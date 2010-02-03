@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.vektor.example.service
+OpenIDE-Module-Layer: cz/cuni/mff/vektor/example/service/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/vektor/example/service/Bundle.properties
+OpenIDE-Module-Provides: cz.cuni.mff.vektor.example.base.AppInterface
+OpenIDE-Module-Specification-Version: 1.0

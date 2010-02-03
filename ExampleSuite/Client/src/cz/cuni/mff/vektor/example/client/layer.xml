@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="Actions">
+        <folder name="File">
+            <file name="cz-cuni-mff-vektor-example-client-SomeAction.instance">
+                <attr name="delegate" newvalue="cz.cuni.mff.vektor.example.client.SomeAction"/>
+                <attr name="displayName" bundlevalue="cz.cuni.mff.vektor.example.client.Bundle#CTL_SomeAction"/>
+                <attr name="iconBase" stringvalue="cz/cuni/mff/vektor/example/client/action_forward.gif"/>
+                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+                <attr name="noIconInMenu" boolvalue="false"/>
+            </file>
+        </folder>
+    </folder>
+    <folder name="Toolbars">
+        <folder name="File">
+            <file name="cz-cuni-mff-vektor-example-client-SomeAction.shadow">
+                <attr name="originalFile" stringvalue="Actions/File/cz-cuni-mff-vektor-example-client-SomeAction.instance"/>
+                <attr name="position" intvalue="0"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>

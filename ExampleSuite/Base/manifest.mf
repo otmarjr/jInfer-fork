@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.vektor.example.base
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/vektor/example/base/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

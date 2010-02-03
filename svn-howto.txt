@@ -1,0 +1,33 @@
+This is the root of jInfer SVN repository.
+
+When commiting, please conform to the following structure:
+
+/
+    project1                      <i.e. jinfer>
+        trunk
+            doc
+                meeting notes
+                analysis
+                user doc
+                developer doc
+                ...
+            src
+            build.xml
+            ...
+        branches
+            branch-0.1
+                doc
+                src
+                build.xml
+                ...
+            branch-0.2
+            ...
+        tags
+            tag-5121
+                doc
+                src
+                build.xml
+                ...
+            ...
+    project2                      <i.e. jinfer-helper-whatever>
+    ...

@@ -1,45 +1,37 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.List;
 
 /**
- * Interface of a SchemaGenerator module.
- *
- * @author vektor
+ * Class representing a simple text XML node.
+ * 
+ * @author vitasek
  */
-public interface SchemaGenerator {
+public class SimpleData extends AbstractContentNode {
 
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  String getModuleName();
-
-  /**
-   * Start the schema export process.
-   * 
-   * @param grammar Simplified grammar to be exported as XML schema.
-   * @param callback Callback method to be run when export is complete.
-   */
-  void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback);
+  public SimpleData(final List<String> context,
+          final String name,
+          final List<Pair<String, Object>> attributes,
+          final String contentType,
+          final List<Object> content) {
+    super(context, name, NodeType.SIMPLE_DATA, attributes, contentType, content);
+  }
 
 }

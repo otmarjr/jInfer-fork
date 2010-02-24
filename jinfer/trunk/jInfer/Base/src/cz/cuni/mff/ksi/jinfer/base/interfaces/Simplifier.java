@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Rule;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.List;
 
 /**
@@ -40,6 +40,6 @@ public interface Simplifier {
    * @param initialGrammar Grammar to be simplified.
    * @param callback Callback method to be run when simplification is complete.
    */
-  void start(final List<Rule> initialGrammar, final SimplifierCallback callback);
+  void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback);
 
 }

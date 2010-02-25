@@ -24,16 +24,12 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
-import sun.applet.Main;
 
 /**
  * A trivial implementation of IGGenerator module. Works only with XML documents.
@@ -61,25 +57,14 @@ public class IGGeneratorImpl implements IGGenerator {
         parser.parse(doc, handler);
       }
     } catch (ParserConfigurationException ex) {
+      // TODO write errors to Output window
       LOG.log(Level.SEVERE, null, ex);
     } catch (SAXException ex) {
       LOG.log(Level.SEVERE, null, ex);
     } catch (IOException ex) {
       LOG.log(Level.SEVERE, null, ex);
     }
-
-    // get the list of inferred rules
-    final List<AbstractNode> result = new ArrayList<AbstractNode>(handler.getRules());
-
-    // sort rules by name and length
-    Collections.sort(result, new Comparator<AbstractNode>() {
-
-      @Override
-      public int compare(final AbstractNode o1, final AbstractNode o2) {
-        return o1.getName().compareTo(o2.getName());
-      }
-    });
-
-    callback.finished(result);
+    
+    callback.finished(new ArrayList<AbstractNode>(handler.getRules()));
   }
 }

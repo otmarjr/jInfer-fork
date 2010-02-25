@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
@@ -30,8 +29,7 @@ public class Attribute extends AbstractContentNode {
           final String name,
           final List<Pair<String, Object>> attributes,
           final String contentType,
-          final List<Object> content) {
+          final List<? extends Object> content) {
     super(context, name, NodeType.ATTRIBUTE, attributes, contentType, content);
   }
-
 }

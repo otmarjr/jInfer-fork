@@ -30,7 +30,7 @@ public class SimpleData extends AbstractContentNode {
           final String name,
           final List<Pair<String, Object>> attributes,
           final String contentType,
-          final List<Object> content) {
+          final List<? extends Object> content) {
     super(context, name, NodeType.SIMPLE_DATA, attributes, contentType, content);
   }
 

@@ -18,7 +18,9 @@
 package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractContentNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.awt.event.ActionEvent;
@@ -26,7 +28,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
 
 /**
  * Example runner for TrivialIGG, should be removed when the whole framework is operational.
@@ -38,7 +41,7 @@ public final class TestRun implements ActionListener {
   // TODO remove this Action
 
   @Override
-  public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(final ActionEvent e) {
     final IGGeneratorImpl i = new IGGeneratorImpl();
     final List<File> docs = new ArrayList<File>();
     docs.add(new File("C:\\domain.xml"));
@@ -46,17 +49,20 @@ public final class TestRun implements ActionListener {
 
       @Override
       public void finished(final List<AbstractNode> grammar) {
-        final StringBuilder ret = new StringBuilder();
+        final InputOutput io = IOProvider.getDefault().getIO("Inference", true);
         for (final AbstractNode node : grammar) {
-          ret.append(node.getName()).append(" = ");
+          io.getOut().print(node.getType() + " " + node.getName());
           if (node instanceof Element) {
+            io.getOut().print(" = ");
             for (final AbstractNode child : ((Element)node).getSubnodes()) {
-              ret.append(child.getName()).append(", ");
+              io.getOut().print(child.getType() + " " + child.getName() + ", ");
             }
           }
-          ret.append('\n');
+          else if (node instanceof AbstractContentNode) {
+            io.getOut().print(": " + ((AbstractContentNode)node).getContent().get(0));
+          }
+          io.getOut().println();
         }
-        JOptionPane.showMessageDialog(null, ret.toString());
       }
     });
   }

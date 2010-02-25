@@ -30,14 +30,14 @@ public abstract class AbstractContentNode extends AbstractNode {
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list
    * contains only one item. */
-  private final List<Object> content;
+  private final List<? extends Object> content;
 
   public AbstractContentNode(final List<String> context,
           final String name,
           final NodeType type,
           final List<Pair<String, Object>> attributes,
           final String contentType,
-          final List<Object> content) {
+          final List<? extends Object> content) {
     super(context, name, type, attributes);
     this.contentType = contentType;
     this.content = content;
@@ -47,7 +47,7 @@ public abstract class AbstractContentNode extends AbstractNode {
     return contentType;
   }
 
-  public List<Object> getContent() {
+  public List<? extends Object> getContent() {
     return content;
   }
 

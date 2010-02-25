@@ -14,13 +14,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import org.xml.sax.Attributes;
@@ -46,10 +48,19 @@ public class TrivialHandler extends DefaultHandler {
 
     final Element e = new Element(null, qName, null, new ArrayList<AbstractNode>());
 
+    // for each attribute, add a subnode representing it
+    for (int i = 0; i < attributes.getLength(); i++) {
+      final List<String> contents = new ArrayList<String>(1);
+      contents.add(attributes.getValue(i));
+      final Attribute a = new Attribute(null, attributes.getQName(i), null, null, contents);
+      e.getSubnodes().add(a);
+      getRules().add(a);
+    }
+
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
     if (!stack.isEmpty() && stack.peek() instanceof Element) {
-      ((Element)stack.peek()).getSubnodes().add(e);
+      ((Element) stack.peek()).getSubnodes().add(e);
     }
 
     // push the current element to the stack with an empty rule
@@ -68,6 +79,20 @@ public class TrivialHandler extends DefaultHandler {
     }
 
     getRules().add(end);
+  }
+
+  @Override
+  public void characters(char[] ch, int start, int length) throws SAXException {
+    super.characters(ch, start, length);
+    final List<String> contents = new ArrayList<String>(1);
+    contents.add("");
+    final SimpleData sd = new SimpleData(null, String.copyValueOf(ch, start, length), null, null, contents);
+    if (stack.peek() instanceof Element) {
+      ((Element) stack.peek()).getSubnodes().add(sd);
+      rules.add(sd);
+    } else {
+      throw new IllegalArgumentException("Element expected");
+    }
   }
 
   public Set<AbstractNode> getRules() {

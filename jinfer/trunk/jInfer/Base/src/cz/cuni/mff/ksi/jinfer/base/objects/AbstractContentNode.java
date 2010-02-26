@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
@@ -51,4 +50,13 @@ public abstract class AbstractContentNode extends AbstractNode {
     return content;
   }
 
+  @Override
+  public String toString() {
+    final StringBuilder ret = new StringBuilder(super.toString());
+    ret.append('\n').append(contentType).append('\n');
+    for (final Object o : content) {
+      ret.append(o.toString()).append(' ');
+    }
+    return ret.toString();
+  }
 }

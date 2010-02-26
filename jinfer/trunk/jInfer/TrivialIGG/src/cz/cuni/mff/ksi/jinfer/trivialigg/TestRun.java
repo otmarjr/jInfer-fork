@@ -51,17 +51,7 @@ public final class TestRun implements ActionListener {
       public void finished(final List<AbstractNode> grammar) {
         final InputOutput io = IOProvider.getDefault().getIO("Inference", true);
         for (final AbstractNode node : grammar) {
-          io.getOut().print(node.getType() + " " + node.getName());
-          if (node instanceof Element) {
-            io.getOut().print(" = ");
-            for (final AbstractNode child : ((Element)node).getSubnodes()) {
-              io.getOut().print(child.getType() + " " + child.getName() + ", ");
-            }
-          }
-          else if (node instanceof AbstractContentNode) {
-            io.getOut().print(": " + ((AbstractContentNode)node).getContent().get(0));
-          }
-          io.getOut().println();
+          io.getOut().println(node.toString());
         }
       }
     });

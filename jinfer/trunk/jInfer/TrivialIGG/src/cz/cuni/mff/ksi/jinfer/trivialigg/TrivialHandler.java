@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,15 +47,19 @@ public class TrivialHandler extends DefaultHandler {
           final String qName, final Attributes attributes) throws SAXException {
     super.startElement(uri, localName, qName, attributes);
 
-    final Element e = new Element(null, qName, null, new ArrayList<AbstractNode>());
+    final List<String> context = getContext();
 
-    // for each attribute, add a subnode representing it
-    for (int i = 0; i < attributes.getLength(); i++) {
-      final List<String> contents = new ArrayList<String>(1);
-      contents.add(attributes.getValue(i));
-      final Attribute a = new Attribute(null, attributes.getQName(i), null, null, contents);
-      e.getSubnodes().add(a);
-      getRules().add(a);
+    final Element e = new Element(context, qName, null, new ArrayList<AbstractNode>());
+
+    if (attributes.getLength() > 0) {
+      final List<String> attrContext = new ArrayList<String>(context);
+      attrContext.add(qName);
+      // for each attribute, add a subnode representing it
+      for (int i = 0; i < attributes.getLength(); i++) {
+        final Attribute a = new Attribute(attrContext, attributes.getQName(i), null, null, Arrays.asList(attributes.getValue(i)));
+        e.getSubnodes().add(a);
+        rules.add(a);
+      }
     }
 
     // if there is parent element, it sits at the top of the stack
@@ -78,16 +83,14 @@ public class TrivialHandler extends DefaultHandler {
       throw new IllegalArgumentException("unpaired element");
     }
 
-    getRules().add(end);
+    rules.add(end);
   }
 
   @Override
-  public void characters(char[] ch, int start, int length) throws SAXException {
+  public void characters(final char[] ch, final int start, final int length) throws SAXException {
     super.characters(ch, start, length);
-    final List<String> contents = new ArrayList<String>(1);
-    contents.add("");
-    final SimpleData sd = new SimpleData(null, String.copyValueOf(ch, start, length), null, null, contents);
     if (stack.peek() instanceof Element) {
+      final SimpleData sd = new SimpleData(getContext(), String.copyValueOf(ch, start, length), null, null, Arrays.asList(""));
       ((Element) stack.peek()).getSubnodes().add(sd);
       rules.add(sd);
     } else {
@@ -97,5 +100,14 @@ public class TrivialHandler extends DefaultHandler {
 
   public Set<AbstractNode> getRules() {
     return rules;
+  }
+
+  private List<String> getContext() {
+    if (stack.isEmpty()) {
+      return new ArrayList<String>();
+    }
+    final List<String> ret = new ArrayList<String>(stack.peek().getContext());
+    ret.add(stack.peek().getName());
+    return ret;
   }
 }

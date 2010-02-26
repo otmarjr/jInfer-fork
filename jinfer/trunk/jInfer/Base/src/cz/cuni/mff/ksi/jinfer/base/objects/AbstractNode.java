@@ -59,4 +59,19 @@ public abstract class AbstractNode {
   public List<Pair<String, Object>> getAttributes() {
     return attributes;
   }
+
+  @Override
+  public String toString() {
+    final StringBuilder ret = new StringBuilder("----------------\n");
+    // complete context
+    for (final String element : context) {
+      ret.append(element).append('/');
+    }
+    // + name
+    ret.append(name);
+    // type
+    ret.append(": ").append(type);
+    return ret.toString();
+  }
+
 }

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.runner
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/runner/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/runner/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.List;
 
 /**
@@ -27,27 +28,24 @@ public class Element extends AbstractNode {
 
   /** List of all subnodes of this element, in the same order as in the
    * document. */
-  private final List<AbstractNode> subnodes;
+  private final Regexp<AbstractNode> subnodes;
 
   public Element(final List<String> context,
           final String name,
           final List<Pair<String, Object>> attributes,
-          final List<AbstractNode> subnodes) {
+          final Regexp<AbstractNode> subnodes) {
     super(context, name, NodeType.ELEMENT, attributes);
     this.subnodes = subnodes;
   }
 
-  public List<AbstractNode> getSubnodes() {
+  public Regexp<AbstractNode> getSubnodes() {
     return subnodes;
   }
 
   @Override
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());
-    ret.append('\n');
-    for (final AbstractNode subnode : subnodes) {
-      ret.append(subnode.getName()).append(", ");
-    }
+    ret.append('\n').append(subnodes.toString());
     return ret.toString();
   }
 }

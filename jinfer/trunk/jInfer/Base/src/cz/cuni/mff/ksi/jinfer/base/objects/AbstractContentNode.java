@@ -53,7 +53,7 @@ public abstract class AbstractContentNode extends AbstractNode {
   @Override
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());
-    ret.append('\n').append(contentType).append('\n');
+    ret.append('\n').append(contentType).append(": ");
     for (final Object o : content) {
       ret.append(o.toString()).append(' ');
     }

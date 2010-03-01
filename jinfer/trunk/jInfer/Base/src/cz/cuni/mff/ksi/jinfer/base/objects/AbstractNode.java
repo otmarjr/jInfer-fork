@@ -62,7 +62,7 @@ public abstract class AbstractNode {
 
   @Override
   public String toString() {
-    final StringBuilder ret = new StringBuilder("----------------\n");
+    final StringBuilder ret = new StringBuilder();
     // complete context
     for (final String element : context) {
       ret.append(element).append('/');

@@ -20,6 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -49,7 +51,8 @@ public class TrivialHandler extends DefaultHandler {
 
     final List<String> context = getContext();
 
-    final Element e = new Element(context, qName, null, new ArrayList<AbstractNode>());
+    final Element e = new Element(context, qName, null, 
+            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
 
     if (attributes.getLength() > 0) {
       final List<String> attrContext = new ArrayList<String>(context);
@@ -57,7 +60,7 @@ public class TrivialHandler extends DefaultHandler {
       // for each attribute, add a subnode representing it
       for (int i = 0; i < attributes.getLength(); i++) {
         final Attribute a = new Attribute(attrContext, attributes.getQName(i), null, null, Arrays.asList(attributes.getValue(i)));
-        e.getSubnodes().add(a);
+        e.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(a));
         rules.add(a);
       }
     }
@@ -65,7 +68,7 @@ public class TrivialHandler extends DefaultHandler {
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
     if (!stack.isEmpty() && stack.peek() instanceof Element) {
-      ((Element) stack.peek()).getSubnodes().add(e);
+      ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e));
     }
 
     // push the current element to the stack with an empty rule
@@ -91,7 +94,7 @@ public class TrivialHandler extends DefaultHandler {
     super.characters(ch, start, length);
     if (stack.peek() instanceof Element) {
       final SimpleData sd = new SimpleData(getContext(), String.copyValueOf(ch, start, length), null, null, Arrays.asList(""));
-      ((Element) stack.peek()).getSubnodes().add(sd);
+      ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(sd));
       rules.add(sd);
     } else {
       throw new IllegalArgumentException("Element expected");

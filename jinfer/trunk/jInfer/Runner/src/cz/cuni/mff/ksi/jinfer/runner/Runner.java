@@ -18,13 +18,13 @@ package cz.cuni.mff.ksi.jinfer.runner;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleSelection;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.runner.callbacks.IGGeneratorCallbackImpl;
-import cz.cuni.mff.ksi.jinfer.runner.callbacks.SchemaGeneratorCallbackImpl;
-import cz.cuni.mff.ksi.jinfer.runner.callbacks.SimplifierCallbackImpl;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.openide.util.Lookup;
@@ -36,74 +36,112 @@ import org.openide.util.lookup.Lookups;
  */
 public class Runner {
 
-    private FileSelection fs;
-    private ModuleSelection ms;
     private IGGenerator igg;
     private Simplifier s;
     private SchemaGenerator sg;
 
+    private class IGGeneratorCallbackImpl implements IGGeneratorCallback {
+
+        private final Runner r;
+
+        public IGGeneratorCallbackImpl(final Runner r) {
+            this.r = r;
+        }
+
+        public void finished(List<AbstractNode> grammar) {
+            r.finishedIGGenerator(grammar);
+        }
+    }
+
+    private class SimplifierCallbackImpl implements SimplifierCallback {
+
+        private final Runner r;
+
+        public SimplifierCallbackImpl(final Runner r) {
+            this.r = r;
+        }
+
+        public void finished(List<AbstractNode> grammar) {
+            r.finishedSimplifier(grammar);
+        }
+    }
+
+    private class SchemaGeneratorCallbackImpl implements SchemaGeneratorCallback {
+
+        private final Runner r;
+
+        public SchemaGeneratorCallbackImpl(final Runner r) {
+            this.r = r;
+        }
+
+        public void finished() {
+            r.finishedSchemaGenerator();
+        }
+    }
+
     public void run() {
+        FileSelection fs;
+        ModuleSelection ms;
+
         try {
-            lookupFileSelection();
-            lookupModuleSelection();
-            lookupIGGenerator(ms.getIGGenerator());
-            lookupSimplifier(ms.getSimplifier());
-            lookupSchemaGenerator(ms.getSchemaGenerator());
-        } catch (Exception e) {
+            fs = lookupFileSelection();
+            ms = lookupModuleSelection();
+            igg = lookupIGGenerator(ms.getIGGenerator());
+            s = lookupSimplifier(ms.getSimplifier());
+            sg = lookupSchemaGenerator(ms.getSchemaGenerator());
+            igg.start(fs.getInput(), new IGGeneratorCallbackImpl(this)); 
+        } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
             return;
         }
-
-        igg.start(fs.getInput(), new IGGeneratorCallbackImpl(this));
     }
 
-    private void lookupFileSelection() throws Exception {
-        Lookup lkp = Lookups.forPath("FileSelectionProviders");
-        fs = lkp.lookup(FileSelection.class);
+    private FileSelection lookupFileSelection() {
+        final Lookup lkp = Lookups.forPath("FileSelectionProviders");
+        final FileSelection fs = lkp.lookup(FileSelection.class);
         if (fs == null) {
-            throw new Exception("File selector module not found.");
+            throw new RuntimeException("File selector module not found.");
         }
+        return fs;
     }
 
-    private void lookupModuleSelection() throws Exception {
-        Lookup lkp = Lookups.forPath("ModuleSelectionProviders");
-        ms = lkp.lookup(ModuleSelection.class);
+    private ModuleSelection lookupModuleSelection() {
+        final Lookup lkp = Lookups.forPath("ModuleSelectionProviders");
+        final ModuleSelection ms = lkp.lookup(ModuleSelection.class);
         if (ms == null) {
-            throw new Exception("Module selection module not found.");
+            throw new RuntimeException("Module selection module not found.");
         }
+        return ms;
     }
 
-    private void lookupIGGenerator(final String name) throws Exception {
-        Lookup lkp = Lookups.forPath("IGGeneratorProviders");
+    private IGGenerator lookupIGGenerator(final String name) {
+        final Lookup lkp = Lookups.forPath("IGGeneratorProviders");
         for (IGGenerator igg : lkp.lookupAll(IGGenerator.class)) {
             if (igg.getModuleName().equals(name)) {
-                this.igg = igg;
-                return;
+                return igg;
             }
         }
-        throw new Exception("IG generator module not found.");
+        throw new RuntimeException("IG generator module not found.");
     }
 
-    private void lookupSimplifier(final String name) throws Exception {
-        Lookup lkp = Lookups.forPath("SimplifierProviders");
+    private Simplifier lookupSimplifier(final String name) {
+        final Lookup lkp = Lookups.forPath("SimplifierProviders");
         for (Simplifier s : lkp.lookupAll(Simplifier.class)) {
             if (s.getModuleName().equals(name)) {
-                this.s = s;
-                return;
+                return s;
             }
         }
-        throw new Exception("Simplifier module not found.");
+        throw new RuntimeException("Simplifier module not found.");
     }
 
-    private void lookupSchemaGenerator(final String name) throws Exception {
-        Lookup lkp = Lookups.forPath("SimplifierProviders");
+    private SchemaGenerator lookupSchemaGenerator(final String name) {
+        final Lookup lkp = Lookups.forPath("SimplifierProviders");
         for (SchemaGenerator sg : lkp.lookupAll(SchemaGenerator.class)) {
             if (sg.getModuleName().equals(name)) {
-                this.sg = sg;
-                return;
+                return sg;
             }
         }
-        throw new Exception("Schema generator module not found.");
+        throw new RuntimeException("Schema generator module not found.");
     }
 
     public void finishedIGGenerator(List<AbstractNode> grammar) {

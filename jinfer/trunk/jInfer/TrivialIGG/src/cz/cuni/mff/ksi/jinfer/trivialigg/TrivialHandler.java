@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.trivialigg;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
@@ -92,7 +93,7 @@ public class TrivialHandler extends DefaultHandler {
   @Override
   public void characters(final char[] ch, final int start, final int length) throws SAXException {
     super.characters(ch, start, length);
-    if (stack.peek() instanceof Element) {
+    if (stack.peek().getType().equals(NodeType.ELEMENT)) {
       final SimpleData sd = new SimpleData(getContext(), String.copyValueOf(ch, start, length), null, null, Arrays.asList(""));
       ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(sd));
       rules.add(sd);

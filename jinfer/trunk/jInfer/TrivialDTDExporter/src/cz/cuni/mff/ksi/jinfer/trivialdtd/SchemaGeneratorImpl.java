@@ -20,9 +20,13 @@ package cz.cuni.mff.ksi.jinfer.trivialdtd;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.util.Collection;
 import java.util.List;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
@@ -42,9 +46,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // TODO topological sort of grammar
 
 
-    // TODO for each element output a <!ELEMENT ...> and his <!ATTRLIST>
-
-    final InputOutput io = IOProvider.getDefault().getIO("Inference", true);
+    final InputOutput io = IOProvider.getDefault().getIO("Inference", false);
 
     for (final AbstractNode node : grammar) {
       if (node.getType().equals(NodeType.ELEMENT)) {
@@ -54,15 +56,19 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private static void outputElement(final Element e, final InputOutput io) {
-    io.getOut().println("<!ELEMENT " + e.getName() + " " + toString(e.getSubnodes()) + ">");
+    io.getOut().println("<!ELEMENT " + e.getName() + " " + subElementsToString(e.getSubnodes()) + ">");
+    final List<Attribute> attributes = e.getElementAttributes();
+    if (!attributes.isEmpty()) {
+      io.getOut().println("<!ATTLIST " + e.getName() + " " + attributesToString(attributes) + ">");
+    }
   }
 
-  private static String toString(final Regexp<AbstractNode> regexp) {
+  private static String subElementsToString(final Regexp<AbstractNode> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
         return regexp.getContent().getType().equals(NodeType.SIMPLE_DATA) ? "#PCDATA" : regexp.getContent().getName();
       case KLEENE:
-        return "(" + toString(regexp.getChildren().get(0)) + ")*";
+        return "(" + subElementsToString(regexp.getChildren().get(0)) + ")*";
       case CONCATENATION:
         return listToString(regexp.getChildren(), ',');
       case ALTERNATION:
@@ -75,15 +81,30 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static String listToString(final List<Regexp<AbstractNode>> list, final char separator) {
     final StringBuilder ret = new StringBuilder();
     ret.append('(');
+
+    final Collection<Regexp<AbstractNode>> filteredList = BaseUtils.filter(list, new BaseUtils.Predicate<Regexp<AbstractNode>>() {
+      public boolean apply(final Regexp<AbstractNode> type) {
+        return !type.getType().equals(RegexpType.TOKEN) || !type.getContent().getType().equals(NodeType.ATTRIBUTE);
+      }
+    });
+
     boolean first = true;
-    for (final Regexp<AbstractNode> child : list) {
+    for (final Regexp<AbstractNode> child : filteredList) {
       if (!first) {
         ret.append(separator);
       }
       first = false;
-      ret.append(toString(child));
+      ret.append(subElementsToString(child));
     }
     ret.append(')');
+    return ret.toString();
+  }
+
+  private static String attributesToString(final List<Attribute> attributes) {
+    final StringBuilder ret = new StringBuilder();
+    for (final Attribute attribute : attributes) {
+      ret.append("\n\t").append(attribute.getName()).append(" CDATA #IMPLIED");
+    }
     return ret.toString();
   }
 

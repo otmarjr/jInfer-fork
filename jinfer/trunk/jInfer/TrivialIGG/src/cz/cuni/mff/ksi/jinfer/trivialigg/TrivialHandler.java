@@ -86,7 +86,10 @@ public class TrivialHandler extends DefaultHandler {
       throw new IllegalArgumentException("unpaired element");
     }
 
-    rules.add(end);
+    // only add elements that have children
+    if (!((Element) end).getSubnodes().getChildren().isEmpty()) {
+      rules.add(end);
+    }
   }
 
   @Override

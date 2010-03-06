@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Various utility functions for jInfer. Library class.
@@ -42,8 +43,8 @@ public final class BaseUtils {
    * @param predicate Predicate determining whether to accept current element.
    * @return A new collection with selected elements.
    */
-  public static <T> Collection<T> filter(final Collection<T> target, final Predicate<T> predicate) {
-    final Collection<T> result = new ArrayList<T>();
+  public static <T> List<T> filter(final List<T> target, final Predicate<T> predicate) {
+    final List<T> result = new ArrayList<T>();
     for (final T element : target) {
       if (predicate.apply(element)) {
         result.add(element);

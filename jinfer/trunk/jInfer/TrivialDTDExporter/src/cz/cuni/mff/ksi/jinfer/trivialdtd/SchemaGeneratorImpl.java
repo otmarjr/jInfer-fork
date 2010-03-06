@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.trivialdtd;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
@@ -26,10 +25,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
-import org.openide.windows.IOProvider;
-import org.openide.windows.InputOutput;
 
 /**
  * A simple DTD exporter.
@@ -43,24 +40,45 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
-    // TODO topological sort of grammar
-
-
-    final InputOutput io = IOProvider.getDefault().getIO("Inference", false);
-
+    // filter only the elements
+    final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
       if (node.getType().equals(NodeType.ELEMENT)) {
-        outputElement((Element) node, io);
+        elements.add((Element) node);
       }
     }
+
+    // TODO toposort elements
+
+    // generate DTD schema
+    final StringBuilder ret = new StringBuilder();
+    ret.append("<!DOCTYPE ")
+            .append(elements.get(elements.size() - 1).getName())
+            .append(" [\n");
+    for (final Element element : elements) {
+      ret.append(elementToString(element));
+    }
+    ret.append("]>");
+
+    callback.finished(ret.toString());
   }
 
-  private static void outputElement(final Element e, final InputOutput io) {
-    io.getOut().println("<!ELEMENT " + e.getName() + " " + subElementsToString(e.getSubnodes()) + ">");
+  private static String elementToString(final Element e) {
+    final StringBuilder ret = new StringBuilder();
+    ret.append("<!ELEMENT ")
+            .append(e.getName())
+            .append(' ')
+            .append(subElementsToString(e.getSubnodes()))
+            .append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!attributes.isEmpty()) {
-      io.getOut().println("<!ATTLIST " + e.getName() + " " + attributesToString(attributes) + ">");
+      ret.append("<!ATTLIST ")
+              .append(e.getName())
+              .append(' ')
+              .append(attributesToString(attributes))
+              .append(">\n");
     }
+    return ret.toString();
   }
 
   private static String subElementsToString(final Regexp<AbstractNode> regexp) {
@@ -70,26 +88,30 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case KLEENE:
         return "(" + subElementsToString(regexp.getChildren().get(0)) + ")*";
       case CONCATENATION:
-        return listToString(regexp.getChildren(), ',');
+        return listToString(omitAttributes(regexp.getChildren()), ',');
       case ALTERNATION:
-        return listToString(regexp.getChildren(), '|');
+        return listToString(omitAttributes(regexp.getChildren()), '|');
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }
   }
 
-  private static String listToString(final List<Regexp<AbstractNode>> list, final char separator) {
-    final StringBuilder ret = new StringBuilder();
-    ret.append('(');
+  private static List<Regexp<AbstractNode>> omitAttributes(
+          final List<Regexp<AbstractNode>> col) {
+    return BaseUtils.filter(col, new BaseUtils.Predicate<Regexp<AbstractNode>>() {
 
-    final Collection<Regexp<AbstractNode>> filteredList = BaseUtils.filter(list, new BaseUtils.Predicate<Regexp<AbstractNode>>() {
       public boolean apply(final Regexp<AbstractNode> type) {
         return !type.getType().equals(RegexpType.TOKEN) || !type.getContent().getType().equals(NodeType.ATTRIBUTE);
       }
     });
+  }
 
+  private static String listToString(final List<Regexp<AbstractNode>> list,
+          final char separator) {
+    final StringBuilder ret = new StringBuilder();
+    ret.append('(');
     boolean first = true;
-    for (final Regexp<AbstractNode> child : filteredList) {
+    for (final Regexp<AbstractNode> child : list) {
       if (!first) {
         ret.append(separator);
       }
@@ -107,5 +129,4 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
     return ret.toString();
   }
-
 }

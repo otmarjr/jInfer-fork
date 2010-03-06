@@ -26,7 +26,9 @@ public interface SchemaGeneratorCallback {
 
   /**
    * This method is called when SchemaGenerator module has finished its work.
+   *
+   * @param schema String representation of the generated schema.
    */
-  void finished();
+  void finished(final String schema);
 
 }

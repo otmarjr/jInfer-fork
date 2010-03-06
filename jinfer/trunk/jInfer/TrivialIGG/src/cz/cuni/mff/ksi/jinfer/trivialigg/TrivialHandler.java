@@ -43,7 +43,7 @@ public class TrivialHandler extends DefaultHandler {
   /** Stack to hold currently open nodes. */
   private final Stack<AbstractNode> stack = new Stack<AbstractNode>();
   /** Set of rules that have been inferred so far. */
-  private final Set<AbstractNode> rules = new HashSet<AbstractNode>();
+  private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
 
   @Override
   public void startElement(final String uri, final String localName,
@@ -62,13 +62,12 @@ public class TrivialHandler extends DefaultHandler {
       for (int i = 0; i < attributes.getLength(); i++) {
         final Attribute a = new Attribute(attrContext, attributes.getQName(i), null, null, Arrays.asList(attributes.getValue(i)));
         e.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(a));
-        rules.add(a);
       }
     }
 
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
-    if (!stack.isEmpty() && (stack.peek().getType() == NodeType.ELEMENT)) {
+    if (!stack.isEmpty() && (stack.peek().getType().equals(NodeType.ELEMENT))) {
       ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e));
     }
 
@@ -93,8 +92,12 @@ public class TrivialHandler extends DefaultHandler {
   @Override
   public void characters(final char[] ch, final int start, final int length) throws SAXException {
     super.characters(ch, start, length);
+    final String text = String.copyValueOf(ch, start, length).trim();
+    if ("".equals(text)) {
+      return;
+    }
     if (stack.peek().getType().equals(NodeType.ELEMENT)) {
-      final SimpleData sd = new SimpleData(getContext(), String.copyValueOf(ch, start, length), null, null, Arrays.asList(""));
+      final SimpleData sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
       ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(sd));
       rules.add(sd);
     } else {
@@ -102,7 +105,7 @@ public class TrivialHandler extends DefaultHandler {
     }
   }
 
-  public Set<AbstractNode> getRules() {
+  public List<AbstractNode> getRules() {
     return rules;
   }
 

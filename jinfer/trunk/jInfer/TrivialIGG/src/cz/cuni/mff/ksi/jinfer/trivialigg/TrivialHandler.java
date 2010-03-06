@@ -68,7 +68,7 @@ public class TrivialHandler extends DefaultHandler {
 
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
-    if (!stack.isEmpty() && stack.peek() instanceof Element) {
+    if (!stack.isEmpty() && (stack.peek().getType() == NodeType.ELEMENT)) {
       ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e));
     }
 

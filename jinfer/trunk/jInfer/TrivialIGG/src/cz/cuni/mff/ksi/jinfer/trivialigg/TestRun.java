@@ -18,18 +18,16 @@
 package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractContentNode;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.openide.windows.IOProvider;
-import org.openide.windows.InputOutput;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.Lookups;
 
 /**
  * Example runner for TrivialIGG, should be removed when the whole framework is operational.
@@ -49,10 +47,9 @@ public final class TestRun implements ActionListener {
 
       @Override
       public void finished(final List<AbstractNode> grammar) {
-        final InputOutput io = IOProvider.getDefault().getIO("Inference", true);
-        for (final AbstractNode node : grammar) {
-          io.getOut().println(node.toString());
-        }
+        final Lookup lkp = Lookups.forPath("SchemaGeneratorProviders");
+        final SchemaGenerator schemagen = lkp.lookup(SchemaGenerator.class);
+        schemagen.start(grammar, null);
       }
     });
   }

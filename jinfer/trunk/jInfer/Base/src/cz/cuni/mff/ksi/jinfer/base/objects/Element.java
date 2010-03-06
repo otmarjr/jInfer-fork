@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +41,22 @@ public class Element extends AbstractNode {
 
   public Regexp<AbstractNode> getSubnodes() {
     return subnodes;
+  }
+
+  /**
+   * Returns all attributes of this element.
+   * Note: does NOT return attributes of any subelements.
+   *
+   * @return All attributes of current element.
+   */
+  public List<Attribute> getElementAttributes() {
+    final List<Attribute> ret = new ArrayList<Attribute>();
+    for (final AbstractNode node : getSubnodes().getTokens()) {
+      if (node.getType().equals(NodeType.ATTRIBUTE)) {
+        ret.add((Attribute) node);
+      }
+    }
+    return ret;
   }
 
   @Override

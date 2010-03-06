@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,6 +66,31 @@ public class Regexp<T> {
     return children;
   }
 
+  /**
+   * Returns all tokens contained in this regular expression, inorder from
+   * the left to the right.
+   * 
+   * @return All tokens of this regexp.
+   */
+  @SuppressWarnings("unchecked")
+  public List<T> getTokens() {
+    switch (type) {
+      case TOKEN:
+        return Arrays.asList(content);
+      case KLEENE:
+        return children.get(0).getTokens();
+      case CONCATENATION:
+      case ALTERNATION:
+        final List<T> ret = new ArrayList<T>();
+        for (final Regexp<T> child : children) {
+          ret.addAll(child.getTokens());
+        }
+        return ret;
+      default:
+        throw new IllegalArgumentException("Unknown enum member.");
+    }
+  }
+
   public RegexpType getType() {
     return type;
   }
@@ -78,7 +105,7 @@ public class Regexp<T> {
       case CONCATENATION:
         final StringBuilder retConc = new StringBuilder();
         retConc.append('(');
-        for (Regexp<T> child : children) {
+        for (final Regexp<T> child : children) {
           retConc.append(child.toString()).append(",");
         }
         retConc.append(')');
@@ -86,7 +113,7 @@ public class Regexp<T> {
       case ALTERNATION:
         final StringBuilder retAlt = new StringBuilder();
         retAlt.append('(');
-        for (Regexp<T> child : children) {
+        for (final Regexp<T> child : children) {
           retAlt.append(child.toString()).append("|");
         }
         retAlt.append(')');

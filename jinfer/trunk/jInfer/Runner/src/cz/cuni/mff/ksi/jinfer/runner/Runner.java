@@ -71,13 +71,14 @@ public class Runner {
   public void finishedSimplifier(final List<AbstractNode> grammar) {
     schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
 
-      public void finished() {
-        Runner.this.finishedSchemaGenerator();
+      public void finished(final String schema) {
+        Runner.this.finishedSchemaGenerator(schema);
       }
     });
   }
 
-  public void finishedSchemaGenerator() {
+  public void finishedSchemaGenerator(final String schema) {
+    // TODO process result schema
     JOptionPane.showMessageDialog(null, "Finished.");
   }
 

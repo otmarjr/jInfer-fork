@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
@@ -64,7 +63,7 @@ public class IGGeneratorImpl implements IGGenerator {
     } catch (IOException ex) {
       LOG.log(Level.SEVERE, null, ex);
     }
-    
+
     callback.finished(new ArrayList<AbstractNode>(handler.getRules()));
   }
 }

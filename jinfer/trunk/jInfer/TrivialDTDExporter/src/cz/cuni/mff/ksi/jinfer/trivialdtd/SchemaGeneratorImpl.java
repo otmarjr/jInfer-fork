@@ -48,14 +48,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       }
     }
 
-    // TODO toposort elements
+    // sort elements topologically
+    final TopologicalSort s = new TopologicalSort(elements);
+    final List<Element> toposorted = s.sort();
 
     // generate DTD schema
     final StringBuilder ret = new StringBuilder();
     ret.append("<!DOCTYPE ")
             .append(elements.get(elements.size() - 1).getName())
             .append(" [\n");
-    for (final Element element : elements) {
+    for (final Element element : toposorted) {
       ret.append(elementToString(element));
     }
     ret.append("]>");

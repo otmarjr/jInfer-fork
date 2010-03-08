@@ -64,6 +64,6 @@ public class IGGeneratorImpl implements IGGenerator {
       LOG.log(Level.SEVERE, null, ex);
     }
 
-    callback.finished(new ArrayList<AbstractNode>(handler.getRules()));
+    callback.finished(handler.getRules());
   }
 }

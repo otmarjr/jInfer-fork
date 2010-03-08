@@ -102,7 +102,6 @@ public class TrivialHandler extends DefaultHandler {
     if (stack.peek().getType().equals(NodeType.ELEMENT)) {
       final SimpleData sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
       ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(sd));
-      rules.add(sd);
     } else {
       throw new IllegalArgumentException("Element expected");
     }

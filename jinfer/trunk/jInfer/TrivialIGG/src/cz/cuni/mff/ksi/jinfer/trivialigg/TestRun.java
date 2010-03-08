@@ -14,12 +14,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.awt.event.ActionEvent;
@@ -40,7 +41,6 @@ import org.openide.windows.InputOutput;
 public final class TestRun implements ActionListener {
 
   // TODO remove this Action
-
   @Override
   public void actionPerformed(final ActionEvent e) {
     final IGGeneratorImpl i = new IGGeneratorImpl();
@@ -50,16 +50,27 @@ public final class TestRun implements ActionListener {
 
       @Override
       public void finished(final List<AbstractNode> grammar) {
-        final Lookup lkp = Lookups.forPath("SchemaGeneratorProviders");
-        final SchemaGenerator schemagen = lkp.lookup(SchemaGenerator.class);
-        schemagen.start(grammar, new SchemaGeneratorCallback() {
-
+        final Lookup lkpSimplifier = Lookups.forPath("SimplifierProviders");
+        final Simplifier simplifier = lkpSimplifier.lookup(Simplifier.class);
+        simplifier.start(grammar, new SimplifierCallback() {
           @Override
-          public void finished(final String schema) {
-            InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-            io.getOut().println(schema);
+          public void finished(List<AbstractNode> grammar) {
+            generateSchema(grammar);
           }
         });
+      }
+    });
+  }
+
+  private void generateSchema(final List<AbstractNode> grammar) {
+    final Lookup lkpSchema = Lookups.forPath("SchemaGeneratorProviders");
+    final SchemaGenerator schemagen = lkpSchema.lookup(SchemaGenerator.class);
+    schemagen.start(grammar, new SchemaGeneratorCallback() {
+
+      @Override
+      public void finished(final String schema) {
+        InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+        io.getOut().println(schema);
       }
     });
   }

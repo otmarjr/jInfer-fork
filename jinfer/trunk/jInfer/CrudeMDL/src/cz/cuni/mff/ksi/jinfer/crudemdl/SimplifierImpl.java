@@ -20,7 +20,16 @@ package cz.cuni.mff.ksi.jinfer.crudemdl;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
 
 /**
  *
@@ -35,7 +44,41 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public void start(List<AbstractNode> initialGrammar, SimplifierCallback callback) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+    //throw new UnsupportedOperationException("Not supported yet.");
 
+    HashMap<AbstractNode,ArrayList<Regexp<AbstractNode>>> elements = new HashMap<AbstractNode,ArrayList<Regexp<AbstractNode>>>();
+
+    ListIterator<AbstractNode> iter= initialGrammar.listIterator();
+    AbstractNode t = null;
+    while (iter.hasNext()) {
+      t= iter.next();
+      if (!NodeType.ELEMENT.equals(t.getType())) {
+        StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
+        sb.append(t.getType().toString());
+        sb.append(" as left side.");
+        throw new IllegalArgumentException(sb.toString());
+      }
+
+      if (!elements.containsKey(t)) {
+        elements.put(t, new ArrayList<Regexp<AbstractNode>>());
+      }
+      elements.get(t).add( ((Element) t).getSubnodes() );
+    }
+
+    Set<AbstractNode> keys = elements.keySet();
+    ArrayList<AbstractNode> newGrammar = new ArrayList<AbstractNode>();
+    ArrayList<Regexp<AbstractNode>> rightSide = null;
+    AbstractNode leftSide = null;
+    for (AbstractNode el : keys) {
+      rightSide= new ArrayList<Regexp<AbstractNode>>();
+      for (Regexp<AbstractNode> rebeka : elements.get(el)) {
+        rightSide.add(rebeka);
+      }
+      leftSide= new Element(el.getContext(), el.getName(), null,
+        new Regexp<AbstractNode>(null, rightSide, RegexpType.ALTERNATION));
+      newGrammar.add(leftSide);
+    }
+
+    callback.finished(newGrammar);
+  }
 }

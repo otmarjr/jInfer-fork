@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
@@ -30,6 +29,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  *
@@ -46,39 +46,33 @@ public class SimplifierImpl implements Simplifier {
   public void start(List<AbstractNode> initialGrammar, SimplifierCallback callback) {
     //throw new UnsupportedOperationException("Not supported yet.");
 
-    HashMap<AbstractNode,ArrayList<Regexp<AbstractNode>>> elements = new HashMap<AbstractNode,ArrayList<Regexp<AbstractNode>>>();
+    HashMap<Element, Element> elements = new HashMap<Element, Element>();
 
-    ListIterator<AbstractNode> iter= initialGrammar.listIterator();
-    AbstractNode t = null;
-    while (iter.hasNext()) {
-      t= iter.next();
-      if (!NodeType.ELEMENT.equals(t.getType())) {
+    Element el = null;
+    for (AbstractNode node : initialGrammar) {
+      if (!NodeType.ELEMENT.equals(node.getType())) {
         StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
-        sb.append(t.getType().toString());
+        sb.append(node.getType().toString());
         sb.append(" as left side.");
         throw new IllegalArgumentException(sb.toString());
       }
 
-      if (!elements.containsKey(t)) {
-        elements.put(t, new ArrayList<Regexp<AbstractNode>>());
+      el= (Element) node;
+      if (!elements.containsKey(el)) {
+        elements.put(
+                el,
+                new Element(
+                  el.getContext(), el.getName(), null,
+                  new Regexp<AbstractNode>(
+                    null,
+                    new ArrayList<Regexp<AbstractNode>>(),
+                    RegexpType.ALTERNATION)
+                  )
+                );
       }
-      elements.get(t).add( ((Element) t).getSubnodes() );
+      elements.get(el).getSubnodes().getChildren().add( el.getSubnodes() );
     }
 
-    Set<AbstractNode> keys = elements.keySet();
-    ArrayList<AbstractNode> newGrammar = new ArrayList<AbstractNode>();
-    ArrayList<Regexp<AbstractNode>> rightSide = null;
-    AbstractNode leftSide = null;
-    for (AbstractNode el : keys) {
-      rightSide= new ArrayList<Regexp<AbstractNode>>();
-      for (Regexp<AbstractNode> rebeka : elements.get(el)) {
-        rightSide.add(rebeka);
-      }
-      leftSide= new Element(el.getContext(), el.getName(), null,
-        new Regexp<AbstractNode>(null, rightSide, RegexpType.ALTERNATION));
-      newGrammar.add(leftSide);
-    }
-
-    callback.finished(newGrammar);
+    callback.finished( new ArrayList<AbstractNode>(elements.values()) );
   }
 }

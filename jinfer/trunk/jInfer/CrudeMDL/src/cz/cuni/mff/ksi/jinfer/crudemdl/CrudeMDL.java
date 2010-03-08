@@ -32,13 +32,13 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @author anti
  */
 public class CrudeMDL {
-  public double codeLengthGrammar(AbstractNode rootNode) {
+  public double codeLengthGrammar(AbstractNode grammarRootNode) {
     HashSet<String> encounteredElements = new HashSet<String>();
     LinkedList<Regexp<AbstractNode>> stack = new LinkedList<Regexp<AbstractNode>>();
 
-    if (NodeType.ELEMENT.equals(rootNode.getType())) {
-      encounteredElements.add(((Element) rootNode).getName());
-      stack.addFirst(((Element) rootNode).getSubnodes());
+    if (NodeType.ELEMENT.equals(grammarRootNode.getType())) {
+      encounteredElements.add(((Element) grammarRootNode).getName());
+      stack.addFirst(((Element) grammarRootNode).getSubnodes());
     } else {
       throw new IllegalArgumentException("Root node of grammar must be element.");
     }
@@ -63,14 +63,42 @@ public class CrudeMDL {
     return charsCount * Math.log(encounteredElements.size());
   }
 
-  public double codeLengthDocument(AbstractNode rootNode) {
-    throw new NotImplementedException();
+  public double codeLengthDocument(AbstractNode grammarRootNode, AbstractNode rootNode) {
+    LinkedList<Regexp<AbstractNode>> stack = new LinkedList<Regexp<AbstractNode>>();
+
+    if (NodeType.ELEMENT.equals(grammarRootNode.getType())) {
+      stack.addFirst(((Element) grammarRootNode).getSubnodes());
+    } else {
+      throw new IllegalArgumentException("Root node of grammar must be element.");
+    }
+
+    Regexp<AbstractNode> reg = null;
+    StringBuilder sb = new StringBuilder();
+    int charsCount= 0;
+    while (!stack.isEmpty()) {
+      reg = stack.removeFirst();
+      if (RegexpType.CONCATENATION.equals(reg.getType())) {
+        sb.append(grammarRootNode.getName());
+        stack.addAll(reg.getChildren());
+      } else if (RegexpType.ALTERNATION.equals(reg.getType())) {
+        charsCount+= reg.getChildren().size() + 1;
+        stack.addAll(reg.getChildren());
+      } else if (RegexpType.KLEENE.equals(reg.getType())) {
+        charsCount++;
+        stack.addAll(reg.getChildren());
+      } else if (RegexpType.TOKEN.equals(reg.getType())) {
+        charsCount++;
+      }
+    }
+
+
+
+    return 0;
   }
 
   public double codeLengthDocuments(List<AbstractNode> documentRootNodes) {
     double sum = 0;
     for (AbstractNode rootNode : documentRootNodes) {
-      sum+= codeLengthDocument(rootNode);
     }
     return sum;
   }

@@ -1,33 +1,40 @@
 /*
- *  Copyright (C) 2010 rio
- *
+ *  Copyright (C) 2010 vektor
+ * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *
+ * 
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *
+ * 
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.runner;
+package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import java.util.List;
 
 /**
- * TODO rio Comment!
- *
- * @author rio
+ * A trivial implementation of Simplifier - simply passes on the schema.
+ * 
+ * @author vektor
  */
-public final class RunnerAction implements ActionListener {
+public class SimplifierImpl implements Simplifier {
 
   @Override
-  public void actionPerformed(final ActionEvent e) {
-    new Runner().run();
+  public String getModuleName() {
+    return "Trivial Simplifier";
+  }
+
+  @Override
+  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
+    callback.finished(initialGrammar);
   }
 }

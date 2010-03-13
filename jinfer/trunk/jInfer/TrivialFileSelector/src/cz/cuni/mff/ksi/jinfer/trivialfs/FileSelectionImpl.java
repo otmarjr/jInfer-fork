@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 rio
+ *  Copyright (C) 2010 vektor
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,20 +14,27 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.runner;
+package cz.cuni.mff.ksi.jinfer.trivialfs;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
- * TODO rio Comment!
+ * A trivial implementation of FileSelector module.
  *
- * @author rio
+ * @author vektor
  */
-public final class RunnerAction implements ActionListener {
+public class FileSelectionImpl implements FileSelection {
 
   @Override
-  public void actionPerformed(final ActionEvent e) {
-    new Runner().run();
+  public Input getInput() {
+    return new Input(
+            Arrays.asList(new File("C:\\domain.xml")),
+            Collections.<File>emptyList(),
+            Collections.<File>emptyList());
   }
+
 }

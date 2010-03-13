@@ -1,1 +1,1 @@
-package cz.cuni.mff.ksi.jinfer.ModuleSelector;
+package cz.cuni.mff.ksi.jinfer.moduleselector;

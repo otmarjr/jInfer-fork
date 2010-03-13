@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.trivialsimplifier
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/trivialsimplifier/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/trivialsimplifier/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

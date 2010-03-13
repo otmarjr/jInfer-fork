@@ -1,8 +1,20 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *  Copyright (C) 2010 reseto
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.ModuleSelector;
+package cz.cuni.mff.ksi.jinfer.moduleselector;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
@@ -15,11 +27,19 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.Lookups;
 
-final class JinferOPTPanel extends javax.swing.JPanel implements ModuleSelection {
+/**
+ * TODO reseto Comment!
+ * 
+ * @author reseto
+ */
+class JinferOPTPanel extends JPanel {
+
+  private static final long serialVersionUID = 89421324211l;
 
   private final JinferOPTOptionsPanelController controller;
   private static final String DEFAULT_MENU_TEXT = "<none available>";
@@ -125,10 +145,10 @@ final class JinferOPTPanel extends javax.swing.JPanel implements ModuleSelection
           .addComponent(jLabel3))
         .addGap(18, 18, 18)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap(240, Short.MAX_VALUE))
+          .addComponent(jComboBox1, 0, 296, Short.MAX_VALUE)
+          .addComponent(jComboBox2, 0, 296, Short.MAX_VALUE)
+          .addComponent(jComboBox3, 0, 296, Short.MAX_VALUE))
+        .addContainerGap())
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,20 +199,23 @@ final class JinferOPTPanel extends javax.swing.JPanel implements ModuleSelection
        * and since we don't know what the toString method of IGGenerator does..
        */
       jComboBox1.addItem(new IGGMenuItem(ig));
-      if (iGGenerator.equals(ig.getModuleName()))
-        jComboBox1.setSelectedIndex(jComboBox1.getItemCount()-1);
+      if (iGGenerator.equals(ig.getModuleName())) {
+        jComboBox1.setSelectedIndex(jComboBox1.getItemCount() - 1);
+      }
     }
 
     for (Simplifier s : lookupSimplifiers()) {
       jComboBox2.addItem(new SimplifierMenuItem(s));
-      if (simplifier.equals(s.getModuleName()))
-        jComboBox2.setSelectedIndex(jComboBox2.getItemCount()-1);
+      if (simplifier.equals(s.getModuleName())) {
+        jComboBox2.setSelectedIndex(jComboBox2.getItemCount() - 1);
+      }
     }
 
     for (SchemaGenerator sg : lookupSchemaGenerators()) {
       jComboBox3.addItem(new SchemaMenuItem(sg));
-      if (schemaGenerator.equals(sg.getModuleName()))
-        jComboBox3.setSelectedIndex(jComboBox3.getItemCount()-1);
+      if (schemaGenerator.equals(sg.getModuleName())) {
+        jComboBox3.setSelectedIndex(jComboBox3.getItemCount() - 1);
+      }
     }
   }
 
@@ -221,63 +244,21 @@ final class JinferOPTPanel extends javax.swing.JPanel implements ModuleSelection
   private javax.swing.JTabbedPane jTabbedPane1;
   // End of variables declaration//GEN-END:variables
 
-  public String getIGGenerator() {
-    return iGGenerator;
-  }
-
-  public String getSimplifier() {
-    return simplifier;
-  }
-
-  public String getSchemaGenerator() {
-    return schemaGenerator;
-  }
-
   private List<IGGenerator> lookupIGGenerators() {
     List<IGGenerator> list = new ArrayList<IGGenerator>();
     final Lookup lkp = Lookups.forPath("IGGeneratorProviders");
-
     for (IGGenerator ig : lkp.lookupAll(IGGenerator.class)) {
       list.add(ig);
     }
-    
-    if (list.size() == 0) {
-      list.add(new IGGenerator() {
-
-        public String getModuleName() {
-          return DEFAULT_MENU_TEXT;
-        }
-
-        public void start(Input input, IGGeneratorCallback callback) {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
-      });
-    }
-
     return list;
   }
 
   private List<Simplifier> lookupSimplifiers() {
     List<Simplifier> list = new ArrayList<Simplifier>();
     final Lookup lkp = Lookups.forPath("SimplifierProviders");
-
     for (Simplifier s : lkp.lookupAll(Simplifier.class)) {
       list.add(s);
     }
-
-    if (list.size() == 0) {
-      list.add(new Simplifier() {
-
-        public String getModuleName() {
-          return DEFAULT_MENU_TEXT;
-        }
-
-        public void start(List<AbstractNode> initialGrammar, SimplifierCallback callback) {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
-      });
-    }
-
     return list;
   }
 
@@ -287,18 +268,6 @@ final class JinferOPTPanel extends javax.swing.JPanel implements ModuleSelection
     for (SchemaGenerator sg : lkp.lookupAll(SchemaGenerator.class)) {
       list.add(sg);
     }
-    if (list.size() == 0) {
-      list.add(new SchemaGenerator() {
-        public String getModuleName() {
-          return DEFAULT_MENU_TEXT;
-        }
-
-        public void start(List<AbstractNode> grammar, SchemaGeneratorCallback callback) {
-          throw new UnsupportedOperationException("Not supported yet.");
-        }
-      });
-    }
-
     return list;
   }
 }

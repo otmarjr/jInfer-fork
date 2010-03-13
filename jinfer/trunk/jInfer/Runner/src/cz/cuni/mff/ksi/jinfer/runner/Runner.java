@@ -26,12 +26,14 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.List;
-import javax.swing.JOptionPane;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
 
 /**
- *
+ * TODO rio Comment!
+ * 
  * @author rio
  */
 public class Runner {
@@ -53,6 +55,7 @@ public class Runner {
 
     igGenerator.start(fileSelection.getInput(), new IGGeneratorCallback() {
 
+      @Override
       public void finished(final List<AbstractNode> grammar) {
         Runner.this.finishedIGGenerator(grammar);
       }
@@ -62,6 +65,7 @@ public class Runner {
   public void finishedIGGenerator(final List<AbstractNode> grammar) {
     simplifier.start(grammar, new SimplifierCallback() {
 
+      @Override
       public void finished(final List<AbstractNode> grammar) {
         Runner.this.finishedSimplifier(grammar);
       }
@@ -71,6 +75,7 @@ public class Runner {
   public void finishedSimplifier(final List<AbstractNode> grammar) {
     schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
 
+      @Override
       public void finished(final String schema) {
         Runner.this.finishedSchemaGenerator(schema);
       }
@@ -78,8 +83,8 @@ public class Runner {
   }
 
   public void finishedSchemaGenerator(final String schema) {
-    // TODO process result schema
-    JOptionPane.showMessageDialog(null, "Finished.");
+    InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    io.getOut().println(schema);
   }
 
   private FileSelection lookupFileSelection() {

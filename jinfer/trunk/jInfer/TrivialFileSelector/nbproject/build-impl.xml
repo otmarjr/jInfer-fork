@@ -3,7 +3,7 @@
 *** GENERATED FROM project.xml - DO NOT EDIT  ***
 ***         EDIT ../build.xml INSTEAD         ***
 -->
-<project name="cz.cuni.mff.ksi.jinfer.runner-impl" basedir="..">
+<project name="cz.cuni.mff.ksi.jinfer.trivialfs-impl" basedir="..">
     <fail message="Please build using Ant 1.7.1 or higher.">
         <condition>
             <not>

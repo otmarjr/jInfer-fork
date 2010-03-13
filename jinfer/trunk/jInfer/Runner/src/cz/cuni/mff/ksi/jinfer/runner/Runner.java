@@ -102,7 +102,7 @@ public class Runner {
 
   private IGGenerator lookupIGGenerator(final String name) {
     final Lookup lkp = Lookups.forPath("IGGeneratorProviders");
-    for (IGGenerator igGenerator : lkp.lookupAll(IGGenerator.class)) {
+    for (final IGGenerator igGenerator : lkp.lookupAll(IGGenerator.class)) {
       if (igGenerator.getModuleName().equals(name)) {
         return igGenerator;
       }
@@ -112,7 +112,7 @@ public class Runner {
 
   private Simplifier lookupSimplifier(final String name) {
     final Lookup lkp = Lookups.forPath("SimplifierProviders");
-    for (Simplifier simplifier : lkp.lookupAll(Simplifier.class)) {
+    for (final Simplifier simplifier : lkp.lookupAll(Simplifier.class)) {
       if (simplifier.getModuleName().equals(name)) {
         return simplifier;
       }
@@ -121,8 +121,8 @@ public class Runner {
   }
 
   private SchemaGenerator lookupSchemaGenerator(final String name) {
-    final Lookup lkp = Lookups.forPath("SimplifierProviders");
-    for (SchemaGenerator schemaGenerator : lkp.lookupAll(SchemaGenerator.class)) {
+    final Lookup lkp = Lookups.forPath("SchemaGeneratorProviders");
+    for (final SchemaGenerator schemaGenerator : lkp.lookupAll(SchemaGenerator.class)) {
       if (schemaGenerator.getModuleName().equals(name)) {
         return schemaGenerator;
       }

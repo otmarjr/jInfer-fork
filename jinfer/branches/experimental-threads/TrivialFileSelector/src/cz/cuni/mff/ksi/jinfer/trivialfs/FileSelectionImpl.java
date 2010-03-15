@@ -32,7 +32,7 @@ public class FileSelectionImpl implements FileSelection {
   @Override
   public Input getInput() {
     return new Input(
-            Arrays.asList(new File("C:\\domain.xml")),
+            Arrays.asList(new File("C:\\domain.xml"), new File("C:\\domain2.xml")),
             Collections.<File>emptyList(),
             Collections.<File>emptyList());
   }

@@ -21,14 +21,10 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.SAXException;
 
 /**
  * A trivial implementation of IGGenerator module. Works only with XML documents.
@@ -37,7 +33,7 @@ import org.xml.sax.SAXException;
  */
 public class IGGeneratorImpl implements IGGenerator {
 
-  private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class.getName());
+  private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class.getCanonicalName());
 
   @Override
   public String getModuleName() {
@@ -46,24 +42,25 @@ public class IGGeneratorImpl implements IGGenerator {
 
   @Override
   public void start(final Input input, final IGGeneratorCallback callback) {
-    final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-    final TrivialHandler handler = new TrivialHandler();
+    final List<ParserThread> threads = new ArrayList<ParserThread>(input.getDocuments().size());
 
-    try {
-      final SAXParser parser = parserFactory.newSAXParser();
-      // do the parsing
-      for (final File doc : input.getDocuments()) {
-        parser.parse(doc, handler);
-      }
-    } catch (ParserConfigurationException ex) {
-      // TODO write errors to Output window
-      LOG.log(Level.SEVERE, null, ex);
-    } catch (SAXException ex) {
-      LOG.log(Level.SEVERE, null, ex);
-    } catch (IOException ex) {
-      LOG.log(Level.SEVERE, null, ex);
+    for (final File f : input.getDocuments()) {
+      final ParserThread t = new ParserThread(f);
+      threads.add(t);
+      t.start();
     }
 
-    callback.finished(handler.getRules());
+    final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+    for (final ParserThread t : threads) {
+      try {
+        t.join();
+        rules.addAll(t.getHandler().getRules());
+      } catch (InterruptedException ex) {
+        LOG.log(Level.SEVERE, "Parser thread timeouted", ex);
+      }
+    }
+
+    callback.finished(rules);
   }
+
 }

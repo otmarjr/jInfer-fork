@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.List;
+import javax.swing.SwingUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
 import org.openide.windows.IOProvider;
@@ -37,6 +38,8 @@ import org.openide.windows.InputOutput;
  * @author rio
  */
 public class Runner {
+
+  private static final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
 
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
@@ -53,13 +56,20 @@ public class Runner {
   public void run() {
     final FileSelection fileSelection = lookupFileSelection();
 
-    igGenerator.start(fileSelection.getInput(), new IGGeneratorCallback() {
-
+    final Thread t = new Thread(new Runnable() {
       @Override
-      public void finished(final List<AbstractNode> grammar) {
-        Runner.this.finishedIGGenerator(grammar);
+      public void run() {
+        igGenerator.start(fileSelection.getInput(), new IGGeneratorCallback() {
+
+          @Override
+          public void finished(final List<AbstractNode> grammar) {
+            Runner.this.finishedIGGenerator(grammar);
+          }
+        });
       }
     });
+    io.getOut().println("Inference started...");
+    t.start();
   }
 
   public void finishedIGGenerator(final List<AbstractNode> grammar) {
@@ -83,7 +93,6 @@ public class Runner {
   }
 
   public void finishedSchemaGenerator(final String schema) {
-    InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
     io.getOut().println(schema);
   }
 

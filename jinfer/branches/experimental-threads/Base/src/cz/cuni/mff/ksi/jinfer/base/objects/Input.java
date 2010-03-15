@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Documents, schemas, queries etc constituting the input for inference.
@@ -27,27 +27,27 @@ import java.util.Collection;
  */
 public class Input {
 
-  private final Collection<File> documents;
-  private final Collection<File> schemas;
-  private final Collection<File> queries;
+  private final List<File> documents;
+  private final List<File> schemas;
+  private final List<File> queries;
 
-  public Input(final Collection<File> documents,
-          final Collection<File> schemas,
-          final Collection<File> queries) {
+  public Input(final List<File> documents,
+          final List<File> schemas,
+          final List<File> queries) {
     this.documents = documents;
     this.schemas = schemas;
     this.queries = queries;
   }
 
-  public Collection<File> getDocuments() {
+  public List<File> getDocuments() {
     return documents;
   }
 
-  public Collection<File> getSchemas() {
+  public List<File> getSchemas() {
     return schemas;
   }
 
-  public Collection<File> getQueries() {
+  public List<File> getQueries() {
     return queries;
   }
 }

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.fileselector;
 
+import cz.cuni.mff.ksi.jinfer.fileselector.nodes.RootNode;
 import java.util.logging.Logger;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -28,16 +29,16 @@ import org.openide.explorer.view.BeanTreeView;
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.fileselector//FileSelector//EN",
-autostore = false)
-public final class FileSelectorTopComponent extends TopComponent implements ExplorerManager.Provider{
+@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.fileselector//FileSelector//EN", autostore = false)
+public final class FileSelectorTopComponent extends TopComponent implements ExplorerManager.Provider {
+
+  private static final long serialVersionUID = 75433342454l;
 
   private static FileSelectorTopComponent instance;
   /** path to the icon used by the component and its open action */
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
   private static final String PREFERRED_ID = "FileSelectorTopComponent";
   private final ExplorerManager em = new ExplorerManager();
-  
 
   public FileSelectorTopComponent() {
     super();
@@ -69,10 +70,10 @@ public final class FileSelectorTopComponent extends TopComponent implements Expl
       .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JScrollPane jScrollPane1;
   // End of variables declaration//GEN-END:variables
+
   /**
    * Gets default instance. Do not use directly: reserved for *.settings files only,
    * i.e. deserialization routines; otherwise you could get a non-deserialized instance.

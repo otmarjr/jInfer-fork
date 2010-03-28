@@ -14,8 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.fileselector;
+package cz.cuni.mff.ksi.jinfer.fileselector.nodes;
 
+import cz.cuni.mff.ksi.jinfer.fileselector.FileAddAction;
 import java.io.File;
 import java.util.Collection;
 import javax.swing.Action;

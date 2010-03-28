@@ -14,17 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.fileselector;
 
 /**
  *
  * @author sviro
  */
-class NoDataObjectException extends RuntimeException{
+public class NoDataObjectException extends RuntimeException {
+
+  private static final long serialVersionUID = 12549853274156l;
 
   public NoDataObjectException(final String msg) {
     super(msg);
   }
-
 }

@@ -14,8 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.fileselector;
+package cz.cuni.mff.ksi.jinfer.fileselector.nodes;
 
+import cz.cuni.mff.ksi.jinfer.fileselector.FileModel;
 import java.io.File;
 import java.util.Collection;
 import org.openide.nodes.AbstractNode;
@@ -26,15 +27,17 @@ import org.openide.nodes.Node;
  *
  * @author sviro
  */
-class RootNode extends AbstractNode {
+public class RootNode extends AbstractNode {
+
+  // TODO sviro Convert this to an enum
+  private static final String[] FOLDERS = {"XML", "XSD", "QUERIES"};
 
   public RootNode(final FileModel model) {
     super(new Children.Keys<String>() {
 
       @Override
       protected void addNotify() {
-        final String[] folders = {"XML", "XSD", "QUERIES"};
-        setKeys(folders);
+        setKeys(FOLDERS);
       }
 
       @Override

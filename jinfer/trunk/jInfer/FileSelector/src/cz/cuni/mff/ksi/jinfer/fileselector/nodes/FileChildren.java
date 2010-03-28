@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cz.cuni.mff.ksi.jinfer.fileselector.nodes;
 
-package cz.cuni.mff.ksi.jinfer.fileselector;
-
+import cz.cuni.mff.ksi.jinfer.fileselector.NoDataObjectException;
 import java.io.File;
 import java.util.Collection;
 import org.openide.filesystems.FileObject;
@@ -30,7 +30,7 @@ import org.openide.nodes.Node;
  *
  * @author sviro
  */
-public class FileChildren extends Children.Keys<File>{
+public class FileChildren extends Children.Keys<File> {
 
   private final Collection<File> model;
 
@@ -53,5 +53,4 @@ public class FileChildren extends Children.Keys<File>{
       throw new NoDataObjectException(ex.getMessage());
     }
   }
-
 }

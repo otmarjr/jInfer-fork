@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.fileselector;
 
 import java.awt.event.ActionEvent;
@@ -33,7 +32,9 @@ import org.openide.util.Exceptions;
  *
  * @author sviro
  */
-class FileAddAction extends AbstractAction{
+public class FileAddAction extends AbstractAction {
+
+  private static final long serialVersionUID = 12121452l;
 
   private final Collection<File> files;
   private final Node node;
@@ -50,16 +51,15 @@ class FileAddAction extends AbstractAction{
     final JFileChooser fc = new JFileChooser();
     final int retVal = fc.showOpenDialog(null);
     if (retVal == JFileChooser.APPROVE_OPTION) {
-          final File file = fc.getSelectedFile();
-          files.add(file);
-          
-          final FileObject fileOb = FileUtil.toFileObject(file);
+      final File file = fc.getSelectedFile();
+      files.add(file);
+
+      final FileObject fileOb = FileUtil.toFileObject(file);
       try {
         node.getChildren().add(new Node[]{DataObject.find(fileOb).getNodeDelegate()});
       } catch (DataObjectNotFoundException ex) {
         Exceptions.printStackTrace(ex);
       }
-      }
+    }
   }
-
 }

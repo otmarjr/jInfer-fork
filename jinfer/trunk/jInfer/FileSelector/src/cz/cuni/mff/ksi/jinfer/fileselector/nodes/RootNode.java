@@ -16,12 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.fileselector.nodes;
 
-import cz.cuni.mff.ksi.jinfer.fileselector.FileModel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent;
 import java.io.File;
 import java.util.Collection;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.windows.TopComponent;
 
 /**
  *
@@ -32,7 +34,7 @@ public class RootNode extends AbstractNode {
   // TODO sviro Convert this to an enum
   private static final String[] FOLDERS = {"XML", "XSD", "QUERIES"};
 
-  public RootNode(final FileModel model) {
+  public RootNode(final FileSelectorTopComponent topComponent, final Input input) {
     super(new Children.Keys<String>() {
 
       @Override
@@ -41,18 +43,18 @@ public class RootNode extends AbstractNode {
       }
 
       @Override
-      protected Node[] createNodes(final String t) {
+      protected Node[] createNodes(final String folderName) {
         final Collection<File> files;
-        if (t.equals("XML")) {
-          files = model.getInput().getDocuments();
-        } else if (t.equals("XSD")) {
-          files = model.getInput().getSchemas();
-        } else if (t.equals("QUERIES")) {
-          files = model.getInput().getQueries();
+        if (folderName.equals("XML")) {
+          files = input.getDocuments();
+        } else if (folderName.equals("XSD")) {
+          files = input.getSchemas();
+        } else if (folderName.equals("QUERIES")) {
+          files = input.getQueries();
         } else {
           throw new IllegalArgumentException("unknown folder type");
         }
-        return new Node[]{new FolderNode(t, files)};
+        return new Node[]{new FolderNode(folderName, files, topComponent)};
       }
     });
   }

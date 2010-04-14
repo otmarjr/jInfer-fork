@@ -18,24 +18,19 @@ package cz.cuni.mff.ksi.jinfer.fileselector;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
-import java.io.File;
-import java.util.ArrayList;
+import org.openide.windows.WindowManager;
 
 /**
  *
  * @author sviro
  */
-public class FileModel implements FileSelection {
+public class FileSelectionImpl implements FileSelection {
 
-  private final Input input;
 
-  public FileModel() {
-    input = new Input(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
-  }
 
   @Override
   public Input getInput() {
-    return input;
+    return ((FileSelectorTopComponent) WindowManager.getDefault().findTopComponent("FileSelectorTopComponent")).getInput();
   }
 
 }

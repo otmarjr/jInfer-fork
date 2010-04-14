@@ -16,11 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.fileselector;
 
+import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
@@ -35,7 +38,6 @@ import org.openide.util.Exceptions;
 public class FileAddAction extends AbstractAction {
 
   private static final long serialVersionUID = 12121452l;
-
   private final Collection<File> files;
   private final Node node;
 
@@ -49,6 +51,19 @@ public class FileAddAction extends AbstractAction {
   @Override
   public void actionPerformed(final ActionEvent e) {
     final JFileChooser fc = new JFileChooser();
+
+    final String type = ((FolderNode) node).getFolderName();
+    FileFilter fileFilter = null;
+    if ("XML".equals(type)) {
+      fileFilter = new FileNameExtensionFilter("XML files", "xml");
+    } else if ("XSD".equals(type)) {
+      fileFilter = new FileNameExtensionFilter("XSD files", "xsd");
+    } else if ("QUERIES".equals(type)) {
+      fileFilter = new FileNameExtensionFilter("QUERY files", "query");
+    }
+
+    fc.setFileFilter(fileFilter);
+
     final int retVal = fc.showOpenDialog(null);
     if (retVal == JFileChooser.APPROVE_OPTION) {
       final File file = fc.getSelectedFile();
@@ -57,9 +72,12 @@ public class FileAddAction extends AbstractAction {
       final FileObject fileOb = FileUtil.toFileObject(file);
       try {
         node.getChildren().add(new Node[]{DataObject.find(fileOb).getNodeDelegate()});
+
       } catch (DataObjectNotFoundException ex) {
         Exceptions.printStackTrace(ex);
       }
+
+      ((FolderNode) node).getTopComponent().storeInput();
     }
   }
 }

@@ -27,4 +27,7 @@
             </folder>
         </folder>
     </folder>
+    <folder name="FileSelectionProviders">
+    <file name="cz-cuni-mff-ksi-jinfer-fileselector-FileSelectionImpl.instance"/>
+  </folder>
 </filesystem>

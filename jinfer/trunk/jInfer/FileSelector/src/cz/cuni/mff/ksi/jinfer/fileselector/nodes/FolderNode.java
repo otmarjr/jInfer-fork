@@ -17,10 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.fileselector.nodes;
 
 import cz.cuni.mff.ksi.jinfer.fileselector.FileAddAction;
+import cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent;
+import java.awt.Image;
 import java.io.File;
 import java.util.Collection;
 import javax.swing.Action;
 import org.openide.nodes.AbstractNode;
+import org.openide.util.ImageUtilities;
 
 /**
  *
@@ -30,20 +33,44 @@ public class FolderNode extends AbstractNode {
 
   private final Collection<File> files;
   private final String folderName;
+  private final FileSelectorTopComponent topComponent;
 
-  public FolderNode(final String name, final Collection<File> files) {
+  public FolderNode(final String name, final Collection<File> files, final FileSelectorTopComponent topComponent) {
     super(new FileChildren(files));
+    setName(name);
     this.files = files;
     this.folderName = name;
+    this.topComponent = topComponent;
+  }
+
+  @Override
+  public Image getIcon(final int type) {
+    return ImageUtilities.loadImage("cz/cuni/mff/ksi/jinfer/fileselector/resource/folder.png");
+  }
+
+  @Override
+  public Image getOpenedIcon(final int type) {
+    return getIcon(type);
   }
 
   @Override
   public String getDisplayName() {
-    return folderName;
+    return getFolderName();
   }
 
   @Override
   public Action[] getActions(final boolean bln) {
     return new Action[]{new FileAddAction(this, files)};
+  }
+
+  public FileSelectorTopComponent getTopComponent() {
+    return topComponent;
+  }
+
+  /**
+   * @return the folderName
+   */
+  public String getFolderName() {
+    return folderName;
   }
 }

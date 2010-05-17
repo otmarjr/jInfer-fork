@@ -63,6 +63,9 @@ public class Runner {
   }
 
   public void finishedIGGenerator(final List<AbstractNode> grammar) {
+    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    io.getOut().println("Runner: initial grammar contains " + grammar.size()
+            + " rules.");
     simplifier.start(grammar, new SimplifierCallback() {
 
       @Override
@@ -73,6 +76,9 @@ public class Runner {
   }
 
   public void finishedSimplifier(final List<AbstractNode> grammar) {
+    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    io.getOut().println("Runner: simplified grammar contains " + grammar.size()
+            + " rules.");
     schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
 
       @Override
@@ -83,8 +89,10 @@ public class Runner {
   }
 
   public void finishedSchemaGenerator(final String schema) {
-    InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-    io.getOut().println(schema);
+    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    io.getOut().println("Runner: writing schema.");
+    final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
+    ioResult.getOut().println(schema);
   }
 
   private FileSelection lookupFileSelection() {

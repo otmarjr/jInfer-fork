@@ -27,6 +27,8 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.List;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
 
 /**
  * A simple DTD exporter.
@@ -40,6 +42,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
+    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    io.getOut().println("DTD Exporter: got " + grammar.size() +
+            " rules.");
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
@@ -47,6 +52,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         elements.add((Element) node);
       }
     }
+
+    io.getOut().println("DTD Exporter: that is " + elements.size() +
+            " elements.");
 
     // sort elements topologically
     final TopologicalSort s = new TopologicalSort(elements);
@@ -61,6 +69,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(elementToString(element));
     }
     ret.append("]>");
+
+    io.getOut().println("DTD Exporter: schema generated at "
+            + ret.toString().length() + " characters.");
 
     callback.finished(ret.toString());
   }

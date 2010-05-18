@@ -14,10 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
@@ -27,30 +26,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A trivial implementation of Simplifier - simply passes on the schema.
- * 
+ *
  * @author vektor
  */
-public class SimplifierImpl implements Simplifier {
+public class CPAlternations implements ClusterProcessor {
 
   @Override
-  public String getModuleName() {
-    return "Trivial Simplifier";
+  public List<AbstractNode> processClusters(List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+
+    for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
+      ret.add(processCluster(cluster));
+    }
+
+    return ret;
   }
 
-  private ClusterProcessor getClusterProcessor() {
-    return new CPTrie();
-  }
-
-  private Clusterer getClusterer() {
-    return new ClustererImpl();
-  }
-
-  @Override
-  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
-    final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
-
-    callback.finished(getClusterProcessor().processClusters(clustered));
+  private Element processCluster(final Pair<AbstractNode, List<AbstractNode>> cluster) {
+    final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
+    for (final AbstractNode n : cluster.getSecond()) {
+      children.add(((Element) n).getSubnodes());
+    }
+    return new Element(null,
+            cluster.getFirst().getName(),
+            null,
+            new Regexp<AbstractNode>(null, children, RegexpType.ALTERNATION));
   }
 
 }

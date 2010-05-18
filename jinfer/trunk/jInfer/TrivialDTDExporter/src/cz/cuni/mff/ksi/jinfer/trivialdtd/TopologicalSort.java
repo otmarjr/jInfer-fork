@@ -60,6 +60,12 @@ public final class TopologicalSort {
       }
     }
 
-    ret.add(e);
+    // output only original elements
+    for (final Element original : elements) {
+      if (e == original) {
+        ret.add(e);
+        break;
+      }
+    }
   }
 }

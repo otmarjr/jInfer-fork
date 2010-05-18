@@ -64,8 +64,10 @@ public abstract class AbstractNode {
   public String toString() {
     final StringBuilder ret = new StringBuilder();
     // complete context
-    for (final String element : context) {
-      ret.append(element).append('/');
+    if (context != null) {
+      for (final String element : context) {
+        ret.append(element).append('/');
+      }
     }
     // + name
     ret.append(name);

@@ -54,7 +54,9 @@ public class TopologicalSortTest {
     final Element e = new Element(null, "test", null,
             new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
     final TopologicalSort s = new TopologicalSort(Arrays.asList(e));
-    assertEquals(s.sort().get(0), e);
+    final List<Element> elements = s.sort();
+    assertTrue(elements.size() == 1);
+    assertEquals(elements.get(0), e);
   }
 
   @Test
@@ -85,13 +87,15 @@ public class TopologicalSortTest {
     e4.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e6));
     e5.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e6));
     e7.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e8));
-
+    
     final List<Element> elements = Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8);
 
     Collections.shuffle(elements);
 
     final TopologicalSort s = new TopologicalSort(elements);
     final List<Element> toposorted = s.sort();
+
+    assertTrue(toposorted.size() == 8);
     
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e2));
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e3));
@@ -99,5 +103,33 @@ public class TopologicalSortTest {
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e6));
     assertTrue(toposorted.indexOf(e3) > toposorted.indexOf(e6));
     assertTrue(toposorted.indexOf(e7) > toposorted.indexOf(e8));
+  }
+
+  @Test
+  public void testMore() {
+    final Element e1 = new Element(null, "test1", null,
+            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+    final Element e2 = new Element(null, "test2", null,
+            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+    final Element e3 = new Element(null, "test3", null,
+            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+    final Element e4 = new Element(null, "test4", null,
+            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+
+    e1.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e2));
+    e1.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e3));
+    e3.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e4));
+
+    final List<Element> elements = Arrays.asList(e1, e2);
+
+    Collections.shuffle(elements);
+
+    final TopologicalSort s = new TopologicalSort(elements);
+    final List<Element> toposorted = s.sort();
+
+    assertTrue(toposorted.size() == 2);
+    assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e2));
+    assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e3));
+    assertTrue(toposorted.indexOf(e2) > toposorted.indexOf(e4));
   }
 }

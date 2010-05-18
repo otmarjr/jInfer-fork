@@ -62,7 +62,9 @@ public class Element extends AbstractNode {
   @Override
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());
-    ret.append('\n').append(subnodes.toString());
+    if (subnodes != null) {
+      ret.append('\n').append(subnodes.toString());
+    }
     return ret.toString();
   }
 }

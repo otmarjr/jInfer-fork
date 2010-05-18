@@ -95,6 +95,83 @@ public class Regexp<T> {
     return type;
   }
 
+  /**
+   * <p>Converts the i-th position of this concatenation to alternation and
+   * inserts the rest as the one and only of its children.</p>
+   *
+   * <p>Example: consider concatenation :<br/>
+   * <code>(A B C D)</code><br/>
+   * after applying <code>branch(2)</code> it will
+   * look like this:<br/>
+   * <code>(A B (C D | ))</code>
+   * </p>
+   *
+   * <p>If i-th position is already an alternation, nothing happens.</p>
+   *
+   * <p>Note that elements of the concatenation are indexed from 0.</p>
+   *
+   * @param position Where to branch.
+   */
+  public void branch(final int position) {
+    if (!RegexpType.CONCATENATION.equals(getType())) {
+      throw new IllegalArgumentException();
+    }
+    if (position >= children.size()) {
+      throw new IllegalArgumentException();
+    }
+    if (RegexpType.ALTERNATION.equals(children.get(position).getType())) {
+      return;
+    }
+
+    final List<Regexp<T>> newChildren = new ArrayList<Regexp<T>>(position + 1);
+
+    for (int i = 0; i < position; i++) {
+      newChildren.add(children.get(i));
+    }
+
+    final List<Regexp<T>> altChildren = new ArrayList<Regexp<T>>();
+
+    for (int i = position; i < children.size(); i++) {
+      altChildren.add(children.get(i));
+    }
+
+    final Regexp<T> concat = new Regexp<T>(null, altChildren, RegexpType.CONCATENATION);
+
+    final List<Regexp<T>> c = new ArrayList<Regexp<T>>();
+    c.add(concat);
+
+    newChildren.add(new Regexp<T>(null, c, RegexpType.ALTERNATION));
+
+    children.clear();
+    children.addAll(newChildren);
+  }
+
+  /**
+   * Returns the suffix of this concatenation, from parameter <code>from</code> to the end.
+   * 
+   * @param from
+   * @return
+   */
+  public Regexp<T> getEnd(final int from) {
+    if (!RegexpType.CONCATENATION.equals(getType())) {
+      throw new IllegalArgumentException();
+    }
+    if (from >= children.size()) {
+      throw new IllegalArgumentException();
+    }
+    if (from == 0) {
+      return this;
+    }
+
+    final List<Regexp<T>> newChildren = new ArrayList<Regexp<T>>();
+
+    for (int i = from; i < children.size(); i++) {
+      newChildren.add(children.get(i));
+    }
+
+    return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
+  }
+
   @Override
   public String toString() {
     switch (type) {

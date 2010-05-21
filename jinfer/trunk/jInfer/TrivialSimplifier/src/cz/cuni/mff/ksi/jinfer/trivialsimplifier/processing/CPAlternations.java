@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
+package cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
@@ -34,7 +34,7 @@ import java.util.List;
 public class CPAlternations implements ClusterProcessor {
 
   @Override
-  public List<AbstractNode> processClusters(List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+  public List<AbstractNode> processClusters(final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {

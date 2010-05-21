@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
+package cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
@@ -111,30 +111,26 @@ public class CPTrie implements ClusterProcessor {
 
       if (RegexpType.ALTERNATION.equals(tree.getChildren().get(check).getType())) {
         // walk all the items in the alternation
-        //boolean found = false;
         for (final Regexp<AbstractNode> alternated : tree.getChildren().get(check).getChildren()) {
           if (alternated.getChildren().size() > 0
                   && equalTokens(alternated.getChildren().get(0), what.getChildren().get(check))) {
             // continue in this branch
             addToTree(alternated, what.getEnd(check));
-            //found = true;
-            //break;
             return;
           }
         }
 
         // if not found, simply add the end of "what" to the alternation
-        //if (!found) {
-          tree.getChildren().get(check).getChildren().add(what.getEnd(check));
-          return;
-        //}
+        tree.getChildren().get(check).getChildren().add(what.getEnd(check));
+        return;
       }
 
       i++;
     }
   }
 
-  private static boolean equalTokens(Regexp<AbstractNode> t1, Regexp<AbstractNode> t2) {
+  // TODO move to a common package
+  public static boolean equalTokens(final Regexp<AbstractNode> t1, final Regexp<AbstractNode> t2) {
     if (!RegexpType.TOKEN.equals(t1.getType())
             || !RegexpType.TOKEN.equals(t2.getType())) {
       throw new IllegalArgumentException();

@@ -15,19 +15,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
+package cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
- * Second part of the processing - do something with rule clusters.
+ * Third part of the processing - try to apply Kleene operator where reasonable.
  *
  * @author vektor
  */
-public interface ClusterProcessor {
+public interface KleeneProcessor {
 
-  List<AbstractNode> processClusters(List<Pair<AbstractNode, List<AbstractNode>>> clusters);
+  List<AbstractNode> kleeneProcess(List<AbstractNode> rules);
 
 }

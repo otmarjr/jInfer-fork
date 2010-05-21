@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
 
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.CPTrie;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;

@@ -16,14 +16,16 @@
  */
 package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
 
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.CPTrie;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering.NameClusterer;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
-import java.util.ArrayList;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.KleeneProcessor;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.SimpleKP;
 import java.util.List;
 
 /**
@@ -46,11 +48,16 @@ public class SimplifierImpl implements Simplifier {
     return new NameClusterer();
   }
 
+  private KleeneProcessor getKleeneProcessor() {
+    return new SimpleKP();
+  }
+
   @Override
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
-
-    callback.finished(getClusterProcessor().processClusters(clustered));
+    final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
+    final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
+    callback.finished(kleened);
   }
 
 }

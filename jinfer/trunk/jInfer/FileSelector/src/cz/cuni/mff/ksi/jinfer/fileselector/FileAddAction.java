@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.fileselector;
 
+import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -24,13 +25,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileUtil;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.Node;
-import org.openide.util.Exceptions;
-
 /**
  *
  * @author sviro
@@ -69,13 +64,7 @@ public class FileAddAction extends AbstractAction {
       final File file = fc.getSelectedFile();
       files.add(file);
 
-      final FileObject fileOb = FileUtil.toFileObject(file);
-      try {
-        node.getChildren().add(new Node[]{DataObject.find(fileOb).getNodeDelegate()});
-
-      } catch (DataObjectNotFoundException ex) {
-        Exceptions.printStackTrace(ex);
-      }
+      ((FileChildren) node.getChildren()).addNotify();
 
       ((FolderNode) node).getTopComponent().storeInput();
     }

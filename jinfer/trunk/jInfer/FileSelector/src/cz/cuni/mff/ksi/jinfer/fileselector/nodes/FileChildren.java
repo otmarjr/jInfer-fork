@@ -40,7 +40,7 @@ public class FileChildren extends Children.Keys<File> {
   }
 
   @Override
-  protected void addNotify() {
+  public void addNotify() {
     setKeys(model);
   }
 

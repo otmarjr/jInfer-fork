@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.fileselector;
 
+import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -56,6 +57,6 @@ public class FileDeleteAction extends AbstractAction {
     }
     topComponent.storeInput();
 
-    dataNode.getParentNode().getChildren().remove(new Node[]{dataNode});
+    ((FileChildren) dataNode.getParentNode().getChildren()).addNotify();
   }
 }

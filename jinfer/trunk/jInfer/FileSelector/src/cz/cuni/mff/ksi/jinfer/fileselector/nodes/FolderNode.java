@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.fileselector.nodes;
 
+import cz.cuni.mff.ksi.jinfer.fileselector.DeleteAllAction;
 import cz.cuni.mff.ksi.jinfer.fileselector.FileAddAction;
 import cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent;
 import java.awt.Image;
@@ -60,7 +61,7 @@ public class FolderNode extends AbstractNode {
 
   @Override
   public Action[] getActions(final boolean bln) {
-    return new Action[]{new FileAddAction(this, files)};
+    return new Action[]{new FileAddAction(this, files), new DeleteAllAction(this, files)};
   }
 
   public FileSelectorTopComponent getTopComponent() {

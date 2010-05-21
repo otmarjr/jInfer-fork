@@ -24,7 +24,6 @@ import javax.swing.AbstractAction;
 import org.openide.explorer.ExplorerManager;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataNode;
-import org.openide.nodes.Node;
 
 /**
  *

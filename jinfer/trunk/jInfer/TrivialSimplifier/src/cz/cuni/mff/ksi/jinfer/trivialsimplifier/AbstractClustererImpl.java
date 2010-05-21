@@ -22,10 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Abstract clusterer implementation. Walks all the rules and uses overridable
+ * logic to determine, whether they belong to a common cluster.
+ * 
  * @author vektor
  */
-public class ClustererImpl implements Clusterer {
+public abstract class AbstractClustererImpl implements Clusterer {
 
   @Override
   public List<Pair<AbstractNode, List<AbstractNode>>> cluster(final List<AbstractNode> initialGrammar) {
@@ -55,8 +57,5 @@ public class ClustererImpl implements Clusterer {
   /**
    * Answers the question whether these two nodes belong to the same cluster.
    */
-  private boolean clusters(final AbstractNode n, final AbstractNode first) {
-    // TODO vektor Here be different implementations
-    return n.getName().equalsIgnoreCase(first.getName());
-  }
+  protected abstract boolean clusters(final AbstractNode n, final AbstractNode first);
 }

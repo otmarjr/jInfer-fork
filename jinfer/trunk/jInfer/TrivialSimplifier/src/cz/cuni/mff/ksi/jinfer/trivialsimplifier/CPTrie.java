@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Cluster processor implementation that exports a cluster as a trie (prefix tree).
+ * 
  * @author vektor
  */
 public class CPTrie implements ClusterProcessor {

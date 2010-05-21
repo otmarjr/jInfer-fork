@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A trivial implementation of Simplifier - simply passes on the schema.
+ * Basic implementation of Simplifier interface.
  * 
  * @author vektor
  */
@@ -43,7 +43,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private Clusterer getClusterer() {
-    return new ClustererImpl();
+    return new NameClusterer();
   }
 
   @Override

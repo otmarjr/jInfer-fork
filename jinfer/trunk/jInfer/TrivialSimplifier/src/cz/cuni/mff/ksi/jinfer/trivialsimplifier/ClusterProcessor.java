@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
+ * Second part of the processing - do something with rule clusters.
  *
  * @author vektor
  */

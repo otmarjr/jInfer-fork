@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Cluster processor implementation that exports a cluster as an alternation of
+ * its rules.
+ * 
  * @author vektor
  */
 public class CPAlternations implements ClusterProcessor {

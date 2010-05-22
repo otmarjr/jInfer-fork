@@ -22,11 +22,13 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.options.ConfigPanel;
 import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.CPTrie;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import sun.misc.REException;
+import java.util.prefs.Preferences;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
 
 /**
  * A simple Kleene processor - if it finds more or equal than THRESHOLD
@@ -36,10 +38,17 @@ import sun.misc.REException;
  */
 public class SimpleKP implements KleeneProcessor {
 
-  private static final int THRESHOLD = 3;
+  private final int threshold;
+
+  public SimpleKP() {
+    threshold = Preferences.userNodeForPackage(ConfigPanel.class).getInt("kleene.repetitions", 3);
+  }
 
   @Override
   public List<AbstractNode> kleeneProcess(final List<AbstractNode> rules) {
+    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    io.getOut().println("Simplifier: " + threshold + " and more repetitions will be collapsed to a Kleene star.");
+
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules.size());
     for (final AbstractNode root : rules) {
       final Element e  = (Element) root;
@@ -52,7 +61,7 @@ public class SimpleKP implements KleeneProcessor {
     return ret;
   }
 
-  private static Regexp<AbstractNode> processTree(final Regexp<AbstractNode> root) {
+  private Regexp<AbstractNode> processTree(final Regexp<AbstractNode> root) {
     switch (root.getType()) {
       case CONCATENATION:
         return processConcat(root);
@@ -67,7 +76,7 @@ public class SimpleKP implements KleeneProcessor {
     }
   }
 
-  private static Regexp<AbstractNode> processConcat(final Regexp<AbstractNode> root) {
+  private Regexp<AbstractNode> processConcat(final Regexp<AbstractNode> root) {
     if (!RegexpType.CONCATENATION.equals(root.getType())) {
       throw new IllegalArgumentException();
     }
@@ -99,7 +108,7 @@ public class SimpleKP implements KleeneProcessor {
     return new Regexp<AbstractNode>(null, retChildren, RegexpType.CONCATENATION);
   }
 
-  private static boolean equalRegexps(final Regexp<AbstractNode> last, final Regexp<AbstractNode> current) {
+  private boolean equalRegexps(final Regexp<AbstractNode> last, final Regexp<AbstractNode> current) {
     if (last != null
             && current != null
             && RegexpType.TOKEN.equals(last.getType())
@@ -112,12 +121,12 @@ public class SimpleKP implements KleeneProcessor {
     return false;
   }
 
-  private static void closeGroup(final Regexp<AbstractNode> current,
+  private void closeGroup(final Regexp<AbstractNode> current,
           final int groupSize, final List<Regexp<AbstractNode>> retChildren) {
     if (groupSize == 0) {
       return;
     }
-    if (groupSize < THRESHOLD) {
+    if (groupSize < threshold) {
       for (int i = 0; i < groupSize; i++) {
         retChildren.add(current);
       }

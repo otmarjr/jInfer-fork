@@ -54,9 +54,16 @@ public final class TopologicalSort {
 
     visited.add(e);
 
+    // visit all my subnodes
     for (final AbstractNode node : e.getSubnodes().getTokens()) {
       if (node.getType().equals(NodeType.ELEMENT)) {
         visit((Element) node);
+      }
+      // links between input elements might be torn, try to visit others too
+      for (final Element el : elements) {
+        if (el.getName().equalsIgnoreCase(e.getName())) {
+          visit(el);
+        }
       }
     }
 

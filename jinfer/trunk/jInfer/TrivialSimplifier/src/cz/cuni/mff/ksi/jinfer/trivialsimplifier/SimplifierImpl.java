@@ -24,9 +24,15 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering.ContextClusterer;
 import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.KleeneProcessor;
 import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.SimpleKP;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.options.ConfigPanel;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.CPAlternations;
 import java.util.List;
+import java.util.prefs.Preferences;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
 
 /**
  * Basic implementation of Simplifier interface.
@@ -41,10 +47,25 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private ClusterProcessor getClusterProcessor() {
-    return new CPTrie();
+    final String cp = Preferences.userNodeForPackage(ConfigPanel.class).get("cluster.processor", "Trie");
+    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    io.getOut().println("Simplifier: using " + cp + " cluster processor.");
+    if (cp.equals("Trie")) {
+      return new CPTrie();
+    }
+    if (cp.equals("Alternations")) {
+      return new CPAlternations();
+    }
+    throw new IllegalArgumentException("Unknown cluster processor: " + cp);
   }
 
   private Clusterer getClusterer() {
+    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+    if (Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("use.context", false)) {
+      io.getOut().println("Simplifier: using context.");
+      return new ContextClusterer();
+    }
+    io.getOut().println("Simplifier: not using context.");
     return new NameClusterer();
   }
 

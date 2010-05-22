@@ -37,10 +37,12 @@ import org.openide.windows.InputOutput;
  */
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
+  @Override
   public String getModuleName() {
     return "Trivial DTD exporter";
   }
 
+  @Override
   public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
     final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
     io.getOut().println("DTD Exporter: got " + grammar.size() +
@@ -62,13 +64,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // generate DTD schema
     final StringBuilder ret = new StringBuilder();
-    ret.append("<!DOCTYPE ")
-            .append(elements.get(elements.size() - 1).getName())
-            .append(" [\n");
     for (final Element element : toposorted) {
       ret.append(elementToString(element));
     }
-    ret.append("]>");
 
     io.getOut().println("DTD Exporter: schema generated at "
             + ret.toString().length() + " characters.");
@@ -113,6 +111,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
           final List<Regexp<AbstractNode>> col) {
     return BaseUtils.filter(col, new BaseUtils.Predicate<Regexp<AbstractNode>>() {
 
+      @Override
       public boolean apply(final Regexp<AbstractNode> type) {
         return !type.getType().equals(RegexpType.TOKEN) || !type.getContent().getType().equals(NodeType.ATTRIBUTE);
       }
@@ -139,6 +138,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
       ret.append("\n\t").append(attribute.getName()).append(" CDATA #IMPLIED");
+    }
+    return ret.toString();
+  }
+
+  private String getNames(final List<AbstractNode> tokens) {
+    final StringBuilder ret = new StringBuilder();
+    for (final AbstractNode n : tokens) {
+      ret.append(n.getName()).append(' ');
     }
     return ret.toString();
   }

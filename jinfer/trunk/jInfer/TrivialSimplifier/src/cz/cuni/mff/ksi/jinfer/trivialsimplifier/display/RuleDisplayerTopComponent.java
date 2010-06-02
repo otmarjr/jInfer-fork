@@ -29,7 +29,7 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.util.ImageUtilities;
 
 /**
- * Top component which displays something.
+ * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.trivialsimplifier.display//RuleDisplayer//EN",
 autostore = false)
@@ -41,12 +41,20 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   private static final String PREFERRED_ID = "RuleDisplayerTopComponent";
   
   public RuleDisplayerTopComponent() {
+    super();
     initComponents();
     setName(NbBundle.getMessage(RuleDisplayerTopComponent.class, "CTL_RuleDisplayerTopComponent"));
     setToolTipText(NbBundle.getMessage(RuleDisplayerTopComponent.class, "HINT_RuleDisplayerTopComponent"));
     setIcon(ImageUtilities.loadImage(ICON_PATH, true));
   }
 
+  /**
+   * Creates a new panel with provided name.
+   * 
+   * @return The RulePainter assigned to the newly created panel. It can be
+   *  immediately used to draw a set of rules
+   *  (via the RulePainter.setRules() method).
+   */
   public RulePainter createNewPanel(final String name) {
     final RulePanel panel = new RulePanel();
     panels.add(name, panel);
@@ -64,7 +72,7 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(final Graphics g) {
       rp.paint((Graphics2D) g);
     }
   }
@@ -117,7 +125,7 @@ public final class RuleDisplayerTopComponent extends TopComponent {
    * Obtain the RuleDisplayerTopComponent instance. Never call {@link #getDefault} directly!
    */
   public static synchronized RuleDisplayerTopComponent findInstance() {
-    TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
+    final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
       Logger.getLogger(RuleDisplayerTopComponent.class.getName()).warning(
               "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
@@ -147,14 +155,14 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     // TODO add custom code on component closing
   }
 
-  void writeProperties(Properties p) {
+  private void writeProperties(final Properties p) {
     // better to version settings since initial version as advocated at
     // http://wiki.apidesign.org/wiki/PropertyFiles
     p.setProperty("version", "1.0");
     // TODO store your settings
   }
 
-  Object readProperties(Properties p) {
+  private Object readProperties(final Properties p) {
     if (instance == null) {
       instance = this;
     }
@@ -162,8 +170,8 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     return instance;
   }
 
-  private void readPropertiesImpl(Properties p) {
-    String version = p.getProperty("version");
+  private void readPropertiesImpl(final Properties p) {
+    // String version = p.getProperty("version");
     // TODO read your settings according to their version
   }
 

@@ -23,10 +23,8 @@ public final class ConfigPanel extends JPanel {
 
   private static final long serialVersionUID = 561241l;
 
-  private final ConfigOptionsPanelController controller;
-
-  public ConfigPanel(ConfigOptionsPanelController controller) {
-    this.controller = controller;
+  public ConfigPanel() {
+    super();
     initComponents();
     // TODO listen to changes in form fields and call controller.changed()
   }

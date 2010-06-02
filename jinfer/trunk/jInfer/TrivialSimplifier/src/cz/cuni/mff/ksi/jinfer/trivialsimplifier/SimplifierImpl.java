@@ -51,10 +51,10 @@ public class SimplifierImpl implements Simplifier {
     final String cp = Preferences.userNodeForPackage(ConfigPanel.class).get("cluster.processor", "Trie");
     final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
     io.getOut().println("Simplifier: using " + cp + " cluster processor.");
-    if (cp.equals("Trie")) {
+    if ("Trie".equals(cp)) {
       return new CPTrie();
     }
-    if (cp.equals("Alternations")) {
+    if ("Alternations".equals(cp)) {
       return new CPAlternations();
     }
     throw new IllegalArgumentException("Unknown cluster processor: " + cp);

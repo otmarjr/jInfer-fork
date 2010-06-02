@@ -24,7 +24,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 @OptionsPanelController.TopLevelRegistration(categoryName = "#OptionsCategory_Name_Config",
-iconBase = "cz/cuni/mff/ksi/jinfer/trivialsimplifier/jinfer-icon48.png",
+iconBase = "cz/cuni/mff/ksi/jinfer/base/graphics/icons/jinfer-icon48.png",
 keywords = "#OptionsCategory_Keywords_Config",
 keywordsCategory = "Config")
 public final class ConfigOptionsPanelController extends OptionsPanelController {
@@ -66,32 +66,24 @@ public final class ConfigOptionsPanelController extends OptionsPanelController {
   }
 
   @Override
-  public JComponent getComponent(Lookup masterLookup) {
+  public JComponent getComponent(final Lookup masterLookup) {
     return getPanel();
   }
 
   @Override
-  public void addPropertyChangeListener(PropertyChangeListener l) {
+  public void addPropertyChangeListener(final PropertyChangeListener l) {
     pcs.addPropertyChangeListener(l);
   }
 
   @Override
-  public void removePropertyChangeListener(PropertyChangeListener l) {
+  public void removePropertyChangeListener(final PropertyChangeListener l) {
     pcs.removePropertyChangeListener(l);
   }
 
   private ConfigPanel getPanel() {
     if (panel == null) {
-      panel = new ConfigPanel(this);
+      panel = new ConfigPanel();
     }
     return panel;
-  }
-
-  void changed() {
-    if (!changed) {
-      changed = true;
-      pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
-    }
-    pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);
   }
 }

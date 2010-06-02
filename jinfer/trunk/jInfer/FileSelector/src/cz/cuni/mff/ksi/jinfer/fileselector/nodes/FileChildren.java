@@ -47,6 +47,10 @@ public class FileChildren extends Children.Keys<File> {
   @Override
   protected Node[] createNodes(final File arg0) {
     final FileObject fileOb = FileUtil.toFileObject(arg0);
+    if (fileOb == null) {
+      model.remove(arg0);
+      return null;
+    }
     try {
       return new Node[]{DataObject.find(fileOb).getNodeDelegate()};
     } catch (DataObjectNotFoundException ex) {

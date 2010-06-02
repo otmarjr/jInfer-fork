@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Documents, schemas, queries etc constituting the input for inference.
@@ -39,15 +40,27 @@ public class Input {
     this.queries = queries;
   }
 
+  private void removeNonExistFiles(Collection<File> collection) {
+    for (Iterator<File> it = collection.iterator(); it.hasNext();) {
+      File file = it.next();
+      if (!file.exists()) {
+        it.remove();
+      }
+    }
+  }
+
   public Collection<File> getDocuments() {
+    removeNonExistFiles(documents);
     return documents;
   }
 
   public Collection<File> getSchemas() {
+    removeNonExistFiles(schemas);
     return schemas;
   }
 
   public Collection<File> getQueries() {
+    removeNonExistFiles(queries);
     return queries;
   }
 }

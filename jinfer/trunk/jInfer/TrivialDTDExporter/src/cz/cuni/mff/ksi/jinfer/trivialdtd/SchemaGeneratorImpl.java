@@ -37,6 +37,8 @@ import org.openide.windows.InputOutput;
  */
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
+  private final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+
   @Override
   public String getModuleName() {
     return "Trivial DTD exporter";
@@ -44,9 +46,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   @Override
   public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
-    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
     io.getOut().println("DTD Exporter: got " + grammar.size() +
             " rules.");
+    
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
@@ -141,12 +143,5 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
     return ret.toString();
   }
-
-  private String getNames(final List<AbstractNode> tokens) {
-    final StringBuilder ret = new StringBuilder();
-    for (final AbstractNode n : tokens) {
-      ret.append(n.getName()).append(' ');
-    }
-    return ret.toString();
-  }
+  
 }

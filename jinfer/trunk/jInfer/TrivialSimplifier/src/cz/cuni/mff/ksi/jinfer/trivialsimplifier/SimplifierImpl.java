@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering.ContextClusterer;
+import cz.cuni.mff.ksi.jinfer.trivialsimplifier.display.RuleDisplayerTopComponent;
 import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.KleeneProcessor;
 import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.SimpleKP;
 import cz.cuni.mff.ksi.jinfer.trivialsimplifier.options.ConfigPanel;
@@ -75,9 +76,17 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
+    if (!Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("enabled", true)) {
+      callback.finished(initialGrammar);
+      return;
+    }
+    RuleDisplayerTopComponent.findInstance().createNewPanel("Original").setRules(initialGrammar);
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
+    //RuleDisplayerTopComponent.findInstance().createNewPanel("Clustered").setRules(clustered);
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
+    RuleDisplayerTopComponent.findInstance().createNewPanel("Processed").setRules(processed);
     final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
+    RuleDisplayerTopComponent.findInstance().createNewPanel("Kleened").setRules(kleened);
     callback.finished(kleened);
   }
 

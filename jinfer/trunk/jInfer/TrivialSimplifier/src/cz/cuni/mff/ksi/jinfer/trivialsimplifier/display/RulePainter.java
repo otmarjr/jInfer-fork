@@ -31,6 +31,7 @@ import java.util.List;
 import javax.swing.UIManager;
 
 /**
+ * Class responsible for rendering a set of rules to a canvas.
  *
  * @author vektor
  */
@@ -43,6 +44,9 @@ public class RulePainter {
     this.root = root;
   }
 
+  /**
+   * Set the rules this painter will render.
+   */
   public void setRules(final List<AbstractNode> rules) {
     final BufferedImage img = getImage(1000, 1000);
     if (rules != null) {
@@ -112,7 +116,7 @@ public class RulePainter {
     return drawRegexp(subnodes);
   }
 
-  private Image drawRegexp(Regexp<AbstractNode> subnodes) {
+  private Image drawRegexp(final Regexp<AbstractNode> subnodes) {
     switch (subnodes.getType()) {
       case TOKEN: return drawNode(subnodes.getContent());
       case ALTERNATION: return drawAlternation(subnodes);

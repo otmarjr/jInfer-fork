@@ -20,7 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.awt.Color;
 
 /**
- *
+ * Some rule painter utils.
+ * 
  * @author vektor
  */
 public final class Utils {

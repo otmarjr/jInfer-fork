@@ -95,6 +95,14 @@ public class Regexp<T> {
     return type;
   }
 
+  public boolean isEmpty() {
+    if (RegexpType.TOKEN.equals(type)) {
+      return content == null;
+    }
+    return children == null
+            || children.isEmpty();
+  }
+
   /**
    * <p>Converts the i-th position of this concatenation to alternation and
    * inserts the rest as the one and only of its children.</p>

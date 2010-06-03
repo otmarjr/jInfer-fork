@@ -18,6 +18,9 @@ package cz.cuni.mff.ksi.jinfer.trivialsimplifier.display;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import javax.swing.UIManager;
 
 /**
  * Some rule painter utils.
@@ -26,9 +29,8 @@ import java.awt.Color;
  */
 public final class Utils {
 
-  private Utils() {
-  }
-
+  private Utils() { }
+  
   private static final Color COLOR_ELEMENT = Color.gray;
   private static final Color COLOR_ATTRIBUTE = Color.blue;
   private static final Color COLOR_SIMPLE_DATA = Color.red;
@@ -44,5 +46,13 @@ public final class Utils {
       default:
         throw new IllegalArgumentException();
     }
+  }
+
+  public static BufferedImage getImage(final int width, final int height) {
+    final BufferedImage ret = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    final Graphics2D g = ret.createGraphics();
+    g.setColor(UIManager.getDefaults().getColor("Panel.background"));
+    g.fillRect(0, 0, width - 1, height - 1);
+    return ret;
   }
 }

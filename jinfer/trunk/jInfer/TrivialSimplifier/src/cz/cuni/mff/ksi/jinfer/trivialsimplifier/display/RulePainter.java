@@ -48,16 +48,29 @@ public class RulePainter {
    * Set the rules this painter will render.
    */
   public void setRules(final List<AbstractNode> rules) {
-    final BufferedImage img = getImage(1000, 1000);
-    if (rules != null) {
-      int offset = 0;
-      final Graphics2D g = img.createGraphics();
-      for (final AbstractNode a : rules) {
-        final Image i = drawNode(a);
-        g.drawImage(i, 0, offset, null);
-        offset += i.getHeight(null) + 2;
-      }
+    if (rules == null) {
+      return;
     }
+
+    final List<Image> ruleImgs = new ArrayList<Image>(rules.size());
+    int width = 0;
+    int height = 0;
+    for (final AbstractNode a : rules) {
+      final Image i = drawNode(a);
+      ruleImgs.add(i);
+      width = Math.max(width, i.getWidth(null));
+      height += i.getHeight(null) + 2;
+    }
+
+
+    final BufferedImage img = Utils.getImage(width, height);    
+    int offset = 0;
+    final Graphics2D g = img.createGraphics();
+    for (final Image i : ruleImgs) {
+      g.drawImage(i, 0, offset, null);
+      offset += i.getHeight(null) + 2;
+    }
+    
     this.image = img;
     root.repaint();
   }
@@ -85,16 +98,16 @@ public class RulePainter {
       height = fm.getHeight() + 1;
     }
 
-    final BufferedImage ret = getImage(width, height);
+    final BufferedImage ret = Utils.getImage(width, height);
 
     final Graphics2D g = ret.createGraphics();
 
     g.setColor(Color.black);
     g.drawRect(0, 0, width - 1, height - 1);
     g.setColor(Utils.getNodeColor(n));
-    g.fillRect(0, 0, nameWidth + 10, fm.getHeight());
+    g.fillRect(1, 1, nameWidth + 10 - 2, fm.getHeight() - 1);
     g.setColor(Color.white);
-    g.drawString(n.getName(), 0, nameHeight);
+    g.drawString(n.getName(), 1, nameHeight);
     
     if (children != null) {
       g.drawLine(nameWidth, fm.getHeight() / 2, nameWidth + 10, fm.getHeight() / 2);
@@ -121,16 +134,30 @@ public class RulePainter {
       case TOKEN: return drawNode(subnodes.getContent());
       case ALTERNATION: return drawAlternation(subnodes);
       case CONCATENATION: return drawConcatenation(subnodes);
-      case KLEENE: 
-        final Image kleene = drawNode(subnodes.getChildren().get(0).getContent());
-        final BufferedImage kleeneRet = getImage(kleene.getWidth(null) + 10, kleene.getHeight(null));
-        final Graphics2D g = kleeneRet.createGraphics();
-        g.drawImage(kleene, 0, 0, null);
-        g.setColor(Color.black);
-        g.drawString("*", kleene.getWidth(null), 10);
-        return kleeneRet;
+      case KLEENE: return drawKleene(subnodes);
       default: throw new IllegalArgumentException();
     }
+  }
+
+  private Image drawKleene(final Regexp<AbstractNode> subnodes) {
+    final Image kleene = drawNode(subnodes.getChildren().get(0).getContent());
+    final BufferedImage kleeneRet = Utils.getImage(kleene.getWidth(null) + 10, kleene.getHeight(null));
+    final Graphics2D g = kleeneRet.createGraphics();
+    g.drawImage(kleene, 0, 0, null);
+    g.setColor(Color.black);
+    g.drawString("*", kleene.getWidth(null), 10);
+    return kleeneRet;
+  }
+
+  private List<Image> getChildrenImages(final List<Regexp<AbstractNode>> children) {
+    final List<Image> ret = new ArrayList<Image>(children.size());
+    for (final Regexp<AbstractNode> child : children) {
+      final Image childImg = drawRegexp(child);
+      if (childImg != null) {
+        ret.add(childImg);
+      }
+    }
+    return ret;
   }
 
   private Image drawAlternation(final Regexp<AbstractNode> subnodes) {
@@ -138,24 +165,22 @@ public class RulePainter {
       return null;
     }
     
-    final List<Image> altImgs = new ArrayList<Image>(subnodes.getChildren().size());
+    final List<Image> altImgs = getChildrenImages(subnodes.getChildren());
     int width = 0;
     int height = 0;
-    for (final Regexp<AbstractNode> child : subnodes.getChildren()) {
-      final Image childImg = drawRegexp(child);
-      if (childImg != null) {
-        altImgs.add(childImg);
-        width = Math.max(width, childImg.getWidth(null));
-        height += childImg.getHeight(null) + 1;
-      }
+    for (final Image img : altImgs) {
+      width = Math.max(width, img.getWidth(null));
+      height += img.getHeight(null) + 1;
     }
-    final BufferedImage altRet = getImage(width, height);
+    final BufferedImage altRet = Utils.getImage(width + 3, height);
     final Graphics2D g = altRet.createGraphics();
     int offset = 0;
     for (final Image img : altImgs) {
-      g.drawImage(img, 0, offset, null);
+      g.drawImage(img, 2, offset, null);
       offset += img.getHeight(null) + 1;
     }
+    g.setColor(Color.blue);
+    g.drawLine(1, 0, 1, height - 1);
     return altRet;
   }
 
@@ -164,33 +189,25 @@ public class RulePainter {
       return null;
     }
     
-    final List<Image> concatImgs = new ArrayList<Image>(subnodes.getChildren().size());
+    final List<Image> concatImgs = getChildrenImages(subnodes.getChildren());
     int width = 0;
     int height = 0;
-    for (final Regexp<AbstractNode> child : subnodes.getChildren()) {
-      final Image childImg = drawRegexp(child);
-      if (childImg != null) {
-        concatImgs.add(childImg);
-        width += childImg.getWidth(null) + 1;
-        height = Math.max(height, childImg.getHeight(null));
-      }
+    for (final Image img : concatImgs) {
+      width += img.getWidth(null) + 1;
+      height = Math.max(height, img.getHeight(null));
     }
-    final BufferedImage concatRet = getImage(width, height);
+    final BufferedImage concatRet = Utils.getImage(width, height + 3);
     final Graphics2D g = concatRet.createGraphics();
     int offset = 0;
     for (final Image img : concatImgs) {
-      g.drawImage(img, offset, 0, null);
+      g.drawImage(img, offset, 2, null);
       offset += img.getWidth(null) + 1;
     }
+    g.setColor(Color.red);
+    g.drawLine(0, 1, width - 1, 1);
     return concatRet;
   }
 
-  private BufferedImage getImage(final int width, final int height) {
-    final BufferedImage ret = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-    final Graphics2D g = ret.createGraphics();
-    g.setColor(UIManager.getDefaults().getColor("Panel.background"));
-    g.fillRect(0, 0, width - 1, height - 1);
-    return ret;
-  }
+  
 
 }

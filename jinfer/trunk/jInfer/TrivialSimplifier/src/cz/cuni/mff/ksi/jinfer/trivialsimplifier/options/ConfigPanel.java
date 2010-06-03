@@ -45,6 +45,7 @@ public final class ConfigPanel extends JPanel {
     clusterProcessor = new javax.swing.JComboBox();
     jPanel1 = new javax.swing.JPanel();
     enabled = new javax.swing.JCheckBox();
+    render = new javax.swing.JCheckBox();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -58,6 +59,7 @@ public final class ConfigPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(kleeneRepetitions, gridBagConstraints);
@@ -82,6 +84,7 @@ public final class ConfigPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -91,7 +94,7 @@ public final class ConfigPanel extends JPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 434, Short.MAX_VALUE)
+      .addGap(0, 278, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,11 +116,18 @@ public final class ConfigPanel extends JPanel {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(enabled, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(render, org.openide.util.NbBundle.getMessage(ConfigPanel.class, "ConfigPanel.render.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    add(render, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   public void load() {
     enabled.setSelected(Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("enabled", true));
     context.setSelected(Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("use.context", false));
+    render.setSelected(Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true));
     kleeneRepetitions.setValue(Preferences.userNodeForPackage(ConfigPanel.class).getInt("kleene.repetitions", 3));
     clusterProcessor.setSelectedItem(Preferences.userNodeForPackage(ConfigPanel.class).get("cluster.processor", "Trie"));
   }
@@ -125,6 +135,7 @@ public final class ConfigPanel extends JPanel {
   public void store() {
     Preferences.userNodeForPackage(ConfigPanel.class).putBoolean("enabled", enabled.isSelected());
     Preferences.userNodeForPackage(ConfigPanel.class).putBoolean("use.context", context.isSelected());
+    Preferences.userNodeForPackage(ConfigPanel.class).putBoolean("render", render.isSelected());
     Preferences.userNodeForPackage(ConfigPanel.class).putInt("kleene.repetitions", ((Integer)kleeneRepetitions.getValue()).intValue());
     Preferences.userNodeForPackage(ConfigPanel.class).put("cluster.processor", (String)clusterProcessor.getSelectedItem());
   }
@@ -142,5 +153,6 @@ public final class ConfigPanel extends JPanel {
   private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JSpinner kleeneRepetitions;
+  private javax.swing.JCheckBox render;
   // End of variables declaration//GEN-END:variables
 }

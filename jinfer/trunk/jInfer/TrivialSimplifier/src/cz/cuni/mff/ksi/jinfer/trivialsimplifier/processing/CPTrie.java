@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 /**
  * Cluster processor implementation that exports a cluster as a trie (prefix tree).
@@ -49,13 +50,15 @@ public class CPTrie implements ClusterProcessor {
 
     final Element treeBase = (Element) cluster.getFirst();
 
+    // put every item from the cluster into the trie
     for (final AbstractNode n : cluster.getSecond()) {
       if (n != cluster.getFirst()) {
         addToTree(treeBase.getSubnodes(), ((Element) n).getSubnodes());
       }
     }
 
-    return treeBase;
+    // walk the tree and simplify it
+    return simplify(treeBase);
   }
 
   private static void verify(final Pair<AbstractNode, List<AbstractNode>> cluster) throws IllegalArgumentException {
@@ -96,8 +99,8 @@ public class CPTrie implements ClusterProcessor {
       if (check >= tree.getChildren().size()) {
         // append a new alternation between all remaining items from what and an empty concatenation to tree
         final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
-        alt.add(what.getEnd(check));
         alt.add(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+        alt.add(what.getEnd(check));
         tree.getChildren().add(new Regexp<AbstractNode>(null, alt, RegexpType.ALTERNATION));
         return;
       }
@@ -150,5 +153,33 @@ public class CPTrie implements ClusterProcessor {
       return true;
     }
     return false;
+  }
+
+  private static Element simplify(final Element treeBase) {
+    if (treeBase.getSubnodes().isEmpty()
+            || RegexpType.TOKEN.equals(treeBase.getSubnodes().getType())) {
+      return treeBase;
+    }
+    return new Element(
+            treeBase.getContext(),
+            treeBase.getName(),
+            treeBase.getAttributes(), 
+            simplify(treeBase.getSubnodes()));
+  }
+
+  private static Regexp<AbstractNode> simplify(Regexp<AbstractNode> subnodes) {
+    switch (subnodes.getType()) {
+      case ALTERNATION:
+      case CONCATENATION:
+        if (subnodes.getChildren().size() == 1) {
+          return simplify(subnodes.getChildren().get(0));
+        }
+        final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
+        for (final Regexp<AbstractNode> child : subnodes.getChildren()) {
+          children.add(simplify(child));
+        }
+        return new Regexp<AbstractNode>(null, children, subnodes.getType());
+      default: return subnodes;
+    }
   }
 }

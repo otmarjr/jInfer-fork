@@ -63,6 +63,8 @@ public class SimpleKP implements KleeneProcessor {
 
   private Regexp<AbstractNode> processTree(final Regexp<AbstractNode> root) {
     switch (root.getType()) {
+      case TOKEN:
+        return root;
       case CONCATENATION:
         return processConcat(root);
       case ALTERNATION:
@@ -77,6 +79,9 @@ public class SimpleKP implements KleeneProcessor {
   }
 
   private Regexp<AbstractNode> processConcat(final Regexp<AbstractNode> root) {
+    if (RegexpType.TOKEN.equals(root.getType())) {
+      return root;
+    }
     if (!RegexpType.CONCATENATION.equals(root.getType())) {
       throw new IllegalArgumentException();
     }

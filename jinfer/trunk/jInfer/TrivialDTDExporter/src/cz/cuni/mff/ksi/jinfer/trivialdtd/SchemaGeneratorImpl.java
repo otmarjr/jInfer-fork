@@ -97,12 +97,15 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static String subElementsToString(final Regexp<AbstractNode> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
-        return regexp.getContent().getType().equals(NodeType.SIMPLE_DATA) ? "#PCDATA" : regexp.getContent().getName();
+        return regexp.getContent().getType().equals(NodeType.SIMPLE_DATA) ? "(#PCDATA)" : regexp.getContent().getName();
       case KLEENE:
         return "(" + subElementsToString(regexp.getChildren().get(0)) + ")*";
       case CONCATENATION:
         return listToString(omitAttributes(regexp.getChildren()), ',');
       case ALTERNATION:
+        if (regexp.getChildren().get(0).isEmpty()) {
+          return listToString(omitAttributes(regexp.getChildren().subList(1, regexp.getChildren().size())), '|') + "?";
+        }
         return listToString(omitAttributes(regexp.getChildren()), '|');
       default:
         throw new IllegalArgumentException("Unknown enum member.");

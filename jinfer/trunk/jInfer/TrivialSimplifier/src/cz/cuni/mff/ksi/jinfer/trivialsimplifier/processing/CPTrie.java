@@ -25,7 +25,6 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 /**
  * Cluster processor implementation that exports a cluster as a trie (prefix tree).

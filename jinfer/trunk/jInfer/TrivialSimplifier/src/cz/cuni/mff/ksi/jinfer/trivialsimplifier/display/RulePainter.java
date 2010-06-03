@@ -25,10 +25,14 @@ import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.UIManager;
+import org.openide.util.Exceptions;
 
 /**
  * Class responsible for rendering a set of rules to a canvas.
@@ -39,9 +43,14 @@ public class RulePainter {
 
   private final Component root;
   private Image image;
+  private Image lambda = null;
 
   public RulePainter(final Component root) {
     this.root = root;
+    try {
+      lambda = ImageIO.read(RulePainter.class.getClassLoader().getResource("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/lambda.png"));
+    } catch (final IOException ex) {
+    }
   }
 
   /**
@@ -80,8 +89,9 @@ public class RulePainter {
   }
 
   private Image drawNode(final AbstractNode n) {
-    final FontMetrics fm = root.getGraphics().getFontMetrics();
-    final int nameWidth = (int)(fm.stringWidth(n.getName()) * 1.2);
+    final FontMetrics fm = root.getGraphics().getFontMetrics();    
+
+    final int nameWidth = (int)(fm.stringWidth(n.getName()) * 1.5);
     final int nameHeight = fm.getHeight() - fm.getDescent();
 
     final Image children = drawSubnodes(n);
@@ -101,19 +111,20 @@ public class RulePainter {
     final BufferedImage ret = Utils.getImage(width, height);
 
     final Graphics2D g = ret.createGraphics();
-
-    g.setColor(Color.black);
-    g.drawRect(0, 0, width - 1, height - 1);
+    
     g.setColor(Utils.getNodeColor(n));
-    g.fillRect(1, 1, nameWidth + 10 - 2, fm.getHeight() - 1);
+    g.fillRect(0, 0, nameWidth + 10, fm.getHeight());
     g.setColor(Color.white);
     g.drawString(n.getName(), 1, nameHeight);
+    g.setColor(Color.black);
+    g.drawRect(0, 0, width - 1, height - 1);
     
     if (children != null) {
+      g.setColor(Color.white);
       g.drawLine(nameWidth, fm.getHeight() / 2, nameWidth + 10, fm.getHeight() / 2);
       g.drawLine(nameWidth + 5, fm.getHeight() / 4, nameWidth + 10, fm.getHeight() / 2);
       g.drawLine(nameWidth + 5, (3 * fm.getHeight()) / 4, nameWidth + 10, fm.getHeight() / 2);
-      g.drawImage(children, nameWidth + 10, 5, null);
+      g.drawImage(children, nameWidth + 10, 4, null);
     }
     return ret;
   }
@@ -156,6 +167,9 @@ public class RulePainter {
       if (childImg != null) {
         ret.add(childImg);
       }
+      else {
+        ret.add(lambda);
+      }
     }
     return ret;
   }
@@ -176,7 +190,7 @@ public class RulePainter {
     final Graphics2D g = altRet.createGraphics();
     int offset = 0;
     for (final Image img : altImgs) {
-      g.drawImage(img, 2, offset, null);
+      g.drawImage(img, 3, offset, null);
       offset += img.getHeight(null) + 1;
     }
     g.setColor(Color.blue);
@@ -200,7 +214,7 @@ public class RulePainter {
     final Graphics2D g = concatRet.createGraphics();
     int offset = 0;
     for (final Image img : concatImgs) {
-      g.drawImage(img, offset, 2, null);
+      g.drawImage(img, offset, 3, null);
       offset += img.getWidth(null) + 1;
     }
     g.setColor(Color.red);

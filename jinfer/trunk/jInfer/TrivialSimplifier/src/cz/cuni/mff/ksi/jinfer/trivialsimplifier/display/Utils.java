@@ -58,7 +58,7 @@ public final class Utils {
   public static BufferedImage getImage(final int width, final int height) {
     final BufferedImage ret = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     final Graphics2D g = ret.createGraphics();
-    g.setColor(UIManager.getDefaults().getColor("Panel.background"));
+    g.setColor(UIManager.getDefaults().getColor("TabbedPane.background"));
     g.fillRect(0, 0, width, height);
     return ret;
   }

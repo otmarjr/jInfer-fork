@@ -52,7 +52,7 @@ public class CPTrie implements ClusterProcessor {
     // put every item from the cluster into the trie
     for (final AbstractNode n : cluster.getSecond()) {
       if (n != cluster.getFirst()) {
-        addToTree(treeBase.getSubnodes(), ((Element) n).getSubnodes());
+        addBranchToTree(treeBase.getSubnodes(), ((Element) n).getSubnodes());
       }
     }
 
@@ -72,62 +72,83 @@ public class CPTrie implements ClusterProcessor {
     }
   }
 
-  public static void addToTree(final Regexp<AbstractNode> tree, final Regexp<AbstractNode> what) {
+  public static void addBranchToTree(final Regexp<AbstractNode> tree, final Regexp<AbstractNode> branch) {
     if (!RegexpType.CONCATENATION.equals(tree.getType())
-            || !RegexpType.CONCATENATION.equals(what.getType())) {
+            || !RegexpType.CONCATENATION.equals(branch.getType())) {
       throw new IllegalArgumentException();
     }
 
-    int i = -1;
+    int posTre = -1;
+    int posBra = -1;
     while (true) {
-      final int check = i + 1;
+      final int posTree = posTre + 1;
+      final int posBranch = posBra + 1;
 
-      // when do we continue?
-      if (check < tree.getChildren().size()
-              && check < what.getChildren().size()
-              && RegexpType.TOKEN.equals(tree.getChildren().get(check).getType())
-              && equalTokens(tree.getChildren().get(check), what.getChildren().get(check))) {
-        i++;
+      // if we are not on an Element in the tree...
+      if (posTree < tree.getChildren().size()
+              && RegexpType.TOKEN.equals(tree.getChildren().get(posTree).getType())
+              && !NodeType.ELEMENT.equals(tree.getChildren().get(posTree).getContent().getType())) {
+        // move on
+        posTre++;
         continue;
       }
 
-      if (check >= what.getChildren().size()) {
+      // if we are not on an Element in the what...
+      if (posBranch < branch.getChildren().size()
+              && !NodeType.ELEMENT.equals(branch.getChildren().get(posBranch).getContent().getType())) {
+        // move on
+        posBra++;
+        continue;
+      }
+
+      // when do we continue?
+      if (posTree < tree.getChildren().size()
+              && posBranch < branch.getChildren().size()
+              && RegexpType.TOKEN.equals(tree.getChildren().get(posTree).getType())
+              && equalTokens(tree.getChildren().get(posTree), branch.getChildren().get(posBranch))) {
+        posTre++;
+        posBra++;
+        continue;
+      }
+
+      if (posBranch >= branch.getChildren().size()) {
         return;
       }
 
-      if (check >= tree.getChildren().size()) {
+      if (posTree >= tree.getChildren().size()) {
         // append a new alternation between all remaining items from what and an empty concatenation to tree
         final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
         alt.add(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
-        alt.add(what.getEnd(check));
+        alt.add(branch.getEnd(posBranch));
         tree.getChildren().add(new Regexp<AbstractNode>(null, alt, RegexpType.ALTERNATION));
         return;
       }
 
-      if (RegexpType.TOKEN.equals(tree.getChildren().get(check).getType())
-              && !equalTokens(tree.getChildren().get(check), what.getChildren().get(check))) {
-        tree.branch(check);
-        tree.getChildren().get(check).getChildren().add(what.getEnd(check));
+      if (RegexpType.TOKEN.equals(tree.getChildren().get(posTree).getType())
+              && !equalTokens(tree.getChildren().get(posTree), branch.getChildren().get(posBranch))) {
+        tree.branch(posTree);
+        tree.getChildren().get(posTree).getChildren().add(branch.getEnd(posBranch));
         return;
       }
 
-      if (RegexpType.ALTERNATION.equals(tree.getChildren().get(check).getType())) {
+      if (RegexpType.ALTERNATION.equals(tree.getChildren().get(posTree).getType())) {
         // walk all the items in the alternation
-        for (final Regexp<AbstractNode> alternated : tree.getChildren().get(check).getChildren()) {
+        for (final Regexp<AbstractNode> alternated : tree.getChildren().get(posTree).getChildren()) {
           if (alternated.getChildren().size() > 0
-                  && equalTokens(alternated.getChildren().get(0), what.getChildren().get(check))) {
+                  && equalTokens(alternated.getChildren().get(0), branch.getChildren().get(posBranch))) {
             // continue in this branch
-            addToTree(alternated, what.getEnd(check));
+            addBranchToTree(alternated, branch.getEnd(posBranch));
             return;
           }
         }
 
         // if not found, simply add the end of "what" to the alternation
-        tree.getChildren().get(check).getChildren().add(what.getEnd(check));
+        tree.getChildren().get(posTree).getChildren().add(branch.getEnd(posBranch));
         return;
       }
 
-      i++;
+      posTre++;
+      posBra++;
     }
   }
 

@@ -52,7 +52,7 @@ public final class Utils {
     final BufferedImage ret = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     final Graphics2D g = ret.createGraphics();
     g.setColor(UIManager.getDefaults().getColor("Panel.background"));
-    g.fillRect(0, 0, width - 1, height - 1);
+    g.fillRect(0, 0, width, height);
     return ret;
   }
 }

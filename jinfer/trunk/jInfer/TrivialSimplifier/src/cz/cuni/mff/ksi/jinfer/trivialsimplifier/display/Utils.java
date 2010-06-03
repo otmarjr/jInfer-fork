@@ -19,8 +19,12 @@ package cz.cuni.mff.ksi.jinfer.trivialsimplifier.display;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.UIManager;
+import org.openide.util.Exceptions;
 
 /**
  * Some rule painter utils.
@@ -34,6 +38,9 @@ public final class Utils {
   private static final Color COLOR_ELEMENT = Color.gray;
   private static final Color COLOR_ATTRIBUTE = Color.blue;
   private static final Color COLOR_SIMPLE_DATA = Color.red;
+
+  public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/lambda.png");
+  public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/dots.png");
 
   public static Color getNodeColor(final AbstractNode n) {
     switch (n.getType()) {
@@ -54,5 +61,19 @@ public final class Utils {
     g.setColor(UIManager.getDefaults().getColor("Panel.background"));
     g.fillRect(0, 0, width, height);
     return ret;
+  }
+
+  public static void drawArrow(final Graphics2D g, final int x, final int height) {
+    g.drawLine(x, height / 2, x + 10, height / 2);
+    g.drawLine(x + 5, height / 4, x + 10, height / 2);
+    g.drawLine(x + 5, (3 * height) / 4, x + 10, height / 2);
+  }
+
+  private static Image loadStatic(final String url) {
+    try {
+      return ImageIO.read(Utils.class.getClassLoader().getResource(url));
+    } catch (IOException ex) {
+      return null;
+    }
   }
 }

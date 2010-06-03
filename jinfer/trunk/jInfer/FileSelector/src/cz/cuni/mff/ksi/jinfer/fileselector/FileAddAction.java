@@ -58,11 +58,15 @@ public class FileAddAction extends AbstractAction {
     }
 
     fc.setFileFilter(fileFilter);
+    fc.setMultiSelectionEnabled(true);
 
     final int retVal = fc.showOpenDialog(null);
     if (retVal == JFileChooser.APPROVE_OPTION) {
-      final File file = fc.getSelectedFile();
-      files.add(file);
+      final File[] selectedFiles = fc.getSelectedFiles();
+
+      for (File file : selectedFiles) {
+        files.add(file);
+      }
 
       ((FileChildren) node.getChildren()).addNotify();
 

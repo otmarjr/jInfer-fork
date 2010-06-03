@@ -19,68 +19,63 @@ package cz.cuni.mff.ksi.jinfer.trivialsimplifier.display;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.UIManager;
-import org.openide.util.Exceptions;
 
 /**
  * Class responsible for rendering a set of rules to a canvas.
  *
  * @author vektor
  */
-public class RulePainter {  
+public class RulePainter {
+
+  private static final int MAX_LEVEL = 25;
 
   private final Component root;
   private Image image;
-  private Image lambda = null;
 
   public RulePainter(final Component root) {
     this.root = root;
-    try {
-      lambda = ImageIO.read(RulePainter.class.getClassLoader().getResource("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/lambda.png"));
-    } catch (final IOException ex) {
-    }
   }
 
   /**
    * Set the rules this painter will render.
    */
   public void setRules(final List<AbstractNode> rules) {
-    if (rules == null) {
-      return;
-    }
+    this.image = drawRules(rules);
+    root.repaint();
+  }
 
-    final List<Image> ruleImgs = new ArrayList<Image>(rules.size());
+  public void setClusters(final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+    final List<Image> clusterImgs = new ArrayList<Image>(clusters.size());
     int width = 0;
     int height = 0;
-    for (final AbstractNode a : rules) {
-      final Image i = drawNode(a);
-      ruleImgs.add(i);
+    for (final Pair<AbstractNode, List<AbstractNode>> p : clusters) {
+      final Image i = drawRules(p.getSecond());
+      clusterImgs.add(i);
       width = Math.max(width, i.getWidth(null));
-      height += i.getHeight(null) + 2;
+      height += i.getHeight(null) + 5;
     }
 
-
-    final BufferedImage img = Utils.getImage(width, height);    
+    final BufferedImage ret = Utils.getImage(width, height);
     int offset = 0;
-    final Graphics2D g = img.createGraphics();
-    for (final Image i : ruleImgs) {
-      g.drawImage(i, 0, offset, null);
-      offset += i.getHeight(null) + 2;
+    final Graphics2D g = ret.createGraphics();
+    for (final Image i : clusterImgs) {
+      g.drawImage(i, 0, offset, null);      
+      offset += i.getHeight(null) + 5;
+      g.setColor(Color.white);
+      g.drawLine(0, offset - 4, 30, offset - 4);
     }
-    
-    this.image = img;
+
+    this.image = ret;
     root.repaint();
   }
   
@@ -88,13 +83,43 @@ public class RulePainter {
     g.drawImage(image, 0, 0, null);
   }
 
-  private Image drawNode(final AbstractNode n) {
+  private Image drawRules(final List<AbstractNode> rules) {
+    if (rules == null) {
+      return null;
+    }
+
+    final List<Image> ruleImgs = new ArrayList<Image>(rules.size());
+    int width = 0;
+    int height = 0;
+    for (final AbstractNode a : rules) {
+      final Image i = drawNode(a, 0);
+      ruleImgs.add(i);
+      width = Math.max(width, i.getWidth(null));
+      height += i.getHeight(null) + 2;
+    }
+
+    final BufferedImage ret = Utils.getImage(width, height);
+    int offset = 0;
+    final Graphics2D g = ret.createGraphics();
+    for (final Image i : ruleImgs) {
+      g.drawImage(i, 0, offset, null);
+      offset += i.getHeight(null) + 2;
+    }
+
+    return ret;
+  }
+
+  private Image drawNode(final AbstractNode n, final int level) {
+    if (level > MAX_LEVEL) {
+      return Utils.DOTS;
+    }
+
     final FontMetrics fm = root.getGraphics().getFontMetrics();    
 
     final int nameWidth = (int)(fm.stringWidth(n.getName()) * 1.5);
     final int nameHeight = fm.getHeight() - fm.getDescent();
 
-    final Image children = drawSubnodes(n);
+    final Image children = drawSubnodes(n, level + 1);
     
     final int width;
     final int height;
@@ -121,15 +146,13 @@ public class RulePainter {
     
     if (children != null) {
       g.setColor(Color.white);
-      g.drawLine(nameWidth, fm.getHeight() / 2, nameWidth + 10, fm.getHeight() / 2);
-      g.drawLine(nameWidth + 5, fm.getHeight() / 4, nameWidth + 10, fm.getHeight() / 2);
-      g.drawLine(nameWidth + 5, (3 * fm.getHeight()) / 4, nameWidth + 10, fm.getHeight() / 2);
+      Utils.drawArrow(g, nameWidth, fm.getHeight());
       g.drawImage(children, nameWidth + 10, 4, null);
     }
     return ret;
   }
 
-  private Image drawSubnodes(final AbstractNode n) {
+  private Image drawSubnodes(final AbstractNode n, final int level) {
     if (!NodeType.ELEMENT.equals(n.getType())) {
       return null;
     }
@@ -137,21 +160,24 @@ public class RulePainter {
     if (subnodes == null) {
       return null;
     }
-    return drawRegexp(subnodes);
+    return drawRegexp(subnodes, level + 1);
   }
 
-  private Image drawRegexp(final Regexp<AbstractNode> subnodes) {
+  private Image drawRegexp(final Regexp<AbstractNode> subnodes, final int level) {
+    if (level > MAX_LEVEL) {
+      return Utils.DOTS;
+    }
     switch (subnodes.getType()) {
-      case TOKEN: return drawNode(subnodes.getContent());
-      case ALTERNATION: return drawAlternation(subnodes);
-      case CONCATENATION: return drawConcatenation(subnodes);
-      case KLEENE: return drawKleene(subnodes);
+      case TOKEN: return drawNode(subnodes.getContent(), level + 1);
+      case ALTERNATION: return drawAlternation(subnodes, level + 1);
+      case CONCATENATION: return drawConcatenation(subnodes, level + 1);
+      case KLEENE: return drawKleene(subnodes, level + 1);
       default: throw new IllegalArgumentException();
     }
   }
 
-  private Image drawKleene(final Regexp<AbstractNode> subnodes) {
-    final Image kleene = drawNode(subnodes.getChildren().get(0).getContent());
+  private Image drawKleene(final Regexp<AbstractNode> subnodes, final int level) {
+    final Image kleene = drawNode(subnodes.getChildren().get(0).getContent(), level + 1);
     final BufferedImage kleeneRet = Utils.getImage(kleene.getWidth(null) + 10, kleene.getHeight(null));
     final Graphics2D g = kleeneRet.createGraphics();
     g.drawImage(kleene, 0, 0, null);
@@ -160,26 +186,26 @@ public class RulePainter {
     return kleeneRet;
   }
 
-  private List<Image> getChildrenImages(final List<Regexp<AbstractNode>> children) {
+  private List<Image> getChildrenImages(final List<Regexp<AbstractNode>> children, final int level) {
     final List<Image> ret = new ArrayList<Image>(children.size());
     for (final Regexp<AbstractNode> child : children) {
-      final Image childImg = drawRegexp(child);
+      final Image childImg = drawRegexp(child, level + 1);
       if (childImg != null) {
         ret.add(childImg);
       }
       else {
-        ret.add(lambda);
+        ret.add(Utils.LAMBDA);
       }
     }
     return ret;
   }
 
-  private Image drawAlternation(final Regexp<AbstractNode> subnodes) {
+  private Image drawAlternation(final Regexp<AbstractNode> subnodes, final int level) {
     if (subnodes.getChildren().size() == 0) {
       return null;
     }
     
-    final List<Image> altImgs = getChildrenImages(subnodes.getChildren());
+    final List<Image> altImgs = getChildrenImages(subnodes.getChildren(), level + 1);
     int width = 0;
     int height = 0;
     for (final Image img : altImgs) {
@@ -198,12 +224,12 @@ public class RulePainter {
     return altRet;
   }
 
-  private Image drawConcatenation(final Regexp<AbstractNode> subnodes) {
+  private Image drawConcatenation(final Regexp<AbstractNode> subnodes, final int level) {
     if (subnodes.getChildren().size() == 0) {
       return null;
     }
     
-    final List<Image> concatImgs = getChildrenImages(subnodes.getChildren());
+    final List<Image> concatImgs = getChildrenImages(subnodes.getChildren(), level + 1);
     int width = 0;
     int height = 0;
     for (final Image img : concatImgs) {
@@ -221,7 +247,4 @@ public class RulePainter {
     g.drawLine(0, 1, width - 1, 1);
     return concatRet;
   }
-
-  
-
 }

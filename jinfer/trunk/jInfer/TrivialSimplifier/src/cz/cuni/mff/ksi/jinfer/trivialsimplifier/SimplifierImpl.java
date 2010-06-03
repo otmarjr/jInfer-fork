@@ -88,7 +88,7 @@ public class SimplifierImpl implements Simplifier {
     }
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
     if (render) {
-      // RuleDisplayerTopComponent.findInstance().createNewPanel("Clustered").setRules(clustered);
+      RuleDisplayerTopComponent.findInstance().createNewPanel("Clustered").setClusters(clustered);
     }
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
     if (render) {

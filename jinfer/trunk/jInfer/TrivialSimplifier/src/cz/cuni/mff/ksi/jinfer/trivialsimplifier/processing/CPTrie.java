@@ -155,30 +155,31 @@ public class CPTrie implements ClusterProcessor {
   }
 
   private static Element simplify(final Element treeBase) {
-    if (treeBase.getSubnodes().isEmpty()
-            || RegexpType.TOKEN.equals(treeBase.getSubnodes().getType())) {
-      return treeBase;
-    }
     return new Element(
             treeBase.getContext(),
             treeBase.getName(),
-            treeBase.getAttributes(), 
+            treeBase.getAttributes(),
             simplify(treeBase.getSubnodes()));
   }
 
-  private static Regexp<AbstractNode> simplify(Regexp<AbstractNode> subnodes) {
-    switch (subnodes.getType()) {
+  private static Regexp<AbstractNode> simplify(Regexp<AbstractNode> regexp) {
+    switch (regexp.getType()) {
+      case TOKEN:
+        if (NodeType.ELEMENT.equals(regexp.getContent().getType())) {
+          return Regexp.<AbstractNode>getToken(simplify((Element)regexp.getContent()));
+        }
+        return regexp;
       case ALTERNATION:
       case CONCATENATION:
-        if (subnodes.getChildren().size() == 1) {
-          return simplify(subnodes.getChildren().get(0));
+        if (regexp.getChildren().size() == 1) {
+          return simplify(regexp.getChildren().get(0));
         }
         final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
-        for (final Regexp<AbstractNode> child : subnodes.getChildren()) {
+        for (final Regexp<AbstractNode> child : regexp.getChildren()) {
           children.add(simplify(child));
         }
-        return new Regexp<AbstractNode>(null, children, subnodes.getType());
-      default: return subnodes;
+        return new Regexp<AbstractNode>(null, children, regexp.getType());
+      default: return regexp;
     }
   }
 }

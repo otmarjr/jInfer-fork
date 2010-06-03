@@ -78,7 +78,7 @@ public class CPTrieTest {
     final List<Regexp<AbstractNode>> l1 = new ArrayList<Regexp<AbstractNode>>();
     l1.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
     final Regexp<AbstractNode> a1 = new Regexp<AbstractNode>(null, l1, RegexpType.CONCATENATION);
-    CPTrie.addToTree(t, a1);
+    CPTrie.addBranchToTree(t, a1);
     assertTrue(t.toString().equals("(1: ELEMENT,2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)"));
 
 
@@ -86,7 +86,7 @@ public class CPTrieTest {
     final List<Regexp<AbstractNode>> l2 = new ArrayList<Regexp<AbstractNode>>();
     l2.add(Regexp.getToken((AbstractNode) new Element(null, "7", null, null)));
     final Regexp<AbstractNode> a2 = new Regexp<AbstractNode>(null, l2, RegexpType.CONCATENATION);
-    CPTrie.addToTree(t, a2);
+    CPTrie.addBranchToTree(t, a2);
     System.out.println(t.toString());
     assertTrue(t.toString().equals("(((1: ELEMENT,2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)"));
 
@@ -95,7 +95,7 @@ public class CPTrieTest {
     l3.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
     l3.add(Regexp.getToken((AbstractNode) new Element(null, "8", null, null)));
     final Regexp<AbstractNode> a3 = new Regexp<AbstractNode>(null, l3, RegexpType.CONCATENATION);
-    CPTrie.addToTree(t, a3);
+    CPTrie.addBranchToTree(t, a3);
     System.out.println(t.toString());
     assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|),)|(7: ELEMENT,)|),)"));
 
@@ -105,7 +105,7 @@ public class CPTrieTest {
     l4.add(Regexp.getToken((AbstractNode) new Element(null, "7", null, null)));
     l4.add(Regexp.getToken((AbstractNode) new Element(null, "9", null, null)));
     final Regexp<AbstractNode> a4 = new Regexp<AbstractNode>(null, l4, RegexpType.CONCATENATION);
-    CPTrie.addToTree(t, a4);
+    CPTrie.addBranchToTree(t, a4);
     System.out.println(t.toString());
     assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,)|),)|(7: ELEMENT,)|),)"));
 
@@ -116,7 +116,7 @@ public class CPTrieTest {
     l5.add(Regexp.getToken((AbstractNode) new Element(null, "9", null, null)));
     l5.add(Regexp.getToken((AbstractNode) new Element(null, "2", null, null)));
     final Regexp<AbstractNode> a5 = new Regexp<AbstractNode>(null, l5, RegexpType.CONCATENATION);
-    CPTrie.addToTree(t, a5);
+    CPTrie.addBranchToTree(t, a5);
     System.out.println(t.toString());
     assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,((2: ELEMENT,)|()|),)|),)|(7: ELEMENT,)|),)"));
   }

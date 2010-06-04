@@ -70,7 +70,7 @@ public class SimplifierImpl implements Simplifier {
                   )
                 );
       }
-      elements.get(el).getSubnodes().getChildren().add( el.getSubnodes() );
+      elements.get(el).getSubnodes().addChild( el.getSubnodes() );
     }
 
     callback.finished( new ArrayList<AbstractNode>(elements.values()) );

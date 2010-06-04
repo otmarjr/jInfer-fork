@@ -103,11 +103,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case TOKEN:
         return tokenToString(regexp.getContent(), topLevel);
       case KLEENE:
-        return "(" + subElementsToString(regexp.getChildren().get(0), false) + ")*";
+        return "(" + subElementsToString(regexp.getChild(0), false) + ")*";
       case CONCATENATION:
         return listToString(omitAttributes(regexp.getChildren()), ',');
       case ALTERNATION:
-        if (regexp.getChildren().get(0).isEmpty()) {
+        if (regexp.getChild(0).isEmpty()) {
           return listToString(omitAttributes(regexp.getChildren().subList(1, regexp.getChildren().size())), '|') + "?";
         }
         return listToString(omitAttributes(regexp.getChildren()), '|');

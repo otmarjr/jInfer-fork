@@ -59,14 +59,14 @@ public class TrivialHandler extends DefaultHandler {
       // for each attribute, add a subnode representing it
       for (int i = 0; i < attributes.getLength(); i++) {
         final Attribute a = new Attribute(attrContext, attributes.getQName(i), null, null, Arrays.asList(attributes.getValue(i)));
-        e.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(a));
+        e.getSubnodes().addChild(Regexp.<AbstractNode>getToken(a));
       }
     }
 
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
     if (!stack.isEmpty() && (stack.peek().getType().equals(NodeType.ELEMENT))) {
-      ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e));
+      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(e));
     }
 
     // push the current element to the stack with an empty rule
@@ -96,7 +96,7 @@ public class TrivialHandler extends DefaultHandler {
     }
     if (stack.peek().getType().equals(NodeType.ELEMENT)) {
       final SimpleData sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
-      ((Element) stack.peek()).getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(sd));
+      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(sd));
     } else {
       throw new IllegalArgumentException("Element expected");
     }

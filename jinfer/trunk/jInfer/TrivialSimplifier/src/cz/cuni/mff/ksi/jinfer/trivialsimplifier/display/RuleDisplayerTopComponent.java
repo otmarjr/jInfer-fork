@@ -18,9 +18,13 @@ package cz.cuni.mff.ksi.jinfer.trivialsimplifier.display;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -39,13 +43,29 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   private static RuleDisplayerTopComponent instance;
   private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/icon16.png";
   private static final String PREFERRED_ID = "RuleDisplayerTopComponent";
-  
+
   public RuleDisplayerTopComponent() {
     super();
     initComponents();
     setName(NbBundle.getMessage(RuleDisplayerTopComponent.class, "CTL_RuleDisplayerTopComponent"));
     setToolTipText(NbBundle.getMessage(RuleDisplayerTopComponent.class, "HINT_RuleDisplayerTopComponent"));
     setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+
+    panels.addMouseListener(new MouseAdapter() {
+
+      @Override
+      public void mouseClicked(MouseEvent evt) {
+        int tabIndex = panels.indexAtLocation(evt.getX(), evt.getY());
+
+        if (tabIndex < 0) {
+          return;
+        }
+        if ((evt.getModifiers() & InputEvent.BUTTON1_MASK) != 0
+                && evt.getClickCount() == 2) {
+          panels.remove(tabIndex);
+        }
+      }
+    });
   }
 
   /**
@@ -64,7 +84,6 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   private class RulePanel extends JPanel {
 
     private static final long serialVersionUID = 8745252121l;
-
     private final RulePainter rp = new RulePainter(RulePanel.this);
 
     public RulePainter getRulePainter() {
@@ -104,7 +123,6 @@ public final class RuleDisplayerTopComponent extends TopComponent {
         .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTabbedPane panels;
   // End of variables declaration//GEN-END:variables

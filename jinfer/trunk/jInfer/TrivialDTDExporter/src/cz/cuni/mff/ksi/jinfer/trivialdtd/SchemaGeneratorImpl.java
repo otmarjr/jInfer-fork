@@ -81,7 +81,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     ret.append("<!ELEMENT ")
             .append(e.getName())
             .append(' ')
-            .append(subElementsToString(e.getSubnodes()))
+            .append(subElementsToString(e.getSubnodes(), true))
             .append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!attributes.isEmpty()) {
@@ -94,12 +94,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
-  private static String subElementsToString(final Regexp<AbstractNode> regexp) {
+  private static String subElementsToString(final Regexp<AbstractNode> regexp,
+          final boolean topLevel) {
+    if (regexp.isEmpty()) {
+      return "EMPTY";
+    }
     switch (regexp.getType()) {
       case TOKEN:
-        return regexp.getContent().getType().equals(NodeType.SIMPLE_DATA) ? "(#PCDATA)" : regexp.getContent().getName();
+        return tokenToString(regexp.getContent(), topLevel);
       case KLEENE:
-        return "(" + subElementsToString(regexp.getChildren().get(0)) + ")*";
+        return "(" + subElementsToString(regexp.getChildren().get(0), false) + ")*";
       case CONCATENATION:
         return listToString(omitAttributes(regexp.getChildren()), ',');
       case ALTERNATION:
@@ -110,6 +114,23 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }
+  }
+
+  private static String tokenToString(final AbstractNode n, final boolean topLevel) {
+    final StringBuilder ret = new StringBuilder();
+    if (topLevel) {
+      ret.append('(');
+    }
+    if (n.getType().equals(NodeType.SIMPLE_DATA)) {
+      ret.append("#PCDATA");
+    }
+    else {
+      ret.append(n.getName());
+    }
+    if (topLevel) {
+      ret.append(')');
+    }
+    return ret.toString();
   }
 
   private static List<Regexp<AbstractNode>> omitAttributes(
@@ -133,7 +154,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         ret.append(separator);
       }
       first = false;
-      ret.append(subElementsToString(child));
+      ret.append(subElementsToString(child, false));
     }
     ret.append(')');
     return ret.toString();

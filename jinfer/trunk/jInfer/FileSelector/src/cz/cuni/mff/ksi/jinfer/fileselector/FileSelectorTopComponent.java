@@ -27,7 +27,6 @@ import javax.swing.ActionMap;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-//import org.openide.util.ImageUtilities;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
@@ -44,10 +43,10 @@ public final class FileSelectorTopComponent extends TopComponent implements Expl
 
   private static FileSelectorTopComponent instance;
   /** path to the icon used by the component and its open action */
-  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/fileselector/resource/file-selector.png";
+  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/fileselector/resource/icon16.png";
   private static final String PREFERRED_ID = "FileSelectorTopComponent";
   private final ExplorerManager em = new ExplorerManager();
-  private Input input;// = new Input(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
+  private Input input;
 
   public FileSelectorTopComponent() {
     super();

@@ -60,7 +60,7 @@ public class CPTrie implements ClusterProcessor {
     return simplify(treeBase);
   }
 
-  private static void verify(final Pair<AbstractNode, List<AbstractNode>> cluster) throws IllegalArgumentException {
+  private static void verify(final Pair<AbstractNode, List<AbstractNode>> cluster) {
     for (final AbstractNode n : cluster.getSecond()) {
       if (!n.getType().equals(NodeType.ELEMENT)) {
         throw new IllegalArgumentException("Element expected");
@@ -86,8 +86,8 @@ public class CPTrie implements ClusterProcessor {
 
       // if we are not on an Element in the tree...
       if (posTree < tree.getChildren().size()
-              && RegexpType.TOKEN.equals(tree.getChildren().get(posTree).getType())
-              && !NodeType.ELEMENT.equals(tree.getChildren().get(posTree).getContent().getType())) {
+              && RegexpType.TOKEN.equals(tree.getChild(posTree).getType())
+              && !NodeType.ELEMENT.equals(tree.getChild(posTree).getContent().getType())) {
         // move on
         posTre++;
         continue;
@@ -95,7 +95,7 @@ public class CPTrie implements ClusterProcessor {
 
       // if we are not on an Element in the what...
       if (posBranch < branch.getChildren().size()
-              && !NodeType.ELEMENT.equals(branch.getChildren().get(posBranch).getContent().getType())) {
+              && !NodeType.ELEMENT.equals(branch.getChild(posBranch).getContent().getType())) {
         // move on
         posBra++;
         continue;
@@ -104,8 +104,8 @@ public class CPTrie implements ClusterProcessor {
       // when do we continue?
       if (posTree < tree.getChildren().size()
               && posBranch < branch.getChildren().size()
-              && RegexpType.TOKEN.equals(tree.getChildren().get(posTree).getType())
-              && equalTokens(tree.getChildren().get(posTree), branch.getChildren().get(posBranch))) {
+              && RegexpType.TOKEN.equals(tree.getChild(posTree).getType())
+              && equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
         posTre++;
         posBra++;
         continue;
@@ -120,22 +120,22 @@ public class CPTrie implements ClusterProcessor {
         final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
         alt.add(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
         alt.add(branch.getEnd(posBranch));
-        tree.getChildren().add(new Regexp<AbstractNode>(null, alt, RegexpType.ALTERNATION));
+        tree.addChild(new Regexp<AbstractNode>(null, alt, RegexpType.ALTERNATION));
         return;
       }
 
-      if (RegexpType.TOKEN.equals(tree.getChildren().get(posTree).getType())
-              && !equalTokens(tree.getChildren().get(posTree), branch.getChildren().get(posBranch))) {
+      if (RegexpType.TOKEN.equals(tree.getChild(posTree).getType())
+              && !equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
         tree.branch(posTree);
-        tree.getChildren().get(posTree).getChildren().add(branch.getEnd(posBranch));
+        tree.getChild(posTree).addChild(branch.getEnd(posBranch));
         return;
       }
 
-      if (RegexpType.ALTERNATION.equals(tree.getChildren().get(posTree).getType())) {
+      if (RegexpType.ALTERNATION.equals(tree.getChild(posTree).getType())) {
         // walk all the items in the alternation
-        for (final Regexp<AbstractNode> alternated : tree.getChildren().get(posTree).getChildren()) {
+        for (final Regexp<AbstractNode> alternated : tree.getChild(posTree).getChildren()) {
           if (alternated.getChildren().size() > 0
-                  && equalTokens(alternated.getChildren().get(0), branch.getChildren().get(posBranch))) {
+                  && equalTokens(alternated.getChild(0), branch.getChild(posBranch))) {
             // continue in this branch
             addBranchToTree(alternated, branch.getEnd(posBranch));
             return;
@@ -143,7 +143,7 @@ public class CPTrie implements ClusterProcessor {
         }
 
         // if not found, simply add the end of "what" to the alternation
-        tree.getChildren().get(posTree).getChildren().add(branch.getEnd(posBranch));
+        tree.getChild(posTree).addChild(branch.getEnd(posBranch));
         return;
       }
 
@@ -193,7 +193,7 @@ public class CPTrie implements ClusterProcessor {
       case ALTERNATION:
       case CONCATENATION:
         if (regexp.getChildren().size() == 1) {
-          return simplify(regexp.getChildren().get(0));
+          return simplify(regexp.getChild(0));
         }
         final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
         for (final Regexp<AbstractNode> child : regexp.getChildren()) {

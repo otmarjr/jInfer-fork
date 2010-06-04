@@ -95,7 +95,7 @@ public class SimpleKP implements KleeneProcessor {
         closeGroup(last, groupSize, retChildren);
         break;
       }
-      final Regexp<AbstractNode> current = root.getChildren().get(i);
+      final Regexp<AbstractNode> current = root.getChild(i);
       if (equalRegexps(last, current)) {
         // increment count
         groupSize++;

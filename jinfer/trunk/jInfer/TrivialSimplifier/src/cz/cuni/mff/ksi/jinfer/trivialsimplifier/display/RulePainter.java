@@ -178,7 +178,7 @@ public class RulePainter {
   }
 
   private Image drawKleene(final Regexp<AbstractNode> subnodes, final int level) {
-    final Image kleene = drawNode(subnodes.getChildren().get(0).getContent(), level + 1);
+    final Image kleene = drawNode(subnodes.getChild(0).getContent(), level + 1);
     final BufferedImage kleeneRet = Utils.getImage(kleene.getWidth(null) + 10, kleene.getHeight(null));
     final Graphics2D g = kleeneRet.createGraphics();
     g.drawImage(kleene, 0, 0, null);

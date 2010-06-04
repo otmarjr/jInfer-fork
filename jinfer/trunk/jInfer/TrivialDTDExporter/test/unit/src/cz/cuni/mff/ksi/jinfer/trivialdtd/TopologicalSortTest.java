@@ -78,15 +78,15 @@ public class TopologicalSortTest {
     final Element e8 = new Element(null, "test8", null,
             new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
 
-    e1.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e2));
-    e1.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e3));
-    e2.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e4));
-    e2.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e5));
-    e3.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e4));
-    e3.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e5));
-    e4.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e6));
-    e5.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e6));
-    e7.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e8));
+    e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e2));
+    e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e3));
+    e2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e4));
+    e2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e5));
+    e3.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e4));
+    e3.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e5));
+    e4.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e6));
+    e5.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e6));
+    e7.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e8));
     
     final List<Element> elements = Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8);
 
@@ -116,9 +116,9 @@ public class TopologicalSortTest {
     final Element e4 = new Element(null, "test4", null,
             new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
 
-    e1.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e2));
-    e1.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e3));
-    e3.getSubnodes().getChildren().add(Regexp.<AbstractNode>getToken(e4));
+    e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e2));
+    e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e3));
+    e3.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e4));
 
     final List<Element> elements = Arrays.asList(e1, e2);
 

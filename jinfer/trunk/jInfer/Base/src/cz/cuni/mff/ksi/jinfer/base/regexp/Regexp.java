@@ -67,6 +67,25 @@ public class Regexp<T> {
   }
 
   /**
+   * Shorthand for getChildren().get().
+   * 
+   * @param i Which child to fetch.
+   * @return I-th child.
+   */
+  public Regexp<T> getChild(final int i) {
+    return children.get(i);
+  }
+
+  /**
+   * Shorthand for getChildren().add().
+   *
+   * @param child Which child to add.
+   */
+  public void addChild(final Regexp<T> child) {
+    children.add(child);
+  }
+
+  /**
    * Returns all tokens contained in this regular expression, inorder from
    * the left to the right.
    * 
@@ -78,7 +97,7 @@ public class Regexp<T> {
       case TOKEN:
         return Arrays.asList(content);
       case KLEENE:
-        return children.get(0).getTokens();
+        return getChild(0).getTokens();
       case CONCATENATION:
       case ALTERNATION:
         final List<T> ret = new ArrayList<T>();
@@ -127,20 +146,20 @@ public class Regexp<T> {
     if (position >= children.size()) {
       throw new IllegalArgumentException();
     }
-    if (RegexpType.ALTERNATION.equals(children.get(position).getType())) {
+    if (RegexpType.ALTERNATION.equals(getChild(position).getType())) {
       return;
     }
 
     final List<Regexp<T>> newChildren = new ArrayList<Regexp<T>>(position + 1);
 
     for (int i = 0; i < position; i++) {
-      newChildren.add(children.get(i));
+      newChildren.add(getChild(i));
     }
 
     final List<Regexp<T>> altChildren = new ArrayList<Regexp<T>>();
 
     for (int i = position; i < children.size(); i++) {
-      altChildren.add(children.get(i));
+      altChildren.add(getChild(i));
     }
 
     final Regexp<T> concat = new Regexp<T>(null, altChildren, RegexpType.CONCATENATION);
@@ -174,7 +193,7 @@ public class Regexp<T> {
     final List<Regexp<T>> newChildren = new ArrayList<Regexp<T>>();
 
     for (int i = from; i < children.size(); i++) {
-      newChildren.add(children.get(i));
+      newChildren.add(getChild(i));
     }
 
     return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
@@ -186,7 +205,7 @@ public class Regexp<T> {
       case TOKEN:
         return content.toString();
       case KLEENE:
-        return "(" + children.get(0).toString() + ")*";
+        return "(" + getChild(0).toString() + ")*";
       case CONCATENATION:
         final StringBuilder retConc = new StringBuilder();
         retConc.append('(');

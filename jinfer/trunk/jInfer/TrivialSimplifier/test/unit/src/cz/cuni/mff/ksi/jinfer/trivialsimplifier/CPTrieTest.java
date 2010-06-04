@@ -118,7 +118,7 @@ public class CPTrieTest {
     final Regexp<AbstractNode> a5 = new Regexp<AbstractNode>(null, l5, RegexpType.CONCATENATION);
     CPTrie.addBranchToTree(t, a5);
     System.out.println(t.toString());
-    assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,((2: ELEMENT,)|()|),)|),)|(7: ELEMENT,)|),)"));
+    assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,(()|(2: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)"));
   }
  
 

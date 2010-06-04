@@ -31,10 +31,10 @@ import org.openide.nodes.Node;
  */
 public class DeleteAllAction extends AbstractAction {
 
-  private Collection<File> files;
-  private Node node;
+  private final Collection<File> files;
+  private final Node node;
 
-  public DeleteAllAction(Node node, final Collection<File> files) {
+  public DeleteAllAction(final Node node, final Collection<File> files) {
     super();
     putValue(NAME, "Delete all files");
     this.files = files;
@@ -42,9 +42,9 @@ public class DeleteAllAction extends AbstractAction {
   }
 
   @Override
-  public void actionPerformed(ActionEvent e) {
-    String folderName = ((FolderNode) node).getDisplayName();
-    int result = JOptionPane.showOptionDialog(null, "Are you sure you want to delete all files in " + folderName + " folder?", NAME, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+  public void actionPerformed(final ActionEvent e) {
+    final String folderName = ((FolderNode) node).getDisplayName();
+    final int result = JOptionPane.showOptionDialog(null, "Are you sure you want to delete all files in " + folderName + " folder?", NAME, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
     if (result == JOptionPane.YES_OPTION) {
       files.clear();
       ((FileChildren) node.getChildren()).addNotify();

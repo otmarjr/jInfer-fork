@@ -23,7 +23,6 @@ import java.util.Collection;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
-import org.openide.windows.TopComponent;
 
 /**
  *

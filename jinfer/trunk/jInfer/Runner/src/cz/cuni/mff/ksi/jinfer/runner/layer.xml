@@ -13,7 +13,7 @@
         </folder>
     </folder>
     <folder name="Toolbars">
-        <folder name="File">
+        <folder name="JInfer toolbar">
             <file name="cz-cuni-mff-ksi-jinfer-runner-RunnerAction.shadow">
                 <attr name="originalFile" stringvalue="Actions/File/cz-cuni-mff-ksi-jinfer-runner-RunnerAction.instance"/>
                 <attr name="position" intvalue="0"/>

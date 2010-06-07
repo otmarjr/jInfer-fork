@@ -33,6 +33,8 @@ import java.util.List;
  */
 public class CPTrie implements ClusterProcessor {
 
+  private final List<Element> visited = new ArrayList<Element>();
+
   @Override
   public List<AbstractNode> processClusters(final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
@@ -44,7 +46,7 @@ public class CPTrie implements ClusterProcessor {
     return ret;
   }
 
-  private static Element processCluster(final Pair<AbstractNode, List<AbstractNode>> cluster) {
+  private Element processCluster(final Pair<AbstractNode, List<AbstractNode>> cluster) {
     verify(cluster);
 
     final Element treeBase = (Element) cluster.getFirst();
@@ -175,7 +177,13 @@ public class CPTrie implements ClusterProcessor {
     return false;
   }
 
-  private static Element simplify(final Element treeBase) {
+  private Element simplify(final Element treeBase) {
+    for (final Element v : visited) {
+      if (v == treeBase) {
+        return treeBase;
+      }
+    }
+    visited.add(treeBase);
     return new Element(
             treeBase.getContext(),
             treeBase.getName(),
@@ -183,7 +191,7 @@ public class CPTrie implements ClusterProcessor {
             simplify(treeBase.getSubnodes()));
   }
 
-  private static Regexp<AbstractNode> simplify(Regexp<AbstractNode> regexp) {
+  private Regexp<AbstractNode> simplify(final Regexp<AbstractNode> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
         if (NodeType.ELEMENT.equals(regexp.getContent().getType())) {

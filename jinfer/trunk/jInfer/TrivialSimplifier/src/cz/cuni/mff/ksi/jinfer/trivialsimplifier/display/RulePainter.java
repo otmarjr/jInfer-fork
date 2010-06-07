@@ -42,6 +42,7 @@ public class RulePainter {
 
   private final Component root;
   private Image image;
+  private final List<AbstractNode> visited = new ArrayList<AbstractNode>();
 
   public RulePainter(final Component root) {
     this.root = root;
@@ -120,7 +121,10 @@ public class RulePainter {
     final int nameWidth = (int)(fm.stringWidth(n.getName()) * 1.5);
     final int nameHeight = fm.getHeight() - fm.getDescent();
 
-    final Image children = drawSubnodes(n, level + 1);
+    final Image children = isVisited(n) ? Utils.ARROW : drawSubnodes(n, level + 1);
+    if (NodeType.ELEMENT.equals(n.getType())) {
+      visited.add(n);
+    }
     
     final int width;
     final int height;
@@ -247,5 +251,14 @@ public class RulePainter {
     g.setColor(Color.red);
     g.drawLine(0, 1, width - 1, 1);
     return concatRet;
+  }
+
+  private boolean isVisited(AbstractNode n) {
+    for (final AbstractNode v : visited) {
+      if (v == n) {
+        return true;
+      }
+    }
+    return false;
   }
 }

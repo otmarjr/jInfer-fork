@@ -40,6 +40,7 @@ public final class Utils {
 
   public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/lambda.png");
   public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/dots.png");
+  public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/arrow.png");
 
   public static Color getNodeColor(final AbstractNode n) {
     switch (n.getType()) {

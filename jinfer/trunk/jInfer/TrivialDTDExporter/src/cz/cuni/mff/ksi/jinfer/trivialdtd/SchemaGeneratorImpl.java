@@ -26,6 +26,8 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
@@ -105,7 +107,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case KLEENE:
         return "(" + subElementsToString(regexp.getChild(0), false) + ")*";
       case CONCATENATION:
-        return listToString(omitAttributes(regexp.getChildren()), ',');
+        return concatToString(regexp.getChildren());
       case ALTERNATION:
         if (regexp.getChild(0).isEmpty()) {
           return listToString(omitAttributes(regexp.getChildren().subList(1, regexp.getChildren().size())), '|') + "?";
@@ -131,6 +133,46 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(')');
     }
     return ret.toString();
+  }
+
+  /**
+   * If we want to output PCDATA in DTD, it needs to be like this
+   * <code>
+   * (#PCDATA|a|b|c)*
+   * </code>
+   *
+   * @param children
+   * @return
+   */
+  private static String concatToString(final List<Regexp<AbstractNode>> children) {
+    boolean pcdata = false;    
+    for (final Regexp<AbstractNode> child : children) {
+      if (RegexpType.TOKEN.equals(child.getType())
+              && NodeType.SIMPLE_DATA.equals(child.getContent().getType())) {
+        pcdata = true;
+        break;
+      }
+    }
+    if (!pcdata) {
+      return listToString(omitAttributes(children), ',');
+    }
+
+    Collections.sort(children, new Comparator<Regexp<AbstractNode>>() {
+      @Override
+      public int compare(final Regexp<AbstractNode> o1, final Regexp<AbstractNode> o2) {
+        if (RegexpType.TOKEN.equals(o1.getType())
+              && NodeType.SIMPLE_DATA.equals(o1.getContent().getType())) {
+          return -1;
+        }
+        if (RegexpType.TOKEN.equals(o2.getType())
+              && NodeType.SIMPLE_DATA.equals(o2.getContent().getType())) {
+          return 1;
+        }
+        return 0;
+      }
+    });
+
+    return listToString(children, '|') + "*";
   }
 
   private static List<Regexp<AbstractNode>> omitAttributes(

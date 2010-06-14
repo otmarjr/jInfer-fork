@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**

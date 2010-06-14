@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class representing XML node with textual content.
@@ -34,7 +35,7 @@ public abstract class AbstractContentNode extends AbstractNode {
   public AbstractContentNode(final List<String> context,
           final String name,
           final NodeType type,
-          final List<Pair<String, Object>> attributes,
+          final Map<String, Object> attributes,
           final String contentType,
           final List<? extends Object> content) {
     super(context, name, type, attributes);

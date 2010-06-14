@@ -24,11 +24,10 @@ import java.awt.event.MouseEvent;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-//import org.openide.util.ImageUtilities;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.util.ImageUtilities;
 
@@ -54,14 +53,14 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     panels.addMouseListener(new MouseAdapter() {
 
       @Override
-      public void mouseClicked(MouseEvent evt) {
-        int tabIndex = panels.indexAtLocation(evt.getX(), evt.getY());
+      public void mouseClicked(final MouseEvent evt) {
+        final int tabIndex = panels.indexAtLocation(evt.getX(), evt.getY());
 
         if (tabIndex < 0) {
           return;
         }
         if ((evt.getModifiers() & InputEvent.BUTTON1_MASK) != 0
-                && evt.getClickCount() == 2) {
+                && evt.getClickCount() >= 2) {
           panels.remove(tabIndex);
         }
       }
@@ -77,7 +76,8 @@ public final class RuleDisplayerTopComponent extends TopComponent {
    */
   public RulePainter createNewPanel(final String name) {
     final RulePanel panel = new RulePanel();
-    panels.add(name, panel);
+    final JScrollPane jsp = new JScrollPane(panel);
+    panels.add(name, jsp);
     return panel.getRulePainter();
   }
 

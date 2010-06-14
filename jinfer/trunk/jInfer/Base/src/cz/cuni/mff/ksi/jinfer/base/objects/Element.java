@@ -47,13 +47,33 @@ public class Element extends AbstractNode {
   /**
    * Returns all attributes of this element.
    * Note: does NOT return attributes of any subelements.
+   * Returned list is writable in the sense that method add() will work.
    *
    * @return All attributes of current element.
    */
   public List<Attribute> getElementAttributes() {
-    final List<Attribute> ret = new ArrayList<Attribute>();
+    final List<Attribute> ret = new ArrayList<Attribute>() {
+
+      private static final long serialVersionUID = 87451521l;
+
+      @Override
+      public boolean add(final Attribute e) {
+        boolean found = false;
+        for (final AbstractNode node : getSubnodes().getTokens()) {
+          if (NodeType.ATTRIBUTE.equals(node.getType())
+                  && e.getName().equalsIgnoreCase(node.getName())) {
+            found = true;
+          }
+        }
+        if (!found) {
+          getSubnodes().addChild(Regexp.<AbstractNode>getToken(e));
+        }
+        return super.add(e);
+      }
+
+    };
     for (final AbstractNode node : getSubnodes().getTokens()) {
-      if (node.getType().equals(NodeType.ATTRIBUTE)) {
+      if (NodeType.ATTRIBUTE.equals(node.getType())) {
         ret.add((Attribute) node);
       }
     }

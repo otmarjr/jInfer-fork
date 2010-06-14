@@ -190,7 +190,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
-      ret.append("\n\t").append(attribute.getName()).append(" CDATA #IMPLIED");
+      if (attribute.getAttributes().containsKey("required")) {
+        ret.append("\n\t").append(attribute.getName()).append(" CDATA #REQUIRED");
+      }
+      else {
+        ret.append("\n\t").append(attribute.getName()).append(" CDATA #IMPLIED");
+      }
     }
     return ret.toString();
   }

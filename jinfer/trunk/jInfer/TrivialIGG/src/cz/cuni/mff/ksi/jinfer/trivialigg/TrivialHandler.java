@@ -25,7 +25,9 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -58,7 +60,9 @@ public class TrivialHandler extends DefaultHandler {
       attrContext.add(qName);
       // for each attribute, add a subnode representing it
       for (int i = 0; i < attributes.getLength(); i++) {
-        final Attribute a = new Attribute(attrContext, attributes.getQName(i), null, null, Arrays.asList(attributes.getValue(i)));
+        final Map<String, Object> nodeAttrs = new HashMap<String, Object>();
+        nodeAttrs.put("required", Boolean.TRUE);
+        final Attribute a = new Attribute(attrContext, attributes.getQName(i), nodeAttrs, null, Arrays.asList(attributes.getValue(i)));
         e.getSubnodes().addChild(Regexp.<AbstractNode>getToken(a));
       }
     }

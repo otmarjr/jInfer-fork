@@ -17,6 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ public abstract class AbstractClustererImpl implements Clusterer {
       for (final Pair<AbstractNode, List<AbstractNode>> p : ret) {
         if (clusters(n, p.getFirst())) {
           // if n belongs to this cluster, add it
-          p.getSecond().add(n);
+          addNodeToCluster(n, p);
           found = true;
           break;
         }
@@ -58,4 +60,51 @@ public abstract class AbstractClustererImpl implements Clusterer {
    * Answers the question whether these two nodes belong to the same cluster.
    */
   protected abstract boolean clusters(final AbstractNode n, final AbstractNode first);
+
+  private static void addNodeToCluster(final AbstractNode n,
+          final Pair<AbstractNode, List<AbstractNode>> p) {
+    p.getSecond().add(n);
+
+    final Element node = (Element) n;
+    final Element clusterHead = (Element) p.getFirst();
+
+    reflectAttributes(clusterHead.getElementAttributes(), node.getElementAttributes());
+  }
+
+  /**
+   * Attributes from the node are added to those of the cluster. Requiredness is
+   * evaluated.
+   * 
+   * @param clusterAttrs
+   * @param nodeAttrs
+   */
+  private static void reflectAttributes(final List<Attribute> clusterAttrs, final List<Attribute> nodeAttrs) {
+    // add attributes from the node to the cluster, but only if not there already.
+    for (final Attribute a : nodeAttrs) {
+      boolean found = false;
+      for (final Attribute ca : clusterAttrs) {
+        if (ca.getName().equalsIgnoreCase(a.getName())) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        a.getAttributes().remove("required");
+        clusterAttrs.add(a);
+      }
+    }
+    // walk the attributes in the cluster. if not among those from the node, remove their requiredness.
+    for (final Attribute ca : clusterAttrs) {
+      boolean found = false;
+      for (final Attribute a : nodeAttrs) {
+        if (ca.getName().equalsIgnoreCase(a.getName())) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        ca.getAttributes().remove("required");
+      }
+    }
+  }
 }

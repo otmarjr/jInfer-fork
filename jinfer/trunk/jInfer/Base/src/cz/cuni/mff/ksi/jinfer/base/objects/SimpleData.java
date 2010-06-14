@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class representing a simple text XML node.
@@ -28,7 +29,7 @@ public class SimpleData extends AbstractContentNode {
 
   public SimpleData(final List<String> context,
           final String name,
-          final List<Pair<String, Object>> attributes,
+          final Map<String, Object> attributes,
           final String contentType,
           final List<? extends Object> content) {
     super(context, name, NodeType.SIMPLE_DATA, attributes, contentType, content);

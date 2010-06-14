@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class representing a XML attribute.
@@ -27,7 +28,7 @@ public class Attribute extends AbstractContentNode {
 
   public Attribute(final List<String> context,
           final String name,
-          final List<Pair<String, Object>> attributes,
+          final Map<String, Object> attributes,
           final String contentType,
           final List<? extends Object> content) {
     super(context, name, NodeType.ATTRIBUTE, attributes, contentType, content);

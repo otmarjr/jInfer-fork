@@ -40,9 +40,9 @@ public class Input {
     this.queries = queries;
   }
 
-  private void removeNonExistFiles(Collection<File> collection) {
-    for (Iterator<File> it = collection.iterator(); it.hasNext();) {
-      File file = it.next();
+  private void removeNonExistFiles(final Collection<File> collection) {
+    for (final Iterator<File> it = collection.iterator(); it.hasNext();) {
+      final File file = it.next();
       if (!file.exists()) {
         it.remove();
       }

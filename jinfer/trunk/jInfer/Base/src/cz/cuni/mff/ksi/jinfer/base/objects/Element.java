@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class representing a XML element.
@@ -33,7 +34,7 @@ public class Element extends AbstractNode {
 
   public Element(final List<String> context,
           final String name,
-          final List<Pair<String, Object>> attributes,
+          final Map<String, Object> attributes,
           final Regexp<AbstractNode> subnodes) {
     super(context, name, NodeType.ELEMENT, attributes);
     this.subnodes = subnodes;

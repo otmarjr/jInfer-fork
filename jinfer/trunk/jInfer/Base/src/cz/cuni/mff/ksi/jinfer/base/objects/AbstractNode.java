@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class representing a XML node (rule in grammar).
@@ -32,12 +33,12 @@ public abstract class AbstractNode {
   /** Type of this node. */
   private final NodeType type;
   /** List of unspecific attributes assigned to this node. */
-  private final List<Pair<String, Object>> attributes;
+  private final Map<String, Object> attributes;
 
   public AbstractNode(final List<String> context,
           final String name,
           final NodeType type,
-          final List<Pair<String, Object>> attributes) {
+          final Map<String, Object> attributes) {
     this.context = context;
     this.name = name;
     this.type = type;
@@ -56,7 +57,7 @@ public abstract class AbstractNode {
     return type;
   }
 
-  public List<Pair<String, Object>> getAttributes() {
+  public Map<String, Object> getAttributes() {
     return attributes;
   }
 

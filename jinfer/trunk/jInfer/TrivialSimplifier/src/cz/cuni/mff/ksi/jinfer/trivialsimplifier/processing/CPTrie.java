@@ -33,8 +33,6 @@ import java.util.List;
  */
 public class CPTrie implements ClusterProcessor {
 
-  private final List<Element> visited = new ArrayList<Element>();
-
   @Override
   public List<AbstractNode> processClusters(final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
@@ -58,17 +56,17 @@ public class CPTrie implements ClusterProcessor {
       }
     }
 
-    // walk the tree and simplify it
-    return simplify(treeBase);
+    // walk the tree and shorten its concatenations/alternations
+    return (new Shortener()).simplify(treeBase);
   }
 
   private static void verify(final Pair<AbstractNode, List<AbstractNode>> cluster) {
     for (final AbstractNode n : cluster.getSecond()) {
-      if (!n.getType().equals(NodeType.ELEMENT)) {
+      if (!NodeType.ELEMENT.equals(n.getType())) {
         throw new IllegalArgumentException("Element expected");
       }
       final Element e = (Element) n;
-      if (!e.getSubnodes().getType().equals(RegexpType.CONCATENATION)) {
+      if (!RegexpType.CONCATENATION.equals(e.getSubnodes().getType())) {
         throw new IllegalArgumentException("Concatenation expected");
       }
     }
@@ -95,7 +93,7 @@ public class CPTrie implements ClusterProcessor {
         continue;
       }
 
-      // if we are not on an Element in the what...
+      // if we are not on an Element in the branch...
       if (posBranch < branch.getChildren().size()
               && !NodeType.ELEMENT.equals(branch.getChild(posBranch).getContent().getType())) {
         // move on
@@ -104,6 +102,9 @@ public class CPTrie implements ClusterProcessor {
       }
 
       // when do we continue?
+      //  when we are not out of tree or branch,
+      //  pointing on a token in the tree,
+      //  and the tokens in the tree and the branch are equal
       if (posTree < tree.getChildren().size()
               && posBranch < branch.getChildren().size()
               && RegexpType.TOKEN.equals(tree.getChild(posTree).getType())
@@ -118,7 +119,7 @@ public class CPTrie implements ClusterProcessor {
       }
 
       if (posTree >= tree.getChildren().size()) {
-        // append a new alternation between all remaining items from what and an empty concatenation to tree
+        // append a new alternation between all remaining items from the branch and an empty concatenation to tree
         final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
         alt.add(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
         alt.add(branch.getEnd(posBranch));
@@ -144,7 +145,7 @@ public class CPTrie implements ClusterProcessor {
           }
         }
 
-        // if not found, simply add the end of "what" to the alternation
+        // if not found, simply add the end of the branch to the alternation
         tree.getChild(posTree).addChild(branch.getEnd(posBranch));
         return;
       }
@@ -177,38 +178,4 @@ public class CPTrie implements ClusterProcessor {
     return false;
   }
 
-  private Element simplify(final Element treeBase) {
-    for (final Element v : visited) {
-      if (v == treeBase) {
-        return treeBase;
-      }
-    }
-    visited.add(treeBase);
-    return new Element(
-            treeBase.getContext(),
-            treeBase.getName(),
-            treeBase.getAttributes(),
-            simplify(treeBase.getSubnodes()));
-  }
-
-  private Regexp<AbstractNode> simplify(final Regexp<AbstractNode> regexp) {
-    switch (regexp.getType()) {
-      case TOKEN:
-        if (NodeType.ELEMENT.equals(regexp.getContent().getType())) {
-          return Regexp.<AbstractNode>getToken(simplify((Element)regexp.getContent()));
-        }
-        return regexp;
-      case ALTERNATION:
-      case CONCATENATION:
-        if (regexp.getChildren().size() == 1) {
-          return simplify(regexp.getChild(0));
-        }
-        final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
-        for (final Regexp<AbstractNode> child : regexp.getChildren()) {
-          children.add(simplify(child));
-        }
-        return new Regexp<AbstractNode>(null, children, regexp.getType());
-      default: return regexp;
-    }
-  }
 }

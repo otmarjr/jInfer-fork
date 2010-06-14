@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -53,6 +54,7 @@ public class RulePainter {
    */
   public void setRules(final List<AbstractNode> rules) {
     this.image = drawRules(rules);
+    root.setPreferredSize(new Dimension(image.getWidth(null), image.getHeight(null)));
     root.repaint();
   }
 
@@ -78,6 +80,7 @@ public class RulePainter {
     }
 
     this.image = ret;
+    root.setPreferredSize(new Dimension(image.getWidth(null), image.getHeight(null)));
     root.repaint();
   }
   
@@ -253,7 +256,7 @@ public class RulePainter {
     return concatRet;
   }
 
-  private boolean isVisited(AbstractNode n) {
+  private boolean isVisited(final AbstractNode n) {
     for (final AbstractNode v : visited) {
       if (v == n) {
         return true;

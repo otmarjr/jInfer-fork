@@ -114,11 +114,11 @@ public class RegexpTest {
 
     assertTrue(t.getChildren().size() == 1);
     final Regexp<Integer> alt = t.getChild(0);
-    assertTrue(RegexpType.ALTERNATION.equals(alt.getType()));
+    assertTrue(alt.isAlternation());
     assertTrue(alt.getChildren().size() == 1);
-    assertTrue(RegexpType.CONCATENATION.equals(alt.getChild(0).getType()));
+    assertTrue(alt.getChild(0).isConcatenation());
     assertTrue(alt.getChild(0).getChildren().size() == 1);
-    assertTrue(RegexpType.TOKEN.equals(alt.getChild(0).getChild(0).getType()));
+    assertTrue(alt.getChild(0).getChild(0).isToken());
   }
 
   /**
@@ -137,10 +137,10 @@ public class RegexpTest {
 
     assertTrue(t.getChildren().size() == 1);
     final Regexp<Integer> alt = t.getChild(0);
-    assertTrue(RegexpType.ALTERNATION.equals(alt.getType()));
+    assertTrue(alt.isAlternation());
     assertTrue(alt.getChildren().size() == 1);
     final Regexp<Integer> concat = alt.getChild(0);
-    assertTrue(RegexpType.CONCATENATION.equals(concat.getType()));
+    assertTrue(concat.isConcatenation());
     assertTrue(concat.getChildren().size() == 3);
 
     for (int i = 0; i < 3; i++) {
@@ -164,10 +164,10 @@ public class RegexpTest {
 
     assertTrue(t.getChildren().size() == 2);
     final Regexp<Integer> alt = t.getChild(1);
-    assertTrue(RegexpType.ALTERNATION.equals(alt.getType()));
+    assertTrue(alt.isAlternation());
     assertTrue(alt.getChildren().size() == 1);
     final Regexp<Integer> concat = alt.getChild(0);
-    assertTrue(RegexpType.CONCATENATION.equals(concat.getType()));
+    assertTrue(concat.isConcatenation());
     assertTrue(concat.getChildren().size() == 2);
 
     for (int i = 1; i < 3; i++) {
@@ -191,10 +191,10 @@ public class RegexpTest {
 
     assertTrue(t.getChildren().size() == 3);
     final Regexp<Integer> alt = t.getChild(2);
-    assertTrue(RegexpType.ALTERNATION.equals(alt.getType()));
+    assertTrue(alt.isAlternation());
     assertTrue(alt.getChildren().size() == 1);
     final Regexp<Integer> concat = alt.getChild(0);
-    assertTrue(RegexpType.CONCATENATION.equals(concat.getType()));
+    assertTrue(concat.isConcatenation());
     assertTrue(concat.getChildren().size() == 1);
 
     assertTrue(concat.getChild(0).getContent().equals(Integer.valueOf(2)));

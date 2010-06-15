@@ -62,19 +62,19 @@ public class CPTrie implements ClusterProcessor {
 
   private static void verify(final Pair<AbstractNode, List<AbstractNode>> cluster) {
     for (final AbstractNode n : cluster.getSecond()) {
-      if (!NodeType.ELEMENT.equals(n.getType())) {
+      if (!n.isElement()) {
         throw new IllegalArgumentException("Element expected");
       }
       final Element e = (Element) n;
-      if (!RegexpType.CONCATENATION.equals(e.getSubnodes().getType())) {
+      if (!e.getSubnodes().isConcatenation()) {
         throw new IllegalArgumentException("Concatenation expected");
       }
     }
   }
 
   public static void addBranchToTree(final Regexp<AbstractNode> tree, final Regexp<AbstractNode> branch) {
-    if (!RegexpType.CONCATENATION.equals(tree.getType())
-            || !RegexpType.CONCATENATION.equals(branch.getType())) {
+    if (!tree.isConcatenation()
+            || !branch.isConcatenation()) {
       throw new IllegalArgumentException();
     }
 
@@ -86,8 +86,8 @@ public class CPTrie implements ClusterProcessor {
 
       // if we are not on an Element in the tree...
       if (posTree < tree.getChildren().size()
-              && RegexpType.TOKEN.equals(tree.getChild(posTree).getType())
-              && !NodeType.ELEMENT.equals(tree.getChild(posTree).getContent().getType())) {
+              && tree.getChild(posTree).isToken()
+              && !tree.getChild(posTree).getContent().isElement()) {
         // move on
         posTre++;
         continue;
@@ -95,7 +95,7 @@ public class CPTrie implements ClusterProcessor {
 
       // if we are not on an Element in the branch...
       if (posBranch < branch.getChildren().size()
-              && !NodeType.ELEMENT.equals(branch.getChild(posBranch).getContent().getType())) {
+              && !branch.getChild(posBranch).getContent().isElement()) {
         // move on
         posBra++;
         continue;
@@ -107,7 +107,7 @@ public class CPTrie implements ClusterProcessor {
       //  and the tokens in the tree and the branch are equal
       if (posTree < tree.getChildren().size()
               && posBranch < branch.getChildren().size()
-              && RegexpType.TOKEN.equals(tree.getChild(posTree).getType())
+              && tree.getChild(posTree).isToken()
               && equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
         posTre++;
         posBra++;
@@ -127,14 +127,14 @@ public class CPTrie implements ClusterProcessor {
         return;
       }
 
-      if (RegexpType.TOKEN.equals(tree.getChild(posTree).getType())
+      if (tree.getChild(posTree).isToken()
               && !equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
         tree.branch(posTree);
         tree.getChild(posTree).addChild(branch.getEnd(posBranch));
         return;
       }
 
-      if (RegexpType.ALTERNATION.equals(tree.getChild(posTree).getType())) {
+      if (tree.getChild(posTree).isAlternation()) {
         // walk all the items in the alternation
         for (final Regexp<AbstractNode> alternated : tree.getChild(posTree).getChildren()) {
           if (alternated.getChildren().size() > 0
@@ -157,21 +157,20 @@ public class CPTrie implements ClusterProcessor {
 
   // TODO move to a common package
   public static boolean equalTokens(final Regexp<AbstractNode> t1, final Regexp<AbstractNode> t2) {
-    if (!RegexpType.TOKEN.equals(t1.getType())
-            || !RegexpType.TOKEN.equals(t2.getType())) {
+    if (!t1.isToken() || !t2.isToken()) {
       throw new IllegalArgumentException();
     }
-    if (NodeType.SIMPLE_DATA.equals(t1.getContent().getType())
-            && NodeType.SIMPLE_DATA.equals(t2.getContent().getType())) {
+    if (t1.getContent().isSimpleData()
+            && t2.getContent().isSimpleData()) {
       return true;
     }
-    if (NodeType.ELEMENT.equals(t1.getContent().getType())
-            && NodeType.ELEMENT.equals(t2.getContent().getType())
+    if (t1.getContent().isElement()
+            && t2.getContent().isElement()
             && ((Element) t1.getContent()).getName().equalsIgnoreCase(((Element) t2.getContent()).getName())) {
       return true;
     }
-    if (NodeType.ATTRIBUTE.equals(t1.getContent().getType())
-            && NodeType.ATTRIBUTE.equals(t2.getContent().getType())
+    if (t1.getContent().isAttribute()
+            && t2.getContent().isAttribute()
             && ((Attribute) t1.getContent()).getName().equalsIgnoreCase(((Attribute) t2.getContent()).getName())) {
       return true;
     }

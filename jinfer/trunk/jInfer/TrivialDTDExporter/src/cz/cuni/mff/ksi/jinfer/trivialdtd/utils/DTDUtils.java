@@ -40,8 +40,7 @@ public final class DTDUtils {
 
       @Override
       public boolean apply(final Regexp<AbstractNode> r) {
-        return !RegexpType.TOKEN.equals(r.getType())
-                || !NodeType.ATTRIBUTE.equals(r.getContent().getType());
+        return !r.isToken() || !r.getContent().isAttribute();
       }
     });
   }

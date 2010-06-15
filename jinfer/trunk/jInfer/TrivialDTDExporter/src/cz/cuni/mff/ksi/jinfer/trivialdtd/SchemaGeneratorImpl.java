@@ -135,8 +135,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static String concatToString(final List<Regexp<AbstractNode>> children) {
     boolean pcdata = false;
     for (final Regexp<AbstractNode> child : children) {
-      if (RegexpType.TOKEN.equals(child.getType())
-              && NodeType.SIMPLE_DATA.equals(child.getContent().getType())) {
+      if (child.isToken() && child.getContent().isSimpleData()) {
         pcdata = true;
         break;
       }
@@ -149,12 +148,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
       @Override
       public int compare(final Regexp<AbstractNode> o1, final Regexp<AbstractNode> o2) {
-        if (RegexpType.TOKEN.equals(o1.getType())
-                && NodeType.SIMPLE_DATA.equals(o1.getContent().getType())) {
+        if (o1.isToken() && o1.getContent().isSimpleData()) {
           return -1;
         }
-        if (RegexpType.TOKEN.equals(o2.getType())
-                && NodeType.SIMPLE_DATA.equals(o2.getContent().getType())) {
+        if (o2.isToken() && o2.getContent().isSimpleData()) {
           return 1;
         }
         return 0;

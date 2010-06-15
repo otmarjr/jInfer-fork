@@ -79,10 +79,10 @@ public class SimpleKP implements KleeneProcessor {
   }
 
   private Regexp<AbstractNode> processConcat(final Regexp<AbstractNode> root) {
-    if (RegexpType.TOKEN.equals(root.getType())) {
+    if (root.isToken()) {
       return root;
     }
-    if (!RegexpType.CONCATENATION.equals(root.getType())) {
+    if (!root.isConcatenation()) {
       throw new IllegalArgumentException();
     }
     final List<Regexp<AbstractNode>> retChildren = new ArrayList<Regexp<AbstractNode>>();
@@ -116,10 +116,10 @@ public class SimpleKP implements KleeneProcessor {
   private boolean equalRegexps(final Regexp<AbstractNode> last, final Regexp<AbstractNode> current) {
     if (last != null
             && current != null
-            && RegexpType.TOKEN.equals(last.getType())
-            && RegexpType.TOKEN.equals(current.getType())
-            && NodeType.ELEMENT.equals(last.getContent().getType())
-            && NodeType.ELEMENT.equals(current.getContent().getType())
+            && last.isToken()
+            && current.isToken()
+            && last.getContent().isElement()
+            && current.getContent().isElement()
             && CPTrie.equalTokens(last, current)) {
       return true;
     }

@@ -125,7 +125,7 @@ public class RulePainter {
     final int nameHeight = fm.getHeight() - fm.getDescent();
 
     final Image children = isVisited(n) ? Utils.ARROW : drawSubnodes(n, level + 1);
-    if (NodeType.ELEMENT.equals(n.getType())) {
+    if (n.isElement()) {
       visited.add(n);
     }
     
@@ -161,7 +161,7 @@ public class RulePainter {
   }
 
   private Image drawSubnodes(final AbstractNode n, final int level) {
-    if (!NodeType.ELEMENT.equals(n.getType())) {
+    if (!n.isElement()) {
       return null;
     }
     final Regexp<AbstractNode> subnodes = ((Element)n).getSubnodes();

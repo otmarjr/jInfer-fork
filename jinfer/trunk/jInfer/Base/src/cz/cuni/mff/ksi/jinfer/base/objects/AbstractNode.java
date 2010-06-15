@@ -61,6 +61,18 @@ public abstract class AbstractNode {
     return attributes;
   }
 
+  public boolean isElement() {
+    return NodeType.ELEMENT.equals(type);
+  }
+
+  public boolean isAttribute() {
+    return NodeType.ATTRIBUTE.equals(type);
+  }
+
+  public boolean isSimpleData() {
+    return NodeType.SIMPLE_DATA.equals(type);
+  }
+
   @Override
   public String toString() {
     final StringBuilder ret = new StringBuilder();

@@ -114,8 +114,24 @@ public class Regexp<T> {
     return type;
   }
 
+  public boolean isToken() {
+    return RegexpType.TOKEN.equals(type);
+  }
+
+  public boolean isConcatenation() {
+    return RegexpType.CONCATENATION.equals(type);
+  }
+
+  public boolean isAlternation() {
+    return RegexpType.ALTERNATION.equals(type);
+  }
+
+  public boolean isKleene() {
+    return RegexpType.KLEENE.equals(type);
+  }
+
   public boolean isEmpty() {
-    if (RegexpType.TOKEN.equals(type)) {
+    if (isToken()) {
       return content == null;
     }
     return children == null
@@ -140,13 +156,13 @@ public class Regexp<T> {
    * @param position Where to branch.
    */
   public void branch(final int position) {
-    if (!RegexpType.CONCATENATION.equals(getType())) {
+    if (!isConcatenation()) {
       throw new IllegalArgumentException();
     }
     if (position >= children.size()) {
       throw new IllegalArgumentException();
     }
-    if (RegexpType.ALTERNATION.equals(getChild(position).getType())) {
+    if (getChild(position).isAlternation()) {
       return;
     }
 
@@ -180,7 +196,7 @@ public class Regexp<T> {
    * @return
    */
   public Regexp<T> getEnd(final int from) {
-    if (!RegexpType.CONCATENATION.equals(getType())) {
+    if (!isConcatenation()) {
       throw new IllegalArgumentException();
     }
     if (from >= children.size()) {

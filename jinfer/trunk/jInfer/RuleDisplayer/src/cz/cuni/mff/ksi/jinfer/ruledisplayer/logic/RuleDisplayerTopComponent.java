@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier.display;
+package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -34,13 +34,13 @@ import org.openide.util.ImageUtilities;
 /**
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.trivialsimplifier.display//RuleDisplayer//EN",
+@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.ruledisplayer.display//RuleDisplayer//EN",
 autostore = false)
 public final class RuleDisplayerTopComponent extends TopComponent {
 
   private static final long serialVersionUID = 5123131;
   private static RuleDisplayerTopComponent instance;
-  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/icon16.png";
+  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/icon16.png";
   private static final String PREFERRED_ID = "RuleDisplayerTopComponent";
 
   public RuleDisplayerTopComponent() {

@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier.display;
+package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.awt.Color;
@@ -38,9 +38,9 @@ public final class Utils {
   private static final Color COLOR_ATTRIBUTE = Color.blue;
   private static final Color COLOR_SIMPLE_DATA = Color.red;
 
-  public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/lambda.png");
-  public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/dots.png");
-  public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/trivialsimplifier/graphics/arrow.png");
+  public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png");
+  public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/dots.png");
+  public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/arrow.png");
 
   public static Color getNodeColor(final AbstractNode n) {
     switch (n.getType()) {

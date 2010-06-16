@@ -17,14 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.moduleselector;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleSelection;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;

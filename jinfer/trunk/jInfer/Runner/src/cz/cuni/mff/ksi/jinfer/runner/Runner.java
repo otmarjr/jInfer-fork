@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import java.util.Date;
 import java.util.List;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
@@ -93,6 +94,14 @@ public class Runner {
     io.getOut().println("Runner: writing schema.");
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
     ioResult.getOut().println(schema);
+
+    final FileSelection fileSelection = lookupFileSelection();
+    fileSelection.addOutput(
+            igGenerator.getModuleName() + "-" +
+            simplifier.getModuleName() + "-" +
+            schemaGenerator.getModuleName() + "-" +
+            (new Date()).toString()
+            , schema, "dtd");
   }
 
   private FileSelection lookupFileSelection() {

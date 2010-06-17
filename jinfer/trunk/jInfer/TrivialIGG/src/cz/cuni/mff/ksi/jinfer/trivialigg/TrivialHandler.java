@@ -53,16 +53,19 @@ public class TrivialHandler extends DefaultHandler {
     final List<String> context = getContext();
 
     final Element e = new Element(context, qName, null, 
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(0), RegexpType.CONCATENATION));
 
     if (attributes.getLength() > 0) {
       final List<String> attrContext = new ArrayList<String>(context);
       attrContext.add(qName);
       // for each attribute, add a subnode representing it
       for (int i = 0; i < attributes.getLength(); i++) {
-        final Map<String, Object> nodeAttrs = new HashMap<String, Object>();
+        final Map<String, Object> nodeAttrs = new HashMap<String, Object>(1);
         nodeAttrs.put("required", Boolean.TRUE);
-        final Attribute a = new Attribute(attrContext, attributes.getQName(i), nodeAttrs, null, Arrays.asList(attributes.getValue(i)));
+        final List<String> content = new ArrayList<String>(1);
+        content.add(attributes.getValue(i));
+        final Attribute a = new Attribute(attrContext, attributes.getQName(i), 
+                nodeAttrs, null, content);
         e.getSubnodes().addChild(Regexp.<AbstractNode>getToken(a));
       }
     }

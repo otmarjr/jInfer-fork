@@ -24,20 +24,20 @@ import java.util.Map;
  * 
  * @author vitasek
  */
-public abstract class AbstractContentNode extends AbstractNode {
+public abstract class AbstractContentNode<T> extends AbstractNode {
 
   /** Unspecific type of textual data. */
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list
    * contains only one item. */
-  private final List<? extends Object> content;
+  private final List<T> content;
 
   public AbstractContentNode(final List<String> context,
           final String name,
           final NodeType type,
           final Map<String, Object> attributes,
           final String contentType,
-          final List<? extends Object> content) {
+          final List<T> content) {
     super(context, name, type, attributes);
     this.contentType = contentType;
     this.content = content;
@@ -47,7 +47,7 @@ public abstract class AbstractContentNode extends AbstractNode {
     return contentType;
   }
 
-  public List<? extends Object> getContent() {
+  public List<T> getContent() {
     return content;
   }
 

@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,21 +36,21 @@ public abstract class AbstractClustererImpl implements Clusterer {
   public List<Pair<AbstractNode, List<AbstractNode>>> cluster(final List<AbstractNode> initialGrammar) {
     final List<Pair<AbstractNode, List<AbstractNode>>> ret = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>();
 
-    for (final AbstractNode n : initialGrammar) {
+    for (final AbstractNode node : initialGrammar) {
       boolean found = false;
-      for (final Pair<AbstractNode, List<AbstractNode>> p : ret) {
-        if (clusters(n, p.getFirst())) {
+      for (final Pair<AbstractNode, List<AbstractNode>> cluster : ret) {
+        if (clusters(node, cluster.getFirst())) {
           // if n belongs to this cluster, add it
-          addNodeToCluster(n, p);
+          addNodeToCluster((Element) node, cluster);
           found = true;
           break;
         }
       }
       if (!found) {
         // if n doesn't belong to any of the clusters, create a new one for it
-        final List<AbstractNode> l = new ArrayList<AbstractNode>();
-        l.add(n);
-        ret.add(new Pair<AbstractNode, List<AbstractNode>>(n, l));
+        final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
+        l.add(node);
+        ret.add(new Pair<AbstractNode, List<AbstractNode>>(node, l));
       }
     }
 
@@ -61,49 +62,52 @@ public abstract class AbstractClustererImpl implements Clusterer {
    */
   protected abstract boolean clusters(final AbstractNode n, final AbstractNode first);
 
-  private static void addNodeToCluster(final AbstractNode n,
-          final Pair<AbstractNode, List<AbstractNode>> p) {
-    p.getSecond().add(n);
+  private static void addNodeToCluster(final Element node,
+          final Pair<AbstractNode, List<AbstractNode>> cluster) {
+    cluster.getSecond().add(node);
 
-    final Element node = (Element) n;
-    final Element clusterHead = (Element) p.getFirst();
+    final Element clusterHead = (Element) cluster.getFirst();
 
     reflectAttributes(clusterHead.getElementAttributes(), node.getElementAttributes());
   }
 
   /**
-   * Attributes from the node are added to those of the cluster. Requiredness is
-   * evaluated.
+   * Attributes from the node are added to those of the cluster. 
+   * 
+   * Requiredness is evaluated: if the attribute is required in the cluster
+   * and simultaneously it is found in the node, it is still required. Otherwise
+   * its requiredness is removed.
    * 
    * @param clusterAttrs
    * @param nodeAttrs
    */
   private static void reflectAttributes(final List<Attribute> clusterAttrs, final List<Attribute> nodeAttrs) {
     // add attributes from the node to the cluster, but only if not there already.
-    for (final Attribute a : nodeAttrs) {
+    for (final Attribute nodeAttr : nodeAttrs) {
       boolean found = false;
-      for (final Attribute ca : clusterAttrs) {
-        if (ca.getName().equalsIgnoreCase(a.getName())) {
+      for (final Attribute clusterAttr : clusterAttrs) {
+        if (clusterAttr.getName().equalsIgnoreCase(nodeAttr.getName())) {
           found = true;
+          clusterAttr.getContent().addAll(clusterAttr.getContent());
           break;
         }
       }
       if (!found) {
-        a.getAttributes().remove("required");
-        clusterAttrs.add(a);
+        nodeAttr.getAttributes().remove("required");
+        clusterAttrs.add(nodeAttr);
       }
     }
     // walk the attributes in the cluster. if not among those from the node, remove their requiredness.
-    for (final Attribute ca : clusterAttrs) {
+    for (final Attribute clusterAttr : clusterAttrs) {
       boolean found = false;
-      for (final Attribute a : nodeAttrs) {
-        if (ca.getName().equalsIgnoreCase(a.getName())) {
+      for (final Attribute nodeAttr : nodeAttrs) {
+        if (clusterAttr.getName().equalsIgnoreCase(nodeAttr.getName())) {
           found = true;
           break;
         }
       }
       if (!found) {
-        ca.getAttributes().remove("required");
+        clusterAttr.getAttributes().remove("required");
       }
     }
   }

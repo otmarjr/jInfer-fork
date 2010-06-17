@@ -14,27 +14,32 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.fileselector;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
-import cz.cuni.mff.ksi.jinfer.base.objects.Input;
-import org.openide.windows.WindowManager;
+package cz.cuni.mff.ksi.jinfer.fileselector.nodes;
+
+import cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent;
+import java.util.Collection;
+import javax.swing.Action;
+import org.openide.filesystems.FileObject;
 
 /**
  *
  * @author sviro
  */
-public class FileSelectionImpl implements FileSelection {
+public class OutputNode extends FolderNode{
 
+  private Collection<FileObject> files;
 
+  public OutputNode(final String name, final Collection<FileObject> files, final FileSelectorTopComponent topComponent) {
+    super(name, null, topComponent);
+    this.files = files;
+    setChildren(new OutputChildren(files));
+  }
 
   @Override
-  public Input getInput() {
-    return ((FileSelectorTopComponent) WindowManager.getDefault().findTopComponent("FileSelectorTopComponent")).getInput();
+  public Action[] getActions(final boolean bln) {
+    return new Action[]{};
   }
 
-  public void addOutput(String fileName, String data, String extension) {
-    ((FileSelectorTopComponent) WindowManager.getDefault().findTopComponent("FileSelectorTopComponent")).addOutput(fileName, data, extension);
-  }
 
 }

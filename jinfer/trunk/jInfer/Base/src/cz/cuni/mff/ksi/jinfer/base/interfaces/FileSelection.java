@@ -28,4 +28,6 @@ public interface FileSelection {
 
   Input getInput();
 
+  void addOutput(String fileName, String data, String extension);
+
 }

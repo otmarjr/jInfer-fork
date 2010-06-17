@@ -17,19 +17,28 @@
 package cz.cuni.mff.ksi.jinfer.fileselector;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FolderNode;
+import cz.cuni.mff.ksi.jinfer.fileselector.nodes.OutputChildren;
 import cz.cuni.mff.ksi.jinfer.fileselector.nodes.RootNode;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.view.BeanTreeView;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileSystem;
+import org.openide.filesystems.FileUtil;
+import org.openide.nodes.Node;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbPreferences;
 
@@ -47,17 +56,21 @@ public final class FileSelectorTopComponent extends TopComponent implements Expl
   private static final String PREFERRED_ID = "FileSelectorTopComponent";
   private final ExplorerManager em = new ExplorerManager();
   private Input input;
+  private FileSystem memoryFS;
+  private Collection<FileObject> output;
 
   public FileSelectorTopComponent() {
     super();
     initComponents();
+    memoryFS = FileUtil.createMemoryFileSystem();
+    output = new ArrayList<FileObject>();
     loadInput();
     setName(NbBundle.getMessage(FileSelectorTopComponent.class, "CTL_FileSelectorTopComponent"));
     setToolTipText(NbBundle.getMessage(FileSelectorTopComponent.class, "HINT_FileSelectorTopComponent"));
     setIcon(ImageUtilities.loadImage(ICON_PATH, true));
     final ActionMap map = getActionMap();
     map.put("delete", new FileDeleteAction(this));
-    em.setRootContext(new RootNode(this, input));
+    em.setRootContext(new RootNode(this, input, output));
   }
 
   /** This method is called from within the constructor to
@@ -116,6 +129,27 @@ public final class FileSelectorTopComponent extends TopComponent implements Expl
             "There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();
+  }
+
+  public void addOutput(String fileName, String data, String extension) {
+    try {
+      FileObject fObject = memoryFS.getRoot().createData(fileName, extension);
+      OutputStream out = fObject.getOutputStream();
+      out.write(data.getBytes());
+      out.flush();
+      out.close();
+      output.add(fObject);
+
+      Node[] folders = em.getRootContext().getChildren().getNodes();
+      for (Node folder : folders) {
+        FolderNode fNode = (FolderNode) folder;
+        if (fNode.getFolderName().equals("OUTPUT")) {
+          ((OutputChildren)fNode.getChildren()).addNotify();
+        }
+      }
+    } catch (IOException ex) {
+      Exceptions.printStackTrace(ex);
+    }
   }
 
   private void loadInput() {
@@ -217,10 +251,18 @@ public final class FileSelectorTopComponent extends TopComponent implements Expl
     return em;
   }
 
+  public FileSystem getMemoryFS() {
+    return memoryFS;
+  }
+
   /**
    * @return the model
    */
   public Input getInput() {
     return input;
+  }
+
+  public Collection<FileObject> getOutput() {
+    return output;
   }
 }

@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent;
 import java.io.File;
 import java.util.Collection;
+import org.openide.filesystems.FileObject;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
@@ -31,9 +32,9 @@ import org.openide.nodes.Node;
 public class RootNode extends AbstractNode {
 
   // TODO sviro Convert this to an enum
-  private static final String[] FOLDERS = {"XML", "XSD", "QUERIES"};
+  private static final String[] FOLDERS = {"XML", "XSD", "QUERIES", "OUTPUT"};
 
-  public RootNode(final FileSelectorTopComponent topComponent, final Input input) {
+  public RootNode(final FileSelectorTopComponent topComponent, final Input input, final Collection<FileObject> output) {
     super(new Children.Keys<String>() {
 
       @Override
@@ -50,6 +51,8 @@ public class RootNode extends AbstractNode {
           files = input.getSchemas();
         } else if (folderName.equals("QUERIES")) {
           files = input.getQueries();
+        } else if (folderName.equals("OUTPUT")){
+          return new Node[]{new OutputNode(folderName, output, topComponent)};
         } else {
           throw new IllegalArgumentException("unknown folder type");
         }

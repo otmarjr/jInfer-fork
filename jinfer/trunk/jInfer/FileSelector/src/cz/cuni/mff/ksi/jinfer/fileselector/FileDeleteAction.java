@@ -18,12 +18,15 @@ package cz.cuni.mff.ksi.jinfer.fileselector;
 
 import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FolderNode;
+import cz.cuni.mff.ksi.jinfer.fileselector.nodes.OutputChildren;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.AbstractAction;
 import org.openide.explorer.ExplorerManager;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataNode;
+import org.openide.util.Exceptions;
 
 /**
  *
@@ -51,11 +54,22 @@ public class FileDeleteAction extends AbstractAction {
       topComponent.getInput().getSchemas().remove(delFile);
     } else if ("QUERY".equals(parentName)) {
       topComponent.getInput().getQueries().remove(delFile);
+    } else if ("OUTPUT".equals(parentName)) {
+      topComponent.getOutput().remove(dataNode.getDataObject().getPrimaryFile());
+      try {
+        topComponent.getMemoryFS().getRoot().getFileObject(dataNode.getDisplayName()).delete();
+      } catch (IOException ex) {
+        Exceptions.printStackTrace(ex);
+      }
     } else {
       throw new IllegalArgumentException(parentName);
     }
     topComponent.storeInput();
 
-    ((FileChildren) dataNode.getParentNode().getChildren()).addNotify();
+    if ("OUTPUT".equals(parentName)) {
+      ((OutputChildren) dataNode.getParentNode().getChildren()).addNotify();
+    } else {
+      ((FileChildren) dataNode.getParentNode().getChildren()).addNotify();
+    }
   }
 }

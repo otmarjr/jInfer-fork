@@ -32,7 +32,7 @@ import org.openide.util.ImageUtilities;
  */
 public class FolderNode extends AbstractNode {
 
-  private final Collection<File> files;
+  protected final Collection<File> files;
   private final String folderName;
   private final FileSelectorTopComponent topComponent;
 

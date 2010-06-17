@@ -36,7 +36,7 @@ import java.util.List;
  * </li>
  * </ul>
  * 
- * @author vitasek
+ * @author vektor
  */
 public class Regexp<T> {
 

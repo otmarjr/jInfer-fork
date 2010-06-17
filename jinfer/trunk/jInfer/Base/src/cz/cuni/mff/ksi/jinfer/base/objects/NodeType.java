@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 /**
  * Enumeration of XML node types.
  * 
- * @author vitasek
+ * @author vektor
  */
 public enum NodeType {
 

@@ -88,7 +88,7 @@ public abstract class AbstractClustererImpl implements Clusterer {
       for (final Attribute clusterAttr : clusterAttrs) {
         if (clusterAttr.getName().equalsIgnoreCase(nodeAttr.getName())) {
           found = true;
-          clusterAttr.getContent().addAll(clusterAttr.getContent());
+          clusterAttr.getContent().addAll(nodeAttr.getContent());
           break;
         }
       }

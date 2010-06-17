@@ -23,12 +23,14 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DTDUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -80,17 +82,31 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private static String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
-    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(subElementsToString(e.getSubnodes(), true)).append(">\n");
+    ret.append("<!ELEMENT ")
+            .append(e.getName())
+            .append(' ')
+            .append(subElementsToString(e.getSubnodes(), true))
+            .append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!attributes.isEmpty()) {
-      ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).append(">\n");
+      ret.append("<!ATTLIST ")
+              .append(e.getName())
+              .append(' ')
+              .append(attributesToString(attributes))
+              .append(">\n");
     }
     return ret.toString();
   }
 
   private static String subElementsToString(final Regexp<AbstractNode> regexp,
           final boolean topLevel) {
-    if (regexp.isEmpty()) {
+    if (regexp.isEmpty() 
+            || BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
+                  @Override
+                  public boolean apply(AbstractNode argument) {
+                    return argument.isElement();
+                  }
+                }).isEmpty()) {
       return "EMPTY";
     }
     switch (regexp.getType()) {
@@ -187,13 +203,53 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
-      if (attribute.getAttributes().containsKey("required")) {
-        ret.append("\n\t").append(attribute.getName()).append(" CDATA #REQUIRED");
+      final List<String> domain = getDomain(attribute);
+
+      final String type;
+      if (domain.size() < 5) {
+        type = domainToString(domain);
       }
       else {
-        ret.append("\n\t").append(attribute.getName()).append(" CDATA #IMPLIED");
+        type = " CDATA ";
+      }
+
+      ret.append("\n\t").append(attribute.getName()).append(type);
+      if (attribute.getAttributes().containsKey("required")) {
+        ret.append("#REQUIRED");
+      }
+      else {
+        ret.append("#IMPLIED");
       }
     }
+    return ret.toString();
+  }
+
+  private static List<String> getDomain(final Attribute attribute) {
+    final Map<String, Object> domainMap = new HashMap<String, Object>();
+    for (final Object o : attribute.getContent()) {
+      domainMap.put((String) o, null);
+    }
+    final List<String> ret = new ArrayList<String>(domainMap.size());
+    for (final String key : domainMap.keySet()) {
+      ret.add(key);
+    }
+    return ret;
+  }
+
+  private static String domainToString(final List<String> domain) {
+    final StringBuilder ret = new StringBuilder();
+    ret.append(" (");
+    boolean first = true;
+    for (final String s : domain) {
+      ret.append(s);
+      if (!first) {
+        ret.append('|');
+      }
+      else {
+        first = false;
+      }
+    }
+    ret.append(") ");
     return ret.toString();
   }
 }

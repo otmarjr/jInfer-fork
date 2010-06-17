@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Class representing XML node with textual content.
  * 
- * @author vitasek
+ * @author vektor
  */
 public abstract class AbstractContentNode<T> extends AbstractNode {
 

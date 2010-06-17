@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
  * Clusterer implementation in which two rules belong to the same cluster when
  * they have the same name.
  * 
- * @author vitasek
+ * @author vektor
  */
 public class NameClusterer extends AbstractClustererImpl {
 

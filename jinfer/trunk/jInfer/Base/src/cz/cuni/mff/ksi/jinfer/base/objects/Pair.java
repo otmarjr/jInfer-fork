@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 /**
  * Class representing a generic 2-tuple. Immutable class.
  * 
- * @author vitasek
+ * @author vektor
  */
 public class Pair<S, T> {
 

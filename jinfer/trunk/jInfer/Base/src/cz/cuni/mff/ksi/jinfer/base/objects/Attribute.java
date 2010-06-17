@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Class representing a XML attribute.
  * 
- * @author vitasek
+ * @author vektor
  */
 public class Attribute extends AbstractContentNode {
 

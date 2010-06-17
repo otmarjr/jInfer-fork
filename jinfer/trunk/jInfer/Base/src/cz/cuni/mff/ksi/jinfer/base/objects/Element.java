@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Class representing a XML element.
  * 
- * @author vitasek
+ * @author vektor
  */
 public class Element extends AbstractNode {
 

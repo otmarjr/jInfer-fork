@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Class representing a simple text XML node.
  * 
- * @author vitasek
+ * @author vektor
  */
 public class SimpleData extends AbstractContentNode {
 

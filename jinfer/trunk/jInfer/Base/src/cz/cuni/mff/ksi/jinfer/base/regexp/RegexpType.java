@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
 /**
- * @author vitasek
+ * @author vektor
  */
 public enum RegexpType {
 

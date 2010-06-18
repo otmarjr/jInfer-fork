@@ -114,12 +114,31 @@ public class CPTrie implements ClusterProcessor {
         continue;
       }
 
-      if (posBranch >= branch.getChildren().size()) {
+      if (posBranch >= branch.getChildren().size()
+              && posTree >= tree.getChildren().size()) {
         return;
       }
 
+      // we have run out of the branch
+      if (posBranch >= branch.getChildren().size()) {
+        // verify that we need to do additional steps
+        if (tree.getChild(posTree).isAlternation()
+                && tree.getChild(posTree).getChild(0).isEmpty()) {
+          return;
+        }
+        // branch the tree here and add an empty concatenation (lambda)
+        tree.branch(posTree);
+        final Regexp<AbstractNode> split = tree.getChild(posTree);
+        // some acrobacy to have the lambda as the first element in the alternation
+        split.addChild(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+        split.addChild(split.getChild(0));
+        split.getChildren().remove(0);
+        return;
+      }
+
+      // we have run out of the tree
       if (posTree >= tree.getChildren().size()) {
-        // append a new alternation between all remaining items from the branch and an empty concatenation to tree
+        // append a new alternation between all remaining items from the branch and an empty concatenation (lambda) to tree
         final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
         alt.add(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
         alt.add(branch.getEnd(posBranch));
@@ -127,6 +146,7 @@ public class CPTrie implements ClusterProcessor {
         return;
       }
 
+      // we have found a position where tree and branch differ
       if (tree.getChild(posTree).isToken()
               && !equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
         tree.branch(posTree);

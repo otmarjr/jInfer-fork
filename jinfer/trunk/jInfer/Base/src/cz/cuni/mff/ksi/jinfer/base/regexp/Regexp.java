@@ -160,7 +160,7 @@ public class Regexp<T> {
       throw new IllegalArgumentException();
     }
     if (position >= children.size()) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("Requested to branch at position " + position + ", but only " + children.size() + " long");
     }
     if (getChild(position).isAlternation()) {
       return;

@@ -15,15 +15,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening;
+package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.options.ConfigPanel;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.CPTrie;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.options.ConfigPanel;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;

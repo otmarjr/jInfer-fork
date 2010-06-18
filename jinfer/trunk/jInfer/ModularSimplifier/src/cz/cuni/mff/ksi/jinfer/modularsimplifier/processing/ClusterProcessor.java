@@ -14,36 +14,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering;
+
+package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
- * Clusterer implementation in which two rules belong to the same cluster when
- * they have the same name and the same context.
+ * Second part of the processing - do something with rule clusters.
  *
  * @author vektor
  */
-public class ContextClusterer extends AbstractClustererImpl {
+public interface ClusterProcessor {
 
-  @Override
-  protected boolean clusters(final AbstractNode n, final AbstractNode first) {
-    return first.getName().equalsIgnoreCase(n.getName())
-            && equalContexts(first.getContext(), n.getContext());
-  }
+  List<AbstractNode> processClusters(List<Pair<AbstractNode, List<AbstractNode>>> clusters);
 
-  private boolean equalContexts(final List<String> c1, final List<String> c2) {
-    if (c1 == null || c2 == null || c1.size() != c2.size()) {
-      return false;
-    }
-    int i = 0;
-    for (final String s : c1) {
-      if (!s.equalsIgnoreCase(c2.get(i))) {
-        return false;
-      }
-      i++;
-    }
-    return true;
-  }
 }

@@ -2,6 +2,6 @@
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
   <folder name="SimplifierProviders">
-    <file name="cz-cuni-mff-ksi-jinfer-trivialsimplifier-SimplifierImpl.instance"/>
+    <file name="cz-cuni-mff-ksi-jinfer-modularsimplifier-SimplifierImpl.instance"/>
   </folder>
 </filesystem>

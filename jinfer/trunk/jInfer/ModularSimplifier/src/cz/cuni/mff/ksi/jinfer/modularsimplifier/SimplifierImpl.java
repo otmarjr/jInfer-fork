@@ -14,22 +14,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier;
+package cz.cuni.mff.ksi.jinfer.modularsimplifier;
 
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.CPTrie;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.ClusterProcessor;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering.NameClusterer;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.NameClusterer;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.clustering.ContextClusterer;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ContextClusterer;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.RuleDisplayerTopComponent;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.KleeneProcessor;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.kleening.SimpleKP;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.options.ConfigPanel;
-import cz.cuni.mff.ksi.jinfer.trivialsimplifier.processing.CPAlternations;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.SimpleKP;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.options.ConfigPanel;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPAlternations;
 import java.util.List;
 import java.util.prefs.Preferences;
 import org.openide.windows.IOProvider;
@@ -44,7 +44,7 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public String getModuleName() {
-    return "Trivial Simplifier";
+    return "Modular Simplifier";
   }
 
   private ClusterProcessor getClusterProcessor() {
@@ -100,5 +100,4 @@ public class SimplifierImpl implements Simplifier {
     }
     callback.finished(kleened);
   }
-
 }

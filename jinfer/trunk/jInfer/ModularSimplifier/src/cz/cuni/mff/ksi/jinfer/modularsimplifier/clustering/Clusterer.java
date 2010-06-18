@@ -29,7 +29,6 @@ import java.util.List;
  */
 public interface Clusterer {
 
-  // TODO refactor to Pair<Element, List<Element>>
   List<Pair<AbstractNode, List<AbstractNode>>> cluster(final List<AbstractNode> initialGrammar);
 
 }

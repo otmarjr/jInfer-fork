@@ -55,7 +55,7 @@ public class SimpleKP implements KleeneProcessor {
       ret.add(new Element(
               e.getContext(),
               e.getName(),
-              e.getAttributes(), // TODO here we lose the attributes
+              e.getAttributes(),
               processTree(((Element) root).getSubnodes())));
     }
     return ret;

@@ -56,7 +56,7 @@ public class IGGeneratorImpl implements IGGenerator {
         parser.parse(doc, handler);
       }
     } catch (ParserConfigurationException ex) {
-      // TODO write errors to Output window
+      // TODO vektor write errors to Output window
       LOG.log(Level.SEVERE, null, ex);
     } catch (SAXException ex) {
       LOG.log(Level.SEVERE, null, ex);

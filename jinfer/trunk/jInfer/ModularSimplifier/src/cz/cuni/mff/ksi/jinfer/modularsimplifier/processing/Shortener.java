@@ -59,7 +59,7 @@ public class Shortener {
         if (regexp.getChildren().size() == 1) {
           return simplify(regexp.getChild(0));
         }
-        final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
+        final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>(regexp.getChildren().size());
         for (final Regexp<AbstractNode> child : regexp.getChildren()) {
           children.add(simplify(child));
         }

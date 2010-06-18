@@ -100,13 +100,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private static String subElementsToString(final Regexp<AbstractNode> regexp,
           final boolean topLevel) {
-    if (regexp.isEmpty() 
-            || BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
-                  @Override
-                  public boolean apply(AbstractNode argument) {
-                    return argument.isElement();
-                  }
-                }).isEmpty()) {
+    if (regexp.isEmpty()) {
+      return "EMPTY";
+    }
+    if (topLevel
+            && BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
+      @Override
+      public boolean apply(AbstractNode argument) {
+        return argument.isElement();
+      }
+    }).isEmpty()) {
       return "EMPTY";
     }
     switch (regexp.getType()) {
@@ -123,15 +126,15 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private static String tokenToString(final AbstractNode n, final boolean topLevel) {
+  private static String tokenToString(final AbstractNode node, final boolean topLevel) {
     final StringBuilder ret = new StringBuilder();
     if (topLevel) {
       ret.append('(');
     }
-    if (n.getType().equals(NodeType.SIMPLE_DATA)) {
+    if (node.isSimpleData()) {
       ret.append("#PCDATA");
     } else {
-      ret.append(n.getName());
+      ret.append(node.getName());
     }
     if (topLevel) {
       ret.append(')');

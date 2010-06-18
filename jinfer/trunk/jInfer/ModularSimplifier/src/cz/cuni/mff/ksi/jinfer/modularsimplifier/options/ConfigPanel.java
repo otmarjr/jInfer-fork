@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialsimplifier.options;
+package cz.cuni.mff.ksi.jinfer.modularsimplifier.options;
 
 import java.util.prefs.Preferences;
 import javax.swing.JPanel;

@@ -24,7 +24,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 @OptionsPanelController.TopLevelRegistration(categoryName = "#OptionsCategory_Name_Config",
-iconBase = "cz/cuni/mff/ksi/jinfer/base/graphics/icons/jinfer-icon48.png",
+iconBase = "cz/cuni/mff/ksi/jinfer/modularsimplifier/graphics/modular-icon48.png",
 keywords = "#OptionsCategory_Keywords_Config",
 keywordsCategory = "Config")
 public final class ConfigOptionsPanelController extends OptionsPanelController {

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.trivialdtd;
 
+import com.sun.org.apache.xalan.internal.xsltc.dom.AbsoluteIterator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
@@ -163,21 +164,37 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return listToString(DTDUtils.omitAttributes(children), ',');
     }
 
-    Collections.sort(children, new Comparator<Regexp<AbstractNode>>() {
+    final List<AbstractNode> content = new ArrayList<AbstractNode>();
+    for (final Regexp<AbstractNode> r : children) {
+      content.addAll(r.getTokens());
+    }
+
+    Collections.sort(content, new Comparator<AbstractNode>() {
 
       @Override
-      public int compare(final Regexp<AbstractNode> o1, final Regexp<AbstractNode> o2) {
-        if (o1.isToken() && o1.getContent().isSimpleData()) {
+      public int compare(final AbstractNode o1, final AbstractNode o2) {
+        if (o1.isSimpleData()) {
           return -1;
         }
-        if (o2.isToken() && o2.getContent().isSimpleData()) {
+        if (o2.isSimpleData()) {
           return 1;
         }
         return 0;
       }
     });
 
-    return listToString(children, '|') + "*";
+    final StringBuilder ret = new StringBuilder();
+    ret.append('(');
+    boolean first = true;
+    for (final AbstractNode child : content) {
+      if (!first) {
+        ret.append('|');
+      }
+      first = false;
+      ret.append(tokenToString(child, false));
+    }
+    ret.append(")*");
+    return ret.toString();
   }
 
   private static String alternationToString(final List<Regexp<AbstractNode>> children) {

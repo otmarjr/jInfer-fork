@@ -97,11 +97,15 @@ public class Runner {
 
     final FileSelection fileSelection = lookupFileSelection();
     fileSelection.addOutput(
-            igGenerator.getModuleName() + "-" +
-            simplifier.getModuleName() + "-" +
-            schemaGenerator.getModuleName() + "-" +
             (new Date()).toString()
-            , schema, "dtd");
+            , getCommentedSchema(schema), "dtd");
+  }
+
+  private String getCommentedSchema(final String schema) {
+    return "<!-- Inferred on " + (new Date()).toString()
+            + " by " + igGenerator.getModuleName() + ", "
+            + simplifier.getModuleName() + ", "
+            + schemaGenerator.getModuleName() + " -->\n" + schema;
   }
 
   private FileSelection lookupFileSelection() {

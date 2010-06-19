@@ -59,7 +59,7 @@ public final class ConfigPanel extends JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ConfigPanel.class, "ConfigPanel.jLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -71,7 +71,7 @@ public final class ConfigPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.ipadx = 10;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(jLabel2, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(ConfigPanel.class, "ConfigPanel.jLabel3.text")); // NOI18N
@@ -79,9 +79,10 @@ public final class ConfigPanel extends JPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel3, gridBagConstraints);
 
+    minDefaultRatio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
     minDefaultRatio.setText(org.openide.util.NbBundle.getMessage(ConfigPanel.class, "ConfigPanel.minDefaultRatio.text")); // NOI18N
     minDefaultRatio.setMinimumSize(new java.awt.Dimension(50, 20));
     minDefaultRatio.setPreferredSize(new java.awt.Dimension(50, 20));
@@ -99,7 +100,7 @@ public final class ConfigPanel extends JPanel {
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.ipadx = 10;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(jLabel4, gridBagConstraints);
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

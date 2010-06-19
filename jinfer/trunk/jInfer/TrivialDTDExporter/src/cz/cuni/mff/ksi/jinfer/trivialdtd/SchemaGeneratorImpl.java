@@ -26,9 +26,9 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.options.ConfigPanel;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DTDUtils;
+import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.CollectionToString;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +58,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     io.getOut().println("DTD Exporter: got " + grammar.size()
             + " rules.");
 
+    // load settings
     maxEnumSize = Preferences.userNodeForPackage(ConfigPanel.class).getInt("max.enum.size", 3);
     minDefaultRatio = Preferences.userNodeForPackage(ConfigPanel.class).getFloat("min.default.ratio", 0.67f);
     
@@ -160,14 +161,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @return
    */
   private String concatToString(final List<Regexp<AbstractNode>> children) {
-    boolean pcdata = false;
-    for (final Regexp<AbstractNode> child : children) {
-      if (child.isToken() && child.getContent().isSimpleData()) {
-        pcdata = true;
-        break;
-      }
-    }
-    if (!pcdata) {
+    if (!DTDUtils.containsPCDATA(children)) {
       return listToString(DTDUtils.omitAttributes(children), ',');
     }
 
@@ -176,32 +170,18 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       content.addAll(r.getTokens());
     }
 
-    Collections.sort(content, new Comparator<AbstractNode>() {
+    Collections.sort(content, DTDUtils.PCDATA_CMP);
 
-      @Override
-      public int compare(final AbstractNode o1, final AbstractNode o2) {
-        if (o1.isSimpleData()) {
-          return -1;
-        }
-        if (o2.isSimpleData()) {
-          return 1;
-        }
-        return 0;
-      }
-    });
+    return CollectionToString.colToString(
+            content,
+            '|',
+            new CollectionToString.ToString<AbstractNode>() {
 
-    final StringBuilder ret = new StringBuilder();
-    ret.append('(');
-    boolean first = true;
-    for (final AbstractNode child : content) {
-      if (!first) {
-        ret.append('|');
-      }
-      first = false;
-      ret.append(tokenToString(child, false));
-    }
-    ret.append(")*");
-    return ret.toString();
+              @Override
+              public String toString(final AbstractNode t) {
+                return tokenToString(t, false);
+              }
+            }) + "*";
   }
 
   private String alternationToString(final List<Regexp<AbstractNode>> children) {
@@ -213,18 +193,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String listToString(final List<Regexp<AbstractNode>> list,
           final char separator) {
-    final StringBuilder ret = new StringBuilder();
-    ret.append('(');
-    boolean first = true;
-    for (final Regexp<AbstractNode> child : list) {
-      if (!first) {
-        ret.append(separator);
-      }
-      first = false;
-      ret.append(subElementsToString(child, false));
-    }
-    ret.append(')');
-    return ret.toString();
+    return CollectionToString.colToString(
+            list,
+            separator,
+            new CollectionToString.ToString<Regexp<AbstractNode>>() {
+
+              @Override
+              public String toString(final Regexp<AbstractNode> t) {
+                return subElementsToString(t, false);
+              }
+            });
   }
 
   private String attributesToString(final List<Attribute> attributes) {
@@ -283,19 +261,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private String domainToString(final Set<String> domain) {
-    final StringBuilder ret = new StringBuilder();
-    ret.append(" (");
-    boolean first = true;
-    for (final String s : domain) {
-      if (!first) {
-        ret.append('|');
-      }
-      else {
-        first = false;
-      }
-      ret.append(s);
-    }
-    ret.append(") ");
-    return ret.toString();
+    return " " + CollectionToString.colToString(domain, '|', CollectionToString.IDEMPOTENT) + " ";
   }
 }

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: false
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.options
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/options/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/options/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

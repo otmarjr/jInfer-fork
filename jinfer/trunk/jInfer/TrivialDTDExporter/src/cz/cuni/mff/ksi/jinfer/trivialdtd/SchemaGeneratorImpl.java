@@ -31,6 +31,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -219,14 +220,26 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
+  // TODO vektor Make this configurable
+  private static final int DOMAIN_THRESHOLD = 5;
+  private static final double DOMINANT_RATIO = 0.67;
+
   private static String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
-      final List<String> domain = getDomain(attribute);
+      final Map<String, Integer> domain = getDomain(attribute);
+
+      int domainAbsolute = 0;
+
+      for (final Integer i : domain.values()) {
+        domainAbsolute += i.intValue();
+      }
+
+      final int dominantAbsolute = (int)(domainAbsolute * DOMINANT_RATIO);
 
       final String type;
-      if (domain.size() < 5) {
-        type = domainToString(domain);
+      if (domain.size() < DOMAIN_THRESHOLD) {
+        type = domainToString(domain.keySet());
       }
       else {
         type = " CDATA ";
@@ -237,36 +250,47 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         ret.append("#REQUIRED");
       }
       else {
-        ret.append("#IMPLIED");
+        boolean dominantFound = false;
+        for (final Map.Entry<String, Integer> e : domain.entrySet()) {
+          if (e.getValue().intValue() > dominantAbsolute) {
+            ret.append('"').append(e.getKey()).append('"');
+            dominantFound = true;
+            break;
+          }
+        }
+        if (!dominantFound) {
+          ret.append("#IMPLIED");
+        }
       }
     }
     return ret.toString();
   }
 
-  private static List<String> getDomain(final Attribute attribute) {
-    final Map<String, Object> domainMap = new HashMap<String, Object>();
+  private static Map<String, Integer> getDomain(final Attribute attribute) {
+    final Map<String, Integer> domainMap = new HashMap<String, Integer>();
     for (final Object o : attribute.getContent()) {
-      domainMap.put((String) o, null);
+      if (domainMap.containsKey((String) o)) {
+        domainMap.put((String) o, Integer.valueOf(domainMap.get((String) o).intValue() + 1));
+      }
+      else {
+      domainMap.put((String) o, Integer.valueOf(1));
+      }
     }
-    final List<String> ret = new ArrayList<String>(domainMap.size());
-    for (final String key : domainMap.keySet()) {
-      ret.add(key);
-    }
-    return ret;
+    return domainMap;
   }
 
-  private static String domainToString(final List<String> domain) {
+  private static String domainToString(final Set<String> domain) {
     final StringBuilder ret = new StringBuilder();
     ret.append(" (");
     boolean first = true;
     for (final String s : domain) {
-      ret.append(s);
       if (!first) {
         ret.append('|');
       }
       else {
         first = false;
       }
+      ret.append(s);
     }
     ret.append(") ");
     return ret.toString();

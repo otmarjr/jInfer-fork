@@ -106,8 +106,6 @@ class JinferOPTPanel extends JPanel {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    jTabbedPane1 = new javax.swing.JTabbedPane();
-    jPanel1 = new javax.swing.JPanel();
     jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
@@ -127,52 +125,39 @@ class JinferOPTPanel extends JPanel {
 
     jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addGap(32, 32, 32)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jLabel2)
-          .addComponent(jLabel1)
-          .addComponent(jLabel3))
-        .addGap(18, 18, 18)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jComboBox1, 0, 296, Short.MAX_VALUE)
-          .addComponent(jComboBox2, 0, 296, Short.MAX_VALUE)
-          .addComponent(jComboBox3, 0, 296, Short.MAX_VALUE))
-        .addContainerGap())
-    );
-    jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addGap(27, 27, 27)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel1)
-          .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel2)
-          .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel3)
-          .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap(178, Short.MAX_VALUE))
-    );
-
-    jTabbedPane1.addTab(org.openide.util.NbBundle.getMessage(JinferOPTPanel.class, "JinferOPTPanel.jPanel1.TabConstraints.tabTitle"), jPanel1); // NOI18N
-
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
+      .addGroup(layout.createSequentialGroup()
+        .addGap(23, 23, 23)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jLabel2)
+          .addComponent(jLabel1)
+          .addComponent(jLabel3))
+        .addGap(18, 18, 18)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jComboBox1, 0, 293, Short.MAX_VALUE)
+          .addComponent(jComboBox2, 0, 293, Short.MAX_VALUE)
+          .addComponent(jComboBox3, 0, 293, Short.MAX_VALUE))
+        .addGap(24, 24, 24))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+      .addGroup(layout.createSequentialGroup()
+        .addGap(116, 116, 116)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jLabel1)
+          .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jLabel2)
+          .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jLabel3)
+          .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(117, Short.MAX_VALUE))
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -234,8 +219,6 @@ class JinferOPTPanel extends JPanel {
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JTabbedPane jTabbedPane1;
   // End of variables declaration//GEN-END:variables
 
   private List<IGGenerator> lookupIGGenerators() {

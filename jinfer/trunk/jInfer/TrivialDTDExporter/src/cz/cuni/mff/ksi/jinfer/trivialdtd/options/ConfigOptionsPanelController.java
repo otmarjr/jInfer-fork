@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.modularsimplifier.options;
+package cz.cuni.mff.ksi.jinfer.trivialdtd.options;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -24,9 +24,9 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 @OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#OptionsCategory_Name_Config",
-keywords = "#OptionsCategory_Keywords_Config",
-keywordsCategory = "Config")
+displayName = "#AdvancedOption_DisplayName_Config",
+keywords = "#AdvancedOption_Keywords_Config",
+keywordsCategory = "jInfer/Config")
 public final class ConfigOptionsPanelController extends OptionsPanelController {
 
   private ConfigPanel panel;
@@ -82,8 +82,16 @@ public final class ConfigOptionsPanelController extends OptionsPanelController {
 
   private ConfigPanel getPanel() {
     if (panel == null) {
-      panel = new ConfigPanel();
+      panel = new ConfigPanel(this);
     }
     return panel;
+  }
+
+  private void changed() {
+    if (!changed) {
+      changed = true;
+      pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
+    }
+    pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);
   }
 }

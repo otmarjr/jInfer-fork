@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.trivialdtd.options.ConfigPanel;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DTDUtils;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.prefs.Preferences;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -43,6 +45,8 @@ import org.openide.windows.InputOutput;
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+  private int maxEnumSize;
+  private double minDefaultRatio;
 
   @Override
   public String getModuleName() {
@@ -54,6 +58,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     io.getOut().println("DTD Exporter: got " + grammar.size()
             + " rules.");
 
+    maxEnumSize = Preferences.userNodeForPackage(ConfigPanel.class).getInt("max.enum.size", 3);
+    minDefaultRatio = Preferences.userNodeForPackage(ConfigPanel.class).getFloat("min.default.ratio", 0.67f);
+    
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
@@ -81,7 +88,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     callback.finished(ret.toString());
   }
 
-  private static String elementToString(final Element e) {
+  private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
     ret.append("<!ELEMENT ")
             .append(e.getName())
@@ -99,7 +106,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
-  private static String subElementsToString(final Regexp<AbstractNode> regexp,
+  private String subElementsToString(final Regexp<AbstractNode> regexp,
           final boolean topLevel) {
     if (regexp.isEmpty()) {
       return "EMPTY";
@@ -107,7 +114,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     if (topLevel
             && BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
       @Override
-      public boolean apply(AbstractNode argument) {
+      public boolean apply(final AbstractNode argument) {
         return argument.isElement();
       }
     }).isEmpty()) {
@@ -127,7 +134,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private static String tokenToString(final AbstractNode node, final boolean topLevel) {
+  private String tokenToString(final AbstractNode node, final boolean topLevel) {
     final StringBuilder ret = new StringBuilder();
     if (topLevel) {
       ret.append('(');
@@ -152,7 +159,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @param children
    * @return
    */
-  private static String concatToString(final List<Regexp<AbstractNode>> children) {
+  private String concatToString(final List<Regexp<AbstractNode>> children) {
     boolean pcdata = false;
     for (final Regexp<AbstractNode> child : children) {
       if (child.isToken() && child.getContent().isSimpleData()) {
@@ -197,14 +204,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
-  private static String alternationToString(final List<Regexp<AbstractNode>> children) {
+  private String alternationToString(final List<Regexp<AbstractNode>> children) {
     if (children.get(0).isEmpty()) {
       return listToString(DTDUtils.omitAttributes(children.subList(1, children.size())), '|') + "?";
     }
     return listToString(DTDUtils.omitAttributes(children), '|');
   }
 
-  private static String listToString(final List<Regexp<AbstractNode>> list,
+  private String listToString(final List<Regexp<AbstractNode>> list,
           final char separator) {
     final StringBuilder ret = new StringBuilder();
     ret.append('(');
@@ -220,11 +227,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
-  // TODO vektor Make this configurable
-  private static final int DOMAIN_THRESHOLD = 5;
-  private static final double DOMINANT_RATIO = 0.67;
-
-  private static String attributesToString(final List<Attribute> attributes) {
+  private String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
       final Map<String, Integer> domain = getDomain(attribute);
@@ -235,10 +238,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         domainAbsolute += i.intValue();
       }
 
-      final int dominantAbsolute = (int)(domainAbsolute * DOMINANT_RATIO);
+      final long dominantAbsolute = Math.round(domainAbsolute * minDefaultRatio);
 
       final String type;
-      if (domain.size() < DOMAIN_THRESHOLD) {
+      if (domain.size() <= maxEnumSize) {
         type = domainToString(domain.keySet());
       }
       else {
@@ -266,7 +269,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
-  private static Map<String, Integer> getDomain(final Attribute attribute) {
+  private Map<String, Integer> getDomain(final Attribute attribute) {
     final Map<String, Integer> domainMap = new HashMap<String, Integer>();
     for (final Object o : attribute.getContent()) {
       if (domainMap.containsKey((String) o)) {
@@ -279,7 +282,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return domainMap;
   }
 
-  private static String domainToString(final Set<String> domain) {
+  private String domainToString(final Set<String> domain) {
     final StringBuilder ret = new StringBuilder();
     ret.append(" (");
     boolean first = true;

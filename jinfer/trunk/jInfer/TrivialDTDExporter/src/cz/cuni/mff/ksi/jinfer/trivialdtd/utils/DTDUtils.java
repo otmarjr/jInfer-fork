@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -34,14 +35,46 @@ public final class DTDUtils {
   private DTDUtils() {
   }
 
+  /**
+   * Returns the list without tokens of the type <strong>attribute<strong>.
+   */
   public static List<Regexp<AbstractNode>> omitAttributes(
-          final List<Regexp<AbstractNode>> col) {
-    return BaseUtils.filter(col, new BaseUtils.Predicate<Regexp<AbstractNode>>() {
+          final List<Regexp<AbstractNode>> list) {
+    return BaseUtils.filter(list, new BaseUtils.Predicate<Regexp<AbstractNode>>() {
 
       @Override
       public boolean apply(final Regexp<AbstractNode> r) {
         return !r.isToken() || !r.getContent().isAttribute();
       }
     });
+  }
+
+  /**
+   * A simple comparator on AbstractNode that puts SIMPLE_DATA nodes in the front.
+   */
+  public static Comparator<AbstractNode> PCDATA_CMP = new Comparator<AbstractNode>() {
+
+    @Override
+    public int compare(final AbstractNode o1, final AbstractNode o2) {
+      if (o1.isSimpleData()) {
+        return -1;
+      }
+      if (o2.isSimpleData()) {
+        return 1;
+      }
+      return 0;
+    }
+  };
+
+  /**
+   * Returns true if one of the supplied children is a PCDATA.
+   */
+  public static boolean containsPCDATA(final List<Regexp<AbstractNode>> children) {
+    for (final Regexp<AbstractNode> child : children) {
+      if (child.isToken() && child.getContent().isSimpleData()) {
+        return true;
+      }
+    }
+    return false;
   }
 }

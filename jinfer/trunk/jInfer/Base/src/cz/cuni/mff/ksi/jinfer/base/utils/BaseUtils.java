@@ -35,7 +35,8 @@ public final class BaseUtils {
   }
 
   /**
-   * Filters the collection, leaving only elements selected by predicate.
+   * Filters the collection, leaving only elements where predicate
+   * <cite>applies</cite>.
    *
    * @param <T>
    * @param target Collection to be filtered.

@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.trivialdtd;
 
-import com.sun.org.apache.xalan.internal.xsltc.dom.AbsoluteIterator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;

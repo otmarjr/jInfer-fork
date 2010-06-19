@@ -81,6 +81,7 @@ public abstract class AbstractClustererImpl implements Clusterer {
    * @param clusterAttrs
    * @param nodeAttrs
    */
+  @SuppressWarnings("unchecked")
   private static void reflectAttributes(final List<Attribute> clusterAttrs, final List<Attribute> nodeAttrs) {
     // add attributes from the node to the cluster, but only if not there already.
     for (final Attribute nodeAttr : nodeAttrs) {

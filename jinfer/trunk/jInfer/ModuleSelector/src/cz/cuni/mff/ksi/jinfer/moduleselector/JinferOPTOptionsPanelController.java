@@ -28,10 +28,11 @@ import org.openide.util.Lookup;
  * 
  * @author reseto
  */
-@OptionsPanelController.TopLevelRegistration(categoryName = "#OptionsCategory_Name_JinferOPT",
-iconBase = "cz/cuni/mff/ksi/jinfer/base/graphics/icons/jinfer-icon48.png",
+@OptionsPanelController.SubRegistration(location = "jInfer",
+displayName = "#OptionsCategory_Name",
 keywords = "#OptionsCategory_Keywords_JinferOPT",
-keywordsCategory = "JinferOPT")
+keywordsCategory = "JinferOPT",
+position=0)
 public final class JinferOPTOptionsPanelController extends OptionsPanelController {
 
   private JinferOPTPanel panel;

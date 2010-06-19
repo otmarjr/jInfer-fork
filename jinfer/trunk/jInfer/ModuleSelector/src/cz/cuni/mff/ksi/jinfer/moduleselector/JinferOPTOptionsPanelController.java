@@ -32,7 +32,7 @@ import org.openide.util.Lookup;
 displayName = "#OptionsCategory_Name",
 keywords = "#OptionsCategory_Keywords_JinferOPT",
 keywordsCategory = "JinferOPT",
-position=0)
+position = 0)
 public final class JinferOPTOptionsPanelController extends OptionsPanelController {
 
   private JinferOPTPanel panel;

@@ -26,7 +26,8 @@ import org.openide.util.Lookup;
 @OptionsPanelController.SubRegistration(location = "jInfer",
 displayName = "#AdvancedOption_DisplayName_Config",
 keywords = "#AdvancedOption_Keywords_Config",
-keywordsCategory = "jInfer/Config")
+keywordsCategory = "jInfer/Config",
+position = 2)
 public final class ConfigOptionsPanelController extends OptionsPanelController {
 
   private ConfigPanel panel;

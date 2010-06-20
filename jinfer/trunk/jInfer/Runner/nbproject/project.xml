@@ -48,7 +48,9 @@
                     </test-dependency>
                 </test-type>
             </test-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>cz.cuni.mff.ksi.jinfer.runner</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

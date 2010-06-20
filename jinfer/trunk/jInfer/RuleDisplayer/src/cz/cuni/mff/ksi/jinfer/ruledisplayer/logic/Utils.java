@@ -34,9 +34,9 @@ public final class Utils {
 
   private Utils() { }
   
-  private static final Color COLOR_ELEMENT = Color.gray;
-  private static final Color COLOR_ATTRIBUTE = Color.blue;
-  private static final Color COLOR_SIMPLE_DATA = Color.red;
+  public static final Color COLOR_ELEMENT = Color.gray;
+  public static final Color COLOR_ATTRIBUTE = Color.blue;
+  public static final Color COLOR_SIMPLE_DATA = Color.red;
 
   public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png");
   public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/dots.png");

@@ -20,12 +20,14 @@ import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.openide.filesystems.FileChooserBuilder;
 import org.openide.nodes.Node;
+
 /**
  *
  * @author sviro
@@ -45,8 +47,6 @@ public class FileAddAction extends AbstractAction {
 
   @Override
   public void actionPerformed(final ActionEvent e) {
-    final JFileChooser fc = new JFileChooser();
-
     final String type = ((FolderNode) node).getFolderName();
     FileFilter fileFilter = null;
     if ("XML".equals(type)) {
@@ -57,16 +57,12 @@ public class FileAddAction extends AbstractAction {
       fileFilter = new FileNameExtensionFilter("QUERY files", "query");
     }
 
-    fc.setFileFilter(fileFilter);
-    fc.setMultiSelectionEnabled(true);
+    File[] selectedFiles = new FileChooserBuilder(FileAddAction.class).
+            setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
+            setTitle("Add " + type + " files").setFileFilter(fileFilter).showMultiOpenDialog();
 
-    final int retVal = fc.showOpenDialog(null);
-    if (retVal == JFileChooser.APPROVE_OPTION) {
-      final File[] selectedFiles = fc.getSelectedFiles();
-
-      for (File file : selectedFiles) {
-        files.add(file);
-      }
+    if(selectedFiles != null) {
+      files.addAll(Arrays.asList(selectedFiles));
 
       ((FileChildren) node.getChildren()).addNotify();
 

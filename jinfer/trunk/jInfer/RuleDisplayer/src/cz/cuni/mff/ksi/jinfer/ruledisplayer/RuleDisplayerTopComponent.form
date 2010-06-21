@@ -59,7 +59,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/logic/Bundle.properties" key="RuleDisplayerTopComponent.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -74,7 +74,7 @@
           <Connection code="Utils.COLOR_ELEMENT" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/logic/Bundle.properties" key="RuleDisplayerTopComponent.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -89,7 +89,7 @@
           <Connection code="Utils.COLOR_ATTRIBUTE" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/logic/Bundle.properties" key="RuleDisplayerTopComponent.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -104,7 +104,7 @@
           <Connection code="Utils.COLOR_SIMPLE_DATA" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/logic/Bundle.properties" key="RuleDisplayerTopComponent.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>

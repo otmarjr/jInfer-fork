@@ -14,8 +14,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
+package cz.cuni.mff.ksi.jinfer.ruledisplayer;
 
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.RulePainter;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.Utils;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.InputEvent;

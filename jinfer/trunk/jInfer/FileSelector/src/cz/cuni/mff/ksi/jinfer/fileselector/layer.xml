@@ -1,51 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
-    <folder name="Actions">
-        <folder name="Build">
-            <file name="cz-cuni-mff-ksi-jinfer-fileselector-AddXmlAction.instance">
-                <attr name="delegate" newvalue="cz.cuni.mff.ksi.jinfer.fileselector.AddXmlAction"/>
-                <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.fileselector.Bundle#CTL_AddXmlAction"/>
-                <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/fileselector/resource/addfile.png"/>
-                <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
-                <attr name="noIconInMenu" boolvalue="false"/>
-            </file>
-        </folder>
-        <folder name="Window">
-            <file name="cz-cuni-mff-ksi-jinfer-fileselector-FileSelectorAction.instance">
-                <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/fileselector/resource/icon16.png"/>
-                <attr name="component" methodvalue="cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent.findInstance"/>
-                <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.fileselector.Bundle#CTL_FileSelectorAction"/>
-                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
-            </file>
-        </folder>
+  <folder name="Actions">
+    <folder name="Build">
+      <file name="cz-cuni-mff-ksi-jinfer-fileselector-AddXmlAction.instance">
+        <attr name="delegate" newvalue="cz.cuni.mff.ksi.jinfer.fileselector.AddXmlAction"/>
+        <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.fileselector.Bundle#CTL_AddXmlAction"/>
+        <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/fileselector/resource/addfile.png"/>
+        <attr name="instanceCreate" methodvalue="org.openide.awt.Actions.alwaysEnabled"/>
+        <attr name="noIconInMenu" boolvalue="false"/>
+      </file>
     </folder>
-    <folder name="Menu">
-        <folder name="Window">
-            <file name="FileSelectorAction.shadow">
-                <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-fileselector-FileSelectorAction.instance"/>
-            </file>
-        </folder>
+    <folder name="Window">
+      <file name="cz-cuni-mff-ksi-jinfer-fileselector-FileSelectorAction.instance">
+        <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/fileselector/resource/icon16.png"/>
+        <attr name="component" methodvalue="cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent.findInstance"/>
+        <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.fileselector.Bundle#CTL_FileSelectorAction"/>
+        <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+      </file>
     </folder>
-    <folder name="Toolbars">
-        <folder name="JInfer toolbar">
-            <file name="cz-cuni-mff-ksi-jinfer-fileselector-AddXmlAction.shadow">
-                <attr name="originalFile" stringvalue="Actions/Build/cz-cuni-mff-ksi-jinfer-fileselector-AddXmlAction.instance"/>
-                <attr name="position" intvalue="-100"/>
-            </file>
-        </folder>
+  </folder>
+  <folder name="Menu">
+    <folder name="Window">
+      <file name="FileSelectorAction.shadow">
+        <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-fileselector-FileSelectorAction.instance"/>
+      </file>
     </folder>
-    <folder name="Windows2">
-        <folder name="Components">
-            <file name="FileSelectorTopComponent.settings" url="FileSelectorTopComponentSettings.xml"/>
-        </folder>
-        <folder name="Modes">
-            <folder name="explorer">
-                <file name="FileSelectorTopComponent.wstcref" url="FileSelectorTopComponentWstcref.xml"/>
-            </folder>
-        </folder>
+  </folder>
+  <folder name="Toolbars">
+    <folder name="JInfer toolbar">
+      <file name="cz-cuni-mff-ksi-jinfer-fileselector-AddXmlAction.shadow">
+        <attr name="originalFile" stringvalue="Actions/Build/cz-cuni-mff-ksi-jinfer-fileselector-AddXmlAction.instance"/>
+        <attr name="position" intvalue="-100"/>
+      </file>
     </folder>
-    <folder name="FileSelectionProviders">
-      <file name="cz-cuni-mff-ksi-jinfer-fileselector-FileSelectionImpl.instance"/>
+  </folder>
+  <folder name="Windows2">
+    <folder name="Components">
+      <file name="FileSelectorTopComponent.settings" url="FileSelectorTopComponentSettings.xml"/>
+    </folder>
+    <folder name="Modes">
+      <folder name="explorer">
+        <file name="FileSelectorTopComponent.wstcref" url="FileSelectorTopComponentWstcref.xml"/>
+      </folder>
+    </folder>
   </folder>
 </filesystem>

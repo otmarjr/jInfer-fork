@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
+import org.netbeans.api.actions.Openable;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -38,6 +39,7 @@ import org.openide.explorer.view.BeanTreeView;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileSystem;
 import org.openide.filesystems.FileUtil;
+import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbPreferences;
@@ -139,6 +141,7 @@ public final class FileSelectorTopComponent extends TopComponent implements Expl
       out.flush();
       out.close();
       output.add(fObject);
+      DataObject.find(fObject).getLookup().lookup(Openable.class).open();
 
       Node[] folders = em.getRootContext().getChildren().getNodes();
       for (Node folder : folders) {

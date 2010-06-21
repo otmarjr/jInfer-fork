@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,6 +36,7 @@ import org.xml.sax.SAXException;
  * 
  * @author vektor
  */
+@ServiceProvider(service = IGGenerator.class)
 public class IGGeneratorImpl implements IGGenerator {
 
   private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class.getName());

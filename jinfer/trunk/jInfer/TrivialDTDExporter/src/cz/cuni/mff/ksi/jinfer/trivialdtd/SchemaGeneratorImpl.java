@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.prefs.Preferences;
+import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -42,6 +43,7 @@ import org.openide.windows.InputOutput;
  * 
  * @author vektor
  */
+@ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);

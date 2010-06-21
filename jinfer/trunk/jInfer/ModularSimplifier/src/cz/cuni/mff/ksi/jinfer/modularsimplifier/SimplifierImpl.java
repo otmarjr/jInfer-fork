@@ -25,7 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ContextClusterer;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.RuleDisplayerTopComponent;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayerTopComponent;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.SimpleKP;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.options.ConfigPanel;

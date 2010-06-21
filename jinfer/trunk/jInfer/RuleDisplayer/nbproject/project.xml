@@ -66,6 +66,7 @@
                 </test-type>
             </test-dependencies>
             <public-packages>
+                <package>cz.cuni.mff.ksi.jinfer.ruledisplayer</package>
                 <package>cz.cuni.mff.ksi.jinfer.ruledisplayer.logic</package>
             </public-packages>
         </data>

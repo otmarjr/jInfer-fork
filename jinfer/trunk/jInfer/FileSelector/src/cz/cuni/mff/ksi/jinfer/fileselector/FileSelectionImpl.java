@@ -18,23 +18,23 @@ package cz.cuni.mff.ksi.jinfer.fileselector;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
 
 /**
  *
  * @author sviro
  */
+@ServiceProvider(service = FileSelection.class)
 public class FileSelectionImpl implements FileSelection {
-
-
 
   @Override
   public Input getInput() {
     return ((FileSelectorTopComponent) WindowManager.getDefault().findTopComponent("FileSelectorTopComponent")).getInput();
   }
 
+  @Override
   public void addOutput(String fileName, String data, String extension) {
     ((FileSelectorTopComponent) WindowManager.getDefault().findTopComponent("FileSelectorTopComponent")).addOutput(fileName, data, extension);
   }
-
 }

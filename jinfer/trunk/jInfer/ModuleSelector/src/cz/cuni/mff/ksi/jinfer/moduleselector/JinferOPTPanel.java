@@ -222,8 +222,8 @@ class JinferOPTPanel extends JPanel {
   // End of variables declaration//GEN-END:variables
 
   private List<IGGenerator> lookupIGGenerators() {
-    List<IGGenerator> list = new ArrayList<IGGenerator>();
-    final Lookup lkp = Lookups.forPath("IGGeneratorProviders");
+    final List<IGGenerator> list = new ArrayList<IGGenerator>();
+    final Lookup lkp = Lookup.getDefault();
     for (IGGenerator ig : lkp.lookupAll(IGGenerator.class)) {
       list.add(ig);
     }
@@ -231,8 +231,8 @@ class JinferOPTPanel extends JPanel {
   }
 
   private List<Simplifier> lookupSimplifiers() {
-    List<Simplifier> list = new ArrayList<Simplifier>();
-    final Lookup lkp = Lookups.forPath("SimplifierProviders");
+    final List<Simplifier> list = new ArrayList<Simplifier>();
+    final Lookup lkp = Lookup.getDefault();
     for (Simplifier s : lkp.lookupAll(Simplifier.class)) {
       list.add(s);
     }
@@ -240,8 +240,8 @@ class JinferOPTPanel extends JPanel {
   }
 
   private List<SchemaGenerator> lookupSchemaGenerators() {
-    List<SchemaGenerator> list = new ArrayList<SchemaGenerator>();
-    final Lookup lkp = Lookups.forPath("SchemaGeneratorProviders");
+    final List<SchemaGenerator> list = new ArrayList<SchemaGenerator>();
+    final Lookup lkp = Lookup.getDefault();
     for (SchemaGenerator sg : lkp.lookupAll(SchemaGenerator.class)) {
       list.add(sg);
     }

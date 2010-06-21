@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
 import org.openide.util.lookup.Lookups;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Implementation of ModuleSelection: looks for selected modules in
@@ -32,6 +33,7 @@ import org.openide.util.lookup.Lookups;
  * 
  * @author vektor
  */
+@ServiceProvider(service = ModuleSelection.class)
 public class ModuleSelectionImpl implements ModuleSelection {
 
   private static final Logger LOG = Logger.getLogger(ModuleSelectionImpl.class.getCanonicalName());
@@ -43,8 +45,7 @@ public class ModuleSelectionImpl implements ModuleSelection {
       return ret;
     }
     LOG.log(Level.WARNING, "PreferredIGGenerator not found, will use the first one available.");
-    final Lookup lkp = Lookups.forPath("IGGeneratorProviders");
-    return lkp.lookupAll(IGGenerator.class).iterator().next().getModuleName();
+    return Lookup.getDefault().lookupAll(IGGenerator.class).iterator().next().getModuleName();
   }
 
   @Override
@@ -54,8 +55,7 @@ public class ModuleSelectionImpl implements ModuleSelection {
       return ret;
     }
     LOG.log(Level.WARNING, "PreferredSimplifier not found, will use the first one available.");
-    final Lookup lkp = Lookups.forPath("SimplifierProviders");
-    return lkp.lookupAll(Simplifier.class).iterator().next().getModuleName();
+    return Lookup.getDefault().lookupAll(Simplifier.class).iterator().next().getModuleName();
   }
 
   @Override
@@ -65,7 +65,6 @@ public class ModuleSelectionImpl implements ModuleSelection {
       return ret;
     }
     LOG.log(Level.WARNING, "PreferredSchemaGenerator not found, will use the first one available.");
-    final Lookup lkp = Lookups.forPath("SchemaGeneratorProviders");
-    return lkp.lookupAll(SchemaGenerator.class).iterator().next().getModuleName();
+    return Lookup.getDefault().lookupAll(SchemaGenerator.class).iterator().next().getModuleName();
   }
 }

@@ -32,6 +32,7 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.options.ConfigPanel;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPAlternations;
 import java.util.List;
 import java.util.prefs.Preferences;
+import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -40,6 +41,7 @@ import org.openide.windows.InputOutput;
  * 
  * @author vektor
  */
+@ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
 
   @Override

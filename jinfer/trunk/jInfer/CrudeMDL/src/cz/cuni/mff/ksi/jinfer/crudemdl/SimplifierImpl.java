@@ -25,16 +25,14 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-import java.util.logging.Logger;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author anti
  */
+@ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
 
   @Override

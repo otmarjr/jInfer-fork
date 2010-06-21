@@ -28,7 +28,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.Date;
 import java.util.List;
 import org.openide.util.Lookup;
-import org.openide.util.lookup.Lookups;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -109,8 +108,7 @@ public class Runner {
   }
 
   private FileSelection lookupFileSelection() {
-    final Lookup lkp = Lookups.forPath("FileSelectionProviders");
-    final FileSelection fileSelection = lkp.lookup(FileSelection.class);
+    final FileSelection fileSelection = Lookup.getDefault().lookup(FileSelection.class);
     if (fileSelection == null) {
       throw new MissingModuleException("File selector module not found.");
     }
@@ -118,8 +116,7 @@ public class Runner {
   }
 
   private ModuleSelection lookupModuleSelection() {
-    final Lookup lkp = Lookups.forPath("ModuleSelectionProviders");
-    final ModuleSelection moduleSelection = lkp.lookup(ModuleSelection.class);
+    final ModuleSelection moduleSelection = Lookup.getDefault().lookup(ModuleSelection.class);
     if (moduleSelection == null) {
       throw new MissingModuleException("Module selection module not found.");
     }
@@ -127,7 +124,7 @@ public class Runner {
   }
 
   private IGGenerator lookupIGGenerator(final String name) {
-    final Lookup lkp = Lookups.forPath("IGGeneratorProviders");
+    final Lookup lkp = Lookup.getDefault();
     for (final IGGenerator igGenerator : lkp.lookupAll(IGGenerator.class)) {
       if (igGenerator.getModuleName().equals(name)) {
         return igGenerator;
@@ -137,7 +134,7 @@ public class Runner {
   }
 
   private Simplifier lookupSimplifier(final String name) {
-    final Lookup lkp = Lookups.forPath("SimplifierProviders");
+    final Lookup lkp = Lookup.getDefault();
     for (final Simplifier simplifier : lkp.lookupAll(Simplifier.class)) {
       if (simplifier.getModuleName().equals(name)) {
         return simplifier;
@@ -147,7 +144,7 @@ public class Runner {
   }
 
   private SchemaGenerator lookupSchemaGenerator(final String name) {
-    final Lookup lkp = Lookups.forPath("SchemaGeneratorProviders");
+    final Lookup lkp = Lookup.getDefault();
     for (final SchemaGenerator schemaGenerator : lkp.lookupAll(SchemaGenerator.class)) {
       if (schemaGenerator.getModuleName().equals(name)) {
         return schemaGenerator;

@@ -5,4 +5,7 @@
 <project name="jInfer" basedir=".">
     <description>Builds the module suite jInfer.</description>
     <import file="nbproject/build-impl.xml"/>
+    <target name="fix-all-deps" depends="-init" description="Removes unused dependencies of all the modules in this suite.">
+      <subant target="fix-dependencies" buildpath="${modules.sorted}"/>
+    </target>
 </project>

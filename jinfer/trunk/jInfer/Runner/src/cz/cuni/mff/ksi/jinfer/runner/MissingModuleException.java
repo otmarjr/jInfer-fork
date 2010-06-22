@@ -22,7 +22,7 @@ package cz.cuni.mff.ksi.jinfer.runner;
  */
 public class MissingModuleException extends RuntimeException {
 
-  public MissingModuleException(String message) {
+  public MissingModuleException(final String message) {
     super(message);
   }
 }

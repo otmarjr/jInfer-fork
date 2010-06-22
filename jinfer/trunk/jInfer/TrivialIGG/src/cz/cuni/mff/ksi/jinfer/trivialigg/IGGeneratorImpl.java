@@ -18,11 +18,9 @@ package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;

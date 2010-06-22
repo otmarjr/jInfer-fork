@@ -24,7 +24,6 @@ import java.util.List;
 import javax.swing.JPanel;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
-import org.openide.util.lookup.Lookups;
 
 /**
  * TODO reseto Comment!

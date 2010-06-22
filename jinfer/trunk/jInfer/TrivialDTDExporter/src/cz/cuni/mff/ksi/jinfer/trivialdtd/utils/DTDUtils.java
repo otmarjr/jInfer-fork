@@ -17,9 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.trivialdtd.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.Comparator;
 import java.util.List;
@@ -52,7 +50,7 @@ public final class DTDUtils {
   /**
    * A simple comparator on AbstractNode that puts SIMPLE_DATA nodes in the front.
    */
-  public static Comparator<AbstractNode> PCDATA_CMP = new Comparator<AbstractNode>() {
+  public static final Comparator<AbstractNode> PCDATA_CMP = new Comparator<AbstractNode>() {
 
     @Override
     public int compare(final AbstractNode o1, final AbstractNode o2) {

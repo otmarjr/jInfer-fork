@@ -31,6 +31,7 @@ public abstract class AbstractNode {
   /** Name of this node. */
   private final String name;
   /** Type of this node. */
+  // TODO vektor Convert to abstract method getType()
   private final NodeType type;
   /** List of unspecific attributes assigned to this node. */
   private final Map<String, Object> attributes;

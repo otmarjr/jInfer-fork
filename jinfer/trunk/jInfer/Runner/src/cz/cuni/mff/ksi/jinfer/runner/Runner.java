@@ -32,7 +32,9 @@ import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
 /**
- * TODO rio Comment!
+ * Runner is responsible for running other modules in process of inference,
+ * ensuring correct order and passing data from output of a module
+ * to input of another.
  * 
  * @author rio
  */
@@ -50,6 +52,9 @@ public class Runner {
     schemaGenerator = lookupSchemaGenerator(moduleSelection.getSchemaGenerator());
   }
 
+  /**
+   * Starts process of inference.
+   */
   public void run() {
     final FileSelection fileSelection = lookupFileSelection();
 

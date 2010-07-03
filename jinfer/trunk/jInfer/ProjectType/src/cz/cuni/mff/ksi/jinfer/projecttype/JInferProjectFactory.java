@@ -66,7 +66,7 @@ public class JInferProjectFactory implements ProjectFactory {
       propertiesFile = projectRoot.createData(propertiesPath);
     }
 
-    Properties properties = (Properties) project.getLookup().lookup(Properties.class);
+    Properties properties = project.getLookup().lookup(Properties.class);
     File f = FileUtil.toFile(propertiesFile);
     properties.store(new FileOutputStream(f), "JInfer project properties");
   }

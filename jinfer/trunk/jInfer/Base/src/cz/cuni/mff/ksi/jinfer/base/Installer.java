@@ -26,17 +26,19 @@ import org.openide.modules.ModuleInstall;
  */
 public class Installer extends ModuleInstall {
 
-  static Logger logger = Logger.getLogger(ModuleInstall.class.getName());
+  private static final long serialVersionUID = 54612321l;
+
+  private static final Logger LOG = Logger.getLogger(ModuleInstall.class.getName());
 
   @Override
   public void restored() {
     PropertyConfigurator.configure("log4j.properties");
-    logger.info("Base module loaded.");
+    LOG.info("Base module loaded.");
   }
 
   @Override
   public boolean closing() {
-    logger.info("Closing Base module.");
+    LOG.info("Closing Base module.");
     return true;
   }
 

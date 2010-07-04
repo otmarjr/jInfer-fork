@@ -37,9 +37,6 @@ import org.openide.util.lookup.Lookups;
  */
 public class JInferProject implements Project {
 
-  public static final String XML_DIR = "xml";
-  public static final String XSD_DIR = "xsd";
-  public static final String QUERY_DIR = "query";
   public static final String OUTPUT_DIR = "output";
   private final FileObject projectDir;
   private final ProjectState state;
@@ -75,45 +72,6 @@ public class JInferProject implements Project {
     if (result == null && create) {
       try {
         result = projectDir.createFolder(OUTPUT_DIR);
-      } catch (IOException ex) {
-        Exceptions.printStackTrace(ex);
-      }
-    }
-
-    return result;
-  }
-
-  FileObject getXMLFolder(boolean create) {
-    FileObject result = projectDir.getFileObject(XML_DIR);
-    if (result == null && create) {
-      try {
-        result = projectDir.createFolder(XML_DIR);
-      } catch (IOException ex) {
-        Exceptions.printStackTrace(ex);
-      }
-    }
-
-    return result;
-  }
-
-  FileObject getXSDFolder(boolean create) {
-    FileObject result = projectDir.getFileObject(XSD_DIR);
-    if (result == null && create) {
-      try {
-        result = projectDir.createFolder(XSD_DIR);
-      } catch (IOException ex) {
-        Exceptions.printStackTrace(ex);
-      }
-    }
-
-    return result;
-  }
-
-  FileObject getQUERYFolder(boolean create) {
-    FileObject result = projectDir.getFileObject(QUERY_DIR);
-    if (result == null && create) {
-      try {
-        result = projectDir.createFolder(QUERY_DIR);
       } catch (IOException ex) {
         Exceptions.printStackTrace(ex);
       }

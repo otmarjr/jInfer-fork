@@ -55,10 +55,7 @@ public class JInferProjectFactory implements ProjectFactory {
         throw new IOException ("Project dir " + projectRoot.getPath() + " deleted," +
                 " cannot save project");
     }
-
-    ((JInferProject) project).getXMLFolder(true);
-    ((JInferProject) project).getXSDFolder(true);
-    ((JInferProject) project).getQUERYFolder(true);
+    
     ((JInferProject) project).getOutputFolder(true);
 
     String propertiesPath = PROJECT_DIR + "/" + PROJECT_PROPFILE;

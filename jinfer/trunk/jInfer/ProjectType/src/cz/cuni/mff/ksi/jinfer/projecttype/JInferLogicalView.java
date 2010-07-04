@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.Image;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
-import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataFolder;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -62,20 +62,17 @@ public class JInferLogicalView implements LogicalViewProvider {
     private final JInferProject project;
 
     public RootNode(final JInferProject project) {
-      super(new Children.Keys<FileObject>() {
+      super(new Children.Keys<Node>() {
 
         @Override
         protected void addNotify() {
-          setKeys(new FileObject[]{project.getXMLFolder(true), project.getXSDFolder(true), project.getQUERYFolder(true), project.getOutputFolder(true)});
+          setKeys(new Node[]{new FolderNode("xml"), new FolderNode("schema"), new FolderNode("query"), new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(), project)});
         }
 
         @Override
-        protected Node[] createNodes(FileObject fileObject) {
-          DataFolder dataObject = DataFolder.findFolder(fileObject);
+        protected Node[] createNodes(Node node) {
 
-          Node realFolderNode = dataObject.getNodeDelegate();
-
-          return new Node[]{new InputNode(realFolderNode, project)};
+          return new Node[]{node};
         }
       }, Lookups.singleton(project));
       this.project = project;

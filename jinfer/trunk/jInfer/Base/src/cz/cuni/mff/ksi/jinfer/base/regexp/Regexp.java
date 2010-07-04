@@ -58,6 +58,18 @@ public class Regexp<T> {
     return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN);
   }
 
+  public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children) {
+    return new Regexp<T>(null, children, RegexpType.CONCATENATION);
+  }
+
+  public static <T> Regexp<T> getConcatenation() {
+    return getConcatenation(new ArrayList<Regexp<T>>(0));
+  }
+
+  public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {
+    return new Regexp<T>(null, children, RegexpType.ALTERNATION);
+  }
+
   public T getContent() {
     return content;
   }

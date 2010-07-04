@@ -84,8 +84,6 @@ public class SimplifierImpl implements Simplifier {
       return;
     }
 
-    final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
-
     showRulesAsync("Original", initialGrammar);
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
     showClustersAsync("Clustered", clustered);

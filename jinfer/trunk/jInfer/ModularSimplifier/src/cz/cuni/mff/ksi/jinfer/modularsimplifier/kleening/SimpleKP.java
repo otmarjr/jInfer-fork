@@ -37,11 +37,7 @@ import org.openide.windows.InputOutput;
  */
 public class SimpleKP implements KleeneProcessor {
 
-  private final int threshold;
-
-  public SimpleKP() {
-    threshold = Preferences.userNodeForPackage(ConfigPanel.class).getInt("kleene.repetitions", 3);
-  }
+  private final int threshold = Preferences.userNodeForPackage(ConfigPanel.class).getInt("kleene.repetitions", 3);
 
   @Override
   public List<AbstractNode> kleeneProcess(final List<AbstractNode> rules) {
@@ -55,7 +51,7 @@ public class SimpleKP implements KleeneProcessor {
               e.getContext(),
               e.getName(),
               e.getAttributes(),
-              processTree(((Element) root).getSubnodes())));
+              processTree(e.getSubnodes())));
     }
     return ret;
   }
@@ -71,7 +67,7 @@ public class SimpleKP implements KleeneProcessor {
         for (final Regexp<AbstractNode> branch : root.getChildren()) {
           newChildren.add(processConcat(branch));
         }
-        return new Regexp<AbstractNode>(null, newChildren, RegexpType.ALTERNATION);
+        return Regexp.getAlternation(newChildren);
       default:
         throw new IllegalArgumentException();
     }
@@ -95,7 +91,7 @@ public class SimpleKP implements KleeneProcessor {
         break;
       }
       final Regexp<AbstractNode> current = root.getChild(i);
-      if (equalRegexps(last, current)) {
+      if (equalTokenRegexps(last, current)) {
         // increment count
         groupSize++;
       }
@@ -109,20 +105,17 @@ public class SimpleKP implements KleeneProcessor {
       
       i++;
     }
-    return new Regexp<AbstractNode>(null, retChildren, RegexpType.CONCATENATION);
+    return Regexp.getConcatenation(retChildren);
   }
 
-  private boolean equalRegexps(final Regexp<AbstractNode> last, final Regexp<AbstractNode> current) {
-    if (last != null
+  private boolean equalTokenRegexps(final Regexp<AbstractNode> last, final Regexp<AbstractNode> current) {
+    return last != null
             && current != null
             && last.isToken()
             && current.isToken()
             && last.getContent().isElement()
             && current.getContent().isElement()
-            && CPTrie.equalTokens(last, current)) {
-      return true;
-    }
-    return false;
+            && CPTrie.equalTokens(last, current);
   }
 
   private void closeGroup(final Regexp<AbstractNode> current,

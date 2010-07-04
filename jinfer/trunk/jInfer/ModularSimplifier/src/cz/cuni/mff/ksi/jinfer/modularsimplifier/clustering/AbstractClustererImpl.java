@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -82,7 +83,8 @@ public abstract class AbstractClustererImpl implements Clusterer {
    * @param nodeAttrs
    */
   @SuppressWarnings("unchecked")
-  private static void reflectAttributes(final List<Attribute> clusterAttrs, final List<Attribute> nodeAttrs) {
+  private static void reflectAttributes(final List<Attribute> clusterAttrs,
+          final List<Attribute> nodeAttrs) {
     // add attributes from the node to the cluster, but only if not there already.
     for (final Attribute nodeAttr : nodeAttrs) {
       boolean found = false;
@@ -102,16 +104,19 @@ public abstract class AbstractClustererImpl implements Clusterer {
     }
     // walk the attributes in the cluster. if not among those from the node, remove their requiredness.
     for (final Attribute clusterAttr : clusterAttrs) {
-      boolean found = false;
-      for (final Attribute nodeAttr : nodeAttrs) {
-        if (clusterAttr.getName().equalsIgnoreCase(nodeAttr.getName())) {
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
+      if (!isAmongNodeAttrs(clusterAttr, nodeAttrs)) {
         clusterAttr.getAttributes().remove("required");
       }
     }
+  }
+
+  private static boolean isAmongNodeAttrs(final Attribute clusterAttr,
+          final Collection<Attribute> nodeAttrs) {
+    for (final Attribute nodeAttr : nodeAttrs) {
+      if (clusterAttr.getName().equalsIgnoreCase(nodeAttr.getName())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

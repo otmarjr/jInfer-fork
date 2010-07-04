@@ -47,6 +47,7 @@ public class Shortener {
             simplify(treeBase.getSubnodes()));
   }
 
+  @SuppressWarnings("PMD.MissingBreakInSwitch")
   private Regexp<AbstractNode> simplify(final Regexp<AbstractNode> regexp) {
     switch (regexp.getType()) {
       case TOKEN:

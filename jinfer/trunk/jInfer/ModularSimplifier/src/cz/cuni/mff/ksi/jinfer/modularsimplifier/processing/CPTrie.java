@@ -56,7 +56,7 @@ public class CPTrie implements ClusterProcessor {
     }
 
     // walk the tree and shorten its concatenations/alternations
-    return (new Shortener()).simplify(treeBase);
+    return new Shortener().simplify(treeBase);
   }
 
   private static void verify(final Pair<AbstractNode, List<AbstractNode>> cluster) {
@@ -129,7 +129,7 @@ public class CPTrie implements ClusterProcessor {
         tree.branch(posTree);
         final Regexp<AbstractNode> split = tree.getChild(posTree);
         // some acrobacy to have the lambda as the first element in the alternation
-        split.addChild(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+        split.addChild(Regexp.<AbstractNode>getConcatenation());
         split.addChild(split.getChild(0));
         split.getChildren().remove(0);
         return;
@@ -139,9 +139,9 @@ public class CPTrie implements ClusterProcessor {
       if (posTree >= tree.getChildren().size()) {
         // append a new alternation between all remaining items from the branch and an empty concatenation (lambda) to tree
         final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
-        alt.add(new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+        alt.add(Regexp.<AbstractNode>getConcatenation());
         alt.add(branch.getEnd(posBranch));
-        tree.addChild(new Regexp<AbstractNode>(null, alt, RegexpType.ALTERNATION));
+        tree.addChild(Regexp.getAlternation(alt));
         return;
       }
 

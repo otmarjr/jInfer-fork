@@ -27,7 +27,11 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.Date;
 import java.util.List;
+import org.netbeans.api.progress.ProgressHandle;
+import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Lookup;
+import org.openide.util.RequestProcessor;
+import org.openide.util.TaskListener;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -71,13 +75,33 @@ public class Runner {
     final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
     io.getOut().println("Runner: initial grammar contains " + grammar.size()
             + " rules.");
-    simplifier.start(grammar, new SimplifierCallback() {
+
+    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(new Runnable() {
 
       @Override
-      public void finished(final List<AbstractNode> grammar) {
-        Runner.this.finishedSimplifier(grammar);
+      public void run() {
+        simplifier.start(grammar, new SimplifierCallback() {
+
+          @Override
+          public void finished(final List<AbstractNode> grammar) {
+            Runner.this.finishedSimplifier(grammar);
+          }
+        });
       }
     });
+
+    final ProgressHandle handle = ProgressHandleFactory.createHandle("Inferring the schema", theTask);
+    theTask.addTaskListener(new TaskListener() {
+
+      @Override
+      public void taskFinished(org.openide.util.Task task) {
+        handle.finish();
+      }
+    });
+
+    handle.start();
+
+    theTask.schedule(0);
   }
 
   public void finishedSimplifier(final List<AbstractNode> grammar) {

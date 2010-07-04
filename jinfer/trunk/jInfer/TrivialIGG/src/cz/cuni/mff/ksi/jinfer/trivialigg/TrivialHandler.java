@@ -53,7 +53,7 @@ public class TrivialHandler extends DefaultHandler {
     final List<String> context = getContext();
 
     final Element e = new Element(context, qName, null, 
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(0), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getConcatenation());
 
     if (attributes.getLength() > 0) {
       final List<String> attrContext = new ArrayList<String>(context);

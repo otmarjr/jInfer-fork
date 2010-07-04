@@ -70,7 +70,7 @@ public final class DTDProcessor {
   }
 
   private static Element processElement(final ElementType e) {
-    final Element ret = new Element(null, e.name.getLocalName(), null, new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(0), RegexpType.CONCATENATION));
+    final Element ret = new Element(null, e.name.getLocalName(), null, Regexp.<AbstractNode>getConcatenation());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
@@ -85,7 +85,7 @@ public final class DTDProcessor {
     if (e.children.size() > 0) {
       for (final Object oc : e.children.values()) {
         final ElementType c = (ElementType) oc;
-        final Element child = new Element(null, c.name.getLocalName(), null, new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(0), RegexpType.CONCATENATION));
+        final Element child = new Element(null, c.name.getLocalName(), null, Regexp.<AbstractNode>getConcatenation());
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(child));
       }
     }

@@ -34,7 +34,9 @@ import java.util.List;
 public class CPAlternations implements ClusterProcessor {
 
   @Override
-  public List<AbstractNode> processClusters(final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+  public List<AbstractNode> processClusters(
+          final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+    
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
@@ -44,7 +46,9 @@ public class CPAlternations implements ClusterProcessor {
     return ret;
   }
 
-  private Element processCluster(final Pair<AbstractNode, List<AbstractNode>> cluster) {
+  private Element processCluster(
+          final Pair<AbstractNode, List<AbstractNode>> cluster) {
+    
     final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
     for (final AbstractNode n : cluster.getSecond()) {
       children.add(((Element) n).getSubnodes());
@@ -52,7 +56,7 @@ public class CPAlternations implements ClusterProcessor {
     return new Element(null,
             cluster.getFirst().getName(),
             null,
-            new Regexp<AbstractNode>(null, children, RegexpType.ALTERNATION));
+            Regexp.getAlternation(children));
   }
 
 }

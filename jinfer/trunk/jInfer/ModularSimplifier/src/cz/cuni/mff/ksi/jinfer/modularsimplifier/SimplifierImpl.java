@@ -35,6 +35,7 @@ import java.util.prefs.Preferences;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
+import org.openide.windows.WindowManager;
 
 /**
  * Basic implementation of Simplifier interface.
@@ -85,21 +86,45 @@ public class SimplifierImpl implements Simplifier {
 
     final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
 
-    if (render) {
-      RuleDisplayerTopComponent.findInstance().createNewPanel("Original").setRules(initialGrammar);
-    }
+    showRulesAsync("Original", initialGrammar);
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
-    if (render) {
-      RuleDisplayerTopComponent.findInstance().createNewPanel("Clustered").setClusters(clustered);
-    }
+    showClustersAsync("Clustered", clustered);
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
-    if (render) {
-      RuleDisplayerTopComponent.findInstance().createNewPanel("Processed").setRules(processed);
-    }
+    showRulesAsync("Processed", processed);
     final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
-    if (render) {
-      RuleDisplayerTopComponent.findInstance().createNewPanel("Kleened").setRules(kleened);
-    }
-    callback.finished(kleened);
+    showRulesAsync("Kleened", kleened);
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        callback.finished(kleened);
+      }
+    });
+  }
+
+  private static void showRulesAsync(final String panelName, final List<AbstractNode> rules) {
+    final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        if (render) {
+          RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
+        }
+      }
+    });
+  }
+
+  private static void showClustersAsync(final String panelName, final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+    final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        if (render) {
+          RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setClusters(clusters);
+        }
+      }
+    });
   }
 }

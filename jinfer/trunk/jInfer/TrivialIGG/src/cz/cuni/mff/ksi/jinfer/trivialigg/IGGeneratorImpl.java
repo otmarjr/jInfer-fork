@@ -18,14 +18,17 @@ package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.SAXException;
 
@@ -37,7 +40,7 @@ import org.xml.sax.SAXException;
 @ServiceProvider(service = IGGenerator.class)
 public class IGGeneratorImpl implements IGGenerator {
 
-  private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class.getName());
+  private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class);
 
   @Override
   public String getModuleName() {
@@ -46,24 +49,36 @@ public class IGGeneratorImpl implements IGGenerator {
 
   @Override
   public void start(final Input input, final IGGeneratorCallback callback) {
+    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+
+    ret.addAll(getRulesFromDocuments(input.getDocuments()));
+
+    callback.finished(ret);
+  }
+
+  private static List<AbstractNode> getRulesFromDocuments(final Collection<File> files) {
+    if (files.isEmpty()) {
+      return null;
+    }
+
     final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
     final TrivialHandler handler = new TrivialHandler();
 
     try {
       final SAXParser parser = parserFactory.newSAXParser();
       // do the parsing
-      for (final File doc : input.getDocuments()) {
+      for (final File doc : files) {
         parser.parse(doc, handler);
       }
-    } catch (ParserConfigurationException ex) {
-      // TODO vektor write errors to Output window
-      LOG.log(Level.SEVERE, null, ex);
-    } catch (SAXException ex) {
-      LOG.log(Level.SEVERE, null, ex);
-    } catch (IOException ex) {
-      LOG.log(Level.SEVERE, null, ex);
+      return handler.getRules();
+    } catch (final ParserConfigurationException ex) {
+      LOG.error(null, ex);
+    } catch (final SAXException ex) {
+      LOG.error(null, ex);
+    } catch (final IOException ex) {
+      LOG.error(null, ex);
     }
 
-    callback.finished(handler.getRules());
+    return null;
   }
 }

@@ -48,6 +48,13 @@ public class JInferLogicalView implements LogicalViewProvider {
     public Image getIcon(int type) {
       return ImageUtilities.loadImage("cz/cuni/mff/ksi/jinfer/projecttype/graphics/folder.png");
     }
+
+    @Override
+    public Image getOpenedIcon(int type) {
+      return getIcon(type);
+    }
+
+
   }
 
   private static final class RootNode extends AbstractNode {
@@ -59,7 +66,7 @@ public class JInferLogicalView implements LogicalViewProvider {
 
         @Override
         protected void addNotify() {
-          setKeys(new FileObject[]{project.getXMLFolder(true), project.getXSDFolder(true), project.getQUERYFolder(true)});
+          setKeys(new FileObject[]{project.getXMLFolder(true), project.getXSDFolder(true), project.getQUERYFolder(true), project.getOutputFolder(true)});
         }
 
         @Override

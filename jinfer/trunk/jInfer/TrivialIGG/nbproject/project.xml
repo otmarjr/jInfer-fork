@@ -33,6 +33,10 @@
                 </test-type>
             </test-dependencies>
             <public-packages/>
+            <class-path-extension>
+                <runtime-relative-path>ext/log4j-1.2.16.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/log4j-1.2.16.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

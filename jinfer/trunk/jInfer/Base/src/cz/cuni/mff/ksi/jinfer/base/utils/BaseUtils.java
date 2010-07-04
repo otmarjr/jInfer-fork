@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,5 +52,18 @@ public final class BaseUtils {
       }
     }
     return result;
+  }
+
+  /**
+   * Checks whether the collection is empty, that means NULL or empty as in "no elements within".
+   *
+   * TODO vektor Find usages of List.isEmpty() and replace it with this method.
+   * 
+   * @param <T>
+   * @param c Collection to check.
+   * @return True if the collection is NULL or contains no elements.
+   */
+  public static <T> boolean isEmpty(final Collection<T> c) {
+    return c == null || c.isEmpty();
   }
 }

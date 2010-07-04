@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,9 @@ public abstract class AbstractClustererImpl implements Clusterer {
       for (final Attribute clusterAttr : clusterAttrs) {
         if (clusterAttr.getName().equalsIgnoreCase(nodeAttr.getName())) {
           found = true;
-          clusterAttr.getContent().addAll(nodeAttr.getContent());
+          if (!BaseUtils.isEmpty(nodeAttr.getContent())) {
+            clusterAttr.getContent().addAll(nodeAttr.getContent());
+          }
           break;
         }
       }

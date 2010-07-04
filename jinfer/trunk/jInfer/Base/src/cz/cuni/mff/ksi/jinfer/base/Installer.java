@@ -28,7 +28,7 @@ public class Installer extends ModuleInstall {
 
   private static final long serialVersionUID = 54612321l;
 
-  private static final Logger LOG = Logger.getLogger(ModuleInstall.class.getName());
+  private static final Logger LOG = Logger.getLogger(ModuleInstall.class);
 
   @Override
   public void restored() {

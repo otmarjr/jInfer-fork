@@ -59,6 +59,7 @@ public class JInferProjectFactory implements ProjectFactory {
     ((JInferProject) project).getXMLFolder(true);
     ((JInferProject) project).getXSDFolder(true);
     ((JInferProject) project).getQUERYFolder(true);
+    ((JInferProject) project).getOutputFolder(true);
 
     String propertiesPath = PROJECT_DIR + "/" + PROJECT_PROPFILE;
     FileObject propertiesFile = projectRoot.getFileObject(propertiesPath);

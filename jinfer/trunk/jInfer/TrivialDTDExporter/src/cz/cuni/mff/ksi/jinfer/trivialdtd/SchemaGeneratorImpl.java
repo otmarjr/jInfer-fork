@@ -118,7 +118,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             && BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
       @Override
       public boolean apply(final AbstractNode argument) {
-        return argument.isElement();
+        return argument.isElement() || argument.isSimpleData();
       }
     }).isEmpty()) {
       return "EMPTY";
@@ -168,7 +168,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
 
     final List<AbstractNode> content = new ArrayList<AbstractNode>();
-    for (final Regexp<AbstractNode> r : children) {
+    for (final Regexp<AbstractNode> r : DTDUtils.omitAttributes(children)) {
       content.addAll(r.getTokens());
     }
 
@@ -251,12 +251,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private Map<String, Integer> getDomain(final Attribute attribute) {
     final Map<String, Integer> domainMap = new HashMap<String, Integer>();
-    for (final Object o : attribute.getContent()) {
-      if (domainMap.containsKey((String) o)) {
-        domainMap.put((String) o, Integer.valueOf(domainMap.get((String) o).intValue() + 1));
-      }
-      else {
-      domainMap.put((String) o, Integer.valueOf(1));
+    if (attribute.getContent() != null && !attribute.getContent().isEmpty()) {
+      for (final Object o : attribute.getContent()) {
+        if (domainMap.containsKey((String) o)) {
+          domainMap.put((String) o, Integer.valueOf(domainMap.get((String) o).intValue() + 1));
+        }
+        else {
+          domainMap.put((String) o, Integer.valueOf(1));
+        }
       }
     }
     return domainMap;

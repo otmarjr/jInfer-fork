@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,13 +53,15 @@ public class IGGeneratorImpl implements IGGenerator {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     ret.addAll(getRulesFromDocuments(input.getDocuments()));
+    ret.addAll(getRulesFromSchemas(input.getSchemas()));
+    ret.addAll(getRulesFromQueries(input.getQueries()));
 
     callback.finished(ret);
   }
 
   private static List<AbstractNode> getRulesFromDocuments(final Collection<File> files) {
     if (files.isEmpty()) {
-      return null;
+      return new ArrayList<AbstractNode>();
     }
 
     final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
@@ -79,6 +82,30 @@ public class IGGeneratorImpl implements IGGenerator {
       LOG.error(null, ex);
     }
 
-    return null;
+    return new ArrayList<AbstractNode>();
+  }
+
+  private static List<AbstractNode> getRulesFromSchemas(final Collection<File> files) {
+    if (files.isEmpty()) {
+      return new ArrayList<AbstractNode>();
+    }
+
+    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+
+    for (final File f : files) {
+      if ("DTD".equals(FileUtils.getExtension(f.getAbsolutePath()).toUpperCase())) {
+        ret.addAll(DTDProcessor.process(f));
+      }
+    }
+
+    return ret;
+  }
+
+  private static List<AbstractNode> getRulesFromQueries(final Collection<File> files) {
+    if (files.isEmpty()) {
+      return new ArrayList<AbstractNode>();
+    }
+
+    return new ArrayList<AbstractNode>();
   }
 }

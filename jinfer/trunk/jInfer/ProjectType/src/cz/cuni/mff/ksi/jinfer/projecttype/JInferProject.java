@@ -17,14 +17,21 @@
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
 import org.netbeans.spi.project.ActionProvider;
+import org.netbeans.spi.project.CopyOperationImplementation;
+import org.netbeans.spi.project.DeleteOperationImplementation;
 import org.netbeans.spi.project.ProjectState;
+import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
@@ -61,7 +68,9 @@ public class JInferProject implements Project {
                 loadProperties(),
                 new JInferProjectInformation(),
                 new JInferLogicalView(this),
-                new ActionProviderImpl()
+                new ActionProviderImpl(),
+                new JInferCopyOperation(this),
+                new JinferDeleteOperation()
               });
     }
     return lookup;
@@ -146,19 +155,88 @@ public class JInferProject implements Project {
 
   private final class ActionProviderImpl implements ActionProvider {
 
+    private String[] supported = new String[]{
+      ActionProvider.COMMAND_DELETE,
+      ActionProvider.COMMAND_COPY,};
+
     @Override
     public String[] getSupportedActions() {
-      return new String[0];
+      return supported;
     }
 
     @Override
     public void invokeAction(String action, Lookup lookup) throws IllegalArgumentException {
-      //do nothing
+      if (action.equalsIgnoreCase(ActionProvider.COMMAND_DELETE)) {
+        DefaultProjectOperations.performDefaultDeleteOperation(JInferProject.this);
+      }
+      if (action.equalsIgnoreCase(ActionProvider.COMMAND_COPY)) {
+        DefaultProjectOperations.performDefaultCopyOperation(JInferProject.this);
+      }
     }
 
     @Override
     public boolean isActionEnabled(String action, Lookup lookup) throws IllegalArgumentException {
-      return false;
+      if ((action.equals(ActionProvider.COMMAND_DELETE))) {
+        return true;
+      } else if ((action.equals(ActionProvider.COMMAND_COPY))) {
+        return true;
+      } else {
+        throw new IllegalArgumentException(action);
+      }
+    }
+  }
+
+  private final class JinferDeleteOperation implements DeleteOperationImplementation {
+
+    @Override
+    public void notifyDeleting() throws IOException {
+    }
+
+    @Override
+    public void notifyDeleted() throws IOException {
+      JInferProject.this.projectDir.delete();
+      JInferProject.this.state.notifyDeleted();
+    }
+
+    @Override
+    public List<FileObject> getMetadataFiles() {
+      List<FileObject> dataFiles = new ArrayList<FileObject>();
+      return dataFiles;
+    }
+
+    @Override
+    public List<FileObject> getDataFiles() {
+      List<FileObject> dataFiles = new ArrayList<FileObject>();
+      return dataFiles;
+    }
+  }
+
+  private final class JInferCopyOperation implements CopyOperationImplementation {
+
+    private final JInferProject project;
+    private final FileObject projectDir;
+
+    public JInferCopyOperation(JInferProject project) {
+      this.project = project;
+      this.projectDir = project.getProjectDirectory();
+    }
+
+    @Override
+    public List<FileObject> getMetadataFiles() {
+      return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public List<FileObject> getDataFiles() {
+      return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    public void notifyCopying() throws IOException {
+    }
+
+    @Override
+    public void notifyCopied(Project arg0, File arg1, String arg2) throws IOException {
     }
   }
 }

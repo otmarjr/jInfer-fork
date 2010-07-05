@@ -18,7 +18,9 @@ package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.Image;
+import javax.swing.Action;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
+import org.netbeans.spi.project.ui.support.CommonProjectActions;
 import org.openide.loaders.DataFolder;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -88,15 +90,20 @@ public class JInferLogicalView implements LogicalViewProvider {
       return getIcon(type);
     }
 
-
-
     @Override
     public String getDisplayName() {
       return project.getProjectDirectory().getName();
     }
 
-
-
+    @Override
+    public Action[] getActions(boolean context) {
+      Action[] nodeActions = new Action[4];
+      nodeActions[0] = CommonProjectActions.copyProjectAction();
+      nodeActions[1] = CommonProjectActions.deleteProjectAction();
+      nodeActions[2] = CommonProjectActions.setAsMainProjectAction();
+      nodeActions[3] = CommonProjectActions.closeProjectAction();
+      return nodeActions;
+    }
 
   }
   private final JInferProject project;

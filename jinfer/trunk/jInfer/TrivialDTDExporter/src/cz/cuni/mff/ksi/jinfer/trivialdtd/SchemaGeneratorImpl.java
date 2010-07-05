@@ -27,6 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.options.ConfigPanel;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DTDUtils;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.CollectionToString;
+import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DomainUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -210,7 +211,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
-      final Map<String, Integer> domain = getDomain(attribute);
+      final Map<String, Integer> domain = DomainUtils.getDomain(attribute);
 
       int domainAbsolute = 0;
 
@@ -220,15 +221,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
       final long dominantAbsolute = Math.round(domainAbsolute * minDefaultRatio);
 
-      final String type;
-      if (domain.size() <= maxEnumSize) {
-        type = domainToString(domain.keySet());
-      }
-      else {
-        type = " CDATA ";
-      }
-
-      ret.append("\n\t").append(attribute.getName()).append(type);
+      ret.append("\n\t").append(attribute.getName()).append(DomainUtils.getDomainType(domain, maxEnumSize));
       if (attribute.getAttributes().containsKey("required")) {
         ret.append("#REQUIRED");
       }
@@ -249,22 +242,4 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
-  private Map<String, Integer> getDomain(final Attribute attribute) {
-    final Map<String, Integer> domainMap = new HashMap<String, Integer>();
-    if (attribute.getContent() != null && !attribute.getContent().isEmpty()) {
-      for (final Object o : attribute.getContent()) {
-        if (domainMap.containsKey((String) o)) {
-          domainMap.put((String) o, Integer.valueOf(domainMap.get((String) o).intValue() + 1));
-        }
-        else {
-          domainMap.put((String) o, Integer.valueOf(1));
-        }
-      }
-    }
-    return domainMap;
-  }
-
-  private String domainToString(final Set<String> domain) {
-    return " " + CollectionToString.colToString(domain, '|', CollectionToString.IDEMPOTENT) + " ";
-  }
 }

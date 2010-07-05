@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.List;
 

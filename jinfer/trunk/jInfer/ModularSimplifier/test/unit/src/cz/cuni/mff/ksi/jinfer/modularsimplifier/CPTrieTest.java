@@ -72,15 +72,15 @@ public class CPTrieTest {
   public void test01() {
     final Regexp<AbstractNode> t = getTestTree();
     System.out.println(t.toString());
-    assertTrue(t.toString().equals("(1: ELEMENT,2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)"));
+    assertEquals(t.toString(), "(1: ELEMENT,2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)");
 
-    // add 1 - nothing should happen
+    // add 1 - a split should occur right after it
     final List<Regexp<AbstractNode>> l1 = new ArrayList<Regexp<AbstractNode>>(1);
     l1.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
     final Regexp<AbstractNode> a1 = new Regexp<AbstractNode>(null, l1, RegexpType.CONCATENATION);
     CPTrie.addBranchToTree(t, a1);
-    assertTrue(t.toString().equals("(1: ELEMENT,2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)"));
-
+    System.out.println(t.toString());
+    assertEquals(t.toString(), "(1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)");
 
     // add 7 - it should be added to the root
     final List<Regexp<AbstractNode>> l2 = new ArrayList<Regexp<AbstractNode>>(1);
@@ -88,7 +88,7 @@ public class CPTrieTest {
     final Regexp<AbstractNode> a2 = new Regexp<AbstractNode>(null, l2, RegexpType.CONCATENATION);
     CPTrie.addBranchToTree(t, a2);
     System.out.println(t.toString());
-    assertTrue(t.toString().equals("(((1: ELEMENT,2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)"));
+    assertEquals(t.toString(), "(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)|(7: ELEMENT,)|),)");
 
     // add 1 8
     final List<Regexp<AbstractNode>> l3 = new ArrayList<Regexp<AbstractNode>>(2);
@@ -97,7 +97,7 @@ public class CPTrieTest {
     final Regexp<AbstractNode> a3 = new Regexp<AbstractNode>(null, l3, RegexpType.CONCATENATION);
     CPTrie.addBranchToTree(t, a3);
     System.out.println(t.toString());
-    assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|),)|(7: ELEMENT,)|),)"));
+    assertEquals(t.toString(), "(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|),)|(7: ELEMENT,)|),)");
 
     // add 1 7 9
     final List<Regexp<AbstractNode>> l4 = new ArrayList<Regexp<AbstractNode>>(3);
@@ -107,7 +107,7 @@ public class CPTrieTest {
     final Regexp<AbstractNode> a4 = new Regexp<AbstractNode>(null, l4, RegexpType.CONCATENATION);
     CPTrie.addBranchToTree(t, a4);
     System.out.println(t.toString());
-    assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,)|),)|(7: ELEMENT,)|),)"));
+    assertEquals(t.toString(), "(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,)|),)|(7: ELEMENT,)|),)");
 
     // add 1 7 9 2
     final List<Regexp<AbstractNode>> l5 = new ArrayList<Regexp<AbstractNode>>(4);
@@ -118,7 +118,7 @@ public class CPTrieTest {
     final Regexp<AbstractNode> a5 = new Regexp<AbstractNode>(null, l5, RegexpType.CONCATENATION);
     CPTrie.addBranchToTree(t, a5);
     System.out.println(t.toString());
-    assertTrue(t.toString().equals("(((1: ELEMENT,((2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,(()|(2: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)"));
+    assertEquals(t.toString(), "(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,(()|(2: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)");
   }
  
 

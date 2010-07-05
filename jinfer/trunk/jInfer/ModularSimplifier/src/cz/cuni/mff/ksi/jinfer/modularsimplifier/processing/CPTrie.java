@@ -17,11 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class CPTrie implements ClusterProcessor {
     return ret;
   }
 
-  private Element processCluster(final Pair<AbstractNode, List<AbstractNode>> cluster) {
+  private static Element processCluster(final Pair<AbstractNode, List<AbstractNode>> cluster) {
     verify(cluster);
 
     final Element treeBase = (Element) cluster.getFirst();
@@ -64,8 +62,7 @@ public class CPTrie implements ClusterProcessor {
       if (!n.isElement()) {
         throw new IllegalArgumentException("Element expected");
       }
-      final Element e = (Element) n;
-      if (!e.getSubnodes().isConcatenation()) {
+      if (!((Element) n).getSubnodes().isConcatenation()) {
         throw new IllegalArgumentException("Concatenation expected");
       }
     }
@@ -77,6 +74,7 @@ public class CPTrie implements ClusterProcessor {
       throw new IllegalArgumentException();
     }
 
+    // TODO vektor Remove the duplicity
     int posTre = -1;
     int posBra = -1;
     while (true) {
@@ -176,21 +174,24 @@ public class CPTrie implements ClusterProcessor {
 
   // TODO move to a common package
   public static boolean equalTokens(final Regexp<AbstractNode> t1, final Regexp<AbstractNode> t2) {
+    // both need to be tokens
     if (!t1.isToken() || !t2.isToken()) {
       throw new IllegalArgumentException();
     }
+    // if they are both simple data, TRUE
     if (t1.getContent().isSimpleData()
             && t2.getContent().isSimpleData()) {
       return true;
     }
+    // if they are both elements of the same name, TRUE
     if (t1.getContent().isElement()
             && t2.getContent().isElement()
-            && ((Element) t1.getContent()).getName().equalsIgnoreCase(((Element) t2.getContent()).getName())) {
+            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
       return true;
     }
     if (t1.getContent().isAttribute()
             && t2.getContent().isAttribute()
-            && ((Attribute) t1.getContent()).getName().equalsIgnoreCase(((Attribute) t2.getContent()).getName())) {
+            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
       return true;
     }
     return false;

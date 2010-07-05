@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.trivialigg;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;

@@ -64,7 +64,7 @@ public class Installer extends ModuleInstall {
   public void restored() {
     // Configure log4j
     PropertyConfigurator.configure("log4j.properties");
-    PatternLayout outputWindowLayout = new PatternLayout("%p [%t] (%F:%L) - %m%n");
+    PatternLayout outputWindowLayout = new PatternLayout("%m%n");
     Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
     Logger ROOTLOG = Logger.getRootLogger();
     ROOTLOG.addAppender(outputWindowAppender);

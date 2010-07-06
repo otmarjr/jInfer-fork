@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
@@ -26,8 +25,7 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
-import org.openide.windows.IOProvider;
-import org.openide.windows.InputOutput;
+import org.apache.log4j.Logger;
 
 /**
  * A simple Kleene processor - if it finds more or equal than THRESHOLD
@@ -37,16 +35,16 @@ import org.openide.windows.InputOutput;
  */
 public class SimpleKP implements KleeneProcessor {
 
+  private static Logger LOG = Logger.getLogger(KleeneProcessor.class);
   private final int threshold = Preferences.userNodeForPackage(ConfigPanel.class).getInt("kleene.repetitions", 3);
 
   @Override
   public List<AbstractNode> kleeneProcess(final List<AbstractNode> rules) {
-    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-    io.getOut().println("Simplifier: " + threshold + " and more repetitions will be collapsed to a Kleene star.");
+    LOG.info("Simplifier: " + threshold + " and more repetitions will be collapsed to a Kleene star.");
 
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules.size());
     for (final AbstractNode root : rules) {
-      final Element e  = (Element) root;
+      final Element e = (Element) root;
       ret.add(new Element(
               e.getContext(),
               e.getName(),
@@ -94,15 +92,14 @@ public class SimpleKP implements KleeneProcessor {
       if (equalTokenRegexps(last, current)) {
         // increment count
         groupSize++;
-      }
-      else {
+      } else {
         // close the last loop
         closeGroup(last, groupSize, retChildren);
         // start a new loop
         groupSize = 1;
         last = current;
       }
-      
+
       i++;
     }
     return Regexp.getConcatenation(retChildren);
@@ -131,9 +128,8 @@ public class SimpleKP implements KleeneProcessor {
     }
     final List<Regexp<AbstractNode>> kleeneChild = new ArrayList<Regexp<AbstractNode>>(1);
     kleeneChild.add(current);
-    retChildren.add(new Regexp<AbstractNode>(null, 
+    retChildren.add(new Regexp<AbstractNode>(null,
             kleeneChild,
             RegexpType.KLEENE));
   }
-
 }

@@ -32,9 +32,8 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.options.ConfigPanel;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPAlternations;
 import java.util.List;
 import java.util.prefs.Preferences;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
-import org.openide.windows.IOProvider;
-import org.openide.windows.InputOutput;
 import org.openide.windows.WindowManager;
 
 /**
@@ -45,6 +44,8 @@ import org.openide.windows.WindowManager;
 @ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
 
+  private static Logger LOG = Logger.getLogger(Simplifier.class);
+
   @Override
   public String getModuleName() {
     return "Modular Simplifier";
@@ -52,8 +53,7 @@ public class SimplifierImpl implements Simplifier {
 
   private ClusterProcessor getClusterProcessor() {
     final String cp = Preferences.userNodeForPackage(ConfigPanel.class).get("cluster.processor", "Trie");
-    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-    io.getOut().println("Simplifier: using " + cp + " cluster processor.");
+    LOG.info("Simplifier: using " + cp + " cluster processor.");
     if ("Trie".equals(cp)) {
       return new CPTrie();
     }
@@ -64,12 +64,11 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private Clusterer getClusterer() {
-    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
     if (Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("use.context", false)) {
-      io.getOut().println("Simplifier: using context.");
+      LOG.info("Simplifier: using context.");
       return new ContextClusterer();
     }
-    io.getOut().println("Simplifier: not using context.");
+    LOG.info("Simplifier: not using context.");
     return new NameClusterer();
   }
 

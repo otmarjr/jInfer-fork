@@ -27,6 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.Date;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.Lookup;
@@ -47,6 +48,7 @@ public class Runner {
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
   private final SchemaGenerator schemaGenerator;
+  private static Logger LOG = Logger.getLogger(Runner.class);
 
   public Runner() {
     final ModuleSelection moduleSelection = lookupModuleSelection();
@@ -72,8 +74,7 @@ public class Runner {
   }
 
   public void finishedIGGenerator(final List<AbstractNode> grammar) {
-    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-    io.getOut().println("Runner: initial grammar contains " + grammar.size()
+    LOG.info("Runner: initial grammar contains " + grammar.size()
             + " rules.");
 
     final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(new Runnable() {
@@ -105,8 +106,7 @@ public class Runner {
   }
 
   public void finishedSimplifier(final List<AbstractNode> grammar) {
-    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-    io.getOut().println("Runner: simplified grammar contains " + grammar.size()
+    LOG.info("Runner: simplified grammar contains " + grammar.size()
             + " rules.");
     schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
 
@@ -118,15 +118,13 @@ public class Runner {
   }
 
   public void finishedSchemaGenerator(final String schema) {
-    final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-    io.getOut().println("Runner: writing schema.");
+    LOG.info("Runner: writing schema.");
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
     ioResult.getOut().println(schema);
 
     final FileSelection fileSelection = lookupFileSelection();
     fileSelection.addOutput(
-            (new Date()).toString()
-            , getCommentedSchema(schema), "dtd");
+            (new Date()).toString(), getCommentedSchema(schema), "dtd");
   }
 
   private String getCommentedSchema(final String schema) {

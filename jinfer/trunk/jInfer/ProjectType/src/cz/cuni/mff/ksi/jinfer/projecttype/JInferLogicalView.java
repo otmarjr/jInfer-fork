@@ -59,7 +59,7 @@ public class JInferLogicalView implements LogicalViewProvider {
 
   }
 
-  private static final class RootNode extends AbstractNode {
+  private final class RootNode extends AbstractNode {
 
     private final JInferProject project;
 
@@ -68,7 +68,8 @@ public class JInferLogicalView implements LogicalViewProvider {
 
         @Override
         protected void addNotify() {
-          setKeys(new Node[]{new FolderNode("xml"), new FolderNode("schema"), new FolderNode("query"), new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(), project)});
+          Input input = JInferLogicalView.this.project.getLookup().lookup(Input.class);
+          setKeys(new Node[]{new FolderNode("xml", input.getDocuments()), new FolderNode("schema", input.getSchemas()), new FolderNode("query", input.getQueries()), new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(), project)});
         }
 
         @Override

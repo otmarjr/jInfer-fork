@@ -66,6 +66,7 @@ public class JInferProject implements Project {
                 this,
                 state,
                 loadProperties(),
+                loadInput(),
                 new JInferProjectInformation(),
                 new JInferLogicalView(this),
                 new ActionProviderImpl(),
@@ -101,6 +102,12 @@ public class JInferProject implements Project {
       }
     }
     return properties;
+  }
+
+  private Input loadInput() {
+    Input input = new Input(new ArrayList<FileObject>(), new ArrayList<FileObject>(), new ArrayList<FileObject>());
+    //TODO load input files from project properties
+    return input;
   }
 
   private static class NotifyProperties extends Properties {

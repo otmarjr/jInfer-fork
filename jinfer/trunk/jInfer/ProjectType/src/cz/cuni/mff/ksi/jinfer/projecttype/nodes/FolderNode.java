@@ -1,9 +1,12 @@
 
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.FileAddAction;
 import java.awt.Image;
+import java.util.Collection;
+import javax.swing.Action;
+import org.openide.filesystems.FileObject;
 import org.openide.nodes.AbstractNode;
-import org.openide.nodes.Children;
 import org.openide.util.ImageUtilities;
 
 /**
@@ -14,10 +17,12 @@ public class FolderNode extends AbstractNode {
 
 
   private final String folderName;
+  private final Collection<FileObject> files;
 
-  public FolderNode(String folderName) {
-    super(Children.LEAF);
+  public FolderNode(String folderName, Collection<FileObject> files) {
+    super(new FileChildren(files));
     this.folderName = folderName;
+    this.files = files;
   }
 
   @Override
@@ -35,8 +40,9 @@ public class FolderNode extends AbstractNode {
     return getIcon(type);
   }
 
-
-
-
+  @Override
+  public Action[] getActions(boolean context) {
+    return new Action[] {new FileAddAction(this, files)};
+  }
 
 }

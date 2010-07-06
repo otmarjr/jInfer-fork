@@ -30,14 +30,11 @@ import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DomainUtils;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.prefs.Preferences;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
-import org.openide.windows.IOProvider;
-import org.openide.windows.InputOutput;
 
 /**
  * A simple DTD exporter.
@@ -47,7 +44,7 @@ import org.openide.windows.InputOutput;
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
-  private final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+  private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private int maxEnumSize;
   private double minDefaultRatio;
 
@@ -58,7 +55,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   @Override
   public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
-    io.getOut().println("DTD Exporter: got " + grammar.size()
+    LOG.info("DTD Exporter: got " + grammar.size()
             + " rules.");
 
     // load settings
@@ -73,7 +70,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       }
     }
 
-    io.getOut().println("DTD Exporter: that is " + elements.size()
+    LOG.info("DTD Exporter: that is " + elements.size()
             + " elements.");
 
     // sort elements topologically
@@ -86,7 +83,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(elementToString(element));
     }
 
-    io.getOut().println("DTD Exporter: schema generated at "
+    LOG.info("DTD Exporter: schema generated at "
             + ret.toString().length() + " characters.");
 
     callback.finished(ret.toString());

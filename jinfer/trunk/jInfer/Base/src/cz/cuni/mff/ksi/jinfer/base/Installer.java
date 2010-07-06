@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.PropertyConfigurator;
@@ -33,17 +34,16 @@ import org.openide.windows.InputOutput;
 public class Installer extends ModuleInstall {
 
   private static final long serialVersionUID = 54612321l;
-  
-  private static final Logger LOG = Logger.getLogger(ModuleInstall.class);
+  private static Logger LOG;
 
-  private class Log4jOutputWindowAppender extends AppenderSkeleton {
+  private static class Log4jOutputWindowAppender extends AppenderSkeleton {
+
+    public Log4jOutputWindowAppender(final Layout layout) {
+      this.setLayout(layout);
+    }
 
     @Override
     protected void append(LoggingEvent le) {
-      if (this.layout == null) {
-        // TODO rio nejaky error
-      }
-
       final String message = this.layout.format(le);
       final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
       io.getOut().print(message);
@@ -64,12 +64,11 @@ public class Installer extends ModuleInstall {
   public void restored() {
     // Configure log4j
     PropertyConfigurator.configure("log4j.properties");
-    PatternLayout outputWindowLayout = new PatternLayout();
-    outputWindowLayout.setConversionPattern("%p [%t] (%F:%L) - %m%n");
-    Appender outputWindowAppender = new Log4jOutputWindowAppender();
-    outputWindowAppender.setLayout(outputWindowLayout);
+    PatternLayout outputWindowLayout = new PatternLayout("%p [%t] (%F:%L) - %m%n");
+    Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
     Logger ROOTLOG = Logger.getRootLogger();
     ROOTLOG.addAppender(outputWindowAppender);
+    LOG = Logger.getLogger(Installer.class);
     LOG.info("Log initialized.");
 
     LOG.info("Base module loaded.");

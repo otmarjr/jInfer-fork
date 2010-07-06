@@ -28,9 +28,8 @@ import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.XSDUtils;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
-import org.openide.windows.IOProvider;
-import org.openide.windows.InputOutput;
 
 /**
  * A simple XSD exporter.
@@ -40,7 +39,7 @@ import org.openide.windows.InputOutput;
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
-  private final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+  private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
   //private int maxEnumSize;
   //private double minDefaultRatio;
   private int indentationLevel = 0;
@@ -53,7 +52,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   @Override
   public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
-    io.getOut().println("XSD Exporter: got " + grammar.size()
+    LOG.info("XSD Exporter: got " + grammar.size()
             + " rules.");
 
     // load settings

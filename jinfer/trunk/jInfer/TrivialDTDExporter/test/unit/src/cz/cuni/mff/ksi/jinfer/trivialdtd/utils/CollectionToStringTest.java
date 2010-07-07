@@ -37,21 +37,21 @@ public class CollectionToStringTest {
   public void testColToStringOne() {
     System.out.println("colToStringOne");
     final String res = CollectionToString.colToString(Arrays.asList("lala"), ',', CollectionToString.IDEMPOTENT);
-    Assert.assertEquals(res, "(lala)");
+    Assert.assertEquals("(lala)", res);
   }
 
   @Test
   public void testColToStringTwo() {
     System.out.println("colToStringTwo");
     final String res = CollectionToString.colToString(Arrays.asList("lala", "baf"), ',', CollectionToString.IDEMPOTENT);
-    Assert.assertEquals(res, "(lala,baf)");
+    Assert.assertEquals("(lala,baf)", res);
   }
 
   @Test
   public void testColToStringTwoDifferent() {
     System.out.println("colToStringTwoDifferent");
     final String res = CollectionToString.colToString(Arrays.asList("lala ", "baf"), ' ', CollectionToString.IDEMPOTENT);
-    Assert.assertEquals(res, "(lala  baf)");
+    Assert.assertEquals("(lala  baf)", res);
   }
 
 }

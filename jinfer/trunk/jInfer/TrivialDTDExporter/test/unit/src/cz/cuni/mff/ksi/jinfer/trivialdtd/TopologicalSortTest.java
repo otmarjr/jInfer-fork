@@ -46,7 +46,7 @@ public class TopologicalSortTest {
   @Test
   public void testEmpty() {
     final TopologicalSort s = new TopologicalSort(Collections.<Element>emptyList());
-    assertEquals(s.sort(), Collections.<Element>emptyList());
+    assertEquals(Collections.<Element>emptyList(), s.sort());
   }
 
   @Test
@@ -56,7 +56,7 @@ public class TopologicalSortTest {
     final TopologicalSort s = new TopologicalSort(Arrays.asList(e));
     final List<Element> elements = s.sort();
     assertTrue(elements.size() == 1);
-    assertEquals(elements.get(0), e);
+    assertEquals(e, elements.get(0));
   }
 
   @Test

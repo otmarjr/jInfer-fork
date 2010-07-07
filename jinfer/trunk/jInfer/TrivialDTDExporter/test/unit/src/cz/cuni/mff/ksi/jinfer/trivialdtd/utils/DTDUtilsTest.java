@@ -127,7 +127,7 @@ public class DTDUtilsTest {
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att);
     final boolean result = DTDUtils.containsPCDATA(list);
-    assertEquals(result, false);
+    assertEquals(false, result);
   }
 
   @Test
@@ -137,7 +137,7 @@ public class DTDUtilsTest {
     final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, null));
     final List<Regexp<AbstractNode>> list = Arrays.asList(sd);
     final boolean result = DTDUtils.containsPCDATA(list);
-    assertEquals(result, true);
+    assertEquals(true, result);
   }
 
   @Test
@@ -148,6 +148,6 @@ public class DTDUtilsTest {
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att, sd, att);
     final boolean result = DTDUtils.containsPCDATA(list);
-    assertEquals(result, true);
+    assertEquals(true, result);
   }
 }

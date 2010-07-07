@@ -55,9 +55,9 @@ public class DomainUtilsTest {
     final Attribute a = new Attribute(null, "a", null, null, Arrays.asList("a", "b", "c"));
     final Map<String, Integer> domain = DomainUtils.getDomain(a);
     assertEquals(domain.size(), 3);
-    assertEquals(domain.get("a"), Integer.valueOf(1));
-    assertEquals(domain.get("b"), Integer.valueOf(1));
-    assertEquals(domain.get("c"), Integer.valueOf(1));
+    assertEquals(Integer.valueOf(1), domain.get("a"));
+    assertEquals(Integer.valueOf(1), domain.get("b"));
+    assertEquals(Integer.valueOf(1), domain.get("c"));
   }
 
   @Test
@@ -66,9 +66,9 @@ public class DomainUtilsTest {
     final Attribute a = new Attribute(null, "a", null, null, Arrays.asList("a", "a", "b", "a", "c", "c"));
     final Map<String, Integer> domain = DomainUtils.getDomain(a);
     assertEquals(domain.size(), 3);
-    assertEquals(domain.get("a"), Integer.valueOf(3));
-    assertEquals(domain.get("b"), Integer.valueOf(1));
-    assertEquals(domain.get("c"), Integer.valueOf(2));
+    assertEquals(Integer.valueOf(3), domain.get("a"));
+    assertEquals(Integer.valueOf(1), domain.get("b"));
+    assertEquals(Integer.valueOf(2), domain.get("c"));
   }
 
   @Test
@@ -77,10 +77,10 @@ public class DomainUtilsTest {
     final Attribute a = new Attribute(null, "a", null, null, Arrays.asList("c", "a", "a", "d", "b", "a", "c", "c"));
     final Map<String, Integer> domain = DomainUtils.getDomain(a);
     assertEquals(domain.size(), 4);
-    assertEquals(domain.get("a"), Integer.valueOf(3));
-    assertEquals(domain.get("b"), Integer.valueOf(1));
-    assertEquals(domain.get("c"), Integer.valueOf(3));
-    assertEquals(domain.get("d"), Integer.valueOf(1));
+    assertEquals(Integer.valueOf(3), domain.get("a"));
+    assertEquals(Integer.valueOf(1), domain.get("b"));
+    assertEquals(Integer.valueOf(3), domain.get("c"));
+    assertEquals(Integer.valueOf(1), domain.get("d"));
   }
 
   @Test(expected = NullPointerException.class)

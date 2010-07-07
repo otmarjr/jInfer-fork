@@ -65,7 +65,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
-      if (node.getType().equals(NodeType.ELEMENT)) {
+      if (node.isElement()) {
         elements.add((Element) node);
       }
     }
@@ -208,32 +208,19 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
-      final Map<String, Integer> domain = DomainUtils.getDomain(attribute);
+      final Map<String, Integer> domain = DomainUtils.getDomain(attribute);      
 
-      int domainAbsolute = 0;
+      // type declaration of this attribute
+      ret.append("\n\t")
+              .append(attribute.getName())
+              .append(DomainUtils.getAttributeType(domain, maxEnumSize));
 
-      for (final Integer i : domain.values()) {
-        domainAbsolute += i.intValue();
-      }
-
-      final long dominantAbsolute = Math.round(domainAbsolute * minDefaultRatio);
-
-      ret.append("\n\t").append(attribute.getName()).append(DomainUtils.getDomainType(domain, maxEnumSize));
+      // requiredness/default value
       if (attribute.getAttributes().containsKey("required")) {
         ret.append("#REQUIRED");
       }
       else {
-        boolean dominantFound = false;
-        for (final Map.Entry<String, Integer> e : domain.entrySet()) {
-          if (e.getValue().intValue() > dominantAbsolute) {
-            ret.append('"').append(e.getKey()).append('"');
-            dominantFound = true;
-            break;
-          }
-        }
-        if (!dominantFound) {
-          ret.append("#IMPLIED");
-        }
+        ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
       }
     }
     return ret.toString();

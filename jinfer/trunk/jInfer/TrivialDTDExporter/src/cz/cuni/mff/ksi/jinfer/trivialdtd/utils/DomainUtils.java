@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.trivialdtd.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
@@ -38,6 +37,9 @@ public final class DomainUtils {
   private DomainUtils() {
   }
 
+  public static final String ATTRIBUTE_IMPLIED = "#IMPLIED";
+  public static final String ATTRIBUTE_CDATA = " CDATA ";
+
   /**
    * Returns the domain of values of this attribute.
    */
@@ -54,10 +56,29 @@ public final class DomainUtils {
       }
     }
     return domainMap;
-  }  
+  }
 
   /**
-   * Returns the string definition of this domain.
+   * Returns the default value for this domain (that is the value found with
+   * probability higher than ratio) or #IMPLIED, if there is no dominant value.
+   * 
+   * @param ratio Minimal ratio of a single value occurence, above which it is
+   *    declared dominant and therefore default.
+   * @return Default value in double quotes or the keyword #IMPLIED.
+   */
+  public static String getDefault(final Map<String, Integer> domain, final double ratio) {
+    final long dominantAbsolute = Math.round(DomainUtils.getDomainAbsoluteSize(domain) * ratio);
+
+    for (final Map.Entry<String, Integer> e : domain.entrySet()) {
+      if (e.getValue().intValue() > dominantAbsolute) {
+        return '"' + e.getKey() + '"';
+      }
+    }
+    return ATTRIBUTE_IMPLIED;
+  }
+
+  /**
+   * For domain D of attribute A returns its description, or the <i>type</i> of A.
    * 
    * Decides whether this domain is small enough to be enumerated in the
    * attribute definition, or whether it should be an ambiguous CDATA.
@@ -65,7 +86,7 @@ public final class DomainUtils {
    * @param threshold Domains smaller or equal to this will be returned as an enum, larger as CDATA.
    * @return String defining (describing) this domain.
    */
-  public static String getDomainType(final Map<String, Integer> domain, final int threshold) {
+  public static String getAttributeType(final Map<String, Integer> domain, final int threshold) {
     if (domain.size() <= threshold) {
       final List<String> domainValues = new ArrayList<String>(domain.keySet());
       Collections.sort(domainValues);
@@ -74,7 +95,14 @@ public final class DomainUtils {
               '|',
               CollectionToString.IDEMPOTENT) + " ";
     }
-    return " CDATA ";
+    return ATTRIBUTE_CDATA;
   }
 
+  private static int getDomainAbsoluteSize(final Map<String, Integer> domain) {
+    int domainAbsolute = 0;
+    for (final Integer i : domain.values()) {
+      domainAbsolute += i.intValue();
+    }
+    return domainAbsolute;
+  }
 }

@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.trivialdtd.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
+import java.security.DomainCombiner;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,7 @@ import static org.junit.Assert.*;
 public class DomainUtilsTest {
 
   private static final int THRESHOLD = 3;
+  private static final double DOMINANCE_RATIO = 0.75;
 
   @Test(expected = NullPointerException.class)
   public void testGetDomainNull() {
@@ -82,52 +84,106 @@ public class DomainUtilsTest {
   }
 
   @Test(expected = NullPointerException.class)
-  public void testGetDomainTypeNull() {
-    System.out.println("testGetDomainTypeNull");
-    DomainUtils.getDomainType(null, THRESHOLD);
+  public void testGetAttributeTypeNull() {
+    System.out.println("testGetAttributeTypeNull");
+    DomainUtils.getAttributeType(null, THRESHOLD);
   }
 
   @Test
-  public void testGetDomainTypeEmpty() {
-    System.out.println("testGetDomainTypeEmpty");
+  public void testGetAttributeTypeEmpty() {
+    System.out.println("testGetAttributeTypeEmpty");
     final Map<String, Integer> domain = new HashMap<String, Integer>();
     final String expResult = " () ";
-    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testGetDomainTypeOneOfThree() {
-    System.out.println("testGetDomainTypeOneOfThree");
+  public void testGetAttributeTypeOneOfThree() {
+    System.out.println("testGetAttributeTypeOneOfThree");
     final Map<String, Integer> domain = new HashMap<String, Integer>();
     domain.put("a", Integer.valueOf(1));
     final String expResult = " (a) ";
-    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testGetDomainTypeThreeOfThree() {
-    System.out.println("testGetDomainTypeThreeOfThree");
+  public void testGetAttributeTypeThreeOfThree() {
+    System.out.println("testGetAttributeTypeThreeOfThree");
     final Map<String, Integer> domain = new HashMap<String, Integer>();
     domain.put("a", Integer.valueOf(1));
     domain.put("b", Integer.valueOf(2));
     domain.put("c", Integer.valueOf(3));
     final String expResult = " (a|b|c) ";
-    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testGetDomainTypeFourOfThree() {
-    System.out.println("testGetDomainTypeFourOfThree");
+  public void testGetAttributeTypeFourOfThree() {
+    System.out.println("testGetAttributeTypeFourOfThree");
     final Map<String, Integer> domain = new HashMap<String, Integer>();
     domain.put("a", Integer.valueOf(1));
     domain.put("b", Integer.valueOf(2));
     domain.put("c", Integer.valueOf(3));
     domain.put("d", Integer.valueOf(4));
-    final String expResult = " CDATA ";
-    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final String expResult = DomainUtils.ATTRIBUTE_CDATA;
+    final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
     assertEquals(expResult, result);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testGetDefaultNull() {
+    System.out.println("testGetDefaultNull");
+    DomainUtils.getDefault(null, DOMINANCE_RATIO);
+  }
+
+  @Test
+  public void testGetDefaultEmpty() {
+    System.out.println("testGetDefaultEmpty");
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
+    final String expResult = DomainUtils.ATTRIBUTE_IMPLIED;
+    final String result = DomainUtils.getDefault(domain, DOMINANCE_RATIO);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testGetDefaultNoDominance() {
+    System.out.println("testGetDefaultNoDominance");
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
+    domain.put("a", Integer.valueOf(1));
+    domain.put("b", Integer.valueOf(2));
+    domain.put("c", Integer.valueOf(3));
+    domain.put("d", Integer.valueOf(4));
+    final String expResult = DomainUtils.ATTRIBUTE_IMPLIED;
+    final String result = DomainUtils.getDefault(domain, DOMINANCE_RATIO);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testGetDefaultDominance() {
+    System.out.println("testGetDefaultDominance");
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
+    domain.put("a", Integer.valueOf(1));
+    domain.put("b", Integer.valueOf(2));
+    domain.put("c", Integer.valueOf(3));
+    domain.put("d", Integer.valueOf(50));
+    final String expResult = "\"d\"";
+    final String result = DomainUtils.getDefault(domain, DOMINANCE_RATIO);
+    assertEquals(expResult, result);
+  }
+  
+  @Test
+  public void testGetDefaultDominanceTie() {
+    System.out.println("testGetDefaultDominanceTie");
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
+    domain.put("a", Integer.valueOf(1));
+    domain.put("b", Integer.valueOf(50));
+    domain.put("d", Integer.valueOf(50));
+    final String result = DomainUtils.getDefault(domain, 0.2);
+    if (!"\"b\"".equals(result) && !"\"d\"".equals(result)) {
+      fail();
+    }
   }
 }

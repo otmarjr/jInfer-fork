@@ -29,9 +29,6 @@ import static org.junit.Assert.*;
  */
 public class RegexpTest {
 
-  public RegexpTest() {
-  }
-
   @Test
   public void testGetTokensSimple() {
     final Regexp<Integer> r = Regexp.getToken(Integer.valueOf(0));
@@ -73,7 +70,7 @@ public class RegexpTest {
     final Regexp<Character> test = new Regexp<Character>(null, l1, RegexpType.CONCATENATION);
     final List<Character> tokens = test.getTokens();
     final List<Character> expected = Arrays.asList('a', 'b', 'b', 'c', 'd', 'e', 'd', 'e');
-    assertEquals(tokens, expected);
+    assertEquals(expected, tokens);
   }
 
   @Test(expected=IllegalArgumentException.class)

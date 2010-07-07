@@ -20,8 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -92,44 +90,44 @@ public class DomainUtilsTest {
   @Test
   public void testGetDomainTypeEmpty() {
     System.out.println("testGetDomainTypeEmpty");
-    Map<String, Integer> domain = new HashMap<String, Integer>();
-    String expResult = " () ";
-    String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
+    final String expResult = " () ";
+    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testGetDomainTypeOneOfThree() {
     System.out.println("testGetDomainTypeOneOfThree");
-    Map<String, Integer> domain = new HashMap<String, Integer>();
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
     domain.put("a", Integer.valueOf(1));
-    String expResult = " (a) ";
-    String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final String expResult = " (a) ";
+    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testGetDomainTypeThreeOfThree() {
     System.out.println("testGetDomainTypeThreeOfThree");
-    Map<String, Integer> domain = new HashMap<String, Integer>();
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
     domain.put("a", Integer.valueOf(1));
     domain.put("b", Integer.valueOf(2));
     domain.put("c", Integer.valueOf(3));
-    String expResult = " (a|b|c) ";
-    String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final String expResult = " (a|b|c) ";
+    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testGetDomainTypeFourOfThree() {
     System.out.println("testGetDomainTypeFourOfThree");
-    Map<String, Integer> domain = new HashMap<String, Integer>();
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
     domain.put("a", Integer.valueOf(1));
     domain.put("b", Integer.valueOf(2));
     domain.put("c", Integer.valueOf(3));
     domain.put("d", Integer.valueOf(4));
-    String expResult = " CDATA ";
-    String result = DomainUtils.getDomainType(domain, THRESHOLD);
+    final String expResult = " CDATA ";
+    final String result = DomainUtils.getDomainType(domain, THRESHOLD);
     assertEquals(expResult, result);
   }
 }

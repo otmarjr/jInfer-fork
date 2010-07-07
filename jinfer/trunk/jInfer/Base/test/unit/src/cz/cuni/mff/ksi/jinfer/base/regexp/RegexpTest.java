@@ -27,13 +27,14 @@ import static org.junit.Assert.*;
  * 
  * @author vektor
  */
+@SuppressWarnings({"unchecked", "PMD.SystemPrintln"})
 public class RegexpTest {
 
   @Test
   public void testGetTokensSimple() {
     final Regexp<Integer> r = Regexp.getToken(Integer.valueOf(0));
-    assertTrue(r.getTokens().size() == 1);
-    assertTrue(r.getTokens().get(0).equals(Integer.valueOf(0)));
+    assertEquals(1, r.getTokens().size());
+    assertEquals(Integer.valueOf(0), r.getTokens().get(0));
   }
 
   /**
@@ -42,24 +43,20 @@ public class RegexpTest {
    */
   @Test
   public void testGetTokens() {
-    @SuppressWarnings("unchecked")
     final List<Regexp<Character>> l4 = Arrays.asList(
             Regexp.<Character>getToken('d'),
             Regexp.<Character>getToken('e')
             );
     final Regexp<Character> concat = new Regexp<Character>(null, l4, RegexpType.CONCATENATION);
-    @SuppressWarnings("unchecked")
     final List<Regexp<Character>> l3 = Arrays.asList(
             Regexp.<Character>getToken('b'),
             Regexp.<Character>getToken('c'),
             concat
             );
-    @SuppressWarnings("unchecked")
     final List<Regexp<Character>> l2 = Arrays.asList(
             new Regexp<Character>(null, l3, RegexpType.ALTERNATION)
             );
     final Regexp<Character> kleene = new Regexp<Character>(null, l2, RegexpType.KLEENE);
-    @SuppressWarnings("unchecked")
     final List<Regexp<Character>> l1 = Arrays.asList(
             Regexp.<Character>getToken('a'),
             Regexp.<Character>getToken('b'),
@@ -109,12 +106,12 @@ public class RegexpTest {
     t.branch(0);
     System.out.println(t.toString());
 
-    assertTrue(t.getChildren().size() == 1);
+    assertEquals(1, t.getChildren().size());
     final Regexp<Integer> alt = t.getChild(0);
     assertTrue(alt.isAlternation());
-    assertTrue(alt.getChildren().size() == 1);
+    assertEquals(1, alt.getChildren().size());
     assertTrue(alt.getChild(0).isConcatenation());
-    assertTrue(alt.getChild(0).getChildren().size() == 1);
+    assertEquals(1, alt.getChild(0).getChildren().size());
     assertTrue(alt.getChild(0).getChild(0).isToken());
   }
 
@@ -132,13 +129,13 @@ public class RegexpTest {
     t.branch(0);
     System.out.println(t.toString());
 
-    assertTrue(t.getChildren().size() == 1);
+    assertEquals(1, t.getChildren().size());
     final Regexp<Integer> alt = t.getChild(0);
     assertTrue(alt.isAlternation());
-    assertTrue(alt.getChildren().size() == 1);
+    assertEquals(1, alt.getChildren().size());
     final Regexp<Integer> concat = alt.getChild(0);
     assertTrue(concat.isConcatenation());
-    assertTrue(concat.getChildren().size() == 3);
+    assertEquals(3, concat.getChildren().size());
 
     for (int i = 0; i < 3; i++) {
       assertTrue(concat.getChild(i).getContent().equals(Integer.valueOf(i)));
@@ -159,13 +156,13 @@ public class RegexpTest {
     t.branch(1);
     System.out.println(t.toString());
 
-    assertTrue(t.getChildren().size() == 2);
+    assertEquals(2, t.getChildren().size());
     final Regexp<Integer> alt = t.getChild(1);
     assertTrue(alt.isAlternation());
-    assertTrue(alt.getChildren().size() == 1);
+    assertEquals(1, alt.getChildren().size());
     final Regexp<Integer> concat = alt.getChild(0);
     assertTrue(concat.isConcatenation());
-    assertTrue(concat.getChildren().size() == 2);
+    assertEquals(2, concat.getChildren().size());
 
     for (int i = 1; i < 3; i++) {
       assertTrue(concat.getChild(i - 1).getContent().equals(Integer.valueOf(i)));
@@ -186,15 +183,15 @@ public class RegexpTest {
     t.branch(2);
     System.out.println(t.toString());
 
-    assertTrue(t.getChildren().size() == 3);
+    assertEquals(3, t.getChildren().size());
     final Regexp<Integer> alt = t.getChild(2);
     assertTrue(alt.isAlternation());
-    assertTrue(alt.getChildren().size() == 1);
+    assertEquals(1, alt.getChildren().size());
     final Regexp<Integer> concat = alt.getChild(0);
     assertTrue(concat.isConcatenation());
-    assertTrue(concat.getChildren().size() == 1);
+    assertEquals(1, concat.getChildren().size());
 
-    assertTrue(concat.getChild(0).getContent().equals(Integer.valueOf(2)));
+    assertEquals(Integer.valueOf(2), concat.getChild(0).getContent());
   }
 
   /**
@@ -214,10 +211,10 @@ public class RegexpTest {
     t.branch(1);
     System.out.println(t.toString());
 
-    assertTrue(t.getChildren().size() == 3);
+    assertEquals(3, t.getChildren().size());
     final Regexp<Integer> alt = t.getChild(1);
-    assertTrue(RegexpType.ALTERNATION.equals(alt.getType()));
-    assertTrue(alt.getChildren().size() == 2);
+    assertEquals(RegexpType.ALTERNATION, alt.getType());
+    assertEquals(2, alt.getChildren().size());
   }
 
 }

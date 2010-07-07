@@ -66,4 +66,14 @@ public final class BaseUtils {
   public static <T> boolean isEmpty(final Collection<T> c) {
     return c == null || c.isEmpty();
   }
+
+  /**
+   * Checks whether the string is empty, that means NULL or equal to "".
+   *
+   * @param s String to check.
+   * @return True if the string is NULL or has no characters.
+   */
+  public static boolean isEmpty(final String s) {
+    return s == null || "".equals(s);
+  }
 }

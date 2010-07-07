@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 /**
  * @author vektor
  */
-@SuppressWarnings("PMD.SystemPrintln")
+@SuppressWarnings({"PMD.SystemPrintln", "unchecked"})
 public class DTDUtilsTest {
 
   @Test
@@ -45,7 +45,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testOmitAttributesNoneOfOne() {
     System.out.println("testOmitAttributesNoneOfOne");
     final Regexp<AbstractNode> element = Regexp.getToken((AbstractNode) new Element(null, "lala", null, null));
@@ -56,7 +55,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testOmitAttributesOneOfOne() {
     System.out.println("testOmitAttributesOneOfOne");
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
@@ -68,7 +66,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testOmitAttributesOneOfMore1() {
     System.out.println("testOmitAttributesOneOfMore1");
     final Regexp<AbstractNode> element = Regexp.getToken((AbstractNode) new Element(null, "lala", null, null));
@@ -80,7 +77,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testOmitAttributesOneOfMore2() {
     System.out.println("testOmitAttributesOneOfMore2");
     final Regexp<AbstractNode> element = Regexp.getToken((AbstractNode) new Element(null, "lala", null, null));
@@ -92,7 +88,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testOmitAttributesOneOfMore3() {
     System.out.println("testOmitAttributesOneOfMore3");
     final Regexp<AbstractNode> element = Regexp.getToken((AbstractNode) new Element(null, "lala", null, null));
@@ -104,7 +99,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testOmitAttributesAllOfMore() {
     System.out.println("testOmitAttributesAllOfMore");
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
@@ -121,7 +115,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testContainsPCDATANoneOfOne() {
     System.out.println("testContainsPCDATANoneOfOne");
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
@@ -131,7 +124,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testContainsPCDATAOneOfOne() {
     System.out.println("testContainsPCDATAOneOfOne");
     final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, null));
@@ -141,7 +133,6 @@ public class DTDUtilsTest {
   }
 
   @Test
-  @SuppressWarnings("unchecked")
   public void testContainsPCDATAOneOfMore() {
     System.out.println("testContainsPCDATAOneOfMore");
     final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, null));

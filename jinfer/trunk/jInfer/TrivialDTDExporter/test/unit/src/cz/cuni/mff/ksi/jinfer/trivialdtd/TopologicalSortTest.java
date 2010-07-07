@@ -34,9 +34,6 @@ import static org.junit.Assert.*;
  */
 public class TopologicalSortTest {
 
-  public TopologicalSortTest() {
-  }
-
   @Test(expected=NullPointerException.class)
   public void testNull() {
     final TopologicalSort s = new TopologicalSort(null);
@@ -55,7 +52,7 @@ public class TopologicalSortTest {
             new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
     final TopologicalSort s = new TopologicalSort(Arrays.asList(e));
     final List<Element> elements = s.sort();
-    assertTrue(elements.size() == 1);
+    assertEquals(1, elements.size());
     assertEquals(e, elements.get(0));
   }
 
@@ -95,8 +92,8 @@ public class TopologicalSortTest {
     final TopologicalSort s = new TopologicalSort(elements);
     final List<Element> toposorted = s.sort();
 
-    assertTrue(toposorted.size() == 8);
-    
+    assertEquals(8, toposorted.size());
+
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e2));
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e3));
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e4));
@@ -127,7 +124,7 @@ public class TopologicalSortTest {
     final TopologicalSort s = new TopologicalSort(elements);
     final List<Element> toposorted = s.sort();
 
-    assertTrue(toposorted.size() == 2);
+    assertEquals(2, toposorted.size());
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e2));
     assertTrue(toposorted.indexOf(e1) > toposorted.indexOf(e3));
     assertTrue(toposorted.indexOf(e2) > toposorted.indexOf(e4));

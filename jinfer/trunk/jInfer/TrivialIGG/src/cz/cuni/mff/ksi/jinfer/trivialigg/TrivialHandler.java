@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -97,7 +98,7 @@ public class TrivialHandler extends DefaultHandler {
   public void characters(final char[] ch, final int start, final int length) throws SAXException {
     super.characters(ch, start, length);
     final String text = String.copyValueOf(ch, start, length).trim();
-    if ("".equals(text)) {
+    if (BaseUtils.isEmpty(text)) {
       return;
     }
     if (stack.peek().getType().equals(NodeType.ELEMENT)) {
@@ -114,7 +115,7 @@ public class TrivialHandler extends DefaultHandler {
 
   private List<String> getContext() {
     if (stack.isEmpty()) {
-      return new ArrayList<String>();
+      return new ArrayList<String>(0);
     }
     final List<String> ret = new ArrayList<String>(stack.peek().getContext());
     ret.add(stack.peek().getName());

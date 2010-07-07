@@ -61,7 +61,7 @@ public class IGGeneratorImpl implements IGGenerator {
 
   private static List<AbstractNode> getRulesFromDocuments(final Collection<File> files) {
     if (files.isEmpty()) {
-      return new ArrayList<AbstractNode>();
+      return new ArrayList<AbstractNode>(0);
     }
 
     final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
@@ -74,20 +74,16 @@ public class IGGeneratorImpl implements IGGenerator {
         parser.parse(doc, handler);
       }
       return handler.getRules();
-    } catch (final ParserConfigurationException ex) {
-      LOG.error(null, ex);
-    } catch (final SAXException ex) {
-      LOG.error(null, ex);
-    } catch (final IOException ex) {
-      LOG.error(null, ex);
+    } catch (final Exception e) {
+      LOG.error(null, e);
     }
 
-    return new ArrayList<AbstractNode>();
+    return new ArrayList<AbstractNode>(0);
   }
 
   private static List<AbstractNode> getRulesFromSchemas(final Collection<File> files) {
     if (files.isEmpty()) {
-      return new ArrayList<AbstractNode>();
+      return new ArrayList<AbstractNode>(0);
     }
 
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
@@ -103,9 +99,9 @@ public class IGGeneratorImpl implements IGGenerator {
 
   private static List<AbstractNode> getRulesFromQueries(final Collection<File> files) {
     if (files.isEmpty()) {
-      return new ArrayList<AbstractNode>();
+      return new ArrayList<AbstractNode>(0);
     }
 
-    return new ArrayList<AbstractNode>();
+    return new ArrayList<AbstractNode>(0);
   }
 }

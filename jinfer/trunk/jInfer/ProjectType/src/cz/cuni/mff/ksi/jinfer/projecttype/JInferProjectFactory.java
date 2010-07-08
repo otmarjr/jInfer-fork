@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import java.io.File;
@@ -31,11 +30,12 @@ import org.openide.filesystems.FileUtil;
  *
  * @author sviro
  */
-@org.openide.util.lookup.ServiceProvider(service=ProjectFactory.class)
+@org.openide.util.lookup.ServiceProvider(service = ProjectFactory.class)
 public class JInferProjectFactory implements ProjectFactory {
 
   public static final String PROJECT_DIR = "jinferproject";
   public static final String PROJECT_PROPFILE = "project.properties";
+  public static final String PROJECT_INPUTFILE = "input.files";
 
   @Override
   public boolean isProject(FileObject projectDirectory) {
@@ -47,26 +47,34 @@ public class JInferProjectFactory implements ProjectFactory {
     return isProject(dir) ? new JInferProject(dir, ps) : null;
   }
 
-
   @Override
   public void saveProject(final Project project) throws IOException, ClassCastException {
     FileObject projectRoot = project.getProjectDirectory();
     if (projectRoot.getFileObject(PROJECT_DIR) == null) {
-        throw new IOException ("Project dir " + projectRoot.getPath() + " deleted," +
-                " cannot save project");
+      throw new IOException("Project dir " + projectRoot.getPath() + " deleted,"
+              + " cannot save project");
     }
-    
+
     ((JInferProject) project).getOutputFolder(true);
 
     String propertiesPath = PROJECT_DIR + "/" + PROJECT_PROPFILE;
     FileObject propertiesFile = projectRoot.getFileObject(propertiesPath);
     if (propertiesFile == null) {
-      propertiesFile = projectRoot.createData(propertiesPath);
+      propertiesFile = projectRoot.getFileObject(PROJECT_DIR).createData(PROJECT_PROPFILE);
     }
 
     Properties properties = project.getLookup().lookup(Properties.class);
     File f = FileUtil.toFile(propertiesFile);
     properties.store(new FileOutputStream(f), "JInfer project properties");
-  }
 
+    String inputFilesPath = PROJECT_DIR + "/" + PROJECT_INPUTFILE;
+    FileObject inputFilesFile = projectRoot.getFileObject(inputFilesPath);
+    if (inputFilesFile == null) {
+      inputFilesFile = projectRoot.getFileObject(PROJECT_DIR).createData(PROJECT_INPUTFILE);
+    }
+
+    Input input = project.getLookup().lookup(Input.class);
+    f = FileUtil.toFile(inputFilesFile);
+    input.store(new FileOutputStream(f));
+  }
 }

@@ -37,7 +37,7 @@ import org.openide.util.lookup.ProxyLookup;
  */
 public class JInferLogicalView implements LogicalViewProvider {
 
-  private static final class InputNode extends FilterNode {
+  private final class InputNode extends FilterNode {
 
     final JInferProject project;
 
@@ -55,8 +55,6 @@ public class JInferLogicalView implements LogicalViewProvider {
     public Image getOpenedIcon(int type) {
       return getIcon(type);
     }
-
-
   }
 
   private final class RootNode extends AbstractNode {
@@ -69,7 +67,7 @@ public class JInferLogicalView implements LogicalViewProvider {
         @Override
         protected void addNotify() {
           Input input = JInferLogicalView.this.project.getLookup().lookup(Input.class);
-          setKeys(new Node[]{new FolderNode("xml", input.getDocuments()), new FolderNode("schema", input.getSchemas()), new FolderNode("query", input.getQueries()), new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(), project)});
+          setKeys(new Node[]{new FolderNode(JInferLogicalView.this.project, "xml", input.getDocuments()), new FolderNode(JInferLogicalView.this.project, "schema", input.getSchemas()), new FolderNode(JInferLogicalView.this.project, "query", input.getQueries()), new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(), project)});
         }
 
         @Override
@@ -105,7 +103,6 @@ public class JInferLogicalView implements LogicalViewProvider {
       nodeActions[3] = CommonProjectActions.closeProjectAction();
       return nodeActions;
     }
-
   }
   private final JInferProject project;
 

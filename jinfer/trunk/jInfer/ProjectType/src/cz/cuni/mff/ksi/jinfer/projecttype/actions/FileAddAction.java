@@ -16,15 +16,16 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileChooserBuilder;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
@@ -39,10 +40,12 @@ public class FileAddAction extends AbstractAction {
   private static final long serialVersionUID = 12121452l;
   private final Collection<FileObject> files;
   private final Node node;
+  private final JInferProject project;
 
-  public FileAddAction(final Node node, final Collection<FileObject> files) {
+  public FileAddAction(final JInferProject project, final Node node, final Collection<FileObject> files) {
     super();
     putValue(NAME, "Add file");
+    this.project = project;
     this.files = files;
     this.node = node;
   }
@@ -51,24 +54,25 @@ public class FileAddAction extends AbstractAction {
   public void actionPerformed(final ActionEvent e) {
     final String type = ((FolderNode) node).getDisplayName();
     FileFilter fileFilter = null;
-    if ("XML".equals(type)) {
+    if ("xml".equals(type)) {
       fileFilter = new FileNameExtensionFilter("XML files", "xml");
-    } else if ("XSD".equals(type)) {
+    } else if ("schema".equals(type)) {
       fileFilter = new FileNameExtensionFilter("XSD files", "xsd");
-    } else if ("QUERIES".equals(type)) {
+    } else if ("query".equals(type)) {
       fileFilter = new FileNameExtensionFilter("QUERY files", "query");
     }
 
-    File[] selectedFiles = new FileChooserBuilder(FileAddAction.class).
-            setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
+    File[] selectedFiles = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add " + type + " files").setFileFilter(fileFilter).showMultiOpenDialog();
 
-    if(selectedFiles != null) {
+    if (selectedFiles != null) {
       for (File file : selectedFiles) {
         files.add(FileUtil.toFileObject(file));
       }
 
       ((FileChildren) node.getChildren()).addNotify();
+      
+      project.getLookup().lookup(ProjectState.class).markModified();
     }
   }
 }

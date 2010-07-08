@@ -1,6 +1,7 @@
 
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FileAddAction;
 import java.awt.Image;
 import java.util.Collection;
@@ -18,9 +19,11 @@ public class FolderNode extends AbstractNode {
 
   private final String folderName;
   private final Collection<FileObject> files;
+  private final JInferProject project;
 
-  public FolderNode(String folderName, Collection<FileObject> files) {
+  public FolderNode(final JInferProject project, final String folderName, final Collection<FileObject> files) {
     super(new FileChildren(files));
+    this.project = project;
     this.folderName = folderName;
     this.files = files;
   }
@@ -42,7 +45,7 @@ public class FolderNode extends AbstractNode {
 
   @Override
   public Action[] getActions(boolean context) {
-    return new Action[] {new FileAddAction(this, files)};
+    return new Action[] {new FileAddAction(project, this, files)};
   }
 
 }

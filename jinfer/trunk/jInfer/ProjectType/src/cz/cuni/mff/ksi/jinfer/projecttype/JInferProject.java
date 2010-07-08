@@ -105,7 +105,17 @@ public class JInferProject implements Project {
   }
 
   private Input loadInput() {
-    Input input = new Input(new ArrayList<FileObject>(), new ArrayList<FileObject>(), new ArrayList<FileObject>());
+    FileObject inputFilesFileOb = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
+            + "/" + JInferProjectFactory.PROJECT_INPUTFILE);
+
+    Input input = new Input();
+    if (inputFilesFileOb != null) {
+      try {
+        input.load(inputFilesFileOb.getInputStream());
+      } catch (Exception e) {
+        Exceptions.printStackTrace(e);
+      }
+    }
     //TODO load input files from project properties
     return input;
   }
@@ -164,7 +174,7 @@ public class JInferProject implements Project {
 
     private String[] supported = new String[]{
       ActionProvider.COMMAND_DELETE,
-      ActionProvider.COMMAND_COPY,};
+      ActionProvider.COMMAND_COPY};
 
     @Override
     public String[] getSupportedActions() {

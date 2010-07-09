@@ -30,7 +30,7 @@ public class FileChildren extends Children.Keys<FileObject>{
   @Override
   protected Node[] createNodes(FileObject fileOb) {
     try {
-      return new Node[]{DataObject.find(fileOb).getNodeDelegate()};
+      return new Node[]{new FileNode(DataObject.find(fileOb).getNodeDelegate())};
     } catch (DataObjectNotFoundException ex) {
       throw new NoDataObjectException(ex.getMessage());
     }

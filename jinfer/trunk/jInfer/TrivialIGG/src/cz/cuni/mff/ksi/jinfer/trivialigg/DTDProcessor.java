@@ -69,7 +69,9 @@ public final class DTDProcessor {
   }
 
   private static Element processElement(final ElementType e) {
-    final Element ret = new Element(null, e.name.getLocalName(), null, Regexp.<AbstractNode>getConcatenation());
+    final Map<String, Object> elementAttrs = new HashMap<String, Object>(1);
+    elementAttrs.put("from.schema", Boolean.TRUE);
+    final Element ret = new Element(null, e.name.getLocalName(), elementAttrs, Regexp.<AbstractNode>getConcatenation());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {

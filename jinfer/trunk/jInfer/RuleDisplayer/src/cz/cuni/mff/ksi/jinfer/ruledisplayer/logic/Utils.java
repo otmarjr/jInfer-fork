@@ -36,9 +36,12 @@ public final class Utils {
 
   private Utils() { }
 
+  // TODO vektor Choose some sensible defaults
   public static final Color COLOR_ELEMENT = Color.gray;
   public static final Color COLOR_ATTRIBUTE = Color.blue;
   public static final Color COLOR_SIMPLE_DATA = Color.red;
+  public static final Color COLOR_CONCATENATION = Color.red;
+  public static final Color COLOR_ALTERNATION = Color.blue;
 
   public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png");
   public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/dots.png");
@@ -54,6 +57,14 @@ public final class Utils {
 
   public static Color getColorSimpleData() {
     return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("simple.data.color", String.valueOf(COLOR_SIMPLE_DATA.getRGB())));
+  }
+
+  public static Color getColorConcatenation() {
+    return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("concatenation.color", String.valueOf(COLOR_CONCATENATION.getRGB())));
+  }
+
+  public static Color getColorAlternation() {
+    return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("alternation.color", String.valueOf(COLOR_ALTERNATION.getRGB())));
   }
 
   public static Color getNodeColor(final AbstractNode n) {

@@ -37,6 +37,9 @@ import java.util.prefs.Preferences;
  */
 public class NodePainter {
 
+  // TODO vektor
+  // - Kleene is broken
+
   /** Maximum nesting level. */
   private final int maxLevel;
   
@@ -44,8 +47,11 @@ public class NodePainter {
 
   private final Graphics2D graphics;
 
+  private final int margin;
+
   public NodePainter(final Graphics2D graphics) {
     this.maxLevel = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25);
+    this.margin = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("margin", 2);
     this.graphics = graphics;
   }
 
@@ -68,12 +74,12 @@ public class NodePainter {
     final int height;
 
     if (children != null) {
-      width =  nameWidth + 10 + children.getWidth(null) + 1;
-      height = Math.max(children.getHeight(null), fm.getHeight()) + 5;
+      width =  Math.max(nameWidth, children.getWidth(null)) + 2 * margin;
+      height = children.getHeight(null) + fm.getHeight() + 3 * margin;
     }
     else {
-      width = nameWidth + 1;
-      height = fm.getHeight() + 1;
+      width = nameWidth + 2 * margin;
+      height = fm.getHeight() + 2 * margin;
     }
 
     final BufferedImage ret = Utils.getImage(width, height);
@@ -81,16 +87,14 @@ public class NodePainter {
     final Graphics2D g = ret.createGraphics();
 
     g.setColor(Utils.getNodeColor(n));
-    g.fillRect(0, 0, nameWidth + 10, fm.getHeight());
+    g.fillRect(0, 0, width, height);
     g.setColor(Color.white);
-    g.drawString(n.getName(), 1, nameHeight);
+    g.drawString(n.getName(), margin, nameHeight + margin);
     g.setColor(Color.black);
     g.drawRect(0, 0, width - 1, height - 1);
 
     if (children != null) {
-      g.setColor(Color.white);
-      Utils.drawArrow(g, nameWidth, fm.getHeight());
-      g.drawImage(children, nameWidth + 10, 4, null);
+      g.drawImage(children, margin, fm.getHeight() + 2 * margin, null);
     }
     return ret;
   }
@@ -121,11 +125,13 @@ public class NodePainter {
 
   private Image drawKleene(final Regexp<AbstractNode> subnodes, final int level) {
     final Image kleene = drawNode(subnodes.getChild(0).getContent(), level + 1);
-    final BufferedImage kleeneRet = Utils.getImage(kleene.getWidth(null) + 10, kleene.getHeight(null));
+    final BufferedImage kleeneRet = Utils.getImage(
+            kleene.getWidth(null) + 10 + 2 * margin,
+            kleene.getHeight(null) + 2 * margin);
     final Graphics2D g = kleeneRet.createGraphics();
-    g.drawImage(kleene, 0, 0, null);
+    g.drawImage(kleene, margin, margin, null);
     g.setColor(Color.black);
-    g.drawString("*", kleene.getWidth(null), 10);
+    g.drawString("*", kleene.getWidth(null) + 10 + margin, margin);
     return kleeneRet;
   }
 
@@ -153,17 +159,18 @@ public class NodePainter {
     int height = 0;
     for (final Image img : altImgs) {
       width = Math.max(width, img.getWidth(null));
-      height += img.getHeight(null) + 1;
+      height += img.getHeight(null) + margin;
     }
-    final BufferedImage altRet = Utils.getImage(width + 3, height);
+    final BufferedImage altRet = Utils.getImage(width + 2 * margin, height + margin);
     final Graphics2D g = altRet.createGraphics();
-    int offset = 0;
+    g.setColor(Utils.getColorAlternation());
+    g.fillRect(0, 0, width + 2 * margin, height + margin);
+
+    int offset = margin;
     for (final Image img : altImgs) {
-      g.drawImage(img, 3, offset, null);
-      offset += img.getHeight(null) + 1;
+      g.drawImage(img, margin, offset, null);
+      offset += img.getHeight(null) + margin;
     }
-    g.setColor(Color.blue);
-    g.drawLine(1, 0, 1, height - 1);
     return altRet;
   }
 
@@ -176,18 +183,19 @@ public class NodePainter {
     int width = 0;
     int height = 0;
     for (final Image img : concatImgs) {
-      width += img.getWidth(null) + 1;
+      width += img.getWidth(null) + margin;
       height = Math.max(height, img.getHeight(null));
     }
-    final BufferedImage concatRet = Utils.getImage(width, height + 3);
+    final BufferedImage concatRet = Utils.getImage(width + margin, height + 2 * margin);
     final Graphics2D g = concatRet.createGraphics();
-    int offset = 0;
+    g.setColor(Utils.getColorConcatenation());
+    g.fillRect(0, 0, width + margin, height + 2 * margin);
+
+    int offset = margin;
     for (final Image img : concatImgs) {
-      g.drawImage(img, offset, 3, null);
-      offset += img.getWidth(null) + 1;
+      g.drawImage(img, offset, margin, null);
+      offset += img.getWidth(null) + margin;
     }
-    g.setColor(Color.red);
-    g.drawLine(0, 1, width - 1, 1);
     return concatRet;
   }
 

@@ -107,6 +107,8 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     jLabel2 = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
     jLabel4 = new javax.swing.JLabel();
+    jLabel5 = new javax.swing.JLabel();
+    jLabel6 = new javax.swing.JLabel();
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel1.text")); // NOI18N
 
@@ -122,6 +124,14 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     jLabel4.setForeground(Utils.getColorSimpleData());
     org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel4.text")); // NOI18N
 
+    jLabel5.setFont(jLabel5.getFont().deriveFont(jLabel5.getFont().getStyle() | java.awt.Font.BOLD));
+    jLabel5.setForeground(Utils.getColorConcatenation());
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel5.text")); // NOI18N
+
+    jLabel6.setFont(jLabel6.getFont().deriveFont(jLabel6.getFont().getStyle() | java.awt.Font.BOLD));
+    jLabel6.setForeground(Utils.getColorAlternation());
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel6.text")); // NOI18N
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -129,7 +139,7 @@ public final class RuleDisplayerTopComponent extends TopComponent {
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(panels, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+          .addComponent(panels, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
           .addGroup(layout.createSequentialGroup()
             .addComponent(jLabel1)
             .addGap(18, 18, 18)
@@ -137,7 +147,11 @@ public final class RuleDisplayerTopComponent extends TopComponent {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jLabel3)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel4)))
+            .addComponent(jLabel4)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jLabel5)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(jLabel6)))
         .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -150,7 +164,9 @@ public final class RuleDisplayerTopComponent extends TopComponent {
           .addComponent(jLabel1)
           .addComponent(jLabel2)
           .addComponent(jLabel3)
-          .addComponent(jLabel4))
+          .addComponent(jLabel4)
+          .addComponent(jLabel5)
+          .addComponent(jLabel6))
         .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
@@ -159,6 +175,8 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
+  private javax.swing.JLabel jLabel5;
+  private javax.swing.JLabel jLabel6;
   private javax.swing.JTabbedPane panels;
   // End of variables declaration//GEN-END:variables
 

@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -29,6 +30,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 import javax.swing.UIManager;
 
 /**
@@ -38,7 +40,10 @@ import javax.swing.UIManager;
  */
 public class RulePainter {
 
-  private static final int MAX_LEVEL = 25;
+  /** Maximum nesting level. */
+  private final int maxLevel;
+  /** Maximum rules drawn (in each cluster). */
+  private final int maxRules;
 
   private final Component root;
   private Image image;
@@ -46,6 +51,8 @@ public class RulePainter {
 
   public RulePainter(final Component root) {
     this.root = root;
+    maxLevel = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25);
+    maxRules = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.rules", 50);
   }
 
   /**
@@ -92,10 +99,17 @@ public class RulePainter {
       return null;
     }
 
+    final List<AbstractNode> rulesUsed;
+    if (rules.size() > maxRules) {
+      rulesUsed = rules.subList(0, maxRules);
+    } else {
+      rulesUsed = rules;
+    }
+
     final List<Image> ruleImgs = new ArrayList<Image>(rules.size());
     int width = 0;
     int height = 0;
-    for (final AbstractNode a : rules) {
+    for (final AbstractNode a : rulesUsed) {
       final Image i = drawNode(a, 0);
       ruleImgs.add(i);
       width = Math.max(width, i.getWidth(null));
@@ -114,7 +128,7 @@ public class RulePainter {
   }
 
   private Image drawNode(final AbstractNode n, final int level) {
-    if (level > MAX_LEVEL) {
+    if (level > maxLevel) {
       return Utils.DOTS;
     }
 
@@ -171,7 +185,7 @@ public class RulePainter {
   }
 
   private Image drawRegexp(final Regexp<AbstractNode> subnodes, final int level) {
-    if (level > MAX_LEVEL) {
+    if (level > maxLevel) {
       return Utils.DOTS;
     }
     switch (subnodes.getType()) {

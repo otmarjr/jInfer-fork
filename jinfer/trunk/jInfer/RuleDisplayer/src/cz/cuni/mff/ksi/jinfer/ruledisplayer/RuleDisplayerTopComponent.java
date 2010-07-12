@@ -111,15 +111,15 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel1.text")); // NOI18N
 
     jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getStyle() | java.awt.Font.BOLD));
-    jLabel2.setForeground(Utils.COLOR_ELEMENT);
+    jLabel2.setForeground(Utils.getColorElement());
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel2.text")); // NOI18N
 
     jLabel3.setFont(jLabel3.getFont().deriveFont(jLabel3.getFont().getStyle() | java.awt.Font.BOLD));
-    jLabel3.setForeground(Utils.COLOR_ATTRIBUTE);
+    jLabel3.setForeground(Utils.getColorAttribute());
     org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel3.text")); // NOI18N
 
     jLabel4.setFont(jLabel4.getFont().deriveFont(jLabel4.getFont().getStyle() | java.awt.Font.BOLD));
-    jLabel4.setForeground(Utils.COLOR_SIMPLE_DATA);
+    jLabel4.setForeground(Utils.getColorSimpleData());
     org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel4.text")); // NOI18N
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

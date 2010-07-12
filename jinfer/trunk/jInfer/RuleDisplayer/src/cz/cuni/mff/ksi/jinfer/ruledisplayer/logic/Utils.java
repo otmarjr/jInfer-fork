@@ -17,11 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 
@@ -33,7 +35,7 @@ import javax.swing.UIManager;
 public final class Utils {
 
   private Utils() { }
-  
+
   public static final Color COLOR_ELEMENT = Color.gray;
   public static final Color COLOR_ATTRIBUTE = Color.blue;
   public static final Color COLOR_SIMPLE_DATA = Color.red;
@@ -42,14 +44,26 @@ public final class Utils {
   public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/dots.png");
   public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/arrow.png");
 
+  public static Color getColorElement() {
+    return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("element.color", String.valueOf(COLOR_ELEMENT.getRGB())));
+  }
+
+  public static Color getColorAttribute() {
+    return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("attribute.color", String.valueOf(COLOR_ATTRIBUTE.getRGB())));
+  }
+
+  public static Color getColorSimpleData() {
+    return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("simple.data.color", String.valueOf(COLOR_SIMPLE_DATA.getRGB())));
+  }
+
   public static Color getNodeColor(final AbstractNode n) {
     switch (n.getType()) {
       case ELEMENT:
-        return COLOR_ELEMENT;
+        return getColorElement();
       case ATTRIBUTE:
-        return COLOR_ATTRIBUTE;
+        return getColorAttribute();
       case SIMPLE_DATA:
-        return COLOR_SIMPLE_DATA;
+        return getColorSimpleData();
       default:
         throw new IllegalArgumentException();
     }

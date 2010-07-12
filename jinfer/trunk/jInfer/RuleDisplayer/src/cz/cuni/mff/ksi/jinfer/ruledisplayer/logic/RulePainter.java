@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Color;
 import java.awt.Component;
@@ -68,6 +69,7 @@ public class RulePainter {
     final List<Image> clusterImgs = new ArrayList<Image>(clusters.size());
     int width = 0;
     int height = 0;
+    
     for (final Pair<AbstractNode, List<AbstractNode>> p : clusters) {
       final Image i = drawRules(p.getSecond());
       clusterImgs.add(i);
@@ -100,20 +102,29 @@ public class RulePainter {
     }
 
     final List<AbstractNode> rulesUsed;
+    final boolean rulesTrimmed;
     if (rules.size() > maxRules) {
       rulesUsed = rules.subList(0, maxRules);
+      rulesTrimmed = true;
     } else {
       rulesUsed = rules;
+      rulesTrimmed = false;
     }
 
     final List<Image> ruleImgs = new ArrayList<Image>(rules.size());
     int width = 0;
     int height = 0;
+    
     for (final AbstractNode a : rulesUsed) {
       final Image i = drawNode(a, 0);
       ruleImgs.add(i);
       width = Math.max(width, i.getWidth(null));
       height += i.getHeight(null) + 2;
+    }
+
+    if (rulesTrimmed) {
+      ruleImgs.add(Utils.DOTS);
+      height += Utils.DOTS.getHeight(null) + 2;
     }
 
     final BufferedImage ret = Utils.getImage(width, height);
@@ -222,7 +233,7 @@ public class RulePainter {
   }
 
   private Image drawAlternation(final Regexp<AbstractNode> subnodes, final int level) {
-    if (subnodes.getChildren().size() == 0) {
+    if (BaseUtils.isEmpty(subnodes.getChildren())) {
       return null;
     }
     
@@ -246,7 +257,7 @@ public class RulePainter {
   }
 
   private Image drawConcatenation(final Regexp<AbstractNode> subnodes, final int level) {
-    if (subnodes.getChildren().size() == 0) {
+    if (BaseUtils.isEmpty(subnodes.getChildren())) {
       return null;
     }
     

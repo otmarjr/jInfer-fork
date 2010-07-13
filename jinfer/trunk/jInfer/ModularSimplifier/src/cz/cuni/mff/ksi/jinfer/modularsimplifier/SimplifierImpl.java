@@ -44,7 +44,7 @@ import org.openide.windows.WindowManager;
 @ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
 
-  private static Logger LOG = Logger.getLogger(Simplifier.class);
+  private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
   @Override
   public String getModuleName() {
@@ -83,12 +83,12 @@ public class SimplifierImpl implements Simplifier {
       return;
     }
 
-    showRulesAsync("Original", initialGrammar);
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
-    showClustersAsync("Clustered", clustered);
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
-    showRulesAsync("Processed", processed);
     final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
+    showRulesAsync("Original", initialGrammar);
+    showClustersAsync("Clustered", clustered);
+    showRulesAsync("Processed", processed);
     showRulesAsync("Kleened", kleened);
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 

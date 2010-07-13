@@ -49,6 +49,9 @@ public final class RuleDisplayerPanel extends JPanel {
     jLabel11 = new javax.swing.JLabel();
     margin = new javax.swing.JSpinner();
     jLabel12 = new javax.swing.JLabel();
+    jLabel13 = new javax.swing.JLabel();
+    maxPanels = new javax.swing.JSpinner();
+    jLabel14 = new javax.swing.JLabel();
     panelColors = new javax.swing.JPanel();
     jLabel5 = new javax.swing.JLabel();
     panelElement = new javax.swing.JPanel();
@@ -72,7 +75,7 @@ public final class RuleDisplayerPanel extends JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelBehaviour.add(jLabel1, gridBagConstraints);
@@ -81,7 +84,7 @@ public final class RuleDisplayerPanel extends JPanel {
     nestingLevel.setPreferredSize(new java.awt.Dimension(60, 18));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelBehaviour.add(nestingLevel, gridBagConstraints);
@@ -90,6 +93,7 @@ public final class RuleDisplayerPanel extends JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel2.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelBehaviour.add(jLabel2, gridBagConstraints);
@@ -97,7 +101,7 @@ public final class RuleDisplayerPanel extends JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel3.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelBehaviour.add(jLabel3, gridBagConstraints);
@@ -106,7 +110,7 @@ public final class RuleDisplayerPanel extends JPanel {
     maxRules.setPreferredSize(new java.awt.Dimension(60, 18));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelBehaviour.add(maxRules, gridBagConstraints);
@@ -115,7 +119,7 @@ public final class RuleDisplayerPanel extends JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel4.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelBehaviour.add(jLabel4, gridBagConstraints);
@@ -123,7 +127,7 @@ public final class RuleDisplayerPanel extends JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel11.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelBehaviour.add(jLabel11, gridBagConstraints);
@@ -132,7 +136,7 @@ public final class RuleDisplayerPanel extends JPanel {
     margin.setPreferredSize(new java.awt.Dimension(60, 18));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelBehaviour.add(margin, gridBagConstraints);
 
@@ -140,10 +144,36 @@ public final class RuleDisplayerPanel extends JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel12.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelBehaviour.add(jLabel12, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel13.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    panelBehaviour.add(jLabel13, gridBagConstraints);
+
+    maxPanels.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+    maxPanels.setPreferredSize(new java.awt.Dimension(60, 18));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelBehaviour.add(maxPanels, gridBagConstraints);
+
+    jLabel14.setFont(jLabel14.getFont().deriveFont((jLabel14.getFont().getStyle() | java.awt.Font.ITALIC)));
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel14.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    panelBehaviour.add(jLabel14, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -366,11 +396,11 @@ public final class RuleDisplayerPanel extends JPanel {
     fill.setLayout(fillLayout);
     fillLayout.setHorizontalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 502, Short.MAX_VALUE)
+      .addGap(0, 531, Short.MAX_VALUE)
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 19, Short.MAX_VALUE)
+      .addGap(0, 14, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -425,6 +455,7 @@ public final class RuleDisplayerPanel extends JPanel {
   }//GEN-LAST:event_panelAlternationMouseClicked
 
   public void load() {
+    maxPanels.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.panels", 10));
     nestingLevel.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25));
     maxRules.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.rules", 50));
     margin.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("margin", 2));
@@ -437,6 +468,7 @@ public final class RuleDisplayerPanel extends JPanel {
   }
 
   public void store() {
+    Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("max.panels", ((Integer) maxPanels.getValue()).intValue());
     Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("nesting.level", ((Integer) nestingLevel.getValue()).intValue());
     Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("max.rules", ((Integer) maxRules.getValue()).intValue());
     Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("margin", ((Integer) margin.getValue()).intValue());
@@ -457,6 +489,8 @@ public final class RuleDisplayerPanel extends JPanel {
   private javax.swing.JLabel jLabel10;
   private javax.swing.JLabel jLabel11;
   private javax.swing.JLabel jLabel12;
+  private javax.swing.JLabel jLabel13;
+  private javax.swing.JLabel jLabel14;
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
@@ -466,6 +500,7 @@ public final class RuleDisplayerPanel extends JPanel {
   private javax.swing.JLabel jLabel8;
   private javax.swing.JLabel jLabel9;
   private javax.swing.JSpinner margin;
+  private javax.swing.JSpinner maxPanels;
   private javax.swing.JSpinner maxRules;
   private javax.swing.JSpinner nestingLevel;
   private javax.swing.JPanel panelAlternation;

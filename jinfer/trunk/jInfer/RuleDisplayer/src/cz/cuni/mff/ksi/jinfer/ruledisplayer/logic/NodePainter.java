@@ -39,6 +39,7 @@ public class NodePainter {
 
   // TODO vektor
   // - Kleene is broken
+  // - scrolling artifacts
 
   /** Maximum nesting level. */
   private final int maxLevel;
@@ -137,6 +138,7 @@ public class NodePainter {
 
   private List<Image> getChildrenImages(final List<Regexp<AbstractNode>> children, final int level) {
     final List<Image> ret = new ArrayList<Image>(children.size());
+    int count = 0;
     for (final Regexp<AbstractNode> child : children) {
       final Image childImg = drawRegexp(child, level + 1);
       if (childImg != null) {
@@ -144,6 +146,10 @@ public class NodePainter {
       }
       else {
         ret.add(Utils.LAMBDA);
+      }
+      if (count >= maxLevel) {
+        ret.add(Utils.DOTS);
+        return ret;
       }
     }
     return ret;

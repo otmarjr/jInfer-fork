@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.ruledisplayer;
 
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.RulePainter;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.Utils;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.InputEvent;
@@ -25,6 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Properties;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.openide.util.NbBundle;
@@ -44,6 +46,8 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   private static RuleDisplayerTopComponent instance;
   private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/icon16.png";
   private static final String PREFERRED_ID = "RuleDisplayerTopComponent";
+
+  private int panelSequence = 0;
 
   public RuleDisplayerTopComponent() {
     super();
@@ -79,7 +83,13 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   public RulePainter createNewPanel(final String name) {
     final RulePanel panel = new RulePanel();
     final JScrollPane jsp = new JScrollPane(panel);
-    panels.add(name, jsp);
+    panelSequence++;
+    panels.add(name + " [" + panelSequence + "]", jsp);
+
+    if (panels.getTabCount() > Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.panels", 10)) {
+      panels.remove(0);
+    }
+
     return panel.getRulePainter();
   }
 

@@ -38,7 +38,7 @@ public class Installer extends ModuleInstall {
 
   private static class Log4jOutputWindowAppender extends AppenderSkeleton {
 
-    public Log4jOutputWindowAppender(final Layout layout) {
+    private Log4jOutputWindowAppender(final Layout layout) {
       this.setLayout(layout);
     }
 
@@ -64,9 +64,9 @@ public class Installer extends ModuleInstall {
   public void restored() {
     // Configure log4j
     PropertyConfigurator.configure("log4j.properties");
-    PatternLayout outputWindowLayout = new PatternLayout("%m%n");
-    Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
-    Logger ROOTLOG = Logger.getRootLogger();
+    final PatternLayout outputWindowLayout = new PatternLayout("%m%n");
+    final Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
+    final Logger ROOTLOG = Logger.getRootLogger();
     ROOTLOG.addAppender(outputWindowAppender);
     LOG = Logger.getLogger(Installer.class);
     LOG.info("Log initialized.");

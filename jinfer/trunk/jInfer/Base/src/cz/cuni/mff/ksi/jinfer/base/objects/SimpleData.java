@@ -32,7 +32,12 @@ public class SimpleData extends AbstractContentNode {
           final Map<String, Object> attributes,
           final String contentType,
           final List<? extends Object> content) {
-    super(context, name, NodeType.SIMPLE_DATA, attributes, contentType, content);
+    super(context, name, attributes, contentType, content);
+  }
+
+  @Override
+  public NodeType getType() {
+    return NodeType.SIMPLE_DATA;
   }
 
 }

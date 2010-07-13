@@ -34,11 +34,10 @@ public abstract class AbstractContentNode<T> extends AbstractNode {
 
   public AbstractContentNode(final List<String> context,
           final String name,
-          final NodeType type,
           final Map<String, Object> attributes,
           final String contentType,
           final List<T> content) {
-    super(context, name, type, attributes);
+    super(context, name, attributes);
     this.contentType = contentType;
     this.content = content;
   }

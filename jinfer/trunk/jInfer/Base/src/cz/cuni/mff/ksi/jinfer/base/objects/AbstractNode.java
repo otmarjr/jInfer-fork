@@ -30,19 +30,14 @@ public abstract class AbstractNode {
   private final List<String> context;
   /** Name of this node. */
   private final String name;
-  /** Type of this node. */
-  // TODO vektor Convert to abstract method getType()
-  private final NodeType type;
   /** List of unspecific attributes assigned to this node. */
   private final Map<String, Object> attributes;
 
   public AbstractNode(final List<String> context,
           final String name,
-          final NodeType type,
           final Map<String, Object> attributes) {
     this.context = context;
     this.name = name;
-    this.type = type;
     this.attributes = attributes;
   }
 
@@ -54,24 +49,22 @@ public abstract class AbstractNode {
     return name;
   }
 
-  public NodeType getType() {
-    return type;
-  }
+  public abstract NodeType getType();
 
   public Map<String, Object> getAttributes() {
     return attributes;
   }
 
   public boolean isElement() {
-    return NodeType.ELEMENT.equals(type);
+    return NodeType.ELEMENT.equals(getType());
   }
 
   public boolean isAttribute() {
-    return NodeType.ATTRIBUTE.equals(type);
+    return NodeType.ATTRIBUTE.equals(getType());
   }
 
   public boolean isSimpleData() {
-    return NodeType.SIMPLE_DATA.equals(type);
+    return NodeType.SIMPLE_DATA.equals(getType());
   }
 
   @Override
@@ -86,7 +79,7 @@ public abstract class AbstractNode {
     // + name
     ret.append(name);
     // type
-    ret.append(": ").append(type);
+    ret.append(": ").append(getType());
     return ret.toString();
   }
 

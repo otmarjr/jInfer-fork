@@ -36,8 +36,13 @@ public class Element extends AbstractNode {
           final String name,
           final Map<String, Object> attributes,
           final Regexp<AbstractNode> subnodes) {
-    super(context, name, NodeType.ELEMENT, attributes);
+    super(context, name, attributes);
     this.subnodes = subnodes;
+  }
+
+  @Override
+  public NodeType getType() {
+    return NodeType.ELEMENT;
   }
 
   public Regexp<AbstractNode> getSubnodes() {

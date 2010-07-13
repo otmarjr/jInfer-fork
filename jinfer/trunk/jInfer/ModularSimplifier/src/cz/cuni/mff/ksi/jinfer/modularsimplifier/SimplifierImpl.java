@@ -83,12 +83,12 @@ public class SimplifierImpl implements Simplifier {
       return;
     }
 
-    final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
-    final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
-    final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
     showRulesAsync("Original", initialGrammar);
+    final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
     showClustersAsync("Clustered", clustered);
+    final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
     showRulesAsync("Processed", processed);
+    final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
     showRulesAsync("Kleened", kleened);
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 

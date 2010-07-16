@@ -1,0 +1,96 @@
+package cz.cuni.mff.ksi.jinfer.projecttype.properties;
+
+import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.panels.DTDExportJPanel;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.panels.ModularSimplifierJPanel;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.panels.ModuleSelectionJPanel;
+import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import org.netbeans.api.project.ProjectUtils;
+import org.netbeans.spi.project.ui.CustomizerProvider;
+import org.netbeans.spi.project.ui.support.ProjectCustomizer;
+import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;
+
+/**
+ *
+ * @author sviro
+ */
+public class JInferCustomizerProvider implements CustomizerProvider {
+
+  private final JInferProject project;
+
+  private ProjectCustomizer.Category[] categories;
+  private ProjectCustomizer.CategoryComponentProvider componentProvider;
+
+  public JInferCustomizerProvider(final JInferProject project) {
+    this.project = project;
+  }
+
+  private void init() {
+    ProjectCustomizer.Category moduleSelection = ProjectCustomizer.Category.create("moduleSelection",
+            "Module Selection", null);
+
+    ProjectCustomizer.Category modularSimplifier = ProjectCustomizer.Category.create("modularSimplifier",
+            "Modular Simplifier", null);
+
+    ProjectCustomizer.Category dtdExport = ProjectCustomizer.Category.create("dtdExport",
+            "DTD Export", null);
+
+    categories = new ProjectCustomizer.Category[] {moduleSelection, modularSimplifier, dtdExport};
+
+    Map<Category, JPanel> panels = new HashMap<Category, JPanel>();
+    panels.put(moduleSelection, new ModuleSelectionJPanel());
+    panels.put(modularSimplifier, new ModularSimplifierJPanel());
+    panels.put(dtdExport, new DTDExportJPanel());
+
+    componentProvider = new JInferComponentProvider(panels);
+
+  }
+
+  @Override
+  public void showCustomizer() {
+    init();
+
+    PropertiesListener listener = new PropertiesListener(project);
+
+    Dialog dialog = ProjectCustomizer.createCustomizerDialog(categories, componentProvider, null, listener, null);
+
+    dialog.setTitle(ProjectUtils.getInformation(project).getDisplayName());
+
+    dialog.setVisible(true);
+
+  }
+
+  private class PropertiesListener implements ActionListener {
+
+    private final JInferProject project;
+
+    private PropertiesListener(JInferProject project) {
+      this.project = project;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    }
+  }
+
+  private class JInferComponentProvider implements ProjectCustomizer.CategoryComponentProvider {
+
+    private final Map<Category, JPanel> panels;
+    
+    public JInferComponentProvider(final Map<Category, JPanel> panels) {
+      this.panels = panels;
+    }
+
+    @Override
+    public JComponent create(final Category category) {
+      JPanel panel = panels.get(category);
+      return panel == null ? new JPanel() : panel;
+    }
+  }
+}

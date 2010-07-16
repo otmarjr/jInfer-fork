@@ -67,7 +67,12 @@ public class JInferLogicalView implements LogicalViewProvider {
         @Override
         protected void addNotify() {
           Input input = JInferLogicalView.this.project.getLookup().lookup(Input.class);
-          setKeys(new Node[]{new FolderNode(JInferLogicalView.this.project, "xml", input.getDocuments()), new FolderNode(JInferLogicalView.this.project, "schema", input.getSchemas()), new FolderNode(JInferLogicalView.this.project, "query", input.getQueries()), new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(), project)});
+          setKeys(new Node[]{new FolderNode(JInferLogicalView.this.project, "xml",
+                  input.getDocuments()), new FolderNode(JInferLogicalView.this.project, "schema",
+                  input.getSchemas()), new FolderNode(JInferLogicalView.this.project, "query",
+                  input.getQueries()),
+                  new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(),
+                  project)});
         }
 
         @Override
@@ -96,11 +101,12 @@ public class JInferLogicalView implements LogicalViewProvider {
 
     @Override
     public Action[] getActions(boolean context) {
-      Action[] nodeActions = new Action[4];
+      Action[] nodeActions = new Action[5];
       nodeActions[0] = CommonProjectActions.copyProjectAction();
       nodeActions[1] = CommonProjectActions.deleteProjectAction();
       nodeActions[2] = CommonProjectActions.setAsMainProjectAction();
       nodeActions[3] = CommonProjectActions.closeProjectAction();
+      nodeActions[4] = CommonProjectActions.customizeProjectAction();
       return nodeActions;
     }
   }

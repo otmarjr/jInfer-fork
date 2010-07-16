@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.JInferCustomizerProvider;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class JInferProject implements Project {
                 state,
                 loadProperties(),
                 loadInput(),
+                new JInferCustomizerProvider(this),
                 new JInferProjectInformation(),
                 new JInferLogicalView(this),
                 new ActionProviderImpl(),

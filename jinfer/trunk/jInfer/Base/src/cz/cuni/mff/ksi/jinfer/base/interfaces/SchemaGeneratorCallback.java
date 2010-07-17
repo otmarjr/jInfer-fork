@@ -28,7 +28,8 @@ public interface SchemaGeneratorCallback {
    * This method is called when SchemaGenerator module has finished its work.
    *
    * @param schema String representation of the generated schema.
+   * @param extension File extension of the generated schema, for example "dtd" or "xsd".
    */
-  void finished(final String schema);
+  void finished(final String schema, final String extension);
 
 }

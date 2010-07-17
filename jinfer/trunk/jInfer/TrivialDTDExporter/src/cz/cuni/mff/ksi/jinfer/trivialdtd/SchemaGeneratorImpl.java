@@ -85,7 +85,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     LOG.info("DTD Exporter: schema generated at "
             + ret.toString().length() + " characters.");
 
-    callback.finished(ret.toString());
+    callback.finished(ret.toString(), "dtd");
   }
 
   private String elementToString(final Element e) {

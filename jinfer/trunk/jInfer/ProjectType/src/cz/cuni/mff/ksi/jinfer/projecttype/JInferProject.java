@@ -49,6 +49,8 @@ public class JInferProject implements Project {
   private final FileObject projectDir;
   private final ProjectState state;
   private Lookup lookup;
+  private Input input;
+  private Properties properties;
 
   public JInferProject(final FileObject projectDir, final ProjectState state) {
     this.projectDir = projectDir;
@@ -93,32 +95,36 @@ public class JInferProject implements Project {
   }
 
   private Properties loadProperties() {
-    final FileObject fob = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
-            + "/" + JInferProjectFactory.PROJECT_PROPFILE);
-    final Properties properties = new NotifyProperties(state);
-    if (fob != null) {
-      try {
-        properties.load(fob.getInputStream());
-      } catch (Exception e) {
-        Exceptions.printStackTrace(e);
+    if (properties == null) {
+      final FileObject fob = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
+              + "/" + JInferProjectFactory.PROJECT_PROPFILE);
+      properties = new NotifyProperties(state);
+      if (fob != null) {
+        try {
+          properties.load(fob.getInputStream());
+        } catch (Exception e) {
+          Exceptions.printStackTrace(e);
+        }
       }
     }
     return properties;
   }
 
   private Input loadInput() {
-    final FileObject inputFilesFileOb = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
+    if (input == null) {
+      final FileObject inputFilesFileOb = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
             + "/" + JInferProjectFactory.PROJECT_INPUTFILE);
 
-    final Input input = new Input();
-    if (inputFilesFileOb != null) {
-      try {
-        input.load(inputFilesFileOb.getInputStream());
-      } catch (Exception e) {
-        Exceptions.printStackTrace(e);
+      input = new Input();
+      if (inputFilesFileOb != null) {
+        try {
+          input.load(inputFilesFileOb.getInputStream());
+        } catch (Exception e) {
+          Exceptions.printStackTrace(e);
+        }
       }
     }
-    //TODO load input files from project properties
+    
     return input;
   }
 

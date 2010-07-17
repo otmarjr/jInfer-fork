@@ -24,13 +24,13 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class Attribute extends AbstractContentNode {
+public class Attribute extends AbstractContentNode<String> {
 
   public Attribute(final List<String> context,
           final String name,
           final Map<String, Object> attributes,
           final String contentType,
-          final List<? extends Object> content) {
+          final List<String> content) {
     super(context, name, attributes, contentType, content);
   }
 

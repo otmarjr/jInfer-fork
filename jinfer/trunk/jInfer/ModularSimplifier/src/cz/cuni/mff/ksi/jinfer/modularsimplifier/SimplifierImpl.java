@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneUtils;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ContextClusterer;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayerTopComponent;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
@@ -83,13 +84,13 @@ public class SimplifierImpl implements Simplifier {
       return;
     }
 
-    showRulesAsync("Original", initialGrammar);
+    showRulesAsync("Original", CloneUtils.cloneRules(initialGrammar));
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
-    showClustersAsync("Clustered", clustered);
+    showClustersAsync("Clustered", CloneUtils.cloneClusters(clustered));
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
-    showRulesAsync("Processed", processed);
+    showRulesAsync("Processed", CloneUtils.cloneRules(processed));
     final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
-    showRulesAsync("Kleened", kleened);
+    showRulesAsync("Kleened", CloneUtils.cloneRules(kleened));
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override

@@ -23,7 +23,7 @@ public class Input {
   private final Collection<FileObject> schemas;
   private final Collection<FileObject> queries;
 
-  public Input(Collection<FileObject> documents, Collection<FileObject> schemas, Collection<FileObject> queries) {
+  public Input(final Collection<FileObject> documents, final Collection<FileObject> schemas, final Collection<FileObject> queries) {
     this.documents = documents;
     this.schemas = schemas;
     this.queries = queries;
@@ -45,8 +45,8 @@ public class Input {
     return schemas;
   }
 
-  void store(FileOutputStream fileOutputStream) {
-    PrintWriter out = new PrintWriter(fileOutputStream);
+  public void store(final FileOutputStream fileOutputStream) {
+    final PrintWriter out = new PrintWriter(fileOutputStream);
 
     writeCollection(documents, out);
     writeCollection(schemas, out);
@@ -58,9 +58,9 @@ public class Input {
 
   }
 
-  private void writeCollection(Collection<FileObject> collection, PrintWriter out) {
-    for (Iterator<FileObject> it = collection.iterator(); it.hasNext();) {
-      FileObject fileObject = it.next();
+  private void writeCollection(final Collection<FileObject> collection, final PrintWriter out) {
+    for (final Iterator<FileObject> it = collection.iterator(); it.hasNext();) {
+      final FileObject fileObject = it.next();
       out.print(FileUtil.toFile(fileObject).getAbsolutePath());
       if (it.hasNext()) {
         out.print(",");
@@ -69,19 +69,19 @@ public class Input {
     out.println();
   }
 
-  private void readCollection(Collection<FileObject> collection, String line) {
+  private void readCollection(final Collection<FileObject> collection, final String line) {
     if ("".equals(line)) {
       return;
     }
-    String[] filePaths = line.split(",");
+    final String[] filePaths = line.split(",");
 
     for (String filePath : filePaths) {
       collection.add(FileUtil.toFileObject(FileUtil.normalizeFile(new File(filePath))));
     }
   }
 
-  void load(InputStream inputStream) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+  public void load(final InputStream inputStream) throws IOException {
+    final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
     String l;
     int i = 0;

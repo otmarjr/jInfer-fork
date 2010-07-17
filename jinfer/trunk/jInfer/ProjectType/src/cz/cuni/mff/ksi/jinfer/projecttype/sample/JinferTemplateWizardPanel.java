@@ -35,9 +35,6 @@ public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
   private WizardDescriptor wizardDescriptor;
   private JinferTemplatePanelVisual component;
 
-  public JinferTemplateWizardPanel() {
-  }
-
   public Component getComponent() {
     if (component == null) {
       component = new JinferTemplatePanelVisual(this);
@@ -56,13 +53,13 @@ public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
   }
   private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
 
-  public final void addChangeListener(ChangeListener l) {
+  public final void addChangeListener(final ChangeListener l) {
     synchronized (listeners) {
       listeners.add(l);
     }
   }
 
-  public final void removeChangeListener(ChangeListener l) {
+  public final void removeChangeListener(final ChangeListener l) {
     synchronized (listeners) {
       listeners.remove(l);
     }
@@ -73,19 +70,19 @@ public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
     synchronized (listeners) {
       ls = new HashSet<ChangeListener>(listeners);
     }
-    ChangeEvent ev = new ChangeEvent(this);
+    final ChangeEvent ev = new ChangeEvent(this);
     for (ChangeListener l : ls) {
       l.stateChanged(ev);
     }
   }
 
-  public void readSettings(Object settings) {
+  public void readSettings(final Object settings) {
     wizardDescriptor = (WizardDescriptor) settings;
     component.read(wizardDescriptor);
   }
 
-  public void storeSettings(Object settings) {
-    WizardDescriptor d = (WizardDescriptor) settings;
+  public void storeSettings(final Object settings) {
+    final WizardDescriptor d = (WizardDescriptor) settings;
     component.store(d);
   }
 

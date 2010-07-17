@@ -62,7 +62,7 @@ public class FileAddAction extends AbstractAction {
       fileFilter = new FileNameExtensionFilter("QUERY files", "query");
     }
 
-    File[] selectedFiles = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
+    final File[] selectedFiles = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add " + type + " files").setFileFilter(fileFilter).showMultiOpenDialog();
 
     if (selectedFiles != null) {

@@ -38,18 +38,18 @@ public class JInferProjectFactory implements ProjectFactory {
   public static final String PROJECT_INPUTFILE = "input.files";
 
   @Override
-  public boolean isProject(FileObject projectDirectory) {
+  public boolean isProject(final FileObject projectDirectory) {
     return projectDirectory.getFileObject(PROJECT_DIR) != null;
   }
 
   @Override
-  public Project loadProject(FileObject dir, ProjectState ps) throws IOException {
+  public Project loadProject(final FileObject dir, final ProjectState ps) throws IOException {
     return isProject(dir) ? new JInferProject(dir, ps) : null;
   }
 
   @Override
   public void saveProject(final Project project) throws IOException, ClassCastException {
-    FileObject projectRoot = project.getProjectDirectory();
+    final FileObject projectRoot = project.getProjectDirectory();
     if (projectRoot.getFileObject(PROJECT_DIR) == null) {
       throw new IOException("Project dir " + projectRoot.getPath() + " deleted,"
               + " cannot save project");
@@ -57,23 +57,23 @@ public class JInferProjectFactory implements ProjectFactory {
 
     ((JInferProject) project).getOutputFolder(true);
 
-    String propertiesPath = PROJECT_DIR + "/" + PROJECT_PROPFILE;
+    final String propertiesPath = PROJECT_DIR + "/" + PROJECT_PROPFILE;
     FileObject propertiesFile = projectRoot.getFileObject(propertiesPath);
     if (propertiesFile == null) {
       propertiesFile = projectRoot.getFileObject(PROJECT_DIR).createData(PROJECT_PROPFILE);
     }
 
-    Properties properties = project.getLookup().lookup(Properties.class);
+    final Properties properties = project.getLookup().lookup(Properties.class);
     File f = FileUtil.toFile(propertiesFile);
     properties.store(new FileOutputStream(f), "JInfer project properties");
 
-    String inputFilesPath = PROJECT_DIR + "/" + PROJECT_INPUTFILE;
+    final String inputFilesPath = PROJECT_DIR + "/" + PROJECT_INPUTFILE;
     FileObject inputFilesFile = projectRoot.getFileObject(inputFilesPath);
     if (inputFilesFile == null) {
       inputFilesFile = projectRoot.getFileObject(PROJECT_DIR).createData(PROJECT_INPUTFILE);
     }
 
-    Input input = project.getLookup().lookup(Input.class);
+    final Input input = project.getLookup().lookup(Input.class);
     f = FileUtil.toFile(inputFilesFile);
     input.store(new FileOutputStream(f));
   }

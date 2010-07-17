@@ -50,7 +50,7 @@ public class JInferProject implements Project {
   private final ProjectState state;
   private Lookup lookup;
 
-  public JInferProject(FileObject projectDir, ProjectState state) {
+  public JInferProject(final FileObject projectDir, final ProjectState state) {
     this.projectDir = projectDir;
     this.state = state;
   }
@@ -72,14 +72,14 @@ public class JInferProject implements Project {
                 new JInferProjectInformation(),
                 new JInferLogicalView(this),
                 new ActionProviderImpl(),
-                new JInferCopyOperation(this),
+                new JInferCopyOperation(),
                 new JinferDeleteOperation()
               });
     }
     return lookup;
   }
 
-  FileObject getOutputFolder(boolean create) {
+  public FileObject getOutputFolder(final boolean create) {
     FileObject result = projectDir.getFileObject(OUTPUT_DIR);
     if (result == null && create) {
       try {
@@ -93,9 +93,9 @@ public class JInferProject implements Project {
   }
 
   private Properties loadProperties() {
-    FileObject fob = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
+    final FileObject fob = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
             + "/" + JInferProjectFactory.PROJECT_PROPFILE);
-    Properties properties = new NotifyProperties(state);
+    final Properties properties = new NotifyProperties(state);
     if (fob != null) {
       try {
         properties.load(fob.getInputStream());
@@ -107,10 +107,10 @@ public class JInferProject implements Project {
   }
 
   private Input loadInput() {
-    FileObject inputFilesFileOb = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
+    final FileObject inputFilesFileOb = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
             + "/" + JInferProjectFactory.PROJECT_INPUTFILE);
 
-    Input input = new Input();
+    final Input input = new Input();
     if (inputFilesFileOb != null) {
       try {
         input.load(inputFilesFileOb.getInputStream());
@@ -126,13 +126,14 @@ public class JInferProject implements Project {
 
     private final ProjectState state;
 
-    NotifyProperties(ProjectState state) {
+    NotifyProperties(final ProjectState state) {
+      super();
       this.state = state;
     }
 
     @Override
-    public Object put(Object key, Object val) {
-      Object result = super.put(key, val);
+    public Object put(final Object key, final Object val) {
+      final Object result = super.put(key, val);
       if (((result == null) != (val == null)) || (result != null
               && val != null && !val.equals(result))) {
         state.markModified();
@@ -164,17 +165,19 @@ public class JInferProject implements Project {
     }
 
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener pl) {
+    public void addPropertyChangeListener(final PropertyChangeListener pl) {
+      //do nothing
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener pl) {
+    public void removePropertyChangeListener(final PropertyChangeListener pl) {
+      //do nothing
     }
   }
 
   private final class ActionProviderImpl implements ActionProvider {
 
-    private String[] supported = new String[]{
+    private final String[] supported = new String[]{
       ActionProvider.COMMAND_DELETE,
       ActionProvider.COMMAND_COPY};
 
@@ -184,7 +187,7 @@ public class JInferProject implements Project {
     }
 
     @Override
-    public void invokeAction(String action, Lookup lookup) throws IllegalArgumentException {
+    public void invokeAction(final String action, final Lookup lookup) throws IllegalArgumentException {
       if (action.equalsIgnoreCase(ActionProvider.COMMAND_DELETE)) {
         DefaultProjectOperations.performDefaultDeleteOperation(JInferProject.this);
       }
@@ -194,10 +197,8 @@ public class JInferProject implements Project {
     }
 
     @Override
-    public boolean isActionEnabled(String action, Lookup lookup) throws IllegalArgumentException {
-      if ((action.equals(ActionProvider.COMMAND_DELETE))) {
-        return true;
-      } else if ((action.equals(ActionProvider.COMMAND_COPY))) {
+    public boolean isActionEnabled(final String action, final Lookup lookup) throws IllegalArgumentException {
+      if ((action.equals(ActionProvider.COMMAND_DELETE)) || (action.equals(ActionProvider.COMMAND_COPY))) {
         return true;
       } else {
         throw new IllegalArgumentException(action);
@@ -209,6 +210,7 @@ public class JInferProject implements Project {
 
     @Override
     public void notifyDeleting() throws IOException {
+      //do nothing
     }
 
     @Override
@@ -219,26 +221,16 @@ public class JInferProject implements Project {
 
     @Override
     public List<FileObject> getMetadataFiles() {
-      List<FileObject> dataFiles = new ArrayList<FileObject>();
-      return dataFiles;
+      return new ArrayList<FileObject>();
     }
 
     @Override
     public List<FileObject> getDataFiles() {
-      List<FileObject> dataFiles = new ArrayList<FileObject>();
-      return dataFiles;
+      return new ArrayList<FileObject>();
     }
   }
 
   private final class JInferCopyOperation implements CopyOperationImplementation {
-
-    private final JInferProject project;
-    private final FileObject projectDir;
-
-    public JInferCopyOperation(JInferProject project) {
-      this.project = project;
-      this.projectDir = project.getProjectDirectory();
-    }
 
     @Override
     public List<FileObject> getMetadataFiles() {
@@ -252,10 +244,12 @@ public class JInferProject implements Project {
 
     @Override
     public void notifyCopying() throws IOException {
+      //do nothing
     }
 
     @Override
-    public void notifyCopied(Project arg0, File arg1, String arg2) throws IOException {
+    public void notifyCopied(final Project arg0, final File arg1, final String arg2) throws IOException {
+      //do nothing
     }
   }
 }

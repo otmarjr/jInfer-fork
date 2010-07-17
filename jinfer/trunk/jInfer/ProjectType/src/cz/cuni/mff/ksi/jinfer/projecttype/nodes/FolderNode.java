@@ -27,7 +27,7 @@ public class FolderNode extends AbstractNode {
     this(project, folderName, files, new InstanceContent());
   }
 
-  private FolderNode(final JInferProject project, final String folderName, final Collection<FileObject> files, InstanceContent content) {
+  private FolderNode(final JInferProject project, final String folderName, final Collection<FileObject> files, final InstanceContent content) {
     super(new FileChildren(files), new AbstractLookup(content));
     content.add(project);
     content.add(files);
@@ -43,17 +43,17 @@ public class FolderNode extends AbstractNode {
   
 
   @Override
-  public Image getIcon(int type) {
+  public Image getIcon(final int type) {
     return ImageUtilities.loadImage("cz/cuni/mff/ksi/jinfer/projecttype/graphics/folder.png");
   }
 
   @Override
-  public Image getOpenedIcon(int type) {
+  public Image getOpenedIcon(final int type) {
     return getIcon(type);
   }
 
   @Override
-  public Action[] getActions(boolean context) {
+  public Action[] getActions(final boolean context) {
     return new Action[] {new FileAddAction(project, this, files)};
   }
 

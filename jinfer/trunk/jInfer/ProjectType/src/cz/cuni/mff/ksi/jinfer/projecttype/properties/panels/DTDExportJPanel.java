@@ -134,6 +134,7 @@ public final class DTDExportJPanel extends JPanel {
     try {
       Preferences.userNodeForPackage(DTDExportJPanel.class).putFloat("min.default.ratio", nf.parse(minDefaultRatio.getText()).floatValue());
     } catch (final ParseException ex) {
+      
     }
   }
 

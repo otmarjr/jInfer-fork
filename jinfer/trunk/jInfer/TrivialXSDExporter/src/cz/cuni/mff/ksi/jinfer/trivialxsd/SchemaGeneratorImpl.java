@@ -90,7 +90,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     //io.getOut().println("DTD Exporter: schema generated at "
     //        + ret.toString().length() + " characters.");
 
-    callback.finished(ret.toString());
+    callback.finished(ret.toString(), "xsd");
   }
 
   private String elementToString(final Element e) {

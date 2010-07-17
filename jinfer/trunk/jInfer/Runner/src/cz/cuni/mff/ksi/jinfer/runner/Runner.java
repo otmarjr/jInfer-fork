@@ -111,20 +111,20 @@ public class Runner {
     schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
 
       @Override
-      public void finished(final String schema) {
-        Runner.this.finishedSchemaGenerator(schema);
+      public void finished(final String schema, final String extension) {
+        Runner.this.finishedSchemaGenerator(schema, extension);
       }
     });
   }
 
-  public void finishedSchemaGenerator(final String schema) {
+  public void finishedSchemaGenerator(final String schema, final String extension) {
     LOG.info("Runner: writing schema.");
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
     ioResult.getOut().println(schema);
 
     final FileSelection fileSelection = lookupFileSelection();
     fileSelection.addOutput(
-            (new Date()).toString(), getCommentedSchema(schema), "dtd");
+            (new Date()).toString(), getCommentedSchema(schema), extension);
   }
 
   private String getCommentedSchema(final String schema) {

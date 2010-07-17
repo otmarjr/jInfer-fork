@@ -101,26 +101,28 @@ public class SimplifierImpl implements Simplifier {
 
   private static void showRulesAsync(final String panelName, final List<AbstractNode> rules) {
     final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
+    if (!render) {
+      return;
+    }
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override
       public void run() {
-        if (render) {
-          RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
-        }
+        RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
       }
     });
   }
 
   private static void showClustersAsync(final String panelName, final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
     final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
+    if (!render) {
+      return;
+    }
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override
       public void run() {
-        if (render) {
-          RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setClusters(clusters);
-        }
+        RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setClusters(clusters);
       }
     });
   }

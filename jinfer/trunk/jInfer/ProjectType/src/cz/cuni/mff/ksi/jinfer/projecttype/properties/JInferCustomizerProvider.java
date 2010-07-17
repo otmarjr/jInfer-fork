@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.netbeans.api.project.ProjectUtils;
@@ -43,10 +44,12 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
     categories = new ProjectCustomizer.Category[] {moduleSelection, modularSimplifier, dtdExport};
 
+    final Properties properties = project.getLookup().lookup(Properties.class);
+
     final Map<Category, JPanel> panels = new HashMap<Category, JPanel>();
-    panels.put(moduleSelection, new ModuleSelectionJPanel());
-    panels.put(modularSimplifier, new ModularSimplifierJPanel());
-    panels.put(dtdExport, new DTDExportJPanel());
+    panels.put(moduleSelection, new ModuleSelectionJPanel(properties));
+    panels.put(modularSimplifier, new ModularSimplifierJPanel(properties));
+    panels.put(dtdExport, new DTDExportJPanel(properties));
 
     componentProvider = new JInferComponentProvider(panels);
 
@@ -75,7 +78,11 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-      //TODO changing properties
+      if ("ok".equalsIgnoreCase(e.getActionCommand())) {
+        for (Category category : categories) {
+          ((PropertiesPanel)componentProvider.create(category)).store();
+        }
+      }
     }
   }
 

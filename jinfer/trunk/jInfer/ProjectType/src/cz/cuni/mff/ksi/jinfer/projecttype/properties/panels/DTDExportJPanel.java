@@ -16,21 +16,24 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.properties.panels;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.PropertiesPanel;
 import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.prefs.Preferences;
+import java.util.Properties;
 import javax.swing.JPanel;
 
-public final class DTDExportJPanel extends JPanel {
+public final class DTDExportJPanel extends JPanel implements PropertiesPanel{
 
   private static final long serialVersionUID = 5421231l;
 
   private final NumberFormat nf = NumberFormat.getInstance();
 
-  public DTDExportJPanel() {
+  private final Properties properties;
+
+  public DTDExportJPanel(final Properties properties) {
     super();
+    this.properties = properties;
     initComponents();
-    // TODO listen to changes in form fields and call controller.changed()
+    load();
   }
 
   @SuppressWarnings("PMD")
@@ -122,25 +125,16 @@ public final class DTDExportJPanel extends JPanel {
     add(jPanel1, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  @Override
   public void load() {
-    maxEnumSize.setValue(Preferences.userNodeForPackage(DTDExportJPanel.class).getInt("max.enum.size", 3));
-    minDefaultRatio.setValue(
-            nf.format(
-            Preferences.userNodeForPackage(DTDExportJPanel.class).getFloat("min.default.ratio", 0.67f)));
+    maxEnumSize.setValue(Integer.valueOf(properties.getProperty("trivialdtdexporter.max.enum.size", "3")));
+    minDefaultRatio.setValue(properties.getProperty("trivialdtdexporter.min.default.ratio", Float.toString(0.67f)));
   }
 
+  @Override
   public void store() {
-    Preferences.userNodeForPackage(DTDExportJPanel.class).putInt("max.enum.size", ((Integer) maxEnumSize.getValue()).intValue());
-    try {
-      Preferences.userNodeForPackage(DTDExportJPanel.class).putFloat("min.default.ratio", nf.parse(minDefaultRatio.getText()).floatValue());
-    } catch (final ParseException ex) {
-      
-    }
-  }
-
-  public boolean valid() {
-    // TODO check whether form is consistent and complete
-    return true;
+    properties.setProperty("trivialdtdexporter.max.enum.size", ((Integer) maxEnumSize.getValue()).toString());
+    properties.setProperty("trivialdtdexporter.min.default.ratio", minDefaultRatio.getText());
   }
   
   // Variables declaration - do not modify//GEN-BEGIN:variables

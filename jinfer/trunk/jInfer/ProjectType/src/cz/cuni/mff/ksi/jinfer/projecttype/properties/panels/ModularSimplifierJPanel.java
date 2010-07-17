@@ -16,17 +16,20 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.properties.panels;
 
-import java.util.prefs.Preferences;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.PropertiesPanel;
+import java.util.Properties;
 import javax.swing.JPanel;
 
-public final class ModularSimplifierJPanel extends JPanel {
+public final class ModularSimplifierJPanel extends JPanel implements PropertiesPanel{
 
   private static final long serialVersionUID = 561241l;
+  private final Properties properties;
 
-  public ModularSimplifierJPanel() {
+  public ModularSimplifierJPanel(final Properties properties) {
     super();
+    this.properties = properties;
     initComponents();
-    // TODO listen to changes in form fields and call controller.changed()
+    load();
   }
 
   @SuppressWarnings("PMD")
@@ -181,27 +184,23 @@ public final class ModularSimplifierJPanel extends JPanel {
     add(jLabel7, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  @Override
   public void load() {
-    enabled.setSelected(Preferences.userNodeForPackage(ModularSimplifierJPanel.class).getBoolean("enabled", true));
-    context.setSelected(Preferences.userNodeForPackage(ModularSimplifierJPanel.class).getBoolean("use.context", false));
-    render.setSelected(Preferences.userNodeForPackage(ModularSimplifierJPanel.class).getBoolean("render", true));
-    kleeneRepetitions.setValue(Preferences.userNodeForPackage(ModularSimplifierJPanel.class).getInt("kleene.repetitions", 3));
-    clusterProcessor.setSelectedItem(Preferences.userNodeForPackage(ModularSimplifierJPanel.class).get("cluster.processor", "Trie"));
+    enabled.setSelected(Boolean.parseBoolean(properties.getProperty("modularsimplifier.enabled", "true")));
+    context.setSelected(Boolean.parseBoolean(properties.getProperty("modularsimplifier.use.context", "false")));
+    render.setSelected(Boolean.parseBoolean(properties.getProperty("modularsimplifier.render", "true")));
+    kleeneRepetitions.setValue(Integer.valueOf(properties.getProperty("modularsimplifier.kleene.repetitions", "3")));
+    clusterProcessor.setSelectedItem(properties.getProperty("modularsimplifier.cluster.processor", "Trie"));
   }
 
+  @Override
   public void store() {
-    Preferences.userNodeForPackage(ModularSimplifierJPanel.class).putBoolean("enabled", enabled.isSelected());
-    Preferences.userNodeForPackage(ModularSimplifierJPanel.class).putBoolean("use.context", context.isSelected());
-    Preferences.userNodeForPackage(ModularSimplifierJPanel.class).putBoolean("render", render.isSelected());
-    Preferences.userNodeForPackage(ModularSimplifierJPanel.class).putInt("kleene.repetitions", ((Integer)kleeneRepetitions.getValue()).intValue());
-    Preferences.userNodeForPackage(ModularSimplifierJPanel.class).put("cluster.processor", (String)clusterProcessor.getSelectedItem());
+    properties.setProperty("modularsimplifier.enabled", Boolean.toString(enabled.isSelected()));
+    properties.setProperty("modularsimplifier.use.context", Boolean.toString(context.isSelected()));
+    properties.setProperty("modularsimplifier.render", Boolean.toString(render.isSelected()));
+    properties.setProperty("modularsimplifier.kleene.repetitions",  ((Integer)kleeneRepetitions.getValue()).toString());
+    properties.setProperty("modularsimplifier.cluster.processor", (String) clusterProcessor.getSelectedItem());
   }
-
-  public boolean valid() {
-    // TODO check whether form is consistent and complete
-    return true;
-  }
-  
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox clusterProcessor;
   private javax.swing.JCheckBox context;

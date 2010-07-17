@@ -17,7 +17,7 @@ public class FileChildren extends Children.Keys<FileObject>{
 
   private final Collection<FileObject> files;
 
-  public FileChildren(Collection<FileObject> files) {
+  public FileChildren(final Collection<FileObject> files) {
     super();
     this.files = files;
   }
@@ -28,7 +28,7 @@ public class FileChildren extends Children.Keys<FileObject>{
   }
 
   @Override
-  protected Node[] createNodes(FileObject fileOb) {
+  protected Node[] createNodes(final FileObject fileOb) {
     try {
       return new Node[]{new FileNode(DataObject.find(fileOb).getNodeDelegate())};
     } catch (DataObjectNotFoundException ex) {

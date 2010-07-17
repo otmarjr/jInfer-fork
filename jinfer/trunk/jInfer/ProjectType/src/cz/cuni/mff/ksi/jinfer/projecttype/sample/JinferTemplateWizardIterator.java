@@ -52,9 +52,6 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
   private WizardDescriptor.Panel[] panels;
   private WizardDescriptor wiz;
 
-  public JinferTemplateWizardIterator() {
-  }
-
   public static JinferTemplateWizardIterator createIterator() {
     return new JinferTemplateWizardIterator();
   }
@@ -71,26 +68,26 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
   }
 
   public Set/*<FileObject>*/ instantiate(/*ProgressHandle handle*/) throws IOException {
-    Set<FileObject> resultSet = new LinkedHashSet<FileObject>();
-    File dirF = FileUtil.normalizeFile((File) wiz.getProperty("projdir"));
+    final Set<FileObject> resultSet = new LinkedHashSet<FileObject>();
+    final File dirF = FileUtil.normalizeFile((File) wiz.getProperty("projdir"));
     dirF.mkdirs();
 
-    FileObject template = Templates.getTemplate(wiz);
-    FileObject dir = FileUtil.toFileObject(dirF);
+    final FileObject template = Templates.getTemplate(wiz);
+    final FileObject dir = FileUtil.toFileObject(dirF);
     unZipFile(template.getInputStream(), dir);
 
     // Always open top dir as a project:
     resultSet.add(dir);
     // Look for nested projects to open as well:
-    Enumeration<? extends FileObject> e = dir.getFolders(true);
+    final Enumeration<? extends FileObject> e = dir.getFolders(true);
     while (e.hasMoreElements()) {
-      FileObject subfolder = e.nextElement();
+      final FileObject subfolder = e.nextElement();
       if (ProjectManager.getDefault().isProject(subfolder)) {
         resultSet.add(subfolder);
       }
     }
 
-    File parent = dirF.getParentFile();
+    final File parent = dirF.getParentFile();
     if (parent != null && parent.exists()) {
       ProjectChooser.setProjectsFolder(parent);
     }
@@ -98,14 +95,14 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     return resultSet;
   }
 
-  public void initialize(WizardDescriptor wiz) {
+  public void initialize(final WizardDescriptor wiz) {
     this.wiz = wiz;
     index = 0;
     panels = createPanels();
     // Make sure list of steps is accurate.
     String[] steps = createSteps();
     for (int i = 0; i < panels.length; i++) {
-      Component c = panels[i].getComponent();
+      final Component c = panels[i].getComponent();
       if (steps[i] == null) {
         // Default step name to component name of panel.
         // Mainly useful for getting the name of the target
@@ -113,17 +110,17 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
         steps[i] = c.getName();
       }
       if (c instanceof JComponent) { // assume Swing components
-        JComponent jc = (JComponent) c;
+        final JComponent jc = (JComponent) c;
         // Step #.
         // TODO if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_*:
-        jc.putClientProperty("WizardPanel_contentSelectedIndex", new Integer(i));
+        jc.putClientProperty("WizardPanel_contentSelectedIndex", Integer.valueOf(i));
         // Step name (actually the whole list for reference).
         jc.putClientProperty("WizardPanel_contentData", steps);
       }
     }
   }
 
-  public void uninitialize(WizardDescriptor wiz) {
+  public void uninitialize(final WizardDescriptor wiz) {
     this.wiz.putProperty("projdir", null);
     this.wiz.putProperty("name", null);
     this.wiz = null;
@@ -132,7 +129,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
 
   public String name() {
     return MessageFormat.format("{0} of {1}",
-            new Object[]{new Integer(index + 1), new Integer(panels.length)});
+            new Object[]{Integer.valueOf(index + 1), Integer.valueOf(panels.length)});
   }
 
   public boolean hasNext() {
@@ -162,21 +159,23 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
   }
 
   // If nothing unusual changes in the middle of the wizard, simply:
-  public final void addChangeListener(ChangeListener l) {
+  public final void addChangeListener(final ChangeListener l) {
+    //do nothing
   }
 
-  public final void removeChangeListener(ChangeListener l) {
+  public final void removeChangeListener(final ChangeListener l) {
+    //do nothing
   }
 
-  private static void unZipFile(InputStream source, FileObject projectRoot) throws IOException {
+  private static void unZipFile(final InputStream source,final FileObject projectRoot) throws IOException {
     try {
-      ZipInputStream str = new ZipInputStream(source);
+      final ZipInputStream str = new ZipInputStream(source);
       ZipEntry entry;
       while ((entry = str.getNextEntry()) != null) {
         if (entry.isDirectory()) {
           FileUtil.createFolder(projectRoot, entry.getName());
         } else {
-          FileObject fo = FileUtil.createData(projectRoot, entry.getName());
+          final FileObject fo = FileUtil.createData(projectRoot, entry.getName());
           if ("nbproject/project.xml".equals(entry.getName())) {
             // Special handling for setting name of Ant-based projects; customize as needed:
             filterProjectXML(fo, str, projectRoot.getName());
@@ -190,8 +189,8 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     }
   }
 
-  private static void writeFile(ZipInputStream str, FileObject fo) throws IOException {
-    OutputStream out = fo.getOutputStream();
+  private static void writeFile(final ZipInputStream str, final FileObject fo) throws IOException {
+    final OutputStream out = fo.getOutputStream();
     try {
       FileUtil.copy(str, out);
     } finally {
@@ -199,17 +198,17 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     }
   }
 
-  private static void filterProjectXML(FileObject fo, ZipInputStream str, String name) throws IOException {
+  private static void filterProjectXML(final FileObject fo, final ZipInputStream str, final String name) throws IOException {
     try {
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
       FileUtil.copy(str, baos);
-      Document doc = XMLUtil.parse(new InputSource(new ByteArrayInputStream(baos.toByteArray())), false, false, null, null);
-      NodeList nl = doc.getDocumentElement().getElementsByTagName("name");
+      final Document doc = XMLUtil.parse(new InputSource(new ByteArrayInputStream(baos.toByteArray())), false, false, null, null);
+      final NodeList nl = doc.getDocumentElement().getElementsByTagName("name");
       if (nl != null) {
         for (int i = 0; i < nl.getLength(); i++) {
-          Element el = (Element) nl.item(i);
+          final Element el = (Element) nl.item(i);
           if (el.getParentNode() != null && "data".equals(el.getParentNode().getNodeName())) {
-            NodeList nl2 = el.getChildNodes();
+            final NodeList nl2 = el.getChildNodes();
             if (nl2.getLength() > 0) {
               nl2.item(0).setNodeValue(name);
             }
@@ -217,7 +216,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
           }
         }
       }
-      OutputStream out = fo.getOutputStream();
+      final OutputStream out = fo.getOutputStream();
       try {
         XMLUtil.write(doc, out, "UTF-8");
       } finally {

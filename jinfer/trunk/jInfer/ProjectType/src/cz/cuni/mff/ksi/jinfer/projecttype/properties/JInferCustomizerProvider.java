@@ -32,18 +32,18 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   }
 
   private void init() {
-    ProjectCustomizer.Category moduleSelection = ProjectCustomizer.Category.create("moduleSelection",
+    final ProjectCustomizer.Category moduleSelection = ProjectCustomizer.Category.create("moduleSelection",
             "Module Selection", null);
 
-    ProjectCustomizer.Category modularSimplifier = ProjectCustomizer.Category.create("modularSimplifier",
+    final ProjectCustomizer.Category modularSimplifier = ProjectCustomizer.Category.create("modularSimplifier",
             "Modular Simplifier", null);
 
-    ProjectCustomizer.Category dtdExport = ProjectCustomizer.Category.create("dtdExport",
+    final ProjectCustomizer.Category dtdExport = ProjectCustomizer.Category.create("dtdExport",
             "DTD Export", null);
 
     categories = new ProjectCustomizer.Category[] {moduleSelection, modularSimplifier, dtdExport};
 
-    Map<Category, JPanel> panels = new HashMap<Category, JPanel>();
+    final Map<Category, JPanel> panels = new HashMap<Category, JPanel>();
     panels.put(moduleSelection, new ModuleSelectionJPanel());
     panels.put(modularSimplifier, new ModularSimplifierJPanel());
     panels.put(dtdExport, new DTDExportJPanel());
@@ -56,9 +56,8 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   public void showCustomizer() {
     init();
 
-    PropertiesListener listener = new PropertiesListener(project);
-
-    Dialog dialog = ProjectCustomizer.createCustomizerDialog(categories, componentProvider, null, listener, null);
+    final Dialog dialog = ProjectCustomizer.createCustomizerDialog(categories, componentProvider,
+            null, new PropertiesListener(project), null);
 
     dialog.setTitle(ProjectUtils.getInformation(project).getDisplayName());
 
@@ -70,12 +69,13 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
     private final JInferProject project;
 
-    private PropertiesListener(JInferProject project) {
+    private PropertiesListener(final JInferProject project) {
       this.project = project;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
+      //TODO changing properties
     }
   }
 
@@ -83,13 +83,13 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
     private final Map<Category, JPanel> panels;
     
-    public JInferComponentProvider(final Map<Category, JPanel> panels) {
+    private JInferComponentProvider(final Map<Category, JPanel> panels) {
       this.panels = panels;
     }
 
     @Override
     public JComponent create(final Category category) {
-      JPanel panel = panels.get(category);
+      final JPanel panel = panels.get(category);
       return panel == null ? new JPanel() : panel;
     }
   }

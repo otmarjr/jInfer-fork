@@ -39,20 +39,20 @@ public class JInferLogicalView implements LogicalViewProvider {
 
   private final class InputNode extends FilterNode {
 
-    final JInferProject project;
+    private final JInferProject project;
 
-    public InputNode(Node node, JInferProject project) {
+    public InputNode(final Node node, final JInferProject project) {
       super(node, new FilterNode.Children(node), new ProxyLookup(new Lookup[]{Lookups.singleton(project), node.getLookup()}));
       this.project = project;
     }
 
     @Override
-    public Image getIcon(int type) {
+    public Image getIcon(final int type) {
       return ImageUtilities.loadImage("cz/cuni/mff/ksi/jinfer/projecttype/graphics/folder.png");
     }
 
     @Override
-    public Image getOpenedIcon(int type) {
+    public Image getOpenedIcon(final int type) {
       return getIcon(type);
     }
   }
@@ -66,7 +66,7 @@ public class JInferLogicalView implements LogicalViewProvider {
 
         @Override
         protected void addNotify() {
-          Input input = JInferLogicalView.this.project.getLookup().lookup(Input.class);
+          final Input input = JInferLogicalView.this.project.getLookup().lookup(Input.class);
           setKeys(new Node[]{new FolderNode(JInferLogicalView.this.project, "xml",
                   input.getDocuments()), new FolderNode(JInferLogicalView.this.project, "schema",
                   input.getSchemas()), new FolderNode(JInferLogicalView.this.project, "query",
@@ -76,7 +76,7 @@ public class JInferLogicalView implements LogicalViewProvider {
         }
 
         @Override
-        protected Node[] createNodes(Node node) {
+        protected Node[] createNodes(final Node node) {
 
           return new Node[]{node};
         }
@@ -85,12 +85,12 @@ public class JInferLogicalView implements LogicalViewProvider {
     }
 
     @Override
-    public Image getIcon(int type) {
+    public Image getIcon(final int type) {
       return ImageUtilities.loadImage("cz/cuni/mff/ksi/jinfer/projecttype/graphics/icon16.png");
     }
 
     @Override
-    public Image getOpenedIcon(int type) {
+    public Image getOpenedIcon(final int type) {
       return getIcon(type);
     }
 
@@ -100,7 +100,7 @@ public class JInferLogicalView implements LogicalViewProvider {
     }
 
     @Override
-    public Action[] getActions(boolean context) {
+    public Action[] getActions(final boolean context) {
       Action[] nodeActions = new Action[5];
       nodeActions[0] = CommonProjectActions.copyProjectAction();
       nodeActions[1] = CommonProjectActions.deleteProjectAction();
@@ -112,7 +112,7 @@ public class JInferLogicalView implements LogicalViewProvider {
   }
   private final JInferProject project;
 
-  public JInferLogicalView(JInferProject project) {
+  public JInferLogicalView(final JInferProject project) {
     this.project = project;
   }
 
@@ -122,7 +122,7 @@ public class JInferLogicalView implements LogicalViewProvider {
   }
 
   @Override
-  public Node findPath(Node node, Object o) {
+  public Node findPath(final Node node, final Object o) {
     return null;
   }
 }

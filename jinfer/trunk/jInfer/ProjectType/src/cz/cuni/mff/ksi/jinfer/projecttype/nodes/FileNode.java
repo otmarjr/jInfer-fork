@@ -15,16 +15,16 @@ import org.openide.nodes.Node;
 public class FileNode extends FilterNode{
 
 
-  public FileNode(Node node) {
+  public FileNode(final Node node) {
     super(node, new FilterNode.Children(node), node.getLookup());
     disableDelegation(DELEGATE_DESTROY);
   }
 
   @Override
   public void destroy() throws IOException {
-    Collection<FileObject> files = (Collection<FileObject>)((FolderNode)this.getParentNode()).getLookup().lookup(Collection.class);
-    DataNode orig = (DataNode) this.getOriginal();
-    FileObject fileOb = orig.getDataObject().getPrimaryFile();
+    final Collection<FileObject> files = (Collection<FileObject>)((FolderNode)this.getParentNode()).getLookup().lookup(Collection.class);
+    final DataNode orig = (DataNode) this.getOriginal();
+    final FileObject fileOb = orig.getDataObject().getPrimaryFile();
     files.remove(fileOb);
 
     ((FileChildren)((FolderNode)this.getParentNode()).getChildren()).addNotify();

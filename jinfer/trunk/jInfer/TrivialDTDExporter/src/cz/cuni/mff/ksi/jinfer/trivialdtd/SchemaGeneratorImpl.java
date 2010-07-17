@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.options.ConfigPanel;

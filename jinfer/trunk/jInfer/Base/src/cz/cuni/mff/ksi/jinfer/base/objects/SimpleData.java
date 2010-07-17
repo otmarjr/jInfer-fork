@@ -25,13 +25,13 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class SimpleData extends AbstractContentNode {
+public class SimpleData extends AbstractContentNode<String> {
 
   public SimpleData(final List<String> context,
           final String name,
           final Map<String, Object> attributes,
           final String contentType,
-          final List<? extends Object> content) {
+          final List<String> content) {
     super(context, name, attributes, contentType, content);
   }
 

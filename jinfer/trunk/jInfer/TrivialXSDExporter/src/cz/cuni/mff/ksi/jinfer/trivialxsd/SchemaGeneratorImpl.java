@@ -191,7 +191,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indent(ret, "<xs:choice>\n");
         indentationIncrease();
         for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
-          ret.append(subElementsToString(subRegexp));
+          if ((subRegexp != null) && (!subRegexp.isEmpty())) {
+            ret.append(subElementsToString(subRegexp));
+          }
         }
         indentationDecrease();
         indent(ret, "</xs:choice>\n");

@@ -17,15 +17,12 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.properties.panels;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.PropertiesPanel;
-import java.text.NumberFormat;
 import java.util.Properties;
 import javax.swing.JPanel;
 
 public final class DTDExportJPanel extends JPanel implements PropertiesPanel{
 
   private static final long serialVersionUID = 5421231l;
-
-  private final NumberFormat nf = NumberFormat.getInstance();
 
   private final Properties properties;
 

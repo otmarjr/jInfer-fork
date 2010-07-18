@@ -16,16 +16,20 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.JInferCustomizerProvider;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import org.netbeans.api.actions.Openable;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
 import org.netbeans.spi.project.ActionProvider;
@@ -34,6 +38,7 @@ import org.netbeans.spi.project.DeleteOperationImplementation;
 import org.netbeans.spi.project.ProjectState;
 import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
 import org.openide.filesystems.FileObject;
+import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
@@ -70,6 +75,7 @@ public class JInferProject implements Project {
                 state,
                 loadProperties(),
                 loadInput(),
+                new OutputHandler(),
                 new JInferCustomizerProvider(this),
                 new JInferProjectInformation(),
                 new JInferLogicalView(this),
@@ -256,6 +262,30 @@ public class JInferProject implements Project {
     @Override
     public void notifyCopied(final Project arg0, final File arg1, final String arg2) throws IOException {
       //do nothing
+    }
+  }
+
+  private final class OutputHandler implements FileSelection{
+
+    @Override
+    public void addOutput(final String name, final String data, final String extension) {
+      try {
+        final FileObject outputFolder = getOutputFolder(true);
+        final FileObject output = outputFolder.createData(name, extension);
+        final OutputStream out = output.getOutputStream();
+        out.write(data.getBytes());
+        out.flush();
+        out.close();
+        DataObject.find(output).getLookup().lookup(Openable.class).open();
+        outputFolder.refresh();
+      } catch (IOException ex) {
+        Exceptions.printStackTrace(ex);
+      }
+    }
+
+    @Override
+    public Input getInput() {
+      return null;
     }
   }
 }

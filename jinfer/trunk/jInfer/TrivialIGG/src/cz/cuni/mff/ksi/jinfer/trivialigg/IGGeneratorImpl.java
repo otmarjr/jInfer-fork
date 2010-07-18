@@ -50,9 +50,11 @@ public class IGGeneratorImpl implements IGGenerator {
   public void start(final Input input, final IGGeneratorCallback callback) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
-    ret.addAll(getRulesFromDocuments(input.getDocuments()));
-    ret.addAll(getRulesFromSchemas(input.getSchemas()));
-    ret.addAll(getRulesFromQueries(input.getQueries()));
+    if (input != null) {
+      ret.addAll(getRulesFromDocuments(input.getDocuments()));
+      ret.addAll(getRulesFromSchemas(input.getSchemas()));
+      ret.addAll(getRulesFromQueries(input.getQueries()));
+    }
 
     callback.finished(ret);
   }

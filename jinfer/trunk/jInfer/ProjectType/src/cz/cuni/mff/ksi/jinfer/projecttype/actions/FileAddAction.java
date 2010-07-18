@@ -21,14 +21,13 @@ import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileChooserBuilder;
-import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileUtil;
 import org.openide.nodes.Node;
 
 /**
@@ -38,11 +37,11 @@ import org.openide.nodes.Node;
 public class FileAddAction extends AbstractAction {
 
   private static final long serialVersionUID = 12121452l;
-  private final Collection<FileObject> files;
+  private final Collection<File> files;
   private final Node node;
   private final JInferProject project;
 
-  public FileAddAction(final JInferProject project, final Node node, final Collection<FileObject> files) {
+  public FileAddAction(final JInferProject project, final Node node, final Collection<File> files) {
     super();
     putValue(NAME, "Add file");
     this.project = project;
@@ -66,9 +65,7 @@ public class FileAddAction extends AbstractAction {
             setTitle("Add " + type + " files").setFileFilter(fileFilter).showMultiOpenDialog();
 
     if (selectedFiles != null) {
-      for (File file : selectedFiles) {
-        files.add(FileUtil.toFileObject(file));
-      }
+      files.addAll(Arrays.asList(selectedFiles));
 
       ((FileChildren) node.getChildren()).addNotify();
       

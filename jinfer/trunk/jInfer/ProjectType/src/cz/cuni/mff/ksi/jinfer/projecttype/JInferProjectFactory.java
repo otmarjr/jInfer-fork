@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

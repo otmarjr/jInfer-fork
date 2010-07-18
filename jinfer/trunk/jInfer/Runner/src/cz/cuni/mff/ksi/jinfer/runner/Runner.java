@@ -19,14 +19,16 @@ package cz.cuni.mff.ksi.jinfer.runner;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleSelection;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
@@ -51,20 +53,19 @@ public class Runner {
   private static Logger LOG = Logger.getLogger(Runner.class);
 
   public Runner() {
-    final ModuleSelection moduleSelection = lookupModuleSelection();
+    final Properties projectProperties = RunningProject.getActiveProject().getLookup().lookup(Properties.class);
 
-    igGenerator = lookupIGGenerator(moduleSelection.getIGGenerator());
-    simplifier = lookupSimplifier(moduleSelection.getSimplifier());
-    schemaGenerator = lookupSchemaGenerator(moduleSelection.getSchemaGenerator());
+    igGenerator = lookupIGGenerator(projectProperties.getProperty("moduleselector.initialgrammar"));
+    simplifier = lookupSimplifier(projectProperties.getProperty("moduleselector.simplifier"));
+    schemaGenerator = lookupSchemaGenerator(projectProperties.getProperty("moduleselector.schemagenerator"));
   }
 
   /**
    * Starts process of inference.
    */
   public void run() {
-    final FileSelection fileSelection = lookupFileSelection();
 
-    igGenerator.start(fileSelection.getInput(), new IGGeneratorCallback() {
+    igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), new IGGeneratorCallback() {
 
       @Override
       public void finished(final List<AbstractNode> grammar) {
@@ -95,7 +96,7 @@ public class Runner {
     theTask.addTaskListener(new TaskListener() {
 
       @Override
-      public void taskFinished(org.openide.util.Task task) {
+      public void taskFinished(final org.openide.util.Task task) {
         handle.finish();
       }
     });
@@ -122,9 +123,10 @@ public class Runner {
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
     ioResult.getOut().println(schema);
 
-    final FileSelection fileSelection = lookupFileSelection();
-    fileSelection.addOutput(
-            (new Date()).toString(), getCommentedSchema(schema), extension);
+    RunningProject.getActiveProject().getLookup().lookup(FileSelection.class)
+            .addOutput((new Date()).toString(), getCommentedSchema(schema), extension);
+
+    RunningProject.removeActiveProject();
   }
 
   private String getCommentedSchema(final String schema) {
@@ -134,48 +136,57 @@ public class Runner {
             + schemaGenerator.getModuleName() + " -->\n" + schema;
   }
 
-  private FileSelection lookupFileSelection() {
-    final FileSelection fileSelection = Lookup.getDefault().lookup(FileSelection.class);
-    if (fileSelection == null) {
-      throw new MissingModuleException("File selector module not found.");
-    }
-    return fileSelection;
-  }
-
-  private ModuleSelection lookupModuleSelection() {
-    final ModuleSelection moduleSelection = Lookup.getDefault().lookup(ModuleSelection.class);
-    if (moduleSelection == null) {
-      throw new MissingModuleException("Module selection module not found.");
-    }
-    return moduleSelection;
-  }
-
   private IGGenerator lookupIGGenerator(final String name) {
     final Lookup lkp = Lookup.getDefault();
-    for (final IGGenerator igGenerator : lkp.lookupAll(IGGenerator.class)) {
-      if (igGenerator.getModuleName().equals(name)) {
-        return igGenerator;
+    IGGenerator result = null;
+    for (final IGGenerator igGeneratorI : lkp.lookupAll(IGGenerator.class)) {
+      if (result == null) {
+        result = igGeneratorI;
       }
+      
+      if (igGeneratorI.getModuleName().equals(name)) {
+        return igGeneratorI;
+      }
+    }
+
+    if (result != null) {
+      return result;
     }
     throw new MissingModuleException("IG generator module not found.");
   }
 
   private Simplifier lookupSimplifier(final String name) {
     final Lookup lkp = Lookup.getDefault();
-    for (final Simplifier simplifier : lkp.lookupAll(Simplifier.class)) {
-      if (simplifier.getModuleName().equals(name)) {
-        return simplifier;
+    Simplifier result = null;
+    for (final Simplifier simplifierI : lkp.lookupAll(Simplifier.class)) {
+      if (result == null) {
+        result = simplifierI;
       }
+      if (simplifierI.getModuleName().equals(name)) {
+        return simplifierI;
+      }
+    }
+
+    if (result != null) {
+      return result;
     }
     throw new MissingModuleException("Simplifier module not found.");
   }
 
   private SchemaGenerator lookupSchemaGenerator(final String name) {
     final Lookup lkp = Lookup.getDefault();
-    for (final SchemaGenerator schemaGenerator : lkp.lookupAll(SchemaGenerator.class)) {
-      if (schemaGenerator.getModuleName().equals(name)) {
-        return schemaGenerator;
+    SchemaGenerator result = null;
+    for (final SchemaGenerator schemaGeneratorI : lkp.lookupAll(SchemaGenerator.class)) {
+      if (result == null) {
+        result = schemaGeneratorI;
       }
+      if (schemaGeneratorI.getModuleName().equals(name)) {
+        return schemaGeneratorI;
+      }
+    }
+
+    if (result != null) {
+      return result;
     }
     throw new MissingModuleException("Schema generator module not found.");
   }

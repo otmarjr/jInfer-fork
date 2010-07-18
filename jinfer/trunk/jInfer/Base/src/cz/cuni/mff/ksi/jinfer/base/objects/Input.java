@@ -16,7 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -38,6 +45,10 @@ public class Input {
     this.documents = documents;
     this.schemas = schemas;
     this.queries = queries;
+  }
+
+  public Input() {
+    this(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
   }
 
   private void removeNonExistFiles(final Collection<File> collection) {
@@ -62,5 +73,64 @@ public class Input {
   public Collection<File> getQueries() {
     removeNonExistFiles(queries);
     return queries;
+  }
+
+  public void store(final FileOutputStream fileOutputStream) {
+    final PrintWriter out = new PrintWriter(fileOutputStream);
+
+    writeCollection(documents, out);
+    writeCollection(schemas, out);
+    writeCollection(queries, out);
+
+    if (out != null) {
+      out.close();
+    }
+
+  }
+
+  private void writeCollection(final Collection<File> collection, final PrintWriter out) {
+    for (final Iterator<File> it = collection.iterator(); it.hasNext();) {
+      final File file = it.next();
+      out.print(file.getAbsolutePath());
+      if (it.hasNext()) {
+        out.print(",");
+      }
+    }
+    out.println();
+  }
+
+  private void readCollection(final Collection<File> collection, final String line) {
+    if ("".equals(line)) {
+      return;
+    }
+    final String[] filePaths = line.split(",");
+
+    for (String filePath : filePaths) {
+      collection.add(new File(filePath));
+    }
+  }
+
+  public void load(final InputStream inputStream) throws IOException {
+    final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+    String l;
+    int i = 0;
+    while ((l = reader.readLine()) != null) {
+      if (i == 0) {
+        readCollection(documents, l);
+      }
+      if (i == 1) {
+        readCollection(schemas, l);
+      }
+      if (i == 2) {
+        readCollection(queries, l);
+      }
+
+      ++i;
+    }
+
+    if (reader != null) {
+      reader.close();
+    }
   }
 }

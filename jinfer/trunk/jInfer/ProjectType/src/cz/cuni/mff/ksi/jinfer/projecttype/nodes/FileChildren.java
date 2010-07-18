@@ -2,8 +2,9 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.NoDataObjectException;
+import java.io.File;
 import java.util.Collection;
-import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.Children;
@@ -13,11 +14,11 @@ import org.openide.nodes.Node;
  *
  * @author sviro
  */
-public class FileChildren extends Children.Keys<FileObject>{
+public class FileChildren extends Children.Keys<File>{
 
-  private final Collection<FileObject> files;
+  private final Collection<File> files;
 
-  public FileChildren(final Collection<FileObject> files) {
+  public FileChildren(final Collection<File> files) {
     super();
     this.files = files;
   }
@@ -28,9 +29,9 @@ public class FileChildren extends Children.Keys<FileObject>{
   }
 
   @Override
-  protected Node[] createNodes(final FileObject fileOb) {
+  protected Node[] createNodes(final File file) {
     try {
-      return new Node[]{new FileNode(DataObject.find(fileOb).getNodeDelegate())};
+      return new Node[]{new FileNode(DataObject.find(FileUtil.toFileObject(file)).getNodeDelegate())};
     } catch (DataObjectNotFoundException ex) {
       throw new NoDataObjectException(ex.getMessage());
     }

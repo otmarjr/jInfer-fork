@@ -43,7 +43,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
-  private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
+  private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private int maxEnumSize;
   private double minDefaultRatio;
 
@@ -96,7 +96,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             .append(subElementsToString(e.getSubnodes(), true))
             .append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
-    if (!attributes.isEmpty()) {
+    if (!BaseUtils.isEmpty(attributes)) {
       ret.append("<!ATTLIST ")
               .append(e.getName())
               .append(' ')

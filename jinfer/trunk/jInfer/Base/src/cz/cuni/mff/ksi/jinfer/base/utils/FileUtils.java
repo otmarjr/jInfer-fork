@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 /**
- * TODO vektor Comment!
+ * Utilities for file handling.
  * 
  * @author vektor
  */
@@ -27,6 +27,11 @@ public final class FileUtils {
   private FileUtils() {
   }
 
+  /**
+   * Returns the extension of the provided file.
+   *
+   * Extension is defined as the part behind the last position of dot (".") in the file name.
+   */
   public static String getExtension(final String fileName) {
     return fileName.substring(fileName.lastIndexOf('.') + 1);
   }

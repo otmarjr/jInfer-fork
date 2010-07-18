@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,7 +61,7 @@ public class DTDUtilsTest {
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att);
     final List<Regexp<AbstractNode>> result = DTDUtils.omitAttributes(list);
-    if (!result.isEmpty()) {
+    if (result == null || !BaseUtils.isEmpty(result)) {
       Assert.fail();
     }
   }

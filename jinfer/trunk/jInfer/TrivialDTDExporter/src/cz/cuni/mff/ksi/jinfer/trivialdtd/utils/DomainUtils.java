@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.trivialdtd.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public final class DomainUtils {
    */
   public static Map<String, Integer> getDomain(final Attribute attribute) {
     final Map<String, Integer> domainMap = new HashMap<String, Integer>();
-    if (attribute.getContent() != null && !attribute.getContent().isEmpty()) {
+    if (!BaseUtils.isEmpty(attribute.getContent())) {
       for (final Object o : attribute.getContent()) {
         if (domainMap.containsKey((String) o)) {
           domainMap.put((String) o, Integer.valueOf(domainMap.get((String) o).intValue() + 1));

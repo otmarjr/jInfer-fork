@@ -20,18 +20,16 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
-import org.xml.sax.SAXException;
 
 /**
  * A trivial implementation of IGGenerator module. Works only with XML documents.
@@ -60,7 +58,7 @@ public class IGGeneratorImpl implements IGGenerator {
   }
 
   private static List<AbstractNode> getRulesFromDocuments(final Collection<File> files) {
-    if (files.isEmpty()) {
+    if (BaseUtils.isEmpty(files)) {
       return new ArrayList<AbstractNode>(0);
     }
 
@@ -82,7 +80,7 @@ public class IGGeneratorImpl implements IGGenerator {
   }
 
   private static List<AbstractNode> getRulesFromSchemas(final Collection<File> files) {
-    if (files.isEmpty()) {
+    if (BaseUtils.isEmpty(files)) {
       return new ArrayList<AbstractNode>(0);
     }
 
@@ -98,7 +96,7 @@ public class IGGeneratorImpl implements IGGenerator {
   }
 
   private static List<AbstractNode> getRulesFromQueries(final Collection<File> files) {
-    if (files.isEmpty()) {
+    if (BaseUtils.isEmpty(files)) {
       return new ArrayList<AbstractNode>(0);
     }
 

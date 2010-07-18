@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -146,8 +147,7 @@ public class Regexp<T> {
     if (isToken()) {
       return content == null;
     }
-    return children == null
-            || children.isEmpty();
+    return BaseUtils.isEmpty(children);
   }
 
   /**
@@ -258,7 +258,7 @@ public class Regexp<T> {
   private void verify() {
     switch (type) {
       case TOKEN:
-        if (!children.isEmpty()) {
+        if (!BaseUtils.isEmpty(children)) {
           throw new IllegalArgumentException("A token must not have children.");
         }
         if (content == null) {

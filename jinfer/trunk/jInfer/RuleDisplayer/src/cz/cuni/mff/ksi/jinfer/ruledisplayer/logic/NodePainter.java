@@ -37,10 +37,6 @@ import java.util.prefs.Preferences;
  */
 public class NodePainter {
 
-  // TODO vektor
-  // - Kleene is broken
-  // - scrolling artifacts
-
   /** Maximum nesting level. */
   private final int maxLevel;
   

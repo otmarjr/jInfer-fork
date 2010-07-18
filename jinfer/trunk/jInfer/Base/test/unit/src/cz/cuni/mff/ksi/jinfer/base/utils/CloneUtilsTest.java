@@ -69,7 +69,7 @@ public class CloneUtilsTest {
     final Element e = new Element(null, "e", m, Regexp.getConcatenation(children));
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(e);
-    final List result = CloneUtils.cloneRules(l);
+    final List<AbstractNode> result = CloneUtils.cloneRules(l);
 
     assertEquals(1, result.size());
     assert (l != result);

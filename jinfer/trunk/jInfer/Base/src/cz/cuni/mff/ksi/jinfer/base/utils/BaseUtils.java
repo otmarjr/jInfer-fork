@@ -56,8 +56,6 @@ public final class BaseUtils {
 
   /**
    * Checks whether the collection is empty, that means NULL or empty as in "no elements within".
-   *
-   * TODO vektor Find usages of List.isEmpty() and replace it with this method.
    * 
    * @param <T>
    * @param c Collection to check.

@@ -271,7 +271,17 @@ public class JInferProject implements Project {
     public void addOutput(final String name, final String data, final String extension) {
       try {
         final FileObject outputFolder = getOutputFolder(true);
-        final FileObject output = outputFolder.createData(name, extension);
+
+        int min = 1;
+
+        while (true) {
+          if (outputFolder.getFileObject(name + min, extension) == null) {
+            break;
+          }
+          min++;
+        }
+
+        final FileObject output = outputFolder.createData(name + min, extension);
         final OutputStream out = output.getOutputStream();
         out.write(data.getBytes());
         out.flush();

@@ -124,7 +124,7 @@ public class Runner {
     ioResult.getOut().println(schema);
 
     RunningProject.getActiveProject().getLookup().lookup(FileSelection.class)
-            .addOutput((new Date()).toString(), getCommentedSchema(schema), extension);
+            .addOutput("generated-schema", getCommentedSchema(schema), extension);
 
     RunningProject.removeActiveProject();
   }

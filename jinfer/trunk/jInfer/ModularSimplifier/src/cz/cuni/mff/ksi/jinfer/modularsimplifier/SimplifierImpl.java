@@ -25,14 +25,14 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ContextClusterer;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayerTopComponent;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.SimpleKP;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.options.ConfigPanel;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPAlternations;
 import java.util.List;
-import java.util.prefs.Preferences;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
@@ -53,7 +53,8 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private ClusterProcessor getClusterProcessor() {
-    final String cp = Preferences.userNodeForPackage(ConfigPanel.class).get("cluster.processor", "Trie");
+    final Properties properties = RunningProject.getActiveProjectProps();
+    final String cp = properties.getProperty("modularsimplifier.cluster.processor", "Trie");
     LOG.info("Simplifier: using " + cp + " cluster processor.");
     if ("Trie".equals(cp)) {
       return new CPTrie();
@@ -65,7 +66,8 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private Clusterer getClusterer() {
-    if (Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("use.context", false)) {
+    final Properties properties = RunningProject.getActiveProjectProps();
+    if (Boolean.parseBoolean(properties.getProperty("modularsimplifier.use.context", "false"))) {
       LOG.info("Simplifier: using context.");
       return new ContextClusterer();
     }
@@ -79,18 +81,22 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
-    if (!Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("enabled", true)) {
+    final Properties properties = RunningProject.getActiveProjectProps();
+
+    if (!Boolean.parseBoolean(properties.getProperty("modularsimplifier.enabled", "true"))) {
       callback.finished(initialGrammar);
       return;
     }
 
-    showRulesAsync("Original", CloneUtils.cloneRules(initialGrammar));
+    final boolean render = Boolean.parseBoolean(properties.getProperty("modularsimplifier.render", "true"));
+
+    showRulesAsync("Original", CloneUtils.cloneRules(initialGrammar), render);
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
-    showClustersAsync("Clustered", CloneUtils.cloneClusters(clustered));
+    showClustersAsync("Clustered", CloneUtils.cloneClusters(clustered), render);
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
-    showRulesAsync("Processed", CloneUtils.cloneRules(processed));
+    showRulesAsync("Processed", CloneUtils.cloneRules(processed), render);
     final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
-    showRulesAsync("Kleened", CloneUtils.cloneRules(kleened));
+    showRulesAsync("Kleened", CloneUtils.cloneRules(kleened), render);
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override
@@ -100,8 +106,7 @@ public class SimplifierImpl implements Simplifier {
     });
   }
 
-  private static void showRulesAsync(final String panelName, final List<AbstractNode> rules) {
-    final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
+  private static void showRulesAsync(final String panelName, final List<AbstractNode> rules, final boolean render) {
     if (!render) {
       return;
     }
@@ -114,8 +119,7 @@ public class SimplifierImpl implements Simplifier {
     });
   }
 
-  private static void showClustersAsync(final String panelName, final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
-    final boolean render = Preferences.userNodeForPackage(ConfigPanel.class).getBoolean("render", true);
+  private static void showClustersAsync(final String panelName, final List<Pair<AbstractNode, List<AbstractNode>>> clusters, final boolean render) {
     if (!render) {
       return;
     }

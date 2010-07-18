@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.Image;
 import javax.swing.Action;
@@ -37,11 +39,11 @@ import org.openide.util.lookup.ProxyLookup;
  */
 public class JInferLogicalView implements LogicalViewProvider {
 
-  private final class InputNode extends FilterNode {
+  private final class OutputNode extends FilterNode {
 
     private final JInferProject project;
 
-    public InputNode(final Node node, final JInferProject project) {
+    public OutputNode(final Node node, final JInferProject project) {
       super(node, new FilterNode.Children(node), new ProxyLookup(new Lookup[]{Lookups.singleton(project), node.getLookup()}));
       this.project = project;
     }
@@ -71,7 +73,7 @@ public class JInferLogicalView implements LogicalViewProvider {
                   input.getDocuments()), new FolderNode(JInferLogicalView.this.project, "schema",
                   input.getSchemas()), new FolderNode(JInferLogicalView.this.project, "query",
                   input.getQueries()),
-                  new InputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(),
+                  new OutputNode(DataFolder.findFolder(project.getOutputFolder(true)).getNodeDelegate(),
                   project)});
         }
 
@@ -101,12 +103,13 @@ public class JInferLogicalView implements LogicalViewProvider {
 
     @Override
     public Action[] getActions(final boolean context) {
-      Action[] nodeActions = new Action[5];
-      nodeActions[0] = CommonProjectActions.copyProjectAction();
-      nodeActions[1] = CommonProjectActions.deleteProjectAction();
-      nodeActions[2] = CommonProjectActions.setAsMainProjectAction();
-      nodeActions[3] = CommonProjectActions.closeProjectAction();
-      nodeActions[4] = CommonProjectActions.customizeProjectAction();
+      Action[] nodeActions = new Action[6];
+      nodeActions[0] = new RunAction(project);
+      nodeActions[1] = CommonProjectActions.copyProjectAction();
+      nodeActions[2] = CommonProjectActions.deleteProjectAction();
+      nodeActions[3] = CommonProjectActions.setAsMainProjectAction();
+      nodeActions[4] = CommonProjectActions.closeProjectAction();
+      nodeActions[5] = CommonProjectActions.customizeProjectAction();
       return nodeActions;
     }
   }

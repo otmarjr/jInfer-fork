@@ -15,16 +15,37 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.projecttype.properties;
+package cz.cuni.mff.ksi.jinfer.projecttype.actions;
+
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
+import cz.cuni.mff.ksi.jinfer.runner.Runner;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
 
 /**
  *
  * @author sviro
  */
-public interface PropertiesPanel {
+public class RunAction extends AbstractAction{
 
-  void store();
+  private final JInferProject project;
 
-  void load();
+  public RunAction(final JInferProject project) {
+    super("Run");
+    this.project = project;
+  }
+
+
+
+  @Override
+  public void actionPerformed(final ActionEvent e) {
+    if (RunningProject.setActiveProject(project)) {
+      new Runner().run();
+    } else {
+      //TODO treba oznamit ze inferencia bezi uz niekde inde
+    }
+    
+  }
 
 }

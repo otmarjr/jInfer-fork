@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.trivialdtd.options.ConfigPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DTDUtils;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.utils.DomainUtils;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.prefs.Preferences;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -58,8 +58,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             + " rules.");
 
     // load settings
-    maxEnumSize = Preferences.userNodeForPackage(ConfigPanel.class).getInt("max.enum.size", 3);
-    minDefaultRatio = Preferences.userNodeForPackage(ConfigPanel.class).getFloat("min.default.ratio", 0.67f);
+    final Properties properties = RunningProject.getActiveProjectProps();
+
+    maxEnumSize = Integer.parseInt(properties.getProperty("trivialdtdexporter.max.enum.size", "3"));
+    minDefaultRatio = Float.parseFloat(properties.getProperty("trivialdtdexporter.min.default.ratio", "0.67f"));
     
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();

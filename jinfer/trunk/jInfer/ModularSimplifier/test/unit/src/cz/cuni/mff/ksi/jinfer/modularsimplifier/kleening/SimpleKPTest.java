@@ -33,10 +33,12 @@ import static org.junit.Assert.*;
 @SuppressWarnings({"PMD.SystemPrintln", "unchecked"})
 public class SimpleKPTest {
 
+  private static final int THRESHOLD = 3;
+
   @Test(expected = NullPointerException.class)
   public void testKleeneProcessNull() {
     System.out.println("testKleeneProcessNull");
-    new SimpleKP().kleeneProcess(null);
+    new SimpleKP(THRESHOLD).kleeneProcess(null);
   }
 
   @Test
@@ -50,7 +52,7 @@ public class SimpleKPTest {
 
     rules.add(rule);
 
-    final List<AbstractNode> result = new SimpleKP().kleeneProcess(rules);
+    final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
     assertEquals(result.size(), 1);
     final AbstractNode n = result.get(0);
     assertEquals(NodeType.ELEMENT, n.getType());
@@ -76,7 +78,7 @@ public class SimpleKPTest {
     final AbstractNode rule1 = new Element(null, "e1", null, subnodes1);
     rules.add(rule1);
 
-    final List<AbstractNode> result = new SimpleKP().kleeneProcess(rules);
+    final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
     assertEquals(1, result.size());
     final AbstractNode n = result.get(0);
     assertEquals(NodeType.ELEMENT, n.getType());
@@ -99,7 +101,7 @@ public class SimpleKPTest {
     final AbstractNode rule1 = new Element(null, "e1", null, getSubnodes0());
     rules.add(rule1);
 
-    final List<AbstractNode> result = new SimpleKP().kleeneProcess(rules);
+    final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
 
     assertEquals(1, result.size());
     final AbstractNode n = result.get(0);
@@ -125,7 +127,7 @@ public class SimpleKPTest {
     final AbstractNode rule2 = new Element(null, "ehm1", null, getSubnodes2());
     rules.add(rule2);
 
-    final List<AbstractNode> result = new SimpleKP().kleeneProcess(rules);
+    final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
     assertEquals(result.size(), 2);
     final AbstractNode n0 = result.get(0);
     assertEquals(NodeType.ELEMENT, n0.getType());
@@ -166,7 +168,7 @@ public class SimpleKPTest {
     rules.add(rule2);
 
 
-    final List<AbstractNode> result = new SimpleKP().kleeneProcess(rules);
+    final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
 
     assertEquals(result.size(), 2);
     final AbstractNode n1 = result.get(0);

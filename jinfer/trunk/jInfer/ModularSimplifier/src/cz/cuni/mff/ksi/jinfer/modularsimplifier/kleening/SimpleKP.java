@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,11 @@ import org.apache.log4j.Logger;
 public class SimpleKP implements KleeneProcessor {
 
   private static Logger LOG = Logger.getLogger(KleeneProcessor.class);
-  private final int threshold = Integer.parseInt(RunningProject.getActiveProjectProps()
-          .getProperty("modularsimplifier.kleene.repetitions", "3"));
+  private final int threshold;
+
+  public SimpleKP(final int threshold) {
+    this.threshold = threshold;
+  }
 
   @Override
   public List<AbstractNode> kleeneProcess(final List<AbstractNode> rules) {

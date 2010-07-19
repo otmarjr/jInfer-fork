@@ -34,4 +34,14 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
     return new ModularSimplifierPropertiesPanel(properties);
   }
 
+  @Override
+  public String getName() {
+    return "modularSimplifier";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Modular Simplifier";
+  }
+
 }

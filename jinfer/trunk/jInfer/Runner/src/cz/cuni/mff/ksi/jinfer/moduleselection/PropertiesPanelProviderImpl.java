@@ -34,4 +34,14 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
     return new ModuleSelectionPropertiesPanel(properties);
   }
 
+  @Override
+  public String getName() {
+    return "moduleSelection";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Module Selection";
+  }
+
 }

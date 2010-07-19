@@ -34,4 +34,14 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
     return new DTDExportPropertiesPanel(properties);
   }
 
+  @Override
+  public String getName() {
+    return "dtdExport";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "DTD export";
+  }
+
 }

@@ -33,4 +33,8 @@ public interface PropertiesPanelProvider {
    */
   AbstractPropertiesPanel getPanel(final Properties properties);
 
+  String getName();
+
+  String getDisplayName();
+
 }

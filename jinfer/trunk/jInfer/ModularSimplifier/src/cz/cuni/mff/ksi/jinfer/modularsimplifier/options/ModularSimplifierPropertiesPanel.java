@@ -17,9 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.options;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.SimplifierImpl;
 import java.util.Properties;
 
-public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPanel{
+public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 561241l;
 
@@ -151,20 +152,30 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
 
   @Override
   public void load() {
-    enabled.setSelected(Boolean.parseBoolean(properties.getProperty("modularsimplifier.enabled", "true")));
-    context.setSelected(Boolean.parseBoolean(properties.getProperty("modularsimplifier.use.context", "false")));
-    render.setSelected(Boolean.parseBoolean(properties.getProperty("modularsimplifier.render", "true")));
-    kleeneRepetitions.setValue(Integer.valueOf(properties.getProperty("modularsimplifier.kleene.repetitions", "3")));
-    clusterProcessor.setSelectedItem(properties.getProperty("modularsimplifier.cluster.processor", "Trie"));
+    enabled.setSelected(Boolean.parseBoolean(properties
+            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_ENABLED, "true")));
+    context.setSelected(Boolean.parseBoolean(properties
+            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_USE_CONTEXT, "false")));
+    render.setSelected(Boolean.parseBoolean(properties
+            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_RENDER, "true")));
+    kleeneRepetitions.setValue(Integer.valueOf(properties
+            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_KLEENE_REPETITIONS, "3")));
+    clusterProcessor.setSelectedItem(properties
+            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR, "Trie"));
   }
 
   @Override
   public void store() {
-    properties.setProperty("modularsimplifier.enabled", Boolean.toString(enabled.isSelected()));
-    properties.setProperty("modularsimplifier.use.context", Boolean.toString(context.isSelected()));
-    properties.setProperty("modularsimplifier.render", Boolean.toString(render.isSelected()));
-    properties.setProperty("modularsimplifier.kleene.repetitions",  ((Integer)kleeneRepetitions.getValue()).toString());
-    properties.setProperty("modularsimplifier.cluster.processor", (String) clusterProcessor.getSelectedItem());
+    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_ENABLED,
+            Boolean.toString(enabled.isSelected()));
+    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_USE_CONTEXT,
+            Boolean.toString(context.isSelected()));
+    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_RENDER,
+            Boolean.toString(render.isSelected()));
+    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_KLEENE_REPETITIONS,
+            ((Integer) kleeneRepetitions.getValue()).toString());
+    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR,
+            (String) clusterProcessor.getSelectedItem());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox clusterProcessor;

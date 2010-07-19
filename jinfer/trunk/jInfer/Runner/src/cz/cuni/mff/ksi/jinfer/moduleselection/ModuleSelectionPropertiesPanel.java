@@ -26,13 +26,11 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
-  private final Properties properties;
   private static final String DEFAULT_MENU_TEXT = "<none available>";
 
   /** Creates new form ModuleSelectionJPanel */
   public ModuleSelectionPropertiesPanel(final Properties properties) {
     super(properties);
-    this.properties = properties;
     initComponents();
     load();
   }

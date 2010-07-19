@@ -42,6 +42,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
+  public static final String TRIVIALDTDEXPORTER_MAX_ENUM_SIZE = "trivialdtdexporter.max.enum.size";
+  public static final String TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO = "trivialdtdexporter.min.default.ratio";
 
   private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private int maxEnumSize;
@@ -60,8 +62,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // load settings
     final Properties properties = RunningProject.getActiveProjectProps();
 
-    maxEnumSize = Integer.parseInt(properties.getProperty("trivialdtdexporter.max.enum.size", "3"));
-    minDefaultRatio = Float.parseFloat(properties.getProperty("trivialdtdexporter.min.default.ratio", "0.67f"));
+    maxEnumSize = Integer.parseInt(properties.getProperty(TRIVIALDTDEXPORTER_MAX_ENUM_SIZE,"3"));
+    minDefaultRatio = Float.parseFloat(properties.getProperty(TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO,"0.67f"));
     
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();

@@ -22,13 +22,20 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
+import org.jaxen.saxpath.SAXPathException;
+import org.jaxen.saxpath.XPathReader;
+import org.jaxen.saxpath.helpers.XPathReaderFactory;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -100,6 +107,38 @@ public class IGGeneratorImpl implements IGGenerator {
   private static List<AbstractNode> getRulesFromQueries(final Collection<File> files) {
     if (BaseUtils.isEmpty(files)) {
       return new ArrayList<AbstractNode>(0);
+    }
+
+    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+
+    for (final File f : files) {
+      try {
+        final DataInputStream in = new DataInputStream(new FileInputStream(f));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        String strLine;
+        while ((strLine = br.readLine()) != null) {
+          if (!strLine.startsWith("#")) {
+            ret.addAll(parsePath(strLine));
+          }
+        }
+        in.close();
+      } catch (final Exception e) {
+        LOG.error("Error reading file " + f, e);
+      }
+    }
+
+    return ret;
+  }
+
+  private static List<AbstractNode> parsePath(final String path) {
+    try {
+      final XPathReader xr = XPathReaderFactory.createReader();
+      final XPathHandlerImpl xh = new XPathHandlerImpl();
+      xr.setXPathHandler(xh);
+      xr.parse(path);
+      return xh.getRules();
+    } catch (SAXPathException ex) {
+      LOG.error("Error parsing the path: " + path, ex);
     }
 
     return new ArrayList<AbstractNode>(0);

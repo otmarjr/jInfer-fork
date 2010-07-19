@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ContextClusterer;
@@ -107,7 +108,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private static void showRulesAsync(final String panelName, final List<AbstractNode> rules, final boolean render) {
-    if (!render) {
+    if (!render || BaseUtils.isEmpty(rules)) {
       return;
     }
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
@@ -120,7 +121,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private static void showClustersAsync(final String panelName, final List<Pair<AbstractNode, List<AbstractNode>>> clusters, final boolean render) {
-    if (!render) {
+    if (!render || BaseUtils.isEmpty(clusters)) {
       return;
     }
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {

@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * SAX handler for the trivial IGGenerator module.
+ * SAX handler for the IGGenerator module.
  * 
  * @author vektor
  */
@@ -42,7 +42,7 @@ public class TrivialHandler extends DefaultHandler {
 
   /** Stack to hold currently open nodes. */
   private final Stack<AbstractNode> stack = new Stack<AbstractNode>();
-  /** Set of rules that have been inferred so far. */
+  /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
 
   @Override

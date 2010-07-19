@@ -27,16 +27,19 @@ import org.jaxen.saxpath.SAXPathException;
 import org.jaxen.saxpath.helpers.DefaultXPathHandler;
 
 /**
+ * XPath handler for the IGGenerator module.
  *
- * @author vitasek
+ * @author vektor
  */
 public class XPathHandlerImpl extends DefaultXPathHandler {
 
+  /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+  /** The element we were looking at the last time. */
   private String lastStep = null;
 
   @Override
-  public void startAllNodeStep(int axis) throws SAXPathException {
+  public void startAllNodeStep(final int axis) throws SAXPathException {
     super.startAllNodeStep(axis);
 
     if (axis == Axis.DESCENDANT_OR_SELF || axis == Axis.PARENT) {
@@ -49,7 +52,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   }
 
   @Override
-  public void startNameStep(int axis, String prefix, String localName) throws SAXPathException {
+  public void startNameStep(final int axis, final String prefix, final String localName) throws SAXPathException {
     super.startNameStep(axis, prefix, localName);
 
     if (lastStep != null) {
@@ -61,11 +64,15 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     lastStep = localName;
   }
 
+  /**
+   * Returns the list of rules that were collected while parsing the query.
+   */
   public List<AbstractNode> getRules() {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules);
     if (lastStep != null) {
       ret.add(new Element(null, lastStep, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation()));
     }
+    lastStep = null;
     return ret;
   }
 }

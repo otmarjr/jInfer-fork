@@ -45,6 +45,11 @@ import org.openide.windows.WindowManager;
  */
 @ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
+  public static final String MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR = "modularsimplifier.cluster.processor";
+  public static final String MODULAR_SIMPLIFIER_ENABLED = "modularsimplifier.enabled";
+  public static final String MODULAR_SIMPLIFIER_KLEENE_REPETITIONS = "modularsimplifier.kleene.repetitions";
+  public static final String MODULAR_SIMPLIFIER_RENDER = "modularsimplifier.render";
+  public static final String MODULAR_SIMPLIFIER_USE_CONTEXT = "modularsimplifier.use.context";
 
   private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
@@ -55,7 +60,7 @@ public class SimplifierImpl implements Simplifier {
 
   private ClusterProcessor getClusterProcessor() {
     final Properties properties = RunningProject.getActiveProjectProps();
-    final String cp = properties.getProperty("modularsimplifier.cluster.processor", "Trie");
+    final String cp = properties.getProperty(MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR,"Trie");
     LOG.info("Simplifier: using " + cp + " cluster processor.");
     if ("Trie".equals(cp)) {
       return new CPTrie();
@@ -68,7 +73,7 @@ public class SimplifierImpl implements Simplifier {
 
   private Clusterer getClusterer() {
     final Properties properties = RunningProject.getActiveProjectProps();
-    if (Boolean.parseBoolean(properties.getProperty("modularsimplifier.use.context", "false"))) {
+    if (Boolean.parseBoolean(properties.getProperty(MODULAR_SIMPLIFIER_USE_CONTEXT,"false"))) {
       LOG.info("Simplifier: using context.");
       return new ContextClusterer();
     }
@@ -78,19 +83,19 @@ public class SimplifierImpl implements Simplifier {
 
   private KleeneProcessor getKleeneProcessor() {
     return new SimpleKP(Integer.parseInt(RunningProject.getActiveProjectProps()
-          .getProperty("modularsimplifier.kleene.repetitions", "3")));
+          .getProperty(MODULAR_SIMPLIFIER_KLEENE_REPETITIONS,"3")));
   }
 
   @Override
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
     final Properties properties = RunningProject.getActiveProjectProps();
 
-    if (!Boolean.parseBoolean(properties.getProperty("modularsimplifier.enabled", "true"))) {
+    if (!Boolean.parseBoolean(properties.getProperty(MODULAR_SIMPLIFIER_ENABLED,"true"))) {
       callback.finished(initialGrammar);
       return;
     }
 
-    final boolean render = Boolean.parseBoolean(properties.getProperty("modularsimplifier.render", "true"));
+    final boolean render = Boolean.parseBoolean(properties.getProperty(MODULAR_SIMPLIFIER_RENDER,"true"));
 
     showRulesAsync("Original", CloneUtils.cloneRules(initialGrammar), render);
     final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);

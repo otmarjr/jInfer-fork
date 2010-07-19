@@ -77,7 +77,8 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private KleeneProcessor getKleeneProcessor() {
-    return new SimpleKP();
+    return new SimpleKP(Integer.parseInt(RunningProject.getActiveProjectProps()
+          .getProperty("modularsimplifier.kleene.repetitions", "3")));
   }
 
   @Override

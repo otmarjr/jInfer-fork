@@ -1,9 +1,8 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
-import cz.cuni.mff.ksi.jinfer.projecttype.properties.panels.DTDExportJPanel;
-import cz.cuni.mff.ksi.jinfer.projecttype.properties.panels.ModularSimplifierJPanel;
-import cz.cuni.mff.ksi.jinfer.projecttype.properties.panels.ModuleSelectionJPanel;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +15,7 @@ import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.spi.project.ui.CustomizerProvider;
 import org.netbeans.spi.project.ui.support.ProjectCustomizer;
 import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -33,26 +33,25 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   }
 
   private void init() {
-    final ProjectCustomizer.Category moduleSelection = ProjectCustomizer.Category.create("moduleSelection",
-            "Module Selection", null);
-
-    final ProjectCustomizer.Category modularSimplifier = ProjectCustomizer.Category.create("modularSimplifier",
-            "Modular Simplifier", null);
-
-    final ProjectCustomizer.Category dtdExport = ProjectCustomizer.Category.create("dtdExport",
-            "DTD Export", null);
-
-    categories = new ProjectCustomizer.Category[] {moduleSelection, modularSimplifier, dtdExport};
-
     final Properties properties = project.getLookup().lookup(Properties.class);
 
-    final Map<Category, JPanel> panels = new HashMap<Category, JPanel>();
-    panels.put(moduleSelection, new ModuleSelectionJPanel(properties));
-    panels.put(modularSimplifier, new ModularSimplifierJPanel(properties));
-    panels.put(dtdExport, new DTDExportJPanel(properties));
+    final Map<Category, JPanel> panels = lookupCategoriesPanels(properties);
+    categories = panels.keySet().toArray(new Category[0]);
 
     componentProvider = new JInferComponentProvider(panels);
 
+  }
+
+  private Map<Category, JPanel> lookupCategoriesPanels(final Properties properties) {
+    final Map<Category, JPanel> result = new HashMap<Category, JPanel>();
+
+    final Lookup lkp = Lookup.getDefault();
+    for (final PropertiesPanelProvider propPanelProvider : lkp.lookupAll(PropertiesPanelProvider.class)) {
+      result.put(Category.create(propPanelProvider.getName(),
+              propPanelProvider.getDisplayName(), null), propPanelProvider.getPanel(properties));
+    }
+    
+    return result;
   }
 
   @Override
@@ -80,7 +79,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     public void actionPerformed(final ActionEvent e) {
       if ("ok".equalsIgnoreCase(e.getActionCommand())) {
         for (Category category : categories) {
-          ((PropertiesPanel)componentProvider.create(category)).store();
+          ((AbstractPropertiesPanel)componentProvider.create(category)).store();
         }
       }
     }

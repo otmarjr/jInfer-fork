@@ -15,44 +15,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.base.objects;
+package cz.cuni.mff.ksi.jinfer.modularsimplifier.options;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
-import javax.swing.JPanel;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author sviro
  */
-public abstract class AbstractPropertiesPanel extends JPanel {
+@ServiceProvider(service = PropertiesPanelProvider.class)
+public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
 
-  protected final Properties properties;
-
-  /**
-   * 
-   * @param properties
-   */
-  public AbstractPropertiesPanel(final Properties properties) {
-    super();
-    this.properties = properties;
-  }
-
-  /**
-   * 
-   */
-  public abstract void store();
-
-  /**
-   * 
-   */
-  public abstract  void load();
-
-  /**
-   * 
-   * @return
-   */
-  public Properties getProperties() {
-    return properties;
+  @Override
+  public AbstractPropertiesPanel getPanel(final Properties properties) {
+    return new ModularSimplifierPropertiesPanel(properties);
   }
 
 }

@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import java.util.Properties;
 
 /**
  *
@@ -25,6 +26,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
  */
 public interface PropertiesPanelProvider {
 
-  AbstractPropertiesPanel getPanel();
+  /**
+   * 
+   * @param properties
+   * @return
+   */
+  AbstractPropertiesPanel getPanel(final Properties properties);
 
 }

@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.moduleselection.ModuleSelection;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -55,9 +56,9 @@ public class Runner {
   public Runner() {
     final Properties projectProperties = RunningProject.getActiveProject().getLookup().lookup(Properties.class);
 
-    igGenerator = lookupIGGenerator(projectProperties.getProperty("moduleselector.initialgrammar"));
-    simplifier = lookupSimplifier(projectProperties.getProperty("moduleselector.simplifier"));
-    schemaGenerator = lookupSchemaGenerator(projectProperties.getProperty("moduleselector.schemagenerator"));
+    igGenerator = ModuleSelection.lookupIGGenerator(projectProperties.getProperty("moduleselector.initialgrammar"));
+    simplifier = ModuleSelection.lookupSimplifier(projectProperties.getProperty("moduleselector.simplifier"));
+    schemaGenerator = ModuleSelection.lookupSchemaGenerator(projectProperties.getProperty("moduleselector.schemagenerator"));
   }
 
   /**
@@ -136,58 +137,4 @@ public class Runner {
             + schemaGenerator.getModuleName() + " -->\n" + schema;
   }
 
-  private IGGenerator lookupIGGenerator(final String name) {
-    final Lookup lkp = Lookup.getDefault();
-    IGGenerator result = null;
-    for (final IGGenerator igGeneratorI : lkp.lookupAll(IGGenerator.class)) {
-      if (result == null) {
-        result = igGeneratorI;
-      }
-      
-      if (igGeneratorI.getModuleName().equals(name)) {
-        return igGeneratorI;
-      }
-    }
-
-    if (result != null) {
-      return result;
-    }
-    throw new MissingModuleException("IG generator module not found.");
-  }
-
-  private Simplifier lookupSimplifier(final String name) {
-    final Lookup lkp = Lookup.getDefault();
-    Simplifier result = null;
-    for (final Simplifier simplifierI : lkp.lookupAll(Simplifier.class)) {
-      if (result == null) {
-        result = simplifierI;
-      }
-      if (simplifierI.getModuleName().equals(name)) {
-        return simplifierI;
-      }
-    }
-
-    if (result != null) {
-      return result;
-    }
-    throw new MissingModuleException("Simplifier module not found.");
-  }
-
-  private SchemaGenerator lookupSchemaGenerator(final String name) {
-    final Lookup lkp = Lookup.getDefault();
-    SchemaGenerator result = null;
-    for (final SchemaGenerator schemaGeneratorI : lkp.lookupAll(SchemaGenerator.class)) {
-      if (result == null) {
-        result = schemaGeneratorI;
-      }
-      if (schemaGeneratorI.getModuleName().equals(name)) {
-        return schemaGeneratorI;
-      }
-    }
-
-    if (result != null) {
-      return result;
-    }
-    throw new MissingModuleException("Schema generator module not found.");
-  }
 }

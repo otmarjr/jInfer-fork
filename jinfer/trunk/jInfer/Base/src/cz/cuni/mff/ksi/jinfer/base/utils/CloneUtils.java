@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- *
+ * TODO vektor Comment!
  * @author vektor
  */
 public final class CloneUtils {

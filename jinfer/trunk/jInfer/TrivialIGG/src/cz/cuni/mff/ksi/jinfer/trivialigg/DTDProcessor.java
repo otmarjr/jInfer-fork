@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.trivialigg;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.trivialigg.utils.IGGUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -69,9 +70,7 @@ public final class DTDProcessor {
   }
 
   private static Element processElement(final ElementType e) {
-    final Map<String, Object> elementAttrs = new HashMap<String, Object>(1);
-    elementAttrs.put("from.schema", Boolean.TRUE);
-    final Element ret = new Element(null, e.name.getLocalName(), elementAttrs, Regexp.<AbstractNode>getConcatenation());
+    final Element ret = new Element(null, e.name.getLocalName(), IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getConcatenation());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {

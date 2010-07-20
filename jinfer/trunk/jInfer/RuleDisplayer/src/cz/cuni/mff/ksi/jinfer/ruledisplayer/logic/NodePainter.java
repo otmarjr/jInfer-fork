@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.prefs.Preferences;
 
 /**
- *
- * @author vitasek
+ * @author vektor
  */
 public class NodePainter {
 
@@ -52,6 +51,13 @@ public class NodePainter {
     this.graphics = graphics;
   }
 
+  /**
+   * TODO vektor Comment!
+   * 
+   * @param n
+   * @param level
+   * @return
+   */
   public Image drawNode(final AbstractNode n, final int level) {
     if (level > maxLevel) {
       return Utils.DOTS;

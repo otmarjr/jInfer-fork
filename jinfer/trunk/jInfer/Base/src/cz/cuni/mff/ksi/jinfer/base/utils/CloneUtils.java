@@ -29,7 +29,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * TODO vektor Comment!
+ * Utilities for rule cloning.
+ * 
  * @author vektor
  */
 public final class CloneUtils {

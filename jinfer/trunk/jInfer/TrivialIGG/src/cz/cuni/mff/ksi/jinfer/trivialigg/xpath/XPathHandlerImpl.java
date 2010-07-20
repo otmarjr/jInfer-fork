@@ -42,6 +42,8 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
   /** The element we were looking at the last time. */
   private Element lastElement = null;
+  /** Has lastElement already been written to output? */
+  private boolean dirty = false;
   /** The attribute we were looking at the last time. */
   private Attribute lastAttribute = null;
   /** The literal we were looking at the last time. */
@@ -57,6 +59,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       }
 
       lastElement = null;
+      dirty = false;
     }
 
     LOG.info("allNode: " + axis + " (" + Axis.lookup(axis) + ")");
@@ -66,20 +69,26 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   public void startNameStep(final int axis, final String prefix, final String localName) throws SAXPathException {
     super.startNameStep(axis, prefix, localName);
 
-    // TODO vektor switch
-    if (axis == Axis.CHILD) {
-      final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation());
-      if (lastElement != null) {
-        lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newElement));
-        rules.add(lastElement);
-      }
-      lastElement = newElement;
-      lastAttribute = null;
-    } else if (axis == Axis.ATTRIBUTE && lastElement != null) {
-      final Attribute newAttr = new Attribute(null, localName, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
-      lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newAttr));
-      lastAttribute = newAttr;
-      rules.add(lastElement);
+    switch (axis) {
+      case Axis.CHILD:
+        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation());
+        if (lastElement != null) {
+          lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newElement));
+          rules.add(lastElement);
+        }
+        lastElement = newElement;
+        dirty = true;
+        lastAttribute = null;
+        break;
+      case Axis.ATTRIBUTE:
+        if (lastElement != null) {
+          final Attribute newAttr = new Attribute(null, localName, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+          lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newAttr));
+          lastAttribute = newAttr;
+          rules.add(lastElement);
+          dirty = false;
+        }
+        break;
     }
 
     LOG.info("name: " + axis + " (" + Axis.lookup(axis) + "), " + prefix + ", " + localName);
@@ -116,10 +125,11 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
    */
   public List<AbstractNode> getRules() {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules);
-    if (lastElement != null) {
+    if (lastElement != null && dirty) {
       ret.add(lastElement);
     }
     lastElement = null;
+    dirty = false;
     return ret;
   }
 }

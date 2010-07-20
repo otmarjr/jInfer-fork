@@ -14,30 +14,28 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.trivialigg.utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Utilities for IGG.
  *
- * @author vitasek
+ * @author vektor
  */
 public final class IGGUtils {
 
-  private IGGUtils() { }
-
+  private IGGUtils() {
+  }
   public static final Map<String, Object> ATTR_FROM_SCHEMA = new HashMap<String, Object>(1);
 
   static {
     ATTR_FROM_SCHEMA.put("from.schema", Boolean.TRUE);
   }
-
   public static final Map<String, Object> ATTR_FROM_QUERY = new HashMap<String, Object>(1);
 
   static {
     ATTR_FROM_SCHEMA.put("from.query", Boolean.TRUE);
   }
-
 }

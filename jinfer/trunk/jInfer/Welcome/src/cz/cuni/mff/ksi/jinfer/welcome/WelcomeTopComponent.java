@@ -23,12 +23,6 @@ import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
-import cz.cuni.mff.ksi.jinfer.fileselector.FileAddAction;
-import cz.cuni.mff.ksi.jinfer.fileselector.FileSelectorTopComponent;
-import cz.cuni.mff.ksi.jinfer.fileselector.nodes.FolderNode;
-import cz.cuni.mff.ksi.jinfer.runner.Runner;
-import javax.swing.Action;
-import org.openide.nodes.Node;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbPreferences;
 
@@ -63,15 +57,10 @@ public final class WelcomeTopComponent extends TopComponent {
     ico1options = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
     jLabel4 = new javax.swing.JLabel();
-    ico2files = new javax.swing.JLabel();
-    jLabel6 = new javax.swing.JLabel();
-    jLabel7 = new javax.swing.JLabel();
     ico3run = new javax.swing.JLabel();
     jLabel9 = new javax.swing.JLabel();
     jLabel10 = new javax.swing.JLabel();
     step1options = new javax.swing.JButton();
-    step2addFiles = new javax.swing.JButton();
-    step3run = new javax.swing.JButton();
     L2support = new javax.swing.JLabel();
     jLabel12 = new javax.swing.JLabel();
     jLabel13 = new javax.swing.JLabel();
@@ -103,13 +92,6 @@ public final class WelcomeTopComponent extends TopComponent {
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel4.text")); // NOI18N
 
-    ico2files.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/welcome/graphics/numer-2-32.png"))); // NOI18N
-    org.openide.awt.Mnemonics.setLocalizedText(ico2files, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.ico2files.text")); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel6.text")); // NOI18N
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel7.text")); // NOI18N
-
     ico3run.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/welcome/graphics/numer-3-32.png"))); // NOI18N
     org.openide.awt.Mnemonics.setLocalizedText(ico3run, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.ico3run.text")); // NOI18N
 
@@ -121,21 +103,6 @@ public final class WelcomeTopComponent extends TopComponent {
     step1options.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         step1optionsActionPerformed(evt);
-      }
-    });
-
-    org.openide.awt.Mnemonics.setLocalizedText(step2addFiles, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.step2addFiles.text")); // NOI18N
-    step2addFiles.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        step2addFilesActionPerformed(evt);
-      }
-    });
-
-    step3run.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/welcome/graphics/arrow-right.png"))); // NOI18N
-    org.openide.awt.Mnemonics.setLocalizedText(step3run, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.step3run.text")); // NOI18N
-    step3run.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        step3runActionPerformed(evt);
       }
     });
 
@@ -185,14 +152,6 @@ public final class WelcomeTopComponent extends TopComponent {
               .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addGroup(layout.createSequentialGroup()
-                    .addComponent(ico2files)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                      .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel7))
-                      .addComponent(jLabel6)))
-                  .addGroup(layout.createSequentialGroup()
                     .addComponent(ico1options)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,16 +167,13 @@ public final class WelcomeTopComponent extends TopComponent {
                   .addComponent(jLabel18)
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(step1options, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                    .addComponent(step3run, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(L2developingjInfer, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(step2addFiles, javax.swing.GroupLayout.Alignment.LEADING))
-                  .addComponent(jLabel17))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 622, Short.MAX_VALUE))))
+                    .addComponent(L2developingjInfer, javax.swing.GroupLayout.Alignment.LEADING))
+                  .addComponent(jLabel17)))))
           .addGroup(layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(showOnStartup))
           .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap(16, Short.MAX_VALUE))
+        .addContainerGap(34, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,22 +195,11 @@ public final class WelcomeTopComponent extends TopComponent {
               .addComponent(step1options, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel4)))
-        .addGap(29, 29, 29)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(ico2files)
-          .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-              .addComponent(jLabel6)
-              .addComponent(step2addFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel7)))
-        .addGap(18, 18, 18)
+        .addGap(87, 87, 87)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
           .addComponent(ico3run)
           .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-              .addComponent(jLabel9)
-              .addComponent(step3run, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel9)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel10)))
         .addGap(18, 18, 18)
@@ -273,7 +218,7 @@ public final class WelcomeTopComponent extends TopComponent {
         .addComponent(jLabel13)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jLabel15)
-        .addGap(18, 36, Short.MAX_VALUE)
+        .addGap(18, 39, Short.MAX_VALUE)
         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
   }// </editor-fold>//GEN-END:initComponents
@@ -282,33 +227,12 @@ public final class WelcomeTopComponent extends TopComponent {
     OptionsDisplayer.getDefault().open("jInfer");
   }//GEN-LAST:event_step1optionsActionPerformed
 
-  private void step2addFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step2addFilesActionPerformed
-    // TODO sviro Refactor to AddXmlAction call
-    final Node[] nodes = ((FileSelectorTopComponent) WindowManager.getDefault().findTopComponent("FileSelectorTopComponent")).getExplorerManager().getRootContext().getChildren().getNodes();
-    for (Node node : nodes) {
-      if (((FolderNode) node).getFolderName().equals("XML")) {
-        final Action[] actions = node.getActions(false);
-        for (Action action : actions) {
-          if (action instanceof FileAddAction) {
-            action.actionPerformed(null);
-          }
-        }
-      }
-    }
-  }//GEN-LAST:event_step2addFilesActionPerformed
-
-  private void step3runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step3runActionPerformed
-    // TODO sviro Refactor to a RunnerAction call
-    new Runner().run();
-  }//GEN-LAST:event_step3runActionPerformed
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
   private javax.swing.JLabel L2developingjInfer;
   private javax.swing.JLabel L2gettingStarted;
   private javax.swing.JLabel L2support;
   private javax.swing.JLabel ico1options;
-  private javax.swing.JLabel ico2files;
   private javax.swing.JLabel ico3run;
   private javax.swing.JLabel jInferLogo;
   private javax.swing.JLabel jLabel1;
@@ -321,13 +245,9 @@ public final class WelcomeTopComponent extends TopComponent {
   private javax.swing.JLabel jLabel18;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
-  private javax.swing.JLabel jLabel6;
-  private javax.swing.JLabel jLabel7;
   private javax.swing.JLabel jLabel9;
   private javax.swing.JCheckBox showOnStartup;
   private javax.swing.JButton step1options;
-  private javax.swing.JButton step2addFiles;
-  private javax.swing.JButton step3run;
   // End of variables declaration//GEN-END:variables
 
   /**

@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.JInferCustomizerProvider;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -191,7 +192,8 @@ public class JInferProject implements Project {
 
     private final String[] supported = new String[]{
       ActionProvider.COMMAND_DELETE,
-      ActionProvider.COMMAND_COPY};
+      ActionProvider.COMMAND_COPY,
+      ActionProvider.COMMAND_RUN};
 
     @Override
     public String[] getSupportedActions() {
@@ -206,11 +208,16 @@ public class JInferProject implements Project {
       if (action.equalsIgnoreCase(ActionProvider.COMMAND_COPY)) {
         DefaultProjectOperations.performDefaultCopyOperation(JInferProject.this);
       }
+      if (action.equalsIgnoreCase(ActionProvider.COMMAND_RUN)) {
+        new RunAction(JInferProject.this).actionPerformed(null);
+      }
     }
 
     @Override
     public boolean isActionEnabled(final String action, final Lookup lookup) throws IllegalArgumentException {
-      if ((action.equals(ActionProvider.COMMAND_DELETE)) || (action.equals(ActionProvider.COMMAND_COPY))) {
+      if ((action.equals(ActionProvider.COMMAND_DELETE)) 
+              || (action.equals(ActionProvider.COMMAND_COPY))
+              || (action.equals(ActionProvider.COMMAND_RUN))) {
         return true;
       } else {
         throw new IllegalArgumentException(action);

@@ -70,6 +70,18 @@ public class IGGeneratorImpl implements IGGenerator {
     callback.finished(ret);
   }
 
+  /**
+   * Retrieves IG rules from provided input files.
+   *
+   * @param files A collection of input files from which rules will be retrieved.
+   * @param mappings {@link Map} of pairs (extension - processor). Extension is
+   * a lowercase file extension (e.g. "dtd"),
+   * processor is the {@link Processor} responsible
+   * for this file type. If <code>mappings</code> contain the key "*", will the
+   * associated processor handle all file types.
+   *
+   * @return List of IG rules. Empty, if there are no input files or an error occurs.
+   */
   private static List<AbstractNode> getRulesFromInput(final Collection<File> files,
           final Map<String, Processor> mappings) {
     if (BaseUtils.isEmpty(files)) {

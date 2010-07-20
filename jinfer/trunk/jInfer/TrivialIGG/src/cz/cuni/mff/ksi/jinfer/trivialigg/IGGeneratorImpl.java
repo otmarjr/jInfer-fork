@@ -16,18 +16,24 @@
  */
 package cz.cuni.mff.ksi.jinfer.trivialigg;
 
+import cz.cuni.mff.ksi.jinfer.trivialigg.xpath.XPathProcessor;
+import cz.cuni.mff.ksi.jinfer.trivialigg.dtd.DTDProcessor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.trivialigg.xml.XMLProcessor;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -50,38 +56,22 @@ public class IGGeneratorImpl implements IGGenerator {
   public void start(final Input input, final IGGeneratorCallback callback) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
-    if (input != null) {
-      ret.addAll(getRulesFromDocuments(input.getDocuments()));
-      ret.addAll(getRulesFromSchemas(input.getSchemas()));
-      ret.addAll(getRulesFromQueries(input.getQueries()));
-    }
+    final Map<String, Processor> xmlProcessor = new HashMap<String, Processor>();
+    xmlProcessor.put("xml", new XMLProcessor());
+    final Map<String, Processor> dtdProcessor = new HashMap<String, Processor>();
+    dtdProcessor.put("dtd", new DTDProcessor());
+    final Map<String, Processor> xpathProcessor = new HashMap<String, Processor>();
+    xpathProcessor.put("*", new XPathProcessor());
+
+    ret.addAll(getRulesFromInput(input.getDocuments(), xmlProcessor));
+    ret.addAll(getRulesFromInput(input.getSchemas(), dtdProcessor));
+    ret.addAll(getRulesFromInput(input.getQueries(), xpathProcessor));
 
     callback.finished(ret);
   }
 
-  private static List<AbstractNode> getRulesFromDocuments(final Collection<File> files) {
-    if (BaseUtils.isEmpty(files)) {
-      return new ArrayList<AbstractNode>(0);
-    }
-
-    final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-    final TrivialHandler handler = new TrivialHandler();
-
-    try {
-      final SAXParser parser = parserFactory.newSAXParser();
-      // do the parsing
-      for (final File doc : files) {
-        parser.parse(doc, handler);
-      }
-      return handler.getRules();
-    } catch (final Exception e) {
-      LOG.error(null, e);
-    }
-
-    return new ArrayList<AbstractNode>(0);
-  }
-
-  private static List<AbstractNode> getRulesFromSchemas(final Collection<File> files) {
+  private static List<AbstractNode> getRulesFromInput(final Collection<File> files,
+          final Map<String, Processor> mappings) {
     if (BaseUtils.isEmpty(files)) {
       return new ArrayList<AbstractNode>(0);
     }
@@ -89,23 +79,20 @@ public class IGGeneratorImpl implements IGGenerator {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     for (final File f : files) {
-      if ("DTD".equals(FileUtils.getExtension(f.getAbsolutePath()).toUpperCase())) {
-        ret.addAll(DTDProcessor.process(f));
+      try {
+        if (mappings.containsKey("*")) {
+          ret.addAll(mappings.get("*").process(new FileInputStream(f)));
+        } else {
+          final String ext = FileUtils.getExtension(f.getAbsolutePath());
+          if (mappings.containsKey(ext)) {
+            ret.addAll(mappings.get(ext).process(new FileInputStream(f)));
+          } else {
+            LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
+          }
+        }
+      } catch (final FileNotFoundException e) {
+        LOG.error("File not found: " + f.getAbsolutePath(), e);
       }
-    }
-
-    return ret;
-  }
-
-  private static List<AbstractNode> getRulesFromQueries(final Collection<File> files) {
-    if (BaseUtils.isEmpty(files)) {
-      return new ArrayList<AbstractNode>(0);
-    }
-
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
-
-    for (final File f : files) {
-      ret.addAll(XPathProcessor.process(f));
     }
 
     return ret;

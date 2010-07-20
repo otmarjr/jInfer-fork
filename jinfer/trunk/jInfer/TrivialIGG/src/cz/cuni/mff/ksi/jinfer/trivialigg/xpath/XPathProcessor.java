@@ -14,13 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialigg;
+package cz.cuni.mff.ksi.jinfer.trivialigg.xpath;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +35,9 @@ import org.jaxen.saxpath.helpers.XPathReaderFactory;
  *
  * @author vektor
  */
-public final class XPathProcessor {
+public class XPathProcessor implements Processor {
 
   private static final Logger LOG = Logger.getLogger(XPathProcessor.class);
-
-  private XPathProcessor() {
-  }
 
   /**
    * Parses the file containing a list of XPath queris and returns the
@@ -49,10 +47,11 @@ public final class XPathProcessor {
    * beginning with # are ignored.
    * @return List of IG rules retrieved from it.
    */
-  public static List<AbstractNode> process(final File f) {
+  @Override
+  public List<AbstractNode> process(final InputStream s) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
     try {
-      final DataInputStream in = new DataInputStream(new FileInputStream(f));
+      final DataInputStream in = new DataInputStream(s);
       final BufferedReader br = new BufferedReader(new InputStreamReader(in));
       String strLine;
       while ((strLine = br.readLine()) != null) {
@@ -62,7 +61,7 @@ public final class XPathProcessor {
       }
       in.close();
     } catch (final Exception e) {
-      LOG.error("Error reading file " + f, e);
+      LOG.error("Error reading file " + s, e);
     }
     return ret;
   }

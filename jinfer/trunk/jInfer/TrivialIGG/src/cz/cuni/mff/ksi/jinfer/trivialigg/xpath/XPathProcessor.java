@@ -40,11 +40,11 @@ public class XPathProcessor implements Processor {
   private static final Logger LOG = Logger.getLogger(XPathProcessor.class);
 
   /**
-   * Parses the file containing a list of XPath queris and returns the
+   * Parses the file containing a list of XPath queries and returns the
    * IG rules contained within.
    *
-   * @param f File containing a list of XPath queries. One query per line, lines
-   * beginning with # are ignored.
+   * @param s File containing a list of XPath queries. One query per line, lines
+   * beginning with "#" are ignored.
    * @return List of IG rules retrieved from it.
    */
   @Override

@@ -14,14 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialigg;
+package cz.cuni.mff.ksi.jinfer.trivialigg.dtd;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.trivialigg.utils.IGGUtils;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,10 +39,7 @@ import org.xmlmiddleware.schemas.dtds.ElementType;
  * 
  * @author vektor
  */
-public final class DTDProcessor {
-
-  private DTDProcessor() {
-  }
+public class DTDProcessor implements Processor {
 
   /**
    * Parses the DTD schema and returns the IG rules contained within.
@@ -50,10 +47,11 @@ public final class DTDProcessor {
    * @param f DTD schema file.
    * @return List of IG rules retrieved from it.
    */
-  public static List<AbstractNode> process(final File f) {
+  @Override
+  public List<AbstractNode> process(final InputStream s) {
     try {
       final DTDParser parser = new DTDParser();
-      final DTD result = parser.parseExternalSubset(new InputSource(new FileInputStream(f)), null);
+      final DTD result = parser.parseExternalSubset(new InputSource(s), null);
 
       final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 

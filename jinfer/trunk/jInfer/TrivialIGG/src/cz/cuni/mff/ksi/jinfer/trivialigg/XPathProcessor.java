@@ -69,12 +69,13 @@ public final class XPathProcessor {
 
   private static List<AbstractNode> parsePath(final String path) {
     try {
+      LOG.info("--- parsing: " + path);
       final XPathReader xr = XPathReaderFactory.createReader();
       final XPathHandlerImpl xh = new XPathHandlerImpl();
       xr.setXPathHandler(xh);
       xr.parse(path);
       return xh.getRules();
-    } catch (SAXPathException ex) {
+    } catch (final SAXPathException ex) {
       LOG.error("Error parsing the path: " + path, ex);
     }
 

@@ -17,11 +17,15 @@
 package cz.cuni.mff.ksi.jinfer.trivialigg;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.trivialigg.utils.IGGUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.apache.log4j.Logger;
 import org.jaxen.saxpath.Axis;
 import org.jaxen.saxpath.SAXPathException;
 import org.jaxen.saxpath.helpers.DefaultXPathHandler;
@@ -33,10 +37,12 @@ import org.jaxen.saxpath.helpers.DefaultXPathHandler;
  */
 public class XPathHandlerImpl extends DefaultXPathHandler {
 
+  // TODO vektor Remove logging
+  private static final Logger LOG = Logger.getLogger(XPathHandlerImpl.class);
   /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
   /** The element we were looking at the last time. */
-  private String lastStep = null;
+  private Element lastStep = null;
 
   @Override
   public void startAllNodeStep(final int axis) throws SAXPathException {
@@ -44,24 +50,35 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     if (axis == Axis.DESCENDANT_OR_SELF || axis == Axis.PARENT) {
       if (lastStep != null) {
-        rules.add(new Element(null, lastStep, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation()));
+        rules.add(lastStep);
       }
 
       lastStep = null;
     }
+
+    LOG.info("allNode: " + axis + " (" + Axis.lookup(axis) + ")");
   }
 
   @Override
   public void startNameStep(final int axis, final String prefix, final String localName) throws SAXPathException {
     super.startNameStep(axis, prefix, localName);
 
-    if (lastStep != null) {
-      final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>(1);
-      children.add(Regexp.<AbstractNode>getToken(new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation())));
-      rules.add(new Element(null, lastStep, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation(children)));
+    if (axis == Axis.CHILD) {
+      final Element newStep = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation());
+      if (lastStep != null) {
+        lastStep.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newStep));
+        rules.add(lastStep);
+      }
+      lastStep = newStep;
+    } else if (axis == Axis.ATTRIBUTE) {
+      if (lastStep != null) {
+        lastStep.getSubnodes().addChild(Regexp.<AbstractNode>getToken(
+                new Attribute(null, localName, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0))));
+        rules.add(lastStep);
+      }
     }
 
-    lastStep = localName;
+    LOG.info("name: " + axis + " (" + Axis.lookup(axis) + "), " + prefix + ", " + localName);
   }
 
   /**
@@ -70,7 +87,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   public List<AbstractNode> getRules() {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules);
     if (lastStep != null) {
-      ret.add(new Element(null, lastStep, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation()));
+      ret.add(lastStep);
     }
     lastStep = null;
     return ret;

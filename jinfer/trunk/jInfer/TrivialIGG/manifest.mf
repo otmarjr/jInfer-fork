@@ -1,6 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: cz.cuni.mff.ksi.jinfer.trivialigg
-OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/trivialigg/layer.xml
 OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/trivialigg/Bundle.properties
 OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator
 OpenIDE-Module-Specification-Version: 1.0

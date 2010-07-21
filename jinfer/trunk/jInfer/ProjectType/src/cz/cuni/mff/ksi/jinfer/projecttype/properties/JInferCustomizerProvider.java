@@ -6,9 +6,11 @@ import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.netbeans.api.project.ProjectUtils;
@@ -43,7 +45,15 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   }
 
   private Map<Category, JPanel> lookupCategoriesPanels(final Properties properties) {
-    final Map<Category, JPanel> result = new HashMap<Category, JPanel>();
+    final Map<Category, JPanel> result = new TreeMap<Category, JPanel>(new Comparator<Category>() {
+
+      @Override
+      public int compare(final Category o1, final Category o2) {
+        String categoryName1 = o1.getDisplayName();
+        String categoryName2 = o2.getDisplayName();
+        return categoryName1.compareTo(categoryName2);
+      }
+    });
 
     final Lookup lkp = Lookup.getDefault();
     for (final PropertiesPanelProvider propPanelProvider : lkp.lookupAll(PropertiesPanelProvider.class)) {

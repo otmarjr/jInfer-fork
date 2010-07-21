@@ -56,7 +56,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
     setLayout(new java.awt.GridBagLayout());
 
-    initialGrammar.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupIGGenerators().toArray()));
+    initialGrammar.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupIGGeneratorNames().toArray()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
@@ -65,7 +65,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(initialGrammar, gridBagConstraints);
 
-    simplifier.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSimplifiers().toArray()));
+    simplifier.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSimplifierNames().toArray()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
@@ -74,7 +74,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(simplifier, gridBagConstraints);
 
-    schemaGenerator.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSchemaGenerators().toArray()));
+    schemaGenerator.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSchemaGeneratorNames().toArray()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
@@ -103,6 +103,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel3, gridBagConstraints);
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -114,15 +115,16 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridheight = 4;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
     add(jPanel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   @Override
   public final void load() {
-    initialGrammar.setModel(new DefaultComboBoxModel(ModuleSelection.lookupIGGenerators().toArray()));
-    simplifier.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSimplifiers().toArray()));
-    schemaGenerator.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSchemaGenerators().toArray()));
+    initialGrammar.setModel(new DefaultComboBoxModel(ModuleSelection.lookupIGGeneratorNames().toArray()));
+    simplifier.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSimplifierNames().toArray()));
+    schemaGenerator.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSchemaGeneratorNames().toArray()));
 
     initialGrammar.setSelectedItem(properties.getProperty(ModuleSelection.MODULE_SELECTION_INITIAL_GRAMMAR, DEFAULT_MENU_TEXT));
     simplifier.setSelectedItem(properties.getProperty(ModuleSelection.MODULE_SELECTION_SIMPIFIER, DEFAULT_MENU_TEXT));

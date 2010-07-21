@@ -67,6 +67,14 @@ public final class Utils {
     return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("alternation.color", String.valueOf(COLOR_ALTERNATION.getRGB())));
   }
 
+  public static Color getColorBackground() {
+    return UIManager.getDefaults().getColor("TabbedPane.background");
+  }
+
+  public static Color getColorForeground() {
+    return UIManager.getDefaults().getColor("TabbedPane.foreground");
+  }
+
   public static Color getNodeColor(final AbstractNode n) {
     switch (n.getType()) {
       case ELEMENT:
@@ -83,7 +91,7 @@ public final class Utils {
   public static BufferedImage getImage(final int width, final int height) {
     final BufferedImage ret = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     final Graphics2D g = ret.createGraphics();
-    g.setColor(UIManager.getDefaults().getColor("TabbedPane.background"));
+    g.setColor(getColorBackground());
     g.fillRect(0, 0, width, height);
     return ret;
   }

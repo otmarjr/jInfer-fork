@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vitasek
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@ package cz.cuni.mff.ksi.jinfer.trivialigg.xml;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
@@ -31,17 +33,18 @@ import org.apache.log4j.Logger;
 public class XMLProcessor implements Processor {
 
   private static final Logger LOG = Logger.getLogger(XMLProcessor.class);
+  private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
 
   @Override
   public List<AbstractNode> process(final InputStream f) {
-    final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+    
     final TrivialHandler handler = new TrivialHandler();
     try {
-      parserFactory.newSAXParser().parse(f, handler);
+      PARSER_FACTORY.newSAXParser().parse(f, handler);
       return handler.getRules();
     } catch (final Exception e) {
       LOG.error("Error parsing XML file.", e);
     }
-    return null;
+    return new ArrayList<AbstractNode>(0);
   }
 }

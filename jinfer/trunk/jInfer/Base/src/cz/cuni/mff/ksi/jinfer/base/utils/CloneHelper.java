@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +34,11 @@ import java.util.Map.Entry;
  * 
  * @author vektor
  */
-public final class CloneUtils {
+public class CloneHelper {
 
-  private CloneUtils() { }
+  private final List<Pair<Element, Element>> cloned = new ArrayList<Pair<Element, Element>>();
 
-  public static List<AbstractNode> cloneRules(final List<AbstractNode> l) {
+  public List<AbstractNode> cloneRules(final List<AbstractNode> l) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(l.size());
     for (final AbstractNode n : l) {
       ret.add(cloneAbstractNode(n));
@@ -45,7 +46,7 @@ public final class CloneUtils {
     return ret;
   }
 
-  public static List<Pair<AbstractNode, List<AbstractNode>>> cloneClusters(
+  public List<Pair<AbstractNode, List<AbstractNode>>> cloneClusters(
           final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
     final List<Pair<AbstractNode, List<AbstractNode>>> ret = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>(clusters.size());
     for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
@@ -62,8 +63,27 @@ public final class CloneUtils {
     return new SimpleData(cloneList(s.getContext()), String.valueOf(s.getName()), cloneMap(s.getAttributes()), String.valueOf(s.getContentType()), cloneList(s.getContent()));
   }
 
-  private static Element cloneElement(final Element e) {
-    return new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getAttributes()), cloneRegexp(e.getSubnodes()));
+  private Element cloneElement(final Element e) {
+    for (final Pair<Element, Element> p : cloned) {
+      if (e == p.getFirst()) {
+        return p.getSecond();
+      }
+    }
+
+    final Element clone;
+    if (e.getSubnodes().isToken()) {
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getAttributes()), new Regexp<AbstractNode>(null, null, RegexpType.TOKEN));
+      cloned.add(new Pair<Element, Element>(e, clone));
+      final AbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
+      clone.getSubnodes().setContent(clonedToken);
+    } else {
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getAttributes()), new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), e.getSubnodes().getType()));
+      cloned.add(new Pair<Element, Element>(e, clone));
+      final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
+      clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
+    }
+
+    return clone;
   }
 
   private static List<String> cloneList(final List<String> l) {
@@ -85,11 +105,11 @@ public final class CloneUtils {
     return ret;
   }
 
-  private static Regexp<AbstractNode> cloneRegexp(final Regexp<AbstractNode> r) {
+  private Regexp<AbstractNode> cloneRegexp(final Regexp<AbstractNode> r) {
     return new Regexp<AbstractNode>(cloneAbstractNode(r.getContent()), cloneChildren(r.getChildren()), r.getType());
   }
 
-  private static AbstractNode cloneAbstractNode(final AbstractNode n) {
+  private AbstractNode cloneAbstractNode(final AbstractNode n) {
     if (n == null) {
       return null;
     }
@@ -105,7 +125,7 @@ public final class CloneUtils {
     throw new IllegalArgumentException("Unknown abstract node: " + n);
   }
 
-  private static List<Regexp<AbstractNode>> cloneChildren(final List<Regexp<AbstractNode>> c) {
+  private List<Regexp<AbstractNode>> cloneChildren(final List<Regexp<AbstractNode>> c) {
     final List<Regexp<AbstractNode>> ret = new ArrayList<Regexp<AbstractNode>>(c.size());
     for (final Regexp<AbstractNode> r : c) {
       ret.add(cloneRegexp(r));
@@ -113,7 +133,7 @@ public final class CloneUtils {
     return ret;
   }
 
-  private static Pair<AbstractNode, List<AbstractNode>> cloneCluster(final Pair<AbstractNode, List<AbstractNode>> c) {
+  private Pair<AbstractNode, List<AbstractNode>> cloneCluster(final Pair<AbstractNode, List<AbstractNode>> c) {
     return new Pair<AbstractNode, List<AbstractNode>>(cloneAbstractNode(c.getFirst()), cloneRules(c.getSecond()));
   }
 }

@@ -42,7 +42,7 @@ import java.util.List;
 public class Regexp<T> {
 
   /** If this is a token, its token. */
-  private final T content;
+  private T content;
   /** If this is not a token, list of children. */
   private final List<Regexp<T>> children;
   private final RegexpType type;
@@ -52,7 +52,6 @@ public class Regexp<T> {
     this.content = content;
     this.children = children;
     this.type = type;
-    verify();
   }
 
   public static <T> Regexp<T> getToken(final T content) {
@@ -69,6 +68,10 @@ public class Regexp<T> {
 
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {
     return new Regexp<T>(null, children, RegexpType.ALTERNATION);
+  }
+
+  public void setContent(final T content) {
+    this.content = content;
   }
 
   public T getContent() {
@@ -250,32 +253,6 @@ public class Regexp<T> {
         }
         retAlt.append(')');
         return retAlt.toString();
-      default:
-        throw new IllegalArgumentException("Unknown enum member.");
-    }
-  }
-
-  private void verify() {
-    switch (type) {
-      case TOKEN:
-        if (!BaseUtils.isEmpty(children)) {
-          throw new IllegalArgumentException("A token must not have children.");
-        }
-        if (content == null) {
-          throw new IllegalArgumentException("A token must have content.");
-        }
-        break;
-      case KLEENE:
-        if (content != null) {
-          throw new IllegalArgumentException("A Kleene star must not have content.");
-        }
-        break;
-      case CONCATENATION:
-      case ALTERNATION:
-        if (content != null) {
-          throw new IllegalArgumentException("Concatenation/Alternation must not have content.");
-        }
-        break;
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }

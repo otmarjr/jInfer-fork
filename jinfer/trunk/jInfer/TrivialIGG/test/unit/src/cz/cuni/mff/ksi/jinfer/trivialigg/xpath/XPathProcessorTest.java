@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vitasek
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,13 +30,32 @@ public class XPathProcessorTest {
 
   private static final char NL = '\n';
 
+  @Test
+  public void testProcessEmpty() {
+    System.out.println("processEmpty");
+    final InputStream s = new ByteArrayInputStream("".getBytes());
+    final XPathProcessor instance = new XPathProcessor();
+    final List<AbstractNode> result = instance.process(s);
+    assertEquals(0, result.size());
+  }
+
+  @Test
+  public void testProcessEmptyComment() {
+    System.out.println("processEmptyComment");
+    final InputStream s = new ByteArrayInputStream("# this is a comment".getBytes());
+    final XPathProcessor instance = new XPathProcessor();
+    final List<AbstractNode> result = instance.process(s);
+    assertEquals(0, result.size());
+  }
+
   private static final String ZOO =
           "zoo" + NL
+          + "# this must not show" + NL
           + "zoo/lion" + NL
           + "zoo/lion/paw" + NL
           + "zoo/./lion";
 
-  private static String[] ZOO_RESULTS = {
+  private static final String[] ZOO_RESULTS = {
     "zoo: ELEMENT\n()",
     "zoo: ELEMENT\n(lion: ELEMENT\n(),)",
     "lion: ELEMENT\n()",
@@ -54,15 +73,17 @@ public class XPathProcessorTest {
     final List<AbstractNode> result = instance.process(s);
     assertEquals(ZOO_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
-      assertEquals(ZOO_RESULTS[i], result.get(i).toString());
+      assertEquals("Iteration " + i, ZOO_RESULTS[i], result.get(i).toString());
     }
   }
 
   private static final String CARS =
-          "car//wheel" + NL
-          + "car/front//wheel" + NL;
+          "# this must not show" + NL
+          + "car//wheel" + NL
+          + "car/front//wheel" + NL
+          + "# this must not show" + NL;
   
-  private static String[] CARS_RESULTS = {
+  private static final String[] CARS_RESULTS = {
     "car: ELEMENT\n()",
     "wheel: ELEMENT\n()",
     "car: ELEMENT\n(front: ELEMENT\n(),)",
@@ -77,19 +98,20 @@ public class XPathProcessorTest {
     final List<AbstractNode> result = instance.process(s);
     assertEquals(CARS_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
-      assertEquals(CARS_RESULTS[i], result.get(i).toString());
+      assertEquals("Iteration " + i, CARS_RESULTS[i], result.get(i).toString());
     }
   }
 
   private static final String PEOPLE =
-          "person/@name" + NL +
-          "people/person/@name" + NL +
-          "person[@name]" + NL +
-          "person[@name and @age]" + NL +
-          "person[@name = \"john\"]" + NL +
-          "person[@name != \"john\"]" + NL;
+          "person/@name" + NL
+          + "people/person/@name" + NL
+          + "person[@name]" + NL
+          + "person[@name and @age]" + NL
+          + "person[@name = \"john\"]" + NL
+          + "person[@name != \"john\"]" + NL
+          + "# this must not show" + NL;
 
-  private static String[] PEOPLE_RESULTS = {
+  private static final String[] PEOPLE_RESULTS = {
     "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,)",
     "people: ELEMENT\n(person: ELEMENT\n(name: ATTRIBUTE\nnull: ,),)",
     "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,)",
@@ -111,7 +133,31 @@ public class XPathProcessorTest {
     final List<AbstractNode> result = instance.process(s);
     assertEquals(PEOPLE_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
-      assertEquals(PEOPLE_RESULTS[i], result.get(i).toString());
+      assertEquals("Iteration " + i, PEOPLE_RESULTS[i], result.get(i).toString());
+    }
+  }
+  
+  private static final String PEOPLE2 =
+          "person[@name]/address";
+
+  private static final String[] PEOPLE_RESULTS2 = {
+    // Explanation: the same as above. First rule is for the relation
+    // person -> @name, second for person -> address.
+    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,address: ELEMENT\n(),)",
+    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,address: ELEMENT\n(),)",
+    // End of explained part.
+    "address: ELEMENT\n()"
+  };
+
+  @Test
+  public void testProcessAttributes2() {
+    System.out.println("testProcessAttributes2");
+    final InputStream s = new ByteArrayInputStream(PEOPLE2.getBytes());
+    final XPathProcessor instance = new XPathProcessor();
+    final List<AbstractNode> result = instance.process(s);
+    assertEquals(PEOPLE_RESULTS2.length, result.size());
+    for (int i = 0; i < result.size(); i++) {
+      assertEquals("Iteration " + i, PEOPLE_RESULTS2[i], result.get(i).toString());
     }
   }
 }

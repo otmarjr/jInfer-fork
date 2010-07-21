@@ -64,7 +64,7 @@ public class DTDProcessor implements Processor {
       Logger.getLogger(DTDProcessor.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    return null;
+    return new ArrayList<AbstractNode>(0);
   }
 
   private static Element processElement(final ElementType e) {

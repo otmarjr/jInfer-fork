@@ -27,7 +27,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
-import javax.swing.UIManager;
 
 /**
  * Class responsible for rendering a set of rules to a canvas.
@@ -74,7 +73,7 @@ public class RulePainter {
     for (final Image i : clusterImgs) {
       g.drawImage(i, 0, offset, null);      
       offset += i.getHeight(null) + 5;
-      g.setColor(UIManager.getDefaults().getColor("TabbedPane.foreground"));
+      g.setColor(Utils.getColorForeground());
       g.drawLine(0, offset - 4, 30, offset - 4);
     }
 
@@ -84,6 +83,8 @@ public class RulePainter {
   }
   
   public void paint(final Graphics2D g) {
+    g.setColor(Utils.getColorBackground());
+    g.fillRect(0, 0, root.getWidth(), root.getHeight());
     g.drawImage(image, 0, 0, null);
   }
 

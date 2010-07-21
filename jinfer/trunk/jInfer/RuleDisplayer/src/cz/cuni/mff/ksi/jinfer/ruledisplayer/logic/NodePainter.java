@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
-import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -91,9 +91,9 @@ public class NodePainter {
 
     g.setColor(Utils.getNodeColor(n));
     g.fillRect(0, 0, width, height);
-    g.setColor(Color.white);
+    g.setColor(Utils.getColorBackground());
     g.drawString(n.getName(), margin, nameHeight + margin);
-    g.setColor(Color.black);
+    g.setColor(Utils.getColorForeground());
     g.drawRect(0, 0, width - 1, height - 1);
 
     if (children != null) {
@@ -133,8 +133,13 @@ public class NodePainter {
             kleene.getHeight(null) + 2 * margin);
     final Graphics2D g = kleeneRet.createGraphics();
     g.drawImage(kleene, margin, margin, null);
-    g.setColor(Color.black);
-    g.drawString("*", kleene.getWidth(null) + 10 + margin, margin);
+    final FontMetrics fm = g.getFontMetrics();
+    g.setFont(g.getFont().deriveFont(Font.BOLD));
+    g.setColor(Utils.getColorForeground());
+    g.drawString("*", 
+            kleene.getWidth(null) + margin + fm.stringWidth("*"),
+            margin + fm.getHeight() - fm.getDescent());
+    g.setFont(g.getFont().deriveFont(Font.PLAIN));
     return kleeneRet;
   }
 

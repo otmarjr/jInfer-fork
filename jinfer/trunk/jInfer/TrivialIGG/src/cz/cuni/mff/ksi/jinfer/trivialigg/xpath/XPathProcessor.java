@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.trivialigg.xpath;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -55,7 +56,8 @@ public class XPathProcessor implements Processor {
       final BufferedReader br = new BufferedReader(new InputStreamReader(in));
       String strLine;
       while ((strLine = br.readLine()) != null) {
-        if (strLine.charAt(0) != '#') {
+        if (!BaseUtils.isEmpty(strLine.trim())
+                && strLine.trim().charAt(0) != '#') {
           ret.addAll(parsePath(strLine));
         }
       }

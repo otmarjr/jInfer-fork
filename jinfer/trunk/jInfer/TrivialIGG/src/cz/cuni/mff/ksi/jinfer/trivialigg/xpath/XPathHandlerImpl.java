@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.trivialigg.xpath;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.trivialigg.utils.IGGUtils;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   private boolean dirty = false;
   /** The attribute we were looking at the last time. */
   private Attribute lastAttribute = null;
+  private boolean isSimpleData = false;
   /** The literal we were looking at the last time. */
   private String lastLiteral = null;
 
@@ -79,6 +81,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         lastElement = newElement;
         dirty = true;
         lastAttribute = null;
+        isSimpleData = false;
         break;
       case Axis.ATTRIBUTE:
         if (lastElement != null) {
@@ -114,10 +117,38 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     if (operator == Operator.EQUALS && lastLiteral != null && lastAttribute != null) {
       lastAttribute.getContent().add(lastLiteral);
-      lastLiteral = null;
+    }
+    if (operator == Operator.EQUALS
+            && lastLiteral != null
+            && isSimpleData
+            && lastElement != null) {
+      final SimpleData newSimpleData = new SimpleData(null, lastLiteral, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
+      rules.add(lastElement);
+      dirty = false;
+      isSimpleData = false;
     }
 
+    lastLiteral = null;
+
     LOG.info("endEqualityExpr: " + operator);
+  }
+
+  @Override
+  public void startTextNodeStep(int axis) throws SAXPathException {
+    super.startTextNodeStep(axis);
+
+    isSimpleData = true;
+
+    if (lastElement != null) {
+      final SimpleData newSimpleData = new SimpleData(null, null, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
+      rules.add(lastElement);
+      dirty = false;
+      //isSimpleData = false;
+    }
+
+    LOG.info("startTextNodeStep: " + Axis.lookup(axis));
   }
 
   /**

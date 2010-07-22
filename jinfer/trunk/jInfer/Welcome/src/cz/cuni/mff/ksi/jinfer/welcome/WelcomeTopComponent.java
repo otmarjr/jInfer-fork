@@ -16,14 +16,20 @@
  */
 package cz.cuni.mff.ksi.jinfer.welcome;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Properties;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import org.netbeans.api.project.ui.OpenProjects;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
 import org.openide.util.ImageUtilities;
+import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
 
 /**
@@ -41,6 +47,7 @@ public final class WelcomeTopComponent extends TopComponent {
 
   public WelcomeTopComponent() {
     initComponents();
+    OpenProjects.getDefault().addPropertyChangeListener(new MainProjectListener(this));
     setName(NbBundle.getMessage(WelcomeTopComponent.class, "CTL_WelcomeTopComponent"));
     setToolTipText(NbBundle.getMessage(WelcomeTopComponent.class, "HINT_WelcomeTopComponent"));
     setIcon(ImageUtilities.loadImage(ICON_PATH, true));
@@ -74,6 +81,7 @@ public final class WelcomeTopComponent extends TopComponent {
     jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
     jLabel5 = new javax.swing.JLabel();
+    step3runProject = new javax.swing.JButton();
 
     setBackground(java.awt.Color.white);
     setForeground(java.awt.Color.white);
@@ -136,6 +144,14 @@ public final class WelcomeTopComponent extends TopComponent {
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel5.text")); // NOI18N
 
+    step3runProject.setEnabled(false);
+    org.openide.awt.Mnemonics.setLocalizedText(step3runProject, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.step3runProject.text")); // NOI18N
+    step3runProject.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        step3runProjectActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -182,7 +198,9 @@ public final class WelcomeTopComponent extends TopComponent {
                       .addComponent(jLabel17)))
                   .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(100, 100, 100)
-                    .addComponent(step1project, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                      .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                      .addComponent(step1project, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))))
               .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -219,7 +237,9 @@ public final class WelcomeTopComponent extends TopComponent {
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
           .addComponent(ico3run)
           .addGroup(jPanel1Layout.createSequentialGroup()
-            .addComponent(jLabel9)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+              .addComponent(jLabel9)
+              .addComponent(step3runProject, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel10)))
         .addGap(18, 18, 18)
@@ -261,6 +281,10 @@ public final class WelcomeTopComponent extends TopComponent {
     CommonProjectActions.newProjectAction().actionPerformed(evt);
   }//GEN-LAST:event_step1projectActionPerformed
 
+  private void step3runProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step3runProjectActionPerformed
+    OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(ActionProvider.COMMAND_RUN, Lookup.EMPTY);
+  }//GEN-LAST:event_step3runProjectActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
   private javax.swing.JLabel L2developingjInfer;
@@ -286,6 +310,7 @@ public final class WelcomeTopComponent extends TopComponent {
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JCheckBox showOnStartup;
   private javax.swing.JButton step1project;
+  private javax.swing.JButton step3runProject;
   // End of variables declaration//GEN-END:variables
 
   /**
@@ -356,5 +381,9 @@ public final class WelcomeTopComponent extends TopComponent {
   @Override
   protected String preferredID() {
     return PREFERRED_ID;
+  }
+
+  public JButton getStep3runProject() {
+    return step3runProject;
   }
 }

@@ -51,9 +51,14 @@ public class XPathProcessorTest {
   private static final String ZOO =
           "zoo" + NL
           + "# this must not show" + NL
+          + NL
+          + "   " + NL
+          + "   " + NL + NL
           + "zoo/lion" + NL
           + "zoo/lion/paw" + NL
-          + "zoo/./lion";
+          + "zoo/./lion" + NL + NL
+          + "giraffe/../zebra" + NL
+          + "giraffe/..//paw";
 
   private static final String[] ZOO_RESULTS = {
     "zoo: ELEMENT\n()",
@@ -63,7 +68,11 @@ public class XPathProcessorTest {
     "lion: ELEMENT\n(paw: ELEMENT\n(),)",
     "paw: ELEMENT\n()",
     "zoo: ELEMENT\n(lion: ELEMENT\n(),)",
-    "lion: ELEMENT\n()"};
+    "lion: ELEMENT\n()",
+    "giraffe: ELEMENT\n()",
+    "zebra: ELEMENT\n()",
+    "giraffe: ELEMENT\n()",
+    "paw: ELEMENT\n()"};
 
   @Test
   public void testProcessBasic() {
@@ -158,6 +167,36 @@ public class XPathProcessorTest {
     assertEquals(PEOPLE_RESULTS2.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, PEOPLE_RESULTS2[i], result.get(i).toString());
+    }
+  }
+
+  private static final String BOOKS =
+          "chapter/text()" + NL
+          + "chapter//text()" + NL
+          + "chapter[text()]" + NL
+          + "chapter[text() = \"Lorem ipsum\"]" + NL
+          + "chapter[text() = \"Lorem ipsum\"]/b";
+
+  private static final String[] BOOKS_RESULTS = {
+    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,)",
+    "chapter: ELEMENT\n()",
+    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,)",
+    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,)",
+    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,)",
+    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,b: ELEMENT\n(),)",
+    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,b: ELEMENT\n(),)",
+    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,b: ELEMENT\n(),)",
+    "b: ELEMENT\n()"};
+
+  @Test
+  public void testProcessSimpleData() {
+    System.out.println("testProcessSimpleData");
+    final InputStream s = new ByteArrayInputStream(BOOKS.getBytes());
+    final XPathProcessor instance = new XPathProcessor();
+    final List<AbstractNode> result = instance.process(s);
+    assertEquals(BOOKS_RESULTS.length, result.size());
+    for (int i = 0; i < result.size(); i++) {
+      assertEquals("Iteration " + i, BOOKS_RESULTS[i], result.get(i).toString());
     }
   }
 }

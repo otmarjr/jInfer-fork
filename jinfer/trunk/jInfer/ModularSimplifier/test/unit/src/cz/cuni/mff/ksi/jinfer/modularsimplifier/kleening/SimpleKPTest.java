@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
@@ -214,6 +215,99 @@ public class SimpleKPTest {
 
     assertElement(ch2.getChild(0).getChild(0).getContent(), "e3");
     assertElement(ch2.getChild(1).getChild(0).getContent(), "e6");
+  }
+
+  /**
+   * Tests
+   * <a>
+   *  <b/>
+   *  <b>text</b>
+   * </a>
+   *
+   * Second &lt;b&gt; should retain its #PCDATA in the result.
+   */
+  @Test
+  public void testKleeneProcessError() {
+    System.out.println("testKleeneProcessError");
+    final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+
+
+    final Element b1 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
+    final Element b2 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
+    b2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(new SimpleData(null, "text", null, null, new ArrayList<String>())));
+    final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>(2);
+    children.add(Regexp.<AbstractNode>getToken(b1));
+    children.add(Regexp.<AbstractNode>getToken(b2));
+    final Element root = new Element(null, "root", null, Regexp.getConcatenation(children));
+
+    rules.add(root);
+
+    final KleeneProcessor kp = new SimpleKP(THRESHOLD);
+
+    final List<AbstractNode> processed = kp.kleeneProcess(rules);
+    assertEquals(1, processed.size());
+    assertElement(processed.get(0), "root");
+    final Element root2 = (Element) processed.get(0);
+
+    assertEquals(2, root2.getSubnodes().getChildren().size());
+    assertElement(root2.getSubnodes().getChild(0).getContent(), "b");
+    assertElement(root2.getSubnodes().getChild(1).getContent(), "b");
+    final Element b12 = (Element) root2.getSubnodes().getChild(0).getContent();
+    final Element b22 = (Element) root2.getSubnodes().getChild(1).getContent();
+    assertEquals(0, b12.getSubnodes().getChildren().size());
+    assertEquals(1, b22.getSubnodes().getChildren().size());
+    assertEquals(NodeType.SIMPLE_DATA, b22.getSubnodes().getChild(0).getContent().getType());
+    final SimpleData sd = (SimpleData) b22.getSubnodes().getChild(0).getContent();
+    assertEquals("text", sd.getName());
+  }
+
+  /**
+   * Tests
+   * <a>
+   *  <b/>
+   *  <b/>
+   *  <b>text</b>
+   * </a>
+   *
+   * After collapse of the three &lt;b&gt;'s the #PCDATA should be retained.
+   */
+  @Test
+  public void testKleeneProcessError2() {
+    System.out.println("testKleeneProcessError2");
+    final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+
+
+    final Element b1 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
+    final Element b15 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
+    final Element b2 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
+    b2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(new SimpleData(null, "text", null, null, new ArrayList<String>())));
+    final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>(2);
+    children.add(Regexp.<AbstractNode>getToken(b1));
+    children.add(Regexp.<AbstractNode>getToken(b15));
+    children.add(Regexp.<AbstractNode>getToken(b2));
+    final Element root = new Element(null, "root", null, Regexp.getConcatenation(children));
+
+    rules.add(root);
+
+    System.out.println(root.toString());
+
+    final KleeneProcessor kp = new SimpleKP(THRESHOLD);
+
+    final List<AbstractNode> processed = kp.kleeneProcess(rules);
+    assertEquals(1, processed.size());
+    assertElement(processed.get(0), "root");
+    final Element root2 = (Element) processed.get(0);
+
+    System.out.println(root2.toString());
+
+    // TODO vektor Repair!
+//    assertEquals(1, root2.getSubnodes().getChildren().size());
+//    assertElement(root2.getSubnodes().getChild(0).getChild(0).getContent(), "b");
+//    final Element b12 = (Element) root2.getSubnodes().getChild(0).getChild(0).getContent();
+//    assertEquals(1, b12.getSubnodes().getChildren().size());
+//    assertEquals(NodeType.SIMPLE_DATA, b12.getSubnodes().getChild(0).getContent().getType());
+//    final SimpleData sd = (SimpleData) b12.getSubnodes().getChild(0).getContent();
+//    assertEquals("text", sd.getName());
   }
 
   private static Regexp<AbstractNode> getSubnodes0() {

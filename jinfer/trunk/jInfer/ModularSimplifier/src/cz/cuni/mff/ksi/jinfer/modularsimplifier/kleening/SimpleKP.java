@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,25 +82,29 @@ public class SimpleKP implements KleeneProcessor {
       throw new IllegalArgumentException();
     }
     final List<Regexp<AbstractNode>> retChildren = new ArrayList<Regexp<AbstractNode>>();
+    final List<Regexp<AbstractNode>> buffer = new ArrayList<Regexp<AbstractNode>>();
 
     int i = 0;
     int groupSize = 0;
     Regexp<AbstractNode> last = null;
     while (true) {
       if (i >= root.getChildren().size()) {
-        closeGroup(last, groupSize, retChildren);
+        closeGroup(buffer, retChildren);
         break;
       }
       final Regexp<AbstractNode> current = root.getChild(i);
       if (equalTokenRegexps(last, current)) {
         // increment count
         groupSize++;
+        buffer.add(current);
       } else {
         // close the last loop
-        closeGroup(last, groupSize, retChildren);
+        closeGroup(buffer, retChildren);
         // start a new loop
         groupSize = 1;
         last = current;
+        buffer.clear();
+        buffer.add(current);
       }
 
       i++;
@@ -117,19 +122,18 @@ public class SimpleKP implements KleeneProcessor {
             && CPTrie.equalTokens(last, current);
   }
 
-  private void closeGroup(final Regexp<AbstractNode> current,
-          final int groupSize, final List<Regexp<AbstractNode>> retChildren) {
-    if (groupSize == 0) {
+  private void closeGroup(final List<Regexp<AbstractNode>> buffer,
+          final List<Regexp<AbstractNode>> retChildren) {
+    if (BaseUtils.isEmpty(buffer)) {
       return;
     }
-    if (groupSize < threshold) {
-      for (int i = 0; i < groupSize; i++) {
-        retChildren.add(current);
-      }
+    if (buffer.size() < threshold) {
+      retChildren.addAll(buffer);
       return;
     }
     final List<Regexp<AbstractNode>> kleeneChild = new ArrayList<Regexp<AbstractNode>>(1);
-    kleeneChild.add(current);
+    // TODO vektor Accumulate!
+    kleeneChild.add(buffer.get(0));
     retChildren.add(new Regexp<AbstractNode>(null,
             kleeneChild,
             RegexpType.KLEENE));

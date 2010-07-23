@@ -17,9 +17,11 @@
 
 package cz.cuni.mff.ksi.jinfer.modularsimplifier;
 
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.TrieHelper;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
@@ -70,7 +72,7 @@ public class CPTrieTest {
   }
 
   @Test
-  public void test01() {
+  public final void test01() {
     final Regexp<AbstractNode> t = getTestTree();
     System.out.println(t.toString());
     assertEquals("(1: ELEMENT,2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)",
@@ -80,7 +82,7 @@ public class CPTrieTest {
     final List<Regexp<AbstractNode>> l1 = new ArrayList<Regexp<AbstractNode>>(1);
     l1.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
     final Regexp<AbstractNode> a1 = new Regexp<AbstractNode>(null, l1, RegexpType.CONCATENATION);
-    CPTrie.addBranchToTree(t, a1);
+    TrieHelper.addBranchToTree(t, a1);
     System.out.println(t.toString());
     assertEquals("(1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)",
             t.toString());
@@ -89,7 +91,7 @@ public class CPTrieTest {
     final List<Regexp<AbstractNode>> l2 = new ArrayList<Regexp<AbstractNode>>(1);
     l2.add(Regexp.getToken((AbstractNode) new Element(null, "7", null, null)));
     final Regexp<AbstractNode> a2 = new Regexp<AbstractNode>(null, l2, RegexpType.CONCATENATION);
-    CPTrie.addBranchToTree(t, a2);
+    TrieHelper.addBranchToTree(t, a2);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)|(7: ELEMENT,)|),)",
             t.toString());
@@ -99,7 +101,7 @@ public class CPTrieTest {
     l3.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
     l3.add(Regexp.getToken((AbstractNode) new Element(null, "8", null, null)));
     final Regexp<AbstractNode> a3 = new Regexp<AbstractNode>(null, l3, RegexpType.CONCATENATION);
-    CPTrie.addBranchToTree(t, a3);
+    TrieHelper.addBranchToTree(t, a3);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|),)|(7: ELEMENT,)|),)",
             t.toString());
@@ -110,7 +112,7 @@ public class CPTrieTest {
     l4.add(Regexp.getToken((AbstractNode) new Element(null, "7", null, null)));
     l4.add(Regexp.getToken((AbstractNode) new Element(null, "9", null, null)));
     final Regexp<AbstractNode> a4 = new Regexp<AbstractNode>(null, l4, RegexpType.CONCATENATION);
-    CPTrie.addBranchToTree(t, a4);
+    TrieHelper.addBranchToTree(t, a4);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,)|),)|(7: ELEMENT,)|),)",
             t.toString());
@@ -122,11 +124,30 @@ public class CPTrieTest {
     l5.add(Regexp.getToken((AbstractNode) new Element(null, "9", null, null)));
     l5.add(Regexp.getToken((AbstractNode) new Element(null, "2", null, null)));
     final Regexp<AbstractNode> a5 = new Regexp<AbstractNode>(null, l5, RegexpType.CONCATENATION);
-    CPTrie.addBranchToTree(t, a5);
+    TrieHelper.addBranchToTree(t, a5);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,(()|(2: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)",
             t.toString());
   }
- 
+
+  /**
+   * Test
+   *
+   * <a>
+   *   <b/>
+   *   <b>text</b>
+   * </a>
+   *
+   * The text must not be lost.
+   */
+  @Test
+  public final void testProblem() {
+    final Element b1 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
+    final Element b2 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
+    b2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(new SimpleData(null, "text", null, null, new ArrayList<String>(0))));
+    TrieHelper.addBranchToTree(b1.getSubnodes(), b2.getSubnodes());
+    assertEquals(1, b1.getSubnodes().getChildren().size());
+    assertEquals(NodeType.SIMPLE_DATA, b1.getSubnodes().getChild(0).getContent().getType());
+  }
 
 }

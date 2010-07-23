@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.TrieHelper;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -119,7 +120,7 @@ public class SimpleKP implements KleeneProcessor {
             && current.isToken()
             && last.getContent().isElement()
             && current.getContent().isElement()
-            && CPTrie.equalTokens(last, current);
+            && TrieHelper.equalTokens(last, current);
   }
 
   private void closeGroup(final List<Regexp<AbstractNode>> buffer,

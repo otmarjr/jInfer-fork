@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,8 @@ import java.util.List;
 public class CPTrie implements ClusterProcessor {
 
   @Override
-  public List<AbstractNode> processClusters(final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+  public List<AbstractNode> processClusters(
+          final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
@@ -41,7 +41,8 @@ public class CPTrie implements ClusterProcessor {
     return ret;
   }
 
-  private static Element processCluster(final Pair<AbstractNode, List<AbstractNode>> cluster) {
+  private static Element processCluster(
+          final Pair<AbstractNode, List<AbstractNode>> cluster) {
     verify(cluster);
 
     final Element treeBase = (Element) cluster.getFirst();
@@ -49,7 +50,7 @@ public class CPTrie implements ClusterProcessor {
     // put every item from the cluster into the trie
     for (final AbstractNode n : cluster.getSecond()) {
       if (n != cluster.getFirst()) {
-        addBranchToTree(treeBase.getSubnodes(), ((Element) n).getSubnodes());
+        TrieHelper.addBranchToTree(treeBase.getSubnodes(), ((Element) n).getSubnodes());
       }
     }
 
@@ -57,7 +58,8 @@ public class CPTrie implements ClusterProcessor {
     return new Shortener().simplify(treeBase);
   }
 
-  private static void verify(final Pair<AbstractNode, List<AbstractNode>> cluster) {
+  private static void verify(
+          final Pair<AbstractNode, List<AbstractNode>> cluster) {
     for (final AbstractNode n : cluster.getSecond()) {
       if (!n.isElement()) {
         throw new IllegalArgumentException("Element expected");
@@ -67,134 +69,4 @@ public class CPTrie implements ClusterProcessor {
       }
     }
   }
-
-  public static void addBranchToTree(final Regexp<AbstractNode> tree, final Regexp<AbstractNode> branch) {
-    if (!tree.isConcatenation()
-            || !branch.isConcatenation()) {
-      throw new IllegalArgumentException();
-    }
-
-    // TODO vektor Remove the duplicity
-    int posTre = -1;
-    int posBra = -1;
-    while (true) {
-      final int posTree = posTre + 1;
-      final int posBranch = posBra + 1;
-
-      // if we are not on an Element in the tree...
-      if (posTree < tree.getChildren().size()
-              && tree.getChild(posTree).isToken()
-              && !tree.getChild(posTree).getContent().isElement()) {
-        // move on
-        posTre++;
-        continue;
-      }
-
-      // if we are not on an Element in the branch...
-      if (posBranch < branch.getChildren().size()
-              && !branch.getChild(posBranch).getContent().isElement()) {
-        // move on
-        posBra++;
-        continue;
-      }
-
-      // when do we continue?
-      //  when we are not out of tree or branch,
-      //  pointing on a token in the tree,
-      //  and the tokens in the tree and the branch are equal
-      if (posTree < tree.getChildren().size()
-              && posBranch < branch.getChildren().size()
-              && tree.getChild(posTree).isToken()
-              && equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
-        posTre++;
-        posBra++;
-        continue;
-      }
-
-      if (posBranch >= branch.getChildren().size()
-              && posTree >= tree.getChildren().size()) {
-        return;
-      }
-
-      // we have run out of the branch
-      if (posBranch >= branch.getChildren().size()) {
-        // verify that we need to do additional steps
-        if (tree.getChild(posTree).isAlternation()
-                && tree.getChild(posTree).getChild(0).isEmpty()) {
-          return;
-        }
-        // branch the tree here and add an empty concatenation (lambda)
-        tree.branch(posTree);
-        final Regexp<AbstractNode> split = tree.getChild(posTree);
-        // some acrobacy to have the lambda as the first element in the alternation
-        split.addChild(Regexp.<AbstractNode>getConcatenation());
-        split.addChild(split.getChild(0));
-        split.getChildren().remove(0);
-        return;
-      }
-
-      // we have run out of the tree
-      if (posTree >= tree.getChildren().size()) {
-        // append a new alternation between all remaining items from the branch and an empty concatenation (lambda) to tree
-        final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
-        alt.add(Regexp.<AbstractNode>getConcatenation());
-        alt.add(branch.getEnd(posBranch));
-        tree.addChild(Regexp.getAlternation(alt));
-        return;
-      }
-
-      // we have found a position where tree and branch differ
-      if (tree.getChild(posTree).isToken()
-              && !equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
-        tree.branch(posTree);
-        tree.getChild(posTree).addChild(branch.getEnd(posBranch));
-        return;
-      }
-
-      if (tree.getChild(posTree).isAlternation()) {
-        // walk all the items in the alternation
-        for (final Regexp<AbstractNode> alternated : tree.getChild(posTree).getChildren()) {
-          if (alternated.getChildren().size() > 0
-                  && equalTokens(alternated.getChild(0), branch.getChild(posBranch))) {
-            // continue in this branch
-            addBranchToTree(alternated, branch.getEnd(posBranch));
-            return;
-          }
-        }
-
-        // if not found, simply add the end of the branch to the alternation
-        tree.getChild(posTree).addChild(branch.getEnd(posBranch));
-        return;
-      }
-
-      posTre++;
-      posBra++;
-    }
-  }
-
-  // TODO move to a common package
-  public static boolean equalTokens(final Regexp<AbstractNode> t1, final Regexp<AbstractNode> t2) {
-    // both need to be tokens
-    if (!t1.isToken() || !t2.isToken()) {
-      throw new IllegalArgumentException();
-    }
-    // if they are both simple data, TRUE
-    if (t1.getContent().isSimpleData()
-            && t2.getContent().isSimpleData()) {
-      return true;
-    }
-    // if they are both elements of the same name, TRUE
-    if (t1.getContent().isElement()
-            && t2.getContent().isElement()
-            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
-      return true;
-    }
-    if (t1.getContent().isAttribute()
-            && t2.getContent().isAttribute()
-            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
-      return true;
-    }
-    return false;
-  }
-
 }

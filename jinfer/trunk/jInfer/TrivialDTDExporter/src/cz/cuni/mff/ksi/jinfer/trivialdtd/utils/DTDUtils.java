@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.trivialdtd.utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -46,7 +47,6 @@ public final class DTDUtils {
       }
     });
   }
-
   /**
    * A simple comparator on AbstractNode that puts SIMPLE_DATA nodes in the front.
    */
@@ -74,5 +74,26 @@ public final class DTDUtils {
       }
     }
     return false;
+  }
+
+  /**
+   * Modifies a list so that only one PCDATA element remains in it (the first one).
+   */
+  public static List<AbstractNode> uniquePCDATA(final List<AbstractNode> l) {
+    boolean wasPCData = false;
+    final List<AbstractNode> ret = new ArrayList<AbstractNode>(l.size());
+
+    for (final AbstractNode n : l) {
+      if (n.isSimpleData()) {
+        if (!wasPCData) {
+          ret.add(n);
+        }
+        wasPCData = true;
+      } else {
+        ret.add(n);
+      }
+    }
+
+    return ret;
   }
 }

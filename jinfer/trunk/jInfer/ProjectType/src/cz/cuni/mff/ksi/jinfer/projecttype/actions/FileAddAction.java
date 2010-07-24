@@ -55,7 +55,7 @@ public class FileAddAction extends AbstractAction {
     FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add " + type + " files");
     if ("XML".equals(type)) {
-      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("Xml files (*.xml)", "xml"));
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("XML files (*.xml)", "xml"));
     } else if ("schema".equals(type)) {
       fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("Schema files (*.dtd, *.xsd)", "dtd", "xsd"));
     } else if ("query".equals(type)) {

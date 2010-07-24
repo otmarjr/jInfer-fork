@@ -26,6 +26,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 
 /**
  * Documents, schemas, queries etc constituting the input for inference.
@@ -51,17 +53,15 @@ public class Input {
     this(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
   }
 
-  public static boolean removeNonExistFiles(final Collection<File> collection) {
-    boolean result = false;
+  public static void removeNonExistFiles(final Collection<File> collection) {
     for (final Iterator<File> it = collection.iterator(); it.hasNext();) {
       final File file = it.next();
       if (!file.exists()) {
         it.remove();
-        result = true;
+        DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.Message("Some of the input files were deleted from disk. They were removed from input files.", NotifyDescriptor.INFORMATION_MESSAGE));
       }
     }
 
-    return result;
   }
 
   public Collection<File> getDocuments() {

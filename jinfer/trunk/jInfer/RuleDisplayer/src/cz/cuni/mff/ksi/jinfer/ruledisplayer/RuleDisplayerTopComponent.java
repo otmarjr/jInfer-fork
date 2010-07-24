@@ -25,10 +25,10 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Properties;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -46,6 +46,7 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   private static RuleDisplayerTopComponent instance;
   private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/icon16.png";
   private static final String PREFERRED_ID = "RuleDisplayerTopComponent";
+  private static final Logger LOG = Logger.getLogger(RuleDisplayerTopComponent.class);
 
   private int panelSequence = 0;
 
@@ -209,16 +210,14 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
       getDefault().open();
-      Logger.getLogger(RuleDisplayerTopComponent.class.getName()).warning(
-              "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+      LOG.warn("Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
       return getDefault();
     }
     if (win instanceof RuleDisplayerTopComponent) {
       win.open();
       return (RuleDisplayerTopComponent) win;
     }
-    Logger.getLogger(RuleDisplayerTopComponent.class.getName()).warning(
-            "There seem to be multiple components with the '" + PREFERRED_ID
+    LOG.warn("There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();
   }

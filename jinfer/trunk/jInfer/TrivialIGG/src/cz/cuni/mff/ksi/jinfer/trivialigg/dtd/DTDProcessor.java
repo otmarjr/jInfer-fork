@@ -26,8 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xmlmiddleware.schemas.dtds.Attribute;
 import org.xmlmiddleware.schemas.dtds.DTD;
@@ -41,10 +40,12 @@ import org.xmlmiddleware.schemas.dtds.ElementType;
  */
 public class DTDProcessor implements Processor {
 
+  private static final Logger LOG = Logger.getLogger(DTDProcessor.class);
+
   /**
    * Parses the DTD schema and returns the IG rules contained within.
    *
-   * @param f DTD schema file.
+   * @param s DTD schema file.
    * @return List of IG rules retrieved from it.
    */
   @Override
@@ -60,22 +61,26 @@ public class DTDProcessor implements Processor {
       }
 
       return ret;
-    } catch (Exception ex) {
-      Logger.getLogger(DTDProcessor.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (final Exception ex) {
+      LOG.error("Error processing DTD", ex);
     }
 
     return new ArrayList<AbstractNode>(0);
   }
 
   private static Element processElement(final ElementType e) {
-    final Element ret = new Element(null, e.name.getLocalName(), IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getConcatenation());
+    final Element ret = new Element(null, e.name.getLocalName(),
+            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getConcatenation());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
         final Attribute a = (Attribute) oa;
         final Map<String, Object> nodeAttrs = new HashMap<String, Object>(1);
-        nodeAttrs.put("required", Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
-        final cz.cuni.mff.ksi.jinfer.base.objects.Attribute at = new cz.cuni.mff.ksi.jinfer.base.objects.Attribute(null, a.name.getLocalName(), nodeAttrs, null, null);
+        nodeAttrs.put("required",
+                Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
+        final cz.cuni.mff.ksi.jinfer.base.objects.Attribute at =
+                new cz.cuni.mff.ksi.jinfer.base.objects.Attribute(null,
+                                a.name.getLocalName(), nodeAttrs, null, null);
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(at));
       }
     }
@@ -83,11 +88,12 @@ public class DTDProcessor implements Processor {
     if (e.children.size() > 0) {
       for (final Object oc : e.children.values()) {
         final ElementType c = (ElementType) oc;
-        final Element child = new Element(null, c.name.getLocalName(), null, Regexp.<AbstractNode>getConcatenation());
+        final Element child = new Element(null, c.name.getLocalName(),
+                null, Regexp.<AbstractNode>getConcatenation());
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(child));
       }
     }
     return ret;
   }
-  
+
 }

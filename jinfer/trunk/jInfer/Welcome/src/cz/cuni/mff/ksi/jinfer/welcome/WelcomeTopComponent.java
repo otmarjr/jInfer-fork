@@ -16,11 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.welcome;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Properties;
-import java.util.logging.Logger;
 import javax.swing.JButton;
+import org.apache.log4j.Logger;
 import org.netbeans.api.project.ui.OpenProjects;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -44,6 +42,7 @@ public final class WelcomeTopComponent extends TopComponent {
   /** path to the icon used by the component and its open action */
   private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/welcome/graphics/jinfer-icon16.png";
   private static final String PREFERRED_ID = "WelcomeTopComponent";
+  private static final Logger LOG = Logger.getLogger(WelcomeTopComponent.class);
 
   public WelcomeTopComponent() {
     initComponents();
@@ -331,15 +330,13 @@ public final class WelcomeTopComponent extends TopComponent {
   public static synchronized WelcomeTopComponent findInstance() {
     final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
-      Logger.getLogger(WelcomeTopComponent.class.getName()).warning(
-              "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+      LOG.warn("Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
       return getDefault();
     }
     if (win instanceof WelcomeTopComponent) {
       return (WelcomeTopComponent) win;
     }
-    Logger.getLogger(WelcomeTopComponent.class.getName()).warning(
-            "There seem to be multiple components with the '" + PREFERRED_ID
+    LOG.warn("There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();
   }

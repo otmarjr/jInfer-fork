@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.trivialdtd.utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -141,5 +142,77 @@ public class DTDUtilsTest {
     final List<Regexp<AbstractNode>> list = Arrays.asList(att, sd, att);
     final boolean result = DTDUtils.containsPCDATA(list);
     assertEquals(true, result);
+  }
+
+  @Test(expected = NullPointerException.class)
+  public void testUniquePCDATANull() {
+    System.out.println("testUniquePCDATANull");
+    DTDUtils.uniquePCDATA(null);
+  }
+
+  @Test
+  public void testUniquePCDATAEmpty() {
+    System.out.println("testUniquePCDATAEmpty");
+    final List<AbstractNode> ret = DTDUtils.uniquePCDATA(new ArrayList<AbstractNode>());
+    assertEquals(0, ret.size());
+  }
+
+  @Test
+  public void testUniquePCDATAOne() {
+    System.out.println("testUniquePCDATAOne");
+    final List<AbstractNode> l = new ArrayList<AbstractNode>();
+    l.add(new SimpleData(null, null, null, null, null));
+    final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
+    assertEquals(1, ret.size());
+  }
+
+  @Test
+  public void testUniquePCDATAOnePlusElement() {
+    System.out.println("testUniquePCDATAOnePlusElement");
+    final List<AbstractNode> l = new ArrayList<AbstractNode>();
+    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new Element(null, null, null, null));
+    final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
+    assertEquals(2, ret.size());
+  }
+
+  @Test
+  public void testUniquePCDATATwo() {
+    System.out.println("testUniquePCDATATwo");
+    final List<AbstractNode> l = new ArrayList<AbstractNode>();
+    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, null));
+    final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
+    assertEquals(1, ret.size());
+  }
+
+  @Test
+  public void testUniquePCDATATwoPlusElement() {
+    System.out.println("testUniquePCDATATwoPlusElement");
+    final List<AbstractNode> l = new ArrayList<AbstractNode>();
+    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new Element(null, null, null, null));
+    final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
+    assertEquals(2, ret.size());
+  }
+
+  @Test
+  public void testUniquePCDATAComplex() {
+    System.out.println("testUniquePCDATAComplex");
+    final List<AbstractNode> l = new ArrayList<AbstractNode>();
+    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new Element(null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new Element(null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new Element(null, null, null, null));
+    l.add(new Element(null, null, null, null));
+    final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
+    assertEquals(5, ret.size());
+    assertEquals(NodeType.SIMPLE_DATA, ret.get(0).getType());
+    for (int i = 1; i < ret.size(); i++) {
+      assertEquals(NodeType.ELEMENT, ret.get(i).getType());
+    }
   }
 }

@@ -176,7 +176,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     Collections.sort(content, DTDUtils.PCDATA_CMP);
 
     return CollectionToString.colToString(
-            content,
+            DTDUtils.uniquePCDATA(content),
             '|',
             new CollectionToString.ToString<AbstractNode>() {
 

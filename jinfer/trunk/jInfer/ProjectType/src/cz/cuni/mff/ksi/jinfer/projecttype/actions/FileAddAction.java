@@ -52,17 +52,17 @@ public class FileAddAction extends AbstractAction {
   @Override
   public void actionPerformed(final ActionEvent e) {
     final String type = ((FolderNode) node).getDisplayName();
-    FileFilter fileFilter = null;
+    FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
+            setTitle("Add " + type + " files");
     if ("xml".equals(type)) {
-      fileFilter = new FileNameExtensionFilter("XML files", "xml");
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("Xml files (*.xml)", "xml"));
     } else if ("schema".equals(type)) {
-      fileFilter = new FileNameExtensionFilter("XSD files", "xsd");
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("Schema files (*.dtd, *.xsd)", "dtd", "xsd"));
     } else if ("query".equals(type)) {
-      fileFilter = new FileNameExtensionFilter("QUERY files", "query");
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("XPath files (*.xpath)", "xpath")).addFileFilter(new FileNameExtensionFilter("Text files (*.txt)", "txt"));
     }
 
-    final File[] selectedFiles = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
-            setTitle("Add " + type + " files").setFileFilter(fileFilter).showMultiOpenDialog();
+    final File[] selectedFiles = fileChooserBuilder.showMultiOpenDialog();
 
     if (selectedFiles != null) {
       files.addAll(Arrays.asList(selectedFiles));

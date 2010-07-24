@@ -20,6 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Action;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
@@ -103,14 +105,17 @@ public class JInferLogicalView implements LogicalViewProvider {
 
     @Override
     public Action[] getActions(final boolean context) {
-      Action[] nodeActions = new Action[6];
-      nodeActions[0] = new RunAction(project);
-      nodeActions[1] = CommonProjectActions.copyProjectAction();
-      nodeActions[2] = CommonProjectActions.deleteProjectAction();
-      nodeActions[3] = CommonProjectActions.setAsMainProjectAction();
-      nodeActions[4] = CommonProjectActions.closeProjectAction();
-      nodeActions[5] = CommonProjectActions.customizeProjectAction();
-      return nodeActions;
+      final List<Action> nodeActions = new ArrayList<Action>();
+      nodeActions.add(new RunAction(project));
+      nodeActions.add(null); //separator
+      nodeActions.add(CommonProjectActions.copyProjectAction());
+      nodeActions.add(CommonProjectActions.deleteProjectAction());
+      nodeActions.add(null); //separator
+      nodeActions.add(CommonProjectActions.setAsMainProjectAction());
+      nodeActions.add(CommonProjectActions.closeProjectAction());
+      nodeActions.add(null); //separator
+      nodeActions.add(CommonProjectActions.customizeProjectAction());
+      return nodeActions.toArray(new Action[nodeActions.size()]);
     }
   }
   private final JInferProject project;

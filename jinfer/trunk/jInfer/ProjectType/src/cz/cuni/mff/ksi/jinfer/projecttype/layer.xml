@@ -6,6 +6,7 @@
             <folder name="Jinfer">
                 <file name="JinferTemplateProject.zip" url="JinferTemplateProject.zip">
                     <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.projecttype.Bundle#Templates/Project/Jinfer/JinferTemplateProject.zip"/>
+                    <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/projecttype/graphics/icon16.png"/>
                     <attr name="instantiatingIterator" methodvalue="cz.cuni.mff.ksi.jinfer.projecttype.sample.JinferTemplateWizardIterator.createIterator"/>
                     <attr name="instantiatingWizardURL" urlvalue="nbresloc:/cz/cuni/mff/ksi/jinfer/projecttype/sample/JinferTemplateDescription.html"/>
                     <attr name="template" boolvalue="true"/>

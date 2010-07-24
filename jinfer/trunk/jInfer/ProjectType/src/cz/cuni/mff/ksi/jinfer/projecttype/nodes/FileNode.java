@@ -23,6 +23,18 @@ public class FileNode extends FilterNode{
   }
 
   @Override
+  public boolean canCopy() {
+    return false;
+  }
+
+  @Override
+  public boolean canCut() {
+    return false;
+  }
+
+
+
+  @Override
   public void destroy() throws IOException {
     final Collection<File> files = (Collection<File>)((FolderNode)this.getParentNode()).getLookup().lookup(Collection.class);
     final DataNode orig = (DataNode) this.getOriginal();

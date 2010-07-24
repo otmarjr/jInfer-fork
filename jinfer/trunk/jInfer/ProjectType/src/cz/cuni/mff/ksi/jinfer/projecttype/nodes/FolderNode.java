@@ -2,6 +2,7 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.DeleteAllAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FileAddAction;
 import java.awt.Image;
 import java.io.File;
@@ -54,7 +55,7 @@ public class FolderNode extends AbstractNode {
 
   @Override
   public Action[] getActions(final boolean context) {
-    return new Action[] {new FileAddAction(project, this, files)};
+    return new Action[] {new FileAddAction(project, this, files), new DeleteAllAction(project, this, files)};
   }
 
 }

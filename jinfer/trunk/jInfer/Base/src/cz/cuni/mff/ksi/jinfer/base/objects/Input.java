@@ -51,13 +51,17 @@ public class Input {
     this(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
   }
 
-  private void removeNonExistFiles(final Collection<File> collection) {
+  public static boolean removeNonExistFiles(final Collection<File> collection) {
+    boolean result = false;
     for (final Iterator<File> it = collection.iterator(); it.hasNext();) {
       final File file = it.next();
       if (!file.exists()) {
         it.remove();
+        result = true;
       }
     }
+
+    return result;
   }
 
   public Collection<File> getDocuments() {

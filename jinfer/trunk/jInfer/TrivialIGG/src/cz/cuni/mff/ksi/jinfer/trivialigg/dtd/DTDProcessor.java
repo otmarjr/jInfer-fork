@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.trivialigg.dtd;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.trivialigg.utils.IGGUtils;
@@ -92,6 +93,13 @@ public class DTDProcessor implements Processor {
                 null, Regexp.<AbstractNode>getConcatenation());
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(child));
       }
+    }
+
+    // if there is #PCDATA inside...
+    if (e.contentType == ElementType.CONTENT_MIXED || e.contentType == ElementType.CONTENT_PCDATA) {
+      ret.getSubnodes().addChild(
+              Regexp.<AbstractNode>getToken(
+                    new SimpleData(null, null, null, null, new ArrayList<String>(0))));
     }
     return ret;
   }

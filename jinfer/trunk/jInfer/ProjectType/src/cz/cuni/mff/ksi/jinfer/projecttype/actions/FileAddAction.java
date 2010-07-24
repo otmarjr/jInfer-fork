@@ -24,7 +24,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.AbstractAction;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileChooserBuilder;
@@ -40,10 +39,12 @@ public class FileAddAction extends AbstractAction {
   private final Collection<File> files;
   private final Node node;
   private final JInferProject project;
+  private final String type;
 
   public FileAddAction(final JInferProject project, final Node node, final Collection<File> files) {
     super();
-    putValue(NAME, "Add file");
+    type = ((FolderNode) node).getDisplayName();
+    putValue(NAME, "Add " + type + " files");
     this.project = project;
     this.files = files;
     this.node = node;
@@ -51,7 +52,6 @@ public class FileAddAction extends AbstractAction {
 
   @Override
   public void actionPerformed(final ActionEvent e) {
-    final String type = ((FolderNode) node).getDisplayName();
     FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add " + type + " files");
     if ("xml".equals(type)) {

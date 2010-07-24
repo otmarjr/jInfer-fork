@@ -71,7 +71,7 @@ public class JInferLogicalView implements LogicalViewProvider {
         @Override
         protected void addNotify() {
           final Input input = JInferLogicalView.this.project.getLookup().lookup(Input.class);
-          setKeys(new Node[]{new FolderNode(JInferLogicalView.this.project, "xml",
+          setKeys(new Node[]{new FolderNode(JInferLogicalView.this.project, "XML",
                   input.getDocuments()), new FolderNode(JInferLogicalView.this.project, "schema",
                   input.getSchemas()), new FolderNode(JInferLogicalView.this.project, "query",
                   input.getQueries()),

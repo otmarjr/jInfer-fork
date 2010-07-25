@@ -59,7 +59,7 @@ public class DTDUtilsTest {
   @Test
   public void testOmitAttributesOneOfOne() {
     System.out.println("testOmitAttributesOneOfOne");
-    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
+    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att);
     final List<Regexp<AbstractNode>> result = DTDUtils.omitAttributes(list);
     if (result == null || !BaseUtils.isEmpty(result)) {
@@ -71,7 +71,7 @@ public class DTDUtilsTest {
   public void testOmitAttributesOneOfMore1() {
     System.out.println("testOmitAttributesOneOfMore1");
     final Regexp<AbstractNode> element = Regexp.getToken((AbstractNode) new Element(null, "lala", null, null));
-    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
+    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(element, element, att, element);
     final List<Regexp<AbstractNode>> expResult = new ArrayList<Regexp<AbstractNode>>(Arrays.asList(element, element, element));
     final List<Regexp<AbstractNode>> result = DTDUtils.omitAttributes(list);
@@ -82,7 +82,7 @@ public class DTDUtilsTest {
   public void testOmitAttributesOneOfMore2() {
     System.out.println("testOmitAttributesOneOfMore2");
     final Regexp<AbstractNode> element = Regexp.getToken((AbstractNode) new Element(null, "lala", null, null));
-    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
+    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(element, element, att, element, att);
     final List<Regexp<AbstractNode>> expResult = new ArrayList<Regexp<AbstractNode>>(Arrays.asList(element, element, element));
     final List<Regexp<AbstractNode>> result = DTDUtils.omitAttributes(list);
@@ -93,7 +93,7 @@ public class DTDUtilsTest {
   public void testOmitAttributesOneOfMore3() {
     System.out.println("testOmitAttributesOneOfMore3");
     final Regexp<AbstractNode> element = Regexp.getToken((AbstractNode) new Element(null, "lala", null, null));
-    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
+    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att, element, element, element);
     final List<Regexp<AbstractNode>> expResult = new ArrayList<Regexp<AbstractNode>>(Arrays.asList(element, element, element));
     final List<Regexp<AbstractNode>> result = DTDUtils.omitAttributes(list);
@@ -103,7 +103,7 @@ public class DTDUtilsTest {
   @Test
   public void testOmitAttributesAllOfMore() {
     System.out.println("testOmitAttributesAllOfMore");
-    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
+    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att, att, att);
     final List<Regexp<AbstractNode>> expResult = Collections.emptyList();
     final List<Regexp<AbstractNode>> result = DTDUtils.omitAttributes(list);
@@ -119,7 +119,7 @@ public class DTDUtilsTest {
   @Test
   public void testContainsPCDATANoneOfOne() {
     System.out.println("testContainsPCDATANoneOfOne");
-    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
+    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att);
     final boolean result = DTDUtils.containsPCDATA(list);
     assertEquals(false, result);
@@ -128,7 +128,7 @@ public class DTDUtilsTest {
   @Test
   public void testContainsPCDATAOneOfOne() {
     System.out.println("testContainsPCDATAOneOfOne");
-    final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, null));
+    final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(sd);
     final boolean result = DTDUtils.containsPCDATA(list);
     assertEquals(true, result);
@@ -137,8 +137,8 @@ public class DTDUtilsTest {
   @Test
   public void testContainsPCDATAOneOfMore() {
     System.out.println("testContainsPCDATAOneOfMore");
-    final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, null));
-    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, null));
+    final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, Collections.<String>emptyList()));
+    final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att, sd, att);
     final boolean result = DTDUtils.containsPCDATA(list);
     assertEquals(true, result);
@@ -161,7 +161,7 @@ public class DTDUtilsTest {
   public void testUniquePCDATAOne() {
     System.out.println("testUniquePCDATAOne");
     final List<AbstractNode> l = new ArrayList<AbstractNode>();
-    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
     final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
     assertEquals(1, ret.size());
   }
@@ -170,7 +170,7 @@ public class DTDUtilsTest {
   public void testUniquePCDATAOnePlusElement() {
     System.out.println("testUniquePCDATAOnePlusElement");
     final List<AbstractNode> l = new ArrayList<AbstractNode>();
-    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
     l.add(new Element(null, null, null, null));
     final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
     assertEquals(2, ret.size());
@@ -180,8 +180,8 @@ public class DTDUtilsTest {
   public void testUniquePCDATATwo() {
     System.out.println("testUniquePCDATATwo");
     final List<AbstractNode> l = new ArrayList<AbstractNode>();
-    l.add(new SimpleData(null, null, null, null, null));
-    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
     final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
     assertEquals(1, ret.size());
   }
@@ -190,8 +190,8 @@ public class DTDUtilsTest {
   public void testUniquePCDATATwoPlusElement() {
     System.out.println("testUniquePCDATATwoPlusElement");
     final List<AbstractNode> l = new ArrayList<AbstractNode>();
-    l.add(new SimpleData(null, null, null, null, null));
-    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
     l.add(new Element(null, null, null, null));
     final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);
     assertEquals(2, ret.size());
@@ -201,11 +201,11 @@ public class DTDUtilsTest {
   public void testUniquePCDATAComplex() {
     System.out.println("testUniquePCDATAComplex");
     final List<AbstractNode> l = new ArrayList<AbstractNode>();
-    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
     l.add(new Element(null, null, null, null));
-    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
     l.add(new Element(null, null, null, null));
-    l.add(new SimpleData(null, null, null, null, null));
+    l.add(new SimpleData(null, null, null, null, Collections.<String>emptyList()));
     l.add(new Element(null, null, null, null));
     l.add(new Element(null, null, null, null));
     final List<AbstractNode> ret = DTDUtils.uniquePCDATA(l);

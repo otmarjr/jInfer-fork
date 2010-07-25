@@ -26,6 +26,7 @@ import static org.junit.Assert.*;
 /**
  * @author vektor
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class XPathProcessorTest {
 
   private static final char NL = '\n';

@@ -38,6 +38,11 @@ public abstract class AbstractContentNode<T> extends AbstractNode {
           final String contentType,
           final List<T> content) {
     super(context, name, attributes);
+
+    if (content == null) {
+      throw new IllegalArgumentException("Content must not be null");
+    }
+
     this.contentType = contentType;
     this.content = content;
   }

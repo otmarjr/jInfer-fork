@@ -27,11 +27,17 @@ import org.openide.WizardDescriptor;
 import org.openide.WizardValidationException;
 import org.openide.filesystems.FileUtil;
 
+/**
+ * // TODO sviro Comment!
+ * @author sviro
+ */
 public class JinferTemplatePanelVisual extends JPanel implements DocumentListener {
 
   public static final String PROP_PROJECT_NAME = "projectName";
 
   public static final String WIZARD_ERROR_MESSAGE = "WizardPanel_errorMessage";
+
+  private static final long serialVersionUID = 785187562L;
 
   private JinferTemplateWizardPanel panel;
 

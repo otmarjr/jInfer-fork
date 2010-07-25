@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
@@ -29,11 +28,12 @@ import org.netbeans.spi.project.ProjectState;
 import org.openide.nodes.Node;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
-public class DeleteAllAction extends AbstractAction{
+public class DeleteAllAction extends AbstractAction {
 
+  private static final long serialVersionUID = 8956231L;
   private final JInferProject project;
   private final Node node;
   private final Collection<File> files;
@@ -45,18 +45,18 @@ public class DeleteAllAction extends AbstractAction{
     this.files = files;
   }
 
-
-
   @Override
   public void actionPerformed(ActionEvent e) {
     final String folderName = ((FolderNode) node).getDisplayName();
-    final int result = JOptionPane.showOptionDialog(null, "Are you sure you want to remove all files in " + folderName + " folder?", NAME, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+    final int result = JOptionPane.showOptionDialog(null,
+            "Are you sure you want to remove all files in " + folderName + " folder?",
+            NAME, JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE, null, null, null);
     if (result == JOptionPane.YES_OPTION) {
       files.clear();
       ((FileChildren) node.getChildren()).addNotify();
-      
+
       project.getLookup().lookup(ProjectState.class).markModified();
     }
   }
-
 }

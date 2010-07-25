@@ -36,7 +36,7 @@ import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ProxyLookup;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
 public class JInferLogicalView implements LogicalViewProvider {
@@ -61,6 +61,7 @@ public class JInferLogicalView implements LogicalViewProvider {
     }
   }
 
+  // TODO sviro Comment! & move to the top level
   private final class RootNode extends AbstractNode {
 
     private final JInferProject project;

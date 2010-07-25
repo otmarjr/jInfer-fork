@@ -46,6 +46,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+// TODO sviro Comment! & move to the top level
 public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress*/InstantiatingIterator {
 
   private int index;
@@ -167,7 +168,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     //do nothing
   }
 
-  private static void unZipFile(final InputStream source,final FileObject projectRoot) throws IOException {
+  private static void unZipFile(final InputStream source, final FileObject projectRoot) throws IOException {
     try {
       final ZipInputStream str = new ZipInputStream(source);
       ZipEntry entry;

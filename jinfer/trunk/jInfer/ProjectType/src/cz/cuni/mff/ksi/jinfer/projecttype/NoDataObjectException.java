@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
 public class NoDataObjectException extends RuntimeException {

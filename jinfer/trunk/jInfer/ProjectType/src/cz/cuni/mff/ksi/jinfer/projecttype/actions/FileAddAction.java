@@ -30,7 +30,7 @@ import org.openide.filesystems.FileChooserBuilder;
 import org.openide.nodes.Node;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
 public class FileAddAction extends AbstractAction {
@@ -39,6 +39,7 @@ public class FileAddAction extends AbstractAction {
   private final Collection<File> files;
   private final Node node;
   private final JInferProject project;
+  // TODO sviro Convert type to an enum
   private final String type;
 
   public FileAddAction(final JInferProject project, final Node node, final Collection<File> files) {

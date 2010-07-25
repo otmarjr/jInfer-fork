@@ -26,12 +26,13 @@ import org.netbeans.spi.project.ProjectFactory;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
-@org.openide.util.lookup.ServiceProvider(service = ProjectFactory.class)
+@ServiceProvider(service = ProjectFactory.class)
 public class JInferProjectFactory implements ProjectFactory {
 
   public static final String PROJECT_DIR = "jinferproject";

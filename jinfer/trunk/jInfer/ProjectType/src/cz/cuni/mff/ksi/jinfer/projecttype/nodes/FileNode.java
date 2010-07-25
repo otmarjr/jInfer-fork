@@ -1,4 +1,3 @@
-
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
 import java.io.File;
@@ -11,11 +10,10 @@ import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
-public class FileNode extends FilterNode{
-
+public class FileNode extends FilterNode {
 
   public FileNode(final Node node) {
     super(node, new FilterNode.Children(node), node.getLookup());
@@ -32,20 +30,15 @@ public class FileNode extends FilterNode{
     return false;
   }
 
-
-
   @Override
   public void destroy() throws IOException {
-    final Collection<File> files = (Collection<File>)((FolderNode)this.getParentNode()).getLookup().lookup(Collection.class);
+    final Collection<File> files = (Collection<File>) ((FolderNode) this.getParentNode()).getLookup().lookup(Collection.class);
     final DataNode orig = (DataNode) this.getOriginal();
     final FileObject fileOb = orig.getDataObject().getPrimaryFile();
     files.remove(FileUtil.toFile(fileOb));
 
-    ((FileChildren)((FolderNode)this.getParentNode()).getChildren()).addNotify();
-    
+    ((FileChildren) ((FolderNode) this.getParentNode()).getChildren()).addNotify();
+
     super.destroy();
   }
-
-  
-
 }

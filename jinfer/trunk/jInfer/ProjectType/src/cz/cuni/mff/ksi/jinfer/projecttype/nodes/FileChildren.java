@@ -11,7 +11,7 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
 public class FileChildren extends Children.Keys<File> {

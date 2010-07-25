@@ -1,4 +1,3 @@
-
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
@@ -14,11 +13,10 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
 public class FolderNode extends AbstractNode {
-
 
   private final String folderName;
   private final Collection<File> files;
@@ -41,7 +39,6 @@ public class FolderNode extends AbstractNode {
   public String getDisplayName() {
     return folderName;
   }
-  
 
   @Override
   public Image getIcon(final int type) {
@@ -55,7 +52,8 @@ public class FolderNode extends AbstractNode {
 
   @Override
   public Action[] getActions(final boolean context) {
-    return new Action[] {new FileAddAction(project, this, files), new DeleteAllAction(project, this, files)};
+    return new Action[]{
+              new FileAddAction(project, this, files),
+              new DeleteAllAction(project, this, files)};
   }
-
 }

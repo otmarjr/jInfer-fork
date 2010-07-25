@@ -46,7 +46,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
 public class JInferProject implements Project {
@@ -155,6 +155,7 @@ public class JInferProject implements Project {
     }
   }
 
+  // TODO sviro Comment! & move to the top level
   private final class JInferProjectInformation implements ProjectInformation {
 
     @Override
@@ -188,6 +189,7 @@ public class JInferProject implements Project {
     }
   }
 
+  // TODO sviro Comment! & move to the top level
   private final class ActionProviderImpl implements ActionProvider {
 
     private final String[] supported = new String[]{
@@ -225,6 +227,7 @@ public class JInferProject implements Project {
     }
   }
 
+  // TODO sviro Comment! & move to the top level
   private final class JinferDeleteOperation implements DeleteOperationImplementation {
 
     @Override
@@ -249,6 +252,7 @@ public class JInferProject implements Project {
     }
   }
 
+  // TODO sviro Comment! & move to the top level
   private final class JInferCopyOperation implements CopyOperationImplementation {
 
     @Override
@@ -272,6 +276,7 @@ public class JInferProject implements Project {
     }
   }
 
+  // TODO sviro Comment! & move to the top level
   private final class OutputHandler implements FileSelection{
 
     @Override

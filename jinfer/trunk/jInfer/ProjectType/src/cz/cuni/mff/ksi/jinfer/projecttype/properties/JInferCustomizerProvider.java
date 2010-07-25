@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.SortedMap;
 import java.util.TreeMap;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -20,13 +19,12 @@ import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;
 import org.openide.util.Lookup;
 
 /**
- *
+ * TODO sviro Comment!
  * @author sviro
  */
 public class JInferCustomizerProvider implements CustomizerProvider {
 
   private final JInferProject project;
-
   private ProjectCustomizer.Category[] categories;
   private ProjectCustomizer.CategoryComponentProvider componentProvider;
 
@@ -60,7 +58,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
       result.put(Category.create(propPanelProvider.getName(),
               propPanelProvider.getDisplayName(), null), propPanelProvider.getPanel(properties));
     }
-    
+
     return result;
   }
 
@@ -77,6 +75,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
   }
 
+  // TODO sviro Comment! & move to the top level
   private class PropertiesListener implements ActionListener {
 
     private final JInferProject project;
@@ -89,16 +88,17 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     public void actionPerformed(final ActionEvent e) {
       if ("ok".equalsIgnoreCase(e.getActionCommand())) {
         for (Category category : categories) {
-          ((AbstractPropertiesPanel)componentProvider.create(category)).store();
+          ((AbstractPropertiesPanel) componentProvider.create(category)).store();
         }
       }
     }
   }
 
+  // TODO sviro Comment! & move to the top level
   private class JInferComponentProvider implements ProjectCustomizer.CategoryComponentProvider {
 
     private final Map<Category, JPanel> panels;
-    
+
     private JInferComponentProvider(final Map<Category, JPanel> panels) {
       this.panels = panels;
     }

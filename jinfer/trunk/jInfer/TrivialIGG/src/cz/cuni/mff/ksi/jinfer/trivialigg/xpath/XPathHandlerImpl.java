@@ -135,7 +135,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   }
 
   @Override
-  public void startTextNodeStep(int axis) throws SAXPathException {
+  public void startTextNodeStep(final int axis) throws SAXPathException {
     super.startTextNodeStep(axis);
 
     isSimpleData = true;

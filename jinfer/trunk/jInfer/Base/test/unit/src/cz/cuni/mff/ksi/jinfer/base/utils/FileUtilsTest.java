@@ -34,36 +34,36 @@ public class FileUtilsTest {
   @Test
   public void testGetExtension1() {
     System.out.println("getExtension1");
-    String fileName = "file.ext";
-    String expResult = "ext";
-    String result = FileUtils.getExtension(fileName);
+    final String fileName = "file.ext";
+    final String expResult = "ext";
+    final String result = FileUtils.getExtension(fileName);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testGetExtension2() {
     System.out.println("getExtension2");
-    String fileName = "file.ext1.ext2";
-    String expResult = "ext2";
-    String result = FileUtils.getExtension(fileName);
+    final String fileName = "file.ext1.ext2";
+    final String expResult = "ext2";
+    final String result = FileUtils.getExtension(fileName);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testGetExtension3() {
     System.out.println("getExtension3");
-    String fileName = "noextension";
-    String expResult = "noextension";
-    String result = FileUtils.getExtension(fileName);
+    final String fileName = "noextension";
+    final String expResult = "noextension";
+    final String result = FileUtils.getExtension(fileName);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testGetExtension4() {
     System.out.println("getExtension4");
-    String fileName = "weirdfile.";
-    String expResult = "";
-    String result = FileUtils.getExtension(fileName);
+    final String fileName = "weirdfile.";
+    final String expResult = "";
+    final String result = FileUtils.getExtension(fileName);
     assertEquals(expResult, result);
   }
 }

@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.trivialigg.xml;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.SAXParserFactory;

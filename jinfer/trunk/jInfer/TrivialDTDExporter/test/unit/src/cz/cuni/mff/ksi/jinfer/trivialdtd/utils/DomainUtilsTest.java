@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.trivialdtd.utils;
 
+import java.util.Collections;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
-import java.security.DomainCombiner;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
  * @author vektor
  */
 @SuppressWarnings("PMD.SystemPrintln")
@@ -43,7 +42,7 @@ public class DomainUtilsTest {
   @Test
   public void testGetDomainEmpty() {
     System.out.println("testGetDomainEmpty");
-    final Attribute a = new Attribute(null, "a", null, null, null);
+    final Attribute a = new Attribute(null, "a", null, null, Collections.<String>emptyList());
     if (!DomainUtils.getDomain(a).isEmpty()) {
       fail();
     }
@@ -93,9 +92,8 @@ public class DomainUtilsTest {
   public void testGetAttributeTypeEmpty() {
     System.out.println("testGetAttributeTypeEmpty");
     final Map<String, Integer> domain = new HashMap<String, Integer>();
-    final String expResult = " () ";
     final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
-    assertEquals(expResult, result);
+    assertEquals(" () ", result);
   }
 
   @Test
@@ -103,9 +101,8 @@ public class DomainUtilsTest {
     System.out.println("testGetAttributeTypeOneOfThree");
     final Map<String, Integer> domain = new HashMap<String, Integer>();
     domain.put("a", Integer.valueOf(1));
-    final String expResult = " (a) ";
     final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
-    assertEquals(expResult, result);
+    assertEquals(" (a) ", result);
   }
 
   @Test
@@ -115,9 +112,8 @@ public class DomainUtilsTest {
     domain.put("a", Integer.valueOf(1));
     domain.put("b", Integer.valueOf(2));
     domain.put("c", Integer.valueOf(3));
-    final String expResult = " (a|b|c) ";
     final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
-    assertEquals(expResult, result);
+    assertEquals(" (a|b|c) ", result);
   }
 
   @Test
@@ -169,9 +165,8 @@ public class DomainUtilsTest {
     domain.put("b", Integer.valueOf(2));
     domain.put("c", Integer.valueOf(3));
     domain.put("d", Integer.valueOf(50));
-    final String expResult = "\"d\"";
     final String result = DomainUtils.getDefault(domain, DOMINANCE_RATIO);
-    assertEquals(expResult, result);
+    assertEquals("\"d\"", result);
   }
   
   @Test

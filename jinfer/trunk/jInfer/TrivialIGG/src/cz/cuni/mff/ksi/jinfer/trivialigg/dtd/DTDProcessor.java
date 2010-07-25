@@ -81,7 +81,8 @@ public class DTDProcessor implements Processor {
                 Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
         final cz.cuni.mff.ksi.jinfer.base.objects.Attribute at =
                 new cz.cuni.mff.ksi.jinfer.base.objects.Attribute(null,
-                                a.name.getLocalName(), nodeAttrs, null, null);
+                                a.name.getLocalName(), nodeAttrs, null, 
+                                new ArrayList<String>(0));
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(at));
       }
     }

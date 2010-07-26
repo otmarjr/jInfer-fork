@@ -108,7 +108,9 @@
                     </test-dependency>
                 </test-type>
             </test-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>cz.cuni.mff.ksi.jinfer.projecttype.actions</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

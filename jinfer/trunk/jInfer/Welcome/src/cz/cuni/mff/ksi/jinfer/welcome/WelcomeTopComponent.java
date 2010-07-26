@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.welcome;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import java.util.Properties;
 import javax.swing.JButton;
 import org.apache.log4j.Logger;
@@ -81,6 +82,7 @@ public final class WelcomeTopComponent extends TopComponent {
     jLabel2 = new javax.swing.JLabel();
     jLabel5 = new javax.swing.JLabel();
     step3runProject = new javax.swing.JButton();
+    step2addFiles = new javax.swing.JButton();
 
     setBackground(java.awt.Color.white);
     setForeground(java.awt.Color.white);
@@ -119,21 +121,29 @@ public final class WelcomeTopComponent extends TopComponent {
 
     L2support.setFont(L2support.getFont().deriveFont(L2support.getFont().getSize()+3f));
     org.openide.awt.Mnemonics.setLocalizedText(L2support, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.L2support.text")); // NOI18N
+    L2support.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel12.text")); // NOI18N
+    jLabel12.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel13.text")); // NOI18N
+    jLabel13.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel14.text")); // NOI18N
+    jLabel14.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel15.text")); // NOI18N
+    jLabel15.setEnabled(false);
 
     L2developingjInfer.setFont(L2developingjInfer.getFont().deriveFont(L2developingjInfer.getFont().getSize()+3f));
     org.openide.awt.Mnemonics.setLocalizedText(L2developingjInfer, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.L2developingjInfer.text")); // NOI18N
+    L2developingjInfer.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel17.text")); // NOI18N
+    jLabel17.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel18, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel18.text")); // NOI18N
+    jLabel18.setEnabled(false);
 
     jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/welcome/graphics/bottom_bar.png"))); // NOI18N
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel1.text")); // NOI18N
@@ -148,6 +158,17 @@ public final class WelcomeTopComponent extends TopComponent {
     step3runProject.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         step3runProjectActionPerformed(evt);
+      }
+    });
+
+    step2addFiles.setEnabled(false);
+    org.openide.awt.Mnemonics.setLocalizedText(step2addFiles, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.step2addFiles.text")); // NOI18N
+    step2addFiles.setMaximumSize(new java.awt.Dimension(103, 29));
+    step2addFiles.setMinimumSize(new java.awt.Dimension(103, 29));
+    step2addFiles.setPreferredSize(new java.awt.Dimension(103, 29));
+    step2addFiles.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        step2addFilesActionPerformed(evt);
       }
     });
 
@@ -198,6 +219,7 @@ public final class WelcomeTopComponent extends TopComponent {
                   .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(100, 100, 100)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                      .addComponent(step2addFiles, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                       .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                       .addComponent(step1project, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))))
               .addGroup(jPanel1Layout.createSequentialGroup()
@@ -231,6 +253,7 @@ public final class WelcomeTopComponent extends TopComponent {
         .addGap(32, 32, 32)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jLabel2)
+          .addComponent(step2addFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel5))
         .addGap(38, 38, 38)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -284,6 +307,10 @@ public final class WelcomeTopComponent extends TopComponent {
     OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(ActionProvider.COMMAND_RUN, Lookup.EMPTY);
   }//GEN-LAST:event_step3runProjectActionPerformed
 
+  private void step2addFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step2addFilesActionPerformed
+    OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(FilesAddAction.COMMAND_FILES_ADD, Lookup.EMPTY);
+  }//GEN-LAST:event_step2addFilesActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
   private javax.swing.JLabel L2developingjInfer;
@@ -309,6 +336,7 @@ public final class WelcomeTopComponent extends TopComponent {
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JCheckBox showOnStartup;
   private javax.swing.JButton step1project;
+  private javax.swing.JButton step2addFiles;
   private javax.swing.JButton step3runProject;
   // End of variables declaration//GEN-END:variables
 
@@ -382,5 +410,9 @@ public final class WelcomeTopComponent extends TopComponent {
 
   public JButton getStep3runProject() {
     return step3runProject;
+  }
+
+  public JButton getStep2addFiles() {
+    return step2addFiles;
   }
 }

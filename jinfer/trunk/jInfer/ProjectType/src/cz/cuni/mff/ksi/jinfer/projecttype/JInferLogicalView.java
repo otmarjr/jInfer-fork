@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.Image;
@@ -107,6 +108,7 @@ public class JInferLogicalView implements LogicalViewProvider {
     @Override
     public Action[] getActions(final boolean context) {
       final List<Action> nodeActions = new ArrayList<Action>();
+      nodeActions.add(new FilesAddAction(project));
       nodeActions.add(new RunAction(project));
       nodeActions.add(null); //separator
       nodeActions.add(CommonProjectActions.copyProjectAction());
@@ -121,13 +123,18 @@ public class JInferLogicalView implements LogicalViewProvider {
   }
   private final JInferProject project;
 
+  private RootNode rootNode = null;
+
   public JInferLogicalView(final JInferProject project) {
     this.project = project;
   }
 
   @Override
   public Node createLogicalView() {
-    return new RootNode(project);
+    if (rootNode == null) {
+      rootNode = new RootNode(project);
+    }
+    return rootNode;
   }
 
   @Override

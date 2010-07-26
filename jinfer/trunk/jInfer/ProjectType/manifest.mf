@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
-OpenIDE-Module: cz.cuni.mff.ksi.jinfer.projecttype
+AutoUpdate-Show-In-Client: false
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.projecttype/1
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/projecttype/layer.xml
 OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/projecttype/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
 

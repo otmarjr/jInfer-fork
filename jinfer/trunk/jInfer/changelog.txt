@@ -1,0 +1,15 @@
+
+                                jInfer
+                Java framework for XML schema inference
+                             
+                              CHANGELOG
+                              
+	Version 0.1
+	-----------
+	
+	Features:
+	- Initial grammar can be retrieved from XML documents, DTD schemas and XPath
+		queries
+	- Simplifier uses name-based clustering, trie and naive approach to inferring
+		Kleene star.
+	- Resulting schema can be exported to DTD.

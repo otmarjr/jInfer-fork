@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-OpenIDE-Module: cz.cuni.mff.ksi.jinfer.trivialdtd
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.trivialdtd/1
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/trivialdtd/Bundle.properties
 OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator
-OpenIDE-Module-Specification-Version: 1.0
 

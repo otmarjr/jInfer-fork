@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module: cz.cuni.mff.ksi.jinfer.runner
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.runner/1
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/runner/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
 

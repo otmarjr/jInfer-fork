@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.JInferCustomizerProvider;
 import java.beans.PropertyChangeListener;
@@ -195,7 +196,8 @@ public class JInferProject implements Project {
     private final String[] supported = new String[]{
       ActionProvider.COMMAND_DELETE,
       ActionProvider.COMMAND_COPY,
-      ActionProvider.COMMAND_RUN};
+      ActionProvider.COMMAND_RUN,
+      FilesAddAction.COMMAND_FILES_ADD};
 
     @Override
     public String[] getSupportedActions() {
@@ -212,6 +214,9 @@ public class JInferProject implements Project {
       }
       if (action.equalsIgnoreCase(ActionProvider.COMMAND_RUN)) {
         new RunAction(JInferProject.this).actionPerformed(null);
+      }
+      if (action.equalsIgnoreCase(FilesAddAction.COMMAND_FILES_ADD)) {
+        new FilesAddAction(JInferProject.this).actionPerformed(null);
       }
     }
 

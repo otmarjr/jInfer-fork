@@ -19,9 +19,12 @@ package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
+import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
+import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.filechooser.FileFilter;
@@ -39,6 +42,8 @@ import org.openide.nodes.Node;
 public class FilesAddAction extends AbstractAction{
 
   private final JInferProject project;
+
+  public static final String COMMAND_FILES_ADD = "FilesAddAction";
 
   public FilesAddAction(final JInferProject project) {
     super("Add files");
@@ -68,8 +73,12 @@ public class FilesAddAction extends AbstractAction{
 
       final Node root = project.getLookup().lookup(LogicalViewProvider.class).createLogicalView();
       final Node[] nodes = root.getChildren().getNodes();
+
       for (int i = 0; i < nodes.length; i++) {
         Node node = nodes[i];
+        if (node instanceof FolderNode) {
+           ((FileChildren)node.getChildren()).addNotify();
+        }
       }
     }
     

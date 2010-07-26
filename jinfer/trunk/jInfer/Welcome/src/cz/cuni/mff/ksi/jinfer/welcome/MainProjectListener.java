@@ -39,8 +39,10 @@ public class MainProjectListener implements PropertyChangeListener{
    if (evt.getPropertyName().equals(OpenProjects.PROPERTY_MAIN_PROJECT)) {
      if (OpenProjects.getDefault().getMainProject() != null) {
       topComponent.getStep3runProject().setEnabled(true);
+      topComponent.getStep2addFiles().setEnabled(true);
      } else {
       topComponent.getStep3runProject().setEnabled(false);
+      topComponent.getStep2addFiles().setEnabled(false);
      }
    }
 

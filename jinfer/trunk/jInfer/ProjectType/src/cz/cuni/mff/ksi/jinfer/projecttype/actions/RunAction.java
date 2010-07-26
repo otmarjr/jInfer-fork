@@ -41,7 +41,7 @@ public class RunAction extends AbstractAction {
     if (RunningProject.setActiveProject(project)) {
       new Runner().run();
     } else {
-      //TODO treba oznamit ze inferencia bezi uz niekde inde
+      //TODO sviro need to popup message that inference is already running
     }
 
   }

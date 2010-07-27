@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vektor
+ *  Copyright (C) 2010 sviro
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,19 +15,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
-
-import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
 /**
- * Interface of a FileSelector module.
- * 
- * @author vektor
+ * Folder type for input folder.
+ * @author sviro
  */
-public interface FileSelection {
+public enum FolderType {
 
-  Input getInput();
+  XML("XML"),
+  SCHEMA("schema"),
+  QUERY("query");
 
-  void addOutput(String fileName, String data, String extension);
+  private final String name;
+  FolderType(final String name) {
+    this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
 
 }

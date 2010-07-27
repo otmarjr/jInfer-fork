@@ -27,7 +27,7 @@ import java.util.List;
 import org.openide.util.Lookup;
 
 /**
- *
+ * Class providing methods for lookup modules important for inference.
  * @author sviro
  */
 public final class ModuleSelection {

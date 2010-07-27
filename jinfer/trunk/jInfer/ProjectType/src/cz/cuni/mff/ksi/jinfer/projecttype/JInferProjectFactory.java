@@ -29,7 +29,7 @@ import org.openide.filesystems.FileUtil;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO sviro Comment!
+ * Creates in-memory jInfer projects from disk directories.
  * @author sviro
  */
 @ServiceProvider(service = ProjectFactory.class)

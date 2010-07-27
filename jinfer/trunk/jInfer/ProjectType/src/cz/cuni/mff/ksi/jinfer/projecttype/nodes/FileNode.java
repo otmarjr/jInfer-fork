@@ -1,3 +1,19 @@
+/*
+ *  Copyright (C) 2010 sviro
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
 import java.io.File;
@@ -10,7 +26,7 @@ import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 
 /**
- * TODO sviro Comment!
+ * Node which encapsulate input Files in folder node. For this node is disabled copy and cut.
  * @author sviro
  */
 public class FileNode extends FilterNode {
@@ -32,7 +48,8 @@ public class FileNode extends FilterNode {
 
   @Override
   public void destroy() throws IOException {
-    final Collection<File> files = (Collection<File>) ((FolderNode) this.getParentNode()).getLookup().lookup(Collection.class);
+    final Collection<File> files = (Collection<File>) ((FolderNode) this.getParentNode()).getLookup().
+            lookup(Collection.class);
     final DataNode orig = (DataNode) this.getOriginal();
     final FileObject fileOb = orig.getDataObject().getPrimaryFile();
     files.remove(FileUtil.toFile(fileOb));

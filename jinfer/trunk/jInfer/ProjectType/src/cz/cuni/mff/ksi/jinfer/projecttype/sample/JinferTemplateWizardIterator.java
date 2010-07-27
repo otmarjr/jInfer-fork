@@ -46,7 +46,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-// TODO sviro Comment! & move to the top level
+// TODO sviro version 0.2 Comment! & move to the top level
 public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress*/InstantiatingIterator {
 
   private int index;

@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
@@ -36,13 +35,12 @@ import org.openide.filesystems.FileUtil;
 import org.openide.nodes.Node;
 
 /**
- *
+ * Action to add files to all input folders of jInfer project.
  * @author sviro
  */
-public class FilesAddAction extends AbstractAction{
+public class FilesAddAction extends AbstractAction {
 
   private final JInferProject project;
-
   public static final String COMMAND_FILES_ADD = "FilesAddAction";
 
   public FilesAddAction(final JInferProject project) {
@@ -50,13 +48,13 @@ public class FilesAddAction extends AbstractAction{
     this.project = project;
   }
 
-
-
   @Override
   public void actionPerformed(final ActionEvent e) {
-    final FileFilter fileFilter = new FileNameExtensionFilter("Files (*.xml, *.xsd, *.dtd, *.xpath)", "xml", "xsd", "dtd", "xpath");
+    final FileFilter fileFilter = new FileNameExtensionFilter("Files (*.xml, *.xsd, *.dtd, *.xpath)",
+            "xml", "xsd", "dtd", "xpath");
 
-    final File[] selectedFiles = new FileChooserBuilder(FilesAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
+    final File[] selectedFiles = new FileChooserBuilder(FilesAddAction.class).
+            setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add files").setFileFilter(fileFilter).showMultiOpenDialog();
 
     if (selectedFiles != null) {
@@ -75,17 +73,17 @@ public class FilesAddAction extends AbstractAction{
       final Node[] nodes = root.getChildren().getNodes();
 
       for (int i = 0; i < nodes.length; i++) {
-        Node node = nodes[i];
+        final Node node = nodes[i];
         if (node instanceof FolderNode) {
-           ((FileChildren)node.getChildren()).addNotify();
+          ((FileChildren) node.getChildren()).addNotify();
         }
       }
     }
-    
+
 
   }
 
-  private Collection<File> getSpecificFiles(final File[] files, String... extensions) {
+  private Collection<File> getSpecificFiles(final File[] files, final String... extensions) {
     final Collection<File> result = new ArrayList<File>();
 
     for (int i = 0; i < files.length; i++) {
@@ -98,5 +96,4 @@ public class FilesAddAction extends AbstractAction{
     }
     return result;
   }
-
 }

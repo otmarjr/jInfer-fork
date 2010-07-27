@@ -58,7 +58,10 @@ public class Input {
       final File file = it.next();
       if (!file.exists()) {
         it.remove();
-        DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.Message("Some of the input files were deleted from disk. They were removed from input files.", NotifyDescriptor.INFORMATION_MESSAGE));
+        
+        DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.Message(
+                org.openide.util.NbBundle.getMessage(Input.class, "Input.deletedInputFiles.message"),
+                NotifyDescriptor.INFORMATION_MESSAGE));
       }
     }
 

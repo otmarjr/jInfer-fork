@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,17 +14,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.projecttype;
+
+package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 /**
- * Exception for missing DataObject for provided FileObject of input file.
- * @author sviro
+ * Interface for adding output to project.
+ * 
+ * @author vektor
  */
-public class NoDataObjectException extends RuntimeException {
+public interface IOutputHandler {
 
-  private static final long serialVersionUID = 12549853274156l;
+  void addOutput(String fileName, String data, String extension);
 
-  public NoDataObjectException(final String msg) {
-    super(msg);
-  }
 }

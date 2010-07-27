@@ -28,7 +28,7 @@ import org.openide.WizardValidationException;
 import org.openide.filesystems.FileUtil;
 
 /**
- * // TODO sviro Comment!
+ * // TODO sviro version 0.2 Comment!
  * @author sviro
  */
 public class JinferTemplatePanelVisual extends JPanel implements DocumentListener {

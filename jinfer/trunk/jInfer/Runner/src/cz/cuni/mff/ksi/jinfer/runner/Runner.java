@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.runner;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.FileSelection;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.IOutputHandler;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
@@ -33,7 +33,6 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
-import org.openide.util.Lookup;
 import org.openide.util.RequestProcessor;
 import org.openide.util.TaskListener;
 import org.openide.windows.IOProvider;
@@ -124,7 +123,7 @@ public class Runner {
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
     ioResult.getOut().println(schema);
 
-    RunningProject.getActiveProject().getLookup().lookup(FileSelection.class)
+    RunningProject.getActiveProject().getLookup().lookup(IOutputHandler.class)
             .addOutput("generated-schema", getCommentedSchema(schema), extension);
 
     RunningProject.removeActiveProject();

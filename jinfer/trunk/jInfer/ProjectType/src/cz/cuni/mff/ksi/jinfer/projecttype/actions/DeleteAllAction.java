@@ -25,10 +25,12 @@ import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import org.netbeans.spi.project.ProjectState;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.nodes.Node;
 
 /**
- * TODO sviro Comment!
+ * Action for folder node which delete all input files in folder.
  * @author sviro
  */
 public class DeleteAllAction extends AbstractAction {
@@ -48,11 +50,12 @@ public class DeleteAllAction extends AbstractAction {
   @Override
   public void actionPerformed(ActionEvent e) {
     final String folderName = ((FolderNode) node).getDisplayName();
-    final int result = JOptionPane.showOptionDialog(null,
-            "Are you sure you want to remove all files in " + folderName + " folder?",
-            NAME, JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE, null, null, null);
-    if (result == JOptionPane.YES_OPTION) {
+    final NotifyDescriptor.Confirmation descriptor = new NotifyDescriptor.Confirmation(
+            "Are you sure you want to remove all files in " + folderName + " folder?");
+
+    DialogDisplayer.getDefault().notify(descriptor);
+
+    if (descriptor.getValue().equals(NotifyDescriptor.YES_OPTION)) {
       files.clear();
       ((FileChildren) node.getChildren()).addNotify();
 

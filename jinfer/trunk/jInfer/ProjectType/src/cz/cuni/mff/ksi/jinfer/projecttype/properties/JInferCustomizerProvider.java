@@ -1,25 +1,38 @@
+/*
+ *  Copyright (C) 2010 sviro
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.Dialog;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.spi.project.ui.CustomizerProvider;
 import org.netbeans.spi.project.ui.support.ProjectCustomizer;
 import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;
+import org.netbeans.spi.project.ui.support.ProjectCustomizer.CategoryComponentProvider;
 import org.openide.util.Lookup;
 
 /**
- * TODO sviro Comment!
+ * Creates jInfer project Properties Dialog.
  * @author sviro
  */
 public class JInferCustomizerProvider implements CustomizerProvider {
@@ -54,7 +67,8 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     });
 
     final Lookup lkp = Lookup.getDefault();
-    for (final PropertiesPanelProvider propPanelProvider : lkp.lookupAll(PropertiesPanelProvider.class)) {
+    for (final PropertiesPanelProvider propPanelProvider : lkp.lookupAll(
+            PropertiesPanelProvider.class)) {
       result.put(Category.create(propPanelProvider.getName(),
               propPanelProvider.getDisplayName(), null), propPanelProvider.getPanel(properties));
     }
@@ -67,7 +81,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     init();
 
     final Dialog dialog = ProjectCustomizer.createCustomizerDialog(categories, componentProvider,
-            null, new PropertiesListener(project), null);
+            null, new PropertiesListener(project, this), null);
 
     dialog.setTitle(ProjectUtils.getInformation(project).getDisplayName());
 
@@ -75,38 +89,13 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
   }
 
-  // TODO sviro Comment! & move to the top level
-  private class PropertiesListener implements ActionListener {
-
-    private final JInferProject project;
-
-    private PropertiesListener(final JInferProject project) {
-      this.project = project;
-    }
-
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-      if ("ok".equalsIgnoreCase(e.getActionCommand())) {
-        for (Category category : categories) {
-          ((AbstractPropertiesPanel) componentProvider.create(category)).store();
-        }
-      }
-    }
+  public Category[] getCategories() {
+    return categories;
   }
 
-  // TODO sviro Comment! & move to the top level
-  private class JInferComponentProvider implements ProjectCustomizer.CategoryComponentProvider {
-
-    private final Map<Category, JPanel> panels;
-
-    private JInferComponentProvider(final Map<Category, JPanel> panels) {
-      this.panels = panels;
-    }
-
-    @Override
-    public JComponent create(final Category category) {
-      final JPanel panel = panels.get(category);
-      return panel == null ? new JPanel() : panel;
-    }
+  public CategoryComponentProvider getComponentProvider() {
+    return componentProvider;
   }
+
+  
 }

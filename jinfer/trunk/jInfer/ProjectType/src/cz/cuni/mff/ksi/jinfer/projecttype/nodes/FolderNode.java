@@ -1,3 +1,19 @@
+/*
+ *  Copyright (C) 2010 sviro
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
@@ -13,31 +29,33 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
 /**
- * TODO sviro Comment!
+ * Provide node for input folder.
  * @author sviro
  */
 public class FolderNode extends AbstractNode {
 
-  private final String folderName;
+  private final FolderType folderType;
   private final Collection<File> files;
   private final JInferProject project;
 
-  public FolderNode(final JInferProject project, final String folderName, final Collection<File> files) {
-    this(project, folderName, files, new InstanceContent());
+  public FolderNode(final JInferProject project, final FolderType folderType,
+          final Collection<File> files) {
+    this(project, folderType, files, new InstanceContent());
   }
 
-  private FolderNode(final JInferProject project, final String folderName, final Collection<File> files, final InstanceContent content) {
+  private FolderNode(final JInferProject project, final FolderType folderType,
+          final Collection<File> files, final InstanceContent content) {
     super(new FileChildren(files), new AbstractLookup(content));
     content.add(project);
     content.add(files);
     this.project = project;
-    this.folderName = folderName;
     this.files = files;
+    this.folderType = folderType;
   }
 
   @Override
   public String getDisplayName() {
-    return folderName;
+    return folderType.getName();
   }
 
   @Override
@@ -48,6 +66,10 @@ public class FolderNode extends AbstractNode {
   @Override
   public Image getOpenedIcon(final int type) {
     return getIcon(type);
+  }
+
+  public FolderType getFolderType() {
+    return folderType;
   }
 
   @Override

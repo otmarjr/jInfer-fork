@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
+import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderType;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;
@@ -30,7 +31,7 @@ import org.openide.filesystems.FileChooserBuilder;
 import org.openide.nodes.Node;
 
 /**
- * TODO sviro Comment!
+ * Action for folder node which add specific file into input folder.
  * @author sviro
  */
 public class FileAddAction extends AbstractAction {
@@ -39,12 +40,11 @@ public class FileAddAction extends AbstractAction {
   private final Collection<File> files;
   private final Node node;
   private final JInferProject project;
-  // TODO sviro Convert type to an enum
-  private final String type;
+  private final FolderType type;
 
   public FileAddAction(final JInferProject project, final Node node, final Collection<File> files) {
     super();
-    type = ((FolderNode) node).getDisplayName();
+    type = ((FolderNode) node).getFolderType();
     putValue(NAME, "Add " + type + " files");
     this.project = project;
     this.files = files;
@@ -53,14 +53,19 @@ public class FileAddAction extends AbstractAction {
 
   @Override
   public void actionPerformed(final ActionEvent e) {
-    FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
-            setTitle("Add " + type + " files");
-    if ("XML".equals(type)) {
-      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("XML files (*.xml)", "xml"));
-    } else if ("schema".equals(type)) {
-      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("Schema files (*.dtd, *.xsd)", "dtd", "xsd"));
-    } else if ("query".equals(type)) {
-      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("XPath files (*.xpath)", "xpath")).addFileFilter(new FileNameExtensionFilter("Text files (*.txt)", "txt"));
+    FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).
+            setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
+            setTitle("Add " + type.getName() + " files");
+    if (FolderType.XML.equals(type)) {
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
+              "XML files (*.xml)", "xml"));
+    } else if (FolderType.SCHEMA.equals(type)) {
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
+              "Schema files (*.dtd, *.xsd)", "dtd", "xsd"));
+    } else if (FolderType.QUERY.equals(type)) {
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
+              "XPath files (*.xpath)", "xpath")).addFileFilter(new FileNameExtensionFilter(
+              "Text files (*.txt)", "txt"));
     }
 
     final File[] selectedFiles = fileChooserBuilder.showMultiOpenDialog();
@@ -69,7 +74,7 @@ public class FileAddAction extends AbstractAction {
       files.addAll(Arrays.asList(selectedFiles));
 
       ((FileChildren) node.getChildren()).addNotify();
-      
+
       project.getLookup().lookup(ProjectState.class).markModified();
     }
   }

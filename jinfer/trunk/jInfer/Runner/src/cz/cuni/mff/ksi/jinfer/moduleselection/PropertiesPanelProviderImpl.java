@@ -23,7 +23,7 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Properties panel provider for module selection category.
  * @author sviro
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)

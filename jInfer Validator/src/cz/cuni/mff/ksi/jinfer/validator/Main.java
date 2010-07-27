@@ -27,6 +27,9 @@ import java.util.List;
 
 public final class Main {
 
+  // TODO vektor Refactor
+  // TODO vektor Create GUI
+
   private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
   private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
   private static final List<String> NOT_MODULES = Arrays.asList(".svn", "build", "nbproject");
@@ -44,20 +47,20 @@ public final class Main {
           final String projectRoot) {
     final List<Remark> ret = new ArrayList<Remark>();
 
-    ret.addAll(getCompilationRemarks(ant, projectRoot));
+    // ret.addAll(getCompilationRemarks(ant, projectRoot));
 
     for (final File project : getModuleNames(projectRoot)) {
-      ret.addAll(checkProject(project));
+      ret.addAll(checkModule(project));
     }
     return ret;
   }
 
-  private static List<Remark> checkProject(final File project) {
+  private static List<Remark> checkModule(final File module) {
     final List<Remark> ret = new ArrayList<Remark>();
-    final List<File> projectFiles = getProjectFiles(project);
+    final List<File> moduleFiles = getModuleFiles(module);
 
-    for (final File file : projectFiles) {
-      ret.addAll(checkFile(file));
+    for (final File file : moduleFiles) {
+      ret.addAll(checkFile(module.getName(), file));
     }
 
     // TODO vektor Check for missing project metadata - add as ERROR
@@ -65,17 +68,32 @@ public final class Main {
     return ret;
   }
 
-  private static List<Remark> checkFile(final File file) {
+  private static List<Remark> checkFile(final String module, final File file) {
     final List<Remark> ret = new ArrayList<Remark>();
+
+    final String fileStr = FileHelper.readFileAsString(file.getAbsolutePath());
+
+    if (!fileStr.startsWith("/*")) {
+      ret.add(new Remark(module, file,
+              0, Severity.WARNING, "License comment not found"));
+    }
+
     // TODO vektor Check for:
     // - TODO/XXX/FIXME - add as WARNING
     // - missing or inconsistent license/author info - add as ERROR
     return ret;
   }
 
-  private static List<File> getProjectFiles(final File project) {
-    // TODO vektor
-    return new ArrayList<File>();
+  private static List<File> getModuleFiles(final File module) {
+    final List<File> ret = new ArrayList<File>();
+
+    for (final File f : FileHelper.getFiles(module)) {
+      if (f.isFile() && f.getName().toLowerCase().endsWith(".java")) {
+        ret.add(f);
+      }
+    }
+
+    return ret;
   }
 
   private static List<File> getModuleNames(final String projectRoot) {

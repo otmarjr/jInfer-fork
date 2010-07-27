@@ -16,15 +16,17 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
+import java.io.File;
+
 public class Remark {
 
   private String module;
-  private String file;
+  private File file;
   private Integer line;
   private Severity severity;
 
   public Remark(final String module,
-          final String file, final Integer line, final Severity severity,
+          final File file, final Integer line, final Severity severity,
           final String text) {
     this.module = module;
     this.file = file;
@@ -50,11 +52,11 @@ public class Remark {
     this.module = module;
   }
 
-  public String getFile() {
+  public File getFile() {
     return file;
   }
 
-  public void setFile(final String file) {
+  public void setFile(final File file) {
     this.file = file;
   }
 
@@ -99,7 +101,7 @@ public class Remark {
       ret.append('[').append(module).append(']');
     }
     if (file != null) {
-      ret.append(' ').append(file);
+      ret.append(' ').append(file.getName());
     }
     if (line != null) {
       ret.append(':').append(line.toString());

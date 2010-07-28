@@ -48,7 +48,9 @@ public class MainWnd extends JFrame {
       public void mouseClicked(final MouseEvent e) {
         if (e.getClickCount() == 2 && result.getSelectedRowCount() == 1) {
           try {
-            Desktop.getDesktop().open(model.get(result.getSelectedRow()).getFile());
+            Desktop.getDesktop().open(model.get(
+                    result.convertRowIndexToModel(result.getSelectedRow())
+                    ).getFile());
           } catch (IOException ex) {
           }
         }

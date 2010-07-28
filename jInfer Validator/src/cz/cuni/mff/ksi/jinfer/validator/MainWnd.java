@@ -17,22 +17,100 @@
 package cz.cuni.mff.ksi.jinfer.validator;
 
 import cz.cuni.mff.ksi.jinfer.validator.objects.Remark;
+import java.awt.Desktop;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
 public class MainWnd extends JFrame {
 
+  // TODO vektor Column widths
   private static final long serialVersionUID = 7542612L;
-
   private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
   private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
+  private final List<Remark> model = new ArrayList<Remark>();
 
   public MainWnd() {
     initComponents();
 
     setLocationRelativeTo(null);
+
+    result.addMouseListener(new MouseAdapter() {
+
+      @Override
+      public void mouseClicked(final MouseEvent e) {
+        if (e.getClickCount() == 2 && result.getSelectedRowCount() == 1) {
+          try {
+            Desktop.getDesktop().open(model.get(result.getSelectedRow()).getFile());
+          } catch (IOException ex) {
+          }
+        }
+      }
+    });
+  }
+
+  private class MyModel extends DefaultTableModel {
+
+    private static final long serialVersionUID = 175218631L;
+
+    @Override
+    public int getRowCount() {
+      return model.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+      return 5;
+    }
+
+    @Override
+    public String getColumnName(final int column) {
+      switch (column) {
+        case 0:
+          return "Severity";
+        case 1:
+          return "Module";
+        case 2:
+          return "File";
+        case 3:
+          return "Line";
+        case 4:
+          return "Text";
+        default:
+          throw new IllegalArgumentException();
+      }
+    }
+
+    @Override
+    public Object getValueAt(final int row, final int column) {
+      final Remark r = model.get(row);
+      switch (column) {
+        case 0:
+          return r.getSeverity().toString();
+        case 1:
+          return r.getModule();
+        case 2:
+          return r.getFile() != null ? r.getFile().getName() : "";
+        case 3:
+          return r.getLine() != null ? r.getLine() : "";
+        case 4:
+          return r.getText();
+        default:
+          throw new IllegalArgumentException();
+      }
+    }
+
+    @Override
+    public boolean isCellEditable(final int row, final int column) {
+      return false;
+    }
   }
 
   /** This method is called from within the constructor to
@@ -56,7 +134,7 @@ public class MainWnd extends JFrame {
     compile = new javax.swing.JCheckBox();
     jPanel2 = new javax.swing.JPanel();
     jScrollPane1 = new javax.swing.JScrollPane();
-    result = new javax.swing.JTextArea();
+    result = new javax.swing.JTable();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,8 +225,9 @@ public class MainWnd extends JFrame {
 
     jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Results"));
 
-    result.setColumns(20);
-    result.setRows(5);
+    result.setAutoCreateRowSorter(true);
+    result.setModel(new MyModel());
+    result.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane1.setViewportView(result);
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -163,7 +242,7 @@ public class MainWnd extends JFrame {
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(jPanel2Layout.createSequentialGroup()
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
         .addContainerGap())
     );
 
@@ -186,11 +265,19 @@ public class MainWnd extends JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void runValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runValidationActionPerformed
-    for (final Remark r : Logic.checkSuite(antLocation.getText(),
-            rootFolder.getText(), compile.isSelected())) {
-      result.append(r.toString());
-      result.append("\n");
-    }
+    runValidation.setEnabled(false);
+    final Thread t = new Thread(new Runnable() {
+
+      @Override
+      public void run() {
+        model.clear();
+        model.addAll(Logic.checkSuite(antLocation.getText(),
+                rootFolder.getText(), compile.isSelected()));
+        result.setModel(new MyModel());
+        runValidation.setEnabled(true);
+      }
+    });
+    t.start();
   }//GEN-LAST:event_runValidationActionPerformed
 
   private void locateAntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locateAntActionPerformed
@@ -207,7 +294,6 @@ public class MainWnd extends JFrame {
       rootFolder.setText(jfc.getSelectedFile().getAbsolutePath());
     }
   }//GEN-LAST:event_locateRootActionPerformed
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField antLocation;
   private javax.swing.JCheckBox compile;
@@ -218,7 +304,7 @@ public class MainWnd extends JFrame {
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JButton locateAnt;
   private javax.swing.JButton locateRoot;
-  private javax.swing.JTextArea result;
+  private javax.swing.JTable result;
   private javax.swing.JTextField rootFolder;
   private javax.swing.JButton runValidation;
   // End of variables declaration//GEN-END:variables

@@ -24,10 +24,6 @@ public final class Utils {
   private Utils() {
   }
 
-  public static void out(final String s) {
-    System.out.println(s);
-  }
-
   public static String getExceptionStackTraceAsString(final Exception exception) {
     final StringWriter sw = new StringWriter();
     exception.printStackTrace(new PrintWriter(sw));

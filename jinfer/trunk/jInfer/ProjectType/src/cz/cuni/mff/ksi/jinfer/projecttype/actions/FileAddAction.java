@@ -55,7 +55,7 @@ public class FileAddAction extends AbstractAction {
   public void actionPerformed(final ActionEvent e) {
     FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).
             setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
-            setTitle("Add " + type.getName() + " files");
+            setTitle("Add " + type.getName() + " files").setFilesOnly(true);
     if (FolderType.XML.equals(type)) {
       fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
               "XML files (*.xml)", "xml"));

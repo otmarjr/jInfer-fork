@@ -23,8 +23,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public final class FileHelper {
+
+  private static final List<String> NOT_MODULES = Arrays.asList(".svn", "build", "nbproject");
 
   private FileHelper() {
   }
@@ -43,8 +46,8 @@ public final class FileHelper {
     return result;
   }
 
-  public static String readFileAsString(final String filePath) {
-    final byte[] buffer = new byte[(int) new File(filePath).length()];
+  public static String readFileAsString(final File filePath) {
+    final byte[] buffer = new byte[(int) filePath.length()];
     BufferedInputStream f = null;
     try {
       f = new BufferedInputStream(new FileInputStream(filePath));
@@ -59,5 +62,36 @@ public final class FileHelper {
       }
     }
     return new String(buffer);
+  }
+
+  public static List<String> getFileLines(final String fileStr) {
+    final List<String> ret = new ArrayList<String>();
+    final StringTokenizer st = new StringTokenizer(fileStr, "\r\n");
+    while (st.hasMoreTokens()) {
+      ret.add(st.nextToken());
+    }
+    return ret;
+  }
+
+  public static List<File> getModuleFiles(final File module) {
+    final List<File> ret = new ArrayList<File>();
+
+    for (final File f : FileHelper.getFiles(module)) {
+      if (f.isFile() && f.getName().toLowerCase().endsWith(".java")) {
+        ret.add(f);
+      }
+    }
+
+    return ret;
+  }
+
+  public static List<File> getModuleNames(final String projectRoot) {
+    final List<File> ret = new ArrayList<File>();
+    for (final File child : new File(projectRoot).listFiles()) {
+      if (child.isDirectory() && !NOT_MODULES.contains(child.getName())) {
+        ret.add(child);
+      }
+    }
+    return ret;
   }
 }

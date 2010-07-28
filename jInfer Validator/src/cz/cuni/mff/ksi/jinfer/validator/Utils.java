@@ -16,20 +16,21 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
-public final class Main {
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
-  // TODO vektor Create GUI
+public final class Utils {
 
-  private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
-  private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
-
-  private Main() {
+  private Utils() {
   }
 
-  public static void main(final String[] args) {
-    for (final Remark r : Logic.checkSuite(ANT, PROJECT_ROOT)) {
-      Utils.out(r.toString());
-    }
+  public static void out(final String s) {
+    System.out.println(s);
   }
 
+  public static String getExceptionStackTraceAsString(final Exception exception) {
+    final StringWriter sw = new StringWriter();
+    exception.printStackTrace(new PrintWriter(sw));
+    return sw.toString();
+  }
 }

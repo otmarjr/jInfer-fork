@@ -57,7 +57,7 @@ public class IGGeneratorImpl implements IGGenerator {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     final Map<String, Processor> xmlProcessor = new HashMap<String, Processor>();
-    xmlProcessor.put("xml", new XMLProcessor());
+    xmlProcessor.put("*", new XMLProcessor());
     final Map<String, Processor> dtdProcessor = new HashMap<String, Processor>();
     dtdProcessor.put("dtd", new DTDProcessor());
     final Map<String, Processor> xpathProcessor = new HashMap<String, Processor>();

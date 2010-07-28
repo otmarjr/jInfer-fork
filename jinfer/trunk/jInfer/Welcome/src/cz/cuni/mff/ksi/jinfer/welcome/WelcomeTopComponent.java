@@ -33,6 +33,8 @@ import org.openide.util.NbPreferences;
 
 /**
  * jInfer welcome window shown on the first run.
+ *
+ * @author vektor
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.welcome//Welcome//EN",
 autostore = false)

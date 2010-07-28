@@ -20,6 +20,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.SimplifierImpl;
 import java.util.Properties;
 
+/**
+ * @author vektor
+ */
 public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 561241l;

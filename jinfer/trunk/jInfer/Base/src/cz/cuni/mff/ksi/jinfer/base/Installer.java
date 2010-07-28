@@ -30,6 +30,8 @@ import org.openide.windows.InputOutput;
 /**
  * Manages a module's lifecycle. Remember that an installer is optional and
  * often not needed at all.
+ *
+ * @author rio
  */
 public class Installer extends ModuleInstall {
 

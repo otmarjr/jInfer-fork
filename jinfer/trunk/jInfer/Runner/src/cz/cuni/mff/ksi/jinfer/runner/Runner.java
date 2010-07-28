@@ -47,6 +47,8 @@ import org.openide.windows.InputOutput;
  */
 public class Runner {
 
+  // TODO vektor Refactor asynchronous logic
+
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
   private final SchemaGenerator schemaGenerator;
@@ -64,14 +66,32 @@ public class Runner {
    * Starts process of inference.
    */
   public void run() {
-
-    igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), new IGGeneratorCallback() {
+    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(new Runnable() {
 
       @Override
-      public void finished(final List<AbstractNode> grammar) {
-        Runner.this.finishedIGGenerator(grammar);
+      public void run() {
+        igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), new IGGeneratorCallback() {
+
+          @Override
+          public void finished(final List<AbstractNode> grammar) {
+            Runner.this.finishedIGGenerator(grammar);
+          }
+        });
       }
     });
+
+    final ProgressHandle handle = ProgressHandleFactory.createHandle("Retrieving IG", theTask);
+    theTask.addTaskListener(new TaskListener() {
+
+      @Override
+      public void taskFinished(final org.openide.util.Task task) {
+        handle.finish();
+      }
+    });
+
+    handle.start();
+
+    theTask.schedule(0);
   }
 
   public void finishedIGGenerator(final List<AbstractNode> grammar) {
@@ -109,13 +129,33 @@ public class Runner {
   public void finishedSimplifier(final List<AbstractNode> grammar) {
     LOG.info("Runner: simplified grammar contains " + grammar.size()
             + " rules.");
-    schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
+
+    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(new Runnable() {
 
       @Override
-      public void finished(final String schema, final String extension) {
-        Runner.this.finishedSchemaGenerator(schema, extension);
+      public void run() {
+        schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
+
+          @Override
+          public void finished(final String schema, final String extension) {
+            Runner.this.finishedSchemaGenerator(schema, extension);
+          }
+        });
       }
     });
+
+    final ProgressHandle handle = ProgressHandleFactory.createHandle("Generating result schema", theTask);
+    theTask.addTaskListener(new TaskListener() {
+
+      @Override
+      public void taskFinished(final org.openide.util.Task task) {
+        handle.finish();
+      }
+    });
+
+    handle.start();
+
+    theTask.schedule(0);
   }
 
   public void finishedSchemaGenerator(final String schema, final String extension) {

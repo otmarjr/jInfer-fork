@@ -458,7 +458,7 @@ public final class RuleDisplayerPanel extends JPanel {
   }//GEN-LAST:event_panelAlternationMouseClicked
 //TODO change to NBPreferences
   public void load() {
-    maxPanels.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.panels", 10));
+    maxPanels.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.panels", 8));
     nestingLevel.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25));
     maxRules.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.rules", 50));
     margin.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("margin", 2));

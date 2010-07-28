@@ -31,10 +31,12 @@ public final class Logic {
   }
 
   public static List<Remark> checkSuite(final String ant,
-          final String projectRoot) {
+          final String projectRoot, final boolean compile) {
     final List<Remark> ret = new ArrayList<Remark>();
 
-    ret.addAll(getCompilationRemarks(ant, projectRoot));
+    if (compile) {
+      ret.addAll(getCompilationRemarks(ant, projectRoot));
+    }
 
     for (final File project : FileHelper.getModuleNames(projectRoot)) {
       ret.addAll(checkModule(project));

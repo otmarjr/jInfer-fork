@@ -21,7 +21,7 @@ import java.util.Properties;
 import org.netbeans.api.project.Project;
 
 /**
- *
+ * TODO developer: Comment!
  * @author sviro
  */
 public final class RunningProject {

@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
 
 /**
+ * TODO developer: Comment!
  *
  * @author sviro
  */

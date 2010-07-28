@@ -29,7 +29,9 @@ public final class BaseUtils {
 
   private BaseUtils() {
   }
-
+/**
+ * TODO developer: Comment!
+ */
   public interface Predicate<T> {
 
     boolean apply(final T argument);

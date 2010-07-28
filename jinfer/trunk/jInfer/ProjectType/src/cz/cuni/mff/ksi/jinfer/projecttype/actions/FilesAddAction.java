@@ -55,7 +55,7 @@ public class FilesAddAction extends AbstractAction {
 
     final File[] selectedFiles = new FileChooserBuilder(FilesAddAction.class).
             setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
-            setTitle("Add files").setFileFilter(fileFilter).showMultiOpenDialog();
+            setTitle("Add files").setFileFilter(fileFilter).setFilesOnly(true).showMultiOpenDialog();
 
     if (selectedFiles != null) {
       final Collection<File> xmlFiles = getSpecificFiles(selectedFiles, "xml");

@@ -16,6 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
+import cz.cuni.mff.ksi.jinfer.validator.utils.FileHelper;
+import cz.cuni.mff.ksi.jinfer.validator.utils.Utils;
+import cz.cuni.mff.ksi.jinfer.validator.objects.ImportantFiles;
+import cz.cuni.mff.ksi.jinfer.validator.objects.Remark;
+import cz.cuni.mff.ksi.jinfer.validator.objects.Severity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;

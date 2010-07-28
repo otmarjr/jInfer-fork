@@ -14,9 +14,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.validator;
+package cz.cuni.mff.ksi.jinfer.validator.utils;
 
-public enum Severity {
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
-  WARNING, ERROR
+public final class Utils {
+
+  private Utils() {
+  }
+
+  public static void out(final String s) {
+    System.out.println(s);
+  }
+
+  public static String getExceptionStackTraceAsString(final Exception exception) {
+    final StringWriter sw = new StringWriter();
+    exception.printStackTrace(new PrintWriter(sw));
+    return sw.toString();
+  }
 }

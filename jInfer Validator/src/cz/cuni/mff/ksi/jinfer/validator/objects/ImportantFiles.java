@@ -14,23 +14,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.validator;
+package cz.cuni.mff.ksi.jinfer.validator.objects;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
+/**
+ *
+ * @author vitasek
+ */
+public enum ImportantFiles {
 
-public final class Utils {
+  MANIFEST("manifest.mf"),
+  PROJECT_PROPERTIES("nbproject/project.properties");
 
-  private Utils() {
+  private final String location;
+
+  private ImportantFiles(final String location) {
+    this.location = location;
   }
 
-  public static void out(final String s) {
-    System.out.println(s);
+  public String getLocation() {
+    return location;
   }
 
-  public static String getExceptionStackTraceAsString(final Exception exception) {
-    final StringWriter sw = new StringWriter();
-    exception.printStackTrace(new PrintWriter(sw));
-    return sw.toString();
-  }
 }

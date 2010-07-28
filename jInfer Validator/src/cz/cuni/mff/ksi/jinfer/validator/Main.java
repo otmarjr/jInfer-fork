@@ -24,6 +24,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public final class Main {
 
@@ -32,7 +33,7 @@ public final class Main {
 
   private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
   private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
-  private static final List<String> NOT_MODULES = Arrays.asList(".svn", "build", "nbproject");
+  private static final List<String> NOT_MODULES = Arrays.asList(".svn", "build", "nbproject");  
 
   private Main() {
   }
@@ -47,7 +48,7 @@ public final class Main {
           final String projectRoot) {
     final List<Remark> ret = new ArrayList<Remark>();
 
-    // ret.addAll(getCompilationRemarks(ant, projectRoot));
+    ret.addAll(getCompilationRemarks(ant, projectRoot));
 
     for (final File project : getModuleNames(projectRoot)) {
       ret.addAll(checkModule(project));
@@ -78,9 +79,54 @@ public final class Main {
               0, Severity.WARNING, "License comment not found"));
     }
 
-    // TODO vektor Check for:
-    // - TODO/XXX/FIXME - add as WARNING
-    // - missing or inconsistent license/author info - add as ERROR
+    final List<String> lines = getFileLines(fileStr);
+
+    int lineNum = 1;
+    String fileAuthor = null;
+    String classAuthor = null;
+    for (final String line : lines) {
+      // TODOs
+      if (line.contains("TODO")) {
+        ret.add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("TODO"))));
+      }
+      if (line.contains("FIXME")) {
+        ret.add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("FIXME"))));
+      }
+      if (line.contains("XXX")) {
+        ret.add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("XXX"))));
+      }
+
+      // license, author etc
+      if (line.contains("Copyright (C)")) {
+        fileAuthor = line.substring(line.lastIndexOf(' ') + 1);
+      }
+      if (line.contains("@author")) {
+        classAuthor = line.substring(line.lastIndexOf(' ') + 1);
+      }
+
+      lineNum++;
+    }
+
+    if (fileAuthor != null && classAuthor != null
+            && !fileAuthor.equals(classAuthor)) {
+      ret.add(new Remark(module, file, 0, Severity.ERROR, "File and class authors differ: " + fileAuthor + " vs. " + classAuthor));
+    } else {
+      if (fileAuthor == null) {
+        ret.add(new Remark(module, file, 0, Severity.ERROR, "File has no author in license comment"));
+      }
+      if (classAuthor == null) {
+        ret.add(new Remark(module, file, 0, Severity.ERROR, "Class has no author in JavaDoc"));
+      }
+    }
+    return ret;
+  }
+
+  private static List<String> getFileLines(final String fileStr) {
+    final List<String> ret = new ArrayList<String>();
+    final StringTokenizer st = new StringTokenizer(fileStr, "\r\n");
+    while (st.hasMoreTokens()) {
+      ret.add(st.nextToken());
+    }
     return ret;
   }
 

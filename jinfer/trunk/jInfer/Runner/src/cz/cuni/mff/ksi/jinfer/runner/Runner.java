@@ -47,8 +47,6 @@ import org.openide.windows.InputOutput;
  */
 public class Runner {
 
-  // TODO vektor Refactor asynchronous logic
-
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
   private final SchemaGenerator schemaGenerator;
@@ -62,11 +60,24 @@ public class Runner {
     schemaGenerator = ModuleSelection.lookupSchemaGenerator(projectProperties.getProperty("moduleselector.schemagenerator"));
   }
 
+  private static void runAsync(final Runnable r, final String taskName) {
+    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(r);
+    final ProgressHandle handle = ProgressHandleFactory.createHandle(taskName, theTask);
+    theTask.addTaskListener(new TaskListener() {
+      @Override
+      public void taskFinished(final org.openide.util.Task task) {
+        handle.finish();
+      }
+    });
+    handle.start();
+    theTask.schedule(0);
+  }
+
   /**
    * Starts process of inference.
    */
   public void run() {
-    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(new Runnable() {
+    runAsync(new Runnable() {
 
       @Override
       public void run() {
@@ -78,27 +89,14 @@ public class Runner {
           }
         });
       }
-    });
-
-    final ProgressHandle handle = ProgressHandleFactory.createHandle("Retrieving IG", theTask);
-    theTask.addTaskListener(new TaskListener() {
-
-      @Override
-      public void taskFinished(final org.openide.util.Task task) {
-        handle.finish();
-      }
-    });
-
-    handle.start();
-
-    theTask.schedule(0);
+    }, "Retrieving IG");
   }
 
   public void finishedIGGenerator(final List<AbstractNode> grammar) {
     LOG.info("Runner: initial grammar contains " + grammar.size()
             + " rules.");
 
-    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(new Runnable() {
+    runAsync(new Runnable() {
 
       @Override
       public void run() {
@@ -110,27 +108,14 @@ public class Runner {
           }
         });
       }
-    });
-
-    final ProgressHandle handle = ProgressHandleFactory.createHandle("Inferring the schema", theTask);
-    theTask.addTaskListener(new TaskListener() {
-
-      @Override
-      public void taskFinished(final org.openide.util.Task task) {
-        handle.finish();
-      }
-    });
-
-    handle.start();
-
-    theTask.schedule(0);
+    }, "Inferring the schema");
   }
 
   public void finishedSimplifier(final List<AbstractNode> grammar) {
     LOG.info("Runner: simplified grammar contains " + grammar.size()
             + " rules.");
 
-    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(new Runnable() {
+    runAsync(new Runnable() {
 
       @Override
       public void run() {
@@ -142,20 +127,7 @@ public class Runner {
           }
         });
       }
-    });
-
-    final ProgressHandle handle = ProgressHandleFactory.createHandle("Generating result schema", theTask);
-    theTask.addTaskListener(new TaskListener() {
-
-      @Override
-      public void taskFinished(final org.openide.util.Task task) {
-        handle.finish();
-      }
-    });
-
-    handle.start();
-
-    theTask.schedule(0);
+    }, "Generating result schema");
   }
 
   public void finishedSchemaGenerator(final String schema, final String extension) {

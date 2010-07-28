@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
 /**
+ * TODO developer: Comment!
  * @author vektor
  */
 public enum RegexpType {

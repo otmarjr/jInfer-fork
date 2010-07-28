@@ -16,20 +16,28 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
+import java.awt.EventQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 public final class Main {
-
-  // TODO vektor Create GUI
-
-  private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
-  private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
 
   private Main() {
   }
 
   public static void main(final String[] args) {
-    for (final Remark r : Logic.checkSuite(ANT, PROJECT_ROOT)) {
-      Utils.out(r.toString());
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (final Exception ex) {
     }
-  }
+    EventQueue.invokeLater(new Runnable() {
 
+      @Override
+      public void run() {
+        new MainWnd().setVisible(true);
+      }
+    });
+  }
 }

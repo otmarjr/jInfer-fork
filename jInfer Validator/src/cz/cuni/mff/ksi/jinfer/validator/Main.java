@@ -16,17 +16,31 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
+import cz.cuni.mff.ksi.jinfer.validator.objects.Remark;
 import java.awt.EventQueue;
 import javax.swing.UIManager;
 
 public final class Main {
 
-  // TODO vektor Console version
-
   private Main() {
   }
 
   public static void main(final String[] args) {
+    if (args.length == 2) {
+      commandLine(args);
+    }
+    else {
+      runGUI();
+    }
+  }
+
+  private static void commandLine(final String[] args) {
+    for (final Remark r : Logic.checkSuite(args[0], args[1], true)) {
+      System.out.println(r.toString());
+    }
+  }
+
+  private static void runGUI() {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (final Exception ex) {

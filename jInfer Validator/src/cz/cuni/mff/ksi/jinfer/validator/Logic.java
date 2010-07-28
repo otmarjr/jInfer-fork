@@ -63,7 +63,7 @@ public final class Logic {
     final String manifest = FileHelper.readFileAsString(manifestFile);
     if (!manifest.contains("OpenIDE-Module-Implementation-Version:")) {
       ret.add(new Remark(module.getName(), manifestFile,
-              0, Severity.ERROR, "Module implementation version not found"));
+              null, Severity.ERROR, "Module implementation version not found"));
     }
 
     // check project.properties
@@ -73,23 +73,23 @@ public final class Logic {
 
     if (!project.contains("license.file=../gpl30.txt")) {
       ret.add(new Remark(module.getName(), projectFile,
-              0, Severity.ERROR, "Module license file not specified"));
+              null, Severity.ERROR, "Module license file not specified"));
     }
     if (!project.contains("nbm.homepage=")) {
       ret.add(new Remark(module.getName(), projectFile,
-              0, Severity.ERROR, "Project homepage not specified"));
+              null, Severity.ERROR, "Project homepage not specified"));
     }
     if (!project.contains("nbm.module.author=")) {
       ret.add(new Remark(module.getName(), projectFile,
-              0, Severity.ERROR, "Project author(s) not specified"));
+              null, Severity.ERROR, "Project author(s) not specified"));
     }
     if (!project.contains("project.license=gpl30")) {
       ret.add(new Remark(module.getName(), projectFile,
-              0, Severity.ERROR, "Module license not specified/incorrect"));
+              null, Severity.ERROR, "Module license not specified/incorrect"));
     }
     if (!project.contains("spec.version.base=")) {
       ret.add(new Remark(module.getName(), projectFile,
-              0, Severity.ERROR, "Module specification version not found"));
+              null, Severity.ERROR, "Module specification version not found"));
     }
 
     return ret;
@@ -102,7 +102,7 @@ public final class Logic {
 
     if (!fileStr.startsWith("/*")) {
       ret.add(new Remark(module, file,
-              0, Severity.WARNING, "License comment not found"));
+              null, Severity.WARNING, "License comment not found"));
     }
 
     final List<String> lines = FileHelper.getFileLines(fileStr);
@@ -135,22 +135,22 @@ public final class Logic {
 
     if (fileAuthor != null && classAuthor != null
             && !fileAuthor.equals(classAuthor)) {
-      ret.add(new Remark(module, file, 0, Severity.ERROR, "File and class authors differ: " + fileAuthor + " vs. " + classAuthor));
+      ret.add(new Remark(module, file, null, Severity.ERROR, "File and class authors differ: " + fileAuthor + " vs. " + classAuthor));
     } else {
       if (fileAuthor == null) {
-        ret.add(new Remark(module, file, 0, Severity.ERROR, "File has no author in license comment"));
+        ret.add(new Remark(module, file, null, Severity.ERROR, "File has no author in license comment"));
       }
       if (classAuthor == null) {
-        ret.add(new Remark(module, file, 0, Severity.ERROR, "Class has no author in JavaDoc"));
+        ret.add(new Remark(module, file, null, Severity.ERROR, "Class has no author in JavaDoc"));
       }
     }
 
     if (fileAuthor != null && !AUTHORS.contains(fileAuthor)) {
-      ret.add(new Remark(module, file, 0, Severity.ERROR, "File author unknown: " + fileAuthor));
+      ret.add(new Remark(module, file, null, Severity.ERROR, "File author unknown: " + fileAuthor));
     }
 
     if (classAuthor != null && !AUTHORS.contains(classAuthor)) {
-      ret.add(new Remark(module, file, 0, Severity.ERROR, "Class author unknown: " + classAuthor));
+      ret.add(new Remark(module, file, null, Severity.ERROR, "Class author unknown: " + classAuthor));
     }
 
     return ret;

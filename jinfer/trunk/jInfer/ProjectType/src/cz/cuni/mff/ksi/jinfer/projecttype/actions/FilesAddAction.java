@@ -75,7 +75,7 @@ public class FilesAddAction extends AbstractAction {
       for (int i = 0; i < nodes.length; i++) {
         final Node node = nodes[i];
         if (node instanceof FolderNode) {
-          ((FileChildren) node.getChildren()).addNotify();
+          ((FileChildren) node.getChildren()).refreshNodes();
         }
       }
     }

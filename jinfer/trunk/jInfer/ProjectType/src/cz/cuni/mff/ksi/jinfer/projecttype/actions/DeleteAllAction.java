@@ -57,7 +57,7 @@ public class DeleteAllAction extends AbstractAction {
 
     if (descriptor.getValue().equals(NotifyDescriptor.YES_OPTION)) {
       files.clear();
-      ((FileChildren) node.getChildren()).addNotify();
+      ((FileChildren) node.getChildren()).refreshNodes();
 
       project.getLookup().lookup(ProjectState.class).markModified();
     }

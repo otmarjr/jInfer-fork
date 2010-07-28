@@ -47,4 +47,11 @@ final class OutputNode extends FilterNode {
   public Image getOpenedIcon(final int type) {
     return getIcon(type);
   }
+
+  @Override
+  public boolean canDestroy() {
+    return false;
+  }
+
+
 }

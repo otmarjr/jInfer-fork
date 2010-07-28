@@ -73,7 +73,7 @@ public class FileAddAction extends AbstractAction {
     if (selectedFiles != null) {
       files.addAll(Arrays.asList(selectedFiles));
 
-      ((FileChildren) node.getChildren()).addNotify();
+      ((FileChildren) node.getChildren()).refreshNodes();
 
       project.getLookup().lookup(ProjectState.class).markModified();
     }

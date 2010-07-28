@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.NoDataObjectException;
 import java.io.File;
 import java.util.Collection;
+import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
@@ -39,9 +40,16 @@ public class FileChildren extends Children.Keys<File> {
     this.files = files;
   }
 
+  public void refreshNodes() {
+    if (isInitialized()) {
+      addNotify();
+    }
+  }
+
   @Override
-  public void addNotify() {
+  protected void addNotify() {
     Input.removeNonExistFiles(files);
+
     setKeys(files);
   }
 

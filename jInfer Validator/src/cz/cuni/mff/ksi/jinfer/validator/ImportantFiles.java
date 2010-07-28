@@ -16,20 +16,23 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
-public final class Main {
+/**
+ *
+ * @author vitasek
+ */
+public enum ImportantFiles {
 
-  // TODO vektor Create GUI
+  MANIFEST("manifest.mf"),
+  PROJECT_PROPERTIES("nbproject/project.properties");
 
-  private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
-  private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
+  private final String location;
 
-  private Main() {
+  private ImportantFiles(final String location) {
+    this.location = location;
   }
 
-  public static void main(final String[] args) {
-    for (final Remark r : Logic.checkSuite(ANT, PROJECT_ROOT)) {
-      Utils.out(r.toString());
-    }
+  public String getLocation() {
+    return location;
   }
 
 }

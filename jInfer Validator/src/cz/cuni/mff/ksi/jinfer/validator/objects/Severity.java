@@ -14,25 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.validator;
+package cz.cuni.mff.ksi.jinfer.validator.objects;
 
-/**
- *
- * @author vitasek
- */
-public enum ImportantFiles {
+public enum Severity {
 
-  MANIFEST("manifest.mf"),
-  PROJECT_PROPERTIES("nbproject/project.properties");
-
-  private final String location;
-
-  private ImportantFiles(final String location) {
-    this.location = location;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
+  WARNING, ERROR
 }

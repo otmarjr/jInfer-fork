@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
+import cz.cuni.mff.ksi.jinfer.validator.objects.Remark;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;

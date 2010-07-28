@@ -22,6 +22,9 @@ import java.util.prefs.Preferences;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
+/**
+ * @author vektor
+ */
 public final class RuleDisplayerPanel extends JPanel {
 
   private static final long serialVersionUID = 1211214L;

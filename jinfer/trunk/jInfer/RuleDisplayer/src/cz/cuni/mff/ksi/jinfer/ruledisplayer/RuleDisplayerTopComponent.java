@@ -37,6 +37,8 @@ import org.openide.util.ImageUtilities;
 
 /**
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
+ *
+ * @author vektor
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.ruledisplayer.display//RuleDisplayer//EN",
 autostore = false)

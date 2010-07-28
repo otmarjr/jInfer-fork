@@ -20,6 +20,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.trivialdtd.SchemaGeneratorImpl;
 import java.util.Properties;
 
+/**
+ * @author vektor
+ */
 public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
 
   private static final long serialVersionUID = 5421231l;

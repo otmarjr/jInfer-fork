@@ -348,7 +348,7 @@ public class SimplifierImpl implements Simplifier {
   @Override
   public void start(List<AbstractNode> initialGrammar, SimplifierCallback callback) {
 // TODO remove this line when finished, now here to pass this module
-    callback.finished( new ArrayList<AbstractNode>() );
+//    callback.finished( new ArrayList<AbstractNode>() );
 
     for (AbstractNode node : initialGrammar) {
       if (!NodeType.ELEMENT.equals(node.getType())) {
@@ -394,5 +394,6 @@ public class SimplifierImpl implements Simplifier {
       // add to list
     }
 //    callback.finished( new ArrayList<AbstractNode>(elements.values()) );
+    callback.finished( new ArrayList<AbstractNode>() );
   }
 }

@@ -25,8 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
+// TODO this class should be rewrited from scratch
 /**
  *
  * @author anti

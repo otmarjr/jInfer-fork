@@ -31,17 +31,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 class State<T> {
   private Map< T, Step<T>> outSteps;
   private List<Step<T>> inSteps;
   private Integer finalCount;
-
-  State(Step<T> inStep, Integer finalCount) {
-    this(finalCount);
-    this.inSteps.add(inStep);
-  }
 
   State(Integer finalCount) {
     this.inSteps= new LinkedList<Step<T>>();
@@ -90,17 +86,41 @@ class State<T> {
   public void setFinalCount(Integer finalCount) {
     this.finalCount = finalCount;
   }
+
+  void incFinalCount() {
+    this.setFinalCount(this.getFinalCount() + 1);
+  }
+
+  public void addInStep(Step<T> inStep) {
+    this.inSteps.add(inStep);
+  }
+
+  public void addOutStep(Step<T> outStep) {
+    this.outSteps.put(outStep.getAcceptSymbol(), outStep);
+  }
+
+  State<T> buildPTAOnSymbol(T symbol) {
+    if (this.outSteps.containsKey(symbol)) {
+      Step<T> outStep= this.outSteps.get(symbol);
+      outStep.incUseCount();
+      return outStep.getDestination();
+    } else {
+      State<T> newState= new State<T>(0);
+      Step<T> newOutStep= new Step<T>(symbol, this, newState, 1);
+      this.addOutStep(newOutStep);
+      newState.addInStep(newOutStep);
+      return newState;
+    }
+  }
 }
 
 class Step<T> {
   private T acceptSymbol;
   private Integer useCount;
+  private State<T> source;
+  private State<T> destination;
 
-  Step(T acceptSymbol) {
-    this(acceptSymbol, 0);
-  }
-
-  Step(T acceptSymbol, Integer useCount) {
+  Step(T acceptSymbol, State<T> source, State<T> destination, Integer useCount) {
     this.acceptSymbol= acceptSymbol;
     this.useCount= useCount;
   }
@@ -131,6 +151,38 @@ class Step<T> {
    */
   public void setUseCount(Integer useCount) {
     this.useCount = useCount;
+  }
+
+  public void incUseCount() {
+    this.setUseCount(this.getUseCount() + 1);
+  }
+
+  /**
+   * @return the source
+   */
+  public State<T> getSource() {
+    return source;
+  }
+
+  /**
+   * @param source the source to set
+   */
+  public void setSource(State<T> source) {
+    this.source = source;
+  }
+
+  /**
+   * @return the destination
+   */
+  public State<T> getDestination() {
+    return destination;
+  }
+
+  /**
+   * @param destination the destination to set
+   */
+  public void setDestination(State<T> destination) {
+    this.destination = destination;
   }
 }
 
@@ -214,13 +266,14 @@ abstract class AbstractClusterer<T> {
   public abstract void add(T item);
   public abstract void addAll(List<T> items);
   public abstract List<Cluster<T>> cluster();
+  public abstract T getRepresentantForItem(T item);
 }
 
-class InameClusterer extends AbstractClusterer<Element> {
-  List<Cluster<Element>> clusters;
+class InameClusterer extends AbstractClusterer<AbstractNode> {
+  List<Cluster<AbstractNode>> clusters;
 
   InameClusterer() {
-    this.clusters= new LinkedList<Cluster<Element>>();
+    this.clusters= new LinkedList<Cluster<AbstractNode>>();
   }
 
   /*
@@ -230,28 +283,33 @@ class InameClusterer extends AbstractClusterer<Element> {
    * to it. If not, new cluster with item as representant is added.
    */
   @Override
-  public void add(Element item) {
+  public void add(AbstractNode item) {
     Boolean found= false;
-    for (Cluster<Element> cluster : this.clusters) {
-      if (
-              cluster.getRepresentant().getName().equalsIgnoreCase(item.getName())
-              ) {
+    for (Cluster<AbstractNode> cluster : this.clusters) {
+      AbstractNode representant= cluster.getRepresentant();
+      if (representant.isSimpleData()) {
         cluster.add(item);
         found= true;
         break;
+      } else if (representant.isElement()) {
+        if (representant.getName().equalsIgnoreCase(item.getName())) {
+          cluster.add(item);
+          found= true;
+          break;
+        }
       }
     }
     if (!found) {
       this.clusters.add(
-              new Cluster<Element>(item)
+              new Cluster<AbstractNode>(item)
               );
     }
   }
 
   @Override
-  public void addAll(List<Element> items) {
-    for (Element el : items) {
-      this.add(el);
+  public void addAll(List<AbstractNode> items) {
+    for (AbstractNode node : items) {
+      this.add(node);
     }
   }
 
@@ -259,8 +317,18 @@ class InameClusterer extends AbstractClusterer<Element> {
    * In this method no magic is found, clustering happens already when items are added.
    */
   @Override
-  public List<Cluster<Element>> cluster() {
+  public List<Cluster<AbstractNode>> cluster() {
     return this.clusters;
+  }
+
+  @Override
+  public AbstractNode getRepresentantForItem(AbstractNode item) {
+    for (Cluster<AbstractNode> cluster : this.clusters) {
+      if (cluster.isMember(item)) {
+        return cluster.getRepresentant();
+      }
+    }
+    throw new IllegalArgumentException("Node " + item.toString() + " is not in clusters, it wasn't added, i can't find it.");
   }
 }
 
@@ -270,6 +338,7 @@ class InameClusterer extends AbstractClusterer<Element> {
  */
 @ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
+  private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
   @Override
   public String getModuleName() {
@@ -281,9 +350,6 @@ public class SimplifierImpl implements Simplifier {
 // TODO remove this line when finished, now here to pass this module
     callback.finished( new ArrayList<AbstractNode>() );
 
-    List<Element> elementGrammar= new LinkedList<Element>();
-
-    Element el = null;
     for (AbstractNode node : initialGrammar) {
       if (!NodeType.ELEMENT.equals(node.getType())) {
         StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
@@ -291,31 +357,38 @@ public class SimplifierImpl implements Simplifier {
         sb.append(" as left side.");
         throw new IllegalArgumentException(sb.toString());
       }
-
-      el= (Element) node;
-      elementGrammar.add(el);
     }
 
     InameClusterer clusterer = new InameClusterer();
-    clusterer.addAll(elementGrammar);
-    List<Cluster<Element>> clusters = clusterer.cluster();
+    clusterer.addAll(initialGrammar);
+    List<Cluster<AbstractNode>> clusters = clusterer.cluster();
 
     List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
-    for (Cluster<Element> cluster : clusters) {
+    for (Cluster<AbstractNode> cluster : clusters) {
+      if (!cluster.getRepresentant().isElement()) {
+        continue; // we deal only with elements for now
+      }
+
       // construct PTA
-      Set<Element> elementInstances= cluster.getMembers();
+      Set<AbstractNode> elementInstances= cluster.getMembers();
 
-      Automaton<Element> automaton = new Automaton<Element>();
+      Automaton<AbstractNode> automaton = new Automaton<AbstractNode>();
 
-      for (Element instance : elementInstances) {
-        Regexp<AbstractNode> rightSide= instance.getSubnodes();
+      for (AbstractNode instance : elementInstances) {
+        Element element = (Element) instance;
+        Regexp<AbstractNode> rightSide= element.getSubnodes();
+        List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
         State x = automaton.getInitialState();
 
-        
+        for (AbstractNode token : rightSideTokens) {
+          AbstractNode representant= clusterer.getRepresentantForItem(token);
+          x= x.buildPTAOnSymbol(representant);
+        }
+        x.incFinalCount();
       }
-
+      LOG.fatal(automaton);
       // simplify
       // convert to regex
       // add to list

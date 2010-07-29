@@ -89,9 +89,6 @@ public class CrudeMDL {
         charsCount++;
       }
     }
-
-
-
     return 0;
   }
 

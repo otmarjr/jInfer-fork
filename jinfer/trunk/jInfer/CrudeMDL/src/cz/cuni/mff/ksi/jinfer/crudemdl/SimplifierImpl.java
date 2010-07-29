@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.openide.util.lookup.ServiceProvider;
 
 class State<T> {
@@ -154,28 +156,111 @@ class Automaton<T> {
   }
 }
 
-class Clusterer {
-  static List<Pair<Element, List<Element>>> cluster(final List<Element> initialGrammar) {
-    final List<Pair<Element, List<Element>>> clusters= new LinkedList<Pair<Element, List<Element>>>();
+class Cluster<T> {
+  private T representant;
+  private Set<T> members;
 
-    for (Element element : initialGrammar) {
-      Boolean found= false;
-      for (Pair<Element, List<Element>> cluster : clusters) {
-        Element representant= cluster.getFirst();
-        if (representant.getName().equalsIgnoreCase(element.getName())) {
-          found= true;
-          cluster.getSecond().add(element);
-        }
-        if (!found) {
-          List<Element> l = new LinkedList<Element>();
-          l.add(element);
-          clusters.add(
-                  new Pair<Element, List<Element>>(element, l)
-                  );
-        }
+  Cluster(T representant) {
+    this.representant= representant;
+    this.members= new TreeSet<T>();
+    this.members.add(representant);
+  }
+
+  /**
+   * @return the representant
+   */
+  public T getRepresentant() {
+    return representant;
+  }
+
+  /**
+   * @param representant the representant to set
+   */
+  public void setRepresentant(T representant) {
+    this.representant = representant;
+  }
+
+  /**
+   * @return the members
+   */
+  public Set<T> getMembers() {
+    return members;
+  }
+
+  /**
+   * @param members the members to set
+   */
+  public void setMembers(Set<T> members) {
+    this.members = members;
+  }
+
+  public Boolean isMember(T item) {
+    return this.members.contains(item);
+  }
+
+  public void add(T item) {
+    this.members.add(item);
+  }
+}
+
+abstract class AbstractClusterer<T> {
+  /*
+   * Add x to some cluster, find the right one or create new. Depends on clustering algorithm.
+   * One can do classify on demand, or can create a method that builds just one cluster on classify
+   * and then call some own method to 'reclassify' - do the real clustering. Opposite is also in mind
+   * do cluster for each x, then apply own merging clustering algorithm. The algorithms should be then
+   * added in own methods.
+   */
+  public abstract void add(T item);
+  public abstract void addAll(List<T> items);
+  public abstract List<Cluster<T>> cluster();
+}
+
+class InameClusterer extends AbstractClusterer<Element> {
+  List<Cluster<Element>> clusters;
+
+  InameClusterer() {
+    this.clusters= new LinkedList<Cluster<Element>>();
+  }
+
+  /*
+   * Add action, add item to some cluster. In our method - elements are clustered by
+   * name (ignore case). DeFacto clustering happens at this method - when adding, all
+   * clusters are scanned, if there is one with representant of same name, item is added
+   * to it. If not, new cluster with item as representant is added.
+   */
+  @Override
+  public void add(Element item) {
+    Boolean found= false;
+    for (Cluster<Element> cluster : this.clusters) {
+      if (
+              cluster.getRepresentant().getName().equalsIgnoreCase(item.getName())
+              ) {
+        cluster.add(item);
+        found= true;
+        break;
       }
     }
-   return clusters;
+    if (!found) {
+      this.clusters.add(
+              new Cluster<Element>(item)
+              );
+    }
+  }
+
+  @Override
+  public void addAll(List<Element> items) {
+    for (Element el : items) {
+      this.add(el);
+    }
+  }
+
+  /*
+   * In this method no magic is found, clustering happens already when items are added.
+   */
+  @Override
+  public List<Cluster<Element>> cluster() {
+    return this.clusters;
   }
 }
 
@@ -211,13 +296,15 @@ public class SimplifierImpl implements Simplifier {
       elementGrammar.add(el);
     }
 
-    List<Pair<Element, List<Element>>> clusters = Clusterer.cluster(elementGrammar);
+    InameClusterer clusterer = new InameClusterer();
+    clusterer.addAll(elementGrammar);
+    List<Cluster<Element>> clusters = clusterer.cluster();
 
     List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
-    for (Pair<Element, List<Element>> cluster : clusters) {
+    for (Cluster<Element> cluster : clusters) {
       // construct PTA
-      List<Element> elementInstances= cluster.getSecond();
+      Set<Element> elementInstances= cluster.getMembers();
 
       Automaton<Element> automaton = new Automaton<Element>();
 
@@ -226,6 +313,7 @@ public class SimplifierImpl implements Simplifier {
 
         State x = automaton.getInitialState();
 
+        
       }
 
       // simplify

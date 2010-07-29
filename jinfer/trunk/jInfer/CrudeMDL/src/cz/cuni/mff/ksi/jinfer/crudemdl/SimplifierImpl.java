@@ -21,16 +21,15 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -214,7 +213,7 @@ class Cluster<T> {
 
   Cluster(T representant) {
     this.representant= representant;
-    this.members= new TreeSet<T>();
+    this.members= new HashSet<T>();
     this.members.add(representant);
   }
 
@@ -271,9 +270,10 @@ abstract class AbstractClusterer<T> {
 
 class InameClusterer extends AbstractClusterer<AbstractNode> {
   List<Cluster<AbstractNode>> clusters;
-
+  AbstractNode universalSimpleData;
   InameClusterer() {
     this.clusters= new LinkedList<Cluster<AbstractNode>>();
+    this.universalSimpleData= new SimpleData(new ArrayList<String>(), "SIMPLE REPRE", new HashMap<String, Object>(), "", new ArrayList<String>());
   }
 
   /*
@@ -323,6 +323,9 @@ class InameClusterer extends AbstractClusterer<AbstractNode> {
 
   @Override
   public AbstractNode getRepresentantForItem(AbstractNode item) {
+    if (item.isSimpleData()) {
+      return this.universalSimpleData;
+    }
     for (Cluster<AbstractNode> cluster : this.clusters) {
       if (cluster.isMember(item)) {
         return cluster.getRepresentant();
@@ -346,7 +349,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   @Override
-  public void start(List<AbstractNode> initialGrammar, SimplifierCallback callback) {
+  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
 // TODO remove this line when finished, now here to pass this module
 //    callback.finished( new ArrayList<AbstractNode>() );
 

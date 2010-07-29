@@ -39,9 +39,9 @@ public final class Utils {
   // TODO vektor Choose some sensible defaults
   public static final Color COLOR_ELEMENT = Color.gray;
   public static final Color COLOR_ATTRIBUTE = Color.blue;
-  public static final Color COLOR_SIMPLE_DATA = Color.red;
+  public static final Color COLOR_SIMPLE_DATA = Color.black;
   public static final Color COLOR_CONCATENATION = Color.red;
-  public static final Color COLOR_ALTERNATION = Color.blue;
+  public static final Color COLOR_ALTERNATION = Color.yellow;
 
   public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png");
   public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/dots.png");

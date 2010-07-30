@@ -23,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Collection;
 import javax.swing.AbstractAction;
-import javax.swing.JOptionPane;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;

@@ -44,7 +44,7 @@ public class RunAction extends AbstractAction {
       new Runner().run();
     } else {
       DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.Message(
-              org.openide.util.NbBundle.getMessage(AbstractAction.class,
+              org.openide.util.NbBundle.getMessage(RunAction.class,
               "RunAction.runningInference.message"),
               NotifyDescriptor.INFORMATION_MESSAGE));
     }

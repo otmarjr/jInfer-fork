@@ -139,6 +139,7 @@ public class Runner {
             .addOutput("generated-schema", getCommentedSchema(schema), extension);
 
     RunningProject.removeActiveProject();
+    LOG.info("------------- DONE -------------");
   }
 
   private String getCommentedSchema(final String schema) {

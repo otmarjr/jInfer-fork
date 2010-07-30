@@ -24,14 +24,16 @@ https://jinfer.svn.sourceforge.net/svnroot/jinfer
   Software Requirements
   ---------------------
 
-  jInfer requires Java 6+ and NetBeans 6.9+ to run.
+  jInfer requires Java 6+ and NetBeans 6.9+ to run or develop.
 
 
   Installation
   ------------
 
   To install jInfer into an existing NetBeans installation, use
-Tools > Plugins > Downloaded from the main NetBeans menu.
+Tools > Plugins > Downloaded from the main NetBeans menu. Select all .NBM files
+from the bin/ directory of this distribution and install them. After restarting
+NetBeans, jInfer is ready to be used.
 
 
   Documentation

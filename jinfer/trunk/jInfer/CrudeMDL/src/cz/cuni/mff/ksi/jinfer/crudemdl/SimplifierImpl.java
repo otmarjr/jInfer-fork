@@ -37,11 +37,13 @@ class State<T> {
   private Map< T, Step<T>> outSteps;
   private List<Step<T>> inSteps;
   private Integer finalCount;
+  private Integer name;
 
-  State(Integer finalCount) {
+  State(Integer finalCount, Integer name) {
     this.inSteps= new LinkedList<Step<T>>();
     this.outSteps= new HashMap<T, Step<T>>();
     this.finalCount= finalCount;
+    this.name= name;
   }
 
   /**
@@ -104,12 +106,46 @@ class State<T> {
       outStep.incUseCount();
       return outStep.getDestination();
     } else {
-      State<T> newState= new State<T>(0);
+      State<T> newState= new State<T>(0, this.name + 1);
       Step<T> newOutStep= new Step<T>(symbol, this, newState, 1);
       this.addOutStep(newOutStep);
       newState.addInStep(newOutStep);
       return newState;
     }
+  }
+
+  @Override
+  public String toString() {
+  //  return super.toString();
+    StringBuilder sb = new StringBuilder("[");
+    sb.append(this.getName());
+    sb.append("|");
+    sb.append(this.finalCount);
+    sb.append("] steps:\n");
+    for (T symbol : this.outSteps.keySet()) {
+      sb.append("on ");
+      sb.append(symbol);
+      sb.append(" -> ");
+      sb.append(this.outSteps.get(symbol).getDestination().getName());
+    }
+    for (Step<T> step : this.outSteps.values()) {
+      sb.append(step.getDestination());
+    }
+    return sb.toString();
+  }
+
+  /**
+   * @return the name
+   */
+  public Integer getName() {
+    return name;
+  }
+
+  /**
+   * @param name the name to set
+   */
+  public void setName(Integer name) {
+    this.name = name;
   }
 }
 
@@ -122,6 +158,8 @@ class Step<T> {
   Step(T acceptSymbol, State<T> source, State<T> destination, Integer useCount) {
     this.acceptSymbol= acceptSymbol;
     this.useCount= useCount;
+    this.source= source;
+    this.destination= destination;
   }
 
   /**
@@ -183,13 +221,19 @@ class Step<T> {
   public void setDestination(State<T> destination) {
     this.destination = destination;
   }
+
+  @Override
+  public String toString() {
+    //return super.toString();
+    return this.acceptSymbol.toString();
+  }
 }
 
 class Automaton<T> {
   private State<T> initialState;
 
   Automaton() {
-    initialState= new State<T>(0);
+    initialState= new State<T>(0, 1);
   }
 
   /**
@@ -204,6 +248,12 @@ class Automaton<T> {
    */
   public void setInitialState(State<T> initialState) {
     this.initialState = initialState;
+  }
+
+  @Override
+  public String toString() {
+//    return super.toString();
+    return "Automaton\n" + this.getInitialState().toString();
   }
 }
 
@@ -270,10 +320,9 @@ abstract class AbstractClusterer<T> {
 
 class InameClusterer extends AbstractClusterer<AbstractNode> {
   List<Cluster<AbstractNode>> clusters;
-  AbstractNode universalSimpleData;
+
   InameClusterer() {
     this.clusters= new LinkedList<Cluster<AbstractNode>>();
-    this.universalSimpleData= new SimpleData(new ArrayList<String>(), "SIMPLE REPRE", new HashMap<String, Object>(), "", new ArrayList<String>());
   }
 
   /*
@@ -323,9 +372,6 @@ class InameClusterer extends AbstractClusterer<AbstractNode> {
 
   @Override
   public AbstractNode getRepresentantForItem(AbstractNode item) {
-    if (item.isSimpleData()) {
-      return this.universalSimpleData;
-    }
     for (Cluster<AbstractNode> cluster : this.clusters) {
       if (cluster.isMember(item)) {
         return cluster.getRepresentant();
@@ -360,6 +406,9 @@ public class SimplifierImpl implements Simplifier {
         sb.append(" as left side.");
         throw new IllegalArgumentException(sb.toString());
       }
+      if (node == null) {
+        throw new IllegalArgumentException("Got null as left side in grammar.");
+      }
     }
 
     InameClusterer clusterer = new InameClusterer();
@@ -385,9 +434,15 @@ public class SimplifierImpl implements Simplifier {
 
         State x = automaton.getInitialState();
 
+        SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "SIMPLE REPRE", new HashMap<String, Object>(), "", new ArrayList<String>());
+
         for (AbstractNode token : rightSideTokens) {
-          AbstractNode representant= clusterer.getRepresentantForItem(token);
-          x= x.buildPTAOnSymbol(representant);
+          if (token.isSimpleData()) {
+            x= x.buildPTAOnSymbol(universalSimpleData);
+          } else {
+            AbstractNode representant= clusterer.getRepresentantForItem(token);
+            x= x.buildPTAOnSymbol(representant);
+          }
         }
         x.incFinalCount();
       }

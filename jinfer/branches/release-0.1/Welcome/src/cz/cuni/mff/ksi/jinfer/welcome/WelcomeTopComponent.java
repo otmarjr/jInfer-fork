@@ -72,15 +72,6 @@ public final class WelcomeTopComponent extends TopComponent {
     jLabel9 = new javax.swing.JLabel();
     jLabel10 = new javax.swing.JLabel();
     step1project = new javax.swing.JButton();
-    L2support = new javax.swing.JLabel();
-    jLabel12 = new javax.swing.JLabel();
-    jLabel13 = new javax.swing.JLabel();
-    jLabel14 = new javax.swing.JLabel();
-    jLabel15 = new javax.swing.JLabel();
-    L2developingjInfer = new javax.swing.JLabel();
-    jLabel17 = new javax.swing.JLabel();
-    jLabel18 = new javax.swing.JLabel();
-    jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
     jLabel5 = new javax.swing.JLabel();
     step3runProject = new javax.swing.JButton();
@@ -89,6 +80,10 @@ public final class WelcomeTopComponent extends TopComponent {
 
     setBackground(java.awt.Color.white);
     setForeground(java.awt.Color.white);
+
+    jScrollPane1.setPreferredSize(new java.awt.Dimension(0, 0));
+
+    jPanel1.setPreferredSize(new java.awt.Dimension(0, 580));
 
     jInferLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/welcome/graphics/logo-vektor.png"))); // NOI18N
     org.openide.awt.Mnemonics.setLocalizedText(jInferLogo, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jInferLogo.text")); // NOI18N
@@ -121,35 +116,6 @@ public final class WelcomeTopComponent extends TopComponent {
         step1projectActionPerformed(evt);
       }
     });
-
-    L2support.setFont(L2support.getFont().deriveFont(L2support.getFont().getSize()+3f));
-    org.openide.awt.Mnemonics.setLocalizedText(L2support, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.L2support.text")); // NOI18N
-    L2support.setEnabled(false);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel12.text")); // NOI18N
-    jLabel12.setEnabled(false);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel13.text")); // NOI18N
-    jLabel13.setEnabled(false);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel14.text")); // NOI18N
-    jLabel14.setEnabled(false);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel15.text")); // NOI18N
-    jLabel15.setEnabled(false);
-
-    L2developingjInfer.setFont(L2developingjInfer.getFont().deriveFont(L2developingjInfer.getFont().getSize()+3f));
-    org.openide.awt.Mnemonics.setLocalizedText(L2developingjInfer, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.L2developingjInfer.text")); // NOI18N
-    L2developingjInfer.setEnabled(false);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel17, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel17.text")); // NOI18N
-    jLabel17.setEnabled(false);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel18, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel18.text")); // NOI18N
-    jLabel18.setEnabled(false);
-
-    jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/welcome/graphics/bottom_bar.png"))); // NOI18N
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel1.text")); // NOI18N
 
     jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/welcome/graphics/numer-2-32.png"))); // NOI18N
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel2.text")); // NOI18N
@@ -187,8 +153,6 @@ public final class WelcomeTopComponent extends TopComponent {
           .addGroup(jPanel1Layout.createSequentialGroup()
             .addGap(50, 50, 50)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(jLabel15)
-              .addComponent(jLabel13)
               .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(ico3run)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -201,33 +165,19 @@ public final class WelcomeTopComponent extends TopComponent {
               .addComponent(L1welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
               .addComponent(jInferLogo)
               .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(ico1options)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addComponent(ico1options)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                      .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel4))
-                      .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                  .addComponent(L2support)
-                  .addComponent(jLabel14)
-                  .addComponent(jLabel12))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGap(16, 16, 16)
+                    .addComponent(jLabel4))
                   .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(18, 18, 18)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                      .addComponent(jLabel18)
-                      .addComponent(L2developingjInfer)
-                      .addComponent(jLabel17)))
-                  .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(34, 34, 34)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                      .addComponent(step1project, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                      .addComponent(step2addFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                      .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 504, Short.MAX_VALUE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                  .addComponent(step1project, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                  .addComponent(step2addFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                  .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))
               .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -236,9 +186,8 @@ public final class WelcomeTopComponent extends TopComponent {
                     .addGap(10, 10, 10)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                   .addComponent(jLabel5)))))
-          .addComponent(showOnStartup)
-          .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap())
+          .addComponent(showOnStartup))
+        .addGap(499, 499, 499))
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,25 +227,7 @@ public final class WelcomeTopComponent extends TopComponent {
               .addComponent(step3runProject, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel10)))
-        .addGap(18, 18, 18)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(L2support)
-          .addComponent(L2developingjInfer))
-        .addGap(18, 18, 18)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel14)
-          .addComponent(jLabel17))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(jLabel12)
-          .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel13)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jLabel15)
-        .addGap(18, 86, Short.MAX_VALUE)
-        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap())
+        .addContainerGap(82, Short.MAX_VALUE))
     );
 
     jScrollPane1.setViewportView(jPanel1);
@@ -305,11 +236,11 @@ public final class WelcomeTopComponent extends TopComponent {
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1141, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1043, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 861, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -327,20 +258,11 @@ public final class WelcomeTopComponent extends TopComponent {
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
-  private javax.swing.JLabel L2developingjInfer;
   private javax.swing.JLabel L2gettingStarted;
-  private javax.swing.JLabel L2support;
   private javax.swing.JLabel ico1options;
   private javax.swing.JLabel ico3run;
   private javax.swing.JLabel jInferLogo;
-  private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel10;
-  private javax.swing.JLabel jLabel12;
-  private javax.swing.JLabel jLabel13;
-  private javax.swing.JLabel jLabel14;
-  private javax.swing.JLabel jLabel15;
-  private javax.swing.JLabel jLabel17;
-  private javax.swing.JLabel jLabel18;
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;

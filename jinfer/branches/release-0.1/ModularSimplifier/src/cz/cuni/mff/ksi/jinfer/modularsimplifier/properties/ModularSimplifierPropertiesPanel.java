@@ -48,6 +48,7 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
     render = new javax.swing.JCheckBox();
     jPanel2 = new javax.swing.JPanel();
 
+    setPreferredSize(new java.awt.Dimension(0, 0));
     setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ModularSimplifierPropertiesPanel.class, "ModularSimplifierPropertiesPanel.jLabel1.text")); // NOI18N
@@ -100,11 +101,11 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 907, Short.MAX_VALUE)
+      .addGap(0, 353, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 7, Short.MAX_VALUE)
+      .addGap(0, 18, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -133,15 +134,17 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(render, gridBagConstraints);
 
+    jPanel2.setPreferredSize(new java.awt.Dimension(0, 0));
+
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 462, Short.MAX_VALUE)
+      .addGap(0, 60, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 138, Short.MAX_VALUE)
+      .addGap(0, 127, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

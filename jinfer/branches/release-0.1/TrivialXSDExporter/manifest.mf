@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.trivialxsd/1
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/trivialxsd/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/trivialxsd/Bundle.properties
+OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator
+

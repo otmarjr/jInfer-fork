@@ -60,6 +60,8 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
     add(jLabel1, gridBagConstraints);
 
     kleeneRepetitions.setToolTipText(org.openide.util.NbBundle.getMessage(ModularSimplifierPropertiesPanel.class, "ModularSimplifierPropertiesPanel.kleeneRepetitions.toolTipText")); // NOI18N
+    kleeneRepetitions.setMinimumSize(new java.awt.Dimension(150, 22));
+    kleeneRepetitions.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 4;
@@ -88,11 +90,12 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
 
     clusterProcessor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Trie", "Alternations" }));
     clusterProcessor.setToolTipText(org.openide.util.NbBundle.getMessage(ModularSimplifierPropertiesPanel.class, "ModularSimplifierPropertiesPanel.clusterProcessor.toolTipText")); // NOI18N
+    clusterProcessor.setMinimumSize(new java.awt.Dimension(150, 22));
+    clusterProcessor.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.weightx = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(clusterProcessor, gridBagConstraints);
 
@@ -100,11 +103,11 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 907, Short.MAX_VALUE)
+      .addGap(0, 375, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 7, Short.MAX_VALUE)
+      .addGap(0, 96, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -137,11 +140,11 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 462, Short.MAX_VALUE)
+      .addGap(0, 113, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 138, Short.MAX_VALUE)
+      .addGap(0, 133, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

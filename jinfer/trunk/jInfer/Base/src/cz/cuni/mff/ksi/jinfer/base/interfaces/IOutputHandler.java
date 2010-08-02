@@ -24,6 +24,8 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces;
  */
 public interface IOutputHandler {
 
+  // TODO sviro Why the prefix "I"? Rename
+
   void addOutput(String fileName, String data, String extension);
 
 }

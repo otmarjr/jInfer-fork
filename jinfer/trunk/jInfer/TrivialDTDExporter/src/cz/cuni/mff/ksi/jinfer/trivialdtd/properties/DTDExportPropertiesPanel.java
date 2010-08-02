@@ -23,7 +23,7 @@ import java.util.Properties;
 /**
  * @author vektor
  */
-public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
+public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 5421231l;
 
@@ -57,7 +57,8 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
 
     maxEnumSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
     maxEnumSize.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.maxEnumSize.toolTipText")); // NOI18N
-    maxEnumSize.setPreferredSize(new java.awt.Dimension(60, 18));
+    maxEnumSize.setMinimumSize(new java.awt.Dimension(150, 22));
+    maxEnumSize.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -76,8 +77,8 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
     minDefaultRatio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
     minDefaultRatio.setText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.minDefaultRatio.text")); // NOI18N
     minDefaultRatio.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.minDefaultRatio.toolTipText")); // NOI18N
-    minDefaultRatio.setMinimumSize(new java.awt.Dimension(50, 20));
-    minDefaultRatio.setPreferredSize(new java.awt.Dimension(60, 18));
+    minDefaultRatio.setMinimumSize(new java.awt.Dimension(150, 22));
+    minDefaultRatio.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
@@ -89,11 +90,11 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 433, Short.MAX_VALUE)
+      .addGap(0, 322, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 166, Short.MAX_VALUE)
+      .addGap(0, 114, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -108,11 +109,11 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 252, Short.MAX_VALUE)
+      .addGap(0, 66, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 56, Short.MAX_VALUE)
+      .addGap(0, 52, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -126,10 +127,8 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
 
   @Override
   public void load() {
-    maxEnumSize.setValue(Integer.valueOf(properties
-            .getProperty(SchemaGeneratorImpl.TRIVIALDTDEXPORTER_MAX_ENUM_SIZE, "3")));
-    minDefaultRatio.setValue(properties
-            .getProperty(SchemaGeneratorImpl.TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO,
+    maxEnumSize.setValue(Integer.valueOf(properties.getProperty(SchemaGeneratorImpl.TRIVIALDTDEXPORTER_MAX_ENUM_SIZE, "3")));
+    minDefaultRatio.setValue(properties.getProperty(SchemaGeneratorImpl.TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO,
             Float.toString(0.67f)));
   }
 
@@ -140,7 +139,6 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel{
     properties.setProperty(SchemaGeneratorImpl.TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO,
             minDefaultRatio.getText());
   }
-  
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel3;

@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.TrieHelper;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ import org.apache.log4j.Logger;
  */
 public class SimpleKP implements KleeneProcessor {
 
-  private static Logger LOG = Logger.getLogger(KleeneProcessor.class);
+  private static final Logger LOG = Logger.getLogger(KleeneProcessor.class);
   private final int threshold;
 
   public SimpleKP(final int threshold) {
@@ -43,11 +42,15 @@ public class SimpleKP implements KleeneProcessor {
   }
 
   @Override
-  public List<AbstractNode> kleeneProcess(final List<AbstractNode> rules) {
+  public List<AbstractNode> kleeneProcess(final List<AbstractNode> rules) 
+          throws InterruptedException {
     LOG.info("Simplifier: " + threshold + " and more repetitions will be collapsed to a Kleene star.");
 
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules.size());
     for (final AbstractNode root : rules) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       final Element e = (Element) root;
       ret.add(new Element(
               e.getContext(),
@@ -113,7 +116,8 @@ public class SimpleKP implements KleeneProcessor {
     return Regexp.getConcatenation(retChildren);
   }
 
-  private boolean equalTokenRegexps(final Regexp<AbstractNode> last, final Regexp<AbstractNode> current) {
+  private static boolean equalTokenRegexps(final Regexp<AbstractNode> last,
+          final Regexp<AbstractNode> current) {
     return last != null
             && current != null
             && last.isToken()

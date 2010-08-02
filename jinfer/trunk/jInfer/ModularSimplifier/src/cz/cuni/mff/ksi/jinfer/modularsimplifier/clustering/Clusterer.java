@@ -29,6 +29,7 @@ import java.util.List;
  */
 public interface Clusterer {
 
-  List<Pair<AbstractNode, List<AbstractNode>>> cluster(final List<AbstractNode> initialGrammar);
+  List<Pair<AbstractNode, List<AbstractNode>>> cluster(
+          final List<AbstractNode> initialGrammar) throws InterruptedException;
 
 }

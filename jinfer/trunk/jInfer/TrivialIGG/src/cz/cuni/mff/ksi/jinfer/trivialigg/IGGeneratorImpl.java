@@ -53,7 +53,8 @@ public class IGGeneratorImpl implements IGGenerator {
   }
 
   @Override
-  public void start(final Input input, final IGGeneratorCallback callback) {
+  public void start(final Input input, final IGGeneratorCallback callback)
+          throws InterruptedException {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     final Map<String, Processor> xmlProcessor = new HashMap<String, Processor>();
@@ -83,7 +84,7 @@ public class IGGeneratorImpl implements IGGenerator {
    * @return List of IG rules. Empty, if there are no input files or an error occurs.
    */
   private static List<AbstractNode> getRulesFromInput(final Collection<File> files,
-          final Map<String, Processor> mappings) {
+          final Map<String, Processor> mappings) throws InterruptedException {
     if (BaseUtils.isEmpty(files)) {
       return new ArrayList<AbstractNode>(0);
     }
@@ -91,6 +92,9 @@ public class IGGeneratorImpl implements IGGenerator {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     for (final File f : files) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       try {
         if (mappings.containsKey("*")) {
           ret.addAll(mappings.get("*").process(new FileInputStream(f)));

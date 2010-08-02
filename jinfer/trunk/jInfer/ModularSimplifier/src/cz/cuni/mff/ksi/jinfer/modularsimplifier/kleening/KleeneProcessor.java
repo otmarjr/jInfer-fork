@@ -27,6 +27,7 @@ import java.util.List;
  */
 public interface KleeneProcessor {
 
-  List<AbstractNode> kleeneProcess(List<AbstractNode> rules);
+  List<AbstractNode> kleeneProcess(final List<AbstractNode> rules)
+          throws InterruptedException;
 
 }

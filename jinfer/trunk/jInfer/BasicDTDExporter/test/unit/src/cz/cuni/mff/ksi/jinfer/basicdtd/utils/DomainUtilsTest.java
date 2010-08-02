@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicdtd.utils;
 
-import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
 import java.util.Collections;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import java.util.Arrays;

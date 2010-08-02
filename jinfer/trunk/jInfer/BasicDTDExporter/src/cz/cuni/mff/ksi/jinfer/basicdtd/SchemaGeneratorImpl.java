@@ -55,7 +55,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
+  public void start(final List<AbstractNode> grammar, 
+          final SchemaGeneratorCallback callback) throws InterruptedException {
+    
     LOG.info("DTD Exporter: got " + grammar.size()
             + " rules.");
 
@@ -83,6 +85,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // generate DTD schema
     final StringBuilder ret = new StringBuilder();
     for (final Element element : toposorted) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       ret.append(elementToString(element));
     }
 

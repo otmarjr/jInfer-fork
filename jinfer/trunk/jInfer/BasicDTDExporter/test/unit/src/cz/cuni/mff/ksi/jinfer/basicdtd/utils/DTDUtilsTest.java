@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicdtd.utils;
 
-import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DTDUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;

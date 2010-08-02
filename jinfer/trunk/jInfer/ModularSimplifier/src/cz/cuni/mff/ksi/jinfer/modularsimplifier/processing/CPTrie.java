@@ -29,12 +29,17 @@ import java.util.List;
  */
 public class CPTrie implements ClusterProcessor {
 
+  // TODO vektor Unify this logic with CPAlternations: create a common ancestor and make processCluster abstract
   @Override
   public List<AbstractNode> processClusters(
-          final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+          final List<Pair<AbstractNode, List<AbstractNode>>> clusters)
+          throws InterruptedException {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
     for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       ret.add(processCluster(cluster));
     }
 

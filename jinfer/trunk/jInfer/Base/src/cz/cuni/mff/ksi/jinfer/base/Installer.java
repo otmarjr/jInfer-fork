@@ -45,7 +45,7 @@ public class Installer extends ModuleInstall {
     }
 
     @Override
-    protected void append(LoggingEvent le) {
+    protected void append(final LoggingEvent le) {
       final String message = this.layout.format(le);
       final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
       io.getOut().print(message);

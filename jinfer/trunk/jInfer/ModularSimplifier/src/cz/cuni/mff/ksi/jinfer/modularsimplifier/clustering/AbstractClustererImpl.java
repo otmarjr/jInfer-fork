@@ -34,10 +34,15 @@ import java.util.List;
 public abstract class AbstractClustererImpl implements Clusterer {
 
   @Override
-  public List<Pair<AbstractNode, List<AbstractNode>>> cluster(final List<AbstractNode> initialGrammar) {
+  public List<Pair<AbstractNode, List<AbstractNode>>> cluster(
+          final List<AbstractNode> initialGrammar) throws InterruptedException {
+    
     final List<Pair<AbstractNode, List<AbstractNode>>> ret = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>();
 
     for (final AbstractNode node : initialGrammar) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       boolean found = false;
       for (final Pair<AbstractNode, List<AbstractNode>> cluster : ret) {
         if (clusters(node, cluster.getFirst())) {

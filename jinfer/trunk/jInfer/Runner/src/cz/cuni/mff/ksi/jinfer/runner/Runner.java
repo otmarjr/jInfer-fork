@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.util.RequestProcessor;
+import org.openide.util.Task;
 import org.openide.util.TaskListener;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
@@ -47,10 +48,32 @@ import org.openide.windows.InputOutput;
  */
 public class Runner {
 
+  private static final Logger LOG = Logger.getLogger(Runner.class);
+
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
   private final SchemaGenerator schemaGenerator;
-  private static Logger LOG = Logger.getLogger(Runner.class);
+  private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
+
+    @Override
+    public void finished(final List<AbstractNode> grammar) {
+      Runner.this.finishedIGGenerator(grammar);
+    }
+  };
+  private final SimplifierCallback simplCallback = new SimplifierCallback() {
+
+    @Override
+    public void finished(final List<AbstractNode> grammar) {
+      Runner.this.finishedSimplifier(grammar);
+    }
+  };
+  private final SchemaGeneratorCallback sgCallback = new SchemaGeneratorCallback() {
+
+    @Override
+    public void finished(final String schema, final String extension) {
+      Runner.this.finishedSchemaGenerator(schema, extension);
+    }
+  };
 
   public Runner() {
     final Properties projectProperties = RunningProject.getActiveProject().getLookup().lookup(Properties.class);
@@ -61,11 +84,12 @@ public class Runner {
   }
 
   private static void runAsync(final Runnable r, final String taskName) {
-    final RequestProcessor.Task theTask = RequestProcessor.getDefault().create(r);
+    final RequestProcessor rp = new RequestProcessor("interruptible", 1, true);
+    final RequestProcessor.Task theTask = rp.create(r);
     final ProgressHandle handle = ProgressHandleFactory.createHandle(taskName, theTask);
     theTask.addTaskListener(new TaskListener() {
       @Override
-      public void taskFinished(final org.openide.util.Task task) {
+      public void taskFinished(final Task task) {
         handle.finish();
       }
     });
@@ -81,13 +105,13 @@ public class Runner {
 
       @Override
       public void run() {
-        igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), new IGGeneratorCallback() {
-
-          @Override
-          public void finished(final List<AbstractNode> grammar) {
-            Runner.this.finishedIGGenerator(grammar);
-          }
-        });
+        try {
+          igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), iggCallback);
+        }
+        catch (final InterruptedException e) {
+          LOG.error("User interrupted the inference.");
+          RunningProject.removeActiveProject();
+        }
       }
     }, "Retrieving IG");
   }
@@ -100,13 +124,13 @@ public class Runner {
 
       @Override
       public void run() {
-        simplifier.start(grammar, new SimplifierCallback() {
-
-          @Override
-          public void finished(final List<AbstractNode> grammar) {
-            Runner.this.finishedSimplifier(grammar);
-          }
-        });
+        try {
+          simplifier.start(grammar, simplCallback);
+        }
+        catch (final InterruptedException e) {
+          LOG.error("User interrupted the inference.");
+          RunningProject.removeActiveProject();
+        }
       }
     }, "Inferring the schema");
   }
@@ -119,13 +143,13 @@ public class Runner {
 
       @Override
       public void run() {
-        schemaGenerator.start(grammar, new SchemaGeneratorCallback() {
-
-          @Override
-          public void finished(final String schema, final String extension) {
-            Runner.this.finishedSchemaGenerator(schema, extension);
-          }
-        });
+        try {
+          schemaGenerator.start(grammar, sgCallback);
+        }
+        catch (final InterruptedException e) {
+          LOG.error("User interrupted the inference.");
+          RunningProject.removeActiveProject();
+        }
       }
     }, "Generating result schema");
   }

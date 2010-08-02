@@ -153,6 +153,8 @@ public final class ModuleSelection {
     return list;
   }
 
+  // TODO sviro Refactor the following 3 methods
+
   private static List<Simplifier> lookupSimplifiers() {
     final Lookup lkp = Lookup.getDefault();
     final List<Simplifier> result = new ArrayList<Simplifier>(lkp.lookupAll(Simplifier.class));

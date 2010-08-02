@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.basicdtd.utils;
 
-import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;

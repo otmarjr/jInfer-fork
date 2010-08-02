@@ -40,6 +40,7 @@ public interface Simplifier {
    * @param initialGrammar Grammar to be simplified.
    * @param callback Callback method to be run when simplification is complete.
    */
-  void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback);
+  void start(final List<AbstractNode> initialGrammar, 
+          final SimplifierCallback callback) throws InterruptedException;
 
 }

@@ -40,6 +40,7 @@ public interface SchemaGenerator {
    * @param grammar Simplified grammar to be exported as XML schema.
    * @param callback Callback method to be run when export is complete.
    */
-  void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback);
+  void start(final List<AbstractNode> grammar, 
+          final SchemaGeneratorCallback callback) throws InterruptedException;
 
 }

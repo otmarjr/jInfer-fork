@@ -28,6 +28,8 @@ import java.util.List;
  */
 public interface ClusterProcessor {
 
-  List<AbstractNode> processClusters(List<Pair<AbstractNode, List<AbstractNode>>> clusters);
+  List<AbstractNode> processClusters(
+          final List<Pair<AbstractNode, List<AbstractNode>>> clusters)
+          throws InterruptedException;
 
 }

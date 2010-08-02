@@ -87,7 +87,8 @@ public class SimplifierImpl implements Simplifier {
   }
 
   @Override
-  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
+  public void start(final List<AbstractNode> initialGrammar, 
+          final SimplifierCallback callback) throws InterruptedException {
     final Properties properties = RunningProject.getActiveProjectProps();
 
     if (!Boolean.parseBoolean(properties.getProperty(MODULAR_SIMPLIFIER_ENABLED,"true"))) {

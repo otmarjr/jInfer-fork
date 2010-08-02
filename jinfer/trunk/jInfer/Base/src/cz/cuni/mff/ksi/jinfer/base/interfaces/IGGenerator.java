@@ -38,6 +38,7 @@ public interface IGGenerator {
    * @param input Input data.
    * @param callback Method to be run when IG generation is complete.
    */
-  void start(final Input input, final IGGeneratorCallback callback);
+  void start(final Input input, final IGGeneratorCallback callback)
+          throws InterruptedException;
   
 }

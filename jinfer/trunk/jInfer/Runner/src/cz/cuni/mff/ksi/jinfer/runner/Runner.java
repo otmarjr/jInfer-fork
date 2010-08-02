@@ -83,20 +83,6 @@ public class Runner {
     schemaGenerator = ModuleSelection.lookupSchemaGenerator(projectProperties.getProperty("moduleselector.schemagenerator"));
   }
 
-  private static void runAsync(final Runnable r, final String taskName) {
-    final RequestProcessor rp = new RequestProcessor("interruptible", 1, true);
-    final RequestProcessor.Task theTask = rp.create(r);
-    final ProgressHandle handle = ProgressHandleFactory.createHandle(taskName, theTask);
-    theTask.addTaskListener(new TaskListener() {
-      @Override
-      public void taskFinished(final Task task) {
-        handle.finish();
-      }
-    });
-    handle.start();
-    theTask.schedule(0);
-  }
-
   /**
    * Starts process of inference.
    */
@@ -109,8 +95,7 @@ public class Runner {
           igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), iggCallback);
         }
         catch (final InterruptedException e) {
-          LOG.error("User interrupted the inference.");
-          RunningProject.removeActiveProject();
+          interrupted();
         }
       }
     }, "Retrieving IG");
@@ -128,8 +113,7 @@ public class Runner {
           simplifier.start(grammar, simplCallback);
         }
         catch (final InterruptedException e) {
-          LOG.error("User interrupted the inference.");
-          RunningProject.removeActiveProject();
+          interrupted();
         }
       }
     }, "Inferring the schema");
@@ -147,8 +131,7 @@ public class Runner {
           schemaGenerator.start(grammar, sgCallback);
         }
         catch (final InterruptedException e) {
-          LOG.error("User interrupted the inference.");
-          RunningProject.removeActiveProject();
+          interrupted();
         }
       }
     }, "Generating result schema");
@@ -164,6 +147,26 @@ public class Runner {
 
     RunningProject.removeActiveProject();
     LOG.info("------------- DONE -------------");
+  }
+
+  private static void runAsync(final Runnable r, final String taskName) {
+    final RequestProcessor rp = new RequestProcessor("interruptible", 1, true);
+    final RequestProcessor.Task theTask = rp.create(r);
+    final ProgressHandle handle = ProgressHandleFactory.createHandle(taskName, theTask);
+    theTask.addTaskListener(new TaskListener() {
+      @Override
+      public void taskFinished(final Task task) {
+        handle.finish();
+      }
+    });
+    handle.start();
+    theTask.schedule(0);
+  }
+
+  private static void interrupted() {
+    // TODO vektor Perhaps a message box?
+    LOG.error("User interrupted the inference.");
+    RunningProject.removeActiveProject();
   }
 
   private String getCommentedSchema(final String schema) {

@@ -122,6 +122,8 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     jLabel4 = new javax.swing.JLabel();
     jLabel5 = new javax.swing.JLabel();
     jLabel6 = new javax.swing.JLabel();
+    jLabel7 = new javax.swing.JLabel();
+    jLabel8 = new javax.swing.JLabel();
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel1.text")); // NOI18N
 
@@ -145,6 +147,12 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     jLabel6.setForeground(Utils.getColorAlternation());
     org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel6.text")); // NOI18N
 
+    jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/arrow.png"))); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel7.text")); // NOI18N
+
+    jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png"))); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel8.text")); // NOI18N
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -152,26 +160,32 @@ public final class RuleDisplayerTopComponent extends TopComponent {
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(panels, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
+          .addComponent(panels, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
           .addGroup(layout.createSequentialGroup()
             .addComponent(jLabel1)
             .addGap(18, 18, 18)
-            .addComponent(jLabel2)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jLabel3)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel4)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel5)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel6)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel8))
+              .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)))))
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(panels, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+        .addComponent(panels, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(jLabel1)
@@ -180,6 +194,10 @@ public final class RuleDisplayerTopComponent extends TopComponent {
           .addComponent(jLabel4)
           .addComponent(jLabel5)
           .addComponent(jLabel6))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jLabel7)
+          .addComponent(jLabel8))
         .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
@@ -190,6 +208,8 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   private javax.swing.JLabel jLabel4;
   private javax.swing.JLabel jLabel5;
   private javax.swing.JLabel jLabel6;
+  private javax.swing.JLabel jLabel7;
+  private javax.swing.JLabel jLabel8;
   private javax.swing.JTabbedPane panels;
   // End of variables declaration//GEN-END:variables
 

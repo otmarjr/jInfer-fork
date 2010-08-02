@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,26 +26,10 @@ import java.util.List;
  * 
  * @author vektor
  */
-public class CPTrie implements ClusterProcessor {
+public class CPTrie extends AbstractCPImpl {
 
-  // TODO vektor Unify this logic with CPAlternations: create a common ancestor and make processCluster abstract
   @Override
-  public List<AbstractNode> processClusters(
-          final List<Pair<AbstractNode, List<AbstractNode>>> clusters)
-          throws InterruptedException {
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
-
-    for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      ret.add(processCluster(cluster));
-    }
-
-    return ret;
-  }
-
-  private static Element processCluster(
+  protected Element processCluster(
           final Pair<AbstractNode, List<AbstractNode>> cluster) {
     verify(cluster);
 

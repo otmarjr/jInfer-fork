@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vektor
+ *  Copyright (C) 2010 vitasek
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,30 +20,32 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Cluster processor implementation that exports a cluster as an alternation of
- * its rules.
- * 
- * @author vektor
+ *
+ * @author vitasek
  */
-public class CPAlternations extends AbstractCPImpl {
+public abstract class AbstractCPImpl implements ClusterProcessor {
 
   @Override
-  protected Element processCluster(
-          final Pair<AbstractNode, List<AbstractNode>> cluster) {
-    
-    final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
-    for (final AbstractNode n : cluster.getSecond()) {
-      children.add(((Element) n).getSubnodes());
+  public List<AbstractNode> processClusters(
+          final List<Pair<AbstractNode, List<AbstractNode>>> clusters)
+          throws InterruptedException {
+    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+
+    for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      ret.add(processCluster(cluster));
     }
-    return new Element(null,
-            cluster.getFirst().getName(),
-            null,
-            Regexp.getAlternation(children));
+
+    return ret;
   }
+
+  protected abstract Element processCluster(
+          final Pair<AbstractNode, List<AbstractNode>> cluster);
 
 }

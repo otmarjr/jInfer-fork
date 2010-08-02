@@ -137,7 +137,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     simplifier.setSelectedItem(properties.getProperty(ModuleSelection.MODULE_SELECTION_SIMPIFIER, DEFAULT_MENU_TEXT));
     schemaGenerator.setSelectedItem(properties.getProperty(ModuleSelection.MODULE_SELECTION_SCHEMA_GENERATOR, DEFAULT_MENU_TEXT));
 
-    //TODO treba doriesit ak neexistuje modul co je nacitany z properties a ak neexistuje ziaden modul danej kategorie
+    // TODO sviro Treba doriesit ak neexistuje modul co je nacitany z properties a ak neexistuje ziaden modul danej kategorie
   }
 
   @Override

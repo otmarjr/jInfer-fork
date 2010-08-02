@@ -456,7 +456,7 @@ public final class RuleDisplayerPanel extends JPanel {
       panelAlternation.setBackground(c);
     }
   }//GEN-LAST:event_panelAlternationMouseClicked
-//TODO change to NBPreferences
+  // TODO sviro Change to NBPreferences
   public void load() {
     maxPanels.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.panels", 8));
     nestingLevel.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25));
@@ -469,7 +469,7 @@ public final class RuleDisplayerPanel extends JPanel {
     panelConcatenation.setBackground(Utils.getColorConcatenation());
     panelAlternation.setBackground(Utils.getColorAlternation());
   }
-//TODO change to NBPreferences
+  // TODO sviro Change to NBPreferences
   public void store() {
     Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("max.panels", ((Integer) maxPanels.getValue()).intValue());
     Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("nesting.level", ((Integer) nestingLevel.getValue()).intValue());

@@ -89,7 +89,6 @@ public class SimpleKP implements KleeneProcessor {
     final List<Regexp<AbstractNode>> buffer = new ArrayList<Regexp<AbstractNode>>();
 
     int i = 0;
-    int groupSize = 0;
     Regexp<AbstractNode> last = null;
     while (true) {
       if (i >= root.getChildren().size()) {
@@ -99,13 +98,11 @@ public class SimpleKP implements KleeneProcessor {
       final Regexp<AbstractNode> current = root.getChild(i);
       if (equalTokenRegexps(last, current)) {
         // increment count
-        groupSize++;
         buffer.add(current);
       } else {
         // close the last loop
         closeGroup(buffer, retChildren);
         // start a new loop
-        groupSize = 1;
         last = current;
         buffer.clear();
         buffer.add(current);

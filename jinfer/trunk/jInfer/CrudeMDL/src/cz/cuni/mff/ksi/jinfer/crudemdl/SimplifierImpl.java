@@ -356,7 +356,13 @@ class Automaton<T> {
     while (!toTestStates.isEmpty()) {
       toTestState= toTestStates.removeFirst();
       List<Pair<State<T>, State<T>>> testStateKHcontexts= toTestState.find21contexts();
+      if (testStateKHcontexts.size() == 0) {
+        continue;
+      }
       for (State<T> anotherState : this.states) {
+        if (anotherState.equals(toTestState)) {
+          continue;
+        }
         List<Pair<State<T>, State<T>>> anotherStateKHcontexts= anotherState.find21contexts();
         if (this.hasIntersection(testStateKHcontexts, anotherStateKHcontexts)) {
           toMergeStates.add(anotherState);
@@ -367,6 +373,8 @@ class Automaton<T> {
         continue;
       } else {
         this.mergeStates(toTestState, toMergeStates);
+        toTestStates.removeAll(toMergeStates);
+        toMergeStates.clear();
       }
     }
   }

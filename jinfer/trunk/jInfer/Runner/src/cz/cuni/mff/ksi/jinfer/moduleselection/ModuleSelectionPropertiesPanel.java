@@ -27,6 +27,7 @@ import javax.swing.DefaultComboBoxModel;
 public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final String DEFAULT_MENU_TEXT = "<none available>";
+  private static final long serialVersionUID = 784463434L;
 
   /** Creates new form ModuleSelectionJPanel */
   public ModuleSelectionPropertiesPanel(final Properties properties) {
@@ -57,31 +58,34 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     setLayout(new java.awt.GridBagLayout());
 
     initialGrammar.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupIGGeneratorNames().toArray()));
+    initialGrammar.setMinimumSize(new java.awt.Dimension(200, 22));
+    initialGrammar.setPreferredSize(new java.awt.Dimension(200, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.ipadx = 150;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(initialGrammar, gridBagConstraints);
 
     simplifier.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSimplifierNames().toArray()));
+    simplifier.setMinimumSize(new java.awt.Dimension(200, 22));
+    simplifier.setPreferredSize(new java.awt.Dimension(200, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.ipadx = 150;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(simplifier, gridBagConstraints);
 
     schemaGenerator.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSchemaGeneratorNames().toArray()));
+    schemaGenerator.setMinimumSize(new java.awt.Dimension(200, 22));
+    schemaGenerator.setPreferredSize(new java.awt.Dimension(200, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.ipadx = 150;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(schemaGenerator, gridBagConstraints);

@@ -42,9 +42,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
+
   public static final String TRIVIALDTDEXPORTER_MAX_ENUM_SIZE = "trivialdtdexporter.max.enum.size";
   public static final String TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO = "trivialdtdexporter.min.default.ratio";
-
   private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private int maxEnumSize;
   private double minDefaultRatio;
@@ -62,9 +62,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // load settings
     final Properties properties = RunningProject.getActiveProjectProps();
 
-    maxEnumSize = Integer.parseInt(properties.getProperty(TRIVIALDTDEXPORTER_MAX_ENUM_SIZE,"3"));
-    minDefaultRatio = Float.parseFloat(properties.getProperty(TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO,"0.67f"));
-    
+    maxEnumSize = Integer.parseInt(properties.getProperty(TRIVIALDTDEXPORTER_MAX_ENUM_SIZE, "3"));
+    minDefaultRatio = Float.parseFloat(properties.getProperty(TRIVIALDTDEXPORTER_MIN_DEFAULT_RATIO, "0.67f"));
+
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
@@ -94,18 +94,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
-    ret.append("<!ELEMENT ")
-            .append(e.getName())
-            .append(' ')
-            .append(subElementsToString(e.getSubnodes(), true))
-            .append(">\n");
+    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(subElementsToString(e.getSubnodes(), true)).append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!BaseUtils.isEmpty(attributes)) {
-      ret.append("<!ATTLIST ")
-              .append(e.getName())
-              .append(' ')
-              .append(attributesToString(attributes))
-              .append(">\n");
+      ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).append(">\n");
     }
     return ret.toString();
   }
@@ -117,6 +109,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
     if (topLevel
             && BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
+
       @Override
       public boolean apply(final AbstractNode argument) {
         return argument.isElement() || argument.isSimpleData();
@@ -211,22 +204,18 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
-      final Map<String, Integer> domain = DomainUtils.getDomain(attribute);      
+      final Map<String, Integer> domain = DomainUtils.getDomain(attribute);
 
       // type declaration of this attribute
-      ret.append("\n\t")
-              .append(attribute.getName())
-              .append(DomainUtils.getAttributeType(domain, maxEnumSize));
+      ret.append("\n\t").append(attribute.getName()).append(DomainUtils.getAttributeType(domain, maxEnumSize));
 
       // requiredness/default value
       if (attribute.getAttributes().containsKey("required")) {
         ret.append("#REQUIRED");
-      }
-      else {
+      } else {
         ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
       }
     }
     return ret.toString();
   }
-
 }

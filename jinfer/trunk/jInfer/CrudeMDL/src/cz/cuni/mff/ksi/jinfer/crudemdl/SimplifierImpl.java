@@ -116,7 +116,7 @@ class State<T> {
       outStep.incUseCount();
       return outStep.getDestination();
     } else {
-      State<T> newState= new State<T>(0, this.name + 1, this.myAutomaton);
+      State<T> newState= new State<T>(0, this.myAutomaton.getMaxStateName() + 1, this.myAutomaton);
       this.myAutomaton.addNewStateCreated(newState);
       Step<T> newOutStep= new Step<T>(symbol, this, newState, 1);
       this.addOutStep(newOutStep);
@@ -269,8 +269,10 @@ class Step<T> {
 class Automaton<T> {
   private State<T> initialState;
   private List<State<T>> states;
+  private Integer maxStateName;
 
   Automaton() {
+    this.maxStateName= 1;
     this.initialState= new State<T>(0, 1, this);
     this.states= new LinkedList<State<T>>();
     this.states.add(this.initialState);
@@ -294,14 +296,16 @@ class Automaton<T> {
   public String toString() {
 //    return super.toString();
     StringBuilder sb = new StringBuilder("Automaton\n");
-    for (State<T> state: this.states) {
+    for (State<T> state: this.getStates()) {
     sb.append(state);
     }
     return sb.toString();
   }
 
   public void addNewStateCreated(State<T> newState) {
-    this.states.add(newState);
+    // TODO assert here
+    this.maxStateName++;
+    this.getStates().add(newState);
   }
 
   public void mergeStates(State<T> mainState, State<T> mergedState) {
@@ -324,7 +328,7 @@ class Automaton<T> {
         mainState.addOutStep(mergedStateOutStep);
       }
     }
-    this.states.remove(mergedState);
+    this.getStates().remove(mergedState);
     // TODO check loops
   }
 
@@ -350,7 +354,7 @@ class Automaton<T> {
 
   public void make21context() {
     Deque<State<T>> toTestStates = new LinkedList<State<T>>();
-    toTestStates.addAll(this.states);
+    toTestStates.addAll(this.getStates());
     State<T> toTestState;
     List<State<T>> toMergeStates= new LinkedList<State<T>>();
     while (!toTestStates.isEmpty()) {
@@ -359,7 +363,7 @@ class Automaton<T> {
       if (testStateKHcontexts.size() == 0) {
         continue;
       }
-      for (State<T> anotherState : this.states) {
+      for (State<T> anotherState : this.getStates()) {
         if (anotherState.equals(toTestState)) {
           continue;
         }
@@ -377,6 +381,34 @@ class Automaton<T> {
         toMergeStates.clear();
       }
     }
+  }
+
+  /**
+   * @return the states
+   */
+  public List<State<T>> getStates() {
+    return states;
+  }
+
+  /**
+   * @param states the states to set
+   */
+  public void setStates(List<State<T>> states) {
+    this.states = states;
+  }
+
+  /**
+   * @return the maxStateName
+   */
+  public Integer getMaxStateName() {
+    return maxStateName;
+  }
+
+  /**
+   * @param maxStateName the maxStateName to set
+   */
+  public void setMaxStateName(Integer maxStateName) {
+    this.maxStateName = maxStateName;
   }
 }
 

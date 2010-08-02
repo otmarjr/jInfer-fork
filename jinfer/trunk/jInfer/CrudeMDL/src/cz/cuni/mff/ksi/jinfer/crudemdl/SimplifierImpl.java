@@ -21,14 +21,18 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -38,12 +42,14 @@ class State<T> {
   private List<Step<T>> inSteps;
   private Integer finalCount;
   private Integer name;
+  private Automaton<T> myAutomaton;
 
-  State(Integer finalCount, Integer name) {
+  State(Integer finalCount, Integer name, Automaton<T> myAutomaton) {
     this.inSteps= new LinkedList<Step<T>>();
     this.outSteps= new HashMap<T, Step<T>>();
     this.finalCount= finalCount;
     this.name= name;
+    this.myAutomaton= myAutomaton;
   }
 
   /**
@@ -96,6 +102,10 @@ class State<T> {
     this.inSteps.add(inStep);
   }
 
+  public void addInStepsAll(Collection<Step<T>> inSteps) {
+    this.inSteps.addAll(inSteps);
+  }
+
   public void addOutStep(Step<T> outStep) {
     this.outSteps.put(outStep.getAcceptSymbol(), outStep);
   }
@@ -106,12 +116,26 @@ class State<T> {
       outStep.incUseCount();
       return outStep.getDestination();
     } else {
-      State<T> newState= new State<T>(0, this.name + 1);
+      State<T> newState= new State<T>(0, this.name + 1, this.myAutomaton);
+      this.myAutomaton.addNewStateCreated(newState);
       Step<T> newOutStep= new Step<T>(symbol, this, newState, 1);
       this.addOutStep(newOutStep);
       newState.addInStep(newOutStep);
       return newState;
     }
+  }
+
+  public List<Pair<State<T>, State<T>>> find21contexts() {
+    List<Pair<State<T>, State<T>>> contexts= new LinkedList<Pair<State<T>, State<T>>>();
+    for (Step<T> inStep: this.inSteps) {
+      for (Step<T> secondInStep: inStep.getSource().getInSteps()) {
+        contexts.add(new Pair(
+                secondInStep.getSource(),
+                inStep.getSource()
+                ));
+      }
+    }
+    return contexts;
   }
 
   @Override
@@ -124,12 +148,15 @@ class State<T> {
     sb.append("] steps:\n");
     for (T symbol : this.outSteps.keySet()) {
       sb.append("on ");
-      sb.append(symbol);
+      sb.append(this.outSteps.get(symbol));
       sb.append(" -> ");
       sb.append(this.outSteps.get(symbol).getDestination().getName());
+      sb.append("\n");
     }
+    sb.append("\n");
+    Set<State<T>> outStates= new HashSet<State<T>>();
     for (Step<T> step : this.outSteps.values()) {
-      sb.append(step.getDestination());
+      outStates.add(step.getDestination());
     }
     return sb.toString();
   }
@@ -191,7 +218,11 @@ class Step<T> {
   }
 
   public void incUseCount() {
-    this.setUseCount(this.getUseCount() + 1);
+    this.incUseCount(1);
+  }
+
+  public void incUseCount(Integer i) {
+    this.setUseCount(this.getUseCount() + i);
   }
 
   /**
@@ -225,15 +256,24 @@ class Step<T> {
   @Override
   public String toString() {
     //return super.toString();
-    return this.acceptSymbol.toString();
+    StringBuilder sb = new StringBuilder();
+    sb.append("{");
+    sb.append(this.acceptSymbol);
+    sb.append("|");
+    sb.append(this.useCount);
+    sb.append("}");
+    return sb.toString();
   }
 }
 
 class Automaton<T> {
   private State<T> initialState;
+  private List<State<T>> states;
 
   Automaton() {
-    initialState= new State<T>(0, 1);
+    this.initialState= new State<T>(0, 1, this);
+    this.states= new LinkedList<State<T>>();
+    this.states.add(this.initialState);
   }
 
   /**
@@ -253,7 +293,82 @@ class Automaton<T> {
   @Override
   public String toString() {
 //    return super.toString();
-    return "Automaton\n" + this.getInitialState().toString();
+    StringBuilder sb = new StringBuilder("Automaton\n");
+    for (State<T> state: this.states) {
+    sb.append(state);
+    }
+    return sb.toString();
+  }
+
+  public void addNewStateCreated(State<T> newState) {
+    this.states.add(newState);
+  }
+
+  public void mergeStates(State<T> mainState, State<T> mergedState) {
+    List<Step<T>> mergedStateInSteps= mergedState.getInSteps();
+    for (Step<T> mergedStateInStep : mergedStateInSteps) {
+      mergedStateInStep.setDestination(mainState);
+    }
+    Map<T, Step<T>> mergedStateOutSteps= mergedState.getOutSteps();
+    for (T symbol : mergedStateOutSteps.keySet()) {
+      Step<T> mergedStateOutStep= mergedStateOutSteps.get(symbol);
+      if (mainState.getOutSteps().containsKey(symbol)) {
+        State<T> mainStateDestination= mainState.getOutSteps().get(symbol).getDestination();
+        State<T> mergedStateDestination= mergedStateOutStep.getDestination();
+        if (!mainStateDestination.equals(mergedStateDestination)) {
+          this.mergeStates(mainStateDestination, mergedStateDestination);
+        }
+        mainState.getOutSteps().get(symbol).incUseCount(mergedStateOutStep.getUseCount());
+      } else {
+        mergedStateOutStep.setSource(mainState);
+        mainState.addOutStep(mergedStateOutStep);
+      }
+    }
+    this.states.remove(mergedState);
+    // TODO check loops
+  }
+
+  public void mergeStates(State<T> mainState, List<State<T>> mergedStates) {
+    for (State<T> mergedState : mergedStates) {
+      this.mergeStates(mainState, mergedState);
+    }
+  }
+
+  private Boolean hasIntersection(List<Pair<State<T>, State<T>>> contextsA, List<Pair<State<T>, State<T>>> contextsB) {
+    for (Pair<State<T>, State<T>> contextA : contextsA) {
+      for (Pair<State<T>, State<T>> contextB : contextsB) {
+        if (
+                contextA.getFirst().equals(contextB.getFirst())&&
+                contextA.getSecond().equals(contextB.getSecond())
+                ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public void make21context() {
+    Deque<State<T>> toTestStates = new LinkedList<State<T>>();
+    toTestStates.addAll(this.states);
+    State<T> toTestState;
+    List<State<T>> toMergeStates= new LinkedList<State<T>>();
+    while (!toTestStates.isEmpty()) {
+      toTestState= toTestStates.removeFirst();
+      List<Pair<State<T>, State<T>>> testStateKHcontexts= toTestState.find21contexts();
+      for (State<T> anotherState : this.states) {
+        List<Pair<State<T>, State<T>>> anotherStateKHcontexts= anotherState.find21contexts();
+        if (this.hasIntersection(testStateKHcontexts, anotherStateKHcontexts)) {
+          toMergeStates.add(anotherState);
+        }
+      }
+      // merge them
+      if (toMergeStates.isEmpty()) {
+        continue;
+      } else {
+        this.mergeStates(toTestState, toMergeStates);
+      }
+    }
   }
 }
 
@@ -301,6 +416,19 @@ class Cluster<T> {
 
   public void add(T item) {
     this.members.add(item);
+  }
+
+  @Override
+  public String toString() {
+//    return super.toString();
+    StringBuilder sb = new StringBuilder("Cluster\n");
+    sb.append("representant: ");
+    sb.append(this.representant);
+    sb.append("\nmembers: ");
+    for (T member: this.members) {
+      sb.append(member);
+    }
+    return sb.toString();
   }
 }
 
@@ -419,6 +547,7 @@ public class SimplifierImpl implements Simplifier {
 
     for (Cluster<AbstractNode> cluster : clusters) {
       if (!cluster.getRepresentant().isElement()) {
+        LOG.info(cluster);
         continue; // we deal only with elements for now
       }
 
@@ -426,6 +555,7 @@ public class SimplifierImpl implements Simplifier {
       Set<AbstractNode> elementInstances= cluster.getMembers();
 
       Automaton<AbstractNode> automaton = new Automaton<AbstractNode>();
+      SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "SIMPLE REPRE", new HashMap<String, Object>(), "", new ArrayList<String>());
 
       for (AbstractNode instance : elementInstances) {
         Element element = (Element) instance;
@@ -433,8 +563,6 @@ public class SimplifierImpl implements Simplifier {
         List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
         State x = automaton.getInitialState();
-
-        SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "SIMPLE REPRE", new HashMap<String, Object>(), "", new ArrayList<String>());
 
         for (AbstractNode token : rightSideTokens) {
           if (token.isSimpleData()) {
@@ -446,8 +574,15 @@ public class SimplifierImpl implements Simplifier {
         }
         x.incFinalCount();
       }
+      LOG.fatal(cluster.getRepresentant());
       LOG.fatal(automaton);
+      
       // simplify
+      automaton.make21context();
+      LOG.fatal("LAKHGFKJLHGKLAHLKG\n");
+      LOG.fatal(automaton);
+
+
       // convert to regex
       // add to list
     }

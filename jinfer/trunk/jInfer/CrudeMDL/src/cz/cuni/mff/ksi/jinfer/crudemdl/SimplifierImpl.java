@@ -125,13 +125,13 @@ class State<T> {
     }
   }
 
-  public List<Pair<State<T>, State<T>>> find21contexts() {
-    List<Pair<State<T>, State<T>>> contexts= new LinkedList<Pair<State<T>, State<T>>>();
+  public List<Pair<Step<T>, Step<T>>> find21contexts() {
+    List<Pair<Step<T>, Step<T>>> contexts= new LinkedList<Pair<Step<T>, Step<T>>>();
     for (Step<T> inStep: this.inSteps) {
       for (Step<T> secondInStep: inStep.getSource().getInSteps()) {
         contexts.add(new Pair(
-                secondInStep.getSource(),
-                inStep.getSource()
+                secondInStep,
+                inStep
                 ));
       }
     }
@@ -338,12 +338,12 @@ class Automaton<T> {
     }
   }
 
-  private Boolean hasIntersection(List<Pair<State<T>, State<T>>> contextsA, List<Pair<State<T>, State<T>>> contextsB) {
-    for (Pair<State<T>, State<T>> contextA : contextsA) {
-      for (Pair<State<T>, State<T>> contextB : contextsB) {
+  private Boolean hasIntersection(List<Pair<Step<T>, Step<T>>> contextsA, List<Pair<Step<T>, Step<T>>> contextsB) {
+    for (Pair<Step<T>, Step<T>> contextA : contextsA) {
+      for (Pair<Step<T>, Step<T>> contextB : contextsB) {
         if (
-                contextA.getFirst().equals(contextB.getFirst())&&
-                contextA.getSecond().equals(contextB.getSecond())
+                contextA.getFirst().getAcceptSymbol().equals(contextB.getFirst().getAcceptSymbol())&&
+                contextA.getSecond().getAcceptSymbol().equals(contextB.getSecond().getAcceptSymbol())
                 ) {
           return true;
         }
@@ -359,7 +359,7 @@ class Automaton<T> {
     List<State<T>> toMergeStates= new LinkedList<State<T>>();
     while (!toTestStates.isEmpty()) {
       toTestState= toTestStates.removeFirst();
-      List<Pair<State<T>, State<T>>> testStateKHcontexts= toTestState.find21contexts();
+      List<Pair<Step<T>, Step<T>>> testStateKHcontexts= toTestState.find21contexts();
       if (testStateKHcontexts.size() == 0) {
         continue;
       }
@@ -367,7 +367,7 @@ class Automaton<T> {
         if (anotherState.equals(toTestState)) {
           continue;
         }
-        List<Pair<State<T>, State<T>>> anotherStateKHcontexts= anotherState.find21contexts();
+        List<Pair<Step<T>, Step<T>>> anotherStateKHcontexts= anotherState.find21contexts();
         if (this.hasIntersection(testStateKHcontexts, anotherStateKHcontexts)) {
           toMergeStates.add(anotherState);
         }
@@ -622,8 +622,8 @@ public class SimplifierImpl implements Simplifier {
       LOG.fatal("LAKHGFKJLHGKLAHLKG\n");
       LOG.fatal(automaton);
 
-
       // convert to regex
+      
       // add to list
     }
 //    callback.finished( new ArrayList<AbstractNode>(elements.values()) );

@@ -101,12 +101,14 @@ public class Step<T> {
   @Override
   public String toString() {
     //return super.toString();
-    final StringBuilder sb = new StringBuilder();
-    sb.append("{");
+    final StringBuilder sb = new StringBuilder("from ");
+    sb.append(this.source.getName());
+    sb.append(" on {");
     sb.append(this.acceptSymbol);
     sb.append("|");
     sb.append(this.useCount);
-    sb.append("}");
+    sb.append("} to ");
+    sb.append(this.destination.getName());
     return sb.toString();
   }
 }

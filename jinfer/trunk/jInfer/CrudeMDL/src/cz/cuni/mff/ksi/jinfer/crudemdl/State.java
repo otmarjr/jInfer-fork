@@ -17,60 +17,19 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 /**
  *
  * @author anti
  */
 public class State<T> {
-  private Map< T, Step<T>> outSteps;
-  private List<Step<T>> inSteps;
   private Integer finalCount;
   private Integer name;
   private Automaton<T> parentAutomaton;
 
   State(final Integer finalCount, final Integer name, final Automaton<T> parentAutomaton) {
-    this.inSteps= new LinkedList<Step<T>>();
-    this.outSteps= new HashMap<T, Step<T>>();
     this.finalCount= finalCount;
     this.name= name;
     this.parentAutomaton= parentAutomaton;
-  }
-
-  /**
-   * @return the outSteps
-   */
-  public Map<T, Step<T>> getOutSteps() {
-    return this.outSteps;
-  }
-
-  /**
-   * @param outSteps the outSteps to set
-   */
-  public void setOutSteps(Map<T, Step<T>> outSteps) {
-    this.outSteps = outSteps;
-  }
-
-  /**
-   * @return the inSteps
-   */
-  public List<Step<T>> getInSteps() {
-    return this.inSteps;
-  }
-
-  /**
-   * @param inSteps the inSteps to set
-   */
-  public void setInSteps(List<Step<T>> inSteps) {
-    this.inSteps = inSteps;
   }
 
   /**
@@ -93,69 +52,6 @@ public class State<T> {
 
   public void incFinalCount(final Integer i) {
     this.setFinalCount(this.getFinalCount() + i);
-  }
-
-  public void addInStep(Step<T> inStep) {
-    this.inSteps.add(inStep);
-  }
-
-  public void addInStepAll(Collection<Step<T>> inSteps) {
-    this.inSteps.addAll(inSteps);
-  }
-
-  public void addOutStep(Step<T> outStep) {
-    this.outSteps.put(outStep.getAcceptSymbol(), outStep);
-  }
-
-  public State<T> buildPTAOnSymbol(final T symbol) {
-    if (this.outSteps.containsKey(symbol)) {
-      final Step<T> outStep= this.outSteps.get(symbol);
-      outStep.incUseCount();
-      return outStep.getDestination();
-    } else {
-      State<T> newState= new State<T>(0, this.getParentAutomaton().getMaxStateName() + 1, this.getParentAutomaton());
-      this.getParentAutomaton().addNewStateCreated(newState);
-      Step<T> newOutStep= new Step<T>(symbol, this, newState, 1);
-      this.addOutStep(newOutStep);
-      newState.addInStep(newOutStep);
-      return newState;
-    }
-  }
-
-  public List<Pair<Step<T>, Step<T>>> find21contexts() {
-    List<Pair<Step<T>, Step<T>>> contexts= new LinkedList<Pair<Step<T>, Step<T>>>();
-    for (Step<T> inStep: this.inSteps) {
-      for (Step<T> secondInStep: inStep.getSource().getInSteps()) {
-        contexts.add(new Pair<Step<T>, Step<T>>(
-                secondInStep,
-                inStep
-                ));
-      }
-    }
-    return contexts;
-  }
-
-  @Override
-  public String toString() {
-  //  return super.toString();
-    StringBuilder sb = new StringBuilder("[");
-    sb.append(this.getName());
-    sb.append("|");
-    sb.append(this.finalCount);
-    sb.append("] steps:\n");
-    for (T symbol : this.outSteps.keySet()) {
-      sb.append("on ");
-      sb.append(this.outSteps.get(symbol));
-      sb.append(" -> ");
-      sb.append(this.outSteps.get(symbol).getDestination().getName());
-      sb.append("\n");
-    }
-    sb.append("\n");
-    Set<State<T>> outStates= new HashSet<State<T>>();
-    for (Step<T> step : this.outSteps.values()) {
-      outStates.add(step.getDestination());
-    }
-    return sb.toString();
   }
 
   /**
@@ -184,5 +80,16 @@ public class State<T> {
    */
   public void setParentAutomaton(Automaton<T> parentAutomaton) {
     this.parentAutomaton = parentAutomaton;
+  }
+
+  @Override
+  public String toString() {
+  //  return super.toString();
+    StringBuilder sb = new StringBuilder("[");
+    sb.append(this.getName());
+    sb.append("|");
+    sb.append(this.finalCount);
+    sb.append("]");
+    return sb.toString();
   }
 }

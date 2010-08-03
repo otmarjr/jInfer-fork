@@ -86,15 +86,15 @@ public class SimplifierImpl implements Simplifier {
 
         State<AbstractNode> x = automaton.getInitialState();
 
+        List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
         for (AbstractNode token : rightSideTokens) {
           if (token.isSimpleData()) {
-            x= x.buildPTAOnSymbol(universalSimpleData);
+            symbolString.add(universalSimpleData);
           } else {
-            AbstractNode representant= clusterer.getRepresentantForItem(token);
-            x= x.buildPTAOnSymbol(representant);
+            symbolString.add( clusterer.getRepresentantForItem(token) );
           }
         }
-        x.incFinalCount();
+        automaton.buildPTAOnSymbol(symbolString);
       }
       LOG.fatal(cluster.getRepresentant());
       LOG.fatal(automaton);

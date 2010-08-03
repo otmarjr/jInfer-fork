@@ -133,11 +133,13 @@ public class MainWnd extends JFrame {
     locateAnt = new javax.swing.JButton();
     runValidation = new javax.swing.JButton();
     compile = new javax.swing.JCheckBox();
+    jButton1 = new javax.swing.JButton();
     jPanel2 = new javax.swing.JPanel();
     jScrollPane1 = new javax.swing.JScrollPane();
     result = new javax.swing.JTable();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("jInfer validator");
 
     jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Settings"));
     jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -162,6 +164,7 @@ public class MainWnd extends JFrame {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.ipadx = 321;
     gridBagConstraints.weightx = 1.0;
@@ -175,7 +178,7 @@ public class MainWnd extends JFrame {
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -185,6 +188,7 @@ public class MainWnd extends JFrame {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -197,7 +201,7 @@ public class MainWnd extends JFrame {
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -210,7 +214,7 @@ public class MainWnd extends JFrame {
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
@@ -223,6 +227,19 @@ public class MainWnd extends JFrame {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(compile, gridBagConstraints);
+
+    jButton1.setText("Fix dependencies");
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1ActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel1.add(jButton1, gridBagConstraints);
 
     jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Results"));
 
@@ -295,9 +312,15 @@ public class MainWnd extends JFrame {
       rootFolder.setText(jfc.getSelectedFile().getAbsolutePath());
     }
   }//GEN-LAST:event_locateRootActionPerformed
+
+  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    Logic.fixDependencies(antLocation.getText(), rootFolder.getText());
+  }//GEN-LAST:event_jButton1ActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField antLocation;
   private javax.swing.JCheckBox compile;
+  private javax.swing.JButton jButton1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel jPanel1;

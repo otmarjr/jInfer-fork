@@ -14,28 +14,37 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
 
 /**
- * TODO developer: Comment!
+ * TODO sviro Comment!
  *
  * @author sviro
  */
 public interface PropertiesPanelProvider {
 
   /**
+   * TODO sviro Comment!
    * 
    * @param properties
    * @return
    */
   AbstractPropertiesPanel getPanel(final Properties properties);
 
+  /**
+   * TODO sviro Comment!
+   * 
+   * @return
+   */
   String getName();
 
+  /**
+   * TODO sviro Comment!
+   * 
+   * @return
+   */
   String getDisplayName();
-
 }

@@ -114,6 +114,11 @@ public class MainWnd extends JFrame {
     }
   }
 
+  private void setUIEnabled(final boolean enabled) {
+    runValidation.setEnabled(enabled);
+    fixDeps.setEnabled(enabled);
+  }
+
   /** This method is called from within the constructor to
    * initialize the form.
    * WARNING: Do NOT modify this code. The content of this method is
@@ -133,7 +138,7 @@ public class MainWnd extends JFrame {
     locateAnt = new javax.swing.JButton();
     runValidation = new javax.swing.JButton();
     compile = new javax.swing.JCheckBox();
-    jButton1 = new javax.swing.JButton();
+    fixDeps = new javax.swing.JButton();
     jPanel2 = new javax.swing.JPanel();
     jScrollPane1 = new javax.swing.JScrollPane();
     result = new javax.swing.JTable();
@@ -228,10 +233,10 @@ public class MainWnd extends JFrame {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(compile, gridBagConstraints);
 
-    jButton1.setText("Fix dependencies");
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
+    fixDeps.setText("Fix dependencies");
+    fixDeps.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton1ActionPerformed(evt);
+        fixDepsActionPerformed(evt);
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -239,7 +244,7 @@ public class MainWnd extends JFrame {
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(jButton1, gridBagConstraints);
+    jPanel1.add(fixDeps, gridBagConstraints);
 
     jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Results"));
 
@@ -283,7 +288,7 @@ public class MainWnd extends JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void runValidationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runValidationActionPerformed
-    runValidation.setEnabled(false);
+    setUIEnabled(false);
     final Thread t = new Thread(new Runnable() {
 
       @Override
@@ -292,7 +297,7 @@ public class MainWnd extends JFrame {
         model.addAll(Logic.checkSuite(antLocation.getText(),
                 rootFolder.getText(), compile.isSelected()));
         result.setModel(new MyModel());
-        runValidation.setEnabled(true);
+        setUIEnabled(true);
       }
     });
     t.start();
@@ -313,14 +318,25 @@ public class MainWnd extends JFrame {
     }
   }//GEN-LAST:event_locateRootActionPerformed
 
-  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    Logic.fixDependencies(antLocation.getText(), rootFolder.getText());
-  }//GEN-LAST:event_jButton1ActionPerformed
+  private void fixDepsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fixDepsActionPerformed
+    setUIEnabled(false);
+    final Thread t = new Thread(new Runnable() {
+
+      @Override
+      public void run() {
+        model.clear();
+        model.addAll(CallToAnt.fixDependencies(antLocation.getText(), rootFolder.getText()));
+        result.setModel(new MyModel());
+        setUIEnabled(true);
+      }
+    });
+    t.start();
+  }//GEN-LAST:event_fixDepsActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField antLocation;
   private javax.swing.JCheckBox compile;
-  private javax.swing.JButton jButton1;
+  private javax.swing.JButton fixDeps;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel jPanel1;

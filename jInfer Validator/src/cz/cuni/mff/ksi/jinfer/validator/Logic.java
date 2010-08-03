@@ -17,14 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.validator;
 
 import cz.cuni.mff.ksi.jinfer.validator.utils.FileHelper;
-import cz.cuni.mff.ksi.jinfer.validator.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.validator.objects.ImportantFiles;
 import cz.cuni.mff.ksi.jinfer.validator.objects.Remark;
 import cz.cuni.mff.ksi.jinfer.validator.objects.Severity;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +37,7 @@ public final class Logic {
     final List<Remark> ret = new ArrayList<Remark>();
 
     if (compile) {
-      ret.addAll(getCompilationRemarks(ant, projectRoot));
+      ret.addAll(CallToAnt.getCompilationRemarks(ant, projectRoot));
     }
 
     for (final File project : FileHelper.getModuleNames(projectRoot)) {
@@ -154,69 +150,6 @@ public final class Logic {
       ret.add(new Remark(module, file, null, Severity.ERROR, "Class author unknown: " + classAuthor));
     }
 
-    return ret;
-  }
-
-  public static List<Remark> fixDependencies(final String ant, 
-          final String projectRoot) {
-    final List<Remark> ret = new ArrayList<Remark>();
-    final String antExe = "\"" + ant + "\" -f \"" + projectRoot + "\\build.xml\" fix-all-deps";
-    
-    try {
-      String line;
-      final Process p = Runtime.getRuntime().exec(antExe,
-              null,
-              new File(projectRoot));
-
-      final BufferedReader input =
-              new BufferedReader(new InputStreamReader(p.getInputStream()));
-      final BufferedReader err =
-              new BufferedReader(new InputStreamReader(p.getInputStream()));
-      while ((line = input.readLine()) != null) {
-        System.out.println(line);
-      }
-      while ((line = err.readLine()) != null) {
-        ret.add(Remark.getError(line));
-      }
-      input.close();
-    } catch (IOException ex) {
-      ret.add(new Remark("fix-all-deps", null, null, Severity.ERROR,
-              Utils.getExceptionStackTraceAsString(ex)));
-    }
-    return ret;
-  }
-
-  private static List<Remark> getCompilationRemarks(final String ant,
-          final String projectRoot) {
-
-    final List<Remark> ret = new ArrayList<Remark>();
-    final String antExe =
-            "\"" + ant + "\" -f \"" + projectRoot + "\\build.xml\" clean build";
-    try {
-      String line;
-      final Process p = Runtime.getRuntime().exec(antExe,
-              null,
-              new File(projectRoot));
-
-      final BufferedReader input =
-              new BufferedReader(new InputStreamReader(p.getInputStream()));
-      final BufferedReader err =
-              new BufferedReader(new InputStreamReader(p.getInputStream()));
-      while ((line = input.readLine()) != null) {
-        if (line.contains("Warning: ")) {
-          ret.add(Remark.getWarning(line));
-        } else if (line.contains("Error: ")) {
-          ret.add(Remark.getError(line));
-        }
-      }
-      while ((line = err.readLine()) != null) {
-        ret.add(Remark.getError(line));
-      }
-      input.close();
-    } catch (final Exception err) {
-      ret.add(new Remark("compile", null, null, Severity.ERROR,
-              Utils.getExceptionStackTraceAsString(err)));
-    }
     return ret;
   }
 }

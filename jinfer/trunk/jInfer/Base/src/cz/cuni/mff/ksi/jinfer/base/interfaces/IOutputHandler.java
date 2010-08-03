@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 /**
- * Interface for adding output to project.
+ * TODO sviro Comment!
  * 
  * @author vektor
  */
@@ -26,6 +26,13 @@ public interface IOutputHandler {
 
   // TODO sviro Why the prefix "I"? Rename
 
-  void addOutput(String fileName, String data, String extension);
+  /**
+   * TODO sviro Comment!
+   * 
+   * @param fileName
+   * @param data
+   * @param extension
+   */
+  void addOutput(final String fileName, final String data, final String extension);
 
 }

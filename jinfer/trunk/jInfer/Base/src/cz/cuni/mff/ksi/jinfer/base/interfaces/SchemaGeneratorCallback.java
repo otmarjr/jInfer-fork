@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 /**
@@ -25,11 +24,11 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces;
 public interface SchemaGeneratorCallback {
 
   /**
-   * This method is called when SchemaGenerator module has finished its work.
+   * This method is called by a SchemaGenerator implementation, after it has
+   * finished its work.
    *
    * @param schema String representation of the generated schema.
    * @param extension File extension of the generated schema, for example "dtd" or "xsd".
    */
   void finished(final String schema, final String extension);
-
 }

@@ -20,6 +20,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 
 /**
  * Interface of an IGGenerator module.
+ *
+ * <p>Initial Grammar Generator is the first module in inference process. Its task
+ * is to create a list of rules from the input files, schemas and queries.
+ * After the rules are retrieved, they are sent to the next inference stages
+ * via the callback.</p>
  * 
  * @author vektor
  */
@@ -33,12 +38,15 @@ public interface IGGenerator {
   String getModuleName();
 
   /**
-   * Start the IG generation process.
+   * Start the IG generation process. This method is called by the Runner module
+   * as the first stage of inference.
    *
-   * @param input Input data.
-   * @param callback Method to be run when IG generation is complete.
+   * @param input Input data. Implementation of IGGenerator should retrieve the
+   *  list of initial grammar rules from this input alone.
+   * @param callback A callback object. After all the IG rules are retrieved, their
+   *  list must be sent to the next stages by calling the <code>finished()</code>
+   *  method of this object.
    */
   void start(final Input input, final IGGeneratorCallback callback)
           throws InterruptedException;
-  
 }

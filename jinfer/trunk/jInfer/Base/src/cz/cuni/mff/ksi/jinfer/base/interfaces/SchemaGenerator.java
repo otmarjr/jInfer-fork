@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
@@ -22,6 +21,12 @@ import java.util.List;
 
 /**
  * Interface of a SchemaGenerator module.
+ *
+ * <p>Schema Generator is the last module in the inference process. Its task is
+ * to transform the simplified grammar (still a list of rules) into a textual
+ * schema representation. Schema may be in any format or language, such as
+ * DTD or XSD. After the schema is created, it is sent to the Runner module
+ * via the callback.</p>
  *
  * @author vektor
  */
@@ -35,12 +40,14 @@ public interface SchemaGenerator {
   String getModuleName();
 
   /**
-   * Start the schema export process.
+   * Start the schema export process. This method is called by the Runner module
+   * as the last stage of inference.
    * 
    * @param grammar Simplified grammar to be exported as XML schema.
-   * @param callback Callback method to be run when export is complete.
+   * @param callback A callback object. After the schema is created, it must be
+   *  returned to the caller by invoking the <code>finished()</code>
+   *  method on this object.
    */
-  void start(final List<AbstractNode> grammar, 
+  void start(final List<AbstractNode> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException;
-
 }

@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
@@ -28,10 +27,10 @@ import java.util.List;
 public interface IGGeneratorCallback {
 
   /**
-   * This method is called when IGGenerator module has finished its work.
+   * This method is called by a IGGenerator implementation, after it has
+   * finished its work.
    *
    * @param grammar Initial grammar as retrieved from input files.
    */
   void finished(final List<AbstractNode> grammar);
-
 }

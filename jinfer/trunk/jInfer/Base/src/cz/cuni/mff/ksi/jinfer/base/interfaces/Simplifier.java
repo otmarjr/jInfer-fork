@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
@@ -22,6 +21,12 @@ import java.util.List;
 
 /**
  * Interface of a Simplifier module.
+ *
+ * <p>Simplifier is the second, middle module in the inference process. It
+ * receives a raw list of initial grammar rules and should output a simplified
+ * yet same grammar. The exact definition of "simplified" varies greatly among
+ * different algorithms; "same grammar" means that the languages they describe
+ * should be the same.</p>
  * 
  * @author vektor
  */
@@ -35,12 +40,14 @@ public interface Simplifier {
   String getModuleName();
 
   /**
-   * Start the grammar simplification process.
+   * Start the grammar simplification process. This method is called by the
+   * Runner module as the second stage of inference.
    * 
-   * @param initialGrammar Grammar to be simplified.
-   * @param callback Callback method to be run when simplification is complete.
+   * @param initialGrammar Initial Grammar to be simplified.
+   * @param callback A callback object. When the initial grammar is simplified,
+   *  the resulting list of rules must be sent to the last stage by calling
+   *  the <code>finished()</code> method of this object.
    */
-  void start(final List<AbstractNode> initialGrammar, 
+  void start(final List<AbstractNode> initialGrammar,
           final SimplifierCallback callback) throws InterruptedException;
-
 }

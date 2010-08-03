@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,11 @@ class State<T> {
   }
 
   void incFinalCount() {
-    this.setFinalCount(this.getFinalCount() + 1);
+    this.incFinalCount(1);
+  }
+
+  void incFinalCount(Integer i) {
+    this.setFinalCount(this.getFinalCount() + i);
   }
 
   public void addInStep(Step<T> inStep) {
@@ -267,6 +272,7 @@ class Step<T> {
 }
 
 class Automaton<T> {
+  private static final Logger LOG = Logger.getLogger(Simplifier.class);
   private State<T> initialState;
   private List<State<T>> states;
   private Integer maxStateName;
@@ -308,77 +314,126 @@ class Automaton<T> {
     this.getStates().add(newState);
   }
 
-  public void mergeStates(State<T> mainState, State<T> mergedState) {
-    List<Step<T>> mergedStateInSteps= mergedState.getInSteps();
-    for (Step<T> mergedStateInStep : mergedStateInSteps) {
-      mergedStateInStep.setDestination(mainState);
+  public List<State<T>> mergeStates(State<T> mainState, State<T> mergedState) {
+    return this.mergeStates(new Pair(mainState, mergedState));
+  }
+
+  public List<State<T>> mergeStates(Pair<State<T>, State<T>> toMergePair) {
+    List<State<T>> removedStates= new LinkedList<State<T>>();
+    if (!this.states.contains(toMergePair.getFirst())) {
+      LOG.fatal("neobsahuje uz mainstate:" + toMergePair.getFirst());
+      return removedStates;
     }
-    Map<T, Step<T>> mergedStateOutSteps= mergedState.getOutSteps();
-    for (T symbol : mergedStateOutSteps.keySet()) {
-      Step<T> mergedStateOutStep= mergedStateOutSteps.get(symbol);
-      if (mainState.getOutSteps().containsKey(symbol)) {
-        State<T> mainStateDestination= mainState.getOutSteps().get(symbol).getDestination();
-        State<T> mergedStateDestination= mergedStateOutStep.getDestination();
-        if (!mainStateDestination.equals(mergedStateDestination)) {
-          this.mergeStates(mainStateDestination, mergedStateDestination);
-        }
-        mainState.getOutSteps().get(symbol).incUseCount(mergedStateOutStep.getUseCount());
-      } else {
-        mergedStateOutStep.setSource(mainState);
-        mainState.addOutStep(mergedStateOutStep);
+    if (!this.states.contains(toMergePair.getSecond())) {
+      LOG.fatal("neobsahuje uz mergedstate:" + toMergePair.getSecond());
+      return removedStates;
+    }
+    Deque<Pair<State<T>, State<T>>> toMergeStates= new LinkedList<Pair<State<T>, State<T>>>();
+    toMergeStates.add(toMergePair);
+
+    while (!toMergeStates.isEmpty()) {
+      Pair<State<T>, State<T>> mergePair= toMergeStates.removeFirst();
+      State<T> mainState= mergePair.getFirst();
+      State<T> mergedState= mergePair.getSecond();
+
+      /* insteps */
+      List<Step<T>> mergedStateInSteps= mergedState.getInSteps();
+      for (Step<T> mergedStateInStep : mergedStateInSteps) {
+        mergedStateInStep.setDestination(mainState);
       }
+
+      /* outsteps */
+      Map<T, Step<T>> mergedStateOutSteps= mergedState.getOutSteps();
+      for (T symbol : mergedStateOutSteps.keySet()) {
+        Step<T> mergedStateOutStep= mergedStateOutSteps.get(symbol);
+
+        if (mainState.getOutSteps().containsKey(symbol)) {
+          State<T> mainStateDestination= mainState.getOutSteps().get(symbol).getDestination();
+          State<T> mergedStateDestination= mergedStateOutStep.getDestination();
+          if (!mainStateDestination.equals(mergedStateDestination)) {
+            toMergeStates.addLast(
+                    new Pair<State<T>, State<T>>(mainStateDestination, mergedStateDestination)
+                    );
+          }
+          mainState.getOutSteps().get(symbol).incUseCount(mergedStateOutStep.getUseCount());
+        } else {
+          mergedStateOutStep.setSource(mainState);
+          mainState.addOutStep(mergedStateOutStep);
+        }
+      }
+
+      /* finalCount */
+      mainState.incFinalCount(mergedState.getFinalCount());
+      
+      removedStates.add(mergedState);
+      this.states.remove(mergedState);
+      LOG.error("removed:\n");
+      LOG.error(mergedState);
+      LOG.error("after:\n");
+      LOG.error(this);
     }
-    this.getStates().remove(mergedState);
-    // TODO check loops
+    return removedStates;
+  // TODO check loop
   }
 
-  public void mergeStates(State<T> mainState, List<State<T>> mergedStates) {
-    for (State<T> mergedState : mergedStates) {
-      this.mergeStates(mainState, mergedState);
-    }
-  }
-
-  private Boolean hasIntersection(List<Pair<Step<T>, Step<T>>> contextsA, List<Pair<Step<T>, Step<T>>> contextsB) {
+  private Pair<State<T>, State<T>> hasIntersection(List<Pair<Step<T>, Step<T>>> contextsA, List<Pair<Step<T>, Step<T>>> contextsB) {
     for (Pair<Step<T>, Step<T>> contextA : contextsA) {
       for (Pair<Step<T>, Step<T>> contextB : contextsB) {
         if (
                 contextA.getFirst().getAcceptSymbol().equals(contextB.getFirst().getAcceptSymbol())&&
                 contextA.getSecond().getAcceptSymbol().equals(contextB.getSecond().getAcceptSymbol())
                 ) {
-          return true;
+          return new Pair<State<T>, State<T>>(contextA.getFirst().getDestination(), contextB.getFirst().getDestination());
         }
       }
     }
-    return false;
+    return null;
   }
 
   public void make21context() {
     Deque<State<T>> toTestStates = new LinkedList<State<T>>();
     toTestStates.addAll(this.getStates());
-    State<T> toTestState;
-    List<State<T>> toMergeStates= new LinkedList<State<T>>();
+
     while (!toTestStates.isEmpty()) {
-      toTestState= toTestStates.removeFirst();
+      State<T> toTestState= toTestStates.removeFirst();
       List<Pair<Step<T>, Step<T>>> testStateKHcontexts= toTestState.find21contexts();
-      if (testStateKHcontexts.size() == 0) {
+      if (testStateKHcontexts.isEmpty()) {
         continue;
       }
-      for (State<T> anotherState : this.getStates()) {
-        if (anotherState.equals(toTestState)) {
+
+      Deque<State<T>> anotherStates= new LinkedList<State<T>>();
+      anotherStates.addAll(this.getStates());
+      while (!anotherStates.isEmpty()) {
+        State<T> anotherState= anotherStates.removeFirst();
+ /*       if (anotherState.equals(toTestState)) {
           continue;
         }
-        List<Pair<Step<T>, Step<T>>> anotherStateKHcontexts= anotherState.find21contexts();
-        if (this.hasIntersection(testStateKHcontexts, anotherStateKHcontexts)) {
-          toMergeStates.add(anotherState);
+  */      List<Pair<Step<T>, Step<T>>> anotherStateKHcontexts= anotherState.find21contexts();
+        if (anotherStateKHcontexts.isEmpty()) {
+          continue;
         }
-      }
-      // merge them
-      if (toMergeStates.isEmpty()) {
-        continue;
-      } else {
-        this.mergeStates(toTestState, toMergeStates);
-        toTestStates.removeAll(toMergeStates);
-        toMergeStates.clear();
+        
+        Pair<State<T>, State<T>> additionalMerge= this.hasIntersection(testStateKHcontexts, anotherStateKHcontexts);
+        List<State<T>> removedStates= new LinkedList<State<T>>();
+        if (additionalMerge.getFirst().equals(additionalMerge.getSecond())) {
+          continue;
+        }
+        if (additionalMerge != null)
+        {
+          LOG.error("Equals:" + toTestState.getName() + " " + anotherState.getName());
+          LOG.error("additionaly:" + additionalMerge.getFirst().getName() + " " + additionalMerge.getSecond().getName());
+          removedStates.addAll( this.mergeStates(additionalMerge.getFirst(), additionalMerge.getSecond()) );
+// TODO cez removed spravit
+          if (this.states.contains(toTestState)&&this.states.contains(anotherState)) {
+            removedStates.addAll( this.mergeStates(toTestState, anotherState) );
+          }
+          anotherStates.removeAll(removedStates);
+          toTestStates.removeAll(removedStates);
+          if (removedStates.contains(toTestState)) {
+            break;
+          }
+          testStateKHcontexts= toTestState.find21contexts();
+        }
       }
     }
   }

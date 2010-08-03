@@ -16,24 +16,21 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator.objects;
 
-/**
- *
- * @author vitasek
- */
-public enum ImportantFiles {
+import java.util.ArrayList;
+import java.util.List;
 
-  MANIFEST("manifest.mf"),
-  PROJECT_PROPERTIES("nbproject/project.properties"),
-  PROJECT_XML("nbproject/project.xml");
+public class FileInfo {
 
-  private final String location;
+  private final List<Remark> remarks = new ArrayList<Remark>();
 
-  private ImportantFiles(final String location) {
-    this.location = location;
+  private final List<ConsumedPackage> consumedPackages = new ArrayList<ConsumedPackage>();
+
+  public List<Remark> getRemarks() {
+    return remarks;
   }
 
-  public String getLocation() {
-    return location;
+  public List<ConsumedPackage> getConsumedPackages() {
+    return consumedPackages;
   }
 
 }

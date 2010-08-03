@@ -16,24 +16,31 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator.objects;
 
-/**
- *
- * @author vitasek
- */
-public enum ImportantFiles {
+public class ConsumedPackage {
 
-  MANIFEST("manifest.mf"),
-  PROJECT_PROPERTIES("nbproject/project.properties"),
-  PROJECT_XML("nbproject/project.xml");
+  private final String module;
 
-  private final String location;
+  private final String file;
 
-  private ImportantFiles(final String location) {
-    this.location = location;
+  private final String name;
+
+  public ConsumedPackage(final String module, final String file,
+          final String name) {
+    this.module = module;
+    this.file = file;
+    this.name = name;
   }
 
-  public String getLocation() {
-    return location;
+  public String getModule() {
+    return module;
+  }
+
+  public String getFile() {
+    return file;
+  }
+
+  public String getName() {
+    return name;
   }
 
 }

@@ -16,8 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.validator;
 
+import cz.cuni.mff.ksi.jinfer.validator.objects.ConsumedPackage;
+import cz.cuni.mff.ksi.jinfer.validator.objects.FileInfo;
 import cz.cuni.mff.ksi.jinfer.validator.utils.FileHelper;
 import cz.cuni.mff.ksi.jinfer.validator.objects.ImportantFiles;
+import cz.cuni.mff.ksi.jinfer.validator.objects.ModuleInfo;
+import cz.cuni.mff.ksi.jinfer.validator.objects.ProvidedPackage;
 import cz.cuni.mff.ksi.jinfer.validator.objects.Remark;
 import cz.cuni.mff.ksi.jinfer.validator.objects.Severity;
 import java.io.File;
@@ -40,18 +44,41 @@ public final class Logic {
       ret.addAll(CallToAnt.getCompilationRemarks(ant, projectRoot));
     }
 
+    final List<ProvidedPackage> providedPackages = new ArrayList<ProvidedPackage>();
+    final List<ConsumedPackage> consumedPackages = new ArrayList<ConsumedPackage>();
     for (final File project : FileHelper.getModuleNames(projectRoot)) {
-      ret.addAll(checkModule(project));
+      final ModuleInfo info = checkModule(project);
+      ret.addAll(info.getRemarks());
+      providedPackages.addAll(info.getProvidedPackages());
+      consumedPackages.addAll(info.getConsumedPackages());
     }
+
+    for (final ProvidedPackage providedPackage : providedPackages) {
+      boolean found = false;
+      for (final ConsumedPackage consumedPackage : consumedPackages) {
+        if (consumedPackage.getName().contains(providedPackage.getName())) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        ret.add(new Remark(providedPackage.getModule(), null, null, 
+                Severity.ERROR, "Package " + providedPackage.getName() +
+                " is provided but never used outside"));
+      }
+    }
+
     return ret;
   }
 
-  private static List<Remark> checkModule(final File module) {
-    final List<Remark> ret = new ArrayList<Remark>();
+  private static ModuleInfo checkModule(final File module) {
+    final ModuleInfo ret = new ModuleInfo();
     final List<File> moduleFiles = FileHelper.getModuleFiles(module);
 
     for (final File file : moduleFiles) {
-      ret.addAll(checkFile(module.getName(), file));
+      final FileInfo info = checkFile(module.getName(), file);
+      ret.getRemarks().addAll(info.getRemarks());
+      ret.getConsumedPackages().addAll(info.getConsumedPackages());
     }
 
     // check manifest.mf
@@ -59,7 +86,7 @@ public final class Logic {
             .concat("/").concat(ImportantFiles.MANIFEST.getLocation()));
     final String manifest = FileHelper.readFileAsString(manifestFile);
     if (!manifest.contains("OpenIDE-Module-Implementation-Version:")) {
-      ret.add(new Remark(module.getName(), manifestFile,
+      ret.getRemarks().add(new Remark(module.getName(), manifestFile,
               null, Severity.ERROR, "Module implementation version not found"));
     }
 
@@ -69,36 +96,49 @@ public final class Logic {
     final String project = FileHelper.readFileAsString(projectFile);
 
     if (!project.contains("license.file=../gpl30.txt")) {
-      ret.add(new Remark(module.getName(), projectFile,
+      ret.getRemarks().add(new Remark(module.getName(), projectFile,
               null, Severity.ERROR, "Module license file not specified"));
     }
     if (!project.contains("nbm.homepage=")) {
-      ret.add(new Remark(module.getName(), projectFile,
+      ret.getRemarks().add(new Remark(module.getName(), projectFile,
               null, Severity.ERROR, "Project homepage not specified"));
     }
     if (!project.contains("nbm.module.author=")) {
-      ret.add(new Remark(module.getName(), projectFile,
+      ret.getRemarks().add(new Remark(module.getName(), projectFile,
               null, Severity.ERROR, "Project author(s) not specified"));
     }
     if (!project.contains("project.license=gpl30")) {
-      ret.add(new Remark(module.getName(), projectFile,
+      ret.getRemarks().add(new Remark(module.getName(), projectFile,
               null, Severity.ERROR, "Module license not specified/incorrect"));
     }
     if (!project.contains("spec.version.base=")) {
-      ret.add(new Remark(module.getName(), projectFile,
+      ret.getRemarks().add(new Remark(module.getName(), projectFile,
               null, Severity.ERROR, "Module specification version not found"));
+    }
+
+    // check project.xml
+    final File projectXmlFile = new File(module.getAbsolutePath()
+            .concat("/").concat(ImportantFiles.PROJECT_XML.getLocation()));
+    final String projectXml = FileHelper.readFileAsString(projectXmlFile);
+    final List<String> lines = FileHelper.getFileLines(projectXml);
+    for (final String line : lines) {
+      if (line.contains("<package>") && line.contains("</package>")) {
+        ret.getProvidedPackages().add(new ProvidedPackage(
+                module.getName(),
+                line.substring(line.indexOf("<package>") + 9, line.indexOf("</package>"))));
+      }
     }
 
     return ret;
   }
 
-  private static List<Remark> checkFile(final String module, final File file) {
-    final List<Remark> ret = new ArrayList<Remark>();
+  private static FileInfo checkFile(final String module, final File file) {
+    final FileInfo ret = new FileInfo();
 
     final String fileStr = FileHelper.readFileAsString(file);
 
     if (!fileStr.startsWith("/*")) {
-      ret.add(new Remark(module, file,
+      ret.getRemarks().add(new Remark(module, file,
               null, Severity.WARNING, "License comment not found"));
     }
 
@@ -110,13 +150,13 @@ public final class Logic {
     for (final String line : lines) {
       // TODOs
       if (line.contains("TODO")) {
-        ret.add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("TODO"))));
+        ret.getRemarks().add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("TODO"))));
       }
       if (line.contains("FIXME")) {
-        ret.add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("FIXME"))));
+        ret.getRemarks().add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("FIXME"))));
       }
       if (line.contains("XXX")) {
-        ret.add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("XXX"))));
+        ret.getRemarks().add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("XXX"))));
       }
 
       // license, author etc
@@ -127,27 +167,33 @@ public final class Logic {
         classAuthor = line.substring(line.lastIndexOf(' ') + 1);
       }
 
+      // imports
+      if (line.contains("import ")) {
+        ret.getConsumedPackages().add(new ConsumedPackage(module, file.getName(),
+                line.substring(line.indexOf("import ") + 7, line.indexOf(";"))));
+      }
+
       lineNum++;
     }
 
     if (fileAuthor != null && classAuthor != null
             && !fileAuthor.equals(classAuthor)) {
-      ret.add(new Remark(module, file, null, Severity.ERROR, "File and class authors differ: " + fileAuthor + " vs. " + classAuthor));
+      ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "File and class authors differ: " + fileAuthor + " vs. " + classAuthor));
     } else {
       if (fileAuthor == null) {
-        ret.add(new Remark(module, file, null, Severity.ERROR, "File has no author in license comment"));
+        ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "File has no author in license comment"));
       }
       if (classAuthor == null) {
-        ret.add(new Remark(module, file, null, Severity.ERROR, "Class has no author in JavaDoc"));
+        ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "Class has no author in JavaDoc"));
       }
     }
 
     if (fileAuthor != null && !AUTHORS.contains(fileAuthor)) {
-      ret.add(new Remark(module, file, null, Severity.ERROR, "File author unknown: " + fileAuthor));
+      ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "File author unknown: " + fileAuthor));
     }
 
     if (classAuthor != null && !AUTHORS.contains(classAuthor)) {
-      ret.add(new Remark(module, file, null, Severity.ERROR, "Class author unknown: " + classAuthor));
+      ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "Class author unknown: " + classAuthor));
     }
 
     return ret;

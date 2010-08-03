@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.moduleselection;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.runner.MissingModuleException;
@@ -35,6 +36,19 @@ public final class ModuleSelection {
   public static final String MODULE_SELECTION_INITIAL_GRAMMAR = "moduleselector.initialgrammar";
   public static final String MODULE_SELECTION_SIMPIFIER = "moduleselector.simplifier";
   public static final String MODULE_SELECTION_SCHEMA_GENERATOR = "moduleselector.schemagenerator";
+
+  private static Comparator<ModuleName> getComparator() {
+    return new Comparator<ModuleName>() {
+
+      @Override
+      public int compare(final ModuleName o1, final ModuleName o2) {
+        final String s1 = o1.getModuleName();
+        final String s2 = o2.getModuleName();
+        return s1.compareTo(s2);
+      }
+    };
+  }
+
 
   private ModuleSelection() {
   }
@@ -153,50 +167,25 @@ public final class ModuleSelection {
     return list;
   }
 
-  // TODO sviro Refactor the following 3 methods
-
   private static List<Simplifier> lookupSimplifiers() {
     final Lookup lkp = Lookup.getDefault();
     final List<Simplifier> result = new ArrayList<Simplifier>(lkp.lookupAll(Simplifier.class));
-    Collections.sort(result, new Comparator<Simplifier>() {
-
-      @Override
-      public int compare(final Simplifier o1, final Simplifier o2) {
-        final String s1 = o1.getModuleName();
-        final String s2 = o2.getModuleName();
-        return s1.compareTo(s2);
-      }
-    });
+    Collections.sort(result, getComparator());
     return result;
   }
 
   private static List<IGGenerator> lookupIGGenerators() {
     final Lookup lkp = Lookup.getDefault();
     final List<IGGenerator> result = new ArrayList<IGGenerator>(lkp.lookupAll(IGGenerator.class));
-    Collections.sort(result, new Comparator<IGGenerator>() {
-
-      @Override
-      public int compare(final IGGenerator o1, final IGGenerator o2) {
-        final String s1 = o1.getModuleName();
-        final String s2 = o2.getModuleName();
-        return s1.compareTo(s2);
-      }
-    });
+    Collections.sort(result, getComparator());
     return result;
   }
 
   private static List<SchemaGenerator> lookupSchemaGenerators() {
     final Lookup lkp = Lookup.getDefault();
     final List<SchemaGenerator> result = new ArrayList<SchemaGenerator>(lkp.lookupAll(SchemaGenerator.class));
-    Collections.sort(result, new Comparator<SchemaGenerator>() {
-
-      @Override
-      public int compare(final SchemaGenerator o1, final SchemaGenerator o2) {
-        final String s1 = o1.getModuleName();
-        final String s2 = o2.getModuleName();
-        return s1.compareTo(s2);
-      }
-    });
+    Collections.sort(result, getComparator());
     return result;
   }
+
 }

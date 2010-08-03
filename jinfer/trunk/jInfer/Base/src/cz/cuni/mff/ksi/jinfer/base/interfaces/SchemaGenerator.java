@@ -30,14 +30,8 @@ import java.util.List;
  *
  * @author vektor
  */
-public interface SchemaGenerator {
+public interface SchemaGenerator extends ModuleName{
 
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  String getModuleName();
 
   /**
    * Start the schema export process. This method is called by the Runner module

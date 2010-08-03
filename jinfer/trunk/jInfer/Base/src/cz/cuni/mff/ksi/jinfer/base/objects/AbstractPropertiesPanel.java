@@ -21,6 +21,7 @@ import java.util.Properties;
 import javax.swing.JPanel;
 
 /**
+ * Class representing a panel for category in jInfer project properties.
  *
  * @author sviro
  */
@@ -29,8 +30,9 @@ public abstract class AbstractPropertiesPanel extends JPanel {
   protected final Properties properties;
 
   /**
-   * 
-   * @param properties
+   * Default contructor.
+   *
+   * @param properties Properties used to store and load data to panel.
    */
   public AbstractPropertiesPanel(final Properties properties) {
     super();
@@ -38,18 +40,18 @@ public abstract class AbstractPropertiesPanel extends JPanel {
   }
 
   /**
-   * 
+   * method used to store data from panel to properties.
    */
   public abstract void store();
 
   /**
-   * 
+   * method used to load data from properties to panel.
    */
   public abstract  void load();
 
   /**
    * 
-   * @return
+   * @return Properties used to load and store data to panel.
    */
   public Properties getProperties() {
     return properties;

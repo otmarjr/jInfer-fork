@@ -81,7 +81,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     init();
 
     final Dialog dialog = ProjectCustomizer.createCustomizerDialog(categories, componentProvider,
-            null, new PropertiesListener(project, this), null);
+            null, new PropertiesListener(this), null);
 
     dialog.setTitle(ProjectUtils.getInformation(project).getDisplayName());
 

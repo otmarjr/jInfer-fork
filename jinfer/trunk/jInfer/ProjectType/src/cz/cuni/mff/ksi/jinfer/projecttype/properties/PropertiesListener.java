@@ -29,12 +29,10 @@ import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;
  */
 public class PropertiesListener implements ActionListener {
 
-  private final JInferProject project;
   private final JInferCustomizerProvider customizerProvider;
 
-  public PropertiesListener(final JInferProject project, JInferCustomizerProvider customizerProvider) {
+  public PropertiesListener(final JInferCustomizerProvider customizerProvider) {
     this.customizerProvider = customizerProvider;
-    this.project = project;
   }
 
   @Override

@@ -20,31 +20,31 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
 
 /**
- * TODO sviro Comment!
+ * Interface of Properties panel provider for module selection category.
  *
  * @author sviro
  */
 public interface PropertiesPanelProvider {
 
   /**
-   * TODO sviro Comment!
+   * Gets a panel for category.
    * 
-   * @param properties
-   * @return
+   * @param properties Properties used to store and load data to panel.
+   * @return Panel for category.
    */
   AbstractPropertiesPanel getPanel(final Properties properties);
 
   /**
-   * TODO sviro Comment!
+   * Gets a programmatic name of category.
    * 
-   * @return
+   * @return Programmatic name of category.
    */
   String getName();
 
   /**
-   * TODO sviro Comment!
-   * 
-   * @return
+   * Gets display name of category.
+   *
+   * @return Display name of category.
    */
   String getDisplayName();
 }

@@ -28,14 +28,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
  * 
  * @author vektor
  */
-public interface IGGenerator {
-
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  String getModuleName();
+public interface IGGenerator extends ModuleName{
 
   /**
    * Start the IG generation process. This method is called by the Runner module

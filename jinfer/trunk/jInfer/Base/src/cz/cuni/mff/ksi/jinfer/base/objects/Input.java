@@ -53,6 +53,11 @@ public class Input {
     this(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
   }
 
+  /**
+   * Removes files from collection which is not present on disk.
+   *
+   * @param collection Collection to be removed files from.
+   */
   public static void removeNonExistFiles(final Collection<File> collection) {
     for (final Iterator<File> it = collection.iterator(); it.hasNext();) {
       final File file = it.next();
@@ -82,6 +87,12 @@ public class Input {
     return queries;
   }
 
+  /**
+   * Writes this input files to the output stream in a format suitable for loading
+   * into an Input using the load(InputStream) method.
+   *
+   * @param fileOutputStream an output stream.
+   */
   public void store(final FileOutputStream fileOutputStream) {
     final PrintWriter out = new PrintWriter(fileOutputStream);
 
@@ -95,6 +106,12 @@ public class Input {
 
   }
 
+  /**
+   * Writes Files from collection to defined print writer.
+   *
+   * @param collection of files to write.
+   * @param out an print writer.
+   */
   private void writeCollection(final Collection<File> collection, final PrintWriter out) {
     for (final Iterator<File> it = collection.iterator(); it.hasNext();) {
       final File file = it.next();
@@ -106,6 +123,12 @@ public class Input {
     out.println();
   }
 
+  /**
+   * Parse line and adds Files created from parsed file paths to collection.
+   *
+   * @param collection for adding Files from parsed line.
+   * @param line to be parsed.
+   */
   private void readCollection(final Collection<File> collection, final String line) {
     if ("".equals(line)) {
       return;
@@ -117,6 +140,12 @@ public class Input {
     }
   }
 
+  /**
+   * Reads an Input from the input byte stream.
+   *
+   * @param inputStream the input stream.
+   * @throws IOException if an error occurred when reading from the input stream.
+   */
   public void load(final InputStream inputStream) throws IOException {
     final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 

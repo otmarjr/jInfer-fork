@@ -14,23 +14,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.Properties;
 import org.netbeans.api.project.Project;
 
 /**
- * TODO developer: Comment!
+ * Class for determining which jInfer Project actually runs inference.
+ *
  * @author sviro
  */
 public final class RunningProject {
 
   private static Project project = null;
 
-  private RunningProject() {}
+  private RunningProject() {
+  }
 
-  public static boolean setActiveProject(final Project project) {
+  /**
+   * Sets project as active and return true if there is no active project, otherwise return false.
+   *
+   * @param project to be set as active.
+   * @return true if project is set to active, otherwise returns false.
+   */
+  public synchronized static boolean setActiveProject(final Project project) {
     if (!isActiveProject()) {
       RunningProject.project = project;
       return true;
@@ -38,20 +45,37 @@ public final class RunningProject {
     return false;
   }
 
+  /**
+   * Removes active project.
+   *
+   */
   public static void removeActiveProject() {
-    if (RunningProject.project != null) {
-      RunningProject.project = null;
-    }
+    RunningProject.project = null;
   }
 
+  /**
+   * Gets active project.
+   *
+   * @return Active project.
+   */
   public static Project getActiveProject() {
     return project;
   }
 
+  /**
+   * Returns whether active project is set or not.
+   *
+   * @return true if active project is set, otherwise returns false.
+   */
   public static boolean isActiveProject() {
     return project != null;
   }
 
+  /**
+   * Gets Properties of active project.
+   *
+   * @return propeties of active project.
+   */
   public static Properties getActiveProjectProps() {
     if (isActiveProject()) {
       return project.getLookup().lookup(Properties.class);
@@ -59,6 +83,4 @@ public final class RunningProject {
 
     return null;
   }
-  
-
 }

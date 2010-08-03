@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.runner;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IOutputHandler;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
@@ -161,7 +161,7 @@ public class Runner {
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
     ioResult.getOut().println(schema);
 
-    RunningProject.getActiveProject().getLookup().lookup(IOutputHandler.class)
+    RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class)
             .addOutput("generated-schema", getCommentedSchema(schema), extension);
 
     RunningProject.removeActiveProject();

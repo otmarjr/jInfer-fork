@@ -30,14 +30,8 @@ import java.util.List;
  * 
  * @author vektor
  */
-public interface Simplifier {
+public interface Simplifier extends ModuleName{
 
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  String getModuleName();
 
   /**
    * Start the grammar simplification process. This method is called by the

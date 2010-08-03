@@ -58,7 +58,7 @@ public class JInferProject implements Project {
                 state,
                 loadProperties(),
                 loadInput(),
-                new OutputHandler(this),
+                new OutputHandlerImpl(this),
                 new JInferCustomizerProvider(this),
                 new JInferProjectInformation(this),
                 new JInferLogicalView(this),
@@ -72,6 +72,7 @@ public class JInferProject implements Project {
 
   /**
    * Get FileObject of output folder. If not exist and create is true, then it's created.
+   * 
    * @param create If is folder created when it not exist.
    * @return FileObject of output folder.
    */

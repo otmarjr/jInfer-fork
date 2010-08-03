@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vektor
+ *  Copyright (C) 2010 sviro
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,21 +18,16 @@
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 /**
- * TODO sviro Comment!
- * 
- * @author vektor
+ *
+ * @author sviro
  */
-public interface IOutputHandler {
-
-  // TODO sviro Why the prefix "I"? Rename
+public interface ModuleName {
 
   /**
-   * TODO sviro Comment!
-   * 
-   * @param fileName
-   * @param data
-   * @param extension
+   * Returns a user friendly yet unique name of the module.
+   *
+   * @return Unique module name.
    */
-  void addOutput(final String fileName, final String data, final String extension);
+  String getModuleName();
 
 }

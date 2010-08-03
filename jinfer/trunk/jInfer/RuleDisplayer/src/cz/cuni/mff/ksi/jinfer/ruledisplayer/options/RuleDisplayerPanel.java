@@ -18,9 +18,9 @@ package cz.cuni.mff.ksi.jinfer.ruledisplayer.options;
 
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.Utils;
 import java.awt.Color;
-import java.util.prefs.Preferences;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
+import org.openide.util.NbPreferences;
 
 /**
  * @author vektor
@@ -456,12 +456,12 @@ public final class RuleDisplayerPanel extends JPanel {
       panelAlternation.setBackground(c);
     }
   }//GEN-LAST:event_panelAlternationMouseClicked
-  // TODO sviro Change to NBPreferences
+
   public void load() {
-    maxPanels.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.panels", 8));
-    nestingLevel.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25));
-    maxRules.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.rules", 50));
-    margin.setValue(Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("margin", 2));
+    maxPanels.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("max.panels", 8));
+    nestingLevel.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("nesting.level", 25));
+    maxRules.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("max.rules", 50));
+    margin.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("margin", 2));
 
     panelElement.setBackground(Utils.getColorElement());
     panelAttribute.setBackground(Utils.getColorAttribute());
@@ -469,18 +469,18 @@ public final class RuleDisplayerPanel extends JPanel {
     panelConcatenation.setBackground(Utils.getColorConcatenation());
     panelAlternation.setBackground(Utils.getColorAlternation());
   }
-  // TODO sviro Change to NBPreferences
-  public void store() {
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("max.panels", ((Integer) maxPanels.getValue()).intValue());
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("nesting.level", ((Integer) nestingLevel.getValue()).intValue());
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("max.rules", ((Integer) maxRules.getValue()).intValue());
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).putInt("margin", ((Integer) margin.getValue()).intValue());
 
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).put("element.color", String.valueOf(panelElement.getBackground().getRGB()));
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).put("attribute.color", String.valueOf(panelAttribute.getBackground().getRGB()));
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).put("simple.data.color", String.valueOf(panelSimpleData.getBackground().getRGB()));
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).put("concatenation.color", String.valueOf(panelConcatenation.getBackground().getRGB()));
-    Preferences.userNodeForPackage(RuleDisplayerPanel.class).put("alternation.color", String.valueOf(panelAlternation.getBackground().getRGB()));
+  public void store() {
+    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("max.panels", ((Integer) maxPanels.getValue()).intValue());
+    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("nesting.level", ((Integer) nestingLevel.getValue()).intValue());
+    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("max.rules", ((Integer) maxRules.getValue()).intValue());
+    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("margin", ((Integer) margin.getValue()).intValue());
+
+    NbPreferences.forModule(RuleDisplayerPanel.class).put("element.color", String.valueOf(panelElement.getBackground().getRGB()));
+    NbPreferences.forModule(RuleDisplayerPanel.class).put("attribute.color", String.valueOf(panelAttribute.getBackground().getRGB()));
+    NbPreferences.forModule(RuleDisplayerPanel.class).put("simple.data.color", String.valueOf(panelSimpleData.getBackground().getRGB()));
+    NbPreferences.forModule(RuleDisplayerPanel.class).put("concatenation.color", String.valueOf(panelConcatenation.getBackground().getRGB()));
+    NbPreferences.forModule(RuleDisplayerPanel.class).put("alternation.color", String.valueOf(panelAlternation.getBackground().getRGB()));
   }
 
   public boolean valid() {

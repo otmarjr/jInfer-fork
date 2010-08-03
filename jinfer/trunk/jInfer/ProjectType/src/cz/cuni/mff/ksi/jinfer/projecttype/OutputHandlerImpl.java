@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IOutputHandler;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,11 +29,11 @@ import org.openide.util.Exceptions;
  * Handler for adding output files into jInfer project output folder.
  * @author sviro
  */
-public class OutputHandler implements IOutputHandler {
+public class OutputHandlerImpl implements OutputHandler {
 
   private final JInferProject project;
 
-  public OutputHandler(final JInferProject project) {
+  public OutputHandlerImpl(final JInferProject project) {
     this.project = project;
   }
 

@@ -109,6 +109,7 @@ public class Step<T> {
     sb.append(this.useCount);
     sb.append("} to ");
     sb.append(this.destination.getName());
+    sb.append("\n");
     return sb.toString();
   }
 }

@@ -70,7 +70,7 @@ public class KHContext<T> {
     final Iterator<Step<T>> anotherStepsIterator= anotherSteps.iterator();
     final Iterator<Step<T>> myStepsIterator= this.steps.iterator();
     boolean equivalent= true;
-    while ((!equivalent)&&(anotherStepsIterator.hasNext())) {
+    while ((equivalent)&&(anotherStepsIterator.hasNext())) {
       final Step<T> myStep= myStepsIterator.next();
       final Step<T> anotherStep= anotherStepsIterator.next();
       if (!myStep.getAcceptSymbol().equals(

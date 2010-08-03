@@ -21,7 +21,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl;
  *
  * @author anti
  */
-public class State<T> {
+public class State<T> implements Comparable<State<T>> {
   private Integer finalCount;
   private Integer name;
   private Automaton<T> parentAutomaton;
@@ -91,5 +91,16 @@ public class State<T> {
     sb.append(this.finalCount);
     sb.append("]");
     return sb.toString();
+  }
+
+  @Override
+  public int compareTo(State<T> o) {
+    if (o.getName() > this.name) {
+      return -1;
+    } else if (o.getName() < this.name) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }

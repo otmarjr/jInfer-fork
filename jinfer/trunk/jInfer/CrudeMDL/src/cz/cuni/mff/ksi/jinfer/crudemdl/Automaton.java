@@ -217,8 +217,8 @@ public class Automaton<T> {
         }
       }
       if (found) {
-        LOG.debug("Merging states: " + equivalentContexts.getFirst().getStates().getLast().getName() + " " + equivalentContexts.getSecond().getStates().getLast().getName() + "\n");
-        this.mergeStates(equivalentContexts.getFirst().getStates().getLast(), equivalentContexts.getSecond().getStates().getLast());
+        LOG.error("Merging states: " + equivalentContexts.getFirst().getStates().getFirst().getName() + " " + equivalentContexts.getSecond().getStates().getFirst().getName() + "\n");
+        this.mergeStates(equivalentContexts.getFirst().getStates().getFirst(), equivalentContexts.getSecond().getStates().getFirst());
         searchAgain= true;
       } else {
         searchAgain= false;

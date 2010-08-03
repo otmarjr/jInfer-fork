@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 /**
@@ -40,7 +41,7 @@ public class Automaton<T> {
 
   Automaton() {
     this.newStateName= 1;
-    this.delta= new HashMap<State<T>, Set<Step<T>>>();
+    this.delta= new TreeMap<State<T>, Set<Step<T>>>();
     this.reverseDelta= new HashMap<State<T>, Set<Step<T>>>();
 
     this.initialState= this.createNewState();
@@ -64,7 +65,7 @@ public class Automaton<T> {
     final State<T> newState= new State<T>(0, this.newStateName, this);
     this.newStateName++;
     this.delta.put(newState, new HashSet<Step<T>>());
-    this.reverseDelta.put(initialState, new HashSet<Step<T>>());
+    this.reverseDelta.put(newState, new HashSet<Step<T>>());
     return newState;
   }
 
@@ -119,6 +120,9 @@ public class Automaton<T> {
     }
 
     for (State<T> mergedState : mergedStates) {
+      if (mainState.equals(mergedState)) {
+        continue;
+      }
       /* insteps */
       final Set<Step<T>> mergedStateInSteps= this.reverseDelta.get(mergedState);
       for (Step<T> mergedStateInStep : mergedStateInSteps) {
@@ -174,7 +178,7 @@ public class Automaton<T> {
   private Pair<KHContext<T>, KHContext<T>> getEquivalentKHContexts(final List<KHContext<T>> kHContextsA, final List<KHContext<T>> kHContextsB) {
     for (KHContext<T> contextA : kHContextsA) {
       for (KHContext<T> contextB : kHContextsB) {
-        if (contextA.equals(contextB)) {
+        if (contextA.isEquivalent(contextB)) {
           return new Pair<KHContext<T>, KHContext<T>>(contextA, contextB);
         }
       }
@@ -191,19 +195,29 @@ public class Automaton<T> {
       while ((!found)&&(statesIterator.hasNext())) {
         final State<T> toTestState= statesIterator.next();
         final List<KHContext<T>> kHContexts= this.find21Contexts(toTestState);
-
+        if (kHContexts.isEmpty()) {
+          continue;
+        }
+        
         final Iterator<State<T>> anotherIterator= this.delta.keySet().iterator();
         while ((!found)&&(anotherIterator.hasNext())) {
           final State<T> anotherState= anotherIterator.next();
           final List<KHContext<T>> anotherKHContexts= this.find21Contexts(anotherState);
+          if (anotherKHContexts.isEmpty()) {
+            continue;
+          }
 
           equivalentContexts= this.getEquivalentKHContexts(kHContexts, anotherKHContexts);
-          if (equivalentContexts != null) {
+          if ((equivalentContexts != null)&&
+                  (!toTestState.equals(anotherState))
+                  ) {
+            LOG.error("Equivalent states: " + toTestState.getName() + " " + anotherState.getName() + "\n");
             found= true;
           }
         }
       }
       if (found) {
+        LOG.debug("Merging states: " + equivalentContexts.getFirst().getStates().getLast().getName() + " " + equivalentContexts.getSecond().getStates().getLast().getName() + "\n");
         this.mergeStates(equivalentContexts.getFirst().getStates().getLast(), equivalentContexts.getSecond().getStates().getLast());
         searchAgain= true;
       } else {

@@ -415,11 +415,11 @@ class Automaton<T> {
         
         Pair<State<T>, State<T>> additionalMerge= this.hasIntersection(testStateKHcontexts, anotherStateKHcontexts);
         List<State<T>> removedStates= new LinkedList<State<T>>();
-        if (additionalMerge.getFirst().equals(additionalMerge.getSecond())) {
-          continue;
-        }
         if (additionalMerge != null)
         {
+          if (additionalMerge.getFirst().equals(additionalMerge.getSecond())) {
+            continue;
+          }
           LOG.error("Equals:" + toTestState.getName() + " " + anotherState.getName());
           LOG.error("additionaly:" + additionalMerge.getFirst().getName() + " " + additionalMerge.getSecond().getName());
           removedStates.addAll( this.mergeStates(additionalMerge.getFirst(), additionalMerge.getSecond()) );
@@ -678,6 +678,7 @@ public class SimplifierImpl implements Simplifier {
       LOG.fatal(automaton);
 
       // convert to regex
+      Automaton<Regexp<AbstractNode>> regexpAutomaton= new Automaton<Regexp<AbstractNode>>();
       
       // add to list
     }

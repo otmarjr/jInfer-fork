@@ -91,11 +91,22 @@ public class Runner {
 
       @Override
       public void run() {
+        // testovanie logov
+        // TODO rio remove
+        //LOG.info("info");
+        //LOG.warn("warn");
+        //LOG.error("error");
+        //LOG.fatal("fatal");
+
         try {
           igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), iggCallback);
         }
         catch (final InterruptedException e) {
           interrupted();
+        }
+        catch (final RuntimeException e) {
+          unexpected();
+          throw e;
         }
       }
     }, "Retrieving IG");
@@ -115,6 +126,10 @@ public class Runner {
         catch (final InterruptedException e) {
           interrupted();
         }
+        catch (final RuntimeException e) {
+          unexpected();
+          throw e;
+        }
       }
     }, "Inferring the schema");
   }
@@ -132,6 +147,10 @@ public class Runner {
         }
         catch (final InterruptedException e) {
           interrupted();
+        }
+        catch (final RuntimeException e) {
+          unexpected();
+          throw e;
         }
       }
     }, "Generating result schema");
@@ -166,6 +185,11 @@ public class Runner {
   private static void interrupted() {
     // TODO vektor Perhaps a message box?
     LOG.error("User interrupted the inference.");
+    RunningProject.removeActiveProject();
+  }
+
+  private static void unexpected() {
+    LOG.error("Inference interrupted due to an unexpected error.");
     RunningProject.removeActiveProject();
   }
 

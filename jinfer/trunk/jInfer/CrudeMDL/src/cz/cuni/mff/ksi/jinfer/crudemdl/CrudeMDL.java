@@ -56,7 +56,7 @@ public class CrudeMDL {
         stack.addAll(reg.getChildren());
       } else if (RegexpType.TOKEN.equals(reg.getType())) {
         charsCount++;
-        encounteredElements.add(((Element) reg.getChildren()).getName());
+      //  encounteredElements.add(((Element) reg.getChildren()).getName());
       }
     }
     return charsCount * Math.log(encounteredElements.size());

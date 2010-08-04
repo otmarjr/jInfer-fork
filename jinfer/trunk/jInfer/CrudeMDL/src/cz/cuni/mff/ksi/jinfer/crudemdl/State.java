@@ -17,6 +17,8 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+
 /**
  *
  * @author anti
@@ -64,7 +66,7 @@ public class State<T> implements Comparable<State<T>> {
   /**
    * @param name the name to set
    */
-  public void setName(Integer name) {
+  public void setName(final Integer name) {
     this.name = name;
   }
 
@@ -78,14 +80,14 @@ public class State<T> implements Comparable<State<T>> {
   /**
    * @param parentAutomaton the myAutomaton to set
    */
-  public void setParentAutomaton(Automaton<T> parentAutomaton) {
+  public void setParentAutomaton(final Automaton<T> parentAutomaton) {
     this.parentAutomaton = parentAutomaton;
   }
 
   @Override
   public String toString() {
   //  return super.toString();
-    StringBuilder sb = new StringBuilder("[");
+    final StringBuilder sb = new StringBuilder("[");
     sb.append(this.getName());
     sb.append("|");
     sb.append(this.finalCount);
@@ -94,7 +96,7 @@ public class State<T> implements Comparable<State<T>> {
   }
 
   @Override
-  public int compareTo(State<T> o) {
+  public int compareTo(final State<T> o) {
     if (o.getName() > this.name) {
       return -1;
     } else if (o.getName() < this.name) {

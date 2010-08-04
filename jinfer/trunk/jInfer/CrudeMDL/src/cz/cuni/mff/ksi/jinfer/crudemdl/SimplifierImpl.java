@@ -65,7 +65,7 @@ public class SimplifierImpl implements Simplifier {
     clusterer.addAll(initialGrammar);
     final List<Cluster<AbstractNode>> clusters = clusterer.cluster();
 
-    List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
+    final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
     for (Cluster<AbstractNode> cluster : clusters) {
       if (!cluster.getRepresentant().isElement()) {
@@ -77,16 +77,14 @@ public class SimplifierImpl implements Simplifier {
       final Set<AbstractNode> elementInstances= cluster.getMembers();
 
       final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>();
-      SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "SIMPLE REPRE", new HashMap<String, Object>(), "", new ArrayList<String>());
+      final SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "PCDATA", new HashMap<String, Object>(), "", new ArrayList<String>());
 
       for (AbstractNode instance : elementInstances) {
-        Element element = (Element) instance;
-        Regexp<AbstractNode> rightSide= element.getSubnodes();
-        List<AbstractNode> rightSideTokens= rightSide.getTokens();
+        final Element element = (Element) instance;
+        final Regexp<AbstractNode> rightSide= element.getSubnodes();
+        final List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
-        State<AbstractNode> x = automaton.getInitialState();
-
-        List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
+        final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
         for (AbstractNode token : rightSideTokens) {
           if (token.isSimpleData()) {
             symbolString.add(universalSimpleData);

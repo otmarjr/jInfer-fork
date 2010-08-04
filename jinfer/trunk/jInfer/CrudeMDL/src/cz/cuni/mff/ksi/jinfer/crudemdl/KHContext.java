@@ -79,8 +79,14 @@ public class KHContext<T> {
         equivalent= false;
       }
     }
+// TODO 2-context only
+    if (another.getStates().getLast().equals(this.getStates().getLast())) {
+      equivalent= false;
+    }
     return equivalent;
   }
+
+
 
   /**
    * @return the states

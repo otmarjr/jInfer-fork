@@ -76,15 +76,15 @@ public class SimplifierImpl implements Simplifier {
       // construct PTA
       final Set<AbstractNode> elementInstances= cluster.getMembers();
 
-      final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>();
+      final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
       final SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "PCDATA", new HashMap<String, Object>(), "", new ArrayList<String>());
 
       for (AbstractNode instance : elementInstances) {
-        Element element = (Element) instance;
-        Regexp<AbstractNode> rightSide= element.getSubnodes();
-        List<AbstractNode> rightSideTokens= rightSide.getTokens();
+        final Element element = (Element) instance;
+        final Regexp<AbstractNode> rightSide= element.getSubnodes();
+        final List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
-        List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
+        final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
         for (AbstractNode token : rightSideTokens) {
           if (token.isSimpleData()) {
             symbolString.add(universalSimpleData);
@@ -103,12 +103,13 @@ public class SimplifierImpl implements Simplifier {
       LOG.fatal(automaton);
 
       // convert to regex
-      RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);
+      final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);
       LOG.fatal(regexpAutomaton);
       regexpAutomaton.makeRegexpForm();
       LOG.fatal(">>>>>>> After regexp >>>>\n");
       LOG.fatal(regexpAutomaton);
-
+      System.out.println(regexpAutomaton.toString());
+      LOG.fatal(null);
       // add to list
     }
 //    callback.finished( new ArrayList<AbstractNode>(elements.values()) );

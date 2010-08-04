@@ -212,7 +212,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
 
   }
 
-  private void collapseStateOutSteps(Step<Regexp<AbstractNode>> state) {
+  private void collapseStateOutSteps(final State<Regexp<AbstractNode>> state) {
     final List<Step<Regexp<AbstractNode>>> outSteps= new LinkedList<Step<Regexp<AbstractNode>>>();
 
     for (Step<Regexp<AbstractNode>> step : this.delta.get(state)) {

@@ -20,7 +20,6 @@ package cz.cuni.mff.ksi.jinfer.welcome;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import org.netbeans.api.project.ui.OpenProjects;
-import org.openide.windows.TopComponent;
 
 /**
  *
@@ -35,7 +34,7 @@ public class MainProjectListener implements PropertyChangeListener{
   }
 
   @Override
-  public void propertyChange(PropertyChangeEvent evt) {
+  public void propertyChange(final PropertyChangeEvent evt) {
    if (evt.getPropertyName().equals(OpenProjects.PROPERTY_MAIN_PROJECT)) {
      if (OpenProjects.getDefault().getMainProject() != null) {
       topComponent.getStep3runProject().setEnabled(true);

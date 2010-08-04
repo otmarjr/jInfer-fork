@@ -80,11 +80,11 @@ public class SimplifierImpl implements Simplifier {
       final SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "PCDATA", new HashMap<String, Object>(), "", new ArrayList<String>());
 
       for (AbstractNode instance : elementInstances) {
-        final Element element = (Element) instance;
-        final Regexp<AbstractNode> rightSide= element.getSubnodes();
-        final List<AbstractNode> rightSideTokens= rightSide.getTokens();
+        Element element = (Element) instance;
+        Regexp<AbstractNode> rightSide= element.getSubnodes();
+        List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
-        final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
+        List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
         for (AbstractNode token : rightSideTokens) {
           if (token.isSimpleData()) {
             symbolString.add(universalSimpleData);

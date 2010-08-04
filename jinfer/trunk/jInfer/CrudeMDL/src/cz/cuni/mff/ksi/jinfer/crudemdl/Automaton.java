@@ -61,7 +61,7 @@ public class Automaton<T> {
   }
 
   private Step<T> getStepOnSymbolFromState(final State<T> state, final T symbol) {
-    final Set<Step<T>> steps= this.getDelta().get(state);
+    final Set<Step<T>> steps= this.delta.get(state);
     for (Step<T> step : steps) {
       if (step.getAcceptSymbol().equals(symbol)) {
         return step;

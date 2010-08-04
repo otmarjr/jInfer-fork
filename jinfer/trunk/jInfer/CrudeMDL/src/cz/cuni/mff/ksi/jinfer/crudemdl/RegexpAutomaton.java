@@ -119,7 +119,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     return weight;
   }
 
-  private Step<Regexp<AbstractNode>> collapseStateParallelSteps(State<Regexp<AbstractNode>> state) {
+  private Step<Regexp<AbstractNode>> collapseStateParallelSteps(final State<Regexp<AbstractNode>> state) {
     final Set<Step<Regexp<AbstractNode>>> loopSteps= new HashSet<Step<Regexp<AbstractNode>>>();
     final Set<Step<Regexp<AbstractNode>>> inSteps= new HashSet<Step<Regexp<AbstractNode>>>();
     final Set<Step<Regexp<AbstractNode>>> outSteps= new HashSet<Step<Regexp<AbstractNode>>>();
@@ -142,24 +142,24 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
 
 
     /* loops */
-    List<Regexp<AbstractNode>> loopChildren= new ArrayList<Regexp<AbstractNode>>();
+    final List<Regexp<AbstractNode>> loopChildren= new ArrayList<Regexp<AbstractNode>>();
     for (Step<Regexp<AbstractNode>> loopStep : loopSteps) {
       loopChildren.add(loopStep.getAcceptSymbol());
     }
-    Regexp<AbstractNode> loopRegexpAlt= Regexp.<AbstractNode>getAlternation(loopChildren);
-    List<Regexp<AbstractNode>> kleeneChildren= new ArrayList<Regexp<AbstractNode>>();
+    final Regexp<AbstractNode> loopRegexpAlt= Regexp.<AbstractNode>getAlternation(loopChildren);
+    final List<Regexp<AbstractNode>> kleeneChildren= new ArrayList<Regexp<AbstractNode>>();
     kleeneChildren.add(loopRegexpAlt);
-    Regexp<AbstractNode> loopRegexpKleene= Regexp.<AbstractNode>getKleene(kleeneChildren);
+    final Regexp<AbstractNode> loopRegexpKleene= Regexp.<AbstractNode>getKleene(kleeneChildren);
     for (Step<Regexp<AbstractNode>> loopStep : loopSteps) {
       this.delta.get(state).remove(loopStep);
       this.reverseDelta.get(state).remove(loopStep);
     }
-    Step<Regexp<AbstractNode>> newLoopStep= new Step<Regexp<AbstractNode>>(loopRegexpKleene, state, state, 1);
+    final Step<Regexp<AbstractNode>> newLoopStep= new Step<Regexp<AbstractNode>>(loopRegexpKleene, state, state, 1);
 //    this.delta.get(state).add(newLoopStep);
 //    this.reverseDelta.get(state).add(newLoopStep);
 
     /* inSteps */
-    Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> inBuckets= new TreeMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
+    final Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> inBuckets= new TreeMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
     for (Step<Regexp<AbstractNode>> inStep : inSteps) {
       if (!inBuckets.containsKey(inStep.getSource())) {
         inBuckets.put(inStep.getSource(), new LinkedList<Step<Regexp<AbstractNode>>>());
@@ -174,14 +174,14 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
         this.delta.get(inBucketKey).remove(inBucketStep);
         this.reverseDelta.get(state).remove(inBucketStep);
       }
-      Regexp<AbstractNode> newInRegexp= Regexp.<AbstractNode>getAlternation(inStepRegexps);
-      Step<Regexp<AbstractNode>> newInStep= new Step<Regexp<AbstractNode>>(newInRegexp, inBucketKey, state, 1);
+      final Regexp<AbstractNode> newInRegexp= Regexp.<AbstractNode>getAlternation(inStepRegexps);
+      final Step<Regexp<AbstractNode>> newInStep= new Step<Regexp<AbstractNode>>(newInRegexp, inBucketKey, state, 1);
       this.delta.get(inBucketKey).add(newInStep);
       this.reverseDelta.get(state).add(newInStep);
     }
 
     /* outSteps */
-    Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> outBuckets= new TreeMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
+    final Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> outBuckets= new TreeMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
     for (Step<Regexp<AbstractNode>> outStep : outSteps) {
       if (!outBuckets.containsKey(outStep.getSource())) {
         outBuckets.put(outStep.getDestination(), new LinkedList<Step<Regexp<AbstractNode>>>());
@@ -196,8 +196,8 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
         this.reverseDelta.get(outBucketKey).remove(outBucketStep);
         this.delta.get(state).remove(outBucketStep);
       }
-      Regexp<AbstractNode> newOutRegexp= Regexp.<AbstractNode>getAlternation(outStepRegexps);
-      Step<Regexp<AbstractNode>> newOutStep= new Step<Regexp<AbstractNode>>(newOutRegexp, state, outBucketKey, 1);
+      final Regexp<AbstractNode> newOutRegexp= Regexp.<AbstractNode>getAlternation(outStepRegexps);
+      final Step<Regexp<AbstractNode>> newOutStep= new Step<Regexp<AbstractNode>>(newOutRegexp, state, outBucketKey, 1);
       this.reverseDelta.get(outBucketKey).add(newOutStep);
       this.delta.get(state).add(newOutStep);
     }
@@ -210,7 +210,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
       int minWeight= Integer.MAX_VALUE;
       State<Regexp<AbstractNode>> minState= null;
       for (State<Regexp<AbstractNode>> state : this.delta.keySet()) {
-        int stateWeight= this.getStateWeight(state);
+        final int stateWeight= this.getStateWeight(state);
         if (stateWeight < minWeight) {
           minWeight= stateWeight;
           minState= state;
@@ -221,10 +221,28 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
       for (Step<Regexp<AbstractNode>> inStep : this.reverseDelta.get(minState)) {
         for (Step<Regexp<AbstractNode>> outStep : this.delta.get(minState)) {
           List<Regexp<AbstractNode>> newRegexpChildren= new LinkedList<Regexp<AbstractNode>>();
-          
+          newRegexpChildren.add(inStep.getAcceptSymbol());
+          newRegexpChildren.add(loopStep.getAcceptSymbol());
+          newRegexpChildren.add(outStep.getAcceptSymbol());
+
+          Regexp<AbstractNode> newRegexp= Regexp.<AbstractNode>getConcatenation(newRegexpChildren);
+          Step<Regexp<AbstractNode>> newStep=
+                  new Step<Regexp<AbstractNode>>(newRegexp, inStep.getSource(), outStep.getDestination(), 1);
+
+          this.delta.get(inStep.getSource()).add(newStep);
+          this.reverseDelta.get(outStep.getDestination()).add(newStep);
         }
       }
-      
-    }
+
+      for (Step<Regexp<AbstractNode>> inStep : this.reverseDelta.get(minState)) {
+        this.delta.get(inStep.getSource()).remove(inStep);
+      }
+      this.reverseDelta.remove(minState);
+
+      for (Step<Regexp<AbstractNode>> outStep : this.delta.get(minState)) {
+        this.reverseDelta.get(outStep.getDestination()).remove(outStep);
+      }
+      this.delta.remove(minState);
+   }
   }
 }

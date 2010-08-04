@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vitasek
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
@@ -24,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Common logic for cluster processing.
  *
- * @author vitasek
+ * @author vektor
  */
 public abstract class AbstractCPImpl implements ClusterProcessor {
 

@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialigg.interfaces;
+package cz.cuni.mff.ksi.jinfer.basicigg.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.io.InputStream;

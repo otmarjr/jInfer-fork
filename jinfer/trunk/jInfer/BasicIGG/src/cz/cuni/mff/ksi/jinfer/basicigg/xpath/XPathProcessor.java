@@ -14,11 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialigg.xpath;
+package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.trivialigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.InputStream;

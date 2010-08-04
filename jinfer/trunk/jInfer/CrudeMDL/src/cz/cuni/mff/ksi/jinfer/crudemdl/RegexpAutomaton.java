@@ -243,6 +243,6 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
         this.reverseDelta.get(outStep.getDestination()).remove(outStep);
       }
       this.delta.remove(minState);
-   }
+    }
   }
 }

@@ -103,8 +103,11 @@ public class SimplifierImpl implements Simplifier {
       LOG.fatal(automaton);
 
       // convert to regex
-    //  Automaton<Regexp<AbstractNode>> regexpAutomaton= new Automaton<Regexp<AbstractNode>>();
-   //   regexpAutomaton.constructFrom(automaton);
+      RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);
+      LOG.fatal(regexpAutomaton);
+      regexpAutomaton.makeRegexpForm();
+      LOG.fatal(">>>>>>> After regexp >>>>\n");
+      LOG.fatal(regexpAutomaton);
 
       // add to list
     }

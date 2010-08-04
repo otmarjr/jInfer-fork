@@ -70,6 +70,10 @@ public class Regexp<T> {
     return new Regexp<T>(null, children, RegexpType.ALTERNATION);
   }
 
+  public static <T> Regexp<T> getKleene(final List<Regexp<T>> children) {
+    return new Regexp<T>(null, children, RegexpType.KLEENE);
+  }
+
   public void setContent(final T content) {
     this.content = content;
   }

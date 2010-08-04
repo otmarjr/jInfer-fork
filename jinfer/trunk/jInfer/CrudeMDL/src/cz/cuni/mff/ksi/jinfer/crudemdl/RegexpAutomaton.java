@@ -37,7 +37,8 @@ import org.apache.log4j.Logger;
 public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
   private static final Logger LOG = Logger.getLogger(RegexpAutomaton.class);
   private State<Regexp<AbstractNode>> superFinalState;
-
+  private Regexp<AbstractNode> regexp= null;
+  
   public RegexpAutomaton(final Automaton<AbstractNode> anotherAutomaton) {
     super(false);
     this.newStateName= anotherAutomaton.getNewStateName();
@@ -94,6 +95,9 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     this.superFinalState= this.createNewState();
 
     for (State<Regexp<AbstractNode>> state : this.delta.keySet()) {
+      if (state.equals(this.superFinalState)) {
+        continue;
+      }
       if (state.getFinalCount() > 0) {
         final Step<Regexp<AbstractNode>> newStep= new Step<Regexp<AbstractNode>>(
                 Regexp.<AbstractNode>getLambda(), state, this.superFinalState, 1);
@@ -114,9 +118,9 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     }
 
     for (Step<Regexp<AbstractNode>> step : this.delta.get(state)) {
-      if (!step.getDestination().equals(state)) { // To prevent twice counting the loops
+     // if (!step.getDestination().equals(state)) { // To prevent twice counting the loops
         weight+= this.getRegexpWeight(step.getAcceptSymbol());
-      }
+     // }
     }
     return weight;
   }
@@ -263,6 +267,15 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     return newLoopStep;
   }
 
+  private Step<Regexp<AbstractNode>> collapseStateParallelStepsOnInitial() {
+    final State<Regexp<AbstractNode>> state= this.initialState;
+    final Step<Regexp<AbstractNode>> newLoopStep= this.collapseStateLoops(state);
+
+//    this.collapseStateInSteps(state);
+    this.collapseStateOutSteps(state);
+    return newLoopStep;
+  }
+
   private void regexRemoveState(State<Regexp<AbstractNode>> state, Step<Regexp<AbstractNode>> loopStep) {
     final List<Step<Regexp<AbstractNode>>> inSteps= new LinkedList<Step<Regexp<AbstractNode>>>();
 
@@ -308,6 +321,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
   public void makeRegexpForm() {
     this.createSuperFinalState();
     while (this.delta.keySet().size() > 2) {
+      LOG.error(this);
       int minWeight= Integer.MAX_VALUE;
       State<Regexp<AbstractNode>> minState= null;
       for (State<Regexp<AbstractNode>> state : this.delta.keySet()) {
@@ -324,5 +338,27 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
       Step<Regexp<AbstractNode>> loopStep= this.collapseStateParallelSteps(minState);
       this.regexRemoveState(minState, loopStep);
     }
+    Step<Regexp<AbstractNode>> loopStep= this.collapseStateParallelStepsOnInitial();
+    List<Regexp<AbstractNode>> regexpChildren= new LinkedList<Regexp<AbstractNode>>();
+    if (loopStep != null) {
+      regexpChildren.add(loopStep.getAcceptSymbol());
+      for (Step<Regexp<AbstractNode>> outStep : this.delta.get(this.initialState)) {
+        regexpChildren.add(outStep.getAcceptSymbol());
+      }
+      assert (regexpChildren.size() == 2);
+      this.regexp= Regexp.<AbstractNode>getConcatenation(regexpChildren);
+    } else {
+      assert (this.delta.get(this.initialState).size() == 1);
+      for (Step<Regexp<AbstractNode>> outStep : this.delta.get(this.initialState)) {
+        this.regexp= outStep.getAcceptSymbol();
+      }
+    }
+  }
+
+  /**
+   * @return the regexp
+   */
+  public Regexp<AbstractNode> getRegexp() {
+    return regexp;
   }
 }

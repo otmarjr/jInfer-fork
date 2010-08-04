@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -99,20 +100,29 @@ public class SimplifierImpl implements Simplifier {
       
       // simplify
       automaton.make21context();
-      LOG.fatal("LAKHGFKJLHGKLAHLKG\n");
+      LOG.fatal(">>> After 2-context \n");
       LOG.fatal(automaton);
 
       // convert to regex
       final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);
+      LOG.fatal(">>> After regexpautomaton created \n");
       LOG.fatal(regexpAutomaton);
       regexpAutomaton.makeRegexpForm();
-      LOG.fatal(">>>>>>> After regexp >>>>\n");
+      LOG.fatal(">>> After regexp automaton conversion \n");
       LOG.fatal(regexpAutomaton);
-      System.out.println(regexpAutomaton.toString());
-      LOG.fatal(null);
+      LOG.fatal(">>> And the regexp is:");
+      LOG.fatal(regexpAutomaton.getRegexp());
+
       // add to list
+      finalGrammar.add(
+        new Element(
+          cluster.getRepresentant().getContext(),
+          cluster.getRepresentant().getName(),
+          cluster.getRepresentant().getAttributes(),
+          regexpAutomaton.getRegexp()
+        )
+      );
     }
-//    callback.finished( new ArrayList<AbstractNode>(elements.values()) );
-    callback.finished( new ArrayList<AbstractNode>() );
+    callback.finished( finalGrammar );
   }
 }

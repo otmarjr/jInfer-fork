@@ -3,6 +3,7 @@ AutoUpdate-Show-In-Client: false
 OpenIDE-Module: cz.cuni.mff.ksi.jinfer.welcome/1
 OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/welcome/layer.xml
+OpenIDE-Module-Install: cz/cuni/mff/ksi/jinfer/welcome/Installer.class
 OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/welcome/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
 

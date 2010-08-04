@@ -18,7 +18,9 @@ package cz.cuni.mff.ksi.jinfer.welcome;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import java.util.Properties;
+import java.util.prefs.Preferences;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import org.apache.log4j.Logger;
 import org.netbeans.api.project.ui.OpenProjects;
 import org.openide.util.NbBundle;
@@ -39,6 +41,7 @@ import org.openide.util.NbPreferences;
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.welcome//Welcome//EN",
 autostore = false)
 public final class WelcomeTopComponent extends TopComponent {
+  public static final String SHOW_ON_STARTUP = "show.startup";
 
   private static final long serialVersionUID = 789451321321l;
   private static WelcomeTopComponent instance;
@@ -100,6 +103,11 @@ public final class WelcomeTopComponent extends TopComponent {
     org.openide.awt.Mnemonics.setLocalizedText(L1welcome, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.L1welcome.text")); // NOI18N
 
     org.openide.awt.Mnemonics.setLocalizedText(showOnStartup, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.showOnStartup.text")); // NOI18N
+    showOnStartup.addChangeListener(new javax.swing.event.ChangeListener() {
+      public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        showOnStartupStateChanged(evt);
+      }
+    });
 
     L2gettingStarted.setFont(L2gettingStarted.getFont().deriveFont(L2gettingStarted.getFont().getSize()+3f));
     org.openide.awt.Mnemonics.setLocalizedText(L2gettingStarted, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.L2gettingStarted.text")); // NOI18N
@@ -296,7 +304,7 @@ public final class WelcomeTopComponent extends TopComponent {
         .addComponent(jLabel13)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jLabel15)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addContainerGap())
     );
@@ -307,13 +315,17 @@ public final class WelcomeTopComponent extends TopComponent {
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1104, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 818, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
+
+  private Preferences prefs() {
+    return NbPreferences.forModule(WelcomeTopComponent.class);
+  }
 
   private void step1projectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step1projectActionPerformed
     CommonProjectActions.newProjectAction().actionPerformed(evt);
@@ -326,6 +338,11 @@ public final class WelcomeTopComponent extends TopComponent {
   private void step2addFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step2addFilesActionPerformed
     OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(FilesAddAction.COMMAND_FILES_ADD, Lookup.EMPTY);
   }//GEN-LAST:event_step2addFilesActionPerformed
+
+  private void showOnStartupStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showOnStartupStateChanged
+    setShowOnStartup(((JCheckBox)evt.getSource()).isSelected());
+
+  }//GEN-LAST:event_showOnStartupStateChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
@@ -393,16 +410,28 @@ public final class WelcomeTopComponent extends TopComponent {
 
   @Override
   public void componentOpened() {
-    final boolean showStartup = NbPreferences.forModule(WelcomeTopComponent.class).getBoolean("show.startup", true);
+    final boolean showStartup = prefs().getBoolean(SHOW_ON_STARTUP, true);
     showOnStartup.setSelected(showStartup);
     if (!showStartup) {
       close();
     }
   }
 
+  public boolean isShowOnStartup() {
+    return prefs().getBoolean(SHOW_ON_STARTUP, true);
+  }
+
+  private void setShowOnStartup(final boolean show) {
+    boolean oldValue = isShowOnStartup();
+    if (oldValue == show) {
+      return;
+    }
+    prefs().putBoolean(SHOW_ON_STARTUP, show);
+  }
+
   @Override
   public void componentClosed() {
-    NbPreferences.forModule(WelcomeTopComponent.class).putBoolean("show.startup", showOnStartup.isSelected());
+    prefs().putBoolean(SHOW_ON_STARTUP, showOnStartup.isSelected());
   }
 
   // TODO vektor perhaps these 3 may be removed?

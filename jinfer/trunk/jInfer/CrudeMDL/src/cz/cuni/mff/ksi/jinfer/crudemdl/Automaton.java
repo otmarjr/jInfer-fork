@@ -55,8 +55,8 @@ public class Automaton<T> {
   protected State<T> createNewState() {
     final State<T> newState= new State<T>(0, this.newStateName, this);
     this.newStateName++;
-    this.getDelta().put(newState, new HashSet<Step<T>>());
-    this.getReverseDelta().put(newState, new HashSet<Step<T>>());
+    this.delta.put(newState, new HashSet<Step<T>>());
+    this.reverseDelta.put(newState, new HashSet<Step<T>>());
     return newState;
   }
 
@@ -72,8 +72,8 @@ public class Automaton<T> {
 
   private Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
     final Step<T> newStep= new Step<T>(onSymbol, source, destination, 1);
-    this.getDelta().get(source).add(newStep);
-    this.getReverseDelta().get(destination).add(newStep);
+    this.delta.get(source).add(newStep);
+    this.reverseDelta.get(destination).add(newStep);
     return newStep;
   }
 
@@ -92,6 +92,10 @@ public class Automaton<T> {
       }
     }
     xState.incFinalCount();
+  }
+
+  private void correctParallelSteps(State<T> state) {
+
   }
 
   public Automaton<T> mergeStates(final State<T> mainState, final State<T> mergedState) {
@@ -115,25 +119,33 @@ public class Automaton<T> {
         continue;
       }
       /* insteps */
-      final Set<Step<T>> mergedStateInSteps= this.getReverseDelta().get(mergedState);
+      final Set<Step<T>> mergedStateInSteps= this.reverseDelta.get(mergedState);
       for (Step<T> mergedStateInStep : mergedStateInSteps) {
         mergedStateInStep.setDestination(mainState);
       }
-      this.getReverseDelta().remove(mergedState);
-      this.getReverseDelta().get(mainState).addAll(mergedStateInSteps);
+      this.reverseDelta.remove(mergedState);
+      this.reverseDelta.get(mainState).addAll(mergedStateInSteps);
 
       /* outsteps */
-      final Set<Step<T>> mergedStateOutSteps= this.getDelta().get(mergedState);
+      final Set<Step<T>> mergedStateOutSteps= this.delta.get(mergedState);
       for (Step<T> mergedStateOutStep : mergedStateOutSteps) {
+        Step<T> mainStepSameSymbol= this.getStepOnSymbolFromState(mainState, mergedStateOutStep.getAcceptSymbol());
+        if (mainStepSameSymbol != null) {
+          mergedStateOutStep.incUseCount(mainStepSameSymbol.getUseCount());
+          this.delta.get(mainState).remove(mainStepSameSymbol);
+          this.reverseDelta.get(mainStepSameSymbol.getDestination()).remove(mainStepSameSymbol);
+        }
         mergedStateOutStep.setSource(mainState);
       }
-      this.getDelta().remove(mergedState);
-      this.getDelta().get(mainState).addAll(mergedStateOutSteps);
+      this.delta.remove(mergedState);
+      this.delta.get(mainState).addAll(mergedStateOutSteps);
 
 
       /* finalCount */
       mainState.incFinalCount(mergedState.getFinalCount());
     }
+
+    this.correctParallelSteps(mainState);
     return null;
   }
 
@@ -152,8 +164,8 @@ public class Automaton<T> {
   private List<KHContext<T>> find21Contexts(final State<T> state) {
     final List<KHContext<T>> result= new LinkedList<KHContext<T>>();
 
-    for (Step<T> inStep : this.getReverseDelta().get(state)) {
-      for (Step<T> secondInStep : this.getReverseDelta().get(inStep.getSource())) {
+    for (Step<T> inStep : this.reverseDelta.get(state)) {
+      for (Step<T> secondInStep : this.reverseDelta.get(inStep.getSource())) {
         final KHContext<T> context= new KHContext<T>(2, 1);
         context.addStateLast(secondInStep.getSource());
         context.addStepLast(secondInStep);
@@ -184,7 +196,7 @@ public class Automaton<T> {
     boolean searchAgain= true;
     while (searchAgain) {
       boolean found= false;
-      final Iterator<State<T>> statesIterator= this.getDelta().keySet().iterator();
+      final Iterator<State<T>> statesIterator= this.delta.keySet().iterator();
       List<Pair<KHContext<T>, KHContext<T>>> equivalentContexts= null;
       while ((!found)&&(statesIterator.hasNext())) {
         final State<T> toTestState= statesIterator.next();
@@ -193,7 +205,7 @@ public class Automaton<T> {
           continue;
         }
         
-        final Iterator<State<T>> anotherIterator= this.getDelta().keySet().iterator();
+        final Iterator<State<T>> anotherIterator= this.delta.keySet().iterator();
         while ((!found)&&(anotherIterator.hasNext())) {
           final State<T> anotherState= anotherIterator.next();
           final List<KHContext<T>> anotherKHContexts= this.find21Contexts(anotherState);
@@ -224,10 +236,10 @@ public class Automaton<T> {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("Automaton\n");
-    for (State<T> state: this.getDelta().keySet()) {
+    for (State<T> state: this.delta.keySet()) {
       sb.append(state);
       sb.append("Steps:\n");
-      for (Step<T> step : this.getDelta().get(state)) {
+      for (Step<T> step : this.delta.get(state)) {
         sb.append(step);
       }
     }

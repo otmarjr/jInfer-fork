@@ -14,14 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialigg.xpath;
+package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.trivialigg.utils.IGGUtils;
+import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;

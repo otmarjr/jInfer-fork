@@ -130,10 +130,11 @@ public class Automaton<T> {
       final Set<Step<T>> mergedStateOutSteps= this.delta.get(mergedState);
       for (Step<T> mergedStateOutStep : mergedStateOutSteps) {
         Step<T> mainStepSameSymbol= this.getStepOnSymbolFromState(mainState, mergedStateOutStep.getAcceptSymbol());
-        if (mainStepSameSymbol != null) {
+        if ((mainStepSameSymbol != null)) {
           mergedStateOutStep.incUseCount(mainStepSameSymbol.getUseCount());
           this.delta.get(mainState).remove(mainStepSameSymbol);
           this.reverseDelta.get(mainStepSameSymbol.getDestination()).remove(mainStepSameSymbol);
+          this.reverseDelta.get(mainStepSameSymbol.getDestination()).add(mergedStateOutStep);
         }
         mergedStateOutStep.setSource(mainState);
       }

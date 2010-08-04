@@ -31,8 +31,8 @@ public interface Clusterer<T> {
    * do cluster for each x, then apply own merging clustering algorithm. The algorithms should be then
    * added in own methods.
    */
-  public void add(T item);
-  public void addAll(List<T> items);
-  public List<Cluster<T>> cluster();
-  public T getRepresentantForItem(T item);
+   void add(final T item);
+   void addAll(final List<T> items);
+   List<Cluster<T>> cluster();
+   T getRepresentantForItem(final T item);
 }

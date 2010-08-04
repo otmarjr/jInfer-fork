@@ -61,7 +61,7 @@ public final class TopologicalSort {
       }
       // links between input elements might be torn, try to visit others too
       for (final Element el : elements) {
-        if (el.getName().equalsIgnoreCase(e.getName())) {
+        if (el.getName().equalsIgnoreCase(node.getName())) {
           visit(el);
         }
       }

@@ -49,7 +49,7 @@ public class IGGeneratorImpl implements IGGenerator {
 
   @Override
   public String getModuleName() {
-    return "Trivial IG Generator";
+    return "Basic IG Generator";
   }
 
   @Override

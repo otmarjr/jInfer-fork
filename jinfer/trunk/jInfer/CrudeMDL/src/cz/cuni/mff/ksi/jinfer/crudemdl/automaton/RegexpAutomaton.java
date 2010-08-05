@@ -298,7 +298,9 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
         if (loopStep != null) {
           newRegexpChildren.add(loopStep.getAcceptSymbol());
         }
-        newRegexpChildren.add(outStep.getAcceptSymbol());
+        if (!outStep.getAcceptSymbol().isLambda()) {
+          newRegexpChildren.add(outStep.getAcceptSymbol());
+        }
 
         Regexp<AbstractNode> newRegexp= Regexp.<AbstractNode>getConcatenation(newRegexpChildren);
         Step<Regexp<AbstractNode>> newStep=

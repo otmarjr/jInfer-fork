@@ -27,7 +27,8 @@ import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 
 /**
- * Panel just asking for basic info.
+ * TODO sviro comment
+ * @author sviro
  */
 public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
         WizardDescriptor.ValidatingPanel, WizardDescriptor.FinishablePanel {

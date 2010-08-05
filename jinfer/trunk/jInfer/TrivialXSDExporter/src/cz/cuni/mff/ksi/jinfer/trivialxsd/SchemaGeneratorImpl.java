@@ -44,6 +44,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   //private double minDefaultRatio;
   private int indentationLevel = 0;
   private final int indentationStep = 2;
+  private Preprocessing preprocessing = null;
 
   @Override
   public String getModuleName() {
@@ -67,38 +68,42 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       }
     }
 
-    //io.getOut().println("DTD Exporter: that is " + elements.size()
-    //        + " elements.");
+    LOG.info("XSD Exporter: that is " + elements.size()
+            + " elements.");
 
-    // sort elements topologically
-    final TopologicalSort s = new TopologicalSort(elements);
-    final List<Element> toposorted = s.sort();
+    if (elements.isEmpty()) {
+      return;
+    }
+
+    /* TODO rio overit ci platia poziadavka:
+     * - nazov elementu je jeho unikatny identifikator vo vstupnom liste
+     */
 
     // generate XSD
     final StringBuilder ret = new StringBuilder();
     ret.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     ret.append("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
-    
-    if (!toposorted.isEmpty()) {
-      ret.append(elementToString(toposorted.get(toposorted.size() - 1)));
-    }
-    // TODO rio ostatne elementy, ktore nie su dostupne z prveho
-    //for (final Element element : toposorted) {
-    //  ret.append(elementToString(element));
-    //}
 
-    //io.getOut().println("DTD Exporter: schema generated at "
-    //        + ret.toString().length() + " characters.");
+    preprocessing = new Preprocessing(elements);
+    preprocessing.run();
+    
+    // TODO rio interrupt
+    ret.append(elementToString(preprocessing.getTopElement()));
+
+    ret.append("</xs:schema>");
+
+    LOG.info("XSD Exporter: schema generated at "
+            + ret.toString().length() + " characters.");
 
     callback.finished(ret.toString(), "xsd");
   }
 
-  private String elementToString(final Element e) {
+  private String elementToString(final Element element) {
     final StringBuilder ret = new StringBuilder();
     indent(ret, "<xs:element name=\"");
-    ret.append(e.getName())
+    ret.append(element.getName())
             .append("\"");
-    TypeCategory typeCategory = XSDUtils.getTypeCategory(e);
+    TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
     if (typeCategory.equals(TypeCategory.BUILTIN)) {
       ret.append(" type=\"xs:string\">\n");
       return ret.toString();
@@ -119,7 +124,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
     indentationIncrease();
 
-    final List<Attribute> attributes = e.getElementAttributes();
+    final List<Attribute> attributes = element.getElementAttributes();
     if (!attributes.isEmpty()) {
       assert(typeCategory.equals(TypeCategory.COMPLEX));
       for (Attribute attribute : attributes) {
@@ -129,7 +134,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       }
     }
 
-    ret.append(subElementsToString(e.getSubnodes()));
+    ret.append(subElementsToString(element.getSubnodes()));
     indentationDecrease();
 
     switch (typeCategory) {
@@ -208,7 +213,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     assert(node.isSimpleData() == false);
     assert(node.isElement());
 
-    return elementToString((Element) node);
+    final Element element = preprocessing.getElementByName(node.getName());
+
+    if (element == null) {
+      LOG.warn("XSD Exporter: Referenced element(" + node.getName() + ") not found in IG element list, probably error in code");
+      return null;
+    }
+
+    return elementToString(element);
   }
 
   private void indent(final StringBuilder sb, final String txt) {

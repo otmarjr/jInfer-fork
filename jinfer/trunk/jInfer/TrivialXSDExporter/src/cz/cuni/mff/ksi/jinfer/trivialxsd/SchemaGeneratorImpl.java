@@ -86,6 +86,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     preprocessing = new Preprocessing(elements);
     preprocessing.run();
+
+    // handle global elements
+    final List<Element> globalElements = preprocessing.getGlobalElements();
+    for (Element globalElement : globalElements) {
+      ret.append(globalElementToString(globalElement));
+    }
     
     // TODO rio interrupt
     ret.append(elementToString(preprocessing.getTopElement()));
@@ -100,14 +106,19 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String elementToString(final Element element) {
     final StringBuilder ret = new StringBuilder();
-    indent(ret, "<xs:element name=\"");
-    ret.append(element.getName())
-            .append("\"");
+    indent(ret, "<xs:element name=\"" + element.getName() + "\"");
+
     TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
     if (typeCategory.equals(TypeCategory.BUILTIN)) {
       ret.append(" type=\"xs:string\">\n");
       return ret.toString();
     }
+
+    if (preprocessing.isGlobal(element.getName())) {
+      ret.append(" type=\"T" + element.getName() + "\"/>\n");
+      return ret.toString();
+    }
+
     ret.append(">\n");
      // TODO rio mixed content
     indentationIncrease();
@@ -150,6 +161,57 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentationDecrease();
 
     indent(ret, "</xs:element>\n");
+    return ret.toString();
+  }
+
+  private String globalElementToString(final Element element) {
+    final StringBuilder ret = new StringBuilder();
+
+    TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
+    if (typeCategory.equals(TypeCategory.BUILTIN)) {
+      return "";
+    }
+
+     // TODO rio mixed content
+    switch (typeCategory) {
+      case SIMPLE:
+        indent(ret, "<xs:simpleType name=");
+        break;
+      case COMPLEX:
+        indent(ret, "<xs:complexType name=");
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown of illegal enum member.");
+    }
+    ret.append("\"T" + element.getName() + "\">\n");
+    indentationIncrease();
+
+    final List<Attribute> attributes = element.getElementAttributes();
+    if (!attributes.isEmpty()) {
+      assert(typeCategory.equals(TypeCategory.COMPLEX));
+      for (Attribute attribute : attributes) {
+        indent(ret, "<xs:attribute name=\"");
+        ret.append(attribute.getName())
+              .append("\" type=\"xs:string\">\n");
+      }
+    }
+
+    ret.append(subElementsToString(element.getSubnodes()));
+    indentationDecrease();
+
+    switch (typeCategory) {
+      case SIMPLE:
+        indent(ret, "</xs:simpleType>\n");
+        break;
+      case COMPLEX:
+        indent(ret, "</xs:complexType>\n");
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown of illegal enum member.");
+    }
+
+    ret.append("\n");
+
     return ret.toString();
   }
 

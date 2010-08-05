@@ -97,6 +97,16 @@ public final class Preprocessing {
     return toposortedElements.get(toposortedElements.size() - 1);
   }
 
+  public List<Element> getGlobalElements() {
+    final List<Element> globalElements = new LinkedList<Element>();
+    for (Element element : toposortedElements) {
+      if (isGlobal(element.getName())) {
+        globalElements.add(element);
+      }
+    }
+    return globalElements;
+  }
+
   /** Spocita pocty pouziti elementov dostupnych zo zadaneho korena.
    *
    * @param occurrenceCounts

@@ -69,7 +69,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   @Override
-  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
+  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
     // 1. cluster elements according to name
@@ -82,6 +82,9 @@ public class SimplifierImpl implements Simplifier {
 
     // 3. process rules
     for (Cluster<AbstractNode> cluster : clusters) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       // TODO anti Try to extract the whole block inside the for-loop to a method
       if (!cluster.getRepresentant().isElement()) {
         // we deal only with elements for now, rules are generated only for elements

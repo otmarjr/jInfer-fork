@@ -106,7 +106,7 @@ public class Step<T> implements Comparable<Step<T>> {
     final StringBuilder sb = new StringBuilder("from ");
     sb.append(this.source.getName());
     sb.append(" on {");
-    sb.append(this.acceptSymbol);
+    sb.append(this.acceptSymbol.toString().replaceAll("\n", ""));
     sb.append("|");
     sb.append(this.useCount);
     sb.append("} to ");

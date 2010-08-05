@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,22 +30,20 @@ import java.util.List;
  */
 public class InameClusterer implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> clusters;
+  private List<AbstractNode> items;
 
   public InameClusterer() {
     this.clusters= new LinkedList<Cluster<AbstractNode>>();
+    this.items= new LinkedList<AbstractNode>();
   }
 
-  /*
-   * Add action, add item to some cluster. In our method - elements are clustered by
-   * name (ignore case). DeFacto clustering happens at this method - when adding, all
-   * clusters are scanned, if there is one with representant of same name, item is added
-   * to it. If not, new cluster with item as representant is added.
-   */
-  @Override
-  public void add(final AbstractNode item) {
+  private void internalAdd(final AbstractNode item) throws InterruptedException {
     final Iterator<Cluster<AbstractNode>> iterator= this.clusters.iterator();
     boolean found= false;
     while (iterator.hasNext()&&(!found)) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       final Cluster<AbstractNode> cluster= iterator.next();
       final AbstractNode representant= cluster.getRepresentant();
       if (representant.isSimpleData()) {
@@ -64,20 +63,36 @@ public class InameClusterer implements Clusterer<AbstractNode> {
               );
     }
   }
+  /*
+   * Add action, add item to some cluster. In our method - elements are clustered by
+   * name (ignore case). DeFacto clustering happens at this method - when adding, all
+   * clusters are scanned, if there is one with representant of same name, item is added
+   * to it. If not, new cluster with item as representant is added.
+   */
+  @Override
+  public void add(final AbstractNode item) {
+    this.items.add(item);
+  }
 
   @Override
-  public void addAll(final List<AbstractNode> items) {
-    for (AbstractNode node : items) {
-      this.add(node);
-    }
+  public void addAll(final List<AbstractNode> items){
+    this.items.addAll(items);
   }
 
   /*
    * In this method no magic is found, clustering happens already when items are added.
    */
   @Override
-  public List<Cluster<AbstractNode>> cluster() {
-    return this.clusters;
+  public List<Cluster<AbstractNode>> cluster() throws InterruptedException {
+    for (AbstractNode node : items) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      this.internalAdd(node);
+    }
+    this.items.clear();
+
+    return Collections.unmodifiableList(this.clusters);
   }
 
   @Override

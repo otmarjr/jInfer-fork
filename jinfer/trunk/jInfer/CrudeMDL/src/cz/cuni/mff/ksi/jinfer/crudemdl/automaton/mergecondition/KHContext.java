@@ -43,7 +43,7 @@ public class KHContext<T> {
   }
 
   public void addStepLast(final Step<T> step) {
-    this.getSteps().add(step);
+    this.steps.add(step);
   }
 
   public List<Pair<State<T>, State<T>>> getMergeableStates(final KHContext<T> another) {

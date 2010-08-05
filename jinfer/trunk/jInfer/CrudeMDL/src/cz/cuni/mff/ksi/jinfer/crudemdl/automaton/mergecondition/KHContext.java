@@ -15,9 +15,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
+package cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.State;
+import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.Step;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;

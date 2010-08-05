@@ -17,9 +17,11 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * TODO anti Comment!
@@ -87,7 +89,18 @@ public class KHContext<T> {
     return equivalent;
   }
 
-
+  public List<Pair<State<T>, State<T>>> getMergeableStates(final KHContext<T> another) {
+    List<Pair<State<T>, State<T>>> result= new LinkedList<Pair<State<T>, State<T>>>();
+    if (this.isEquivalent(another)) {
+      result.add(
+              new Pair<State<T>, State<T>>(
+                this.states.getLast(),
+                another.getStates().getLast()
+              )
+            );
+    }
+    return result;
+  }
 
   /**
    * @return the states

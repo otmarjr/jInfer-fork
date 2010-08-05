@@ -17,7 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
+import com.sun.org.apache.xml.internal.serializer.ToTextStream;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.AbstractList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -62,8 +64,18 @@ public class Automaton<T> {
     return newState;
   }
 
-  private Step<T> getStepOnSymbolFromState(final State<T> state, final T symbol) {
+  private Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
     final Set<Step<T>> steps= this.delta.get(state);
+    for (Step<T> step : steps) {
+      if (step.getAcceptSymbol().equals(symbol)) {
+        return step;
+      }
+    }
+    return null;
+  }
+
+  private Step<T> getInStepOnSymbol(final State<T> state, final T symbol) {
+    final Set<Step<T>> steps= this.reverseDelta.get(state);
     for (Step<T> step : steps) {
       if (step.getAcceptSymbol().equals(symbol)) {
         return step;
@@ -82,7 +94,7 @@ public class Automaton<T> {
   public void buildPTAOnSymbol(final List<T> symbolString) {
     State<T> xState= this.getInitialState();
     for (T symbol : symbolString) {
-      final Step<T> xStep= this.getStepOnSymbolFromState(xState, symbol);
+      final Step<T> xStep= this.getOutStepOnSymbol(xState, symbol);
       if (xStep != null) {
         xStep.incUseCount();
         xState= xStep.getDestination();
@@ -131,11 +143,6 @@ public class Automaton<T> {
   }
 
   public void mergeStates(final State<T> mainState, final State<T> mergedState) {
-/*    final List<State<T>> list= new LinkedList<State<T>>();
-    list.add(mergedState);
-    return this.mergeStates(mainState, list);
- *
- */
     if (mergedState.equals(mainState)) {
       return;
     }
@@ -159,50 +166,11 @@ public class Automaton<T> {
 
     /* finalCount */
     mainState.incFinalCount(mergedState.getFinalCount());
+    LOG.error("after merge");
+    LOG.error(this);
     this.collapseStepsAfterMerge(mainState);
-  }
-
-  public void mergeStates(final State<T> mainState, final List<State<T>> mergedStates) {
-    if (!this.delta.containsKey(mainState)) {
-      throw new IllegalArgumentException("State " + mainState.toString() + " not present in automaton " + this.toString());
-    }
-    for (State<T> mergedState : mergedStates) {
-      if (!this.delta.containsKey(mergedState)) {
-        throw new IllegalArgumentException("State " + mergedState.toString() + " not present in automaton " + this.toString());
-      }
-    }
-
-    for (State<T> mergedState : mergedStates) {
-      if (mainState.equals(mergedState)) {
-        continue;
-      }
-      /* insteps */
-      final Set<Step<T>> mergedStateInSteps= this.reverseDelta.get(mergedState);
-      for (Step<T> mergedStateInStep : mergedStateInSteps) {
-        mergedStateInStep.setDestination(mainState);
-      }
-      this.reverseDelta.remove(mergedState);
-      this.reverseDelta.get(mainState).addAll(mergedStateInSteps);
-
-      /* outsteps */
-      final Set<Step<T>> mergedStateOutSteps= this.delta.get(mergedState);
-      for (Step<T> mergedStateOutStep : mergedStateOutSteps) {
-        Step<T> mainStepSameSymbol= this.getStepOnSymbolFromState(mainState, mergedStateOutStep.getAcceptSymbol());
-        if ((mainStepSameSymbol != null)) {
-          mergedStateOutStep.incUseCount(mainStepSameSymbol.getUseCount());
-          this.delta.get(mainState).remove(mainStepSameSymbol);
-          this.reverseDelta.get(mainStepSameSymbol.getDestination()).remove(mainStepSameSymbol);
-          this.reverseDelta.get(mainStepSameSymbol.getDestination()).add(mergedStateOutStep);
-        }
-        mergedStateOutStep.setSource(mainState);
-      }
-      this.delta.remove(mergedState);
-      this.delta.get(mainState).addAll(mergedStateOutSteps);
-
-
-      /* finalCount */
-      mainState.incFinalCount(mergedState.getFinalCount());
-    }
+    LOG.error("after collapse");
+    LOG.error(this);
   }
 
   private List<KHContext<T>> find21Contexts(final State<T> state) {
@@ -222,18 +190,17 @@ public class Automaton<T> {
     return result;
   }
 
-  private List<Pair<KHContext<T>, KHContext<T>>> getEquivalentKHContexts(final List<KHContext<T>> kHContextsA, final List<KHContext<T>> kHContextsB) {
-    final List<Pair<KHContext<T>, KHContext<T>>> eqContexts= new LinkedList<Pair<KHContext<T>, KHContext<T>>>();
+  private List<Pair<State<T>, State<T>>> getEquivalentKHContexts(final List<KHContext<T>> kHContextsA, final List<KHContext<T>> kHContextsB) {
+    List<Pair<State<T>, State<T>>> result= new LinkedList<Pair<State<T>, State<T>>>();
     for (KHContext<T> contextA : kHContextsA) {
       for (KHContext<T> contextB : kHContextsB) {
-        if (contextA.isEquivalent(contextB)) {
-          eqContexts.add(
-                  new Pair<KHContext<T>, KHContext<T>>(contextA, contextB)
-                  );
+        result= contextA.getMergeableStates(contextB);
+        if (!result.isEmpty()) {
+          return result;
         }
       }
     }
-    return eqContexts;
+    return result;
   }
 
   public void make21context() {
@@ -242,6 +209,7 @@ public class Automaton<T> {
       boolean found= false;
       final Iterator<State<T>> statesIterator= this.delta.keySet().iterator();
       List<Pair<KHContext<T>, KHContext<T>>> equivalentContexts= null;
+      List<Pair<State<T>, State<T>>> mergableStates=null;
       while ((!found)&&(statesIterator.hasNext())) {
         final State<T> toTestState= statesIterator.next();
         final List<KHContext<T>> kHContexts= this.find21Contexts(toTestState);
@@ -252,23 +220,26 @@ public class Automaton<T> {
         final Iterator<State<T>> anotherIterator= this.delta.keySet().iterator();
         while ((!found)&&(anotherIterator.hasNext())) {
           final State<T> anotherState= anotherIterator.next();
+          if (anotherState.equals(toTestState)) {
+            continue;
+          }
           final List<KHContext<T>> anotherKHContexts= this.find21Contexts(anotherState);
           if (anotherKHContexts.isEmpty()) {
             continue;
           }
 
-          equivalentContexts= this.getEquivalentKHContexts(kHContexts, anotherKHContexts);
-          if ((!equivalentContexts.isEmpty())&&
-                  (!toTestState.equals(anotherState))
-                  ) {
-            LOG.error("Equivalent states: " + toTestState.getName() + " " + anotherState.getName() + "\n");
-            found= true;
-          }
+            mergableStates= this.getEquivalentKHContexts(kHContexts, anotherKHContexts);
+            if (!mergableStates.isEmpty()) {
+              LOG.error("Equivalent states: " + toTestState.getName() + " " + anotherState.getName() + "\n");
+              found= true;
+            }
         }
       }
       if (found) {
-        LOG.error("Merging states: " + equivalentContexts.get(0).getFirst().getStates().getLast().getName() + " " + equivalentContexts.get(0).getSecond().getStates().getLast().getName() + "\n");
-        this.mergeStates(equivalentContexts.get(0).getFirst().getStates().getLast(), equivalentContexts.get(0).getSecond().getStates().getLast());
+        for (Pair<State<T>, State<T>> mergePair : mergableStates) {
+          LOG.error("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
+          this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
+        }
         searchAgain= true;
       } else {
         searchAgain= false;
@@ -282,8 +253,16 @@ public class Automaton<T> {
     final StringBuilder sb = new StringBuilder("Automaton\n");
     for (State<T> state: this.delta.keySet()) {
       sb.append(state);
-      sb.append("Steps:\n");
+      sb.append("outSteps:\n");
       for (Step<T> step : this.delta.get(state)) {
+        sb.append(step);
+      }
+    }
+    sb.append("reversed:\n");
+    for (State<T> state: this.reverseDelta.keySet()) {
+      sb.append(state);
+      sb.append("inSteps:\n");
+      for (Step<T> step : this.reverseDelta.get(state)) {
         sb.append(step);
       }
     }

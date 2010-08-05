@@ -140,6 +140,10 @@ public class Regexp<T> {
     return type;
   }
 
+  public boolean isLambda() {
+    return RegexpType.LAMBDA.equals(type);
+  }
+
   public boolean isToken() {
     return RegexpType.TOKEN.equals(type);
   }

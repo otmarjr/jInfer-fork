@@ -27,6 +27,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.KHContextMergeConditionTester;
+import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.MergeCondidionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -125,7 +127,8 @@ public class SimplifierImpl implements Simplifier {
 
 
       // 3.2 simplify by merging states
-      automaton.make21context();
+      MergeCondidionTester<AbstractNode> mergeCondidionTester= new KHContextMergeConditionTester<AbstractNode>(2, 0);
+      automaton.make2context(mergeCondidionTester);
       LOG.debug(">>> After 2-context:");
       LOG.debug(automaton);
 

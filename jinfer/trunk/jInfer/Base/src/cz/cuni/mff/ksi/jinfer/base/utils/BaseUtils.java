@@ -29,9 +29,11 @@ public final class BaseUtils {
 
   private BaseUtils() {
   }
-/**
- * TODO developer: Comment!
- */
+  
+  /**
+   * Interface describing an object that decides whether the predicate
+   * (described by this object) appliest to an argument or not.
+   */
   public interface Predicate<T> {
 
     boolean apply(final T argument);

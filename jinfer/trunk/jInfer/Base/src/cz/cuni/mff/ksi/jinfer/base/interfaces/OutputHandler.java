@@ -32,6 +32,6 @@ public interface OutputHandler {
    * @param data content of the added file.
    * @param extension Extension of file to be added without starting dot.
    */
-  void addOutput(final String fileName, final String data, final String extension);
+  void addOutput(final String fileName, final String data, final String extension, final boolean showOutput);
 
 }

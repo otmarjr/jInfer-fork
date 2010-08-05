@@ -49,6 +49,7 @@ public class Installer extends ModuleInstall {
       final String message = this.layout.format(le);
       final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
       io.getOut().print(message);
+      io.getOut().close();
     }
 
     @Override

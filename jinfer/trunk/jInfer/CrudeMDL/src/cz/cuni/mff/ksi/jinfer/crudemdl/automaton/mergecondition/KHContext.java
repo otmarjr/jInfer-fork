@@ -75,6 +75,15 @@ public class KHContext<T> {
                 );
         }
       }
+      if ((equivalent)&&(i == k - 1)) {
+        if (!myStep.getDestination().equals(anotherStep.getDestination())) {
+          result.add(
+                  new Pair<State<T>, State<T>>(
+                    myStep.getDestination(), anotherStep.getDestination()
+                  )
+                );
+        }
+      }
       i++;
     }
     if (equivalent) {
@@ -117,5 +126,14 @@ public class KHContext<T> {
    */
   public void setH(final Integer h) {
     this.h = h;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb= new StringBuilder("k,h-context: k=" + this.k.toString() + " h=" + this.h.toString() + ".\nSteps:");
+    for (Step<T> step : this.steps) {
+      sb.append(step);
+    }
+    return sb.toString();
   }
 }

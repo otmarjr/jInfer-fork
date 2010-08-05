@@ -22,7 +22,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
  *
  * @author anti
  */
-public class Step<T> implements Comparable<Step<T>> {
+public class Step<T> {
   // TODO anti Comment the fields
   private T acceptSymbol;
   private Integer useCount;
@@ -113,10 +113,5 @@ public class Step<T> implements Comparable<Step<T>> {
     sb.append(this.destination.getName());
     sb.append("\n");
     return sb.toString();
-  }
-
-  @Override
-  public int compareTo(Step<T> o) {
-    return this.getDestination().compareTo(o.getDestination());
   }
 }

@@ -28,6 +28,10 @@ import org.openide.nodes.Children;
 import org.openide.util.Lookup;
 import org.openide.text.DataEditorSupport;
 
+/**
+ * 
+ * @author sviro
+ */
 public class XPathDataObject extends MultiDataObject {
 
   public XPathDataObject(final FileObject pf, final MultiFileLoader loader) throws DataObjectExistsException,

@@ -22,8 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -166,9 +164,12 @@ public class Automaton<T> {
   }
 
 
-  public void make2context(MergeCondidionTester<T> mergeCondidionTester) {
+  public void simplify(MergeCondidionTester<T> mergeCondidionTester) throws InterruptedException {
     boolean search= true;
     while (search) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       search= false;
       List<List<Pair<State<T>, State<T>>>> mergableStates=null;
       boolean found= false;

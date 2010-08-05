@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -93,10 +94,12 @@ public class InameClusterer implements Clusterer<AbstractNode> {
   @Override
   public List<Cluster<AbstractNode>> cluster() throws InterruptedException {
     for (AbstractNode node : items) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
       this.addNode(node);
+      if (node.isElement()&&(node instanceof Element)) {
+        for (AbstractNode subNode: ((Element) node).getSubnodes().getTokens()) {
+          this.addNode(subNode);
+        }
+      }
     }
     this.items.clear();
 

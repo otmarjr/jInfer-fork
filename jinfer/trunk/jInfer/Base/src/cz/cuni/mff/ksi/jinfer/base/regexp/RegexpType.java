@@ -23,8 +23,6 @@ package cz.cuni.mff.ksi.jinfer.base.regexp;
  */
 public enum RegexpType {
 
-  /** An empty letter λ, represantating empty string "". */
-  LAMBDA,
   /** A letter of Σ. Eg "a". */
   TOKEN,
   /** A concatenation of regular expressions. Eg "abc". */

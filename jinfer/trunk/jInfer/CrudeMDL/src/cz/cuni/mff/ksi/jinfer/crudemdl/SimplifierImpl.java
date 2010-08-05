@@ -55,8 +55,11 @@ public class SimplifierImpl implements Simplifier {
     return "CrudeMDL";
   }
 
-  private void verifyInput(final List<AbstractNode> initialGrammar) {
+  private void verifyInput(final List<AbstractNode> initialGrammar) throws InterruptedException {
     for (AbstractNode node : initialGrammar) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       if (!NodeType.ELEMENT.equals(node.getType())) {
         final StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
         sb.append(node.getType().toString());
@@ -76,11 +79,6 @@ public class SimplifierImpl implements Simplifier {
     // 1. cluster elements according to name
     final InameClusterer clusterer = new InameClusterer();
     clusterer.addAll(initialGrammar);
-    for (AbstractNode node : initialGrammar) {
-      if (node.isElement()&&(node instanceof Element)) {
-        clusterer.addAll(((Element) node).getSubnodes().getTokens());
-      }
-    }
     final List<Cluster<AbstractNode>> clusters = clusterer.cluster();
     
     // 2. prepare emtpy final grammar
@@ -99,22 +97,12 @@ public class SimplifierImpl implements Simplifier {
 
       // 3.1 construct PTA
       final Set<AbstractNode> elementInstances= cluster.getMembers();
-      final InameClusterer attClusterer = new InameClusterer();
-      attClusterer.addAll(elementInstances);
-      for (AbstractNode node : elementInstances) {
-        if (node.isElement()&&(node instanceof Element)) {
-          attClusterer.addAll(((Element) node).getSubnodes().getTokens());
-        }
-      }
-      final List<Cluster<AbstractNode>> attClusters = attClusterer.cluster();
 
       final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
-      final Automaton<AbstractNode> attAutomaton= new Automaton<AbstractNode>(true);
 
       for (AbstractNode instance : elementInstances) {
         final Element element = (Element) instance;
         final Regexp<AbstractNode> rightSide= element.getSubnodes();
-        final List<Attribute> atts= element.getElementAttributes();
 
         if (!rightSide.isConcatenation()) {
           throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp.");
@@ -123,24 +111,15 @@ public class SimplifierImpl implements Simplifier {
         final List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
         final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
-        final List<AbstractNode> attSymbolString= new LinkedList<AbstractNode>();
         for (AbstractNode token : rightSideTokens) {
           if (token.isAttribute()) {
             continue;
           }
           symbolString.add( clusterer.getRepresentantForItem(token) );
         }
-        for (AbstractNode token : atts) {
-          if (!token.isAttribute()) {
-            continue;
-          }
-          attSymbolString.add( attClusterer.getRepresentantForItem(token) );
-        }
         automaton.buildPTAOnSymbol(symbolString);
-        attAutomaton.buildPTAOnSymbol(attSymbolString);
       }
       //LOG.setLevel(Level.DEBUG);
-      LOG.error(attAutomaton);
       LOG.debug("--- Simplifier on element:");
       LOG.debug(cluster.getRepresentant());
       LOG.debug(">>> PTA automaton:");
@@ -149,7 +128,7 @@ public class SimplifierImpl implements Simplifier {
 
       // 3.2 simplify by merging states
       MergeCondidionTester<AbstractNode> mergeCondidionTester= new KHContextMergeConditionTester<AbstractNode>(2, 1);
-      automaton.make2context(mergeCondidionTester);
+      automaton.simplify(mergeCondidionTester);
       LOG.debug(">>> After 2-context:");
       LOG.debug(automaton);
 
@@ -165,13 +144,13 @@ public class SimplifierImpl implements Simplifier {
       LOG.debug("--- End");
 
       // 3.4 return element with regexp
-      finalGrammar.add( //  (new Shortener()).simplify(
+      finalGrammar.add(   (new Shortener()).simplify(
               new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getAttributes(),
           regexpAutomaton.getRegexp()
-           )   //)
+           )   )
       );
     }
     callback.finished( finalGrammar );

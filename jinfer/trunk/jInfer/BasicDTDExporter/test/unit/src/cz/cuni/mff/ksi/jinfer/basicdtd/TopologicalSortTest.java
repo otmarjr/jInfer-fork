@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicdtd;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;

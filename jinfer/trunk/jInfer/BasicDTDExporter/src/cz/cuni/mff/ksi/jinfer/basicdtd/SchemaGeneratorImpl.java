@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicdtd;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;

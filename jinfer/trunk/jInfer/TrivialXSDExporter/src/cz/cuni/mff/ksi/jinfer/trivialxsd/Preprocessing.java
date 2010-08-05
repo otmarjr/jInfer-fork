@@ -20,6 +20,7 @@ package cz.cuni.mff.ksi.jinfer.trivialxsd;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

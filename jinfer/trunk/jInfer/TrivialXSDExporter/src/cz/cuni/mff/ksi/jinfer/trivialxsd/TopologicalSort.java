@@ -25,6 +25,8 @@ import java.util.List;
 /**
  * Topological sorting of elements. In the DAG where sorting takes place,
  * elements are vertices and edges go from depending to dependant elements.
+ *
+ * TODO rio refactor to Base module and use in DTD exporter
  * 
  * @author vektor
  */
@@ -61,7 +63,7 @@ public final class TopologicalSort {
       }
       // links between input elements might be torn, try to visit others too
       for (final Element el : elements) {
-        if (el.getName().equalsIgnoreCase(e.getName())) {
+        if (el.getName().equalsIgnoreCase(node.getName())) {
           visit(el);
         }
       }

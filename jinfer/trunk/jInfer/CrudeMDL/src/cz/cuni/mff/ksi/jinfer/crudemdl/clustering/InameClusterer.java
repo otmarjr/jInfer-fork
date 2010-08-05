@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -46,16 +47,24 @@ public class InameClusterer implements Clusterer<AbstractNode> {
       }
       final Cluster<AbstractNode> cluster= iterator.next();
       final AbstractNode representant= cluster.getRepresentant();
-      if (representant.isSimpleData()) {
+      if (item.isSimpleData()&&representant.isSimpleData()) {
         cluster.add(item);
         found= true;
-      } else if (
-              representant.isElement() &&
-              representant.getName().equalsIgnoreCase(item.getName())
-              ) {
+      } else 
+        if (item.isElement() &&
+          representant.isElement() &&
+          representant.getName().equalsIgnoreCase(item.getName())
+        ) {
           cluster.add(item);
           found= true;
-      }
+      } else
+        if (item.isAttribute() &&
+          representant.isAttribute() &&
+          representant.getName().equalsIgnoreCase(item.getName())
+        ) {
+          cluster.add(item);
+          found=true;
+        }
     }
     if (!found) {
       this.clusters.add(
@@ -71,12 +80,20 @@ public class InameClusterer implements Clusterer<AbstractNode> {
    */
   @Override
   public void add(final AbstractNode item) {
-    this.items.add(item);
+    if (!item.isSimpleData()) {
+      this.items.add(item);
+    }
+    if (item.isElement()&&(item instanceof Element)) {
+      Element el= (Element) item;
+      this.addAll(el.getSubnodes().getTokens());
+    }
   }
 
   @Override
   public void addAll(final List<AbstractNode> items){
-    this.items.addAll(items);
+    for (AbstractNode item : items) {
+      this.add(item);
+    }
   }
 
   /*

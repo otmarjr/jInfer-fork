@@ -75,6 +75,7 @@ public class KHContext<T> {
                 );
         }
       }
+      i++;
     }
     if (equivalent) {
       return result;

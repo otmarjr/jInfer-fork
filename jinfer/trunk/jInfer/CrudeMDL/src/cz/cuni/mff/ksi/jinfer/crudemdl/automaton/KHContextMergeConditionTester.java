@@ -64,5 +64,6 @@ public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T>
         }
       }
     }
+    return null;
   }
 }

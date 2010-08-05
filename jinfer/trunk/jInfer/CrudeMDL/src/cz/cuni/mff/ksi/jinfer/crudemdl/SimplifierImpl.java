@@ -54,6 +54,7 @@ public class SimplifierImpl implements Simplifier {
   @Override
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
 
+    // TODO anti Separate to a method "verify"
     for (AbstractNode node : initialGrammar) {
       if (!NodeType.ELEMENT.equals(node.getType())) {
         final StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
@@ -73,11 +74,13 @@ public class SimplifierImpl implements Simplifier {
     final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
     for (Cluster<AbstractNode> cluster : clusters) {
+      // TODO anti Try to extract the whole block inside the for-loop to a method
       if (!cluster.getRepresentant().isElement()) {
         // we deal only with elements for now, rules are generated only for elements
         continue;
       }
 
+      // TODO anti You started a numbered sequence, but stopped at 1. ;)
       // 1. construct PTA
       final Set<AbstractNode> elementInstances= cluster.getMembers();
 
@@ -108,7 +111,7 @@ public class SimplifierImpl implements Simplifier {
           }
         }
         automaton.buildPTAOnSymbol(symbolString);
-      }
+      }      
       LOG.setLevel(Level.DEBUG);
       LOG.debug("--- Simplifier on element:");
       LOG.debug(cluster.getRepresentant());

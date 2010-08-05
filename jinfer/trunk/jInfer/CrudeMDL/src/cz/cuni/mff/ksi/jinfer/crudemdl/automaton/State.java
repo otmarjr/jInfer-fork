@@ -30,6 +30,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
  * @author anti
  */
 public class State<T> implements Comparable<State<T>> {
+  // TODO anti Comment the fields
   private Integer finalCount;
   private Integer name;
   private Automaton<T> parentAutomaton;
@@ -103,6 +104,7 @@ public class State<T> implements Comparable<State<T>> {
 
   @Override
   public int compareTo(final State<T> o) {
+    // TODO anti Integer has the method compareTo()
     if (o.getName() > this.name) {
       return -1;
     } else if (o.getName() < this.name) {

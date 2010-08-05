@@ -18,11 +18,12 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
 /**
- * TODO anti comment
+ * TODO anti Comment!
  *
  * @author anti
  */
 public class Step<T> implements Comparable<Step<T>> {
+  // TODO anti Comment the fields
   private T acceptSymbol;
   private Integer useCount;
   private State<T> source;

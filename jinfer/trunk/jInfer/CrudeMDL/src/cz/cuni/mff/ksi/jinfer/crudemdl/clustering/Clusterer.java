@@ -20,11 +20,12 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 import java.util.List;
 
 /**
- * TODO anti comment
+ * TODO anti Comment!
  *
  * @author anti
  */
 public interface Clusterer<T> {
+  // TODO anti Be careful - JavaDoc comments start with /**
   /*
    * Add x to some cluster, find the right one or create new. Depends on clustering algorithm.
    * One can do classify on demand, or can create a method that builds just one cluster on classify
@@ -33,6 +34,7 @@ public interface Clusterer<T> {
    * added in own methods.
    */
    void add(final T item);
+   // TODO anti Comment all the methods
    void addAll(final List<T> items);
    List<Cluster<T>> cluster();
    T getRepresentantForItem(final T item);

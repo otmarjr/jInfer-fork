@@ -30,11 +30,12 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * TODO anti Comment!
  * @author anti
  */
 public class Automaton<T> {
   private static final Logger LOG = Logger.getLogger(Automaton.class);
+  // TODO anti Comment the fields
   protected State<T> initialState;
   protected final Map<State<T>, Set<Step<T>>> delta;
   protected final Map<State<T>, Set<Step<T>>> reverseDelta;

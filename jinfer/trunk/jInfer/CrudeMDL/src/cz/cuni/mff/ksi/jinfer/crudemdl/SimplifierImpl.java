@@ -23,26 +23,26 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.InameClusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
-import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition.MergeCondidionTester;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ElementInameClusterer;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti comment
+ * Simplifier intended to user some crude two-part MDL to evaluate solutions.
+ * In general, simplification should proceed as follows:
+ * 1. cluster elements
+ * 2. for each element
+ *      create prefix tree automaton
+ *      simplify automaton by merging condition - currently supports k,h-contexts - configured to use 2,1-contexts
+ *      create automaton with regexps on steps
+ *      by removing states and combining regexp simplify regexp automaton and retrieve regexp
  *
  * @author anti
  */
@@ -124,7 +124,6 @@ public class SimplifierImpl implements Simplifier {
       LOG.debug(cluster.getRepresentant());
       LOG.debug(">>> PTA automaton:");
       LOG.debug(automaton);
-
 
       // 3.2 simplify by merging states
       MergeCondidionTester<AbstractNode> mergeCondidionTester= new KHContextMergeConditionTester<AbstractNode>(2, 1);

@@ -29,7 +29,8 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti comment
+ * Automaton with Regexp<AbstractNode> on steps. Can be simplified by removing states
+ * to a single regexp. 
  *
  * @author anti
  */
@@ -37,7 +38,12 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
   private static final Logger LOG = Logger.getLogger(RegexpAutomaton.class);
   private State<Regexp<AbstractNode>> superFinalState;
   private Regexp<AbstractNode> regexp= null;
-  
+
+  /**
+   * Given another automaton, creates this automaton with same structure (states, delta function).
+   *
+   * @param anotherAutomaton
+   */
   public RegexpAutomaton(final Automaton<AbstractNode> anotherAutomaton) {
     super(false);
     this.newStateName= anotherAutomaton.getNewStateName();
@@ -314,10 +320,15 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     this.delta.remove(state);
   }
 
+  /**
+   * Simplify this automaton to two-state form with one regexp on one step. After
+   * it, regexp can be retrieved by getRegexp().
+   *
+   * @throws InterruptedException
+   */
   public void makeRegexpForm() throws InterruptedException {
     this.createSuperFinalState();
     while (this.delta.keySet().size() > 2) {
-      LOG.error(this);
       int minWeight= Integer.MAX_VALUE;
       State<Regexp<AbstractNode>> minState= null;
       for (State<Regexp<AbstractNode>> state : this.delta.keySet()) {

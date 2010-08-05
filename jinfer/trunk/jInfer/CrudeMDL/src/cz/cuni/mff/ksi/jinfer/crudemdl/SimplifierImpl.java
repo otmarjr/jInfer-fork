@@ -16,6 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
+import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.RegexpAutomaton;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.InameClusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;

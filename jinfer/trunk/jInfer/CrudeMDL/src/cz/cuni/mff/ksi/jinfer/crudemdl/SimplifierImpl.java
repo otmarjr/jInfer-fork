@@ -27,6 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,10 +52,7 @@ public class SimplifierImpl implements Simplifier {
     return "CrudeMDL";
   }
 
-  @Override
-  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
-
-    // TODO anti Separate to a method "verify"
+  private void verifyInput(final List<AbstractNode> initialGrammar) {
     for (AbstractNode node : initialGrammar) {
       if (!NodeType.ELEMENT.equals(node.getType())) {
         final StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
@@ -66,22 +64,29 @@ public class SimplifierImpl implements Simplifier {
         throw new IllegalArgumentException("Got null as left side in grammar.");
       }
     }
+  }
 
+  @Override
+  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
+    this.verifyInput(initialGrammar);
+
+    // 1. cluster elements according to name
     final InameClusterer clusterer = new InameClusterer();
     clusterer.addAll(initialGrammar);
     final List<Cluster<AbstractNode>> clusters = clusterer.cluster();
-
+    
+    // 2. prepare emtpy final grammar
     final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
+    // 3. process rules
     for (Cluster<AbstractNode> cluster : clusters) {
       // TODO anti Try to extract the whole block inside the for-loop to a method
       if (!cluster.getRepresentant().isElement()) {
         // we deal only with elements for now, rules are generated only for elements
-        continue;
+        continue;// TODO anti remove when clusterizer fixed
       }
 
-      // TODO anti You started a numbered sequence, but stopped at 1. ;)
-      // 1. construct PTA
+      // 3.1 construct PTA
       final Set<AbstractNode> elementInstances= cluster.getMembers();
 
       final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
@@ -111,19 +116,20 @@ public class SimplifierImpl implements Simplifier {
           }
         }
         automaton.buildPTAOnSymbol(symbolString);
-      }      
+      }
       LOG.setLevel(Level.DEBUG);
       LOG.debug("--- Simplifier on element:");
       LOG.debug(cluster.getRepresentant());
       LOG.debug(">>> PTA automaton:");
       LOG.debug(automaton);
-      
-      // simplify
+
+
+      // 3.2 simplify by merging states
       automaton.make21context();
       LOG.debug(">>> After 2-context:");
       LOG.debug(automaton);
 
-      // convert to regex
+      // 3.3 convert to regexpautomaton
       final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);
       LOG.debug(">>> After regexpautomaton created:");
       LOG.debug(regexpAutomaton);
@@ -134,9 +140,8 @@ public class SimplifierImpl implements Simplifier {
       LOG.debug(regexpAutomaton.getRegexp());
       LOG.debug("--- End");
 
-      // add to list
-      finalGrammar.add(
-        new Element(
+      // 3.4 return element with regexp
+      finalGrammar.add( new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getAttributes(),

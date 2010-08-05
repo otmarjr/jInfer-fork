@@ -18,9 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -58,33 +56,22 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
       this.reverseDelta.put(newState, new HashSet<Step<Regexp<AbstractNode>>>());
     }
 
-    final Map<Step<AbstractNode>, Step<Regexp<AbstractNode>>> stepConversionMap= new TreeMap<Step<AbstractNode>, Step<Regexp<AbstractNode>>>();
     for (State<AbstractNode> anotherState : anotherDelta.keySet()) {
-      final State<Regexp<AbstractNode>> myState= stateConversionMap.get(anotherState);
+      State<Regexp<AbstractNode>> myState= stateConversionMap.get(anotherState);
       for (Step<AbstractNode> anotherStep : anotherDelta.get(anotherState)) {
-        final Regexp<AbstractNode> newSymbol= Regexp.<AbstractNode>getToken(
+        Regexp<AbstractNode> newSymbol= Regexp.<AbstractNode>getToken(
                 anotherStep.getAcceptSymbol()
                 );
 
-        final Step<Regexp<AbstractNode>> newStep= new Step<Regexp<AbstractNode>>(
+        Step<Regexp<AbstractNode>> newStep= new Step<Regexp<AbstractNode>>(
                 newSymbol,
                 stateConversionMap.get(anotherStep.getSource()),
                 stateConversionMap.get(anotherStep.getDestination()),
                 anotherStep.getUseCount()
                 );
 
-        stepConversionMap.put(anotherStep, newStep);
         this.delta.get(myState).add(newStep);
-      }
-    }
-
-    for (State<AbstractNode> anotherState : anotherReverseDelta.keySet()) {
-      for (Step<AbstractNode> anotherStep : anotherReverseDelta.get(anotherState)) {
-        this.reverseDelta.get(
-                stateConversionMap.get(anotherState)
-                ).add(
-                stepConversionMap.get(anotherStep)
-                );
+        this.reverseDelta.get(newStep.getDestination()).add(newStep);
       }
     }
 
@@ -119,9 +106,9 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     }
 
     for (Step<Regexp<AbstractNode>> step : this.delta.get(state)) {
-     // if (!step.getDestination().equals(state)) { // To prevent twice counting the loops
+      if (!step.getDestination().equals(state)) { // To prevent twice counting the loops
         weight+= this.getRegexpWeight(step.getAcceptSymbol());
-     // }
+      }
     }
     return weight;
   }

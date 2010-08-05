@@ -99,7 +99,9 @@ public class Automaton<T> {
 
   private void collapseStepsAfterMerge(final State<T> mainState) {
     final Map<State<T>, Map<T, Step<T>>> inBuckets= new HashMap<State<T>, Map<T, Step<T>>>();
-    for (Step<T> inStep : this.reverseDelta.get(mainState)) {
+
+    final Set<Step<T>> inSteps= new HashSet<Step<T>>(this.reverseDelta.get(mainState));
+    for (Step<T> inStep : inSteps) {
       if (inBuckets.containsKey(inStep.getSource())) {
         if (inBuckets.get(inStep.getSource()).containsKey(inStep.getAcceptSymbol())) {
           inBuckets.get(inStep.getSource()).get(inStep.getAcceptSymbol()).incUseCount(inStep.getUseCount());
@@ -115,7 +117,8 @@ public class Automaton<T> {
     }
 
     final Map<State<T>, Map<T, Step<T>>> outBuckets= new HashMap<State<T>, Map<T, Step<T>>>();
-    for (Step<T> outStep : this.delta.get(mainState)) {
+    final Set<Step<T>> outSteps= new HashSet<Step<T>>(this.delta.get(mainState));
+    for (Step<T> outStep : outSteps) {
       if (outBuckets.containsKey(outStep.getDestination())) {
         if (outBuckets.get(outStep.getDestination()).containsKey(outStep.getAcceptSymbol())) {
           outBuckets.get(outStep.getDestination()).get(outStep.getAcceptSymbol()).incUseCount(outStep.getUseCount());
@@ -167,7 +170,7 @@ public class Automaton<T> {
     boolean search= true;
     while (search) {
       search= false;
-      List<Pair<State<T>, State<T>>> mergableStates=null;
+      List<List<Pair<State<T>, State<T>>>> mergableStates=null;
       boolean found= false;
       for (State<T> mainState : this.delta.keySet()) {
         for (State<T> mergedState : this.delta.keySet()) {
@@ -183,7 +186,7 @@ public class Automaton<T> {
         }
       }
       if (found) {
-        for (Pair<State<T>, State<T>> mergePair : mergableStates) {
+        for (Pair<State<T>, State<T>> mergePair : mergableStates.get(0)) {
           LOG.error("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
           this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
         }

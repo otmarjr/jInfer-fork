@@ -57,7 +57,7 @@ public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T>
   }
 
   @Override
-  public List<Pair<State<T>, State<T>>> getMergableStates(State<T> mainState, State<T> mergedState, Automaton<T> automaton) {
+  public List<List<Pair<State<T>, State<T>>>> getMergableStates(State<T> mainState, State<T> mergedState, Automaton<T> automaton) {
     final Map<State<T>, Set<Step<T>>> delta= automaton.getDelta();
     final Map<State<T>, Set<Step<T>>> reverseDelta= automaton.getReverseDelta();
 
@@ -77,10 +77,14 @@ public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T>
     List<KHContext<T>> mainKHContexts= this.findKHContexts(mainState, delta, reverseDelta);
     List<KHContext<T>> mergedKHContexts= this.findKHContexts(mergedState, delta, reverseDelta);
 
-    List<Pair<State<T>, State<T>>> result= new LinkedList<Pair<State<T>, State<T>>>();
-    for (KHContext<T> mainKHContext : mergedKHContexts) {
+    List<List<Pair<State<T>, State<T>>>> result= new LinkedList<List<Pair<State<T>, State<T>>>>();
+    boolean found= false;
+    for (KHContext<T> mainKHContext : mainKHContexts) {
       for (KHContext<T> mergedKHContext : mergedKHContexts) {
-        result.addAll( mainKHContext.getMergeableStates(mergedKHContext) );
+        final List<Pair<State<T>, State<T>>> temp= mainKHContext.getMergeableStates(mergedKHContext);
+        if (!temp.isEmpty()) {
+          result.add(temp);
+        }
       }
     }
     return result;

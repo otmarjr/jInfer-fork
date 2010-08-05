@@ -33,9 +33,12 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Task;
 import org.openide.util.TaskListener;
+import org.openide.windows.IOContainer;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -104,9 +107,8 @@ public class Runner {
         catch (final InterruptedException e) {
           interrupted();
         }
-        catch (final RuntimeException e) {
-          unexpected();
-          throw e;
+        catch (final Exception e) {
+          unexpected(e);
         }
       }
     }, "Retrieving IG");
@@ -127,8 +129,7 @@ public class Runner {
           interrupted();
         }
         catch (final RuntimeException e) {
-          unexpected();
-          throw e;
+          unexpected(e);
         }
       }
     }, "Inferring the schema");
@@ -149,8 +150,7 @@ public class Runner {
           interrupted();
         }
         catch (final RuntimeException e) {
-          unexpected();
-          throw e;
+          unexpected(e);
         }
       }
     }, "Generating result schema");
@@ -188,9 +188,18 @@ public class Runner {
     RunningProject.removeActiveProject();
   }
 
-  private static void unexpected() {
-    LOG.error("Inference interrupted due to an unexpected error.");
+  private static void unexpected(final Exception e) {
+    LOG.error("Inference interrupted due to an unexpected error.", e);
     RunningProject.removeActiveProject();
+
+    // display a message box
+    NotifyDescriptor message = new NotifyDescriptor.Message("Process of inferrence caused an unexpected error. Detailed information was logged to the logfile and inferrence was cancelled.", NotifyDescriptor.ERROR_MESSAGE);
+    DialogDisplayer.getDefault().notify(message);
+
+    // TODO rio Output sa neda zobrazit z tohoto vlakna - vyhodi vynimku
+    // show Output window
+    //IOContainer.getDefault().open();
+    //IOContainer.getDefault().requestVisible();
   }
 
   private String getCommentedSchema(final String schema) {

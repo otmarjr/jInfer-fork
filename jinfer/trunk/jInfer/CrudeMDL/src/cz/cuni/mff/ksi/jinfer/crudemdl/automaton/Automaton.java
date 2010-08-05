@@ -17,9 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
-import com.sun.org.apache.xml.internal.serializer.ToTextStream;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import java.util.AbstractList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,16 +64,6 @@ public class Automaton<T> {
 
   private Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
     final Set<Step<T>> steps= this.delta.get(state);
-    for (Step<T> step : steps) {
-      if (step.getAcceptSymbol().equals(symbol)) {
-        return step;
-      }
-    }
-    return null;
-  }
-
-  private Step<T> getInStepOnSymbol(final State<T> state, final T symbol) {
-    final Set<Step<T>> steps= this.reverseDelta.get(state);
     for (Step<T> step : steps) {
       if (step.getAcceptSymbol().equals(symbol)) {
         return step;
@@ -247,6 +235,34 @@ public class Automaton<T> {
     }
   }
 
+  public void make2context(MergeCondidionTester<T> mergeCondidionTester) {
+    boolean search= true;
+    while (search) {
+      search= false;
+      List<Pair<State<T>, State<T>>> mergableStates=null;
+      boolean found= false;
+      for (State<T> mainState : this.delta.keySet()) {
+        for (State<T> mergedState : this.delta.keySet()) {
+          mergableStates= mergeCondidionTester.getMergableStates(mainState, mergedState, this );
+          if (!mergableStates.isEmpty()) {
+            LOG.error("Equivalent states: " + mainState.toString() + " " + mergedState.toString() + "\n");
+            found= true;
+            break;
+          }
+        }
+        if (found) {
+          break; // get out of searching when found already
+        }
+      }
+      if (found) {
+        for (Pair<State<T>, State<T>> mergePair : mergableStates) {
+          LOG.error("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
+          this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
+        }
+        search= true;
+      }
+    }
+  }
 
   @Override
   public String toString() {

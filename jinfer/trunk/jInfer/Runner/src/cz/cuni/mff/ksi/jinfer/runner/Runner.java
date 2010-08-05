@@ -27,7 +27,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.moduleselection.ModuleSelection;
+import cz.cuni.mff.ksi.jinfer.runner.options.RunnerPanel;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
@@ -35,11 +37,12 @@ import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.util.NbPreferences;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Task;
 import org.openide.util.TaskListener;
-import org.openide.windows.IOContainer;
 import org.openide.windows.IOProvider;
+import org.openide.windows.IOSelect;
 import org.openide.windows.InputOutput;
 
 /**
@@ -52,7 +55,6 @@ import org.openide.windows.InputOutput;
 public class Runner {
 
   private static final Logger LOG = Logger.getLogger(Runner.class);
-
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
   private final SchemaGenerator schemaGenerator;
@@ -79,11 +81,15 @@ public class Runner {
   };
 
   public Runner() {
-    final Properties projectProperties = RunningProject.getActiveProject().getLookup().lookup(Properties.class);
+    final Properties projectProperties = RunningProject.getActiveProject().getLookup().lookup(
+            Properties.class);
 
-    igGenerator = ModuleSelection.lookupIGGenerator(projectProperties.getProperty("moduleselector.initialgrammar"));
-    simplifier = ModuleSelection.lookupSimplifier(projectProperties.getProperty("moduleselector.simplifier"));
-    schemaGenerator = ModuleSelection.lookupSchemaGenerator(projectProperties.getProperty("moduleselector.schemagenerator"));
+    igGenerator = ModuleSelection.lookupIGGenerator(projectProperties.getProperty(
+            "moduleselector.initialgrammar"));
+    simplifier = ModuleSelection.lookupSimplifier(projectProperties.getProperty(
+            "moduleselector.simplifier"));
+    schemaGenerator = ModuleSelection.lookupSchemaGenerator(projectProperties.getProperty(
+            "moduleselector.schemagenerator"));
   }
 
   /**
@@ -102,9 +108,9 @@ public class Runner {
         //LOG.fatal("fatal");
 
         try {
-          igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), iggCallback);
-        }
-        catch (final InterruptedException e) {
+          igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class),
+                  iggCallback);
+        } catch (final InterruptedException e) {
           interrupted();
         }
         catch (final Exception e) {
@@ -124,11 +130,9 @@ public class Runner {
       public void run() {
         try {
           simplifier.start(grammar, simplCallback);
-        }
-        catch (final InterruptedException e) {
+        } catch (final InterruptedException e) {
           interrupted();
-        }
-        catch (final RuntimeException e) {
+        } catch (final RuntimeException e) {
           unexpected(e);
         }
       }
@@ -145,11 +149,9 @@ public class Runner {
       public void run() {
         try {
           schemaGenerator.start(grammar, sgCallback);
-        }
-        catch (final InterruptedException e) {
+        } catch (final InterruptedException e) {
           interrupted();
-        }
-        catch (final RuntimeException e) {
+        } catch (final RuntimeException e) {
           unexpected(e);
         }
       }
@@ -158,11 +160,24 @@ public class Runner {
 
   public void finishedSchemaGenerator(final String schema, final String extension) {
     LOG.info("Runner: writing schema.");
+
+    final boolean openSchema = NbPreferences.forModule(RunnerPanel.class).getBoolean(
+            RunnerPanel.SCHEMA_OPEN, false);
+
+    RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class).addOutput(
+            "generated-schema", getCommentedSchema(schema), extension, openSchema);
+
+    final boolean showOutput = NbPreferences.forModule(RunnerPanel.class).getBoolean(
+            RunnerPanel.OUTPUT_SHOW, false);
+
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
     ioResult.getOut().println(schema);
 
-    RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class)
-            .addOutput("generated-schema", getCommentedSchema(schema), extension);
+    if (showOutput) {
+      IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
+    }
+    ioResult.getOut().close();
+
 
     RunningProject.removeActiveProject();
     LOG.info("------------- DONE -------------");
@@ -173,6 +188,7 @@ public class Runner {
     final RequestProcessor.Task theTask = rp.create(r);
     final ProgressHandle handle = ProgressHandleFactory.createHandle(taskName, theTask);
     theTask.addTaskListener(new TaskListener() {
+
       @Override
       public void taskFinished(final Task task) {
         handle.finish();
@@ -208,5 +224,4 @@ public class Runner {
             + simplifier.getModuleName() + ", "
             + schemaGenerator.getModuleName() + " -->\n" + schema;
   }
-
 }

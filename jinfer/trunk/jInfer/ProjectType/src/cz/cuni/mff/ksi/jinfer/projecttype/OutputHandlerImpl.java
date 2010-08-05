@@ -38,7 +38,7 @@ public class OutputHandlerImpl implements OutputHandler {
   }
 
   @Override
-  public void addOutput(final String name, final String data, final String extension) {
+  public void addOutput(final String name, final String data, final String extension, final boolean showOutput) {
     try {
       final FileObject outputFolder = project.getOutputFolder(true);
       int min = 1;
@@ -53,7 +53,11 @@ public class OutputHandlerImpl implements OutputHandler {
       out.write(data.getBytes());
       out.flush();
       out.close();
-      DataObject.find(output).getLookup().lookup(Openable.class).open();
+
+      if (showOutput) {
+        DataObject.find(output).getLookup().lookup(Openable.class).open();
+      }
+      
       outputFolder.refresh();
     } catch (IOException ex) {
       Exceptions.printStackTrace(ex);

@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 /**
+ * TODO anti comment
  *
  * @author anti
  */
@@ -27,7 +28,7 @@ public class Step<T> implements Comparable<Step<T>> {
   private State<T> source;
   private State<T> destination;
 
-  Step(final T acceptSymbol, final State<T> source, final State<T> destination, final Integer useCount) {
+  public Step(final T acceptSymbol, final State<T> source, final State<T> destination, final Integer useCount) {
     this.acceptSymbol= acceptSymbol;
     this.useCount= useCount;
     this.source= source;
@@ -117,6 +118,4 @@ public class Step<T> implements Comparable<Step<T>> {
   public int compareTo(Step<T> o) {
     return this.getDestination().compareTo(o.getDestination());
   }
-
-
 }

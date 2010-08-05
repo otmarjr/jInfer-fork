@@ -23,13 +23,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * TODO anti comment
  *
  * @author anti
  */
 public class InameClusterer implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> clusters;
 
-  InameClusterer() {
+  public InameClusterer() {
     this.clusters= new LinkedList<Cluster<AbstractNode>>();
   }
 

@@ -65,7 +65,9 @@ public class FileAddAction extends AbstractAction {
     } else if (FolderType.QUERY.equals(type)) {
       fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
               "XPath files (*.xpath)", "xpath")).addFileFilter(new FileNameExtensionFilter(
-              "Text files (*.txt)", "txt"));
+              "Text files (*.txt)", "txt")).addFileFilter(new FileNameExtensionFilter(
+              "Text and XPath files (*.txt, *.xpath)",
+              "txt", "xpath"));
     }
 
     final File[] selectedFiles = fileChooserBuilder.showMultiOpenDialog();

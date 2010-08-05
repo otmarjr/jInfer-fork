@@ -29,10 +29,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * TODO anti comment
  *
  * @author anti
  */
@@ -47,8 +49,6 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) {
-// TODO remove this line when finished, now here to pass this module
-//    callback.finished( new ArrayList<AbstractNode>() );
 
     for (AbstractNode node : initialGrammar) {
       if (!NodeType.ELEMENT.equals(node.getType())) {
@@ -70,19 +70,29 @@ public class SimplifierImpl implements Simplifier {
 
     for (Cluster<AbstractNode> cluster : clusters) {
       if (!cluster.getRepresentant().isElement()) {
-        LOG.info(cluster); // TODO assertion here
-        continue; // we deal only with elements for now
+        // we deal only with elements for now, rules are generated only for elements
+        continue;
       }
 
-      // construct PTA
+      // 1. construct PTA
       final Set<AbstractNode> elementInstances= cluster.getMembers();
 
       final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
-      final SimpleData universalSimpleData= new SimpleData(new ArrayList<String>(), "PCDATA", new HashMap<String, Object>(), "", new ArrayList<String>());
+      final SimpleData universalSimpleData= new SimpleData(
+              new ArrayList<String>(),
+              "univ_simple",
+              new HashMap<String, Object>(),
+              "",
+              new ArrayList<String>()
+              );
 
       for (AbstractNode instance : elementInstances) {
         final Element element = (Element) instance;
         final Regexp<AbstractNode> rightSide= element.getSubnodes();
+        if (!rightSide.isConcatenation()) {
+          throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp.");
+        }
+
         final List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
         final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
@@ -95,23 +105,27 @@ public class SimplifierImpl implements Simplifier {
         }
         automaton.buildPTAOnSymbol(symbolString);
       }
-      LOG.fatal(cluster.getRepresentant());
-      LOG.fatal(automaton);
+      LOG.setLevel(Level.DEBUG);
+      LOG.debug("--- Simplifier on element:");
+      LOG.debug(cluster.getRepresentant());
+      LOG.debug(">>> PTA automaton:");
+      LOG.debug(automaton);
       
       // simplify
       automaton.make21context();
-      LOG.fatal(">>> After 2-context \n");
-      LOG.fatal(automaton);
+      LOG.debug(">>> After 2-context:");
+      LOG.debug(automaton);
 
       // convert to regex
       final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);
-      LOG.fatal(">>> After regexpautomaton created \n");
-      LOG.fatal(regexpAutomaton);
+      LOG.debug(">>> After regexpautomaton created:");
+      LOG.debug(regexpAutomaton);
       regexpAutomaton.makeRegexpForm();
-      LOG.fatal(">>> After regexp automaton conversion \n");
-      LOG.fatal(regexpAutomaton);
-      LOG.fatal(">>> And the regexp is:");
-      LOG.fatal(regexpAutomaton.getRegexp());
+      LOG.debug(">>> After regexp automaton conversion:");
+      LOG.debug(regexpAutomaton);
+      LOG.debug(">>> And the regexp is:");
+      LOG.debug(regexpAutomaton.getRegexp());
+      LOG.debug("--- End");
 
       // add to list
       finalGrammar.add(

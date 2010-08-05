@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -94,17 +95,73 @@ public class Automaton<T> {
     xState.incFinalCount();
   }
 
-  private void correctParallelSteps(State<T> state) {
+  private void collapseStepsAfterMerge(final State<T> mainState) {
+    final Map<State<T>, Map<T, Step<T>>> inBuckets= new HashMap<State<T>, Map<T, Step<T>>>();
+    for (Step<T> inStep : this.reverseDelta.get(mainState)) {
+      if (inBuckets.containsKey(inStep.getSource())) {
+        if (inBuckets.get(inStep.getSource()).containsKey(inStep.getAcceptSymbol())) {
+          inBuckets.get(inStep.getSource()).get(inStep.getAcceptSymbol()).incUseCount(inStep.getUseCount());
+          this.delta.get(inStep.getSource()).remove(inStep);
+          this.reverseDelta.get(inStep.getDestination()).remove(inStep);
+        } else {
+          inBuckets.get(inStep.getSource()).put(inStep.getAcceptSymbol(), inStep);
+        }
+      } else {
+        inBuckets.put(inStep.getSource(), new HashMap<T, Step<T>>());
+        inBuckets.get(inStep.getSource()).put(inStep.getAcceptSymbol(), inStep);
+      }
+    }
 
+    final Map<State<T>, Map<T, Step<T>>> outBuckets= new HashMap<State<T>, Map<T, Step<T>>>();
+    for (Step<T> outStep : this.delta.get(mainState)) {
+      if (outBuckets.containsKey(outStep.getDestination())) {
+        if (outBuckets.get(outStep.getDestination()).containsKey(outStep.getAcceptSymbol())) {
+          outBuckets.get(outStep.getDestination()).get(outStep.getAcceptSymbol()).incUseCount(outStep.getUseCount());
+          this.delta.get(outStep.getSource()).remove(outStep);
+          this.reverseDelta.get(outStep.getDestination()).remove(outStep);
+        } else {
+          outBuckets.get(outStep.getDestination()).put(outStep.getAcceptSymbol(), outStep);
+        }
+      } else {
+        outBuckets.put(outStep.getDestination(), new HashMap<T, Step<T>>());
+        outBuckets.get(outStep.getDestination()).put(outStep.getAcceptSymbol(), outStep);
+      }
+    }
   }
 
-  public Automaton<T> mergeStates(final State<T> mainState, final State<T> mergedState) {
-    final List<State<T>> list= new LinkedList<State<T>>();
+  public void mergeStates(final State<T> mainState, final State<T> mergedState) {
+/*    final List<State<T>> list= new LinkedList<State<T>>();
     list.add(mergedState);
     return this.mergeStates(mainState, list);
+ *
+ */
+    if (mergedState.equals(mainState)) {
+      return;
+    }
+
+    /* insteps */
+    final Set<Step<T>> mergedStateInSteps= this.reverseDelta.get(mergedState);
+    for (Step<T> mergedStateInStep : mergedStateInSteps) {
+      mergedStateInStep.setDestination(mainState);
+    }
+    this.reverseDelta.remove(mergedState);
+    this.reverseDelta.get(mainState).addAll(mergedStateInSteps);
+
+    /* outsteps */
+    final Set<Step<T>> mergedStateOutSteps= this.delta.get(mergedState);
+    for (Step<T> mergedStateOutStep : mergedStateOutSteps) {
+        mergedStateOutStep.setSource(mainState);
+    }
+    this.delta.remove(mergedState);
+    this.delta.get(mainState).addAll(mergedStateOutSteps);
+
+
+    /* finalCount */
+    mainState.incFinalCount(mergedState.getFinalCount());
+    this.collapseStepsAfterMerge(mainState);
   }
 
-  public Automaton<T> mergeStates(final State<T> mainState, final List<State<T>> mergedStates) {
+  public void mergeStates(final State<T> mainState, final List<State<T>> mergedStates) {
     if (!this.delta.containsKey(mainState)) {
       throw new IllegalArgumentException("State " + mainState.toString() + " not present in automaton " + this.toString());
     }
@@ -145,22 +202,7 @@ public class Automaton<T> {
       /* finalCount */
       mainState.incFinalCount(mergedState.getFinalCount());
     }
-
-    this.correctParallelSteps(mainState);
-    return null;
   }
-
-/*
-  private List<KHContext<T>> findKHContexts(State<T> state, int k, int h) {
-    List<KHContext<T>> result= new LinkedList<KHContext<T>>();
-
-
-    for ()
-    
-    KHContext<T> kHContext= new KHContext<T>(k, h);
-
-  }
-*/
 
   private List<KHContext<T>> find21Contexts(final State<T> state) {
     final List<KHContext<T>> result= new LinkedList<KHContext<T>>();

@@ -17,9 +17,15 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-
 /**
+ * Class representing state in deterministic finite automaton.
+ * has fields- finalCount - number the times its final state, how
+ * many input strings ended in this state
+ * 
+ * name - simple integer to name states correctly in log output and
+ * visualization
+ * 
+ * parentAutomaton
  *
  * @author anti
  */

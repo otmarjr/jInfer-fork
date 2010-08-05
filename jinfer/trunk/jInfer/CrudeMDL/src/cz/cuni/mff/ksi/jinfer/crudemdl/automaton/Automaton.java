@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
+import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition.MergeCondidionTester;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.Collections;
 import java.util.HashMap;
@@ -215,21 +216,21 @@ public class Automaton<T> {
   /**
    * @return the initialState
    */
-  protected State<T> getInitialState() {
+  public State<T> getInitialState() {
     return initialState;
   }
 
   /**
    * @return the delta
    */
-  protected Map<State<T>, Set<Step<T>>> getDelta() {
+  public Map<State<T>, Set<Step<T>>> getDelta() {
     return Collections.unmodifiableMap(delta);
   }
 
   /**
    * @return the reverseDelta
    */
-  protected Map<State<T>, Set<Step<T>>> getReverseDelta() {
+  public Map<State<T>, Set<Step<T>>> getReverseDelta() {
     return Collections.unmodifiableMap(reverseDelta);
   }
 

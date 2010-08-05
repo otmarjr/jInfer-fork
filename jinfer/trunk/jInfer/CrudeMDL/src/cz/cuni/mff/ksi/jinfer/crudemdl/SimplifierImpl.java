@@ -29,9 +29,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition.MergeCondidionTester;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -130,7 +128,7 @@ public class SimplifierImpl implements Simplifier {
 
 
       // 3.2 simplify by merging states
-      MergeCondidionTester<AbstractNode> mergeCondidionTester= new KHContextMergeConditionTester<AbstractNode>(2, 0);
+      MergeCondidionTester<AbstractNode> mergeCondidionTester= new KHContextMergeConditionTester<AbstractNode>(2, 1);
       automaton.make2context(mergeCondidionTester);
       LOG.debug(">>> After 2-context:");
       LOG.debug(automaton);
@@ -147,12 +145,12 @@ public class SimplifierImpl implements Simplifier {
       LOG.debug("--- End");
 
       // 3.4 return element with regexp
-      finalGrammar.add( new Element(
+      finalGrammar.add( (new Shortener()).simplify( new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getAttributes(),
-          regexpAutomaton.getRegexp()
-        )
+           regexpAutomaton.getRegexp()
+           )   )
       );
     }
     callback.finished( finalGrammar );

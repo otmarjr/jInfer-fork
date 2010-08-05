@@ -54,10 +54,6 @@ public class Regexp<T> {
     this.type = type;
   }
 
-  public static <T> Regexp<T> getLambda() {
-    return new Regexp<T>(null, Collections.<Regexp<T>>emptyList(), RegexpType.LAMBDA);
-  }
-
   public static <T> Regexp<T> getToken(final T content) {
     return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN);
   }
@@ -118,8 +114,6 @@ public class Regexp<T> {
   @SuppressWarnings("unchecked")
   public List<T> getTokens() {
     switch (type) {
-      case LAMBDA:
-        return Collections.emptyList();
       case TOKEN:
         return Arrays.asList(content);
       case KLEENE:
@@ -138,10 +132,6 @@ public class Regexp<T> {
 
   public RegexpType getType() {
     return type;
-  }
-
-  public boolean isLambda() {
-    return RegexpType.LAMBDA.equals(type);
   }
 
   public boolean isToken() {
@@ -247,8 +237,6 @@ public class Regexp<T> {
   @Override
   public String toString() {
     switch (type) {
-      case LAMBDA:
-        return "\u03BB"; // that really is "λ"
       case TOKEN:
         return content.toString();
       case KLEENE:

@@ -314,13 +314,16 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     this.delta.remove(state);
   }
 
-  public void makeRegexpForm() {
+  public void makeRegexpForm() throws InterruptedException {
     this.createSuperFinalState();
     while (this.delta.keySet().size() > 2) {
       LOG.error(this);
       int minWeight= Integer.MAX_VALUE;
       State<Regexp<AbstractNode>> minState= null;
       for (State<Regexp<AbstractNode>> state : this.delta.keySet()) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         if (state.equals(this.initialState)||state.equals(this.superFinalState)) {
           continue;//remove except initial state
         }

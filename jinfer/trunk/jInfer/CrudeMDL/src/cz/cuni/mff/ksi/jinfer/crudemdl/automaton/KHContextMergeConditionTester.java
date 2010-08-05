@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,12 +30,27 @@ import java.util.Set;
 public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T> {
   private int k;
   private int h;
+  
   public KHContextMergeConditionTester(int k, int h) {
     if (h > k) {
       throw  new IllegalArgumentException("K must be greater than h");
     }
     this.k= k;
     this.h= h;
+  }
+
+  private List<KHContext<T>> findKHContexts(final State<T> state, final Map<State<T>, Set<Step<T>>> delta, final Map<State<T>, Set<Step<T>>> reverseDelta) {
+    final List<KHContext<T>> result= new LinkedList<KHContext<T>>();
+
+    for (Step<T> inStep : reverseDelta.get(state)) {
+      for (Step<T> secondInStep : reverseDelta.get(inStep.getSource())) {
+        final KHContext<T> context= new KHContext<T>(this.k, this.h);
+        context.addStepLast(secondInStep);
+        context.addStepLast(inStep);
+        result.add(context);
+      }
+    }
+    return result;
   }
 
   @Override
@@ -55,15 +71,15 @@ public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T>
       throw new IllegalArgumentException("reverseDelta function does not contain state to check.");
     }
 
-    Set<Step<T>> mainInSteps= reverseDelta.get(mainState);
-    Set<Step<T>> mergedInSteps= reverseDelta.get(mergedState);
-    for (Step<T> mainInStep : mainInSteps) {
-      for (Step<T> mergedInStep : mergedInSteps) {
-        if (mainInStep.getAcceptSymbol().equals(mergedInStep.getAcceptSymbol())) {
+    List<KHContext<T>> mainKHContexts= this.findKHContexts(mainState, delta, reverseDelta);
+    List<KHContext<T>> mergedKHContexts= this.findKHContexts(mergedState, delta, reverseDelta);
 
-        }
+    List<Pair<State<T>, State<T>>> result= new LinkedList<Pair<State<T>, State<T>>>();
+    for (KHContext<T> mainKHContext : mergedKHContexts) {
+      for (KHContext<T> mergedKHContext : mergedKHContexts) {
+        result.addAll( mainKHContext.getMergeableStates(mergedKHContext) );
       }
     }
-    return null;
+    return result;
   }
 }

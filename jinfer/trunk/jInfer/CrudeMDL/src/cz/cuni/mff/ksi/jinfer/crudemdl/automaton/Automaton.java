@@ -158,11 +158,11 @@ public class Automaton<T> {
 
     /* finalCount */
     mainState.incFinalCount(mergedState.getFinalCount());
-    LOG.error("after merge");
-    LOG.error(this);
+    LOG.debug("after merge");
+    LOG.debug(this);
     this.collapseStepsAfterMerge(mainState);
-    LOG.error("after collapse");
-    LOG.error(this);
+    LOG.debug("after collapse");
+    LOG.debug(this);
   }
 
 

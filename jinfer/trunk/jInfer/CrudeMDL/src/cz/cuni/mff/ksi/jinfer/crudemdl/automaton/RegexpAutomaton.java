@@ -88,7 +88,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
       }
       if (state.getFinalCount() > 0) {
         final Step<Regexp<AbstractNode>> newStep= new Step<Regexp<AbstractNode>>(
-                Regexp.<AbstractNode>getLambda(), state, this.superFinalState, 1);
+                Regexp.<AbstractNode>getConcatenation(), state, this.superFinalState, 1);
         this.delta.get(state).add(newStep);
         this.reverseDelta.get(this.superFinalState).add(newStep);
       }
@@ -130,6 +130,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
 
     if (loopSteps.size() == 1) {
       Step<Regexp<AbstractNode>> oldLoopStep= loopSteps.get(0);
+
       loopChildren.add(oldLoopStep.getAcceptSymbol());
       newLoopStep=
               new Step<Regexp<AbstractNode>>(
@@ -211,8 +212,6 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
         outSteps.add(step);
     }
 
-    //TODO anti assertion here (steps are partitioned)
-
     assert !outSteps.isEmpty();
     if (outSteps.size() == 1) {
       return;
@@ -281,12 +280,19 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
       for (Step<Regexp<AbstractNode>> outStep : outSteps) {
 
         final List<Regexp<AbstractNode>> newRegexpChildren= new LinkedList<Regexp<AbstractNode>>();
-        newRegexpChildren.add(inStep.getAcceptSymbol());
+        if (inStep.getAcceptSymbol().isToken()) {
+          newRegexpChildren.add(inStep.getAcceptSymbol());
+        } else {
+          newRegexpChildren.addAll(inStep.getAcceptSymbol().getChildren());
+        }
         if (loopStep != null) {
           newRegexpChildren.add(loopStep.getAcceptSymbol());
         }
-        if (!outStep.getAcceptSymbol().isLambda()) {
+        if (!outStep.getAcceptSymbol().isEmpty())
+        if (outStep.getAcceptSymbol().isToken()) {
           newRegexpChildren.add(outStep.getAcceptSymbol());
+        } else {
+          newRegexpChildren.addAll(outStep.getAcceptSymbol().getChildren());
         }
 
         Regexp<AbstractNode> newRegexp= Regexp.<AbstractNode>getConcatenation(newRegexpChildren);

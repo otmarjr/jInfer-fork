@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -30,16 +30,17 @@ import java.util.List;
  * @author anti
  */
 public class InameClusterer implements Clusterer<AbstractNode> {
-  private final List<Cluster<AbstractNode>> clusters;
+  private final List<Cluster<AbstractNode>> nodeClusters;
   private List<AbstractNode> items;
 
   public InameClusterer() {
-    this.clusters= new LinkedList<Cluster<AbstractNode>>();
+    this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
     this.items= new LinkedList<AbstractNode>();
   }
 
-  private void internalAdd(final AbstractNode item) throws InterruptedException {
-    final Iterator<Cluster<AbstractNode>> iterator= this.clusters.iterator();
+  private void addNode(final AbstractNode item) throws InterruptedException {
+    final Iterator<Cluster<AbstractNode>> iterator= this.nodeClusters.iterator();
+
     boolean found= false;
     while (iterator.hasNext()&&(!found)) {
       if (Thread.interrupted()) {
@@ -50,24 +51,22 @@ public class InameClusterer implements Clusterer<AbstractNode> {
       if (item.isSimpleData()&&representant.isSimpleData()) {
         cluster.add(item);
         found= true;
-      } else 
-        if (item.isElement() &&
+      } else if (item.isElement() &&
           representant.isElement() &&
           representant.getName().equalsIgnoreCase(item.getName())
         ) {
           cluster.add(item);
           found= true;
-      } else
-        if (item.isAttribute() &&
+      } else if (item.isAttribute() &&
           representant.isAttribute() &&
           representant.getName().equalsIgnoreCase(item.getName())
         ) {
           cluster.add(item);
-          found=true;
-        }
+          found= true;
+      }
     }
     if (!found) {
-      this.clusters.add(
+      this.nodeClusters.add(
               new Cluster<AbstractNode>(item)
               );
     }
@@ -80,20 +79,12 @@ public class InameClusterer implements Clusterer<AbstractNode> {
    */
   @Override
   public void add(final AbstractNode item) {
-    if (!item.isSimpleData()) {
-      this.items.add(item);
-    }
-    if (item.isElement()&&(item instanceof Element)) {
-      Element el= (Element) item;
-      this.addAll(el.getSubnodes().getTokens());
-    }
+    this.items.add(item);
   }
 
   @Override
-  public void addAll(final List<AbstractNode> items){
-    for (AbstractNode item : items) {
-      this.add(item);
-    }
+  public void addAll(final Collection<AbstractNode> items){
+    this.items.addAll(items);
   }
 
   /*
@@ -105,16 +96,16 @@ public class InameClusterer implements Clusterer<AbstractNode> {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      this.internalAdd(node);
+      this.addNode(node);
     }
     this.items.clear();
 
-    return Collections.unmodifiableList(this.clusters);
+    return Collections.unmodifiableList(this.nodeClusters);
   }
 
   @Override
   public AbstractNode getRepresentantForItem(final AbstractNode item) {
-    for (Cluster<AbstractNode> cluster : this.clusters) {
+    for (Cluster<AbstractNode> cluster : this.nodeClusters) {
       if (cluster.isMember(item)) {
         return cluster.getRepresentant();
       }

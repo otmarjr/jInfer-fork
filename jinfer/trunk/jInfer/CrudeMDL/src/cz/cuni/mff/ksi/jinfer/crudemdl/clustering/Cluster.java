@@ -26,10 +26,10 @@ import java.util.Set;
  * @author anti
  */
 public class Cluster<T> {
-  private T representant;
-  private Set<T> members;
+  protected T representant;
+  protected Set<T> members;
 
-  Cluster(final T representant) {
+  public Cluster(final T representant) {
     this.representant= representant;
     this.members= new HashSet<T>();
     this.members.add(representant);

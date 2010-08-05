@@ -23,12 +23,15 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.InameClusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition.MergeCondidionTester;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ElementInameClusterer;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -73,6 +76,11 @@ public class SimplifierImpl implements Simplifier {
     // 1. cluster elements according to name
     final InameClusterer clusterer = new InameClusterer();
     clusterer.addAll(initialGrammar);
+    for (AbstractNode node : initialGrammar) {
+      if (node.isElement()&&(node instanceof Element)) {
+        clusterer.addAll(((Element) node).getSubnodes().getTokens());
+      }
+    }
     final List<Cluster<AbstractNode>> clusters = clusterer.cluster();
     
     // 2. prepare emtpy final grammar
@@ -86,24 +94,28 @@ public class SimplifierImpl implements Simplifier {
       // TODO anti Try to extract the whole block inside the for-loop to a method
       if (!cluster.getRepresentant().isElement()) {
         // we deal only with elements for now, rules are generated only for elements
-        continue;// TODO anti remove when clusterizer fixed
+        continue;
       }
 
       // 3.1 construct PTA
       final Set<AbstractNode> elementInstances= cluster.getMembers();
+      final InameClusterer attClusterer = new InameClusterer();
+      attClusterer.addAll(elementInstances);
+      for (AbstractNode node : elementInstances) {
+        if (node.isElement()&&(node instanceof Element)) {
+          attClusterer.addAll(((Element) node).getSubnodes().getTokens());
+        }
+      }
+      final List<Cluster<AbstractNode>> attClusters = attClusterer.cluster();
 
       final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
-      final SimpleData universalSimpleData= new SimpleData(
-              new ArrayList<String>(),
-              "univ_simple",
-              new HashMap<String, Object>(),
-              "",
-              new ArrayList<String>()
-              );
+      final Automaton<AbstractNode> attAutomaton= new Automaton<AbstractNode>(true);
 
       for (AbstractNode instance : elementInstances) {
         final Element element = (Element) instance;
         final Regexp<AbstractNode> rightSide= element.getSubnodes();
+        final List<Attribute> atts= element.getElementAttributes();
+
         if (!rightSide.isConcatenation()) {
           throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp.");
         }
@@ -111,16 +123,24 @@ public class SimplifierImpl implements Simplifier {
         final List<AbstractNode> rightSideTokens= rightSide.getTokens();
 
         final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
+        final List<AbstractNode> attSymbolString= new LinkedList<AbstractNode>();
         for (AbstractNode token : rightSideTokens) {
-          if (token.isSimpleData()) {
-            symbolString.add(universalSimpleData);
-          } else {
-            symbolString.add( clusterer.getRepresentantForItem(token) );
+          if (token.isAttribute()) {
+            continue;
           }
+          symbolString.add( clusterer.getRepresentantForItem(token) );
+        }
+        for (AbstractNode token : atts) {
+          if (!token.isAttribute()) {
+            continue;
+          }
+          attSymbolString.add( attClusterer.getRepresentantForItem(token) );
         }
         automaton.buildPTAOnSymbol(symbolString);
+        attAutomaton.buildPTAOnSymbol(attSymbolString);
       }
-      LOG.setLevel(Level.DEBUG);
+      //LOG.setLevel(Level.DEBUG);
+      LOG.error(attAutomaton);
       LOG.debug("--- Simplifier on element:");
       LOG.debug(cluster.getRepresentant());
       LOG.debug(">>> PTA automaton:");
@@ -145,12 +165,13 @@ public class SimplifierImpl implements Simplifier {
       LOG.debug("--- End");
 
       // 3.4 return element with regexp
-      finalGrammar.add( (new Shortener()).simplify( new Element(
+      finalGrammar.add( //  (new Shortener()).simplify(
+              new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getAttributes(),
-           regexpAutomaton.getRegexp()
-           )   )
+          regexpAutomaton.getRegexp()
+           )   //)
       );
     }
     callback.finished( finalGrammar );

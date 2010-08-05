@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -35,7 +36,7 @@ public interface Clusterer<T> {
    */
    void add(final T item);
    // TODO anti Comment all the methods
-   void addAll(final List<T> items);
+   void addAll(final Collection<T> items);
    List<Cluster<T>> cluster() throws InterruptedException;
    T getRepresentantForItem(final T item);
 }

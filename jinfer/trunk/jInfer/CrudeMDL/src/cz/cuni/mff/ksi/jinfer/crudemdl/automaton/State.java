@@ -32,10 +32,17 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 public class State<T> implements Comparable<State<T>> {
   // TODO anti Comment the fields
   private Integer finalCount;
-  private Integer name;
+  private int name;
   private Automaton<T> parentAutomaton;
 
-  State(final Integer finalCount, final Integer name, final Automaton<T> parentAutomaton) {
+  /**
+   * TODO anti Comment!
+   * 
+   * @param finalCount
+   * @param name
+   * @param parentAutomaton
+   */
+  public State(final Integer finalCount, final int name, final Automaton<T> parentAutomaton) {
     this.finalCount= finalCount;
     this.name= name;
     this.parentAutomaton= parentAutomaton;
@@ -55,25 +62,33 @@ public class State<T> implements Comparable<State<T>> {
     this.finalCount = finalCount;
   }
 
+  /**
+   * increment finalCount by 1
+   */
   public void incFinalCount() {
     this.incFinalCount(1);
   }
 
-  public void incFinalCount(final Integer i) {
+  /**
+   * increment finalCount
+   *
+   * @param i
+   */
+  public void incFinalCount(final int i) {
     this.setFinalCount(this.getFinalCount() + i);
   }
 
   /**
    * @return the name
    */
-  public Integer getName() {
+  public int getName() {
     return name;
   }
 
   /**
    * @param name the name to set
    */
-  public void setName(final Integer name) {
+  public void setName(final int name) {
     this.name = name;
   }
 
@@ -104,13 +119,6 @@ public class State<T> implements Comparable<State<T>> {
 
   @Override
   public int compareTo(final State<T> o) {
-    // TODO anti Integer has the method compareTo()
-    if (o.getName() > this.name) {
-      return -1;
-    } else if (o.getName() < this.name) {
-      return 1;
-    } else {
-      return 0;
-    }
+    return this.name - o.getName();
   }
 }

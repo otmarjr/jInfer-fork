@@ -26,8 +26,8 @@ import java.util.Set;
  * @author anti
  */
 public class Cluster<T> {
-  protected T representant;
-  protected Set<T> members;
+  private T representant;
+  private Set<T> members;
 
   public Cluster(final T representant) {
     this.representant= representant;

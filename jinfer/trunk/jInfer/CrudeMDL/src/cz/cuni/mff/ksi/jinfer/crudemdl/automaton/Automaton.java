@@ -29,7 +29,9 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
+ * Class representing deterministic finite automaton.
+ * Can simplify itself when given mergingCondition
+ * 
  * @author anti
  */
 public class Automaton<T> {
@@ -40,12 +42,18 @@ public class Automaton<T> {
   protected final Map<State<T>, Set<Step<T>>> reverseDelta;
   protected int newStateName;
 
+  /**
+   * Constructor which doesn't create initialState
+   */
   public Automaton() {
     this.newStateName= 1;
     this.delta= new TreeMap<State<T>, Set<Step<T>>>();
     this.reverseDelta= new TreeMap<State<T>, Set<Step<T>>>();
   }
 
+  /**
+   * @param createInitialState - true= create initial state, false- as default constructor
+   */
   public Automaton(final boolean createInitialState) {
     this();
     if (createInitialState) {
@@ -78,6 +86,12 @@ public class Automaton<T> {
     return newStep;
   }
 
+  /**
+   * Given symbolString, iterates through it and follows steps in automaton. When there
+   * isn't a step to follow, new state and step is created. Resulting in tree-formed automaton.
+   * 
+   * @param symbolString - list of symbols (one word from accepting language)
+   */
   public void buildPTAOnSymbol(final List<T> symbolString) {
     State<T> xState= this.getInitialState();
     for (T symbol : symbolString) {
@@ -132,7 +146,7 @@ public class Automaton<T> {
     }
   }
 
-  public void mergeStates(final State<T> mainState, final State<T> mergedState) {
+  private void mergeStates(final State<T> mainState, final State<T> mergedState) {
     if (mergedState.equals(mainState)) {
       return;
     }
@@ -163,7 +177,12 @@ public class Automaton<T> {
     LOG.debug(this);
   }
 
-
+  /**
+   * Simplify by merging states. Condition to merge states is tested in provided mergedConditionTester
+   *
+   * @param mergeCondidionTester
+   * @throws InterruptedException
+   */
   public void simplify(MergeCondidionTester<T> mergeCondidionTester) throws InterruptedException {
     boolean search= true;
     while (search) {
@@ -177,7 +196,7 @@ public class Automaton<T> {
         for (State<T> mergedState : this.delta.keySet()) {
           mergableStates= mergeCondidionTester.getMergableStates(mainState, mergedState, this );
           if (!mergableStates.isEmpty()) {
-            LOG.error("Equivalent states: " + mainState.toString() + " " + mergedState.toString() + "\n");
+            LOG.debug("Equivalent states: " + mainState.toString() + " " + mergedState.toString() + "\n");
             found= true;
             break;
           }
@@ -190,13 +209,13 @@ public class Automaton<T> {
         Map<State<T>, State<T>> mergedOutStates= new HashMap<State<T>, State<T>>();
         for (Pair<State<T>, State<T>> mergePair : mergableStates.get(0)) {
           if (mergedOutStates.containsKey(mergePair.getFirst())) {
-            LOG.error("State " + mergePair.getFirst() +
+            LOG.debug("State " + mergePair.getFirst() +
                     " was merged out previously to " + mergedOutStates.get(mergePair.getFirst()) +
                     "  Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
             this.mergeStates(mergedOutStates.get(mergePair.getFirst()), mergePair.getSecond());
             mergedOutStates.put(mergePair.getSecond(),  mergedOutStates.get(mergePair.getFirst()));
           } else {
-            LOG.error("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
+            LOG.debug("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
             this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
             mergedOutStates.put(mergePair.getSecond(), mergePair.getFirst());
           }

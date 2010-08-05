@@ -18,7 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.automaton;
 
 /**
- * TODO anti Comment!
+ * Class representing step in finite automaton.
+ * TODO anti Comment! more!
  *
  * @author anti
  */

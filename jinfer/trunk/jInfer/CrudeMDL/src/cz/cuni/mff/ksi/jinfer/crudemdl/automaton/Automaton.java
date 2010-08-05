@@ -186,9 +186,19 @@ public class Automaton<T> {
         }
       }
       if (found) {
+        Map<State<T>, State<T>> mergedOutStates= new HashMap<State<T>, State<T>>();
         for (Pair<State<T>, State<T>> mergePair : mergableStates.get(0)) {
-          LOG.error("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
-          this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
+          if (mergedOutStates.containsKey(mergePair.getFirst())) {
+            LOG.error("State " + mergePair.getFirst() +
+                    " was merged out previously to " + mergedOutStates.get(mergePair.getFirst()) +
+                    "  Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
+            this.mergeStates(mergedOutStates.get(mergePair.getFirst()), mergePair.getSecond());
+            mergedOutStates.put(mergePair.getSecond(),  mergedOutStates.get(mergePair.getFirst()));
+          } else {
+            LOG.error("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
+            this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
+            mergedOutStates.put(mergePair.getSecond(), mergePair.getFirst());
+          }
         }
         search= true;
       }

@@ -30,15 +30,15 @@ public abstract class AbstractNode {
   private final List<String> context;
   /** Name of this node. */
   private final String name;
-  /** List of unspecific attributes assigned to this node. */
-  private final Map<String, Object> attributes;
+  /** List of unspecific attributes - metadata assigned to this node. */
+  private final Map<String, Object> metadata;
 
   public AbstractNode(final List<String> context,
           final String name,
-          final Map<String, Object> attributes) {
+          final Map<String, Object> metadata) {
     this.context = context;
     this.name = name;
-    this.attributes = attributes;
+    this.metadata = metadata;
   }
 
   public List<String> getContext() {
@@ -51,8 +51,8 @@ public abstract class AbstractNode {
 
   public abstract NodeType getType();
 
-  public Map<String, Object> getAttributes() {
-    return attributes;
+  public Map<String, Object> getMetadata() {
+    return metadata;
   }
 
   public boolean isElement() {

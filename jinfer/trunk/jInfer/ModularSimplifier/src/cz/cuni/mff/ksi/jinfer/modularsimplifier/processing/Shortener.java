@@ -43,7 +43,7 @@ public class Shortener {
     return new Element(
             root.getContext(),
             root.getName(),
-            root.getAttributes(),
+            root.getMetadata(),
             simplify(root.getSubnodes()));
   }
 

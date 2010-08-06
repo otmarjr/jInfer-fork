@@ -216,7 +216,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append("\n\t").append(attribute.getName()).append(DomainUtils.getAttributeType(domain, maxEnumSize));
 
       // requiredness/default value
-      if (attribute.getAttributes().containsKey("required")) {
+      if (attribute.getMetadata().containsKey("required")) {
         ret.append("#REQUIRED");
       } else {
         ret.append(DomainUtils.getDefault(domain, minDefaultRatio));

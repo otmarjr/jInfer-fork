@@ -56,11 +56,11 @@ public class CloneHelper {
   }
 
   private static Attribute cloneAttribute(final Attribute a) {
-    return new Attribute(cloneList(a.getContext()), String.valueOf(a.getName()), cloneMap(a.getAttributes()), String.valueOf(a.getContentType()), cloneList(a.getContent()));
+    return new Attribute(cloneList(a.getContext()), String.valueOf(a.getName()), cloneMap(a.getMetadata()), String.valueOf(a.getContentType()), cloneList(a.getContent()));
   }
 
   private static SimpleData cloneSimpleData(final SimpleData s) {
-    return new SimpleData(cloneList(s.getContext()), String.valueOf(s.getName()), cloneMap(s.getAttributes()), String.valueOf(s.getContentType()), cloneList(s.getContent()));
+    return new SimpleData(cloneList(s.getContext()), String.valueOf(s.getName()), cloneMap(s.getMetadata()), String.valueOf(s.getContentType()), cloneList(s.getContent()));
   }
 
   private Element cloneElement(final Element e) {
@@ -72,12 +72,12 @@ public class CloneHelper {
 
     final Element clone;
     if (e.getSubnodes().isToken()) {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getAttributes()), new Regexp<AbstractNode>(null, null, RegexpType.TOKEN));
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, null, RegexpType.TOKEN));
       cloned.add(new Pair<Element, Element>(e, clone));
       final AbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
       clone.getSubnodes().setContent(clonedToken);
     } else {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getAttributes()), new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), e.getSubnodes().getType()));
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), e.getSubnodes().getType()));
       cloned.add(new Pair<Element, Element>(e, clone));
       final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
       clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());

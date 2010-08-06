@@ -103,14 +103,14 @@ public abstract class AbstractClustererImpl implements Clusterer {
         }
       }
       if (!found) {
-        nodeAttr.getAttributes().remove("required");
+        nodeAttr.getMetadata().remove("required");
         clusterAttrs.add(nodeAttr);
       }
     }
     // walk the attributes in the cluster. if not among those from the node, remove their requiredness.
     for (final Attribute clusterAttr : clusterAttrs) {
       if (!isAmongNodeAttrs(clusterAttr, nodeAttrs)) {
-        clusterAttr.getAttributes().remove("required");
+        clusterAttr.getMetadata().remove("required");
       }
     }
   }

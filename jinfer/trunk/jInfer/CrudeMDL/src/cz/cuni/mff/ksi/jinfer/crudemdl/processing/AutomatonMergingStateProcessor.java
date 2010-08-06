@@ -92,7 +92,7 @@ public class AutomatonMergingStateProcessor implements ElementProcessor<Abstract
     return (new Shortener()).simplify( new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
-          cluster.getRepresentant().getAttributes(),
+          cluster.getRepresentant().getMetadata(),
           regexpAutomaton.getRegexp()
            ));
   }

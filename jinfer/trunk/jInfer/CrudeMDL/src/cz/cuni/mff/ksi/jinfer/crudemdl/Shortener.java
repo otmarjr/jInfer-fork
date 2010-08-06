@@ -43,7 +43,7 @@ public class Shortener {
     return new Element(
             treeBase.getContext(),
             treeBase.getName(),
-            treeBase.getAttributes(),
+            treeBase.getMetadata(),
             simplify(treeBase.getSubnodes()));
   }
 

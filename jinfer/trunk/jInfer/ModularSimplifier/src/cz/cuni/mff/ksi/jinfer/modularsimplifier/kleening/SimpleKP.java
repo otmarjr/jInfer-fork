@@ -56,7 +56,7 @@ public class SimpleKP implements KleeneProcessor {
       ret.add(new Shortener().simplify(new Element(
               e.getContext(),
               e.getName(),
-              e.getAttributes(),
+              e.getMetadata(),
               processTree(e.getSubnodes()))));
     }
     return ret;

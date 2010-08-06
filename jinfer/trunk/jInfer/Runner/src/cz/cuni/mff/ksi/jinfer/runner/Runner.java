@@ -41,11 +41,9 @@ import org.openide.util.NbPreferences;
 import org.openide.util.RequestProcessor;
 import org.openide.util.Task;
 import org.openide.util.TaskListener;
-import org.openide.windows.IOContainer;
 import org.openide.windows.IOProvider;
 import org.openide.windows.IOSelect;
 import org.openide.windows.InputOutput;
-import org.openide.windows.WindowManager;
 
 /**
  * Runner is responsible for running other modules in process of inference,
@@ -211,14 +209,8 @@ public class Runner {
     RunningProject.removeActiveProject();
 
     // show Output window
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
-      @Override
-      public void run() {
-        IOContainer.getDefault().open();
-        IOContainer.getDefault().requestVisible();
-      }
-    });
+    final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer", false);
+    IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
 
     // display a message box
     NotifyDescriptor message = new NotifyDescriptor.Message("Process of inferrence caused an unexpected error:\n\n" + t.toString() + "\n\n Detailed information was logged to the logfile and inferrence was cancelled.", NotifyDescriptor.ERROR_MESSAGE);

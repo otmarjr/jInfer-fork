@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.Shortener;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.TrieHelper;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +53,11 @@ public class SimpleKP implements KleeneProcessor {
         throw new InterruptedException();
       }
       final Element e = (Element) root;
-      ret.add(new Element(
+      ret.add(new Shortener().simplify(new Element(
               e.getContext(),
               e.getName(),
               e.getAttributes(),
-              processTree(e.getSubnodes())));
+              processTree(e.getSubnodes()))));
     }
     return ret;
   }

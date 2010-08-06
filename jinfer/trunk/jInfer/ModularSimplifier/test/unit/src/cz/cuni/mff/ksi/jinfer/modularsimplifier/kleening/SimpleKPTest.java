@@ -60,9 +60,8 @@ public class SimpleKPTest {
       assertEquals(NodeType.ELEMENT, n.getType());
       final Element e = (Element) n;
       assertNotNull(e.getSubnodes());
-      assertEquals(RegexpType.CONCATENATION, e.getSubnodes().getType());
-      assertEquals(e.getSubnodes().getChildren().size(), 1);
-      final AbstractNode n2 = e.getSubnodes().getChild(0).getContent();
+      assertEquals(RegexpType.TOKEN, e.getSubnodes().getType());
+      final AbstractNode n2 = e.getSubnodes().getContent();
       assertElement(n2, "e2");
     } catch (InterruptedException ex) {
       fail("Interrupted");
@@ -238,9 +237,10 @@ public class SimpleKPTest {
       final Element b12 = (Element) root2.getSubnodes().getChild(0).getContent();
       final Element b22 = (Element) root2.getSubnodes().getChild(1).getContent();
       assertEquals(0, b12.getSubnodes().getChildren().size());
-      assertEquals(1, b22.getSubnodes().getChildren().size());
-      assertEquals(NodeType.SIMPLE_DATA, b22.getSubnodes().getChild(0).getContent().getType());
-      final SimpleData sd = (SimpleData) b22.getSubnodes().getChild(0).getContent();
+      assertEquals(0, b22.getSubnodes().getChildren().size());
+      assertEquals(RegexpType.TOKEN, b22.getSubnodes().getType());
+      assertEquals(NodeType.SIMPLE_DATA, b22.getSubnodes().getContent().getType());
+      final SimpleData sd = (SimpleData) b22.getSubnodes().getContent();
       assertEquals("text", sd.getName());
     } catch (InterruptedException ex) {
       fail("Interrupted");

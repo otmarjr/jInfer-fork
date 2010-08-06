@@ -27,6 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.XSDUtils;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -42,6 +43,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private Preprocessor preprocessor = null;
   private Indentator indentator = null;
+  // TODO rio nastavovat uzivatelom?
   private static final String TYPENAME_PREFIX = "T";
 
   @Override
@@ -97,7 +99,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // run recursion starting at the top element
     indentator.indent("<!-- top level element -->\n");
-    processElement(preprocessor.getTopElement());
+    processElement(preprocessor.getTopElement(), 1);
 
     // close XSD
     indentator.indent("</xs:schema>");
@@ -108,13 +110,19 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     callback.finished(indentator.toString(), "xsd");
   }
 
-  private void processElement(final Element element) throws InterruptedException {
+  private void processElement(final Element element, final int minOccurs) throws InterruptedException {
     checkInterrupt();
 
     // begin definition of element and write its name
     indentator.indent("<xs:element name=\"");
     indentator.append(element.getName());
     indentator.append("\"");
+
+    if (minOccurs != 1) {
+      indentator.append(" minOccurs=\"");
+      indentator.append(Integer.toString(minOccurs));
+      indentator.append("\"");
+    }
 
     // if its type is one of built-in types we don't have much work to do
     // TODO rio dalsie built-in typy
@@ -266,17 +274,67 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       }
       case CONCATENATION:
       {
+        // TODO rio specialny pripad konkatenacie alternacie(A|lambda)
+        List<Regexp<AbstractNode>> simpleAlternations = new LinkedList<Regexp<AbstractNode>>();
+        for (final Regexp<AbstractNode> child : regexp.getChildren()) {
+          if (child.isAlternation()) {
+            if (child.getChildren().size() == 2) {
+              if (child.getChild(0).isEmpty()) {
+                simpleAlternations.add(child);
+              }
+            }
+          }
+        }
+
         indentator.indent("<xs:sequence>\n");
         indentator.increaseIndentation();
-        for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
-          processSubElements(subRegexp);
+
+        for (final Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
+          if (simpleAlternations.contains(subRegexp)) {
+            final Regexp<AbstractNode> alternation = subRegexp;
+            if (alternation.getChild(1).isToken()) {
+              processSubElements(alternation);
+            } else if (alternation.getChild(1).isConcatenation()) {
+              indentator.indent("<xs:sequence minOccurs=\"0\">\n");
+              indentator.increaseIndentation();
+              final Regexp<AbstractNode> r = alternation.getChild(1);
+              for (final Regexp<AbstractNode> subReg : r.getChildren()) {
+                processSubElements(subReg);
+              }
+              indentator.decreaseIndentation();
+              indentator.indent("</xs:sequence>\n");
+
+            } else {
+              indentator.indent("<xs:sequence minOccurs=\"0\">\n");
+              indentator.increaseIndentation();
+              processSubElements(alternation.getChild(1));
+              indentator.decreaseIndentation();
+              indentator.indent("</xs:sequence>\n");
+            }
+          } else {
+            processSubElements(subRegexp);
+          }
         }
+        
         indentator.decreaseIndentation();
         indentator.indent("</xs:sequence>\n");
         return;
       }
       case ALTERNATION:
-        {
+      {
+        // simple alternation (Element | lambda)
+        if (regexp.getChildren().size() == 2) {
+          if (regexp.getChild(0).isEmpty()) {
+            if (regexp.getChild(1).isToken()) {
+              processOptionalToken(regexp.getChild(1).getContent());
+              return;
+            }
+          }
+        }
+
+        // simple alternation (notToken | lambda) is handled in CONCATENATION
+
+        // other alternation (A | B ...)
         indentator.indent("<xs:choice>\n");
         indentator.increaseIndentation();
         for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
@@ -304,7 +362,21 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return;
     }
 
-    processElement(element);
+    processElement(element, 1);
+  }
+
+  private void processOptionalToken(final AbstractNode node) throws InterruptedException {
+    assert(node.isSimpleData() == false);
+    assert(node.isElement());
+
+    final Element element = preprocessor.getElementByName(node.getName());
+
+    if (element == null) {
+      LOG.warn("XSD Exporter: Referenced element(" + node.getName() + ") not found in IG element list, probably error in code");
+      return;
+    }
+
+    processElement(element, 0);
   }
 
   private void checkInterrupt() throws InterruptedException {

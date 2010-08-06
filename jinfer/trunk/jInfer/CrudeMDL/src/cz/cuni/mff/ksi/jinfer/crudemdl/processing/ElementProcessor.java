@@ -15,9 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.List;
 
@@ -26,8 +27,9 @@ import java.util.List;
  * 
  * @author anti
  */
-public interface Processor<T> {
-  List<AbstractNode> processClusters(
-          final Clusterer<T> clusterer)
-          throws InterruptedException;
+public interface ElementProcessor<T> {
+  AbstractNode processElement(
+          final Clusterer<T> clusterer,
+          final Cluster<T> cluster
+          ) throws InterruptedException;
 }

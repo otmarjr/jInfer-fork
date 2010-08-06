@@ -33,18 +33,18 @@ public class Shortener {
 
   private final List<Element> visited = new ArrayList<Element>();
 
-  public Element simplify(final Element treeBase) {
+  public Element simplify(final Element root) {
     for (final Element v : visited) {
-      if (v == treeBase) {
-        return treeBase;
+      if (v == root) {
+        return root;
       }
     }
-    visited.add(treeBase);
+    visited.add(root);
     return new Element(
-            treeBase.getContext(),
-            treeBase.getName(),
-            treeBase.getAttributes(),
-            simplify(treeBase.getSubnodes()));
+            root.getContext(),
+            root.getName(),
+            root.getAttributes(),
+            simplify(root.getSubnodes()));
   }
 
   @SuppressWarnings("PMD.MissingBreakInSwitch")

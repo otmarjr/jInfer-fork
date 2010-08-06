@@ -17,17 +17,19 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * TODO anti comment
+ * Class representing one cluster. Holds all members and representant.
+ *
  *
  * @author anti
  */
 public class Cluster<T> {
   private T representant;
-  private Set<T> members;
+  private final Set<T> members;
 
   public Cluster(final T representant) {
     this.representant= representant;
@@ -46,6 +48,9 @@ public class Cluster<T> {
    * @param representant the representant to set
    */
   public void setRepresentant(final T representant) {
+    if (!this.members.contains(representant)) {
+      throw new IllegalArgumentException("Trying to set representant to item, which is not in this cluster.");
+    }
     this.representant = representant;
   }
 
@@ -53,14 +58,7 @@ public class Cluster<T> {
    * @return the members
    */
   public Set<T> getMembers() {
-    return this.members;
-  }
-
-  /**
-   * @param members the members to set
-   */
-  public void setMembers(final Set<T> members) {
-    this.members = members;
+    return Collections.unmodifiableSet(this.members);
   }
 
   public Boolean isMember(final T item) {
@@ -73,8 +71,7 @@ public class Cluster<T> {
 
   @Override
   public String toString() {
-//    return super.toString();
-    final StringBuilder sb = new StringBuilder("Cluster\n");
+    final StringBuilder sb = new StringBuilder("Cluster ");
     sb.append("representant: ");
     sb.append(this.representant);
     sb.append("\nmembers: ");

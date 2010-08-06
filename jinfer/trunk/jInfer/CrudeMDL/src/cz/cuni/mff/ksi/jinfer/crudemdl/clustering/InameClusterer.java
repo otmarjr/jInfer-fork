@@ -26,13 +26,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * TODO anti comment
+ * Cluster nodes by name - ignoring case.
+ *
+ * Clustering is done by iterating queued items for clustering, for
+ * each item, iterate clusters. If any representant is of same type (SimpleData,
+ * Element,Attribute) add item to cluster. If cluster is not found, create new
+ * with item as representant.
+ * For SimpleData, check for same name is omitted, all simpledata ends up in one cluster.
  *
  * @author anti
  */
 public class InameClusterer implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
-  private List<AbstractNode> items;
+  private final List<AbstractNode> items;
 
   public InameClusterer() {
     this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
@@ -72,12 +78,7 @@ public class InameClusterer implements Clusterer<AbstractNode> {
               );
     }
   }
-  /*
-   * Add action, add item to some cluster. In our method - elements are clustered by
-   * name (ignore case). DeFacto clustering happens at this method - when adding, all
-   * clusters are scanned, if there is one with representant of same name, item is added
-   * to it. If not, new cluster with item as representant is added.
-   */
+
   @Override
   public void add(final AbstractNode item) {
     this.items.add(item);
@@ -88,11 +89,8 @@ public class InameClusterer implements Clusterer<AbstractNode> {
     this.items.addAll(items);
   }
 
-  /*
-   * In this method no magic is found, clustering happens already when items are added.
-   */
   @Override
-  public List<Cluster<AbstractNode>> cluster() throws InterruptedException {
+  public void cluster() throws InterruptedException {
     for (AbstractNode node : items) {
       this.addNode(node);
       if (node.isElement()&&(node instanceof Element)) {
@@ -103,7 +101,6 @@ public class InameClusterer implements Clusterer<AbstractNode> {
     }
     this.items.clear();
 
-    return Collections.unmodifiableList(this.nodeClusters);
   }
 
   @Override
@@ -114,5 +111,10 @@ public class InameClusterer implements Clusterer<AbstractNode> {
       }
     }
     throw new IllegalArgumentException("Node " + item.toString() + " is not in clusters, it wasn't added, i can't find it.");
+  }
+
+  @Override
+  public List<Cluster<AbstractNode>> getClusters() {
+    return Collections.unmodifiableList(this.nodeClusters);
   }
 }

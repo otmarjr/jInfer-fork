@@ -187,8 +187,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private String alternationToString(final List<Regexp<AbstractNode>> children) {
-    if (children.get(0).isEmpty()) {
-      return listToString(DTDUtils.omitAttributes(children.subList(1, children.size())), '|') + "?";
+    if (DTDUtils.containsEmpty(children)) {
+      return listToString(DTDUtils.omitAttributes(DTDUtils.omitEmpty(children)), '|') + "?";
     }
     return listToString(DTDUtils.omitAttributes(children), '|');
   }

@@ -27,25 +27,70 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * Class representing KHContext of state. KHcontext is path of states ending in
+ * desired state. Path has length k - that is number of steps on path.
+ *
+ * For example 3,x-context:
+ * A -> B -> C -> D
+ * ending in D, only steps are held by this class (steps have source and destination
+ * either so no information is lost).
+ *
+ * Two context are equivalent, if all k corresponding pairs of steps have same
+ * accept symbol.
+ * Equivalent contexts:
+ * A -on x-> B -on y-> C
+ * D -on x-> D -on y-> G
+ *
+ * When two contexts are equivalent, ending states (C, G), are said to be merged.
+ * Second number, h, is the number of states before the ending states, that are
+ * said to be merged if context are equivalent.
+ *
+ * So, lets have instances of this class with 4,1-context, k=4, h=1.
+ * Only contexts with 4 steps equals acceptSymbol are equivalent, and only on them
+ * the last two states are said to be merged, and one more pair before then. See:
+ * Z -d-> A -x-> B -y-> C -z-> D -f-> E
+ * R -o-> F -x-> L -y-> C -z-> R -f-> I
+ *
+ * States I,E are to be merged, and, as h=1, also one preceeding pair: D,R.
  *
  * @author anti
  */
 public class KHContext<T> {
+  /**
+   * List of steps held by this context
+   */
   private List<Step<T>> steps;
   private Integer k;
   private Integer h;
 
+  /**
+   * Constructor does not set steps, they are added separately.
+   * @param k
+   * @param h
+   */
   public KHContext(final Integer k, final Integer h) {
     this.steps= new ArrayList<Step<T>>();
     this.k= k;
     this.h= h;
   }
 
+  /**
+   * Use addStepLast to add steps. Add them from left to right. Starting
+   * with step farthest on left from inspected state.
+   *
+   * @param step
+   */
   public void addStepLast(final Step<T> step) {
     this.steps.add(step);
   }
 
+  /**
+   * Whole magic procedure. Compares this context to another, and if equivalent
+   * return list of pairs of states to merge.
+   * 
+   * @param another
+   * @return
+   */
   public List<Pair<State<T>, State<T>>> getMergeableStates(final KHContext<T> another) {
     if (another.getK() != this.k) {
       throw new IllegalArgumentException();
@@ -130,7 +175,7 @@ public class KHContext<T> {
 
   @Override
   public String toString() {
-    StringBuilder sb= new StringBuilder("k,h-context: k=" + this.k.toString() + " h=" + this.h.toString() + ".\nSteps:");
+    final StringBuilder sb= new StringBuilder("k,h-context: k=" + this.k.toString() + " h=" + this.h.toString() + ".\nSteps:");
     for (Step<T> step : this.steps) {
       sb.append(step);
     }

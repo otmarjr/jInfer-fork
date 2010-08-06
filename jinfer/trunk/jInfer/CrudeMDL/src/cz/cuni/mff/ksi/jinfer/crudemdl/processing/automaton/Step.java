@@ -18,19 +18,53 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
 
 /**
- * Class representing step in finite automaton.
- * TODO anti Comment! more!
+ * Class representing step sin finite automaton.
+ * It's just a container for .equals() runs in automaton.
+ *
+ * But also has useful information, source, destination - this is the only place
+ * where such information in automaton is held. Although automaton has
+ * map<state, steps>, it has no direct information about where the steps have
+ * the other ends.
+ *
+ * Step also holds acceptSymbol, which is whatever object on which the automaton
+ * is build on.
+ *
+ * useCount is just integer representing times the step was used when automaton
+ * was builded as PTA.
  *
  * @author anti
  */
 public class Step<T> {
-  // TODO anti Comment the fields
+  /**
+   * Whatever object the automaton is build on. When doing comparisons, automaton
+   * uses .equals on symbols too. So take care that same symbols really yields
+   * .equals.
+   */
   private T acceptSymbol;
-  private Integer useCount;
+  /**
+   * Number the times transition was used when builded as PTA. Its useful as
+   * probability in some simplification methods.
+   */
+  private int useCount;
+  /**
+   * State source of transition
+   */
   private State<T> source;
+  /**
+   * And destination, simple.
+   */
   private State<T> destination;
 
-  public Step(final T acceptSymbol, final State<T> source, final State<T> destination, final Integer useCount) {
+  /**
+   * All settings at one constructor. In time of creating step, states from and to
+   * which it should point, have to be already instantiated.
+   *
+   * @param acceptSymbol
+   * @param source
+   * @param destination
+   * @param useCount
+   */
+  public Step(final T acceptSymbol, final State<T> source, final State<T> destination, final int useCount) {
     this.acceptSymbol= acceptSymbol;
     this.useCount= useCount;
     this.source= source;
@@ -54,21 +88,33 @@ public class Step<T> {
   /**
    * @return the useCount
    */
-  public Integer getUseCount() {
+  public int getUseCount() {
     return useCount;
   }
 
   /**
    * @param useCount the useCount to set
    */
-  public void setUseCount(final Integer useCount) {
+  public void setUseCount(final int useCount) {
     this.useCount = useCount;
   }
 
+  /**
+   * Increment useCount by one, useful in PTA build procedure
+   */
   public void incUseCount() {
     this.incUseCount(1);
   }
 
+  /**
+   * Increment by arbitrary number. Useful when collapsing steps such that
+   * A -2-> B
+   * A -5-> B
+   * to one step
+   * A -7-> B
+   * 
+   * @param i
+   */
   public void incUseCount(final Integer i) {
     this.setUseCount(this.getUseCount() + i);
   }

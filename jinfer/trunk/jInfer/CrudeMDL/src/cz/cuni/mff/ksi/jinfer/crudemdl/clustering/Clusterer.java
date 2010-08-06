@@ -43,7 +43,9 @@ import java.util.List;
  * }
  * When automaton is created, getRepresentantForItem() is called for everything on
  * elements right side of rule. So Clusterer have to deal with SimpleData (one cluster
- * for all simpledata nodes), attributes TODO anti
+ * for all simpledata nodes), attributes
+ *
+ * TODO anti Comment! what about attributes when done with attributes
  *
  * Each item has to be in exactly one cluster, that's what clustering is all about.
  *

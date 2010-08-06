@@ -20,19 +20,23 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.crudemdl.Shortener;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.mergecondition.KHContextMergeConditionTester;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.mergecondition.MergeCondidionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
+ * Class providing method for inferring DTD for single element. In this implementation
+ * deterministic finite automaton is used.
+ * First Prefix-Tree automaton is constructed using cluster.members() as positive
+ * examples. Then, given KHContextMergeConditionTester, merging of states occurs
+ * until there are no more states to merge. Currently k=2, h=1, so
+ * producing 2,1-context automaton by merging.
  *
  * @author anti
  */
@@ -85,11 +89,11 @@ public class AutomatonMergingStateProcessor implements ElementProcessor<Abstract
     LOG.debug("--- End");
     
     // 3.4 return element with regexp
-    return new Element(
+    return (new Shortener()).simplify( new Element(
           cluster.getRepresentant().getContext(),
-          "sdga",//cluster.getRepresentant().getName(),
+          cluster.getRepresentant().getName(),
           cluster.getRepresentant().getAttributes(),
           regexpAutomaton.getRegexp()
-           );
+           ));
   }
 }

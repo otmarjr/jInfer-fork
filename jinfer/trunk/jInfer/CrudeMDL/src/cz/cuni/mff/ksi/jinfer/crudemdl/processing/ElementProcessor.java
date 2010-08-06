@@ -23,7 +23,17 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * Interface representing one box in chain. Process one element at a time, given
+ * clusterer which can respond to getClusterRepresentant request and getClusters
+ * request. And whole cluster containing instances of element found in documents.
+ *
+ * Implementors have to take care about thread interruptions. Check for it, and
+ * throw InterruptedException in some inner main loop. Example:
+ * for (...) {
+ *   if (Thread.interrupted()) {
+ *     throw new InterruptedException();
+ *   }
+ * }
  * 
  * @author anti
  */

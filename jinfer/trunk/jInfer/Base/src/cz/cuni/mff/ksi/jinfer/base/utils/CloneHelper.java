@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
@@ -46,10 +47,10 @@ public class CloneHelper {
     return ret;
   }
 
-  public List<Pair<AbstractNode, List<AbstractNode>>> cloneClusters(
-          final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
-    final List<Pair<AbstractNode, List<AbstractNode>>> ret = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>(clusters.size());
-    for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
+  public List<Cluster> cloneClusters(
+          final List<Cluster> clusters) {
+    final List<Cluster> ret = new ArrayList<Cluster>(clusters.size());
+    for (final Cluster cluster : clusters) {
       ret.add(cloneCluster(cluster));
     }
     return ret;
@@ -133,7 +134,7 @@ public class CloneHelper {
     return ret;
   }
 
-  private Pair<AbstractNode, List<AbstractNode>> cloneCluster(final Pair<AbstractNode, List<AbstractNode>> c) {
-    return new Pair<AbstractNode, List<AbstractNode>>(cloneAbstractNode(c.getFirst()), cloneRules(c.getSecond()));
+  private Cluster cloneCluster(final Cluster c) {
+    return new Cluster(cloneAbstractNode(c.getRepresentant()), cloneRules(c.getContent()));
   }
 }

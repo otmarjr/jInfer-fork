@@ -16,10 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,18 +34,18 @@ import java.util.List;
 public abstract class AbstractClustererImpl implements Clusterer {
 
   @Override
-  public List<Pair<AbstractNode, List<AbstractNode>>> cluster(
+  public List<Cluster> cluster(
           final List<AbstractNode> initialGrammar) throws InterruptedException {
     
-    final List<Pair<AbstractNode, List<AbstractNode>>> ret = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>();
+    final List<Cluster> ret = new ArrayList<Cluster>();
 
     for (final AbstractNode node : initialGrammar) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
       boolean found = false;
-      for (final Pair<AbstractNode, List<AbstractNode>> cluster : ret) {
-        if (clusters(node, cluster.getFirst())) {
+      for (final Cluster cluster : ret) {
+        if (clusters(node, cluster.getRepresentant())) {
           // if n belongs to this cluster, add it
           addNodeToCluster((Element) node, cluster);
           found = true;
@@ -56,7 +56,7 @@ public abstract class AbstractClustererImpl implements Clusterer {
         // if n doesn't belong to any of the clusters, create a new one for it
         final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
         l.add(node);
-        ret.add(new Pair<AbstractNode, List<AbstractNode>>(node, l));
+        ret.add(new Cluster(node, l));
       }
     }
 
@@ -69,12 +69,12 @@ public abstract class AbstractClustererImpl implements Clusterer {
   protected abstract boolean clusters(final AbstractNode n, final AbstractNode first);
 
   private static void addNodeToCluster(final Element node,
-          final Pair<AbstractNode, List<AbstractNode>> cluster) {
-    cluster.getSecond().add(node);
+          final Cluster cluster) {
+    cluster.getContent().add(node);
 
-    final Element clusterHead = (Element) cluster.getFirst();
+    final Element representant = (Element) cluster.getRepresentant();
 
-    reflectAttributes(clusterHead.getElementAttributes(), node.getElementAttributes());
+    reflectAttributes(representant.getElementAttributes(), node.getElementAttributes());
   }
 
   /**

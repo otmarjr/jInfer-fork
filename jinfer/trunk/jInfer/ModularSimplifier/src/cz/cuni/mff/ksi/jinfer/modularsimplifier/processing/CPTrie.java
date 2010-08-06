@@ -17,9 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import java.util.List;
 
 /**
  * Cluster processor implementation that exports a cluster as a trie (prefix tree).
@@ -30,25 +29,25 @@ public class CPTrie extends AbstractCPImpl {
 
   @Override
   protected Element processCluster(
-          final Pair<AbstractNode, List<AbstractNode>> cluster) {
+          final Cluster cluster) {
     verify(cluster);
 
-    final Element treeBase = (Element) cluster.getFirst();
+    final Element representant = (Element) cluster.getRepresentant();
 
     // put every item from the cluster into the trie
-    for (final AbstractNode n : cluster.getSecond()) {
-      if (n != cluster.getFirst()) {
-        TrieHelper.addBranchToTree(treeBase.getSubnodes(), ((Element) n).getSubnodes());
+    for (final AbstractNode n : cluster.getContent()) {
+      if (n != cluster.getRepresentant()) {
+        TrieHelper.addBranchToTree(representant.getSubnodes(), ((Element) n).getSubnodes());
       }
     }
 
     // walk the tree and shorten its concatenations/alternations
-    return new Shortener().simplify(treeBase);
+    return new Shortener().simplify(representant);
   }
 
   private static void verify(
-          final Pair<AbstractNode, List<AbstractNode>> cluster) {
-    for (final AbstractNode n : cluster.getSecond()) {
+          final Cluster cluster) {
+    for (final AbstractNode n : cluster.getContent()) {
       if (!n.isElement()) {
         throw new IllegalArgumentException("Element expected");
       }

@@ -16,10 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import java.util.Map;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,7 +90,7 @@ public class CloneHelperTest {
   @Test(expected = NullPointerException.class)
   public void testCloneClustersNull2() {
     System.out.println("cloneClustersNull2");
-    final List<Pair<AbstractNode, List<AbstractNode>>> clusters = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>();
+    final List<Cluster> clusters = new ArrayList<Cluster>();
     clusters.add(null);
     new CloneHelper().cloneClusters(clusters);
   }
@@ -98,8 +98,8 @@ public class CloneHelperTest {
   @Test(expected = NullPointerException.class)
   public void testCloneClustersNull3() {
     System.out.println("cloneClustersNull3");
-    final List<Pair<AbstractNode, List<AbstractNode>>> clusters = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>();
-    clusters.add(new Pair<AbstractNode, List<AbstractNode>>(null, null));
+    final List<Cluster> clusters = new ArrayList<Cluster>();
+    clusters.add(new Cluster(null, null));
     new CloneHelper().cloneClusters(clusters);
   }
 
@@ -110,12 +110,12 @@ public class CloneHelperTest {
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(null);
 
-    final List<Pair<AbstractNode, List<AbstractNode>>> clusters = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>();
-    clusters.add(new Pair<AbstractNode, List<AbstractNode>>(null, l));
-    final List<Pair<AbstractNode, List<AbstractNode>>> result = new CloneHelper().cloneClusters(clusters);
+    final List<Cluster> clusters = new ArrayList<Cluster>();
+    clusters.add(new Cluster(null, l));
+    final List<Cluster> result = new CloneHelper().cloneClusters(clusters);
     assertEquals(1, result.size());
-    assertEquals(null, result.get(0).getFirst());
-    assertEquals(null, result.get(0).getSecond().get(0));
+    assertEquals(null, result.get(0).getRepresentant());
+    assertEquals(null, result.get(0).getContent().get(0));
   }
 
   @Test
@@ -137,17 +137,17 @@ public class CloneHelperTest {
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(e);
 
-    final List<Pair<AbstractNode, List<AbstractNode>>> clusters = new ArrayList<Pair<AbstractNode, List<AbstractNode>>>();
-    clusters.add(new Pair<AbstractNode, List<AbstractNode>>(e, l));
-    final List<Pair<AbstractNode, List<AbstractNode>>> result = new CloneHelper().cloneClusters(clusters);
+    final List<Cluster> clusters = new ArrayList<Cluster>();
+    clusters.add(new Cluster(e, l));
+    final List<Cluster> result = new CloneHelper().cloneClusters(clusters);
 
     assertEquals(1, result.size());
     assert (clusters != result);
-    final List<AbstractNode> otherList = result.get(0).getSecond();
+    final List<AbstractNode> otherList = result.get(0).getContent();
     assert (l != otherList);
     final Element other = (Element) otherList.get(0);
     assert (e != other);
-    assert (e != result.get(0).getSecond());
+    assert (e != result.get(0).getContent());
     assert (e.getSubnodes() != other.getSubnodes());
     assert (e.getSubnodes().getChild(0) != other.getSubnodes().getChild(0));
     assert (e.getSubnodes().getChild(0).getChild(0) != other.getSubnodes().getChild(0).getChild(0));

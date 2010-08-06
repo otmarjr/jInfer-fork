@@ -15,21 +15,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import java.util.List;
 
 /**
- * Second part of the processing - do something with rule clusters.
  *
  * @author vektor
  */
-public interface ClusterProcessor {
+public class Cluster {
 
-  List<AbstractNode> processClusters(
-          final List<Cluster> clusters)
-          throws InterruptedException;
+  private final AbstractNode representant;
+  
+  private final List<AbstractNode> content;
+
+  public Cluster(final AbstractNode representant, final List<AbstractNode> content) {
+    this.representant = representant;
+    this.content = content;
+  }
+
+  public AbstractNode getRepresentant() {
+    return representant;
+  }
+
+  public List<AbstractNode> getContent() {
+    return content;
+  }
 
 }

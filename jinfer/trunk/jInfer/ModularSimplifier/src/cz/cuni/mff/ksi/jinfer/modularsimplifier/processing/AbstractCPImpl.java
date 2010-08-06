@@ -17,8 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +31,11 @@ public abstract class AbstractCPImpl implements ClusterProcessor {
 
   @Override
   public List<AbstractNode> processClusters(
-          final List<Pair<AbstractNode, List<AbstractNode>>> clusters)
+          final List<Cluster> clusters)
           throws InterruptedException {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
-    for (final Pair<AbstractNode, List<AbstractNode>> cluster : clusters) {
+    for (final Cluster cluster : clusters) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -46,6 +46,6 @@ public abstract class AbstractCPImpl implements ClusterProcessor {
   }
 
   protected abstract Element processCluster(
-          final Pair<AbstractNode, List<AbstractNode>> cluster);
+          final Cluster cluster);
 
 }

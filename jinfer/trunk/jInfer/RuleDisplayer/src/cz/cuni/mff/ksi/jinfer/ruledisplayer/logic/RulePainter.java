@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -55,13 +55,13 @@ public class RulePainter {
     root.repaint();
   }
 
-  public void setClusters(final List<Pair<AbstractNode, List<AbstractNode>>> clusters) {
+  public void setClusters(final List<Cluster> clusters) {
     final List<Image> clusterImgs = new ArrayList<Image>(clusters.size());
     int width = 0;
     int height = 0;
     
-    for (final Pair<AbstractNode, List<AbstractNode>> p : clusters) {
-      final Image i = drawRules(p.getSecond());
+    for (final Cluster cluster : clusters) {
+      final Image i = drawRules(cluster.getContent());
       clusterImgs.add(i);
       width = Math.max(width, i.getWidth(null));
       height += i.getHeight(null) + 5;

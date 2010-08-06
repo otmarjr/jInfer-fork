@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -99,7 +99,7 @@ public class SimplifierImpl implements Simplifier {
     final boolean render = Boolean.parseBoolean(properties.getProperty(MODULAR_SIMPLIFIER_RENDER,"true"));
 
     showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), render);
-    final List<Pair<AbstractNode, List<AbstractNode>>> clustered = getClusterer().cluster(initialGrammar);
+    final List<Cluster> clustered = getClusterer().cluster(initialGrammar);
     showClustersAsync("Clustered", new CloneHelper().cloneClusters(clustered), render);
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
     showRulesAsync("Processed", new CloneHelper().cloneRules(processed), render);
@@ -127,7 +127,7 @@ public class SimplifierImpl implements Simplifier {
     });
   }
 
-  private static void showClustersAsync(final String panelName, final List<Pair<AbstractNode, List<AbstractNode>>> clusters, final boolean render) {
+  private static void showClustersAsync(final String panelName, final List<Cluster> clusters, final boolean render) {
     if (!render || BaseUtils.isEmpty(clusters)) {
       return;
     }

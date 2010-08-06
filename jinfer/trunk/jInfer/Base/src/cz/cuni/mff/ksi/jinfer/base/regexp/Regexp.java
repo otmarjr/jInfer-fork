@@ -150,6 +150,14 @@ public class Regexp<T> {
     return RegexpType.KLEENE.equals(type);
   }
 
+  /**
+   * Returns true, if this is a token and its content is null;
+   * or if the children are empty.
+   *
+   * Regexp should be considered to represent λ (lambda) iff it is empty.
+   * 
+   * @return
+   */
   public boolean isEmpty() {
     if (isToken()) {
       return content == null;

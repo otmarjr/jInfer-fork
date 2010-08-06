@@ -100,13 +100,6 @@ public class Runner {
 
       @Override
       public void run() {
-        // testovanie logov
-        // TODO rio remove
-        //LOG.info("info");
-        //LOG.warn("warn");
-        //LOG.error("error");
-        //LOG.fatal("fatal");
-
         try {
           igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class),
                   iggCallback);

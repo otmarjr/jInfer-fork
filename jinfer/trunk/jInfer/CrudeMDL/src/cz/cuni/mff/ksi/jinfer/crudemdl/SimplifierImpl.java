@@ -24,11 +24,15 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayerTopComponent;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.windows.WindowManager;
 
 /**
  * Simplifier intended to user some crude two-part MDL to evaluate solutions.
@@ -68,6 +72,19 @@ public class SimplifierImpl implements Simplifier {
     }
   }
 
+  private static void showRulesAsync(final String panelName, final List<AbstractNode> rules, final boolean render) {
+    if (!render || BaseUtils.isEmpty(rules)) {
+      return;
+    }
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
+      }
+    });
+  }
+
   private Clusterer<AbstractNode> getClusterer() {
     return new InameClusterer();
   }
@@ -81,6 +98,7 @@ public class SimplifierImpl implements Simplifier {
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
+    showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
     final Clusterer<AbstractNode> clusterer= this.getClusterer();
     clusterer.addAll(initialGrammar);
@@ -104,6 +122,7 @@ public class SimplifierImpl implements Simplifier {
 
     // TODO anti Shortener
     
+    showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
     callback.finished( finalGrammar );
   }
 }

@@ -127,7 +127,7 @@ public class NodePainter {
   }
 
   private Image drawKleene(final Regexp<AbstractNode> subnodes, final int level) {
-    final Image kleene = drawNode(subnodes.getChild(0).getContent(), level + 1);
+    final Image kleene = drawRegexp(subnodes.getChild(0), level + 1);
     final BufferedImage kleeneRet = Utils.getImage(
             kleene.getWidth(null) + 10 + 2 * margin,
             kleene.getHeight(null) + 2 * margin);

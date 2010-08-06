@@ -40,8 +40,9 @@ import org.openide.util.lookup.ServiceProvider;
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
-  private Preprocessor preprocessing = null;
+  private Preprocessor preprocessor = null;
   private Indentator indentator = null;
+  private static final String TYPENAME_PREFIX = "T";
 
   @Override
   public String getModuleName() {
@@ -49,13 +50,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) {
+  public void start(final List<AbstractNode> grammar, final SchemaGeneratorCallback callback) throws InterruptedException {
     LOG.info("XSD Exporter: got " + grammar.size()
             + " rules.");
-
-    // load settings
-    //maxEnumSize = Preferences.userNodeForPackage(ConfigPanel.class).getInt("max.enum.size", 3);
-    //minDefaultRatio = Preferences.userNodeForPackage(ConfigPanel.class).getFloat("min.default.ratio", 0.67f);
     
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
@@ -76,23 +73,33 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
      * - nazov elementu je jeho unikatny identifikator vo vstupnom liste
      */
 
-    // generate XSD
     indentator = new Indentator();
+
+    // generate head of a new XSD
     indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
 
-    preprocessing = new Preprocessor(elements);
-    preprocessing.run();
+    preprocessor = new Preprocessor(elements);
+    preprocessor.run();
 
     // handle global elements
-    final List<Element> globalElements = preprocessing.getGlobalElements();
+    final List<Element> globalElements = preprocessor.getGlobalElements();
+    if (!globalElements.isEmpty()) {
+      indentator.append("\n");
+      indentator.indent("<!-- global types -->\n");
+    }
     for (Element globalElement : globalElements) {
-      globalElementToString(globalElement);
+      checkInterrupt();
+      processGlobalElement(globalElement);
     }
     
     // TODO rio interrupt
-    elementToString(preprocessing.getTopElement());
 
+    // run recursion starting at the top element
+    indentator.indent("<!-- top level element -->\n");
+    processElement(preprocessor.getTopElement());
+
+    // close XSD
     indentator.indent("</xs:schema>");
 
     LOG.info("XSD Exporter: schema generated at "
@@ -101,24 +108,35 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     callback.finished(indentator.toString(), "xsd");
   }
 
-  private void elementToString(final Element element) {
-    indentator.indent("<xs:element name=\"" + element.getName() + "\"");
+  private void processElement(final Element element) throws InterruptedException {
+    checkInterrupt();
 
+    // begin definition of element and write its name
+    indentator.indent("<xs:element name=\"");
+    indentator.append(element.getName());
+    indentator.append("\"");
+
+    // if its type is one of built-in types we don't have much work to do
+    // TODO rio dalsie built-in typy
     TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
     if (typeCategory.equals(TypeCategory.BUILTIN)) {
       indentator.append(" type=\"xs:string\">\n");
       return;
     }
 
-    if (preprocessing.isElementGlobal(element.getName())) {
-      indentator.append(" type=\"T" + element.getName() + "\"/>\n");
+    // if element's type is global set it and finish
+    if (preprocessor.isElementGlobal(element.getName())) {
+      indentator.append(" type=\"");
+      indentator.append(TYPENAME_PREFIX);
+      indentator.append(element.getName());
+      indentator.append("\"/>\n");
       return;
     }
 
     indentator.append(">\n");
-     // TODO rio mixed content
     indentator.increaseIndentation();
 
+    // TODO rio mixed content
     switch (typeCategory) {
       case SIMPLE:
         indentator.indent("<xs:simpleType>\n");
@@ -132,17 +150,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     indentator.increaseIndentation();
 
-    final List<Attribute> attributes = element.getElementAttributes();
-    if (!attributes.isEmpty()) {
-      assert(typeCategory.equals(TypeCategory.COMPLEX));
-      for (Attribute attribute : attributes) {
-        indentator.indent("<xs:attribute name=\"");
-        indentator.append(attribute.getName());
-        indentator.append("\" type=\"xs:string\">\n");
-      }
-    }
+    processElementAttributes(element);
 
-    subElementsToString(element.getSubnodes());
+    processSubElements(element.getSubnodes());
 
     indentator.decreaseIndentation();
 
@@ -163,7 +173,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return;
   }
 
-  private void globalElementToString(final Element element) {
+  private void processGlobalElement(final Element element) throws InterruptedException {
+    checkInterrupt();
+
+    // if element is of a built-in type don't define it
+    // TODO rio refactor to XSDUtils
     TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
     if (typeCategory.equals(TypeCategory.BUILTIN)) {
       return;
@@ -172,28 +186,24 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
      // TODO rio mixed content
     switch (typeCategory) {
       case SIMPLE:
-        indentator.indent("<xs:simpleType name=");
+        indentator.indent("<xs:simpleType name=\"");
         break;
       case COMPLEX:
-        indentator.indent("<xs:complexType name=");
+        indentator.indent("<xs:complexType name=\"");
         break;
       default:
         throw new IllegalArgumentException("Unknown of illegal enum member.");
     }
-    indentator.append("\"T" + element.getName() + "\">\n");
+    indentator.append(TYPENAME_PREFIX);
+    indentator.append(element.getName());
+    indentator.append("\">\n");
+
     indentator.increaseIndentation();
 
-    final List<Attribute> attributes = element.getElementAttributes();
-    if (!attributes.isEmpty()) {
-      assert(typeCategory.equals(TypeCategory.COMPLEX));
-      for (Attribute attribute : attributes) {
-        indentator.indent("<xs:attribute name=\"");
-        indentator.append(attribute.getName());
-        indentator.append("\" type=\"xs:string\">\n");
-      }
-    }
+    processElementAttributes(element);
 
-    subElementsToString(element.getSubnodes());
+    processSubElements(element.getSubnodes());
+
     indentator.decreaseIndentation();
 
     switch (typeCategory) {
@@ -212,7 +222,24 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return;
   }
 
-  private void subElementsToString(final Regexp<AbstractNode> regexp) {
+  private void processElementAttributes(final Element element) throws InterruptedException {
+    final List<Attribute> attributes = element.getElementAttributes();
+
+    if (!attributes.isEmpty()) {
+      TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
+      assert(typeCategory.equals(TypeCategory.COMPLEX));
+      for (Attribute attribute : attributes) {
+        checkInterrupt();
+        indentator.indent("<xs:attribute name=\"");
+        indentator.append(attribute.getName());
+        // TODO rio types of attributes
+        indentator.append("\" type=\"xs:string\">\n");
+      }
+    }
+  }
+
+  private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
+    checkInterrupt();
     assert(regexp.isEmpty() == false);
 
     if (BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
@@ -226,25 +253,23 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     switch (regexp.getType()) {
       case TOKEN:
-        tokenToString(regexp.getContent());
+        processToken(regexp.getContent());
         return;
       case KLEENE:
       {
-        final StringBuilder ret = new StringBuilder();
         indentator.indent("<xs:sequence>\n");
         indentator.increaseIndentation();
-        subElementsToString(regexp.getChild(0));
+        processSubElements(regexp.getChild(0));
         indentator.decreaseIndentation();
         indentator.indent("</xs:sequence>\n");
         return;
       }
       case CONCATENATION:
       {
-        final StringBuilder ret = new StringBuilder();
         indentator.indent("<xs:sequence>\n");
         indentator.increaseIndentation();
         for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
-          subElementsToString(subRegexp);
+          processSubElements(subRegexp);
         }
         indentator.decreaseIndentation();
         indentator.indent("</xs:sequence>\n");
@@ -252,12 +277,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       }
       case ALTERNATION:
         {
-        final StringBuilder ret = new StringBuilder();
         indentator.indent("<xs:choice>\n");
         indentator.increaseIndentation();
         for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
           if ((subRegexp != null) && (!subRegexp.isEmpty())) {
-            subElementsToString(subRegexp);
+            processSubElements(subRegexp);
           }
         }
         indentator.decreaseIndentation();
@@ -269,36 +293,23 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private void tokenToString(final AbstractNode node) {
+  private void processToken(final AbstractNode node) throws InterruptedException {
     assert(node.isSimpleData() == false);
     assert(node.isElement());
 
-    final Element element = preprocessing.getElementByName(node.getName());
+    final Element element = preprocessor.getElementByName(node.getName());
 
     if (element == null) {
       LOG.warn("XSD Exporter: Referenced element(" + node.getName() + ") not found in IG element list, probably error in code");
       return;
     }
 
-    elementToString(element);
+    processElement(element);
   }
-/*
-  private void indent(final StringBuilder sb, final String txt) {
-    char[] spaces = new char[indentationLevel];
-    for (int i = 0; i < indentationLevel; ++i) {
-      spaces[i] = ' ';
+
+  private void checkInterrupt() throws InterruptedException {
+    if (Thread.interrupted()) {
+      throw new InterruptedException();
     }
-    final String indentation = new String(spaces);
-    sb.append(indentation)
-            .append(txt);
   }
-
-  private void indentationIncrease() {
-    indentationLevel += indentationStep;
-  }
-
-  private void indentationDecrease() {
-    assert(indentationLevel >= indentationStep);
-    indentationLevel -= indentationStep;
-  } */
 }

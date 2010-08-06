@@ -27,13 +27,26 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TODO anti Comment!
+ * Using class KHContext, we build 2,x-context condition merger.
+ *
+ * Should be generalized to k,h parameters, but currently only 2,x works
+ * (because of recursive character of finding contexts of state)
+ *
+ * It first finds all contexts of two states, then compares each pair. Returns
+ * list of alternative merge lists of pairs.
+ *
  * @author anti
  */
 public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T> {
   private int k;
   private int h;
-  
+
+  /**
+   * Setting k,h. It has to be k >= h, or exception thrown (cannot merge more than
+   * k states on path, when only k of them were examined).
+   * @param k
+   * @param h
+   */
   public KHContextMergeConditionTester(int k, int h) {
     if (h > k) {
       throw  new IllegalArgumentException("K must be greater than h");

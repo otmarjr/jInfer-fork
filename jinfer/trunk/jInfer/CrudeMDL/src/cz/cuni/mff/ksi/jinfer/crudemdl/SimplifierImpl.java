@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ElementProcessor;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.AutomatonMergingStateProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.InameClusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
@@ -23,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -69,7 +72,7 @@ public class SimplifierImpl implements Simplifier {
     return new InameClusterer();
   }
 
-  private Processor<AbstractNode> getProcessor() {
+  private ElementProcessor<AbstractNode> getProcessor() {
     return new AutomatonMergingStateProcessor();
   }
 
@@ -82,11 +85,24 @@ public class SimplifierImpl implements Simplifier {
     final Clusterer<AbstractNode> clusterer= this.getClusterer();
     clusterer.addAll(initialGrammar);
     clusterer.cluster();
-    
-    final Processor<AbstractNode> processor= this.getProcessor();
-    final List<AbstractNode> finalGrammar= processor.processClusters(clusterer);
 
-    // TODO Shortener
+    // 2. prepare emtpy final grammar
+    final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
+
+    // 3. process rules
+    final ElementProcessor<AbstractNode> processor= this.getProcessor();
+    for (Cluster<AbstractNode> cluster : clusterer.getClusters()) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      if (!cluster.getRepresentant().isElement()) {
+        continue;
+      }
+      // 4. add to rules
+      finalGrammar.add( processor.processElement(clusterer, cluster) );
+    }
+
+    // TODO anti Shortener
     
     callback.finished( finalGrammar );
   }

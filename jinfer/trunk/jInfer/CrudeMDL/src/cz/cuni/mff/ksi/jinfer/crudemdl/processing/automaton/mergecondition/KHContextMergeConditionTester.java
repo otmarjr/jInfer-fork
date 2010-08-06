@@ -15,12 +15,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.automaton.mergecondition;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.mergecondition;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.State;
-import cz.cuni.mff.ksi.jinfer.crudemdl.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;

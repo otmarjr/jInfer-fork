@@ -87,7 +87,7 @@ public class AutomatonMergingStateProcessor implements ElementProcessor<Abstract
     // 3.4 return element with regexp
     return new Element(
           cluster.getRepresentant().getContext(),
-          cluster.getRepresentant().getName(),
+          "sdga",//cluster.getRepresentant().getName(),
           cluster.getRepresentant().getAttributes(),
           regexpAutomaton.getRegexp()
            );

@@ -73,7 +73,7 @@ public final class Preprocessor {
     // count occurrences of elements
     final Map<String, Integer> elementOccurrenceCounts = countOccurrences(toposortedElementsWithUnused);
     // TODO rio remove debug log
-    LOG.info(elementOccurrenceCounts);
+    //LOG.info(elementOccurrenceCounts);
     toposortedElements = removeUnused(toposortedElementsWithUnused, elementOccurrenceCounts);
     // presence of any unused elements means there is more than one top level element
     if (!toposortedElements.equals(toposortedElementsWithUnused)) {

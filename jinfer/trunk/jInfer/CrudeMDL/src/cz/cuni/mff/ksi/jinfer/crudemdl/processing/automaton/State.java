@@ -21,6 +21,11 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
  * Class representing state in deterministic finite automaton.
  * has fields- finalCount - number the times its final state, how
  * many input strings ended in this state
+ *
+ * State is just a nearly
+ * empty box used as reference for .equals() when traversing automaton and so on.
+ * But object with some properties is more useful then representation by numbers
+ * for example.
  * 
  * name - simple integer to name states correctly in log output and
  * visualization
@@ -30,13 +35,23 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
  * @author anti
  */
 public class State<T> implements Comparable<State<T>> {
-  // TODO anti Comment the fields
+  /**
+   * finalCount - number the times the state was final for some input string.
+   */
   private Integer finalCount;
+  /**
+   * Just unique number as name, to visualize and log automaton correctly.
+   */
   private int name;
+  /**
+   * Maybe will be considered not useful. In future not states, but only whole
+   * automatons will be passed thru api. So this would not be necessary.
+   * Don't even know where it is used know.
+   */
   private Automaton<T> parentAutomaton;
 
   /**
-   * TODO anti Comment!
+   * Only one constructor, setting all states parameters.
    * 
    * @param finalCount
    * @param name

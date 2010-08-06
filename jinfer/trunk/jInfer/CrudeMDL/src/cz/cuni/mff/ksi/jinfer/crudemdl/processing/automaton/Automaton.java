@@ -31,15 +31,52 @@ import org.apache.log4j.Logger;
 /**
  * Class representing deterministic finite automaton.
  * Can simplify itself when given mergingCondition
+ *
+ * Automaton can be non-deterministic for algorithmic reasons.
+ * Of course, there is no constraint that each state has to have transition on
+ * each symbol. But what more, there can be multiple transitions from one step
+ * on same symbol, pointing to different states (real non-determinism) or to same
+ * state (just non-canonical form).
+ *
+ * When merging occurs, this deviations can appear. Non-canonical form, when
+ * there are two-or-more steps on same symbol between two states, is solved
+ * (and collapsed to only one step) automatically by merging procedure.
+ * Non-deterministic form is not solved by automaton itself. The merging algorithm
+ * has to deal with this opportunity is it gives bad order of merging states.
+ * But it can let it non-deterministic by design.
  * 
  * @author anti
  */
 public class Automaton<T> {
   private static final Logger LOG = Logger.getLogger(Automaton.class);
-  // TODO anti Comment the fields
+  /**
+   * Initial state of automaton, entry point. State in which automaton is
+   * when starting reading input. Has to be in delta function keySet.
+   *
+   * Has no incoming steps.
+   */
   protected State<T> initialState;
+  /**
+   * Transition function of automaton. Maps states to their outgoing steps. KeySet
+   * is a set of all states of automaton.
+   *
+   * State is removed by delta.remove(state) and reverseDelta.remove(state)
+   */
   protected final Map<State<T>, Set<Step<T>>> delta;
+  /**
+   * Transition function of automaton, mathematically the same as delta. For
+   * programmatic reasons we have the reverse map, state mapping to ist incoming
+   * steps.
+   * Loops are therefore findable by using delta and reverseDelta so be careful
+   * when counting loops - may count twice.
+   */
   protected final Map<State<T>, Set<Step<T>>> reverseDelta;
+  /**
+   * New state name is an integer that is assigned to any new state created by
+   * createNewState. It is always incremented in createNewState so no two states
+   * share same name. Numbers freed by state removing are not used again, sequence
+   * only grows.
+   */
   protected int newStateName;
 
   /**
@@ -61,6 +98,18 @@ public class Automaton<T> {
     }
   }
 
+  /**
+   * Creates new state and return it. This is preferred way to extend automaton
+   * states. It initializes delta map, and revesre delta map with empty hashsets
+   * of steps, increments newstatename.
+   *
+   * Process of extending automaton is therefore:
+   * 1. create state using this function
+   * 2. create steps giving them proper sources,destinations
+   * 3. put step instances correctly in delta map and reverseDelta map.
+   *
+   * @return
+   */
   protected State<T> createNewState() {
     final State<T> newState= new State<T>(0, this.newStateName, this);
     this.newStateName++;
@@ -69,7 +118,15 @@ public class Automaton<T> {
     return newState;
   }
 
-  private Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
+  /**
+   * Returns first step from state, which accepts given symbol. If there are
+   * multiple such steps, return only one found.
+   *
+   * @param state
+   * @param symbol
+   * @return
+   */
+  protected Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
     final Set<Step<T>> steps= this.delta.get(state);
     for (Step<T> step : steps) {
       if (step.getAcceptSymbol().equals(symbol)) {
@@ -79,6 +136,14 @@ public class Automaton<T> {
     return null;
   }
 
+  /**
+   * Preferred way to create new steps. Gives 1 as useCount to step.
+   *
+   * @param onSymbol
+   * @param source
+   * @param destination
+   * @return
+   */
   private Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
     final Step<T> newStep= new Step<T>(onSymbol, source, destination, 1);
     this.delta.get(source).add(newStep);
@@ -178,7 +243,11 @@ public class Automaton<T> {
   }
 
   /**
-   * Simplify by merging states. Condition to merge states is tested in provided mergedConditionTester
+   * Simplify by merging states. Condition to merge states is tested in provided 
+   * mergedConditionTester.
+   * 
+   * Loops until there are no more states to merge (until each pair of states tested
+   * by mergeCondidionTester is returned empty list of states to merge.
    *
    * @param mergeCondidionTester
    * @throws InterruptedException
@@ -254,14 +323,14 @@ public class Automaton<T> {
   }
 
   /**
-   * @return the delta
+   * @return the delta, unmodifiable!
    */
   public Map<State<T>, Set<Step<T>>> getDelta() {
     return Collections.unmodifiableMap(delta);
   }
 
   /**
-   * @return the reverseDelta
+   * @return the reverseDelta, unmodifiable!
    */
   public Map<State<T>, Set<Step<T>>> getReverseDelta() {
     return Collections.unmodifiableMap(reverseDelta);

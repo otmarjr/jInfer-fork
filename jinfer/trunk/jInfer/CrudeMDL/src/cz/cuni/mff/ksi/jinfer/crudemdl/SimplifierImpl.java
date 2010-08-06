@@ -44,6 +44,8 @@ import org.openide.windows.WindowManager;
  *      create automaton with regexps on steps
  *      by removing states and combining regexp simplify regexp automaton and retrieve regexp
  *
+ * 
+ *
  * @author anti
  */
 @ServiceProvider(service = Simplifier.class)
@@ -120,9 +122,7 @@ public class SimplifierImpl implements Simplifier {
       finalGrammar.add( processor.processElement(clusterer, cluster) );
     }
 
-    // TODO anti Shortener
-    
-    showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
+    showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);
     callback.finished( finalGrammar );
   }
 }

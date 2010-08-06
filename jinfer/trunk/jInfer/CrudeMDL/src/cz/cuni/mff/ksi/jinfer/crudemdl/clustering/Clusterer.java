@@ -21,22 +21,77 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * Interface for clustering algorithms implementations. Actual implementors will
+ * probably use AbstractNode as generic class for Clusterer and differentiate
+ * Nodes coming for clustering in runtime.
+ *
+ * Purpose of clustering is to cluster elements based on some criterion into clusters -
+ * generally same name. Sometimes elements with same name appear in documents with
+ * different semantics, sometimes misspelled element names in documents causes
+ * semantically same elements to have different names.
+ *
+ * Clusterer have to deal with these issues.
+ *
+ * As method getRepresentantForItem is used for getting one representant of
+ * element/simpledata/attribute when adding steps into automaton (which have to
+ * be A.equals(B) when node A and B are in same cluster), clusterer have to
+ * parse elements right sides. Maybe by just doing:
+ * for (Node x : queue) {
+ *   if (x.isElement) {
+ *     this.addAll(((Element) x).getSubnodes().getTokens());
+ *   }
+ * }
+ * When automaton is created, getRepresentantForItem() is called for everything on
+ * elements right side of rule. So Clusterer have to deal with SimpleData (one cluster
+ * for all simpledata nodes), attributes TODO anti
+ *
+ * Each item has to be in exactly one cluster, that's what clustering is all about.
  *
  * @author anti
  */
 public interface Clusterer<T> {
-  // TODO anti Be careful - JavaDoc comments start with /**
-  /*
-   * Add x to some cluster, find the right one or create new. Depends on clustering algorithm.
-   * One can do classify on demand, or can create a method that builds just one cluster on classify
-   * and then call some own method to 'reclassify' - do the real clustering. Opposite is also in mind
-   * do cluster for each x, then apply own merging clustering algorithm. The algorithms should be then
-   * added in own methods.
+   /**
+   * Add x to some clusterer, enqueue for processing. Don't implement clustering here,
+   * has to be in cluster() method to enable thread interruption.
    */
    void add(final T item);
-   // TODO anti Comment all the methods
+   /**
+    * Add the whole collection to queue for clustering
+    * @param items
+    */
    void addAll(final Collection<T> items);
-   List<Cluster<T>> cluster() throws InterruptedException;
+   /**
+    * Do the main job, cluster enqueued items into clusters. But don't throw away old items.
+    * If there are already some items in clusters, user suppose they didn't disappeared.
+    *
+    * Example: add(x), add(y), add(xx), add(yx), enqueued items: x, y, xx, yx. Calling
+    * cluster() creates clusters for example based on starting letter. Creates two clusters:
+    * (x, xx) | (y, yx)
+    *
+    * Now let user use add(xd), add(zz). Calling cluster() again have to result in
+    * (x, xx, xd) | (y, yx) | (zz)
+    *
+    * Of course, if cluster criterion is not so stable as first letter, items x, xx, y, yx
+    * can change their clusters and so. Point is, that they don't disappear. Once an item is added
+    * clusterer has to hold it for future cluster() calls.
+    *
+    * cluster method has to check for interruption of thread by using:
+    *  if (Thread.interrupted()) {
+    *    throw new InterruptedException();
+    *  }
+    * in some main loop.
+    *
+    */
+   void cluster() throws InterruptedException;
+   /**
+    * Return representant of the item's cluster
+    * @param item
+    * @return
+    */
    T getRepresentantForItem(final T item);
+   /**
+    * Without doing reclusterization, return result of last cluster() call.
+    * @return
+    */
+   List<Cluster<T>> getClusters();
 }

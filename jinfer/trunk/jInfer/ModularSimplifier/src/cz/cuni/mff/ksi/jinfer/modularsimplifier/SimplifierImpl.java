@@ -16,22 +16,21 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier;
 
+import cz.cuni.mff.ksi.jinfer.base.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.base.clustering.ContextClusterer;
+import cz.cuni.mff.ksi.jinfer.base.clustering.NameClusterer;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessor;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.NameClusterer;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ContextClusterer;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayerTopComponent;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.SimpleKP;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPAlternations;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
@@ -98,44 +97,18 @@ public class SimplifierImpl implements Simplifier {
 
     final boolean render = Boolean.parseBoolean(properties.getProperty(MODULAR_SIMPLIFIER_RENDER,"true"));
 
-    showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), render);
+    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), render);
     final List<Cluster> clustered = getClusterer().cluster(initialGrammar);
-    showClustersAsync("Clustered", new CloneHelper().cloneClusters(clustered), render);
+    RuleDisplayer.showClustersAsync("Clustered", new CloneHelper().cloneClusters(clustered), render);
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
-    showRulesAsync("Processed", new CloneHelper().cloneRules(processed), render);
+    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(processed), render);
     final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
-    showRulesAsync("Kleened", new CloneHelper().cloneRules(kleened), render);
+    RuleDisplayer.showRulesAsync("Kleened", new CloneHelper().cloneRules(kleened), render);
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override
       public void run() {
         callback.finished(kleened);
-      }
-    });
-  }
-
-  private static void showRulesAsync(final String panelName, final List<AbstractNode> rules, final boolean render) {
-    if (!render || BaseUtils.isEmpty(rules)) {
-      return;
-    }
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
-      @Override
-      public void run() {
-        RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
-      }
-    });
-  }
-
-  private static void showClustersAsync(final String panelName, final List<Cluster> clusters, final boolean render) {
-    if (!render || BaseUtils.isEmpty(clusters)) {
-      return;
-    }
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
-      @Override
-      public void run() {
-        RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setClusters(clusters);
       }
     });
   }

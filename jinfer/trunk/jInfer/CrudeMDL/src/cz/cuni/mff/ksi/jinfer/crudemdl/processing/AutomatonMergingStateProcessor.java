@@ -18,14 +18,13 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.Shortener;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.mergecondition.KHContextMergeConditionTester;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -40,15 +39,15 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class AutomatonMergingStateProcessor implements ElementProcessor<AbstractNode>{
+public class AutomatonMergingStateProcessor implements ElementProcessor {
   private static final Logger LOG = Logger.getLogger(AutomatonMergingStateProcessor.class);
 
   @Override
-  public AbstractNode processElement(final Clusterer<AbstractNode> clusterer, final Cluster<AbstractNode> cluster) throws InterruptedException {
+  public AbstractNode processElement(final Cluster cluster) throws InterruptedException {
     // 3.1 construct PTA
     final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
 
-    for (AbstractNode instance : cluster.getMembers()) {
+    for (AbstractNode instance : cluster.getContent()) {
       final Element element = (Element) instance;
       final Regexp<AbstractNode> rightSide= element.getSubnodes();
 
@@ -63,7 +62,11 @@ public class AutomatonMergingStateProcessor implements ElementProcessor<Abstract
         if (token.isAttribute()) {
           continue;
         }
-        symbolString.add( clusterer.getRepresentantForItem(token) );
+        // TODO anti This
+        // symbolString.add( clusterer.getRepresentantForItem(token) );
+        // was replaced by the following
+        symbolString.add(token);
+        // is it OK?
       }
       automaton.buildPTAOnSymbol(symbolString);
     }

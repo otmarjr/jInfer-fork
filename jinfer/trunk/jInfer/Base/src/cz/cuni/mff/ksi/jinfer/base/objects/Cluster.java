@@ -14,20 +14,21 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.List;
 
 /**
- *
+ * Representation of a cluster of rules.
+ *  
  * @author vektor
  */
 public class Cluster {
 
+  /** A rule that represents this cluster. Should be also contained in content. */
   private final AbstractNode representant;
   
+  /** Rules in this cluster. */
   private final List<AbstractNode> content;
 
   public Cluster(final AbstractNode representant, final List<AbstractNode> content) {

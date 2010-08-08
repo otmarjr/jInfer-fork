@@ -33,6 +33,10 @@ public final class XSDUtils {
     if (!e.getElementAttributes().isEmpty()) {
       return TypeCategory.COMPLEX;
     }
+
+    if (hasMixedContent(e)) {
+      return TypeCategory.COMPLEX;
+    }
     
     Regexp<AbstractNode> subnodes = e.getSubnodes();
 
@@ -56,5 +60,29 @@ public final class XSDUtils {
     }
 
     return TypeCategory.COMPLEX;
+  }
+
+  public static boolean hasMixedContent(final Element e) {
+    final Regexp<AbstractNode> regexp = e.getSubnodes();
+
+    boolean hasSimpleData = false;
+    boolean hasElements = false;
+    boolean hasAttributes = false;
+
+    for (final AbstractNode token : regexp.getTokens()) {
+      if (token.isSimpleData()) {
+        hasSimpleData = true;
+      } else if (token.isElement()) {
+        hasElements = true;
+      } else if (token.isAttribute()) {
+        hasAttributes = true;
+      }
+    }
+
+    if (hasSimpleData && (hasElements || hasAttributes)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -146,7 +146,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("<xs:simpleType>\n");
         break;
       case COMPLEX:
-        indentator.indent("<xs:complexType>\n");
+        indentator.indent("<xs:complexType");
+        if (XSDUtils.hasMixedContent(element)) {
+          indentator.append(" mixed=\"true\"");
+        }
+        indentator.append(">\n");
         break;
       default:
         throw new IllegalArgumentException("Unknown of illegal enum member.");
@@ -197,7 +201,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
     indentator.append(TYPENAME_PREFIX);
     indentator.append(element.getName());
-    indentator.append("\">\n");
+    indentator.append("\"");
+
+    if (XSDUtils.hasMixedContent(element)) {
+      indentator.append(" mixed=\"true\"");
+    }
+
+    indentator.append(">\n");
 
     indentator.increaseIndentation();
     processSubElements(element.getSubnodes(), 1, 1);

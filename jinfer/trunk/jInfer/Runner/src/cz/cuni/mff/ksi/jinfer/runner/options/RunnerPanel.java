@@ -56,7 +56,6 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel1.setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(openSchema, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.null.text")); // NOI18N
-    openSchema.setName("null"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.weightx = 1.0;
@@ -71,11 +70,6 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel2.setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(showOutputWindow, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.showOutputWindow.text")); // NOI18N
-    showOutputWindow.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        showOutputWindowActionPerformed(evt);
-      }
-    });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.weightx = 1.0;
@@ -92,7 +86,7 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 511, Short.MAX_VALUE)
+      .addGap(0, 783, Short.MAX_VALUE)
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,12 +101,8 @@ public final class RunnerPanel extends javax.swing.JPanel {
     add(jPanel3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
-  private void showOutputWindowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showOutputWindowActionPerformed
-    // TODO add your handling code here:
-  }//GEN-LAST:event_showOutputWindowActionPerformed
-
   void load() {
-    openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, false));
+    openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, true));
     showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, false));
   }
 

@@ -155,7 +155,7 @@ public class Runner {
     LOG.info("Runner: writing schema.");
 
     final boolean openSchema = NbPreferences.forModule(RunnerPanel.class).getBoolean(
-            RunnerPanel.SCHEMA_OPEN, false);
+            RunnerPanel.SCHEMA_OPEN, true);
 
     RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class).addOutput(
             "generated-schema", getCommentedSchema(schema), extension, openSchema);

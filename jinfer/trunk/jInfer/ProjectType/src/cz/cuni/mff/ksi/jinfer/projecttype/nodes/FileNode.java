@@ -54,7 +54,7 @@ public class FileNode extends FilterNode {
     final FileObject fileOb = orig.getDataObject().getPrimaryFile();
     files.remove(FileUtil.toFile(fileOb));
 
-    ((FileChildren) ((FolderNode) this.getParentNode()).getChildren()).addNotify();
+    ((FileChildren) ((FolderNode) this.getParentNode()).getChildren()).refreshNodes();
 
     super.destroy();
   }

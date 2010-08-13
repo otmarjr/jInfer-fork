@@ -62,6 +62,16 @@ public final class XSDUtils {
     return TypeCategory.COMPLEX;
   }
 
+  public static boolean hasBuiltinType(final Element e) {
+    TypeCategory typeCategory = XSDUtils.getTypeCategory(e);
+    return typeCategory.equals(TypeCategory.BUILTIN) ? true : false;
+  }
+
+  public static boolean hasComplexType(final Element e) {
+    TypeCategory typeCategory = XSDUtils.getTypeCategory(e);
+    return typeCategory.equals(TypeCategory.COMPLEX) ? true : false;
+  }
+
   public static boolean hasMixedContent(final Element e) {
     final Regexp<AbstractNode> regexp = e.getSubnodes();
 

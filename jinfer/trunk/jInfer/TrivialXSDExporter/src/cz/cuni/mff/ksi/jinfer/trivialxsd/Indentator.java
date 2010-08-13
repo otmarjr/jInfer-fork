@@ -17,7 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.trivialxsd;
 
-/**
+// TODO rio comment
+/** TODO rio translate
+ * Stara sa o odsadenie riadkov.
  *
  * @author rio
  */
@@ -28,6 +30,8 @@ public class Indentator {
   // TODO rio nastavovat optionom z vonku?
   private static int INDENTATION_STEP = 2;
 
+  /** Constructor.
+   */
   public Indentator() {
     builder = new StringBuilder();
   }

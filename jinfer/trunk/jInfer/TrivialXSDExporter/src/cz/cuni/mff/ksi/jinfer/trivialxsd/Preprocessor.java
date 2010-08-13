@@ -82,8 +82,6 @@ public final class Preprocessor {
 
     // decide which elements will be global
     globalElementFlags = makeGlobalFlags(toposortedElements, elementOccurrenceCounts);
-
-    // TODO rio ?? make string representation of elements ??
   }
 
   /** Returns element by name.

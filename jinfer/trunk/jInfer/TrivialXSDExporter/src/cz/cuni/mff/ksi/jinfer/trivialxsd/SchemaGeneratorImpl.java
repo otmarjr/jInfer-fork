@@ -24,12 +24,14 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.XSDUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -42,12 +44,25 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
+  public static final String TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL = "trivialxsdexporter.generate.global";
+  public static final String TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL = "trivialxsdexporter.number.to.global";
+  public static final String TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT = "trivialxsdexporter.spaces.per.indent";
+  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX = "trivialxsdexporter.typename.prefix";
+  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX = "trivialxsdexporter.typename.postfix";
+
+  public final static boolean GENERATE_GLOBAL_DEFAULT = true;
+  /// Default value of number of occurrences of element to consider it as a global type.
+  public final static int NUMBER_TO_GLOBAL_DEFAULT = 1;
+  public final static int SPACES_PER_INDENT_DEFAULT = 2;
+  public final static String TYPENAME_PREFIX_DEFAULT = "T";
+  public final static String TYPENAME_POSTFIX_DEFAULT = "";
 
   private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private Preprocessor preprocessor = null;
   private Indentator indentator = null;
-  // TODO rio nastavovat uzivatelom?
-  private static final String TYPENAME_PREFIX = "T";
+  private String typenamePrefix = null;
+  private String typenamePostfix = null;
+
   private static final int MINOCCURS_DEFAULT = 1;
   private static final int MAXOCCURS_DEFAULT = 1;
 
@@ -80,14 +95,22 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     assert(verifyInput(elements));
 
-    indentator = new Indentator();
+    final Properties properties = RunningProject.getActiveProjectProps();
+
+    final int spacesPerIndent = Integer.parseInt(properties.getProperty(TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT, String.valueOf(SPACES_PER_INDENT_DEFAULT)));
+    indentator = new Indentator(spacesPerIndent);
 
     // generate head of a new XSD
     indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
 
-    preprocessor = new Preprocessor(elements);
+    final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL, String.valueOf(GENERATE_GLOBAL_DEFAULT)));
+    final int numberToGlobal = Integer.parseInt(properties.getProperty(TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL, String.valueOf(NUMBER_TO_GLOBAL_DEFAULT)));
+    preprocessor = new Preprocessor(elements, generateGlobal, numberToGlobal);
     preprocessor.run();
+
+    typenamePrefix = properties.getProperty(TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX, TYPENAME_PREFIX_DEFAULT);
+    typenamePostfix = properties.getProperty(TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX, TYPENAME_POSTFIX_DEFAULT);
 
     // handle global elements
     final List<Element> globalElements = preprocessor.getGlobalElements();
@@ -134,8 +157,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // if element's type is global set it and finish
     if (preprocessor.isElementGlobal(element.getName())) {
       indentator.append(" type=\"");
-      indentator.append(TYPENAME_PREFIX);
+      indentator.append(typenamePrefix);
       indentator.append(element.getName());
+      indentator.append(typenamePostfix);
       indentator.append("\"/>\n");
       return;
     }
@@ -199,8 +223,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       default:
         throw new IllegalArgumentException("Unknown of illegal enum member.");
     }
-    indentator.append(TYPENAME_PREFIX);
+    indentator.append(typenamePrefix);
     indentator.append(element.getName());
+    indentator.append(typenamePostfix);
     indentator.append("\"");
 
     if (XSDUtils.hasMixedContent(element)) {

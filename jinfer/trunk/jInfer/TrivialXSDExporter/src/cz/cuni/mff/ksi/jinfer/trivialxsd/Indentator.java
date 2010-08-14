@@ -18,22 +18,24 @@
 package cz.cuni.mff.ksi.jinfer.trivialxsd;
 
 // TODO rio comment
+
 /** TODO rio translate
  * Stara sa o odsadenie riadkov.
  *
  * @author rio
  */
 public class Indentator {
+
   private final StringBuilder builder;
   private int indentationLevel = 0;
-
-  // TODO rio nastavovat optionom z vonku?
-  private static int INDENTATION_STEP = 2;
+  private final int spacesPerIndent;
+  
 
   /** Constructor.
    */
-  public Indentator() {
-    builder = new StringBuilder();
+  public Indentator(final int spacesPerIndent) {
+    this.builder = new StringBuilder();
+    this.spacesPerIndent = spacesPerIndent;
   }
 
   public void indent(final String string) {
@@ -51,12 +53,12 @@ public class Indentator {
   }
 
   public void increaseIndentation() {
-    indentationLevel += INDENTATION_STEP;
+    indentationLevel += spacesPerIndent;
   }
 
   public void decreaseIndentation() {
-    assert (indentationLevel >= INDENTATION_STEP);
-    indentationLevel -= INDENTATION_STEP;
+    assert (indentationLevel >= spacesPerIndent);
+    indentationLevel -= spacesPerIndent;
   }
 
   private String makeIndentation() {

@@ -20,11 +20,13 @@ package cz.cuni.mff.ksi.jinfer.trivialxsd;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 
 /** TODO translate
@@ -47,18 +49,21 @@ public final class Preprocessor {
    * global type or not.
    */
   private Map<String, Boolean> globalElementFlags = null;
-
-  // TODO rio nastavovat optionom?
+  /// Generate global definitions of elements types.
+  private boolean generateGlobal;
   /// Number of occurrences of element to consider it as a global type.
-  private final static int NUMBER_OF_OCCURRENCES_TO_GLOBAL = 2;
+  private final int numberToGlobal;
+  
 
   /** Constructor
    *
    * @param elements Non empty list of elements from IGG.
    */
-  public Preprocessor(final List<Element> elements) {
+  public Preprocessor(final List<Element> elements, final boolean generateGlobal, final int numberToGlobal) {
     assert (!elements.isEmpty());
-    originalElements = elements;
+    this.originalElements = elements;
+    this.generateGlobal = generateGlobal;
+    this.numberToGlobal = numberToGlobal;
   }
 
   /** Need to be called before calling of any other public method.
@@ -195,8 +200,12 @@ public final class Preprocessor {
     final Map<String, Boolean> globalFlags = new HashMap<String, Boolean>();
     
     for (Element element : elements) {
-      final boolean isGlobal = (occurrenceCounts.get(element.getName()) >= NUMBER_OF_OCCURRENCES_TO_GLOBAL) ? true : false;
-      globalFlags.put(element.getName(), isGlobal);
+      if (generateGlobal) {
+        final boolean isGlobal = (occurrenceCounts.get(element.getName()) >= numberToGlobal) ? true : false;
+        globalFlags.put(element.getName(), isGlobal);
+      } else {
+        globalFlags.put(element.getName(), false);
+      }
     }
 
     return globalFlags;

@@ -183,7 +183,23 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
 
     indentator.increaseIndentation();
+
+    boolean makeSequence = false;
+    if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {
+      makeSequence = true;
+    }
+    if (makeSequence) {
+      indentator.indent("<xs:sequence>\n");
+      indentator.increaseIndentation();
+    }
+
     processSubElements(element.getSubnodes(), 1, 1);
+
+    if (makeSequence) {
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:sequence>\n");
+    }
+    
     processElementAttributes(element);
     indentator.decreaseIndentation();
 
@@ -235,7 +251,25 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.append(">\n");
 
     indentator.increaseIndentation();
+
+    // TODO rio refactor and merge with processElement
+    // if element subnodes is token and it is element, wrap it in <xs:sequence></xs:sequence>
+    boolean makeSequence = false;
+    if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {
+      makeSequence = true;
+    }
+    if (makeSequence) {
+      indentator.indent("<xs:sequence>\n");
+      indentator.increaseIndentation();
+    }
+
     processSubElements(element.getSubnodes(), 1, 1);
+
+    if (makeSequence) {
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:sequence>\n");
+    }
+
     processElementAttributes(element);
     indentator.decreaseIndentation();
 

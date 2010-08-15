@@ -57,6 +57,20 @@ public final class XSDUtils {
         default:
           throw new IllegalArgumentException("Unknown enum member.");
       }
+    } else {
+      /* Case: <A>aa</A><A>bb</A>
+       * A is CONCATENATION of 2 TOKENS which are SIMPLE_DATA
+       */
+      boolean allNodesSimpleData = true;
+      for (final Regexp<AbstractNode> node : subnodes.getChildren()) {
+        if (!node.isToken() || !node.getContent().isSimpleData()) {
+          allNodesSimpleData = false;
+          break;
+        }
+      }
+      if (allNodesSimpleData) {
+        return TypeCategory.BUILTIN;
+      }
     }
 
     return TypeCategory.COMPLEX;

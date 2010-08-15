@@ -148,8 +148,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // if its type is one of built-in types we don't have much work to do
     // TODO rio dalsie built-in typy
-    TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
-    if (typeCategory.equals(TypeCategory.BUILTIN)) {
+    if (XSDUtils.hasBuiltinType(element)) {
       indentator.append(" type=\"xs:string\"/>\n");
       return;
     }
@@ -167,6 +166,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.append(">\n");
     indentator.increaseIndentation();
 
+    TypeCategory typeCategory = XSDUtils.getTypeCategory(element);
     switch (typeCategory) {
       case SIMPLE:
         indentator.indent("<xs:simpleType>\n");

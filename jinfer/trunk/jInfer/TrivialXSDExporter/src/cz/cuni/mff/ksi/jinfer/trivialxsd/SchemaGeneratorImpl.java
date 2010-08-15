@@ -184,23 +184,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     indentator.increaseIndentation();
 
-    boolean makeSequence = false;
-    if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {
-      makeSequence = true;
-    }
-    if (makeSequence) {
-      indentator.indent("<xs:sequence>\n");
-      indentator.increaseIndentation();
-    }
+    processElementContent(element);
 
-    processSubElements(element.getSubnodes(), 1, 1);
-
-    if (makeSequence) {
-      indentator.decreaseIndentation();
-      indentator.indent("</xs:sequence>\n");
-    }
-    
-    processElementAttributes(element);
     indentator.decreaseIndentation();
 
     switch (typeCategory) {
@@ -252,7 +237,27 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     indentator.increaseIndentation();
 
-    // TODO rio refactor and merge with processElement
+    processElementContent(element);
+    
+    indentator.decreaseIndentation();
+
+    switch (typeCategory) {
+      case SIMPLE:
+        indentator.indent("</xs:simpleType>\n");
+        break;
+      case COMPLEX:
+        indentator.indent("</xs:complexType>\n");
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown of illegal enum member.");
+    }
+
+    indentator.append("\n");
+
+    return;
+  }
+
+  private void processElementContent(final Element element) throws InterruptedException {
     // if element subnodes is token and it is element, wrap it in <xs:sequence></xs:sequence>
     boolean makeSequence = false;
     if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {
@@ -271,22 +276,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
 
     processElementAttributes(element);
-    indentator.decreaseIndentation();
-
-    switch (typeCategory) {
-      case SIMPLE:
-        indentator.indent("</xs:simpleType>\n");
-        break;
-      case COMPLEX:
-        indentator.indent("</xs:complexType>\n");
-        break;
-      default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
-    }
-
-    indentator.append("\n");
-
-    return;
   }
 
   private void processElementAttributes(final Element element) throws InterruptedException {

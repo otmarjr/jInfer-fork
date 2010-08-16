@@ -445,10 +445,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final Set<String> set = new HashSet<String>() {};
 
     for (Element element : input) {
-      if (set.contains(element.getName())) {
+      if (set.contains(element.getName().toLowerCase())) {
         return false;
       }
-      set.add(element.getName());
+      set.add(element.getName().toLowerCase());
     }
 
     return true;

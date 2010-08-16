@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public final class TrieHelper {
       if (posTree < tree.getChildren().size()
               && posBranch < branch.getChildren().size()
               && tree.getChild(posTree).isToken()
-              && equalTokens(tree.getChild(posTree),
+              && BaseUtils.equalTokens(tree.getChild(posTree),
               branch.getChild(posBranch))) {
         posTree++;
         posBranch++;
@@ -119,7 +120,7 @@ public final class TrieHelper {
 
       // we have found a position where tree and branch differ
       if (tree.getChild(posTree).isToken()
-              && !equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
+              && !BaseUtils.equalTokens(tree.getChild(posTree), branch.getChild(posBranch))) {
         tree.branch(posTree);
         tree.getChild(posTree).addChild(branch.getEnd(posBranch));
         return;
@@ -129,7 +130,7 @@ public final class TrieHelper {
         // walk all the items in the alternation
         for (final Regexp<AbstractNode> alternated : tree.getChild(posTree).getChildren()) {
           if (alternated.getChildren().size() > 0
-                  && equalTokens(alternated.getChild(0),
+                  && BaseUtils.equalTokens(alternated.getChild(0),
                   branch.getChild(posBranch))) {
             // continue in this branch
             addBranchToTree(alternated, branch.getEnd(posBranch));
@@ -145,31 +146,5 @@ public final class TrieHelper {
       posTree++;
       posBranch++;
     }
-  }
-
-  // TODO vektor Move to a common package
-  public static boolean equalTokens(final Regexp<AbstractNode> t1,
-          final Regexp<AbstractNode> t2) {
-    // both need to be tokens
-    if (!t1.isToken() || !t2.isToken()) {
-      throw new IllegalArgumentException();
-    }
-    // if they are both simple data, TRUE
-    if (t1.getContent().isSimpleData()
-            && t2.getContent().isSimpleData()) {
-      return true;
-    }
-    // if they are both elements of the same name, TRUE
-    if (t1.getContent().isElement()
-            && t2.getContent().isElement()
-            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
-      return true;
-    }
-    if (t1.getContent().isAttribute()
-            && t2.getContent().isAttribute()
-            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
-      return true;
-    }
-    return false;
   }
 }

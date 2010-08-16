@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -77,5 +79,45 @@ public final class BaseUtils {
    */
   public static boolean isEmpty(final String s) {
     return s == null || "".equals(s);
+  }
+
+  /**
+   * Decides whether the two provided tokens are "the same".
+   *
+   * <p>
+   * Two tokens are considered to be same iff:
+   *
+   * <ul>
+   *   <li>If they are both simple data, or</li>
+   *   <li>If they are both elements of the same name (case <strong>insensitive</strong>), or</li>
+   *   <li>If they are both attributes of the same name (case <strong>insensitive</strong>).</li>
+   * </ul>
+   * </p>
+   *
+   * @param t1 First regexp - token.
+   * @param t2 Second regexp - token.
+   * @return True, if tokens are equal in the sense described above. False otherwise.
+   * @throws IllegalArgumentException When one of the regexps is not a token.
+   */
+  public static boolean equalTokens(final Regexp<AbstractNode> t1,
+          final Regexp<AbstractNode> t2) {
+    if (!t1.isToken() || !t2.isToken()) {
+      throw new IllegalArgumentException();
+    }
+    if (t1.getContent().isSimpleData()
+            && t2.getContent().isSimpleData()) {
+      return true;
+    }
+    if (t1.getContent().isElement()
+            && t2.getContent().isElement()
+            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
+      return true;
+    }
+    if (t1.getContent().isAttribute()
+            && t2.getContent().isAttribute()
+            && t1.getContent().getName().equalsIgnoreCase(t2.getContent().getName())) {
+      return true;
+    }
+    return false;
   }
 }

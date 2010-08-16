@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -139,6 +140,7 @@ public final class Preprocessor {
    */
   private Map<String, Integer> countOccurrences(final List<Element> toposortedElements) {
     final Map<String, Integer> occurrenceCounts = new HashMap<String, Integer>();
+    final List<Element> visited = new ArrayList<Element>();
     
     // initialize counts to 0s
     for (Element e : toposortedElements) {
@@ -147,7 +149,7 @@ public final class Preprocessor {
     
     // run recursion from the top element
     final Element topElement = toposortedElements.get(toposortedElements.size() - 1);
-    countOccurrencesRecursion(toposortedElements, occurrenceCounts, topElement);
+    countOccurrencesRecursion(toposortedElements, occurrenceCounts, topElement, visited);
 
     return occurrenceCounts;
   }
@@ -158,11 +160,18 @@ public final class Preprocessor {
    * @param occurrenceCounts output parameter - holds counts of occurrences, at start it must be initialized to 0s
    * @param root element to start recursion at
    */
-  private void countOccurrencesRecursion(final List<Element> elements, final Map<String, Integer> occurrenceCounts, final Element root) {
+  private void countOccurrencesRecursion(final List<Element> elements, final Map<String, Integer> occurrenceCounts, final Element root, final List<Element> visited) {
+    for (Element element : visited) {
+      if (element == root) {
+        return;
+      }
+    }
+    visited.add(root);
+
     occurrenceCounts.put(root.getName(), occurrenceCounts.get(root.getName()) + 1);
     for (AbstractNode node : root.getSubnodes().getTokens()) {
       if (node.getType().equals(NodeType.ELEMENT)) {
-        countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()));
+        countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()), visited);
       }
     }
   }

@@ -19,10 +19,8 @@ package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.SAXParserFactory;
-import org.apache.log4j.Logger;
 
 /**
  * Contains logic for IG retrieval from XML documents.
@@ -31,7 +29,6 @@ import org.apache.log4j.Logger;
  */
 public class XMLProcessor implements Processor {
 
-  private static final Logger LOG = Logger.getLogger(XMLProcessor.class);
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
 
   @Override
@@ -42,8 +39,7 @@ public class XMLProcessor implements Processor {
       PARSER_FACTORY.newSAXParser().parse(f, handler);
       return handler.getRules();
     } catch (final Exception e) {
-      LOG.error("Error parsing XML file.", e);
+      throw new RuntimeException("Error parsing XML file.", e);
     }
-    return new ArrayList<AbstractNode>(0);
   }
 }

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xmlmiddleware.schemas.dtds.Attribute;
 import org.xmlmiddleware.schemas.dtds.DTD;
@@ -40,8 +39,6 @@ import org.xmlmiddleware.schemas.dtds.ElementType;
  * @author vektor
  */
 public class DTDProcessor implements Processor {
-
-  private static final Logger LOG = Logger.getLogger(DTDProcessor.class);
 
   /**
    * Parses the DTD schema and returns the IG rules contained within.
@@ -63,10 +60,8 @@ public class DTDProcessor implements Processor {
 
       return ret;
     } catch (final Exception ex) {
-      LOG.error("Error processing DTD", ex);
+      throw new RuntimeException("Error processing DTD", ex);
     }
-
-    return new ArrayList<AbstractNode>(0);
   }
 
   private static Element processElement(final ElementType e) {

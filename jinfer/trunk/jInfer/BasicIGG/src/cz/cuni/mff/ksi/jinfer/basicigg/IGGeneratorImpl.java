@@ -107,7 +107,7 @@ public class IGGeneratorImpl implements IGGenerator {
           }
         }
       } catch (final FileNotFoundException e) {
-        LOG.error("File not found: " + f.getAbsolutePath(), e);
+        throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);
       }
     }
 

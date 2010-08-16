@@ -32,12 +32,12 @@ public class JInferCopyOperation implements CopyOperationImplementation {
 
   @Override
   public List<FileObject> getMetadataFiles() {
-    return Collections.EMPTY_LIST;
+    return Collections.emptyList();
   }
 
   @Override
   public List<FileObject> getDataFiles() {
-    return Collections.EMPTY_LIST;
+    return Collections.emptyList();
   }
 
   @Override

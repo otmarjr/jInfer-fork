@@ -122,7 +122,7 @@ public class SimpleKP implements KleeneProcessor {
             && current.isToken()
             && last.getContent().isElement()
             && current.getContent().isElement()
-            && TrieHelper.equalTokens(last, current);
+            && BaseUtils.equalTokens(last, current);
   }
 
   private void closeGroup(final List<Regexp<AbstractNode>> buffer,

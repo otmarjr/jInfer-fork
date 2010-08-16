@@ -102,6 +102,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private Clusterer getClusterer() {
+    // TODO anti Add an option "use context?" and return ContextClusterer if "Yes".
     return new NameClusterer();
   }
 

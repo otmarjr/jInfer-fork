@@ -29,20 +29,18 @@ import static org.junit.Assert.*;
 @SuppressWarnings("PMD.SystemPrintln")
 public class XMLProcessorTest {
 
-  @Test
+  @Test(expected = RuntimeException.class)
   public void testProcessEmpty() {
     System.out.println("processEmpty");
     final InputStream s = new ByteArrayInputStream("".getBytes());
-    final List<AbstractNode> result = new XMLProcessor().process(s);
-    assertEquals(0, result.size());
+    new XMLProcessor().process(s);
   }
 
-  @Test
+  @Test(expected = RuntimeException.class)
   public void testProcessEmptyComment() {
     System.out.println("processEmptyComment");
     final InputStream s = new ByteArrayInputStream("<!-- nothing to be seen here -->".getBytes());
-    final List<AbstractNode> result = new XMLProcessor().process(s);
-    assertEquals(0, result.size());
+    new XMLProcessor().process(s);
   }
 
   private static final String CARS =

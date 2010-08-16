@@ -32,7 +32,7 @@ public class DTDProcessorTest {
 
   private static final char NL = '\n';
 
-  @Test
+  @Test(expected = RuntimeException.class)
   public void testProcessNull() {
     System.out.println("processNull");
     final List<AbstractNode> expResult = new ArrayList<AbstractNode>(0);
@@ -40,7 +40,7 @@ public class DTDProcessorTest {
     assertEquals(expResult, result);
   }
 
-  @Test
+  @Test(expected = RuntimeException.class)
   public void testProcessEmpty() {
     System.out.println("processEmpty");
     final InputStream s = new ByteArrayInputStream("".getBytes());

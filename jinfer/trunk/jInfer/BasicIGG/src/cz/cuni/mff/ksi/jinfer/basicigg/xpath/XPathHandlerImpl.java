@@ -24,7 +24,6 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.jaxen.saxpath.Axis;
 import org.jaxen.saxpath.Operator;
 import org.jaxen.saxpath.SAXPathException;
@@ -37,8 +36,6 @@ import org.jaxen.saxpath.helpers.DefaultXPathHandler;
  */
 public class XPathHandlerImpl extends DefaultXPathHandler {
 
-  // TODO vektor Remove logging
-  private static final Logger LOG = Logger.getLogger(XPathHandlerImpl.class);
   /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
   /** The element we were looking at the last time. */
@@ -63,8 +60,6 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       lastElement = null;
       dirty = false;
     }
-
-    LOG.info("allNode: " + axis + " (" + Axis.lookup(axis) + ")");
   }
 
   @Override
@@ -93,22 +88,18 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         }
         break;
     }
-
-    LOG.info("name: " + axis + " (" + Axis.lookup(axis) + "), " + prefix + ", " + localName);
   }
 
   @Override
   public void literal(final String literal) throws SAXPathException {
     super.literal(literal);
     lastLiteral = literal;
-    LOG.info("literal: " + literal);
   }
 
   @Override
   public void startEqualityExpr() throws SAXPathException {
     super.startEqualityExpr();
     lastLiteral = null;
-    LOG.info("startEqualityExpr");
   }
 
   @Override
@@ -130,8 +121,6 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     }
 
     lastLiteral = null;
-
-    LOG.info("endEqualityExpr: " + operator);
   }
 
   @Override
@@ -145,10 +134,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
-      //isSimpleData = false;
     }
-
-    LOG.info("startTextNodeStep: " + Axis.lookup(axis));
   }
 
   /**

@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.jaxen.saxpath.SAXPathException;
 import org.jaxen.saxpath.XPathReader;
 import org.jaxen.saxpath.helpers.XPathReaderFactory;
@@ -36,8 +35,6 @@ import org.jaxen.saxpath.helpers.XPathReaderFactory;
  * @author vektor
  */
 public class XPathProcessor implements Processor {
-
-  private static final Logger LOG = Logger.getLogger(XPathProcessor.class);
 
   /**
    * Parses the file containing a list of XPath queries and returns the
@@ -61,24 +58,21 @@ public class XPathProcessor implements Processor {
         }
       }
       in.close();
+      return ret;
     } catch (final Exception e) {
-      LOG.error("Error reading file " + s, e);
+      throw new RuntimeException("Error reading file " + s, e);
     }
-    return ret;
   }
 
   private static List<AbstractNode> parsePath(final String path) {
     try {
-      LOG.info("--- parsing: " + path);
       final XPathReader xr = XPathReaderFactory.createReader();
       final XPathHandlerImpl xh = new XPathHandlerImpl();
       xr.setXPathHandler(xh);
       xr.parse(path);
       return xh.getRules();
     } catch (final SAXPathException ex) {
-      LOG.error("Error parsing the path: " + path, ex);
+      throw new RuntimeException("Error parsing the path: " + path, ex);
     }
-
-    return new ArrayList<AbstractNode>(0);
   }
 }

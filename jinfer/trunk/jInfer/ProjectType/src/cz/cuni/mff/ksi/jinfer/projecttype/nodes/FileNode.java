@@ -16,9 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.ValidateAction;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import javax.swing.Action;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataNode;
@@ -58,4 +60,16 @@ public class FileNode extends FilterNode {
 
     super.destroy();
   }
+
+  @Override
+  public Action[] getActions(boolean context) {
+    Action[] actions = super.getActions(context);
+    Action[] result = new Action[actions.length + 1];
+
+    System.arraycopy(actions, 0, result, 0, actions.length);
+    result[result.length - 1] = ValidateAction.getInstance();
+    return result;
+  }
+
+
 }

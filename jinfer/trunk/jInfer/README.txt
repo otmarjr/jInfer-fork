@@ -14,7 +14,7 @@ developed at Charles University in Prague in a Software Project course.
 
   The Latest Version
   ------------------
-  
+
   The latest version can be obtained from SourceForge.net by following the link:
 https://sourceforge.net/projects/jinfer/
 Source codes can be obtained via Subversion URL:
@@ -46,7 +46,7 @@ NetBeans, jInfer is ready to be used.
   -----------
 
   TODO link to Project web.
-  
+
   To build jInfer, download the source codes, open the jInfer module suite in
 NetBeans, build & start hacking.
 
@@ -62,7 +62,9 @@ jInfer uses multiple FOSS libraries:
     no copyright
   - jaxen, version 1.1.3, http://jaxen.codehaus.org/,
     license located in jaxen-license.txt
-    
+  - DoctypeChanger, version 1.1, http://doctypechanger.sourceforge.net/,
+    license located in doctypeChanger-license.txt
+
   Contacts
   --------
 

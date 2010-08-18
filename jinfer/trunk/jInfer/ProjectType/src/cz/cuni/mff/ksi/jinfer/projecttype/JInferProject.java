@@ -120,7 +120,7 @@ public class JInferProject implements Project {
       final FileObject inputFilesFileOb = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
               + "/" + JInferProjectFactory.PROJECT_INPUTFILE);
 
-      input = new Input();
+      input = new Input(new InputFilesList(), new InputFilesList(), new InputFilesList());
       if (inputFilesFileOb != null) {
         try {
           input.load(inputFilesFileOb.getInputStream());

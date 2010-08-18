@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.InputFilesList;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.DeleteAllAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FileAddAction;
@@ -51,6 +52,10 @@ public class FolderNode extends AbstractNode {
     this.project = project;
     this.files = files;
     this.folderType = folderType;
+
+    if (files instanceof InputFilesList) {
+      ((InputFilesList) files).getListener().setFileChildren(this.getChildren());
+    }
   }
 
   @Override

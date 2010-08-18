@@ -73,17 +73,17 @@ public class Input {
   }
 
   public Collection<File> getDocuments() {
-    removeNonExistFiles(documents);
+    //removeNonExistFiles(documents);
     return documents;
   }
 
   public Collection<File> getSchemas() {
-    removeNonExistFiles(schemas);
+    //removeNonExistFiles(schemas);
     return schemas;
   }
 
   public Collection<File> getQueries() {
-    removeNonExistFiles(queries);
+    //removeNonExistFiles(queries);
     return queries;
   }
 

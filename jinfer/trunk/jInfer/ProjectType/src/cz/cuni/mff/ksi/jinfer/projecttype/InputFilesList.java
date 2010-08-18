@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.openide.filesystems.FileUtil;
+import org.openide.nodes.Children;
 
 /**
  *
@@ -30,6 +31,7 @@ public class InputFilesList extends ArrayList<File> {
 
   private static final String UNSUPPORTED_OPERATION = "This operation is not supported in InputFilesList.";
   private final InputFilesListener listener;
+  private Children fileChildren = null;
 
   public InputFilesList() {
     super();
@@ -111,7 +113,11 @@ public class InputFilesList extends ArrayList<File> {
     throw new UnsupportedOperationException(UNSUPPORTED_OPERATION);
   }
 
-  public InputFilesListener getListener() {
-    return listener;
+  public Children getFileChildren() {
+    return fileChildren;
+  }
+
+  public void setFileChildren(final Children fileChildren) {
+    this.fileChildren = fileChildren;
   }
 }

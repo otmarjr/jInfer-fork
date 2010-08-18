@@ -63,7 +63,7 @@ public class Input {
       final File file = it.next();
       if (!file.exists()) {
         it.remove();
-        
+
         DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.Message(
                 org.openide.util.NbBundle.getMessage(Input.class, "Input.deletedInputFiles.message"),
                 NotifyDescriptor.INFORMATION_MESSAGE));
@@ -136,7 +136,10 @@ public class Input {
     final String[] filePaths = line.split(",");
 
     for (String filePath : filePaths) {
-      collection.add(new File(filePath));
+      File file = new File(filePath);
+      if (file.exists()) {
+        collection.add(file);
+      }
     }
   }
 

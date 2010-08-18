@@ -17,28 +17,27 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderType;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.stream.XMLEventFactory;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.DTD;
-import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import net.socialchange.doctype.Doctype;
+import net.socialchange.doctype.DoctypeChangerStream;
+import net.socialchange.doctype.DoctypeGenerator;
+import net.socialchange.doctype.DoctypeImpl;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.filesystems.FileObject;
@@ -50,7 +49,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
-import org.xml.sax.InputSource;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -68,17 +67,21 @@ public final class ValidateAction extends NodeAction {
     private Boolean result;
 
     public JInferErrorHandler() {
-      result = new Boolean(true);
+      super();
+      result = true;
     }
 
     @Override
-    public void error(SAXParseException e) throws SAXException {
-      result = new Boolean(false);
+    public void error(final SAXParseException e) throws SAXException {
+      final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
+      ioResult.getOut().println(e);
+      ioResult.getOut().close();
+      result = false;
     }
 
     @Override
-    public void fatalError(SAXParseException e) throws SAXException {
-      result = new Boolean(false);
+    public void fatalError(final SAXParseException e) throws SAXException {
+      result = false;
     }
 
     public Boolean getResult() {
@@ -140,60 +143,44 @@ public final class ValidateAction extends NodeAction {
     return false;
   }
 
-  private boolean validateDTD(final FileObject xmlFile, final FileObject schemaFile) {
-    // rewrite input file...
-    final StringWriter rewrite_out = new StringWriter();
-    final XMLEventFactory xef = XMLEventFactory.newInstance();
-    final XMLOutputFactory xof = XMLOutputFactory.newInstance();
-    final XMLInputFactory xif = XMLInputFactory.newInstance();
-    final XMLEventReader er;
-    try {
-      er = xif.createXMLEventReader(new StreamSource(FileUtil.toFile(xmlFile)));
-      final XMLEventWriter ew = xof.createXMLEventWriter(rewrite_out);
-      while (er.hasNext()) {
-        XMLEvent e = er.nextEvent();
-        if (e.isStartElement()) {
-          // creatre new DTD
-          DTD dtd = xef.createDTD("<!DOCTYPE jnlp"
-                  + " SYSTEM \"" + FileUtil.toFile(schemaFile).toURI() + "\">");
-          ew.add(dtd);
-          ew.add(e);
-          break;
-        } else if (e instanceof DTD) {
-          // skip original DTD
-        } else {
-          // write event as is
-          ew.add(e);
-        }
+  private String getDTDRootNode(final File xmlFile) throws ParserConfigurationException, SAXException, IOException {
+    final DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
+    DocumentBuilder builder;
+
+    builder = fact.newDocumentBuilder();
+    final Document doc = builder.parse(xmlFile);
+    return doc.getDocumentElement().getNodeName();
+  }
+
+  private boolean validateDTD(final FileObject xmlFile, final FileObject schemaFile) throws
+          IOException, SAXException, ParserConfigurationException {
+    DoctypeChangerStream changer = null;
+
+    final InputStream inputStream = new FileInputStream(FileUtil.toFile(xmlFile));
+
+    final String rootNode = getDTDRootNode(FileUtil.toFile(xmlFile));
+    final String schemaText = schemaFile.asText();
+    changer = new DoctypeChangerStream(inputStream);
+    changer.setGenerator(new DoctypeGenerator() {
+
+      @Override
+      public Doctype generate(final Doctype dctp) {
+        return new DoctypeImpl(rootNode, null, null, schemaText);
       }
-      // write all left input events...
-      ew.add(er);
-      ew.flush();
-      ew.close();
-    } catch (XMLStreamException ex) {
-      Exceptions.printStackTrace(ex);
-    }
+    });
 
 
-    // System.out.println(rewrite_out.toString());
-    StringReader rewritten_in = new StringReader(rewrite_out.toString());
-    // validate...
-    SAXParserFactory spf = SAXParserFactory.newInstance();
-    spf.setValidating(true);
-    SAXParser sp;
-    try {
+    if (changer != null) {
+      final SAXParserFactory spf = SAXParserFactory.newInstance();
+      spf.setValidating(true);
+      SAXParser sp;
+
       sp = spf.newSAXParser();
-      InputSource is = new InputSource(rewritten_in);
-      JInferErrorHandler handler = new JInferErrorHandler();
-      sp.parse(is, handler);
+      final JInferErrorHandler handler = new JInferErrorHandler();
+      sp.parse(changer, handler);
 
       return handler.getResult().booleanValue();
-    } catch (IOException ex) {
-      Exceptions.printStackTrace(ex);
-    } catch (ParserConfigurationException ex) {
-      Exceptions.printStackTrace(ex);
-    } catch (SAXException ex) {
-      Exceptions.printStackTrace(ex);
+
     }
 
     return false;
@@ -202,18 +189,17 @@ public final class ValidateAction extends NodeAction {
   private boolean validate(final FileObject xmlFile, final FileObject schemaFile) {
     final String ext = schemaFile.getExt();
     String schemaLanguage = null;
-    if ("xsd".equalsIgnoreCase(ext)) {
-      schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
-    } else if ("dtd".equalsIgnoreCase(ext)) {
-      //TODO sviro fix DTD validation
-      return false;
 
-      //return validateDTD(xmlFile, schemaFile);
-    }
+    try {
+      if ("xsd".equalsIgnoreCase(ext)) {
+        schemaLanguage = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+      } else if ("dtd".equalsIgnoreCase(ext)) {
+        return validateDTD(xmlFile, schemaFile);
+      }
 
-    if (schemaLanguage != null) {
-      final SchemaFactory factory = SchemaFactory.newInstance(schemaLanguage);
-      try {
+      if (schemaLanguage != null) {
+        final SchemaFactory factory = SchemaFactory.newInstance(schemaLanguage);
+
         final Schema schema = factory.newSchema(FileUtil.toFile(schemaFile));
 
         final Validator validator = schema.newValidator();
@@ -221,16 +207,18 @@ public final class ValidateAction extends NodeAction {
 
         validator.validate(source);
 
-      } catch (IOException ex) {
-        Exceptions.printStackTrace(ex);
-      } catch (SAXException ex) {
-        final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
-        ioResult.getOut().println(ex);
-        ioResult.getOut().close();
-        return false;
+        return true;
       }
 
-      return true;
+    } catch (IOException ex) {
+      Exceptions.printStackTrace(ex);
+    } catch (SAXException ex) {
+      final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
+      ioResult.getOut().println(ex);
+      ioResult.getOut().close();
+      return false;
+    } catch (ParserConfigurationException ex) {
+      Exceptions.printStackTrace(ex);
     }
     return false;
   }

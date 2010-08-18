@@ -54,7 +54,7 @@ public class FolderNode extends AbstractNode {
     this.folderType = folderType;
 
     if (files instanceof InputFilesList) {
-      ((InputFilesList) files).getListener().setFileChildren(this.getChildren());
+      ((InputFilesList) files).setFileChildren(this.getChildren());
     }
   }
 

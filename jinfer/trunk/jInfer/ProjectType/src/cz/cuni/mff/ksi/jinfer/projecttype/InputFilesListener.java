@@ -18,8 +18,6 @@ package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
-import java.io.File;
-import java.util.Collection;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.filesystems.FileAttributeEvent;
@@ -35,11 +33,10 @@ import org.openide.nodes.Children;
  */
 public class InputFilesListener implements FileChangeListener {
 
-  private final Collection<File> collection;
-  private Children fileChildren = null;
+  private final InputFilesList list;
 
-  public InputFilesListener(final Collection<File> collection) {
-    this.collection = collection;
+  public InputFilesListener(final InputFilesList list) {
+    this.list = list;
   }
 
   @Override
@@ -59,15 +56,17 @@ public class InputFilesListener implements FileChangeListener {
 
   @Override
   public void fileDeleted(final FileEvent fe) {
-    if (collection != null) {
-      collection.remove(FileUtil.toFile(fe.getFile()));
+    if (list != null) {
+      list.remove(FileUtil.toFile(fe.getFile()));
+
+      final Children fileChildren = list.getFileChildren();
+      if (fileChildren != null) {
+        ((FileChildren) fileChildren).refreshNodes();
+      }
+      DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(
+              org.openide.util.NbBundle.getMessage(Input.class, "Input.deletedInputFiles.message"),
+              NotifyDescriptor.INFORMATION_MESSAGE));
     }
-    if (fileChildren != null) {
-      ((FileChildren) fileChildren).refreshNodes();
-    }
-    DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(
-                org.openide.util.NbBundle.getMessage(Input.class, "Input.deletedInputFiles.message"),
-                NotifyDescriptor.INFORMATION_MESSAGE));
   }
 
   @Override
@@ -78,9 +77,5 @@ public class InputFilesListener implements FileChangeListener {
   @Override
   public void fileAttributeChanged(final FileAttributeEvent fe) {
     //
-  }
-
-  public void setFileChildren(Children fileChildren) {
-    this.fileChildren = fileChildren;
   }
 }

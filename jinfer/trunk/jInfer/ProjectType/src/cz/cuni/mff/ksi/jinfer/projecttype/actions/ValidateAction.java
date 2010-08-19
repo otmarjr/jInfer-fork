@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -61,6 +62,8 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class ValidateAction extends NodeAction {
 
   private static ValidateAction action = null;
+
+  String[] schemas = new String[] {"xsd", "dtd"};
 
   private static class JInferErrorHandler extends DefaultHandler {
 
@@ -106,7 +109,7 @@ public final class ValidateAction extends NodeAction {
     FileObject schemaFile = null;
     final List<FileObject> xmlFiles = new ArrayList<FileObject>();
     for (Node node : activatedNodes) {
-      final DataObject dObject = (DataObject) node.getLookup().lookup(DataObject.class);
+      final DataObject dObject = node.getLookup().lookup(DataObject.class);
       if (dObject != null) {
         final FileObject fileObject = dObject.getPrimaryFile();
         if (isSchemaFile(fileObject)) {
@@ -228,8 +231,18 @@ public final class ValidateAction extends NodeAction {
     boolean result = true;
     boolean isSchemaSelected = false;
     for (Node node : activatedNodes) {
-      final boolean isSchemaNode = FolderType.SCHEMA.getName().equals(
-              node.getParentNode().getDisplayName());
+      final DataObject dataObject = node.getLookup().lookup(DataObject.class);
+
+
+      boolean isSchemaNode = false;
+      if (dataObject != null) {
+        final FileObject fileObject = dataObject.getPrimaryFile();
+        if (fileObject.isFolder()) {
+          return false;
+        }
+
+        isSchemaNode = Arrays.asList(schemas).contains(fileObject.getExt());
+      }
 
       if (isSchemaSelected && isSchemaNode) {
         return false;

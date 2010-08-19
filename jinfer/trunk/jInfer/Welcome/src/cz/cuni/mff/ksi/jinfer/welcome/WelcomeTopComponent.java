@@ -17,18 +17,31 @@
 package cz.cuni.mff.ksi.jinfer.welcome;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import org.apache.log4j.Logger;
+import org.netbeans.api.project.Project;
+import org.netbeans.api.project.Project;
+import org.netbeans.api.project.ProjectManager;
 import org.netbeans.api.project.ui.OpenProjects;
+import org.openide.filesystems.FileObject;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
+import org.netbeans.spi.project.ui.support.ProjectChooser;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbPreferences;
@@ -41,8 +54,8 @@ import org.openide.util.NbPreferences;
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.welcome//Welcome//EN",
 autostore = false)
 public final class WelcomeTopComponent extends TopComponent {
-  public static final String SHOW_ON_STARTUP = "show.startup";
 
+  public static final String SHOW_ON_STARTUP = "show.startup";
   private static final long serialVersionUID = 789451321321l;
   private static WelcomeTopComponent instance;
   /** path to the icon used by the component and its open action */
@@ -77,8 +90,8 @@ public final class WelcomeTopComponent extends TopComponent {
     step1project = new javax.swing.JButton();
     L2support = new javax.swing.JLabel();
     jLabel12 = new javax.swing.JLabel();
-    jLabel13 = new javax.swing.JLabel();
-    jLabel14 = new javax.swing.JLabel();
+    jLabel13 = new JHyperlinkLabel("http://sourceforge.net/tracker/?group_id=302779&atid=1276495");
+    jLabel14 = new JHyperlinkLabel("http://jinfer.sourceforge.net/");
     jLabel15 = new javax.swing.JLabel();
     L2developingjInfer = new javax.swing.JLabel();
     jLabel17 = new javax.swing.JLabel();
@@ -89,6 +102,8 @@ public final class WelcomeTopComponent extends TopComponent {
     step3runProject = new javax.swing.JButton();
     step2addFiles = new javax.swing.JButton();
     jLabel6 = new javax.swing.JLabel();
+    jButton1 = new javax.swing.JButton();
+    jLabel7 = new javax.swing.JLabel();
 
     setBackground(java.awt.Color.white);
     setForeground(java.awt.Color.white);
@@ -141,10 +156,8 @@ public final class WelcomeTopComponent extends TopComponent {
     jLabel12.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel13.text")); // NOI18N
-    jLabel13.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel14.text")); // NOI18N
-    jLabel14.setEnabled(false);
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel15.text")); // NOI18N
     jLabel15.setEnabled(false);
@@ -188,6 +201,15 @@ public final class WelcomeTopComponent extends TopComponent {
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel6.text")); // NOI18N
 
+    org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jButton1.text")); // NOI18N
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1ActionPerformed(evt);
+      }
+    });
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel7.text")); // NOI18N
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -212,40 +234,48 @@ public final class WelcomeTopComponent extends TopComponent {
               .addComponent(L1welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
               .addComponent(jInferLogo)
               .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addComponent(ico1options)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                      .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel4))
-                      .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                  .addComponent(L2support)
-                  .addComponent(jLabel14)
-                  .addComponent(jLabel12))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                  .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(18, 18, 18)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                      .addComponent(jLabel18)
-                      .addComponent(L2developingjInfer)
-                      .addComponent(jLabel17)))
-                  .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(34, 34, 34)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                      .addComponent(step1project, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                      .addComponent(step2addFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                      .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))))
-              .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                   .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(10, 10, 10)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                  .addComponent(jLabel5)))))
+                  .addComponent(jLabel5)))
+              .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                  .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addGap(345, 345, 345)
+                    .addComponent(step2addFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                  .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                      .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(ico1options)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                          .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                          .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(16, 16, 16)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                              .addComponent(jLabel7)
+                              .addComponent(jLabel4)))))
+                      .addComponent(L2support)
+                      .addComponent(jLabel14)
+                      .addComponent(jLabel12))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                      .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                          .addComponent(jLabel18)
+                          .addComponent(L2developingjInfer)
+                          .addComponent(jLabel17)))
+                      .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                          .addComponent(step1project, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                          .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                          .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 472, Short.MAX_VALUE))))
           .addComponent(showOnStartup)
           .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -269,8 +299,12 @@ public final class WelcomeTopComponent extends TopComponent {
               .addComponent(jLabel3)
               .addComponent(step1project, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel4)))
-        .addGap(32, 32, 32)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+              .addComponent(jLabel4)
+              .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        .addGap(3, 3, 3)
+        .addComponent(jLabel7)
+        .addGap(18, 18, 18)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jLabel2)
           .addGroup(jPanel1Layout.createSequentialGroup()
@@ -279,7 +313,7 @@ public final class WelcomeTopComponent extends TopComponent {
               .addComponent(step2addFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        .addGap(32, 32, 32)
+        .addGap(26, 26, 26)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
           .addComponent(ico3run)
           .addGroup(jPanel1Layout.createSequentialGroup()
@@ -315,11 +349,11 @@ public final class WelcomeTopComponent extends TopComponent {
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -332,17 +366,36 @@ public final class WelcomeTopComponent extends TopComponent {
   }//GEN-LAST:event_step1projectActionPerformed
 
   private void step3runProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step3runProjectActionPerformed
-    OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(ActionProvider.COMMAND_RUN, Lookup.EMPTY);
+    OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(
+            ActionProvider.COMMAND_RUN, Lookup.EMPTY);
   }//GEN-LAST:event_step3runProjectActionPerformed
 
   private void step2addFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_step2addFilesActionPerformed
-    OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(FilesAddAction.COMMAND_FILES_ADD, Lookup.EMPTY);
+    OpenProjects.getDefault().getMainProject().getLookup().lookup(ActionProvider.class).invokeAction(
+            FilesAddAction.COMMAND_FILES_ADD, Lookup.EMPTY);
   }//GEN-LAST:event_step2addFilesActionPerformed
 
   private void showOnStartupStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_showOnStartupStateChanged
-    setShowOnStartup(((JCheckBox)evt.getSource()).isSelected());
+    setShowOnStartup(((JCheckBox) evt.getSource()).isSelected());
 
   }//GEN-LAST:event_showOnStartupStateChanged
+
+  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    try {
+      final JFileChooser projectChooser = ProjectChooser.projectChooser();
+      projectChooser.showOpenDialog(null);
+      final File selectedFile = projectChooser.getSelectedFile();
+      final FileObject projectFileObject = FileUtil.toFileObject(selectedFile);
+      final Project project = ProjectManager.getDefault().findProject(projectFileObject);
+      final Project[] array = new Project[]{project};
+      OpenProjects.getDefault().open(array, false);
+      OpenProjects.getDefault().setMainProject(project);
+    } catch (IOException ex) {
+      Exceptions.printStackTrace(ex);
+    } catch (IllegalArgumentException ex) {
+      Exceptions.printStackTrace(ex);
+    }
+  }//GEN-LAST:event_jButton1ActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
@@ -351,6 +404,7 @@ public final class WelcomeTopComponent extends TopComponent {
   private javax.swing.JLabel L2support;
   private javax.swing.JLabel ico1options;
   private javax.swing.JLabel ico3run;
+  private javax.swing.JButton jButton1;
   private javax.swing.JLabel jInferLogo;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel10;
@@ -365,6 +419,7 @@ public final class WelcomeTopComponent extends TopComponent {
   private javax.swing.JLabel jLabel4;
   private javax.swing.JLabel jLabel5;
   private javax.swing.JLabel jLabel6;
+  private javax.swing.JLabel jLabel7;
   private javax.swing.JLabel jLabel9;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JScrollPane jScrollPane1;
@@ -392,7 +447,8 @@ public final class WelcomeTopComponent extends TopComponent {
   public static synchronized WelcomeTopComponent findInstance() {
     final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
-      LOG.warn("Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+      LOG.warn(
+              "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
       return getDefault();
     }
     if (win instanceof WelcomeTopComponent) {

@@ -12,6 +12,15 @@
   - Added XSD schema exporter.
   - Inference process can be now interrupted from the progress bar in bottom.
   Various bugfixes.
+  
+  XSD schema exporter features:
+  - Export of elements, attributes.
+  - Global definition of element types.
+  - XSD elements sequence, choice, complexType.
+  - elements with mixed content.
+  - optional occurrence of element, choice, sequence expressed using minOccurs=0.
+  - kleene star of element, choice, sequence expressed using minOccurs=0
+    maxOccurs=unbounded.
 
 
   Version 0.1

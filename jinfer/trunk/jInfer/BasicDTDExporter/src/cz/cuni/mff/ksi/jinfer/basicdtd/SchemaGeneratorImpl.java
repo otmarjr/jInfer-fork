@@ -84,7 +84,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final List<Element> toposorted = s.sort();
 
     // generate DTD schema
-    final StringBuilder ret = new StringBuilder();
+    final StringBuilder ret = new StringBuilder("<!-- %generated% -->\n");
     for (final Element element : toposorted) {
       if (Thread.interrupted()) {
         throw new InterruptedException();

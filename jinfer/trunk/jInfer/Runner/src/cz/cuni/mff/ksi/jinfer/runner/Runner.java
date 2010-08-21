@@ -211,9 +211,10 @@ public class Runner {
   }
 
   private String getCommentedSchema(final String schema) {
-    return "<!-- Inferred on " + (new Date()).toString()
+    return schema.replace("%generated%",
+            "Inferred on " + (new Date()).toString()
             + " by " + igGenerator.getModuleName() + ", "
             + simplifier.getModuleName() + ", "
-            + schemaGenerator.getModuleName() + " -->\n" + schema;
+            + schemaGenerator.getModuleName());
   }
 }

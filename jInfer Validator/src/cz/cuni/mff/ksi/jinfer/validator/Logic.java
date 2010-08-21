@@ -56,7 +56,8 @@ public final class Logic {
     for (final ProvidedPackage providedPackage : providedPackages) {
       boolean found = false;
       for (final ConsumedPackage consumedPackage : consumedPackages) {
-        if (consumedPackage.getName().contains(providedPackage.getName())) {
+        if (consumedPackage.getName().contains(providedPackage.getName())
+                && !consumedPackage.getModule().equals(providedPackage.getModule())) {
           found = true;
           break;
         }
@@ -122,7 +123,8 @@ public final class Logic {
     final String projectXml = FileHelper.readFileAsString(projectXmlFile);
     final List<String> lines = FileHelper.getFileLines(projectXml);
     for (final String line : lines) {
-      if (line.contains("<package>") && line.contains("</package>")) {
+      if (line.contains("<package>") && line.contains("</package>")
+              && line.contains("cz.cuni.mff.ksi.jinfer")) {
         ret.getProvidedPackages().add(new ProvidedPackage(
                 module.getName(),
                 line.substring(line.indexOf("<package>") + 9, line.indexOf("</package>"))));

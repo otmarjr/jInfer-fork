@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.trivialxsd;
+package cz.cuni.mff.ksi.jinfer.basicxsd;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
@@ -25,8 +25,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.TypeCategory;
-import cz.cuni.mff.ksi.jinfer.trivialxsd.utils.XSDUtils;
+import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
+import cz.cuni.mff.ksi.jinfer.basicxsd.utils.XSDUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -44,11 +44,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
-  public static final String TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL = "trivialxsdexporter.generate.global";
-  public static final String TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL = "trivialxsdexporter.number.to.global";
-  public static final String TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT = "trivialxsdexporter.spaces.per.indent";
-  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX = "trivialxsdexporter.typename.prefix";
-  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX = "trivialxsdexporter.typename.postfix";
+  public static final String TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL = "basicxsdexporter.generate.global";
+  public static final String TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL = "basicxsdexporter.number.to.global";
+  public static final String TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT = "basicxsdexporter.spaces.per.indent";
+  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX = "basicxsdexporter.typename.prefix";
+  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX = "basicxsdexporter.typename.postfix";
 
   public final static boolean GENERATE_GLOBAL_DEFAULT = true;
   /// Default value of number of occurrences of element to consider it as a global type.
@@ -68,7 +68,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   @Override
   public String getModuleName() {
-    return "Trivial XSD exporter";
+    return "Basic XSD exporter";
   }
 
   @Override

@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.trivialxsd.utils;
+package cz.cuni.mff.ksi.jinfer.basicxsd.utils;
 
 /**
  *

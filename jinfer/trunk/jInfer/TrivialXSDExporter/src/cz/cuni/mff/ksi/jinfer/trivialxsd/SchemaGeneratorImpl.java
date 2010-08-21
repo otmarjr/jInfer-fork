@@ -103,6 +103,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // generate head of a new XSD
     indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
+    indentator.indent("<!-- %generated% -->\n");
 
     final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL, String.valueOf(GENERATE_GLOBAL_DEFAULT)));
     final int numberToGlobal = Integer.parseInt(properties.getProperty(TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL, String.valueOf(NUMBER_TO_GLOBAL_DEFAULT)));

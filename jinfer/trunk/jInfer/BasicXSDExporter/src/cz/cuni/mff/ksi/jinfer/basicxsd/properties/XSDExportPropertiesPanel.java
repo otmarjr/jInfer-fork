@@ -20,10 +20,10 @@
  *
  * Created on Aug 13, 2010, 10:49:44 PM
  */
-package cz.cuni.mff.ksi.jinfer.trivialxsd.properties;
+package cz.cuni.mff.ksi.jinfer.basicxsd.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.trivialxsd.SchemaGeneratorImpl;
+import cz.cuni.mff.ksi.jinfer.basicxsd.SchemaGeneratorImpl;
 import java.util.Properties;
 
 /**

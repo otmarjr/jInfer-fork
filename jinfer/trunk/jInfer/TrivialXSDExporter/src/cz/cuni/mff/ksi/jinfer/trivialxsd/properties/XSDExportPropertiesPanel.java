@@ -47,6 +47,7 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
   @SuppressWarnings("unchecked")
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
+    java.awt.GridBagConstraints gridBagConstraints;
 
     generateGlobalTypes = new javax.swing.JCheckBox();
     countToGlobal = new javax.swing.JSpinner();
@@ -57,6 +58,10 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     jLabel3 = new javax.swing.JLabel();
     typenamePostfix = new javax.swing.JTextField();
     jLabel4 = new javax.swing.JLabel();
+    jPanel1 = new javax.swing.JPanel();
+    jPanel2 = new javax.swing.JPanel();
+
+    setLayout(new java.awt.GridBagLayout());
 
     generateGlobalTypes.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.generateGlobalTypes.text")); // NOI18N
     generateGlobalTypes.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -64,72 +69,120 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
         generateGlobalTypesStateChanged(evt);
       }
     });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(generateGlobalTypes, gridBagConstraints);
 
     countToGlobal.setModel(new javax.swing.SpinnerNumberModel(1, 1, 99, 1));
+    countToGlobal.setMinimumSize(new java.awt.Dimension(60, 20));
+    countToGlobal.setPreferredSize(new java.awt.Dimension(150, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(countToGlobal, gridBagConstraints);
 
     jLabel1.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel1.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel1, gridBagConstraints);
 
     spacesPerIndent.setModel(new javax.swing.SpinnerNumberModel(0, 0, 99, 1));
+    spacesPerIndent.setMinimumSize(new java.awt.Dimension(60, 20));
+    spacesPerIndent.setPreferredSize(new java.awt.Dimension(150, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(spacesPerIndent, gridBagConstraints);
 
     jLabel2.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel2.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel2, gridBagConstraints);
 
     typenamePrefix.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.typenamePrefix.text")); // NOI18N
+    typenamePrefix.setMinimumSize(new java.awt.Dimension(60, 20));
+    typenamePrefix.setPreferredSize(new java.awt.Dimension(150, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(typenamePrefix, gridBagConstraints);
 
     jLabel3.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel3.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel3, gridBagConstraints);
 
     typenamePostfix.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.typenamePostfix.text")); // NOI18N
+    typenamePostfix.setMinimumSize(new java.awt.Dimension(60, 20));
+    typenamePostfix.setPreferredSize(new java.awt.Dimension(150, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(typenamePostfix, gridBagConstraints);
 
     jLabel4.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel4.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel4, gridBagConstraints);
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-    this.setLayout(layout);
-    layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(countToGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel1))
-          .addComponent(generateGlobalTypes)
-          .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-              .addComponent(typenamePrefix, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(typenamePostfix, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(5, 5, 5)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(jLabel4)
-              .addComponent(jLabel3)))
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(spacesPerIndent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jLabel2)))
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 124, Short.MAX_VALUE)
     );
-    layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(generateGlobalTypes)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(countToGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel1))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(typenamePrefix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel3))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(typenamePostfix, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel4))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(spacesPerIndent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(jLabel2))
-        .addContainerGap(140, Short.MAX_VALUE))
+    jPanel1Layout.setVerticalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 123, Short.MAX_VALUE)
     );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridheight = 5;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    add(jPanel1, gridBagConstraints);
+
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 546, Short.MAX_VALUE)
+    );
+    jPanel2Layout.setVerticalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 147, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 5;
+    gridBagConstraints.gridwidth = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 1.0;
+    add(jPanel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void generateGlobalTypesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_generateGlobalTypesStateChanged
@@ -146,6 +199,8 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
   private javax.swing.JSpinner spacesPerIndent;
   private javax.swing.JTextField typenamePostfix;
   private javax.swing.JTextField typenamePrefix;

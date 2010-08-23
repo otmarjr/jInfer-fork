@@ -42,9 +42,19 @@ public interface PropertiesPanelProvider {
   String getName();
 
   /**
-   * Gets display name of category.
+   * Gets display name of category. If priorities of categories are same, categories
+   * are sorted by this.
    *
    * @return Display name of category.
    */
   String getDisplayName();
+
+  /**
+   * Gets priority by which is sorted category in jInfer Project properties. Higher
+   * priority is first. If the priorities of categories are same, categories are sorted
+   * by DisplayName.
+   *
+   * @return priority to sort by.
+   */
+  int getPriority();
 }

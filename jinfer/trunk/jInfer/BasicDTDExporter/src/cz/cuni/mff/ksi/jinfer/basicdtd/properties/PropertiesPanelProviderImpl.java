@@ -28,6 +28,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
+  private static final int PANEL_PRIORITY = 100000;
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -42,6 +43,11 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
   @Override
   public String getDisplayName() {
     return "DTD export";
+  }
+
+  @Override
+  public int getPriority() {
+    return PANEL_PRIORITY;
   }
 
 }

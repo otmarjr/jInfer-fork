@@ -19,7 +19,10 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.Dialog;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -47,31 +50,44 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
   private void init() {
     final Properties properties = project.getLookup().lookup(Properties.class);
+    final List<Category> categoriesList = new ArrayList<Category>();
 
-    final Map<Category, JPanel> panels = lookupCategoriesPanels(properties);
-    categories = panels.keySet().toArray(new Category[0]);
+    final Map<Category, JPanel> panels = lookupCategoriesPanels(properties, categoriesList);
+    categories = categoriesList.toArray(new Category[categoriesList.size()]);
 
     componentProvider = new JInferComponentProvider(panels);
 
   }
 
-  private Map<Category, JPanel> lookupCategoriesPanels(final Properties properties) {
-    final Map<Category, JPanel> result = new TreeMap<Category, JPanel>(new Comparator<Category>() {
+  private Map<Category, JPanel> lookupCategoriesPanels(final Properties properties, final List<Category> categories) {
+    final Map<Category, JPanel> result = new HashMap<Category, JPanel>();
+
+    final Map<PropertiesPanelProvider, Category> categoriesMap = new TreeMap<PropertiesPanelProvider, Category>(
+            new Comparator<PropertiesPanelProvider>() {
 
       @Override
-      public int compare(final Category o1, final Category o2) {
-        String categoryName1 = o1.getDisplayName();
-        String categoryName2 = o2.getDisplayName();
-        return categoryName1.compareTo(categoryName2);
+      public int compare(final PropertiesPanelProvider panel1, final PropertiesPanelProvider panel2) {
+        final int priority1 = panel1.getPriority();
+        final int priority2 = panel2.getPriority();
+
+        if (priority1 == priority2) {
+          return panel1.getDisplayName().compareTo(panel2.getDisplayName());
+        }
+
+        return priority2 - priority1;
       }
     });
 
     final Lookup lkp = Lookup.getDefault();
     for (final PropertiesPanelProvider propPanelProvider : lkp.lookupAll(
             PropertiesPanelProvider.class)) {
-      result.put(Category.create(propPanelProvider.getName(),
-              propPanelProvider.getDisplayName(), null), propPanelProvider.getPanel(properties));
+      final Category category = Category.create(propPanelProvider.getName(),
+              propPanelProvider.getDisplayName(), null);
+      result.put(category,propPanelProvider.getPanel(properties));
+      categoriesMap.put(propPanelProvider, category);
     }
+
+    categories.addAll(categoriesMap.values());
 
     return result;
   }
@@ -96,6 +112,4 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   public CategoryComponentProvider getComponentProvider() {
     return componentProvider;
   }
-
-  
 }

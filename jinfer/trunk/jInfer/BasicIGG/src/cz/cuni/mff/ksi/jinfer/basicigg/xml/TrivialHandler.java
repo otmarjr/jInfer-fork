@@ -60,12 +60,12 @@ public class TrivialHandler extends DefaultHandler {
       attrContext.add(qName);
       // for each attribute, add a subnode representing it
       for (int i = 0; i < attributes.getLength(); i++) {
-        final Map<String, Object> nodeAttrs = new HashMap<String, Object>(1);
-        nodeAttrs.put("required", Boolean.TRUE);
+        final Map<String, Object> metadata = new HashMap<String, Object>(1);
+        metadata.put("required", Boolean.TRUE);
         final List<String> content = new ArrayList<String>(1);
         content.add(attributes.getValue(i));
         final Attribute a = new Attribute(attrContext, attributes.getQName(i), 
-                nodeAttrs, null, content);
+                metadata, null, content);
         e.getSubnodes().addChild(Regexp.<AbstractNode>getToken(a));
       }
     }

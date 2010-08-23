@@ -7,5 +7,6 @@ OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/projecttype/Bundle.prop
 OpenIDE-Module-Requires: 
   cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator,
   cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator,
-  cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier
+  cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier,
+  org.openide.windows.IOProvider
 

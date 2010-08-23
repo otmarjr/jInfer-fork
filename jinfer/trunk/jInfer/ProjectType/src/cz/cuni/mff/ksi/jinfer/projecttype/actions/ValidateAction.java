@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -49,6 +50,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 import org.openide.windows.IOProvider;
+import org.openide.windows.IOSelect;
 import org.openide.windows.InputOutput;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -218,6 +220,7 @@ public final class ValidateAction extends NodeAction {
     } catch (SAXException ex) {
       final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
       ioResult.getOut().println(ex);
+      IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
       ioResult.getOut().close();
       return false;
     } catch (ParserConfigurationException ex) {
@@ -270,7 +273,7 @@ public final class ValidateAction extends NodeAction {
 
   @Override
   public String getName() {
-    return "Validate...";
+    return "Validate document vs. schema";
   }
 
   @Override

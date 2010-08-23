@@ -163,7 +163,7 @@ public class Runner {
     final boolean showOutput = NbPreferences.forModule(RunnerPanel.class).getBoolean(
             RunnerPanel.OUTPUT_SHOW, false);
 
-    final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", false);
+    final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", true);
     ioResult.getOut().println(schema);
 
     if (showOutput) {

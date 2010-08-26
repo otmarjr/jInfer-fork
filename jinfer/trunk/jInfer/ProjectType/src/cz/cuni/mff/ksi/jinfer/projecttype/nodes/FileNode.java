@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import javax.swing.Action;
+import org.netbeans.api.project.Project;
+import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataNode;
@@ -50,20 +52,22 @@ public class FileNode extends FilterNode {
 
   @Override
   public void destroy() throws IOException {
-    final Collection<File> files = (Collection<File>) ((FolderNode) this.getParentNode()).getLookup().
+    final FolderNode folderNode = (FolderNode) this.getParentNode();
+    final Collection<File> files = (Collection<File>) folderNode.getLookup().
             lookup(Collection.class);
     final DataNode orig = (DataNode) this.getOriginal();
     final FileObject fileOb = orig.getDataObject().getPrimaryFile();
     files.remove(FileUtil.toFile(fileOb));
 
-    ((FileChildren) ((FolderNode) this.getParentNode()).getChildren()).refreshNodes();
+    folderNode.getLookup().lookup(Project.class).getLookup().lookup(ProjectState.class).markModified();
+    ((FileChildren) folderNode.getChildren()).refreshNodes();
 
     super.destroy();
   }
 
   @Override
-  public Action[] getActions(boolean context) {
-    Action[] actions = super.getActions(context);
+  public Action[] getActions(final boolean context) {
+    final Action[] actions = super.getActions(context);
     Action[] result = new Action[actions.length + 1];
 
     System.arraycopy(actions, 0, result, 0, actions.length);

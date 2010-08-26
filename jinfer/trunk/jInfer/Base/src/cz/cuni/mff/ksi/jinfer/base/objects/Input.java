@@ -34,6 +34,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -187,7 +188,10 @@ public class Input {
       if (inputStream != null) {
         inputStream.close();
       }
-
+    } catch (UnmarshalException ex) {
+      DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.Message(
+                org.openide.util.NbBundle.getMessage(Input.class, "Input.fileBroken.message"),
+                NotifyDescriptor.INFORMATION_MESSAGE));
     } catch (JAXBException ex) {
       Exceptions.printStackTrace(ex);
     } finally {

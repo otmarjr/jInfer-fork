@@ -16,18 +16,28 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
-import java.io.BufferedReader;
+import cz.cuni.mff.ksi.jinfer.base.jaxb.ObjectFactory;
+import cz.cuni.mff.ksi.jinfer.base.jaxb.Tfile;
+import cz.cuni.mff.ksi.jinfer.base.jaxb.Tjinfer;
+import cz.cuni.mff.ksi.jinfer.base.jaxb.Tqueries;
+import cz.cuni.mff.ksi.jinfer.base.jaxb.Tschemas;
+import cz.cuni.mff.ksi.jinfer.base.jaxb.Txml;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.util.Exceptions;
 
 /**
  * Documents, schemas, queries etc constituting the input for inference.
@@ -94,52 +104,63 @@ public class Input {
    * @param fileOutputStream an output stream.
    */
   public void store(final FileOutputStream fileOutputStream) {
-    final PrintWriter out = new PrintWriter(fileOutputStream);
+    final ObjectFactory objFactory = new ObjectFactory();
 
-    writeCollection(documents, out);
-    writeCollection(schemas, out);
-    writeCollection(queries, out);
+    final Tjinfer jinfer = objFactory.createTjinfer();
 
-    if (out != null) {
-      out.close();
+    final Txml Txml = objFactory.createTxml();
+    jinfer.setXml(Txml);
+
+    final Tschemas Tschemas = objFactory.createTschemas();
+    jinfer.setSchemas(Tschemas);
+
+    final Tqueries Tqueries = objFactory.createTqueries();
+    jinfer.setQueries(Tqueries);
+
+    writeCollection(objFactory, documents, Txml.getFile());
+    writeCollection(objFactory, schemas, Tschemas.getFile());
+    writeCollection(objFactory, queries, Tqueries.getFile());
+
+    final JAXBElement<Tjinfer> jinferInput = objFactory.createJinferinput(jinfer);
+
+    final ClassLoader orig = Thread.currentThread().getContextClassLoader();
+    Thread.currentThread().setContextClassLoader(Tjinfer.class.getClassLoader());
+    try {
+      final JAXBContext context = JAXBContext.newInstance(Tjinfer.class.getPackage().getName());
+      final Marshaller marshaller = context.createMarshaller();
+      marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      marshaller.marshal(jinferInput, fileOutputStream);
+    } catch (JAXBException ex) {
+      Exceptions.printStackTrace(ex);
+    } finally {
+      Thread.currentThread().setContextClassLoader(orig);
     }
 
-  }
-
-  /**
-   * Writes Files from collection to defined print writer.
-   *
-   * @param collection of files to write.
-   * @param out an print writer.
-   */
-  private void writeCollection(final Collection<File> collection, final PrintWriter out) {
-    for (final Iterator<File> it = collection.iterator(); it.hasNext();) {
-      final File file = it.next();
-      out.print(file.getAbsolutePath());
-      if (it.hasNext()) {
-        out.print(",");
+    if (fileOutputStream != null) {
+      try {
+        fileOutputStream.close();
+      } catch (IOException ex) {
+        Exceptions.printStackTrace(ex);
       }
     }
-    out.println();
+
   }
 
-  /**
-   * Parse line and adds Files created from parsed file paths to collection.
-   *
-   * @param collection for adding Files from parsed line.
-   * @param line to be parsed.
-   */
-  private void readCollection(final Collection<File> collection, final String line) {
-    if ("".equals(line)) {
-      return;
-    }
-    final String[] filePaths = line.split(",");
-
-    for (String filePath : filePaths) {
-      File file = new File(filePath);
+  private void readCollection(final List<Tfile> inputFiles, final Collection<File> collection) {
+    for (Tfile tfile : inputFiles) {
+      final File file = new File(tfile.getLoc());
       if (file.exists()) {
         collection.add(file);
       }
+    }
+  }
+
+  private void writeCollection(final ObjectFactory objFactory, final Collection<File> collection,
+          final List<Tfile> OutputFiles) {
+    for (File file : collection) {
+      final Tfile fileType = objFactory.createTfile();
+      fileType.setLoc(file.getAbsolutePath());
+      OutputFiles.add(fileType);
     }
   }
 
@@ -150,26 +171,28 @@ public class Input {
    * @throws IOException if an error occurred when reading from the input stream.
    */
   public void load(final InputStream inputStream) throws IOException {
-    final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+    final ClassLoader orig = Thread.currentThread().getContextClassLoader();
+    Thread.currentThread().setContextClassLoader(Tjinfer.class.getClassLoader());
+    try {
+      final JAXBContext context = JAXBContext.newInstance(Tjinfer.class.getPackage().getName());
+      final Unmarshaller unmarshaller = context.createUnmarshaller();
+      final JAXBElement<Tjinfer> jinferElement = (JAXBElement<Tjinfer>) unmarshaller.unmarshal(
+              inputStream);
+      final Tjinfer jinfer = jinferElement.getValue();
 
-    String l;
-    int i = 0;
-    while ((l = reader.readLine()) != null) {
-      if (i == 0) {
-        readCollection(documents, l);
-      }
-      if (i == 1) {
-        readCollection(schemas, l);
-      }
-      if (i == 2) {
-        readCollection(queries, l);
+      readCollection(jinfer.getXml().getFile(), documents);
+      readCollection(jinfer.getSchemas().getFile(), schemas);
+      readCollection(jinfer.getQueries().getFile(), queries);
+
+      if (inputStream != null) {
+        inputStream.close();
       }
 
-      ++i;
+    } catch (JAXBException ex) {
+      Exceptions.printStackTrace(ex);
+    } finally {
+      Thread.currentThread().setContextClassLoader(orig);
     }
 
-    if (reader != null) {
-      reader.close();
-    }
   }
 }

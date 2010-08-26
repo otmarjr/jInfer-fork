@@ -147,6 +147,12 @@ public class Input {
 
   }
 
+  /**
+   * Add files from input.files xml representation to collection.
+   *
+   * @param inputFiles to be added to collection.
+   * @param collection to add files to.
+   */
   private void readCollection(final List<Tfile> inputFiles, final Collection<File> collection) {
     for (Tfile tfile : inputFiles) {
       final File file = new File(tfile.getLoc());
@@ -156,6 +162,13 @@ public class Input {
     }
   }
 
+  /**
+   * Add files from input into input.files xml representation.
+   *
+   * @param objFactory factory to create file type in xml.
+   * @param collection to get files from.
+   * @param OutputFiles list to add file type.
+   */
   private void writeCollection(final ObjectFactory objFactory, final Collection<File> collection,
           final List<Tfile> OutputFiles) {
     for (File file : collection) {

@@ -26,6 +26,16 @@ import java.util.Properties;
 public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 561241l;
+  public static final String CLUSTER_PROCESSOR = "modularsimplifier.cluster.processor";
+  public static final String ENABLED = "modularsimplifier.enabled";
+  public static final String KLEENE_REPETITIONS = "modularsimplifier.kleene.repetitions";
+  public static final String RENDER = "modularsimplifier.render";
+  public static final String USE_CONTEXT = "modularsimplifier.use.context";
+  public static final String CLUSTER_PROCESSOR_DEFAULT = "Trie";
+  public static final boolean ENABLED_DEFAULT = true;
+  public static final int KLEENE_REPETITIONS_DEFAULT = 3;
+  public static final boolean RENDER_DEFAULT = true;
+  public static final boolean USE_CONTEXT_DEFAULT = false;
 
   public ModularSimplifierPropertiesPanel(final Properties properties) {
     super(properties);
@@ -158,29 +168,29 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
 
   @Override
   public void load() {
-    enabled.setSelected(Boolean.parseBoolean(properties
-            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_ENABLED, "true")));
-    context.setSelected(Boolean.parseBoolean(properties
-            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_USE_CONTEXT, "false")));
-    render.setSelected(Boolean.parseBoolean(properties
-            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_RENDER, "true")));
-    kleeneRepetitions.setValue(Integer.valueOf(properties
-            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_KLEENE_REPETITIONS, "3")));
-    clusterProcessor.setSelectedItem(properties
-            .getProperty(SimplifierImpl.MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR, "Trie"));
+    enabled.setSelected(Boolean.parseBoolean(properties.getProperty(
+            ENABLED, Boolean.toString(ENABLED_DEFAULT))));
+    context.setSelected(Boolean.parseBoolean(properties.getProperty(
+            USE_CONTEXT, Boolean.toString(USE_CONTEXT_DEFAULT))));
+    render.setSelected(Boolean.parseBoolean(properties.getProperty(
+            RENDER, Boolean.toString(RENDER_DEFAULT))));
+    kleeneRepetitions.setValue(Integer.valueOf(properties.getProperty(
+            KLEENE_REPETITIONS, Integer.toString(KLEENE_REPETITIONS_DEFAULT))));
+    clusterProcessor.setSelectedItem(properties.getProperty(
+            CLUSTER_PROCESSOR, CLUSTER_PROCESSOR_DEFAULT));
   }
 
   @Override
   public void store() {
-    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_ENABLED,
+    properties.setProperty(ENABLED,
             Boolean.toString(enabled.isSelected()));
-    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_USE_CONTEXT,
+    properties.setProperty(USE_CONTEXT,
             Boolean.toString(context.isSelected()));
-    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_RENDER,
+    properties.setProperty(RENDER,
             Boolean.toString(render.isSelected()));
-    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_KLEENE_REPETITIONS,
+    properties.setProperty(KLEENE_REPETITIONS,
             ((Integer) kleeneRepetitions.getValue()).toString());
-    properties.setProperty(SimplifierImpl.MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR,
+    properties.setProperty(CLUSTER_PROCESSOR,
             (String) clusterProcessor.getSelectedItem());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

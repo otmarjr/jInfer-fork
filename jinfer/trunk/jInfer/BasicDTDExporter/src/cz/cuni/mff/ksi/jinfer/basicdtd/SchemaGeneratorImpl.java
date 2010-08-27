@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DTDUtils;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
@@ -44,8 +45,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
-  public static final String MAX_ENUM_SIZE = "basicdtdexporter.max.enum.size";
-  public static final String MIN_DEFAULT_RATIO = "basicdtdexporter.min.default.ratio";
   private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private int maxEnumSize;
   private double minDefaultRatio;
@@ -56,17 +55,20 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<AbstractNode> grammar, 
+  public void start(final List<AbstractNode> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
-    
+
     LOG.info("DTD Exporter: got " + grammar.size()
             + " rules.");
 
     // load settings
     final Properties properties = RunningProject.getActiveProjectProps();
 
-    maxEnumSize = Integer.parseInt(properties.getProperty(MAX_ENUM_SIZE, "3"));
-    minDefaultRatio = Float.parseFloat(properties.getProperty(MIN_DEFAULT_RATIO, "0.67f"));
+    maxEnumSize = Integer.parseInt(properties.getProperty(DTDExportPropertiesPanel.MAX_ENUM_SIZE, Integer.
+            toString(DTDExportPropertiesPanel.MAX_ENUM_SIZE_DEFAULT)));
+    minDefaultRatio = Float.parseFloat(properties.getProperty(
+            DTDExportPropertiesPanel.MIN_DEFAULT_RATIO, Float.toString(
+            DTDExportPropertiesPanel.MIN_DEFAULT_RATIO_DEFAULT)));
 
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
@@ -100,10 +102,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
-    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(subElementsToString(e.getSubnodes(), true)).append(">\n");
+    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(subElementsToString(e.
+            getSubnodes(), true)).append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!BaseUtils.isEmpty(attributes)) {
-      ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).append(">\n");
+      ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).
+              append(">\n");
     }
     return ret.toString();
   }
@@ -213,7 +217,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       final Map<String, Integer> domain = DomainUtils.getDomain(attribute);
 
       // type declaration of this attribute
-      ret.append("\n\t").append(attribute.getName()).append(DomainUtils.getAttributeType(domain, maxEnumSize));
+      ret.append("\n\t").append(attribute.getName()).append(DomainUtils.getAttributeType(domain,
+              maxEnumSize));
 
       // requiredness/default value
       if (attribute.getMetadata().containsKey("required")) {

@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.XSDUtils;
 import java.util.ArrayList;
@@ -44,18 +45,6 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
-  public static final String TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL = "basicxsdexporter.generate.global";
-  public static final String TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL = "basicxsdexporter.number.to.global";
-  public static final String TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT = "basicxsdexporter.spaces.per.indent";
-  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX = "basicxsdexporter.typename.prefix";
-  public static final String TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX = "basicxsdexporter.typename.postfix";
-
-  public final static boolean GENERATE_GLOBAL_DEFAULT = true;
-  /// Default value of number of occurrences of element to consider it as a global type.
-  public final static int NUMBER_TO_GLOBAL_DEFAULT = 1;
-  public final static int SPACES_PER_INDENT_DEFAULT = 2;
-  public final static String TYPENAME_PREFIX_DEFAULT = "T";
-  public final static String TYPENAME_POSTFIX_DEFAULT = "";
 
   private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private Preprocessor preprocessor = null;
@@ -97,7 +86,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     final Properties properties = RunningProject.getActiveProjectProps();
 
-    final int spacesPerIndent = Integer.parseInt(properties.getProperty(TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT, String.valueOf(SPACES_PER_INDENT_DEFAULT)));
+    final int spacesPerIndent = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.SPACES_PER_INDENT, String.valueOf(XSDExportPropertiesPanel.SPACES_PER_INDENT_DEFAULT)));
     indentator = new Indentator(spacesPerIndent);
 
     // generate head of a new XSD
@@ -105,13 +94,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
     indentator.indent("<!-- %generated% -->\n");
 
-    final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL, String.valueOf(GENERATE_GLOBAL_DEFAULT)));
-    final int numberToGlobal = Integer.parseInt(properties.getProperty(TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL, String.valueOf(NUMBER_TO_GLOBAL_DEFAULT)));
+    final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(XSDExportPropertiesPanel.GENERATE_GLOBAL, String.valueOf(XSDExportPropertiesPanel.GENERATE_GLOBAL_DEFAULT)));
+    final int numberToGlobal = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL, String.valueOf(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_DEFAULT)));
     preprocessor = new Preprocessor(elements, generateGlobal, numberToGlobal);
     preprocessor.run();
 
-    typenamePrefix = properties.getProperty(TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX, TYPENAME_PREFIX_DEFAULT);
-    typenamePostfix = properties.getProperty(TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX, TYPENAME_POSTFIX_DEFAULT);
+    typenamePrefix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_PREFIX, XSDExportPropertiesPanel.TYPENAME_PREFIX_DEFAULT);
+    typenamePostfix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_POSTFIX, XSDExportPropertiesPanel.TYPENAME_POSTFIX_DEFAULT);
 
     // handle global elements
     final List<Element> globalElements = preprocessor.getGlobalElements();

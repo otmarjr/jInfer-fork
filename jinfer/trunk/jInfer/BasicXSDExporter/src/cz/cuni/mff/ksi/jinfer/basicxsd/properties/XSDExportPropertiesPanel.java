@@ -32,6 +32,19 @@ import java.util.Properties;
  */
 public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
 
+  public static final String GENERATE_GLOBAL = "basicxsdexporter.generate.global";
+  public static final String NUMBER_TO_GLOBAL = "basicxsdexporter.number.to.global";
+  public static final String SPACES_PER_INDENT = "basicxsdexporter.spaces.per.indent";
+  public static final String TYPENAME_PREFIX = "basicxsdexporter.typename.prefix";
+  public static final String TYPENAME_POSTFIX = "basicxsdexporter.typename.postfix";
+
+  public final static boolean GENERATE_GLOBAL_DEFAULT = true;
+  /// Default value of number of occurrences of element to consider it as a global type.
+  public final static int NUMBER_TO_GLOBAL_DEFAULT = 1;
+  public final static int SPACES_PER_INDENT_DEFAULT = 2;
+  public final static String TYPENAME_PREFIX_DEFAULT = "T";
+  public final static String TYPENAME_POSTFIX_DEFAULT = "";
+
   /** Creates new form XSDExportPropertiesPanel */
   public XSDExportPropertiesPanel(final Properties properties) {
     super(properties);
@@ -210,28 +223,28 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
   public void load() {
     // TODO rio tooltips
     generateGlobalTypes.setSelected(Boolean.parseBoolean(properties
-            .getProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL, String.valueOf(SchemaGeneratorImpl.GENERATE_GLOBAL_DEFAULT))));
+            .getProperty(GENERATE_GLOBAL, String.valueOf(GENERATE_GLOBAL_DEFAULT))));
     countToGlobal.setValue(Integer.valueOf(properties
-            .getProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL, String.valueOf(SchemaGeneratorImpl.NUMBER_TO_GLOBAL_DEFAULT))));
+            .getProperty(NUMBER_TO_GLOBAL, String.valueOf(NUMBER_TO_GLOBAL_DEFAULT))));
     spacesPerIndent.setValue(Integer.valueOf(properties
-            .getProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT, String.valueOf(SchemaGeneratorImpl.SPACES_PER_INDENT_DEFAULT))));
+            .getProperty(SPACES_PER_INDENT, String.valueOf(SPACES_PER_INDENT_DEFAULT))));
     typenamePrefix.setText(properties
-            .getProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX, SchemaGeneratorImpl.TYPENAME_PREFIX_DEFAULT));
+            .getProperty(TYPENAME_PREFIX,TYPENAME_PREFIX_DEFAULT));
     typenamePostfix.setText(properties
-            .getProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX, SchemaGeneratorImpl.TYPENAME_POSTFIX_DEFAULT));
+            .getProperty(TYPENAME_POSTFIX, TYPENAME_POSTFIX_DEFAULT));
   }
 
   @Override
   public void store() {
-    properties.setProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_GENERATE_GLOBAL,
+    properties.setProperty(GENERATE_GLOBAL,
             Boolean.toString(generateGlobalTypes.isSelected()));
-    properties.setProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_NUMBER_TO_GLOBAL,
+    properties.setProperty(NUMBER_TO_GLOBAL,
             ((Integer) countToGlobal.getValue()).toString());
-    properties.setProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_SPACES_PER_INDENT,
+    properties.setProperty(SPACES_PER_INDENT,
             ((Integer) spacesPerIndent.getValue()).toString());
-    properties.setProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_TYPENAME_PREFIX,
+    properties.setProperty(TYPENAME_PREFIX,
             typenamePrefix.getText());
-    properties.setProperty(SchemaGeneratorImpl.TRIVIAL_XSD_EXPORTER_TYPENAME_POSTFIX,
+    properties.setProperty(TYPENAME_POSTFIX,
             typenamePostfix.getText());
   }
 }

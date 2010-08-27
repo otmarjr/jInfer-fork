@@ -32,7 +32,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new ModuleSelectionPropertiesPanel(properties);
+    return AbstractPropertiesPanel.getPropertiesPanel(new ModuleSelectionPropertiesPanel(properties));
   }
 
   @Override

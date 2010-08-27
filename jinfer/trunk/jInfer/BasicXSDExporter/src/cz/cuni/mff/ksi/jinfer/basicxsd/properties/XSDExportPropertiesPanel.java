@@ -49,7 +49,6 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
   public XSDExportPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
-    load();
   }
 
   /** This method is called from within the constructor to

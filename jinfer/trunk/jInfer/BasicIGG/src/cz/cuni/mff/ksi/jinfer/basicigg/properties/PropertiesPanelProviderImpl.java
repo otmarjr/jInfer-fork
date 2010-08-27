@@ -30,7 +30,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new BasicIGGPropertiesPanel(properties);
+    return AbstractPropertiesPanel.getPropertiesPanel(new BasicIGGPropertiesPanel(properties));
   }
 
   @Override

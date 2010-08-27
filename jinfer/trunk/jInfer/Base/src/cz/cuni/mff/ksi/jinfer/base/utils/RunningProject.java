@@ -81,6 +81,6 @@ public final class RunningProject {
       return project.getLookup().lookup(Properties.class);
     }
 
-    return null;
+    return new Properties();
   }
 }

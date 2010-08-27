@@ -20,13 +20,17 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xmlmiddleware.schemas.dtds.Attribute;
 import org.xmlmiddleware.schemas.dtds.DTD;
@@ -39,6 +43,8 @@ import org.xmlmiddleware.schemas.dtds.ElementType;
  * @author vektor
  */
 public class DTDProcessor implements Processor {
+
+  private static final Logger LOG = Logger.getLogger(DTDProcessor.class);
 
   /**
    * Parses the DTD schema and returns the IG rules contained within.
@@ -59,8 +65,13 @@ public class DTDProcessor implements Processor {
       }
 
       return ret;
-    } catch (final Exception ex) {
-      throw new RuntimeException("Error processing DTD", ex);
+    } catch (final Exception e) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps().getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+        throw new RuntimeException("Error processing DTD", e);
+      } else {
+        LOG.warn("Error processing DTD, ignoring and going on.", e);
+        return Collections.emptyList();
+      }
     }
   }
 

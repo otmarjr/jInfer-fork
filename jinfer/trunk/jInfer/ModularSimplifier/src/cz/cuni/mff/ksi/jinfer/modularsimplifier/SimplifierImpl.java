@@ -58,8 +58,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private ClusterProcessor getClusterProcessor() {
-    final Properties properties = RunningProject.getActiveProjectProps();
-    final String cp = properties.getProperty(MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR,"Trie");
+    final String cp = RunningProject.getActiveProjectProps().getProperty(MODULAR_SIMPLIFIER_CLUSTER_PROCESSOR,"Trie");
     LOG.info("Simplifier: using " + cp + " cluster processor.");
     if ("Trie".equals(cp)) {
       return new CPTrie();
@@ -71,8 +70,8 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private Clusterer getClusterer() {
-    final Properties properties = RunningProject.getActiveProjectProps();
-    if (Boolean.parseBoolean(properties.getProperty(MODULAR_SIMPLIFIER_USE_CONTEXT,"false"))) {
+    if (Boolean.parseBoolean(
+            RunningProject.getActiveProjectProps().getProperty(MODULAR_SIMPLIFIER_USE_CONTEXT, "false"))) {
       LOG.info("Simplifier: using context.");
       return new ContextClusterer();
     }

@@ -23,11 +23,14 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -44,6 +47,8 @@ public class TrivialHandler extends DefaultHandler {
   private final Stack<AbstractNode> stack = new Stack<AbstractNode>();
   /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+
+  private final Properties properties = RunningProject.getActiveProjectProps();
 
   @Override
   public void startElement(final String uri, final String localName,
@@ -63,7 +68,9 @@ public class TrivialHandler extends DefaultHandler {
         final Map<String, Object> metadata = new HashMap<String, Object>(1);
         metadata.put("required", Boolean.TRUE);
         final List<String> content = new ArrayList<String>(1);
-        content.add(attributes.getValue(i));
+        if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES, "true"))) {
+          content.add(attributes.getValue(i));
+        }
         final Attribute a = new Attribute(attrContext, attributes.getQName(i), 
                 metadata, null, content);
         e.getSubnodes().addChild(Regexp.<AbstractNode>getToken(a));
@@ -102,7 +109,13 @@ public class TrivialHandler extends DefaultHandler {
       return;
     }
     if (stack.peek().getType().equals(NodeType.ELEMENT)) {
-      final SimpleData sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
+      final SimpleData sd;
+      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
+        sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
+      }
+      else {
+        sd = new SimpleData(getContext(), "", null, null, Arrays.asList(""));
+      }
       ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(sd));
     } else {
       throw new IllegalArgumentException("Element expected");

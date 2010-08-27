@@ -18,13 +18,17 @@ package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.jaxen.saxpath.SAXPathException;
 import org.jaxen.saxpath.XPathReader;
 import org.jaxen.saxpath.helpers.XPathReaderFactory;
@@ -35,6 +39,8 @@ import org.jaxen.saxpath.helpers.XPathReaderFactory;
  * @author vektor
  */
 public class XPathProcessor implements Processor {
+
+  private static final Logger LOG = Logger.getLogger(XPathProcessor.class);
 
   /**
    * Parses the file containing a list of XPath queries and returns the
@@ -60,7 +66,12 @@ public class XPathProcessor implements Processor {
       in.close();
       return ret;
     } catch (final Exception e) {
-      throw new RuntimeException("Error reading file " + s, e);
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps().getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+        throw new RuntimeException("Error reading file " + s, e);
+      } else {
+        LOG.warn("Error reading file " + s + ", ignoring and going on.", e);
+        return Collections.emptyList();
+      }
     }
   }
 
@@ -71,8 +82,13 @@ public class XPathProcessor implements Processor {
       xr.setXPathHandler(xh);
       xr.parse(path);
       return xh.getRules();
-    } catch (final SAXPathException ex) {
-      throw new RuntimeException("Error parsing the path: " + path, ex);
+    } catch (final SAXPathException e) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps().getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+        throw new RuntimeException("Error parsing the path: " + path, e);
+      } else {
+        LOG.warn("Error parsing the path: " + path + ", ignoring and going on.", e);
+        return Collections.emptyList();
+      }
     }
   }
 }

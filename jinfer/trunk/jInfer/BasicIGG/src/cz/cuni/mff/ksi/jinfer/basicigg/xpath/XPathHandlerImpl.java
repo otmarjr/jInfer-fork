@@ -113,6 +113,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
             && lastLiteral != null
             && isSimpleData
             && lastElement != null) {
+      // TODO vektor #3036539
       final SimpleData newSimpleData = new SimpleData(null, lastLiteral, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
       rules.add(lastElement);
@@ -130,6 +131,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     isSimpleData = true;
 
     if (lastElement != null) {
+      // TODO vektor #3036539
       final SimpleData newSimpleData = new SimpleData(null, null, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
       rules.add(lastElement);

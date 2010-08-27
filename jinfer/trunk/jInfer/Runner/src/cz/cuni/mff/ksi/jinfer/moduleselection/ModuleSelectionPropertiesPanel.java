@@ -29,6 +29,10 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463434L;
 
+  public static final String INITIAL_GRAMMAR = "moduleselector.initialgrammar";
+  public static final String SIMPIFIER = "moduleselector.simplifier";
+  public static final String SCHEMA_GENERATOR = "moduleselector.schemagenerator";
+
   /** Creates new form ModuleSelectionJPanel */
   public ModuleSelectionPropertiesPanel(final Properties properties) {
     super(properties);
@@ -133,20 +137,20 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     simplifier.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSimplifierNames().toArray()));
     schemaGenerator.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSchemaGeneratorNames().toArray()));
 
-    initialGrammar.setSelectedItem(properties.getProperty(ModuleSelection.MODULE_SELECTION_INITIAL_GRAMMAR, DEFAULT_MENU_TEXT));
-    simplifier.setSelectedItem(properties.getProperty(ModuleSelection.MODULE_SELECTION_SIMPIFIER, DEFAULT_MENU_TEXT));
-    schemaGenerator.setSelectedItem(properties.getProperty(ModuleSelection.MODULE_SELECTION_SCHEMA_GENERATOR, DEFAULT_MENU_TEXT));
+    initialGrammar.setSelectedItem(properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT));
+    simplifier.setSelectedItem(properties.getProperty(SIMPIFIER, DEFAULT_MENU_TEXT));
+    schemaGenerator.setSelectedItem(properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT));
 
     // TODO sviro Treba doriesit ak neexistuje modul co je nacitany z properties a ak neexistuje ziaden modul danej kategorie
   }
 
   @Override
   public void store() {
-    properties.setProperty(ModuleSelection.MODULE_SELECTION_INITIAL_GRAMMAR,
+    properties.setProperty(INITIAL_GRAMMAR,
             (String) initialGrammar.getSelectedItem());
-    properties.setProperty(ModuleSelection.MODULE_SELECTION_SIMPIFIER,
+    properties.setProperty(SIMPIFIER,
             (String) simplifier.getSelectedItem());
-    properties.setProperty(ModuleSelection.MODULE_SELECTION_SCHEMA_GENERATOR,
+    properties.setProperty(SCHEMA_GENERATOR,
             (String) schemaGenerator.getSelectedItem());
   }
 

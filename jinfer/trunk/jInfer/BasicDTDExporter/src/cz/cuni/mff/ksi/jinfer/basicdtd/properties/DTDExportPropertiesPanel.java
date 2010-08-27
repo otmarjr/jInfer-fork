@@ -26,6 +26,10 @@ import java.util.Properties;
 public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 5421231l;
+  public static final String MAX_ENUM_SIZE = "basicdtdexporter.max.enum.size";
+  public static final String MIN_DEFAULT_RATIO = "basicdtdexporter.min.default.ratio";
+  public static final int MAX_ENUM_SIZE_DEFAULT = 3;
+  public static final float MIN_DEFAULT_RATIO_DEFAULT = 0.67f;
 
   public DTDExportPropertiesPanel(final Properties properties) {
     super(properties);
@@ -127,16 +131,17 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void load() {
-    maxEnumSize.setValue(Integer.valueOf(properties.getProperty(SchemaGeneratorImpl.MAX_ENUM_SIZE, "3")));
-    minDefaultRatio.setValue(properties.getProperty(SchemaGeneratorImpl.MIN_DEFAULT_RATIO,
-            Float.toString(0.67f)));
+    maxEnumSize.setValue(Integer.valueOf(properties.getProperty(MAX_ENUM_SIZE, Integer.toString(
+            MAX_ENUM_SIZE_DEFAULT))));
+    minDefaultRatio.setValue(properties.getProperty(MIN_DEFAULT_RATIO,
+            Float.toString(MIN_DEFAULT_RATIO_DEFAULT)));
   }
 
   @Override
   public void store() {
-    properties.setProperty(SchemaGeneratorImpl.MAX_ENUM_SIZE,
+    properties.setProperty(MAX_ENUM_SIZE,
             ((Integer) maxEnumSize.getValue()).toString());
-    properties.setProperty(SchemaGeneratorImpl.MIN_DEFAULT_RATIO,
+    properties.setProperty(MIN_DEFAULT_RATIO,
             minDefaultRatio.getText());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

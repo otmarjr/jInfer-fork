@@ -33,10 +33,6 @@ import org.openide.util.Lookup;
  */
 public final class ModuleSelection {
 
-  public static final String MODULE_SELECTION_INITIAL_GRAMMAR = "moduleselector.initialgrammar";
-  public static final String MODULE_SELECTION_SIMPIFIER = "moduleselector.simplifier";
-  public static final String MODULE_SELECTION_SCHEMA_GENERATOR = "moduleselector.schemagenerator";
-
   private static Comparator<ModuleName> getComparator() {
     return new Comparator<ModuleName>() {
 

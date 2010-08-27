@@ -34,7 +34,6 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
   public DTDExportPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
-    load();
   }
 
   @SuppressWarnings("PMD")

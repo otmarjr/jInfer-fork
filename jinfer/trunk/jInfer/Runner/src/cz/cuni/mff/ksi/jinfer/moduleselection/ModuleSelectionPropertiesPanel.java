@@ -37,7 +37,6 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   public ModuleSelectionPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
-    load();
   }
 
   /** This method is called from within the constructor to

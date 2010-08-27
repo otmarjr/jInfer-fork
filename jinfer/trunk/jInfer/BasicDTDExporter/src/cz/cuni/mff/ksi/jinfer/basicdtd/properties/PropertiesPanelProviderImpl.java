@@ -32,7 +32,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new DTDExportPropertiesPanel(properties);
+    return AbstractPropertiesPanel.getPropertiesPanel(new DTDExportPropertiesPanel(properties));
   }
 
   @Override

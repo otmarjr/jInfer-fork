@@ -40,8 +40,8 @@ public final class ModularSimplifierPropertiesPanel extends AbstractPropertiesPa
   public ModularSimplifierPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
-    load();
   }
+
 
   @SuppressWarnings("PMD")
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

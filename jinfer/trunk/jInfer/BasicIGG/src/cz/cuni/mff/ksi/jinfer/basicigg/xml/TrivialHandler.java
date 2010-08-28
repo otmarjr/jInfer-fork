@@ -114,7 +114,7 @@ public class TrivialHandler extends DefaultHandler {
         sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
       }
       else {
-        sd = new SimpleData(getContext(), "", null, null, Arrays.asList(""));
+        sd = new SimpleData(getContext(), "simple data", null, null, Arrays.asList(""));
       }
       ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(sd));
     } else {

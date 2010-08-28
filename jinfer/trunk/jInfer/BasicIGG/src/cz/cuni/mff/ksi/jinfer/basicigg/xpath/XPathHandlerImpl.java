@@ -21,9 +21,12 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import org.jaxen.saxpath.Axis;
 import org.jaxen.saxpath.Operator;
 import org.jaxen.saxpath.SAXPathException;
@@ -35,6 +38,8 @@ import org.jaxen.saxpath.helpers.DefaultXPathHandler;
  * @author vektor
  */
 public class XPathHandlerImpl extends DefaultXPathHandler {
+
+  private final Properties properties = RunningProject.getActiveProjectProps();
 
   /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
@@ -107,14 +112,20 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     super.endEqualityExpr(operator);
 
     if (operator == Operator.EQUALS && lastLiteral != null && lastAttribute != null) {
-      lastAttribute.getContent().add(lastLiteral);
+      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES, "true"))) {
+        lastAttribute.getContent().add(lastLiteral);
+      }
     }
     if (operator == Operator.EQUALS
             && lastLiteral != null
             && isSimpleData
             && lastElement != null) {
-      // TODO vektor #3036539
-      final SimpleData newSimpleData = new SimpleData(null, lastLiteral, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      final SimpleData newSimpleData;
+      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
+        newSimpleData = new SimpleData(null, lastLiteral, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      } else {
+        newSimpleData = new SimpleData(null, "simple data", IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      }
       lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
@@ -131,8 +142,12 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     isSimpleData = true;
 
     if (lastElement != null) {
-      // TODO vektor #3036539
-      final SimpleData newSimpleData = new SimpleData(null, null, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      final SimpleData newSimpleData;
+      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
+        newSimpleData = new SimpleData(null, null, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      } else {
+        newSimpleData = new SimpleData(null, "simple data", IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      }
       lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;

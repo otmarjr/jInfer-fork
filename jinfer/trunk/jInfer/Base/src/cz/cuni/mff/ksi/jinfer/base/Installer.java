@@ -16,12 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.base;
 
+import java.io.IOException;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 import org.openide.modules.ModuleInstall;
 import org.openide.windows.IOProvider;
@@ -65,14 +67,34 @@ public class Installer extends ModuleInstall {
 
   @Override
   public void restored() {
-    // Configure log4j
-    PropertyConfigurator.configure("log4j.properties");
+    /* configure log4j */
+    final Logger ROOTLOG = Logger.getRootLogger();
+    ROOTLOG.setLevel(Level.INFO);
+
+    // configure appender to the Output window
     final PatternLayout outputWindowLayout = new PatternLayout("%m%n");
     final Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
-    final Logger ROOTLOG = Logger.getRootLogger();
     ROOTLOG.addAppender(outputWindowAppender);
+    
     LOG = Logger.getLogger(Installer.class);
-    LOG.info("Log initialized.");
+
+    // configure appender to a logfile
+    final PatternLayout fileLayout = new PatternLayout("(%d{dd MMM yyyy HH:mm:ss,SSS}) %p [%t] %c (%F:%L) - %m%n");
+    try {
+      final String logfileName = System.getProperty("user.home") + "/.jinfer/jinfer.errors.log";
+      final RollingFileAppender logfileAppender = new RollingFileAppender(fileLayout, logfileName);
+      // keep max 1 old logfile
+      logfileAppender.setMaxBackupIndex(1);
+      // max file size if 100KB
+      logfileAppender.setMaximumFileSize(100 * 1024);
+      // log to file only errors and stronger levels
+      logfileAppender.setThreshold(Level.ERROR);
+      ROOTLOG.addAppender(logfileAppender);
+
+      LOG.info("Log initialized.");
+    } catch (IOException exc) {
+      LOG.error("Cannot log to file, logfile disabled.", exc);
+    }
 
     LOG.info("Base module loaded.");
   }

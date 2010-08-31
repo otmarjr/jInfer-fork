@@ -77,7 +77,7 @@ public class AutomatonMergingStateProcessor implements ElementProcessor {
 
     // 3.2 simplify by merging states
     automaton.simplify( new KHContextMergeConditionTester<AbstractNode>(2, 1) );
-    LOG.debug(">>> After 2-context:");
+    LOG.debug(">>> After 2,1-context:");
     LOG.debug(automaton);
 
     // 3.3 convert to regexpautomaton

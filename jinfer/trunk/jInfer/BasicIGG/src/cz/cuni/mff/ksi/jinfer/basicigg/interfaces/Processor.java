@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.basicigg.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.io.InputStream;
 import java.util.List;
 
@@ -26,6 +27,16 @@ import java.util.List;
  * @author vektor
  */
 public interface Processor {
+
+  /**
+   * Which folder does this processor operate on.
+   */
+  FolderType getFolder();
+
+  /**
+   * Which extension can this processor process.
+   */
+  String getExtension();
 
   /**
    * Returns the rules contained in the input.

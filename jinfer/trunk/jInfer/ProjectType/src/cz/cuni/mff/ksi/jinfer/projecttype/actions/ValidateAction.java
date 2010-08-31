@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
-import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderType;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

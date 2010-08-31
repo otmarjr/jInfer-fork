@@ -22,7 +22,6 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO vektor Comment!
  * @author vektor
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)

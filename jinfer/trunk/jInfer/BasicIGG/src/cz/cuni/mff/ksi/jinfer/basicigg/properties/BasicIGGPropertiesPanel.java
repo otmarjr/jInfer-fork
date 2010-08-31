@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
 
 /**
- * TODO vektor Comment!
  * @author vektor
  */
 public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {

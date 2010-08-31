@@ -16,16 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg;
 
-import cz.cuni.mff.ksi.jinfer.basicigg.xpath.XPathProcessor;
-import cz.cuni.mff.ksi.jinfer.basicigg.dtd.DTDProcessor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
-import cz.cuni.mff.ksi.jinfer.basicigg.xml.XMLProcessor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -57,16 +56,12 @@ public class IGGeneratorImpl implements IGGenerator {
           throws InterruptedException {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();
 
-    final Map<String, Processor> xmlProcessor = new HashMap<String, Processor>();
-    xmlProcessor.put("*", new XMLProcessor());
-    final Map<String, Processor> dtdProcessor = new HashMap<String, Processor>();
-    dtdProcessor.put("dtd", new DTDProcessor());
-    final Map<String, Processor> xpathProcessor = new HashMap<String, Processor>();
-    xpathProcessor.put("*", new XPathProcessor());
+    // find processor mappings for all folders
+    final Map<FolderType, Map<String, Processor>> registeredProcessors = getRegisteredProcessors();
 
-    ret.addAll(getRulesFromInput(input.getDocuments(), xmlProcessor));
-    ret.addAll(getRulesFromInput(input.getSchemas(), dtdProcessor));
-    ret.addAll(getRulesFromInput(input.getQueries(), xpathProcessor));
+    ret.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.XML)));
+    ret.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
+    ret.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
 
     callback.finished(ret);
   }
@@ -96,19 +91,36 @@ public class IGGeneratorImpl implements IGGenerator {
         throw new InterruptedException();
       }
       try {
-        if (mappings.containsKey("*")) {
+        final String ext = FileUtils.getExtension(f.getAbsolutePath());
+        if (mappings.containsKey(ext)) {
+          ret.addAll(mappings.get(ext).process(new FileInputStream(f)));
+        } else if (mappings.containsKey("*")) {
           ret.addAll(mappings.get("*").process(new FileInputStream(f)));
         } else {
-          final String ext = FileUtils.getExtension(f.getAbsolutePath());
-          if (mappings.containsKey(ext)) {
-            ret.addAll(mappings.get(ext).process(new FileInputStream(f)));
-          } else {
-            LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
-          }
+          LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
         }
       } catch (final FileNotFoundException e) {
         throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);
       }
+    }
+
+    return ret;
+  }
+
+  /**
+   * Returns the map (folder - (extension - processor) ) of all processors
+   * installed in this NetBeans.
+   */
+  private Map<FolderType, Map<String, Processor>> getRegisteredProcessors() {
+    final Map<FolderType, Map<String, Processor>> ret =
+            new HashMap<FolderType, Map<String, Processor>>();
+
+    for (final FolderType ft : FolderType.values()) {
+      ret.put(ft, new HashMap<String, Processor>());
+    }
+
+    for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
+      ret.get(p.getFolder()).put(p.getExtension(), p);
     }
 
     return ret;

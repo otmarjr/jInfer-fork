@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;

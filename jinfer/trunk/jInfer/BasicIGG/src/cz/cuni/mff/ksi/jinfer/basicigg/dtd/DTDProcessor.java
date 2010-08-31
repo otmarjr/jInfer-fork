@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.InputSource;
 import org.xmlmiddleware.schemas.dtds.Attribute;
 import org.xmlmiddleware.schemas.dtds.DTD;
@@ -42,9 +44,20 @@ import org.xmlmiddleware.schemas.dtds.ElementType;
  * 
  * @author vektor
  */
+@ServiceProvider(service = Processor.class)
 public class DTDProcessor implements Processor {
 
   private static final Logger LOG = Logger.getLogger(DTDProcessor.class);
+
+  @Override
+  public String getExtension() {
+    return "dtd";
+  }
+
+  @Override
+  public FolderType getFolder() {
+    return FolderType.SCHEMA;
+  }
 
   /**
    * Parses the DTD schema and returns the IG rules contained within.

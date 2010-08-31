@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
@@ -25,16 +26,28 @@ import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Contains logic for IG retrieval from XML documents.
  * 
  * @author vektor
  */
+@ServiceProvider(service = Processor.class)
 public class XMLProcessor implements Processor {
 
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
   private static final Logger LOG = Logger.getLogger(XMLProcessor.class);
+
+  @Override
+  public String getExtension() {
+    return "*";
+  }
+
+  @Override
+  public FolderType getFolder() {
+    return FolderType.XML;
+  }
 
   @Override
   public List<AbstractNode> process(final InputStream f) {

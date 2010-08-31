@@ -214,18 +214,28 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
     for (final Attribute attribute : attributes) {
-      final Map<String, Integer> domain = DomainUtils.getDomain(attribute);
+      ret.append(attributeToString(attribute));
+    }
+    return ret.toString();
+  }
 
-      // type declaration of this attribute
-      ret.append("\n\t").append(attribute.getName()).append(DomainUtils.getAttributeType(domain,
-              maxEnumSize));
+  private String attributeToString(final Attribute a) {
+    if (a.getName().startsWith("xmlns:")) {
+      return "\n\t" + a.getName() + " CDATA #IMPLIED";
+    }
+    final Map<String, Integer> domain = DomainUtils.getDomain(a);
 
-      // requiredness/default value
-      if (attribute.getMetadata().containsKey("required")) {
-        ret.append("#REQUIRED");
-      } else {
-        ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
-      }
+    final StringBuilder ret = new StringBuilder();
+    // type declaration of this attribute
+    ret.append("\n\t")
+        .append(a.getName())
+        .append(DomainUtils.getAttributeType(domain, maxEnumSize));
+
+    // requiredness/default value
+    if (a.getMetadata().containsKey("required")) {
+      ret.append("#REQUIRED");
+    } else {
+      ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
     }
     return ret.toString();
   }

@@ -153,18 +153,19 @@ public class Runner {
 
   public void finishedSchemaGenerator(final String schema, final String extension) {
     LOG.info("Runner: writing schema.");
+    final String commentedSchema = getCommentedSchema(schema);
 
     final boolean openSchema = NbPreferences.forModule(RunnerPanel.class).getBoolean(
             RunnerPanel.SCHEMA_OPEN, true);
 
     RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class).addOutput(
-            "generated-schema", getCommentedSchema(schema), extension, openSchema);
+            "generated-schema", commentedSchema, extension, openSchema);
 
     final boolean showOutput = NbPreferences.forModule(RunnerPanel.class).getBoolean(
             RunnerPanel.OUTPUT_SHOW, false);
 
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", true);
-    ioResult.getOut().println(schema);
+    ioResult.getOut().println(commentedSchema);
 
     if (showOutput) {
       IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));

@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
-import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderType;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;

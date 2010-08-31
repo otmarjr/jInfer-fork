@@ -14,8 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
 /**
  * Folder type for input folder.
@@ -26,14 +25,14 @@ public enum FolderType {
   XML("XML"),
   SCHEMA("schema"),
   QUERY("query");
-
+  
   private final String name;
-  FolderType(final String name) {
+
+  private FolderType(final String name) {
     this.name = name;
   }
 
   public String getName() {
     return name;
   }
-
 }

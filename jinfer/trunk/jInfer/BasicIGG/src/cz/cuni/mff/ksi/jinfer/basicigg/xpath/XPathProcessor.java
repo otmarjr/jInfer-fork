@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
@@ -32,15 +33,27 @@ import org.apache.log4j.Logger;
 import org.jaxen.saxpath.SAXPathException;
 import org.jaxen.saxpath.XPathReader;
 import org.jaxen.saxpath.helpers.XPathReaderFactory;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Contains logic for IG retrieval from XPath 1.0 queries.
  *
  * @author vektor
  */
+@ServiceProvider(service = Processor.class)
 public class XPathProcessor implements Processor {
 
   private static final Logger LOG = Logger.getLogger(XPathProcessor.class);
+
+  @Override
+  public String getExtension() {
+    return "*";
+  }
+
+  @Override
+  public FolderType getFolder() {
+    return FolderType.QUERY;
+  }
 
   /**
    * Parses the file containing a list of XPath queries and returns the

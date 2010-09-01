@@ -16,9 +16,9 @@
    width="525.00116"
    height="142.64801"
    sodipodi:docname="logo.svg"
-   inkscape:export-filename="/home/anti/skola/jinfer/graphics/logo-shade-261x71.png"
-   inkscape:export-xdpi="44.795578"
-   inkscape:export-ydpi="44.795578"
+   inkscape:export-filename="/home/anti/skola/jinfer/graphics/logo/black/logo-shade-261x71.png"
+   inkscape:export-xdpi="44.740002"
+   inkscape:export-ydpi="44.740002"
    style="display:inline">
   <metadata
      id="metadata8">
@@ -34,6 +34,13 @@
   </metadata>
   <defs
      id="defs6">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 71.324005 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="525.00116 : 71.324005 : 1"
+       inkscape:persp3d-origin="262.50058 : 47.549337 : 1"
+       id="perspective549" />
     <linearGradient
        id="linearGradient4135">
       <stop
@@ -2600,11 +2607,31 @@
        y1="78.654846"
        x2="211.5107"
        y2="78.654846" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4135"
+       id="linearGradient3359"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.12983599,0,0,2.0120966,33.881063,-420.76163)"
+       x1="-41.805092"
+       y1="78.654846"
+       x2="211.5107"
+       y2="78.654846" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4135"
+       id="linearGradient3376"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.12983599,0,0,2.0120966,33.881063,-420.76163)"
+       x1="-41.805092"
+       y1="78.654846"
+       x2="211.5107"
+       y2="78.654846" />
     <mask
        maskUnits="userSpaceOnUse"
-       id="mask4188">
+       id="mask3366">
       <g
-         id="g4190"
+         id="g3368"
          transform="translate(-341.37057,-129.85343)">
         <rect
            transform="matrix(0,1,-1,0,0,0)"
@@ -2612,21 +2639,21 @@
            x="28.64801"
            height="525.00098"
            width="32.5"
-           id="rect4192"
-           style="fill:url(#linearGradient4198);fill-opacity:1;stroke:none" />
+           id="rect3370"
+           style="fill:url(#linearGradient3376);fill-opacity:1;stroke:none" />
         <rect
-           y="61.14801"
+           y="60.14801"
            x="0"
-           height="81.5"
+           height="82.5"
            width="525.00098"
-           id="rect4194"
+           id="rect3372"
            style="fill:#ffffff;fill-opacity:1;stroke:none" />
         <rect
-           y="1.0253906e-05"
+           y="8.9426039e-06"
            x="0"
-           height="28.648001"
+           height="29.648001"
            width="525.00098"
-           id="rect4196"
+           id="rect3374"
            style="fill:#ffffff;fill-opacity:1;stroke:none" />
       </g>
     </mask>
@@ -2645,13 +2672,15 @@
      id="namedview4"
      showgrid="true"
      inkscape:snap-global="false"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="252.14968"
-     inkscape:cy="101.65156"
+     inkscape:zoom="2.0000001"
+     inkscape:cx="252.92314"
+     inkscape:cy="79.34573"
      inkscape:window-x="0"
      inkscape:window-y="33"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
        id="grid2897"
@@ -2698,7 +2727,7 @@
      transform="translate(341.37057,129.85343)"
      style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-linecap:butt;stroke-opacity:1;font-family:Bitstream Vera Sans"
      id="flowRoot3707"
-     mask="url(#mask4188)">
+     mask="url(#mask3366)">
     <path
        d="m -236.08818,-97.884613 25.16497,0 -15.02908,76.892911 c -2.14371,10.951405 -6.15146,19.060103 -12.02325,24.32612 -5.82524,5.312574 -13.70093,7.968873 -23.6271,7.968903 l -12.44267,0 3.14562,-16.427122 4.40387,0 c 4.70678,-1.5e-5 8.1553,-1.071855 10.34559,-3.215522 2.14367,-2.097089 3.82134,-6.314545 5.03299,-12.652379 l 15.02906,-76.892911 m 5.87183,-30.477557 25.16496,0 -3.98445,20.41158 -25.23486,0 4.05435,-20.41158"
        style="font-size:144px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#000000;stroke-width:2.98251295;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold Oblique"
@@ -2759,6 +2788,8 @@
       </g>
     </g>
   </g>
+  <g
+     id="g4190" />
   <g
      inkscape:groupmode="layer"
      id="layer1"

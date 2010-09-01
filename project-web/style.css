@@ -3,7 +3,7 @@ body {
 	padding: 0;
 	border-width: 0;
 	text-align:left;
-	font-family: OpenSymbol, DejaVu Sans, Verdana, sans-serif;
+	font-family: DejaVu Sans, Verdana, sans-serif;
 	background-color: white;
 	color:black;
 }
@@ -85,6 +85,25 @@ div#footer-content a:hover {
 	width: 36em;
 }
 
+.outer-right-box-container {
+	position: relative;
+	width: 0;
+	height: 0;
+}
+
+.outer-right-box {
+	margin: 0 0 0 0.5em;
+	background-image: url(images/box-downleft.png);
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	width: 17.5em;
+	height: 10em;
+	position: absolute;
+	left: 36em;
+	top: 0;
+}
+	
+
 .box {
 	margin: 0.5em;
 	background-image: url(images/box-downleft.png);
@@ -124,9 +143,10 @@ div#footer-content a:hover {
 }
 
 .box-head {
-	font-size: 2em;
+	font-size: 1.8em;
 	height: 2em;
 	text-align: center;
+	font-variant: small-caps;
 }
 
 .box-content {
@@ -189,8 +209,33 @@ table.layout, table.layout td, table.layout tr {
 	border-spacing: 0;
 }
 
-h2, h3, h4, h5, h6 {
-	font-style: oblique;
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+}
+
+h1 {
+	font-size: 1.5em;
+	border-bottom: 3px solid #3691aa;
+}
+
+h2 {
+	font-size: 1.3em;
+}
+
+h3 {
+	font-size: 1.1em;
+}
+
+h4 {
+	font-size: 0.9em;
+}
+
+h5 {
+	font-size: 0.7em;
+}
+
+h6 {
+	font-size: 0.8em;
 }
 
 a {

@@ -8,84 +8,65 @@ body {
 	color:black;
 }
 
-h2, h3, h4, h5, h6 {
-	font-style: oblique;
-}
-
-a {
-	color: white;
-	text-decoration: underline;
-}
-
-a:hover {
-	color: #d0d0ff;
-	text-decoration: underline;
-}
-	
-img, a img {
-	border: 0px;
-}
-	
-p {
-	line-height: 1.7em;
-	text-align: justify;
-}
-
-/* Header Area */
 #header{
 	background-color: #c64847;
 	background-image: url(images/background3.png);
 	background-repeat: repeat-x;
-	background-position: 0px 50px;
-	height: 182px;
+	background-position: 0px 33px;
+	height: 128px;
 }
 
 #header-content {
 	margin: 0 auto;
-	width: 50em;
-	height: 142px;
+	width: 36em;
+	height: 128px;
 }
 
 #header-content img {
-	background-image: url(images/jinfer-logo-mask.png);
-	width: 585px;
-	height: 142px;
-	margin-top: 20px;
-	margin-left: -97px;
+	/*background-image: url(images/jinfer-logo-mask.png);*/
+	width: 437px;
+	height: 128px;
+	margin-left: -67px;
 }
 	
 div#menu
 {
- 	margin-top: -10px;
-	background-color: #3792aa;
+	color: white;
+ 	background-color: #3691aa;
 }
 
 div#menu-content {
 	margin: 0 auto;
-	width: 50em;
+	width: 36em;
 	text-align: right;
 	line-height: 2em;
 }
 
 div#menu-content a {
-	font-size: larger;
 	color: white;
 	text-decoration: none;
 }
 
+div#menu-content span, div#footer-content span {
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+	border-right: 1px dotted white;
+}
+
 div#menu-content a:hover {
-	font-size: larger;
-	color: #d0d0ff;
+	color: #d8d8d8;
 }
 
 div#footer
 {
-	background-color: #3792aa;
+	color: white;
+	background-color: #3691aa;
 }
 
 div#footer-content {
 	margin: 0 auto;
-	width: 50em;
+	width: 36em;
 	text-align: right;
 	line-height: 2em;
 }
@@ -96,41 +77,103 @@ div#footer-content a {
 }
 
 div#footer-content a:hover {
-	color: #d0d0ff;
+	color: #d8d8d8;
 }
 
 #content {
 	margin: 1em auto 1em auto;
-	width: 50em;
+	width: 36em;
 }
 
 .box {
-	margin: 1em;
+	margin: 0.5em;
 	background-image: url(images/box-downleft.png);
 	background-position: 0 100%;
 	background-repeat: no-repeat;
-	width: 24em;
-	height: 15em;
+	width: 17.5em;
+	height: 10em;
 	float: left;
 }
 .boxx {
 	border-width: 0;
-	margin: 0.5em 1em 0.5em 1em;
+	margin: 0.25em;
 }
 .boxxx {
-	width: 23em;
-	height: 14em;
+	width: 17em;
+	height: 9.5em;
 	color: white;
+}
+
+.boxxx a {
+	color: white;
+	text-decoration: underline;
+}
+
+.boxxx a:hover {
+	color: #d8d8d8;
+	text-decoration: underline;
+}
+
+.box-table {
+	height: 100%; width: 100%;
+}
+
+.box-icon img {
+	width: 64px;
+	height: 64px;
 }
 
 .box-head {
 	font-size: 2em;
-	line-height: 1.5em;
+	height: 2em;
 	text-align: center;
 }
 
 .box-content {
-	text-align: center;
+	vertical-align: top;
+	font-size: 0.90em;
+}
+
+.box-content ul {
+	margin: 0;
+	padding-left: 2em;
+}
+
+.orange {
+	color: #f0ad00;
+}
+.bg-orange {
+	background-color: #f0ad00;
+}
+.blue {
+	color: #60b5cc;
+}
+.bg-blue {
+	background-color: #60b5cc;
+}
+.red {
+	color: #e66c7d;
+}
+.bg-red {
+	background-color: #e66c7d;
+}
+.green {
+	color: #6bb76d;
+}
+.bg-green {
+	background-color: #6bb76d;
+}
+.sand {
+	color: #e88651;
+}
+.bg-sand {
+	background-color: #e88651;
+}
+.bordo {
+	color: #c64847;
+}
+.bg-bordo {
+	background-color: #c64847;
 }
 
 .center {
@@ -144,6 +187,29 @@ table.layout, table.layout td, table.layout tr {
 	border-color: black;
 	border-style: solid;
 	border-spacing: 0;
+}
+
+h2, h3, h4, h5, h6 {
+	font-style: oblique;
+}
+
+a {
+	color: #7f7f7f;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #3f3f3f;
+	text-decoration: underline;
+}
+	
+img, a img {
+	border: 0px;
+}
+	
+p {
+	line-height: 1.7em;
+	text-align: justify;
 }
 
 .clear {

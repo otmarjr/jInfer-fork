@@ -23,7 +23,6 @@ body {
 }
 
 #header-content img {
-	/*background-image: url(images/jinfer-logo-mask.png);*/
 	width: 437px;
 	height: 128px;
 	margin-left: -67px;
@@ -85,52 +84,47 @@ div#footer-content a:hover {
 	width: 36em;
 }
 
-.outer-right-box-container {
+.right-box-outer {
 	position: relative;
 	width: 0;
 	height: 0;
 }
 
-.outer-right-box {
+.right-box {
 	margin: 0 0 0 0.5em;
-	background-image: url(images/box-downleft.png);
-	background-position: 0 100%;
-	background-repeat: no-repeat;
-	width: 17.5em;
-	height: 10em;
 	position: absolute;
 	left: 36em;
 	top: 0;
 }
-	
+
+.index-box-left {
+	margin: 0.5em 0.5em 0.5em 0;
+	float: left;
+	width: 17.5em;
+	height: 10em;
+}
+
+.index-box-right {
+	margin: 0.5em 0 0.5em 0.5em;
+	float: left;
+	width: 17.5em;
+	height: 10em;
+}
 
 .box {
-	margin: 0.5em;
 	background-image: url(images/box-downleft.png);
 	background-position: 0 100%;
 	background-repeat: no-repeat;
-	width: 17.5em;
-	height: 10em;
-	float: left;
 }
-.boxx {
+
+.box-inner {
 	border-width: 0;
-	margin: 0.25em;
-}
-.boxxx {
-	width: 17em;
-	height: 9.5em;
-	color: white;
+	margin: 0.5em;
 }
 
-.boxxx a {
-	color: white;
-	text-decoration: underline;
-}
-
-.boxxx a:hover {
-	color: #d8d8d8;
-	text-decoration: underline;
+.index-box-inner {
+	width: 16.5em;
+	height: 9em;
 }
 
 .box-table {
@@ -159,45 +153,45 @@ div#footer-content a:hover {
 	padding-left: 2em;
 }
 
-.orange {
-	color: #f0ad00;
+.bg-orange a, .bg-blue a, .bg-green a, .bg-red a
+{
+	color: white;
+	text-decoration: underline;
 }
+.bg-orange a:hover, .bg-blue a:hover, .bg-green a:hover, .bg-red a:hover
+{
+	color: #d8d8d8;
+	text-decoration: underline;
+}
+
 .bg-orange {
+	color: white;
 	background-color: #f0ad00;
 }
-.blue {
-	color: #60b5cc;
-}
 .bg-blue {
+	color: white;
 	background-color: #60b5cc;
 }
-.red {
-	color: #e66c7d;
-}
 .bg-red {
+	color: white;
 	background-color: #e66c7d;
 }
-.green {
-	color: #6bb76d;
-}
 .bg-green {
+	color: white;
 	background-color: #6bb76d;
-}
-.sand {
-	color: #e88651;
-}
-.bg-sand {
-	background-color: #e88651;
-}
-.bordo {
-	color: #c64847;
-}
-.bg-bordo {
-	background-color: #c64847;
 }
 
 .center {
 	text-align: center;
+}
+
+.code {
+	font-family: monospace;
+	font-weight: normal;
+	margin: auto 2em;
+	padding: 1em;
+	border: 1px solid grey;
+	background-color: lightgrey;
 }
 
 table.layout, table.layout td, table.layout tr {

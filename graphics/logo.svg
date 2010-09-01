@@ -13,12 +13,13 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   width="526.07941"
-   height="141.48438"
+   width="525.00116"
+   height="142.64801"
    sodipodi:docname="logo.svg"
-   inkscape:export-filename="/home/anti/skola/jinfer/graphics/logo-noshade.png"
-   inkscape:export-xdpi="89.645622"
-   inkscape:export-ydpi="89.645622">
+   inkscape:export-filename="/home/anti/skola/jinfer/graphics/logo-shade-261x71.png"
+   inkscape:export-xdpi="44.795578"
+   inkscape:export-ydpi="44.795578"
+   style="display:inline">
   <metadata
      id="metadata8">
     <rdf:RDF>
@@ -33,6 +34,21 @@
   </metadata>
   <defs
      id="defs6">
+    <linearGradient
+       id="linearGradient4135">
+      <stop
+         id="stop4137"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.19607843;"
+         offset="0.33000001"
+         id="stop4139" />
+      <stop
+         id="stop4141"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+    </linearGradient>
     <pattern
        inkscape:collect="always"
        xlink:href="#pattern3716"
@@ -1913,13 +1929,6 @@
        xlink:href="#pattern17232"
        id="pattern2968"
        patternTransform="matrix(0.41894376,-0.41894376,0.41894376,0.41894376,-4.5,1.5)" />
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 70.742188 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="526.07941 : 70.742188 : 1"
-       inkscape:persp3d-origin="263.0397 : 47.161458 : 1"
-       id="perspective162" />
     <pattern
        inkscape:collect="always"
        xlink:href="#pattern17230"
@@ -2571,6 +2580,56 @@
          x="0"
          style="fill:black;stroke:none" />
     </pattern>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4135"
+       id="linearGradient4161"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.12983599,0,0,2.0120966,33.881063,-420.76163)"
+       x1="-41.805092"
+       y1="78.654846"
+       x2="211.5107"
+       y2="78.654846" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4135"
+       id="linearGradient4198"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.12983599,0,0,2.0120966,33.881063,-420.76163)"
+       x1="-41.805092"
+       y1="78.654846"
+       x2="211.5107"
+       y2="78.654846" />
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask4188">
+      <g
+         id="g4190"
+         transform="translate(-341.37057,-129.85343)">
+        <rect
+           transform="matrix(0,1,-1,0,0,0)"
+           y="-525.00098"
+           x="28.64801"
+           height="525.00098"
+           width="32.5"
+           id="rect4192"
+           style="fill:url(#linearGradient4198);fill-opacity:1;stroke:none" />
+        <rect
+           y="61.14801"
+           x="0"
+           height="81.5"
+           width="525.00098"
+           id="rect4194"
+           style="fill:#ffffff;fill-opacity:1;stroke:none" />
+        <rect
+           y="1.0253906e-05"
+           x="0"
+           height="28.648001"
+           width="525.00098"
+           id="rect4196"
+           style="fill:#ffffff;fill-opacity:1;stroke:none" />
+      </g>
+    </mask>
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -2586,13 +2645,13 @@
      id="namedview4"
      showgrid="true"
      inkscape:snap-global="false"
-     inkscape:zoom="2"
-     inkscape:cx="230.57583"
-     inkscape:cy="63.202753"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="252.14968"
+     inkscape:cy="101.65156"
      inkscape:window-x="0"
      inkscape:window-y="33"
      inkscape:window-maximized="1"
-     inkscape:current-layer="flowRoot3707">
+     inkscape:current-layer="svg2">
     <inkscape:grid
        type="xygrid"
        id="grid2897"
@@ -2605,7 +2664,7 @@
      xml:space="preserve"
      id="flowRoot3681"
      style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-     transform="translate(374.10511,183.91699)"><flowRegion
+     transform="translate(343.56602,204.49881)"><flowRegion
        id="flowRegion3683"><rect
          id="rect3685"
          width="238.86523"
@@ -2616,7 +2675,7 @@
      xml:space="preserve"
      id="flowRoot3689"
      style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
-     transform="translate(374.10511,183.91699)"><flowRegion
+     transform="translate(343.56602,204.49881)"><flowRegion
        id="flowRegion3691"><rect
          id="rect3693"
          width="179.14893"
@@ -2628,7 +2687,7 @@
      xml:space="preserve"
      id="flowRoot3697"
      style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-     transform="translate(374.10511,183.91699)"><flowRegion
+     transform="translate(343.56602,204.49881)"><flowRegion
        id="flowRegion3699"><rect
          id="rect3701"
          width="224.81433"
@@ -2636,12 +2695,13 @@
          x="-262.57611"
          y="-29.259901" /></flowRegion><flowPara
        id="flowPara3703" /></flowRoot>  <g
-     transform="translate(371.90966,109.27161)"
+     transform="translate(341.37057,129.85343)"
      style="font-size:40px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-linecap:butt;stroke-opacity:1;font-family:Bitstream Vera Sans"
-     id="flowRoot3707">
+     id="flowRoot3707"
+     mask="url(#mask4188)">
     <path
-       d="m -267.00998,-78.115361 25.31251,0 -15.11719,77.34375 c -2.15628,11.015616 -6.18753,19.171857 -12.09375,24.46875 -5.85939,5.343722 -13.78126,8.015596 -23.76563,8.015626 l -12.51562,0 3.16406,-16.523438 4.42969,0 c 4.73438,-1.5e-5 8.20312,-1.078139 10.40625,-3.234375 2.15624,-2.109385 3.84374,-6.351568 5.0625,-12.726563 l 15.11718,-77.34375 m 5.90625,-30.656249 25.31251,0 -4.00781,20.531249 -25.38282,0 4.07812,-20.531249"
-       style="font-size:144px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold Oblique;fill-opacity:1;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m -236.08818,-97.884613 25.16497,0 -15.02908,76.892911 c -2.14371,10.951405 -6.15146,19.060103 -12.02325,24.32612 -5.82524,5.312574 -13.70093,7.968873 -23.6271,7.968903 l -12.44267,0 3.14562,-16.427122 4.40387,0 c 4.70678,-1.5e-5 8.1553,-1.071855 10.34559,-3.215522 2.14367,-2.097089 3.82134,-6.314545 5.03299,-12.652379 l 15.02906,-76.892911 m 5.87183,-30.477557 25.16496,0 -3.98445,20.41158 -25.23486,0 4.05435,-20.41158"
+       style="font-size:144px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#000000;stroke-width:2.98251295;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans Bold Oblique"
        id="path5285"
        inkscape:export-filename="/home/anti/skola/jinfer/graphics/logo-anti4.png"
        inkscape:export-xdpi="90"
@@ -2649,7 +2709,7 @@
     <g
        id="g6825"
        style="fill:url(#pattern3718);fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       transform="translate(-143.78,0)"
+       transform="matrix(0.99417097,0,0,0.99417097,-113.57651,-20.224589)"
        inkscape:export-filename="/home/anti/skola/jinfer/graphics/logo-anti4.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90">
@@ -2699,4 +2759,9 @@
       </g>
     </g>
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer"
+     style="display:inline" />
 </svg>

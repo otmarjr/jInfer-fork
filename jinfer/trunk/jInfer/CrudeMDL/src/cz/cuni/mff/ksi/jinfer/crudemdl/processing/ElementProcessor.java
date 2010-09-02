@@ -14,10 +14,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import java.util.List;
 
 /**
  * Interface representing one box in chain. Process one element at a time, given
@@ -34,7 +37,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
  * 
  * @author anti
  */
-public interface ElementProcessor {
-
-  AbstractNode processElement(final Cluster cluster) throws InterruptedException;
+public interface ElementProcessor<T> {
+  AbstractNode processElement(
+          final Clusterer<T> clusterer,
+          final Cluster<T> cluster
+          ) throws InterruptedException;
 }

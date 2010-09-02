@@ -32,7 +32,7 @@ import java.util.List;
 public class Shortener {
 
   private final List<Element> visited = new ArrayList<Element>();
-
+  
   // TODO vektor Move to a common location
   public Element simplify(final Element treeBase) {
     for (final Element v : visited) {

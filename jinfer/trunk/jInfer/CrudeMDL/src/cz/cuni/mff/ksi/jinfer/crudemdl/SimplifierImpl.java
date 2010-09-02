@@ -18,14 +18,14 @@ package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ElementProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.AutomatonMergingStateProcessor;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.InameClusterer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
-import cz.cuni.mff.ksi.jinfer.base.clustering.Clusterer;
-import cz.cuni.mff.ksi.jinfer.base.clustering.NameClusterer;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,41 +47,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
+//  private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
   @Override
   public String getModuleName() {
     return "CrudeMDL";
-  }
-
-  @Override
-  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
-    verifyInput(initialGrammar);
-
-    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
-
-    // 1. cluster elements according to name
-    final List<Cluster> clusters = getClusterer().cluster(initialGrammar);
-
-    RuleDisplayer.showClustersAsync("Clustered", clusters, true);
-
-    // 2. prepare emtpy final grammar
-    final List<AbstractNode> finalGrammar = new LinkedList<AbstractNode>();
-
-    // 3. process rules
-    final ElementProcessor processor = getProcessor();
-    for (final Cluster cluster : clusters) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      if (!cluster.getRepresentant().isElement()) {
-        continue;
-      }
-      // 4. add to rules
-      finalGrammar.add(processor.processElement(cluster));
-    }
-
-    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
-    callback.finished(finalGrammar);
   }
 
   private void verifyInput(final List<AbstractNode> initialGrammar) throws InterruptedException {
@@ -101,12 +71,42 @@ public class SimplifierImpl implements Simplifier {
     }
   }
 
-  private Clusterer getClusterer() {
-    // TODO anti Add an option "use context?" and return ContextClusterer if "Yes".
-    return new NameClusterer();
+  private Clusterer<AbstractNode> getClusterer() {
+    return new InameClusterer();
   }
 
-  private ElementProcessor getProcessor() {
+  private ElementProcessor<AbstractNode> getProcessor() {
     return new AutomatonMergingStateProcessor();
+  }
+
+
+  @Override
+  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+    this.verifyInput(initialGrammar);
+
+    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
+    // 1. cluster elements according to name
+    final Clusterer<AbstractNode> clusterer= this.getClusterer();
+    clusterer.addAll(initialGrammar);
+    clusterer.cluster();
+
+    // 2. prepare emtpy final grammar
+    final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
+
+    // 3. process rules
+    final ElementProcessor<AbstractNode> processor= this.getProcessor();
+    for (Cluster<AbstractNode> cluster : clusterer.getClusters()) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      if (!cluster.getRepresentant().isElement()) {
+        continue;
+      }
+      // 4. add to rules
+      finalGrammar.add( processor.processElement(clusterer, cluster) );
+    }
+
+    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);
+    callback.finished( finalGrammar );
   }
 }

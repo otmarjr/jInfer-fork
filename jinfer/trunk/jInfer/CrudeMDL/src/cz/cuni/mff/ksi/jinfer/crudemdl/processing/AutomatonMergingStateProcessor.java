@@ -28,6 +28,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -73,9 +74,11 @@ public class AutomatonMergingStateProcessor implements ElementProcessor<Abstract
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
+    LOG.setLevel(Level.DEBUG);
     automaton.simplify( new KHContextMergeConditionTester<AbstractNode>(2, 1) );
     LOG.debug(">>> After 2-context:");
     LOG.debug(automaton);
+    LOG.setLevel(Level.WARN);
 
     // 3.3 convert to regexpautomaton
     final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -78,6 +79,11 @@ public class Automaton<T> {
    * only grows.
    */
   protected int newStateName;
+  /**
+   * TODO anti Comment
+   */
+  protected final Map<State<T>, State<T>> mergedStates;
+
 
   /**
    * Constructor which doesn't create initialState
@@ -86,6 +92,7 @@ public class Automaton<T> {
     this.newStateName= 1;
     this.delta= new TreeMap<State<T>, Set<Step<T>>>();
     this.reverseDelta= new TreeMap<State<T>, Set<Step<T>>>();
+    this.mergedStates= new HashMap<State<T>, State<T>>();
   }
 
   /**
@@ -110,7 +117,7 @@ public class Automaton<T> {
    *
    * @return
    */
-  protected State<T> createNewState() {
+  protected final State<T> createNewState() {
     final State<T> newState= new State<T>(0, this.newStateName, this);
     this.newStateName++;
     this.delta.put(newState, new HashSet<Step<T>>());
@@ -211,7 +218,20 @@ public class Automaton<T> {
     }
   }
 
-  private void mergeStates(final State<T> mainState, final State<T> mergedState) {
+  private State<T> getRealState(final State<T> state) {
+    if (this.delta.containsKey(state)) {
+      return state;
+    } else {
+      /* this is union-find-set with path shortening along the way */
+      final State<T> realState= this.getRealState(this.mergedStates.get(state));
+      this.mergedStates.put(state, realState);
+      return realState;
+    }
+  }
+
+  private void mergeStates(State<T> _mainState, State<T> _mergedState) {
+    State<T> mainState= this.getRealState(_mainState);
+    State<T> mergedState= this.getRealState(_mergedState);
     if (mergedState.equals(mainState)) {
       return;
     }
@@ -240,6 +260,7 @@ public class Automaton<T> {
     this.collapseStepsAfterMerge(mainState);
     LOG.debug("after collapse");
     LOG.debug(this);
+    this.mergedStates.put(mergedState, mainState);
   }
 
   /**
@@ -253,6 +274,7 @@ public class Automaton<T> {
    * @throws InterruptedException
    */
   public void simplify(MergeCondidionTester<T> mergeCondidionTester) throws InterruptedException {
+    LOG.setLevel(Level.DEBUG);
     boolean search= true;
     while (search) {
       if (Thread.interrupted()) {
@@ -275,19 +297,19 @@ public class Automaton<T> {
         }
       }
       if (found) {
-        Map<State<T>, State<T>> mergedOutStates= new HashMap<State<T>, State<T>>();
+//        Map<State<T>, State<T>> mergedOutStates= new HashMap<State<T>, State<T>>();
         for (Pair<State<T>, State<T>> mergePair : mergableStates.get(0)) {
-          if (mergedOutStates.containsKey(mergePair.getFirst())) {
+/*          if (mergedOutStates.containsKey(mergePair.getFirst())) {
             LOG.debug("State " + mergePair.getFirst() +
                     " was merged out previously to " + mergedOutStates.get(mergePair.getFirst()) +
                     "  Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
             this.mergeStates(mergedOutStates.get(mergePair.getFirst()), mergePair.getSecond());
             mergedOutStates.put(mergePair.getSecond(),  mergedOutStates.get(mergePair.getFirst()));
           } else {
-            LOG.debug("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
+*/            LOG.debug("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
             this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
-            mergedOutStates.put(mergePair.getSecond(), mergePair.getFirst());
-          }
+//            mergedOutStates.put(mergePair.getSecond(), mergePair.getFirst());
+//          }
         }
         search= true;
       }

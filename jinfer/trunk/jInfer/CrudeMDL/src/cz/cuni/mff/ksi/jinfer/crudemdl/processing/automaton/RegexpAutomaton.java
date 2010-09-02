@@ -20,12 +20,12 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 /**
@@ -52,7 +52,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     final Map<State<AbstractNode>, Set<Step<AbstractNode>>> anotherDelta= anotherAutomaton.getDelta();
     final Map<State<AbstractNode>, Set<Step<AbstractNode>>> anotherReverseDelta= anotherAutomaton.getReverseDelta();
 
-    final Map<State<AbstractNode>, State<Regexp<AbstractNode>>> stateConversionMap= new TreeMap<State<AbstractNode>, State<Regexp<AbstractNode>>>();
+    final Map<State<AbstractNode>, State<Regexp<AbstractNode>>> stateConversionMap= new HashMap<State<AbstractNode>, State<Regexp<AbstractNode>>>();
     for (State<AbstractNode> anotherState : anotherDelta.keySet()) {
       final State<Regexp<AbstractNode>> newState=new State<Regexp<AbstractNode>>(
                 anotherState.getFinalCount(), anotherState.getName(), this
@@ -179,7 +179,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     }
 
     /* Bucketing according to source of step */
-    final Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> inStepBuckets= new TreeMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
+    final Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> inStepBuckets= new HashMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
     for (Step<Regexp<AbstractNode>> inStep : inSteps) {
       if (!inStepBuckets.containsKey(inStep.getSource())) {
         inStepBuckets.put(inStep.getSource(), new LinkedList<Step<Regexp<AbstractNode>>>());
@@ -224,7 +224,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
     }
 
     /* outSteps */
-    final Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> outStepBuckets= new TreeMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
+    final Map<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>> outStepBuckets= new HashMap<State<Regexp<AbstractNode>>, List<Step<Regexp<AbstractNode>>>>();
     /* bucket according to outstep destination */
     for (Step<Regexp<AbstractNode>> outStep : outSteps) {
       if (!outStepBuckets.containsKey(outStep.getDestination())) {

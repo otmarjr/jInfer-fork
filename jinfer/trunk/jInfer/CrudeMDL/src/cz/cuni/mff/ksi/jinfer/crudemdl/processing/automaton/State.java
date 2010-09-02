@@ -34,7 +34,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
  *
  * @author anti
  */
-public class State<T> implements Comparable<State<T>> {
+public class State<T> {
   /**
    * finalCount - number the times the state was final for some input string.
    */
@@ -132,8 +132,4 @@ public class State<T> implements Comparable<State<T>> {
     return sb.toString();
   }
 
-  @Override
-  public int compareTo(final State<T> o) {
-    return this.name - o.getName();
-  }
 }

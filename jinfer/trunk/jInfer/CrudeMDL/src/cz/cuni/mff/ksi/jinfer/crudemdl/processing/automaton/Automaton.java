@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -90,8 +89,8 @@ public class Automaton<T> {
    */
   public Automaton() {
     this.newStateName= 1;
-    this.delta= new TreeMap<State<T>, Set<Step<T>>>();
-    this.reverseDelta= new TreeMap<State<T>, Set<Step<T>>>();
+    this.delta= new HashMap<State<T>, Set<Step<T>>>();
+    this.reverseDelta= new HashMap<State<T>, Set<Step<T>>>();
     this.mergedStates= new HashMap<State<T>, State<T>>();
   }
 

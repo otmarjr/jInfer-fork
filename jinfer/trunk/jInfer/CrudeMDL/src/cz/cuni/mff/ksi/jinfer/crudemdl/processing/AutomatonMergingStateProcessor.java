@@ -23,9 +23,14 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.Shortener;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.RegexpAutomaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.mergecondition.KHContextMergeConditionTester;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.AutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.GreedyAutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Level;
@@ -74,14 +79,16 @@ public class AutomatonMergingStateProcessor implements ElementProcessor<Abstract
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    LOG.setLevel(Level.DEBUG);
-    automaton.simplify( new KHContextMergeConditionTester<AbstractNode>(2, 1) );
-    LOG.debug(">>> After 2-context:");
-    LOG.debug(automaton);
-    LOG.setLevel(Level.WARN);
+    final AutomatonSimplifier<AbstractNode> automatonSimplifier= new GreedyAutomatonSimplifier<AbstractNode>();
+    final List<MergeCondidionTester<AbstractNode>> l= new ArrayList<MergeCondidionTester<AbstractNode>>();
+    l.add(new KHContextMergeConditionTester<AbstractNode>(2, 1));
+    final Automaton<AbstractNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton,  l);
+//    automaton.simplify( new KHContextMergeConditionTester<AbstractNode>(2, 1) );
+    LOG.debug(">>> After 2,1-context:");
+    LOG.debug(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
-    final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(automaton);
+    final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
     regexpAutomaton.makeRegexpForm();

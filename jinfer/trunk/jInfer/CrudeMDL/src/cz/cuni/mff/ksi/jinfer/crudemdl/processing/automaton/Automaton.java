@@ -17,15 +17,14 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.mergecondition.MergeCondidionTester;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -81,11 +80,11 @@ public class Automaton<T> {
   /**
    * TODO anti Comment
    */
-  private final Map<State<T>, State<T>> mergedStates;
+  protected final Map<State<T>, State<T>> mergedStates;
   /**
    * TODO anti Comment
    */
-  private final Map<State<T>, Set<State<T>>> reverseMergedStates;
+  protected final Map<State<T>, Set<State<T>>> reverseMergedStates;
 
 
   /**
@@ -273,55 +272,22 @@ public class Automaton<T> {
     LOG.debug(this);
   }
 
-  /**
-   * Simplify by merging states. Condition to merge states is tested in provided 
-   * mergedConditionTester.
-   * 
-   * Loops until there are no more states to merge (until each pair of states tested
-   * by mergeCondidionTester is returned empty list of states to merge.
-   *
-   * @param mergeCondidionTester
-   * @throws InterruptedException
-   */
-  public void simplify(MergeCondidionTester<T> mergeCondidionTester) throws InterruptedException {
-    LOG.setLevel(Level.DEBUG);
-    boolean search= true;
-    while (search) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      search= false;
-      List<List<Pair<State<T>, State<T>>>> mergableStates=null;
-      boolean found= false;
-      for (State<T> mainState : this.delta.keySet()) {
-        for (State<T> mergedState : this.delta.keySet()) {
-          mergableStates= mergeCondidionTester.getMergableStates(mainState, mergedState, this );
-          if (!mergableStates.isEmpty()) {
-            LOG.debug("Equivalent states: " + mainState.toString() + " " + mergedState.toString() + "\n");
-            found= true;
-            break;
-          }
-        }
-        if (found) {
-          break; // get out of searching when found already
-        }
-      }
-      if (found) {
-        for (Pair<State<T>, State<T>> mergePair : mergableStates.get(0)) {
-          LOG.debug("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
-          this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
-        }
-        search= true;
-      }
-    }
-  }
-
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("Automaton\n");
-    for (State<T> state: this.delta.keySet()) {
+    Comparator<State<T>> stateComparator= new Comparator<State<T>>() {
+      @Override
+      public int compare(State<T> o1, State<T> o2) {
+        return o1.getName() - o2.getName();
+      }
+    };
+
+    List<State<T>> deltaKeys= new ArrayList<State<T>>();
+    deltaKeys.addAll(this.delta.keySet());
+    Collections.sort(deltaKeys, stateComparator);
+    for (State<T> state: deltaKeys) {
       sb.append(state);
-      for (State<T> mergedState: this.reverseMergedStates.get(state)) {
+      for (State<T> mergedState : this.reverseMergedStates.get(state)) {
         sb.append(" + ");
         sb.append(mergedState);
       }
@@ -330,8 +296,12 @@ public class Automaton<T> {
         sb.append(step);
       }
     }
+
+    List<State<T>> reverseDeltaKeys= new ArrayList<State<T>>();
+    reverseDeltaKeys.addAll(this.reverseDelta.keySet());
+    Collections.sort(reverseDeltaKeys, stateComparator);
     sb.append("reversed:\n");
-    for (State<T> state: this.reverseDelta.keySet()) {
+    for (State<T> state: reverseDeltaKeys) {
       sb.append(state);
       for (State<T> mergedState: this.reverseMergedStates.get(state)) {
         sb.append(" + ");

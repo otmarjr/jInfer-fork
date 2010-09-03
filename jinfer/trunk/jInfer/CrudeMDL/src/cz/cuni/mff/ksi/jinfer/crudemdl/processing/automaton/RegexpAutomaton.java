@@ -83,6 +83,7 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
 
     this.initialState= stateConversionMap.get(anotherAutomaton.getInitialState());
     this.superFinalState= null;
+    // TODO anti mergeStates a reverseMergedStates
   }
 
   private void createSuperFinalState() {

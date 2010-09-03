@@ -81,7 +81,11 @@ public class Automaton<T> {
   /**
    * TODO anti Comment
    */
-  protected final Map<State<T>, State<T>> mergedStates;
+  private final Map<State<T>, State<T>> mergedStates;
+  /**
+   * TODO anti Comment
+   */
+  private final Map<State<T>, Set<State<T>>> reverseMergedStates;
 
 
   /**
@@ -92,6 +96,7 @@ public class Automaton<T> {
     this.delta= new HashMap<State<T>, Set<Step<T>>>();
     this.reverseDelta= new HashMap<State<T>, Set<Step<T>>>();
     this.mergedStates= new HashMap<State<T>, State<T>>();
+    this.reverseMergedStates= new HashMap<State<T>, Set<State<T>>>();
   }
 
   /**
@@ -121,6 +126,7 @@ public class Automaton<T> {
     this.newStateName++;
     this.delta.put(newState, new HashSet<Step<T>>());
     this.reverseDelta.put(newState, new HashSet<Step<T>>());
+    this.reverseMergedStates.put(newState, new HashSet<State<T>>());
     return newState;
   }
 
@@ -224,14 +230,18 @@ public class Automaton<T> {
       /* this is union-find-set with path shortening along the way */
       final State<T> realState= this.getRealState(this.mergedStates.get(state));
       this.mergedStates.put(state, realState);
+      this.reverseMergedStates.get(realState).add(state);
       return realState;
     }
   }
 
-  private void mergeStates(State<T> _mainState, State<T> _mergedState) {
-    State<T> mainState= this.getRealState(_mainState);
-    State<T> mergedState= this.getRealState(_mergedState);
+  public void mergeStates(final State<T> _mainState, final State<T> _mergedState) {
+    final State<T> mainState= this.getRealState(_mainState);
+    final State<T> mergedState= this.getRealState(_mergedState);
+    LOG.debug("mergeStates: Got to merge states: " + _mainState + " + " + _mergedState + "\n");
+    LOG.debug("mergeStates: Real states merging: " +  mainState + " + " +  mergedState + "\n");
     if (mergedState.equals(mainState)) {
+      LOG.debug("mergeStates: States equal, doing nothing\n");
       return;
     }
 
@@ -254,12 +264,13 @@ public class Automaton<T> {
 
     /* finalCount */
     mainState.incFinalCount(mergedState.getFinalCount());
+    this.mergedStates.put(mergedState, mainState);
+    this.reverseMergedStates.get(mainState).add(mergedState);
     LOG.debug("after merge");
     LOG.debug(this);
     this.collapseStepsAfterMerge(mainState);
     LOG.debug("after collapse");
     LOG.debug(this);
-    this.mergedStates.put(mergedState, mainState);
   }
 
   /**
@@ -296,19 +307,9 @@ public class Automaton<T> {
         }
       }
       if (found) {
-//        Map<State<T>, State<T>> mergedOutStates= new HashMap<State<T>, State<T>>();
         for (Pair<State<T>, State<T>> mergePair : mergableStates.get(0)) {
-/*          if (mergedOutStates.containsKey(mergePair.getFirst())) {
-            LOG.debug("State " + mergePair.getFirst() +
-                    " was merged out previously to " + mergedOutStates.get(mergePair.getFirst()) +
-                    "  Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
-            this.mergeStates(mergedOutStates.get(mergePair.getFirst()), mergePair.getSecond());
-            mergedOutStates.put(mergePair.getSecond(),  mergedOutStates.get(mergePair.getFirst()));
-          } else {
-*/            LOG.debug("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
-            this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
-//            mergedOutStates.put(mergePair.getSecond(), mergePair.getFirst());
-//          }
+          LOG.debug("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
+          this.mergeStates(mergePair.getFirst(), mergePair.getSecond());
         }
         search= true;
       }
@@ -320,7 +321,11 @@ public class Automaton<T> {
     final StringBuilder sb = new StringBuilder("Automaton\n");
     for (State<T> state: this.delta.keySet()) {
       sb.append(state);
-      sb.append("outSteps:\n");
+      for (State<T> mergedState: this.reverseMergedStates.get(state)) {
+        sb.append(" + ");
+        sb.append(mergedState);
+      }
+      sb.append(" outSteps:\n");
       for (Step<T> step : this.delta.get(state)) {
         sb.append(step);
       }
@@ -328,7 +333,11 @@ public class Automaton<T> {
     sb.append("reversed:\n");
     for (State<T> state: this.reverseDelta.keySet()) {
       sb.append(state);
-      sb.append("inSteps:\n");
+      for (State<T> mergedState: this.reverseMergedStates.get(state)) {
+        sb.append(" + ");
+        sb.append(mergedState);
+      }
+      sb.append(" inSteps:\n");
       for (Step<T> step : this.reverseDelta.get(state)) {
         sb.append(step);
       }
@@ -362,5 +371,12 @@ public class Automaton<T> {
    */
   protected Integer getNewStateName() {
     return newStateName;
+  }
+
+  /**
+   * @return the mergedStates
+   */
+  public Map<State<T>, State<T>> getMergedStates() {
+    return Collections.unmodifiableMap(mergedStates);
   }
 }

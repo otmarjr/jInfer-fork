@@ -69,7 +69,7 @@ public class Installer extends ModuleInstall {
   public void restored() {
     /* configure log4j */
     final Logger ROOTLOG = Logger.getRootLogger();
-    ROOTLOG.setLevel(Level.INFO);
+    ROOTLOG.setLevel(Level.ALL);
 
     // configure appender to the Output window
     final PatternLayout outputWindowLayout = new PatternLayout("%m%n");

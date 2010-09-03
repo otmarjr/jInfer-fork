@@ -15,8 +15,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.mergecondition;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;

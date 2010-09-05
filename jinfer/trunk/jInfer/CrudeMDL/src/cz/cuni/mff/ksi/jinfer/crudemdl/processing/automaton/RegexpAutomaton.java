@@ -41,49 +41,18 @@ public class RegexpAutomaton extends Automaton<Regexp<AbstractNode>> {
 
   /**
    * Given another automaton, creates this automaton with same structure (states, delta function).
+   * Using AutomatonCloner of course.
    *
    * @param anotherAutomaton
    */
   public RegexpAutomaton(final Automaton<AbstractNode> anotherAutomaton) {
     super(false);
-    this.newStateName= anotherAutomaton.getNewStateName();
 
-    /* other states */
-    final Map<State<AbstractNode>, Set<Step<AbstractNode>>> anotherDelta= anotherAutomaton.getDelta();
-    final Map<State<AbstractNode>, Set<Step<AbstractNode>>> anotherReverseDelta= anotherAutomaton.getReverseDelta();
+    AutomatonCloner<AbstractNode, Regexp<AbstractNode>> cloner= new AutomatonClonerImpl<AbstractNode, Regexp<AbstractNode>>();
 
-    final Map<State<AbstractNode>, State<Regexp<AbstractNode>>> stateConversionMap= new HashMap<State<AbstractNode>, State<Regexp<AbstractNode>>>();
-    for (State<AbstractNode> anotherState : anotherDelta.keySet()) {
-      final State<Regexp<AbstractNode>> newState=new State<Regexp<AbstractNode>>(
-                anotherState.getFinalCount(), anotherState.getName(), this
-              );
-      stateConversionMap.put(anotherState, newState);
-      this.delta.put(newState, new HashSet<Step<Regexp<AbstractNode>>>());
-      this.reverseDelta.put(newState, new HashSet<Step<Regexp<AbstractNode>>>());
-    }
-
-    for (State<AbstractNode> anotherState : anotherDelta.keySet()) {
-      State<Regexp<AbstractNode>> myState= stateConversionMap.get(anotherState);
-      for (Step<AbstractNode> anotherStep : anotherDelta.get(anotherState)) {
-        Regexp<AbstractNode> newSymbol= Regexp.<AbstractNode>getToken(
-                anotherStep.getAcceptSymbol()
-                );
-
-        Step<Regexp<AbstractNode>> newStep= new Step<Regexp<AbstractNode>>(
-                newSymbol,
-                stateConversionMap.get(anotherStep.getSource()),
-                stateConversionMap.get(anotherStep.getDestination()),
-                anotherStep.getUseCount()
-                );
-
-        this.delta.get(myState).add(newStep);
-        this.reverseDelta.get(newStep.getDestination()).add(newStep);
-      }
-    }
-
-    this.initialState= stateConversionMap.get(anotherAutomaton.getInitialState());
+    cloner.convertAutomaton(anotherAutomaton, this, new AutomatonSymbolConverterAbstractNode2Regexp());
+    
     this.superFinalState= null;
-    // TODO anti mergeStates a reverseMergedStates
   }
 
   private void createSuperFinalState() {

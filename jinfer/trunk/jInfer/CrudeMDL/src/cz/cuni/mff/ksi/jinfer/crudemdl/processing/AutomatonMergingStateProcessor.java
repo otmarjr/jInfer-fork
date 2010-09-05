@@ -46,11 +46,11 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class AutomatonMergingStateProcessor implements ElementProcessor<AbstractNode>{
+public class AutomatonMergingStateProcessor implements ClusterProcessor<AbstractNode>{
   private static final Logger LOG = Logger.getLogger(AutomatonMergingStateProcessor.class);
 
   @Override
-  public AbstractNode processElement(final Clusterer<AbstractNode> clusterer, final Cluster<AbstractNode> cluster) throws InterruptedException {
+  public AbstractNode processCluster(final Clusterer<AbstractNode> clusterer, final Cluster<AbstractNode> cluster) throws InterruptedException {
     // 3.1 construct PTA
     final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
 

@@ -86,7 +86,6 @@ public class Automaton<T> {
    */
   protected final Map<State<T>, Set<State<T>>> reverseMergedStates;
 
-
   /**
    * Constructor which doesn't create initialState
    */
@@ -108,6 +107,22 @@ public class Automaton<T> {
     }
   }
 
+  public Automaton(final Automaton<T> anotherAutomaton) {
+    this(false);
+    
+    AutomatonCloner<T, T> cloner= new AutomatonClonerImpl<T, T>();
+
+    cloner.convertAutomaton(anotherAutomaton, this,
+            new
+              AutomatonSymbolConverter<T, T>() {
+                @Override
+                public T convertSymbol(T symbol) {
+                  return symbol;
+                }
+              }
+    );
+  }
+
   /**
    * Creates new state and return it. This is preferred way to extend automaton
    * states. It initializes delta map, and revesre delta map with empty hashsets
@@ -121,7 +136,7 @@ public class Automaton<T> {
    * @return
    */
   protected final State<T> createNewState() {
-    final State<T> newState= new State<T>(0, this.newStateName, this);
+    final State<T> newState= new State<T>(0, this.newStateName);
     this.newStateName++;
     this.delta.put(newState, new HashSet<Step<T>>());
     this.reverseDelta.put(newState, new HashSet<Step<T>>());
@@ -348,5 +363,12 @@ public class Automaton<T> {
    */
   public Map<State<T>, State<T>> getMergedStates() {
     return Collections.unmodifiableMap(mergedStates);
+  }
+
+  /**
+   * @return the reverseMergedStates
+   */
+  public Map<State<T>, Set<State<T>>> getReverseMergedStates() {
+    return Collections.unmodifiableMap(reverseMergedStates);
   }
 }

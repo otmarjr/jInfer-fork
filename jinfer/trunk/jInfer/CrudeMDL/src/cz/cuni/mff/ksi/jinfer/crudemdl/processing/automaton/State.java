@@ -34,7 +34,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
  *
  * @author anti
  */
-public class State<T> implements Comparable<State<T>> {
+public class State<T> {
   /**
    * finalCount - number the times the state was final for some input string.
    */
@@ -43,12 +43,6 @@ public class State<T> implements Comparable<State<T>> {
    * Just unique number as name, to visualize and log automaton correctly.
    */
   private int name;
-  /**
-   * Maybe will be considered not useful. In future not states, but only whole
-   * automatons will be passed thru api. So this would not be necessary.
-   * Don't even know where it is used know.
-   */
-  private Automaton<T> parentAutomaton;
 
   /**
    * Only one constructor, setting all states parameters.
@@ -57,10 +51,9 @@ public class State<T> implements Comparable<State<T>> {
    * @param name
    * @param parentAutomaton
    */
-  public State(final Integer finalCount, final int name, final Automaton<T> parentAutomaton) {
+  public State(final Integer finalCount, final int name) {
     this.finalCount= finalCount;
     this.name= name;
-    this.parentAutomaton= parentAutomaton;
   }
 
   /**
@@ -107,20 +100,6 @@ public class State<T> implements Comparable<State<T>> {
     this.name = name;
   }
 
-  /**
-   * @return the myAutomaton
-   */
-  public Automaton<T> getParentAutomaton() {
-    return parentAutomaton;
-  }
-
-  /**
-   * @param parentAutomaton the myAutomaton to set
-   */
-  public void setParentAutomaton(final Automaton<T> parentAutomaton) {
-    this.parentAutomaton = parentAutomaton;
-  }
-
   @Override
   public String toString() {
   //  return super.toString();
@@ -131,11 +110,4 @@ public class State<T> implements Comparable<State<T>> {
     sb.append("]");
     return sb.toString();
   }
-
-  @Override
-  public int compareTo(State<T> o) {
-    return this.name - o.getName();
-  }
-
-
 }

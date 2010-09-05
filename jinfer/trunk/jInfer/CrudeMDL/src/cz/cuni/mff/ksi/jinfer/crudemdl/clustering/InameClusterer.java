@@ -117,4 +117,9 @@ public class InameClusterer implements Clusterer<AbstractNode> {
   public List<Cluster<AbstractNode>> getClusters() {
     return Collections.unmodifiableList(this.nodeClusters);
   }
+
+  @Override
+  public String getModuleName() {
+    return "InameClusterer";
+  }
 }

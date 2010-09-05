@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
 import java.util.Collection;
 import java.util.List;
 
@@ -51,7 +52,7 @@ import java.util.List;
  *
  * @author anti
  */
-public interface Clusterer<T> {
+public interface Clusterer<T> extends ModuleName {
    /**
    * Add x to some clusterer, enqueue for processing. Don't implement clustering here,
    * has to be in cluster() method to enable thread interruption.

@@ -37,8 +37,8 @@ import java.util.List;
  * 
  * @author anti
  */
-public interface ElementProcessor<T> {
-  AbstractNode processElement(
+public interface ClusterProcessor<T> {
+  AbstractNode processCluster(
           final Clusterer<T> clusterer,
           final Cluster<T> cluster
           ) throws InterruptedException;

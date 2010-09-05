@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ElementProcessor;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.AutomatonMergingStateProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.InameClusterer;
@@ -75,7 +75,7 @@ public class SimplifierImpl implements Simplifier {
     return new InameClusterer();
   }
 
-  private ElementProcessor<AbstractNode> getProcessor() {
+  private ClusterProcessor<AbstractNode> getProcessor() {
     return new AutomatonMergingStateProcessor();
   }
 
@@ -94,7 +94,7 @@ public class SimplifierImpl implements Simplifier {
     final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
     // 3. process rules
-    final ElementProcessor<AbstractNode> processor= this.getProcessor();
+    final ClusterProcessor<AbstractNode> processor= this.getProcessor();
     for (Cluster<AbstractNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -103,7 +103,7 @@ public class SimplifierImpl implements Simplifier {
         continue;
       }
       // 4. add to rules
-      finalGrammar.add( processor.processElement(clusterer, cluster) );
+      finalGrammar.add( processor.processCluster(clusterer, cluster) );
     }
 
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);

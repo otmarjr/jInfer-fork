@@ -1,0 +1,60 @@
+/*
+ *  Copyright (C) 2010 anti
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * TODO anti Comment!
+ *
+ * @author anti
+ */
+public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomatonSimplifier<T> {
+  @Override
+  public Regexp<T> simplify(RegexpAutomaton<T> inputAutomaton) throws InterruptedException {
+    RegexpAutomatonStateRemoval<T> stateRemovalAutomaton= new RegexpAutomatonStateRemoval<T>(inputAutomaton);
+
+    RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer= new RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T>();
+    while (inputAutomaton.getDelta().size() > 2) {
+      State<Regexp<T>> toRemoveState= orderer.getStateToRemove(stateRemovalAutomaton);
+
+      stateRemovalAutomaton.removeState(toRemoveState);
+    }
+    List<Regexp<T>> regexpChildren= new LinkedList<Regexp<T>>();
+    Step<Regexp<T>> loopStep= stateRemovalAutomaton.getLoopSteps(stateRemovalAutomaton.getInitialState()).get(0);
+    if (loopStep != null) {
+      regexpChildren.add(loopStep.getAcceptSymbol());
+      for (Step<Regexp<T>> outStep : stateRemovalAutomaton.getDelta().get(stateRemovalAutomaton.getInitialState())) {
+        regexpChildren.add(outStep.getAcceptSymbol());
+     }
+-      assert (regexpChildren.size() == 2);
+-      this.regexp= Regexp.<AbstractNode>getConcatenation(regexpChildren);
+-    } else {
+-      assert (this.delta.get(this.initialState).size() == 1);
+-      for (Step<Regexp<AbstractNode>> outStep : this.delta.get(this.initialState)) {
+-        this.regexp= outStep.getAcceptSymbol();
+-      }
+-    }
+
+  }
+}

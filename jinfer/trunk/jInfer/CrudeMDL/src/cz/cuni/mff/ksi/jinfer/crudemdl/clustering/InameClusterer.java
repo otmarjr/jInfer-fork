@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Cluster nodes by name - ignoring case.
@@ -36,6 +37,7 @@ import java.util.List;
  *
  * @author anti
  */
+@ServiceProvider(service = Clusterer.class)
 public class InameClusterer implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
   private final List<AbstractNode> items;

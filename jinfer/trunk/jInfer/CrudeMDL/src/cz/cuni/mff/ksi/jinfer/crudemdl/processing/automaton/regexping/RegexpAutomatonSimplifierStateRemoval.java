@@ -17,12 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * TODO anti Comment!
@@ -40,21 +38,13 @@ public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomaton
 
       stateRemovalAutomaton.removeState(toRemoveState);
     }
-    List<Regexp<T>> regexpChildren= new LinkedList<Regexp<T>>();
-    Step<Regexp<T>> loopStep= stateRemovalAutomaton.getLoopSteps(stateRemovalAutomaton.getInitialState()).get(0);
-    if (loopStep != null) {
-      regexpChildren.add(loopStep.getAcceptSymbol());
-      for (Step<Regexp<T>> outStep : stateRemovalAutomaton.getDelta().get(stateRemovalAutomaton.getInitialState())) {
-        regexpChildren.add(outStep.getAcceptSymbol());
-     }
--      assert (regexpChildren.size() == 2);
--      this.regexp= Regexp.<AbstractNode>getConcatenation(regexpChildren);
--    } else {
--      assert (this.delta.get(this.initialState).size() == 1);
--      for (Step<Regexp<AbstractNode>> outStep : this.delta.get(this.initialState)) {
--        this.regexp= outStep.getAcceptSymbol();
--      }
--    }
-
+    Set<Step<Regexp<T>>> regexpSteps= stateRemovalAutomaton.getDelta().get(
+            stateRemovalAutomaton.getSuperInitialState()
+            );
+    assert regexpSteps.size() == 1;
+    for (Step<Regexp<T>> step : regexpSteps) {
+      return step.getAcceptSymbol();
+    }
+    return null; // non-reachable statement TODO anti wrong set one member handling
   }
 }

@@ -17,10 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
-import java.util.List;
 
 /**
  * Interface representing one box in chain. Process one element at a time, given
@@ -37,7 +37,7 @@ import java.util.List;
  * 
  * @author anti
  */
-public interface ClusterProcessor<T> {
+public interface ClusterProcessor<T> extends ModuleName {
   AbstractNode processCluster(
           final Clusterer<T> clusterer,
           final Cluster<T> cluster

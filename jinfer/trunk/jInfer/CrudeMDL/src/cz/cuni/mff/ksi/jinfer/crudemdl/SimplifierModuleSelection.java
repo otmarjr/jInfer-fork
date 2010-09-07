@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +30,7 @@ import org.openide.util.Lookup;
  * Class providing methods for lookup modules important for inference.
  * @author anti
  */
-public final class ModuleSelection {
+public final class SimplifierModuleSelection {
 
   private static Comparator<ModuleName> getComparator() {
     return new Comparator<ModuleName>() {
@@ -44,7 +45,7 @@ public final class ModuleSelection {
   }
 
 
-  private ModuleSelection() {
+  private SimplifierModuleSelection() {
   }
 
   /**
@@ -52,12 +53,12 @@ public final class ModuleSelection {
    * @param name
    * @return
    */
-  public static Clusterer<? extends Object> lookupClusterer(final String name) {
-    final List<Clusterer<? extends Object>> clusterers = lookupClusterers();
+  public static Clusterer<?> lookupClusterer(final String name) {
+    final List<Clusterer<?>> clusterers = lookupClusterers();
     
-    Clusterer<? extends Object> result = null;
+    Clusterer<?> result = null;
     
-    for (Clusterer<? extends Object> clusterer : clusterers) {
+    for (Clusterer<?> clusterer : clusterers) {
       if (result == null) {
         result = clusterer;
       }
@@ -76,7 +77,7 @@ public final class ModuleSelection {
    */
   public static List<String> lookupClustererNames() {
     final List<String> list = new ArrayList<String>();
-    for (Clusterer<? extends Object> clusterer : lookupClusterers()) {
+    for (Clusterer<?> clusterer : lookupClusterers()) {
       list.add(clusterer.getModuleName());
     }
     return list;
@@ -85,7 +86,7 @@ public final class ModuleSelection {
   private static List<Clusterer<?>> lookupClusterers() {
     final Lookup lkp = Lookup.getDefault();
     final List<Clusterer<?>> result = new ArrayList<Clusterer<?>>();
-    result.addAll( (Collection<? extends Clusterer<?>>) lkp.lookupAll( cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer.class ));
+    result.addAll( (Collection<Clusterer<?>>) lkp.lookupAll(Clusterer.class));
     Collections.sort(result, getComparator());
     return result;
   }

@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import java.util.Collection;
 import java.util.List;
 

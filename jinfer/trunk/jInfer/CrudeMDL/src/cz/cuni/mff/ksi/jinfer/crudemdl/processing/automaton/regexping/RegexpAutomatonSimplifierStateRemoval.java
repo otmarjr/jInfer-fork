@@ -33,7 +33,7 @@ public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomaton
     RegexpAutomatonStateRemoval<T> stateRemovalAutomaton= new RegexpAutomatonStateRemoval<T>(inputAutomaton);
 
     RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer= new RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T>();
-    while (inputAutomaton.getDelta().size() > 2) {
+    while (stateRemovalAutomaton.getDelta().size() > 2) {
       State<Regexp<T>> toRemoveState= orderer.getStateToRemove(stateRemovalAutomaton);
 
       stateRemovalAutomaton.removeState(toRemoveState);

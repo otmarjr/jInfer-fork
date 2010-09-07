@@ -21,6 +21,8 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
 import java.util.Set;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 /**
  * TODO anti Comment!
@@ -28,6 +30,8 @@ import java.util.Set;
  * @author anti
  */
 public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomatonSimplifier<T> {
+  private static final Logger LOG = Logger.getLogger(RegexpAutomatonSimplifierStateRemoval.class);
+  
   @Override
   public Regexp<T> simplify(RegexpAutomaton<T> inputAutomaton) throws InterruptedException {
     RegexpAutomatonStateRemoval<T> stateRemovalAutomaton= new RegexpAutomatonStateRemoval<T>(inputAutomaton);
@@ -38,13 +42,16 @@ public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomaton
 
       stateRemovalAutomaton.removeState(toRemoveState);
     }
+    stateRemovalAutomaton.finalStep();
     Set<Step<Regexp<T>>> regexpSteps= stateRemovalAutomaton.getDelta().get(
             stateRemovalAutomaton.getSuperInitialState()
             );
-    assert regexpSteps.size() == 1;
-    for (Step<Regexp<T>> step : regexpSteps) {
-      return step.getAcceptSymbol();
+    LOG.setLevel(Level.DEBUG);
+    LOG.debug("After RegexpAutomatonSimplifierStateRemoval simplify:");
+    LOG.debug(stateRemovalAutomaton);
+    if (!(regexpSteps.size() == 1)) {
+      throw  new IllegalStateException("There should be only one step in whole automaton.");
     }
-    return null; // non-reachable statement TODO anti wrong set one member handling
+    return regexpSteps.iterator().next().getAcceptSymbol();
   }
 }

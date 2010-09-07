@@ -272,6 +272,10 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     this.delta.remove(state);
   }
 
+  public void finalStep() {
+    this.collapseStateOutSteps(this.superInitialState);
+  }
+
   /**
    *
    * @return superFinalState

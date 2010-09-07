@@ -26,6 +26,8 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAuto
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomatonSimplifierStateRemoval;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.GreedyAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
@@ -88,14 +90,15 @@ public class AutomatonMergingStateProcessor implements ClusterProcessor<Abstract
     LOG.debug(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
-    final RegexpAutomaton regexpAutomaton= new RegexpAutomaton(simplifiedAutomaton);
+    final RegexpAutomaton<AbstractNode> regexpAutomaton= new RegexpAutomaton<AbstractNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
-    regexpAutomaton.makeRegexpForm();
+    final RegexpAutomatonSimplifier<AbstractNode> regexpAutomatonSimplifier= new RegexpAutomatonSimplifierStateRemoval<AbstractNode>();
+    final Regexp<AbstractNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
     LOG.debug(">>> After regexp automaton conversion:");
     LOG.debug(regexpAutomaton);
     LOG.debug(">>> And the regexp is:");
-    LOG.debug(regexpAutomaton.getRegexp());
+    LOG.debug(regexp);
     LOG.debug("--- End");
     
     // 3.4 return element with regexp
@@ -103,7 +106,7 @@ public class AutomatonMergingStateProcessor implements ClusterProcessor<Abstract
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
-          regexpAutomaton.getRegexp()
+          regexp
            ));
   }
 }

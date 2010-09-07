@@ -18,9 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +33,7 @@ import java.util.Map;
  */
 public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
   private State<Regexp<T>> superFinalState;
+  private State<Regexp<T>> superInitialState;
 
   /**
    * Given RegexpAutomaton, creates state removal automaton with superfinal state.
@@ -43,6 +42,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
    */
   public RegexpAutomatonStateRemoval(RegexpAutomaton<T> anotherAutomaton) {
     super(anotherAutomaton);
+    this.createSuperInitialState();
     this.createSuperFinalState();
   }
 
@@ -52,6 +52,15 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
    */
   public RegexpAutomatonStateRemoval(RegexpAutomatonStateRemoval<T> anotherAutomaton) {
     super(anotherAutomaton);
+  }
+
+  private void createSuperInitialState() {
+    this.superInitialState= this.createNewState();
+
+    final Step<Regexp<T>> newStep= new Step<Regexp<T>>(
+            Regexp.<T>getConcatenation(), this.superInitialState, this.initialState, 1);
+    this.delta.get(this.superInitialState).add(newStep);
+    this.reverseDelta.get(this.initialState).add(newStep);
   }
 
   private void createSuperFinalState() {
@@ -206,9 +215,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
   private Step<Regexp<T>> collapseStateParallelSteps(final State<Regexp<T>> state) {
     final Step<Regexp<T>> newLoopStep= this.collapseStateLoops(state);
 
-    if (!state.equals(this.initialState)) {
-      this.collapseStateInSteps(state);
-    }
+    this.collapseStateInSteps(state);
     this.collapseStateOutSteps(state);
     return newLoopStep;
   }
@@ -271,6 +278,14 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
    */
   public State<Regexp<T>> getSuperFinalState() {
     return superFinalState;
+  }
+
+  /**
+   *
+   * @return superInitialState
+   */
+  public State<Regexp<T>> getSuperInitialState() {
+    return superInitialState;
   }
 
   /**

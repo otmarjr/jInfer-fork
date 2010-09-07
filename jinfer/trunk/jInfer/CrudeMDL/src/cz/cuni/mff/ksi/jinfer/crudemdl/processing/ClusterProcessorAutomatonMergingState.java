@@ -48,8 +48,13 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class AutomatonMergingStateProcessor implements ClusterProcessor<AbstractNode>{
-  private static final Logger LOG = Logger.getLogger(AutomatonMergingStateProcessor.class);
+public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<AbstractNode> {
+  private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
+
+  @Override
+  public String getModuleName() {
+    return "ClusterProcessorAutomatonMergingState";
+  }
 
   @Override
   public AbstractNode processCluster(final Clusterer<AbstractNode> clusterer, final Cluster<AbstractNode> cluster) throws InterruptedException {

@@ -42,6 +42,11 @@ public class InameClusterer implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
   private final List<AbstractNode> items;
 
+  @Override
+  public String getModuleName() {
+    return "InameClusterer";
+  }
+
   public InameClusterer() {
     this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
     this.items= new LinkedList<AbstractNode>();
@@ -118,10 +123,5 @@ public class InameClusterer implements Clusterer<AbstractNode> {
   @Override
   public List<Cluster<AbstractNode>> getClusters() {
     return Collections.unmodifiableList(this.nodeClusters);
-  }
-
-  @Override
-  public String getModuleName() {
-    return "InameClusterer";
   }
 }

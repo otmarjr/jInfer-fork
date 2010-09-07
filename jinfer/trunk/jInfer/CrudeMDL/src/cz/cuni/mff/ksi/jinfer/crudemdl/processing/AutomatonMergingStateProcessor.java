@@ -95,8 +95,6 @@ public class AutomatonMergingStateProcessor implements ClusterProcessor<Abstract
     LOG.debug(regexpAutomaton);
     final RegexpAutomatonSimplifier<AbstractNode> regexpAutomatonSimplifier= new RegexpAutomatonSimplifierStateRemoval<AbstractNode>();
     final Regexp<AbstractNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
-    LOG.debug(">>> After regexp automaton conversion:");
-    LOG.debug(regexpAutomaton);
     LOG.debug(">>> And the regexp is:");
     LOG.debug(regexp);
     LOG.debug("--- End");
@@ -106,7 +104,6 @@ public class AutomatonMergingStateProcessor implements ClusterProcessor<Abstract
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
-          regexp
-           ));
+          regexp           ));
   }
 }

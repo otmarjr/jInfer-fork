@@ -54,8 +54,8 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T> implements 
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      if (state.equals(automaton.getInitialState())||state.equals(automaton.getSuperFinalState())) {
-        continue;//remove except initial state and superfinal state
+      if (state.equals(automaton.getSuperInitialState())||state.equals(automaton.getSuperFinalState())) {
+        continue;//remove except superinitial state and superfinal state
       }
       final int stateWeight= this.getStateWeight(automaton, state);
       if (stateWeight < minWeight) {

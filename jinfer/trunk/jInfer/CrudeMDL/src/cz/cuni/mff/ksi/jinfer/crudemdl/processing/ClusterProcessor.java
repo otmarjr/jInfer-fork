@@ -17,8 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 
@@ -37,8 +35,8 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
  * 
  * @author anti
  */
-public interface ClusterProcessor<T> extends ModuleName {
-  AbstractNode processCluster(
+public interface ClusterProcessor<T> {
+  T processCluster(
           final Clusterer<T> clusterer,
           final Cluster<T> cluster
           ) throws InterruptedException;

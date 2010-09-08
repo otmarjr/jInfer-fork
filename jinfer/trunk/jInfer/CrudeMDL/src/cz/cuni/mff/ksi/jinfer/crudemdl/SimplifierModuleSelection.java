@@ -16,78 +16,35 @@
  */
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.List;
-import org.openide.util.Lookup;
 
 /**
  * Class providing methods for lookup modules important for inference.
  * @author anti
  */
 public final class SimplifierModuleSelection {
-
-  private static Comparator<ModuleName> getComparator() {
-    return new Comparator<ModuleName>() {
-
-      @Override
-      public int compare(final ModuleName o1, final ModuleName o2) {
-        final String s1 = o1.getModuleName();
-        final String s2 = o2.getModuleName();
-        return s1.compareTo(s2);
-      }
-    };
+  public static Clusterer<AbstractNode> getClusterer(final String name) {
+    Lookuper<ClustererFactory> l= new Lookuper<ClustererFactory>(ClustererFactory.class);
+    ClustererFactory result = l.lookupF(name);
+    return result.create();
   }
 
-
-  private SimplifierModuleSelection() {
-  }
-
-  /**
-   * 
-   * @param name
-   * @return
-   */
-  public static Clusterer<?> lookupClusterer(final String name) {
-    final List<Clusterer<?>> clusterers = lookupClusterers();
-    
-    Clusterer<?> result = null;
-    
-    for (Clusterer<?> clusterer : clusterers) {
-      if (result == null) {
-        result = clusterer;
-      }
-      
-      if (clusterer.getModuleName().equals(name)) {
-        return clusterer;
-      }
-    }
-
-    return result;
-  }
-
-  /**
-   * 
-   * @return
-   */
   public static List<String> lookupClustererNames() {
-    final List<String> list = new ArrayList<String>();
-    for (Clusterer<?> clusterer : lookupClusterers()) {
-      list.add(clusterer.getModuleName());
-    }
-    return list;
+    return new Lookuper<ClustererFactory>(ClustererFactory.class).lookupFNames();
   }
- 
-  private static List<Clusterer<?>> lookupClusterers() {
-    final Lookup lkp = Lookup.getDefault();
-    final List<Clusterer<?>> result = new ArrayList<Clusterer<?>>();
-    result.addAll( (Collection<Clusterer<?>>) lkp.lookupAll(Clusterer.class));
-    Collections.sort(result, getComparator());
-    return result;
+
+  public static ClusterProcessor<AbstractNode> getClusterProcessor(final String name) {
+    Lookuper<ClusterProcessorFactory> l= new Lookuper<ClusterProcessorFactory>(ClusterProcessorFactory.class);
+    ClusterProcessorFactory result = l.lookupF(name);
+    return result.create();
+  }
+
+  public static List<String> lookupClusterProcessorNames() {
+    return new Lookuper<ClusterProcessorFactory>(ClusterProcessorFactory.class).lookupFNames();
   }
 }

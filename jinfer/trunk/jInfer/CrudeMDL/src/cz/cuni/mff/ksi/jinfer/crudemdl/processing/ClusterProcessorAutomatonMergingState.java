@@ -52,11 +52,6 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
 
   @Override
-  public String getModuleName() {
-    return "ClusterProcessorAutomatonMergingState";
-  }
-
-  @Override
   public AbstractNode processCluster(final Clusterer<AbstractNode> clusterer, final Cluster<AbstractNode> cluster) throws InterruptedException {
     // 3.1 construct PTA
     final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);

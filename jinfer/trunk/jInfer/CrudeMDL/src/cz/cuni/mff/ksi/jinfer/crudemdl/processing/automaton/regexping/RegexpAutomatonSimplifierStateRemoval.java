@@ -46,7 +46,6 @@ public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomaton
     Set<Step<Regexp<T>>> regexpSteps= stateRemovalAutomaton.getDelta().get(
             stateRemovalAutomaton.getSuperInitialState()
             );
-    LOG.setLevel(Level.DEBUG);
     LOG.debug("After RegexpAutomatonSimplifierStateRemoval simplify:");
     LOG.debug(stateRemovalAutomaton);
     if (!(regexpSteps.size() == 1)) {

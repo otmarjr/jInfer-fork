@@ -25,6 +25,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.Lookuper;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +61,32 @@ public class SimplifierImpl implements Simplifier {
     return MODULE_NAME;
   }
 
+  @Override
+  public String getCommentedSchema() {
+    return getModuleName() + "(" + clustererFactoryLookuper.lookupF().getCommentedSchema() + ", " + clusterProcessorFactoryLookuper.lookupF().getCommentedSchema() + ")";
+  }
+
+  private static Lookuper<ClustererFactory> clustererFactoryLookuper=
+          new Lookuper<ClustererFactory>(ClustererFactory.class, PROPERTIES_CLUSTERER);
+  private static Lookuper<ClusterProcessorFactory> clusterProcessorFactoryLookuper= 
+          new Lookuper<ClusterProcessorFactory>(ClusterProcessorFactory.class, PROPERTIES_CLUSTER_PROCESSOR);
+
+  public static Lookuper<ClustererFactory> getClustererFactoryLookuper() {
+    return clustererFactoryLookuper;
+  }
+
+  public static Lookuper<ClusterProcessorFactory> getClusterProcessorFactoryLookuper() {
+    return clusterProcessorFactoryLookuper;
+  }
+
+  public static Clusterer<AbstractNode> getClusterer() {
+    return clustererFactoryLookuper.lookupF().create();
+  }
+
+  public static ClusterProcessor<AbstractNode> getClusterProcessor() {
+    return clusterProcessorFactoryLookuper.lookupF().create();
+  }
+
   private void verifyInput(final List<AbstractNode> initialGrammar) throws InterruptedException {
     for (AbstractNode node : initialGrammar) {
       if (Thread.interrupted()) {
@@ -75,28 +104,13 @@ public class SimplifierImpl implements Simplifier {
     }
   }
 
-  private Clusterer<AbstractNode> getClusterer() {
-    final Properties projectProperties = RunningProject.getActiveProjectProps();
-
-    projectProperties.setProperty(PROPERTIES_CLUSTERER, "InameClusterer");
-    return SimplifierModuleSelection.getClusterer(projectProperties.getProperty(PROPERTIES_CLUSTERER));
-  }
-
-  private ClusterProcessor<AbstractNode> getClusterProcessor() {
-    final Properties projectProperties = RunningProject.getActiveProjectProps();
-
-    projectProperties.setProperty(PROPERTIES_CLUSTER_PROCESSOR, "ClusterProcessorAutomatonMergingState");
-    return SimplifierModuleSelection.getClusterProcessor(projectProperties.getProperty(PROPERTIES_CLUSTER_PROCESSOR));
-  }
-
-
   @Override
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
-    final Clusterer<AbstractNode> clusterer= this.getClusterer();
+    final Clusterer<AbstractNode> clusterer= SimplifierImpl.getClusterer();
     clusterer.addAll(initialGrammar);
     clusterer.cluster();
 
@@ -104,7 +118,7 @@ public class SimplifierImpl implements Simplifier {
     final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
     // 3. process rules
-    final ClusterProcessor<AbstractNode> processor= this.getClusterProcessor();
+    final ClusterProcessor<AbstractNode> processor= SimplifierImpl.getClusterProcessor();
     for (Cluster<AbstractNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();

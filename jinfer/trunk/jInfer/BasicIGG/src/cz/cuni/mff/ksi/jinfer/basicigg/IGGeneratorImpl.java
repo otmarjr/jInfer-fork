@@ -52,6 +52,11 @@ public class IGGeneratorImpl implements IGGenerator {
   }
 
   @Override
+  public String getCommentedSchema() {
+    return getModuleName();
+  }
+
+  @Override
   public void start(final Input input, final IGGeneratorCallback callback)
           throws InterruptedException {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>();

@@ -53,6 +53,11 @@ public class SimplifierImpl implements Simplifier {
     return "Modular Simplifier";
   }
 
+  @Override
+  public String getCommentedSchema() {
+    return getModuleName();
+  }
+
   private ClusterProcessor getClusterProcessor() {
     final String cp = RunningProject.getActiveProjectProps().getProperty(
             ModularSimplifierPropertiesPanel.CLUSTER_PROCESSOR,

@@ -33,6 +33,11 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   }
 
   @Override
+  public String getCommentedSchema() {
+    return getModuleName();
+  }
+
+  @Override
   public ClusterProcessor<AbstractNode> create() {
     return new ClusterProcessorAutomatonMergingState();
   }

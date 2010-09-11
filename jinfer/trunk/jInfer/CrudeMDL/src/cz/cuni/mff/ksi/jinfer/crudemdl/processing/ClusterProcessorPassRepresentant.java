@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,23 +15,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 
 /**
+ * TODO anti Comment!
  *
- * @author sviro
+ * @author anti
  */
-public interface ModuleName {
+public class ClusterProcessorPassRepresentant implements ClusterProcessor<AbstractNode> {
 
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  String getModuleName();
-  /**
-   * TODO anti Comment!
-   * @return
-   */
-  String getCommentedSchema();
+  @Override
+  public AbstractNode processCluster(Clusterer<AbstractNode> clusterer, Cluster<AbstractNode> cluster) throws InterruptedException {
+    return cluster.getRepresentant();
+  }
+
 }

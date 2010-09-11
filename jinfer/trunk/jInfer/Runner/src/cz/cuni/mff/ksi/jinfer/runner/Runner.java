@@ -214,8 +214,8 @@ public class Runner {
   private String getCommentedSchema(final String schema) {
     return schema.replace("%generated%",
             "Inferred on " + (new Date()).toString()
-            + " by " + igGenerator.getModuleName() + ", "
-            + simplifier.getModuleName() + ", "
-            + schemaGenerator.getModuleName());
+            + " by " + igGenerator.getCommentedSchema() + ", "
+            + simplifier.getCommentedSchema() + ", "
+            + schemaGenerator.getCommentedSchema());
   }
 }

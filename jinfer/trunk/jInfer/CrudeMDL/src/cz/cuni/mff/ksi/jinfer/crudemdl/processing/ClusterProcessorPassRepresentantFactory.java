@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import org.openide.util.lookup.ServiceProvider;
@@ -25,15 +25,22 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author anti
  */
-@ServiceProvider(service = ClustererFactory.class)
-public class InameClustererFactory implements ClustererFactory {
+@ServiceProvider(service = ClusterProcessorFactory.class)
+public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
+
   @Override
-  public Clusterer<AbstractNode> create() {
-    return new InameClusterer();
+  public ClusterProcessor<AbstractNode> create() {
+    return new ClusterProcessorPassRepresentant();
   }
 
   @Override
   public String getModuleName() {
-    return "InameClusterer";
+    return "ClusterProcessorPassRepresentant";
   }
+
+  @Override
+  public String getCommentedSchema() {
+    return getModuleName();
+  }
+
 }

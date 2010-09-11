@@ -55,6 +55,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
+  public String getCommentedSchema() {
+    return getModuleName();
+  }
+
+  @Override
   public void start(final List<AbstractNode> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
 

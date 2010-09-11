@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl;
+package cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
 import java.util.Comparator;

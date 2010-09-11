@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,23 +15,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
+package cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection;
 
 /**
+ * TODO anti Comment!
  *
- * @author sviro
+ * @author anti
  */
-public interface ModuleName {
+public class MissingModuleException extends RuntimeException {
+  private static final long serialVersionUID = 87942131L;
 
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  String getModuleName();
-  /**
-   * TODO anti Comment!
-   * @return
-   */
-  String getCommentedSchema();
+  public MissingModuleException(final String message) {
+    super("Required module " + message + " not found in installation.");
+  }
 }

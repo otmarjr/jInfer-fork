@@ -39,11 +39,11 @@ import org.openide.util.lookup.ServiceProviders;
  * @author anti
  */
 @ServiceProvider(service = Clusterer.class)
-public class InameClusterer implements Clusterer<AbstractNode> {
+public class ClustererIname implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
   private final List<AbstractNode> items;
 
-  public InameClusterer() {
+  public ClustererIname() {
     this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
     this.items= new LinkedList<AbstractNode>();
   }

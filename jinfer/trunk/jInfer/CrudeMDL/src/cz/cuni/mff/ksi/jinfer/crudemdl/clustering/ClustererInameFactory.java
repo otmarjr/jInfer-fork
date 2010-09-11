@@ -15,17 +15,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl;
+package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public class MissingModuleException extends RuntimeException {
-  private static final long serialVersionUID = 87942131L;
+@ServiceProvider(service = ClustererFactory.class)
+public class ClustererInameFactory implements ClustererFactory {
+  @Override
+  public Clusterer<AbstractNode> create() {
+    return new ClustererIname();
+  }
 
-  public MissingModuleException(final String message) {
-    super("Required module " + message + " not found in installation.");
+  @Override
+  public String getModuleName() {
+    return "ClustererIname";
+  }
+
+  @Override
+  public String getCommentedSchema() {
+    return getModuleName();
   }
 }

@@ -15,12 +15,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl;
+package cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import org.openide.util.Lookup;
 
 /**
@@ -30,12 +32,17 @@ import org.openide.util.Lookup;
  */
 public class Lookuper<F extends ModuleName> {
   private Class<F> clazz;
+  private String propertyName;
 
-  public Lookuper(Class<F> clazz) {
+  public Lookuper(Class<F> clazz, final String propertyName) {
     this.clazz= clazz;
+    this.propertyName= propertyName;
   }
 
-  public F lookupF(final String name) {
+  public F lookupF() {
+    Properties properties= RunningProject.getActiveProjectProps();
+    String name= properties.getProperty(this.propertyName);
+    
     F result = null;
     for (F factory : lookupFs()) {
       if (factory.getModuleName().equals(name)) {

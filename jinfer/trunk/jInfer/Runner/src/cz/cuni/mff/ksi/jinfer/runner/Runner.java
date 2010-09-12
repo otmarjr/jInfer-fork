@@ -84,6 +84,8 @@ public class Runner {
     final Properties projectProperties = RunningProject.getActiveProject().getLookup().lookup(
             Properties.class);
 
+
+    // TODO sviro Use constants from ModuleSelectionPropertiesPanel!
     igGenerator = ModuleSelection.lookupIGGenerator(projectProperties.getProperty(
             "moduleselector.initialgrammar"));
     simplifier = ModuleSelection.lookupSimplifier(projectProperties.getProperty(

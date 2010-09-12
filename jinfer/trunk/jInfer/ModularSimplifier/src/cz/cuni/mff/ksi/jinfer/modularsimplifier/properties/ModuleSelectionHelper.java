@@ -1,0 +1,138 @@
+/*
+ *  Copyright (C) 2010 vektor
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package cz.cuni.mff.ksi.jinfer.modularsimplifier.properties;
+
+import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import org.apache.log4j.Logger;
+import org.openide.util.Lookup;
+
+/**
+ * Logic for looking up service provider implementations based on their name.
+ * 
+ * @author vektor
+ */
+public final class ModuleSelectionHelper {
+
+  private static final Logger LOG = Logger.getLogger(ModuleSelectionHelper.class);
+  private static final Comparator<ModuleName> MODULE_NAME_CMP = new Comparator<ModuleName>() {
+
+    @Override
+    public int compare(final ModuleName o1, final ModuleName o2) {
+      return o1.getModuleName().compareTo(o2.getModuleName());
+    }
+  };
+
+  /** Library class. */
+  private ModuleSelectionHelper() {
+  }
+
+  /**
+   * Defines what should happen if none of the implementations has the name
+   * we look for.
+   */
+  public enum Fallback {
+
+    /** Throw an exception. */
+    EXCEPTION,
+    /** Return the first implementation. */
+    FIRST
+  }
+
+  public static <T extends ModuleName> List<String> lookupImplementationNames(
+          final Class<T> clazz) {
+    
+    final List<String> ret = new ArrayList<String>();
+    for (final T implementation : Lookup.getDefault().lookupAll(clazz)) {
+      ret.add(implementation.getModuleName());
+    }
+    return ret;
+  }
+
+  /**
+   * Looks up implementation of requested interface based on its name.
+   * 
+   * @param <T> Interface to be found. Must extend ModuleName.
+   * @param clazz Interface to be found. Must extend ModuleName.
+   * @param name Module name. This parameter will be compared to the names
+   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName#getModuleName()})
+   * of all implementations of the requested interface.
+   * 
+   * @return Implementation with the correct name. If there is no implementation
+   * of this interface <cite>at all</cite>, runtime exception. If there are
+   * implementations but none has the correct name, first implementation (in
+   * alphabetic order) is returned.
+   */
+  public static <T extends ModuleName> T lookupImpl(final Class<T> clazz,
+          final String name) {
+    return lookupImpl(clazz, name, Fallback.FIRST);
+  }
+
+  /**
+   * Looks up implementation of requested interface based on its name.
+   *
+   * @param <T> Interface to be found. Must extend ModuleName.
+   * @param clazz Interface to be found. Must extend ModuleName.
+   * @param name Module name. This parameter will be compared to the names
+   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName#getModuleName()})
+   * of all implementations of the requested interface.
+   * @param fallback Defines what to do if no implementation with correct name
+   * is found.
+   *
+   * @return Implementation with the correct name. If there is no implementation
+   * of this interface <cite>at all</cite>, runtime exception. If there are
+   * implementations but none has the correct name, the behaviour depends on the
+   * fallback parameter. See {@see Fallback}.
+   */
+  public static <T extends ModuleName> T lookupImpl(final Class<T> clazz,
+          final String name, final Fallback fallback) {
+    @SuppressWarnings("unchecked")
+    final List<T> implementations = new ArrayList<T>(
+            (Collection<T>) Lookup.getDefault().lookupAll(clazz));
+
+    if (BaseUtils.isEmpty(implementations)) {
+      throw new IllegalArgumentException("No implementations of "
+              + clazz.getCanonicalName() + " found.");
+    }
+
+    Collections.sort(implementations, MODULE_NAME_CMP);
+
+    for (final T implementation : implementations) {
+      if (implementation.getModuleName().equals(name)) {
+        return implementation;
+      }
+    }
+
+    switch (fallback) {
+      case EXCEPTION:
+        throw new IllegalArgumentException("No implementation of "
+                + clazz.getCanonicalName() + " with name " + name + " was found.");
+      case FIRST:
+        LOG.warn("No implementation of "
+                + clazz.getCanonicalName() + " with name " + name +
+                " was found, using the first one.");
+        return implementations.get(0);
+      default:
+        throw new IllegalArgumentException("Unknown fallback type: " + fallback);
+    }
+  }
+}

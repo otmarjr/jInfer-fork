@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,27 +14,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
- * @author sviro
+ * Implementation of a cluster processor factory - creates a Trie CP.
+ * 
+ * @author vektor
  */
-// TODO vektor Rename to NamedModule
-public interface ModuleName {
+@ServiceProvider(service = ClusterProcessorFactory.class)
+public class CPTrieFactory implements ClusterProcessorFactory {
 
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  // TODO vektor Rename to getName
-  String getModuleName();
-  /**
-   * TODO anti Comment!
-   * @return
-   */
-  // TODO anti Rename to getModuleDescription
-  String getCommentedSchema();
+  @Override
+  public ClusterProcessor create() {
+    return new CPTrie();
+  }
+
+  @Override
+  public String getModuleName() {
+    return "Trie";
+  }
+
+  @Override
+  public String getCommentedSchema() {
+    return getModuleName();
+  }
 }

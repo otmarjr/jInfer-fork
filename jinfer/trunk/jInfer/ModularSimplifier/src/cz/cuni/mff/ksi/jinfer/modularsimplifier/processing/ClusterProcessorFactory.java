@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,27 +14,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
 
 /**
- *
- * @author sviro
+ * Interface of a cluster processor factory.
+ * 
+ * @author vektor
  */
-// TODO vektor Rename to NamedModule
-public interface ModuleName {
+public interface ClusterProcessorFactory extends ModuleName {
 
-  /**
-   * Returns a user friendly yet unique name of the module.
-   *
-   * @return Unique module name.
-   */
-  // TODO vektor Rename to getName
-  String getModuleName();
-  /**
-   * TODO anti Comment!
-   * @return
-   */
-  // TODO anti Rename to getModuleDescription
-  String getCommentedSchema();
+  ClusterProcessor create();
 }

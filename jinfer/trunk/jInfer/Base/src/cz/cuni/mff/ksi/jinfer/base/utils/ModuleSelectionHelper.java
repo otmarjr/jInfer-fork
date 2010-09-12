@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.modularsimplifier.properties;
+package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -58,13 +58,29 @@ public final class ModuleSelectionHelper {
     FIRST
   }
 
-  public static <T extends NamedModule> List<String> lookupImplementationNames(
+  /**
+   * Returns a list of names
+   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
+   * of all the implementations of requested interface registered via
+   * {@see org.openide.util.lookup.ServiceProvider}.
+   *
+   * @param <T> Interface for which the names are to be found.
+   * Must extend NamedModule.
+   * @param clazz Interface for which the names are to be found.
+   * Must extend NamedModule.
+   *
+   * @return Alphabetically sorted list of all names of modules registered as
+   * {@see org.openide.util.lookup.ServiceProvider} implementing the requested
+   * interface.
+   */
+  public static <T extends NamedModule> List<String> lookupNames(
           final Class<T> clazz) {
     
     final List<String> ret = new ArrayList<String>();
     for (final T implementation : Lookup.getDefault().lookupAll(clazz)) {
       ret.add(implementation.getName());
     }
+    Collections.sort(ret);
     return ret;
   }
 

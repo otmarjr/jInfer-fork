@@ -28,7 +28,7 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessorFactory;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.properties.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.properties.PropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.List;

@@ -22,7 +22,9 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Interface of any class that can take an InputStream and produce IG rules from it.
+ * Interface of any class that can take an InputStream and produce IG rules 
+ * from it. The class must work as a singleton, subsequent calls to
+ * {@see Processor#process()} will be on the same instance.
  * 
  * @author vektor
  */

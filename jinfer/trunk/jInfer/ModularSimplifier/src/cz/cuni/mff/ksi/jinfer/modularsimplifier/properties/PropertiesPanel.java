@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessorFactory;
@@ -202,19 +203,19 @@ public final class PropertiesPanel extends AbstractPropertiesPanel {
             RENDER, Boolean.toString(RENDER_DEFAULT))));
 
     clusterer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupImplementationNames(
+            ModuleSelectionHelper.lookupNames(
             ClustererFactory.class).toArray()));
     clusterer.setSelectedItem(properties.getProperty(
             CLUSTERER, CLUSTERER_DEFAULT));
     
     clusterProcessor.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupImplementationNames(
+            ModuleSelectionHelper.lookupNames(
             ClusterProcessorFactory.class).toArray()));
     clusterProcessor.setSelectedItem(properties.getProperty(
             CLUSTER_PROCESSOR, CLUSTER_PROCESSOR_DEFAULT));
 
     kleeneProcessor.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupImplementationNames(
+            ModuleSelectionHelper.lookupNames(
             KleeneProcessorFactory.class).toArray()));
     kleeneProcessor.setSelectedItem(properties.getProperty(
             KLEENE_PROCESSOR, KLEENE_PROCESSOR_DEFAULT));

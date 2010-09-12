@@ -16,7 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.moduleselection;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
@@ -60,7 +64,6 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
     setLayout(new java.awt.GridBagLayout());
 
-    initialGrammar.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupIGGeneratorNames().toArray()));
     initialGrammar.setMinimumSize(new java.awt.Dimension(200, 22));
     initialGrammar.setPreferredSize(new java.awt.Dimension(200, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -71,7 +74,6 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(initialGrammar, gridBagConstraints);
 
-    simplifier.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSimplifierNames().toArray()));
     simplifier.setMinimumSize(new java.awt.Dimension(200, 22));
     simplifier.setPreferredSize(new java.awt.Dimension(200, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -82,7 +84,6 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(simplifier, gridBagConstraints);
 
-    schemaGenerator.setModel(new javax.swing.DefaultComboBoxModel(ModuleSelection.lookupSchemaGeneratorNames().toArray()));
     schemaGenerator.setMinimumSize(new java.awt.Dimension(200, 22));
     schemaGenerator.setPreferredSize(new java.awt.Dimension(200, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -132,9 +133,12 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public final void load() {
-    initialGrammar.setModel(new DefaultComboBoxModel(ModuleSelection.lookupIGGeneratorNames().toArray()));
-    simplifier.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSimplifierNames().toArray()));
-    schemaGenerator.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSchemaGeneratorNames().toArray()));
+    initialGrammar.setModel(new DefaultComboBoxModel(
+            ModuleSelectionHelper.lookupNames(IGGenerator.class).toArray()));
+    simplifier.setModel(new DefaultComboBoxModel(
+            ModuleSelectionHelper.lookupNames(Simplifier.class).toArray()));
+    schemaGenerator.setModel(new DefaultComboBoxModel(
+            ModuleSelectionHelper.lookupNames(SchemaGenerator.class).toArray()));
 
     initialGrammar.setSelectedItem(properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT));
     simplifier.setSelectedItem(properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT));

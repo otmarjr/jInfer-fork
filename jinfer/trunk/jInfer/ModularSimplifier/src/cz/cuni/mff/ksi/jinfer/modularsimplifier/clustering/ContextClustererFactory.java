@@ -32,12 +32,12 @@ public class ContextClustererFactory implements ClustererFactory {
   }
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Context clusterer";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 }

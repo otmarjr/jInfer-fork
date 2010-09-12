@@ -16,14 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 
 /**
  * Interface of a cluster processor factory.
  * 
  * @author vektor
  */
-public interface ClusterProcessorFactory extends ModuleName {
+public interface ClusterProcessorFactory extends NamedModule {
 
   ClusterProcessor create();
 }

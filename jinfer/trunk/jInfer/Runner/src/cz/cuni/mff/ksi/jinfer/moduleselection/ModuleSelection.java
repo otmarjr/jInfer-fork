@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.moduleselection;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.runner.MissingModuleException;
@@ -35,13 +35,13 @@ import org.openide.util.Lookup;
 public final class ModuleSelection {
 
   // TODO sviro Write things like this as constants (ask vektor if unclear)
-  private static Comparator<ModuleName> getComparator() {
-    return new Comparator<ModuleName>() {
+  private static Comparator<NamedModule> getComparator() {
+    return new Comparator<NamedModule>() {
 
       @Override
-      public int compare(final ModuleName o1, final ModuleName o2) {
-        final String s1 = o1.getModuleName();
-        final String s2 = o2.getModuleName();
+      public int compare(final NamedModule o1, final NamedModule o2) {
+        final String s1 = o1.getName();
+        final String s2 = o2.getName();
         return s1.compareTo(s2);
       }
     };
@@ -69,7 +69,7 @@ public final class ModuleSelection {
         result = iGGenerator;
       }
       
-      if (iGGenerator.getModuleName().equals(name)) {
+      if (iGGenerator.getName().equals(name)) {
         return iGGenerator;
       }
     }
@@ -95,7 +95,7 @@ public final class ModuleSelection {
         result = simplifier;
       }
 
-      if (simplifier.getModuleName().equals(name)) {
+      if (simplifier.getName().equals(name)) {
         return simplifier;
       }
     }
@@ -121,7 +121,7 @@ public final class ModuleSelection {
         result = schemaGenerator;
       }
 
-      if (schemaGenerator.getModuleName().equals(name)) {
+      if (schemaGenerator.getName().equals(name)) {
         return schemaGenerator;
       }
     }
@@ -136,7 +136,7 @@ public final class ModuleSelection {
   public static List<String> lookupIGGeneratorNames() {
     final List<String> list = new ArrayList<String>();
     for (IGGenerator igGenerator : lookupIGGenerators()) {
-      list.add(igGenerator.getModuleName());
+      list.add(igGenerator.getName());
     }
     return list;
   }
@@ -148,7 +148,7 @@ public final class ModuleSelection {
   public static List<String> lookupSimplifierNames() {
     final List<String> list = new ArrayList<String>();
     for (Simplifier simplif : lookupSimplifiers()) {
-      list.add(simplif.getModuleName());
+      list.add(simplif.getName());
     }
     return list;
   }
@@ -160,7 +160,7 @@ public final class ModuleSelection {
   public static List<String> lookupSchemaGeneratorNames() {
     final List<String> list = new ArrayList<String>();
     for (SchemaGenerator sg : lookupSchemaGenerators()) {
-      list.add(sg.getModuleName());
+      list.add(sg.getName());
     }
     return list;
   }

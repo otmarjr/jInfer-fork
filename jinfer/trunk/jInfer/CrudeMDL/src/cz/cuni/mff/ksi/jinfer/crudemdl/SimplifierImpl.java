@@ -57,13 +57,13 @@ public class SimplifierImpl implements Simplifier {
   public static final String PROPERTIES_CLUSTER_PROCESSOR = MODULE_NAME + ".cluster-processor";
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return MODULE_NAME;
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName() + "(" + clustererFactoryLookuper.lookupF().getCommentedSchema() + ", " + clusterProcessorFactoryLookuper.lookupF().getCommentedSchema() + ")";
+  public String getModuleDescription() {
+    return getName() + "(" + clustererFactoryLookuper.lookupF().getModuleDescription() + ", " + clusterProcessorFactoryLookuper.lookupF().getModuleDescription() + ")";
   }
 
   private static Lookuper<ClustererFactory> clustererFactoryLookuper=

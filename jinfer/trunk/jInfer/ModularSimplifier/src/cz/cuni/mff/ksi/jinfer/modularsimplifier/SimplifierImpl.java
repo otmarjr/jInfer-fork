@@ -48,13 +48,13 @@ public class SimplifierImpl implements Simplifier {
   private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Modular Simplifier";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName(); // TODO vektor Elaborate based on selected sub-modules
+  public String getModuleDescription() {
+    return getName(); // TODO vektor Elaborate based on selected sub-modules
   }
 
   private Clusterer getClusterer() {

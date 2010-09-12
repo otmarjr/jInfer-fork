@@ -47,13 +47,13 @@ public class IGGeneratorImpl implements IGGenerator {
   private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class);
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Basic IG Generator";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 
   @Override

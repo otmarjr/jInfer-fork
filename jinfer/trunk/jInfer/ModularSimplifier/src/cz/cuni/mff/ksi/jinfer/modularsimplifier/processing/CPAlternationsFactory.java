@@ -32,12 +32,12 @@ public class CPAlternationsFactory implements ClusterProcessorFactory {
   }
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Alternations";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 }

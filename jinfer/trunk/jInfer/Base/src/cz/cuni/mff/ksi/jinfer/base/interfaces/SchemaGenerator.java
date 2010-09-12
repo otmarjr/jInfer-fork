@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author vektor
  */
-public interface SchemaGenerator extends ModuleName{
+public interface SchemaGenerator extends NamedModule{
 
 
   /**

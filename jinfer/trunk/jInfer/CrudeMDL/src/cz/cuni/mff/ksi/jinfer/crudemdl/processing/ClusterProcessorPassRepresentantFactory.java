@@ -34,13 +34,13 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
   }
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "ClusterProcessorPassRepresentant";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 
 }

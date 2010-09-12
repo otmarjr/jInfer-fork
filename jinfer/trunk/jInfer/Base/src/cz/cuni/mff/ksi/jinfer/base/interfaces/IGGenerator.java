@@ -28,7 +28,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
  * 
  * @author vektor
  */
-public interface IGGenerator extends ModuleName{
+public interface IGGenerator extends NamedModule{
 
   /**
    * Start the IG generation process. This method is called by the Runner module

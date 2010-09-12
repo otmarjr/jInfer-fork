@@ -32,12 +32,12 @@ public class CPTrieFactory implements ClusterProcessorFactory {
   }
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Trie";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 }

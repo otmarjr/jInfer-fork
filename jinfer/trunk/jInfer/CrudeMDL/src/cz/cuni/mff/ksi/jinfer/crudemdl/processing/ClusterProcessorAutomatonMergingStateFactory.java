@@ -28,13 +28,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "ClusterProcessorAutomatonMergingState";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 
   @Override

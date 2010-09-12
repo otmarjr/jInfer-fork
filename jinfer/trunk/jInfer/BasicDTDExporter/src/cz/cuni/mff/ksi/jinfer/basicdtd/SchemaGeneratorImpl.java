@@ -50,13 +50,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private double minDefaultRatio;
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Basic DTD exporter";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 
   @Override

@@ -36,12 +36,12 @@ public class SimpleKPFactory implements KleeneProcessorFactory {
   }
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Simple Kleene processor";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 }

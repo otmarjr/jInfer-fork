@@ -31,7 +31,7 @@ import java.util.List;
 
 public final class Logic {
 
-  private static final List<String> AUTHORS = Arrays.asList("vektor", "sviro", "anti", "rio", "riacik");
+  private static final List<String> AUTHORS = Arrays.asList("vektor", "sviro", "anti", "rio", "riacik", "reseto");
 
   private Logic() {
   }

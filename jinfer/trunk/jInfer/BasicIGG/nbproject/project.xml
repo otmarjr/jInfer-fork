@@ -11,8 +11,8 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <release-version>2</release-version>
-                        <specification-version>2.0</specification-version>
+                        <release-version>3</release-version>
+                        <specification-version>3.0</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -41,7 +41,10 @@
                     </test-dependency>
                 </test-type>
             </test-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>cz.cuni.mff.ksi.jinfer.basicigg</package>
+                <package>cz.cuni.mff.ksi.jinfer.basicigg.interfaces</package>
+            </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/jaxen-1.1.3.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jaxen-1.1.3.jar</binary-origin>

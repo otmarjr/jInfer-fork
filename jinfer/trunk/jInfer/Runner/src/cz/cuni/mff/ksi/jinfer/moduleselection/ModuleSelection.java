@@ -31,8 +31,10 @@ import org.openide.util.Lookup;
  * Class providing methods for lookup modules important for inference.
  * @author sviro
  */
+// TODO sviro Rewrite using ModuleSelectionHelper
 public final class ModuleSelection {
 
+  // TODO sviro Write things like this as constants (ask vektor if unclear)
   private static Comparator<ModuleName> getComparator() {
     return new Comparator<ModuleName>() {
 

@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.Shortener;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.TrieHelper;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;

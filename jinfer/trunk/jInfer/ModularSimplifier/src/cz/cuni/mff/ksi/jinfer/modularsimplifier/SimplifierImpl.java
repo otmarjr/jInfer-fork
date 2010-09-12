@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier;
 import cz.cuni.mff.ksi.jinfer.base.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.base.clustering.ContextClusterer;
 import cz.cuni.mff.ksi.jinfer.base.clustering.NameClusterer;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPTrie;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
@@ -28,9 +27,10 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.SimpleKP;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.CPAlternations;
-import cz.cuni.mff.ksi.jinfer.modularsimplifier.properties.ModularSimplifierPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.properties.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.properties.PropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.List;
 import java.util.Properties;
@@ -55,27 +55,13 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public String getCommentedSchema() {
-    return getModuleName();
-  }
-
-  private ClusterProcessor getClusterProcessor() {
-    final String cp = RunningProject.getActiveProjectProps().getProperty(
-            ModularSimplifierPropertiesPanel.CLUSTER_PROCESSOR,
-            ModularSimplifierPropertiesPanel.CLUSTER_PROCESSOR_DEFAULT);
-    LOG.info("Simplifier: using " + cp + " cluster processor.");
-    if ("Trie".equals(cp)) {
-      return new CPTrie();
-    }
-    if ("Alternations".equals(cp)) {
-      return new CPAlternations();
-    }
-    throw new IllegalArgumentException("Unknown cluster processor: " + cp);
+    return getModuleName(); // TODO vektor Elaborate based on selected sub-modules
   }
 
   private Clusterer getClusterer() {
     if (Boolean.parseBoolean(
-            RunningProject.getActiveProjectProps().getProperty(ModularSimplifierPropertiesPanel.USE_CONTEXT,
-            Boolean.toString(ModularSimplifierPropertiesPanel.USE_CONTEXT_DEFAULT)))) {
+            RunningProject.getActiveProjectProps().getProperty(PropertiesPanel.USE_CONTEXT,
+            Boolean.toString(PropertiesPanel.USE_CONTEXT_DEFAULT)))) {
       LOG.info("Simplifier: using context.");
       return new ContextClusterer();
     }
@@ -83,10 +69,22 @@ public class SimplifierImpl implements Simplifier {
     return new NameClusterer();
   }
 
+  private ClusterProcessor getClusterProcessor() {
+    final String cp = RunningProject.getActiveProjectProps().getProperty(
+            PropertiesPanel.CLUSTER_PROCESSOR,
+            PropertiesPanel.CLUSTER_PROCESSOR_DEFAULT);
+    LOG.info("Simplifier: using " + cp + " cluster processor.");
+    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class,
+            cp).create();
+  }
+
   private KleeneProcessor getKleeneProcessor() {
-    return new SimpleKP(Integer.parseInt(RunningProject.getActiveProjectProps().getProperty(
-            ModularSimplifierPropertiesPanel.KLEENE_REPETITIONS,
-            Integer.toString(ModularSimplifierPropertiesPanel.KLEENE_REPETITIONS_DEFAULT))));
+    final String kp = RunningProject.getActiveProjectProps().getProperty(
+            PropertiesPanel.KLEENE_PROCESSOR,
+            PropertiesPanel.KLEENE_PROCESSOR_DEFAULT);
+    LOG.info("Simplifier: using " + kp + ".");
+    return ModuleSelectionHelper.lookupImpl(KleeneProcessorFactory.class,
+            kp).create();
   }
 
   @Override
@@ -94,15 +92,15 @@ public class SimplifierImpl implements Simplifier {
           final SimplifierCallback callback) throws InterruptedException {
     final Properties properties = RunningProject.getActiveProjectProps();
 
-    if (!Boolean.parseBoolean(properties.getProperty(ModularSimplifierPropertiesPanel.ENABLED,
-            Boolean.toString(ModularSimplifierPropertiesPanel.ENABLED_DEFAULT)))) {
+    if (!Boolean.parseBoolean(properties.getProperty(PropertiesPanel.ENABLED,
+            Boolean.toString(PropertiesPanel.ENABLED_DEFAULT)))) {
       callback.finished(initialGrammar);
       return;
     }
 
     final boolean render = Boolean.parseBoolean(
-            properties.getProperty(ModularSimplifierPropertiesPanel.RENDER,
-            Boolean.toString(ModularSimplifierPropertiesPanel.RENDER_DEFAULT)));
+            properties.getProperty(PropertiesPanel.RENDER,
+            Boolean.toString(PropertiesPanel.RENDER_DEFAULT)));
 
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), render);
     final List<Cluster> clustered = getClusterer().cluster(initialGrammar);

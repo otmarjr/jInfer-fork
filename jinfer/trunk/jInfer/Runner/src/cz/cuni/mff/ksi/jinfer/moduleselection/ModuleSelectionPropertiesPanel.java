@@ -30,7 +30,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   private static final long serialVersionUID = 784463434L;
 
   public static final String INITIAL_GRAMMAR = "moduleselector.initialgrammar";
-  public static final String SIMPIFIER = "moduleselector.simplifier";
+  public static final String SIMPLIFIER = "moduleselector.simplifier";
   public static final String SCHEMA_GENERATOR = "moduleselector.schemagenerator";
 
   /** Creates new form ModuleSelectionJPanel */
@@ -137,7 +137,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     schemaGenerator.setModel(new DefaultComboBoxModel(ModuleSelection.lookupSchemaGeneratorNames().toArray()));
 
     initialGrammar.setSelectedItem(properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT));
-    simplifier.setSelectedItem(properties.getProperty(SIMPIFIER, DEFAULT_MENU_TEXT));
+    simplifier.setSelectedItem(properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT));
     schemaGenerator.setSelectedItem(properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT));
 
     // TODO sviro Treba doriesit ak neexistuje modul co je nacitany z properties a ak neexistuje ziaden modul danej kategorie
@@ -147,7 +147,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   public void store() {
     properties.setProperty(INITIAL_GRAMMAR,
             (String) initialGrammar.getSelectedItem());
-    properties.setProperty(SIMPIFIER,
+    properties.setProperty(SIMPLIFIER,
             (String) simplifier.getSelectedItem());
     properties.setProperty(SCHEMA_GENERATOR,
             (String) schemaGenerator.getSelectedItem());

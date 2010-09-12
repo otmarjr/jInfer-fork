@@ -56,13 +56,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static final int MAXOCCURS_DEFAULT = 1;
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Basic XSD exporter";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 
   @Override

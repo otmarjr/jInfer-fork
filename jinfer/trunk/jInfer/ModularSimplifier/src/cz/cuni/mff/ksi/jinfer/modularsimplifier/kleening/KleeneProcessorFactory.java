@@ -16,14 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 
 /**
  * Interface of a Kleene processor factory.
  * 
  * @author vektor
  */
-public interface KleeneProcessorFactory extends ModuleName {
+public interface KleeneProcessorFactory extends NamedModule {
 
   KleeneProcessor create();
 

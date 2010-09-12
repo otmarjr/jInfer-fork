@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.properties;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,11 +34,11 @@ import org.openide.util.Lookup;
 public final class ModuleSelectionHelper {
 
   private static final Logger LOG = Logger.getLogger(ModuleSelectionHelper.class);
-  private static final Comparator<ModuleName> MODULE_NAME_CMP = new Comparator<ModuleName>() {
+  private static final Comparator<NamedModule> MODULE_NAME_CMP = new Comparator<NamedModule>() {
 
     @Override
-    public int compare(final ModuleName o1, final ModuleName o2) {
-      return o1.getModuleName().compareTo(o2.getModuleName());
+    public int compare(final NamedModule o1, final NamedModule o2) {
+      return o1.getName().compareTo(o2.getName());
     }
   };
 
@@ -58,12 +58,12 @@ public final class ModuleSelectionHelper {
     FIRST
   }
 
-  public static <T extends ModuleName> List<String> lookupImplementationNames(
+  public static <T extends NamedModule> List<String> lookupImplementationNames(
           final Class<T> clazz) {
     
     final List<String> ret = new ArrayList<String>();
     for (final T implementation : Lookup.getDefault().lookupAll(clazz)) {
-      ret.add(implementation.getModuleName());
+      ret.add(implementation.getName());
     }
     return ret;
   }
@@ -71,10 +71,10 @@ public final class ModuleSelectionHelper {
   /**
    * Looks up implementation of requested interface based on its name.
    * 
-   * @param <T> Interface to be found. Must extend ModuleName.
-   * @param clazz Interface to be found. Must extend ModuleName.
+   * @param <T> Interface to be found. Must extend NamedModule.
+   * @param clazz Interface to be found. Must extend NamedModule.
    * @param name Module name. This parameter will be compared to the names
-   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName#getModuleName()})
+   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
    * of all implementations of the requested interface.
    * 
    * @return Implementation with the correct name. If there is no implementation
@@ -82,7 +82,7 @@ public final class ModuleSelectionHelper {
    * implementations but none has the correct name, first implementation (in
    * alphabetic order) is returned.
    */
-  public static <T extends ModuleName> T lookupImpl(final Class<T> clazz,
+  public static <T extends NamedModule> T lookupImpl(final Class<T> clazz,
           final String name) {
     return lookupImpl(clazz, name, Fallback.FIRST);
   }
@@ -90,10 +90,10 @@ public final class ModuleSelectionHelper {
   /**
    * Looks up implementation of requested interface based on its name.
    *
-   * @param <T> Interface to be found. Must extend ModuleName.
-   * @param clazz Interface to be found. Must extend ModuleName.
+   * @param <T> Interface to be found. Must extend NamedModule.
+   * @param clazz Interface to be found. Must extend NamedModule.
    * @param name Module name. This parameter will be compared to the names
-   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName#getModuleName()})
+   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
    * of all implementations of the requested interface.
    * @param fallback Defines what to do if no implementation with correct name
    * is found.
@@ -103,7 +103,7 @@ public final class ModuleSelectionHelper {
    * implementations but none has the correct name, the behaviour depends on the
    * fallback parameter. See {@see Fallback}.
    */
-  public static <T extends ModuleName> T lookupImpl(final Class<T> clazz,
+  public static <T extends NamedModule> T lookupImpl(final Class<T> clazz,
           final String name, final Fallback fallback) {
     @SuppressWarnings("unchecked")
     final List<T> implementations = new ArrayList<T>(
@@ -117,7 +117,7 @@ public final class ModuleSelectionHelper {
     Collections.sort(implementations, MODULE_NAME_CMP);
 
     for (final T implementation : implementations) {
-      if (implementation.getModuleName().equals(name)) {
+      if (implementation.getName().equals(name)) {
         return implementation;
       }
     }

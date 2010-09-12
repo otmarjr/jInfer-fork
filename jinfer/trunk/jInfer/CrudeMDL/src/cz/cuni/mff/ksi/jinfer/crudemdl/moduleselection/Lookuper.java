@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +30,7 @@ import org.openide.util.Lookup;
  *
  * @author anti
  */
-public class Lookuper<F extends ModuleName> {
+public class Lookuper<F extends NamedModule> {
   private Class<F> clazz;
   private String propertyName;
 
@@ -45,7 +45,7 @@ public class Lookuper<F extends ModuleName> {
     
     F result = null;
     for (F factory : lookupFs()) {
-      if (factory.getModuleName().equals(name)) {
+      if (factory.getName().equals(name)) {
         return factory;
       } else if (result == null) {
         result= factory;
@@ -60,7 +60,7 @@ public class Lookuper<F extends ModuleName> {
   public List<String> lookupFNames() {
     final List<String> list = new ArrayList<String>();
     for (F factory : lookupFs()) {
-      list.add(factory.getModuleName());
+      list.add(factory.getName());
     }
     return list;
   }

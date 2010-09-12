@@ -14,27 +14,26 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 /**
  *
  * @author sviro
  */
-// TODO vektor Rename to NamedModule
-public interface ModuleName {
+public interface NamedModule {
 
   /**
    * Returns a user friendly yet unique name of the module.
    *
    * @return Unique module name.
    */
-  // TODO vektor Rename to getName
-  String getModuleName();
+  String getName();
+
   /**
-   * TODO anti Comment!
-   * @return
+   * Returns the information about this module's inner workings.
+   * Most of the time will be equal to a call to {@see getName()}, but if the
+   * module for example consists of more sub-modules, their names should be
+   * listed here.
    */
-  // TODO anti Rename to getModuleDescription
-  String getCommentedSchema();
+  String getModuleDescription();
 }

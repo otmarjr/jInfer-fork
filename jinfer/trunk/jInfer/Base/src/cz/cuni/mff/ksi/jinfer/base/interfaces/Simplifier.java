@@ -30,7 +30,7 @@ import java.util.List;
  * 
  * @author vektor
  */
-public interface Simplifier extends ModuleName{
+public interface Simplifier extends NamedModule{
 
 
   /**

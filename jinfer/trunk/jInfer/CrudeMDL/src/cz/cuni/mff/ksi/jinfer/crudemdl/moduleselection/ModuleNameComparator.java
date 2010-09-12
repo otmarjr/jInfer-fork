@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import java.util.Comparator;
 
 /**
@@ -26,12 +26,12 @@ import java.util.Comparator;
  * @author anti
  */
 public class ModuleNameComparator {
-  public static Comparator<ModuleName> getComparator() {
-    return new Comparator<ModuleName>() {
+  public static Comparator<NamedModule> getComparator() {
+    return new Comparator<NamedModule>() {
       @Override
-      public int compare(final ModuleName o1, final ModuleName o2) {
-        final String s1 = o1.getModuleName();
-        final String s2 = o2.getModuleName();
+      public int compare(final NamedModule o1, final NamedModule o2) {
+        final String s1 = o1.getName();
+        final String s2 = o2.getName();
         return s1.compareTo(s2);
       }
     };

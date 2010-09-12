@@ -32,12 +32,12 @@ public class NameClustererFactory implements ClustererFactory {
   }
 
   @Override
-  public String getModuleName() {
+  public String getName() {
     return "Name clusterer";
   }
 
   @Override
-  public String getCommentedSchema() {
-    return getModuleName();
+  public String getModuleDescription() {
+    return getName();
   }
 }

@@ -16,14 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.ModuleName;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 
 /**
  * Interface of a clusterer factory.
  * 
  * @author vektor
  */
-public interface ClustererFactory extends ModuleName {
+public interface ClustererFactory extends NamedModule {
 
   Clusterer create();
 }

@@ -16,9 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier;
 
-import cz.cuni.mff.ksi.jinfer.base.clustering.Clusterer;
-import cz.cuni.mff.ksi.jinfer.base.clustering.ContextClusterer;
-import cz.cuni.mff.ksi.jinfer.base.clustering.NameClusterer;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
@@ -26,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessor;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening.KleeneProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessorFactory;
@@ -59,14 +58,11 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private Clusterer getClusterer() {
-    if (Boolean.parseBoolean(
-            RunningProject.getActiveProjectProps().getProperty(PropertiesPanel.USE_CONTEXT,
-            Boolean.toString(PropertiesPanel.USE_CONTEXT_DEFAULT)))) {
-      LOG.info("Simplifier: using context.");
-      return new ContextClusterer();
-    }
-    LOG.info("Simplifier: not using context.");
-    return new NameClusterer();
+    final String cs = RunningProject.getActiveProjectProps().getProperty(
+            PropertiesPanel.CLUSTERER,
+            PropertiesPanel.CLUSTERER_DEFAULT);
+    LOG.info("Simplifier: using " + cs + ".");
+    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, cs).create();
   }
 
   private ClusterProcessor getClusterProcessor() {

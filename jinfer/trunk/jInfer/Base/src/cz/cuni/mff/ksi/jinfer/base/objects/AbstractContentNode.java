@@ -34,10 +34,10 @@ public abstract class AbstractContentNode<T> extends AbstractNode {
 
   public AbstractContentNode(final List<String> context,
           final String name,
-          final Map<String, Object> attributes,
+          final Map<String, Object> metadata,
           final String contentType,
           final List<T> content) {
-    super(context, name, attributes);
+    super(context, name, metadata);
 
     if (content == null) {
       throw new IllegalArgumentException("Content must not be null");

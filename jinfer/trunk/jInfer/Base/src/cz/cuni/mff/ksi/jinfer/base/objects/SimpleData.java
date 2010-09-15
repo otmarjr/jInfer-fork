@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
@@ -29,15 +28,14 @@ public class SimpleData extends AbstractContentNode<String> {
 
   public SimpleData(final List<String> context,
           final String name,
-          final Map<String, Object> attributes,
+          final Map<String, Object> metadata,
           final String contentType,
           final List<String> content) {
-    super(context, name, attributes, contentType, content);
+    super(context, name, metadata, contentType, content);
   }
 
   @Override
   public NodeType getType() {
     return NodeType.SIMPLE_DATA;
   }
-
 }

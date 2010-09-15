@@ -34,9 +34,9 @@ public class Element extends AbstractNode {
 
   public Element(final List<String> context,
           final String name,
-          final Map<String, Object> attributes,
+          final Map<String, Object> metadata,
           final Regexp<AbstractNode> subnodes) {
-    super(context, name, attributes);
+    super(context, name, metadata);
     this.subnodes = subnodes;
   }
 
@@ -75,7 +75,6 @@ public class Element extends AbstractNode {
         }
         return super.add(e);
       }
-
     };
     for (final AbstractNode node : getSubnodes().getTokens()) {
       if (NodeType.ATTRIBUTE.equals(node.getType())) {

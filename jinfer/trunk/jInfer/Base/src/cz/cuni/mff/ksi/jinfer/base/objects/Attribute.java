@@ -28,10 +28,10 @@ public class Attribute extends AbstractContentNode<String> {
 
   public Attribute(final List<String> context,
           final String name,
-          final Map<String, Object> attributes,
+          final Map<String, Object> metadata,
           final String contentType,
           final List<String> content) {
-    super(context, name, attributes, contentType, content);
+    super(context, name, metadata, contentType, content);
   }
 
   @Override

@@ -19,8 +19,11 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
@@ -38,7 +41,7 @@ public class XSDProcessor implements Processor {
 
   @Override
   public FolderType getFolder() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return FolderType.SCHEMA;
   }
 
   @Override
@@ -47,8 +50,20 @@ public class XSDProcessor implements Processor {
   }
 
   @Override
-  public List<AbstractNode> process(InputStream s) {
-    throw new UnsupportedOperationException("Not supported yet.");
+  public List<AbstractNode> process(InputStream stream) {
+    final XSDSimpleHandler handler = new XSDSimpleHandler();
+    try {
+      
+      PARSER_FACTORY.newSAXParser().parse(stream, handler);
+      return handler.getRules();
+    } catch (final Exception e) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps().getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+        throw new RuntimeException("Error parsing XSD schema file.", e);
+      } else {
+        LOG.warn("Error parsing XSD schema file, ignoring and going on.", e);
+        return Collections.emptyList();
+      }
+    }
   }
 
 }

@@ -39,6 +39,7 @@ public class XSDDocumentElement {
   public XSDDocumentElement(final String trimmedQName) {
     this.trimmedQName = trimmedQName;
     attrs = new HashMap<String, XSDAttributeData>();
+    associatedCTypeName = "";
   }
 
   public String getAssociatedCTypeName() {

@@ -21,9 +21,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -58,12 +60,12 @@ class XSDSimpleHandler extends DefaultHandler {
   public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
     super.startElement(uri, localName, qName, attributes);
 
-    LOG.warn("XSD: start of element '" + qName + "' with " + attributes.getLength() + "attributes.");
+    //TODO reseto nejaky debug? LOG.warn("XSD: start of element '" + qName + "' with " + attributes.getLength() + " attributes.");
 
     // first, create xsd-element that can be pushed into documentElementStack
     XSDDocumentElement docElement = new XSDDocumentElement(trimNS(qName));
     for (int i = 0; i < attributes.getLength(); i++) {
-      XSDAttributeData data = new XSDAttributeData(attributes.getURI(i), attributes.getLocalName(i), attributes.getQName(i).toLowerCase(), attributes.getType(i), attributes.getValue(i));
+      XSDAttributeData data = new XSDAttributeData(attributes.getURI(i), attributes.getLocalName(i), attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
       docElement.getAttrs().put(attributes.getQName(i).toLowerCase(), data);
     }
 
@@ -74,25 +76,19 @@ class XSDSimpleHandler extends DefaultHandler {
     }
 
     //TODO reseto take care of complextype
-    /*
-    if (!documentElementStack.isEmpty()) {
-      && documentElementStack.peek().isNamedComplexType()
+    
+    if (!documentElementStack.isEmpty() && documentElementStack.peek().isNamedComplexType()) {
+      // remember: name of the complex type is the value of its attribute 'name'
+      String name = documentElementStack.peek().getAttrs().get("name").getValue();
+      createNamedComplexType(docElement, name);
     }
 
-
-    ) {
-      if (!docElement.getName().equalsIgnoreCase("element") && !docElement.getName().equalsIgnoreCase("schema"))
-      docElement.setAssociatedCTypeName(documentElementStack.peek().getName());
-    }
-    */
     documentElementStack.push(docElement);
   }
 
   @Override
   public void endElement(String uri, String localName, String qName) throws SAXException {
     super.endElement(uri, localName, qName);
-
-    LOG.warn("XSD: end of element '" + qName + "'");
 
     XSDDocumentElement docElement = documentElementStack.pop();
     if ( !docElement.getName().equalsIgnoreCase(trimNS(qName)) ) {
@@ -102,7 +98,18 @@ class XSDSimpleHandler extends DefaultHandler {
     if (trimNS(qName).equalsIgnoreCase("element")) {
       // we are dealing with <xs:element name="somename" type="sometype">
       AbstractNode last = ruleElementStack.pop();
+      /*TODO reseto: konci element, pozri sa ci bol simple data typu
+       * ak bol, tak nic, ak bol nejakeho pomenovaneho typu->zarad ho na resolvnutie
+       */
       rules.add(last);
+    } else if (trimNS(qName).equalsIgnoreCase("schema")) {
+      // schema element closes, do additional checking
+      LOG.warn("XSD: schema registered following " + namedTypes.size() + " named types");
+      for (Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
+        String name = it.next();
+        LOG.warn("\t" + name + ": " + namedTypes.get(name).getType().toString() + " has " + namedTypes.get(name).getChildren().size() + " children");
+      }
+
     }
   }
 
@@ -117,8 +124,6 @@ class XSDSimpleHandler extends DefaultHandler {
     return qName.substring(qName.lastIndexOf(':') + 1).toLowerCase();
   }
 
-
-
   private List<String> getContext() {
     if (ruleElementStack.isEmpty()) {
       return new ArrayList<String>(0);
@@ -131,16 +136,79 @@ class XSDSimpleHandler extends DefaultHandler {
   private void createAndPushRuleElement(XSDDocumentElement docElement) {
     final List<String> context = getContext();
 
-      final Element e = new Element(context, docElement.getAttrs().get("name").getValue(), null,
-            Regexp.<AbstractNode>getConcatenation());
+    final Map<String, Object> metadata = new HashMap<String, Object>();
 
-      // if there is parent element, it sits at the top of the stack
-      // we add the current element to its parent's rule
-      if (!ruleElementStack.isEmpty() && (ruleElementStack.peek().getType().equals(NodeType.ELEMENT))) {
-        ((Element) ruleElementStack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(e));
+    String key = "minoccurs";
+    determineOccurence(docElement, metadata, key);
+    key = "maxoccurs";
+    determineOccurence(docElement, metadata, key);
+
+    final Element elem = new Element(context, docElement.getAttrs().get("name").getValue(), metadata,
+          Regexp.<AbstractNode>getConcatenation());
+
+    // if there is parent element, it sits at the top of the stack
+    // we add the current element to its parent's rule
+    if (!ruleElementStack.isEmpty() && (ruleElementStack.peek().getType().equals(NodeType.ELEMENT))) {
+      ((Element) ruleElementStack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(elem));
+    }
+
+    // if we have an element that is descendant to a named ComplexType,
+    // add it to the CTypes children
+    if ( !documentElementStack.isEmpty() && !documentElementStack.peek().getAssociatedCTypeName().equals("") ) {
+      namedTypes.get(documentElementStack.peek().getAssociatedCTypeName()).addChild(Regexp.<AbstractNode>getToken(elem));
+    }
+
+    // push the current element to the stack with an empty rule
+    ruleElementStack.push(elem);
+  }
+
+  /** Add information about element occurence to its metadata.
+   * To be used with keys "minoccurs" and "maxoccurs".
+   * @param docElement
+   * @param metadata
+   * @param key
+   */
+  private void determineOccurence(XSDDocumentElement docElement, Map<String, Object> metadata, String key) {
+    if (docElement.getAttrs().containsKey(key)) {
+      XSDAttributeData data = docElement.getAttrs().get(key);
+      if (data.getValue().equalsIgnoreCase("unbounded")) {
+        if (key.equalsIgnoreCase("minoccurs")) {
+          throw new IllegalArgumentException("Attribute minOccurs cannot be 'unbounded'.");
+        }
+        metadata.put(key, new Integer(-1));
+      } else {
+        // if parseInt crashes, it's not our problem - valid schema uses only non negative integers
+        metadata.put(key, Integer.parseInt(data.getValue()));
       }
-
-      // push the current element to the stack with an empty rule
-      ruleElementStack.push(e);
+    }
+  }
+  
+  /**
+   * Create pair String-Regexp to be put in namedTypes Map.
+   * Regexp<AbstractNode> will contain children,
+   * which are later used as a type template to create rules.
+   * 
+   * @param docElement
+   * @param name
+   */
+  private void createNamedComplexType(XSDDocumentElement docElement, String name) {
+    if (docElement.getName().equalsIgnoreCase("sequence")) {
+      Regexp<AbstractNode> data = new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION);
+      namedTypes.put(name, data);
+      docElement.setAssociatedCTypeName(name);
+    } else if (docElement.getName().equalsIgnoreCase("all")) {
+      Regexp<AbstractNode> data = new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.KLEENE);
+      namedTypes.put(name, data);
+      docElement.setAssociatedCTypeName(name);
+    } else if (docElement.getName().equalsIgnoreCase("choice")) {
+      Regexp<AbstractNode> data = new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.ALTERNATION);
+      namedTypes.put(name, data);
+      docElement.setAssociatedCTypeName(name);
+    } else {
+      // we have complexContent with possibly some extension, for now just concatenate
+      Regexp<AbstractNode> data = Regexp.<AbstractNode>getConcatenation();
+      namedTypes.put(name, data);
+      docElement.setAssociatedCTypeName(name);
+    }
   }
 }

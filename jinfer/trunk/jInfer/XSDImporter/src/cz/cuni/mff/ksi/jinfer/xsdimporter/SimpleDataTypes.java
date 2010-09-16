@@ -88,7 +88,7 @@ public class SimpleDataTypes {
     QName;
   }
 
-  public boolean isStringType(String type) {
+  public static boolean isStringType(String type) {
     try {
       StringType.valueOf(trimNS(type));
       return true;
@@ -97,7 +97,7 @@ public class SimpleDataTypes {
     }
   }
   
-  public boolean isDateType(String type) {
+  public static boolean isDateType(String type) {
     try {
       DateType.valueOf(trimNS(type));
       return true;
@@ -106,7 +106,7 @@ public class SimpleDataTypes {
     }
   }
 
-  public boolean isNumericType(String type) {
+  public static boolean isNumericType(String type) {
     try {
       NumericType.valueOf(trimNS(type));
       return true;
@@ -115,20 +115,20 @@ public class SimpleDataTypes {
     }
   }
   
-  public boolean isTrickyNumericType(String type) {
+  public static boolean isTrickyNumericType(String type) {
     return (TrickyNumericType.BYTE.toString().toLowerCase().equals(trimNS(type))
             || TrickyNumericType.INT.toString().toLowerCase().equals(trimNS(type))
             || TrickyNumericType.LONG.toString().toLowerCase().equals(trimNS(type))
             || TrickyNumericType.SHORT.toString().toLowerCase().equals(trimNS(type)));
   }
 
-  public boolean isTrickyMiscType(String type) {
+  public static boolean isTrickyMiscType(String type) {
     return (TrickyMiscType.BOOLEAN.toString().toLowerCase().equals(trimNS(type))
             || TrickyMiscType.DOUBLE.toString().toLowerCase().equals(trimNS(type))
             || TrickyMiscType.FLOAT.toString().toLowerCase().equals(trimNS(type)));
   }
 
-  public boolean isMiscType(String type) {
+  public static boolean isMiscType(String type) {
     try {
       MiscType.valueOf(trimNS(type));
       return true;
@@ -137,7 +137,7 @@ public class SimpleDataTypes {
     }
   }
 
-  public boolean isSimpleDataType(String type) {
+  public static boolean isSimpleDataType(String type) {
     return (isStringType(type)
             || isDateType(type)
             || isNumericType(type)
@@ -146,7 +146,7 @@ public class SimpleDataTypes {
             || isMiscType(type));
   }
 
-  private String trimNS(String qName) {
+  private static String trimNS(String qName) {
     return qName.substring(qName.lastIndexOf(':') + 1);
   }
 }

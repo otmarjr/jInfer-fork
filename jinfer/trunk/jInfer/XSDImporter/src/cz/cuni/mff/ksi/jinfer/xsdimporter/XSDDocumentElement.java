@@ -35,11 +35,13 @@ public class XSDDocumentElement {
    of named complex type (so it's a sequence/all/choice or complexContent/ext)
   */
   private String associatedCTypeName;
+  private boolean associatedWithUnnamedCType;
 
   public XSDDocumentElement(final String trimmedQName) {
     this.trimmedQName = trimmedQName;
     attrs = new HashMap<String, XSDAttributeData>();
     associatedCTypeName = "";
+    associatedWithUnnamedCType = false;
   }
 
   public String getAssociatedCTypeName() {
@@ -60,7 +62,18 @@ public class XSDDocumentElement {
   
   public boolean isNamedComplexType() {
     XSDAttributeData nameAttr = attrs.get("name");
-    return (nameAttr != null && !nameAttr.getQName().equals("") && trimmedQName.equalsIgnoreCase("complextype")) ? true : false;
+    return (nameAttr != null && !nameAttr.getQName().equals("") && isComplexType()) ? true : false;
   }
 
+  public boolean isComplexType() {
+    return (trimmedQName.equalsIgnoreCase("complextype")) ? true : false;
+  }
+
+  public void associateWithUnnamedCType() {
+    this.associatedWithUnnamedCType = true;
+  }
+
+  public boolean isAssociated() {
+    return associatedWithUnnamedCType;
+  }
 }

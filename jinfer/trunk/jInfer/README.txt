@@ -1,7 +1,7 @@
 
                                jInfer
                 Java framework for XML schema inference
-                             version 0.1
+                             version 0.2
 
 
   What is it?
@@ -39,13 +39,15 @@ NetBeans, jInfer is ready to be used.
   Documentation
   -------------
 
-  TODO link to Project web and doc/ folder.
+	jInfer documentation can be found at the project web:
+http://jinfer.sourceforge.net/documentation.html
 
 
   Development
   -----------
 
-  TODO link to Project web.
+	jInfer developer's documentation can be found at the project web:
+http://jinfer.sourceforge.net/documentation.html
 
   To build jInfer, download the source codes, open the jInfer module suite in
 NetBeans, build & start hacking.
@@ -67,8 +69,6 @@ jInfer uses multiple FOSS libraries:
 
   Contacts
   --------
-
-  TODO link to Project web.
 
   To report a bug or request a new feature, please visit jInfer tracker:
 https://sourceforge.net/tracker/?group_id=302779

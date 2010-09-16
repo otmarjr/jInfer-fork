@@ -151,6 +151,7 @@ div#footer-content a:hover {
 .box-content ul {
 	margin: 0;
 	padding-left: 2em;
+	line-height: 140%;
 }
 
 .bg-orange a, .bg-blue a, .bg-green a, .bg-red a
@@ -186,9 +187,10 @@ div#footer-content a:hover {
 }
 
 .code {
-	font-family: monospace;
+	font-family: DeJavu Mono, monospace;
 	font-weight: normal;
-	margin: auto 2em;
+	font-size: smaller;
+	margin: auto 0em;
 	padding: 1em;
 	border: 1px solid grey;
 	background-color: lightgrey;

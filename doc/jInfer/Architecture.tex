@@ -61,27 +61,65 @@ The class representing a regular expression is \texttt{Regexp}. A \texttt{Regexp
 \subsection{XML representation}
 \label{xml-rep}
 
-The classes that represent XML elements, attributes and simple text data are summarized in figure \ref{img-arch-nodes}.
+The classes that represent XML elements, attributes and simple text data (collectively known as \textit{XML nodes}) are summarized in figure \ref{img-arch-nodes}.
 
 \begin{figure}
 	\includegraphics[scale=0.3]{Architecture-images/nodes.eps} 
-	\caption{UML class diagram of classes representing parts of XML}
+	\caption{UML class diagram of classes representing XML nodes}
 	\label{img-arch-nodes}
 \end{figure}
 
-It is important to note that attributes in jInfer's data structures are nodes, just like elements and simple data.\\
+It is important to note that attributes in jInfer's data structures are nodes too, just like elements and simple data.\\
 
-Description of all classes from the schema follows.
+Description of all classes from the schema follows. All classes can be found in \texttt{cz.cuni.mff.ksi.jinfer.base.objects} package.
 
-\subsubsection{AbstractNode}
+\subsubsection{\texttt{NodeType}}
 
-\subsubsection{Element}
+NodeType is an enum of all non-abstract node types, i.e. ATTRIBUTE, ELEMENT, SIMPLE\_DATA.
 
-\subsubsection{AbstractContentNode}
+\subsubsection{\texttt{AbstractNode}}
 
-\subsubsection{Attribute}
+A common ancestor of all XML nodes. Contains the following members:
+\begin{itemize}
+	\item \texttt{context} - a list of \texttt{String}s, element names, marking the path from this document's root element to the current node. For example, in a document like this
+\begin{verbatim}
+<people>
+<person>
+<name first="John" last="Doe">
+</person>
+</people>
+\end{verbatim} % TODO tabs
+the element \texttt{$<$name$>$} would have context \texttt{\{"people", "person"\}} while the element \texttt{$<$people$>$} would have an empty list for context.
+	\item \texttt{name} - a String representing this node's name. For \texttt{ELEMENT}s and \texttt{ATTRIBUTES}s this is their name. For \texttt{SIMPLE\_DATA}, this is the string representation of the textual data in this node.
+	\item \texttt{metadata} - a map indexed by \texttt{String}s, containing general \texttt{Object}s containing various metadata related to this node. At this moment, three types of metadata are recognized:
+	\begin{itemize}
+		\item required - used in \texttt{ATTRIBUTE}s. If there is a \texttt{Boolean.TRUE} value under this key in metadata, it means that the attribute represented by this node is considered to be required (for example, in DTD this would be marked as \texttt{\#REQUIRED}).
+		\item \texttt{from.schema} - a \texttt{Boolean.TRUE} value under this key means that this node was obtained while processing an XML schema.
+		\item \texttt{from.query} - a \texttt{Boolean.TRUE} value under this key means that this node was obtained while processing a query.
+	\end{itemize}
+	jInfer module are free to ignore or process these metadata.
+\end{itemize}
+Method \texttt{getType()} returning this node's \texttt{NodeType} is declared as abstract and overriden in corresponding classes.
 
-\subsubsection{SimpleData}
+\subsubsection{\texttt{Element}}
+
+Represents an actual XML element. Apart from the members mentioned before, a new member \texttt{subnodes} is introduced. \texttt{subnodes} is of type \texttt{Regexp$<$AbstractNodes$>$}. This regular expression describes the allowed content of this node (i.e. the nodes that can be within, hence \textit{subnodes}). \texttt{subnodes} may be \texttt{null}.
+
+\subsubsection{\texttt{AbstractContentNode}}
+
+A common ancestor for nodes that have some (usually textual) content. This class is generic, however, this document assumes it to be parametrized as \texttt{AbstractContentNode$<$String$>$} for the sake of simplicity. Contains the following members:
+\begin{itemize}
+	\item \texttt{contentType} - a \texttt{String} describing the type of the content in this node. Note that the parameter is currently ignored and will probably be deleted or changed.
+	\item \texttt{content} - a list of \texttt{String}s holding the actual content of this node. Note that a single node has only one string as its content, however, as the nodes are routinely aggregated, this list might hold all the contents of the original aggregated nodes.
+\end{itemize}
+
+\subsubsection{\texttt{Attribute}}
+
+This is just a marker implementation of an \texttt{AbstractContentNode$<$String$>$}. Represents an XML attribute.
+
+\subsubsection{\texttt{SimpleData}}
+
+This is just a marker implementation of an \texttt{AbstractContentNode$<$String$>$}. Represents XML simple text data.
 
 \section{Interfaces}
 

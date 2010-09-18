@@ -15,12 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.xsdimporter;
+package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  *
@@ -29,7 +27,7 @@ import java.util.Vector;
 public class XSDDocumentElement {
 
   private final String trimmedQName;
-  private final Map<String, XSDAttributeData> attrs;
+  private final Map<String, SAXAttributeData> attrs;
 
   /* determines if the current XSDDocElem is a direct successor
    of named complex type (so it's a sequence/all/choice or complexContent/ext)
@@ -39,7 +37,7 @@ public class XSDDocumentElement {
 
   public XSDDocumentElement(final String trimmedQName) {
     this.trimmedQName = trimmedQName;
-    attrs = new HashMap<String, XSDAttributeData>();
+    attrs = new HashMap<String, SAXAttributeData>();
     associatedCTypeName = "";
     associatedWithUnnamedCType = false;
   }
@@ -52,7 +50,7 @@ public class XSDDocumentElement {
     this.associatedCTypeName = associatedCTypeName;
   }
 
-  public Map<String, XSDAttributeData> getAttrs() {
+  public Map<String, SAXAttributeData> getAttrs() {
     return attrs;
   }
 
@@ -61,7 +59,7 @@ public class XSDDocumentElement {
   }
   
   public boolean isNamedComplexType() {
-    XSDAttributeData nameAttr = attrs.get("name");
+    SAXAttributeData nameAttr = attrs.get("name");
     return (nameAttr != null && !nameAttr.getQName().equals("") && isComplexType()) ? true : false;
   }
 

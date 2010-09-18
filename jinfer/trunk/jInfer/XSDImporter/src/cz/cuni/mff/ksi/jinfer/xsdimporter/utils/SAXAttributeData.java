@@ -15,17 +15,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.xsdimporter;
+package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
  *
  * @author reseto
  */
-public class XSDAttributeData {
+public class SAXAttributeData {
 
   private String uri, local, qname, type, value;
 
-  public XSDAttributeData(String uri, String local, String qname, String type, String value) {
+  public SAXAttributeData(String uri, String local, String qname, String type, String value) {
     this.uri = uri;
     this.local = local;
     this.qname = qname;
@@ -33,7 +33,7 @@ public class XSDAttributeData {
     this.value = value;
   }
 
-  public XSDAttributeData() {
+  public SAXAttributeData() {
     this.uri = "";
     this.local = "";
     this.qname = "";

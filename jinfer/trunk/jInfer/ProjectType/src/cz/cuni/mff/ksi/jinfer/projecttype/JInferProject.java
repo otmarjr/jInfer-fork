@@ -123,7 +123,7 @@ public class JInferProject implements Project {
       input = new Input(new InputFilesList(), new InputFilesList(), new InputFilesList());
       if (inputFilesFileOb != null) {
         try {
-          input.load(inputFilesFileOb.getInputStream());
+          InputFiles.load(inputFilesFileOb.getInputStream(), input);
         } catch (Exception e) {
           Exceptions.printStackTrace(e);
         }

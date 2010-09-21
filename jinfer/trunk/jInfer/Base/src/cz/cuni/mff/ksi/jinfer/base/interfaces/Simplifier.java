@@ -30,8 +30,7 @@ import java.util.List;
  * 
  * @author vektor
  */
-public interface Simplifier extends NamedModule{
-
+public interface Simplifier extends NamedModule, Capabilities {
 
   /**
    * Start the grammar simplification process. This method is called by the

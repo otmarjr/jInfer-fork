@@ -60,6 +60,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
+  public List<String> getCapabilities() {
+    return Collections.emptyList();
+  }
+
+  @Override
   public void start(final List<AbstractNode> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
 

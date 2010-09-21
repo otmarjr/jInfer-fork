@@ -29,6 +29,7 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.XSDUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,6 +64,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   @Override
   public String getModuleDescription() {
     return getName();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.emptyList();
   }
 
   @Override

@@ -229,7 +229,7 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
 
     String projectName = (String) settings.getProperty("name");
     if (projectName == null) {
-      projectName = "JinferTemplate";
+      projectName = "jInferTemplate";
     }
     this.projectNameTextField.setText(projectName);
     this.projectNameTextField.selectAll();
@@ -240,6 +240,7 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
   }
 
   // Implementation of DocumentListener --------------------------------------
+  @Override
   public void changedUpdate(final DocumentEvent e) {
     updateTexts(e);
     if (this.projectNameTextField.getDocument() == e.getDocument()) {
@@ -247,6 +248,7 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     }
   }
 
+  @Override
   public void insertUpdate(final DocumentEvent e) {
     updateTexts(e);
     if (this.projectNameTextField.getDocument() == e.getDocument()) {
@@ -254,6 +256,7 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     }
   }
 
+  @Override
   public void removeUpdate(final DocumentEvent e) {
     updateTexts(e);
     if (this.projectNameTextField.getDocument() == e.getDocument()) {

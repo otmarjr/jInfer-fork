@@ -20,6 +20,7 @@ import java.awt.Component;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,6 +28,7 @@ import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -62,15 +64,17 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
 
   private WizardDescriptor.Panel[] createPanels() {
     return new WizardDescriptor.Panel[]{
-              new JinferTemplateWizardPanel(),};
+              new JinferTemplateWizardPanel(), new ModuleSelectionWizardPanel1()};
   }
 
   private String[] createSteps() {
     return new String[]{
-              NbBundle.getMessage(JinferTemplateWizardIterator.class, "LBL_CreateProjectStep")
+              NbBundle.getMessage(JinferTemplateWizardIterator.class, "LBL_CreateProjectStep"),
+              NbBundle.getMessage(JinferTemplateWizardIterator.class, "LBL_SetModulesStep")
             };
   }
 
+  @Override
   public Set/*<FileObject>*/ instantiate(/*ProgressHandle handle*/) throws IOException {
     final Set<FileObject> resultSet = new LinkedHashSet<FileObject>();
     final File dirF = FileUtil.normalizeFile((File) wiz.getProperty("projdir"));
@@ -79,6 +83,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     final FileObject template = Templates.getTemplate(wiz);
     final FileObject dir = FileUtil.toFileObject(dirF);
     unZipFile(template.getInputStream(), dir);
+    setModules(dir, wiz);
 
     // Always open top dir as a project:
     resultSet.add(dir);
@@ -99,6 +104,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     return resultSet;
   }
 
+  @Override
   public void initialize(final WizardDescriptor wiz) {
     this.wiz = wiz;
     index = 0;
@@ -124,6 +130,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     }
   }
 
+  @Override
   public void uninitialize(final WizardDescriptor wiz) {
     this.wiz.putProperty("projdir", null);
     this.wiz.putProperty("name", null);
@@ -131,19 +138,23 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     panels = null;
   }
 
+  @Override
   public String name() {
     return MessageFormat.format("{0} of {1}",
             new Object[]{Integer.valueOf(index + 1), Integer.valueOf(panels.length)});
   }
 
+  @Override
   public boolean hasNext() {
     return index < panels.length - 1;
   }
 
+  @Override
   public boolean hasPrevious() {
     return index > 0;
   }
 
+  @Override
   public void nextPanel() {
     if (!hasNext()) {
       throw new NoSuchElementException();
@@ -151,6 +162,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     index++;
   }
 
+  @Override
   public void previousPanel() {
     if (!hasPrevious()) {
       throw new NoSuchElementException();
@@ -158,15 +170,18 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     index--;
   }
 
+  @Override
   public WizardDescriptor.Panel current() {
     return panels[index];
   }
 
   // If nothing unusual changes in the middle of the wizard, simply:
+  @Override
   public final void addChangeListener(final ChangeListener l) {
     //do nothing
   }
 
+  @Override
   public final void removeChangeListener(final ChangeListener l) {
     //do nothing
   }
@@ -231,5 +246,18 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
       writeFile(str, fo);
     }
 
+  }
+
+  private static void setModules(final FileObject dir, final WizardDescriptor wiz) {
+    final Properties properties = (Properties) wiz.getProperty(ModuleSelectionWizardPanel1.MODULE_SELECTION_PROPS);
+    if (properties != null) {
+      final FileObject jinferProjectDir = dir.getFileObject("jinferproject");
+      try {
+        final FileObject projectProperties = jinferProjectDir.createData("project", "properties");
+        properties.store(new FileOutputStream(FileUtil.toFile(projectProperties)), null);
+      } catch (IOException ex) {
+        Exceptions.printStackTrace(ex);
+      }
+    }
   }
 }

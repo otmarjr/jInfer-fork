@@ -36,6 +36,7 @@ public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
   private WizardDescriptor wizardDescriptor;
   private JinferTemplatePanelVisual component;
 
+  @Override
   public Component getComponent() {
     if (component == null) {
       component = new JinferTemplatePanelVisual(this);
@@ -44,22 +45,26 @@ public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
     return component;
   }
 
+  @Override
   public HelpCtx getHelp() {
     return new HelpCtx(JinferTemplateWizardPanel.class);
   }
 
+  @Override
   public boolean isValid() {
     getComponent();
     return component.valid(wizardDescriptor);
   }
   private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
 
+  @Override
   public final void addChangeListener(final ChangeListener l) {
     synchronized (listeners) {
       listeners.add(l);
     }
   }
 
+  @Override
   public final void removeChangeListener(final ChangeListener l) {
     synchronized (listeners) {
       listeners.remove(l);
@@ -77,20 +82,24 @@ public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
     }
   }
 
+  @Override
   public void readSettings(final Object settings) {
     wizardDescriptor = (WizardDescriptor) settings;
     component.read(wizardDescriptor);
   }
 
+  @Override
   public void storeSettings(final Object settings) {
     final WizardDescriptor d = (WizardDescriptor) settings;
     component.store(d);
   }
 
+  @Override
   public boolean isFinishPanel() {
     return true;
   }
 
+  @Override
   public void validate() throws WizardValidationException {
     getComponent();
     component.validate(wizardDescriptor);

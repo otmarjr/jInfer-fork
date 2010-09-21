@@ -43,7 +43,6 @@ public class JInferDeleteOperation implements DeleteOperationImplementation {
 
   @Override
   public void notifyDeleted() throws IOException {
-    project.getProjectDirectory().delete();
     project.getLookup().lookup(ProjectState.class).notifyDeleted();
   }
 
@@ -54,6 +53,8 @@ public class JInferDeleteOperation implements DeleteOperationImplementation {
 
   @Override
   public List<FileObject> getDataFiles() {
-    return new ArrayList<FileObject>();
+    final List<FileObject> result = new ArrayList<FileObject>();
+    result.add(project.getProjectDirectory());
+    return result;
   }
 }

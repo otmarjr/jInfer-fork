@@ -31,6 +31,7 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessorFacto
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.properties.PropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
@@ -55,6 +56,11 @@ public class SimplifierImpl implements Simplifier {
   @Override
   public String getModuleDescription() {
     return getName(); // TODO vektor Elaborate based on selected sub-modules
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.emptyList();
   }
 
   private Clusterer getClusterer() {

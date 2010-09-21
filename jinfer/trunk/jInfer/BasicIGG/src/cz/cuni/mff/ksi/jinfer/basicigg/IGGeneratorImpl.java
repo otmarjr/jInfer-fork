@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,11 @@ public class IGGeneratorImpl implements IGGenerator {
   @Override
   public String getModuleDescription() {
     return getName();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.emptyList();
   }
 
   @Override

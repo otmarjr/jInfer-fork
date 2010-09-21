@@ -30,8 +30,7 @@ import java.util.List;
  *
  * @author vektor
  */
-public interface SchemaGenerator extends NamedModule{
-
+public interface SchemaGenerator extends NamedModule, Capabilities {
 
   /**
    * Start the schema export process. This method is called by the Runner module

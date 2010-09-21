@@ -23,15 +23,14 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.Lookuper;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -64,6 +63,11 @@ public class SimplifierImpl implements Simplifier {
   @Override
   public String getModuleDescription() {
     return getName() + "(" + clustererFactoryLookuper.lookupF().getModuleDescription() + ", " + clusterProcessorFactoryLookuper.lookupF().getModuleDescription() + ")";
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.emptyList();
   }
 
   private static Lookuper<ClustererFactory> clustererFactoryLookuper=

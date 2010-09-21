@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import org.netbeans.api.project.Project;
 
@@ -27,6 +30,8 @@ import org.netbeans.api.project.Project;
 public final class RunningProject {
 
   private static Project project = null;
+
+  private static Capabilities nextModuleCaps = null;
 
   private RunningProject() {
   }
@@ -82,5 +87,33 @@ public final class RunningProject {
     }
 
     return new Properties();
+  }
+
+  /**
+   * Returns the capabilities of the next module in the inference chain.
+   *
+   * @return Capabilities of the next module in the inference chain. Empty
+   * capabilities ({@see Capabilities} object returning an empty list of capabilities)
+   * if next module is <code>null</code> for any reason.
+   */
+  public static Capabilities getNextModuleCaps() {
+    if (nextModuleCaps == null) {
+      return new Capabilities() {
+
+        @Override
+        public List<String> getCapabilities() {
+          return Collections.emptyList();
+        }
+      };
+    }
+    return nextModuleCaps;
+  }
+
+  /**
+   * Sets the capabilities of the next module in the inference chain. Used by
+   * Runner implementations.
+   */
+  public static void setNextModuleCaps(Capabilities aNextModuleCaps) {
+    nextModuleCaps = aNextModuleCaps;
   }
 }

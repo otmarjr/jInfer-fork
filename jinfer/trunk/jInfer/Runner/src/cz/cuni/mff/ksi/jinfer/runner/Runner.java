@@ -102,6 +102,7 @@ public class Runner {
       @Override
       public void run() {
         try {
+          RunningProject.setNextModuleCaps(simplifier);
           igGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class),
                   iggCallback);
         } catch (final InterruptedException e) {
@@ -123,6 +124,7 @@ public class Runner {
       @Override
       public void run() {
         try {
+          RunningProject.setNextModuleCaps(schemaGenerator);
           simplifier.start(grammar, simplCallback);
         } catch (final InterruptedException e) {
           interrupted();
@@ -142,6 +144,7 @@ public class Runner {
       @Override
       public void run() {
         try {
+          RunningProject.setNextModuleCaps(null);
           schemaGenerator.start(grammar, sgCallback);
         } catch (final InterruptedException e) {
           interrupted();
@@ -197,11 +200,13 @@ public class Runner {
     // TODO vektor Perhaps a message box?
     LOG.error("User interrupted the inference.");
     RunningProject.removeActiveProject();
+    RunningProject.setNextModuleCaps(null);
   }
 
   private static void unexpected(final Throwable t) {
     LOG.error("Inference interrupted due to an unexpected error.", t);
     RunningProject.removeActiveProject();
+    RunningProject.setNextModuleCaps(null);
 
     // show Output window
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer", false);

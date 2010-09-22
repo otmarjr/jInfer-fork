@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;

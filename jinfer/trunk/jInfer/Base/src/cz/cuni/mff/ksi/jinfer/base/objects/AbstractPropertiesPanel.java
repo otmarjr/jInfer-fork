@@ -39,11 +39,6 @@ public abstract class AbstractPropertiesPanel extends JPanel {
     this.properties = properties;
   }
 
-  public static final AbstractPropertiesPanel getPropertiesPanel(AbstractPropertiesPanel panel) {
-    panel.load();
-    return panel;
-  }
-
   /**
    * method used to store data from panel to properties.
    */

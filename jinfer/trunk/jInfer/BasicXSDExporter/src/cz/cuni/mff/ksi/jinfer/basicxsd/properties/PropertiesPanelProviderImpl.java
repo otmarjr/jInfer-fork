@@ -33,7 +33,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return AbstractPropertiesPanel.getPropertiesPanel(new XSDExportPropertiesPanel(properties));
+    return new XSDExportPropertiesPanel(properties);
   }
 
   @Override

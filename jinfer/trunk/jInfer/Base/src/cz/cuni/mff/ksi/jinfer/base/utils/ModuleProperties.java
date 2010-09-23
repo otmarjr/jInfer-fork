@@ -14,40 +14,31 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cz.cuni.mff.ksi.jinfer.base.utils;
 
-package cz.cuni.mff.ksi.jinfer.modularsimplifier.properties;
-
-import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
-import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author sviro
  */
-@ServiceProvider(service = PropertiesPanelProvider.class)
-public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
-  private static final int PANEL_PRIORITY = 200000;
+public class ModuleProperties extends Properties {
 
-  @Override
-  public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new PropertiesPanel(properties);
+  private final String moduleName;
+  private final Properties properties;
+
+  public ModuleProperties(final String moduleName, final Properties properties) {
+    this.moduleName = moduleName;
+    this.properties = properties;
   }
 
   @Override
-  public String getName() {
-    return PropertiesPanel.NAME;
+  public synchronized Object put(final Object key, final Object value) {
+    return properties.put(moduleName + "." + key, value);
   }
 
   @Override
-  public String getDisplayName() {
-    return "Modular Simplifier";
+  public String getProperty(final String key) {
+    return properties.getProperty(moduleName + "." + key);
   }
-
-  @Override
-  public int getPriority() {
-    return PANEL_PRIORITY;
-  }
-
 }

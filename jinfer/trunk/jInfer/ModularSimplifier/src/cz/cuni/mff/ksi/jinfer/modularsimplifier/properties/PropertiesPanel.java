@@ -31,20 +31,21 @@ public final class PropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 561241l;
 
-  public static final String CLUSTERER = "modularsimplifier.clusterer";
+  public static final String NAME = "modularsimplifier";
+  public static final String CLUSTERER = "clusterer";
   public static final String CLUSTERER_DEFAULT = "Name clusterer";
 
-  public static final String CLUSTER_PROCESSOR = "modularsimplifier.cluster.processor";
+  public static final String CLUSTER_PROCESSOR = "cluster.processor";
   public static final String CLUSTER_PROCESSOR_DEFAULT = "Trie";
 
-  public static final String KLEENE_PROCESSOR = "modularsimplifier.kleene.processor";
+  public static final String KLEENE_PROCESSOR = "kleene.processor";
   public static final String KLEENE_PROCESSOR_DEFAULT = "Simple Kleene processor";
-  public static final String KLEENE_REPETITIONS = "modularsimplifier.kleene.repetitions";
+  public static final String KLEENE_REPETITIONS = "kleene.repetitions";
   public static final int KLEENE_REPETITIONS_DEFAULT = 3;
 
-  public static final String ENABLED = "modularsimplifier.enabled";
+  public static final String ENABLED = "enabled";
   public static final boolean ENABLED_DEFAULT = true;
-  public static final String RENDER = "modularsimplifier.render";
+  public static final String RENDER = "render";
   public static final boolean RENDER_DEFAULT = true;
 
   public PropertiesPanel(final Properties properties) {

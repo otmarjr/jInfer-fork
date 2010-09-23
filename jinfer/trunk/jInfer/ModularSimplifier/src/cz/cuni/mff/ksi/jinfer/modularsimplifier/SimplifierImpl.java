@@ -64,7 +64,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private Clusterer getClusterer() {
-    final String cs = RunningProject.getActiveProjectProps().getProperty(
+    final String cs = RunningProject.getActiveProjectProps(PropertiesPanel.NAME).getProperty(
             PropertiesPanel.CLUSTERER,
             PropertiesPanel.CLUSTERER_DEFAULT);
     LOG.info("Simplifier: using " + cs + ".");
@@ -72,7 +72,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private ClusterProcessor getClusterProcessor() {
-    final String cp = RunningProject.getActiveProjectProps().getProperty(
+    final String cp = RunningProject.getActiveProjectProps(PropertiesPanel.NAME).getProperty(
             PropertiesPanel.CLUSTER_PROCESSOR,
             PropertiesPanel.CLUSTER_PROCESSOR_DEFAULT);
     LOG.info("Simplifier: using " + cp + " cluster processor.");
@@ -81,7 +81,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private KleeneProcessor getKleeneProcessor() {
-    final String kp = RunningProject.getActiveProjectProps().getProperty(
+    final String kp = RunningProject.getActiveProjectProps(PropertiesPanel.NAME).getProperty(
             PropertiesPanel.KLEENE_PROCESSOR,
             PropertiesPanel.KLEENE_PROCESSOR_DEFAULT);
     LOG.info("Simplifier: using " + kp + ".");
@@ -92,7 +92,7 @@ public class SimplifierImpl implements Simplifier {
   @Override
   public void start(final List<AbstractNode> initialGrammar,
           final SimplifierCallback callback) throws InterruptedException {
-    final Properties properties = RunningProject.getActiveProjectProps();
+    final Properties properties = RunningProject.getActiveProjectProps(PropertiesPanel.NAME);
 
     if (!Boolean.parseBoolean(properties.getProperty(PropertiesPanel.ENABLED,
             Boolean.toString(PropertiesPanel.ENABLED_DEFAULT)))) {

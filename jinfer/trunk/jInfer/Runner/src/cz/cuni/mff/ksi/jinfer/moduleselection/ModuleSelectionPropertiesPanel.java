@@ -33,9 +33,10 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463434L;
 
-  public static final String INITIAL_GRAMMAR = "moduleselector.initialgrammar";
-  public static final String SIMPLIFIER = "moduleselector.simplifier";
-  public static final String SCHEMA_GENERATOR = "moduleselector.schemagenerator";
+  public static final String NAME = "moduleselector";
+  public static final String INITIAL_GRAMMAR = "initialgrammar";
+  public static final String SIMPLIFIER = "simplifier";
+  public static final String SCHEMA_GENERATOR = "schemagenerator";
 
   /** Creates new form ModuleSelectionJPanel */
   public ModuleSelectionPropertiesPanel(final Properties properties) {

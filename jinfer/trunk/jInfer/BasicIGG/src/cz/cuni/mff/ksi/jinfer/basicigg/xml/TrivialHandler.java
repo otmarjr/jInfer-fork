@@ -48,7 +48,7 @@ public class TrivialHandler extends DefaultHandler {
   /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
 
-  private final Properties properties = RunningProject.getActiveProjectProps();
+  private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
   @Override
   public void startElement(final String uri, final String localName,

@@ -26,8 +26,9 @@ import java.util.Properties;
 public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 5421231l;
-  public static final String MAX_ENUM_SIZE = "basicdtdexporter.max.enum.size";
-  public static final String MIN_DEFAULT_RATIO = "basicdtdexporter.min.default.ratio";
+  public static final String NAME = "basicdtdexporter";
+  public static final String MAX_ENUM_SIZE = "max.enum.size";
+  public static final String MIN_DEFAULT_RATIO = "min.default.ratio";
   public static final int MAX_ENUM_SIZE_DEFAULT = 3;
   public static final float MIN_DEFAULT_RATIO_DEFAULT = 0.67f;
 

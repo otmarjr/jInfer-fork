@@ -38,18 +38,18 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
     List<Lookuper<?>> l= new ArrayList<Lookuper<?>>();
     l.add(SimplifierImpl.getClustererFactoryLookuper());
     l.add(SimplifierImpl.getClusterProcessorFactoryLookuper());
-    return new ModuleSelectionPropertiesPanel(properties, l);
-//    return AbstractPropertiesPanel.getPropertiesPanel(new ModuleSelectionPropertiesPanel(properties));
+    return new CrudeMDLPropertiesPanel(properties, l);
+//    return AbstractPropertiesPanel.getPropertiesPanel(new CrudeMDLPropertiesPanel(properties));
   }
 
   @Override
   public String getName() {
-    return SimplifierImpl.MODULE_NAME;
+    return CrudeMDLPropertiesPanel.NAME;
   }
 
   @Override
   public String getDisplayName() {
-    return SimplifierImpl.MODULE_NAME;
+    return CrudeMDLPropertiesPanel.NAME;
   }
 
   @Override

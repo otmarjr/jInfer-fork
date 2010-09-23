@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.Dialog;
 import java.util.ArrayList;
@@ -85,7 +86,9 @@ public class JInferCustomizerProvider implements CustomizerProvider {
       final Category category = Category.create(propPanelProvider.getName(),
               propPanelProvider.getDisplayName(), null);
       
-      final AbstractPropertiesPanel panel = propPanelProvider.getPanel(properties);
+      final String moduleName = propPanelProvider.getName();
+      final AbstractPropertiesPanel panel = propPanelProvider.getPanel(new ModuleProperties(
+              moduleName, properties));
       panel.load();
 
       result.put(category, panel);

@@ -27,6 +27,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.moduleselection.ModuleSelectionPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.moduleselection.PropertiesPanelProviderImpl;
 import cz.cuni.mff.ksi.jinfer.runner.options.RunnerPanel;
 import java.util.Date;
 import java.util.EnumSet;
@@ -81,15 +83,14 @@ public class Runner {
   };
 
   public Runner() {
-    final Properties projectProperties = RunningProject.getActiveProjectProps();
+    final Properties projectProperties = RunningProject.getActiveProjectProps(ModuleSelectionPropertiesPanel.NAME);
 
-    // TODO sviro Use constants from ModuleSelectionPropertiesPanel!
     igGenerator = ModuleSelectionHelper.lookupImpl(IGGenerator.class,
-            projectProperties.getProperty("moduleselector.initialgrammar"));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.INITIAL_GRAMMAR));
     simplifier = ModuleSelectionHelper.lookupImpl(Simplifier.class,
-            projectProperties.getProperty("moduleselector.simplifier"));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
-            projectProperties.getProperty("moduleselector.schemagenerator"));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMA_GENERATOR));
   }
 
   /**

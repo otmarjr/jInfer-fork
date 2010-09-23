@@ -32,11 +32,12 @@ import java.util.Properties;
  */
 public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
 
-  public static final String GENERATE_GLOBAL = "basicxsdexporter.generate.global";
-  public static final String NUMBER_TO_GLOBAL = "basicxsdexporter.number.to.global";
-  public static final String SPACES_PER_INDENT = "basicxsdexporter.spaces.per.indent";
-  public static final String TYPENAME_PREFIX = "basicxsdexporter.typename.prefix";
-  public static final String TYPENAME_POSTFIX = "basicxsdexporter.typename.postfix";
+  public static final String NAME = "basicxsdexporter";
+  public static final String GENERATE_GLOBAL = "generate.global";
+  public static final String NUMBER_TO_GLOBAL = "number.to.global";
+  public static final String SPACES_PER_INDENT = "spaces.per.indent";
+  public static final String TYPENAME_PREFIX = "typename.prefix";
+  public static final String TYPENAME_POSTFIX = "typename.postfix";
 
   public final static boolean GENERATE_GLOBAL_DEFAULT = true;
   /// Default value of number of occurrences of element to consider it as a global type.

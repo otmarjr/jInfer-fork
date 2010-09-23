@@ -72,7 +72,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             + " rules.");
 
     // load settings
-    final Properties properties = RunningProject.getActiveProjectProps();
+    final Properties properties = RunningProject.getActiveProjectProps(DTDExportPropertiesPanel.NAME);
 
     maxEnumSize = Integer.parseInt(properties.getProperty(DTDExportPropertiesPanel.MAX_ENUM_SIZE, Integer.
             toString(DTDExportPropertiesPanel.MAX_ENUM_SIZE_DEFAULT)));

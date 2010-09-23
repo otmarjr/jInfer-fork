@@ -38,7 +38,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
 
   @Override
   public String getName() {
-    return "XSDExport";
+    return XSDExportPropertiesPanel.NAME;
   }
 
   @Override

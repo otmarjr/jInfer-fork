@@ -39,7 +39,7 @@ import org.jaxen.saxpath.helpers.DefaultXPathHandler;
  */
 public class XPathHandlerImpl extends DefaultXPathHandler {
 
-  private final Properties properties = RunningProject.getActiveProjectProps();
+  private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
   /** Rules that have been inferred so far. */
   private final List<AbstractNode> rules = new ArrayList<AbstractNode>();

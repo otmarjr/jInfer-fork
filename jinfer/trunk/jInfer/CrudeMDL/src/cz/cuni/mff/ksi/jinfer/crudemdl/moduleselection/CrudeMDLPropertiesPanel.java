@@ -26,16 +26,19 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author sviro
  */
-public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
+public class CrudeMDLPropertiesPanel extends AbstractPropertiesPanel {
 
+  public static final String NAME = "TwoStepSimplifier";
+  public static final String PROPERTIES_CLUSTERER = "clusterer";
+  public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
   private List<Lookuper<?>> lookupers;
 
   /** Creates new form ModuleSelectionJPanel */
-  public ModuleSelectionPropertiesPanel(final Properties properties, final List<Lookuper<?>> lookupers) {
+  public CrudeMDLPropertiesPanel(final Properties properties, final List<Lookuper<?>> lookupers) {
     super(properties);
-    this.lookupers= lookupers;
+    this.lookupers = lookupers;
     initComponents();
     this.load();
   }
@@ -79,7 +82,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(clusterProcessor, gridBagConstraints);
 
-    labelClusterer.setText(org.openide.util.NbBundle.getMessage(ModuleSelectionPropertiesPanel.class, "ModuleSelectionPropertiesPanel.labelClusterer.text")); // NOI18N
+    labelClusterer.setText(org.openide.util.NbBundle.getMessage(CrudeMDLPropertiesPanel.class, "CrudeMDLPropertiesPanel.labelClusterer.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -87,7 +90,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelClusterer, gridBagConstraints);
 
-    labelClusterProcessor.setText(org.openide.util.NbBundle.getMessage(ModuleSelectionPropertiesPanel.class, "ModuleSelectionPropertiesPanel.labelClusterProcessor.text")); // NOI18N
+    labelClusterProcessor.setText(org.openide.util.NbBundle.getMessage(CrudeMDLPropertiesPanel.class, "CrudeMDLPropertiesPanel.labelClusterProcessor.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -113,18 +116,18 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     clusterer.setModel(new DefaultComboBoxModel(lookupers.get(0).lookupFNames().toArray()));
     clusterProcessor.setModel(new DefaultComboBoxModel(lookupers.get(1).lookupFNames().toArray()));
 
-    clusterer.setSelectedItem(properties.getProperty(SimplifierImpl.PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
-    clusterProcessor.setSelectedItem(properties.getProperty(SimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR, DEFAULT_MENU_TEXT));
+    clusterer.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
+    clusterProcessor.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTER_PROCESSOR,
+            DEFAULT_MENU_TEXT));
   }
 
   @Override
   public void store() {
-    properties.setProperty(SimplifierImpl.PROPERTIES_CLUSTERER,
+    properties.setProperty(PROPERTIES_CLUSTERER,
             (String) clusterer.getSelectedItem());
-    properties.setProperty(SimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR,
+    properties.setProperty(PROPERTIES_CLUSTER_PROCESSOR,
             (String) clusterProcessor.getSelectedItem());
   }
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox clusterProcessor;
   private javax.swing.JComboBox clusterer;

@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.CrudeMDLPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.Lookuper;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
@@ -51,13 +52,10 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = Simplifier.class)
 public class SimplifierImpl implements Simplifier {
   private static final Logger LOG = Logger.getLogger(Simplifier.class);
-  public static final String MODULE_NAME = "TwoStepSimplifier";
-  public static final String PROPERTIES_CLUSTERER = MODULE_NAME + ".clusterer";
-  public static final String PROPERTIES_CLUSTER_PROCESSOR = MODULE_NAME + ".cluster-processor";
 
   @Override
   public String getName() {
-    return MODULE_NAME;
+    return CrudeMDLPropertiesPanel.NAME;
   }
 
   @Override
@@ -71,9 +69,9 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private static Lookuper<ClustererFactory> clustererFactoryLookuper=
-          new Lookuper<ClustererFactory>(ClustererFactory.class, PROPERTIES_CLUSTERER);
+          new Lookuper<ClustererFactory>(ClustererFactory.class, CrudeMDLPropertiesPanel.PROPERTIES_CLUSTERER);
   private static Lookuper<ClusterProcessorFactory> clusterProcessorFactoryLookuper= 
-          new Lookuper<ClusterProcessorFactory>(ClusterProcessorFactory.class, PROPERTIES_CLUSTER_PROCESSOR);
+          new Lookuper<ClusterProcessorFactory>(ClusterProcessorFactory.class, CrudeMDLPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR);
 
   public static Lookuper<ClustererFactory> getClustererFactoryLookuper() {
     return clustererFactoryLookuper;

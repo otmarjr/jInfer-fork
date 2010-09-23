@@ -37,7 +37,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
 
   @Override
   public String getName() {
-    return "moduleSelection";
+    return ModuleSelectionPropertiesPanel.NAME;
   }
 
   @Override

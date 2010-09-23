@@ -95,7 +95,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     assert(verifyInput(elements));
 
-    final Properties properties = RunningProject.getActiveProjectProps();
+    final Properties properties = RunningProject.getActiveProjectProps(XSDExportPropertiesPanel.NAME);
 
     final int spacesPerIndent = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.SPACES_PER_INDENT, String.valueOf(XSDExportPropertiesPanel.SPACES_PER_INDENT_DEFAULT)));
     indentator = new Indentator(spacesPerIndent);

@@ -79,7 +79,7 @@ public class XPathProcessor implements Processor {
       in.close();
       return ret;
     } catch (final Exception e) {
-      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps().getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error reading file " + s, e);
       } else {
         LOG.warn("Error reading file " + s + ", ignoring and going on.", e);
@@ -96,7 +96,7 @@ public class XPathProcessor implements Processor {
       xr.parse(path);
       return xh.getRules();
     } catch (final SAXPathException e) {
-      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps().getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error parsing the path: " + path, e);
       } else {
         LOG.warn("Error parsing the path: " + path + ", ignoring and going on.", e);

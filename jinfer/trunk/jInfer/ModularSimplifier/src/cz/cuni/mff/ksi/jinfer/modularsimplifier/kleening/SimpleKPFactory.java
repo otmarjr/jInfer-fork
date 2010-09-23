@@ -30,7 +30,7 @@ public class SimpleKPFactory implements KleeneProcessorFactory {
 
   @Override
   public KleeneProcessor create() {
-    return new SimpleKP(Integer.parseInt(RunningProject.getActiveProjectProps().getProperty(
+    return new SimpleKP(Integer.parseInt(RunningProject.getActiveProjectProps(PropertiesPanel.NAME).getProperty(
             PropertiesPanel.KLEENE_REPETITIONS,
             Integer.toString(PropertiesPanel.KLEENE_REPETITIONS_DEFAULT))));
   }

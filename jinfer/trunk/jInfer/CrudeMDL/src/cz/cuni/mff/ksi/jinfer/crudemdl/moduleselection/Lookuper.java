@@ -40,8 +40,8 @@ public class Lookuper<F extends NamedModule> {
   }
 
   public F lookupF() {
-    Properties properties= RunningProject.getActiveProjectProps();
-    String name= properties.getProperty(this.propertyName);
+    Properties properties = RunningProject.getActiveProjectProps(CrudeMDLPropertiesPanel.NAME);
+    String name = properties.getProperty(this.propertyName);
     
     F result = null;
     for (F factory : lookupFs()) {

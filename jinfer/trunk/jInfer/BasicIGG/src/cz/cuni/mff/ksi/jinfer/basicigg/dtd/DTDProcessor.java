@@ -79,7 +79,7 @@ public class DTDProcessor implements Processor {
 
       return ret;
     } catch (final Exception e) {
-      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps().getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error processing DTD", e);
       } else {
         LOG.warn("Error processing DTD, ignoring and going on.", e);

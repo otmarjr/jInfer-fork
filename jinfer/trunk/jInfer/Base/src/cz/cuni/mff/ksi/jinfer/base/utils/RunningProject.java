@@ -81,9 +81,9 @@ public final class RunningProject {
    *
    * @return propeties of active project.
    */
-  public static Properties getActiveProjectProps() {
+  public static Properties getActiveProjectProps(final String moduleName) {
     if (isActiveProject()) {
-      return project.getLookup().lookup(Properties.class);
+      return new ModuleProperties(moduleName, project.getLookup().lookup(Properties.class));
     }
 
     return new Properties();

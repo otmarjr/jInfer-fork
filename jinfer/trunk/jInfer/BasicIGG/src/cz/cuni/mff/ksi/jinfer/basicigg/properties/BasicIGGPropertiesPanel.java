@@ -26,6 +26,7 @@ public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 18746542132L;
 
+  public static final String NAME = "basicIGG";
   public static final String KEEP_ATTRIBUTES = "keep.attributes";
   public static final String KEEP_SIMPLE_DATA = "keep.simple.data";
   public static final String STOP_ON_ERROR = "stop.on.error";

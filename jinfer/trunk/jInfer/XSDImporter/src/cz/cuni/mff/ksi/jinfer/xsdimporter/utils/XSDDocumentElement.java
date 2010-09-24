@@ -36,7 +36,11 @@ public class XSDDocumentElement {
   private boolean associatedWithUnnamedCType;
 
   public XSDDocumentElement(final String trimmedQName) {
-    this.trimmedQName = trimmedQName;
+    if (trimmedQName == null || trimmedQName.equals("")) {
+      throw new IllegalArgumentException("XDS Document Element: can't have empty or null element name!");
+    } else {
+      this.trimmedQName = trimmedQName;
+    }
     attrs = new HashMap<String, SAXAttributeData>();
     associatedCTypeName = "";
     associatedWithUnnamedCType = false;

@@ -50,7 +50,7 @@ class XSDSimpleHandler extends DefaultHandler {
   /** HashMap of named complextypes, saved as templates for creating rules */
   private final Map<String, Regexp<AbstractNode>> namedTypes = new HashMap<String, Regexp<AbstractNode>>();
 
-  private static final Logger LOG = Logger.getLogger(XSDProcessor.class);
+  private static final Logger LOG = Logger.getLogger(XSDProcessorSAX.class);
 /**
  * Pseudo-unique name for the container elements that are pushed in contentStack
  * the name should be distict from every element name in the actual schema

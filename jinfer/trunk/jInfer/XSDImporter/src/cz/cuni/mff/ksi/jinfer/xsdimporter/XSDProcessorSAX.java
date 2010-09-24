@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.basicigg.properties.PropertiesPanelProviderImpl;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
@@ -35,10 +34,10 @@ import org.openide.util.lookup.ServiceProvider;
  * @author reseto
  */
 @ServiceProvider(service = Processor.class)
-public class XSDProcessor implements Processor {
+public class XSDProcessorSAX implements Processor {
 
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
-  private static final Logger LOG = Logger.getLogger(XSDProcessor.class);
+  private static final Logger LOG = Logger.getLogger(XSDProcessorSAX.class);
 
   @Override
   public FolderType getFolder() {

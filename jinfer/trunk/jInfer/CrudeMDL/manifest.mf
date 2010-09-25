@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-OpenIDE-Module: cz.cuni.mff.ksi.jinfer.crudemdl/2
-OpenIDE-Module-Implementation-Version: 2
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.crudemdl/3
+OpenIDE-Module-Implementation-Version: 3
 OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/crudemdl/layer.xml
 OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/crudemdl/Bundle.properties
 OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier

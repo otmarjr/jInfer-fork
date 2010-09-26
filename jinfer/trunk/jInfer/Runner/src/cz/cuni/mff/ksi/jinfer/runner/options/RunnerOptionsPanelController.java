@@ -46,8 +46,10 @@ public final class RunnerOptionsPanelController extends OptionsPanelController {
 
   @Override
   public void applyChanges() {
-    getPanel().store();
-    changed = false;
+    if (isValid()) {
+      getPanel().store();
+      changed = false;
+    }
   }
 
   @Override

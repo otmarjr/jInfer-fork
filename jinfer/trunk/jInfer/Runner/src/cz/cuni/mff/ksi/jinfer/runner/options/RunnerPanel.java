@@ -16,6 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.runner.options;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.util.NbPreferences;
 
 /**
@@ -26,6 +30,10 @@ import org.openide.util.NbPreferences;
 public final class RunnerPanel extends javax.swing.JPanel {
   public static final String OUTPUT_SHOW = "output.show";
   public static final String SCHEMA_OPEN = "schema.open";
+  public static final String NAME_PATTERN = "name.pattern";
+  public static final boolean OUTPUT_SHOW_DEFAULT = true;
+  public static final boolean SCHEMA_OPEN_DEFAULT = false;
+  public static final String NAME_PATTERN_DEFAULT = "generated-schema{n}";
 
   private final RunnerOptionsPanelController controller;
 
@@ -46,6 +54,8 @@ public final class RunnerPanel extends javax.swing.JPanel {
 
     jPanel1 = new javax.swing.JPanel();
     openSchema = new javax.swing.JCheckBox();
+    namePattern = new javax.swing.JTextField();
+    jLabel1 = new javax.swing.JLabel();
     jPanel2 = new javax.swing.JPanel();
     showOutputWindow = new javax.swing.JCheckBox();
     jPanel3 = new javax.swing.JPanel();
@@ -57,9 +67,30 @@ public final class RunnerPanel extends javax.swing.JPanel {
 
     org.openide.awt.Mnemonics.setLocalizedText(openSchema, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.null.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.weightx = 1.0;
     jPanel1.add(openSchema, gridBagConstraints);
+
+    namePattern.setText(org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.namePattern.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.ipadx = 150;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 1.0;
+    jPanel1.add(namePattern, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jLabel1.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+    jPanel1.add(jLabel1, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -86,11 +117,11 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 783, Short.MAX_VALUE)
+      .addGap(0, 1097, Short.MAX_VALUE)
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 248, Short.MAX_VALUE)
+      .addGap(0, 221, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -104,21 +135,44 @@ public final class RunnerPanel extends javax.swing.JPanel {
   void load() {
     openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, true));
     showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, false));
+    namePattern.setText(NbPreferences.forModule(RunnerPanel.class).get(NAME_PATTERN, NAME_PATTERN_DEFAULT));
   }
 
   void store() {
     NbPreferences.forModule(RunnerPanel.class).putBoolean(SCHEMA_OPEN, openSchema.isSelected());
     NbPreferences.forModule(RunnerPanel.class).putBoolean(OUTPUT_SHOW, showOutputWindow.isSelected());
+    if (namePattern.getText().trim().isEmpty()) {
+      namePattern.setText(NAME_PATTERN_DEFAULT);
+    }
+
+    NbPreferences.forModule(RunnerPanel.class).put(NAME_PATTERN, namePattern.getText());
   }
 
   boolean valid() {
-    // TODO check whether form is consistent and complete
+    Pattern p = Pattern.compile("\\{n\\}");
+    Matcher matcher = p.matcher(namePattern.getText());
+    int matches = 0;
+    while (matcher.find()) {
+      matches++;
+    }
+
+    if (matches > 1) {
+      DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(
+              org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.multiple.numbering"),
+              NotifyDescriptor.ERROR_MESSAGE));
+
+
+      return false;
+    }
+
     return true;
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JLabel jLabel1;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel3;
+  private javax.swing.JTextField namePattern;
   private javax.swing.JCheckBox openSchema;
   private javax.swing.JCheckBox showOutputWindow;
   // End of variables declaration//GEN-END:variables

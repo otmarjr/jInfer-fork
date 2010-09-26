@@ -28,7 +28,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.moduleselection.ModuleSelectionPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.moduleselection.PropertiesPanelProviderImpl;
 import cz.cuni.mff.ksi.jinfer.runner.options.RunnerPanel;
 import java.util.Date;
 import java.util.EnumSet;
@@ -160,13 +159,15 @@ public class Runner {
     final String commentedSchema = getCommentedSchema(schema);
 
     final boolean openSchema = NbPreferences.forModule(RunnerPanel.class).getBoolean(
-            RunnerPanel.SCHEMA_OPEN, true);
+            RunnerPanel.SCHEMA_OPEN, RunnerPanel.SCHEMA_OPEN_DEFAULT);
+
+    final String namePattern = NbPreferences.forModule(RunnerPanel.class).get(RunnerPanel.NAME_PATTERN, RunnerPanel.NAME_PATTERN_DEFAULT);
 
     RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class).addOutput(
-            "generated-schema", commentedSchema, extension, openSchema);
+            namePattern, commentedSchema, extension, openSchema);
 
     final boolean showOutput = NbPreferences.forModule(RunnerPanel.class).getBoolean(
-            RunnerPanel.OUTPUT_SHOW, false);
+            RunnerPanel.OUTPUT_SHOW, RunnerPanel.OUTPUT_SHOW_DEFAULT);
 
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", true);
     ioResult.getOut().println(commentedSchema);

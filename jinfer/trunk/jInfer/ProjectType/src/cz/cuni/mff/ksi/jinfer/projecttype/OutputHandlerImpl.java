@@ -17,10 +17,16 @@
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
-import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import org.apache.log4j.Logger;
 import org.netbeans.api.actions.Openable;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
@@ -31,6 +37,9 @@ import org.openide.util.Exceptions;
  */
 public class OutputHandlerImpl implements OutputHandler {
 
+  private static final Logger LOG = Logger.getLogger(OutputHandler.class);
+  private static final String NUMBER_PATTERN = "\\{n\\}";
+  private static final String DATE_PATTERN = "\\{date\\}";
   private final JInferProject project;
 
   public OutputHandlerImpl(final JInferProject project) {
@@ -38,29 +47,60 @@ public class OutputHandlerImpl implements OutputHandler {
   }
 
   @Override
-  public void addOutput(final String name, final String data, final String extension, final boolean showOutput) {
+  public void addOutput(final String name, final String data, final String extension,
+          final boolean showOutput) {
+    OutputStream out = null;
     try {
       final FileObject outputFolder = project.getOutputFolder(true);
+      String proccessedName = generateDate(name);
+      proccessedName = generateNumbering(proccessedName, extension, outputFolder);
+      FileObject output;
+      try {
+        output = outputFolder.createData(proccessedName, extension);
+      } catch (IOException ex) {
+        LOG.error(org.openide.util.NbBundle.getMessage(OutputHandlerImpl.class, "schemaName.exists", proccessedName, extension));
+
+        DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(
+              org.openide.util.NbBundle.getMessage(OutputHandlerImpl.class, "schemaName.exists", proccessedName, extension),
+              NotifyDescriptor.ERROR_MESSAGE));
+
+        return;
+      }
+      out = output.getOutputStream();
+      out.write(data.getBytes());
+      out.flush();
+      out.close();
+      if (showOutput) {
+        DataObject.find(output).getLookup().lookup(Openable.class).open();
+      }
+      outputFolder.refresh();
+    } catch (IOException ex) {
+      throw new RuntimeException(ex);
+    } 
+  }
+
+  private String generateDate(final String name) {
+    final DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault());
+    final String date = df.format(new Date());
+
+    return name.replaceAll(DATE_PATTERN, date);
+  }
+
+  private String generateNumbering(final String proccessedName, final String extension,
+          final FileObject outputFolder) {
+    if (proccessedName.contains("{n}")) {
       int min = 1;
       while (true) {
-        if (outputFolder.getFileObject(name + min, extension) == null) {
+        if (outputFolder.getFileObject(proccessedName.replaceFirst(NUMBER_PATTERN, String.valueOf(
+                min)), extension) == null) {
           break;
         }
         min++;
       }
-      final FileObject output = outputFolder.createData(name + min, extension);
-      final OutputStream out = output.getOutputStream();
-      out.write(data.getBytes());
-      out.flush();
-      out.close();
 
-      if (showOutput) {
-        DataObject.find(output).getLookup().lookup(Openable.class).open();
-      }
-      
-      outputFolder.refresh();
-    } catch (IOException ex) {
-      Exceptions.printStackTrace(ex);
+      return proccessedName.replaceFirst(NUMBER_PATTERN, String.valueOf(min));
+    } else {
+      return proccessedName;
     }
   }
 }

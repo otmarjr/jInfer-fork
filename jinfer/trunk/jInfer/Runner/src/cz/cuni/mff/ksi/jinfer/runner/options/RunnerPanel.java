@@ -31,8 +31,8 @@ public final class RunnerPanel extends javax.swing.JPanel {
   public static final String OUTPUT_SHOW = "output.show";
   public static final String SCHEMA_OPEN = "schema.open";
   public static final String NAME_PATTERN = "name.pattern";
-  public static final boolean OUTPUT_SHOW_DEFAULT = true;
-  public static final boolean SCHEMA_OPEN_DEFAULT = false;
+  public static final boolean OUTPUT_SHOW_DEFAULT = false;
+  public static final boolean SCHEMA_OPEN_DEFAULT = true;
   public static final String NAME_PATTERN_DEFAULT = "generated-schema{n}";
 
   private final RunnerOptionsPanelController controller;
@@ -133,8 +133,8 @@ public final class RunnerPanel extends javax.swing.JPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   void load() {
-    openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, true));
-    showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, false));
+    openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, SCHEMA_OPEN_DEFAULT));
+    showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, OUTPUT_SHOW_DEFAULT));
     namePattern.setText(NbPreferences.forModule(RunnerPanel.class).get(NAME_PATTERN, NAME_PATTERN_DEFAULT));
   }
 

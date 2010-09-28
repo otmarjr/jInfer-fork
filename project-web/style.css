@@ -257,7 +257,30 @@ p {
 	clear: both;
 }
 
-ul.people {
-	list-style: none;
-	line-height: 200%;
+table.people {
+	border-spacing: 0.5em;
+}
+
+.member_photo {
+	width: 160px;
+	height: 160px;
+}
+
+.member_info {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.member_name {
+	font-size: 1.3em;
+}
+
+.member_function {
+	padding-left: 1em;
+	color: grey;
+	font-style: oblique;
+}
+
+.member_email {
+	font-size: 1.1em;
 }

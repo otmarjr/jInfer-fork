@@ -262,17 +262,17 @@ table.people {
 }
 
 .member_photo {
-	width: 160px;
-	height: 160px;
+	width: 128px;
+	height: 128px;
 }
 
 .member_info {
-	text-align: center;
+	text-align: left;
 	vertical-align: middle;
 }
 
 .member_name {
-	font-size: 1.3em;
+	font-size: 1.2em;
 }
 
 .member_function {

@@ -18,8 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -238,6 +238,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       for (Step<Regexp<T>> outStep : outSteps) {
 
         final List<Regexp<T>> newRegexpChildren= new LinkedList<Regexp<T>>();
+        if (!inStep.getAcceptSymbol().isEmpty())
         if (inStep.getAcceptSymbol().isToken()) {
           newRegexpChildren.add(inStep.getAcceptSymbol());
         } else {
@@ -253,7 +254,12 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
           newRegexpChildren.addAll(outStep.getAcceptSymbol().getChildren());
         }
 
-        Regexp<T> newRegexp= Regexp.<T>getConcatenation(newRegexpChildren);
+        Regexp<T> newRegexp;
+        if (newRegexpChildren.size() == 1) {
+          newRegexp= newRegexpChildren.get(0);
+        } else {
+          newRegexp= Regexp.<T>getConcatenation(newRegexpChildren);
+        }
         Step<Regexp<T>> newStep=
                 new Step<Regexp<T>>(newRegexp, inStep.getSource(), outStep.getDestination(), 1);
 

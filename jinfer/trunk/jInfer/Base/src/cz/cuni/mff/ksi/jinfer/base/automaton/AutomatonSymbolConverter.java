@@ -15,16 +15,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
-
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
+package cz.cuni.mff.ksi.jinfer.base.automaton;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public interface AutomatonCloner<A, B> {
-  Automaton<B> convertAutomaton(final Automaton<A> anotherAutomaton, final AutomatonSymbolConverter<A, B> symbolConverter);
-  void convertAutomaton(final Automaton<A> anotherAutomaton, final Automaton<B> newAutomaton, final AutomatonSymbolConverter<A, B> symbolConverter);
+public interface AutomatonSymbolConverter<A, B> {
+  B convertSymbol(final A symbol);
 }

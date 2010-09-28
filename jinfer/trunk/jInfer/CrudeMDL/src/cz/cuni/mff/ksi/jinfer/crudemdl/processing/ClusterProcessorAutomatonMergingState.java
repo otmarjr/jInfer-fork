@@ -21,7 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.Shortener;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
@@ -100,10 +100,10 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug("--- End");
     
     // 3.4 return element with regexp
-    return (new Shortener()).simplify( new Element(
+    return /*(new Shortener()).simplify(*/ new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
-          regexp           ));
+          regexp           );//);
   }
 }

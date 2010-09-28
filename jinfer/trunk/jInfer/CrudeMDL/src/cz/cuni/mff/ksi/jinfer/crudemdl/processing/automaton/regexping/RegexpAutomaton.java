@@ -18,10 +18,10 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.AutomatonCloner;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.AutomatonClonerImpl;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.AutomatonSymbolConverter;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerImpl;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonSymbolConverter;
 import org.apache.log4j.Logger;
 
 /**

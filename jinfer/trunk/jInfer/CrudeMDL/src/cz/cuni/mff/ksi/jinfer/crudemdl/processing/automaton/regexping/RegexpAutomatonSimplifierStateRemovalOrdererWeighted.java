@@ -18,9 +18,9 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 
 /**
  * TODO anti Comment!

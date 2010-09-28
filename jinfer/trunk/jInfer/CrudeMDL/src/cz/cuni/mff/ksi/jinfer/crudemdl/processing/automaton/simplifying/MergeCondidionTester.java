@@ -18,8 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import java.util.List;
 
 /**

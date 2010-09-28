@@ -18,8 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;

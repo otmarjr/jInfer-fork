@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import java.util.List;
 
 /**

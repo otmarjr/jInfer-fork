@@ -19,9 +19,9 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.State;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;

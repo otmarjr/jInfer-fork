@@ -15,7 +15,7 @@
  *  along with newAutomaton program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton;
+package cz.cuni.mff.ksi.jinfer.base.automaton;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -257,8 +257,15 @@ p {
 	clear: both;
 }
 
+.people_outer {
+	position: relative;
+	left: -128px;
+}
+
 table.people {
-	border-spacing: 0.5em;
+	border-spacing: 1em;
+	position: relative;
+	left: -2em;
 }
 
 .member_photo {
@@ -281,6 +288,6 @@ table.people {
 	font-style: oblique;
 }
 
-.member_email {
-	font-size: 1.1em;
+.member_email, .member_http {
+	text-indent: 1em;
 }

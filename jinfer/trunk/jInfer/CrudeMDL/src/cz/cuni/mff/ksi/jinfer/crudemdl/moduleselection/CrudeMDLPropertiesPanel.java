@@ -17,7 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.crudemdl.SimplifierImpl;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
@@ -33,14 +35,11 @@ public class CrudeMDLPropertiesPanel extends AbstractPropertiesPanel {
   public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
-  private List<Lookuper<?>> lookupers;
 
   /** Creates new form ModuleSelectionJPanel */
-  public CrudeMDLPropertiesPanel(final Properties properties, final List<Lookuper<?>> lookupers) {
+  public CrudeMDLPropertiesPanel(final Properties properties) {
     super(properties);
-    this.lookupers = lookupers;
     initComponents();
-    this.load();
   }
 
   /** This method is called from within the constructor to
@@ -113,8 +112,12 @@ public class CrudeMDLPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public final void load() {
-    clusterer.setModel(new DefaultComboBoxModel(lookupers.get(0).lookupFNames().toArray()));
-    clusterProcessor.setModel(new DefaultComboBoxModel(lookupers.get(1).lookupFNames().toArray()));
+    clusterer.setModel(new DefaultComboBoxModel(
+            ModuleSelectionHelper.lookupNames(ClustererFactory.class).toArray()
+            ));
+    clusterProcessor.setModel(new DefaultComboBoxModel(
+           ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()
+           ));
 
     clusterer.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
     clusterProcessor.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTER_PROCESSOR,

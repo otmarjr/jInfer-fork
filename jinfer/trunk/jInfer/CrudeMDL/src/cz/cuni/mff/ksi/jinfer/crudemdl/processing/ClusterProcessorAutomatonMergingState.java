@@ -104,14 +104,15 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     final List<MergeCondidionTester<AbstractNode>> l= new ArrayList<MergeCondidionTester<AbstractNode>>();
     l.add(new KHContextMergeConditionTester<AbstractNode>(2, 1));
     final Automaton<AbstractNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton,  l);
-//    automaton.simplify( new KHContextMergeConditionTester<AbstractNode>(2, 1) );
     LOG.debug(">>> After 2,1-context:");
     LOG.debug(simplifiedAutomaton);
+//    AutoEditor.drawAutomatonAsync(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
     final RegexpAutomaton<AbstractNode> regexpAutomaton= new RegexpAutomaton<AbstractNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
+//    AutoEditor.drawAutomatonAsync(regexpAutomaton);
     final RegexpAutomatonSimplifier<AbstractNode> regexpAutomatonSimplifier= new RegexpAutomatonSimplifierStateRemoval<AbstractNode>();
     final Regexp<AbstractNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
     LOG.debug(">>> And the regexp is:");

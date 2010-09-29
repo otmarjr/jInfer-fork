@@ -35,11 +35,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    List<Lookuper<?>> l= new ArrayList<Lookuper<?>>();
-    l.add(SimplifierImpl.getClustererFactoryLookuper());
-    l.add(SimplifierImpl.getClusterProcessorFactoryLookuper());
-    return new CrudeMDLPropertiesPanel(properties, l);
-//    return AbstractPropertiesPanel.getPropertiesPanel(new CrudeMDLPropertiesPanel(properties));
+    return new CrudeMDLPropertiesPanel(properties);
   }
 
   @Override

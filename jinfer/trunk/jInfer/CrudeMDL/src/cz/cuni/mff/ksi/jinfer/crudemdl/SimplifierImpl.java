@@ -23,15 +23,17 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.CrudeMDLPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.Lookuper;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -40,13 +42,8 @@ import org.openide.util.lookup.ServiceProvider;
  * In general, simplification should proceed as follows:
  * 1. cluster elements
  * 2. for each element
- *      create prefix tree automaton
- *      simplify automaton by merging condition - currently supports k,h-contexts - configured to use 2,1-contexts
- *      create automaton with regexps on steps
- *      by removing states and combining regexp simplify regexp automaton and retrieve regexp
- *
- * 
- *
+ *      run clusterprocessor
+ * TODO anti Comment!
  * @author anti
  */
 @ServiceProvider(service = Simplifier.class)
@@ -60,7 +57,7 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public String getModuleDescription() {
-    return getName() + "(" + clustererFactoryLookuper.lookupF().getModuleDescription() + ", " + clusterProcessorFactoryLookuper.lookupF().getModuleDescription() + ")";
+    return getName() + "(" + this.getClustererFactory().getModuleDescription() + ", " + this.getClusterProcessorFactory().getModuleDescription() + ")";
   }
 
   @Override
@@ -68,25 +65,16 @@ public class SimplifierImpl implements Simplifier {
     return Collections.emptyList();
   }
 
-  private static Lookuper<ClustererFactory> clustererFactoryLookuper=
-          new Lookuper<ClustererFactory>(ClustererFactory.class, CrudeMDLPropertiesPanel.PROPERTIES_CLUSTERER);
-  private static Lookuper<ClusterProcessorFactory> clusterProcessorFactoryLookuper= 
-          new Lookuper<ClusterProcessorFactory>(ClusterProcessorFactory.class, CrudeMDLPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR);
+  private ClustererFactory getClustererFactory() {
+    Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-  public static Lookuper<ClustererFactory> getClustererFactoryLookuper() {
-    return clustererFactoryLookuper;
+    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTERER));
   }
 
-  public static Lookuper<ClusterProcessorFactory> getClusterProcessorFactoryLookuper() {
-    return clusterProcessorFactoryLookuper;
-  }
+  private ClusterProcessorFactory getClusterProcessorFactory() {
+    Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-  public static Clusterer<AbstractNode> getClusterer() {
-    return clustererFactoryLookuper.lookupF().create();
-  }
-
-  public static ClusterProcessor<AbstractNode> getClusterProcessor() {
-    return clusterProcessorFactoryLookuper.lookupF().create();
+    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR));
   }
 
   private void verifyInput(final List<AbstractNode> initialGrammar) throws InterruptedException {
@@ -112,7 +100,7 @@ public class SimplifierImpl implements Simplifier {
 
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
-    final Clusterer<AbstractNode> clusterer= SimplifierImpl.getClusterer();
+    final Clusterer<AbstractNode> clusterer= this.getClustererFactory().create();
     clusterer.addAll(initialGrammar);
     clusterer.cluster();
 
@@ -120,7 +108,7 @@ public class SimplifierImpl implements Simplifier {
     final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
 
     // 3. process rules
-    final ClusterProcessor<AbstractNode> processor= SimplifierImpl.getClusterProcessor();
+    final ClusterProcessor<AbstractNode> processor= this.getClusterProcessorFactory().create();
     for (Cluster<AbstractNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();

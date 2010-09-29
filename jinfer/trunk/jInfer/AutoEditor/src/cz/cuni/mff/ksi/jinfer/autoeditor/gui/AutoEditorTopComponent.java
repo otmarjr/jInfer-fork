@@ -16,9 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui;
 
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -26,7 +30,6 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -124,6 +127,11 @@ public final class AutoEditorTopComponent extends TopComponent {
     jPanel1.add(vv, gbc);
     jPanel1.repaint();
   }//GEN-LAST:event_jButton1ActionPerformed
+
+  public void drawAutomatonBasicVisualizationServer(final BasicVisualizationServer<State<AbstractNode>, Step<AbstractNode>> bvs) {
+    jPanel1.add(bvs);
+    jPanel1.repaint();
+  }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;

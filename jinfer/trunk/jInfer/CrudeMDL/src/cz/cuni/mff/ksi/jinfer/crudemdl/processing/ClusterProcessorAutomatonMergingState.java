@@ -20,8 +20,8 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.crudemdl.Shortener;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
@@ -32,10 +32,10 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.Automato
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.GreedyAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.log4j.Level;
+import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
@@ -56,6 +56,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     // 3.1 construct PTA
     final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
 
+    final Map<AbstractNode, Integer> attributesMap= new HashMap<AbstractNode, Integer>();
     for (AbstractNode instance : cluster.getMembers()) {
       final Element element = (Element) instance;
       final Regexp<AbstractNode> rightSide= element.getSubnodes();
@@ -69,12 +70,28 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
       final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
       for (AbstractNode token : rightSideTokens) {
         if (token.isAttribute()) {
-          continue;
+          Attribute tokenA= (Attribute) token;
+          AbstractNode attRepresentant= clusterer.getRepresentantForItem(tokenA);
+          if (attributesMap.containsKey(attRepresentant)) {
+            attributesMap.put(attRepresentant, attributesMap.get(attRepresentant) + 1);
+            Attribute attRepresentantA = (Attribute) attRepresentant;
+            attRepresentantA.getContent().addAll(tokenA.getContent());
+          } else {
+            attributesMap.put(attRepresentant, Integer.valueOf(1));
+          }
+        } else {
+          symbolString.add( clusterer.getRepresentantForItem(token) );
         }
-        symbolString.add( clusterer.getRepresentantForItem(token) );
       }
       automaton.buildPTAOnSymbol(symbolString);
     }
+
+    for (AbstractNode attribute : attributesMap.keySet()) {
+      if (attributesMap.get(attribute) < cluster.getMembers().size()) {
+        attribute.getMetadata().remove("required");
+      }
+    }
+
     LOG.debug("--- AutomatonMergingStateProcessor on element:");
     LOG.debug(cluster.getRepresentant());
     LOG.debug(">>> PTA automaton:");
@@ -98,12 +115,27 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(">>> And the regexp is:");
     LOG.debug(regexp);
     LOG.debug("--- End");
-    
+
+    List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
+    for (AbstractNode att : attributesMap.keySet()) {
+      attTokens.add(
+              Regexp.<AbstractNode>getToken(att)
+              );
+    }
+
+    final Regexp<AbstractNode> regexpAttributes=
+            Regexp.<AbstractNode>getConcatenation( attTokens );
+    LOG.debug(">>> Attributes regexp is:");
+    LOG.debug(regexpAttributes);
+
+    attTokens.add(regexp);
+
     // 3.4 return element with regexp
     return /*(new Shortener()).simplify(*/ new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
-          regexp           );//);
+          Regexp.<AbstractNode>getConcatenation( attTokens )
+          );//);
   }
 }

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  * TODO anti Comment!
@@ -32,6 +33,8 @@ import java.util.Map;
  * @author anti
  */
 public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
+  private static final Logger LOG = Logger.getLogger(RegexpAutomatonStateRemoval.class);
+  
   private State<Regexp<T>> superFinalState;
   private State<Regexp<T>> superInitialState;
 
@@ -193,17 +196,21 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       outStepBuckets.get(outStep.getDestination()).add(outStep);
     }
 
+    /* in each bucket collapse to alternation - if there are more the one steps */
     for (State<Regexp<T>> outBucketDestinationState : outStepBuckets.keySet()) {
       if (outStepBuckets.get(outBucketDestinationState).size() == 1) {
         continue;
       }
 
+      /* collapse to alternation */
       final List<Regexp<T>> outStepRegexps= new LinkedList<Regexp<T>>();
       for (Step<Regexp<T>> outBucketStep : outStepBuckets.get(outBucketDestinationState)) {
+        // TODO anti Ak lambda medzi nimi, je nepovinny
         outStepRegexps.add(outBucketStep.getAcceptSymbol());
         this.reverseDelta.get(outBucketDestinationState).remove(outBucketStep);
         this.delta.get(state).remove(outBucketStep);
       }
+      /* build up new instep with alternation regex */
       final Regexp<T> newOutRegexp= Regexp.<T>getAlternation(outStepRegexps);
       final Step<Regexp<T>> newOutStep= new Step<Regexp<T>>(newOutRegexp, state, outBucketDestinationState, 1);
       this.reverseDelta.get(outBucketDestinationState).add(newOutStep);
@@ -238,20 +245,15 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       for (Step<Regexp<T>> outStep : outSteps) {
 
         final List<Regexp<T>> newRegexpChildren= new LinkedList<Regexp<T>>();
-        if (!inStep.getAcceptSymbol().isEmpty())
-        if (inStep.getAcceptSymbol().isToken()) {
+        if (!inStep.getAcceptSymbol().isEmpty()) {
           newRegexpChildren.add(inStep.getAcceptSymbol());
-        } else {
-          newRegexpChildren.addAll(inStep.getAcceptSymbol().getChildren());
         }
+
         if (loopStep != null) {
           newRegexpChildren.add(loopStep.getAcceptSymbol());
         }
-        if (!outStep.getAcceptSymbol().isEmpty())
-        if (outStep.getAcceptSymbol().isToken()) {
+        if (!outStep.getAcceptSymbol().isEmpty()) {
           newRegexpChildren.add(outStep.getAcceptSymbol());
-        } else {
-          newRegexpChildren.addAll(outStep.getAcceptSymbol().getChildren());
         }
 
         Regexp<T> newRegexp;
@@ -276,6 +278,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       this.reverseDelta.get(outStep.getDestination()).remove(outStep);
     }
     this.delta.remove(state);
+    LOG.debug(this);
   }
 
   public void finalStep() {

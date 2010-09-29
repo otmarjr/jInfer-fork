@@ -17,8 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-
 /**
  * TODO anti Comment!
  *

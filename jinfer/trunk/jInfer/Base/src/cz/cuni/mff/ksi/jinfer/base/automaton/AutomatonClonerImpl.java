@@ -55,7 +55,7 @@ public class AutomatonClonerImpl<A, B> implements AutomatonCloner<A, B> {
       newAutomaton.reverseMergedStates.put(newState, new HashSet<State<B>>());
       for (State<A> anotherState2 : anotherAutomaton.getReverseMergedStates().get(anotherState)) {
         final State<B> newState2=new State<B>(
-                  anotherState.getFinalCount(), anotherState.getName()
+                  anotherState2.getFinalCount(), anotherState2.getName()
                 );
         stateConversionMap.put(anotherState2, newState2);
         newAutomaton.reverseMergedStates.get(newState).add(newState2);
@@ -81,10 +81,10 @@ public class AutomatonClonerImpl<A, B> implements AutomatonCloner<A, B> {
 
 
     Map<State<A>, State<A>> anotherMergedStates= anotherAutomaton.getMergedStates();
-    for (State<A> state : anotherMergedStates.keySet()) {
+    for (State<A> anotherState : anotherMergedStates.keySet()) {
       newAutomaton.mergedStates.put(
-              stateConversionMap.get(state),
-              stateConversionMap.get(anotherMergedStates.get(state))
+              stateConversionMap.get(anotherState),
+              stateConversionMap.get(anotherMergedStates.get(anotherState))
               );
     }
 

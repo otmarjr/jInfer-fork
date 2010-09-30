@@ -39,12 +39,12 @@ import java.util.Map;
  *
  * @author anti
  */
-public class ClustererIname implements ElementClusterer<AbstractNode> {
+public class ClustererWithAttributesIname implements ClustererWithAttributes<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
   private final List<AbstractNode> items;
   private final Map<AbstractNode, Clusterer<AbstractNode>> attributeClusterers;
 
-  public ClustererIname() {
+  public ClustererWithAttributesIname() {
     this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
     this.items= new LinkedList<AbstractNode>();
     this.attributeClusterers= new HashMap<AbstractNode, Clusterer<AbstractNode>>();

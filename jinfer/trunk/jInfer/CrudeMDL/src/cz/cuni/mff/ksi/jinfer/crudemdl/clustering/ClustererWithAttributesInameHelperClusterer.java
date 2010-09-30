@@ -26,7 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * Helper class for ClustererWithAttributesIname. Clusters attributes for one
+ * element by name.
  *
  * @author anti
  */

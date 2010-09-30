@@ -42,17 +42,29 @@ import java.util.List;
  * }
  * When automaton is created, getRepresentantForItem() is called for everything on
  * elements right side of rule. So Clusterer have to deal with SimpleData (one cluster
- * for all simpledata nodes), attributes
+ * for all simpledata nodes).
  *
- * TODO anti Comment! what about attributes when done with attributes
+ * This Clusterer have to do more work on attributes. For each cluster, it has
+ * to collect attributes in cluster members and cluster attributes separately,
+ * by some criterion. Then simplifier may ask for all attributes clusters by
+ * giving representant to getAttributeClusters method.
  *
- * Each item has to be in exactly one cluster, that's what clustering is all about.
+ * Clusterer may decide that attribute should be converted into element, and
+ * update clusters accordingly (removing attributes, adding elements with same
+ * content to appropriate element cluster). There should be log message to user
+ * about such a decision, may be consulted with user in some way.
+ *
+ * It's up to simplifier, to decide what to do with attributes (simplifying).
+ *
+ * Each item has to be in exactly one cluster.
  *
  * @author anti
  */
 public interface ClustererWithAttributes<T> extends Clusterer<T> {
    /**
-    * TODO anti Comment
+    * Returns all clusters of attributes for a given representant of cluster (for
+    * a given element cluster defacto). Attributes have to be collected from
+    * elements.
     * @param representant
     * @return
     */

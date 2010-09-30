@@ -20,8 +20,8 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
-import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerImpl;
-import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonSymbolConverter;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
 import org.apache.log4j.Logger;
 
 /**
@@ -60,10 +60,10 @@ public class RegexpAutomaton<T> extends Automaton<Regexp<T>> {
   public RegexpAutomaton(final Automaton<T> anotherAutomaton) {
     super(false);
 
-    AutomatonClonerImpl<T, Regexp<T>> cloner= new AutomatonClonerImpl<T, Regexp<T>>();
+    AutomatonCloner<T, Regexp<T>> cloner= new AutomatonCloner<T, Regexp<T>>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
-      new AutomatonSymbolConverter<T, Regexp<T>>() {
+      new AutomatonClonerSymbolConverter<T, Regexp<T>>() {
         @Override
         public Regexp<T> convertSymbol(T symbol) {
           return Regexp.<T>getToken(symbol);

@@ -43,12 +43,8 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Simplifier intended to user some crude two-part MDL to evaluate solutions.
- * In general, simplification should proceed as follows:
- * 1. cluster elements
- * 2. for each element
- *      run clusterprocessor
- * TODO anti Comment!
+ * TODO anti Comment! STILL UNDER HEAVY DEVELOPMENT, after more is done, comment
+ * will be written (at least i hope so)
  * @author anti
  */
 @ServiceProvider(service = Simplifier.class)

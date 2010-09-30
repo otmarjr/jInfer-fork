@@ -123,11 +123,11 @@ public class Automaton<T> {
   public Automaton(final Automaton<T> anotherAutomaton) {
     this(false);
     
-    AutomatonClonerImpl<T, T> cloner= new AutomatonClonerImpl<T, T>();
+    AutomatonCloner<T, T> cloner= new AutomatonCloner<T, T>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
             new
-              AutomatonSymbolConverter<T, T>() {
+              AutomatonClonerSymbolConverter<T, T>() {
                 @Override
                 public T convertSymbol(T symbol) {
                   return symbol;

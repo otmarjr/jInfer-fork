@@ -22,7 +22,13 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 
 /**
- * TODO anti Comment!
+ * Factory interface for Clusterer interface. Implementing factories
+ * should be annotated as
+ * \@ServiceProvider(service = ClustererFactory.class)
+ * 
+ * Simplifier will lookup installed implementations and choose one 
+ * according to user settings. Then calls create to obtain instance of
+ * Clusterer class.
  *
  * @author anti
  */

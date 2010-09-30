@@ -43,11 +43,12 @@ import java.util.List;
  * }
  * When automaton is created, getRepresentantForItem() is called for everything on
  * elements right side of rule. So Clusterer have to deal with SimpleData (one cluster
- * for all simpledata nodes), attributes
+ * for all simpledata nodes), attributes are omitted in automaton creation,
+ * can be omitted in clusterer. For those who wish to write simplifier with
+ * attributes handling, take a look at ClustererWithAttributes interface.
  *
- * TODO anti Comment! what about attributes when done with attributes
- *
- * Each item has to be in exactly one cluster, that's what clustering is all about.
+ * Each item has to be in exactly one cluster (that's what clustering is all
+ * about).
  *
  * @author anti
  */

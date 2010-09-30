@@ -23,8 +23,9 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment!
+ * Factory class for ClustererWithAttributesIname class.
  *
+ * Has capability "attributeClusters" and informs about it in getCapabilities().
  * @author anti
  */
 @ServiceProvider(service = ClustererFactory.class)
@@ -36,7 +37,7 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
 
   @Override
   public String getName() {
-    return "ClustererIname";
+    return "ClustererInameWithAttributes";
   }
 
   @Override

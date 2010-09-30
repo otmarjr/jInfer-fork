@@ -21,7 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment!
+ * Factory class for ClusterProcessorAutomatonMergingState.
  *
  * @author anti
  */

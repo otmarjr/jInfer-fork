@@ -30,34 +30,35 @@ import java.util.List;
  *
  * @author anti
  */
-public class ClustererInameAttributeHelperClusterer implements Clusterer<Attribute> {
-  private final List<Cluster<Attribute>> nodeClusters;
-  private final List<Attribute> items;
+public class ClustererInameAttributeHelperClusterer implements Clusterer<AbstractNode> {
+  private final List<Cluster<AbstractNode>> nodeClusters;
+  private final List<AbstractNode> items;
 
   public ClustererInameAttributeHelperClusterer() {
-    this.nodeClusters= new LinkedList<Cluster<Attribute>>();
-    this.items= new LinkedList<Attribute>();
+    this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
+    this.items= new LinkedList<AbstractNode>();
   }
 
   @Override
-  public void add(final Attribute item) {
+  public void add(final AbstractNode item) {
+    assert item.isAttribute();
     this.items.add(item);
   }
 
   @Override
-  public void addAll(final Collection<Attribute> items) {
+  public void addAll(final Collection<AbstractNode> items) {
     this.items.addAll(items);
   }
 
-  private AbstractNode addNode(final Attribute item) throws InterruptedException {
-    final Iterator<Cluster<Attribute>> iterator= this.nodeClusters.iterator();
+  private AbstractNode addNode(final AbstractNode item) throws InterruptedException {
+    final Iterator<Cluster<AbstractNode>> iterator= this.nodeClusters.iterator();
 
     while (iterator.hasNext()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      final Cluster<Attribute> cluster= iterator.next();
-      final Attribute representant= cluster.getRepresentant();
+      final Cluster<AbstractNode> cluster= iterator.next();
+      final AbstractNode representant= cluster.getRepresentant();
       if (
               representant.getName().equalsIgnoreCase(item.getName())
       ) {
@@ -66,22 +67,22 @@ public class ClustererInameAttributeHelperClusterer implements Clusterer<Attribu
       }
     }
     this.nodeClusters.add(
-            new Cluster<Attribute>(item)
+            new Cluster<AbstractNode>(item)
             );
     return item;
   }
 
   @Override
   public void cluster() throws InterruptedException {
-    for (Attribute item : this.items) {
+    for (AbstractNode item : this.items) {
       this.addNode(item);
     }
     this.items.clear();
   }
 
   @Override
-  public Attribute getRepresentantForItem(Attribute item) {
-    for (Cluster<Attribute> cluster : this.nodeClusters) {
+  public AbstractNode getRepresentantForItem(AbstractNode item) {
+    for (Cluster<AbstractNode> cluster : this.nodeClusters) {
       if (cluster.isMember(item)) {
         return cluster.getRepresentant();
       }
@@ -90,7 +91,7 @@ public class ClustererInameAttributeHelperClusterer implements Clusterer<Attribu
   }
 
   @Override
-  public List<Cluster<Attribute>> getClusters() {
+  public List<Cluster<AbstractNode>> getClusters() {
     return Collections.unmodifiableList(this.nodeClusters);
   }
 

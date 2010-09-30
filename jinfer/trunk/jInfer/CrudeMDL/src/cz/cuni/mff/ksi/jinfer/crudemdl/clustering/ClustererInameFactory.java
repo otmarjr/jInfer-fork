@@ -18,6 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import java.util.ArrayList;
+import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -40,5 +42,12 @@ public class ClustererInameFactory implements ClustererFactory {
   @Override
   public String getModuleDescription() {
     return getName();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    List<String> l= new ArrayList<String>();
+    l.add("attributeClusters");
+    return l;
   }
 }

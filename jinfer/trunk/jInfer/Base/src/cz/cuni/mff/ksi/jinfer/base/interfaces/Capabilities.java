@@ -20,6 +20,8 @@ import java.util.List;
 
 /**
  * Interface of inference modules that have capabilities.
+ * TODO vektor Comment more, how are capabilities represented, is this optional
+ * or required to implement this?
  * 
  * @author vektor
  */
@@ -27,6 +29,8 @@ public interface Capabilities {
 
   /**
    * Returns the list of capabilities (strings) of this module.
+   * 
+   * @return List of capability names
    */
   List<String> getCapabilities();
 

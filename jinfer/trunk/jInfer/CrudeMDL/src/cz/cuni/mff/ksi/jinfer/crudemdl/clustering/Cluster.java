@@ -69,6 +69,10 @@ public class Cluster<T> {
     this.members.add(item);
   }
 
+  public int size() {
+    return this.members.size();
+  }
+
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("Cluster ");

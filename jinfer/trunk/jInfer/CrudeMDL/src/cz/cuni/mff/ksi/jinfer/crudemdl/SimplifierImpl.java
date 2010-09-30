@@ -21,15 +21,20 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ElementClusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.CrudeMDLPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,7 +105,8 @@ public class SimplifierImpl implements Simplifier {
 
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
-    final Clusterer<AbstractNode> clusterer= this.getClustererFactory().create();
+    ClustererFactory clustererFactory= this.getClustererFactory();
+    final Clusterer<AbstractNode> clusterer= clustererFactory.create();
     clusterer.addAll(initialGrammar);
     clusterer.cluster();
 
@@ -116,8 +122,43 @@ public class SimplifierImpl implements Simplifier {
       if (!cluster.getRepresentant().isElement()) {
         continue;
       }
+
+      AbstractNode node =  processor.processCluster(clusterer, cluster);
+      
+      List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
+      if (clustererFactory.getCapabilities().contains("attributeClusters")) {
+        List<Cluster<AbstractNode>> attributeClusters=
+                ((ElementClusterer<AbstractNode>) clusterer).
+                getAttributeClusters(cluster.getRepresentant());
+
+        for (Cluster<AbstractNode> attCluster : attributeClusters) {
+          if (attCluster.size() < cluster.size()) {
+            attCluster.getRepresentant().getMetadata().remove("required");
+          }
+
+          for (AbstractNode instance : attCluster.getMembers()) {
+            assert instance.isAttribute();
+            if (instance.isAttribute()&&(!instance.equals(attCluster.getRepresentant()))) {
+              ((Attribute) attCluster.getRepresentant()).getContent().addAll(
+                      ((Attribute) instance).getContent());
+            }
+          }
+
+          attTokens.add(
+                  Regexp.<AbstractNode>getToken(attCluster.getRepresentant())
+                  );
+
+        }
+      }
       // 4. add to rules
-      finalGrammar.add( processor.processCluster(clusterer, cluster) );
+      attTokens.add(((Element) node).getSubnodes());
+      final Regexp<AbstractNode> regexpAttributes=
+              Regexp.<AbstractNode>getConcatenation( attTokens );
+      LOG.debug(">>> Attributes regexp is:");
+      LOG.debug(regexpAttributes);
+      finalGrammar.add(
+              new Element(node.getContext(), node.getName(), node.getMetadata(), regexpAttributes)
+              );
     }
 
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);

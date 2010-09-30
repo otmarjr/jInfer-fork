@@ -60,7 +60,7 @@ public class RegexpAutomaton<T> extends Automaton<Regexp<T>> {
   public RegexpAutomaton(final Automaton<T> anotherAutomaton) {
     super(false);
 
-    AutomatonCloner<T, Regexp<T>> cloner= new AutomatonClonerImpl<T, Regexp<T>>();
+    AutomatonClonerImpl<T, Regexp<T>> cloner= new AutomatonClonerImpl<T, Regexp<T>>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
       new AutomatonSymbolConverter<T, Regexp<T>>() {

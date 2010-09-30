@@ -23,13 +23,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TODO anti Comment!
+ * AutomatonCloner is helper class, which does just what it's name says.
+ * Given one automaton build with generic type <A> it constructs automaton
+ * build with generic type <B>, when given class AutomatonSymbolConverter<A, B>.
+ *
+ * It deeply clones = constructs the delta function, sets of states, mergedStates...
+ * whole internal structure of automaton.
+ *
+ * It can be used to convert from automaton with AbstractNode on transitions
+ * to automaton with Regexp<AbstractNode> on transitions, aso.
  *
  * @author anti
  */
-public class AutomatonClonerImpl<A, B> implements AutomatonCloner<A, B> {
+public class AutomatonClonerImpl<A, B> {
 
-  @Override
   public Automaton<B> convertAutomaton(final Automaton<A> anotherAutomaton, final AutomatonSymbolConverter<A, B> symbolConverter) {
     Automaton<B> newAutomaton= new Automaton<B>(false);
 
@@ -38,7 +45,6 @@ public class AutomatonClonerImpl<A, B> implements AutomatonCloner<A, B> {
     return newAutomaton;
   }
 
-  @Override
   public void convertAutomaton(Automaton<A> anotherAutomaton, Automaton<B> newAutomaton, AutomatonSymbolConverter<A, B> symbolConverter) {
     /* other states */
     final Map<State<A>, Set<Step<A>>> anotherDelta= anotherAutomaton.getDelta();

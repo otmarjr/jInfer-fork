@@ -78,11 +78,24 @@ public class Automaton<T> {
    */
   protected int newStateName;
   /**
-   * TODO anti Comment
+   * Merged states - when state X is merged into state Y, we say, X is being
+   * merged out (from automaton). Because simplification may require us
+   * to merge state X again with another state (using old name of state), we
+   * need to remember for each merged out state the destination state.
+   * That's what this map is used for, for every merged out state X (merging
+   * into Y), entry
+   * (X, Y) is added into map. As state can be merged out at most once, using
+   * map is all-right for this purpose.
+   * When request to merge state X arrives at future, and X is no longer in
+   * delta function, the real (correct) state to merge will be searched using
+   * this map.
    */
   protected final Map<State<T>, State<T>> mergedStates;
   /**
-   * TODO anti Comment
+   * As in mergedStates, but in opposing direction. Holds information about
+   * all the states, that merged to "key" in map. When X merges into Y,
+   * this is done: reverseMergedStates.get(Y).add(X)
+   * 
    */
   protected final Map<State<T>, Set<State<T>>> reverseMergedStates;
 
@@ -110,7 +123,7 @@ public class Automaton<T> {
   public Automaton(final Automaton<T> anotherAutomaton) {
     this(false);
     
-    AutomatonCloner<T, T> cloner= new AutomatonClonerImpl<T, T>();
+    AutomatonClonerImpl<T, T> cloner= new AutomatonClonerImpl<T, T>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
             new

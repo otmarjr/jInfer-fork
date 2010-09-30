@@ -96,7 +96,7 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
         for (AbstractNode subNode: ((Element) node).getSubnodes().getTokens()) {
           if (subNode.isAttribute()) {
             if (!this.attributeClusterers.containsKey(representant)) {
-              this.attributeClusterers.put(representant, new ClustererInameAttributeHelperClusterer());
+              this.attributeClusterers.put(representant, new ClustererWithAttributesInameHelperClusterer());
             }
             this.attributeClusterers.get(representant).add((Attribute) subNode);
           } else {

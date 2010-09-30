@@ -59,6 +59,7 @@ import java.util.List;
  * List<Pair<State, State>>: [1, 2] [2, 3]
  *
  * TODO anti rework comment when automaton is clever enough
+ * TODO anti COMMENT IS OBSOLETE! rework!
  *
  * Method actually returns not a single list of pairs, but list of list of pairs.
  * It's intended to return more alternative lists in one run. When some heuristic

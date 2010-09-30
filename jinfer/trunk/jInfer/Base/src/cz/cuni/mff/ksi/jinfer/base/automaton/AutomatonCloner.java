@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * AutomatonCloner is helper class, which does just what it's name says.
  * Given one automaton build with generic type <A> it constructs automaton
- * build with generic type <B>, when given class AutomatonSymbolConverter<A, B>.
+ * build with generic type <B>, when given class AutomatonClonerSymbolConverter<A, B>.
  *
  * It deeply clones = constructs the delta function, sets of states, mergedStates...
  * whole internal structure of automaton.
@@ -35,9 +35,9 @@ import java.util.Set;
  *
  * @author anti
  */
-public class AutomatonClonerImpl<A, B> {
+public class AutomatonCloner<A, B> {
 
-  public Automaton<B> convertAutomaton(final Automaton<A> anotherAutomaton, final AutomatonSymbolConverter<A, B> symbolConverter) {
+  public Automaton<B> convertAutomaton(final Automaton<A> anotherAutomaton, final AutomatonClonerSymbolConverter<A, B> symbolConverter) {
     Automaton<B> newAutomaton= new Automaton<B>(false);
 
     this.convertAutomaton(anotherAutomaton, newAutomaton, symbolConverter);
@@ -45,7 +45,7 @@ public class AutomatonClonerImpl<A, B> {
     return newAutomaton;
   }
 
-  public void convertAutomaton(Automaton<A> anotherAutomaton, Automaton<B> newAutomaton, AutomatonSymbolConverter<A, B> symbolConverter) {
+  public void convertAutomaton(Automaton<A> anotherAutomaton, Automaton<B> newAutomaton, AutomatonClonerSymbolConverter<A, B> symbolConverter) {
     /* other states */
     final Map<State<A>, Set<Step<A>>> anotherDelta= anotherAutomaton.getDelta();
     final Map<State<A>, Set<Step<A>>> anotherReverseDelta= anotherAutomaton.getReverseDelta();

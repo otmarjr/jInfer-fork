@@ -21,7 +21,11 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 
 /**
- * TODO anti Comment!
+ * RegexpAutomatonSimplifierStateRemovalOrderer is interface for determining
+ * which state to remove from RegexpAutomaton to obtain shorter regexp.
+ *
+ * Given RegexpAutomatonStateRemoval automaton, it has to explore structure and
+ * decide, which state would be best to remove first.
  *
  * @author anti
  */

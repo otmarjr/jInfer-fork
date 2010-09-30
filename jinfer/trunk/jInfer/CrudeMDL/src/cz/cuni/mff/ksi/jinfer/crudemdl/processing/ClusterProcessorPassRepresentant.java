@@ -22,7 +22,9 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 
 /**
- * TODO anti Comment!
+ * Trivial cluster processor to prove concept of changing submodules of simplifier.
+ * For each clusters, it does no processing (grammar generation), just returns
+ * representant.
  *
  * @author anti
  */

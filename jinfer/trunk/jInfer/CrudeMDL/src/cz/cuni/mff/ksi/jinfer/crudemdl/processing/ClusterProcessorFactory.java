@@ -21,8 +21,12 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 
 /**
- * TODO anti Comment!
+ * Factory interface for ClusterProcessor. Implementations should be annotated
  *
+ * \@ServiceProvider(service = ClusterProcessorFactory.class)
+ *
+ * to enable simplifier to find implementation by lookups.
+ * 
  * @author anti
  */
 public interface ClusterProcessorFactory extends NamedModule {

@@ -24,7 +24,13 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
+ * One of methods for deriving regexp from RegexpAutomaton is by removing states
+ * and combining regexps on transitions properly.
+ *
+ * Uses RegexpAutomatonStateRemoval automaton implementation of automaton, to
+ * which it supplies states to remove in "correct" order.
+ * Order is determined by implementation of interface
+ * RegexpAutomatonSimplifierStateRemovalOrderer.
  *
  * @author anti
  */

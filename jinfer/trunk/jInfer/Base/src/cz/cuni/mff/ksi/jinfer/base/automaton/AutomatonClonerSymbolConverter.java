@@ -18,10 +18,22 @@
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
 /**
- * TODO anti Comment!
+ * Interface for AutomatonCloner<A, B>
+ *
+ * Has to implement only one method - convertSymbol, in which it has to return
+ * symbol of type B, for each possible symbol of type A.
+ *
+ * But wait, it has to be .equals() consistent. Once it returns instance X of
+ * type B, as a symbol corresponding to input instance Y (of type A), every
+ * next call with instance Z (of type A), for which Z.equals(Y), method  must
+ * return instance Z', for which:
+ * (Z').equals(X)
+ *
+ * It can be accomplished as a simple memory inside converter between subsequent
+ * calls of course (and returning really same references).
  *
  * @author anti
  */
-public interface AutomatonSymbolConverter<A, B> {
+public interface AutomatonClonerSymbolConverter<A, B> {
   B convertSymbol(final A symbol);
 }

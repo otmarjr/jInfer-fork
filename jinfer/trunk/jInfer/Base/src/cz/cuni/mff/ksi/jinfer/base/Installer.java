@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base;
 
+import java.awt.Color;
 import java.io.IOException;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
@@ -26,6 +27,10 @@ import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 import org.openide.modules.ModuleInstall;
+import org.openide.util.Exceptions;
+import org.openide.windows.IOColorLines;
+import org.openide.windows.IOColorPrint;
+import org.openide.windows.IOColors;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -48,10 +53,37 @@ public class Installer extends ModuleInstall {
 
     @Override
     protected void append(final LoggingEvent le) {
-      final String message = this.layout.format(le);
       final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-      io.getOut().print(message);
-      io.getOut().close();
+      Color textColor = null;
+
+      switch (le.getLevel().toInt()) {
+        case Level.WARN_INT:
+          textColor = Color.ORANGE;
+          break;
+        case Level.DEBUG_INT:
+          float[] hsb = Color.RGBtoHSB(7, 105, 45, null);
+          textColor = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+          break;
+        case Level.ERROR_INT:
+          textColor = Color.RED;
+          break;
+        case Level.INFO_INT:
+        default:
+          break;
+      }
+
+      final String message = this.layout.format(le);
+      if (IOColorPrint.isSupported(io)) {
+        try {
+          IOColorPrint.print(io, message, textColor);
+        } catch (IOException ex) {
+          io.getOut().print(message);
+          io.getOut().close();
+        }
+      } else {
+        io.getOut().print(message);
+        io.getOut().close();
+      }
     }
 
     @Override
@@ -75,11 +107,12 @@ public class Installer extends ModuleInstall {
     final PatternLayout outputWindowLayout = new PatternLayout("%m%n");
     final Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
     ROOTLOG.addAppender(outputWindowAppender);
-    
+
     LOG = Logger.getLogger(Installer.class);
 
     // configure appender to a logfile
-    final PatternLayout fileLayout = new PatternLayout("(%d{dd MMM yyyy HH:mm:ss,SSS}) %p [%t] %c (%F:%L) - %m%n");
+    final PatternLayout fileLayout = new PatternLayout(
+            "(%d{dd MMM yyyy HH:mm:ss,SSS}) %p [%t] %c (%F:%L) - %m%n");
     try {
       final String logfileName = System.getProperty("user.home") + "/.jinfer/jinfer.errors.log";
       final RollingFileAppender logfileAppender = new RollingFileAppender(fileLayout, logfileName);

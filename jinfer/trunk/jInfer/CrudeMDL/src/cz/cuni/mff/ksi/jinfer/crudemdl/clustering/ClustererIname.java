@@ -18,14 +18,15 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Cluster nodes by name - ignoring case.
@@ -38,22 +39,22 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author anti
  */
-@ServiceProvider(service = Clusterer.class)
 public class ClustererIname implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
   private final List<AbstractNode> items;
-  //private final Map<AbstractNode, List<Cluster<AbstractNode>>> attributeClusters;
+  private final Map<AbstractNode, Clusterer<Attribute>> attributeClusterers;
 
   public ClustererIname() {
     this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
     this.items= new LinkedList<AbstractNode>();
+    this.attributeClusterers= new HashMap<AbstractNode, Clusterer<Attribute>>();
   }
 
-  private void addNode(final AbstractNode item) throws InterruptedException {
+  private AbstractNode addNode(final AbstractNode item) throws InterruptedException {
+    assert !item.isAttribute();
     final Iterator<Cluster<AbstractNode>> iterator= this.nodeClusters.iterator();
 
-    boolean found= false;
-    while (iterator.hasNext()&&(!found)) {
+    while (iterator.hasNext()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -61,26 +62,20 @@ public class ClustererIname implements Clusterer<AbstractNode> {
       final AbstractNode representant= cluster.getRepresentant();
       if (item.isSimpleData()&&representant.isSimpleData()) {
         cluster.add(item);
-        found= true;
-      } else if (item.isElement() &&
-          representant.isElement() &&
-          representant.getName().equalsIgnoreCase(item.getName())
-        ) {
-          cluster.add(item);
-          found= true;
-      } else if (item.isAttribute() &&
-          representant.isAttribute() &&
-          representant.getName().equalsIgnoreCase(item.getName())
-        ) {
-          cluster.add(item);
-          found= true;
+        return representant;
+      } else if (
+              item.isElement() &&
+              representant.isElement() &&
+              representant.getName().equalsIgnoreCase(item.getName())
+      ) {
+        cluster.add(item);
+        return representant;
       }
     }
-    if (!found) {
-      this.nodeClusters.add(
-              new Cluster<AbstractNode>(item)
-              );
-    }
+    this.nodeClusters.add(
+            new Cluster<AbstractNode>(item)
+            );
+    return item;
   }
 
   @Override
@@ -96,15 +91,24 @@ public class ClustererIname implements Clusterer<AbstractNode> {
   @Override
   public void cluster() throws InterruptedException {
     for (AbstractNode node : items) {
-      this.addNode(node);
+      final AbstractNode representant= this.addNode(node);
       if (node.isElement()&&(node instanceof Element)) {
         for (AbstractNode subNode: ((Element) node).getSubnodes().getTokens()) {
-          this.addNode(subNode);
+          if (subNode.isAttribute()) {
+            if (!this.attributeClusterers.containsKey(representant)) {
+              this.attributeClusterers.put(representant, new ClustererInameAttributeHelperClusterer());
+            }
+            this.attributeClusterers.get(representant).add((Attribute) subNode);
+          } else {
+            this.addNode(subNode);
+          }
         }
       }
     }
+    for (AbstractNode rep : this.attributeClusterers.keySet()) {
+      this.attributeClusterers.get(rep).cluster();
+    }
     this.items.clear();
-
   }
 
   @Override

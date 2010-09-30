@@ -57,7 +57,6 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     // 3.1 construct PTA
     final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
 
-    final Map<AbstractNode, Integer> attributesMap= new HashMap<AbstractNode, Integer>();
     for (AbstractNode instance : cluster.getMembers()) {
       final Element element = (Element) instance;
       final Regexp<AbstractNode> rightSide= element.getSubnodes();
@@ -71,26 +70,11 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
       final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
       for (AbstractNode token : rightSideTokens) {
         if (token.isAttribute()) {
-          Attribute tokenA= (Attribute) token;
-          AbstractNode attRepresentant= clusterer.getRepresentantForItem(tokenA);
-          if (attributesMap.containsKey(attRepresentant)) {
-            attributesMap.put(attRepresentant, attributesMap.get(attRepresentant) + 1);
-            Attribute attRepresentantA = (Attribute) attRepresentant;
-            attRepresentantA.getContent().addAll(tokenA.getContent());
-          } else {
-            attributesMap.put(attRepresentant, Integer.valueOf(1));
-          }
-        } else {
-          symbolString.add( clusterer.getRepresentantForItem(token) );
+          continue;
         }
-      }
+        symbolString.add( clusterer.getRepresentantForItem(token) );
+     }
       automaton.buildPTAOnSymbol(symbolString);
-    }
-
-    for (AbstractNode attribute : attributesMap.keySet()) {
-      if (attributesMap.get(attribute) < cluster.getMembers().size()) {
-        attribute.getMetadata().remove("required");
-      }
     }
 
     LOG.debug("--- AutomatonMergingStateProcessor on element:");
@@ -119,6 +103,16 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(regexp);
     LOG.debug("--- End");
 
+    
+/*
+
+    for (AbstractNode attribute : attributesMap.keySet()) {
+      if (attributesMap.get(attribute) < cluster.getMembers().size()) {
+        attribute.getMetadata().remove("required");
+      }
+    }
+
+
     List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
     for (AbstractNode att : attributesMap.keySet()) {
       attTokens.add(
@@ -132,13 +126,14 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(regexpAttributes);
 
     attTokens.add(regexp);
-
+*/
     // 3.4 return element with regexp
     return /*(new Shortener()).simplify(*/ new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
-          Regexp.<AbstractNode>getConcatenation( attTokens )
+//          Regexp.<AbstractNode>getConcatenation( attTokens )
+          regexp
           );//);
   }
 }

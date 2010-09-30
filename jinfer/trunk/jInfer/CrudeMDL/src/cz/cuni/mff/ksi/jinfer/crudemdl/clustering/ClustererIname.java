@@ -39,15 +39,15 @@ import java.util.Map;
  *
  * @author anti
  */
-public class ClustererIname implements Clusterer<AbstractNode> {
+public class ClustererIname implements ElementClusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
   private final List<AbstractNode> items;
-  private final Map<AbstractNode, Clusterer<Attribute>> attributeClusterers;
+  private final Map<AbstractNode, Clusterer<AbstractNode>> attributeClusterers;
 
   public ClustererIname() {
     this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
     this.items= new LinkedList<AbstractNode>();
-    this.attributeClusterers= new HashMap<AbstractNode, Clusterer<Attribute>>();
+    this.attributeClusterers= new HashMap<AbstractNode, Clusterer<AbstractNode>>();
   }
 
   private AbstractNode addNode(final AbstractNode item) throws InterruptedException {
@@ -124,5 +124,14 @@ public class ClustererIname implements Clusterer<AbstractNode> {
   @Override
   public List<Cluster<AbstractNode>> getClusters() {
     return Collections.unmodifiableList(this.nodeClusters);
+  }
+
+  @Override
+  public List<Cluster<AbstractNode>> getAttributeClusters(AbstractNode representant) {
+    if (this.attributeClusterers.containsKey(representant)) {
+      return Collections.unmodifiableList(this.attributeClusterers.get(representant).getClusters());
+    } else {
+      return Collections.emptyList();
+    }
   }
 }

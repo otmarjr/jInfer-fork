@@ -70,6 +70,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
       final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
       for (AbstractNode token : rightSideTokens) {
         if (token.isAttribute()) {
+          LOG.debug(token);
           continue;
         }
         symbolString.add( clusterer.getRepresentantForItem(token) );
@@ -103,36 +104,11 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(regexp);
     LOG.debug("--- End");
 
-    
-/*
-
-    for (AbstractNode attribute : attributesMap.keySet()) {
-      if (attributesMap.get(attribute) < cluster.getMembers().size()) {
-        attribute.getMetadata().remove("required");
-      }
-    }
-
-
-    List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
-    for (AbstractNode att : attributesMap.keySet()) {
-      attTokens.add(
-              Regexp.<AbstractNode>getToken(att)
-              );
-    }
-
-    final Regexp<AbstractNode> regexpAttributes=
-            Regexp.<AbstractNode>getConcatenation( attTokens );
-    LOG.debug(">>> Attributes regexp is:");
-    LOG.debug(regexpAttributes);
-
-    attTokens.add(regexp);
-*/
     // 3.4 return element with regexp
     return /*(new Shortener()).simplify(*/ new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
-//          Regexp.<AbstractNode>getConcatenation( attTokens )
           regexp
           );//);
   }

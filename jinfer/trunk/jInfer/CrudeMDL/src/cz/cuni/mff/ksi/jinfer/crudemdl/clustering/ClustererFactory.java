@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 
@@ -25,6 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
  *
  * @author anti
  */
-public interface ClustererFactory extends NamedModule{
+public interface ClustererFactory extends NamedModule, Capabilities {
   Clusterer<AbstractNode> create();
 }

@@ -15,32 +15,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.implementations.clustering;
+package cz.cuni.mff.ksi.jinfer.crudemdl.clusterprocessing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
-import org.openide.util.lookup.ServiceProvider;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clusterprocessing.ClusterProcessor;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-@ServiceProvider(service = ClustererFactory.class)
-public class ClustererInameFactory implements ClustererFactory {
-  @Override
-  public Clusterer<AbstractNode> create() {
-    return new ClustererIname();
-  }
+public class ClusterProcessorPassRepresentant implements ClusterProcessor<AbstractNode> {
 
   @Override
-  public String getName() {
-    return "ClustererIname";
+  public AbstractNode processCluster(Clusterer<AbstractNode> clusterer, Cluster<AbstractNode> cluster) throws InterruptedException {
+    return cluster.getRepresentant();
   }
 
-  @Override
-  public String getModuleDescription() {
-    return getName();
-  }
 }

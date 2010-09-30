@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.implementations.clusterprocessing;
+package cz.cuni.mff.ksi.jinfer.crudemdl.clusterprocessing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clusterprocessing.ClusterProcessor;
@@ -28,16 +28,10 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
-public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
-
-  @Override
-  public ClusterProcessor<AbstractNode> create() {
-    return new ClusterProcessorPassRepresentant();
-  }
-
+public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
   @Override
   public String getName() {
-    return "ClusterProcessorPassRepresentant";
+    return "ClusterProcessorAutomatonMergingState";
   }
 
   @Override
@@ -45,4 +39,8 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
     return getName();
   }
 
+  @Override
+  public ClusterProcessor<AbstractNode> create() {
+    return new ClusterProcessorAutomatonMergingState();
+  }
 }

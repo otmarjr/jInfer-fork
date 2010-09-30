@@ -22,8 +22,8 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
-import java.util.LinkedList;
+
+
 import java.util.List;
 
 /**
@@ -59,7 +59,7 @@ public class KHContext<T> {
   /**
    * List of steps held by this context
    */
-  private List<Step<T>> steps;
+  private final List<Step<T>> steps;
   private Integer k;
   private Integer h;
 

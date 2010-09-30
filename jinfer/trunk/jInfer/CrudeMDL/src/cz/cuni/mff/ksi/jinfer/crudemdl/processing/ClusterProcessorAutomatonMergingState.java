@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
@@ -33,10 +32,8 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.Automato
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.GreedyAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**

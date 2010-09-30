@@ -47,7 +47,7 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
 
   @Override
   public List<String> getCapabilities() {
-    List<String> l= new ArrayList<String>();
+    final List<String> l= new ArrayList<String>();
     l.add("attributeClusters");
     return l;
   }

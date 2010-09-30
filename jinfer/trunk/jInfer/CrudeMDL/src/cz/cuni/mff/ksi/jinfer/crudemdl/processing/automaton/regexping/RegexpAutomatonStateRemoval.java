@@ -43,7 +43,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
    * 
    * @param anotherAutomaton
    */
-  public RegexpAutomatonStateRemoval(RegexpAutomaton<T> anotherAutomaton) {
+  public RegexpAutomatonStateRemoval(final RegexpAutomaton<T> anotherAutomaton) {
     super(anotherAutomaton);
     this.createSuperInitialState();
     this.createSuperFinalState();
@@ -53,7 +53,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
    * Clear cloning constructor.
    * @param anotherAutomaton
    */
-  public RegexpAutomatonStateRemoval(RegexpAutomatonStateRemoval<T> anotherAutomaton) {
+  public RegexpAutomatonStateRemoval(final RegexpAutomatonStateRemoval<T> anotherAutomaton) {
     super(anotherAutomaton);
   }
 
@@ -94,11 +94,11 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       return null;
     }
 
-    final Step<Regexp<T>> newLoopStep;
+    Step<Regexp<T>> newLoopStep;
     final List<Regexp<T>> loopChildren= new ArrayList<Regexp<T>>();
 
     if (loopSteps.size() == 1) {
-      Step<Regexp<T>> oldLoopStep= loopSteps.get(0);
+      final Step<Regexp<T>> oldLoopStep= loopSteps.get(0);
 
       loopChildren.add(oldLoopStep.getAcceptSymbol());
       newLoopStep=
@@ -227,8 +227,8 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     return newLoopStep;
   }
 
-  public void removeState(State<Regexp<T>> state) {
-    Step<Regexp<T>> loopStep= this.collapseStateParallelSteps(state);
+  public void removeState(final State<Regexp<T>> state) {
+    final Step<Regexp<T>> loopStep= this.collapseStateParallelSteps(state);
     final List<Step<Regexp<T>>> inSteps= new LinkedList<Step<Regexp<T>>>();
 
     for (Step<Regexp<T>> step : this.reverseDelta.get(state)) {
@@ -262,7 +262,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
         } else {
           newRegexp= Regexp.<T>getConcatenation(newRegexpChildren);
         }
-        Step<Regexp<T>> newStep=
+        final Step<Regexp<T>> newStep=
                 new Step<Regexp<T>>(newRegexp, inStep.getSource(), outStep.getDestination(), 1);
 
         this.delta.get(inStep.getSource()).add(newStep);
@@ -307,7 +307,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
    * @param state
    * @return
    */
-  public List<Step<Regexp<T>>> getLoopSteps(State<Regexp<T>> state) {
+  public List<Step<Regexp<T>>> getLoopSteps(final State<Regexp<T>> state) {
     final List<Step<Regexp<T>>> loopSteps= new LinkedList<Step<Regexp<T>>>();
     for (Step<Regexp<T>> step : this.delta.get(state)) {
       if (step.getDestination().equals(state)) {

@@ -20,9 +20,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
-import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
 import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
-import org.apache.log4j.Logger;
 
 /**
  * Automaton with Regexp<AbstractNode> on steps. Can be simplified by removing states
@@ -31,9 +29,6 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class RegexpAutomaton<T> extends Automaton<Regexp<T>> {
-  private static final Logger LOG = Logger.getLogger(RegexpAutomaton.class);
-//  private State<Regexp<T>> superFinalState;
-
   /**
    * Constructor to create empty automaton.
    */
@@ -46,7 +41,7 @@ public class RegexpAutomaton<T> extends Automaton<Regexp<T>> {
    * 
    * @param createInitialState
    */
-  public RegexpAutomaton(boolean createInitialState) {
+  public RegexpAutomaton(final boolean createInitialState) {
     super(createInitialState);
   }
 
@@ -60,12 +55,12 @@ public class RegexpAutomaton<T> extends Automaton<Regexp<T>> {
   public RegexpAutomaton(final Automaton<T> anotherAutomaton) {
     super(false);
 
-    AutomatonCloner<T, Regexp<T>> cloner= new AutomatonCloner<T, Regexp<T>>();
+    final AutomatonCloner<T, Regexp<T>> cloner= new AutomatonCloner<T, Regexp<T>>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
       new AutomatonClonerSymbolConverter<T, Regexp<T>>() {
         @Override
-        public Regexp<T> convertSymbol(T symbol) {
+        public Regexp<T> convertSymbol(final T symbol) {
           return Regexp.<T>getToken(symbol);
         }
       }

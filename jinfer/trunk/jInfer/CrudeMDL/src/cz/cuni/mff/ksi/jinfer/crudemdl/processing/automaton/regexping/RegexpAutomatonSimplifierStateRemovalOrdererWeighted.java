@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 
@@ -47,7 +47,7 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T> implements 
   }
 
   @Override
-  public State<Regexp<T>> getStateToRemove(RegexpAutomatonStateRemoval<T> automaton) throws InterruptedException {
+  public State<Regexp<T>> getStateToRemove(final RegexpAutomatonStateRemoval<T> automaton) throws InterruptedException {
     int minWeight= Integer.MAX_VALUE;
     State<Regexp<T>> minState= null;
     for (State<Regexp<T>> state : automaton.getDelta().keySet()) {

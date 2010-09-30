@@ -38,17 +38,17 @@ public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomaton
   private static final Logger LOG = Logger.getLogger(RegexpAutomatonSimplifierStateRemoval.class);
   
   @Override
-  public Regexp<T> simplify(RegexpAutomaton<T> inputAutomaton) throws InterruptedException {
-    RegexpAutomatonStateRemoval<T> stateRemovalAutomaton= new RegexpAutomatonStateRemoval<T>(inputAutomaton);
+  public Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton) throws InterruptedException {
+    final RegexpAutomatonStateRemoval<T> stateRemovalAutomaton= new RegexpAutomatonStateRemoval<T>(inputAutomaton);
 
-    RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer= new RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T>();
+    final RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer= new RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T>();
     while (stateRemovalAutomaton.getDelta().size() > 2) {
-      State<Regexp<T>> toRemoveState= orderer.getStateToRemove(stateRemovalAutomaton);
+      final State<Regexp<T>> toRemoveState= orderer.getStateToRemove(stateRemovalAutomaton);
 
       stateRemovalAutomaton.removeState(toRemoveState);
     }
     stateRemovalAutomaton.finalStep();
-    Set<Step<Regexp<T>>> regexpSteps= stateRemovalAutomaton.getDelta().get(
+    final Set<Step<Regexp<T>>> regexpSteps= stateRemovalAutomaton.getDelta().get(
             stateRemovalAutomaton.getSuperInitialState()
             );
     LOG.debug("After RegexpAutomatonSimplifierStateRemoval simplify:");

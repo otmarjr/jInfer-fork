@@ -50,7 +50,7 @@ import java.util.List;
  *
  * @author anti
  */
-public interface ElementClusterer<T> extends Clusterer<T> {
+public interface ClustererWithAttributes<T> extends Clusterer<T> {
    /**
     * TODO anti Comment
     * @param representant

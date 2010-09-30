@@ -30,7 +30,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ElementClusterer;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
 import cz.cuni.mff.ksi.jinfer.crudemdl.moduleselection.CrudeMDLPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
@@ -124,11 +124,12 @@ public class SimplifierImpl implements Simplifier {
       }
 
       AbstractNode node =  processor.processCluster(clusterer, cluster);
-      
+
+      // 3.1 process attributes if supported
       List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
       if (clustererFactory.getCapabilities().contains("attributeClusters")) {
         List<Cluster<AbstractNode>> attributeClusters=
-                ((ElementClusterer<AbstractNode>) clusterer).
+                ((ClustererWithAttributes<AbstractNode>) clusterer).
                 getAttributeClusters(cluster.getRepresentant());
 
         for (Cluster<AbstractNode> attCluster : attributeClusters) {
@@ -149,16 +150,18 @@ public class SimplifierImpl implements Simplifier {
                   );
 
         }
+        // 4. add to rules
+        attTokens.add(((Element) node).getSubnodes());
+        final Regexp<AbstractNode> regexpAttributes=
+                Regexp.<AbstractNode>getConcatenation( attTokens );
+        LOG.debug(">>> Attributes regexp is:");
+        LOG.debug(regexpAttributes);
+        finalGrammar.add(
+                new Element(node.getContext(), node.getName(), node.getMetadata(), regexpAttributes)
+                );
+      } else {
+        finalGrammar.add( node );
       }
-      // 4. add to rules
-      attTokens.add(((Element) node).getSubnodes());
-      final Regexp<AbstractNode> regexpAttributes=
-              Regexp.<AbstractNode>getConcatenation( attTokens );
-      LOG.debug(">>> Attributes regexp is:");
-      LOG.debug(regexpAttributes);
-      finalGrammar.add(
-              new Element(node.getContext(), node.getName(), node.getMetadata(), regexpAttributes)
-              );
     }
 
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);

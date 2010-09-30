@@ -28,10 +28,10 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = ClustererFactory.class)
-public class ClustererInameFactory implements ClustererFactory {
+public class ClustererWithAttributesInameFactory implements ClustererFactory {
   @Override
   public Clusterer<AbstractNode> create() {
-    return new ClustererIname();
+    return new ClustererWithAttributesIname();
   }
 
   @Override

@@ -18,11 +18,12 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.monitor.Monitor;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -39,43 +40,75 @@ import org.openide.windows.WindowManager;
  * @author rio
  * TODO rio comment
  */
-public class AutoEditor {
+public class AutoEditor<T> {
 
-  public static void drawAutomatonAsync(final Automaton<AbstractNode> automaton) {
-    final DirectedSparseGraph<State<AbstractNode>, Step<AbstractNode>> graph = new DirectedSparseGraph<State<AbstractNode>, Step<AbstractNode>>();
-    final Map<State<AbstractNode>, Set<Step<AbstractNode>>> delta = automaton.getDelta();
+  private final Monitor<Pair<State<T>, State<T>>> monitor;
+  private VisualizationViewer<State<T>, Step<T>> vv;
+
+  public AutoEditor() {
+    monitor = new Monitor<Pair<State<T>, State<T>>>();
+  }
+
+  public void callback() {
+    final Set<State<T>> pickedSet = vv.getPickedVertexState().getPicked();
+    final Pair<State<T>, State<T>> result = (pickedSet.size() >= 2) ? new Pair<State<T>, State<T>>((State<T>)pickedSet.toArray()[0], (State<T>)pickedSet.toArray()[1]) : null;
+    synchronized(monitor) {
+      monitor.setData(result);
+      monitor.notify();
+    }
+  }
+
+  public Pair<State<T>, State<T>> drawAutomaton(final Automaton<T> automaton) {
+    final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
+    final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
 
     // vrcholy
-    for (Entry<State<AbstractNode>, Set<Step<AbstractNode>>> entry : delta.entrySet()) {
+    for (Entry<State<T>, Set<Step<T>>> entry : delta.entrySet()) {
       graph.addVertex(entry.getKey());
     }
 
     // hrany
-    for (Entry<State<AbstractNode>, Set<Step<AbstractNode>>> entry : delta.entrySet()) {
-      for (Step<AbstractNode> step : entry.getValue()) {
+    for (Entry<State<T>, Set<Step<T>>> entry : delta.entrySet()) {
+      for (Step<T> step : entry.getValue()) {
         graph.addEdge(step, step.getSource(), step.getDestination());
       }
     }
 
-    final Layout<State<AbstractNode>, Step<AbstractNode>> layout = new CircleLayout<State<AbstractNode>, Step<AbstractNode>>(graph);
+    final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space
     // The BasicVisualizationServer<V,E> is parameterized by the edge types
-    final VisualizationViewer<State<AbstractNode>, Step<AbstractNode>> vv = new VisualizationViewer<State<AbstractNode>, Step<AbstractNode>>(layout);
+    vv = new VisualizationViewer<State<T>, Step<T>>(layout);
     //vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
-    vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<AbstractNode>>());
-    vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<Step<AbstractNode>>());
+    vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
+    vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
 
-    final DefaultModalGraphMouse<State<AbstractNode>, Step<AbstractNode>> gm = new DefaultModalGraphMouse<State<AbstractNode>, Step<AbstractNode>>();
-    gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+    final DefaultModalGraphMouse<State<T>, Step<T>> gm = new DefaultModalGraphMouse<State<T>, Step<T>>();
+    gm.setMode(ModalGraphMouse.Mode.PICKING);
     vv.setGraphMouse(gm);
-    
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
-      @Override
-      public void run() {
-        AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(vv);
+    synchronized(monitor) {
+      WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+        @Override
+        public void run() {
+          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(new Callback() {
+
+            @Override
+            public void call() {
+              AutoEditor.this.callback();
+            }
+          }, vv);
+        }
+      });
+
+      try {
+        monitor.wait();
+      } catch (InterruptedException e) {
+        return null;
       }
-    });
+    }
+
+    return monitor.getData();
   }
 }

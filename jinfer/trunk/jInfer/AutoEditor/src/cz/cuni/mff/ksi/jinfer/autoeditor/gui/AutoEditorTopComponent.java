@@ -16,19 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.Callback;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.util.logging.Logger;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -48,13 +39,14 @@ public final class AutoEditorTopComponent extends TopComponent {
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
   private static final String PREFERRED_ID = "AutoEditorTopComponent";
   private static final long serialVersionUID = 87543L;
+  private Callback callback;
 
   public AutoEditorTopComponent() {
     initComponents();
     setName(NbBundle.getMessage(AutoEditorTopComponent.class, "CTL_AutoEditorTopComponent"));
     setToolTipText(NbBundle.getMessage(AutoEditorTopComponent.class, "HINT_AutoEditorTopComponent"));
 //        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
-
+    jButton1.setEnabled(false);
   }
 
   /** This method is called from within the constructor to
@@ -102,7 +94,9 @@ public final class AutoEditorTopComponent extends TopComponent {
   }// </editor-fold>//GEN-END:initComponents
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    final DirectedSparseMultigraph<Integer, String> g = new DirectedSparseMultigraph<Integer, String>();
+    jButton1.setEnabled(false);
+    callback.call();
+    /*final DirectedSparseMultigraph<Integer, String> g = new DirectedSparseMultigraph<Integer, String>();
     g.addVertex(10);
     g.addVertex(20);
     g.addEdge("lala", 10, 20);
@@ -125,12 +119,17 @@ public final class AutoEditorTopComponent extends TopComponent {
     gbc.weightx = 1;
     gbc.weighty = 1;
     jPanel1.add(vv, gbc);
-    jPanel1.repaint();
+    jPanel1.repaint();*/
   }//GEN-LAST:event_jButton1ActionPerformed
 
-  public void drawAutomatonBasicVisualizationServer(final BasicVisualizationServer<State<AbstractNode>, Step<AbstractNode>> bvs) {
+  public <T> void drawAutomatonBasicVisualizationServer(final Callback callback, final BasicVisualizationServer<State<T>, Step<T>> bvs) {
+    this.callback = callback;
+    jPanel1.removeAll();
     jPanel1.add(bvs);
-    jPanel1.repaint();
+    jPanel1.validate();
+    jButton1.setEnabled(true);
+    this.open();
+    this.requestActive();
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

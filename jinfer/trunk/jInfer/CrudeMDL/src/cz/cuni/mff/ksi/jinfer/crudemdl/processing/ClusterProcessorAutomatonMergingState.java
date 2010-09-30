@@ -79,7 +79,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(cluster.getRepresentant());
     LOG.debug(">>> PTA automaton:");
     LOG.debug(automaton);
-    AutoEditor.drawAutomatonAsync(automaton);
+    LOG.debug("AUTO EDITOR: " + new AutoEditor<AbstractNode>().drawAutomaton(automaton));
 
     // 3.2 simplify by merging states
     final AutomatonSimplifier<AbstractNode> automatonSimplifier= new GreedyAutomatonSimplifier<AbstractNode>();
@@ -88,13 +88,13 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     final Automaton<AbstractNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton,  l);
     LOG.debug(">>> After 2,1-context:");
     LOG.debug(simplifiedAutomaton);
-//    AutoEditor.drawAutomatonAsync(simplifiedAutomaton);
+//    AutoEditor.drawAutomaton(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
     final RegexpAutomaton<AbstractNode> regexpAutomaton= new RegexpAutomaton<AbstractNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
-//    AutoEditor.drawAutomatonAsync(regexpAutomaton);
+//    AutoEditor.drawAutomaton(regexpAutomaton);
     final RegexpAutomatonSimplifier<AbstractNode> regexpAutomatonSimplifier= new RegexpAutomatonSimplifierStateRemoval<AbstractNode>();
     final Regexp<AbstractNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
     LOG.debug(">>> And the regexp is:");

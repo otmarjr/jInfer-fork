@@ -67,13 +67,13 @@ public class SimplifierImpl implements Simplifier {
   }
 
   private ClustererFactory getClustererFactory() {
-    Properties p = RunningProject.getActiveProjectProps(this.getName());
+    final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
     return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTERER));
   }
 
   private ClusterProcessorFactory getClusterProcessorFactory() {
-    Properties p = RunningProject.getActiveProjectProps(this.getName());
+    final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
     return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR));
   }
@@ -101,7 +101,7 @@ public class SimplifierImpl implements Simplifier {
 
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
-    ClustererFactory clustererFactory= this.getClustererFactory();
+    final ClustererFactory clustererFactory= this.getClustererFactory();
     final Clusterer<AbstractNode> clusterer= clustererFactory.create();
     clusterer.addAll(initialGrammar);
     clusterer.cluster();
@@ -119,12 +119,12 @@ public class SimplifierImpl implements Simplifier {
         continue;
       }
 
-      AbstractNode node =  processor.processCluster(clusterer, cluster);
+      final AbstractNode node =  processor.processCluster(clusterer, cluster);
 
       // 3.1 process attributes if supported
-      List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
+      final List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
       if (clustererFactory.getCapabilities().contains("attributeClusters")) {
-        List<Cluster<AbstractNode>> attributeClusters=
+        final List<Cluster<AbstractNode>> attributeClusters=
                 ((ClustererWithAttributes<AbstractNode>) clusterer).
                 getAttributeClusters(cluster.getRepresentant());
 

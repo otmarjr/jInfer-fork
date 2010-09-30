@@ -18,7 +18,6 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -82,7 +81,7 @@ public class ClustererWithAttributesInameHelperClusterer implements Clusterer<Ab
   }
 
   @Override
-  public AbstractNode getRepresentantForItem(AbstractNode item) {
+  public AbstractNode getRepresentantForItem(final AbstractNode item) {
     for (Cluster<AbstractNode> cluster : this.nodeClusters) {
       if (cluster.isMember(item)) {
         return cluster.getRepresentant();

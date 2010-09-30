@@ -31,7 +31,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 public class ClusterProcessorPassRepresentant implements ClusterProcessor<AbstractNode> {
 
   @Override
-  public AbstractNode processCluster(Clusterer<AbstractNode> clusterer, Cluster<AbstractNode> cluster) throws InterruptedException {
+  public AbstractNode processCluster(final Clusterer<AbstractNode> clusterer, final Cluster<AbstractNode> cluster) throws InterruptedException {
     return cluster.getRepresentant();
   }
 

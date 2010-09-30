@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;

@@ -127,7 +127,7 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
   }
 
   @Override
-  public List<Cluster<AbstractNode>> getAttributeClusters(AbstractNode representant) {
+  public List<Cluster<AbstractNode>> getAttributeClusters(final AbstractNode representant) {
     if (this.attributeClusterers.containsKey(representant)) {
       return Collections.unmodifiableList(this.attributeClusterers.get(representant).getClusters());
     } else {

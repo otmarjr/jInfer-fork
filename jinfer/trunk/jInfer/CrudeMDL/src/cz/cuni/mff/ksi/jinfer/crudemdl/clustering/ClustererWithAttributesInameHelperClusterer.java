@@ -30,11 +30,11 @@ import java.util.List;
  *
  * @author anti
  */
-public class ClustererInameAttributeHelperClusterer implements Clusterer<AbstractNode> {
+public class ClustererWithAttributesInameHelperClusterer implements Clusterer<AbstractNode> {
   private final List<Cluster<AbstractNode>> nodeClusters;
   private final List<AbstractNode> items;
 
-  public ClustererInameAttributeHelperClusterer() {
+  public ClustererWithAttributesInameHelperClusterer() {
     this.nodeClusters= new LinkedList<Cluster<AbstractNode>>();
     this.items= new LinkedList<AbstractNode>();
   }

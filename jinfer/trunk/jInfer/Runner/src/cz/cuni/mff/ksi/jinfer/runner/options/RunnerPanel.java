@@ -55,9 +55,15 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel1 = new javax.swing.JPanel();
     openSchema = new javax.swing.JCheckBox();
     namePattern = new javax.swing.JTextField();
-    jLabel1 = new javax.swing.JLabel();
+    nameTemplateHelp = new javax.swing.JLabel();
+    openSchemaHelp = new javax.swing.JLabel();
+    openSchemaLabel = new javax.swing.JLabel();
+    nameTemplateLabel = new javax.swing.JLabel();
     jPanel2 = new javax.swing.JPanel();
     showOutputWindow = new javax.swing.JCheckBox();
+    jLabel1 = new javax.swing.JLabel();
+    jLabel2 = new javax.swing.JLabel();
+    jPanel4 = new javax.swing.JPanel();
     jPanel3 = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
@@ -66,31 +72,59 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel1.setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(openSchema, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.null.text")); // NOI18N
+    openSchema.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.ipadx = 100;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(openSchema, gridBagConstraints);
 
     namePattern.setText(org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.namePattern.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.ipadx = 150;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.weightx = 1.0;
-    jPanel1.add(namePattern, gridBagConstraints);
-
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jLabel1.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.ipadx = 100;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-    jPanel1.add(jLabel1, gridBagConstraints);
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel1.add(namePattern, gridBagConstraints);
+
+    nameTemplateHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13)); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(nameTemplateHelp, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.nameTemplateHelp.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel1.add(nameTemplateHelp, gridBagConstraints);
+
+    openSchemaHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13)); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(openSchemaHelp, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.openSchemaHelp.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel1.add(openSchemaHelp, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(openSchemaLabel, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.openSchemaLabel.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel1.add(openSchemaLabel, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(nameTemplateLabel, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.nameTemplateLabel.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel1.add(nameTemplateLabel, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -102,9 +136,45 @@ public final class RunnerPanel extends javax.swing.JPanel {
 
     org.openide.awt.Mnemonics.setLocalizedText(showOutputWindow, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.showOutputWindow.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel2.add(showOutputWindow, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jLabel1.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel2.add(jLabel1, gridBagConstraints);
+
+    jLabel2.setFont(new java.awt.Font("DejaVu Sans", 2, 13)); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jLabel2.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel2.add(jLabel2, gridBagConstraints);
+
+    javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+    jPanel4.setLayout(jPanel4Layout);
+    jPanel4Layout.setHorizontalGroup(
+      jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+    jPanel4Layout.setVerticalGroup(
+      jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    jPanel2.add(jPanel4, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -117,11 +187,11 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 1097, Short.MAX_VALUE)
+      .addGap(0, 1172, Short.MAX_VALUE)
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 221, Short.MAX_VALUE)
+      .addGap(0, 209, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -169,11 +239,17 @@ public final class RunnerPanel extends javax.swing.JPanel {
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel3;
+  private javax.swing.JPanel jPanel4;
   private javax.swing.JTextField namePattern;
+  private javax.swing.JLabel nameTemplateHelp;
+  private javax.swing.JLabel nameTemplateLabel;
   private javax.swing.JCheckBox openSchema;
+  private javax.swing.JLabel openSchemaHelp;
+  private javax.swing.JLabel openSchemaLabel;
   private javax.swing.JCheckBox showOutputWindow;
   // End of variables declaration//GEN-END:variables
 }

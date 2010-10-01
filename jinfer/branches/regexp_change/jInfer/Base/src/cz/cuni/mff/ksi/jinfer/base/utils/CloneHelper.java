@@ -92,7 +92,7 @@ public class CloneHelper {
       clone.getSubnodes().setType(e.getSubnodes().getType());
       clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
       final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
-      clone.getSubnodes().setChildren(clonedRegexp.getChildren());
+      clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
       clone.getSubnodes().setUnmutable();
     }
     return clone;

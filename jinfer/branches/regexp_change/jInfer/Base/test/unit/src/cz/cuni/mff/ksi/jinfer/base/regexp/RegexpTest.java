@@ -47,16 +47,15 @@ public class RegexpTest {
             Regexp.<Character>getToken('d'),
             Regexp.<Character>getToken('e')
             );
-    final Regexp<Character> concat = new Regexp<Character>(null, l4, RegexpType.CONCATENATION);
+    final Regexp<Character> concat = Regexp.<Character>getConcatenation(l4);
     final List<Regexp<Character>> l3 = Arrays.asList(
             Regexp.<Character>getToken('b'),
             Regexp.<Character>getToken('c'),
             concat
             );
-    final List<Regexp<Character>> l2 = Arrays.asList(
-            new Regexp<Character>(null, l3, RegexpType.ALTERNATION)
+    final Regexp<Character> kleene = 
+            Regexp.<Character>getAlternation(l3, RegexpInterval.getKleeneStar()
             );
-    final Regexp<Character> kleene = new Regexp<Character>(null, l2, RegexpType.KLEENE);
     final List<Regexp<Character>> l1 = Arrays.asList(
             Regexp.<Character>getToken('a'),
             Regexp.<Character>getToken('b'),
@@ -64,7 +63,7 @@ public class RegexpTest {
             Regexp.<Character>getToken('d'),
             Regexp.<Character>getToken('e')
             );
-    final Regexp<Character> test = new Regexp<Character>(null, l1, RegexpType.CONCATENATION);
+    final Regexp<Character> test = Regexp.<Character>getConcatenation(l1);
     final List<Character> tokens = test.getTokens();
     final List<Character> expected = Arrays.asList('a', 'b', 'b', 'c', 'd', 'e', 'd', 'e');
     assertEquals(expected, tokens);
@@ -78,19 +77,25 @@ public class RegexpTest {
 
   @Test(expected=IllegalArgumentException.class)
   public void testBranchIllegal2() {
-    final Regexp<Integer> t = new Regexp<Integer>(null, null, RegexpType.ALTERNATION);
+    final Regexp<Integer> t = new Regexp<Integer>(null, null, RegexpType.ALTERNATION, null);
     t.branch(0);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testBranchIllegal3() {
-    final Regexp<Integer> t = new Regexp<Integer>(null, null, RegexpType.KLEENE);
+    final Regexp<Integer> t = new Regexp<Integer>(null, null, RegexpType.PERMUTATION, null);
+    t.branch(0);
+  }
+
+  @Test(expected=IllegalArgumentException.class)
+  public void testBranchIllegal4() {
+    final Regexp<Integer> t = new Regexp<Integer>(null, null, RegexpType.LAMBDA, null);
     t.branch(0);
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testBranchEmpty() {
-    final Regexp<Integer> t = new Regexp<Integer>(null, new ArrayList<Regexp<Integer>>(), RegexpType.CONCATENATION);
+    final Regexp<Integer> t = new Regexp<Integer>(null, new ArrayList<Regexp<Integer>>(), RegexpType.CONCATENATION, null);
     t.branch(0);
   }
 
@@ -101,7 +106,7 @@ public class RegexpTest {
   public void testBranchLengthOne() {
     final List<Regexp<Integer>> children = new ArrayList<Regexp<Integer>>();
     children.add(Regexp.getToken(Integer.valueOf(0)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION);
+    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
     System.out.print(t.toString() + " -> ");
     t.branch(0);
     System.out.println(t.toString());
@@ -124,7 +129,7 @@ public class RegexpTest {
     children.add(Regexp.getToken(Integer.valueOf(0)));
     children.add(Regexp.getToken(Integer.valueOf(1)));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION);
+    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
     System.out.print(t.toString() + " -> ");
     t.branch(0);
     System.out.println(t.toString());
@@ -151,7 +156,7 @@ public class RegexpTest {
     children.add(Regexp.getToken(Integer.valueOf(0)));
     children.add(Regexp.getToken(Integer.valueOf(1)));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION);
+    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
     System.out.print(t.toString() + " -> ");
     t.branch(1);
     System.out.println(t.toString());
@@ -178,7 +183,7 @@ public class RegexpTest {
     children.add(Regexp.getToken(Integer.valueOf(0)));
     children.add(Regexp.getToken(Integer.valueOf(1)));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION);
+    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
     System.out.print(t.toString() + " -> ");
     t.branch(2);
     System.out.println(t.toString());
@@ -204,9 +209,9 @@ public class RegexpTest {
     final List<Regexp<Integer>> altC = new ArrayList<Regexp<Integer>>();
     altC.add(Regexp.getToken(Integer.valueOf(10)));
     altC.add(Regexp.getToken(Integer.valueOf(11)));
-    children.add(new Regexp<Integer>(null, altC, RegexpType.ALTERNATION));
+    children.add(new Regexp<Integer>(null, altC, RegexpType.ALTERNATION, null));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION);
+    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
     System.out.print(t.toString() + " -> ");
     t.branch(1);
     System.out.println(t.toString());

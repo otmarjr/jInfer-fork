@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -78,7 +79,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(cluster.getRepresentant());
     LOG.debug(">>> PTA automaton:");
     LOG.debug(automaton);
-    //LOG.debug("AUTO EDITOR: " + new AutoEditor<AbstractNode>().drawAutomaton(automaton));
+  //  LOG.debug("AUTO EDITOR: " + new AutoEditor<AbstractNode>().drawAutomaton(automaton));
 
     // 3.2 simplify by merging states
     final AutomatonSimplifier<AbstractNode> automatonSimplifier= new GreedyAutomatonSimplifier<AbstractNode>();

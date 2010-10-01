@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
@@ -32,6 +33,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
 import cz.cuni.mff.ksi.jinfer.crudemdl.properties.CrudeMDLPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -97,7 +99,7 @@ public class SimplifierImpl implements Simplifier {
   public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
- //   RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
+    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
     final ClustererFactory clustererFactory= this.getClustererFactory();
     final Clusterer<AbstractNode> clusterer= clustererFactory.create();
@@ -158,7 +160,7 @@ public class SimplifierImpl implements Simplifier {
       }
     }
 
-  //  RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);
+    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);
     callback.finished( finalGrammar );
   }
 }

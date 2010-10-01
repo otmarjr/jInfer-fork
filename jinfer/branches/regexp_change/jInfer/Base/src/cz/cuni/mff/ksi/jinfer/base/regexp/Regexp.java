@@ -56,6 +56,10 @@ public class Regexp<T> {
     this.interval= interval;
   }
 
+  public static <T> Regexp<T> getLambda() {
+    return new Regexp<T>(null, null, RegexpType.LAMBDA, null);
+  }
+
   public static <T> Regexp<T> getToken(final T content, RegexpInterval interval) {
     return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN, interval);
   }

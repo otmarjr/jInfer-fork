@@ -1,0 +1,140 @@
+/*
+ *  Copyright (C) 2010 rio
+ * 
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ * 
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package cz.cuni.mff.ksi.jinfer.base;
+
+import java.awt.Color;
+import java.io.IOException;
+import org.apache.log4j.Appender;
+import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
+import org.apache.log4j.spi.LoggingEvent;
+import org.openide.modules.ModuleInstall;
+import org.openide.util.Exceptions;
+import org.openide.windows.IOColorLines;
+import org.openide.windows.IOColorPrint;
+import org.openide.windows.IOColors;
+import org.openide.windows.IOProvider;
+import org.openide.windows.InputOutput;
+
+/**
+ * Manages a module's lifecycle. Remember that an installer is optional and
+ * often not needed at all.
+ *
+ * @author rio
+ */
+public class Installer extends ModuleInstall {
+
+  private static final long serialVersionUID = 54612321l;
+  private static Logger LOG;
+
+  private static class Log4jOutputWindowAppender extends AppenderSkeleton {
+
+    private Log4jOutputWindowAppender(final Layout layout) {
+      this.setLayout(layout);
+    }
+
+    @Override
+    protected void append(final LoggingEvent le) {
+      final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+      Color textColor = null;
+
+      switch (le.getLevel().toInt()) {
+        case Level.WARN_INT:
+          textColor = Color.ORANGE;
+          break;
+        case Level.DEBUG_INT:
+          float[] hsb = Color.RGBtoHSB(7, 105, 45, null);
+          textColor = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
+          break;
+        case Level.ERROR_INT:
+          textColor = Color.RED;
+          break;
+        case Level.INFO_INT:
+        default:
+          break;
+      }
+
+      final String message = this.layout.format(le);
+      if (IOColorPrint.isSupported(io)) {
+        try {
+          IOColorPrint.print(io, message, textColor);
+        } catch (IOException ex) {
+          io.getOut().print(message);
+          io.getOut().close();
+        }
+      } else {
+        io.getOut().print(message);
+        io.getOut().close();
+      }
+    }
+
+    @Override
+    public boolean requiresLayout() {
+      return true;
+    }
+
+    @Override
+    public void close() {
+      // nothing needed
+    }
+  }
+
+  @Override
+  public void restored() {
+    /* configure log4j */
+    final Logger ROOTLOG = Logger.getRootLogger();
+    ROOTLOG.setLevel(Level.ALL);
+
+    // configure appender to the Output window
+    final PatternLayout outputWindowLayout = new PatternLayout("%m%n");
+    final Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
+    ROOTLOG.addAppender(outputWindowAppender);
+
+    LOG = Logger.getLogger(Installer.class);
+
+    // configure appender to a logfile
+    final PatternLayout fileLayout = new PatternLayout(
+            "(%d{dd MMM yyyy HH:mm:ss,SSS}) %p [%t] %c (%F:%L) - %m%n");
+    try {
+      final String logfileName = System.getProperty("user.home") + "/.jinfer/jinfer.errors.log";
+      final RollingFileAppender logfileAppender = new RollingFileAppender(fileLayout, logfileName);
+      // keep max 1 old logfile
+      logfileAppender.setMaxBackupIndex(1);
+      // max file size if 100KB
+      logfileAppender.setMaximumFileSize(100 * 1024);
+      // log to file only errors and stronger levels
+      logfileAppender.setThreshold(Level.ERROR);
+      ROOTLOG.addAppender(logfileAppender);
+
+      LOG.info("Log initialized.");
+    } catch (IOException exc) {
+      LOG.error("Cannot log to file, logfile disabled.", exc);
+    }
+
+    LOG.info("Base module loaded.");
+  }
+
+  @Override
+  public boolean closing() {
+    LOG.info("Closing Base module.");
+    return true;
+  }
+}

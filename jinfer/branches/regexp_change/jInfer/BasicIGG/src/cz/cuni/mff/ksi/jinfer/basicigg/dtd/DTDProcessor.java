@@ -21,6 +21,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
@@ -90,7 +92,7 @@ public class DTDProcessor implements Processor {
 
   private static Element processElement(final ElementType e) {
     final Element ret = new Element(null, e.name.getLocalName(),
-            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getConcatenationMutable());
+            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getMutable());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
@@ -110,7 +112,7 @@ public class DTDProcessor implements Processor {
       for (final Object oc : e.children.values()) {
         final ElementType c = (ElementType) oc;
         final Element child = new Element(null, c.name.getLocalName(),
-                null, Regexp.<AbstractNode>getConcatenationMutable());
+                null, Regexp.<AbstractNode>getLambda());
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(child));
       }
     }
@@ -121,6 +123,15 @@ public class DTDProcessor implements Processor {
               Regexp.<AbstractNode>getToken(
                     new SimpleData(null, null, null, null, new ArrayList<String>(0))));
     }
+
+    if (ret.getSubnodes().getChildren().isEmpty()) {
+      ret.getSubnodes().setType(RegexpType.LAMBDA);
+    } else {
+      ret.getSubnodes().setType(RegexpType.CONCATENATION);
+      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
+    }
+    ret.getSubnodes().setUnmutable();
+
     return ret;
   }
 

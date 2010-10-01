@@ -21,6 +21,8 @@ import java.util.Map;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -60,11 +62,11 @@ public class CloneHelperTest {
     m.put("two", Integer.valueOf(2));
 
     final List<Regexp<AbstractNode>> altChildren = new ArrayList<Regexp<AbstractNode>>();
-    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getConcatenation())));
+    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getLambda())));
 
     final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenation())));
+    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getLambda())));
 
     final Element e = new Element(null, "e", m, Regexp.getConcatenation(children));
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
@@ -127,11 +129,11 @@ public class CloneHelperTest {
     m.put("two", Integer.valueOf(2));
 
     final List<Regexp<AbstractNode>> altChildren = new ArrayList<Regexp<AbstractNode>>();
-    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getConcatenation())));
+    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getConcatenationMutable())));
 
     final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenation())));
+    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenationMutable())));
 
     final Element e = new Element(null, "e", m, Regexp.getConcatenation(children));
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
@@ -158,8 +160,8 @@ public class CloneHelperTest {
   public void testCycle() {
     System.out.println("cycle");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getConcatenation());
-    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenation());
+    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getConcatenationMutable());
+    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenationMutable());
     e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e2));
     e2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e1));
 
@@ -182,10 +184,12 @@ public class CloneHelperTest {
   public void testCycleTokens() {
     System.out.println("cycleTokens");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getToken(null));
-    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getToken(null));
+    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getMutable());
+    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getToken(e1));
     e1.getSubnodes().setContent(e2);
-    e2.getSubnodes().setContent(e1);
+    e1.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e1.getSubnodes().setType(RegexpType.TOKEN);
+    e1.getSubnodes().setUnmutable();
 
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(e1);

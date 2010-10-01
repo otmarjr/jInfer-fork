@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.swing.AbstractAction;
 
 /**
  * Utilities for rule cloning.
@@ -38,7 +39,7 @@ import java.util.Map.Entry;
  */
 public class CloneHelper {
 
-  private final List<Pair<Element, Element>> cloned = new ArrayList<Pair<Element, Element>>();
+  private final Map<Element, Element> cloned = new HashMap<Element, Element>();
 
   public List<AbstractNode> cloneRules(final List<AbstractNode> l) {
     final List<AbstractNode> ret = new ArrayList<AbstractNode>(l.size());
@@ -66,27 +67,34 @@ public class CloneHelper {
   }
 
   private Element cloneElement(final Element e) {
-    for (final Pair<Element, Element> p : cloned) {
-      if (e == p.getFirst()) {
-        return p.getSecond();
-      }
+    if (cloned.containsKey(e)) {
+      return cloned.get(e);
     }
 
     final Element clone;
     if (e.getSubnodes().isToken()) {
-      // TODO vektor Check this, and why content is set afterwards and not before this line? TODO getInterval.clone() use clone
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, null, RegexpType.TOKEN, e.getSubnodes().getInterval()));
-      cloned.add(new Pair<Element, Element>(e, clone));
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), 
+              Regexp.<AbstractNode>getMutable());
+      cloned.put(e, clone);
+      clone.getSubnodes().setType(RegexpType.TOKEN);
+      clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
       final AbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
       clone.getSubnodes().setContent(clonedToken);
+      clone.getSubnodes().setUnmutable();
+    } else if (e.getSubnodes().isLambda()) {
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), 
+              Regexp.<AbstractNode>getLambda());
+      cloned.put(e, clone);
     } else {
-      // TODO vektor Check this, and why content is set afterwards and not before this line?
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), e.getSubnodes().getType(), e.getSubnodes().getInterval()));
-      cloned.add(new Pair<Element, Element>(e, clone));
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()),
+             Regexp.<AbstractNode>getMutable());
+      cloned.put(e, clone);
+      clone.getSubnodes().setType(e.getSubnodes().getType());
+      clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
       final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
-      clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
+      clone.getSubnodes().setChildren(clonedRegexp.getChildren());
+      clone.getSubnodes().setUnmutable();
     }
-
     return clone;
   }
 
@@ -109,7 +117,6 @@ public class CloneHelper {
     return ret;
   }
 
-  // TODO vekto anti clone interval
   private Regexp<AbstractNode> cloneRegexp(final Regexp<AbstractNode> r) {
     return new Regexp<AbstractNode>(cloneAbstractNode(r.getContent()), cloneChildren(r.getChildren()), r.getType(), r.getInterval());
   }
@@ -131,6 +138,9 @@ public class CloneHelper {
   }
 
   private List<Regexp<AbstractNode>> cloneChildren(final List<Regexp<AbstractNode>> c) {
+    if (c == null) {
+      return null;
+    }
     final List<Regexp<AbstractNode>> ret = new ArrayList<Regexp<AbstractNode>>(c.size());
     for (final Regexp<AbstractNode> r : c) {
       ret.add(cloneRegexp(r));

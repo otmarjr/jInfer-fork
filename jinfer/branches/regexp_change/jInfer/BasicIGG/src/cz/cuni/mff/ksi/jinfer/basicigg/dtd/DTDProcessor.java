@@ -90,7 +90,7 @@ public class DTDProcessor implements Processor {
 
   private static Element processElement(final ElementType e) {
     final Element ret = new Element(null, e.name.getLocalName(),
-            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getConcatenation());
+            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getConcatenationMutable());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
@@ -110,7 +110,7 @@ public class DTDProcessor implements Processor {
       for (final Object oc : e.children.values()) {
         final ElementType c = (ElementType) oc;
         final Element child = new Element(null, c.name.getLocalName(),
-                null, Regexp.<AbstractNode>getConcatenation());
+                null, Regexp.<AbstractNode>getConcatenationMutable());
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(child));
       }
     }

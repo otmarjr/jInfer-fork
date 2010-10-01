@@ -73,7 +73,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     switch (axis) {
       case Axis.CHILD:
-        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation());
+        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenationMutable());
         if (lastElement != null) {
           lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newElement));
           rules.add(lastElement);

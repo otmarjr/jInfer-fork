@@ -122,7 +122,7 @@ public class NodePainter {
       case TOKEN: return drawNode(subnodes.getContent(), level + 1);
       case ALTERNATION: return drawAlternation(subnodes, level + 1);
       case CONCATENATION: return drawConcatenation(subnodes, level + 1);
-      case KLEENE: return drawKleene(subnodes, level + 1);
+//      case KLEENE: return drawKleene(subnodes, level + 1);
       default: throw new IllegalArgumentException();
     }
   }

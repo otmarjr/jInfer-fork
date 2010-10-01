@@ -36,6 +36,6 @@ public final class IGGUtils {
   public static final Map<String, Object> ATTR_FROM_QUERY = new HashMap<String, Object>(1);
 
   static {
-    ATTR_FROM_SCHEMA.put("from.query", Boolean.TRUE);
+    ATTR_FROM_QUERY.put("from.query", Boolean.TRUE);
   }
 }

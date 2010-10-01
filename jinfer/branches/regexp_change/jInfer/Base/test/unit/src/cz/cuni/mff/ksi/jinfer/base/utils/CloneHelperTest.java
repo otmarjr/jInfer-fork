@@ -129,11 +129,11 @@ public class CloneHelperTest {
     m.put("two", Integer.valueOf(2));
 
     final List<Regexp<AbstractNode>> altChildren = new ArrayList<Regexp<AbstractNode>>();
-    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getConcatenationMutable())));
+    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getLambda())));
 
     final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenationMutable())));
+    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getLambda())));
 
     final Element e = new Element(null, "e", m, Regexp.getConcatenation(children));
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
@@ -160,10 +160,21 @@ public class CloneHelperTest {
   public void testCycle() {
     System.out.println("cycle");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getConcatenationMutable());
-    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenationMutable());
-    e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e2));
-    e2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e1));
+    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getMutable());
+    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getMutable());
+    e1.getSubnodes().addChild(
+            Regexp.<AbstractNode>getToken(e2)
+            );
+    e1.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e1.getSubnodes().setType(RegexpType.CONCATENATION);
+    e1.getSubnodes().setUnmutable();
+    e2.getSubnodes().addChild(
+            Regexp.<AbstractNode>getToken(e1)
+            );
+    e2.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e2.getSubnodes().setType(RegexpType.CONCATENATION);
+    e2.getSubnodes().setUnmutable();
+
 
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(e1);

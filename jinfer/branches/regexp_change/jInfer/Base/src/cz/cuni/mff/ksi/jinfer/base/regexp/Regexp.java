@@ -46,32 +46,37 @@ public class Regexp<T> {
   /** If this is not a token, list of children. */
   private final List<Regexp<T>> children;
   private final RegexpType type;
+  private final RegexpInterval interval;
 
   public Regexp(final T content,
-          final List<Regexp<T>> children, final RegexpType type) {
+          final List<Regexp<T>> children, final RegexpType type, RegexpInterval interval) {
     this.content = content;
     this.children = children;
     this.type = type;
+    this.interval= interval;
   }
 
   public static <T> Regexp<T> getToken(final T content) {
-    return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN);
+    return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN, RegexpInterval.getOnce());
   }
 
+  // TODO anti exception? children nonempty
   public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.CONCATENATION);
+    return new Regexp<T>(null, children, RegexpType.CONCATENATION, RegexpInterval.getOnce());
   }
 
+  // TODO anti LAMBDA regexp after conversion
   public static <T> Regexp<T> getConcatenation() {
     return getConcatenation(new ArrayList<Regexp<T>>(0));
   }
 
+  // TODO anti assert? children nonempty
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.ALTERNATION);
+    return new Regexp<T>(null, children, RegexpType.ALTERNATION, RegexpInterval.getOnce());
   }
 
-  public static <T> Regexp<T> getKleene(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.KLEENE);
+  public static <T> Regexp<T> getXsall(final List<Regexp<T>> children) {
+    return new Regexp<T>(null, children, RegexpType.XSALL, RegexpInterval.getOnce());
   }
 
   public void setContent(final T content) {
@@ -116,15 +121,16 @@ public class Regexp<T> {
     switch (type) {
       case TOKEN:
         return Arrays.asList(content);
-      case KLEENE:
-        return getChild(0).getTokens();
       case CONCATENATION:
       case ALTERNATION:
+      case XSALL:
         final List<T> ret = new ArrayList<T>();
         for (final Regexp<T> child : children) {
           ret.addAll(child.getTokens());
         }
         return ret;
+      case LAMBDA:
+        return Collections.emptyList();
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }
@@ -146,8 +152,12 @@ public class Regexp<T> {
     return RegexpType.ALTERNATION.equals(type);
   }
 
-  public boolean isKleene() {
-    return RegexpType.KLEENE.equals(type);
+  public boolean isXsall() {
+    return RegexpType.XSALL.equals(type);
+  }
+
+  public boolean isLambda() {
+    return RegexpType.LAMBDA.equals(type);
   }
 
   /**
@@ -205,12 +215,16 @@ public class Regexp<T> {
       altChildren.add(getChild(i));
     }
 
-    final Regexp<T> concat = new Regexp<T>(null, altChildren, RegexpType.CONCATENATION);
+    // TODO vektor Check here
+//    final Regexp<T> concat = new Regexp<T>(null, altChildren, RegexpType.CONCATENATION);
+    final Regexp<T> concat = Regexp.<T>getConcatenation(altChildren);
 
     final List<Regexp<T>> c = new ArrayList<Regexp<T>>();
     c.add(concat);
 
-    newChildren.add(new Regexp<T>(null, c, RegexpType.ALTERNATION));
+    // TODO vektor check here
+//    newChildren.add(new Regexp<T>(null, c, RegexpType.ALTERNATION));
+    newChildren.add(Regexp.<T>getAlternation(c));
 
     children.clear();
     children.addAll(newChildren);
@@ -239,32 +253,38 @@ public class Regexp<T> {
       newChildren.add(getChild(i));
     }
 
-    return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
+    // TODO vektor check here
+//    return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
+    return Regexp.<T>getConcatenation(newChildren);
+  }
+
+  private String comboToString(final String delimiter) {
+    final StringBuilder ret = new StringBuilder();
+    for (final Regexp<T> child : children) {
+      if (!child.isToken()) {
+        ret.append('(');
+      }
+      ret.append(child.toString()).append(delimiter);
+      if (!child.isToken()) {
+        ret.append(')');
+      }
+    }
+    return ret.toString();
   }
 
   @Override
   public String toString() {
     switch (type) {
       case TOKEN:
-        return content.toString();
-      case KLEENE:
-        return "(" + getChild(0).toString() + ")*";
+          return content.toString() + interval.toString();
       case CONCATENATION:
-        final StringBuilder retConc = new StringBuilder();
-        retConc.append('(');
-        for (final Regexp<T> child : children) {
-          retConc.append(child.toString()).append(",");
-        }
-        retConc.append(')');
-        return retConc.toString();
+        return comboToString(",") + interval.toString();
       case ALTERNATION:
-        final StringBuilder retAlt = new StringBuilder();
-        retAlt.append('(');
-        for (final Regexp<T> child : children) {
-          retAlt.append(child.toString()).append("|");
-        }
-        retAlt.append(')');
-        return retAlt.toString();
+        return comboToString("|") + interval.toString();
+      case XSALL:
+        return comboToString("&") + interval.toString();
+      case LAMBDA:
+        return "λ";
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }

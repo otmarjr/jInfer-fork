@@ -29,6 +29,13 @@ public enum RegexpType {
   CONCATENATION,
   /** An alternation between regular expressions. Eg "a|b|c". */
   ALTERNATION,
-  /** Kleene star operator. Eg "a*". */
-  KLEENE;
+  /**
+   * xs:all
+   * TODO anti Comment!
+   */
+  XSALL,
+  /**
+   * Lambda, λ, empty string
+   */
+  LAMBDA;
 }

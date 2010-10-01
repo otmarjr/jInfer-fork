@@ -22,6 +22,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
@@ -58,7 +60,7 @@ public class TrivialHandler extends DefaultHandler {
     final List<String> context = getContext();
 
     final Element e = new Element(context, qName, null, 
-            Regexp.<AbstractNode>getConcatenationMutable());
+            Regexp.<AbstractNode>getMutable());
 
     if (attributes.getLength() > 0) {
       final List<String> attrContext = new ArrayList<String>(context);
@@ -94,10 +96,19 @@ public class TrivialHandler extends DefaultHandler {
 
     // current element ends, it is time to give out its rule
     final AbstractNode end = stack.pop();
+
     if (!end.getName().equals(qName)) {
       throw new IllegalArgumentException("unpaired element");
     }
-
+    Element e = (Element) end;
+    if (e.getSubnodes().getChildren().isEmpty()) {
+      e.getSubnodes().setType(RegexpType.LAMBDA);
+    } else {
+      e.getSubnodes().setType(RegexpType.CONCATENATION);
+      e.getSubnodes().setInterval(RegexpInterval.getOnce());
+    }
+    e.getSubnodes().setUnmutable();
+    
     rules.add(end);
   }
 

@@ -36,7 +36,8 @@ import java.util.List;
  * Kleene star operator.
  * </li>
  * </ul>
- * 
+ *
+ *
  * @author vektor
  */
 public class Regexp<T> {
@@ -147,14 +148,6 @@ public class Regexp<T> {
 
   public T getContent() {
     return content;
-  }
-
-  public void setChildren(List<Regexp<T>> children) {
-    if (this.mutable) {
-      this.children = children;
-    } else {
-      throw new IllegalStateException("Trying to change children of unmutable regexp.");
-    }
   }
 
   public List<Regexp<T>> getChildren() {
@@ -325,15 +318,11 @@ public class Regexp<T> {
       altChildren.add(getChild(i));
     }
 
-    // TODO vektor Check here
-//    final Regexp<T> concat = new Regexp<T>(null, altChildren, RegexpType.CONCATENATION);
     final Regexp<T> concat = Regexp.<T>getConcatenation(altChildren);
 
     final List<Regexp<T>> c = new ArrayList<Regexp<T>>();
     c.add(concat);
 
-    // TODO vektor check here
-//    newChildren.add(new Regexp<T>(null, c, RegexpType.ALTERNATION));
     newChildren.add(Regexp.<T>getAlternation(c));
 
     children.clear();
@@ -370,15 +359,11 @@ public class Regexp<T> {
 
   private String comboToString(final String delimiter) {
     final StringBuilder ret = new StringBuilder();
+    ret.append('(');
     for (final Regexp<T> child : children) {
-      if (!child.isToken()) {
-        ret.append('(');
-      }
       ret.append(child.toString()).append(delimiter);
-      if (!child.isToken()) {
-        ret.append(')');
-      }
     }
+    ret.append(')');
     return ret.toString();
   }
 

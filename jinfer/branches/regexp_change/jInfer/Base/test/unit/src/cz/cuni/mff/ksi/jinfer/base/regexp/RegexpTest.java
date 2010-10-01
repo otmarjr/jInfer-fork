@@ -106,7 +106,7 @@ public class RegexpTest {
   public void testBranchLengthOne() {
     final List<Regexp<Integer>> children = new ArrayList<Regexp<Integer>>();
     children.add(Regexp.getToken(Integer.valueOf(0)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
+    final Regexp<Integer> t = Regexp.<Integer>getConcatenation(children);
     System.out.print(t.toString() + " -> ");
     t.branch(0);
     System.out.println(t.toString());
@@ -129,7 +129,7 @@ public class RegexpTest {
     children.add(Regexp.getToken(Integer.valueOf(0)));
     children.add(Regexp.getToken(Integer.valueOf(1)));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
+    final Regexp<Integer> t = Regexp.<Integer>getConcatenation(children);
     System.out.print(t.toString() + " -> ");
     t.branch(0);
     System.out.println(t.toString());
@@ -156,7 +156,7 @@ public class RegexpTest {
     children.add(Regexp.getToken(Integer.valueOf(0)));
     children.add(Regexp.getToken(Integer.valueOf(1)));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
+    final Regexp<Integer> t = Regexp.<Integer>getConcatenation(children);
     System.out.print(t.toString() + " -> ");
     t.branch(1);
     System.out.println(t.toString());
@@ -183,7 +183,7 @@ public class RegexpTest {
     children.add(Regexp.getToken(Integer.valueOf(0)));
     children.add(Regexp.getToken(Integer.valueOf(1)));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
+    final Regexp<Integer> t = Regexp.<Integer>getConcatenation(children);
     System.out.print(t.toString() + " -> ");
     t.branch(2);
     System.out.println(t.toString());
@@ -209,9 +209,9 @@ public class RegexpTest {
     final List<Regexp<Integer>> altC = new ArrayList<Regexp<Integer>>();
     altC.add(Regexp.getToken(Integer.valueOf(10)));
     altC.add(Regexp.getToken(Integer.valueOf(11)));
-    children.add(new Regexp<Integer>(null, altC, RegexpType.ALTERNATION, null));
+    children.add(Regexp.<Integer>getAlternation(altC));
     children.add(Regexp.getToken(Integer.valueOf(2)));
-    final Regexp<Integer> t = new Regexp<Integer>(null, children, RegexpType.CONCATENATION, null);
+    final Regexp<Integer> t = Regexp.<Integer>getConcatenation(children);
     System.out.print(t.toString() + " -> ");
     t.branch(1);
     System.out.println(t.toString());

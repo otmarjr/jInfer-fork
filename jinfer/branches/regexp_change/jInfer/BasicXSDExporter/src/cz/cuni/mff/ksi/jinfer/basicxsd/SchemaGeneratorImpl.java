@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
@@ -126,7 +127,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // run recursion starting at the top element
     indentator.indent("<!-- top level element -->\n");
-    processElement(preprocessor.getTopElement(), 1, 1);
+    processElement(preprocessor.getTopElement(), new RegexpInterval(MINOCCURS_DEFAULT, MAXOCCURS_DEFAULT));
 
     // close XSD
     indentator.indent("</xs:schema>");
@@ -137,7 +138,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     callback.finished(indentator.toString(), "xsd");
   }
 
-  private void processElement(final Element element, final int minOccurs, final int maxOccurs) throws InterruptedException {
+  private void processElement(final Element element, final RegexpInterval interval) throws InterruptedException {
     checkInterrupt();
 
     // begin definition of element and write its name
@@ -145,7 +146,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.append(element.getName());
     indentator.append("\"");
 
-    processOccurrences(minOccurs, maxOccurs);
+    processOccurrences(interval);
 
     // if its type is one of built-in types we don't have much work to do
     // TODO rio dalsie built-in typy
@@ -269,7 +270,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       indentator.increaseIndentation();
     }
 
-    processSubElements(element.getSubnodes(), 1, 1);
+    processSubElements(element.getSubnodes());
 
     if (makeSequence) {
       indentator.decreaseIndentation();
@@ -294,7 +295,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private void processSubElements(final Regexp<AbstractNode> regexp, final int minOccurs, final int maxOccurs) throws InterruptedException {
+  private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
     checkInterrupt();
 
     if (regexp.isEmpty()) {
@@ -312,9 +313,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     switch (regexp.getType()) {
       case TOKEN:
-        processToken(regexp.getContent(), minOccurs, maxOccurs);
+        processToken(regexp.getContent(), regexp.getInterval());
         return;
-      case KLEENE:
+      /*case KLEENE:
       {
         indentator.indent("<xs:sequence>\n");
         indentator.increaseIndentation();
@@ -322,7 +323,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.decreaseIndentation();
         indentator.indent("</xs:sequence>\n");
         return;
-      }
+      }*/
       case CONCATENATION:
       {
         // specialny pripad konkatenacie alternacie(A|lambda)
@@ -338,7 +339,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
 
         indentator.indent("<xs:sequence");
-        processOccurrences(minOccurs, maxOccurs);
+        processOccurrences(regexp.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
 
@@ -346,12 +347,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
           if (simpleAlternations.contains(subRegexp)) {
             final Regexp<AbstractNode> alternation = subRegexp;
             if (alternation.getChild(1).isToken()) {
-              processSubElements(alternation, 1, 1);
+              processSubElements(alternation);
             } else if (alternation.getChild(1).isConcatenation()) {
               indentator.indent("<xs:sequence minOccurs=\"0\">\n");
               indentator.increaseIndentation();
               for (final Regexp<AbstractNode> subReg : alternation.getChild(1).getChildren()) {
-                processSubElements(subReg, 1, 1);
+                processSubElements(subReg);
               }
               indentator.decreaseIndentation();
               indentator.indent("</xs:sequence>\n");
@@ -359,12 +360,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             } else {
               indentator.indent("<xs:sequence minOccurs=\"0\">\n");
               indentator.increaseIndentation();
-              processSubElements(alternation.getChild(1), 1, 1);
+              processSubElements(alternation.getChild(1));
               indentator.decreaseIndentation();
               indentator.indent("</xs:sequence>\n");
             }
           } else {
-            processSubElements(subRegexp, 1, 1);
+            processSubElements(subRegexp);
           }
         }
         
@@ -378,7 +379,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         if (regexp.getChildren().size() == 2) {
           if (regexp.getChild(0).isEmpty()) {
             if (regexp.getChild(1).isToken()) {
-              processToken(regexp.getChild(1).getContent(), 0, 1);
+              processToken(regexp.getChild(1).getContent(), new RegexpInterval(0, 1));
               return;
             }
           }
@@ -388,12 +389,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
         // other alternation (A | B ...)
         indentator.indent("<xs:choice");
-        processOccurrences(minOccurs, maxOccurs);
+        processOccurrences(regexp.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
         for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
           if ((subRegexp != null) && (!subRegexp.isEmpty())) {
-            processSubElements(subRegexp, 1, 1);
+            processSubElements(subRegexp);
           }
         }
         indentator.decreaseIndentation();
@@ -405,7 +406,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private void processToken(final AbstractNode node, final int minOccurs, final int maxOccurs) throws InterruptedException {
+  private void processToken(final AbstractNode node, final RegexpInterval interval) throws InterruptedException {
     assert(node.isSimpleData() == false);
     assert(node.isElement());
 
@@ -415,24 +416,26 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       LOG.warn("XSD Exporter: Referenced element(" + node.getName() + ") not found in IG element list, probably error in code");
       return;
     }
-      processElement(element, minOccurs, maxOccurs);
+      processElement(element, interval);
   }
 
-  private void processOccurrences(final int minOccurs, final int maxOccurs) {
+  private void processOccurrences(final RegexpInterval interval) {
+    int minOccurs = interval.getMin();
     if (minOccurs != MINOCCURS_DEFAULT) {
       indentator.append(" minOccurs=\"");
       indentator.append(Integer.toString(minOccurs));
       indentator.append("\"");
     }
 
-    if (maxOccurs != MAXOCCURS_DEFAULT) {
-      indentator.append(" maxOccurs=\"");
-      if (maxOccurs == Integer.MAX_VALUE) {
-        indentator.append("unbounded");
-      } else {
+    if (interval.isUnbounded()) {
+      indentator.append(" maxOccurs=\"unbounded\"");
+    } else {
+      int maxOccurs = interval.getMax();
+      if (maxOccurs != MAXOCCURS_DEFAULT) {
+        indentator.append(" maxOccurs=\"");
         indentator.append(Integer.toString(minOccurs));
+        indentator.append("\"");
       }
-      indentator.append("\"");
     }
   }
 

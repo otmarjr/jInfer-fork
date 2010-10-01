@@ -18,7 +18,16 @@
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
 /**
- * TODO anti Comment!
+ * Class representing interval of each regexp. As in character regexp, which
+ * can have intervals for occurrences in form:
+ * {m, n} - at least m, at most n
+ * {m, } - at least m to infinity
+ * {, n} - zero to at most n
+ * Every regexp has an interval. Every interval has minimum as a natural number.
+ * Maximum can be unbounded and for this case, calling 'isUnbounded' will reveal.
+ *
+ * Calling getMax when interval is unbounded causes exception.
+ * There are some helper functions for common cases (*;+;?;{m,};{1,1})
  *
  * @author anti
  */

@@ -86,7 +86,7 @@ public class Regexp<T> {
   }
 
   public static <T> Regexp<T> getConcatenation() {
-    return getConcatenation(new ArrayList<Regexp<T>>(0));
+    return new Regexp<T>(null,  (new ArrayList<Regexp<T>>(0)), RegexpType.CONCATENATION, RegexpInterval.getOnce());
   }
 
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {

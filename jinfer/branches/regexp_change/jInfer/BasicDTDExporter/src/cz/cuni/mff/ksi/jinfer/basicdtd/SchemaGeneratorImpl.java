@@ -138,14 +138,21 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return "EMPTY";
     }
     switch (regexp.getType()) {
-      case TOKEN:
-        return tokenToString(regexp.getContent(), topLevel);
-      case KLEENE:
-        return "(" + subElementsToString(regexp.getChild(0), false) + ")*";
+      case TOKEN: /*
+        if (regexp.getInterval().isUnbounded()||regexp.getInterval().getMax() > 1) {
+          return tokenToString(regexp.getContent(), topLevel) + "*";
+        } else if (regexp.getInterval().getMin() == 0) {
+          return tokenToString(regexp.getContent(), topLevel) + "?";
+        } else {
+          return tokenToString(regexp.getContent(), topLevel);
+        }*/
+        return tokenToString(regexp.getContent(), topLevel) + regexp.getInterval().toString();
+//      case KLEENE:
+//        return "(" + subElementsToString(regexp.getChild(0), false) + ")*";
       case CONCATENATION:
-        return concatToString(regexp.getChildren());
+        return concatToString(regexp.getChildren()) + regexp.getInterval().toString();
       case ALTERNATION:
-        return alternationToString(regexp.getChildren());
+        return alternationToString(regexp.getChildren()) + regexp.getInterval().toString();
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }

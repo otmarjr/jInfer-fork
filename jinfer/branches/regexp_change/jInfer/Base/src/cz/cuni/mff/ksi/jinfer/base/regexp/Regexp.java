@@ -72,8 +72,14 @@ public class Regexp<T> {
 
   // TODO anti assert? children nonempty
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.ALTERNATION, RegexpInterval.getOnce());
+    return getAlternation(children, RegexpInterval.getOnce());
   }
+
+    // TODO anti assert? children nonempty
+  public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children, final RegexpInterval interval) {
+    return new Regexp<T>(null, children, RegexpType.ALTERNATION, interval);
+  }
+
 
   public static <T> Regexp<T> getXsall(final List<Regexp<T>> children) {
     return new Regexp<T>(null, children, RegexpType.XSALL, RegexpInterval.getOnce());

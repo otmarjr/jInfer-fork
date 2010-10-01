@@ -140,6 +140,10 @@ public class Regexp<T> {
     return type;
   }
 
+  public RegexpInterval getInterval() {
+    return interval;
+  }
+
   public boolean isToken() {
     return RegexpType.TOKEN.equals(type);
   }

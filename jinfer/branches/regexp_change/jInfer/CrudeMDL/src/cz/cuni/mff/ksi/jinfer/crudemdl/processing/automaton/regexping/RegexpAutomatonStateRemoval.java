@@ -20,6 +20,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -100,10 +101,12 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     if (loopSteps.size() == 1) {
       final Step<Regexp<T>> oldLoopStep= loopSteps.get(0);
 
-      loopChildren.add(oldLoopStep.getAcceptSymbol());
+      Regexp<T> symbol= oldLoopStep.getAcceptSymbol();
       newLoopStep=
               new Step<Regexp<T>>(
-                Regexp.<T>getKleene(loopChildren),
+                new Regexp<T>(
+                  symbol.getContent(), symbol.getChildren(),
+                  symbol.getType(), RegexpInterval.getKleeneStar()),
                 state,
                 state,
                 1);
@@ -116,15 +119,12 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       loopChildren.add(oldLoopStep.getAcceptSymbol());
     }
 
-    final Regexp<T> loopRegexpAlt= Regexp.<T>getAlternation(loopChildren);
-    final List<Regexp<T>> kleeneChildren= new ArrayList<Regexp<T>>();
-    kleeneChildren.add(loopRegexpAlt);
-    final Regexp<T> loopRegexpKleene= Regexp.<T>getKleene(kleeneChildren);
+    final Regexp<T> loopRegexpAlt= Regexp.<T>getAlternation(loopChildren, RegexpInterval.getKleeneStar());
     for (Step<Regexp<T>> oldLoopStep : loopSteps) {
       this.delta.get(state).remove(oldLoopStep);
       this.reverseDelta.get(state).remove(oldLoopStep);
     }
-    newLoopStep= new Step<Regexp<T>>(loopRegexpKleene, state, state, 1);
+    newLoopStep= new Step<Regexp<T>>(loopRegexpAlt, state, state, 1);
     return newLoopStep;
   }
 

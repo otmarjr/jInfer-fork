@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,12 +74,14 @@ public class CloneHelper {
 
     final Element clone;
     if (e.getSubnodes().isToken()) {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, null, RegexpType.TOKEN));
+      // TODO vektor Check this, and why content is set afterwards and not before this line? TODO getInterval.clone() use clone
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, null, RegexpType.TOKEN, e.getSubnodes().getInterval()));
       cloned.add(new Pair<Element, Element>(e, clone));
       final AbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
       clone.getSubnodes().setContent(clonedToken);
     } else {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), e.getSubnodes().getType()));
+      // TODO vektor Check this, and why content is set afterwards and not before this line?
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), e.getSubnodes().getType(), e.getSubnodes().getInterval()));
       cloned.add(new Pair<Element, Element>(e, clone));
       final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
       clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
@@ -106,8 +109,9 @@ public class CloneHelper {
     return ret;
   }
 
+  // TODO vekto anti clone interval
   private Regexp<AbstractNode> cloneRegexp(final Regexp<AbstractNode> r) {
-    return new Regexp<AbstractNode>(cloneAbstractNode(r.getContent()), cloneChildren(r.getChildren()), r.getType());
+    return new Regexp<AbstractNode>(cloneAbstractNode(r.getContent()), cloneChildren(r.getChildren()), r.getType(), r.getInterval());
   }
 
   private AbstractNode cloneAbstractNode(final AbstractNode n) {

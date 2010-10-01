@@ -33,7 +33,7 @@ public enum RegexpType {
    * xs:all
    * TODO anti Comment!
    */
-  XSALL,
+  PERMUTATION,
   /**
    * Lambda, λ, empty string
    */

@@ -56,33 +56,67 @@ public class Regexp<T> {
     this.interval= interval;
   }
 
+  public static <T> Regexp<T> getToken(final T content, RegexpInterval interval) {
+    return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN, interval);
+  }
+
   public static <T> Regexp<T> getToken(final T content) {
-    return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN, RegexpInterval.getOnce());
+    return Regexp.<T>getToken(content, RegexpInterval.getOnce());
   }
 
-  // TODO anti exception? children nonempty
+  public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children, RegexpInterval interval) {
+    if (children == null) {
+      throw new IllegalArgumentException("Children of concatenation cannot be "
+              + "null. Why would you like to create such concatenation?");
+    } else if (children.isEmpty()) {
+      throw new IllegalArgumentException("Children of concatenation shouldn't "
+              + "be set to empty list this way. If you need to add children"
+              + " later, call getConcatenation() to obtain such regexp. This "
+              + "method is for proper use.");
+    }
+    return new Regexp<T>(null, children, RegexpType.CONCATENATION, interval);
+  }
+
   public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.CONCATENATION, RegexpInterval.getOnce());
+    return getConcatenation(children, RegexpInterval.getOnce());
   }
 
-  // TODO anti LAMBDA regexp after conversion
   public static <T> Regexp<T> getConcatenation() {
     return getConcatenation(new ArrayList<Regexp<T>>(0));
   }
 
-  // TODO anti assert? children nonempty
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {
     return getAlternation(children, RegexpInterval.getOnce());
   }
 
-    // TODO anti assert? children nonempty
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children, final RegexpInterval interval) {
+    if (children == null) {
+      throw new IllegalArgumentException("Children of alternation cannot be "
+              + "null. Why would you like to create such alternation?");
+    } else if (children.isEmpty()) {
+      throw new IllegalArgumentException("Children of alternation shouldn't "
+              + "be set to empty list this way. If you need to add children"
+              + " later, call getAlternation() to obtain such regexp. This "
+              + "method is for proper use.");
+    }
     return new Regexp<T>(null, children, RegexpType.ALTERNATION, interval);
   }
 
+  public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children, RegexpInterval interval) {
+    if (children == null) {
+      throw new IllegalArgumentException("Children of permutation cannot be "
+              + "null. Why would you like to create such permutation?");
+    } else if (children.isEmpty()) {
+      throw new IllegalArgumentException("Children of permutation shouldn't "
+              + "be set to empty list this way. If you need to add children"
+              + " later, call getpermutation() to obtain such regexp. This "
+              + "method is for proper use.");
+    }
+    return new Regexp<T>(null, children, RegexpType.PERMUTATION, interval);
+  }
 
-  public static <T> Regexp<T> getXsall(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.XSALL, RegexpInterval.getOnce());
+  public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children) {
+    return getPermutation(children, RegexpInterval.getOnce());
   }
 
   public void setContent(final T content) {
@@ -129,7 +163,7 @@ public class Regexp<T> {
         return Arrays.asList(content);
       case CONCATENATION:
       case ALTERNATION:
-      case XSALL:
+      case PERMUTATION:
         final List<T> ret = new ArrayList<T>();
         for (final Regexp<T> child : children) {
           ret.addAll(child.getTokens());
@@ -163,7 +197,7 @@ public class Regexp<T> {
   }
 
   public boolean isXsall() {
-    return RegexpType.XSALL.equals(type);
+    return RegexpType.PERMUTATION.equals(type);
   }
 
   public boolean isLambda() {
@@ -291,7 +325,7 @@ public class Regexp<T> {
         return comboToString(",") + interval.toString();
       case ALTERNATION:
         return comboToString("|") + interval.toString();
-      case XSALL:
+      case PERMUTATION:
         return comboToString("&") + interval.toString();
       case LAMBDA:
         return "λ";

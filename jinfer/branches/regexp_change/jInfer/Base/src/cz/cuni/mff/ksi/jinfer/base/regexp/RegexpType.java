@@ -30,8 +30,9 @@ public enum RegexpType {
   /** An alternation between regular expressions. Eg "a|b|c". */
   ALTERNATION,
   /**
-   * xs:all
-   * TODO anti Comment!
+   * All possible permutations of children. Noted as "a&b&c",
+   * which matches abc, acb, bac, bca, cab, cba. In XSD it is represented
+   * as <xs:all> element.
    */
   PERMUTATION,
   /**

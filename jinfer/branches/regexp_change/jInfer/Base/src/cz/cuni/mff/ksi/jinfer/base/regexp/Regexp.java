@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

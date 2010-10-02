@@ -298,7 +298,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
     checkInterrupt();
 
-    if (regexp.isEmpty()) {
+    if (regexp.isLambda()) {
       return;
     }
 
@@ -331,7 +331,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         for (final Regexp<AbstractNode> child : regexp.getChildren()) {
           if (child.isAlternation()) {
             if (child.getChildren().size() == 2) {
-              if (child.getChild(0).isEmpty()) {
+              if (child.getChild(0).isLambda()) {
                 simpleAlternations.add(child);
               }
             }
@@ -377,7 +377,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       {
         // simple alternation (Element | lambda)
         if (regexp.getChildren().size() == 2) {
-          if (regexp.getChild(0).isEmpty()) {
+          if (regexp.getChild(0).isLambda()) {
             if (regexp.getChild(1).isToken()) {
               processToken(regexp.getChild(1).getContent(), new RegexpInterval(0, 1));
               return;
@@ -393,7 +393,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.append(">\n");
         indentator.increaseIndentation();
         for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
-          if ((subRegexp != null) && (!subRegexp.isEmpty())) {
+          if ((subRegexp != null) && (!subRegexp.isLambda())) {
             processSubElements(subRegexp);
           }
         }
@@ -433,7 +433,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       int maxOccurs = interval.getMax();
       if (maxOccurs != MAXOCCURS_DEFAULT) {
         indentator.append(" maxOccurs=\"");
-        indentator.append(Integer.toString(minOccurs));
+        indentator.append(Integer.toString(maxOccurs));
         indentator.append("\"");
       }
     }

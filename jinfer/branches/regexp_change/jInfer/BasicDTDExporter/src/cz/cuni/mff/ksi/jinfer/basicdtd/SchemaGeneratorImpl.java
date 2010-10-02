@@ -123,6 +123,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return ret.toString();
   }
 
+  /**
+   * If we want to output PCDATA in DTD, it needs to be like this
+   * <code>
+   * (#PCDATA|a|b|c)*
+   * </code>
+
+   * @param regexp
+   * @param topLevel
+   * @return
+   */
   private String subElementsToString(final Regexp<AbstractNode> regexp,
           final boolean topLevel) {
     if (regexp.isLambda()) {
@@ -149,12 +159,37 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         if (topLevel) {
           sb.append(')');
         }
+        return sb.toString();
       case CONCATENATION:
-        return concatToString(regexp.getChildren()) + regexp.getInterval().toString();
+        if (!DTDUtils.containsPCDATA(regexp.getChildren())) {
+          return listToString(DTDUtils.omitAttributes(regexp.getChildren()), ',') +
+                  regexp.getInterval().toString();
+        }
+
+        final List<AbstractNode> content = new ArrayList<AbstractNode>();
+        for (final Regexp<AbstractNode> r : DTDUtils.omitAttributes(regexp.getChildren())) {
+          content.addAll(r.getTokens());
+        }
+
+        Collections.sort(content, DTDUtils.PCDATA_CMP);
+
+        return CollectionToString.colToString(
+                DTDUtils.uniquePCDATA(content),
+                '|',
+                new CollectionToString.ToString<AbstractNode>() {
+
+                  @Override
+                  public String toString(final AbstractNode t) {
+                    return tokenToString(t);
+                  }
+                }) + "*";
       case ALTERNATION:
-        return alternationToString(regexp.getChildren()) + regexp.getInterval().toString();
+        return listToString(DTDUtils.omitAttributes(regexp.getChildren()), '|') +
+                  regexp.getInterval().toString();
+      case PERMUTATION:
+        return listToString(DTDUtils.omitAttributes(regexp.getChildren()), '|') + "*";
       default:
-        throw new IllegalArgumentException("Unknown enum member.");
+        throw new IllegalArgumentException("Unknown enum member: " + regexp.getType());
     }
   }
 
@@ -163,46 +198,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return "#PCDATA";
     }
     return node.getName();
-  }
-
-  /**
-   * If we want to output PCDATA in DTD, it needs to be like this
-   * <code>
-   * (#PCDATA|a|b|c)*
-   * </code>
-   *
-   * @param children
-   * @return
-   */
-  private String concatToString(final List<Regexp<AbstractNode>> children) {
-    if (!DTDUtils.containsPCDATA(children)) {
-      return listToString(DTDUtils.omitAttributes(children), ',');
-    }
-
-    final List<AbstractNode> content = new ArrayList<AbstractNode>();
-    for (final Regexp<AbstractNode> r : DTDUtils.omitAttributes(children)) {
-      content.addAll(r.getTokens());
-    }
-
-    Collections.sort(content, DTDUtils.PCDATA_CMP);
-
-    return CollectionToString.colToString(
-            DTDUtils.uniquePCDATA(content),
-            '|',
-            new CollectionToString.ToString<AbstractNode>() {
-
-              @Override
-              public String toString(final AbstractNode t) {
-                return tokenToString(t);
-              }
-            }) + "*";
-  }
-
-  private String alternationToString(final List<Regexp<AbstractNode>> children) {
-    if (DTDUtils.containsEmpty(children)) {
-      return listToString(DTDUtils.omitAttributes(DTDUtils.omitEmpty(children)), '|') + "?";
-    }
-    return listToString(DTDUtils.omitAttributes(children), '|');
   }
 
   private String listToString(final List<Regexp<AbstractNode>> list,

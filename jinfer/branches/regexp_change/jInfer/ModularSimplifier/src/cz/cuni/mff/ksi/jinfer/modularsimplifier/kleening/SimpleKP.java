@@ -111,7 +111,12 @@ public class SimpleKP implements KleeneProcessor {
 
       i++;
     }
-    return Regexp.getConcatenation(retChildren);
+    final Regexp<AbstractNode> r = Regexp.getMutable();
+    r.setType(RegexpType.CONCATENATION);
+    r.getChildren().addAll(retChildren);
+    r.setInterval(RegexpInterval.getOnce());
+    r.setUnmutable();
+    return r;
   }
 
   private static boolean equalTokenRegexps(final Regexp<AbstractNode> last,

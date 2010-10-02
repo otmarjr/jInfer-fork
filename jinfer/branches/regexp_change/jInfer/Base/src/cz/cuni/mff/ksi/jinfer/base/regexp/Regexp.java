@@ -220,6 +220,7 @@ public class Regexp<T> {
     return interval;
   }
 
+  // TODO anti Rename to setImmutable
   public void setUnmutable() {
     if (this.mutable) {
       this.mutable = false;

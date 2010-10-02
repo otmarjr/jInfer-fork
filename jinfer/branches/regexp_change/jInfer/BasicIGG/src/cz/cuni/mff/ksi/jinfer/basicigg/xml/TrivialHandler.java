@@ -101,12 +101,8 @@ public class TrivialHandler extends DefaultHandler {
       throw new IllegalArgumentException("unpaired element");
     }
     Element e = (Element) end;
-    if (e.getSubnodes().getChildren().isEmpty()) {
-      e.getSubnodes().setType(RegexpType.LAMBDA);
-    } else {
-      e.getSubnodes().setType(RegexpType.CONCATENATION);
-      e.getSubnodes().setInterval(RegexpInterval.getOnce());
-    }
+    e.getSubnodes().setType(RegexpType.CONCATENATION);
+    e.getSubnodes().setInterval(RegexpInterval.getOnce());
     e.getSubnodes().setUnmutable();
     
     rules.add(end);

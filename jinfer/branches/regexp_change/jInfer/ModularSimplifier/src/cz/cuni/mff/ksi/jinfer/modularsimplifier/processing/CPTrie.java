@@ -52,7 +52,7 @@ public class CPTrie extends AbstractCPImpl {
         throw new IllegalArgumentException("Element expected");
       }
       if (!((Element) n).getSubnodes().isConcatenation()) {
-        throw new IllegalArgumentException("Concatenation expected");
+        throw new IllegalArgumentException("Concatenation expected, instead " + ((Element) n).getSubnodes().getType() + " found.");
       }
     }
   }

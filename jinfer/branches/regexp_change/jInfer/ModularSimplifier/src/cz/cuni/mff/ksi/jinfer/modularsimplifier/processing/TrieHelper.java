@@ -42,9 +42,11 @@ public final class TrieHelper {
    */
   public static void addBranchToTree(final Regexp<AbstractNode> tree,
           final Regexp<AbstractNode> branch) {
-    if (!tree.isConcatenation()
-            || !branch.isConcatenation()) {
-      throw new IllegalArgumentException();
+    if (!tree.isConcatenation()) {
+      throw new IllegalArgumentException("Tree must be concatenation, is " + tree.getType() + " instead.");
+    }
+    if (!branch.isConcatenation()) {
+      throw new IllegalArgumentException("Branch must be concatenation, is " + branch.getType() + " instead.");
     }
 
     int posTree = 0;

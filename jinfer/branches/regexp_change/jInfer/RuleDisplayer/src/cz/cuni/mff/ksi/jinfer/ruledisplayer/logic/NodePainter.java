@@ -124,6 +124,7 @@ public class NodePainter {
       return Utils.DOTS;
     }
     switch (subnodes.getType()) {
+      case LAMBDA: return Utils.LAMBDA;
       case TOKEN: return drawNode(subnodes, level + 1);
       case ALTERNATION: return drawAlternation(subnodes, level + 1);
       case CONCATENATION: return drawConcatenation(subnodes, level + 1);

@@ -51,7 +51,7 @@ public class Regexp<T> {
   private boolean mutable;
 
   /**
-   * Creates unmutable regexp. TODO anti Comment more!
+   * Creates immutable regexp. TODO anti Comment more!
    * @param content
    * @param children
    * @param type
@@ -177,7 +177,7 @@ public class Regexp<T> {
     if (this.mutable) {
       this.content = content;
     } else {
-      throw new IllegalStateException("Trying to change content of unmutable regexp.");
+      throw new IllegalStateException("Trying to change content of immutable regexp.");
     }
   }
 
@@ -200,7 +200,7 @@ public class Regexp<T> {
     if (this.mutable) {
       this.type = type;
     } else {
-      throw new IllegalStateException("Trying to change type of unmutable regexp.");
+      throw new IllegalStateException("Trying to change type of immutable regexp.");
     }
   }
 
@@ -212,7 +212,7 @@ public class Regexp<T> {
     if (this.mutable) {
       this.interval = interval;
     } else {
-      throw new IllegalStateException("Trying to set interval of unmutable regexp.");
+      throw new IllegalStateException("Trying to set interval of immutable regexp.");
     }
   }
 
@@ -220,12 +220,11 @@ public class Regexp<T> {
     return interval;
   }
 
-  // TODO anti Rename to setImmutable
-  public void setUnmutable() {
+  public void setImmutable() {
     if (this.mutable) {
       this.mutable = false;
     } else {
-      throw new IllegalStateException("Trying to set unmutable regexp, that is once unmutable.");
+      throw new IllegalStateException("Trying to set inmutable regexp, that is once inmutable.");
     }
   }
 
@@ -248,7 +247,7 @@ public class Regexp<T> {
     if (mutable) {
       children.add(child);
     } else {
-      throw new IllegalStateException("Trying to add child to unmutable regexp.");
+      throw new IllegalStateException("Trying to add child to immutable regexp.");
     }
   }
 
@@ -394,7 +393,12 @@ public class Regexp<T> {
     // TODO vektor check here
     // TODO anti This needs to be mutable
 //    return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
-    return Regexp.<T>getConcatenation(newChildren);
+    Regexp<T> ret= Regexp.<T>getMutable();
+    ret.getChildren().addAll(children);
+    ret.setType(RegexpType.CONCATENATION);
+    ret.setInterval(RegexpInterval.getOnce());
+    ret.setImmutable();
+    return ret;
   }
 
   private String comboToString(final String delimiter) {

@@ -167,13 +167,13 @@ public class CloneHelperTest {
             );
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
-    e1.getSubnodes().setUnmutable();
+    e1.getSubnodes().setImmutable();
     e2.getSubnodes().addChild(
             Regexp.<AbstractNode>getToken(e1)
             );
     e2.getSubnodes().setInterval(RegexpInterval.getOnce());
     e2.getSubnodes().setType(RegexpType.CONCATENATION);
-    e2.getSubnodes().setUnmutable();
+    e2.getSubnodes().setImmutable();
 
 
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
@@ -200,7 +200,7 @@ public class CloneHelperTest {
     e1.getSubnodes().setContent(e2);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e1.getSubnodes().setType(RegexpType.TOKEN);
-    e1.getSubnodes().setUnmutable();
+    e1.getSubnodes().setImmutable();
 
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(e1);

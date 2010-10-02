@@ -130,7 +130,7 @@ public class DTDProcessor implements Processor {
       ret.getSubnodes().setType(RegexpType.CONCATENATION);
       ret.getSubnodes().setInterval(RegexpInterval.getOnce());
     }
-    ret.getSubnodes().setUnmutable();
+    ret.getSubnodes().setImmutable();
 
     return ret;
   }

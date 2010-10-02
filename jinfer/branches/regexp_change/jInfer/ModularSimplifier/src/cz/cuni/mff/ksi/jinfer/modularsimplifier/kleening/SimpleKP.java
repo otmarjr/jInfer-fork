@@ -115,7 +115,7 @@ public class SimpleKP implements KleeneProcessor {
     r.setType(RegexpType.CONCATENATION);
     r.getChildren().addAll(retChildren);
     r.setInterval(RegexpInterval.getOnce());
-    r.setUnmutable();
+    r.setImmutable();
     return r;
   }
 

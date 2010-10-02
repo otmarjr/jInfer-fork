@@ -124,12 +124,8 @@ public class DTDProcessor implements Processor {
                     new SimpleData(null, null, null, null, new ArrayList<String>(0))));
     }
 
-    if (ret.getSubnodes().getChildren().isEmpty()) {
-      ret.getSubnodes().setType(RegexpType.LAMBDA);
-    } else {
-      ret.getSubnodes().setType(RegexpType.CONCATENATION);
-      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
-    }
+    ret.getSubnodes().setType(RegexpType.CONCATENATION);
+    ret.getSubnodes().setInterval(RegexpInterval.getOnce());
     ret.getSubnodes().setImmutable();
 
     return ret;

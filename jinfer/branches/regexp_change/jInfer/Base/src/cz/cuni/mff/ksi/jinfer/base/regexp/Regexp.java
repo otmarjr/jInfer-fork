@@ -64,6 +64,41 @@ public class Regexp<T> {
 
   private Regexp(final T content, final List<Regexp<T>> children,
           final RegexpType type, RegexpInterval interval, boolean mutable) {
+    if (!mutable) {
+      if (type == null) {
+        throw new IllegalArgumentException("Type of regexp has to be non-null.");
+      }
+      if (type.equals(RegexpType.LAMBDA)) {
+        if (content != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, content has to be null.");
+        }
+        if (children != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, children has to be null.");
+        }
+        if (interval != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, interval has to be null.");
+        }
+      } else {
+        if (type.equals(RegexpType.TOKEN)) {
+          if (content == null) {
+            throw new IllegalArgumentException("When regexp is TOKEN, content has to be non-null.");
+          }
+          if (children != null) {
+            throw new IllegalArgumentException("When regexp is TOKEN, children has to be null.");
+          }
+        } else {
+          if (content != null) {
+            throw new IllegalArgumentException("When regexp is " + type.toString() + ", content has to be null");
+          }
+          if (children == null) {
+            throw new IllegalArgumentException("When regexp is " + type.toString() + ", children has to be non-null.");
+          }
+        }
+        if (interval == null) {
+          throw new IllegalArgumentException("When regexp is " + type.toString() + ", interval has to be non-null.");
+        }
+      }
+    }
     this.content = content;
     this.children = children;
     this.type = type;

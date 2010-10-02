@@ -18,7 +18,6 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
-import cz.cuni.mff.ksi.jinfer.autoeditor.monitor.Monitor;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -36,79 +35,104 @@ import java.util.Set;
 import org.openide.windows.WindowManager;
 
 /**
+ * Provides a way to draw automata in a GUI component and return a result of
+ * user interaction with the drawing.
+ *
+ * How does it work?
+ * - AutoEditor is called in a particular thread (AutoEditor thread). It
+ *   prepares a visualization of a given automaton and runs an
+ *   AutoEditorTopComponent function in a special thread (GUI thread, running
+ *   in special thread is required by NB). Arguments passed to the
+ *   AutoEditorTopComponent function are:
+ *   1) reference to an instance of visualization of the automaton
+ *   2) reference to this (this instance of AutoEditor).
+ *   Then AutoEditor thread sleeps on its own instance.
+ * - GUI thread stores the instance of AutoEditor in an instance of
+ *   AutoEditorTopComponent class and draws what is be drawn. AutoEditor thread
+ *   still sleeps.
+ * - User interaction (i.e. button click) is handled in some NB thread
+ *   (maybe it is the GUI thread - it is not important) which can access
+ *   the same instance of AutoEditorTopComponent, so it can access
+ *   the instance of AutoEditor, so it wakes AutoEditor thread up.
+ * - AutoEditor thread gets the result of user interaction from the instance
+ *   of visualization (which was passed to GUI thread) and returns it to the
+ *   caller of AutoEditor. So the call of AutoEditor can be considered
+ *   as synchronous.
  *
  * @author rio
- * TODO rio comment
  */
 public class AutoEditor<T> {
 
-  private final Monitor<Pair<State<T>, State<T>>> monitor;
-  private VisualizationViewer<State<T>, Step<T>> vv;
+  /**
+   * Variable used to pass data to the GUI and gets the result of user
+   * interaction.
+   */
+  private VisualizationViewer<State<T>, Step<T>> visualizationViewer;
 
-  public AutoEditor() {
-    monitor = new Monitor<Pair<State<T>, State<T>>>();
-  }
-
-  public void callback() {
-    final Set<State<T>> pickedSet = vv.getPickedVertexState().getPicked();
-    final Pair<State<T>, State<T>> result = (pickedSet.size() >= 2) ? new Pair<State<T>, State<T>>((State<T>)pickedSet.toArray()[0], (State<T>)pickedSet.toArray()[1]) : null;
-    synchronized(monitor) {
-      monitor.setData(result);
-      monitor.notify();
-    }
-  }
-
-  public Pair<State<T>, State<T>> drawAutomaton(final Automaton<T> automaton) {
+  /**
+   * Draws automaton and waits until user picks two states and clicks
+   * 'continue' button.
+   *
+   * @param automaton automaton to be drawn
+   * @return if user picks exactly two states returns Pair of them otherwise null
+   */
+  public Pair<State<T>, State<T>> drawAutomatonToPickTwoStates(final Automaton<T> automaton) {
     final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
-    final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
+    final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
 
-    // vrcholy
-    for (Entry<State<T>, Set<Step<T>>> entry : delta.entrySet()) {
+    // Get vertices = states of automaton
+    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
       graph.addVertex(entry.getKey());
     }
 
-    // hrany
-    for (Entry<State<T>, Set<Step<T>>> entry : delta.entrySet()) {
+    // Get edges of automaton
+    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
       for (Step<T> step : entry.getValue()) {
         graph.addEdge(step, step.getSource(), step.getDestination());
       }
     }
 
+    // TODO rio find suitable layout
     final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space
-    // The BasicVisualizationServer<V,E> is parameterized by the edge types
-    vv = new VisualizationViewer<State<T>, Step<T>>(layout);
-    //vv.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
-    vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
-    vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
+    visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layout);
+    //visualizationViewer.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
+
+    visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
+    visualizationViewer.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
 
     final DefaultModalGraphMouse<State<T>, Step<T>> gm = new DefaultModalGraphMouse<State<T>, Step<T>>();
     gm.setMode(ModalGraphMouse.Mode.PICKING);
-    vv.setGraphMouse(gm);
+    visualizationViewer.setGraphMouse(gm);
 
-    synchronized(monitor) {
+    // Call GUI in a special thread. Required by NB.
+    synchronized(this) {
       WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
         @Override
         public void run() {
-          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(new Callback() {
-
-            @Override
-            public void call() {
-              AutoEditor.this.callback();
-            }
-          }, vv);
+          // Pass this as argument so the thread will be able to wake us up.
+          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(AutoEditor.this, visualizationViewer);
         }
       });
 
       try {
-        monitor.wait();
+        // Sleep on this.
+        this.wait();
       } catch (InterruptedException e) {
         return null;
       }
     }
 
-    return monitor.getData();
+    /* AutoEditorTopComponent wakes us up. Get the result and return it.
+     * VisualizationViewer should give us the information about picked vertices.
+     */
+    final Set<State<T>> pickedSet = visualizationViewer.getPickedVertexState().getPicked();
+    if (pickedSet.size() == 2) {
+      return new Pair<State<T>, State<T>>((State<T>)pickedSet.toArray()[0], (State<T>)pickedSet.toArray()[1]);
+    } else {
+      return null;
+    }
   }
 }

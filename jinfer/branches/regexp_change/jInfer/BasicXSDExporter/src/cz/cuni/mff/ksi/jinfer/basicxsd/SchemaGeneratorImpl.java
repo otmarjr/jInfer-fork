@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
@@ -298,11 +299,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
     checkInterrupt();
 
-    if (regexp.isLambda()) {
+    final Regexp<AbstractNode> regexpWithoutAttrs = RegexpUtils.omitAttributes(regexp);
+
+    if (regexpWithoutAttrs.isLambda()) {
       return;
     }
 
-    if (BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
+    if (BaseUtils.filter(regexpWithoutAttrs.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
       @Override
       public boolean apply(final AbstractNode argument) {
         return argument.isElement();
@@ -311,9 +314,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return;
     }
 
-    switch (regexp.getType()) {
+    switch (regexpWithoutAttrs.getType()) {
       case TOKEN:
-        processToken(regexp.getContent(), regexp.getInterval());
+        processToken(regexpWithoutAttrs.getContent(), regexpWithoutAttrs.getInterval());
         return;
       /*case KLEENE:
       {
@@ -328,7 +331,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       {
         // specialny pripad konkatenacie alternacie(A|lambda)
         List<Regexp<AbstractNode>> simpleAlternations = new LinkedList<Regexp<AbstractNode>>();
-        for (final Regexp<AbstractNode> child : regexp.getChildren()) {
+        for (final Regexp<AbstractNode> child : regexpWithoutAttrs.getChildren()) {
           if (child.isAlternation()) {
             if (child.getChildren().size() == 2) {
               if (child.getChild(0).isLambda()) {
@@ -339,11 +342,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
 
         indentator.indent("<xs:sequence");
-        processOccurrences(regexp.getInterval());
+        processOccurrences(regexpWithoutAttrs.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
 
-        for (final Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
+        for (final Regexp<AbstractNode> subRegexp : regexpWithoutAttrs.getChildren()) {
           if (simpleAlternations.contains(subRegexp)) {
             final Regexp<AbstractNode> alternation = subRegexp;
             if (alternation.getChild(1).isToken()) {
@@ -376,10 +379,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case ALTERNATION:
       {
         // simple alternation (Element | lambda)
-        if (regexp.getChildren().size() == 2) {
-          if (regexp.getChild(0).isLambda()) {
-            if (regexp.getChild(1).isToken()) {
-              processToken(regexp.getChild(1).getContent(), new RegexpInterval(0, 1));
+        if (regexpWithoutAttrs.getChildren().size() == 2) {
+          if (regexpWithoutAttrs.getChild(0).isLambda()) {
+            if (regexpWithoutAttrs.getChild(1).isToken()) {
+              processToken(regexpWithoutAttrs.getChild(1).getContent(), new RegexpInterval(0, 1));
               return;
             }
           }
@@ -389,10 +392,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
         // other alternation (A | B ...)
         indentator.indent("<xs:choice");
-        processOccurrences(regexp.getInterval());
+        processOccurrences(regexpWithoutAttrs.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
-        for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
+        for (Regexp<AbstractNode> subRegexp : regexpWithoutAttrs.getChildren()) {
           if ((subRegexp != null) && (!subRegexp.isLambda())) {
             processSubElements(subRegexp);
           }

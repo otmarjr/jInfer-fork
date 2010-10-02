@@ -419,7 +419,7 @@ public class Regexp<T> {
       case PERMUTATION:
         return comboToString("&") + interval.toString();
       case LAMBDA:
-        return "λ";
+        return "\u03BB";
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }

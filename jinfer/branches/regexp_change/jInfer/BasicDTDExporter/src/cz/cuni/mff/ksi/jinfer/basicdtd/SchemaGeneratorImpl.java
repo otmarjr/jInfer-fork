@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
@@ -124,7 +125,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String subElementsToString(final Regexp<AbstractNode> regexp,
           final boolean topLevel) {
-    if (regexp.isEmpty()) {
+    if (regexp.isLambda()) {
       return "EMPTY";
     }
     if (topLevel
@@ -138,17 +139,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return "EMPTY";
     }
     switch (regexp.getType()) {
-      case TOKEN: /*
-        if (regexp.getInterval().isUnbounded()||regexp.getInterval().getMax() > 1) {
-          return tokenToString(regexp.getContent(), topLevel) + "*";
-        } else if (regexp.getInterval().getMin() == 0) {
-          return tokenToString(regexp.getContent(), topLevel) + "?";
-        } else {
-          return tokenToString(regexp.getContent(), topLevel);
-        }*/
-        return tokenToString(regexp.getContent(), topLevel) + regexp.getInterval().toString();
-//      case KLEENE:
-//        return "(" + subElementsToString(regexp.getChild(0), false) + ")*";
+      case TOKEN:
+        StringBuilder sb = new StringBuilder();
+        if (topLevel) {
+          sb.append('(');
+        }
+        sb.append(tokenToString(regexp.getContent()));
+        sb.append(regexp.getInterval().toString());
+        if (topLevel) {
+          sb.append(')');
+        }
       case CONCATENATION:
         return concatToString(regexp.getChildren()) + regexp.getInterval().toString();
       case ALTERNATION:
@@ -158,20 +158,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private String tokenToString(final AbstractNode node, final boolean topLevel) {
-    final StringBuilder ret = new StringBuilder();
-    if (topLevel) {
-      ret.append('(');
-    }
+  private String tokenToString(final AbstractNode node) {
     if (node.isSimpleData()) {
-      ret.append("#PCDATA");
-    } else {
-      ret.append(node.getName());
+      return "#PCDATA";
     }
-    if (topLevel) {
-      ret.append(')');
-    }
-    return ret.toString();
+    return node.getName();
   }
 
   /**
@@ -202,7 +193,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
               @Override
               public String toString(final AbstractNode t) {
-                return tokenToString(t, false);
+                return tokenToString(t);
               }
             }) + "*";
   }

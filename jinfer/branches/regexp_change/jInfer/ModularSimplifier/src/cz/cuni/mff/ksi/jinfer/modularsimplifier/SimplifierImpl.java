@@ -22,6 +22,9 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.ClustererFactory;
@@ -31,6 +34,7 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessorFacto
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.properties.PropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -104,8 +108,10 @@ public class SimplifierImpl implements Simplifier {
             properties.getProperty(PropertiesPanel.RENDER,
             Boolean.toString(PropertiesPanel.RENDER_DEFAULT)));
 
-    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), render);
-    final List<Cluster> clustered = getClusterer().cluster(initialGrammar);
+    final List<AbstractNode> mutableGrammar = getMutableGrammar(initialGrammar);
+
+    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(mutableGrammar), render);
+    final List<Cluster> clustered = getClusterer().cluster(mutableGrammar);
     RuleDisplayer.showClustersAsync("Clustered", new CloneHelper().cloneClusters(clustered), render);
     final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(processed), render);
@@ -118,5 +124,29 @@ public class SimplifierImpl implements Simplifier {
         callback.finished(kleened);
       }
     });
+  }
+
+  // TODO vektor Share this logic
+  private List<AbstractNode> getMutableGrammar(final List<AbstractNode> initialGrammar) {
+    final List<AbstractNode> ret = new ArrayList<AbstractNode>(initialGrammar.size());
+
+    for (final AbstractNode n : initialGrammar) {
+      if (!(n instanceof Element)) {
+        throw new IllegalArgumentException();
+      }
+      final Element e = (Element) n;
+      final Regexp<AbstractNode> r = Regexp.getMutable();
+      if (e.getSubnodes().isToken()) {
+        r.setContent(e.getSubnodes().getContent());
+      } else {
+        r.getChildren().addAll(e.getSubnodes().getChildren());
+      }
+      r.setType(e.getSubnodes().getType());
+      r.setInterval(e.getSubnodes().getInterval());
+      final Element en = new Element(e.getContext(), e.getName(), e.getMetadata(), r);
+      ret.add(en);
+    }
+
+    return ret;
   }
 }

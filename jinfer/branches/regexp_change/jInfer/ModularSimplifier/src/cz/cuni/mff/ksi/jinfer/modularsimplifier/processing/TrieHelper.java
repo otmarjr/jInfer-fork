@@ -18,6 +18,8 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +95,7 @@ public final class TrieHelper {
       if (posBranch >= branch.getChildren().size()) {
         // verify that we need to do additional steps
         if (tree.getChild(posTree).isAlternation()
-                && tree.getChild(posTree).getChild(0).isEmpty()) {
+                && tree.getChild(posTree).getChild(0).isLambda()) {
           return;
         }
         // branch the tree here and add an empty concatenation (lambda)
@@ -101,7 +103,7 @@ public final class TrieHelper {
         final Regexp<AbstractNode> split = tree.getChild(posTree);
         // some acrobacy to have the lambda as
         // the first element in the alternation
-        split.addChild(Regexp.<AbstractNode>getConcatenation());
+        split.addChild(Regexp.<AbstractNode>getLambda());
         split.addChild(split.getChild(0));
         split.getChildren().remove(0);
         return;
@@ -111,10 +113,12 @@ public final class TrieHelper {
       if (posTree >= tree.getChildren().size()) {
         // append a new alternation between all remaining items from
         // the branch and an empty concatenation (lambda) to tree
-        final List<Regexp<AbstractNode>> alt = new ArrayList<Regexp<AbstractNode>>();
-        alt.add(Regexp.<AbstractNode>getConcatenation());
-        alt.add(branch.getEnd(posBranch));
-        tree.addChild(Regexp.getAlternation(alt));
+        final Regexp<AbstractNode> altRE = Regexp.getMutable();
+        altRE.setType(RegexpType.ALTERNATION);
+        altRE.addChild(Regexp.<AbstractNode>getLambda());
+        altRE.addChild(branch.getEnd(posBranch));
+        altRE.setInterval(RegexpInterval.getOnce());
+        tree.addChild(altRE);
         return;
       }
 

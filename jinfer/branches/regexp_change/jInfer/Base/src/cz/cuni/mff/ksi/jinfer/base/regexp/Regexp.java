@@ -72,7 +72,7 @@ public class Regexp<T> {
   }
 
   public static <T> Regexp<T> getMutable() {
-    return new Regexp<T>(null, null, null, null, true);
+    return new Regexp<T>(null, new ArrayList<Regexp<T>>(), null, null, true);
   }
 
   public static <T> Regexp<T> getLambda() {

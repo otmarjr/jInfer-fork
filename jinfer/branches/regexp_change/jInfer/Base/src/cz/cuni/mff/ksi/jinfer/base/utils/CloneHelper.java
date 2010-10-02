@@ -20,17 +20,14 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.swing.AbstractAction;
 
 /**
  * Utilities for rule cloning.
@@ -72,29 +69,33 @@ public class CloneHelper {
     }
 
     final Element clone;
-    if (e.getSubnodes().isToken()) {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), 
-              Regexp.<AbstractNode>getMutable());
+
+    if (e.getSubnodes().isLambda()) {
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()),
+              Regexp.<AbstractNode>getLambda());
       cloned.put(e, clone);
+      return clone;
+    }
+
+    clone = new Element(cloneList(e.getContext()), 
+            String.valueOf(e.getName()),
+            cloneMap(e.getMetadata()),
+            Regexp.<AbstractNode>getMutable());
+    cloned.put(e, clone);
+    clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
+
+    if (e.getSubnodes().isToken()) {
       clone.getSubnodes().setType(RegexpType.TOKEN);
-      clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
       final AbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
       clone.getSubnodes().setContent(clonedToken);
       clone.getSubnodes().setUnmutable();
-    } else if (e.getSubnodes().isLambda()) {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()), 
-              Regexp.<AbstractNode>getLambda());
-      cloned.put(e, clone);
-    } else {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()),
-             Regexp.<AbstractNode>getMutable());
-      cloned.put(e, clone);
-      clone.getSubnodes().setType(e.getSubnodes().getType());
-      clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
-      final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
-      clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
-      clone.getSubnodes().setUnmutable();
+      return clone;
     }
+
+    clone.getSubnodes().setType(e.getSubnodes().getType());
+    final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
+    clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
+    clone.getSubnodes().setUnmutable();
     return clone;
   }
 
@@ -118,7 +119,11 @@ public class CloneHelper {
   }
 
   private Regexp<AbstractNode> cloneRegexp(final Regexp<AbstractNode> r) {
-    return new Regexp<AbstractNode>(cloneAbstractNode(r.getContent()), cloneChildren(r.getChildren()), r.getType(), r.getInterval());
+    return new Regexp<AbstractNode>(
+            cloneAbstractNode(r.getContent()),
+            (r.getChildren()),
+            r.getType(),
+            r.getInterval());
   }
 
   private AbstractNode cloneAbstractNode(final AbstractNode n) {
@@ -135,17 +140,6 @@ public class CloneHelper {
       return cloneElement((Element) n);
     }
     throw new IllegalArgumentException("Unknown abstract node: " + n);
-  }
-
-  private List<Regexp<AbstractNode>> cloneChildren(final List<Regexp<AbstractNode>> c) {
-    if (c == null) {
-      return null;
-    }
-    final List<Regexp<AbstractNode>> ret = new ArrayList<Regexp<AbstractNode>>(c.size());
-    for (final Regexp<AbstractNode> r : c) {
-      ret.add(cloneRegexp(r));
-    }
-    return ret;
   }
 
   private Cluster cloneCluster(final Cluster c) {

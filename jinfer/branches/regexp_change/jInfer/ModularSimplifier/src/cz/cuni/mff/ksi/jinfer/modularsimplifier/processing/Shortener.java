@@ -52,7 +52,7 @@ public class Shortener {
     switch (regexp.getType()) {
       case TOKEN:
         if (NodeType.ELEMENT.equals(regexp.getContent().getType())) {
-          return Regexp.<AbstractNode>getToken(simplify((Element)regexp.getContent()));
+          return Regexp.<AbstractNode>getToken(simplify((Element)regexp.getContent()), regexp.getInterval());
         }
         return regexp;
       case ALTERNATION:

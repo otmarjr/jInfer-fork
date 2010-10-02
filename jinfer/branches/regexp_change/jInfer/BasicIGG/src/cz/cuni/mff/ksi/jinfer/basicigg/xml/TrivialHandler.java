@@ -103,7 +103,7 @@ public class TrivialHandler extends DefaultHandler {
     Element e = (Element) end;
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
-    e.getSubnodes().setUnmutable();
+    e.getSubnodes().setImmutable();
     
     rules.add(end);
   }

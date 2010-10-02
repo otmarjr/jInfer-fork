@@ -88,14 +88,14 @@ public class CloneHelper {
       clone.getSubnodes().setType(RegexpType.TOKEN);
       final AbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
       clone.getSubnodes().setContent(clonedToken);
-      clone.getSubnodes().setUnmutable();
+      clone.getSubnodes().setImmutable();
       return clone;
     }
 
     clone.getSubnodes().setType(e.getSubnodes().getType());
     final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
     clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
-    clone.getSubnodes().setUnmutable();
+    clone.getSubnodes().setImmutable();
     return clone;
   }
 

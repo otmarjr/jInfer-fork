@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.Callback;
+import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
@@ -39,13 +39,18 @@ public final class AutoEditorTopComponent extends TopComponent {
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
   private static final String PREFERRED_ID = "AutoEditorTopComponent";
   private static final long serialVersionUID = 87543L;
-  private Callback callback;
+  /**
+   * Instance of AutoEditor which AutoEditor thread sleeps on.
+   * When user interaction is done we should call notify() on this variable.
+   */
+  private AutoEditor autoEditorInstance;
 
   public AutoEditorTopComponent() {
     initComponents();
     setName(NbBundle.getMessage(AutoEditorTopComponent.class, "CTL_AutoEditorTopComponent"));
     setToolTipText(NbBundle.getMessage(AutoEditorTopComponent.class, "HINT_AutoEditorTopComponent"));
 //        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+    
     jButton1.setEnabled(false);
   }
 
@@ -95,7 +100,9 @@ public final class AutoEditorTopComponent extends TopComponent {
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     jButton1.setEnabled(false);
-    callback.call();
+    synchronized(autoEditorInstance) {
+      autoEditorInstance.notify();
+    }
     /*final DirectedSparseMultigraph<Integer, String> g = new DirectedSparseMultigraph<Integer, String>();
     g.addVertex(10);
     g.addVertex(20);
@@ -122,8 +129,8 @@ public final class AutoEditorTopComponent extends TopComponent {
     jPanel1.repaint();*/
   }//GEN-LAST:event_jButton1ActionPerformed
 
-  public <T> void drawAutomatonBasicVisualizationServer(final Callback callback, final BasicVisualizationServer<State<T>, Step<T>> bvs) {
-    this.callback = callback;
+  public <T> void drawAutomatonBasicVisualizationServer(final AutoEditor autoEditorInstance, final BasicVisualizationServer<State<T>, Step<T>> bvs) {
+    this.autoEditorInstance = autoEditorInstance;
     jPanel1.removeAll();
     jPanel1.add(bvs);
     jPanel1.validate();

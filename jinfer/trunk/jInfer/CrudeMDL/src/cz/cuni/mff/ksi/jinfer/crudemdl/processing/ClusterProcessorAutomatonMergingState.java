@@ -79,7 +79,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(cluster.getRepresentant());
     LOG.debug(">>> PTA automaton:");
     LOG.debug(automaton);
-    LOG.debug("AUTO EDITOR: " + new AutoEditor<AbstractNode>().drawAutomaton(automaton));
+    LOG.debug("AUTO EDITOR: " + new AutoEditor<AbstractNode>().drawAutomatonToPickTwoStates(automaton));
 
     // 3.2 simplify by merging states
     final AutomatonSimplifier<AbstractNode> automatonSimplifier= new GreedyAutomatonSimplifier<AbstractNode>();

@@ -390,14 +390,10 @@ public class Regexp<T> {
       newChildren.add(getChild(i));
     }
 
-    // TODO vektor check here
-    // TODO anti This needs to be mutable
-//    return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
     Regexp<T> ret= Regexp.<T>getMutable();
     ret.getChildren().addAll(children);
     ret.setType(RegexpType.CONCATENATION);
     ret.setInterval(RegexpInterval.getOnce());
-    ret.setImmutable();
     return ret;
   }
 

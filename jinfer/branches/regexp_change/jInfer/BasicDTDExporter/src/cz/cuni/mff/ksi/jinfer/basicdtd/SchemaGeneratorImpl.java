@@ -23,8 +23,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DTDUtils;
@@ -32,9 +32,11 @@ import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -161,33 +163,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
         return sb.toString();
       case CONCATENATION:
-        if (!DTDUtils.containsPCDATA(regexp.getChildren())) {
-          return listToString(DTDUtils.omitAttributes(regexp.getChildren()), ',') +
-                  regexp.getInterval().toString();
-        }
-
-        final List<AbstractNode> content = new ArrayList<AbstractNode>();
-        for (final Regexp<AbstractNode> r : DTDUtils.omitAttributes(regexp.getChildren())) {
-          content.addAll(r.getTokens());
-        }
-
-        Collections.sort(content, DTDUtils.PCDATA_CMP);
-
-        return CollectionToString.colToString(
-                DTDUtils.uniquePCDATA(content),
-                '|',
-                new CollectionToString.ToString<AbstractNode>() {
-
-                  @Override
-                  public String toString(final AbstractNode t) {
-                    return tokenToString(t);
-                  }
-                }) + "*";
+        return comboToString(regexp, ',');
       case ALTERNATION:
-        return listToString(DTDUtils.omitAttributes(regexp.getChildren()), '|') +
-                  regexp.getInterval().toString();
+        return comboToString(regexp, '|');
       case PERMUTATION:
-        return listToString(DTDUtils.omitAttributes(regexp.getChildren()), '|') + "*";
+        return comboToString(regexp, '|');
       default:
         throw new IllegalArgumentException("Unknown enum member: " + regexp.getType());
     }
@@ -200,6 +180,43 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return node.getName();
   }
 
+  private String comboToString(final Regexp<AbstractNode> regexp, Character delimiter) {
+    if (!DTDUtils.containsPCDATA(regexp.getTokens())) {
+      return listToString(DTDUtils.omitAttributes(regexp.getChildren()), delimiter) +
+              regexp.getInterval().toString();
+    }
+
+    final List<AbstractNode> content = new ArrayList<AbstractNode>();
+    for (final Regexp<AbstractNode> r : DTDUtils.omitAttributes(regexp.getChildren())) {
+      content.addAll(r.getTokens());
+    }
+
+    Collections.sort(content, DTDUtils.PCDATA_CMP);
+
+    final List<AbstractNode> filteredContent= BaseUtils.filter(content, new Predicate<AbstractNode>() {
+      private Set<String> encountered= new HashSet<String>();
+
+      @Override
+      public boolean apply(AbstractNode argument) {
+        if (encountered.contains(argument.getName())) {
+          return false;
+        }
+        encountered.add(argument.getName());
+        return true;
+      }
+    });
+
+    return CollectionToString.colToString(
+            DTDUtils.uniquePCDATA(filteredContent),
+            '|',
+            new CollectionToString.ToString<AbstractNode>() {
+              @Override
+              public String toString(final AbstractNode t) {
+                return tokenToString(t);
+              }
+            }) + "*";
+  }
+  
   private String listToString(final List<Regexp<AbstractNode>> list,
           final char separator) {
     return CollectionToString.colToString(

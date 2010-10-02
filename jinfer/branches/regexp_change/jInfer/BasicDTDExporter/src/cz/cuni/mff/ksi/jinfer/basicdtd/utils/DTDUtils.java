@@ -68,9 +68,9 @@ public final class DTDUtils {
   /**
    * Returns true if one of the supplied children is a PCDATA.
    */
-  public static boolean containsPCDATA(final List<Regexp<AbstractNode>> children) {
-    for (final Regexp<AbstractNode> child : children) {
-      if (child.isToken() && child.getContent().isSimpleData()) {
+  public static boolean containsPCDATA(final List<AbstractNode> children) {
+    for (final AbstractNode child : children) {
+      if (child.isSimpleData()) {
         return true;
       }
     }

@@ -158,13 +158,23 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }).isEmpty()) {
       return "EMPTY";
     }
+    Regexp<AbstractNode> _regexp= withoutAttributes(regexp);
+
     switch (regexp.getType()) {
       case TOKEN:
         StringBuilder sb = new StringBuilder();
         if (topLevel) {
           sb.append('(');
         }
-        sb.append(tokenToString(regexp.getContent()));
+        if (regexp.getContent().isSimpleData()) {
+          if (regexp.getInterval().isOnce()) {
+            sb.append("#PCDATA");
+          } else {
+            sb.append("(#PCDATA)");
+          }
+        } else {
+          sb.append(regexp.getContent().getName());
+        }
         sb.append(regexp.getInterval().toString());
         if (topLevel) {
           sb.append(')');
@@ -181,11 +191,42 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private String tokenToString(final AbstractNode node) {
-    if (node.isSimpleData()) {
+  private Regexp<AbstractNode> withoutAttributes(Regexp<AbstractNode> regexp) {
+    switch (regexp.getType()) {
+      case LAMBDA:
+        return regexp;
+      case TOKEN:
+        if (regexp.getContent().isAttribute()) {
+          return Regexp.<AbstractNode>getLambda();
+        }
+        return regexp;
+      case CONCATENATION:
+      case ALTERNATION:
+      case PERMUTATION:
+        List<Regexp<AbstractNode>> nonAttributeChildren= BaseUtils.filter(regexp.getChildren(),
+                new BaseUtils.Predicate<Regexp<AbstractNode>>() {
+                  @Override
+                  public boolean apply(final Regexp<AbstractNode> r) {
+                    return !r.isToken() || !r.getContent().isAttribute();
+                  }
+        });
+        if (nonAttributeChildren.isEmpty()) {
+          throw new IllegalArgumentException("On DTD Exporter input came regexp for element, in which we don't have any TOKEN.");
+        }
+        if (nonAttributeChildren.size() == 1) {
+          return nonAttributeChildren.get(0);
+        }
+        return new Regexp<AbstractNode>(null, nonAttributeChildren, regexp.getType(), regexp.getInterval());
+      default:
+        return null;
+    }
+  }
+
+  private String tokenToString(AbstractNode t) {
+    if (t.isSimpleData()) {
       return "#PCDATA";
     }
-    return node.getName();
+    return t.getName();
   }
 
   private String comboToString(final Regexp<AbstractNode> regexp, Character delimiter) {

@@ -318,7 +318,10 @@ public class Regexp<T> {
       altChildren.add(getChild(i));
     }
 
-    final Regexp<T> concat = Regexp.<T>getConcatenation(altChildren);
+    final Regexp<T> concat = Regexp.<T>getMutable();
+    concat.setType(RegexpType.CONCATENATION);
+    concat.getChildren().addAll(altChildren);
+    concat.setInterval(RegexpInterval.getOnce());
 
     final List<Regexp<T>> c = new ArrayList<Regexp<T>>();
     c.add(concat);

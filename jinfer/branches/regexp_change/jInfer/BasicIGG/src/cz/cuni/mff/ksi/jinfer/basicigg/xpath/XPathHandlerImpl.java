@@ -164,6 +164,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
    * i am not sure that every rule has to be concatenation, isn't there
    * a chance, getSubnodes() regexp will have empty children list, meaning
    * it is lambda?
+   * TODO anti ModularSimplifier strongly requires Concats, even if they are empty.
    */
   public List<AbstractNode> getRules() {
     //final List<AbstractNode> ret = new ArrayList<AbstractNode>();

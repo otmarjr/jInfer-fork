@@ -392,6 +392,7 @@ public class Regexp<T> {
     }
 
     // TODO vektor check here
+    // TODO anti This needs to be mutable
 //    return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
     return Regexp.<T>getConcatenation(newChildren);
   }

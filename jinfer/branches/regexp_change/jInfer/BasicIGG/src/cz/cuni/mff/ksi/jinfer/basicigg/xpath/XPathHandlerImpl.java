@@ -160,12 +160,6 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   /**
    * Returns the list of rules that were collected while parsing the query.
    */
-  /* TODO vektor check this after patching, why there was list copying? 
-   * i am not sure that every rule has to be concatenation, isn't there
-   * a chance, getSubnodes() regexp will have empty children list, meaning
-   * it is lambda?
-   * TODO anti ModularSimplifier strongly requires Concats, even if they are empty.
-   */
   public List<AbstractNode> getRules() {
     //final List<AbstractNode> ret = new ArrayList<AbstractNode>();
     if (lastElement != null && dirty) {

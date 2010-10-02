@@ -52,6 +52,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private int maxEnumSize;
   private double minDefaultRatio;
 
+  // TODO anti Next input creates <!ELEMENT delay (PCDATA*)>
+  // <registration_status>
+//   <delay>7</delay>
+//   <delay>7</delay>
+//   <delay>7</delay>
+//   <delay>7</delay>
+//</registration_status>
+
   @Override
   public String getName() {
     return "Basic DTD exporter";

@@ -148,7 +148,7 @@ public class NodePainter {
     final List<Image> ret = new ArrayList<Image>(children.size());
     int count = 0;
     for (final Regexp<AbstractNode> child : children) {
-      if (child.isEmpty()) {
+      if (child.isLambda()) {
         ret.add(Utils.LAMBDA);
       }
       else {

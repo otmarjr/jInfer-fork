@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -128,26 +127,8 @@ public class NodePainter {
       case TOKEN: return drawNode(subnodes, level + 1);
       case ALTERNATION: return drawAlternation(subnodes, level + 1);
       case CONCATENATION: return drawConcatenation(subnodes, level + 1);
-//      case KLEENE: return drawKleene(subnodes, level + 1);
       default: throw new IllegalArgumentException();
     }
-  }
-
-  private Image drawKleene(final Regexp<AbstractNode> subnodes, final int level) {
-    final Image kleene = drawRegexp(subnodes.getChild(0), level + 1);
-    final BufferedImage kleeneRet = Utils.getImage(
-            kleene.getWidth(null) + 10 + 2 * margin,
-            kleene.getHeight(null) + 2 * margin);
-    final Graphics2D g = kleeneRet.createGraphics();
-    g.drawImage(kleene, margin, margin, null);
-    final FontMetrics fm = g.getFontMetrics();
-    g.setFont(g.getFont().deriveFont(Font.BOLD));
-    g.setColor(Utils.getColorForeground());
-    g.drawString("*", 
-            kleene.getWidth(null) + margin + fm.stringWidth("*"),
-            margin + fm.getHeight() - fm.getDescent());
-    g.setFont(g.getFont().deriveFont(Font.PLAIN));
-    return kleeneRet;
   }
 
   private List<Image> getChildrenImages(final List<Regexp<AbstractNode>> children, final int level) {

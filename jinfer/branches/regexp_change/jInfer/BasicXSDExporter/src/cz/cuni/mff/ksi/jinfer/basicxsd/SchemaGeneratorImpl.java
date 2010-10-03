@@ -19,9 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicxsd;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -302,13 +300,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private void processElementAttributes(final Element element) throws InterruptedException {
-    // TODO rio LOok here
-//    final List<Attribute> attributes = element.getElementAttributes();
     final Regexp<AbstractNode> attributes = element.getAttributes();
 
     if (!attributes.isLambda()) {
       assert(XSDUtils.hasComplexType(element));
-      // TODO rio getTokens added by anti here
       for (AbstractNode attribute : attributes.getTokens()) {
         checkInterrupt();
         indentator.indent("<xs:attribute name=\"");
@@ -332,15 +327,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
     checkInterrupt();
 
-    // TODO rio look here
-//    final Regexp<AbstractNode> regexpWithoutAttrs = RegexpUtils.omitAttributes(regexp);
-    final Regexp<AbstractNode> regexpWithoutAttrs = regexp;
-
-    if (regexpWithoutAttrs.isLambda()) {
+    if (regexp.isLambda()) {
       return;
     }
 
-    if (BaseUtils.filter(regexpWithoutAttrs.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
+    if (BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
       @Override
       public boolean apply(final AbstractNode argument) {
         return argument.isElement();
@@ -349,9 +340,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return;
     }
 
-    switch (regexpWithoutAttrs.getType()) {
+    switch (regexp.getType()) {
       case TOKEN:
-        processToken(regexpWithoutAttrs.getContent(), regexpWithoutAttrs.getInterval());
+        processToken(regexp.getContent(), regexp.getInterval());
         return;
       /*case KLEENE:
       {
@@ -366,7 +357,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       {
         // specialny pripad konkatenacie alternacie(A|lambda)
         List<Regexp<AbstractNode>> simpleAlternations = new LinkedList<Regexp<AbstractNode>>();
-        for (final Regexp<AbstractNode> child : regexpWithoutAttrs.getChildren()) {
+        for (final Regexp<AbstractNode> child : regexp.getChildren()) {
           if (child.isAlternation()) {
             if (child.getChildren().size() == 2) {
               if (child.getChild(0).isLambda()) {
@@ -377,11 +368,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
 
         indentator.indent("<xs:sequence");
-        processOccurrences(regexpWithoutAttrs.getInterval());
+        processOccurrences(regexp.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
 
-        for (final Regexp<AbstractNode> subRegexp : regexpWithoutAttrs.getChildren()) {
+        for (final Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
           if (simpleAlternations.contains(subRegexp)) {
             final Regexp<AbstractNode> alternation = subRegexp;
             if (alternation.getChild(1).isToken()) {
@@ -414,10 +405,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case ALTERNATION:
       {
         // simple alternation (Element | lambda)
-        if (regexpWithoutAttrs.getChildren().size() == 2) {
-          if (regexpWithoutAttrs.getChild(0).isLambda()) {
-            if (regexpWithoutAttrs.getChild(1).isToken()) {
-              processToken(regexpWithoutAttrs.getChild(1).getContent(), new RegexpInterval(0, 1));
+        if (regexp.getChildren().size() == 2) {
+          if (regexp.getChild(0).isLambda()) {
+            if (regexp.getChild(1).isToken()) {
+              processToken(regexp.getChild(1).getContent(), new RegexpInterval(0, 1));
               return;
             }
           }
@@ -427,10 +418,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
         // other alternation (A | B ...)
         indentator.indent("<xs:choice");
-        processOccurrences(regexpWithoutAttrs.getInterval());
+        processOccurrences(regexp.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
-        for (Regexp<AbstractNode> subRegexp : regexpWithoutAttrs.getChildren()) {
+        for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
           if ((subRegexp != null) && (!subRegexp.isLambda())) {
             processSubElements(subRegexp);
           }

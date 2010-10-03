@@ -29,6 +29,14 @@ public enum RegexpType {
   CONCATENATION,
   /** An alternation between regular expressions. Eg "a|b|c". */
   ALTERNATION,
-  /** Kleene star operator. Eg "a*". */
-  KLEENE;
+  /**
+   * All possible permutations of children. Noted as "a&b&c",
+   * which matches abc, acb, bac, bca, cab, cba. In XSD it is represented
+   * as <xs:all> element.
+   */
+  PERMUTATION,
+  /**
+   * Lambda, λ, empty string
+   */
+  LAMBDA;
 }

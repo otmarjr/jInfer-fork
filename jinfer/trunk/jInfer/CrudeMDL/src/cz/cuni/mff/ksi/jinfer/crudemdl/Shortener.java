@@ -65,7 +65,7 @@ public class Shortener {
         for (final Regexp<AbstractNode> child : regexp.getChildren()) {
           children.add(simplify(child));
         }
-        return new Regexp<AbstractNode>(null, children, regexp.getType());
+        return new Regexp<AbstractNode>(null, children, regexp.getType(), regexp.getInterval());
       default: return regexp;
     }
   }

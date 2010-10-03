@@ -40,7 +40,7 @@ public final class XSDUtils {
     
     Regexp<AbstractNode> subnodes = e.getSubnodes();
 
-    if (subnodes.isEmpty()) {
+    if (subnodes.isLambda()) {
       // TODO rio skutocne built-in??
       return TypeCategory.BUILTIN;
     }

@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +35,8 @@ import java.util.List;
  * Kleene star operator.
  * </li>
  * </ul>
- * 
+ *
+ *
  * @author vektor
  */
 public class Regexp<T> {
@@ -44,38 +44,140 @@ public class Regexp<T> {
   /** If this is a token, its token. */
   private T content;
   /** If this is not a token, list of children. */
-  private final List<Regexp<T>> children;
-  private final RegexpType type;
+  private List<Regexp<T>> children;
+  private RegexpType type;
+  private RegexpInterval interval;
+  private boolean mutable;
 
+  /**
+   * Creates immutable regexp. TODO anti Comment more!
+   * @param content
+   * @param children
+   * @param type
+   * @param interval
+   */
   public Regexp(final T content,
-          final List<Regexp<T>> children, final RegexpType type) {
+          final List<Regexp<T>> children, final RegexpType type, RegexpInterval interval) {
+    this(content, children, type, interval, false);
+  }
+
+  private Regexp(final T content, final List<Regexp<T>> children,
+          final RegexpType type, RegexpInterval interval, boolean mutable) {
+    if (!mutable) {
+      if (type == null) {
+        throw new IllegalArgumentException("Type of regexp has to be non-null.");
+      }
+      if (type.equals(RegexpType.LAMBDA)) {
+        if (content != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, content has to be null.");
+        }
+        if (children != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, children has to be null.");
+        }
+        if (interval != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, interval has to be null.");
+        }
+      } else {
+        if (type.equals(RegexpType.TOKEN)) {
+          if (content == null) {
+            throw new IllegalArgumentException("When regexp is TOKEN, content has to be non-null.");
+          }
+          if (children != null) {
+            throw new IllegalArgumentException("When regexp is TOKEN, children has to be null.");
+          }
+        } else {
+          if (content != null) {
+            throw new IllegalArgumentException("When regexp is " + type.toString() + ", content has to be null");
+          }
+          if (children == null) {
+            throw new IllegalArgumentException("When regexp is " + type.toString() + ", children has to be non-null.");
+          }
+        }
+        if (interval == null) {
+          throw new IllegalArgumentException("When regexp is " + type.toString() + ", interval has to be non-null.");
+        }
+      }
+    }
     this.content = content;
     this.children = children;
     this.type = type;
+    this.interval= interval;
+    this.mutable= mutable;
+  }
+
+  public static <T> Regexp<T> getMutable() {
+    return new Regexp<T>(null, new ArrayList<Regexp<T>>(), null, null, true);
+  }
+
+  public static <T> Regexp<T> getLambda() {
+    return new Regexp<T>(null, null, RegexpType.LAMBDA, null);
+  }
+
+  public static <T> Regexp<T> getToken(final T content, RegexpInterval interval) {
+    return new Regexp<T>(content, null, RegexpType.TOKEN, interval);
   }
 
   public static <T> Regexp<T> getToken(final T content) {
-    return new Regexp<T>(content, Collections.<Regexp<T>>emptyList(), RegexpType.TOKEN);
+    return Regexp.<T>getToken(content, RegexpInterval.getOnce());
+  }
+
+  public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children, RegexpInterval interval) {
+    if (children == null) {
+      throw new IllegalArgumentException("Children of concatenation cannot be "
+              + "null. Why would you like to create such concatenation?");
+    } else if (children.isEmpty()) {
+      throw new IllegalArgumentException("Children of concatenation shouldn't "
+              + "be set to empty list this way. If you need to add children"
+              + " later, call getConcatenationMutable() to obtain such regexp. This "
+              + "method is for proper use.");
+    }
+    return new Regexp<T>(null, children, RegexpType.CONCATENATION, interval);
   }
 
   public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.CONCATENATION);
+    return getConcatenation(children, RegexpInterval.getOnce());
   }
 
-  public static <T> Regexp<T> getConcatenation() {
-    return getConcatenation(new ArrayList<Regexp<T>>(0));
+  public static <T> Regexp<T> getConcatenationMutable() {
+    return new Regexp<T>(null,  new ArrayList<Regexp<T>>(0), RegexpType.CONCATENATION, null, true);
+  }
+
+  public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children, final RegexpInterval interval) {
+    if (children == null) {
+      throw new IllegalArgumentException("Children of alternation cannot be "
+              + "null. Why would you like to create such alternation?");
+    } else if (children.isEmpty()) {
+      throw new IllegalArgumentException("Children of alternation can't be"
+              + " empty list.");
+    }
+    return new Regexp<T>(null, children, RegexpType.ALTERNATION, interval);
   }
 
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.ALTERNATION);
+    return getAlternation(children, RegexpInterval.getOnce());
   }
 
-  public static <T> Regexp<T> getKleene(final List<Regexp<T>> children) {
-    return new Regexp<T>(null, children, RegexpType.KLEENE);
+  public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children, RegexpInterval interval) {
+    if (children == null) {
+      throw new IllegalArgumentException("Children of permutation cannot be "
+              + "null. Why would you like to create such permutation?");
+    } else if (children.isEmpty()) {
+      throw new IllegalArgumentException("Children of permutation can't be "
+              + "empty list.");
+    }
+    return new Regexp<T>(null, children, RegexpType.PERMUTATION, interval);
+  }
+
+  public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children) {
+    return getPermutation(children, RegexpInterval.getOnce());
   }
 
   public void setContent(final T content) {
-    this.content = content;
+    if (this.mutable) {
+      this.content = content;
+    } else {
+      throw new IllegalStateException("Trying to change content of immutable regexp.");
+    }
   }
 
   public T getContent() {
@@ -83,7 +185,46 @@ public class Regexp<T> {
   }
 
   public List<Regexp<T>> getChildren() {
-    return children;
+    if (children == null) {
+      return null;
+    }
+    if (mutable) {
+      return children;
+    } else {
+      return Collections.unmodifiableList(children);
+    }
+  }
+
+  public void setType(RegexpType type) {
+    if (this.mutable) {
+      this.type = type;
+    } else {
+      throw new IllegalStateException("Trying to change type of immutable regexp.");
+    }
+  }
+
+  public RegexpType getType() {
+    return type;
+  }
+
+  public void setInterval(RegexpInterval interval) {
+    if (this.mutable) {
+      this.interval = interval;
+    } else {
+      throw new IllegalStateException("Trying to set interval of immutable regexp.");
+    }
+  }
+
+  public RegexpInterval getInterval() {
+    return interval;
+  }
+
+  public void setImmutable() {
+    if (this.mutable) {
+      this.mutable = false;
+    } else {
+      throw new IllegalStateException("Trying to set inmutable regexp, that is once inmutable.");
+    }
   }
 
   /**
@@ -102,7 +243,11 @@ public class Regexp<T> {
    * @param child Which child to add.
    */
   public void addChild(final Regexp<T> child) {
-    children.add(child);
+    if (mutable) {
+      children.add(child);
+    } else {
+      throw new IllegalStateException("Trying to add child to immutable regexp.");
+    }
   }
 
   /**
@@ -116,22 +261,19 @@ public class Regexp<T> {
     switch (type) {
       case TOKEN:
         return Arrays.asList(content);
-      case KLEENE:
-        return getChild(0).getTokens();
       case CONCATENATION:
       case ALTERNATION:
+      case PERMUTATION:
         final List<T> ret = new ArrayList<T>();
         for (final Regexp<T> child : children) {
           ret.addAll(child.getTokens());
         }
         return ret;
+      case LAMBDA:
+        return Collections.emptyList();
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }
-  }
-
-  public RegexpType getType() {
-    return type;
   }
 
   public boolean isToken() {
@@ -146,8 +288,12 @@ public class Regexp<T> {
     return RegexpType.ALTERNATION.equals(type);
   }
 
-  public boolean isKleene() {
-    return RegexpType.KLEENE.equals(type);
+  public boolean isPermutation() {
+    return RegexpType.PERMUTATION.equals(type);
+  }
+
+  public boolean isLambda() {
+    return RegexpType.LAMBDA.equals(type);
   }
 
   /**
@@ -158,13 +304,14 @@ public class Regexp<T> {
    * 
    * @return
    */
-  public boolean isEmpty() {
+/*  public boolean isEmpty() {
     if (isToken()) {
       return content == null;
     }
     return BaseUtils.isEmpty(children);
   }
-
+*/
+  
   /**
    * <p>Converts the i-th position of this concatenation to alternation and
    * inserts the rest as the one and only of its children.</p>
@@ -205,12 +352,15 @@ public class Regexp<T> {
       altChildren.add(getChild(i));
     }
 
-    final Regexp<T> concat = new Regexp<T>(null, altChildren, RegexpType.CONCATENATION);
+    final Regexp<T> concat = Regexp.<T>getMutable();
+    concat.setType(RegexpType.CONCATENATION);
+    concat.getChildren().addAll(altChildren);
+    concat.setInterval(RegexpInterval.getOnce());
 
     final List<Regexp<T>> c = new ArrayList<Regexp<T>>();
     c.add(concat);
 
-    newChildren.add(new Regexp<T>(null, c, RegexpType.ALTERNATION));
+    newChildren.add(Regexp.<T>getAlternation(c));
 
     children.clear();
     children.addAll(newChildren);
@@ -239,32 +389,36 @@ public class Regexp<T> {
       newChildren.add(getChild(i));
     }
 
-    return new Regexp<T>(null, newChildren, RegexpType.CONCATENATION);
+    Regexp<T> ret= Regexp.<T>getMutable();
+    ret.getChildren().addAll(children);
+    ret.setType(RegexpType.CONCATENATION);
+    ret.setInterval(RegexpInterval.getOnce());
+    return ret;
+  }
+
+  private String comboToString(final String delimiter) {
+    final StringBuilder ret = new StringBuilder();
+    ret.append('(');
+    for (final Regexp<T> child : children) {
+      ret.append(child.toString()).append(delimiter);
+    }
+    ret.append(')');
+    return ret.toString();
   }
 
   @Override
   public String toString() {
     switch (type) {
       case TOKEN:
-        return content.toString();
-      case KLEENE:
-        return "(" + getChild(0).toString() + ")*";
+          return content.toString() + interval.toString();
       case CONCATENATION:
-        final StringBuilder retConc = new StringBuilder();
-        retConc.append('(');
-        for (final Regexp<T> child : children) {
-          retConc.append(child.toString()).append(",");
-        }
-        retConc.append(')');
-        return retConc.toString();
+        return comboToString(",") + interval.toString();
       case ALTERNATION:
-        final StringBuilder retAlt = new StringBuilder();
-        retAlt.append('(');
-        for (final Regexp<T> child : children) {
-          retAlt.append(child.toString()).append("|");
-        }
-        retAlt.append(')');
-        return retAlt.toString();
+        return comboToString("|") + interval.toString();
+      case PERMUTATION:
+        return comboToString("&") + interval.toString();
+      case LAMBDA:
+        return "\u03BB";
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }

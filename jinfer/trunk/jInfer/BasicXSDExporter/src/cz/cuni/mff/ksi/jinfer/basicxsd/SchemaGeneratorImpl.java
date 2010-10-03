@@ -21,8 +21,9 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
@@ -76,10 +77,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     LOG.info("XSD Exporter: got " + grammar.size()
             + " rules.");
     
-    // filter only the elements
+    // Filter only the elements. Everything else can be accessed through the elements.
+    // TODO rio (anti: i think, there should be an exception if RULES contain sth other than element
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
-      if (node.getType().equals(NodeType.ELEMENT)) {
+      if (node.isElement()) {
         elements.add((Element) node);
       }
     }
@@ -100,7 +102,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final int spacesPerIndent = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.SPACES_PER_INDENT, String.valueOf(XSDExportPropertiesPanel.SPACES_PER_INDENT_DEFAULT)));
     indentator = new Indentator(spacesPerIndent);
 
-    // generate head of a new XSD
+    // Generate head of a new XSD.
     indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
     indentator.indent("<!-- %generated% -->\n");
@@ -113,22 +115,23 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     typenamePrefix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_PREFIX, XSDExportPropertiesPanel.TYPENAME_PREFIX_DEFAULT);
     typenamePostfix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_POSTFIX, XSDExportPropertiesPanel.TYPENAME_POSTFIX_DEFAULT);
 
-    // handle global elements
+    // Handle global elements.
     final List<Element> globalElements = preprocessor.getGlobalElements();
     if (!globalElements.isEmpty()) {
       indentator.append("\n");
       indentator.indent("<!-- global types -->\n");
-    }
-    for (Element globalElement : globalElements) {
-      checkInterrupt();
-      processGlobalElement(globalElement);
+
+      for (Element globalElement : globalElements) {
+        checkInterrupt();
+        processGlobalElement(globalElement);
+      }
     }
 
-    // run recursion starting at the top element
+    // Run recursion starting at the top element.
     indentator.indent("<!-- top level element -->\n");
-    processElement(preprocessor.getTopElement(), 1, 1);
+    processElement(preprocessor.getTopElement(), new RegexpInterval(MINOCCURS_DEFAULT, MAXOCCURS_DEFAULT));
 
-    // close XSD
+    // Close XSD.
     indentator.indent("</xs:schema>");
 
     LOG.info("XSD Exporter: schema generated at "
@@ -137,32 +140,44 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     callback.finished(indentator.toString(), "xsd");
   }
 
-  private void processElement(final Element element, final int minOccurs, final int maxOccurs) throws InterruptedException {
+  /**
+   * Processes element. If its type is defined globally simply uses it. Otherwise
+   * defines it inline.
+   *
+   * @param element
+   * @param interval
+   * @throws InterruptedException
+   */
+  private void processElement(final Element element, final RegexpInterval interval) throws InterruptedException {
     checkInterrupt();
 
-    // begin definition of element and write its name
+    // Begin definition of element and write its name.
     indentator.indent("<xs:element name=\"");
     indentator.append(element.getName());
     indentator.append("\"");
 
-    processOccurrences(minOccurs, maxOccurs);
-
-    // if its type is one of built-in types we don't have much work to do
+    // If its type is one of built-in types we don't have much work to do
     // TODO rio dalsie built-in typy
     if (XSDUtils.hasBuiltinType(element)) {
-      indentator.append(" type=\"xs:string\"/>\n");
+      indentator.append(" type=\"xs:string\"");
+      processOccurrences(interval);
+      indentator.append("/>\n");
       return;
     }
 
-    // if element's type is global set it and finish
+    // If element's type is global set it and finish.
     if (preprocessor.isElementGlobal(element.getName())) {
       indentator.append(" type=\"");
       indentator.append(typenamePrefix);
       indentator.append(element.getName());
       indentator.append(typenamePostfix);
-      indentator.append("\"/>\n");
+      indentator.append("\"");
+      processOccurrences(interval);
+      indentator.append("/>\n");
       return;
     }
+
+    processOccurrences(interval);
 
     indentator.append(">\n");
     indentator.increaseIndentation();
@@ -180,7 +195,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.append(">\n");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown or illegal enum member.");
     }
 
     indentator.increaseIndentation();
@@ -197,7 +212,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("</xs:complexType>\n");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown or illegal enum member.");
     }
 
     indentator.decreaseIndentation();
@@ -206,10 +221,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return;
   }
 
+  /**
+   * Defines element's type globally.
+   *
+   * @param element
+   * @throws InterruptedException
+   */
   private void processGlobalElement(final Element element) throws InterruptedException {
     checkInterrupt();
 
-    // if element is of a built-in type don't define it
+    // If element is of a built-in type don't define it.
     if (XSDUtils.hasBuiltinType(element)) {
       return;
     }
@@ -223,7 +244,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("<xs:complexType name=\"");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown or illegal enum member.");
     }
     indentator.append(typenamePrefix);
     indentator.append(element.getName());
@@ -250,7 +271,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("</xs:complexType>\n");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown of illegal enum member.");
     }
 
     indentator.append("\n");
@@ -259,6 +280,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private void processElementContent(final Element element) throws InterruptedException {
+    // SPECIAL CASE
     // if element subnodes is token and it is element, wrap it in <xs:sequence></xs:sequence>
     boolean makeSequence = false;
     if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {
@@ -269,7 +291,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       indentator.increaseIndentation();
     }
 
-    processSubElements(element.getSubnodes(), 1, 1);
+    processSubElements(element.getSubnodes());
 
     if (makeSequence) {
       indentator.decreaseIndentation();
@@ -294,14 +316,26 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private void processSubElements(final Regexp<AbstractNode> regexp, final int minOccurs, final int maxOccurs) throws InterruptedException {
+  /** TODO rio comment
+   *
+   * Dostane jeden prvok z getSubnodes. Ak je ten prvok TOKEN, zaujima nas len
+   * element. To je osetrene ziskanim vsetkych elementov a ak je ich pocet nula,
+   * koncime. To zaroven osetruje, ze sa nebudu generovat prazdne xs elementy,
+   * ktory by sa mohli vygenerovat kebyze vsetky TOKENy su napriklad SIMPLE_DATA.
+   *
+   * @param regexp
+   * @throws InterruptedException
+   */
+  private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
     checkInterrupt();
 
-    if (regexp.isEmpty()) {
+    final Regexp<AbstractNode> regexpWithoutAttrs = RegexpUtils.omitAttributes(regexp);
+
+    if (regexpWithoutAttrs.isLambda()) {
       return;
     }
 
-    if (BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
+    if (BaseUtils.filter(regexpWithoutAttrs.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
       @Override
       public boolean apply(final AbstractNode argument) {
         return argument.isElement();
@@ -310,11 +344,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return;
     }
 
-    switch (regexp.getType()) {
+    switch (regexpWithoutAttrs.getType()) {
       case TOKEN:
-        processToken(regexp.getContent(), minOccurs, maxOccurs);
+        processToken(regexpWithoutAttrs.getContent(), regexpWithoutAttrs.getInterval());
         return;
-      case KLEENE:
+      /*case KLEENE:
       {
         indentator.indent("<xs:sequence>\n");
         indentator.increaseIndentation();
@@ -322,15 +356,15 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.decreaseIndentation();
         indentator.indent("</xs:sequence>\n");
         return;
-      }
+      }*/
       case CONCATENATION:
       {
         // specialny pripad konkatenacie alternacie(A|lambda)
         List<Regexp<AbstractNode>> simpleAlternations = new LinkedList<Regexp<AbstractNode>>();
-        for (final Regexp<AbstractNode> child : regexp.getChildren()) {
+        for (final Regexp<AbstractNode> child : regexpWithoutAttrs.getChildren()) {
           if (child.isAlternation()) {
             if (child.getChildren().size() == 2) {
-              if (child.getChild(0).isEmpty()) {
+              if (child.getChild(0).isLambda()) {
                 simpleAlternations.add(child);
               }
             }
@@ -338,20 +372,20 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
 
         indentator.indent("<xs:sequence");
-        processOccurrences(minOccurs, maxOccurs);
+        processOccurrences(regexpWithoutAttrs.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
 
-        for (final Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
+        for (final Regexp<AbstractNode> subRegexp : regexpWithoutAttrs.getChildren()) {
           if (simpleAlternations.contains(subRegexp)) {
             final Regexp<AbstractNode> alternation = subRegexp;
             if (alternation.getChild(1).isToken()) {
-              processSubElements(alternation, 1, 1);
+              processSubElements(alternation);
             } else if (alternation.getChild(1).isConcatenation()) {
               indentator.indent("<xs:sequence minOccurs=\"0\">\n");
               indentator.increaseIndentation();
               for (final Regexp<AbstractNode> subReg : alternation.getChild(1).getChildren()) {
-                processSubElements(subReg, 1, 1);
+                processSubElements(subReg);
               }
               indentator.decreaseIndentation();
               indentator.indent("</xs:sequence>\n");
@@ -359,12 +393,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             } else {
               indentator.indent("<xs:sequence minOccurs=\"0\">\n");
               indentator.increaseIndentation();
-              processSubElements(alternation.getChild(1), 1, 1);
+              processSubElements(alternation.getChild(1));
               indentator.decreaseIndentation();
               indentator.indent("</xs:sequence>\n");
             }
           } else {
-            processSubElements(subRegexp, 1, 1);
+            processSubElements(subRegexp);
           }
         }
         
@@ -375,10 +409,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case ALTERNATION:
       {
         // simple alternation (Element | lambda)
-        if (regexp.getChildren().size() == 2) {
-          if (regexp.getChild(0).isEmpty()) {
-            if (regexp.getChild(1).isToken()) {
-              processToken(regexp.getChild(1).getContent(), 0, 1);
+        if (regexpWithoutAttrs.getChildren().size() == 2) {
+          if (regexpWithoutAttrs.getChild(0).isLambda()) {
+            if (regexpWithoutAttrs.getChild(1).isToken()) {
+              processToken(regexpWithoutAttrs.getChild(1).getContent(), new RegexpInterval(0, 1));
               return;
             }
           }
@@ -388,12 +422,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
         // other alternation (A | B ...)
         indentator.indent("<xs:choice");
-        processOccurrences(minOccurs, maxOccurs);
+        processOccurrences(regexpWithoutAttrs.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
-        for (Regexp<AbstractNode> subRegexp : regexp.getChildren()) {
-          if ((subRegexp != null) && (!subRegexp.isEmpty())) {
-            processSubElements(subRegexp, 1, 1);
+        for (Regexp<AbstractNode> subRegexp : regexpWithoutAttrs.getChildren()) {
+          if ((subRegexp != null) && (!subRegexp.isLambda())) {
+            processSubElements(subRegexp);
           }
         }
         indentator.decreaseIndentation();
@@ -405,7 +439,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private void processToken(final AbstractNode node, final int minOccurs, final int maxOccurs) throws InterruptedException {
+  private void processToken(final AbstractNode node, final RegexpInterval interval) throws InterruptedException {
     assert(node.isSimpleData() == false);
     assert(node.isElement());
 
@@ -415,24 +449,27 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       LOG.warn("XSD Exporter: Referenced element(" + node.getName() + ") not found in IG element list, probably error in code");
       return;
     }
-      processElement(element, minOccurs, maxOccurs);
+
+    processElement(element, interval);
   }
 
-  private void processOccurrences(final int minOccurs, final int maxOccurs) {
+  private void processOccurrences(final RegexpInterval interval) {
+    int minOccurs = interval.getMin();
     if (minOccurs != MINOCCURS_DEFAULT) {
       indentator.append(" minOccurs=\"");
       indentator.append(Integer.toString(minOccurs));
       indentator.append("\"");
     }
 
-    if (maxOccurs != MAXOCCURS_DEFAULT) {
-      indentator.append(" maxOccurs=\"");
-      if (maxOccurs == Integer.MAX_VALUE) {
-        indentator.append("unbounded");
-      } else {
-        indentator.append(Integer.toString(minOccurs));
+    if (interval.isUnbounded()) {
+      indentator.append(" maxOccurs=\"unbounded\"");
+    } else {
+      int maxOccurs = interval.getMax();
+      if (maxOccurs != MAXOCCURS_DEFAULT) {
+        indentator.append(" maxOccurs=\"");
+        indentator.append(Integer.toString(maxOccurs));
+        indentator.append("\"");
       }
-      indentator.append("\"");
     }
   }
 

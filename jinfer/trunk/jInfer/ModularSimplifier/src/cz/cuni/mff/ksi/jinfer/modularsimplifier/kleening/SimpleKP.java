@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.Shortener;
@@ -110,7 +111,12 @@ public class SimpleKP implements KleeneProcessor {
 
       i++;
     }
-    return Regexp.getConcatenation(retChildren);
+    final Regexp<AbstractNode> r = Regexp.getMutable();
+    r.setType(RegexpType.CONCATENATION);
+    r.getChildren().addAll(retChildren);
+    r.setInterval(RegexpInterval.getOnce());
+    r.setImmutable();
+    return r;
   }
 
   private static boolean equalTokenRegexps(final Regexp<AbstractNode> last,
@@ -133,11 +139,9 @@ public class SimpleKP implements KleeneProcessor {
       retChildren.addAll(buffer);
       return;
     }
-    final List<Regexp<AbstractNode>> kleeneChild = new ArrayList<Regexp<AbstractNode>>(1);
     // TODO vektor Accumulate!
-    kleeneChild.add(buffer.get(0));
-    retChildren.add(new Regexp<AbstractNode>(null,
-            kleeneChild,
-            RegexpType.KLEENE));
+    retChildren.add(new Regexp<AbstractNode>(
+            buffer.get(0).getContent(), null,
+            RegexpType.TOKEN, RegexpInterval.getKleeneStar()));
   }
 }

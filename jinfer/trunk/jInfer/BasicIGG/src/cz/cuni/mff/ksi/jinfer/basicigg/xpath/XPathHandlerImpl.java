@@ -21,6 +21,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
@@ -73,7 +76,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     switch (axis) {
       case Axis.CHILD:
-        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getConcatenation());
+        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getMutable());
         if (lastElement != null) {
           lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newElement));
           rules.add(lastElement);
@@ -158,12 +161,20 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
    * Returns the list of rules that were collected while parsing the query.
    */
   public List<AbstractNode> getRules() {
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules);
+    //final List<AbstractNode> ret = new ArrayList<AbstractNode>();
     if (lastElement != null && dirty) {
-      ret.add(lastElement);
+      rules.add(lastElement);
     }
     lastElement = null;
     dirty = false;
-    return ret;
+
+    for (AbstractNode node : rules) {
+      Element e = (Element) node;
+
+      e.getSubnodes().setType(RegexpType.CONCATENATION);
+      e.getSubnodes().setInterval(RegexpInterval.getOnce());
+    }
+
+    return rules;
   }
 }

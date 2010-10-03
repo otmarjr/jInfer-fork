@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +51,9 @@ public class TopologicalSortTest {
   @Test
   public void testOne() {
     final Element e = new Element(null, "test", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
+    e.getSubnodes().setType(RegexpType.CONCATENATION);
+    e.getSubnodes().setInterval(RegexpInterval.getOnce());
     final TopologicalSort s = new TopologicalSort(Arrays.asList(e));
     final List<Element> elements = s.sort();
     assertEquals(1, elements.size());
@@ -60,21 +63,37 @@ public class TopologicalSortTest {
   @Test
   public void testSort() {
     final Element e1 = new Element(null, "test1", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e2 = new Element(null, "test2", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e3 = new Element(null, "test3", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e4 = new Element(null, "test4", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e5 = new Element(null, "test5", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e6 = new Element(null, "test6", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e7 = new Element(null, "test7", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e8 = new Element(null, "test8", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
+    e1.getSubnodes().setType(RegexpType.CONCATENATION);
+    e1.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e2.getSubnodes().setType(RegexpType.CONCATENATION);
+    e2.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e3.getSubnodes().setType(RegexpType.CONCATENATION);
+    e3.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e4.getSubnodes().setType(RegexpType.CONCATENATION);
+    e4.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e5.getSubnodes().setType(RegexpType.CONCATENATION);
+    e5.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e6.getSubnodes().setType(RegexpType.CONCATENATION);
+    e6.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e7.getSubnodes().setType(RegexpType.CONCATENATION);
+    e7.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e8.getSubnodes().setType(RegexpType.CONCATENATION);
+    e8.getSubnodes().setInterval(RegexpInterval.getOnce());
 
     e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e2));
     e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e3));
@@ -106,13 +125,22 @@ public class TopologicalSortTest {
   @Test
   public void testMore() {
     final Element e1 = new Element(null, "test1", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e2 = new Element(null, "test2", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e3 = new Element(null, "test3", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
     final Element e4 = new Element(null, "test4", null,
-            new Regexp<AbstractNode>(null, new ArrayList<Regexp<AbstractNode>>(), RegexpType.CONCATENATION));
+            Regexp.<AbstractNode>getMutable());
+
+    e1.getSubnodes().setType(RegexpType.CONCATENATION);
+    e1.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e2.getSubnodes().setType(RegexpType.CONCATENATION);
+    e2.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e3.getSubnodes().setType(RegexpType.CONCATENATION);
+    e3.getSubnodes().setInterval(RegexpInterval.getOnce());
+    e4.getSubnodes().setType(RegexpType.CONCATENATION);
+    e4.getSubnodes().setInterval(RegexpInterval.getOnce());
 
     e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e2));
     e1.getSubnodes().addChild(Regexp.<AbstractNode>getToken(e3));

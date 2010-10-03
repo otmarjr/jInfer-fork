@@ -74,7 +74,7 @@ public abstract class AbstractClustererImpl implements Clusterer {
 
     final Element representant = (Element) cluster.getRepresentant();
 
-    reflectAttributes(representant.getElementAttributes(), node.getElementAttributes());
+    reflectAttributes(representant.getElementAttributesMutable(), node.getElementAttributesMutable());
   }
 
   /**

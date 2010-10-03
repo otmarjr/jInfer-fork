@@ -18,6 +18,8 @@ package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -110,7 +112,7 @@ public class RulePainter {
     final NodePainter np = new NodePainter((Graphics2D) root.getGraphics());
 
     for (final AbstractNode a : rulesUsed) {
-      final Image i = np.drawNode(a, 0);
+      final Image i = np.drawNode(Regexp.getToken(a, RegexpInterval.getOnce()), 0);
       ruleImgs.add(i);
       width = Math.max(width, i.getWidth(null));
       height += i.getHeight(null) + 2;

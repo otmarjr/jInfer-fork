@@ -57,7 +57,7 @@ public final class RegexpUtils {
         if (nonAttributeChildren.size() == 1) {
           return nonAttributeChildren.get(0);
         }
-
+        // TODO anti enables this : (att1, att2, sth) and this (att1 | att2 | sth) aso.
         return new Regexp<AbstractNode>(null, nonAttributeChildren, regexp.getType(), regexp.getInterval());
 
       default:

@@ -79,6 +79,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             + " rules.");
     
     // Filter only the elements. Everything else can be accessed through the elements.
+    // TODO rio (anti: i think, there should be an exception if RULES contain sth other than element
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
       if (node.isElement()) {

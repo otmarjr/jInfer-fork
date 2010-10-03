@@ -48,7 +48,8 @@ public final class RegexpUtils {
                   public boolean apply(final Regexp<AbstractNode> regexp) {
                     return !regexp.isToken() || !regexp.getContent().isAttribute();
                   }
-                });
+                }
+        );
 
         // If there are no attributes, return original regexp.
         if (nonAttributeChildren.size() == regexp.getChildren().size()) {
@@ -57,12 +58,13 @@ public final class RegexpUtils {
 
         // Should contain at least one non-attribute (i.e. lambda).
         if (nonAttributeChildren.isEmpty()) {
-          assert(false);
+          throw new IllegalStateException("Regexp has to contain at least one non-attribute child.");
         }
 
         if (nonAttributeChildren.size() == 1) {
           return nonAttributeChildren.get(0);
         }
+
         // TODO anti enables this : (att1, att2, sth) and this (att1 | att2 | sth) aso.
         return new Regexp<AbstractNode>(null, nonAttributeChildren, regexp.getType(), regexp.getInterval());
 

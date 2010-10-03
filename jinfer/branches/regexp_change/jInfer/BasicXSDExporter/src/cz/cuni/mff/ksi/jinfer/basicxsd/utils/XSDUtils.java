@@ -30,7 +30,7 @@ public final class XSDUtils {
   }
 
   public static TypeCategory getTypeCategory(final Element e) {
-    if (!e.getElementAttributes().isEmpty()) {
+    if (!e.getAttributes().isLambda()) {
       return TypeCategory.COMPLEX;
     }
 

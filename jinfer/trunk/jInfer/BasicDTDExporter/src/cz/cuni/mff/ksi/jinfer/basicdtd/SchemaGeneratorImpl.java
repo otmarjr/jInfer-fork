@@ -23,7 +23,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DTDUtils;
@@ -31,9 +33,12 @@ import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -48,6 +53,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private int maxEnumSize;
   private double minDefaultRatio;
+
+  // TODO anti Next input creates <!ELEMENT delay (PCDATA*)>
+  // <registration_status>
+//   <delay>7</delay>
+//   <delay>7</delay>
+//   <delay>7</delay>
+//   <delay>7</delay>
+//</registration_status>
 
   @Override
   public String getName() {
@@ -85,6 +98,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     for (final AbstractNode node : grammar) {
       if (node.isElement()) {
         elements.add((Element) node);
+      } else {
+        throw new IllegalArgumentException("The output grammar can contain only elements. Got " + node.toString());
       }
     }
 
@@ -112,57 +127,20 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
-    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(subElementsToString(e.
-            getSubnodes(), true)).append(">\n");
+    ret.append("<!ELEMENT ").append(e.getName()).append(' ');
+    Regexp<AbstractNode> regexp= RegexpUtils.omitAttributes(e.getSubnodes());
+    if (regexp.isToken()) {
+      ret.append("(");
+    }
+    ret.append(regexpToString(regexp));
+    if (regexp.isToken()) {
+      ret.append(")");
+    }
+    ret.append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!BaseUtils.isEmpty(attributes)) {
       ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).
               append(">\n");
-    }
-    return ret.toString();
-  }
-
-  private String subElementsToString(final Regexp<AbstractNode> regexp,
-          final boolean topLevel) {
-    if (regexp.isEmpty()) {
-      return "EMPTY";
-    }
-    if (topLevel
-            && BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
-
-      @Override
-      public boolean apply(final AbstractNode argument) {
-        return argument.isElement() || argument.isSimpleData();
-      }
-    }).isEmpty()) {
-      return "EMPTY";
-    }
-    switch (regexp.getType()) {
-      case TOKEN:
-        return tokenToString(regexp.getContent(), topLevel);
-      case KLEENE:
-        return "(" + subElementsToString(regexp.getChild(0), false) + ")*";
-      case CONCATENATION:
-        return concatToString(regexp.getChildren());
-      case ALTERNATION:
-        return alternationToString(regexp.getChildren());
-      default:
-        throw new IllegalArgumentException("Unknown enum member.");
-    }
-  }
-
-  private String tokenToString(final AbstractNode node, final boolean topLevel) {
-    final StringBuilder ret = new StringBuilder();
-    if (topLevel) {
-      ret.append('(');
-    }
-    if (node.isSimpleData()) {
-      ret.append("#PCDATA");
-    } else {
-      ret.append(node.getName());
-    }
-    if (topLevel) {
-      ret.append(')');
     }
     return ret.toString();
   }
@@ -172,52 +150,98 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * <code>
    * (#PCDATA|a|b|c)*
    * </code>
-   *
-   * @param children
+
+   * @param subnodes
+   * @param topLevel
    * @return
    */
-  private String concatToString(final List<Regexp<AbstractNode>> children) {
-    if (!DTDUtils.containsPCDATA(children)) {
-      return listToString(DTDUtils.omitAttributes(children), ',');
+  private String regexpToString(final Regexp<AbstractNode> regexp) {
+    // TODO anti Exception when r.getTokens contains attributes
+    switch (regexp.getType()) {
+      case LAMBDA:
+        return "EMPTY";
+      case TOKEN:
+        String intervalString= regexp.getInterval().toString();
+        String contentString= regexp.getContent().isSimpleData() ? "#PCDATA" : regexp.getContent().getName();
+        if (regexp.getContent().isSimpleData()) {
+          return contentString;
+        }
+        return contentString + intervalString;
+      case CONCATENATION:
+        return comboToString(regexp, ',');
+      case ALTERNATION:
+        return comboToString(regexp, '|');
+      case PERMUTATION:
+        return comboToString(regexp, '|');
+      default:
+        throw new IllegalArgumentException("Unknown enum member: " + regexp.getType());
+    }
+  }
+
+  private String comboToString(final Regexp<AbstractNode> regexp, Character delimiter) {
+    if (!DTDUtils.containsPCDATA(regexp.getTokens())) {
+      return listToString(regexp.getChildren(), delimiter) +
+              regexp.getInterval().toString();
     }
 
-    final List<AbstractNode> content = new ArrayList<AbstractNode>();
-    for (final Regexp<AbstractNode> r : DTDUtils.omitAttributes(children)) {
-      content.addAll(r.getTokens());
-    }
+    final List<AbstractNode> content = regexp.getTokens();
 
-    Collections.sort(content, DTDUtils.PCDATA_CMP);
+    Collections.sort(content,
+      new Comparator<AbstractNode>() {
+          @Override
+          public int compare(final AbstractNode o1, final AbstractNode o2) {
+            if (o1.isSimpleData()) {
+              return -1;
+            }
+            if (o2.isSimpleData()) {
+              return 1;
+            }
+            return 0;
+          }
+        }
+    );
+
+    final List<AbstractNode> distinctContent= BaseUtils.filter(content, new Predicate<AbstractNode>() {
+      private Set<String> encountered= new HashSet<String>();
+      private boolean encounteredSimpleData= false;
+      @Override
+      public boolean apply(AbstractNode argument) {
+        if (argument.isSimpleData()) {
+          if (encounteredSimpleData) {
+            return false;
+          }
+          encounteredSimpleData= true;
+          return true;
+        }
+        if (encountered.contains(argument.getName())) {
+          return false;
+        }
+        encountered.add(argument.getName());
+        return true;
+      }
+    });
 
     return CollectionToString.colToString(
-            DTDUtils.uniquePCDATA(content),
+            distinctContent,
             '|',
             new CollectionToString.ToString<AbstractNode>() {
-
               @Override
               public String toString(final AbstractNode t) {
-                return tokenToString(t, false);
+                return regexpToString(Regexp.<AbstractNode>getToken(t));
               }
             }) + "*";
   }
-
-  private String alternationToString(final List<Regexp<AbstractNode>> children) {
-    if (DTDUtils.containsEmpty(children)) {
-      return listToString(DTDUtils.omitAttributes(DTDUtils.omitEmpty(children)), '|') + "?";
-    }
-    return listToString(DTDUtils.omitAttributes(children), '|');
-  }
-
+  
   private String listToString(final List<Regexp<AbstractNode>> list,
           final char separator) {
     return CollectionToString.colToString(
             list,
             separator,
             new CollectionToString.ToString<Regexp<AbstractNode>>() {
-
-              @Override
-              public String toString(final Regexp<AbstractNode> t) {
-                return subElementsToString(t, false);
-              }
+                @Override
+                public String toString(final Regexp<AbstractNode> t) {
+                  return regexpToString(t);
+                }
             });
   }
 

@@ -121,7 +121,7 @@ public class DTDUtilsTest {
     System.out.println("testContainsPCDATANoneOfOne");
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att);
-    final boolean result = DTDUtils.containsPCDATA(list);
+    final boolean result = DTDUtils.containsPCDATA(Regexp.getConcatenation(list).getTokens());
     assertEquals(false, result);
   }
 
@@ -130,7 +130,7 @@ public class DTDUtilsTest {
     System.out.println("testContainsPCDATAOneOfOne");
     final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(sd);
-    final boolean result = DTDUtils.containsPCDATA(list);
+    final boolean result = DTDUtils.containsPCDATA(Regexp.getConcatenation(list).getTokens());
     assertEquals(true, result);
   }
 
@@ -140,7 +140,7 @@ public class DTDUtilsTest {
     final Regexp<AbstractNode> sd = Regexp.getToken((AbstractNode) new SimpleData(null, "lala", null, null, Collections.<String>emptyList()));
     final Regexp<AbstractNode> att = Regexp.getToken((AbstractNode) new Attribute(null, "lala", null, null, Collections.<String>emptyList()));
     final List<Regexp<AbstractNode>> list = Arrays.asList(att, sd, att);
-    final boolean result = DTDUtils.containsPCDATA(list);
+    final boolean result = DTDUtils.containsPCDATA(Regexp.getConcatenation(list).getTokens());
     assertEquals(true, result);
   }
 

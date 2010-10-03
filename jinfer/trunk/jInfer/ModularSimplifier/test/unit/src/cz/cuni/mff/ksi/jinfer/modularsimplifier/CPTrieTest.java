@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,20 +56,20 @@ public class CPTrieTest {
     final List<Regexp<AbstractNode>> c2 = new ArrayList<Regexp<AbstractNode>>(2);
     c2.add(Regexp.getToken((AbstractNode)(new Element(null, "3", null, null))));
     c2.add(Regexp.getToken((AbstractNode)(new Element(null, "5", null, null))));
-    c1.add(new Regexp<AbstractNode>(null, c2, RegexpType.CONCATENATION));
+    c1.add(new Regexp<AbstractNode>(null, c2, RegexpType.CONCATENATION, RegexpInterval.getOnce()));
     final List<Regexp<AbstractNode>> c3 = new ArrayList<Regexp<AbstractNode>>(2);
     c3.add(Regexp.getToken((AbstractNode)(new Element(null, "4", null, null))));
     final List<Regexp<AbstractNode>> c4 = new ArrayList<Regexp<AbstractNode>>(2);
     final List<Regexp<AbstractNode>> c5 = new ArrayList<Regexp<AbstractNode>>(1);
     c5.add(Regexp.getToken((AbstractNode)(new Element(null, "6", null, null))));
-    c4.add(new Regexp<AbstractNode>(null, c5, RegexpType.CONCATENATION));
+    c4.add(new Regexp<AbstractNode>(null, c5, RegexpType.CONCATENATION, RegexpInterval.getOnce()));
     final List<Regexp<AbstractNode>> c6 = new ArrayList<Regexp<AbstractNode>>(1);
     c6.add(Regexp.getToken((AbstractNode)(new Element(null, "7", null, null))));
-    c4.add(new Regexp<AbstractNode>(null, c6, RegexpType.CONCATENATION));
-    c3.add(new Regexp<AbstractNode>(null, c4, RegexpType.ALTERNATION));
-    c1.add(new Regexp<AbstractNode>(null, c3, RegexpType.CONCATENATION));
-    c0.add(new Regexp<AbstractNode>(null, c1, RegexpType.ALTERNATION));
-    return new Regexp<AbstractNode>(null, c0, RegexpType.CONCATENATION);
+    c4.add(new Regexp<AbstractNode>(null, c6, RegexpType.CONCATENATION, RegexpInterval.getOnce()));
+    c3.add(new Regexp<AbstractNode>(null, c4, RegexpType.ALTERNATION, RegexpInterval.getOnce()));
+    c1.add(new Regexp<AbstractNode>(null, c3, RegexpType.CONCATENATION, RegexpInterval.getOnce()));
+    c0.add(new Regexp<AbstractNode>(null, c1, RegexpType.ALTERNATION, RegexpInterval.getOnce()));
+    return new Regexp<AbstractNode>(null, c0, RegexpType.CONCATENATION, RegexpInterval.getOnce());
   }
 
   @Test
@@ -81,7 +82,7 @@ public class CPTrieTest {
     // add 1 - a split should occur right after it
     final List<Regexp<AbstractNode>> l1 = new ArrayList<Regexp<AbstractNode>>(1);
     l1.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
-    final Regexp<AbstractNode> a1 = new Regexp<AbstractNode>(null, l1, RegexpType.CONCATENATION);
+    final Regexp<AbstractNode> a1 = new Regexp<AbstractNode>(null, l1, RegexpType.CONCATENATION, RegexpInterval.getOnce());
     TrieHelper.addBranchToTree(t, a1);
     System.out.println(t.toString());
     assertEquals("(1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)",
@@ -90,7 +91,7 @@ public class CPTrieTest {
     // add 7 - it should be added to the root
     final List<Regexp<AbstractNode>> l2 = new ArrayList<Regexp<AbstractNode>>(1);
     l2.add(Regexp.getToken((AbstractNode) new Element(null, "7", null, null)));
-    final Regexp<AbstractNode> a2 = new Regexp<AbstractNode>(null, l2, RegexpType.CONCATENATION);
+    final Regexp<AbstractNode> a2 = new Regexp<AbstractNode>(null, l2, RegexpType.CONCATENATION, RegexpInterval.getOnce());
     TrieHelper.addBranchToTree(t, a2);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)|(7: ELEMENT,)|),)",
@@ -100,7 +101,7 @@ public class CPTrieTest {
     final List<Regexp<AbstractNode>> l3 = new ArrayList<Regexp<AbstractNode>>(2);
     l3.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
     l3.add(Regexp.getToken((AbstractNode) new Element(null, "8", null, null)));
-    final Regexp<AbstractNode> a3 = new Regexp<AbstractNode>(null, l3, RegexpType.CONCATENATION);
+    final Regexp<AbstractNode> a3 = new Regexp<AbstractNode>(null, l3, RegexpType.CONCATENATION, RegexpInterval.getOnce());
     TrieHelper.addBranchToTree(t, a3);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|),)|(7: ELEMENT,)|),)",
@@ -111,7 +112,7 @@ public class CPTrieTest {
     l4.add(Regexp.getToken((AbstractNode) new Element(null, "1", null, null)));
     l4.add(Regexp.getToken((AbstractNode) new Element(null, "7", null, null)));
     l4.add(Regexp.getToken((AbstractNode) new Element(null, "9", null, null)));
-    final Regexp<AbstractNode> a4 = new Regexp<AbstractNode>(null, l4, RegexpType.CONCATENATION);
+    final Regexp<AbstractNode> a4 = new Regexp<AbstractNode>(null, l4, RegexpType.CONCATENATION, RegexpInterval.getOnce());
     TrieHelper.addBranchToTree(t, a4);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,)|),)|(7: ELEMENT,)|),)",
@@ -123,7 +124,7 @@ public class CPTrieTest {
     l5.add(Regexp.getToken((AbstractNode) new Element(null, "7", null, null)));
     l5.add(Regexp.getToken((AbstractNode) new Element(null, "9", null, null)));
     l5.add(Regexp.getToken((AbstractNode) new Element(null, "2", null, null)));
-    final Regexp<AbstractNode> a5 = new Regexp<AbstractNode>(null, l5, RegexpType.CONCATENATION);
+    final Regexp<AbstractNode> a5 = new Regexp<AbstractNode>(null, l5, RegexpType.CONCATENATION, RegexpInterval.getOnce());
     TrieHelper.addBranchToTree(t, a5);
     System.out.println(t.toString());
     assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,(()|(2: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)",

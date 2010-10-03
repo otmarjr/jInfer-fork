@@ -20,6 +20,8 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -61,7 +63,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     this.superInitialState= this.createNewState();
 
     final Step<Regexp<T>> newStep= new Step<Regexp<T>>(
-            Regexp.<T>getConcatenation(), this.superInitialState, this.initialState, 1);
+            Regexp.<T>getLambda(), this.superInitialState, this.initialState, 1);
     this.delta.get(this.superInitialState).add(newStep);
     this.reverseDelta.get(this.initialState).add(newStep);
   }
@@ -75,7 +77,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       }
       if (state.getFinalCount() > 0) {
         final Step<Regexp<T>> newStep= new Step<Regexp<T>>(
-                Regexp.<T>getConcatenation(), state, this.superFinalState, 1);
+                Regexp.<T>getLambda(), state, this.superFinalState, 1);
         this.delta.get(state).add(newStep);
         this.reverseDelta.get(this.superFinalState).add(newStep);
       }
@@ -100,10 +102,12 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     if (loopSteps.size() == 1) {
       final Step<Regexp<T>> oldLoopStep= loopSteps.get(0);
 
-      loopChildren.add(oldLoopStep.getAcceptSymbol());
+      Regexp<T> symbol= oldLoopStep.getAcceptSymbol();
       newLoopStep=
               new Step<Regexp<T>>(
-                Regexp.<T>getKleene(loopChildren),
+                new Regexp<T>(
+                  symbol.getContent(), symbol.getChildren(),
+                  symbol.getType(), RegexpInterval.getKleeneStar()),
                 state,
                 state,
                 1);
@@ -116,15 +120,12 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       loopChildren.add(oldLoopStep.getAcceptSymbol());
     }
 
-    final Regexp<T> loopRegexpAlt= Regexp.<T>getAlternation(loopChildren);
-    final List<Regexp<T>> kleeneChildren= new ArrayList<Regexp<T>>();
-    kleeneChildren.add(loopRegexpAlt);
-    final Regexp<T> loopRegexpKleene= Regexp.<T>getKleene(kleeneChildren);
+    final Regexp<T> loopRegexpAlt= Regexp.<T>getAlternation(loopChildren, RegexpInterval.getKleeneStar());
     for (Step<Regexp<T>> oldLoopStep : loopSteps) {
       this.delta.get(state).remove(oldLoopStep);
       this.reverseDelta.get(state).remove(oldLoopStep);
     }
-    newLoopStep= new Step<Regexp<T>>(loopRegexpKleene, state, state, 1);
+    newLoopStep= new Step<Regexp<T>>(loopRegexpAlt, state, state, 1);
     return newLoopStep;
   }
 
@@ -204,14 +205,33 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
 
       /* collapse to alternation */
       final List<Regexp<T>> outStepRegexps= new LinkedList<Regexp<T>>();
+      boolean isOptional= false;
       for (Step<Regexp<T>> outBucketStep : outStepBuckets.get(outBucketDestinationState)) {
         // TODO anti Ak lambda medzi nimi, je nepovinny
-        outStepRegexps.add(outBucketStep.getAcceptSymbol());
+        if (outBucketStep.getAcceptSymbol().isLambda()) {
+          isOptional= true;
+        } else {
+          outStepRegexps.add(outBucketStep.getAcceptSymbol());
+        }
         this.reverseDelta.get(outBucketDestinationState).remove(outBucketStep);
         this.delta.get(state).remove(outBucketStep);
       }
       /* build up new instep with alternation regex */
-      final Regexp<T> newOutRegexp= Regexp.<T>getAlternation(outStepRegexps);
+      RegexpInterval interval;
+      if (isOptional) {
+        interval= RegexpInterval.getOptional();
+      } else {
+        interval= RegexpInterval.getOnce();
+      }
+      final Regexp<T> newOutRegexp;
+      // TODO anti loosing interval of token inside!
+      if (outStepRegexps.size() == 1) {
+        final Regexp<T> oldOutRegexp= outStepRegexps.get(0);
+        newOutRegexp= new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),
+          interval);
+      } else {
+        newOutRegexp= Regexp.<T>getAlternation(outStepRegexps, interval);
+      }
       final Step<Regexp<T>> newOutStep= new Step<Regexp<T>>(newOutRegexp, state, outBucketDestinationState, 1);
       this.reverseDelta.get(outBucketDestinationState).add(newOutStep);
       this.delta.get(state).add(newOutStep);
@@ -245,19 +265,21 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       for (Step<Regexp<T>> outStep : outSteps) {
 
         final List<Regexp<T>> newRegexpChildren= new LinkedList<Regexp<T>>();
-        if (!inStep.getAcceptSymbol().isEmpty()) {
+        if (!inStep.getAcceptSymbol().isLambda()) {
           newRegexpChildren.add(inStep.getAcceptSymbol());
         }
 
         if (loopStep != null) {
           newRegexpChildren.add(loopStep.getAcceptSymbol());
         }
-        if (!outStep.getAcceptSymbol().isEmpty()) {
+        if (!outStep.getAcceptSymbol().isLambda()) {
           newRegexpChildren.add(outStep.getAcceptSymbol());
         }
 
         Regexp<T> newRegexp;
-        if (newRegexpChildren.size() == 1) {
+        if (newRegexpChildren.isEmpty()) {
+          newRegexp= Regexp.<T>getLambda();
+        } else if (newRegexpChildren.size() == 1) {
           newRegexp= newRegexpChildren.get(0);
         } else {
           newRegexp= Regexp.<T>getConcatenation(newRegexpChildren);

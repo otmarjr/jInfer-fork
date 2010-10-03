@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -59,19 +58,25 @@ public class NodePainter {
    * @return Image representation of this node. If the level is higher that the
    * threshold from configuration, an image of three dots is returned.
    */
-  public Image drawNode(final AbstractNode n, final int level) {
+  public Image drawNode(final Regexp<AbstractNode> r, final int level) {
+    if (!r.isToken()) {
+      throw new IllegalArgumentException("Can only draw TOKENs.");
+    }
+
     if (level > maxLevel) {
       return Utils.DOTS;
     }
 
     final FontMetrics fm = graphics.getFontMetrics();
 
-    final int nameWidth = (int)(fm.stringWidth(n.getName()) * 1.5);
+    final String label = r.getContent().getName() + r.getInterval().toString();
+
+    final int nameWidth = (int)(fm.stringWidth(label) * 1.5);
     final int nameHeight = fm.getHeight() - fm.getDescent();
 
-    final Image children = isVisited(n) ? Utils.ARROW : drawSubnodes(n, level + 1);
-    if (n.isElement()) {
-      visited.add(n);
+    final Image children = isVisited(r.getContent()) ? Utils.ARROW : drawSubnodes(r.getContent(), level + 1);
+    if (r.getContent().isElement()) {
+      visited.add(r.getContent());
     }
 
     final int width;
@@ -90,10 +95,10 @@ public class NodePainter {
 
     final Graphics2D g = ret.createGraphics();
 
-    g.setColor(Utils.getNodeColor(n));
+    g.setColor(Utils.getNodeColor(r.getContent()));
     g.fillRect(0, 0, width, height);
     g.setColor(Utils.getColorBackground());
-    g.drawString(n.getName(), margin, nameHeight + margin);
+    g.drawString(label, margin, nameHeight + margin);
     g.setColor(Utils.getColorForeground());
     g.drawRect(0, 0, width - 1, height - 1);
 
@@ -119,36 +124,19 @@ public class NodePainter {
       return Utils.DOTS;
     }
     switch (subnodes.getType()) {
-      case TOKEN: return drawNode(subnodes.getContent(), level + 1);
+      case LAMBDA: return Utils.LAMBDA;
+      case TOKEN: return drawNode(subnodes, level + 1);
       case ALTERNATION: return drawAlternation(subnodes, level + 1);
       case CONCATENATION: return drawConcatenation(subnodes, level + 1);
-      case KLEENE: return drawKleene(subnodes, level + 1);
       default: throw new IllegalArgumentException();
     }
-  }
-
-  private Image drawKleene(final Regexp<AbstractNode> subnodes, final int level) {
-    final Image kleene = drawRegexp(subnodes.getChild(0), level + 1);
-    final BufferedImage kleeneRet = Utils.getImage(
-            kleene.getWidth(null) + 10 + 2 * margin,
-            kleene.getHeight(null) + 2 * margin);
-    final Graphics2D g = kleeneRet.createGraphics();
-    g.drawImage(kleene, margin, margin, null);
-    final FontMetrics fm = g.getFontMetrics();
-    g.setFont(g.getFont().deriveFont(Font.BOLD));
-    g.setColor(Utils.getColorForeground());
-    g.drawString("*", 
-            kleene.getWidth(null) + margin + fm.stringWidth("*"),
-            margin + fm.getHeight() - fm.getDescent());
-    g.setFont(g.getFont().deriveFont(Font.PLAIN));
-    return kleeneRet;
   }
 
   private List<Image> getChildrenImages(final List<Regexp<AbstractNode>> children, final int level) {
     final List<Image> ret = new ArrayList<Image>(children.size());
     int count = 0;
     for (final Regexp<AbstractNode> child : children) {
-      if (child.isEmpty()) {
+      if (child.isLambda()) {
         ret.add(Utils.LAMBDA);
       }
       else {

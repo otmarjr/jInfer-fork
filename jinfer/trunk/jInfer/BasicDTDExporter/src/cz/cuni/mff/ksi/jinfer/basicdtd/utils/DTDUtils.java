@@ -49,20 +49,6 @@ public final class DTDUtils {
   }
 
   /**
-   * Returns the list without children that are empty.
-   */
-  public static List<Regexp<AbstractNode>> omitEmpty(
-          final List<Regexp<AbstractNode>> list) {
-    return BaseUtils.filter(list, new BaseUtils.Predicate<Regexp<AbstractNode>>() {
-
-      @Override
-      public boolean apply(final Regexp<AbstractNode> r) {
-        return !r.isEmpty();
-      }
-    });
-  }
-
-  /**
    * A simple comparator on AbstractNode that puts SIMPLE_DATA nodes in the front.
    */
   public static final Comparator<AbstractNode> PCDATA_CMP = new Comparator<AbstractNode>() {
@@ -82,21 +68,9 @@ public final class DTDUtils {
   /**
    * Returns true if one of the supplied children is a PCDATA.
    */
-  public static boolean containsPCDATA(final List<Regexp<AbstractNode>> children) {
-    for (final Regexp<AbstractNode> child : children) {
-      if (child.isToken() && child.getContent().isSimpleData()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Returns true if there is an empty child among the list of regexps.
-   */
-  public static <T> boolean containsEmpty(final List<Regexp<T>> children) {
-    for (final Regexp<T> child : children) {
-      if (child.isEmpty()) {
+  public static boolean containsPCDATA(final List<AbstractNode> children) {
+    for (final AbstractNode child : children) {
+      if (child.isSimpleData()) {
         return true;
       }
     }

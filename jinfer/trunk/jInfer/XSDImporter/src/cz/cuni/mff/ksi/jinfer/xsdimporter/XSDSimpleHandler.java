@@ -364,7 +364,8 @@ class XSDSimpleHandler extends DefaultHandler {
     } else {
       // this in not a container, create element with regexp of any type,
       // it will be changed later to the correct one
-      elem = new Element(context, name, metadata, Regexp.<AbstractNode>getConcatenation());
+      // TODO reseto Don't use getConcatenationMutable(), ask anti for help with new version of regexps:)
+      elem = new Element(context, name, metadata, Regexp.<AbstractNode>getConcatenationMutable());
     }
         
     // push the current element to the stack with an empty rule

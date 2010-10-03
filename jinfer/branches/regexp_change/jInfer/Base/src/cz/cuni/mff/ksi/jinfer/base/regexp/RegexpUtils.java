@@ -50,6 +50,12 @@ public final class RegexpUtils {
                   }
                 });
 
+        // If there are no attributes, return original regexp.
+        if (nonAttributeChildren.size() == regexp.getChildren().size()) {
+          return regexp;
+        }
+
+        // Should contain at least one non-attribute (i.e. lambda).
         if (nonAttributeChildren.isEmpty()) {
           assert(false);
         }

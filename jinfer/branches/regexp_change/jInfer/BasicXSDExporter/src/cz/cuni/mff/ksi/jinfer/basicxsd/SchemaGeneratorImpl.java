@@ -78,10 +78,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     LOG.info("XSD Exporter: got " + grammar.size()
             + " rules.");
     
-    // filter only the elements
+    // Filter only the elements. Everything else can be accessed through the elements.
     final List<Element> elements = new ArrayList<Element>();
     for (final AbstractNode node : grammar) {
-      if (node.getType().equals(NodeType.ELEMENT)) {
+      if (node.isElement()) {
         elements.add((Element) node);
       }
     }
@@ -102,7 +102,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final int spacesPerIndent = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.SPACES_PER_INDENT, String.valueOf(XSDExportPropertiesPanel.SPACES_PER_INDENT_DEFAULT)));
     indentator = new Indentator(spacesPerIndent);
 
-    // generate head of a new XSD
+    // Generate head of a new XSD.
     indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
     indentator.indent("<!-- %generated% -->\n");
@@ -115,22 +115,23 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     typenamePrefix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_PREFIX, XSDExportPropertiesPanel.TYPENAME_PREFIX_DEFAULT);
     typenamePostfix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_POSTFIX, XSDExportPropertiesPanel.TYPENAME_POSTFIX_DEFAULT);
 
-    // handle global elements
+    // Handle global elements.
     final List<Element> globalElements = preprocessor.getGlobalElements();
     if (!globalElements.isEmpty()) {
       indentator.append("\n");
       indentator.indent("<!-- global types -->\n");
-    }
-    for (Element globalElement : globalElements) {
-      checkInterrupt();
-      processGlobalElement(globalElement);
+
+      for (Element globalElement : globalElements) {
+        checkInterrupt();
+        processGlobalElement(globalElement);
+      }
     }
 
-    // run recursion starting at the top element
+    // Run recursion starting at the top element.
     indentator.indent("<!-- top level element -->\n");
     processElement(preprocessor.getTopElement(), new RegexpInterval(MINOCCURS_DEFAULT, MAXOCCURS_DEFAULT));
 
-    // close XSD
+    // Close XSD.
     indentator.indent("</xs:schema>");
 
     LOG.info("XSD Exporter: schema generated at "
@@ -139,32 +140,43 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     callback.finished(indentator.toString(), "xsd");
   }
 
+  /**
+   * Processes element. If its type is defined globally simply uses it. Otherwise
+   * defines it inline.
+   *
+   * @param element
+   * @param interval
+   * @throws InterruptedException
+   */
   private void processElement(final Element element, final RegexpInterval interval) throws InterruptedException {
     checkInterrupt();
 
-    // begin definition of element and write its name
+    // Begin definition of element and write its name.
     indentator.indent("<xs:element name=\"");
     indentator.append(element.getName());
     indentator.append("\"");
 
-    processOccurrences(interval);
-
-    // if its type is one of built-in types we don't have much work to do
+    // If its type is one of built-in types we don't have much work to do
     // TODO rio dalsie built-in typy
     if (XSDUtils.hasBuiltinType(element)) {
-      indentator.append(" type=\"xs:string\"/>\n");
+      indentator.append(" type=\"xs:string\"");
+      processOccurrences(interval);
+      indentator.append("/>\n");
       return;
     }
 
-    // if element's type is global set it and finish
+    // If element's type is global set it and finish.
     if (preprocessor.isElementGlobal(element.getName())) {
       indentator.append(" type=\"");
       indentator.append(typenamePrefix);
       indentator.append(element.getName());
       indentator.append(typenamePostfix);
+      processOccurrences(interval);
       indentator.append("\"/>\n");
       return;
     }
+
+    processOccurrences(interval);
 
     indentator.append(">\n");
     indentator.increaseIndentation();
@@ -182,7 +194,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.append(">\n");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown or illegal enum member.");
     }
 
     indentator.increaseIndentation();
@@ -199,7 +211,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("</xs:complexType>\n");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown or illegal enum member.");
     }
 
     indentator.decreaseIndentation();
@@ -208,10 +220,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return;
   }
 
+  /**
+   * Defines element's type globally.
+   *
+   * @param element
+   * @throws InterruptedException
+   */
   private void processGlobalElement(final Element element) throws InterruptedException {
     checkInterrupt();
 
-    // if element is of a built-in type don't define it
+    // If element is of a built-in type don't define it.
     if (XSDUtils.hasBuiltinType(element)) {
       return;
     }
@@ -225,7 +243,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("<xs:complexType name=\"");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown or illegal enum member.");
     }
     indentator.append(typenamePrefix);
     indentator.append(element.getName());
@@ -252,7 +270,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("</xs:complexType>\n");
         break;
       default:
-        throw new IllegalArgumentException("Unknown of illegal enum member.");
+        throw new IllegalStateException("Unknown of illegal enum member.");
     }
 
     indentator.append("\n");
@@ -261,6 +279,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private void processElementContent(final Element element) throws InterruptedException {
+    // SPECIAL CASE
     // if element subnodes is token and it is element, wrap it in <xs:sequence></xs:sequence>
     boolean makeSequence = false;
     if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {
@@ -296,6 +315,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
+  /** TODO rio comment
+   *
+   * Dostane jeden prvok z getSubnodes. Ak je ten prvok TOKEN, zaujima nas len
+   * element. To je osetrene ziskanim vsetkych elementov a ak je ich pocet nula,
+   * koncime. To zaroven osetruje, ze sa nebudu generovat prazdne xs elementy,
+   * ktory by sa mohli vygenerovat kebyze vsetky TOKENy su napriklad SIMPLE_DATA.
+   *
+   * @param regexp
+   * @throws InterruptedException
+   */
   private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
     checkInterrupt();
 
@@ -419,7 +448,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       LOG.warn("XSD Exporter: Referenced element(" + node.getName() + ") not found in IG element list, probably error in code");
       return;
     }
-      processElement(element, interval);
+
+    processElement(element, interval);
   }
 
   private void processOccurrences(final RegexpInterval interval) {

@@ -147,9 +147,14 @@ public class SimplifierImpl implements Simplifier {
 
         }
         // 4. add to rules
-        attTokens.add(((Element) node).getSubnodes());
-        final Regexp<AbstractNode> regexpAttributes=
-                Regexp.<AbstractNode>getConcatenation( attTokens );
+        final Regexp<AbstractNode> regexpAttributes;
+        if (attTokens.isEmpty()) {
+          regexpAttributes= ((Element) node).getSubnodes();
+        } else {
+          attTokens.add(((Element) node).getSubnodes());
+         regexpAttributes=
+                  Regexp.<AbstractNode>getConcatenation( attTokens );
+        }
         LOG.debug(">>> Attributes regexp is:");
         LOG.debug(regexpAttributes);
         finalGrammar.add(

@@ -127,8 +127,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
-    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(regexpToString(e.
-            getSubnodes())).append(">\n");
+    ret.append("<!ELEMENT ").append(e.getName()).append(' ');
+    Regexp<AbstractNode> regexp= RegexpUtils.omitAttributes(e.getSubnodes());
+    if (regexp.isToken()) {
+      ret.append("(");
+    }
+    ret.append(regexpToString(regexp));
+    if (regexp.isToken()) {
+      ret.append(")");
+    }
+    ret.append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!BaseUtils.isEmpty(attributes)) {
       ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).
@@ -147,10 +155,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @param topLevel
    * @return
    */
-  private String regexpToString(final Regexp<AbstractNode> subnodes) {
-    Regexp<AbstractNode> regexp= RegexpUtils.omitAttributes(subnodes);
+  private String regexpToString(final Regexp<AbstractNode> regexp) {
     // TODO anti Exception when r.getTokens contains attributes
-    // TODO anti move omitAttributes to level higher with exception here
     switch (regexp.getType()) {
       case LAMBDA:
         return "EMPTY";

@@ -18,6 +18,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +51,17 @@ public class Element extends AbstractNode {
     return subnodes;
   }
 
+  // TODO exception when unknown regexptype
   public List<Attribute> getElementAttributes() {
+    if (subnodes.isLambda()) {
+      return Collections.emptyList();
+    }
+    if (subnodes.isToken()) {
+      if (subnodes.getContent().isAttribute()) {
+        return Arrays.asList((Attribute) subnodes.getContent());
+      }
+      return Collections.emptyList();
+    }
     final List<Attribute> ret= new ArrayList<Attribute>();
     for (final Regexp<AbstractNode> r : getSubnodes().getChildren()) {
       if (r.isToken() && NodeType.ATTRIBUTE.equals(r.getContent().getType())) {

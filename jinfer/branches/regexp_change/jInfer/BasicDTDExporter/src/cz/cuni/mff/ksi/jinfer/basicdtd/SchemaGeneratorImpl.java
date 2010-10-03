@@ -163,8 +163,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case TOKEN:
         String intervalString= regexp.getInterval().toString();
         String contentString= regexp.getContent().isSimpleData() ? "#PCDATA" : regexp.getContent().getName();
-        if (regexp.getContent().isSimpleData() && !intervalString.isEmpty()) {
-          return "(" + contentString + ")" + intervalString;
+        if (regexp.getContent().isSimpleData()) {
+          return contentString;
         }
         return contentString + intervalString;
       case CONCATENATION:

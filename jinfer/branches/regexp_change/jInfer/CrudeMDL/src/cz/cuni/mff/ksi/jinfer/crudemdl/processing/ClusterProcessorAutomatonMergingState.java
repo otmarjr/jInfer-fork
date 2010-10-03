@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -67,8 +66,8 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
       final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
       for (AbstractNode token : rightSideTokens) {
         if (token.isAttribute()) {
-          LOG.debug(token);
-          continue;
+          LOG.debug(token);//TODO anti more exception:)
+          throw new IllegalArgumentException("Token in subnodes.");
         }
         symbolString.add( clusterer.getRepresentantForItem(token) );
      }
@@ -102,11 +101,12 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug("--- End");
 
     // 3.4 return element with regexp
-    return /*(new Shortener()).simplify(*/ new Element(
+    return new Element(
           cluster.getRepresentant().getContext(),
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
-          regexp
-          );//);
+          regexp,
+          Regexp.<AbstractNode>getLambda()
+          );
   }
 }

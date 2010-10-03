@@ -76,7 +76,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     switch (axis) {
       case Axis.CHILD:
-        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getMutable());
+        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getMutable());
         if (lastElement != null) {
           lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newElement));
           rules.add(lastElement);
@@ -89,7 +89,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       case Axis.ATTRIBUTE:
         if (lastElement != null) {
           final Attribute newAttr = new Attribute(null, localName, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
-          lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newAttr));
+          lastElement.getAttributes().addChild(Regexp.<AbstractNode>getToken(newAttr));
           lastAttribute = newAttr;
           rules.add(lastElement);
           dirty = false;
@@ -173,6 +173,10 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
       e.getSubnodes().setType(RegexpType.CONCATENATION);
       e.getSubnodes().setInterval(RegexpInterval.getOnce());
+      e.getSubnodes().setImmutable();
+      e.getAttributes().setType(RegexpType.CONCATENATION);
+      e.getAttributes().setInterval(RegexpInterval.getOnce());
+      e.getAttributes().setImmutable();
     }
 
     return rules;

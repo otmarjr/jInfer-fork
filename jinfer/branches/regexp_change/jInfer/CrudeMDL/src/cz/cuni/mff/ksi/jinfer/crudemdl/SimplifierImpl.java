@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -116,7 +117,7 @@ public class SimplifierImpl implements Simplifier {
         throw new InterruptedException();
       }
       if (!cluster.getRepresentant().isElement()) {
-        continue;
+        continue;// TODO anti ???
       }
 
       final AbstractNode node =  processor.processCluster(clusterer, cluster);
@@ -129,8 +130,10 @@ public class SimplifierImpl implements Simplifier {
                 getAttributeClusters(cluster.getRepresentant());
 
         for (Cluster<AbstractNode> attCluster : attributeClusters) {
+          RegexpInterval required= RegexpInterval.getOnce();
           if (attCluster.size() < cluster.size()) {
             attCluster.getRepresentant().getMetadata().remove("required");
+            required= RegexpInterval.getOptional();
           }
 
           for (AbstractNode instance : attCluster.getMembers()) {
@@ -142,27 +145,23 @@ public class SimplifierImpl implements Simplifier {
           }
 
           attTokens.add(
-                  Regexp.<AbstractNode>getToken(attCluster.getRepresentant())
+                  Regexp.<AbstractNode>getToken(attCluster.getRepresentant(), required)
                   );
 
         }
-        // 4. add to rules
-        final Regexp<AbstractNode> regexpAttributes;
-        if (attTokens.isEmpty()) {
-          regexpAttributes= ((Element) node).getSubnodes();
-        } else {
-          attTokens.add(((Element) node).getSubnodes());
-         regexpAttributes=
-                  Regexp.<AbstractNode>getConcatenation( attTokens );
-        }
-        LOG.debug(">>> Attributes regexp is:");
-        LOG.debug(regexpAttributes);
-        finalGrammar.add(
-                new Element(node.getContext(), node.getName(), node.getMetadata(), regexpAttributes)
-                );
-      } else {
-        finalGrammar.add( node );
       }
+      // 4. add to rules
+      final Regexp<AbstractNode> attRegexp;
+      if (attTokens.isEmpty()) {
+        attRegexp= Regexp.<AbstractNode>getLambda();
+      } else {
+        attRegexp= Regexp.<AbstractNode>getConcatenation(attTokens);
+      }
+      LOG.debug(">>> Attributes regexp is:");
+      LOG.debug(attRegexp);
+      finalGrammar.add(
+              new Element(node.getContext(), node.getName(), node.getMetadata(), ((Element) node).getSubnodes(), attRegexp)
+              );
     }
 
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);

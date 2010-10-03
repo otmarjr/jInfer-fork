@@ -72,7 +72,7 @@ public class CloneHelper {
 
     if (e.getSubnodes().isLambda()) {
       clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()),
-              Regexp.<AbstractNode>getLambda());
+              cloneRegexp(e.getSubnodes()), cloneRegexp(e.getAttributes()));
       cloned.put(e, clone);
       return clone;
     }
@@ -80,7 +80,8 @@ public class CloneHelper {
     clone = new Element(cloneList(e.getContext()), 
             String.valueOf(e.getName()),
             cloneMap(e.getMetadata()),
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(),
+            cloneRegexp(e.getAttributes()));
     cloned.put(e, clone);
     clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
 
@@ -121,9 +122,20 @@ public class CloneHelper {
   private Regexp<AbstractNode> cloneRegexp(final Regexp<AbstractNode> r) {
     return new Regexp<AbstractNode>(
             cloneAbstractNode(r.getContent()),
-            (r.getChildren()),
+            cloneChildren(r.getChildren()),
             r.getType(),
             r.getInterval());
+  }
+
+  private List<Regexp<AbstractNode>> cloneChildren(final List<Regexp<AbstractNode>> c) {
+    if (c == null) {
+      return null;
+    }
+    final List<Regexp<AbstractNode>> ret = new ArrayList<Regexp<AbstractNode>>(c.size());
+    for (final Regexp<AbstractNode> r : c) {
+      ret.add(cloneRegexp(r));
+    }
+    return ret;
   }
 
   private AbstractNode cloneAbstractNode(final AbstractNode n) {

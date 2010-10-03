@@ -51,7 +51,7 @@ public class TopologicalSortTest {
   @Test
   public void testOne() {
     final Element e = new Element(null, "test", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
     final TopologicalSort s = new TopologicalSort(Arrays.asList(e));
@@ -63,21 +63,21 @@ public class TopologicalSortTest {
   @Test
   public void testSort() {
     final Element e1 = new Element(null, "test1", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e2 = new Element(null, "test2", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e3 = new Element(null, "test3", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e4 = new Element(null, "test4", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e5 = new Element(null, "test5", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e6 = new Element(null, "test6", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e7 = new Element(null, "test7", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e8 = new Element(null, "test8", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e2.getSubnodes().setType(RegexpType.CONCATENATION);
@@ -125,13 +125,13 @@ public class TopologicalSortTest {
   @Test
   public void testMore() {
     final Element e1 = new Element(null, "test1", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e2 = new Element(null, "test2", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e3 = new Element(null, "test3", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     final Element e4 = new Element(null, "test4", null,
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
 
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());

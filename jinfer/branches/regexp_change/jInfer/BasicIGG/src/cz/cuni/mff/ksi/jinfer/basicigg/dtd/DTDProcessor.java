@@ -92,7 +92,7 @@ public class DTDProcessor implements Processor {
 
   private static Element processElement(final ElementType e) {
     final Element ret = new Element(null, e.name.getLocalName(),
-            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getMutable());
+            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getMutable());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
@@ -104,7 +104,7 @@ public class DTDProcessor implements Processor {
                 new cz.cuni.mff.ksi.jinfer.base.objects.Attribute(null,
                                 a.name.getLocalName(), nodeAttrs, null, 
                                 new ArrayList<String>(0));
-        ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(at));
+        ret.getAttributes().addChild(Regexp.<AbstractNode>getToken(at));
       }
     }
     // for each subelement ditto
@@ -112,7 +112,7 @@ public class DTDProcessor implements Processor {
       for (final Object oc : e.children.values()) {
         final ElementType c = (ElementType) oc;
         final Element child = new Element(null, c.name.getLocalName(),
-                null, Regexp.<AbstractNode>getLambda());
+                null, Regexp.<AbstractNode>getLambda(), Regexp.<AbstractNode>getLambda());
         ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(child));
       }
     }
@@ -127,6 +127,9 @@ public class DTDProcessor implements Processor {
     ret.getSubnodes().setType(RegexpType.CONCATENATION);
     ret.getSubnodes().setInterval(RegexpInterval.getOnce());
     ret.getSubnodes().setImmutable();
+    ret.getAttributes().setType(RegexpType.CONCATENATION);
+    ret.getAttributes().setInterval(RegexpInterval.getOnce());
+    ret.getAttributes().setImmutable();
 
     return ret;
   }

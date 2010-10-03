@@ -172,8 +172,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       indentator.append(typenamePrefix);
       indentator.append(element.getName());
       indentator.append(typenamePostfix);
+      indentator.append("\"");
       processOccurrences(interval);
-      indentator.append("\"/>\n");
+      indentator.append("/>\n");
       return;
     }
 

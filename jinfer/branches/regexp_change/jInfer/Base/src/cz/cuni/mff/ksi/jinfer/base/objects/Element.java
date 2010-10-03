@@ -33,13 +33,15 @@ public class Element extends AbstractNode {
   /** List of all subnodes of this element, in the same order as in the
    * document. */
   private final Regexp<AbstractNode> subnodes;
+  private final Regexp<AbstractNode> attributes;
 
   public Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<AbstractNode> subnodes) {
+          final Regexp<AbstractNode> subnodes, final Regexp<AbstractNode> attributes) {
     super(context, name, metadata);
     this.subnodes = subnodes;
+    this.attributes= attributes;
   }
 
   @Override
@@ -51,7 +53,12 @@ public class Element extends AbstractNode {
     return subnodes;
   }
 
+  public Regexp<AbstractNode> getAttributes() {
+    return attributes;
+  }
+
   // TODO exception when unknown regexptype
+
   public List<Attribute> getElementAttributes() {
     if (subnodes.isLambda()) {
       return Collections.emptyList();

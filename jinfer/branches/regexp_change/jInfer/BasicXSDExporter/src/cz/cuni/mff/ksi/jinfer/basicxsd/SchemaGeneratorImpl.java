@@ -303,11 +303,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private void processElementAttributes(final Element element) throws InterruptedException {
-    final List<Attribute> attributes = element.getElementAttributes();
+    // TODO rio LOok here
+//    final List<Attribute> attributes = element.getElementAttributes();
+    final Regexp<AbstractNode> attributes = element.getAttributes();
 
-    if (!attributes.isEmpty()) {
+    if (!attributes.isLambda()) {
       assert(XSDUtils.hasComplexType(element));
-      for (Attribute attribute : attributes) {
+      // TODO rio getTokens added by anti here
+      for (AbstractNode attribute : attributes.getTokens()) {
         checkInterrupt();
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
@@ -330,7 +333,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private void processSubElements(final Regexp<AbstractNode> regexp) throws InterruptedException {
     checkInterrupt();
 
-    final Regexp<AbstractNode> regexpWithoutAttrs = RegexpUtils.omitAttributes(regexp);
+    // TODO rio look here
+//    final Regexp<AbstractNode> regexpWithoutAttrs = RegexpUtils.omitAttributes(regexp);
+    final Regexp<AbstractNode> regexpWithoutAttrs = regexp;
 
     if (regexpWithoutAttrs.isLambda()) {
       return;

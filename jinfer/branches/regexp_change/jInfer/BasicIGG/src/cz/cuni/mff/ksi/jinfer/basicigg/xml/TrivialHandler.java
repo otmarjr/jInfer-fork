@@ -60,7 +60,7 @@ public class TrivialHandler extends DefaultHandler {
     final List<String> context = getContext();
 
     final Element e = new Element(context, qName, null, 
-            Regexp.<AbstractNode>getMutable());
+            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getMutable());
 
     if (attributes.getLength() > 0) {
       final List<String> attrContext = new ArrayList<String>(context);
@@ -75,7 +75,7 @@ public class TrivialHandler extends DefaultHandler {
         }
         final Attribute a = new Attribute(attrContext, attributes.getQName(i), 
                 metadata, null, content);
-        e.getSubnodes().addChild(Regexp.<AbstractNode>getToken(a));
+        e.getAttributes().addChild(Regexp.<AbstractNode>getToken(a));
       }
     }
 
@@ -104,6 +104,9 @@ public class TrivialHandler extends DefaultHandler {
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
     e.getSubnodes().setImmutable();
+    e.getAttributes().setType(RegexpType.CONCATENATION);
+    e.getAttributes().setInterval(RegexpInterval.getOnce());
+    e.getAttributes().setImmutable();
     
     rules.add(end);
   }

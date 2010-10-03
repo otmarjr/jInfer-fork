@@ -44,7 +44,9 @@ public class IntervalExpander {
             treeBase.getContext(),
             treeBase.getName(),
             treeBase.getMetadata(),
-            expandIntervalsRegexp(treeBase.getSubnodes()));
+            expandIntervalsRegexp(treeBase.getSubnodes()),
+            treeBase.getAttributes()
+            );
   }
 
   private boolean isSafeInterval(RegexpInterval interval) {

@@ -51,7 +51,7 @@ public class CloneHelperTest {
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull3() {
     System.out.println("cloneRulesNull3");
-    new CloneHelper().cloneRules(Arrays.<AbstractNode>asList(new Element(null, "e", null, null), null));
+    new CloneHelper().cloneRules(Arrays.<AbstractNode>asList(new Element(null, "e", null, null, null), null));
   }
 
   @Test
@@ -62,13 +62,15 @@ public class CloneHelperTest {
     m.put("two", Integer.valueOf(2));
 
     final List<Regexp<AbstractNode>> altChildren = new ArrayList<Regexp<AbstractNode>>();
-    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getLambda())));
+    altChildren.add(Regexp.getToken(
+            (AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getLambda(),
+            Regexp.<AbstractNode>getLambda())));
 
     final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getLambda())));
+    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getLambda(), Regexp.<AbstractNode>getLambda())));
 
-    final Element e = new Element(null, "e", m, Regexp.getConcatenation(children));
+    final Element e = new Element(null, "e", m, Regexp.getConcatenation(children), Regexp.<AbstractNode>getLambda());
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(e);
     final List<AbstractNode> result = new CloneHelper().cloneRules(l);
@@ -129,13 +131,13 @@ public class CloneHelperTest {
     m.put("two", Integer.valueOf(2));
 
     final List<Regexp<AbstractNode>> altChildren = new ArrayList<Regexp<AbstractNode>>();
-    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getLambda())));
+    altChildren.add(Regexp.getToken((AbstractNode) new Element(null, "e1", null, Regexp.<AbstractNode>getLambda(), Regexp.<AbstractNode>getLambda())));
 
     final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getLambda())));
+    children.add(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getLambda(), Regexp.<AbstractNode>getLambda())));
 
-    final Element e = new Element(null, "e", m, Regexp.getConcatenation(children));
+    final Element e = new Element(null, "e", m, Regexp.getConcatenation(children), Regexp.<AbstractNode>getLambda());
     final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
     l.add(e);
 
@@ -160,8 +162,8 @@ public class CloneHelperTest {
   public void testCycle() {
     System.out.println("cycle");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getMutable());
-    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getMutable());
+    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
+    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
     e1.getSubnodes().addChild(
             Regexp.<AbstractNode>getToken(e2)
             );
@@ -195,8 +197,8 @@ public class CloneHelperTest {
   public void testCycleTokens() {
     System.out.println("cycleTokens");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getMutable());
-    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getToken(e1));
+    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getLambda());
+    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractNode>getToken(e1), Regexp.<AbstractNode>getLambda());
     e1.getSubnodes().setContent(e2);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e1.getSubnodes().setType(RegexpType.TOKEN);

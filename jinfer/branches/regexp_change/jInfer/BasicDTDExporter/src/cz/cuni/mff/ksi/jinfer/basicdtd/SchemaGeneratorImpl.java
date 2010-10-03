@@ -23,12 +23,10 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DTDUtils;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
 import java.util.ArrayList;
@@ -53,14 +51,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private int maxEnumSize;
   private double minDefaultRatio;
-
-  // TODO anti Next input creates <!ELEMENT delay (PCDATA*)>
-  // <registration_status>
-//   <delay>7</delay>
-//   <delay>7</delay>
-//   <delay>7</delay>
-//   <delay>7</delay>
-//</registration_status>
 
   @Override
   public String getName() {
@@ -128,7 +118,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
     ret.append("<!ELEMENT ").append(e.getName()).append(' ');
-    Regexp<AbstractNode> regexp= RegexpUtils.omitAttributes(e.getSubnodes());
+    Regexp<AbstractNode> regexp= e.getSubnodes();
     if (regexp.isToken()) {
       ret.append("(");
     }
@@ -137,8 +127,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(")");
     }
     ret.append(">\n");
-    final List<Attribute> attributes = e.getElementAttributes();
-    if (!BaseUtils.isEmpty(attributes)) {
+    final Regexp<AbstractNode> attributes = e.getAttributes();
+    if (!attributes.isLambda()) {
       ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).
               append(">\n");
     }
@@ -178,8 +168,20 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
+  /**
+   * Returns true if one of the supplied children is a PCDATA.
+   */
+  private boolean containsPCDATA(final List<AbstractNode> children) {
+    for (final AbstractNode child : children) {
+      if (child.isSimpleData()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private String comboToString(final Regexp<AbstractNode> regexp, Character delimiter) {
-    if (!DTDUtils.containsPCDATA(regexp.getTokens())) {
+    if (!containsPCDATA(regexp.getTokens())) {
       return listToString(regexp.getChildren(), delimiter) +
               regexp.getInterval().toString();
     }
@@ -245,15 +247,20 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             });
   }
 
-  private String attributesToString(final List<Attribute> attributes) {
+  private String attributesToString(final Regexp<AbstractNode> attributes) {
     final StringBuilder ret = new StringBuilder();
-    for (final Attribute attribute : attributes) {
+    if (!attributes.isConcatenation()) {
+      throw new IllegalArgumentException("Attributes have to be concatenation for now.");
+    }
+    // TODO anti atributes better
+    for (final AbstractNode attribute : attributes.getTokens()) {
       ret.append(attributeToString(attribute));
     }
     return ret.toString();
   }
 
-  private String attributeToString(final Attribute a) {
+  private String attributeToString(final AbstractNode b) {
+    Attribute a = (Attribute) b;
     if (a.getName().startsWith("xmlns:")) {
       return "\n\t" + a.getName() + " CDATA #IMPLIED";
     }

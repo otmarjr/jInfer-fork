@@ -49,6 +49,16 @@ public class Element extends AbstractNode {
     return subnodes;
   }
 
+  public List<Attribute> getElementAttributes() {
+    final List<Attribute> ret= new ArrayList<Attribute>();
+    for (final Regexp<AbstractNode> r : getSubnodes().getChildren()) {
+      if (r.isToken() && NodeType.ATTRIBUTE.equals(r.getContent().getType())) {
+        ret.add((Attribute) r.getContent());
+      }
+    }
+    return ret;
+  }
+
   /**
    * Returns all attributes of this element.
    * Note: does NOT return attributes of any subelements.
@@ -56,24 +66,24 @@ public class Element extends AbstractNode {
    *
    * @return All attributes of current element.
    */
-  public List<Attribute> getElementAttributes() {
+  public List<Attribute> getElementAttributesMutable() {
     final List<Attribute> ret = new ArrayList<Attribute>() {
 
       private static final long serialVersionUID = 87451521l;
 
       @Override
-      public boolean add(final Attribute e) {
+      public boolean add(final Attribute att) {
         boolean found = false;
         for (final AbstractNode node : getSubnodes().getTokens()) {
           if (NodeType.ATTRIBUTE.equals(node.getType())
-                  && e.getName().equalsIgnoreCase(node.getName())) {
+                  && att.getName().equals(node.getName())) {
             found = true;
           }
         }
         if (!found) {
-          getSubnodes().addChild(Regexp.<AbstractNode>getToken(e));
+          getSubnodes().addChild(Regexp.<AbstractNode>getToken(att));
         }
-        return super.add(e);
+        return super.add(att);
       }
     };
     for (final AbstractNode node : getSubnodes().getTokens()) {
@@ -86,10 +96,14 @@ public class Element extends AbstractNode {
 
   @Override
   public String toString() {
+    return getName();
+    /*
     final StringBuilder ret = new StringBuilder(super.toString());
     if (subnodes != null) {
       ret.append('\n').append(subnodes.toString());
     }
     return ret.toString();
+     *
+     */
   }
 }

@@ -32,7 +32,7 @@ import java.util.Set;
  *
  * @author anti
  */
-public class Preprocessor {
+public class IntervalExpander {
   private final Set<Element> visited = new HashSet<Element>();
 
   public Element expandIntervalsElement(final Element treeBase) {

@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -32,6 +33,7 @@ import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +98,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     for (final AbstractNode node : grammar) {
       if (node.isElement()) {
         elements.add((Element) node);
+      } else {
+        throw new IllegalArgumentException("The output grammar can contain only elements. Got " + node.toString());
       }
     }
 
@@ -123,8 +127,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
-    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(subElementsToString(e.
-            getSubnodes(), true)).append(">\n");
+    ret.append("<!ELEMENT ").append(e.getName()).append(' ').append(regexpToString(e.
+            getSubnodes())).append(">\n");
     final List<Attribute> attributes = e.getElementAttributes();
     if (!BaseUtils.isEmpty(attributes)) {
       ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).
@@ -139,47 +143,24 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * (#PCDATA|a|b|c)*
    * </code>
 
-   * @param regexp
+   * @param subnodes
    * @param topLevel
    * @return
    */
-  private String subElementsToString(final Regexp<AbstractNode> regexp,
-          final boolean topLevel) {
-    if (regexp.isLambda()) {
-      return "EMPTY";
-    }
-    if (topLevel
-            && BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractNode>() {
-
-      @Override
-      public boolean apply(final AbstractNode argument) {
-        return argument.isElement() || argument.isSimpleData();
-      }
-    }).isEmpty()) {
-      return "EMPTY";
-    }
-    Regexp<AbstractNode> _regexp= withoutAttributes(regexp);
-
+  private String regexpToString(final Regexp<AbstractNode> subnodes) {
+    Regexp<AbstractNode> regexp= RegexpUtils.omitAttributes(subnodes);
+    // TODO anti Exception when r.getTokens contains attributes
+    // TODO anti move omitAttributes to level higher with exception here
     switch (regexp.getType()) {
+      case LAMBDA:
+        return "EMPTY";
       case TOKEN:
-        StringBuilder sb = new StringBuilder();
-        if (topLevel) {
-          sb.append('(');
+        String intervalString= regexp.getInterval().toString();
+        String contentString= regexp.getContent().isSimpleData() ? "#PCDATA" : regexp.getContent().getName();
+        if (regexp.getContent().isSimpleData() && !intervalString.isEmpty()) {
+          return "(" + contentString + ")" + intervalString;
         }
-        if (regexp.getContent().isSimpleData()) {
-          if (regexp.getInterval().isOnce()) {
-            sb.append("#PCDATA");
-          } else {
-            sb.append("(#PCDATA)");
-          }
-        } else {
-          sb.append(regexp.getContent().getName());
-        }
-        sb.append(regexp.getInterval().toString());
-        if (topLevel) {
-          sb.append(')');
-        }
-        return sb.toString();
+        return contentString + intervalString;
       case CONCATENATION:
         return comboToString(regexp, ',');
       case ALTERNATION:
@@ -191,62 +172,41 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private Regexp<AbstractNode> withoutAttributes(Regexp<AbstractNode> regexp) {
-    switch (regexp.getType()) {
-      case LAMBDA:
-        return regexp;
-      case TOKEN:
-        if (regexp.getContent().isAttribute()) {
-          return Regexp.<AbstractNode>getLambda();
-        }
-        return regexp;
-      case CONCATENATION:
-      case ALTERNATION:
-      case PERMUTATION:
-        List<Regexp<AbstractNode>> nonAttributeChildren= BaseUtils.filter(regexp.getChildren(),
-                new BaseUtils.Predicate<Regexp<AbstractNode>>() {
-                  @Override
-                  public boolean apply(final Regexp<AbstractNode> r) {
-                    return !r.isToken() || !r.getContent().isAttribute();
-                  }
-        });
-        if (nonAttributeChildren.isEmpty()) {
-          throw new IllegalArgumentException("On DTD Exporter input came regexp for element, in which we don't have any TOKEN.");
-        }
-        if (nonAttributeChildren.size() == 1) {
-          return nonAttributeChildren.get(0);
-        }
-        return new Regexp<AbstractNode>(null, nonAttributeChildren, regexp.getType(), regexp.getInterval());
-      default:
-        return null;
-    }
-  }
-
-  private String tokenToString(AbstractNode t) {
-    if (t.isSimpleData()) {
-      return "#PCDATA";
-    }
-    return t.getName();
-  }
-
   private String comboToString(final Regexp<AbstractNode> regexp, Character delimiter) {
     if (!DTDUtils.containsPCDATA(regexp.getTokens())) {
-      return listToString(DTDUtils.omitAttributes(regexp.getChildren()), delimiter) +
+      return listToString(regexp.getChildren(), delimiter) +
               regexp.getInterval().toString();
     }
 
-    final List<AbstractNode> content = new ArrayList<AbstractNode>();
-    for (final Regexp<AbstractNode> r : DTDUtils.omitAttributes(regexp.getChildren())) {
-      content.addAll(r.getTokens());
-    }
+    final List<AbstractNode> content = regexp.getTokens();
 
-    Collections.sort(content, DTDUtils.PCDATA_CMP);
+    Collections.sort(content,
+      new Comparator<AbstractNode>() {
+          @Override
+          public int compare(final AbstractNode o1, final AbstractNode o2) {
+            if (o1.isSimpleData()) {
+              return -1;
+            }
+            if (o2.isSimpleData()) {
+              return 1;
+            }
+            return 0;
+          }
+        }
+    );
 
-    final List<AbstractNode> filteredContent= BaseUtils.filter(content, new Predicate<AbstractNode>() {
+    final List<AbstractNode> distinctContent= BaseUtils.filter(content, new Predicate<AbstractNode>() {
       private Set<String> encountered= new HashSet<String>();
-
+      private boolean encounteredSimpleData= false;
       @Override
       public boolean apply(AbstractNode argument) {
+        if (argument.isSimpleData()) {
+          if (encounteredSimpleData) {
+            return false;
+          }
+          encounteredSimpleData= true;
+          return true;
+        }
         if (encountered.contains(argument.getName())) {
           return false;
         }
@@ -256,12 +216,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     });
 
     return CollectionToString.colToString(
-            DTDUtils.uniquePCDATA(filteredContent),
+            distinctContent,
             '|',
             new CollectionToString.ToString<AbstractNode>() {
               @Override
               public String toString(final AbstractNode t) {
-                return tokenToString(t);
+                return regexpToString(Regexp.<AbstractNode>getToken(t));
               }
             }) + "*";
   }
@@ -272,11 +232,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             list,
             separator,
             new CollectionToString.ToString<Regexp<AbstractNode>>() {
-
-              @Override
-              public String toString(final Regexp<AbstractNode> t) {
-                return subElementsToString(t, false);
-              }
+                @Override
+                public String toString(final Regexp<AbstractNode> t) {
+                  return regexpToString(t);
+                }
             });
   }
 

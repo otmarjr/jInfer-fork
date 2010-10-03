@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -222,7 +223,15 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       } else {
         interval= RegexpInterval.getOnce();
       }
-      final Regexp<T> newOutRegexp= Regexp.<T>getAlternation(outStepRegexps, interval);
+      final Regexp<T> newOutRegexp;
+      // TODO anti loosing interval of token inside!
+      if (outStepRegexps.size() == 1) {
+        final Regexp<T> oldOutRegexp= outStepRegexps.get(0);
+        newOutRegexp= new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),
+          interval);
+      } else {
+        newOutRegexp= Regexp.<T>getAlternation(outStepRegexps, interval);
+      }
       final Step<Regexp<T>> newOutStep= new Step<Regexp<T>>(newOutRegexp, state, outBucketDestinationState, 1);
       this.reverseDelta.get(outBucketDestinationState).add(newOutStep);
       this.delta.get(state).add(newOutStep);

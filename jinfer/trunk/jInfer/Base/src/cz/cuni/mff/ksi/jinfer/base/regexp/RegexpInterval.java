@@ -36,13 +36,13 @@ public class RegexpInterval {
   private int max;
   private boolean unbounded;
 
-  public RegexpInterval(final int min, final int max) {
+  private RegexpInterval(final int min, final int max) {
     this.min= min;
     this.max= max;
     this.unbounded= false;
   }
 
-  public RegexpInterval(final int min) {
+  private RegexpInterval(final int min) {
     this.min= min;
     this.unbounded= true;
   }

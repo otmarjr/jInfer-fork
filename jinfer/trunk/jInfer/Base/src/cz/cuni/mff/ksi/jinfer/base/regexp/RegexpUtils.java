@@ -56,11 +56,6 @@ public final class RegexpUtils {
           return regexp;
         }
 
-        // Should contain at least one non-attribute (i.e. lambda).
-        if (nonAttributeChildren.isEmpty()) {
-          throw new IllegalStateException("Regexp has to contain at least one non-attribute child.");
-        }
-
         if (nonAttributeChildren.size() == 1) {
           return nonAttributeChildren.get(0);
         }

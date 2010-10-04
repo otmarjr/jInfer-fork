@@ -28,7 +28,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DTDUtils;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
 import java.util.ArrayList;
@@ -179,7 +178,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private String comboToString(final Regexp<AbstractNode> regexp, Character delimiter) {
-    if (!DTDUtils.containsPCDATA(regexp.getTokens())) {
+    if (!containsPCDATA(regexp.getTokens())) {
       return listToString(regexp.getChildren(), delimiter) +
               regexp.getInterval().toString();
     }
@@ -272,5 +271,17 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
     }
     return ret.toString();
+  }
+
+  /**
+   * Returns true if one of the supplied children is a PCDATA.
+   */
+  public static boolean containsPCDATA(final List<AbstractNode> children) {
+    for (final AbstractNode child : children) {
+      if (child.isSimpleData()) {
+        return true;
+      }
+    }
+    return false;
   }
 }

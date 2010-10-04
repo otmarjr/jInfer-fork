@@ -311,7 +311,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
         // TODO rio types of attributes
-        indentator.append("\" type=\"xs:string\"/>\n");
+        indentator.append("\" type=\"xs:string\"");
+
+        if (attribute.getMetadata().containsKey("required")) {
+          indentator.append(" use=\"required\"");
+          // By default attribute is not required.
+        }
+
+        indentator.append("/>\n");
       }
     }
   }

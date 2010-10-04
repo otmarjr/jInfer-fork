@@ -77,6 +77,10 @@ public class AutoEditor<T> {
    * @return if user picks exactly two states returns Pair of them otherwise null
    */
   public Pair<State<T>, State<T>> drawAutomatonToPickTwoStates(final Automaton<T> automaton) {
+    if (!AutoEditorTopComponent.getAskUser()) {
+      return null;
+    }
+
     final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
     final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
 
@@ -113,7 +117,7 @@ public class AutoEditor<T> {
         @Override
         public void run() {
           // Pass this as argument so the thread will be able to wake us up.
-          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(AutoEditor.this, visualizationViewer);
+          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(AutoEditor.this, visualizationViewer, "Please select two states to be merged together.");
         }
       });
 

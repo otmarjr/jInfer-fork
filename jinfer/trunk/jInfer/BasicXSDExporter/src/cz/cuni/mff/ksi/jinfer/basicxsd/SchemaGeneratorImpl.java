@@ -129,7 +129,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // Run recursion starting at the top element.
     indentator.indent("<!-- top level element -->\n");
-    processElement(preprocessor.getTopElement(), new RegexpInterval(MINOCCURS_DEFAULT, MAXOCCURS_DEFAULT));
+    processElement(preprocessor.getTopElement(), RegexpInterval.getBounded(MINOCCURS_DEFAULT, MAXOCCURS_DEFAULT));
 
     // Close XSD.
     indentator.indent("</xs:schema>");
@@ -419,7 +419,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         if (regexpWithoutAttrs.getChildren().size() == 2) {
           if (regexpWithoutAttrs.getChild(0).isLambda()) {
             if (regexpWithoutAttrs.getChild(1).isToken()) {
-              processToken(regexpWithoutAttrs.getChild(1).getContent(), new RegexpInterval(0, 1));
+              processToken(regexpWithoutAttrs.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
               return;
             }
           }

@@ -39,6 +39,7 @@ public final class AutoEditorTopComponent extends TopComponent {
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
   private static final String PREFERRED_ID = "AutoEditorTopComponent";
   private static final long serialVersionUID = 87543L;
+  private static boolean askUser = true;
   /**
    * Instance of AutoEditor which AutoEditor thread sleeps on.
    * When user interaction is done we should call notify() on this variable.
@@ -65,6 +66,8 @@ public final class AutoEditorTopComponent extends TopComponent {
     jScrollPane1 = new javax.swing.JScrollPane();
     jPanel1 = new javax.swing.JPanel();
     jButton1 = new javax.swing.JButton();
+    jLabel1 = new javax.swing.JLabel();
+    jCheckBox1 = new javax.swing.JCheckBox();
 
     jPanel1.setLayout(new java.awt.GridBagLayout());
     jScrollPane1.setViewportView(jPanel1);
@@ -76,6 +79,15 @@ public final class AutoEditorTopComponent extends TopComponent {
       }
     });
 
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(AutoEditorTopComponent.class, "AutoEditorTopComponent.jLabel1.text")); // NOI18N
+
+    org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(AutoEditorTopComponent.class, "AutoEditorTopComponent.jCheckBox1.text")); // NOI18N
+    jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jCheckBox1ActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -83,17 +95,25 @@ public final class AutoEditorTopComponent extends TopComponent {
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-          .addComponent(jButton1))
+          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(jButton1)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
+            .addComponent(jCheckBox1))
+          .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
         .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+        .addComponent(jLabel1)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jButton1)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jButton1)
+          .addComponent(jCheckBox1))
         .addContainerGap())
     );
   }// </editor-fold>//GEN-END:initComponents
@@ -129,18 +149,26 @@ public final class AutoEditorTopComponent extends TopComponent {
     jPanel1.repaint();*/
   }//GEN-LAST:event_jButton1ActionPerformed
 
-  public <T> void drawAutomatonBasicVisualizationServer(final AutoEditor autoEditorInstance, final BasicVisualizationServer<State<T>, Step<T>> bvs) {
+  private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+    askUser = false;
+  }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+  public <T> void drawAutomatonBasicVisualizationServer(final AutoEditor autoEditorInstance, final BasicVisualizationServer<State<T>, Step<T>> bvs, final String labelText) {
+    assert(askUser);
     this.autoEditorInstance = autoEditorInstance;
     jPanel1.removeAll();
     jPanel1.add(bvs);
     jPanel1.validate();
     jButton1.setEnabled(true);
+    jLabel1.setText(labelText);
     this.open();
     this.requestActive();
   }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;
+  private javax.swing.JCheckBox jCheckBox1;
+  private javax.swing.JLabel jLabel1;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JScrollPane jScrollPane1;
   // End of variables declaration//GEN-END:variables
@@ -205,5 +233,9 @@ public final class AutoEditorTopComponent extends TopComponent {
   @Override
   protected String preferredID() {
     return PREFERRED_ID;
+  }
+
+  public static boolean getAskUser() {
+    return askUser;
   }
 }

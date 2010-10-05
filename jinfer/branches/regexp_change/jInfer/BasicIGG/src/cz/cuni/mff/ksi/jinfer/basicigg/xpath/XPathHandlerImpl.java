@@ -76,7 +76,9 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     switch (axis) {
       case Axis.CHILD:
-        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>());
+        final Element newElement = Element.getMutable();
+        newElement.setName(localName);
+        newElement.getMetadata().put("from.query", Boolean.TRUE);
         if (lastElement != null) {
           lastElement.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(newElement));
           rules.add(lastElement);
@@ -174,6 +176,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       e.getSubnodes().setType(RegexpType.CONCATENATION);
       e.getSubnodes().setInterval(RegexpInterval.getOnce());
       e.getSubnodes().setImmutable();
+      e.setImmutable();
     }
 
     return rules;

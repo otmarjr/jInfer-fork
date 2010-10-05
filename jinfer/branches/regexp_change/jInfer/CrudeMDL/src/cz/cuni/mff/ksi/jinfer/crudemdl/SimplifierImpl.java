@@ -24,9 +24,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
@@ -34,11 +31,12 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
 import cz.cuni.mff.ksi.jinfer.crudemdl.properties.CrudeMDLPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -130,20 +128,21 @@ public class SimplifierImpl implements Simplifier {
                 getAttributeClusters(cluster.getRepresentant());
 
         for (Cluster<Attribute> attCluster : attributeClusters) {
-          RegexpInterval required= RegexpInterval.getOnce();
+          Attribute representant= attCluster.getRepresentant();
           if (attCluster.size() < cluster.size()) {
-            attCluster.getRepresentant().getMetadata().remove("required");
-            required= RegexpInterval.getOptional();
+            Map<String, Object> m= new HashMap<String, Object>(representant.getMetadata());
+            m.remove("required");
+            representant= new Attribute(representant.getContext(), representant.getName(), m, representant.getContentType(), representant.getContent());
           }
 
           for (Attribute instance : attCluster.getMembers()) {
             if (!instance.equals(attCluster.getRepresentant())) {
-              (attCluster.getRepresentant()).getContent().addAll(
+              representant.getContent().addAll(
                       instance.getContent());
             }
           }
 
-          attList.add(attCluster.getRepresentant());
+          attList.add(representant);
         }
       }
       // 4. add to rules

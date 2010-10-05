@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,26 +26,40 @@ import java.util.Map;
  *
  * @author anti
  */
-public class NamedAbstractNode implements NamedNode {
+public abstract class NamedAbstractNode implements NamedNode {
   /** Names of all elements along the path from root to this element (excluded). */
   private final List<String> context;
   /** Name of this node. */
-  private final String name;
+  private String name;
   /** List of unspecific attributes - metadata assigned to this node. */
   private final Map<String, Object> metadata;
+  protected boolean mutable;
+
+  protected NamedAbstractNode(final List<String> context,
+          final String name,
+          final Map<String, Object> metadata, boolean mutable) {
+    this.context = context;
+    this.name = name;
+    this.metadata = metadata;
+    this.mutable= mutable;
+  }
 
   public NamedAbstractNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata) {
-    this.context = context;
-    this.name = name;
-    this.metadata = metadata;
+    this(context, name, metadata, false);
   }
 
   // TODO vektor + anti immutable?
   @Override
   public List<String> getContext() {
-    return context;
+    if (context == null) {
+      return null;
+    }
+    if (mutable) {
+      return context;
+    }
+    return Collections.unmodifiableList(context);
   }
 
   @Override
@@ -52,10 +67,32 @@ public class NamedAbstractNode implements NamedNode {
     return name;
   }
 
+  public void setName(String name) {
+    if (mutable) {
+      this.name= name;
+    } else {
+      throw new IllegalStateException("Trying to change content of immutable NamedAbstractNode.");
+    }
+  }
+
   // TODO vektor + anti immutable?
   @Override
   public Map<String, Object> getMetadata() {
-    return metadata;
+    if (metadata == null) {
+      return null;
+    }
+    if (mutable) {
+      return metadata;
+    }
+    return Collections.unmodifiableMap(metadata);
+  }
+
+  public void setImmutable() {
+    if (this.mutable) {
+      this.mutable = false;
+    } else {
+      throw new IllegalStateException("Trying to set inmutable regexp, that is once inmutable.");
+    }
   }
 
   @Override

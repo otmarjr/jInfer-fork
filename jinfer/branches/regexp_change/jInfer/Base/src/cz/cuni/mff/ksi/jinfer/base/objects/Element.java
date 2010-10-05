@@ -82,14 +82,10 @@ public class Element extends StructuralAbstractNode {
 
   @Override
   public String toString() {
-    return getName();
-    /*
     final StringBuilder ret = new StringBuilder(super.toString());
     if (subnodes != null) {
       ret.append('\n').append(subnodes.toString());
     }
     return ret.toString();
-     *
-     */
   }
 }

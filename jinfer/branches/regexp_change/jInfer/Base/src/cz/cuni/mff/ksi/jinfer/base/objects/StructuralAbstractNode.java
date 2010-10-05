@@ -27,6 +27,12 @@ import java.util.Map;
 public abstract class StructuralAbstractNode extends NamedAbstractNode implements StructuralNode {
   public StructuralAbstractNode(final List<String> context,
           final String name,
+          final Map<String, Object> metadata, boolean mutable) {
+    super(context, name, metadata, mutable);
+  }
+
+  public StructuralAbstractNode(final List<String> context,
+          final String name,
           final Map<String, Object> metadata) {
     super(context, name, metadata);
   }

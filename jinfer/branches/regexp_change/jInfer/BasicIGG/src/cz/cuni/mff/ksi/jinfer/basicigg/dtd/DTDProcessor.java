@@ -91,8 +91,8 @@ public class DTDProcessor implements Processor {
   }
 
   private static Element processElement(final ElementType e) {
-    final Element ret = new Element(null, e.name.getLocalName(),
-            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.Attribute>());
+    List<cz.cuni.mff.ksi.jinfer.base.objects.Attribute> attList=
+            new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.Attribute>();
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
@@ -104,9 +104,14 @@ public class DTDProcessor implements Processor {
                 new cz.cuni.mff.ksi.jinfer.base.objects.Attribute(null,
                                 a.name.getLocalName(), nodeAttrs, null, 
                                 new ArrayList<String>(0));
-        ret.getAttributes().add(at);
+        attList.add(at);
       }
     }
+    final Element ret = Element.getMutable();
+    ret.setName(e.name.getLocalName());
+    ret.getMetadata().put("from.schema", Boolean.TRUE);
+    ret.getAttributes().addAll(attList);
+
     // for each subelement ditto
     if (e.children.size() > 0) {
       for (final Object oc : e.children.values()) {
@@ -127,6 +132,7 @@ public class DTDProcessor implements Processor {
     ret.getSubnodes().setType(RegexpType.CONCATENATION);
     ret.getSubnodes().setInterval(RegexpInterval.getOnce());
     ret.getSubnodes().setImmutable();
+    ret.setImmutable();
 
     return ret;
   }

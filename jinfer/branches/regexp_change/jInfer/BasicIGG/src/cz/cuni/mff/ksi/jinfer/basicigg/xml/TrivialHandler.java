@@ -77,8 +77,10 @@ public class TrivialHandler extends DefaultHandler {
       }
     }
 
-    final Element e = new Element(context, qName, null,
-            Regexp.<StructuralAbstractNode>getMutable(), elAttributes);
+    final Element e = Element.getMutable();
+    e.getContext().addAll(context);
+    e.setName(qName);
+    e.getAttributes().addAll(elAttributes);
 
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
@@ -105,6 +107,7 @@ public class TrivialHandler extends DefaultHandler {
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
     e.getSubnodes().setImmutable();
+    e.setImmutable();
     
     rules.add(end);
   }

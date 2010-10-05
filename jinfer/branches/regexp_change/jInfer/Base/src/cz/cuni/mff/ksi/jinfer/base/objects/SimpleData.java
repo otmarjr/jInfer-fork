@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +38,15 @@ public class SimpleData extends StructuralAbstractNode implements ContentNode {
           final Map<String, Object> metadata,
           final String contentType,
           final List<String> content) {
-    super(context, name, metadata);
+    this(context, name, metadata, contentType, content, false);
+  }
+
+  public SimpleData(final List<String> context,
+          final String name,
+          final Map<String, Object> metadata,
+          final String contentType,
+          final List<String> content, boolean mutable) {
+    super(context, name, metadata, mutable);
 
     if (content == null) {
       throw new IllegalArgumentException("Content must not be null");
@@ -44,6 +54,16 @@ public class SimpleData extends StructuralAbstractNode implements ContentNode {
 
     this.contentType = contentType;
     this.content = content;
+  }
+
+  public static NamedAbstractNode getMutable() {
+    return new SimpleData(new ArrayList<String>(),
+            null,
+            new HashMap<String, Object>(),
+            null,
+            new ArrayList<String>(),
+            true
+            );
   }
 
   @Override

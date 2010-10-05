@@ -18,8 +18,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,9 +39,26 @@ public class Element extends StructuralAbstractNode {
           final String name,
           final Map<String, Object> metadata,
           final Regexp<StructuralAbstractNode> subnodes, final List<Attribute> attributes) {
-    super(context, name, metadata);
+    this(context, name, metadata, subnodes, attributes, false);
+  }
+
+  private Element(final List<String> context,
+          final String name,
+          final Map<String, Object> metadata,
+          final Regexp<StructuralAbstractNode> subnodes, final List<Attribute> attributes, boolean mutable) {
+    super(context, name, metadata, mutable);
     this.subnodes = subnodes;
     this.attributes= attributes;
+  }
+
+  public static Element getMutable() {
+    return new Element(new ArrayList<String>(), 
+            null, 
+            new HashMap<String, Object>(),
+            Regexp.<StructuralAbstractNode>getMutable(),
+            new ArrayList<Attribute>(),
+            true
+            );
   }
 
   @Override
@@ -54,7 +71,13 @@ public class Element extends StructuralAbstractNode {
   }
 
   public List<Attribute> getAttributes() {
-    return attributes;
+    if (attributes == null) {
+      return null;
+    }
+    if (mutable) {
+      return attributes;
+    }
+    return Collections.unmodifiableList(attributes);
   }
 
   @Override

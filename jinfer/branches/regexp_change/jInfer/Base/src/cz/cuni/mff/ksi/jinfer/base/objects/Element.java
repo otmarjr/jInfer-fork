@@ -28,89 +28,33 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class Element extends AbstractNode {
+public class Element extends StructuralAbstractNode {
 
   /** List of all subnodes of this element, in the same order as in the
    * document. */
-  private final Regexp<AbstractNode> subnodes;
-  private final Regexp<AbstractNode> attributes;
+  private final Regexp<StructuralAbstractNode> subnodes;
+  private final List<Attribute> attributes;
 
   public Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<AbstractNode> subnodes, final Regexp<AbstractNode> attributes) {
+          final Regexp<StructuralAbstractNode> subnodes, final List<Attribute> attributes) {
     super(context, name, metadata);
     this.subnodes = subnodes;
     this.attributes= attributes;
   }
 
   @Override
-  public NodeType getType() {
-    return NodeType.ELEMENT;
+  public StructuralNodeType getType() {
+    return StructuralNodeType.ELEMENT;
   }
 
-  public Regexp<AbstractNode> getSubnodes() {
+  public Regexp<StructuralAbstractNode> getSubnodes() {
     return subnodes;
   }
 
-  public Regexp<AbstractNode> getAttributes() {
+  public List<Attribute> getAttributes() {
     return attributes;
-  }
-
-  // TODO exception when unknown regexptype
-
-  public List<Attribute> getElementAttributes() {
-    if (subnodes.isLambda()) {
-      return Collections.emptyList();
-    }
-    if (subnodes.isToken()) {
-      if (subnodes.getContent().isAttribute()) {
-        return Arrays.asList((Attribute) subnodes.getContent());
-      }
-      return Collections.emptyList();
-    }
-    final List<Attribute> ret= new ArrayList<Attribute>();
-    for (final Regexp<AbstractNode> r : getSubnodes().getChildren()) {
-      if (r.isToken() && NodeType.ATTRIBUTE.equals(r.getContent().getType())) {
-        ret.add((Attribute) r.getContent());
-      }
-    }
-    return ret;
-  }
-
-  /**
-   * Returns all attributes of this element.
-   * Note: does NOT return attributes of any subelements.
-   * Returned list is writable in the sense that method add() will work.
-   *
-   * @return All attributes of current element.
-   */
-  public List<Attribute> getElementAttributesMutable() {
-    final List<Attribute> ret = new ArrayList<Attribute>() {
-
-      private static final long serialVersionUID = 87451521l;
-
-      @Override
-      public boolean add(final Attribute att) {
-        boolean found = false;
-        for (final AbstractNode node : getSubnodes().getTokens()) {
-          if (NodeType.ATTRIBUTE.equals(node.getType())
-                  && att.getName().equals(node.getName())) {
-            found = true;
-          }
-        }
-        if (!found) {
-          getSubnodes().addChild(Regexp.<AbstractNode>getToken(att));
-        }
-        return super.add(att);
-      }
-    };
-    for (final AbstractNode node : getSubnodes().getTokens()) {
-      if (NodeType.ATTRIBUTE.equals(node.getType())) {
-        ret.add((Attribute) node);
-      }
-    }
-    return ret;
   }
 
   @Override

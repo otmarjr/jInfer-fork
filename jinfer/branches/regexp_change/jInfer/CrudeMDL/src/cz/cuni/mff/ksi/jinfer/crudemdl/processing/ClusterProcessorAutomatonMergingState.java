@@ -17,10 +17,11 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.KHContextMergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
@@ -45,31 +46,27 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<AbstractNode> {
+public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<StructuralAbstractNode> {
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
 
   @Override
-  public AbstractNode processCluster(final Clusterer<AbstractNode> clusterer, final Cluster<AbstractNode> cluster) throws InterruptedException {
+  public StructuralAbstractNode processCluster(final Clusterer<StructuralAbstractNode> clusterer, final Cluster<StructuralAbstractNode> cluster) throws InterruptedException {
     // 3.1 construct PTA
-    final Automaton<AbstractNode> automaton = new Automaton<AbstractNode>(true);
+    final Automaton<StructuralAbstractNode> automaton = new Automaton<StructuralAbstractNode>(true);
 
-    for (AbstractNode instance : cluster.getMembers()) {
+    for (StructuralAbstractNode instance : cluster.getMembers()) {
       final Element element = (Element) instance;
-      final Regexp<AbstractNode> rightSide= element.getSubnodes();
+      final Regexp<StructuralAbstractNode> rightSide= element.getSubnodes();
 
       if (!rightSide.isConcatenation()) {
         throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp.");
       }
 
-      final List<AbstractNode> rightSideTokens= rightSide.getTokens();
+      final List<StructuralAbstractNode> rightSideTokens= rightSide.getTokens();
 
-      final List<AbstractNode> symbolString= new LinkedList<AbstractNode>();
-      for (AbstractNode token : rightSideTokens) {
-        if (token.isAttribute()) {
-          LOG.debug(token);//TODO anti more exception:)
-          throw new IllegalArgumentException("Token in subnodes.");
-        }
-        symbolString.add( clusterer.getRepresentantForItem(token) );
+      final List<StructuralAbstractNode> symbolString= new LinkedList<StructuralAbstractNode>();
+      for (StructuralAbstractNode token : rightSideTokens) {
+        symbolString.add(clusterer.getRepresentantForItem(token) );
      }
       automaton.buildPTAOnSymbol(symbolString);
     }
@@ -78,24 +75,24 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(cluster.getRepresentant());
     LOG.debug(">>> PTA automaton:");
     LOG.debug(automaton);
-  //  LOG.debug("AUTO EDITOR: " + new AutoEditor<AbstractNode>().drawAutomaton(automaton));
+  //  LOG.debug("AUTO EDITOR: " + new AutoEditor<StructuralAbstractNode>().drawAutomaton(automaton));
 
     // 3.2 simplify by merging states
-    final AutomatonSimplifier<AbstractNode> automatonSimplifier= new GreedyAutomatonSimplifier<AbstractNode>();
-    final List<MergeCondidionTester<AbstractNode>> l= new ArrayList<MergeCondidionTester<AbstractNode>>();
-    l.add(new KHContextMergeConditionTester<AbstractNode>(2, 1));
-    final Automaton<AbstractNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton,  l);
+    final AutomatonSimplifier<StructuralAbstractNode> automatonSimplifier= new GreedyAutomatonSimplifier<StructuralAbstractNode>();
+    final List<MergeCondidionTester<StructuralAbstractNode>> l= new ArrayList<MergeCondidionTester<StructuralAbstractNode>>();
+    l.add(new KHContextMergeConditionTester<StructuralAbstractNode>(2, 1));
+    final Automaton<StructuralAbstractNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton,  l);
     LOG.debug(">>> After 2,1-context:");
     LOG.debug(simplifiedAutomaton);
 //    AutoEditor.drawAutomaton(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
-    final RegexpAutomaton<AbstractNode> regexpAutomaton= new RegexpAutomaton<AbstractNode>(simplifiedAutomaton);
+    final RegexpAutomaton<StructuralAbstractNode> regexpAutomaton= new RegexpAutomaton<StructuralAbstractNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
 //    AutoEditor.drawAutomaton(regexpAutomaton);
-    final RegexpAutomatonSimplifier<AbstractNode> regexpAutomatonSimplifier= new RegexpAutomatonSimplifierStateRemoval<AbstractNode>();
-    final Regexp<AbstractNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
+    final RegexpAutomatonSimplifier<StructuralAbstractNode> regexpAutomatonSimplifier= new RegexpAutomatonSimplifierStateRemoval<StructuralAbstractNode>();
+    final Regexp<StructuralAbstractNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
     LOG.debug(">>> And the regexp is:");
     LOG.debug(regexp);
     LOG.debug("--- End");
@@ -106,7 +103,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
           cluster.getRepresentant().getName(),
           cluster.getRepresentant().getMetadata(),
           regexp,
-          Regexp.<AbstractNode>getLambda()
+          new ArrayList<Attribute>()
           );
   }
 }

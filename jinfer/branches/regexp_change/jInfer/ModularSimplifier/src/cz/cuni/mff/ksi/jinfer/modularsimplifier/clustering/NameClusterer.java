@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 
 /**
  * Clusterer implementation in which two rules belong to the same cluster when
@@ -27,7 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
 public class NameClusterer extends AbstractClustererImpl {
 
   @Override
-  protected boolean clusters(final AbstractNode n, final AbstractNode first) {
+  protected boolean clusters(final StructuralAbstractNode n, final StructuralAbstractNode first) {
     return n.getName().equalsIgnoreCase(first.getName());
   }
 }

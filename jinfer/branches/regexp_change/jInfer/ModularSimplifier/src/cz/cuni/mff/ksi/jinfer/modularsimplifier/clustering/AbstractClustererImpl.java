@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -35,11 +35,11 @@ public abstract class AbstractClustererImpl implements Clusterer {
 
   @Override
   public List<Cluster> cluster(
-          final List<AbstractNode> initialGrammar) throws InterruptedException {
+          final List<StructuralAbstractNode> initialGrammar) throws InterruptedException {
     
     final List<Cluster> ret = new ArrayList<Cluster>();
 
-    for (final AbstractNode node : initialGrammar) {
+    for (final StructuralAbstractNode node : initialGrammar) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -54,7 +54,7 @@ public abstract class AbstractClustererImpl implements Clusterer {
       }
       if (!found) {
         // if n doesn't belong to any of the clusters, create a new one for it
-        final List<AbstractNode> l = new ArrayList<AbstractNode>(1);
+        final List<StructuralAbstractNode> l = new ArrayList<StructuralAbstractNode>(1);
         l.add(node);
         ret.add(new Cluster(node, l));
       }
@@ -66,7 +66,7 @@ public abstract class AbstractClustererImpl implements Clusterer {
   /**
    * Answers the question whether these two nodes belong to the same cluster.
    */
-  protected abstract boolean clusters(final AbstractNode n, final AbstractNode first);
+  protected abstract boolean clusters(final StructuralAbstractNode n, final StructuralAbstractNode first);
 
   private static void addNodeToCluster(final Element node,
           final Cluster cluster) {

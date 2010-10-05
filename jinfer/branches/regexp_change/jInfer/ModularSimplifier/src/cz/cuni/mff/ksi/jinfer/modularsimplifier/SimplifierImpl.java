@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.modularsimplifier.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -94,7 +94,7 @@ public class SimplifierImpl implements Simplifier {
   }
 
   @Override
-  public void start(final List<AbstractNode> initialGrammar,
+  public void start(final List<StructuralAbstractNode> initialGrammar,
           final SimplifierCallback callback) throws InterruptedException {
     final Properties properties = RunningProject.getActiveProjectProps(PropertiesPanel.NAME);
 
@@ -108,14 +108,14 @@ public class SimplifierImpl implements Simplifier {
             properties.getProperty(PropertiesPanel.RENDER,
             Boolean.toString(PropertiesPanel.RENDER_DEFAULT)));
 
-    final List<AbstractNode> mutableGrammar = getMutableGrammar(initialGrammar);
+    final List<StructuralAbstractNode> mutableGrammar = getMutableGrammar(initialGrammar);
 
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(mutableGrammar), render);
     final List<Cluster> clustered = getClusterer().cluster(mutableGrammar);
     RuleDisplayer.showClustersAsync("Clustered", new CloneHelper().cloneClusters(clustered), render);
-    final List<AbstractNode> processed = getClusterProcessor().processClusters(clustered);
+    final List<StructuralAbstractNode> processed = getClusterProcessor().processClusters(clustered);
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(processed), render);
-    final List<AbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
+    final List<StructuralAbstractNode> kleened = getKleeneProcessor().kleeneProcess(processed);
     RuleDisplayer.showRulesAsync("Kleened", new CloneHelper().cloneRules(kleened), render);
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
@@ -127,15 +127,15 @@ public class SimplifierImpl implements Simplifier {
   }
 
   // TODO vektor Share this logic
-  private List<AbstractNode> getMutableGrammar(final List<AbstractNode> initialGrammar) {
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>(initialGrammar.size());
+  private List<StructuralAbstractNode> getMutableGrammar(final List<StructuralAbstractNode> initialGrammar) {
+    final List<StructuralAbstractNode> ret = new ArrayList<StructuralAbstractNode>(initialGrammar.size());
 
-    for (final AbstractNode n : initialGrammar) {
+    for (final StructuralAbstractNode n : initialGrammar) {
       if (!(n instanceof Element)) {
         throw new IllegalArgumentException();
       }
       final Element e = (Element) n;
-      final Regexp<AbstractNode> r = Regexp.getMutable();
+      final Regexp<StructuralAbstractNode> r = Regexp.getMutable();
       if (e.getSubnodes().isToken()) {
         r.setContent(e.getSubnodes().getContent());
       } else {

@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import java.util.ArrayList;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
@@ -31,7 +31,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ClustererFactory.class)
 public class ClustererWithAttributesInameFactory implements ClustererFactory {
   @Override
-  public Clusterer<AbstractNode> create() {
+  public Clusterer<StructuralAbstractNode> create() {
     return new ClustererWithAttributesIname();
   }
 

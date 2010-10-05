@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ import java.util.List;
 public class ContextClusterer extends AbstractClustererImpl {
 
   @Override
-  protected boolean clusters(final AbstractNode n, final AbstractNode first) {
+  protected boolean clusters(final StructuralAbstractNode n, final StructuralAbstractNode first) {
     return first.getName().equalsIgnoreCase(n.getName())
             && equalContexts(first.getContext(), n.getContext());
   }

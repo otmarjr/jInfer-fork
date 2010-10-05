@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDDocumentElement;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.SAXAttributeData;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.SimpleDataTypes;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
@@ -46,9 +46,9 @@ class XSDSimpleHandler extends DefaultHandler {
   /** Stack of XSDDocumentElements to be used only internally for storing data and correct nesting */
   private final Stack<XSDDocumentElement> docElementStack = new Stack<XSDDocumentElement>();
   /** Rules that have been inferred so far. */
-  private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+  private final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
   /** HashMap of named complextypes, saved as templates for creating rules */
-  private final Map<String, Regexp<AbstractNode>> namedTypes = new HashMap<String, Regexp<AbstractNode>>();
+  private final Map<String, Regexp<StructuralAbstractNode>> namedTypes = new HashMap<String, Regexp<StructuralAbstractNode>>();
 
   private static final Logger LOG = Logger.getLogger(XSDProcessorSAX.class);
 /**
@@ -133,7 +133,7 @@ class XSDSimpleHandler extends DefaultHandler {
         int numChildren = namedTypes.get(name).getChildren().size();
         LOG.warn("\t" + name + "-" + namedTypes.get(name).getType().toString().toLowerCase() + " has " + numChildren + " children:");
         for (int i = 0; i < numChildren; i++) {
-          Regexp<AbstractNode> child = namedTypes.get(name).getChild(i);
+          Regexp<StructuralAbstractNode> child = namedTypes.get(name).getChild(i);
           if (child.getContent()==null) {
             LOG.warn("\t\t<unnamed> " + child.getType().toString().toLowerCase());
           } else {
@@ -146,7 +146,7 @@ class XSDSimpleHandler extends DefaultHandler {
     //TODO reseto take care of arguments
   }
 
-  List<AbstractNode> getRules() {
+  List<StructuralAbstractNode> getRules() {
     return rules;
   }
 
@@ -169,7 +169,7 @@ class XSDSimpleHandler extends DefaultHandler {
       elem.getMetadata().put("from.schema", Boolean.TRUE);
     }
     if (!contentStack.isEmpty()) {
-      contentStack.peek().getSubnodes().addChild(Regexp.<AbstractNode>getToken(elem));
+      contentStack.peek().getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(elem));
     }
     //TODO reseto reconsider this:
     //if (!docElementStack.isEmpty() && docElementStack.peek().getName().equalsIgnoreCase("schema")) {
@@ -296,7 +296,7 @@ class XSDSimpleHandler extends DefaultHandler {
       // now we have to add its contents as its parent's child
 
       if (docElement.isAssociated()) {
-        contentStack.peek().getSubnodes().addChild(Regexp.<AbstractNode>getToken(container));
+        contentStack.peek().getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(container));
       } else {
         contentStack.peek().getSubnodes().addChild(container.getSubnodes());
       }
@@ -352,20 +352,20 @@ class XSDSimpleHandler extends DefaultHandler {
     final List<String> context = getContext();
 
     if (docElement.getName().equalsIgnoreCase("sequence")) {
-      elem = new Element(context, name, metadata, Regexp.<AbstractNode>getConcatenation(new ArrayList<Regexp<AbstractNode>>()) );
+      elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getConcatenation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
     } else if (docElement.getName().equalsIgnoreCase("choice")) {
       //TODO reseto allow alternation
-      //elem = new Element(context, name, metadata, Regexp.<AbstractNode>getAlternation(new ArrayList<Regexp<AbstractNode>>()) );
-      elem = new Element(context, name, metadata, Regexp.<AbstractNode>getConcatenation(new ArrayList<Regexp<AbstractNode>>()) );
+      //elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getAlternation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
+      elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getConcatenation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
     } else if (docElement.getName().equalsIgnoreCase("all")) {
       //TODO reseto allow kleene
-      //elem = new Element(context, name, metadata, Regexp.<AbstractNode>getKleene(new ArrayList<Regexp<AbstractNode>>()) );
-      elem = new Element(context, name, metadata, Regexp.<AbstractNode>getConcatenation(new ArrayList<Regexp<AbstractNode>>()) );
+      //elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getKleene(new ArrayList<Regexp<StructuralAbstractNode>>()) );
+      elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getConcatenation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
     } else {
       // this in not a container, create element with regexp of any type,
       // it will be changed later to the correct one
       // TODO reseto Don't use getConcatenationMutable(), ask anti for help with new version of regexps:)
-      elem = new Element(context, name, metadata, Regexp.<AbstractNode>getConcatenationMutable());
+      elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getConcatenationMutable());
     }
         
     // push the current element to the stack with an empty rule

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vektor
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,18 +14,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Class representing a XML node (rule in grammar).
- * 
- * @author vektor
+ * TODO anti Comment!
+ *
+ * @author anti
  */
-public abstract class AbstractNode {
-
+public class NamedAbstractNode implements NamedNode {
   /** Names of all elements along the path from root to this element (excluded). */
   private final List<String> context;
   /** Name of this node. */
@@ -33,7 +33,7 @@ public abstract class AbstractNode {
   /** List of unspecific attributes - metadata assigned to this node. */
   private final Map<String, Object> metadata;
 
-  public AbstractNode(final List<String> context,
+  public NamedAbstractNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata) {
     this.context = context;
@@ -41,30 +41,21 @@ public abstract class AbstractNode {
     this.metadata = metadata;
   }
 
+  // TODO vektor + anti immutable?
+  @Override
   public List<String> getContext() {
     return context;
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
-  public abstract NodeType getType();
-
+  // TODO vektor + anti immutable?
+  @Override
   public Map<String, Object> getMetadata() {
     return metadata;
-  }
-
-  public boolean isElement() {
-    return NodeType.ELEMENT.equals(getType());
-  }
-
-  public boolean isAttribute() {
-    return NodeType.ATTRIBUTE.equals(getType());
-  }
-
-  public boolean isSimpleData() {
-    return NodeType.SIMPLE_DATA.equals(getType());
   }
 
   @Override
@@ -78,9 +69,6 @@ public abstract class AbstractNode {
     }
     // + name
     ret.append(name);
-    // type
-    ret.append(": ").append(getType());
     return ret.toString();
   }
-
 }

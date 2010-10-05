@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -38,7 +38,7 @@ public class NodePainter {
   /** Maximum nesting level. */
   private final int maxLevel;
   
-  private final List<AbstractNode> visited = new ArrayList<AbstractNode>();
+  private final List<StructuralAbstractNode> visited = new ArrayList<StructuralAbstractNode>();
 
   private final Graphics2D graphics;
 
@@ -58,7 +58,7 @@ public class NodePainter {
    * @return Image representation of this node. If the level is higher that the
    * threshold from configuration, an image of three dots is returned.
    */
-  public Image drawNode(final Regexp<AbstractNode> r, final int level) {
+  public Image drawNode(final Regexp<StructuralAbstractNode> r, final int level) {
     if (!r.isToken()) {
       throw new IllegalArgumentException("Can only draw TOKENs.");
     }
@@ -108,18 +108,18 @@ public class NodePainter {
     return ret;
   }
 
-  private Image drawSubnodes(final AbstractNode n, final int level) {
+  private Image drawSubnodes(final StructuralAbstractNode n, final int level) {
     if (!n.isElement()) {
       return null;
     }
-    final Regexp<AbstractNode> subnodes = ((Element)n).getSubnodes();
+    final Regexp<StructuralAbstractNode> subnodes = ((Element)n).getSubnodes();
     if (subnodes == null) {
       return null;
     }
     return drawRegexp(subnodes, level + 1);
   }
 
-  private Image drawRegexp(final Regexp<AbstractNode> subnodes, final int level) {
+  private Image drawRegexp(final Regexp<StructuralAbstractNode> subnodes, final int level) {
     if (level > maxLevel) {
       return Utils.DOTS;
     }
@@ -132,10 +132,10 @@ public class NodePainter {
     }
   }
 
-  private List<Image> getChildrenImages(final List<Regexp<AbstractNode>> children, final int level) {
+  private List<Image> getChildrenImages(final List<Regexp<StructuralAbstractNode>> children, final int level) {
     final List<Image> ret = new ArrayList<Image>(children.size());
     int count = 0;
-    for (final Regexp<AbstractNode> child : children) {
+    for (final Regexp<StructuralAbstractNode> child : children) {
       if (child.isLambda()) {
         ret.add(Utils.LAMBDA);
       }
@@ -150,7 +150,7 @@ public class NodePainter {
     return ret;
   }
 
-  private Image drawAlternation(final Regexp<AbstractNode> subnodes, final int level) {
+  private Image drawAlternation(final Regexp<StructuralAbstractNode> subnodes, final int level) {
     if (BaseUtils.isEmpty(subnodes.getChildren())) {
       return null;
     }
@@ -175,7 +175,7 @@ public class NodePainter {
     return altRet;
   }
 
-  private Image drawConcatenation(final Regexp<AbstractNode> subnodes, final int level) {
+  private Image drawConcatenation(final Regexp<StructuralAbstractNode> subnodes, final int level) {
     if (BaseUtils.isEmpty(subnodes.getChildren())) {
       return null;
     }
@@ -200,8 +200,8 @@ public class NodePainter {
     return concatRet;
   }
 
-  private boolean isVisited(final AbstractNode n) {
-    for (final AbstractNode v : visited) {
+  private boolean isVisited(final StructuralAbstractNode n) {
+    for (final StructuralAbstractNode v : visited) {
       if (v == n) {
         return true;
       }

@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -36,8 +36,8 @@ public class CPAlternations extends AbstractCPImpl {
   protected Element processCluster(
           final Cluster cluster) {
     
-    final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>();
-    for (final AbstractNode n : cluster.getContent()) {
+    final List<Regexp<StructuralAbstractNode>> children = new ArrayList<Regexp<StructuralAbstractNode>>();
+    for (final StructuralAbstractNode n : cluster.getContent()) {
       children.add(((Element) n).getSubnodes());
     }
     return new Element(null,

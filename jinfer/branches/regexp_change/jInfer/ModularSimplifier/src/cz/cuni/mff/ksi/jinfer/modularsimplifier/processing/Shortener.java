@@ -17,9 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +48,11 @@ public class Shortener {
   }
 
   @SuppressWarnings("PMD.MissingBreakInSwitch")
-  private Regexp<AbstractNode> simplify(final Regexp<AbstractNode> regexp) {
+  private Regexp<StructuralAbstractNode> simplify(final Regexp<StructuralAbstractNode> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
-        if (NodeType.ELEMENT.equals(regexp.getContent().getType())) {
-          return Regexp.<AbstractNode>getToken(simplify((Element)regexp.getContent()), regexp.getInterval());
+        if (StructuralNodeType.ELEMENT.equals(regexp.getContent().getType())) {
+          return Regexp.<StructuralAbstractNode>getToken(simplify((Element)regexp.getContent()), regexp.getInterval());
         }
         return regexp;
       case ALTERNATION:
@@ -60,11 +60,11 @@ public class Shortener {
         if (regexp.getChildren().size() == 1) {
           return simplify(regexp.getChild(0));
         }
-        final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>(regexp.getChildren().size());
-        for (final Regexp<AbstractNode> child : regexp.getChildren()) {
+        final List<Regexp<StructuralAbstractNode>> children = new ArrayList<Regexp<StructuralAbstractNode>>(regexp.getChildren().size());
+        for (final Regexp<StructuralAbstractNode> child : regexp.getChildren()) {
           children.add(simplify(child));
         }
-        return new Regexp<AbstractNode>(null, children, regexp.getType(), regexp.getInterval());
+        return new Regexp<StructuralAbstractNode>(null, children, regexp.getType(), regexp.getInterval());
       default: return regexp;
     }
   }

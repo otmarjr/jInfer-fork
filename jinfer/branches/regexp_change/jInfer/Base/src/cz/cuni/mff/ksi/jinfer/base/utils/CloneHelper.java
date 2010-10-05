@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
@@ -38,9 +38,9 @@ public class CloneHelper {
 
   private final Map<Element, Element> cloned = new HashMap<Element, Element>();
 
-  public List<AbstractNode> cloneRules(final List<AbstractNode> l) {
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>(l.size());
-    for (final AbstractNode n : l) {
+  public List<StructuralAbstractNode> cloneRules(final List<StructuralAbstractNode> l) {
+    final List<StructuralAbstractNode> ret = new ArrayList<StructuralAbstractNode>(l.size());
+    for (final StructuralAbstractNode n : l) {
       ret.add(cloneAbstractNode(n));
     }
     return ret;
@@ -72,7 +72,7 @@ public class CloneHelper {
 
     if (e.getSubnodes().isLambda()) {
       clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()),
-              cloneRegexp(e.getSubnodes()), cloneRegexp(e.getAttributes()));
+              cloneRegexp(e.getSubnodes()), cloneList(e.getAttributes()));
       cloned.put(e, clone);
       return clone;
     }
@@ -80,32 +80,34 @@ public class CloneHelper {
     clone = new Element(cloneList(e.getContext()), 
             String.valueOf(e.getName()),
             cloneMap(e.getMetadata()),
-            Regexp.<AbstractNode>getMutable(),
-            cloneRegexp(e.getAttributes()));
+            Regexp.<StructuralAbstractNode>getMutable(),
+            cloneList(e.getAttributes()));
     cloned.put(e, clone);
     clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
 
     if (e.getSubnodes().isToken()) {
       clone.getSubnodes().setType(RegexpType.TOKEN);
-      final AbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
+      final StructuralAbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
       clone.getSubnodes().setContent(clonedToken);
       clone.getSubnodes().setImmutable();
       return clone;
     }
 
     clone.getSubnodes().setType(e.getSubnodes().getType());
-    final Regexp<AbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
+    final Regexp<StructuralAbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
     clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
     clone.getSubnodes().setImmutable();
     return clone;
   }
 
-  private static List<String> cloneList(final List<String> l) {
+  private static <T> List<T> cloneList(final List<T> l) {
     if (l == null) {
       return null;
     }
-    return new ArrayList<String>(l);
+    return new ArrayList<T>(l);
   }
+
+
 
   private static Map<String, Object> cloneMap(final Map<String, Object> m) {
     if (m == null) {
@@ -119,31 +121,28 @@ public class CloneHelper {
     return ret;
   }
 
-  private Regexp<AbstractNode> cloneRegexp(final Regexp<AbstractNode> r) {
-    return new Regexp<AbstractNode>(
+  private Regexp<StructuralAbstractNode> cloneRegexp(final Regexp<StructuralAbstractNode> r) {
+    return new Regexp<StructuralAbstractNode>(
             cloneAbstractNode(r.getContent()),
             cloneChildren(r.getChildren()),
             r.getType(),
             r.getInterval());
   }
 
-  private List<Regexp<AbstractNode>> cloneChildren(final List<Regexp<AbstractNode>> c) {
+  private List<Regexp<StructuralAbstractNode>> cloneChildren(final List<Regexp<StructuralAbstractNode>> c) {
     if (c == null) {
       return null;
     }
-    final List<Regexp<AbstractNode>> ret = new ArrayList<Regexp<AbstractNode>>(c.size());
-    for (final Regexp<AbstractNode> r : c) {
+    final List<Regexp<StructuralAbstractNode>> ret = new ArrayList<Regexp<StructuralAbstractNode>>(c.size());
+    for (final Regexp<StructuralAbstractNode> r : c) {
       ret.add(cloneRegexp(r));
     }
     return ret;
   }
 
-  private AbstractNode cloneAbstractNode(final AbstractNode n) {
+  private StructuralAbstractNode cloneAbstractNode(final StructuralAbstractNode n) {
     if (n == null) {
       return null;
-    }
-    if (n instanceof Attribute) {
-      return cloneAttribute((Attribute) n);
     }
     if (n instanceof SimpleData) {
       return cloneSimpleData((SimpleData) n);

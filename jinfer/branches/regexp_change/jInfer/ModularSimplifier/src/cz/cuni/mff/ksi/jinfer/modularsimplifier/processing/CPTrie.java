@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 
@@ -35,7 +35,7 @@ public class CPTrie extends AbstractCPImpl {
     final Element representant = (Element) cluster.getRepresentant();
 
     // put every item from the cluster into the trie
-    for (final AbstractNode n : cluster.getContent()) {
+    for (final StructuralAbstractNode n : cluster.getContent()) {
       if (n != cluster.getRepresentant()) {
         TrieHelper.addBranchToTree(representant.getSubnodes(), ((Element) n).getSubnodes());
       }
@@ -47,7 +47,7 @@ public class CPTrie extends AbstractCPImpl {
 
   private static void verify(
           final Cluster cluster) {
-    for (final AbstractNode n : cluster.getContent()) {
+    for (final StructuralAbstractNode n : cluster.getContent()) {
       if (!n.isElement()) {
         throw new IllegalArgumentException("Element expected");
       }

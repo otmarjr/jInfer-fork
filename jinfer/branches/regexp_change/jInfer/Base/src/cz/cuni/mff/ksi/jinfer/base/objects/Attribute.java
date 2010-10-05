@@ -24,18 +24,46 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class Attribute extends AbstractContentNode<String> {
+public class Attribute extends NamedAbstractNode implements ContentNode {
+  /** Unspecific type of textual data. */
+  private final String contentType;
+  /** List of all data found in this node. If not aggregating, this list
+   * contains only one item. */
+  private final List<String> content;
 
   public Attribute(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
           final String contentType,
           final List<String> content) {
-    super(context, name, metadata, contentType, content);
+    super(context, name, metadata);
+
+    if (content == null) {
+      throw new IllegalArgumentException("Content must not be null");
+    }
+
+    this.contentType = contentType;
+    this.content = content;
+
   }
 
   @Override
-  public NodeType getType() {
-    return NodeType.ATTRIBUTE;
+  public String getContentType() {
+    return contentType;
+  }
+
+  @Override
+  public List<String> getContent() {
+    return content;
+  }
+
+  @Override
+  public String toString() {
+    final StringBuilder ret = new StringBuilder(super.toString());
+    ret.append('\n').append(contentType).append(": ");
+    for (final Object o : content) {
+      ret.append(o.toString()).append(' ');
+    }
+    return ret.toString();
   }
 }

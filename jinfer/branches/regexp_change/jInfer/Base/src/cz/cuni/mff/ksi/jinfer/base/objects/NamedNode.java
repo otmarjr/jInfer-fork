@@ -15,20 +15,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Factory interface for ClusterProcessor. Implementations should be annotated
+ * TODO anti Comment!
  *
- * \@ServiceProvider(service = ClusterProcessorFactory.class)
- *
- * to enable simplifier to find implementation by lookups.
- * 
  * @author anti
  */
-public interface ClusterProcessorFactory extends NamedModule {
-  ClusterProcessor<StructuralAbstractNode> create();
+public interface NamedNode {
+  List<String> getContext();
+  String getName();
+  Map<String, Object> getMetadata();
 }

@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -62,14 +62,14 @@ public class Runner {
   private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
 
     @Override
-    public void finished(final List<AbstractNode> grammar) {
+    public void finished(final List<StructuralAbstractNode> grammar) {
       Runner.this.finishedIGGenerator(grammar);
     }
   };
   private final SimplifierCallback simplCallback = new SimplifierCallback() {
 
     @Override
-    public void finished(final List<AbstractNode> grammar) {
+    public void finished(final List<StructuralAbstractNode> grammar) {
       Runner.this.finishedSimplifier(grammar);
     }
   };
@@ -114,7 +114,7 @@ public class Runner {
     }, "Retrieving IG");
   }
 
-  public void finishedIGGenerator(final List<AbstractNode> grammar) {
+  public void finishedIGGenerator(final List<StructuralAbstractNode> grammar) {
     LOG.info("Runner: initial grammar contains " + grammar.size()
             + " rules.");
 
@@ -134,7 +134,7 @@ public class Runner {
     }, "Inferring the schema");
   }
 
-  public void finishedSimplifier(final List<AbstractNode> grammar) {
+  public void finishedSimplifier(final List<StructuralAbstractNode> grammar) {
     LOG.info("Runner: simplified grammar contains " + grammar.size()
             + " rules.");
 

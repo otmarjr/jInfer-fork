@@ -16,10 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -46,9 +46,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class TrivialHandler extends DefaultHandler {
 
   /** Stack to hold currently open nodes. */
-  private final Stack<AbstractNode> stack = new Stack<AbstractNode>();
+  private final Stack<StructuralAbstractNode> stack = new Stack<StructuralAbstractNode>();
   /** Rules that have been inferred so far. */
-  private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+  private final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
 
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
@@ -59,9 +59,7 @@ public class TrivialHandler extends DefaultHandler {
 
     final List<String> context = getContext();
 
-    final Element e = new Element(context, qName, null, 
-            Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getMutable());
-
+    final List<Attribute> elAttributes= new ArrayList<Attribute>();
     if (attributes.getLength() > 0) {
       final List<String> attrContext = new ArrayList<String>(context);
       attrContext.add(qName);
@@ -75,14 +73,17 @@ public class TrivialHandler extends DefaultHandler {
         }
         final Attribute a = new Attribute(attrContext, attributes.getQName(i), 
                 metadata, null, content);
-        e.getAttributes().addChild(Regexp.<AbstractNode>getToken(a));
+        elAttributes.add(a);
       }
     }
 
+    final Element e = new Element(context, qName, null,
+            Regexp.<StructuralAbstractNode>getMutable(), elAttributes);
+
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
-    if (!stack.isEmpty() && (stack.peek().getType().equals(NodeType.ELEMENT))) {
-      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(e));
+    if (!stack.isEmpty() && (stack.peek().getType().equals(StructuralNodeType.ELEMENT))) {
+      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e));
     }
 
     // push the current element to the stack with an empty rule
@@ -95,7 +96,7 @@ public class TrivialHandler extends DefaultHandler {
     super.endElement(uri, localName, qName);
 
     // current element ends, it is time to give out its rule
-    final AbstractNode end = stack.pop();
+    final StructuralAbstractNode end = stack.pop();
 
     if (!end.getName().equals(qName)) {
       throw new IllegalArgumentException("unpaired element");
@@ -104,9 +105,6 @@ public class TrivialHandler extends DefaultHandler {
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
     e.getSubnodes().setImmutable();
-    e.getAttributes().setType(RegexpType.CONCATENATION);
-    e.getAttributes().setInterval(RegexpInterval.getOnce());
-    e.getAttributes().setImmutable();
     
     rules.add(end);
   }
@@ -118,7 +116,7 @@ public class TrivialHandler extends DefaultHandler {
     if (BaseUtils.isEmpty(text)) {
       return;
     }
-    if (stack.peek().getType().equals(NodeType.ELEMENT)) {
+    if (stack.peek().getType().equals(StructuralNodeType.ELEMENT)) {
       final SimpleData sd;
       if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
         sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
@@ -126,13 +124,13 @@ public class TrivialHandler extends DefaultHandler {
       else {
         sd = new SimpleData(getContext(), "simple data", null, null, Arrays.asList(""));
       }
-      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractNode>getToken(sd));
+      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(sd));
     } else {
       throw new IllegalArgumentException("Element expected");
     }
   }
 
-  public List<AbstractNode> getRules() {
+  public List<StructuralAbstractNode> getRules() {
     return rules;
   }
 

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
@@ -40,8 +40,8 @@ public final class TrieHelper {
    * @param tree Regular expression - concatenation representing a root node of a Trie.
    * @param branch Regular expression - concatenation representing a branch to be added to this trie.
    */
-  public static void addBranchToTree(final Regexp<AbstractNode> tree,
-          final Regexp<AbstractNode> branch) {
+  public static void addBranchToTree(final Regexp<StructuralAbstractNode> tree,
+          final Regexp<StructuralAbstractNode> branch) {
     if (!tree.isConcatenation()) {
       throw new IllegalArgumentException("Tree must be concatenation, is " + tree.getType() + " instead.");
     }
@@ -102,10 +102,10 @@ public final class TrieHelper {
         }
         // branch the tree here and add an empty concatenation (lambda)
         tree.branch(posTree);
-        final Regexp<AbstractNode> split = tree.getChild(posTree);
+        final Regexp<StructuralAbstractNode> split = tree.getChild(posTree);
         // some acrobacy to have the lambda as
         // the first element in the alternation
-        split.addChild(Regexp.<AbstractNode>getLambda());
+        split.addChild(Regexp.<StructuralAbstractNode>getLambda());
         split.addChild(split.getChild(0));
         split.getChildren().remove(0);
         return;
@@ -115,9 +115,9 @@ public final class TrieHelper {
       if (posTree >= tree.getChildren().size()) {
         // append a new alternation between all remaining items from
         // the branch and an empty concatenation (lambda) to tree
-        final Regexp<AbstractNode> altRE = Regexp.getMutable();
+        final Regexp<StructuralAbstractNode> altRE = Regexp.getMutable();
         altRE.setType(RegexpType.ALTERNATION);
-        altRE.addChild(Regexp.<AbstractNode>getLambda());
+        altRE.addChild(Regexp.<StructuralAbstractNode>getLambda());
         altRE.addChild(branch.getEnd(posBranch));
         altRE.setInterval(RegexpInterval.getOnce());
         tree.addChild(altRE);
@@ -134,7 +134,7 @@ public final class TrieHelper {
 
       if (tree.getChild(posTree).isAlternation()) {
         // walk all the items in the alternation
-        for (final Regexp<AbstractNode> alternated : tree.getChild(posTree).getChildren()) {
+        for (final Regexp<StructuralAbstractNode> alternated : tree.getChild(posTree).getChildren()) {
           if (alternated.getChildren().size() > 0
                   && BaseUtils.equalTokens(alternated.getChild(0),
                   branch.getChild(posBranch))) {

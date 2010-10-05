@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
@@ -68,12 +68,12 @@ public class DTDProcessor implements Processor {
    * @return List of IG rules retrieved from it.
    */
   @Override
-  public List<AbstractNode> process(final InputStream s) {
+  public List<StructuralAbstractNode> process(final InputStream s) {
     try {
       final DTDParser parser = new DTDParser();
       final DTD result = parser.parseExternalSubset(new InputSource(s), null);
 
-      final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+      final List<StructuralAbstractNode> ret = new ArrayList<StructuralAbstractNode>();
 
       for (final Object o : result.elementTypes.values()) {
         ret.add(processElement((ElementType) o));
@@ -92,7 +92,7 @@ public class DTDProcessor implements Processor {
 
   private static Element processElement(final ElementType e) {
     final Element ret = new Element(null, e.name.getLocalName(),
-            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<AbstractNode>getMutable(), Regexp.<AbstractNode>getMutable());
+            IGGUtils.ATTR_FROM_SCHEMA, Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.Attribute>());
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
@@ -104,7 +104,7 @@ public class DTDProcessor implements Processor {
                 new cz.cuni.mff.ksi.jinfer.base.objects.Attribute(null,
                                 a.name.getLocalName(), nodeAttrs, null, 
                                 new ArrayList<String>(0));
-        ret.getAttributes().addChild(Regexp.<AbstractNode>getToken(at));
+        ret.getAttributes().add(at);
       }
     }
     // for each subelement ditto
@@ -112,24 +112,21 @@ public class DTDProcessor implements Processor {
       for (final Object oc : e.children.values()) {
         final ElementType c = (ElementType) oc;
         final Element child = new Element(null, c.name.getLocalName(),
-                null, Regexp.<AbstractNode>getLambda(), Regexp.<AbstractNode>getLambda());
-        ret.getSubnodes().addChild(Regexp.<AbstractNode>getToken(child));
+                null, Regexp.<StructuralAbstractNode>getLambda(), new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.Attribute>());
+        ret.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(child));
       }
     }
 
     // if there is #PCDATA inside...
     if (e.contentType == ElementType.CONTENT_MIXED || e.contentType == ElementType.CONTENT_PCDATA) {
       ret.getSubnodes().addChild(
-              Regexp.<AbstractNode>getToken(
+              Regexp.<StructuralAbstractNode>getToken(
                     new SimpleData(null, null, null, null, new ArrayList<String>(0))));
     }
 
     ret.getSubnodes().setType(RegexpType.CONCATENATION);
     ret.getSubnodes().setInterval(RegexpInterval.getOnce());
     ret.getSubnodes().setImmutable();
-    ret.getAttributes().setType(RegexpType.CONCATENATION);
-    ret.getAttributes().setInterval(RegexpInterval.getOnce());
-    ret.getAttributes().setImmutable();
 
     return ret;
   }

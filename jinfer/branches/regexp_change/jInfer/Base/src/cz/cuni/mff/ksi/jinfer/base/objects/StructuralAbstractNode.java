@@ -17,31 +17,36 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * Representation of a cluster of rules.
- *  
+ * Class representing a XML node (rule in grammar).
+ * 
  * @author vektor
  */
-public class Cluster {
-
-  /** A rule that represents this cluster. Should be also contained in content. */
-  private final StructuralAbstractNode representant;
-  
-  /** Rules in this cluster. */
-  private final List<StructuralAbstractNode> content;
-
-  public Cluster(final StructuralAbstractNode representant, final List<StructuralAbstractNode> content) {
-    this.representant = representant;
-    this.content = content;
+public abstract class StructuralAbstractNode extends NamedAbstractNode implements StructuralNode {
+  public StructuralAbstractNode(final List<String> context,
+          final String name,
+          final Map<String, Object> metadata) {
+    super(context, name, metadata);
   }
 
-  public StructuralAbstractNode getRepresentant() {
-    return representant;
+  @Override
+  public abstract StructuralNodeType getType();
+
+  @Override
+  public boolean isElement() {
+    return StructuralNodeType.ELEMENT.equals(getType());
   }
 
-  public List<StructuralAbstractNode> getContent() {
-    return content;
+  @Override
+  public boolean isSimpleData() {
+    return StructuralNodeType.SIMPLE_DATA.equals(getType());
   }
 
+  // TODO super.toString()
+  @Override
+  public String toString() {
+    return super.toString() + ": " + getType().toString();
+  }
 }

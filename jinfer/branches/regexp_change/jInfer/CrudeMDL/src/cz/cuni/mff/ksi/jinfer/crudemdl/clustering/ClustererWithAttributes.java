@@ -60,7 +60,7 @@ import java.util.List;
  *
  * @author anti
  */
-public interface ClustererWithAttributes<T> extends Clusterer<T> {
+public interface ClustererWithAttributes<T, S> extends Clusterer<T> {
    /**
     * Returns all clusters of attributes for a given representant of cluster (for
     * a given element cluster defacto). Attributes have to be collected from
@@ -68,5 +68,5 @@ public interface ClustererWithAttributes<T> extends Clusterer<T> {
     * @param representant
     * @return
     */
-   List<Cluster<T>> getAttributeClusters(T representant);
+   List<Cluster<S>> getAttributeClusters(T representant);
 }

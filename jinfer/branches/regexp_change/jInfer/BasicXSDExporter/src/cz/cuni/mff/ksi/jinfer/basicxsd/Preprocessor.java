@@ -17,9 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,8 +169,8 @@ public final class Preprocessor {
     visited.add(root);
 
     occurrenceCounts.put(root.getName(), occurrenceCounts.get(root.getName()) + 1);
-    for (AbstractNode node : root.getSubnodes().getTokens()) {
-      if (node.getType().equals(NodeType.ELEMENT)) {
+    for (StructuralAbstractNode node : root.getSubnodes().getTokens()) {
+      if (node.getType().equals(StructuralNodeType.ELEMENT)) {
         countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()), visited);
       }
     }

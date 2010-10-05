@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
@@ -50,18 +50,18 @@ public class SimpleKPTest {
   public void testKleeneProcessOneRuleOneChild() {
     try {
       System.out.println("testKleeneProcessOneRuleOneChild");
-      final List<AbstractNode> rules = new ArrayList<AbstractNode>(1);
-      final Regexp<AbstractNode> subnodes = Regexp.getConcatenation(Arrays.asList(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenation()))));
-      final AbstractNode rule = new Element(null, "e1", null, subnodes);
+      final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>(1);
+      final Regexp<StructuralAbstractNode> subnodes = Regexp.getConcatenation(Arrays.asList(Regexp.getToken((StructuralAbstractNode) new Element(null, "e2", null, Regexp.<StructuralAbstractNode>getConcatenation()))));
+      final StructuralAbstractNode rule = new Element(null, "e1", null, subnodes);
       rules.add(rule);
-      final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
+      final List<StructuralAbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
       assertEquals(result.size(), 1);
-      final AbstractNode n = result.get(0);
-      assertEquals(NodeType.ELEMENT, n.getType());
+      final StructuralAbstractNode n = result.get(0);
+      assertEquals(StructuralNodeType.ELEMENT, n.getType());
       final Element e = (Element) n;
       assertNotNull(e.getSubnodes());
       assertEquals(RegexpType.TOKEN, e.getSubnodes().getType());
-      final AbstractNode n2 = e.getSubnodes().getContent();
+      final StructuralAbstractNode n2 = e.getSubnodes().getContent();
       assertElement(n2, "e2");
     } catch (InterruptedException ex) {
       fail("Interrupted");
@@ -72,14 +72,14 @@ public class SimpleKPTest {
   public void testKleeneProcessOneRuleMoreChildrenNoCollapse() {
     try {
       System.out.println("testKleeneProcessOneRuleMoreChildrenNoCollapse");
-      final List<AbstractNode> rules = new ArrayList<AbstractNode>();
-      final Regexp<AbstractNode> subnodes1 = Regexp.getConcatenation(Arrays.asList(Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenation())), Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())), Regexp.getToken((AbstractNode) new Element(null, "e4", null, Regexp.<AbstractNode>getConcatenation())), Regexp.getToken((AbstractNode) new Element(null, "e5", null, Regexp.<AbstractNode>getConcatenation())), Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation()))));
-      final AbstractNode rule1 = new Element(null, "e1", null, subnodes1);
+      final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
+      final Regexp<StructuralAbstractNode> subnodes1 = Regexp.getConcatenation(Arrays.asList(Regexp.getToken((StructuralAbstractNode) new Element(null, "e2", null, Regexp.<StructuralAbstractNode>getConcatenation())), Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())), Regexp.getToken((StructuralAbstractNode) new Element(null, "e4", null, Regexp.<StructuralAbstractNode>getConcatenation())), Regexp.getToken((StructuralAbstractNode) new Element(null, "e5", null, Regexp.<StructuralAbstractNode>getConcatenation())), Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation()))));
+      final StructuralAbstractNode rule1 = new Element(null, "e1", null, subnodes1);
       rules.add(rule1);
-      final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
+      final List<StructuralAbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
       assertEquals(1, result.size());
-      final AbstractNode n = result.get(0);
-      assertEquals(NodeType.ELEMENT, n.getType());
+      final StructuralAbstractNode n = result.get(0);
+      assertEquals(StructuralNodeType.ELEMENT, n.getType());
       final Element e = (Element) n;
       assertNotNull(e.getSubnodes());
       assertEquals(RegexpType.CONCATENATION, e.getSubnodes().getType());
@@ -98,13 +98,13 @@ public class SimpleKPTest {
   public void testKleeneProcessOneRuleMoreChildrenCollapse() {
     try {
       System.out.println("testKleeneProcessOneRuleMoreChildrenNoCollapse");
-      final List<AbstractNode> rules = new ArrayList<AbstractNode>();
-      final AbstractNode rule1 = new Element(null, "e1", null, getSubnodes0());
+      final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
+      final StructuralAbstractNode rule1 = new Element(null, "e1", null, getSubnodes0());
       rules.add(rule1);
-      final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
+      final List<StructuralAbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
       assertEquals(1, result.size());
-      final AbstractNode n = result.get(0);
-      assertEquals(NodeType.ELEMENT, n.getType());
+      final StructuralAbstractNode n = result.get(0);
+      assertEquals(StructuralNodeType.ELEMENT, n.getType());
       final Element e = (Element) n;
       assertNotNull(e.getSubnodes());
       assertEquals(RegexpType.CONCATENATION, e.getSubnodes().getType());
@@ -122,21 +122,21 @@ public class SimpleKPTest {
   @Test
   public void testKleeneProcessMoreRulesMoreChildren() {
     try {
-      final List<AbstractNode> rules = new ArrayList<AbstractNode>();
-      final AbstractNode rule1 = new Element(null, "e1", null, getSubnodes1());
+      final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
+      final StructuralAbstractNode rule1 = new Element(null, "e1", null, getSubnodes1());
       rules.add(rule1);
-      final AbstractNode rule2 = new Element(null, "ehm1", null, getSubnodes2());
+      final StructuralAbstractNode rule2 = new Element(null, "ehm1", null, getSubnodes2());
       rules.add(rule2);
-      final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
+      final List<StructuralAbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
       assertEquals(result.size(), 2);
-      final AbstractNode n0 = result.get(0);
-      assertEquals(NodeType.ELEMENT, n0.getType());
+      final StructuralAbstractNode n0 = result.get(0);
+      assertEquals(StructuralNodeType.ELEMENT, n0.getType());
       final Element e0 = (Element) n0;
       assertNotNull(e0.getSubnodes());
       assertEquals(RegexpType.CONCATENATION, e0.getSubnodes().getType());
       assertEquals(3, e0.getSubnodes().getChildren().size());
-      final AbstractNode n1 = result.get(1);
-      assertEquals(NodeType.ELEMENT, n1.getType());
+      final StructuralAbstractNode n1 = result.get(1);
+      assertEquals(StructuralNodeType.ELEMENT, n1.getType());
       final Element e1 = (Element) n1;
       assertNotNull(e1.getSubnodes());
       assertEquals(RegexpType.CONCATENATION, e1.getSubnodes().getType());
@@ -158,16 +158,16 @@ public class SimpleKPTest {
   public void testKleeneProcessEpic() {
     try {
       System.out.println("testKleeneProcessEpic");
-      final List<AbstractNode> rules = new ArrayList<AbstractNode>();
-      final AbstractNode rule1 = new Element(null, "rule1", null, getSubnodes0());
+      final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
+      final StructuralAbstractNode rule1 = new Element(null, "rule1", null, getSubnodes0());
       rules.add(rule1);
-      final Regexp<AbstractNode> subnodes2 = Regexp.getAlternation(Arrays.asList(getSubnodes1(), getSubnodes2()));
-      final AbstractNode rule2 = new Element(null, "rule2", null, subnodes2);
+      final Regexp<StructuralAbstractNode> subnodes2 = Regexp.getAlternation(Arrays.asList(getSubnodes1(), getSubnodes2()));
+      final StructuralAbstractNode rule2 = new Element(null, "rule2", null, subnodes2);
       rules.add(rule2);
-      final List<AbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
+      final List<StructuralAbstractNode> result = new SimpleKP(THRESHOLD).kleeneProcess(rules);
       assertEquals(result.size(), 2);
-      final AbstractNode n1 = result.get(0);
-      assertEquals(n1.getType(), NodeType.ELEMENT);
+      final StructuralAbstractNode n1 = result.get(0);
+      assertEquals(n1.getType(), StructuralNodeType.ELEMENT);
       final Element e1 = (Element) n1;
       assertNotNull(e1.getSubnodes());
       assertEquals(e1.getSubnodes().getType(), RegexpType.CONCATENATION);
@@ -177,14 +177,14 @@ public class SimpleKPTest {
       assertElement(e1.getSubnodes().getChild(1).getChild(0).getContent(), "e3");
       assertElement(e1.getSubnodes().getChild(2).getContent(), "e6");
       assertElement(e1.getSubnodes().getChild(3).getContent(), "e6");
-      final AbstractNode n2 = result.get(1);
-      assertEquals(n2.getType(), NodeType.ELEMENT);
+      final StructuralAbstractNode n2 = result.get(1);
+      assertEquals(n2.getType(), StructuralNodeType.ELEMENT);
       final Element e2 = (Element) n2;
       assertNotNull(e2.getSubnodes());
       assertEquals(e2.getSubnodes().getType(), RegexpType.ALTERNATION);
       assertEquals(e2.getSubnodes().getChildren().size(), 2);
-      final Regexp<AbstractNode> ch1 = e2.getSubnodes().getChild(0);
-      final Regexp<AbstractNode> ch2 = e2.getSubnodes().getChild(1);
+      final Regexp<StructuralAbstractNode> ch1 = e2.getSubnodes().getChild(0);
+      final Regexp<StructuralAbstractNode> ch2 = e2.getSubnodes().getChild(1);
       assertEquals(RegexpType.CONCATENATION, ch1.getType());
       assertEquals(RegexpType.CONCATENATION, ch2.getType());
       assertEquals(3, ch1.getChildren().size());
@@ -217,17 +217,17 @@ public class SimpleKPTest {
   public void testKleeneProcessError() {
     try {
       System.out.println("testKleeneProcessError");
-      final List<AbstractNode> rules = new ArrayList<AbstractNode>();
-      final Element b1 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
-      final Element b2 = new Element(null, "b", null, Regexp.<AbstractNode>getConcatenation());
-      b2.getSubnodes().addChild(Regexp.<AbstractNode>getToken(new SimpleData(null, "text", null, null, new ArrayList<String>())));
-      final List<Regexp<AbstractNode>> children = new ArrayList<Regexp<AbstractNode>>(2);
-      children.add(Regexp.<AbstractNode>getToken(b1));
-      children.add(Regexp.<AbstractNode>getToken(b2));
+      final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
+      final Element b1 = new Element(null, "b", null, Regexp.<StructuralAbstractNode>getConcatenation());
+      final Element b2 = new Element(null, "b", null, Regexp.<StructuralAbstractNode>getConcatenation());
+      b2.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(new SimpleData(null, "text", null, null, new ArrayList<String>())));
+      final List<Regexp<StructuralAbstractNode>> children = new ArrayList<Regexp<StructuralAbstractNode>>(2);
+      children.add(Regexp.<StructuralAbstractNode>getToken(b1));
+      children.add(Regexp.<StructuralAbstractNode>getToken(b2));
       final Element root = new Element(null, "root", null, Regexp.getConcatenation(children));
       rules.add(root);
       final KleeneProcessor kp = new SimpleKP(THRESHOLD);
-      final List<AbstractNode> processed = kp.kleeneProcess(rules);
+      final List<StructuralAbstractNode> processed = kp.kleeneProcess(rules);
       assertEquals(1, processed.size());
       assertElement(processed.get(0), "root");
       final Element root2 = (Element) processed.get(0);
@@ -239,7 +239,7 @@ public class SimpleKPTest {
       assertEquals(0, b12.getSubnodes().getChildren().size());
       assertEquals(0, b22.getSubnodes().getChildren().size());
       assertEquals(RegexpType.TOKEN, b22.getSubnodes().getType());
-      assertEquals(NodeType.SIMPLE_DATA, b22.getSubnodes().getContent().getType());
+      assertEquals(StructuralNodeType.SIMPLE_DATA, b22.getSubnodes().getContent().getType());
       final SimpleData sd = (SimpleData) b22.getSubnodes().getContent();
       assertEquals("text", sd.getName());
     } catch (InterruptedException ex) {
@@ -247,38 +247,38 @@ public class SimpleKPTest {
     }
   }
 
-  private static Regexp<AbstractNode> getSubnodes0() {
+  private static Regexp<StructuralAbstractNode> getSubnodes0() {
     return Regexp.getConcatenation(Arrays.asList(
-            Regexp.getToken((AbstractNode) new Element(null, "e2", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation()))));
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e2", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation()))));
   }
 
-  private static Regexp<AbstractNode> getSubnodes1() {
+  private static Regexp<StructuralAbstractNode> getSubnodes1() {
     return Regexp.getConcatenation(Arrays.asList(
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation()))));
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation()))));
   }
 
-  private static Regexp<AbstractNode> getSubnodes2() {
+  private static Regexp<StructuralAbstractNode> getSubnodes2() {
     return Regexp.getConcatenation(Arrays.asList(
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e3", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation())),
-            Regexp.getToken((AbstractNode) new Element(null, "e6", null, Regexp.<AbstractNode>getConcatenation()))));
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e3", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation())),
+            Regexp.getToken((StructuralAbstractNode) new Element(null, "e6", null, Regexp.<StructuralAbstractNode>getConcatenation()))));
   }
 
-  private static void assertElement(final AbstractNode n, final String expectedName) {
+  private static void assertElement(final StructuralAbstractNode n, final String expectedName) {
     assertNotNull(n);
-    assertEquals(NodeType.ELEMENT, n.getType());
+    assertEquals(StructuralNodeType.ELEMENT, n.getType());
     assertEquals(expectedName, n.getName());
   }
 }

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import java.util.List;
 
 /**
@@ -41,6 +41,6 @@ public interface SchemaGenerator extends NamedModule, Capabilities {
    *  returned to the caller by invoking the <code>finished()</code>
    *  method on this object.
    */
-  void start(final List<AbstractNode> grammar,
+  void start(final List<StructuralAbstractNode> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException;
 }

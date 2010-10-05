@@ -20,10 +20,10 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
@@ -79,12 +79,12 @@ public class SimplifierImpl implements Simplifier {
     return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR));
   }
 
-  private void verifyInput(final List<AbstractNode> initialGrammar) throws InterruptedException {
-    for (AbstractNode node : initialGrammar) {
+  private void verifyInput(final List<StructuralAbstractNode> initialGrammar) throws InterruptedException {
+    for (StructuralAbstractNode node : initialGrammar) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      if (!NodeType.ELEMENT.equals(node.getType())) {
+      if (!StructuralNodeType.ELEMENT.equals(node.getType())) {
         final StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
         sb.append(node.getType().toString());
         sb.append(" as left side.");
@@ -97,22 +97,22 @@ public class SimplifierImpl implements Simplifier {
   }
 
   @Override
-  public void start(final List<AbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+  public void start(final List<StructuralAbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
-    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
+//    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
     final ClustererFactory clustererFactory= this.getClustererFactory();
-    final Clusterer<AbstractNode> clusterer= clustererFactory.create();
+    final Clusterer<StructuralAbstractNode> clusterer= clustererFactory.create();
     clusterer.addAll(initialGrammar);
     clusterer.cluster();
 
     // 2. prepare emtpy final grammar
-    final List<AbstractNode> finalGrammar= new LinkedList<AbstractNode>();
+    final List<StructuralAbstractNode> finalGrammar= new LinkedList<StructuralAbstractNode>();
 
     // 3. process rules
-    final ClusterProcessor<AbstractNode> processor= this.getClusterProcessorFactory().create();
-    for (Cluster<AbstractNode> cluster : clusterer.getClusters()) {
+    final ClusterProcessor<StructuralAbstractNode> processor= this.getClusterProcessorFactory().create();
+    for (Cluster<StructuralAbstractNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -120,51 +120,44 @@ public class SimplifierImpl implements Simplifier {
         continue;// TODO anti ???
       }
 
-      final AbstractNode node =  processor.processCluster(clusterer, cluster);
+      final StructuralAbstractNode node =  processor.processCluster(clusterer, cluster);
 
       // 3.1 process attributes if supported
-      final List<Regexp<AbstractNode>> attTokens= new ArrayList<Regexp<AbstractNode>>();
+      final List<Attribute> attList= new ArrayList<Attribute>();
       if (clustererFactory.getCapabilities().contains("attributeClusters")) {
-        final List<Cluster<AbstractNode>> attributeClusters=
-                ((ClustererWithAttributes<AbstractNode>) clusterer).
+        final List<Cluster<Attribute>> attributeClusters=
+                ((ClustererWithAttributes<StructuralAbstractNode, Attribute>) clusterer).
                 getAttributeClusters(cluster.getRepresentant());
 
-        for (Cluster<AbstractNode> attCluster : attributeClusters) {
+        for (Cluster<Attribute> attCluster : attributeClusters) {
           RegexpInterval required= RegexpInterval.getOnce();
           if (attCluster.size() < cluster.size()) {
             attCluster.getRepresentant().getMetadata().remove("required");
             required= RegexpInterval.getOptional();
           }
 
-          for (AbstractNode instance : attCluster.getMembers()) {
-            assert instance.isAttribute();
-            if (instance.isAttribute()&&(!instance.equals(attCluster.getRepresentant()))) {
-              ((Attribute) attCluster.getRepresentant()).getContent().addAll(
-                      ((Attribute) instance).getContent());
+          for (Attribute instance : attCluster.getMembers()) {
+            if (!instance.equals(attCluster.getRepresentant())) {
+              (attCluster.getRepresentant()).getContent().addAll(
+                      instance.getContent());
             }
           }
 
-          attTokens.add(
-                  Regexp.<AbstractNode>getToken(attCluster.getRepresentant(), required)
-                  );
-
+          attList.add(attCluster.getRepresentant());
         }
       }
       // 4. add to rules
-      final Regexp<AbstractNode> attRegexp;
-      if (attTokens.isEmpty()) {
-        attRegexp= Regexp.<AbstractNode>getLambda();
-      } else {
-        attRegexp= Regexp.<AbstractNode>getConcatenation(attTokens);
+      StringBuilder sb= new StringBuilder(">>> Attributes are:");
+      for (Attribute att : attList) {
+        sb.append(att);
       }
-      LOG.debug(">>> Attributes regexp is:");
-      LOG.debug(attRegexp);
+      LOG.debug(sb);
       finalGrammar.add(
-              new Element(node.getContext(), node.getName(), node.getMetadata(), ((Element) node).getSubnodes(), attRegexp)
+              new Element(node.getContext(), node.getName(), node.getMetadata(), ((Element) node).getSubnodes(), attList)
               );
     }
 
-    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(  finalGrammar), true);
+//    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
     callback.finished( finalGrammar );
   }
 }

@@ -18,7 +18,10 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 /**
- * TODO anti Comment!
+ * Interface for nodes that form structure of document tree.
+ * That are elements and text nodes (classes Element and SimpleData).
+ *
+ * Contains isElement() and isSimpleData() functions to recognize actual instance.
  *
  * @author anti
  */

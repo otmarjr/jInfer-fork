@@ -110,12 +110,10 @@ public class SimplifierImpl implements Simplifier {
 
     // 3. process rules
     final ClusterProcessor<AbstractStructuralNode> processor= this.getClusterProcessorFactory().create();
+    // TODO anti getGrammarClusters
     for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
-      }
-      if (!cluster.getRepresentant().isElement()) {
-        continue;// TODO anti ???
       }
 
       final AbstractStructuralNode node =  processor.processCluster(clusterer, cluster);

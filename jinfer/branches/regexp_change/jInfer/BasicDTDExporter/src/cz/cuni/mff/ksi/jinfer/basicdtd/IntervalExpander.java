@@ -28,13 +28,29 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * TODO anti Comment!
+ * Class for recursive expanding of all intervals of regexps, that cannot be
+ * represented in DTD format. That is, interval in form {m, n}, where m > 0
+ * or n is not infinity (DTD has only ?, *, + intervals).
+ *
+ * Expansion is done recursively, every regexp in form
+ * a{m > 0, n} is replaced by regexp in form
+ * (a,a,a,a, ... (m-1 times),a{1,infinity})
+ * that is declaration
+ * <ELEMENT xxx (a,a,a,a, ... (m-1 times),a+)>
+ * in DTD language.
  *
  * @author anti
  */
 public class IntervalExpander {
   private final Set<Element> visited = new HashSet<Element>();
 
+
+  /**
+   * Given a tree base element, expands whole regepx tree underneath.
+   * Returns base of tree element, with expanded regexps.
+   * @param treeBase
+   * @return
+   */
   public Element expandIntervalsElement(final Element treeBase) {
     if (visited.contains(treeBase)) {
       return treeBase;

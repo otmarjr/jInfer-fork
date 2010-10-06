@@ -20,7 +20,9 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * Interface representing basic work cycle with nodes, that have content.
+ * It is used to work with content of text nodes (SimpleData) and attributes
+ * (Attribute)
  *
  * @author anti
  */

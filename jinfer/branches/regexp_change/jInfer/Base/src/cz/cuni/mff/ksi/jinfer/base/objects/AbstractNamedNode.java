@@ -22,7 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO anti Comment!
+ * Class implementing general features of all nodes in grammar structure.
+ * Holds information about name, context, and metadata.
+ *
+ * By default is immutable, children can implement getMutable() function, to enable
+ * creation of temporarily mutable instances, which have to be locked by
+ * calling setImmutable() after all fields are set properly.
  *
  * @author anti
  */
@@ -50,7 +55,6 @@ public abstract class AbstractNamedNode implements NamedNode {
     this(context, name, metadata, false);
   }
 
-  // TODO vektor + anti immutable?
   @Override
   public List<String> getContext() {
     if (context == null) {
@@ -75,7 +79,6 @@ public abstract class AbstractNamedNode implements NamedNode {
     }
   }
 
-  // TODO vektor + anti immutable?
   @Override
   public Map<String, Object> getMetadata() {
     if (metadata == null) {

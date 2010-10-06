@@ -146,7 +146,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @return
    */
   private String regexpToString(final Regexp<AbstractStructuralNode> regexp) {
-    // TODO anti Exception when r.getTokens contains attributes
     switch (regexp.getType()) {
       case LAMBDA:
         return "EMPTY";

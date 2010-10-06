@@ -109,15 +109,20 @@ public class DTDProcessor implements Processor {
     }
     final Element ret = Element.getMutable();
     ret.setName(e.name.getLocalName());
-    ret.getMetadata().put("from.schema", Boolean.TRUE);
+    ret.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
     ret.getAttributes().addAll(attList);
 
     // for each subelement ditto
     if (e.children.size() > 0) {
       for (final Object oc : e.children.values()) {
         final ElementType c = (ElementType) oc;
-        final Element child = new Element(null, c.name.getLocalName(),
-                null, Regexp.<StructuralAbstractNode>getLambda(), new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.Attribute>());
+        final Element child = Element.getMutable();
+        child.setName(c.name.getLocalName());
+        child.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
+        child.getSubnodes().setType(RegexpType.LAMBDA);
+        child.getSubnodes().setInterval(RegexpInterval.getOnce());
+        child.getSubnodes().setImmutable();
+        child.setImmutable();
         ret.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(child));
       }
     }

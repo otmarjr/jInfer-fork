@@ -59,7 +59,10 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<S
       final Regexp<StructuralAbstractNode> rightSide= element.getSubnodes();
 
       if (!rightSide.isConcatenation()) {
-        throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp.");
+        if (rightSide.isLambda()) {
+          continue;
+        }
+        throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp. It is " + element.getMutable().toString());
       }
 
       final List<StructuralAbstractNode> rightSideTokens= rightSide.getTokens();

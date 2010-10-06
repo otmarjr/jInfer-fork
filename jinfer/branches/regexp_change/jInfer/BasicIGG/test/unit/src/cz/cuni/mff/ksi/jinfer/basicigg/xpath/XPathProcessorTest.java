@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -36,7 +36,7 @@ public class XPathProcessorTest {
     System.out.println("processEmpty");
     final InputStream s = new ByteArrayInputStream("".getBytes());
     final XPathProcessor instance = new XPathProcessor();
-    final List<StructuralAbstractNode> result = instance.process(s);
+    final List<AbstractStructuralNode> result = instance.process(s);
     assertEquals(0, result.size());
   }
 
@@ -45,7 +45,7 @@ public class XPathProcessorTest {
     System.out.println("processEmptyComment");
     final InputStream s = new ByteArrayInputStream("# this is a comment".getBytes());
     final XPathProcessor instance = new XPathProcessor();
-    final List<StructuralAbstractNode> result = instance.process(s);
+    final List<AbstractStructuralNode> result = instance.process(s);
     assertEquals(0, result.size());
   }
 
@@ -80,7 +80,7 @@ public class XPathProcessorTest {
     System.out.println("processBasic");
     final InputStream s = new ByteArrayInputStream(ZOO.getBytes());
     final XPathProcessor instance = new XPathProcessor();
-    final List<StructuralAbstractNode> result = instance.process(s);
+    final List<AbstractStructuralNode> result = instance.process(s);
     assertEquals(ZOO_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, ZOO_RESULTS[i], result.get(i).toString());
@@ -105,7 +105,7 @@ public class XPathProcessorTest {
     System.out.println("testProcessDescendant");
     final InputStream s = new ByteArrayInputStream(CARS.getBytes());
     final XPathProcessor instance = new XPathProcessor();
-    final List<StructuralAbstractNode> result = instance.process(s);
+    final List<AbstractStructuralNode> result = instance.process(s);
     assertEquals(CARS_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, CARS_RESULTS[i], result.get(i).toString());
@@ -140,7 +140,7 @@ public class XPathProcessorTest {
     System.out.println("testProcessAttributes");
     final InputStream s = new ByteArrayInputStream(PEOPLE.getBytes());
     final XPathProcessor instance = new XPathProcessor();
-    final List<StructuralAbstractNode> result = instance.process(s);
+    final List<AbstractStructuralNode> result = instance.process(s);
     assertEquals(PEOPLE_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, PEOPLE_RESULTS[i], result.get(i).toString());
@@ -164,7 +164,7 @@ public class XPathProcessorTest {
     System.out.println("testProcessAttributes2");
     final InputStream s = new ByteArrayInputStream(PEOPLE2.getBytes());
     final XPathProcessor instance = new XPathProcessor();
-    final List<StructuralAbstractNode> result = instance.process(s);
+    final List<AbstractStructuralNode> result = instance.process(s);
     assertEquals(PEOPLE_RESULTS2.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, PEOPLE_RESULTS2[i], result.get(i).toString());
@@ -194,7 +194,7 @@ public class XPathProcessorTest {
     System.out.println("testProcessSimpleData");
     final InputStream s = new ByteArrayInputStream(BOOKS.getBytes());
     final XPathProcessor instance = new XPathProcessor();
-    final List<StructuralAbstractNode> result = instance.process(s);
+    final List<AbstractStructuralNode> result = instance.process(s);
     assertEquals(BOOKS_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, BOOKS_RESULTS[i], result.get(i).toString());

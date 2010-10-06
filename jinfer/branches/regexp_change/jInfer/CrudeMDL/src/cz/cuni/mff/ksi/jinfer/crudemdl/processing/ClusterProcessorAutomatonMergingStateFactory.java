@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -38,7 +38,7 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   }
 
   @Override
-  public ClusterProcessor<StructuralAbstractNode> create() {
+  public ClusterProcessor<AbstractStructuralNode> create() {
     return new ClusterProcessorAutomatonMergingState();
   }
 }

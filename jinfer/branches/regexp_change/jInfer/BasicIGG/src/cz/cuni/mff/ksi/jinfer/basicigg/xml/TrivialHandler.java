@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
@@ -46,9 +46,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class TrivialHandler extends DefaultHandler {
 
   /** Stack to hold currently open nodes. */
-  private final Stack<StructuralAbstractNode> stack = new Stack<StructuralAbstractNode>();
+  private final Stack<AbstractStructuralNode> stack = new Stack<AbstractStructuralNode>();
   /** Rules that have been inferred so far. */
-  private final List<StructuralAbstractNode> rules = new ArrayList<StructuralAbstractNode>();
+  private final List<AbstractStructuralNode> rules = new ArrayList<AbstractStructuralNode>();
 
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
@@ -86,7 +86,7 @@ public class TrivialHandler extends DefaultHandler {
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
     if (!stack.isEmpty() && (stack.peek().getType().equals(StructuralNodeType.ELEMENT))) {
-      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e));
+      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e));
     }
 
     // push the current element to the stack with an empty rule
@@ -99,7 +99,7 @@ public class TrivialHandler extends DefaultHandler {
     super.endElement(uri, localName, qName);
 
     // current element ends, it is time to give out its rule
-    final StructuralAbstractNode end = stack.pop();
+    final AbstractStructuralNode end = stack.pop();
 
     if (!end.getName().equals(qName)) {
       throw new IllegalArgumentException("unpaired element");
@@ -128,13 +128,13 @@ public class TrivialHandler extends DefaultHandler {
       else {
         sd = new SimpleData(getContext(), "simple data", null, null, Arrays.asList(""));
       }
-      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(sd));
+      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(sd));
     } else {
       throw new IllegalArgumentException("Element expected");
     }
   }
 
-  public List<StructuralAbstractNode> getRules() {
+  public List<AbstractStructuralNode> getRules() {
     return rules;
   }
 

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
@@ -38,9 +38,9 @@ public class CloneHelper {
 
   private final Map<Element, Element> cloned = new HashMap<Element, Element>();
 
-  public List<StructuralAbstractNode> cloneRules(final List<StructuralAbstractNode> l) {
-    final List<StructuralAbstractNode> ret = new ArrayList<StructuralAbstractNode>(l.size());
-    for (final StructuralAbstractNode n : l) {
+  public List<AbstractStructuralNode> cloneRules(final List<AbstractStructuralNode> l) {
+    final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>(l.size());
+    for (final AbstractStructuralNode n : l) {
       ret.add(cloneAbstractNode(n));
     }
     return ret;
@@ -68,7 +68,7 @@ public class CloneHelper {
       return cloned.get(e);
     }
 
-    final Element clone;
+    Element clone;
 
     if (e.getSubnodes().isLambda()) {
       clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()),
@@ -80,21 +80,21 @@ public class CloneHelper {
     clone = new Element(cloneList(e.getContext()), 
             String.valueOf(e.getName()),
             cloneMap(e.getMetadata()),
-            Regexp.<StructuralAbstractNode>getMutable(),
+            Regexp.<AbstractStructuralNode>getMutable(),
             cloneList(e.getAttributes()));
     cloned.put(e, clone);
     clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
 
     if (e.getSubnodes().isToken()) {
       clone.getSubnodes().setType(RegexpType.TOKEN);
-      final StructuralAbstractNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
+      final AbstractStructuralNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
       clone.getSubnodes().setContent(clonedToken);
       clone.getSubnodes().setImmutable();
       return clone;
     }
 
     clone.getSubnodes().setType(e.getSubnodes().getType());
-    final Regexp<StructuralAbstractNode> clonedRegexp = cloneRegexp(e.getSubnodes());
+    final Regexp<AbstractStructuralNode> clonedRegexp = cloneRegexp(e.getSubnodes());
     clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
     clone.getSubnodes().setImmutable();
     return clone;
@@ -121,26 +121,26 @@ public class CloneHelper {
     return ret;
   }
 
-  private Regexp<StructuralAbstractNode> cloneRegexp(final Regexp<StructuralAbstractNode> r) {
-    return new Regexp<StructuralAbstractNode>(
+  private Regexp<AbstractStructuralNode> cloneRegexp(final Regexp<AbstractStructuralNode> r) {
+    return new Regexp<AbstractStructuralNode>(
             cloneAbstractNode(r.getContent()),
             cloneChildren(r.getChildren()),
             r.getType(),
             r.getInterval());
   }
 
-  private List<Regexp<StructuralAbstractNode>> cloneChildren(final List<Regexp<StructuralAbstractNode>> c) {
+  private List<Regexp<AbstractStructuralNode>> cloneChildren(final List<Regexp<AbstractStructuralNode>> c) {
     if (c == null) {
       return null;
     }
-    final List<Regexp<StructuralAbstractNode>> ret = new ArrayList<Regexp<StructuralAbstractNode>>(c.size());
-    for (final Regexp<StructuralAbstractNode> r : c) {
+    final List<Regexp<AbstractStructuralNode>> ret = new ArrayList<Regexp<AbstractStructuralNode>>(c.size());
+    for (final Regexp<AbstractStructuralNode> r : c) {
       ret.add(cloneRegexp(r));
     }
     return ret;
   }
 
-  private StructuralAbstractNode cloneAbstractNode(final StructuralAbstractNode n) {
+  private AbstractStructuralNode cloneAbstractNode(final AbstractStructuralNode n) {
     if (n == null) {
       return null;
     }

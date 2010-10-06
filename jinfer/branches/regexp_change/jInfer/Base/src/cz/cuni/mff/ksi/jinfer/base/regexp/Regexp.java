@@ -37,6 +37,7 @@ import java.util.List;
  * </ul>
  *
  *
+ * @param <T>
  * @author vektor
  */
 public class Regexp<T> {
@@ -57,12 +58,12 @@ public class Regexp<T> {
    * @param interval
    */
   public Regexp(final T content,
-          final List<Regexp<T>> children, final RegexpType type, RegexpInterval interval) {
+          final List<Regexp<T>> children, final RegexpType type, final RegexpInterval interval) {
     this(content, children, type, interval, false);
   }
 
   private Regexp(final T content, final List<Regexp<T>> children,
-          final RegexpType type, RegexpInterval interval, boolean mutable) {
+          final RegexpType type, final RegexpInterval interval, final boolean mutable) {
     if (!mutable) {
       if (type == null) {
         throw new IllegalArgumentException("Type of regexp has to be non-null.");
@@ -113,7 +114,7 @@ public class Regexp<T> {
     return new Regexp<T>(null, null, RegexpType.LAMBDA, null);
   }
 
-  public static <T> Regexp<T> getToken(final T content, RegexpInterval interval) {
+  public static <T> Regexp<T> getToken(final T content, final RegexpInterval interval) {
     return new Regexp<T>(content, null, RegexpType.TOKEN, interval);
   }
 
@@ -121,7 +122,7 @@ public class Regexp<T> {
     return Regexp.<T>getToken(content, RegexpInterval.getOnce());
   }
 
-  public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children, RegexpInterval interval) {
+  public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children, final RegexpInterval interval) {
     if (children == null) {
       throw new IllegalArgumentException("Children of concatenation cannot be "
               + "null. Why would you like to create such concatenation?");
@@ -157,7 +158,7 @@ public class Regexp<T> {
     return getAlternation(children, RegexpInterval.getOnce());
   }
 
-  public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children, RegexpInterval interval) {
+  public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children, final RegexpInterval interval) {
     if (children == null) {
       throw new IllegalArgumentException("Children of permutation cannot be "
               + "null. Why would you like to create such permutation?");
@@ -195,7 +196,7 @@ public class Regexp<T> {
     }
   }
 
-  public void setType(RegexpType type) {
+  public void setType(final RegexpType type) {
     if (this.mutable) {
       this.type = type;
     } else {
@@ -207,7 +208,7 @@ public class Regexp<T> {
     return type;
   }
 
-  public void setInterval(RegexpInterval interval) {
+  public void setInterval(final RegexpInterval interval) {
     if (this.mutable) {
       this.interval = interval;
     } else {
@@ -389,7 +390,7 @@ public class Regexp<T> {
       newChildren.add(getChild(i));
     }
 
-    Regexp<T> ret= Regexp.<T>getMutable();
+    final Regexp<T> ret= Regexp.<T>getMutable();
     ret.getChildren().addAll(children);
     ret.setType(RegexpType.CONCATENATION);
     ret.setInterval(RegexpInterval.getOnce());

@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author anti
  */
-public abstract class NamedAbstractNode implements NamedNode {
+public abstract class AbstractNamedNode implements NamedNode {
   /** Names of all elements along the path from root to this element (excluded). */
   private final List<String> context;
   /** Name of this node. */
@@ -35,16 +35,16 @@ public abstract class NamedAbstractNode implements NamedNode {
   private final Map<String, Object> metadata;
   protected boolean mutable;
 
-  protected NamedAbstractNode(final List<String> context,
+  protected AbstractNamedNode(final List<String> context,
           final String name,
-          final Map<String, Object> metadata, boolean mutable) {
+          final Map<String, Object> metadata, final boolean mutable) {
     this.context = context;
     this.name = name;
     this.metadata = metadata;
     this.mutable= mutable;
   }
 
-  public NamedAbstractNode(final List<String> context,
+  public AbstractNamedNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata) {
     this(context, name, metadata, false);
@@ -67,7 +67,7 @@ public abstract class NamedAbstractNode implements NamedNode {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(final String name) {
     if (mutable) {
       this.name= name;
     } else {

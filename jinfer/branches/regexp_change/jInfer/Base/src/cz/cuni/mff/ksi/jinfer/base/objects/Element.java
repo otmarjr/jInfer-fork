@@ -28,24 +28,24 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class Element extends StructuralAbstractNode {
+public class Element extends AbstractStructuralNode {
 
   /** List of all subnodes of this element, in the same order as in the
    * document. */
-  private final Regexp<StructuralAbstractNode> subnodes;
+  private final Regexp<AbstractStructuralNode> subnodes;
   private final List<Attribute> attributes;
 
   public Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<StructuralAbstractNode> subnodes, final List<Attribute> attributes) {
+          final Regexp<AbstractStructuralNode> subnodes, final List<Attribute> attributes) {
     this(context, name, metadata, subnodes, attributes, false);
   }
 
   private Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<StructuralAbstractNode> subnodes, final List<Attribute> attributes, boolean mutable) {
+          final Regexp<AbstractStructuralNode> subnodes, final List<Attribute> attributes, final boolean mutable) {
     super(context, name, metadata, mutable);
     this.subnodes = subnodes;
     this.attributes= attributes;
@@ -55,7 +55,7 @@ public class Element extends StructuralAbstractNode {
     return new Element(new ArrayList<String>(), 
             null, 
             new HashMap<String, Object>(),
-            Regexp.<StructuralAbstractNode>getMutable(),
+            Regexp.<AbstractStructuralNode>getMutable(),
             new ArrayList<Attribute>(),
             true
             );
@@ -66,7 +66,7 @@ public class Element extends StructuralAbstractNode {
     return StructuralNodeType.ELEMENT;
   }
 
-  public Regexp<StructuralAbstractNode> getSubnodes() {
+  public Regexp<AbstractStructuralNode> getSubnodes() {
     return subnodes;
   }
 

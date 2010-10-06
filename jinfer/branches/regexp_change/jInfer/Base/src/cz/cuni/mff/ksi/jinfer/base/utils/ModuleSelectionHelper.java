@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

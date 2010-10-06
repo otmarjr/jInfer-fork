@@ -32,9 +32,9 @@ package cz.cuni.mff.ksi.jinfer.base.regexp;
  * @author anti
  */
 public class RegexpInterval {
-  private int min;
-  private int max;
-  private boolean unbounded;
+  private final int min;
+  private final int max;
+  private final boolean unbounded;
 
   public RegexpInterval(final int min, final int max) {
     this.min= min;
@@ -44,6 +44,7 @@ public class RegexpInterval {
 
   public RegexpInterval(final int min) {
     this.min= min;
+    this.max= -1;
     this.unbounded= true;
   }
 

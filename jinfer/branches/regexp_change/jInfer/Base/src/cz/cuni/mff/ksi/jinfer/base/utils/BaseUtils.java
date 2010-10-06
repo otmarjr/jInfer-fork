@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -99,8 +99,8 @@ public final class BaseUtils {
    * @return True, if tokens are equal in the sense described above. False otherwise.
    * @throws IllegalArgumentException When one of the regexps is not a token.
    */
-  public static boolean equalTokens(final Regexp<StructuralAbstractNode> t1,
-          final Regexp<StructuralAbstractNode> t2) {
+  public static boolean equalTokens(final Regexp<AbstractStructuralNode> t1,
+          final Regexp<AbstractStructuralNode> t2) {
     if (!t1.isToken() || !t2.isToken()) {
       throw new IllegalArgumentException();
     }

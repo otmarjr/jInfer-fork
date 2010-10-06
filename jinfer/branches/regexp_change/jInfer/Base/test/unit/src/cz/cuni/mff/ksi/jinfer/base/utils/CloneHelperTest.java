@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import java.util.Map;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -46,13 +46,13 @@ public class CloneHelperTest {
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull2() {
     System.out.println("cloneRulesNull2");
-    new CloneHelper().cloneRules(Arrays.<StructuralAbstractNode>asList(null));
+    new CloneHelper().cloneRules(Arrays.<AbstractStructuralNode>asList(null));
   }
 
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull3() {
     System.out.println("cloneRulesNull3");
-    new CloneHelper().cloneRules(Arrays.<StructuralAbstractNode>asList(new Element(null, "e", null, null, null), null));
+    new CloneHelper().cloneRules(Arrays.<AbstractStructuralNode>asList(new Element(null, "e", null, null, null), null));
   }
 
   @Test
@@ -62,19 +62,19 @@ public class CloneHelperTest {
     m.put("one", Integer.valueOf(1));
     m.put("two", Integer.valueOf(2));
 
-    final List<Regexp<StructuralAbstractNode>> altChildren = new ArrayList<Regexp<StructuralAbstractNode>>();
+    final List<Regexp<AbstractStructuralNode>> altChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
     altChildren.add(Regexp.getToken(
-            (StructuralAbstractNode) new Element(null, "e1", null, Regexp.<StructuralAbstractNode>getLambda(),
+            (AbstractStructuralNode) new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getLambda(),
             new ArrayList<Attribute>(0))));
 
-    final List<Regexp<StructuralAbstractNode>> children = new ArrayList<Regexp<StructuralAbstractNode>>();
+    final List<Regexp<AbstractStructuralNode>> children = new ArrayList<Regexp<AbstractStructuralNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((StructuralAbstractNode) new Element(null, "e2", null, Regexp.<StructuralAbstractNode>getLambda(), new ArrayList<Attribute>(0))));
+    children.add(Regexp.getToken((AbstractStructuralNode) new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getLambda(), new ArrayList<Attribute>(0))));
 
     final Element e = new Element(null, "e", m, Regexp.getConcatenation(children), new ArrayList<Attribute>(0));
-    final List<StructuralAbstractNode> l = new ArrayList<StructuralAbstractNode>(1);
+    final List<AbstractStructuralNode> l = new ArrayList<AbstractStructuralNode>(1);
     l.add(e);
-    final List<StructuralAbstractNode> result = new CloneHelper().cloneRules(l);
+    final List<AbstractStructuralNode> result = new CloneHelper().cloneRules(l);
 
     assertEquals(1, result.size());
     assert (l != result);
@@ -112,7 +112,7 @@ public class CloneHelperTest {
   public void testCloneClustersSmall() {
     System.out.println("cloneClustersSmall");
 
-    final List<StructuralAbstractNode> l = new ArrayList<StructuralAbstractNode>(1);
+    final List<AbstractStructuralNode> l = new ArrayList<AbstractStructuralNode>(1);
     l.add(null);
 
     final List<Cluster> clusters = new ArrayList<Cluster>();
@@ -131,15 +131,15 @@ public class CloneHelperTest {
     m.put("one", Integer.valueOf(1));
     m.put("two", Integer.valueOf(2));
 
-    final List<Regexp<StructuralAbstractNode>> altChildren = new ArrayList<Regexp<StructuralAbstractNode>>();
-    altChildren.add(Regexp.getToken((StructuralAbstractNode) new Element(null, "e1", null, Regexp.<StructuralAbstractNode>getLambda(), new ArrayList<Attribute>(0))));
+    final List<Regexp<AbstractStructuralNode>> altChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
+    altChildren.add(Regexp.getToken((AbstractStructuralNode) new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getLambda(), new ArrayList<Attribute>(0))));
 
-    final List<Regexp<StructuralAbstractNode>> children = new ArrayList<Regexp<StructuralAbstractNode>>();
+    final List<Regexp<AbstractStructuralNode>> children = new ArrayList<Regexp<AbstractStructuralNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((StructuralAbstractNode) new Element(null, "e2", null, Regexp.<StructuralAbstractNode>getLambda(), new ArrayList<Attribute>(0))));
+    children.add(Regexp.getToken((AbstractStructuralNode) new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getLambda(), new ArrayList<Attribute>(0))));
 
     final Element e = new Element(null, "e", m, Regexp.getConcatenation(children), new ArrayList<Attribute>(0));
-    final List<StructuralAbstractNode> l = new ArrayList<StructuralAbstractNode>(1);
+    final List<AbstractStructuralNode> l = new ArrayList<AbstractStructuralNode>(1);
     l.add(e);
 
     final List<Cluster> clusters = new ArrayList<Cluster>();
@@ -148,7 +148,7 @@ public class CloneHelperTest {
 
     assertEquals(1, result.size());
     assert (clusters != result);
-    final List<StructuralAbstractNode> otherList = result.get(0).getContent();
+    final List<AbstractStructuralNode> otherList = result.get(0).getContent();
     assert (l != otherList);
     final Element other = (Element) otherList.get(0);
     assert (e != other);
@@ -163,25 +163,25 @@ public class CloneHelperTest {
   public void testCycle() {
     System.out.println("cycle");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e2 = new Element(null, "e2", null, Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
+    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     e1.getSubnodes().addChild(
-            Regexp.<StructuralAbstractNode>getToken(e2)
+            Regexp.<AbstractStructuralNode>getToken(e2)
             );
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
     e1.getSubnodes().setImmutable();
     e2.getSubnodes().addChild(
-            Regexp.<StructuralAbstractNode>getToken(e1)
+            Regexp.<AbstractStructuralNode>getToken(e1)
             );
     e2.getSubnodes().setInterval(RegexpInterval.getOnce());
     e2.getSubnodes().setType(RegexpType.CONCATENATION);
     e2.getSubnodes().setImmutable();
 
 
-    final List<StructuralAbstractNode> l = new ArrayList<StructuralAbstractNode>(1);
+    final List<AbstractStructuralNode> l = new ArrayList<AbstractStructuralNode>(1);
     l.add(e1);
-    final List<StructuralAbstractNode> result = new CloneHelper().cloneRules(l);
+    final List<AbstractStructuralNode> result = new CloneHelper().cloneRules(l);
 
     assertEquals(1, result.size());
     final Element e1o = (Element) result.get(0);
@@ -198,16 +198,16 @@ public class CloneHelperTest {
   public void testCycleTokens() {
     System.out.println("cycleTokens");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e2 = new Element(null, "e2", null, Regexp.<StructuralAbstractNode>getToken(e1), new ArrayList<Attribute>(0));
+    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
+    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getToken(e1), new ArrayList<Attribute>(0));
     e1.getSubnodes().setContent(e2);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e1.getSubnodes().setType(RegexpType.TOKEN);
     e1.getSubnodes().setImmutable();
 
-    final List<StructuralAbstractNode> l = new ArrayList<StructuralAbstractNode>(1);
+    final List<AbstractStructuralNode> l = new ArrayList<AbstractStructuralNode>(1);
     l.add(e1);
-    final List<StructuralAbstractNode> result = new CloneHelper().cloneRules(l);
+    final List<AbstractStructuralNode> result = new CloneHelper().cloneRules(l);
 
     assertEquals(1, result.size());
     final Element e1o = (Element) result.get(0);

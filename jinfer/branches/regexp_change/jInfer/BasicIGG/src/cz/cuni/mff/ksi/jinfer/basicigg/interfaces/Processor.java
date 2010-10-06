@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.io.InputStream;
 import java.util.List;
@@ -46,5 +46,5 @@ public interface Processor {
    * @param s Input of any arbitrary type.
    * @return Rules contained within. Empty list if there are no rules or an error occurs.
    */
-  List<StructuralAbstractNode> process(final InputStream s);
+  List<AbstractStructuralNode> process(final InputStream s);
 }

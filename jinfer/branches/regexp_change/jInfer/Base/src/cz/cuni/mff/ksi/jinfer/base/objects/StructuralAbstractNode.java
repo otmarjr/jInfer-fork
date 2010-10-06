@@ -50,7 +50,6 @@ public abstract class StructuralAbstractNode extends NamedAbstractNode implement
     return StructuralNodeType.SIMPLE_DATA.equals(getType());
   }
 
-  // TODO super.toString()
   @Override
   public String toString() {
     return super.toString() + ": " + getType().toString();

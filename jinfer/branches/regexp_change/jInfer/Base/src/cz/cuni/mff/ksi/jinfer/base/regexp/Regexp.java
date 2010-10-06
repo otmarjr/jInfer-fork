@@ -51,7 +51,7 @@ public class Regexp<T> {
   private boolean mutable;
 
   /**
-   * Creates immutable regexp. TODO anti Comment more!
+   * Creates immutable regexp. This is the default.
    * @param content
    * @param children
    * @param type

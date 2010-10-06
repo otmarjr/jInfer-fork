@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO anti Comment!
+ * Interface representing general node in grammar structure.
  *
  * @author anti
  */

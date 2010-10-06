@@ -28,7 +28,10 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -106,8 +109,8 @@ public class AutoEditor<T> {
     visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
     visualizationViewer.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
 
-    final DefaultModalGraphMouse<State<T>, Step<T>> gm = new DefaultModalGraphMouse<State<T>, Step<T>>();
-    gm.setMode(ModalGraphMouse.Mode.PICKING);
+    final PluggableGraphMouse gm = new PluggableGraphMouse();
+    gm.add(new PickingUnlimitedGraphMousePlugin<State<T>, Step<T>>());
     visualizationViewer.setGraphMouse(gm);
 
     // Call GUI in a special thread. Required by NB.

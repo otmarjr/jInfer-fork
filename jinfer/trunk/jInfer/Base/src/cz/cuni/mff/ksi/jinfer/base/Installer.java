@@ -27,10 +27,7 @@ import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 import org.openide.modules.ModuleInstall;
-import org.openide.util.Exceptions;
-import org.openide.windows.IOColorLines;
 import org.openide.windows.IOColorPrint;
-import org.openide.windows.IOColors;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 

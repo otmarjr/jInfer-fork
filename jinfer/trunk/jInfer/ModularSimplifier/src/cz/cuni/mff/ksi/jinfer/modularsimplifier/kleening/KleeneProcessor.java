@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import java.util.List;
 
 /**
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public interface KleeneProcessor {
 
-  List<AbstractNode> kleeneProcess(final List<AbstractNode> rules)
+  List<StructuralAbstractNode> kleeneProcess(final List<StructuralAbstractNode> rules)
           throws InterruptedException;
 
 }

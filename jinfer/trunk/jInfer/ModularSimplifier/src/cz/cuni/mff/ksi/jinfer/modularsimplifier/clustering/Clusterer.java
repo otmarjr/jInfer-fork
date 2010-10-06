@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
@@ -31,6 +31,6 @@ import java.util.List;
 public interface Clusterer {
 
   List<Cluster> cluster(
-          final List<AbstractNode> initialGrammar) throws InterruptedException;
+          final List<StructuralAbstractNode> initialGrammar) throws InterruptedException;
 
 }

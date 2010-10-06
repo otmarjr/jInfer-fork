@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vektor
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,23 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import java.util.List;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
 /**
- * Interface defining a response to IGGenerator finishing its work.
+ * Interface for nodes that form structure of document tree.
+ * That are elements and text nodes (classes Element and SimpleData).
  *
- * @author vektor
+ * Contains isElement() and isSimpleData() functions to recognize actual instance.
+ *
+ * @author anti
  */
-public interface IGGeneratorCallback {
-
-  /**
-   * This method is called by a IGGenerator implementation, after it has
-   * finished its work.
-   *
-   * @param grammar Initial grammar as retrieved from input files.
-   */
-  void finished(final List<AbstractStructuralNode> grammar);
+public interface StructuralNode extends NamedNode {
+  StructuralNodeType getType();
+  boolean isElement();
+  boolean isSimpleData();
 }

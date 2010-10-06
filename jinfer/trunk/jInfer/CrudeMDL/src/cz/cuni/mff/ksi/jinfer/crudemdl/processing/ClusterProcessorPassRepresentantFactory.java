@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -29,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
 
   @Override
-  public ClusterProcessor<AbstractNode> create() {
+  public ClusterProcessor<AbstractStructuralNode> create() {
     return new ClusterProcessorPassRepresentant();
   }
 

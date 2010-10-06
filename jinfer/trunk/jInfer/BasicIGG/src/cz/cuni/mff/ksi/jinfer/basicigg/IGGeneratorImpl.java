@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.basicigg;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -65,7 +65,7 @@ public class IGGeneratorImpl implements IGGenerator {
   @Override
   public void start(final Input input, final IGGeneratorCallback callback)
           throws InterruptedException {
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+    final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
 
     // find processor mappings for all folders
     final Map<FolderType, Map<String, Processor>> registeredProcessors = getRegisteredProcessors();
@@ -89,13 +89,13 @@ public class IGGeneratorImpl implements IGGenerator {
    *
    * @return List of IG rules. Empty, if there are no input files or an error occurs.
    */
-  private static List<AbstractNode> getRulesFromInput(final Collection<File> files,
+  private static List<AbstractStructuralNode> getRulesFromInput(final Collection<File> files,
           final Map<String, Processor> mappings) throws InterruptedException {
     if (BaseUtils.isEmpty(files)) {
-      return new ArrayList<AbstractNode>(0);
+      return new ArrayList<AbstractStructuralNode>(0);
     }
 
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+    final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
 
     for (final File f : files) {
       if (Thread.interrupted()) {

@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
@@ -50,7 +50,7 @@ public class XSDProcessorSAX implements Processor {
   }
 
   @Override
-  public List<AbstractNode> process(InputStream stream) {
+  public List<StructuralAbstractNode> process(InputStream stream) {
     final XSDSimpleHandler handler = new XSDSimpleHandler();
     try {
       

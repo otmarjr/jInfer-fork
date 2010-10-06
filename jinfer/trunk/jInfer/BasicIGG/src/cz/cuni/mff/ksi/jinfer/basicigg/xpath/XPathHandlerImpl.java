@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
@@ -45,7 +45,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
   /** Rules that have been inferred so far. */
-  private final List<AbstractNode> rules = new ArrayList<AbstractNode>();
+  private final List<AbstractStructuralNode> rules = new ArrayList<AbstractStructuralNode>();
   /** The element we were looking at the last time. */
   private Element lastElement = null;
   /** Has lastElement already been written to output? */
@@ -76,9 +76,11 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     switch (axis) {
       case Axis.CHILD:
-        final Element newElement = new Element(null, localName, IGGUtils.ATTR_FROM_QUERY, Regexp.<AbstractNode>getMutable());
+        final Element newElement = Element.getMutable();
+        newElement.setName(localName);
+        newElement.getMetadata().put("from.query", Boolean.TRUE);
         if (lastElement != null) {
-          lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newElement));
+          lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newElement));
           rules.add(lastElement);
         }
         lastElement = newElement;
@@ -89,7 +91,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       case Axis.ATTRIBUTE:
         if (lastElement != null) {
           final Attribute newAttr = new Attribute(null, localName, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
-          lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newAttr));
+          lastElement.getAttributes().add(newAttr);
           lastAttribute = newAttr;
           rules.add(lastElement);
           dirty = false;
@@ -129,7 +131,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       } else {
         newSimpleData = new SimpleData(null, "simple data", IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
-      lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
+      lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
       isSimpleData = false;
@@ -151,7 +153,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       } else {
         newSimpleData = new SimpleData(null, "simple data", IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
-      lastElement.getSubnodes().addChild(Regexp.<AbstractNode>getToken(newSimpleData));
+      lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
     }
@@ -160,19 +162,21 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   /**
    * Returns the list of rules that were collected while parsing the query.
    */
-  public List<AbstractNode> getRules() {
-    //final List<AbstractNode> ret = new ArrayList<AbstractNode>();
+  public List<AbstractStructuralNode> getRules() {
+    //final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
     if (lastElement != null && dirty) {
       rules.add(lastElement);
     }
     lastElement = null;
     dirty = false;
 
-    for (AbstractNode node : rules) {
+    for (AbstractStructuralNode node : rules) {
       Element e = (Element) node;
 
       e.getSubnodes().setType(RegexpType.CONCATENATION);
       e.getSubnodes().setInterval(RegexpInterval.getOnce());
+      e.getSubnodes().setImmutable();
+      e.setImmutable();
     }
 
     return rules;

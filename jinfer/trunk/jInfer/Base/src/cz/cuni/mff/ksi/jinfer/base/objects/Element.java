@@ -18,8 +18,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,94 +28,64 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class Element extends AbstractNode {
+public class Element extends AbstractStructuralNode {
 
   /** List of all subnodes of this element, in the same order as in the
    * document. */
-  private final Regexp<AbstractNode> subnodes;
+  private final Regexp<AbstractStructuralNode> subnodes;
+  private final List<Attribute> attributes;
 
   public Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<AbstractNode> subnodes) {
-    super(context, name, metadata);
+          final Regexp<AbstractStructuralNode> subnodes, final List<Attribute> attributes) {
+    this(context, name, metadata, subnodes, attributes, false);
+  }
+
+  private Element(final List<String> context,
+          final String name,
+          final Map<String, Object> metadata,
+          final Regexp<AbstractStructuralNode> subnodes, final List<Attribute> attributes, final boolean mutable) {
+    super(context, name, metadata, mutable);
     this.subnodes = subnodes;
+    this.attributes= attributes;
+  }
+
+  public static Element getMutable() {
+    return new Element(new ArrayList<String>(), 
+            null, 
+            new HashMap<String, Object>(),
+            Regexp.<AbstractStructuralNode>getMutable(),
+            new ArrayList<Attribute>(),
+            true
+            );
   }
 
   @Override
-  public NodeType getType() {
-    return NodeType.ELEMENT;
+  public StructuralNodeType getType() {
+    return StructuralNodeType.ELEMENT;
   }
 
-  public Regexp<AbstractNode> getSubnodes() {
+  public Regexp<AbstractStructuralNode> getSubnodes() {
     return subnodes;
   }
 
-  // TODO exception when unknown regexptype
-  public List<Attribute> getElementAttributes() {
-    if (subnodes.isLambda()) {
-      return Collections.emptyList();
+  public List<Attribute> getAttributes() {
+    if (attributes == null) {
+      return null;
     }
-    if (subnodes.isToken()) {
-      if (subnodes.getContent().isAttribute()) {
-        return Arrays.asList((Attribute) subnodes.getContent());
-      }
-      return Collections.emptyList();
+    if (mutable) {
+      return attributes;
     }
-    final List<Attribute> ret= new ArrayList<Attribute>();
-    for (final Regexp<AbstractNode> r : getSubnodes().getChildren()) {
-      if (r.isToken() && NodeType.ATTRIBUTE.equals(r.getContent().getType())) {
-        ret.add((Attribute) r.getContent());
-      }
-    }
-    return ret;
-  }
-
-  /**
-   * Returns all attributes of this element.
-   * Note: does NOT return attributes of any subelements.
-   * Returned list is writable in the sense that method add() will work.
-   *
-   * @return All attributes of current element.
-   */
-  public List<Attribute> getElementAttributesMutable() {
-    final List<Attribute> ret = new ArrayList<Attribute>() {
-
-      private static final long serialVersionUID = 87451521l;
-
-      @Override
-      public boolean add(final Attribute att) {
-        boolean found = false;
-        for (final AbstractNode node : getSubnodes().getTokens()) {
-          if (NodeType.ATTRIBUTE.equals(node.getType())
-                  && att.getName().equals(node.getName())) {
-            found = true;
-          }
-        }
-        if (!found) {
-          getSubnodes().addChild(Regexp.<AbstractNode>getToken(att));
-        }
-        return super.add(att);
-      }
-    };
-    for (final AbstractNode node : getSubnodes().getTokens()) {
-      if (NodeType.ATTRIBUTE.equals(node.getType())) {
-        ret.add((Attribute) node);
-      }
-    }
-    return ret;
+    return Collections.unmodifiableList(attributes);
   }
 
   @Override
   public String toString() {
-    return getName();
-    /*
     final StringBuilder ret = new StringBuilder(super.toString());
     if (subnodes != null) {
       ret.append('\n').append(subnodes.toString());
     }
     return ret.toString();
-     *
-     */
   }
 }

@@ -123,13 +123,13 @@ public class Automaton<T> {
   public Automaton(final Automaton<T> anotherAutomaton) {
     this(false);
     
-    AutomatonCloner<T, T> cloner= new AutomatonCloner<T, T>();
+    final AutomatonCloner<T, T> cloner= new AutomatonCloner<T, T>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
             new
               AutomatonClonerSymbolConverter<T, T>() {
                 @Override
-                public T convertSymbol(T symbol) {
+                public T convertSymbol(final T symbol) {
                   return symbol;
                 }
               }
@@ -303,14 +303,14 @@ public class Automaton<T> {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("Automaton\n");
-    Comparator<State<T>> stateComparator= new Comparator<State<T>>() {
+    final Comparator<State<T>> stateComparator= new Comparator<State<T>>() {
       @Override
-      public int compare(State<T> o1, State<T> o2) {
+      public int compare(final State<T> o1, final State<T> o2) {
         return o1.getName() - o2.getName();
       }
     };
 
-    List<State<T>> deltaKeys= new ArrayList<State<T>>();
+    final List<State<T>> deltaKeys= new ArrayList<State<T>>();
     deltaKeys.addAll(this.delta.keySet());
     Collections.sort(deltaKeys, stateComparator);
     for (State<T> state: deltaKeys) {
@@ -325,7 +325,7 @@ public class Automaton<T> {
       }
     }
 
-    List<State<T>> reverseDeltaKeys= new ArrayList<State<T>>();
+    final List<State<T>> reverseDeltaKeys= new ArrayList<State<T>>();
     reverseDeltaKeys.addAll(this.reverseDelta.keySet());
     Collections.sort(reverseDeltaKeys, stateComparator);
     sb.append("reversed:\n");

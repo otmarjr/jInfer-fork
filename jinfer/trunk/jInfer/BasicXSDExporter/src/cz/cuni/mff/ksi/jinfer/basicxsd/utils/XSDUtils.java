@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
@@ -30,7 +30,7 @@ public final class XSDUtils {
   }
 
   public static TypeCategory getTypeCategory(final Element e) {
-    if (!e.getElementAttributes().isEmpty()) {
+    if (!e.getAttributes().isEmpty()) {
       return TypeCategory.COMPLEX;
     }
 
@@ -38,7 +38,7 @@ public final class XSDUtils {
       return TypeCategory.COMPLEX;
     }
     
-    Regexp<AbstractNode> subnodes = e.getSubnodes();
+    Regexp<AbstractStructuralNode> subnodes = e.getSubnodes();
 
     if (subnodes.isLambda()) {
       // TODO rio skutocne built-in??
@@ -46,11 +46,9 @@ public final class XSDUtils {
     }
 
     if (subnodes.isToken()) {
-      AbstractNode node = subnodes.getContent();
+      AbstractStructuralNode node = subnodes.getContent();
       switch (node.getType()) {
         case ELEMENT:
-          return TypeCategory.COMPLEX;
-        case ATTRIBUTE:
           return TypeCategory.COMPLEX;
         case SIMPLE_DATA:
           return TypeCategory.BUILTIN;
@@ -62,7 +60,7 @@ public final class XSDUtils {
        * A is CONCATENATION of 2 TOKENS which are SIMPLE_DATA
        */
       boolean allNodesSimpleData = true;
-      for (final Regexp<AbstractNode> node : subnodes.getChildren()) {
+      for (final Regexp<AbstractStructuralNode> node : subnodes.getChildren()) {
         if (!node.isToken() || !node.getContent().isSimpleData()) {
           allNodesSimpleData = false;
           break;
@@ -87,19 +85,17 @@ public final class XSDUtils {
   }
 
   public static boolean hasMixedContent(final Element e) {
-    final Regexp<AbstractNode> regexp = e.getSubnodes();
+    final Regexp<AbstractStructuralNode> regexp = e.getSubnodes();
 
     boolean hasSimpleData = false;
     boolean hasElements = false;
-    boolean hasAttributes = false;
+    boolean hasAttributes = !e.getAttributes().isEmpty();
 
-    for (final AbstractNode token : regexp.getTokens()) {
+    for (final AbstractStructuralNode token : regexp.getTokens()) {
       if (token.isSimpleData()) {
         hasSimpleData = true;
       } else if (token.isElement()) {
         hasElements = true;
-      } else if (token.isAttribute()) {
-        hasAttributes = true;
       }
     }
 

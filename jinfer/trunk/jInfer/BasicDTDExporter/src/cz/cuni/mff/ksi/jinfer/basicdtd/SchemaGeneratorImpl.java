@@ -19,11 +19,10 @@ package cz.cuni.mff.ksi.jinfer.basicdtd;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -53,14 +52,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private int maxEnumSize;
   private double minDefaultRatio;
 
-  // TODO anti Next input creates <!ELEMENT delay (PCDATA*)>
-  // <registration_status>
-//   <delay>7</delay>
-//   <delay>7</delay>
-//   <delay>7</delay>
-//   <delay>7</delay>
-//</registration_status>
-
   @Override
   public String getName() {
     return "Basic DTD exporter";
@@ -77,7 +68,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<AbstractNode> grammar,
+  public void start(final List<AbstractStructuralNode> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
 
     LOG.info("DTD Exporter: got " + grammar.size()
@@ -94,7 +85,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
-    for (final AbstractNode node : grammar) {
+    for (final AbstractStructuralNode node : grammar) {
       if (node.isElement()) {
         elements.add((Element) node);
       } else {
@@ -127,7 +118,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
     ret.append("<!ELEMENT ").append(e.getName()).append(' ');
-    Regexp<AbstractNode> regexp= RegexpUtils.omitAttributes(e.getSubnodes());
+    Regexp<AbstractStructuralNode> regexp= e.getSubnodes();
     if (regexp.isToken()) {
       ret.append("(");
     }
@@ -136,8 +127,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(")");
     }
     ret.append(">\n");
-    final List<Attribute> attributes = e.getElementAttributes();
-    if (!BaseUtils.isEmpty(attributes)) {
+    final List<Attribute> attributes = e.getAttributes();
+    if (!attributes.isEmpty()) {
       ret.append("<!ATTLIST ").append(e.getName()).append(' ').append(attributesToString(attributes)).
               append(">\n");
     }
@@ -154,8 +145,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @param topLevel
    * @return
    */
-  private String regexpToString(final Regexp<AbstractNode> regexp) {
-    // TODO anti Exception when r.getTokens contains attributes
+  private String regexpToString(final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
         return "EMPTY";
@@ -177,18 +167,30 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private String comboToString(final Regexp<AbstractNode> regexp, Character delimiter) {
+  /**
+   * Returns true if one of the supplied children is a PCDATA.
+   */
+  private boolean containsPCDATA(final List<AbstractStructuralNode> children) {
+    for (final AbstractStructuralNode child : children) {
+      if (child.isSimpleData()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private String comboToString(final Regexp<AbstractStructuralNode> regexp, Character delimiter) {
     if (!containsPCDATA(regexp.getTokens())) {
       return listToString(regexp.getChildren(), delimiter) +
               regexp.getInterval().toString();
     }
 
-    final List<AbstractNode> content = regexp.getTokens();
+    final List<AbstractStructuralNode> content = regexp.getTokens();
 
     Collections.sort(content,
-      new Comparator<AbstractNode>() {
+      new Comparator<AbstractStructuralNode>() {
           @Override
-          public int compare(final AbstractNode o1, final AbstractNode o2) {
+          public int compare(final AbstractStructuralNode o1, final AbstractStructuralNode o2) {
             if (o1.isSimpleData()) {
               return -1;
             }
@@ -200,11 +202,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
     );
 
-    final List<AbstractNode> distinctContent= BaseUtils.filter(content, new Predicate<AbstractNode>() {
+    final List<AbstractStructuralNode> distinctContent= BaseUtils.filter(content, new Predicate<AbstractStructuralNode>() {
       private Set<String> encountered= new HashSet<String>();
       private boolean encounteredSimpleData= false;
       @Override
-      public boolean apply(AbstractNode argument) {
+      public boolean apply(AbstractStructuralNode argument) {
         if (argument.isSimpleData()) {
           if (encounteredSimpleData) {
             return false;
@@ -223,22 +225,22 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return CollectionToString.colToString(
             distinctContent,
             '|',
-            new CollectionToString.ToString<AbstractNode>() {
+            new CollectionToString.ToString<AbstractStructuralNode>() {
               @Override
-              public String toString(final AbstractNode t) {
-                return regexpToString(Regexp.<AbstractNode>getToken(t));
+              public String toString(final AbstractStructuralNode t) {
+                return regexpToString(Regexp.<AbstractStructuralNode>getToken(t));
               }
             }) + "*";
   }
   
-  private String listToString(final List<Regexp<AbstractNode>> list,
+  private String listToString(final List<Regexp<AbstractStructuralNode>> list,
           final char separator) {
     return CollectionToString.colToString(
             list,
             separator,
-            new CollectionToString.ToString<Regexp<AbstractNode>>() {
+            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
                 @Override
-                public String toString(final Regexp<AbstractNode> t) {
+                public String toString(final Regexp<AbstractStructuralNode> t) {
                   return regexpToString(t);
                 }
             });
@@ -246,6 +248,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private String attributesToString(final List<Attribute> attributes) {
     final StringBuilder ret = new StringBuilder();
+    // TODO anti atributes better
     for (final Attribute attribute : attributes) {
       ret.append(attributeToString(attribute));
     }
@@ -271,17 +274,5 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
     }
     return ret.toString();
-  }
-
-  /**
-   * Returns true if one of the supplied children is a PCDATA.
-   */
-  public static boolean containsPCDATA(final List<AbstractNode> children) {
-    for (final AbstractNode child : children) {
-      if (child.isSimpleData()) {
-        return true;
-      }
-    }
-    return false;
   }
 }

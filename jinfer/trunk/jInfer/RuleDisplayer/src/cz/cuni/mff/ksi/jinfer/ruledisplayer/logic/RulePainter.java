@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -51,7 +51,7 @@ public class RulePainter {
   /**
    * Set the rules this painter will render.
    */
-  public void setRules(final List<AbstractNode> rules) {
+  public void setRules(final List<AbstractStructuralNode> rules) {
     this.image = drawRules(rules);
     root.setPreferredSize(new Dimension(image.getWidth(null), image.getHeight(null)));
     root.repaint();
@@ -90,12 +90,12 @@ public class RulePainter {
     g.drawImage(image, 0, 0, null);
   }
 
-  private Image drawRules(final List<AbstractNode> rules) {
+  private Image drawRules(final List<AbstractStructuralNode> rules) {
     if (rules == null) {
       return null;
     }
 
-    final List<AbstractNode> rulesUsed;
+    final List<AbstractStructuralNode> rulesUsed;
     final boolean rulesTrimmed;
     if (rules.size() > maxRules) {
       rulesUsed = rules.subList(0, maxRules);
@@ -111,7 +111,7 @@ public class RulePainter {
 
     final NodePainter np = new NodePainter((Graphics2D) root.getGraphics());
 
-    for (final AbstractNode a : rulesUsed) {
+    for (final AbstractStructuralNode a : rulesUsed) {
       final Image i = np.drawNode(Regexp.getToken(a, RegexpInterval.getOnce()), 0);
       ruleImgs.add(i);
       width = Math.max(width, i.getWidth(null));

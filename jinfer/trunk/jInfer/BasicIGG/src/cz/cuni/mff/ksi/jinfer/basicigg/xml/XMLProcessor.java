@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
@@ -50,7 +50,7 @@ public class XMLProcessor implements Processor {
   }
 
   @Override
-  public List<AbstractNode> process(final InputStream f) {
+  public List<AbstractStructuralNode> process(final InputStream f) {
 
     final TrivialHandler handler = new TrivialHandler();
     try {

@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,18 +26,68 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class SimpleData extends AbstractContentNode<String> {
+public class SimpleData extends AbstractStructuralNode implements ContentNode {
+  /** Unspecific type of textual data. */
+  private final String contentType;
+  /** List of all data found in this node. If not aggregating, this list
+   * contains only one item. */
+  private final List<String> content;
 
   public SimpleData(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
           final String contentType,
           final List<String> content) {
-    super(context, name, metadata, contentType, content);
+    this(context, name, metadata, contentType, content, false);
+  }
+
+  public SimpleData(final List<String> context,
+          final String name,
+          final Map<String, Object> metadata,
+          final String contentType,
+          final List<String> content, final boolean mutable) {
+    super(context, name, metadata, mutable);
+
+    if (content == null) {
+      throw new IllegalArgumentException("Content must not be null");
+    }
+
+    this.contentType = contentType;
+    this.content = content;
+  }
+
+  public static AbstractNamedNode getMutable() {
+    return new SimpleData(new ArrayList<String>(),
+            null,
+            new HashMap<String, Object>(),
+            null,
+            new ArrayList<String>(),
+            true
+            );
   }
 
   @Override
-  public NodeType getType() {
-    return NodeType.SIMPLE_DATA;
+  public StructuralNodeType getType() {
+    return StructuralNodeType.SIMPLE_DATA;
+  }
+
+  @Override
+  public String getContentType() {
+    return contentType;
+  }
+
+  @Override
+  public List<String> getContent() {
+    return content;
+  }
+
+  @Override
+  public String toString() {
+    final StringBuilder ret = new StringBuilder(super.toString());
+    ret.append('\n').append(contentType).append(": ");
+    for (final Object o : content) {
+      ret.append(o.toString()).append(' ');
+    }
+    return ret.toString();
   }
 }

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.ruledisplayer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
@@ -32,7 +32,7 @@ public final class RuleDisplayer {
   private RuleDisplayer() {
   }
 
-  public static void showRulesAsync(final String panelName, final List<AbstractNode> rules, final boolean render) {
+  public static void showRulesAsync(final String panelName, final List<AbstractStructuralNode> rules, final boolean render) {
     if (!render || BaseUtils.isEmpty(rules)) {
       return;
     }

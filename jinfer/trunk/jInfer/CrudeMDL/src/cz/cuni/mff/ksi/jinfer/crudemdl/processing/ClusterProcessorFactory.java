@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 
 /**
  * Factory interface for ClusterProcessor. Implementations should be annotated
@@ -30,5 +30,5 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
  * @author anti
  */
 public interface ClusterProcessorFactory extends NamedModule {
-  ClusterProcessor<AbstractNode> create();
+  ClusterProcessor<AbstractStructuralNode> create();
 }

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.modularsimplifier.kleening;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -43,12 +43,12 @@ public class SimpleKP implements KleeneProcessor {
   }
 
   @Override
-  public List<AbstractNode> kleeneProcess(final List<AbstractNode> rules) 
+  public List<StructuralAbstractNode> kleeneProcess(final List<StructuralAbstractNode> rules)
           throws InterruptedException {
     LOG.info("Simplifier: " + threshold + " and more repetitions will be collapsed to a Kleene star.");
 
-    final List<AbstractNode> ret = new ArrayList<AbstractNode>(rules.size());
-    for (final AbstractNode root : rules) {
+    final List<StructuralAbstractNode> ret = new ArrayList<StructuralAbstractNode>(rules.size());
+    for (final StructuralAbstractNode root : rules) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -62,15 +62,15 @@ public class SimpleKP implements KleeneProcessor {
     return ret;
   }
 
-  private Regexp<AbstractNode> processTree(final Regexp<AbstractNode> root) {
+  private Regexp<StructuralAbstractNode> processTree(final Regexp<StructuralAbstractNode> root) {
     switch (root.getType()) {
       case TOKEN:
         return root;
       case CONCATENATION:
         return processConcat(root);
       case ALTERNATION:
-        final List<Regexp<AbstractNode>> newChildren = new ArrayList<Regexp<AbstractNode>>(root.getChildren().size());
-        for (final Regexp<AbstractNode> branch : root.getChildren()) {
+        final List<Regexp<StructuralAbstractNode>> newChildren = new ArrayList<Regexp<StructuralAbstractNode>>(root.getChildren().size());
+        for (final Regexp<StructuralAbstractNode> branch : root.getChildren()) {
           newChildren.add(processConcat(branch));
         }
         return Regexp.getAlternation(newChildren);
@@ -79,24 +79,24 @@ public class SimpleKP implements KleeneProcessor {
     }
   }
 
-  private Regexp<AbstractNode> processConcat(final Regexp<AbstractNode> root) {
+  private Regexp<StructuralAbstractNode> processConcat(final Regexp<StructuralAbstractNode> root) {
     if (root.isToken()) {
       return root;
     }
     if (!root.isConcatenation()) {
       throw new IllegalArgumentException();
     }
-    final List<Regexp<AbstractNode>> retChildren = new ArrayList<Regexp<AbstractNode>>();
-    final List<Regexp<AbstractNode>> buffer = new ArrayList<Regexp<AbstractNode>>();
+    final List<Regexp<StructuralAbstractNode>> retChildren = new ArrayList<Regexp<StructuralAbstractNode>>();
+    final List<Regexp<StructuralAbstractNode>> buffer = new ArrayList<Regexp<StructuralAbstractNode>>();
 
     int i = 0;
-    Regexp<AbstractNode> last = null;
+    Regexp<StructuralAbstractNode> last = null;
     while (true) {
       if (i >= root.getChildren().size()) {
         closeGroup(buffer, retChildren);
         break;
       }
-      final Regexp<AbstractNode> current = root.getChild(i);
+      final Regexp<StructuralAbstractNode> current = root.getChild(i);
       if (equalTokenRegexps(last, current)) {
         // increment count
         buffer.add(current);
@@ -111,7 +111,7 @@ public class SimpleKP implements KleeneProcessor {
 
       i++;
     }
-    final Regexp<AbstractNode> r = Regexp.getMutable();
+    final Regexp<StructuralAbstractNode> r = Regexp.getMutable();
     r.setType(RegexpType.CONCATENATION);
     r.getChildren().addAll(retChildren);
     r.setInterval(RegexpInterval.getOnce());
@@ -119,8 +119,8 @@ public class SimpleKP implements KleeneProcessor {
     return r;
   }
 
-  private static boolean equalTokenRegexps(final Regexp<AbstractNode> last,
-          final Regexp<AbstractNode> current) {
+  private static boolean equalTokenRegexps(final Regexp<StructuralAbstractNode> last,
+          final Regexp<StructuralAbstractNode> current) {
     return last != null
             && current != null
             && last.isToken()
@@ -130,8 +130,8 @@ public class SimpleKP implements KleeneProcessor {
             && BaseUtils.equalTokens(last, current);
   }
 
-  private void closeGroup(final List<Regexp<AbstractNode>> buffer,
-          final List<Regexp<AbstractNode>> retChildren) {
+  private void closeGroup(final List<Regexp<StructuralAbstractNode>> buffer,
+          final List<Regexp<StructuralAbstractNode>> retChildren) {
     if (BaseUtils.isEmpty(buffer)) {
       return;
     }
@@ -140,7 +140,7 @@ public class SimpleKP implements KleeneProcessor {
       return;
     }
     // TODO vektor Accumulate!
-    retChildren.add(new Regexp<AbstractNode>(
+    retChildren.add(new Regexp<StructuralAbstractNode>(
             buffer.get(0).getContent(), null,
             RegexpType.TOKEN, RegexpInterval.getKleeneStar()));
   }

@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +55,8 @@ public final class TopologicalSort {
     visited.add(e);
 
     // visit all my subnodes
-    for (final AbstractNode node : e.getSubnodes().getTokens()) {
-      if (node.getType().equals(NodeType.ELEMENT)) {
+    for (final AbstractStructuralNode node : e.getSubnodes().getTokens()) {
+      if (node.getType().equals(StructuralNodeType.ELEMENT)) {
         visit((Element) node);
       }
       // links between input elements might be torn, try to visit others too

@@ -374,11 +374,13 @@ public final class WelcomeTopComponent extends TopComponent {
       final JFileChooser projectChooser = ProjectChooser.projectChooser();
       projectChooser.showOpenDialog(null);
       final File selectedFile = projectChooser.getSelectedFile();
-      final FileObject projectFileObject = FileUtil.toFileObject(selectedFile);
-      final Project project = ProjectManager.getDefault().findProject(projectFileObject);
-      final Project[] array = new Project[]{project};
-      OpenProjects.getDefault().open(array, false);
-      OpenProjects.getDefault().setMainProject(project);
+      if (selectedFile != null) {
+        final FileObject projectFileObject = FileUtil.toFileObject(selectedFile);
+        final Project project = ProjectManager.getDefault().findProject(projectFileObject);
+        final Project[] array = new Project[]{project};
+        OpenProjects.getDefault().open(array, false);
+        OpenProjects.getDefault().setMainProject(project);
+      }
     } catch (IOException ex) {
       Exceptions.printStackTrace(ex);
     } catch (IllegalArgumentException ex) {

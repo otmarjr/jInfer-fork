@@ -115,7 +115,9 @@ public class SimplifierImpl implements Simplifier {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-
+      if (cluster.getRepresentant().isSimpleData()) {
+        continue; //TODO anti heat point
+      }
       final AbstractStructuralNode node =  processor.processCluster(clusterer, cluster);
 
       // 3.1 process attributes if supported

@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import java.util.Collection;
@@ -39,26 +39,26 @@ import java.util.Map;
  *
  * @author anti
  */
-public class ClustererWithAttributesIname implements ClustererWithAttributes<StructuralAbstractNode, Attribute> {
-  private final List<Cluster<StructuralAbstractNode>> nodeClusters;
-  private final List<StructuralAbstractNode> items;
-  private final Map<StructuralAbstractNode, Clusterer<Attribute>> attributeClusterers;
+public class ClustererWithAttributesIname implements ClustererWithAttributes<AbstractStructuralNode, Attribute> {
+  private final List<Cluster<AbstractStructuralNode>> nodeClusters;
+  private final List<AbstractStructuralNode> items;
+  private final Map<AbstractStructuralNode, Clusterer<Attribute>> attributeClusterers;
 
   public ClustererWithAttributesIname() {
-    this.nodeClusters= new LinkedList<Cluster<StructuralAbstractNode>>();
-    this.items= new LinkedList<StructuralAbstractNode>();
-    this.attributeClusterers= new HashMap<StructuralAbstractNode, Clusterer<Attribute>>();
+    this.nodeClusters= new LinkedList<Cluster<AbstractStructuralNode>>();
+    this.items= new LinkedList<AbstractStructuralNode>();
+    this.attributeClusterers= new HashMap<AbstractStructuralNode, Clusterer<Attribute>>();
   }
 
-  private StructuralAbstractNode addNode(final StructuralAbstractNode item) throws InterruptedException {
-    final Iterator<Cluster<StructuralAbstractNode>> iterator= this.nodeClusters.iterator();
+  private AbstractStructuralNode addNode(final AbstractStructuralNode item) throws InterruptedException {
+    final Iterator<Cluster<AbstractStructuralNode>> iterator= this.nodeClusters.iterator();
 
     while (iterator.hasNext()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      final Cluster<StructuralAbstractNode> cluster= iterator.next();
-      final StructuralAbstractNode representant= cluster.getRepresentant();
+      final Cluster<AbstractStructuralNode> cluster= iterator.next();
+      final AbstractStructuralNode representant= cluster.getRepresentant();
       if (item.isSimpleData()&&representant.isSimpleData()) {
         cluster.add(item);
         return representant;
@@ -72,27 +72,27 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Str
       }
     }
     this.nodeClusters.add(
-            new Cluster<StructuralAbstractNode>(item)
+            new Cluster<AbstractStructuralNode>(item)
             );
     return item;
   }
 
   @Override
-  public void add(final StructuralAbstractNode item) {
+  public void add(final AbstractStructuralNode item) {
     this.items.add(item);
   }
 
   @Override
-  public void addAll(final Collection<StructuralAbstractNode> items){
+  public void addAll(final Collection<AbstractStructuralNode> items){
     this.items.addAll(items);
   }
 
   @Override
   public void cluster() throws InterruptedException {
-    for (StructuralAbstractNode node : items) {
-      final StructuralAbstractNode representant= this.addNode(node);
+    for (AbstractStructuralNode node : items) {
+      final AbstractStructuralNode representant= this.addNode(node);
       if (node.isElement()&&(node instanceof Element)) {
-        for (StructuralAbstractNode subNode: ((Element) node).getSubnodes().getTokens()) {
+        for (AbstractStructuralNode subNode: ((Element) node).getSubnodes().getTokens()) {
           this.addNode(subNode);
         }
         for (Attribute attribute : ((Element) node).getAttributes()) {
@@ -103,15 +103,15 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Str
         }
       }
     }
-    for (StructuralAbstractNode rep : this.attributeClusterers.keySet()) {
+    for (AbstractStructuralNode rep : this.attributeClusterers.keySet()) {
       this.attributeClusterers.get(rep).cluster();
     }
     this.items.clear();
   }
 
   @Override
-  public StructuralAbstractNode getRepresentantForItem(final StructuralAbstractNode item) {
-    for (Cluster<StructuralAbstractNode> cluster : this.nodeClusters) {
+  public AbstractStructuralNode getRepresentantForItem(final AbstractStructuralNode item) {
+    for (Cluster<AbstractStructuralNode> cluster : this.nodeClusters) {
       if (cluster.isMember(item)) {
         return cluster.getRepresentant();
       }
@@ -120,12 +120,12 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Str
   }
 
   @Override
-  public List<Cluster<StructuralAbstractNode>> getClusters() {
+  public List<Cluster<AbstractStructuralNode>> getClusters() {
     return Collections.unmodifiableList(this.nodeClusters);
   }
 
   @Override
-  public List<Cluster<Attribute>> getAttributeClusters(final StructuralAbstractNode representant) {
+  public List<Cluster<Attribute>> getAttributeClusters(final AbstractStructuralNode representant) {
     if (this.attributeClusterers.containsKey(representant)) {
       return Collections.unmodifiableList(this.attributeClusterers.get(representant).getClusters());
     }

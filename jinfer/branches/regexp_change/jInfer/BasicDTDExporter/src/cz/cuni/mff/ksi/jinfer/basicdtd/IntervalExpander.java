@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.basicdtd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -59,44 +59,44 @@ public class IntervalExpander {
     return false;
   }
 
-  private Regexp<StructuralAbstractNode> expandIntervalsRegexp(final Regexp<StructuralAbstractNode> regexp) {
+  private Regexp<AbstractStructuralNode> expandIntervalsRegexp(final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
         return regexp;
       case TOKEN:
         if (StructuralNodeType.ELEMENT.equals(regexp.getContent().getType())) {
-          StructuralAbstractNode expandedContent= expandIntervalsElement((Element) regexp.getContent());
+          AbstractStructuralNode expandedContent= expandIntervalsElement((Element) regexp.getContent());
 
           if (isSafeInterval(regexp.getInterval())) {
-            return Regexp.<StructuralAbstractNode>getToken(expandedContent, regexp.getInterval());
+            return Regexp.<AbstractStructuralNode>getToken(expandedContent, regexp.getInterval());
           }
 
-          List<Regexp<StructuralAbstractNode>> l= new ArrayList<Regexp<StructuralAbstractNode>>();
+          List<Regexp<AbstractStructuralNode>> l= new ArrayList<Regexp<AbstractStructuralNode>>();
           for (int i = 0; i < regexp.getInterval().getMin() - 1; i++) {
-            l.add(Regexp.<StructuralAbstractNode>getToken(expandedContent));
+            l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent));
           }
-          l.add(Regexp.<StructuralAbstractNode>getToken(expandedContent, RegexpInterval.getKleeneCross()));
-          return Regexp.<StructuralAbstractNode>getConcatenation(l);
+          l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent, RegexpInterval.getKleeneCross()));
+          return Regexp.<AbstractStructuralNode>getConcatenation(l);
         }
-        return Regexp.<StructuralAbstractNode>getToken(regexp.getContent()); // nullying any intervals in simple data and attributes!
+        return Regexp.<AbstractStructuralNode>getToken(regexp.getContent()); // nullying any intervals in simple data and attributes!
       case ALTERNATION:
       case CONCATENATION:
       case PERMUTATION:
-        final List<Regexp<StructuralAbstractNode>> children = new ArrayList<Regexp<StructuralAbstractNode>>(regexp.getChildren().size());
-        for (final Regexp<StructuralAbstractNode> child : regexp.getChildren()) {
+        final List<Regexp<AbstractStructuralNode>> children = new ArrayList<Regexp<AbstractStructuralNode>>(regexp.getChildren().size());
+        for (final Regexp<AbstractStructuralNode> child : regexp.getChildren()) {
           children.add(expandIntervalsRegexp(child));
         }
 
         if (isSafeInterval(regexp.getInterval())) {
-         return new Regexp<StructuralAbstractNode>(null, children, regexp.getType(), regexp.getInterval());
+         return new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), regexp.getInterval());
         }
 
-        List<Regexp<StructuralAbstractNode>> m= new ArrayList<Regexp<StructuralAbstractNode>>();
+        List<Regexp<AbstractStructuralNode>> m= new ArrayList<Regexp<AbstractStructuralNode>>();
         for (int i = 0; i < regexp.getInterval().getMin() - 1; i++) {
-          m.add(new Regexp<StructuralAbstractNode>(null, children, regexp.getType(), RegexpInterval.getOnce()));
+          m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getOnce()));
         }
-        m.add(new Regexp<StructuralAbstractNode>(null, children, regexp.getType(), RegexpInterval.getKleeneCross()));
-        return Regexp.<StructuralAbstractNode>getConcatenation(m);
+        m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getKleeneCross()));
+        return Regexp.<AbstractStructuralNode>getConcatenation(m);
       default:
         throw new IllegalArgumentException("Unknown regexp type");
     }

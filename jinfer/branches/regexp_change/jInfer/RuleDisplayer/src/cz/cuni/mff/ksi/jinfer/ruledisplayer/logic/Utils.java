@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -75,7 +75,7 @@ public final class Utils {
     return UIManager.getDefaults().getColor("TabbedPane.foreground");
   }
 
-  public static Color getNodeColor(final StructuralAbstractNode n) {
+  public static Color getNodeColor(final AbstractStructuralNode n) {
     switch (n.getType()) {
       case ELEMENT:
         return getColorElement();

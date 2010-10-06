@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
@@ -169,7 +169,7 @@ public final class Preprocessor {
     visited.add(root);
 
     occurrenceCounts.put(root.getName(), occurrenceCounts.get(root.getName()) + 1);
-    for (StructuralAbstractNode node : root.getSubnodes().getTokens()) {
+    for (AbstractStructuralNode node : root.getSubnodes().getTokens()) {
       if (node.getType().equals(StructuralNodeType.ELEMENT)) {
         countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()), visited);
       }

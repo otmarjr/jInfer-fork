@@ -26,21 +26,21 @@ import java.util.List;
 public class Cluster {
 
   /** A rule that represents this cluster. Should be also contained in content. */
-  private final StructuralAbstractNode representant;
+  private final AbstractStructuralNode representant;
   
   /** Rules in this cluster. */
-  private final List<StructuralAbstractNode> content;
+  private final List<AbstractStructuralNode> content;
 
-  public Cluster(final StructuralAbstractNode representant, final List<StructuralAbstractNode> content) {
+  public Cluster(final AbstractStructuralNode representant, final List<AbstractStructuralNode> content) {
     this.representant = representant;
     this.content = content;
   }
 
-  public StructuralAbstractNode getRepresentant() {
+  public AbstractStructuralNode getRepresentant() {
     return representant;
   }
 
-  public List<StructuralAbstractNode> getContent() {
+  public List<AbstractStructuralNode> getContent() {
     return content;
   }
 

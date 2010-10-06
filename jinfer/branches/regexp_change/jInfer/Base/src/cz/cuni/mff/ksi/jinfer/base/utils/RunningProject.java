@@ -113,6 +113,7 @@ public final class RunningProject {
    * Sets the capabilities of the next module in the inference chain. Used by
    * Runner implementations.
    */
+  // TODO sviro PMD methodargumentfinal
   public static void setNextModuleCaps(Capabilities aNextModuleCaps) {
     nextModuleCaps = aNextModuleCaps;
   }

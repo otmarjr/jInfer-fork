@@ -26,7 +26,7 @@ import java.util.Map;
  * 
  * @author vektor
  */
-public class SimpleData extends StructuralAbstractNode implements ContentNode {
+public class SimpleData extends AbstractStructuralNode implements ContentNode {
   /** Unspecific type of textual data. */
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list
@@ -45,7 +45,7 @@ public class SimpleData extends StructuralAbstractNode implements ContentNode {
           final String name,
           final Map<String, Object> metadata,
           final String contentType,
-          final List<String> content, boolean mutable) {
+          final List<String> content, final boolean mutable) {
     super(context, name, metadata, mutable);
 
     if (content == null) {
@@ -56,7 +56,7 @@ public class SimpleData extends StructuralAbstractNode implements ContentNode {
     this.content = content;
   }
 
-  public static NamedAbstractNode getMutable() {
+  public static AbstractNamedNode getMutable() {
     return new SimpleData(new ArrayList<String>(),
             null,
             new HashMap<String, Object>(),

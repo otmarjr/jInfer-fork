@@ -38,14 +38,14 @@ import java.util.Set;
 public class AutomatonCloner<A, B> {
 
   public Automaton<B> convertAutomaton(final Automaton<A> anotherAutomaton, final AutomatonClonerSymbolConverter<A, B> symbolConverter) {
-    Automaton<B> newAutomaton= new Automaton<B>(false);
+    final Automaton<B> newAutomaton= new Automaton<B>(false);
 
     this.convertAutomaton(anotherAutomaton, newAutomaton, symbolConverter);
     
     return newAutomaton;
   }
 
-  public void convertAutomaton(Automaton<A> anotherAutomaton, Automaton<B> newAutomaton, AutomatonClonerSymbolConverter<A, B> symbolConverter) {
+  public void convertAutomaton(final Automaton<A> anotherAutomaton, final Automaton<B> newAutomaton, final AutomatonClonerSymbolConverter<A, B> symbolConverter) {
     /* other states */
     final Map<State<A>, Set<Step<A>>> anotherDelta= anotherAutomaton.getDelta();
     final Map<State<A>, Set<Step<A>>> anotherReverseDelta= anotherAutomaton.getReverseDelta();
@@ -69,11 +69,11 @@ public class AutomatonCloner<A, B> {
     }
 
     for (State<A> anotherState : anotherDelta.keySet()) {
-      State<B> myState= stateConversionMap.get(anotherState);
+      final State<B> myState= stateConversionMap.get(anotherState);
       for (Step<A> anotherStep : anotherDelta.get(anotherState)) {
-        B newSymbol= symbolConverter.convertSymbol(anotherStep.getAcceptSymbol());
+        final B newSymbol= symbolConverter.convertSymbol(anotherStep.getAcceptSymbol());
 
-        Step<B> newStep= new Step<B>(
+        final Step<B> newStep= new Step<B>(
                 newSymbol,
                 stateConversionMap.get(anotherStep.getSource()),
                 stateConversionMap.get(anotherStep.getDestination()),
@@ -86,7 +86,7 @@ public class AutomatonCloner<A, B> {
     }
 
 
-    Map<State<A>, State<A>> anotherMergedStates= anotherAutomaton.getMergedStates();
+    final Map<State<A>, State<A>> anotherMergedStates= anotherAutomaton.getMergedStates();
     for (State<A> anotherState : anotherMergedStates.keySet()) {
       newAutomaton.mergedStates.put(
               stateConversionMap.get(anotherState),

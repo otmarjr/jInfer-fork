@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.basicdtd;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -52,7 +52,7 @@ public class TopologicalSortTest {
   @Test
   public void testOne() {
     final Element e = new Element(null, "test", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
     final TopologicalSort s = new TopologicalSort(Arrays.asList(e));
@@ -64,21 +64,21 @@ public class TopologicalSortTest {
   @Test
   public void testSort() {
     final Element e1 = new Element(null, "test1", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e2 = new Element(null, "test2", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e3 = new Element(null, "test3", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e4 = new Element(null, "test4", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e5 = new Element(null, "test5", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e6 = new Element(null, "test6", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e7 = new Element(null, "test7", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e8 = new Element(null, "test8", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e2.getSubnodes().setType(RegexpType.CONCATENATION);
@@ -96,15 +96,15 @@ public class TopologicalSortTest {
     e8.getSubnodes().setType(RegexpType.CONCATENATION);
     e8.getSubnodes().setInterval(RegexpInterval.getOnce());
 
-    e1.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e2));
-    e1.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e3));
-    e2.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e4));
-    e2.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e5));
-    e3.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e4));
-    e3.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e5));
-    e4.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e6));
-    e5.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e6));
-    e7.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e8));
+    e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e2));
+    e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e3));
+    e2.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e4));
+    e2.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e5));
+    e3.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e4));
+    e3.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e5));
+    e4.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e6));
+    e5.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e6));
+    e7.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e8));
     
     final List<Element> elements = Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8);
 
@@ -126,13 +126,13 @@ public class TopologicalSortTest {
   @Test
   public void testMore() {
     final Element e1 = new Element(null, "test1", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e2 = new Element(null, "test2", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e3 = new Element(null, "test3", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     final Element e4 = new Element(null, "test4", null,
-            Regexp.<StructuralAbstractNode>getMutable(), new ArrayList<Attribute>(0));
+            Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
 
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
@@ -143,9 +143,9 @@ public class TopologicalSortTest {
     e4.getSubnodes().setType(RegexpType.CONCATENATION);
     e4.getSubnodes().setInterval(RegexpInterval.getOnce());
 
-    e1.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e2));
-    e1.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e3));
-    e3.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(e4));
+    e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e2));
+    e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e3));
+    e3.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e4));
 
     final List<Element> elements = Arrays.asList(e1, e2);
 

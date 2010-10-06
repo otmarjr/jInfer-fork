@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicdtd;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -68,7 +68,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<StructuralAbstractNode> grammar,
+  public void start(final List<AbstractStructuralNode> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
 
     LOG.info("DTD Exporter: got " + grammar.size()
@@ -85,7 +85,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // filter only the elements
     final List<Element> elements = new ArrayList<Element>();
-    for (final StructuralAbstractNode node : grammar) {
+    for (final AbstractStructuralNode node : grammar) {
       if (node.isElement()) {
         elements.add((Element) node);
       } else {
@@ -118,7 +118,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
     ret.append("<!ELEMENT ").append(e.getName()).append(' ');
-    Regexp<StructuralAbstractNode> regexp= e.getSubnodes();
+    Regexp<AbstractStructuralNode> regexp= e.getSubnodes();
     if (regexp.isToken()) {
       ret.append("(");
     }
@@ -145,7 +145,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @param topLevel
    * @return
    */
-  private String regexpToString(final Regexp<StructuralAbstractNode> regexp) {
+  private String regexpToString(final Regexp<AbstractStructuralNode> regexp) {
     // TODO anti Exception when r.getTokens contains attributes
     switch (regexp.getType()) {
       case LAMBDA:
@@ -171,8 +171,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   /**
    * Returns true if one of the supplied children is a PCDATA.
    */
-  private boolean containsPCDATA(final List<StructuralAbstractNode> children) {
-    for (final StructuralAbstractNode child : children) {
+  private boolean containsPCDATA(final List<AbstractStructuralNode> children) {
+    for (final AbstractStructuralNode child : children) {
       if (child.isSimpleData()) {
         return true;
       }
@@ -180,18 +180,18 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return false;
   }
 
-  private String comboToString(final Regexp<StructuralAbstractNode> regexp, Character delimiter) {
+  private String comboToString(final Regexp<AbstractStructuralNode> regexp, Character delimiter) {
     if (!containsPCDATA(regexp.getTokens())) {
       return listToString(regexp.getChildren(), delimiter) +
               regexp.getInterval().toString();
     }
 
-    final List<StructuralAbstractNode> content = regexp.getTokens();
+    final List<AbstractStructuralNode> content = regexp.getTokens();
 
     Collections.sort(content,
-      new Comparator<StructuralAbstractNode>() {
+      new Comparator<AbstractStructuralNode>() {
           @Override
-          public int compare(final StructuralAbstractNode o1, final StructuralAbstractNode o2) {
+          public int compare(final AbstractStructuralNode o1, final AbstractStructuralNode o2) {
             if (o1.isSimpleData()) {
               return -1;
             }
@@ -203,11 +203,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
     );
 
-    final List<StructuralAbstractNode> distinctContent= BaseUtils.filter(content, new Predicate<StructuralAbstractNode>() {
+    final List<AbstractStructuralNode> distinctContent= BaseUtils.filter(content, new Predicate<AbstractStructuralNode>() {
       private Set<String> encountered= new HashSet<String>();
       private boolean encounteredSimpleData= false;
       @Override
-      public boolean apply(StructuralAbstractNode argument) {
+      public boolean apply(AbstractStructuralNode argument) {
         if (argument.isSimpleData()) {
           if (encounteredSimpleData) {
             return false;
@@ -226,22 +226,22 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return CollectionToString.colToString(
             distinctContent,
             '|',
-            new CollectionToString.ToString<StructuralAbstractNode>() {
+            new CollectionToString.ToString<AbstractStructuralNode>() {
               @Override
-              public String toString(final StructuralAbstractNode t) {
-                return regexpToString(Regexp.<StructuralAbstractNode>getToken(t));
+              public String toString(final AbstractStructuralNode t) {
+                return regexpToString(Regexp.<AbstractStructuralNode>getToken(t));
               }
             }) + "*";
   }
   
-  private String listToString(final List<Regexp<StructuralAbstractNode>> list,
+  private String listToString(final List<Regexp<AbstractStructuralNode>> list,
           final char separator) {
     return CollectionToString.colToString(
             list,
             separator,
-            new CollectionToString.ToString<Regexp<StructuralAbstractNode>>() {
+            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
                 @Override
-                public String toString(final Regexp<StructuralAbstractNode> t) {
+                public String toString(final Regexp<AbstractStructuralNode> t) {
                   return regexpToString(t);
                 }
             });

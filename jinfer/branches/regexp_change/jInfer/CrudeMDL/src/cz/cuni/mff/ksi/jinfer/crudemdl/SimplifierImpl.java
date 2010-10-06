@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
@@ -77,8 +77,8 @@ public class SimplifierImpl implements Simplifier {
     return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR));
   }
 
-  private void verifyInput(final List<StructuralAbstractNode> initialGrammar) throws InterruptedException {
-    for (StructuralAbstractNode node : initialGrammar) {
+  private void verifyInput(final List<AbstractStructuralNode> initialGrammar) throws InterruptedException {
+    for (AbstractStructuralNode node : initialGrammar) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -95,22 +95,22 @@ public class SimplifierImpl implements Simplifier {
   }
 
   @Override
-  public void start(final List<StructuralAbstractNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+  public void start(final List<AbstractStructuralNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
 //    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
     final ClustererFactory clustererFactory= this.getClustererFactory();
-    final Clusterer<StructuralAbstractNode> clusterer= clustererFactory.create();
+    final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
     clusterer.addAll(initialGrammar);
     clusterer.cluster();
 
     // 2. prepare emtpy final grammar
-    final List<StructuralAbstractNode> finalGrammar= new LinkedList<StructuralAbstractNode>();
+    final List<AbstractStructuralNode> finalGrammar= new LinkedList<AbstractStructuralNode>();
 
     // 3. process rules
-    final ClusterProcessor<StructuralAbstractNode> processor= this.getClusterProcessorFactory().create();
-    for (Cluster<StructuralAbstractNode> cluster : clusterer.getClusters()) {
+    final ClusterProcessor<AbstractStructuralNode> processor= this.getClusterProcessorFactory().create();
+    for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
@@ -118,13 +118,13 @@ public class SimplifierImpl implements Simplifier {
         continue;// TODO anti ???
       }
 
-      final StructuralAbstractNode node =  processor.processCluster(clusterer, cluster);
+      final AbstractStructuralNode node =  processor.processCluster(clusterer, cluster);
 
       // 3.1 process attributes if supported
       final List<Attribute> attList= new ArrayList<Attribute>();
       if (clustererFactory.getCapabilities().contains("attributeClusters")) {
         final List<Cluster<Attribute>> attributeClusters=
-                ((ClustererWithAttributes<StructuralAbstractNode, Attribute>) clusterer).
+                ((ClustererWithAttributes<AbstractStructuralNode, Attribute>) clusterer).
                 getAttributeClusters(cluster.getRepresentant());
 
         for (Cluster<Attribute> attCluster : attributeClusters) {

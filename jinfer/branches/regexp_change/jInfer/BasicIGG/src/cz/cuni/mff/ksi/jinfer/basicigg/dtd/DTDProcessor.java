@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
@@ -68,12 +68,12 @@ public class DTDProcessor implements Processor {
    * @return List of IG rules retrieved from it.
    */
   @Override
-  public List<StructuralAbstractNode> process(final InputStream s) {
+  public List<AbstractStructuralNode> process(final InputStream s) {
     try {
       final DTDParser parser = new DTDParser();
       final DTD result = parser.parseExternalSubset(new InputSource(s), null);
 
-      final List<StructuralAbstractNode> ret = new ArrayList<StructuralAbstractNode>();
+      final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
 
       for (final Object o : result.elementTypes.values()) {
         ret.add(processElement((ElementType) o));
@@ -123,14 +123,14 @@ public class DTDProcessor implements Processor {
         child.getSubnodes().setInterval(RegexpInterval.getOnce());
         child.getSubnodes().setImmutable();
         child.setImmutable();
-        ret.getSubnodes().addChild(Regexp.<StructuralAbstractNode>getToken(child));
+        ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(child));
       }
     }
 
     // if there is #PCDATA inside...
     if (e.contentType == ElementType.CONTENT_MIXED || e.contentType == ElementType.CONTENT_PCDATA) {
       ret.getSubnodes().addChild(
-              Regexp.<StructuralAbstractNode>getToken(
+              Regexp.<AbstractStructuralNode>getToken(
                     new SimpleData(null, null, null, null, new ArrayList<String>(0))));
     }
 

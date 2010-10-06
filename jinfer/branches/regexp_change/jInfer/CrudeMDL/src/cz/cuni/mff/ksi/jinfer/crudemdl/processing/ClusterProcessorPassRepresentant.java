@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 
@@ -28,10 +28,10 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
  *
  * @author anti
  */
-public class ClusterProcessorPassRepresentant implements ClusterProcessor<StructuralAbstractNode> {
+public class ClusterProcessorPassRepresentant implements ClusterProcessor<AbstractStructuralNode> {
 
   @Override
-  public StructuralAbstractNode processCluster(final Clusterer<StructuralAbstractNode> clusterer, final Cluster<StructuralAbstractNode> cluster) throws InterruptedException {
+  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final Cluster<AbstractStructuralNode> cluster) throws InterruptedException {
     return cluster.getRepresentant();
   }
 

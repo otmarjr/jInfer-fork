@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicxsd;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -72,14 +72,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<StructuralAbstractNode> grammar, final SchemaGeneratorCallback callback) throws InterruptedException {
+  public void start(final List<AbstractStructuralNode> grammar, final SchemaGeneratorCallback callback) throws InterruptedException {
     LOG.info("XSD Exporter: got " + grammar.size()
             + " rules.");
     
     // Filter only the elements. Everything else can be accessed through the elements.
     // TODO rio (anti: i think, there should be an exception if RULES contain sth other than element
     final List<Element> elements = new ArrayList<Element>();
-    for (final StructuralAbstractNode node : grammar) {
+    for (final AbstractStructuralNode node : grammar) {
       if (node.isElement()) {
         elements.add((Element) node);
       }
@@ -325,16 +325,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @param regexp
    * @throws InterruptedException
    */
-  private void processSubElements(final Regexp<StructuralAbstractNode> regexp) throws InterruptedException {
+  private void processSubElements(final Regexp<AbstractStructuralNode> regexp) throws InterruptedException {
     checkInterrupt();
 
     if (regexp.isLambda()) {
       return;
     }
 
-    if (BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<StructuralAbstractNode>() {
+    if (BaseUtils.filter(regexp.getTokens(), new BaseUtils.Predicate<AbstractStructuralNode>() {
       @Override
-      public boolean apply(final StructuralAbstractNode argument) {
+      public boolean apply(final AbstractStructuralNode argument) {
         return argument.isElement();
       }
     }).isEmpty()) {
@@ -357,8 +357,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case CONCATENATION:
       {
         // specialny pripad konkatenacie alternacie(A|lambda)
-        List<Regexp<StructuralAbstractNode>> simpleAlternations = new LinkedList<Regexp<StructuralAbstractNode>>();
-        for (final Regexp<StructuralAbstractNode> child : regexp.getChildren()) {
+        List<Regexp<AbstractStructuralNode>> simpleAlternations = new LinkedList<Regexp<AbstractStructuralNode>>();
+        for (final Regexp<AbstractStructuralNode> child : regexp.getChildren()) {
           if (child.isAlternation()) {
             if (child.getChildren().size() == 2) {
               if (child.getChild(0).isLambda()) {
@@ -373,15 +373,15 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.append(">\n");
         indentator.increaseIndentation();
 
-        for (final Regexp<StructuralAbstractNode> subRegexp : regexp.getChildren()) {
+        for (final Regexp<AbstractStructuralNode> subRegexp : regexp.getChildren()) {
           if (simpleAlternations.contains(subRegexp)) {
-            final Regexp<StructuralAbstractNode> alternation = subRegexp;
+            final Regexp<AbstractStructuralNode> alternation = subRegexp;
             if (alternation.getChild(1).isToken()) {
               processSubElements(alternation);
             } else if (alternation.getChild(1).isConcatenation()) {
               indentator.indent("<xs:sequence minOccurs=\"0\">\n");
               indentator.increaseIndentation();
-              for (final Regexp<StructuralAbstractNode> subReg : alternation.getChild(1).getChildren()) {
+              for (final Regexp<AbstractStructuralNode> subReg : alternation.getChild(1).getChildren()) {
                 processSubElements(subReg);
               }
               indentator.decreaseIndentation();
@@ -422,7 +422,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         processOccurrences(regexp.getInterval());
         indentator.append(">\n");
         indentator.increaseIndentation();
-        for (Regexp<StructuralAbstractNode> subRegexp : regexp.getChildren()) {
+        for (Regexp<AbstractStructuralNode> subRegexp : regexp.getChildren()) {
           if ((subRegexp != null) && (!subRegexp.isLambda())) {
             processSubElements(subRegexp);
           }
@@ -436,7 +436,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private void processToken(final StructuralAbstractNode node, final RegexpInterval interval) throws InterruptedException {
+  private void processToken(final AbstractStructuralNode node, final RegexpInterval interval) throws InterruptedException {
     assert(node.isSimpleData() == false);
     assert(node.isElement());
 

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -64,8 +64,8 @@ public class XPathProcessor implements Processor {
    * @return List of IG rules retrieved from it.
    */
   @Override
-  public List<StructuralAbstractNode> process(final InputStream s) {
-    final List<StructuralAbstractNode> ret = new ArrayList<StructuralAbstractNode>();
+  public List<AbstractStructuralNode> process(final InputStream s) {
+    final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
     try {
       final DataInputStream in = new DataInputStream(s);
       final BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -88,7 +88,7 @@ public class XPathProcessor implements Processor {
     }
   }
 
-  private static List<StructuralAbstractNode> parsePath(final String path) {
+  private static List<AbstractStructuralNode> parsePath(final String path) {
     try {
       final XPathReader xr = XPathReaderFactory.createReader();
       final XPathHandlerImpl xh = new XPathHandlerImpl();

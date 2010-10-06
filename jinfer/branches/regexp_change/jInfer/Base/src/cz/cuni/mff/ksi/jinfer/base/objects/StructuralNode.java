@@ -17,8 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
-
 /**
  * TODO anti Comment!
  *

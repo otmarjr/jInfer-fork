@@ -27,4 +27,5 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
  */
 public interface AutomatonSimplifierFactory extends NamedModule {
   <T> AutomatonSimplifier<T> create();
+ String getDisplayModuleDescription();
 }

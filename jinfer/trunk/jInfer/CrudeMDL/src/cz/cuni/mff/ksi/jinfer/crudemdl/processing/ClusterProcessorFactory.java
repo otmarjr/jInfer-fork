@@ -31,4 +31,5 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
  */
 public interface ClusterProcessorFactory extends NamedModule {
   ClusterProcessor<AbstractStructuralNode> create();
+  String getDisplayModuleDescription();
 }

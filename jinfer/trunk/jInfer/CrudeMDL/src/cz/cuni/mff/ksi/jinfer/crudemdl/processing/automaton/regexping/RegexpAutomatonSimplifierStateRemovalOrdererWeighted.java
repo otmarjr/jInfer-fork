@@ -57,10 +57,16 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T> implements 
       if (state.equals(automaton.getSuperInitialState())||state.equals(automaton.getSuperFinalState())) {
         continue;//remove except superinitial state and superfinal state
       }
-      final int stateWeight= this.getStateWeight(automaton, state);
-      if (stateWeight < minWeight) {
-        minWeight= stateWeight;
+      if (minState == null) {
         minState= state;
+        minWeight= this.getStateWeight(automaton, state);
+      } else {
+        final int stateWeight= this.getStateWeight(automaton, state);
+        if ((stateWeight <= minWeight)&&
+          (state.getName() < minState.getName())) {
+          minWeight= stateWeight;
+          minState= state;
+        }
       }
     }
     return minState;

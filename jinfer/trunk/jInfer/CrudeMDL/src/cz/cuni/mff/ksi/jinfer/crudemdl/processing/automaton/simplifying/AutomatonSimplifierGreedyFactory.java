@@ -17,14 +17,30 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import java.util.List;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public interface AutomatonSimplifier<T> {
-  Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException;
+@ServiceProvider(service = AutomatonSimplifierFactory.class)
+public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFactory {
+
+  @Override
+  public <T> AutomatonSimplifier<T> create() {
+    return new AutomatonSimplifierGreedy<T>(getName());
+  }
+
+  @Override
+  public String getName() {
+    return "GreedyAutomatonSimplifier";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
 }

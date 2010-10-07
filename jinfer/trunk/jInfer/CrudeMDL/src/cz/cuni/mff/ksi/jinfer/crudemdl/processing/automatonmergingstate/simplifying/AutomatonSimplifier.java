@@ -15,32 +15,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import org.openide.util.lookup.ServiceProvider;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import java.util.List;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-@ServiceProvider(service = AutomatonSimplifierFactory.class)
-public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFactory {
-
-  @Override
-  public <T> AutomatonSimplifier<T> create() {
-    return new AutomatonSimplifierGreedy<T>(getName());
-  }
-
-  @Override
-  public String getName() {
-    return "GreedyAutomatonSimplifier";
-  }
-
-  @Override
-  public String getModuleDescription() {
-    return getName();
-  }
-
+public interface AutomatonSimplifier<T> {
+  Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException;
 }

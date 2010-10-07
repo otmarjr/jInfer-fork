@@ -15,20 +15,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment!
+ * Factory class for ClusterProcessorAutomatonMergingState.
  *
  * @author anti
  */
-@ServiceProvider(service = MergeConditionTesterFactory.class)
-public class MergeConditionTesterKHContextFactory implements MergeConditionTesterFactory {
+@ServiceProvider(service = ClusterProcessorFactory.class)
+public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
   @Override
   public String getName() {
-    return "MergeConditionTesterKHContext";
+    return "ClusterProcessorAutomatonMergingState";
   }
 
   @Override
@@ -37,8 +40,7 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   }
 
   @Override
-  public <T> MergeCondidionTester<T> create() {
-    return new MergeConditionTesterKHContext<T>();
+  public ClusterProcessor<AbstractStructuralNode> create() {
+    return new ClusterProcessorAutomatonMergingState(getName());
   }
-
 }

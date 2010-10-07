@@ -15,24 +15,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy;
 
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Trivial cluster processor to prove concept of changing submodules of simplifier.
- * For each clusters, it does no processing (grammar generation), just returns
- * representant.
+ * TODO anti Comment!
  *
  * @author anti
  */
-public class ClusterProcessorPassRepresentant implements ClusterProcessor<AbstractStructuralNode> {
+@ServiceProvider(service = AutomatonSimplifierFactory.class)
+public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFactory {
 
   @Override
-  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final Cluster<AbstractStructuralNode> cluster) throws InterruptedException {
-    return cluster.getRepresentant();
+  public <T> AutomatonSimplifier<T> create() {
+    return new AutomatonSimplifierGreedy<T>(getName());
+  }
+
+  @Override
+  public String getName() {
+    return "GreedyAutomatonSimplifier";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
   }
 
 }

@@ -15,21 +15,28 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.userinteractive;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory class for ClusterProcessorAutomatonMergingState.
+ * TODO anti Comment!
  *
  * @author anti
  */
-@ServiceProvider(service = ClusterProcessorFactory.class)
-public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
+@ServiceProvider(service = AutomatonSimplifierFactory.class)
+public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimplifierFactory {
+
+  @Override
+  public <T> AutomatonSimplifier<T> create() {
+    return new AutomatonSimplifierUserInteractive<T>();
+  }
+
   @Override
   public String getName() {
-    return "ClusterProcessorAutomatonMergingState";
+    return "AutomatonSimplifierUserInteractive";
   }
 
   @Override
@@ -37,8 +44,4 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
     return getName();
   }
 
-  @Override
-  public ClusterProcessor<AbstractStructuralNode> create() {
-    return new ClusterProcessorAutomatonMergingState(getName());
-  }
 }

@@ -15,16 +15,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.passrepresentant;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment!
+ * Factory class for ClusterProcessorPassRepresentant.
  *
  * @author anti
  */
-public interface MergeConditionTesterFactory extends NamedModule {
-  public <T> MergeCondidionTester<T> create();
+@ServiceProvider(service = ClusterProcessorFactory.class)
+public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
+
+  @Override
+  public ClusterProcessor<AbstractStructuralNode> create() {
+    return new ClusterProcessorPassRepresentant();
+  }
+
+  @Override
+  public String getName() {
+    return "ClusterProcessorPassRepresentant";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
 }

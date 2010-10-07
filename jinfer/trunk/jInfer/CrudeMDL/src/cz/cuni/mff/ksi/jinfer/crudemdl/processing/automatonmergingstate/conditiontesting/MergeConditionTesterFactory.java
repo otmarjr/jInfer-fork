@@ -15,16 +15,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import java.util.List;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public interface AutomatonSimplifier<T> {
-  Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException;
+public interface MergeConditionTesterFactory extends NamedModule {
+  public <T> MergeCondidionTester<T> create();
 }

@@ -21,9 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.RegexpAutomatonSimplifierStateRemovalOrderer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.RegexpAutomatonSimplifierStateRemovalOrdererFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.properties.RegexpAutomatonSimplifierStateRemovalPropertiesPanel;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -36,6 +34,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegexpAutomatonSimplifierFactory.class)
 public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutomatonSimplifierFactory {
+  public static final String NAME = "RegexpAutomatonSimplifierStateRemoval";
+  public static final String PROPERTIES_ORDERER = "orderer";
+
   @Override
   public <T> RegexpAutomatonSimplifier<T> create() {
     return new RegexpAutomatonSimplifierStateRemoval<T>(
@@ -44,12 +45,12 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
 
   @Override
   public String getName() {
-    return "RegexpAutomatonSimplifierStateRemoval";
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getName());
     sb.append("(");
     sb.append(getRegexpAutomatonSimplifierStateRemovalOrdererFactory().getModuleDescription());
     sb.append(")");
@@ -63,7 +64,7 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
 
   @Override
   public String getDisplayModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getName());
     sb.append(" generates regular expression from automaton by sequentially"
             + " removing states from it. When a state is removed, all transitions"
             + " to and from it are collapsed. All loops are collapsed to one"
@@ -81,7 +82,7 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class,
-            p.getProperty(RegexpAutomatonSimplifierStateRemovalPropertiesPanel.PROPERTIES_ORDERER));
+            p.getProperty(PROPERTIES_ORDERER));
   }
 
 }

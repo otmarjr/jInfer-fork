@@ -14,12 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.properties;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonSimplifierStateRemovalFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.RegexpAutomatonSimplifierStateRemovalOrdererFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy.AutomatonSimplifierGreedyFactory;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
@@ -27,13 +27,12 @@ import javax.swing.DefaultComboBoxModel;
  * TODO anti Comment!
  * @author anti
  */
-public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends AbstractPropertiesPanel {
-
+public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractPropertiesPanel {
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
 
   /** Creates new form ModuleSelectionJPanel */
-  public RegexpAutomatonSimplifierStateRemovalPropertiesPanel(final Properties properties) {
+  public AutomatonSimplifierGreedyPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
   }
@@ -48,35 +47,35 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
   private void initComponents() {
     java.awt.GridBagConstraints gridBagConstraints;
 
-    labelOrderer = new javax.swing.JLabel();
-    comboOrderer = new javax.swing.JComboBox();
+    labelConditionTester = new javax.swing.JLabel();
+    comboConditionTester = new javax.swing.JComboBox();
     jScrollPane3 = new javax.swing.JScrollPane();
-    descOrderer = new javax.swing.JTextPane();
+    descContitionTester = new javax.swing.JTextPane();
 
     setMinimumSize(new java.awt.Dimension(600, 62));
     setPreferredSize(new java.awt.Dimension(600, 62));
     setLayout(new java.awt.GridBagLayout());
 
-    labelOrderer.setText("StateRemovalOrderer");
+    labelConditionTester.setText("MergeConditionTester");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(labelOrderer, gridBagConstraints);
+    add(labelConditionTester, gridBagConstraints);
 
-    comboOrderer.setMinimumSize(new java.awt.Dimension(400, 22));
-    comboOrderer.setPreferredSize(new java.awt.Dimension(400, 22));
-    comboOrderer.addActionListener(new java.awt.event.ActionListener() {
+    comboConditionTester.setMinimumSize(new java.awt.Dimension(400, 22));
+    comboConditionTester.setPreferredSize(new java.awt.Dimension(400, 22));
+    comboConditionTester.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        comboOrdererChanged(evt);
+        comboConditionTesterChanged(evt);
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    add(comboOrderer, gridBagConstraints);
+    add(comboConditionTester, gridBagConstraints);
 
-    jScrollPane3.setViewportView(descOrderer);
+    jScrollPane3.setViewportView(descContitionTester);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -87,33 +86,32 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
     add(jScrollPane3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
-  private void comboOrdererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdererChanged
+  private void comboConditionTesterChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboConditionTesterChanged
     // TODO add your handling code here:
-    descOrderer.setText(
-            ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class,
-            (String) comboOrderer.getSelectedItem()).getDisplayModuleDescription()
+    descContitionTester.setText(
+            ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
+            (String) comboConditionTester.getSelectedItem()).getDisplayModuleDescription()
             );
-  }//GEN-LAST:event_comboOrdererChanged
+  }//GEN-LAST:event_comboConditionTesterChanged
 
   @Override
   public final void load() {
-    comboOrderer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class).toArray()
+    comboConditionTester.setModel(new DefaultComboBoxModel(
+            ModuleSelectionHelper.lookupNames(MergeConditionTesterFactory.class).toArray()
             ));
-
-    comboOrderer.setSelectedItem(properties.getProperty(RegexpAutomatonSimplifierStateRemovalFactory.PROPERTIES_ORDERER, DEFAULT_MENU_TEXT));
-    comboOrdererChanged(null);
+    comboConditionTester.setSelectedItem(properties.getProperty(AutomatonSimplifierGreedyFactory.PROPERTIES_CONDITION_TESTER, DEFAULT_MENU_TEXT));
+    comboConditionTesterChanged(null);
   }
 
   @Override
   public void store() {
-    properties.setProperty(RegexpAutomatonSimplifierStateRemovalFactory.PROPERTIES_ORDERER,
-            (String) comboOrderer.getSelectedItem());
+    properties.setProperty(AutomatonSimplifierGreedyFactory.PROPERTIES_CONDITION_TESTER,
+            (String) comboConditionTester.getSelectedItem());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JComboBox comboOrderer;
-  private javax.swing.JTextPane descOrderer;
+  private javax.swing.JComboBox comboConditionTester;
+  private javax.swing.JTextPane descContitionTester;
   private javax.swing.JScrollPane jScrollPane3;
-  private javax.swing.JLabel labelOrderer;
+  private javax.swing.JLabel labelConditionTester;
   // End of variables declaration//GEN-END:variables
 }

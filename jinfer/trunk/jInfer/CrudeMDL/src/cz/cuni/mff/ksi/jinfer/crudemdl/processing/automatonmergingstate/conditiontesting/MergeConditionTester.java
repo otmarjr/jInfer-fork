@@ -72,6 +72,6 @@ import java.util.List;
  * 
  * @author anti
  */
-public interface MergeCondidionTester<T> {
+public interface MergeConditionTester<T> {
   List<List<Pair<State<T>, State<T>>>> getMergableStates(State<T> mainState, State<T> mergedState, Automaton<T> automaton);
 }

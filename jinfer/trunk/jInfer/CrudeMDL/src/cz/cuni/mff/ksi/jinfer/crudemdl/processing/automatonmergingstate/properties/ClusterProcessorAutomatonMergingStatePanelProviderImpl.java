@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,15 +19,13 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.propert
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierImpl;
-import java.util.ArrayList;
-import java.util.List;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.ClusterProcessorAutomatonMergingStateFactory;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Properties panel provider for module selection category.
- * @author sviro
+ * @author anti
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class ClusterProcessorAutomatonMergingStatePanelProviderImpl implements PropertiesPanelProvider {
@@ -40,12 +38,12 @@ public class ClusterProcessorAutomatonMergingStatePanelProviderImpl implements P
 
   @Override
   public String getName() {
-    return ClusterProcessorAutomatonMergingStatePropertiesPanel.NAME;
+    return ClusterProcessorAutomatonMergingStateFactory.NAME;
   }
 
   @Override
   public String getDisplayName() {
-    return ClusterProcessorAutomatonMergingStatePropertiesPanel.NAME;
+    return ClusterProcessorAutomatonMergingStateFactory.NAME;
   }
 
   @Override

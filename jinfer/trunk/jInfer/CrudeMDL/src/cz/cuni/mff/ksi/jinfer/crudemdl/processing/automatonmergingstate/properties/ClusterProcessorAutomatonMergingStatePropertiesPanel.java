@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,20 +18,18 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.propert
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.ClusterProcessorAutomatonMergingStateFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- *
- * @author sviro
+ * TODO anti Comment!
+ * @author anti
  */
 public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends AbstractPropertiesPanel {
 
-  public static final String NAME = "ClusterProcessorAutomatonMergingState";
-  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER = "automaton-simplifier";
-  public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER = "regexp-automaton-simplifier";
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
 
@@ -149,23 +147,23 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
             ModuleSelectionHelper.lookupNames(AutomatonSimplifierFactory.class).toArray()
             ));
 
-    automatonSimplifier.setSelectedItem(properties.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT));
+    automatonSimplifier.setSelectedItem(properties.getProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT));
     automatonSimplifierChanged(null);
 
     regexpAutomatonSimplifier.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierFactory.class).toArray()
             ));
 
-    regexpAutomatonSimplifier.setSelectedItem(properties.getProperty(PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT));
+    regexpAutomatonSimplifier.setSelectedItem(properties.getProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT));
     regexpAutomatonSimplifierChanged(null);
   }
 
   @Override
   public void store() {
-    properties.setProperty(PROPERTIES_AUTOMATON_SIMPLIFIER,
+    properties.setProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER,
             (String) automatonSimplifier.getSelectedItem());
 
-    properties.setProperty(PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER,
+    properties.setProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER,
             (String) regexpAutomatonSimplifier.getSelectedItem());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

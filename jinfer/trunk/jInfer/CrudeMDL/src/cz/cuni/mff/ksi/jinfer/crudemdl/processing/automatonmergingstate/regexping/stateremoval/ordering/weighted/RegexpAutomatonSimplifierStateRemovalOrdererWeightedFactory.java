@@ -53,7 +53,7 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory impleme
 
   @Override
   public String getDisplayModuleDescription() {
-    StringBuilder sb= new StringBuilder(getName());
+    final StringBuilder sb= new StringBuilder(getName());
     sb.append(" weights states and returns state with minimum weight to be removed."
             + " Weight of the state is the sum of length of all regular expressions"
             + " on in-transitions, out-transitions and loops.");

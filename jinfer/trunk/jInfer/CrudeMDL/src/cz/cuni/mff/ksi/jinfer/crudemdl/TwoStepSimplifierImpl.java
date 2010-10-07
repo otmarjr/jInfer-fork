@@ -29,7 +29,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
-import cz.cuni.mff.ksi.jinfer.crudemdl.properties.TwoStepPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,11 +47,15 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = Simplifier.class)
 public class TwoStepSimplifierImpl implements Simplifier {
+  public static final String NAME = "TwoStepSimplifier";
+  public static final String PROPERTIES_CLUSTERER = "clusterer";
+  public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
+
   private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
   @Override
   public String getName() {
-    return TwoStepPropertiesPanel.NAME;
+    return NAME;
   }
 
   @Override
@@ -68,13 +71,13 @@ public class TwoStepSimplifierImpl implements Simplifier {
   private ClustererFactory getClustererFactory() {
     final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(TwoStepPropertiesPanel.PROPERTIES_CLUSTERER));
+    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(PROPERTIES_CLUSTERER));
   }
 
   private ClusterProcessorFactory getClusterProcessorFactory() {
     final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(TwoStepPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR));
+    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(PROPERTIES_CLUSTER_PROCESSOR));
   }
 
   private void verifyInput(final List<AbstractStructuralNode> initialGrammar) throws InterruptedException {
@@ -133,7 +136,7 @@ public class TwoStepSimplifierImpl implements Simplifier {
           final Attribute representant= attCluster.getRepresentant();
           Attribute output= new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), representant.getContentType(), representant.getContent());
           if (attCluster.size() < cluster.size()) {
-            Map<String, Object> m= new HashMap<String, Object>(representant.getMetadata());
+            final Map<String, Object> m= new HashMap<String, Object>(representant.getMetadata());
             m.remove("required");
             output= new Attribute(representant.getContext(), representant.getName(), m, representant.getContentType(), representant.getContent());
           }
@@ -149,7 +152,7 @@ public class TwoStepSimplifierImpl implements Simplifier {
         }
       }
       // 4. add to rules
-      StringBuilder sb= new StringBuilder(">>> Attributes are:");
+      final StringBuilder sb= new StringBuilder(">>> Attributes are:");
       for (Attribute att : attList) {
         sb.append(att);
       }

@@ -18,7 +18,6 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import java.util.List;
 
 /**
  * TODO anti Comment!

@@ -15,27 +15,31 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
+package cz.cuni.mff.ksi.jinfer.crudemdl.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
+import java.util.ArrayList;
+import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory class for ClusterProcessorPassRepresentant.
+ * Factory class for ClustererWithAttributesIname class.
  *
+ * Has capability "attributeClusters" and informs about it in getCapabilities().
  * @author anti
  */
-@ServiceProvider(service = ClusterProcessorFactory.class)
-public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
-
+@ServiceProvider(service = ClustererFactory.class)
+public class ClustererWithAttributesInameFactory implements ClustererFactory {
   @Override
-  public ClusterProcessor<AbstractStructuralNode> create() {
-    return new ClusterProcessorPassRepresentant();
+  public Clusterer<AbstractStructuralNode> create() {
+    return new ClustererWithAttributesIname();
   }
 
   @Override
   public String getName() {
-    return "ClusterProcessorPassRepresentant";
+    return "ClustererInameWithAttributes";
   }
 
   @Override
@@ -43,4 +47,10 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
     return getName();
   }
 
+  @Override
+  public List<String> getCapabilities() {
+    final List<String> l= new ArrayList<String>();
+    l.add("attributeClusters");
+    return l;
+  }
 }

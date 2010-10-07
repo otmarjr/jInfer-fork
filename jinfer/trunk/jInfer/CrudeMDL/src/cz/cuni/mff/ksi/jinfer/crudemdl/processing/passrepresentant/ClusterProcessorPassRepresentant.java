@@ -15,16 +15,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.passrepresentant;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 
 /**
- * TODO anti Comment!
+ * Trivial cluster processor to prove concept of changing submodules of simplifier.
+ * For each clusters, it does no processing (grammar generation), just returns
+ * representant.
  *
  * @author anti
  */
-public interface AutomatonSimplifierFactory extends NamedModule {
-  <T> AutomatonSimplifier<T> create();
+public class ClusterProcessorPassRepresentant implements ClusterProcessor<AbstractStructuralNode> {
+
+  @Override
+  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final Cluster<AbstractStructuralNode> cluster) throws InterruptedException {
+    return cluster.getRepresentant();
+  }
+
 }

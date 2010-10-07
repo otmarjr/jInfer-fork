@@ -15,29 +15,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.khcontext;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import java.util.ArrayList;
-import java.util.List;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeCondidionTester;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory class for ClustererWithAttributesIname class.
+ * TODO anti Comment!
  *
- * Has capability "attributeClusters" and informs about it in getCapabilities().
  * @author anti
  */
-@ServiceProvider(service = ClustererFactory.class)
-public class ClustererWithAttributesInameFactory implements ClustererFactory {
-  @Override
-  public Clusterer<AbstractStructuralNode> create() {
-    return new ClustererWithAttributesIname();
-  }
-
+@ServiceProvider(service = MergeConditionTesterFactory.class)
+public class MergeConditionTesterKHContextFactory implements MergeConditionTesterFactory {
   @Override
   public String getName() {
-    return "ClustererInameWithAttributes";
+    return "MergeConditionTesterKHContext";
   }
 
   @Override
@@ -46,9 +39,8 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
   }
 
   @Override
-  public List<String> getCapabilities() {
-    final List<String> l= new ArrayList<String>();
-    l.add("attributeClusters");
-    return l;
+  public <T> MergeCondidionTester<T> create() {
+    return new MergeConditionTesterKHContext<T>();
   }
+
 }

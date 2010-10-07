@@ -15,19 +15,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying;
 
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
+import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 
 /**
- * Interface for regexpAutomaton simplifiers. Given input automaton with
- * Regexp<T> on transition, method simplify has to return Regexp<T>, which
- * corresponds to language accepted by automaton. On input, all regexps on
- * transitions are by definition tokens (it is not enforced anywhere however).
- *
+ * TODO anti Comment!
  *
  * @author anti
  */
-public interface RegexpAutomatonSimplifier<T> {
-  Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton) throws InterruptedException;
+public interface AutomatonSimplifierFactory extends NamedModule {
+  <T> AutomatonSimplifier<T> create();
 }

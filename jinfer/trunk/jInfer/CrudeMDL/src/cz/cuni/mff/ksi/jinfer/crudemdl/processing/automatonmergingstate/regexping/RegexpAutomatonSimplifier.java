@@ -15,31 +15,19 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping;
 
-import org.openide.util.lookup.ServiceProvider;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 /**
- * TODO anti Comment!
+ * Interface for regexpAutomaton simplifiers. Given input automaton with
+ * Regexp<T> on transition, method simplify has to return Regexp<T>, which
+ * corresponds to language accepted by automaton. On input, all regexps on
+ * transitions are by definition tokens (it is not enforced anywhere however).
+ *
  *
  * @author anti
  */
-@ServiceProvider(service = AutomatonSimplifierFactory.class)
-public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimplifierFactory {
-
-  @Override
-  public <T> AutomatonSimplifier<T> create() {
-    return new AutomatonSimplifierUserInteractive<T>();
-  }
-
-  @Override
-  public String getName() {
-    return "AutomatonSimplifierUserInteractive";
-  }
-
-  @Override
-  public String getModuleDescription() {
-    return getName();
-  }
-
+public interface RegexpAutomatonSimplifier<T> {
+  Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton) throws InterruptedException;
 }

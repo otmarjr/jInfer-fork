@@ -15,10 +15,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
+package cz.cuni.mff.ksi.jinfer.crudemdl.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;

@@ -34,9 +34,20 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
     return "ClusterProcessorAutomatonMergingState";
   }
 
+  // TODO anti more comment when attributes are completed
   @Override
   public String getModuleDescription() {
-    return getName();
+    StringBuilder sb = new StringBuilder(getName());
+    sb.append(" constructs prefix tree automaton from positive examples"
+            + " in the cluster. The it selects AutomatonSimplifier class,"
+            + " to which it passes automaton to merge some states. AutomatonSimplifier"
+            + " is believed to return some sort of generalized automaton."
+            + " This generalized automaton is then sent to RegexpAutomatonSimplifier"
+            + " class, which has to create regular expression from automaton somehow."
+            + " This regular expression is returned as grammar for cluster of elements."
+            + " Attributes are processed separately.");
+    return sb.toString();
+
   }
 
   @Override

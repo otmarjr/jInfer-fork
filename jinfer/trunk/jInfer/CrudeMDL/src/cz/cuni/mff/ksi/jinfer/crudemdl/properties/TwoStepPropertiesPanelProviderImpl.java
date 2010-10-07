@@ -30,22 +30,22 @@ import org.openide.util.lookup.ServiceProvider;
  * @author sviro
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
-public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
+public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvider {
   private static final int PANEL_PRIORITY = 400000;
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new CrudeMDLPropertiesPanel(properties);
+    return new TwoStepPropertiesPanel(properties);
   }
 
   @Override
   public String getName() {
-    return CrudeMDLPropertiesPanel.NAME;
+    return TwoStepPropertiesPanel.NAME;
   }
 
   @Override
   public String getDisplayName() {
-    return CrudeMDLPropertiesPanel.NAME;
+    return TwoStepPropertiesPanel.NAME;
   }
 
   @Override

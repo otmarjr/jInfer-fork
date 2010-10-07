@@ -42,7 +42,13 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    StringBuilder sb = new StringBuilder(getName());
+    sb.append(" is really dummy processor of element cluster. The grammar"
+            + " inferred for whole cluster of elements it returns"
+            + " is just the representant of cluster. That is, no inferring"
+            + " occurs at all. Just return representant as the grammar"
+            + " for cluster being processed.");
+    return sb.toString();
   }
 
 }

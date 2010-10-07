@@ -28,7 +28,7 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author sviro
  */
-public class CrudeMDLPropertiesPanel extends AbstractPropertiesPanel {
+public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
 
   public static final String NAME = "TwoStepSimplifier";
   public static final String PROPERTIES_CLUSTERER = "clusterer";
@@ -37,7 +37,7 @@ public class CrudeMDLPropertiesPanel extends AbstractPropertiesPanel {
   private static final long serialVersionUID = 784463431L;
 
   /** Creates new form ModuleSelectionJPanel */
-  public CrudeMDLPropertiesPanel(final Properties properties) {
+  public TwoStepPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
   }
@@ -52,63 +52,102 @@ public class CrudeMDLPropertiesPanel extends AbstractPropertiesPanel {
   private void initComponents() {
     java.awt.GridBagConstraints gridBagConstraints;
 
-    clusterer = new javax.swing.JComboBox();
-    clusterProcessor = new javax.swing.JComboBox();
     labelClusterer = new javax.swing.JLabel();
+    clusterer = new javax.swing.JComboBox();
+    jScrollPane3 = new javax.swing.JScrollPane();
+    descClusterer = new javax.swing.JTextPane();
     labelClusterProcessor = new javax.swing.JLabel();
-    jPanel1 = new javax.swing.JPanel();
-    jPanel2 = new javax.swing.JPanel();
+    clusterProcessor = new javax.swing.JComboBox();
+    jScrollPane1 = new javax.swing.JScrollPane();
+    descClusterProcessor = new javax.swing.JTextPane();
 
+    setMinimumSize(new java.awt.Dimension(600, 62));
+    setPreferredSize(new java.awt.Dimension(600, 62));
     setLayout(new java.awt.GridBagLayout());
 
-    clusterer.setMinimumSize(new java.awt.Dimension(200, 22));
-    clusterer.setPreferredSize(new java.awt.Dimension(200, 22));
+    labelClusterer.setText(org.openide.util.NbBundle.getMessage(TwoStepPropertiesPanel.class, "TwoStepPropertiesPanel.labelClusterer.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(labelClusterer, gridBagConstraints);
+
+    clusterer.setMinimumSize(new java.awt.Dimension(400, 22));
+    clusterer.setPreferredSize(new java.awt.Dimension(400, 22));
+    clusterer.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        clustererChanged(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(clusterer, gridBagConstraints);
 
-    clusterProcessor.setMinimumSize(new java.awt.Dimension(200, 22));
-    clusterProcessor.setPreferredSize(new java.awt.Dimension(200, 22));
+    jScrollPane3.setViewportView(descClusterer);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.ipady = 150;
+    add(jScrollPane3, gridBagConstraints);
+
+    labelClusterProcessor.setText(org.openide.util.NbBundle.getMessage(TwoStepPropertiesPanel.class, "TwoStepPropertiesPanel.labelClusterProcessor.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(labelClusterProcessor, gridBagConstraints);
+
+    clusterProcessor.setMinimumSize(new java.awt.Dimension(400, 22));
+    clusterProcessor.setPreferredSize(new java.awt.Dimension(400, 22));
+    clusterProcessor.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        clusterProcessorChanged(evt);
+      }
+    });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(clusterProcessor, gridBagConstraints);
 
-    labelClusterer.setText(org.openide.util.NbBundle.getMessage(CrudeMDLPropertiesPanel.class, "CrudeMDLPropertiesPanel.labelClusterer.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(labelClusterer, gridBagConstraints);
+    jScrollPane1.setMinimumSize(null);
+    jScrollPane1.setPreferredSize(null);
 
-    labelClusterProcessor.setText(org.openide.util.NbBundle.getMessage(CrudeMDLPropertiesPanel.class, "CrudeMDLPropertiesPanel.labelClusterProcessor.text")); // NOI18N
+    descClusterProcessor.setMinimumSize(null);
+    descClusterProcessor.setPreferredSize(null);
+    jScrollPane1.setViewportView(descClusterProcessor);
+
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(labelClusterProcessor, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weighty = 1.0;
-    add(jPanel1, gridBagConstraints);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridheight = 4;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    add(jPanel2, gridBagConstraints);
+    gridBagConstraints.ipady = 150;
+    add(jScrollPane1, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
+
+  private void clustererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clustererChanged
+    // TODO add your handling code here:
+    descClusterer.setText(
+            ModuleSelectionHelper.lookupImpl(ClustererFactory.class,
+            (String) clusterer.getSelectedItem()).getModuleDescription()
+            );
+  }//GEN-LAST:event_clustererChanged
+
+  private void clusterProcessorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterProcessorChanged
+    // TODO add your handling code here:
+    descClusterProcessor.setText(
+            ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class,
+            (String) clusterProcessor.getSelectedItem()).getModuleDescription()
+            );
+  }//GEN-LAST:event_clusterProcessorChanged
 
   @Override
   public final void load() {
@@ -134,8 +173,10 @@ public class CrudeMDLPropertiesPanel extends AbstractPropertiesPanel {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox clusterProcessor;
   private javax.swing.JComboBox clusterer;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JPanel jPanel2;
+  private javax.swing.JTextPane descClusterProcessor;
+  private javax.swing.JTextPane descClusterer;
+  private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JScrollPane jScrollPane3;
   private javax.swing.JLabel labelClusterProcessor;
   private javax.swing.JLabel labelClusterer;
   // End of variables declaration//GEN-END:variables

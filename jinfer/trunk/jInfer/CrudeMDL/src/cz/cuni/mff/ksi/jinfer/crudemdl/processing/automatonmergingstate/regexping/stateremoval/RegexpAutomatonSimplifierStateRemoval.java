@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.RegexpAutomatonSimplifierStateRemovalOrderer;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.weighted.RegexpAutomatonSimplifierStateRemovalOrdererWeighted;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.RegexpAutomatonSimplifierStateRemovalOrdererFactory;
 import java.util.Set;
 import org.apache.log4j.Logger;
 
@@ -40,12 +40,16 @@ import org.apache.log4j.Logger;
  */
 public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomatonSimplifier<T> {
   private static final Logger LOG = Logger.getLogger(RegexpAutomatonSimplifierStateRemoval.class);
+  private RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer;
+
+  public RegexpAutomatonSimplifierStateRemoval(RegexpAutomatonSimplifierStateRemovalOrdererFactory ordererFactory) {
+    this.orderer = ordererFactory.<T>create();
+  }
   
   @Override
   public Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton) throws InterruptedException {
     final RegexpAutomatonStateRemoval<T> stateRemovalAutomaton= new RegexpAutomatonStateRemoval<T>(inputAutomaton);
 
-    final RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer= new RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T>();
     while (stateRemovalAutomaton.getDelta().size() > 2) {
       final State<Regexp<T>> toRemoveState= orderer.getStateToRemove(stateRemovalAutomaton);
 

@@ -47,7 +47,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = Simplifier.class)
-public class SimplifierImpl implements Simplifier {
+public class TwoStepSimplifierImpl implements Simplifier {
   private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
   @Override

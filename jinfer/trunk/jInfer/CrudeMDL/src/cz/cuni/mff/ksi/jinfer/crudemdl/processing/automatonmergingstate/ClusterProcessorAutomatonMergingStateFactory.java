@@ -23,7 +23,10 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.properties.ClusterProcessorAutomatonMergingStatePropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -35,13 +38,24 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
   @Override
+  public ClusterProcessor<AbstractStructuralNode> create() {
+    return new ClusterProcessorAutomatonMergingState(getAutomatonSimplifierFactory(), getRegexpAutomatonSimplifierFactory());
+  }
+
+  @Override
   public String getName() {
     return ClusterProcessorAutomatonMergingStatePropertiesPanel.NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    return getName() + "(" + getAutomatonSimplifierFactory().getModuleDescription() + ")";
+    StringBuilder sb= new StringBuilder(getName());
+    sb.append("(");
+    sb.append(getAutomatonSimplifierFactory().getModuleDescription());
+    sb.append(", ");
+    sb.append(getRegexpAutomatonSimplifierFactory().getModuleDescription());
+    sb.append(")");
+    return sb.toString();
   }
 
   private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
@@ -49,6 +63,13 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
 
     return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
             p.getProperty(ClusterProcessorAutomatonMergingStatePropertiesPanel.PROPERTIES_AUTOMATON_SIMPLIFIER));
+  }
+
+  private RegexpAutomatonSimplifierFactory getRegexpAutomatonSimplifierFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(getName());
+
+    return ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierFactory.class,
+            p.getProperty(ClusterProcessorAutomatonMergingStatePropertiesPanel.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER));
   }
 
   @Override
@@ -66,7 +87,7 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   }
 
   @Override
-  public ClusterProcessor<AbstractStructuralNode> create() {
-    return new ClusterProcessorAutomatonMergingState(getAutomatonSimplifierFactory());
+  public List<String> getCapabilities() {
+    return Collections.<String>emptyList();
   }
 }

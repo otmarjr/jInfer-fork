@@ -17,15 +17,15 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public interface AutomatonSimplifierFactory extends NamedModule {
+public interface AutomatonSimplifierFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
   <T> AutomatonSimplifier<T> create();
- String getDisplayModuleDescription();
 }

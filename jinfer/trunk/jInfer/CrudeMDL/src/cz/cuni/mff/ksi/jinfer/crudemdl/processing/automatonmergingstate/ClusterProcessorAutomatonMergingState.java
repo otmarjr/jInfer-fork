@@ -27,6 +27,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonSimplifierStateRemoval;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
@@ -48,9 +49,13 @@ import org.apache.log4j.Logger;
 public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<AbstractStructuralNode> {
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
   private AutomatonSimplifierFactory automatonSimplifierFactory;
+  private RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory;
   
-  public ClusterProcessorAutomatonMergingState(AutomatonSimplifierFactory automatonSimplifierFactory) {
+  public ClusterProcessorAutomatonMergingState(
+          AutomatonSimplifierFactory automatonSimplifierFactory,
+          RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory) {
     this.automatonSimplifierFactory= automatonSimplifierFactory;
+    this.regexpAutomatonSimplifierFactory= regexpAutomatonSimplifierFactory;
   }
 
   @Override
@@ -84,19 +89,16 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-//    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= new AutomatonSimplifierGreedy<AbstractStructuralNode>();
     final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= automatonSimplifierFactory.<AbstractStructuralNode>create();
     final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton);
-    LOG.debug(">>> After 2,1-context:");
+    LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
-//    AutoEditor.drawAutomaton(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
     final RegexpAutomaton<AbstractStructuralNode> regexpAutomaton= new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
-//    AutoEditor.drawAutomaton(regexpAutomaton);
-    final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier= new RegexpAutomatonSimplifierStateRemoval<AbstractStructuralNode>();
+    final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier= regexpAutomatonSimplifierFactory.<AbstractStructuralNode>create();
     final Regexp<AbstractStructuralNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
     LOG.debug(">>> And the regexp is:");
     LOG.debug(regexp);

@@ -42,6 +42,11 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
 
   @Override
   public String getModuleDescription() {
+    return getName();
+  }
+
+  @Override
+  public String getDisplayModuleDescription() {
     StringBuilder sb = new StringBuilder(getName());
     sb.append(" is really dummy processor of element cluster. The grammar"
             + " inferred for whole cluster of elements it returns"
@@ -50,5 +55,4 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
             + " for cluster being processed.");
     return sb.toString();
   }
-
 }

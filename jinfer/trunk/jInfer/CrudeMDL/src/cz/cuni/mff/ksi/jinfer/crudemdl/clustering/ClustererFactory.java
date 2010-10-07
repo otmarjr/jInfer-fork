@@ -34,4 +34,5 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
  */
 public interface ClustererFactory extends NamedModule, Capabilities {
   Clusterer<AbstractStructuralNode> create();
+  String getDisplayModuleDescription();
 }

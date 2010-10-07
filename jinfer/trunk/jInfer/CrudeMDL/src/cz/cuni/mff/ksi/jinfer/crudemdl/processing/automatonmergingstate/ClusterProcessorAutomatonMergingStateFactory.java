@@ -18,8 +18,13 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.properties.ClusterProcessorAutomatonMergingStatePropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -31,12 +36,23 @@ import org.openide.util.lookup.ServiceProvider;
 public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
   @Override
   public String getName() {
-    return "ClusterProcessorAutomatonMergingState";
+    return ClusterProcessorAutomatonMergingStatePropertiesPanel.NAME;
   }
 
-  // TODO anti more comment when attributes are completed
   @Override
   public String getModuleDescription() {
+    return getName() + "(" + getAutomatonSimplifierFactory().getModuleDescription() + ")";
+  }
+
+  private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(getName());
+
+    return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
+            p.getProperty(ClusterProcessorAutomatonMergingStatePropertiesPanel.PROPERTIES_AUTOMATON_SIMPLIFIER));
+  }
+
+  @Override
+  public String getDisplayModuleDescription() {
     StringBuilder sb = new StringBuilder(getName());
     sb.append(" constructs prefix tree automaton from positive examples"
             + " in the cluster. The it selects AutomatonSimplifier class,"
@@ -44,14 +60,13 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
             + " is believed to return some sort of generalized automaton."
             + " This generalized automaton is then sent to RegexpAutomatonSimplifier"
             + " class, which has to create regular expression from automaton somehow."
-            + " This regular expression is returned as grammar for cluster of elements."
-            + " Attributes are processed separately.");
+            + " This regular expression is returned as grammar for cluster of elements.");
     return sb.toString();
 
   }
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
-    return new ClusterProcessorAutomatonMergingState(getName());
+    return new ClusterProcessorAutomatonMergingState(getAutomatonSimplifierFactory());
   }
 }

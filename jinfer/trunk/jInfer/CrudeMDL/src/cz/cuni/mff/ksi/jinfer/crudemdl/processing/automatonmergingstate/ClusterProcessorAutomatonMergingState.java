@@ -17,16 +17,12 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.khcontext.MergeConditionTesterKHContext;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
@@ -34,12 +30,9 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexpin
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonSimplifierStateRemoval;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy.AutomatonSimplifierGreedy;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeCondidionTester;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import org.apache.log4j.Logger;
 
 /**
@@ -54,16 +47,10 @@ import org.apache.log4j.Logger;
  */
 public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<AbstractStructuralNode> {
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
-  private String moduleName;
+  private AutomatonSimplifierFactory automatonSimplifierFactory;
   
-  public ClusterProcessorAutomatonMergingState(String moduleName) {
-    this.moduleName= moduleName;
-  }
-
-  private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
-    final Properties p = RunningProject.getActiveProjectProps(moduleName);
-
-    return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, p.getProperty("automaton-simplifier"));
+  public ClusterProcessorAutomatonMergingState(AutomatonSimplifierFactory automatonSimplifierFactory) {
+    this.automatonSimplifierFactory= automatonSimplifierFactory;
   }
 
   @Override
@@ -98,7 +85,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
 
     // 3.2 simplify by merging states
 //    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= new AutomatonSimplifierGreedy<AbstractStructuralNode>();
-    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= getAutomatonSimplifierFactory().<AbstractStructuralNode>create();
+    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= automatonSimplifierFactory.<AbstractStructuralNode>create();
     final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton);
     LOG.debug(">>> After 2,1-context:");
     LOG.debug(simplifiedAutomaton);

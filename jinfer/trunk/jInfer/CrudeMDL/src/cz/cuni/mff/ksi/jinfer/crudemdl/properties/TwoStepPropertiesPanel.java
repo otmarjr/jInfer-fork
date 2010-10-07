@@ -65,7 +65,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     setPreferredSize(new java.awt.Dimension(600, 62));
     setLayout(new java.awt.GridBagLayout());
 
-    labelClusterer.setText(org.openide.util.NbBundle.getMessage(TwoStepPropertiesPanel.class, "TwoStepPropertiesPanel.labelClusterer.text")); // NOI18N
+    labelClusterer.setText("Clusterer");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
@@ -94,7 +94,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.ipady = 150;
     add(jScrollPane3, gridBagConstraints);
 
-    labelClusterProcessor.setText(org.openide.util.NbBundle.getMessage(TwoStepPropertiesPanel.class, "TwoStepPropertiesPanel.labelClusterProcessor.text")); // NOI18N
+    labelClusterProcessor.setText("ClusterProcessor");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
@@ -118,7 +118,6 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     add(clusterProcessor, gridBagConstraints);
 
     jScrollPane1.setMinimumSize(null);
-    jScrollPane1.setPreferredSize(null);
 
     descClusterProcessor.setMinimumSize(null);
     descClusterProcessor.setPreferredSize(null);
@@ -137,7 +136,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     // TODO add your handling code here:
     descClusterer.setText(
             ModuleSelectionHelper.lookupImpl(ClustererFactory.class,
-            (String) clusterer.getSelectedItem()).getModuleDescription()
+            (String) clusterer.getSelectedItem()).getDisplayModuleDescription()
             );
   }//GEN-LAST:event_clustererChanged
 
@@ -145,7 +144,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     // TODO add your handling code here:
     descClusterProcessor.setText(
             ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class,
-            (String) clusterProcessor.getSelectedItem()).getModuleDescription()
+            (String) clusterProcessor.getSelectedItem()).getDisplayModuleDescription()
             );
   }//GEN-LAST:event_clusterProcessorChanged
 

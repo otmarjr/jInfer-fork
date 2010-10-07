@@ -37,7 +37,7 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
 
   @Override
   public String getName() {
-    return "GreedyAutomatonSimplifier";
+    return "AutomatonSimplifierGreedy";
   }
 
   @Override
@@ -45,4 +45,12 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
     return getName();
   }
 
+  @Override
+  public String getDisplayModuleDescription() {
+    StringBuilder sb = new StringBuilder(getName());
+    sb.append(" takes one MergeConditionTester and merges all states"
+            + " that can be merged. E.g. with k,h-context condition tester"
+            + " it defacto creates k,h-context automaton.");
+    return sb.toString();
+  }
 }

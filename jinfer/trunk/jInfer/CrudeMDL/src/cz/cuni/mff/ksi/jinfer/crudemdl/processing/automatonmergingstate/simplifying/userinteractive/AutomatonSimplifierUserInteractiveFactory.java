@@ -19,6 +19,8 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import java.util.Collections;
+import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -53,6 +55,11 @@ public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimpl
             + " selected to merge. Whole process of merging is under user control,"
             + " and it sometime annoying.");
     return sb.toString();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.<String>emptyList();
   }
 
 }

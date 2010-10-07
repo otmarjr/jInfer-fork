@@ -153,13 +153,15 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     clusterer.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(ClustererFactory.class).toArray()
             ));
+    clusterer.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
+    clustererChanged(null);
+
     clusterProcessor.setModel(new DefaultComboBoxModel(
            ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()
            ));
-
-    clusterer.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
     clusterProcessor.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTER_PROCESSOR,
             DEFAULT_MENU_TEXT));
+    clusterProcessorChanged(null);
   }
 
   @Override

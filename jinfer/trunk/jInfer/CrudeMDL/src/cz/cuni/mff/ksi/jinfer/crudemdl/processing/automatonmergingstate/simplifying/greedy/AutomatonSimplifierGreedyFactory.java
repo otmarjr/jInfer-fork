@@ -19,7 +19,8 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import java.util.Collections;
+import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -52,5 +53,10 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
             + " that can be merged. E.g. with k,h-context condition tester"
             + " it defacto creates k,h-context automaton.");
     return sb.toString();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.<String>emptyList();
   }
 }

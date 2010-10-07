@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
@@ -26,6 +26,6 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
  *
  * @author anti
  */
-public interface MergeConditionTesterFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
-  public <T> MergeCondidionTester<T> create();
+public interface RegexpAutomatonSimplifierFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
+  <T> RegexpAutomatonSimplifier<T> create();
 }

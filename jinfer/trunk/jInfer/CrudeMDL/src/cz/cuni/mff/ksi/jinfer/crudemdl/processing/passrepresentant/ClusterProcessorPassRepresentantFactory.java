@@ -20,6 +20,8 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.passrepresentant;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import java.util.Collections;
+import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -54,5 +56,10 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
             + " occurs at all. Just return representant as the grammar"
             + " for cluster being processed.");
     return sb.toString();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.<String>emptyList();
   }
 }

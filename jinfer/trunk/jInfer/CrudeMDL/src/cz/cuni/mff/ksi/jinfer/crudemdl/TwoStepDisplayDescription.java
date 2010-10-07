@@ -15,17 +15,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting;
-
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public interface MergeConditionTesterFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
-  public <T> MergeCondidionTester<T> create();
+public interface TwoStepDisplayDescription {
+  String getDisplayModuleDescription();
 }

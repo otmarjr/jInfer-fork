@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.propert
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.crudemdl.SimplifierImpl;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;

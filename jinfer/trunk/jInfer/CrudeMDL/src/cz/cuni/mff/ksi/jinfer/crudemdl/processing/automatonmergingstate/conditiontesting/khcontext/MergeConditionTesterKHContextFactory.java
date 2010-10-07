@@ -19,6 +19,8 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditi
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeCondidionTester;
+import java.util.Collections;
+import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -41,6 +43,16 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   @Override
   public <T> MergeCondidionTester<T> create() {
     return new MergeConditionTesterKHContext<T>();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.<String>emptyList();
+  }
+
+  @Override
+  public String getDisplayModuleDescription() {
+    return "TODO anti write here";
   }
 
 }

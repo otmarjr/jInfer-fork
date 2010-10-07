@@ -37,7 +37,7 @@ import java.util.Set;
  *
  * @author anti
  */
-public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T> {
+public class MergeConditionTesterKHContext<T> implements MergeCondidionTester<T> {
   private int k;
   private int h;
 
@@ -47,7 +47,7 @@ public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T>
    * @param k
    * @param h
    */
-  public KHContextMergeConditionTester(int k, int h) {
+  public MergeConditionTesterKHContext(int k, int h) {
     if (h > k) {
       throw  new IllegalArgumentException("K must be greater than h");
     }
@@ -55,6 +55,18 @@ public class KHContextMergeConditionTester<T> implements MergeCondidionTester<T>
     this.h= h;
   }
 
+  public MergeConditionTesterKHContext() {
+    this(2, 1);
+  }
+
+  public void setKH(int k, int h) {
+    if (h > k) {
+      throw  new IllegalArgumentException("K must be greater than h");
+    }
+    this.k= k;
+    this.h= h;
+  }
+  
   private List<KHContext<T>> findKHContexts(final State<T> state, final Map<State<T>, Set<Step<T>>> delta, final Map<State<T>, Set<Step<T>>> reverseDelta) {
     final List<KHContext<T>> result= new LinkedList<KHContext<T>>();
 

@@ -23,25 +23,29 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.KHContextMergeConditionTester;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeConditionTesterKHContext;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.regexping.RegexpAutomatonSimplifierStateRemoval;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.AutomatonSimplifier;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.GreedyAutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.AutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.AutomatonSimplifierGreedy;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying.MergeCondidionTester;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 
 /**
  * Class providing method for inferring DTD for single element. In this implementation
  * deterministic finite automaton is used.
  * First Prefix-Tree automaton is constructed using cluster.members() as positive
- * examples. Then, given KHContextMergeConditionTester, merging of states occurs
+ * examples. Then, given MergeConditionTesterKHContext, merging of states occurs
  * until there are no more states to merge. Currently k=2, h=1, so
  * producing 2,1-context automaton by merging.
  *
@@ -49,6 +53,17 @@ import org.apache.log4j.Logger;
  */
 public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<AbstractStructuralNode> {
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
+  private String moduleName;
+  
+  public ClusterProcessorAutomatonMergingState(String moduleName) {
+    this.moduleName= moduleName;
+  }
+
+  private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(moduleName);
+
+    return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, p.getProperty("automaton-simplifier"));
+  }
 
   @Override
   public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final Cluster<AbstractStructuralNode> cluster) throws InterruptedException {
@@ -79,13 +94,11 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(cluster.getRepresentant());
     LOG.debug(">>> PTA automaton:");
     LOG.debug(automaton);
-    LOG.debug("AUTO EDITOR: " + new AutoEditor<AbstractStructuralNode>().drawAutomatonToPickTwoStates(automaton));
 
     // 3.2 simplify by merging states
-    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= new GreedyAutomatonSimplifier<AbstractStructuralNode>();
-    final List<MergeCondidionTester<AbstractStructuralNode>> l= new ArrayList<MergeCondidionTester<AbstractStructuralNode>>();
-    l.add(new KHContextMergeConditionTester<AbstractStructuralNode>(2, 1));
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton,  l);
+//    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= new AutomatonSimplifierGreedy<AbstractStructuralNode>();
+    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= getAutomatonSimplifierFactory().<AbstractStructuralNode>create();
+    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton);
     LOG.debug(">>> After 2,1-context:");
     LOG.debug(simplifiedAutomaton);
 //    AutoEditor.drawAutomaton(simplifiedAutomaton);

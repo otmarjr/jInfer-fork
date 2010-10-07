@@ -21,9 +21,13 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -33,8 +37,19 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class GreedyAutomatonSimplifier<T> implements AutomatonSimplifier<T> {
-  private static final Logger LOG = Logger.getLogger(GreedyAutomatonSimplifier.class);
+public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
+  private static final Logger LOG = Logger.getLogger(AutomatonSimplifierGreedy.class);
+  private String moduleName;
+
+  public AutomatonSimplifierGreedy(String moduleName) {
+    this.moduleName= moduleName;
+  }
+
+  private MergeConditionTesterFactory getMergeConditionTesterFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(moduleName);
+
+    return ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, p.getProperty("merge-condition-tester"));
+  }
 
   /**
    * Simplify by merging states greedily. Condition to merge states is tested in provided
@@ -48,7 +63,16 @@ public class GreedyAutomatonSimplifier<T> implements AutomatonSimplifier<T> {
    * @throws InterruptedException
    */
   @Override
-  public Automaton<T> simplify(final Automaton<T> inputAutomaton, final List<MergeCondidionTester<T>> mergeConditionTesters) throws InterruptedException {
+  public Automaton<T> simplify(Automaton<T> inputAutomaton) throws InterruptedException {
+    MergeConditionTesterFactory f = getMergeConditionTesterFactory();
+
+    final List<MergeCondidionTester<T>> l= new ArrayList<MergeCondidionTester<T>>();
+    l.add(f.<T>create());
+    return this.simplify(inputAutomaton, l);
+  }
+
+
+  private Automaton<T> simplify(final Automaton<T> inputAutomaton, final List<MergeCondidionTester<T>> mergeConditionTesters) throws InterruptedException {
     final Map<State<T>, Set<Step<T>>> delta= inputAutomaton.getDelta();
     final Map<State<T>, Set<Step<T>>> reverseDelta= inputAutomaton.getReverseDelta();
 

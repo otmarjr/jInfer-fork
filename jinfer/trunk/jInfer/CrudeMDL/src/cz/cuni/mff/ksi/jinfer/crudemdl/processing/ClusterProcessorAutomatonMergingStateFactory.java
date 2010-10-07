@@ -39,6 +39,6 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
-    return new ClusterProcessorAutomatonMergingState();
+    return new ClusterProcessorAutomatonMergingState(getName());
   }
 }

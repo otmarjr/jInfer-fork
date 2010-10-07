@@ -17,14 +17,28 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automaton.simplifying;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public interface AutomatonSimplifier<T> {
-  Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException;
+@ServiceProvider(service = MergeConditionTesterFactory.class)
+public class MergeConditionTesterKHContextFactory implements MergeConditionTesterFactory {
+  @Override
+  public String getName() {
+    return "MergeConditionTesterKHContext";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
+  @Override
+  public <T> MergeCondidionTester<T> create() {
+    return new MergeConditionTesterKHContext<T>();
+  }
+
 }

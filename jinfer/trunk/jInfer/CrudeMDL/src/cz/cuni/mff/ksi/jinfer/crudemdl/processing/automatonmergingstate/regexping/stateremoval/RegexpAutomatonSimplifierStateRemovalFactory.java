@@ -49,7 +49,11 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
 
   @Override
   public String getModuleDescription() {
-    return getName() + "(" ; // TODO anti 11
+    StringBuilder sb = new StringBuilder(getName());
+    sb.append("(");
+    sb.append(getRegexpAutomatonSimplifierStateRemovalOrdererFactory().getModuleDescription());
+    sb.append(")");
+    return sb.toString();
   }
 
   @Override

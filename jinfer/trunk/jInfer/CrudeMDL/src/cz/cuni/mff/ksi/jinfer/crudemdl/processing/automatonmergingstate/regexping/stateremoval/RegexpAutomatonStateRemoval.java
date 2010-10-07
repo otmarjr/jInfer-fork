@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -103,7 +102,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     if (loopSteps.size() == 1) {
       final Step<Regexp<T>> oldLoopStep= loopSteps.get(0);
 
-      Regexp<T> symbol= oldLoopStep.getAcceptSymbol();
+      final Regexp<T> symbol= oldLoopStep.getAcceptSymbol();
       newLoopStep=
               new Step<Regexp<T>>(
                 new Regexp<T>(

@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.kstring;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeCondidionTester;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -38,7 +38,7 @@ import java.util.Set;
  *
  * @author anti
  */
-public class MergeConditionTesterKHString<T> implements MergeCondidionTester<T> {
+public class MergeConditionTesterKHString<T> implements MergeConditionTester<T> {
   private int k;
   private int h;
 
@@ -83,7 +83,7 @@ public class MergeConditionTesterKHString<T> implements MergeCondidionTester<T> 
   }
 
   @Override
-  public List<List<Pair<State<T>, State<T>>>> getMergableStates(State<T> mainState, State<T> mergedState, Automaton<T> automaton) {
+  public List<List<Pair<State<T>, State<T>>>> getMergableStates(final State<T> mainState, final State<T> mergedState, final Automaton<T> automaton) {
     final Map<State<T>, Set<Step<T>>> delta= automaton.getDelta();
     final Map<State<T>, Set<Step<T>>> reverseDelta= automaton.getReverseDelta();
 
@@ -100,11 +100,10 @@ public class MergeConditionTesterKHString<T> implements MergeCondidionTester<T> 
       throw new IllegalArgumentException("reverseDelta function does not contain state to check.");
     }
 
-    List<KHString<T>> mainKHStrings= this.findKHStrings(mainState, delta, reverseDelta);
-    List<KHString<T>> mergedKHStrings= this.findKHStrings(mergedState, delta, reverseDelta);
+    final List<KHString<T>> mainKHStrings= this.findKHStrings(mainState, delta, reverseDelta);
+    final List<KHString<T>> mergedKHStrings= this.findKHStrings(mergedState, delta, reverseDelta);
 
-    List<List<Pair<State<T>, State<T>>>> result= new LinkedList<List<Pair<State<T>, State<T>>>>();
-    boolean found= false;
+    final List<List<Pair<State<T>, State<T>>>> result= new LinkedList<List<Pair<State<T>, State<T>>>>();
     for (KHString<T> mainKHString : mainKHStrings) {
       for (KHString<T> mergedKHString : mergedKHStrings) {
         final List<Pair<State<T>, State<T>>> temp= mainKHString.getMergeableStates(mergedKHString);

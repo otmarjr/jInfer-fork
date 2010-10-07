@@ -28,7 +28,6 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonSimplifierStateRemoval;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.ArrayList;
@@ -48,14 +47,14 @@ import org.apache.log4j.Logger;
  */
 public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<AbstractStructuralNode> {
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
-  private AutomatonSimplifierFactory automatonSimplifierFactory;
-  private RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory;
+  private final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier;
+  private final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier;
   
   public ClusterProcessorAutomatonMergingState(
-          AutomatonSimplifierFactory automatonSimplifierFactory,
-          RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory) {
-    this.automatonSimplifierFactory= automatonSimplifierFactory;
-    this.regexpAutomatonSimplifierFactory= regexpAutomatonSimplifierFactory;
+          final AutomatonSimplifierFactory automatonSimplifierFactory,
+          final RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory) {
+    this.automatonSimplifier= automatonSimplifierFactory.<AbstractStructuralNode>create();
+    this.regexpAutomatonSimplifier= regexpAutomatonSimplifierFactory.<AbstractStructuralNode>create();
   }
 
   @Override
@@ -89,7 +88,6 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier= automatonSimplifierFactory.<AbstractStructuralNode>create();
     final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton);
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
@@ -98,7 +96,6 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     final RegexpAutomaton<AbstractStructuralNode> regexpAutomaton= new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
-    final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier= regexpAutomatonSimplifierFactory.<AbstractStructuralNode>create();
     final Regexp<AbstractStructuralNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
     LOG.debug(">>> And the regexp is:");
     LOG.debug(regexp);

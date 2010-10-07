@@ -48,7 +48,7 @@ public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimpl
 
   @Override
   public String getDisplayModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getName());
     sb.append(" instead of using MergeConditionTester, we use AutoEditor,"
             + " which displays automaton to user, wait for input of states to merge,"
             + " and returns us the result. We then merge the states, user"

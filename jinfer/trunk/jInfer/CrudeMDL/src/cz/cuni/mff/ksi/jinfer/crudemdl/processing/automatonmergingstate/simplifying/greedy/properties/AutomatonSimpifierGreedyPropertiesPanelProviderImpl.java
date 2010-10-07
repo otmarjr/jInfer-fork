@@ -15,11 +15,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.properties;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierImpl;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy.AutomatonSimplifierGreedyFactory;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -28,17 +28,17 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
-public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvider {
+public class AutomatonSimpifierGreedyPropertiesPanelProviderImpl implements PropertiesPanelProvider {
   private static final int PANEL_PRIORITY = 400000;
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new TwoStepPropertiesPanel(properties);
+    return new AutomatonSimplifierGreedyPropertiesPanel(properties);
   }
 
   @Override
   public String getName() {
-    return TwoStepSimplifierImpl.NAME;
+    return AutomatonSimplifierGreedyFactory.NAME;
   }
 
   @Override

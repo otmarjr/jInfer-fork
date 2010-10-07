@@ -27,5 +27,5 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
  * @author anti
  */
 public interface MergeConditionTesterFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
-  public <T> MergeCondidionTester<T> create();
+  <T> MergeConditionTester<T> create();
 }

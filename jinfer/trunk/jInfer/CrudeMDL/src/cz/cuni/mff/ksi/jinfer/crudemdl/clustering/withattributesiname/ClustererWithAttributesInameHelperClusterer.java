@@ -18,7 +18,6 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import java.util.Collection;

@@ -17,10 +17,14 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,25 +34,31 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFactory {
+  public static final String NAME = "AutomatonSimplifierGreedy";
+  public static final String PROPERTIES_CONDITION_TESTER = "condition-tester";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
-    return new AutomatonSimplifierGreedy<T>(getName());
+    return new AutomatonSimplifierGreedy<T>(getMergeConditionTesterFactory());
   }
 
   @Override
   public String getName() {
-    return "AutomatonSimplifierGreedy";
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    final StringBuilder sb = new StringBuilder(getName());
+    sb.append("(");
+    sb.append(getMergeConditionTesterFactory().getModuleDescription());
+    sb.append(")");
+    return sb.toString();
   }
 
   @Override
   public String getDisplayModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getName());
     sb.append(" takes one MergeConditionTester and merges all states"
             + " that can be merged. E.g. with k,h-context condition tester"
             + " it defacto creates k,h-context automaton.");
@@ -58,5 +68,11 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
   @Override
   public List<String> getCapabilities() {
     return Collections.<String>emptyList();
+  }
+
+  private MergeConditionTesterFactory getMergeConditionTesterFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(getName());
+
+    return ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, p.getProperty(PROPERTIES_CONDITION_TESTER));
   }
 }

@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.khcontext;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeCondidionTester;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -38,7 +38,7 @@ import java.util.Set;
  *
  * @author anti
  */
-public class MergeConditionTesterKHContext<T> implements MergeCondidionTester<T> {
+public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T> {
   private int k;
   private int h;
 
@@ -83,7 +83,7 @@ public class MergeConditionTesterKHContext<T> implements MergeCondidionTester<T>
   }
 
   @Override
-  public List<List<Pair<State<T>, State<T>>>> getMergableStates(State<T> mainState, State<T> mergedState, Automaton<T> automaton) {
+  public List<List<Pair<State<T>, State<T>>>> getMergableStates(final State<T> mainState, final State<T> mergedState, final Automaton<T> automaton) {
     final Map<State<T>, Set<Step<T>>> delta= automaton.getDelta();
     final Map<State<T>, Set<Step<T>>> reverseDelta= automaton.getReverseDelta();
 
@@ -100,11 +100,10 @@ public class MergeConditionTesterKHContext<T> implements MergeCondidionTester<T>
       throw new IllegalArgumentException("reverseDelta function does not contain state to check.");
     }
 
-    List<KHContext<T>> mainKHContexts= this.findKHContexts(mainState, delta, reverseDelta);
-    List<KHContext<T>> mergedKHContexts= this.findKHContexts(mergedState, delta, reverseDelta);
+    final List<KHContext<T>> mainKHContexts= this.findKHContexts(mainState, delta, reverseDelta);
+    final List<KHContext<T>> mergedKHContexts= this.findKHContexts(mergedState, delta, reverseDelta);
 
-    List<List<Pair<State<T>, State<T>>>> result= new LinkedList<List<Pair<State<T>, State<T>>>>();
-    boolean found= false;
+    final List<List<Pair<State<T>, State<T>>>> result= new LinkedList<List<Pair<State<T>, State<T>>>>();
     for (KHContext<T> mainKHContext : mainKHContexts) {
       for (KHContext<T> mergedKHContext : mergedKHContexts) {
         final List<Pair<State<T>, State<T>>> temp= mainKHContext.getMergeableStates(mergedKHContext);

@@ -33,8 +33,8 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierUserInteractive.class);
   
   @Override
-  public Automaton<T> simplify(Automaton<T> inputAutomaton) throws InterruptedException {
-    AutoEditor<T> gui= new AutoEditor<T>();
+  public Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException {
+    final AutoEditor<T> gui= new AutoEditor<T>();
     Pair<State<T>, State<T>> mergePair;
     do {
       mergePair = gui.drawAutomatonToPickTwoStates(inputAutomaton);

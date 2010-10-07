@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,21 +18,18 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierImpl;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
-import java.util.List;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- *
- * @author sviro
+ * TODO anti Comment!
+ * @author anti
  */
 public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
 
-  public static final String NAME = "TwoStepSimplifier";
-  public static final String PROPERTIES_CLUSTERER = "clusterer";
-  public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
 
@@ -153,22 +150,22 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     clusterer.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(ClustererFactory.class).toArray()
             ));
-    clusterer.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
+    clusterer.setSelectedItem(properties.getProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
     clustererChanged(null);
 
     clusterProcessor.setModel(new DefaultComboBoxModel(
            ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()
            ));
-    clusterProcessor.setSelectedItem(properties.getProperty(PROPERTIES_CLUSTER_PROCESSOR,
+    clusterProcessor.setSelectedItem(properties.getProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR,
             DEFAULT_MENU_TEXT));
     clusterProcessorChanged(null);
   }
 
   @Override
   public void store() {
-    properties.setProperty(PROPERTIES_CLUSTERER,
+    properties.setProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTERER,
             (String) clusterer.getSelectedItem());
-    properties.setProperty(PROPERTIES_CLUSTER_PROCESSOR,
+    properties.setProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR,
             (String) clusterProcessor.getSelectedItem());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

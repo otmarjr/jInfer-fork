@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.properties.ClusterProcessorAutomatonMergingStatePropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
@@ -37,6 +36,10 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
+  public static final String NAME = "ClusterProcessorAutomatonMergingState";
+  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER = "automaton-simplifier";
+  public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER = "regexp-automaton-simplifier";
+
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
     return new ClusterProcessorAutomatonMergingState(getAutomatonSimplifierFactory(), getRegexpAutomatonSimplifierFactory());
@@ -44,12 +47,12 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
 
   @Override
   public String getName() {
-    return ClusterProcessorAutomatonMergingStatePropertiesPanel.NAME;
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    StringBuilder sb= new StringBuilder(getName());
+    final StringBuilder sb= new StringBuilder(getName());
     sb.append("(");
     sb.append(getAutomatonSimplifierFactory().getModuleDescription());
     sb.append(", ");
@@ -62,19 +65,19 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
-            p.getProperty(ClusterProcessorAutomatonMergingStatePropertiesPanel.PROPERTIES_AUTOMATON_SIMPLIFIER));
+            p.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER));
   }
 
   private RegexpAutomatonSimplifierFactory getRegexpAutomatonSimplifierFactory() {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierFactory.class,
-            p.getProperty(ClusterProcessorAutomatonMergingStatePropertiesPanel.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER));
+            p.getProperty(PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER));
   }
 
   @Override
   public String getDisplayModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getName());
     sb.append(" constructs prefix tree automaton from positive examples"
             + " in the cluster. The it selects AutomatonSimplifier class,"
             + " to which it passes automaton to merge some states. AutomatonSimplifier"

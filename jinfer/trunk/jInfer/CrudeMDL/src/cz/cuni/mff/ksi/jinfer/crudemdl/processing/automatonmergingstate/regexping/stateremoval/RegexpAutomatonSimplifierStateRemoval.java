@@ -40,9 +40,9 @@ import org.apache.log4j.Logger;
  */
 public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomatonSimplifier<T> {
   private static final Logger LOG = Logger.getLogger(RegexpAutomatonSimplifierStateRemoval.class);
-  private RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer;
+  private final RegexpAutomatonSimplifierStateRemovalOrderer<T> orderer;
 
-  public RegexpAutomatonSimplifierStateRemoval(RegexpAutomatonSimplifierStateRemovalOrdererFactory ordererFactory) {
+  public RegexpAutomatonSimplifierStateRemoval(final RegexpAutomatonSimplifierStateRemovalOrdererFactory ordererFactory) {
     this.orderer = ordererFactory.<T>create();
   }
   

@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.kstring;
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeCondidionTester;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Collections;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
@@ -41,7 +41,7 @@ public class MergeConditionTesterKHStringFactory implements MergeConditionTester
   }
 
   @Override
-  public <T> MergeCondidionTester<T> create() {
+  public <T> MergeConditionTester<T> create() {
     return new MergeConditionTesterKHString<T>();
   }
 

@@ -293,6 +293,9 @@ public class Automaton<T> {
     mainState.incFinalCount(mergedState.getFinalCount());
     this.mergedStates.put(mergedState, mainState);
     this.reverseMergedStates.get(mainState).add(mergedState);
+    if (mergedState.equals(initialState)) {
+      this.initialState= mainState;
+    }
     LOG.debug("after merge");
     LOG.debug(this);
     this.collapseStepsAfterMerge(mainState);

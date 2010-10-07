@@ -56,13 +56,26 @@ public class CloneHelper {
   }
 
   private static Attribute cloneAttribute(final Attribute a) {
-    return new Attribute(cloneList(a.getContext()), String.valueOf(a.getName()), cloneMap(a.getMetadata()), String.valueOf(a.getContentType()), cloneList(a.getContent()));
+    return new Attribute(cloneList(a.getContext()), String.valueOf(a.getName()), 
+            cloneMap(a.getMetadata()), String.valueOf(a.getContentType()),
+            cloneList(a.getContent()));
+  }
+
+  private static List<Attribute> cloneAttributes(final List<Attribute> attrs) {
+    final List<Attribute> ret = new ArrayList<Attribute>(attrs.size());
+    for (final Attribute a : attrs) {
+      ret.add(cloneAttribute(a));
+    }
+    return ret;
   }
 
   private static SimpleData cloneSimpleData(final SimpleData s) {
-    return new SimpleData(cloneList(s.getContext()), String.valueOf(s.getName()), cloneMap(s.getMetadata()), String.valueOf(s.getContentType()), cloneList(s.getContent()));
+    return new SimpleData(cloneList(s.getContext()), String.valueOf(s.getName()),
+            cloneMap(s.getMetadata()), String.valueOf(s.getContentType()),
+            cloneList(s.getContent()));
   }
 
+  // TODO vektor Test attribute cloning
   private Element cloneElement(final Element e) {
     if (cloned.containsKey(e)) {
       return cloned.get(e);
@@ -71,17 +84,18 @@ public class CloneHelper {
     Element clone;
 
     if (e.getSubnodes().isLambda()) {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), cloneMap(e.getMetadata()),
-              cloneRegexp(e.getSubnodes()), cloneList(e.getAttributes()));
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), 
+              cloneMap(e.getMetadata()), cloneRegexp(e.getSubnodes()),
+              cloneAttributes(e.getAttributes()));
       cloned.put(e, clone);
       return clone;
     }
 
-    clone = new Element(cloneList(e.getContext()), 
+    clone = new Element(cloneList(e.getContext()),
             String.valueOf(e.getName()),
             cloneMap(e.getMetadata()),
             Regexp.<AbstractStructuralNode>getMutable(),
-            cloneList(e.getAttributes()));
+            cloneAttributes(e.getAttributes()));
     cloned.put(e, clone);
     clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
 
@@ -107,8 +121,6 @@ public class CloneHelper {
     return new ArrayList<T>(l);
   }
 
-
-
   private static Map<String, Object> cloneMap(final Map<String, Object> m) {
     if (m == null) {
       return null;
@@ -121,7 +133,8 @@ public class CloneHelper {
     return ret;
   }
 
-  private Regexp<AbstractStructuralNode> cloneRegexp(final Regexp<AbstractStructuralNode> r) {
+  private Regexp<AbstractStructuralNode> cloneRegexp(
+          final Regexp<AbstractStructuralNode> r) {
     return new Regexp<AbstractStructuralNode>(
             cloneAbstractNode(r.getContent()),
             cloneChildren(r.getChildren()),
@@ -129,7 +142,8 @@ public class CloneHelper {
             r.getInterval());
   }
 
-  private List<Regexp<AbstractStructuralNode>> cloneChildren(final List<Regexp<AbstractStructuralNode>> c) {
+  private List<Regexp<AbstractStructuralNode>> cloneChildren(
+          final List<Regexp<AbstractStructuralNode>> c) {
     if (c == null) {
       return null;
     }

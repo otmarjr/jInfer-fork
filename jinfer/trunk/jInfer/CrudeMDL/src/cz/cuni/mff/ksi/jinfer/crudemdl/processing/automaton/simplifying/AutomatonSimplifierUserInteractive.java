@@ -41,7 +41,8 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
       if (mergePair != null) {
         LOG.debug("AUTO EDITOR selected: " + mergePair.toString());
         inputAutomaton.mergeStates(mergePair.getFirst(), mergePair.getSecond());
-        LOG.debug("After merge:");
+        LOG.debug("After merge:"
+                );
         LOG.debug(inputAutomaton);
       }
     } while (mergePair != null);

@@ -29,7 +29,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
-import cz.cuni.mff.ksi.jinfer.crudemdl.properties.CrudeMDLPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.crudemdl.properties.TwoStepPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +52,7 @@ public class SimplifierImpl implements Simplifier {
 
   @Override
   public String getName() {
-    return CrudeMDLPropertiesPanel.NAME;
+    return TwoStepPropertiesPanel.NAME;
   }
 
   @Override
@@ -68,13 +68,13 @@ public class SimplifierImpl implements Simplifier {
   private ClustererFactory getClustererFactory() {
     final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTERER));
+    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(TwoStepPropertiesPanel.PROPERTIES_CLUSTERER));
   }
 
   private ClusterProcessorFactory getClusterProcessorFactory() {
     final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(CrudeMDLPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR));
+    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(TwoStepPropertiesPanel.PROPERTIES_CLUSTER_PROCESSOR));
   }
 
   private void verifyInput(final List<AbstractStructuralNode> initialGrammar) throws InterruptedException {
@@ -124,6 +124,7 @@ public class SimplifierImpl implements Simplifier {
       // 3.1 process attributes if supported
       final List<Attribute> attList= new ArrayList<Attribute>();
       if (clustererFactory.getCapabilities().contains("attributeClusters")) {
+        @SuppressWarnings("unchecked")
         final List<Cluster<Attribute>> attributeClusters=
                 ((ClustererWithAttributes<AbstractStructuralNode, Attribute>) clusterer).
                 getAttributeClusters(cluster.getRepresentant());

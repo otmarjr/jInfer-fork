@@ -44,7 +44,14 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    StringBuilder sb = new StringBuilder(getName());
+    sb.append(" clusters Elements in initial grammar. It considers two elements"
+            + " equivalent exactly when their names equals (with ignoring case)."
+            + " Attributes are handled same way. Only attributes on same element"
+            + " cluster are clusterer once again, to obtain attributes for"
+            + " element. It does not provide any heuristic to find out, whether"
+            + " some attributes are same across different elements.");
+     return sb.toString();
   }
 
   @Override

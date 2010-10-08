@@ -18,7 +18,6 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -46,17 +45,8 @@ public class CloneHelper {
     return ret;
   }
 
-  public List<Cluster> cloneClusters(
-          final List<Cluster> clusters) {
-    final List<Cluster> ret = new ArrayList<Cluster>(clusters.size());
-    for (final Cluster cluster : clusters) {
-      ret.add(cloneCluster(cluster));
-    }
-    return ret;
-  }
-
   private static Attribute cloneAttribute(final Attribute a) {
-    return new Attribute(cloneList(a.getContext()), String.valueOf(a.getName()), 
+    return new Attribute(cloneList(a.getContext()), String.valueOf(a.getName()),
             cloneMap(a.getMetadata()), String.valueOf(a.getContentType()),
             cloneList(a.getContent()));
   }
@@ -84,7 +74,7 @@ public class CloneHelper {
     Element clone;
 
     if (e.getSubnodes().isLambda()) {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()), 
+      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()),
               cloneMap(e.getMetadata()), cloneRegexp(e.getSubnodes()),
               cloneAttributes(e.getAttributes()));
       cloned.put(e, clone);
@@ -165,9 +155,5 @@ public class CloneHelper {
       return cloneElement((Element) n);
     }
     throw new IllegalArgumentException("Unknown abstract node: " + n);
-  }
-
-  private Cluster cloneCluster(final Cluster c) {
-    return new Cluster(cloneElement(c.getRepresentant()), cloneRules(c.getContent()));
   }
 }

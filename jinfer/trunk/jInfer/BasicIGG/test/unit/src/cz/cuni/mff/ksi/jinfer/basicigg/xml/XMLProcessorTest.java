@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -53,7 +53,7 @@ public class XMLProcessorTest {
   public void testProcessSimple() {
     System.out.println("processSimple");
     final InputStream s = new ByteArrayInputStream(CARS.getBytes());
-    final List<AbstractStructuralNode> result = new XMLProcessor().process(s);
+    final List<Element> result = new XMLProcessor().process(s);
     assertEquals(CARS_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, CARS_RESULTS[i], result.get(i).toString());
@@ -70,7 +70,7 @@ public class XMLProcessorTest {
   public void testProcessSimpleAttr() {
     System.out.println("processSimpleAttr");
     final InputStream s = new ByteArrayInputStream(CARS_ATTR.getBytes());
-    final List<AbstractStructuralNode> result = new XMLProcessor().process(s);
+    final List<Element> result = new XMLProcessor().process(s);
     assertEquals(CARS_RESULTS_ATTR.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, CARS_RESULTS_ATTR[i], result.get(i).toString());
@@ -108,13 +108,13 @@ public class XMLProcessorTest {
   public void testProcess() {
     System.out.println("process");
     final InputStream s = new ByteArrayInputStream(PEOPLE.getBytes());
-    final List<AbstractStructuralNode> result = new XMLProcessor().process(s);
+    final List<Element> result = new XMLProcessor().process(s);
     assertEquals(PEOPLE_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, PEOPLE_RESULTS[i], result.get(i).toString());
     }
     final InputStream sComments = new ByteArrayInputStream(PEOPLE_COMMENTS.getBytes());
-    final List<AbstractStructuralNode> resultComments = new XMLProcessor().process(sComments);
+    final List<Element> resultComments = new XMLProcessor().process(sComments);
     assertEquals(PEOPLE_RESULTS.length, resultComments.size());
     for (int i = 0; i < resultComments.size(); i++) {
       assertEquals("Iteration " + i, PEOPLE_RESULTS[i], result.get(i).toString());
@@ -140,7 +140,7 @@ public class XMLProcessorTest {
   public void testProcessSimpleData() {
     System.out.println("testProcessSimpleData");
     final InputStream s = new ByteArrayInputStream(CITIES.getBytes());
-    final List<AbstractStructuralNode> result = new XMLProcessor().process(s);
+    final List<Element> result = new XMLProcessor().process(s);
     assertEquals(CITIES_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, CITIES_RESULTS[i], result.get(i).toString());
@@ -168,7 +168,7 @@ public class XMLProcessorTest {
   public void testProcessMixed() {
     System.out.println("testProcessMixed");
     final InputStream s = new ByteArrayInputStream(HTML.getBytes());
-    final List<AbstractStructuralNode> result = new XMLProcessor().process(s);
+    final List<Element> result = new XMLProcessor().process(s);
     assertEquals(HTML_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, HTML_RESULTS[i], result.get(i).toString());

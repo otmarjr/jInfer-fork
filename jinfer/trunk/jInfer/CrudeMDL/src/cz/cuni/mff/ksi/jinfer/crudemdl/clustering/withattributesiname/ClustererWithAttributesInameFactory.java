@@ -20,8 +20,10 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.clustering.withattributesiname;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.withattributesiname.ClustererWithAttributesInameFactory;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -32,8 +34,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClustererFactory.class)
 public class ClustererWithAttributesInameFactory implements ClustererFactory {
+  private static final Logger LOG = Logger.getLogger(ClustererWithAttributesInameFactory.class);
+
   @Override
   public Clusterer<AbstractStructuralNode> create() {
+    LOG.debug("Creating new ClustererWithAttributesIname.");
     return new ClustererWithAttributesIname();
   }
 

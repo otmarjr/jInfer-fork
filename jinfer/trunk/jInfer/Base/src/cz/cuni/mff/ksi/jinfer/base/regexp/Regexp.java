@@ -51,6 +51,36 @@ public class Regexp<T> {
   private RegexpInterval interval;
   private boolean mutable;
 
+  private void checkConstraits() {
+    if (!mutable) {
+      if (type == null) {
+        throw new IllegalArgumentException("Type of regexp has to be non-null.");
+      }
+      if (children == null) {
+        throw new IllegalArgumentException("When regexp is " + getType() + ", children has to be non-null.");
+      }
+      if (type.equals(RegexpType.LAMBDA)) {
+        if (content != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, content has to be null.");
+        }
+        if (interval != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, interval has to be null.");
+        }
+      } else if (type.equals(RegexpType.TOKEN)) {
+        if (content == null) {
+          throw new IllegalArgumentException("When regexp is TOKEN, content has to be non-null.");
+        }
+      } else {
+        if (content != null) {
+          throw new IllegalArgumentException("When regexp is " + type.toString() + ", content has to be null");
+        }
+        if (interval == null) {
+          throw new IllegalArgumentException("When regexp is " + type.toString() + ", interval has to be non-null.");
+        }
+      }
+    }
+  }
+
   /**
    * Creates immutable regexp. This is the default.
    * @param content
@@ -65,46 +95,12 @@ public class Regexp<T> {
 
   private Regexp(final T content, final List<Regexp<T>> children,
           final RegexpType type, final RegexpInterval interval, final boolean mutable) {
-    if (!mutable) {
-      if (type == null) {
-        throw new IllegalArgumentException("Type of regexp has to be non-null.");
-      }
-      if (type.equals(RegexpType.LAMBDA)) {
-        if (content != null) {
-          throw new IllegalArgumentException("When regexp is LAMBDA, content has to be null.");
-        }
-        if (children != null) {
-          throw new IllegalArgumentException("When regexp is LAMBDA, children has to be null.");
-        }
-        if (interval != null) {
-          throw new IllegalArgumentException("When regexp is LAMBDA, interval has to be null.");
-        }
-      } else {
-        if (type.equals(RegexpType.TOKEN)) {
-          if (content == null) {
-            throw new IllegalArgumentException("When regexp is TOKEN, content has to be non-null.");
-          }
-          if (children != null) {
-            throw new IllegalArgumentException("When regexp is TOKEN, children has to be null.");
-          }
-        } else {
-          if (content != null) {
-            throw new IllegalArgumentException("When regexp is " + type.toString() + ", content has to be null");
-          }
-          if (children == null) {
-            throw new IllegalArgumentException("When regexp is " + type.toString() + ", children has to be non-null.");
-          }
-        }
-        if (interval == null) {
-          throw new IllegalArgumentException("When regexp is " + type.toString() + ", interval has to be non-null.");
-        }
-      }
-    }
     this.content = content;
     this.children = children;
     this.type = type;
     this.interval= interval;
     this.mutable= mutable;
+    checkConstraits();
   }
 
   public static <T> Regexp<T> getMutable() {
@@ -112,11 +108,11 @@ public class Regexp<T> {
   }
 
   public static <T> Regexp<T> getLambda() {
-    return new Regexp<T>(null, null, RegexpType.LAMBDA, null);
+    return new Regexp<T>(null, new ArrayList<Regexp<T>>(), RegexpType.LAMBDA, null);
   }
 
   public static <T> Regexp<T> getToken(final T content, final RegexpInterval interval) {
-    return new Regexp<T>(content, null, RegexpType.TOKEN, interval);
+    return new Regexp<T>(content, new ArrayList<Regexp<T>>(), RegexpType.TOKEN, interval);
   }
 
   public static <T> Regexp<T> getToken(final T content) {
@@ -227,6 +223,7 @@ public class Regexp<T> {
     } else {
       throw new IllegalStateException("Trying to set inmutable regexp, that is once inmutable.");
     }
+    checkConstraits();
   }
 
   /**

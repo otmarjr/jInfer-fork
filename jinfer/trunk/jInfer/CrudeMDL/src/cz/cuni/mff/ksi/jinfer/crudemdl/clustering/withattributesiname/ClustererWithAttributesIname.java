@@ -20,6 +20,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.clustering.withattributesiname;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
@@ -30,6 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  * Cluster nodes by name - ignoring case.
@@ -43,14 +45,18 @@ import java.util.Map;
  * @author anti
  */
 public class ClustererWithAttributesIname implements ClustererWithAttributes<AbstractStructuralNode, Attribute> {
+  private static final Logger LOG = Logger.getLogger(ClustererWithAttributesIname.class);
+  
   private final List<Cluster<AbstractStructuralNode>> nodeClusters;
   private final List<AbstractStructuralNode> items;
   private final Map<AbstractStructuralNode, Clusterer<Attribute>> attributeClusterers;
+  private final Map<AbstractStructuralNode, Clusterer<SimpleData>> simpleDataClusterers;
 
   public ClustererWithAttributesIname() {
     this.nodeClusters= new LinkedList<Cluster<AbstractStructuralNode>>();
     this.items= new LinkedList<AbstractStructuralNode>();
     this.attributeClusterers= new LinkedHashMap<AbstractStructuralNode, Clusterer<Attribute>>();
+    this.simpleDataClusterers= new LinkedHashMap<AbstractStructuralNode, Clusterer<SimpleData>>();
   }
 
   private AbstractStructuralNode addNode(final AbstractStructuralNode item) throws InterruptedException {
@@ -62,10 +68,7 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
       }
       final Cluster<AbstractStructuralNode> cluster= iterator.next();
       final AbstractStructuralNode representant= cluster.getRepresentant();
-      if (item.isSimpleData()&&representant.isSimpleData()) {
-        cluster.add(item);
-        return representant;
-      } else if (
+      if (
               item.isElement() &&
               representant.isElement() &&
               representant.getName().equalsIgnoreCase(item.getName())
@@ -94,13 +97,25 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
   public void cluster() throws InterruptedException {
     for (AbstractStructuralNode node : items) {
       final AbstractStructuralNode representant= this.addNode(node);
-      if (node.isElement()&&(node instanceof Element)) {
+      
+      if (node.isElement()) {
         for (AbstractStructuralNode subNode: ((Element) node).getSubnodes().getTokens()) {
-          this.addNode(subNode);
+          if (Boolean.TRUE.equals(subNode.getMetadata().get("is_sentinel"))) {
+            this.addNode(subNode);
+          }
+          if (subNode.isSimpleData()) {
+            if (!this.simpleDataClusterers.containsKey(representant)) {
+              this.simpleDataClusterers.put(representant,
+                      new SimpleDataClusterer());
+            }
+            this.simpleDataClusterers.get(representant).add((SimpleData) subNode);
+          }// else {
+           // this.addNode(subNode);
+         // }
         }
         for (Attribute attribute : ((Element) node).getAttributes()) {
           if (!this.attributeClusterers.containsKey(representant)) {
-            this.attributeClusterers.put(representant, new ClustererWithAttributesInameHelperClusterer());
+            this.attributeClusterers.put(representant, new AttributeClusterer());
           }
           this.attributeClusterers.get(representant).add(attribute);
         }
@@ -109,14 +124,28 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
     for (AbstractStructuralNode rep : this.attributeClusterers.keySet()) {
       this.attributeClusterers.get(rep).cluster();
     }
+    for (AbstractStructuralNode rep : simpleDataClusterers.keySet()) {
+      simpleDataClusterers.get(rep).cluster();
+    }
     this.items.clear();
   }
 
   @Override
   public AbstractStructuralNode getRepresentantForItem(final AbstractStructuralNode item) {
-    for (Cluster<AbstractStructuralNode> cluster : this.nodeClusters) {
-      if (cluster.isMember(item)) {
-        return cluster.getRepresentant();
+    if (item.isSimpleData()) {
+      Iterator<Clusterer<SimpleData>> it = simpleDataClusterers.values().iterator();
+      while (it.hasNext()) {
+        try {
+          return it.next().getRepresentantForItem((SimpleData) item);
+        } catch (IllegalArgumentException e) {
+          
+        }
+      }
+    } else {
+      for (Cluster<AbstractStructuralNode> cluster : this.nodeClusters) {
+        if (cluster.isMember(item)) {
+          return cluster.getRepresentant();
+        }
       }
     }
     throw new IllegalArgumentException("Node " + item.toString() + " is not in clusters, it wasn't added, i can't find it.");

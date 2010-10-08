@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -31,9 +32,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
+  private static final Logger LOG = Logger.getLogger(ClusterProcessorPassRepresentantFactory.class);
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
+    LOG.debug("Creating new ClusterProcessorPassRepresentant.");
     return new ClusterProcessorPassRepresentant();
   }
 

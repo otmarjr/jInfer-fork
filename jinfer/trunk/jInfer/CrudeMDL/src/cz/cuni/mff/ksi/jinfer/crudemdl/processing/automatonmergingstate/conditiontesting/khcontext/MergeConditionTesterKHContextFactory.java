@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditio
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,6 +31,14 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = MergeConditionTesterFactory.class)
 public class MergeConditionTesterKHContextFactory implements MergeConditionTesterFactory {
+  private static final Logger LOG = Logger.getLogger(MergeConditionTesterKHContextFactory.class);
+
+  @Override
+  public <T> MergeConditionTester<T> create() {
+    LOG.debug("Creating new MergeConditionTesterKHContext.");
+    return new MergeConditionTesterKHContext<T>();
+  }
+
   @Override
   public String getName() {
     return "MergeConditionTesterKHContext";
@@ -38,11 +47,6 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   @Override
   public String getModuleDescription() {
     return getName();
-  }
-
-  @Override
-  public <T> MergeConditionTester<T> create() {
-    return new MergeConditionTesterKHContext<T>();
   }
 
   @Override

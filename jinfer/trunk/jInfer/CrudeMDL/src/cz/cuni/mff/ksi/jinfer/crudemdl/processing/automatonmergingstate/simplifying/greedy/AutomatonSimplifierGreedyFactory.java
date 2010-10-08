@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplify
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -34,11 +35,14 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFactory {
+  private static final Logger LOG = Logger.getLogger(AutomatonSimplifierGreedyFactory.class);
+
   public static final String NAME = "AutomatonSimplifierGreedy";
   public static final String PROPERTIES_CONDITION_TESTER = "condition-tester";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
+    LOG.debug("Creating new AutomatonSimplifierGreedy.");
     return new AutomatonSimplifierGreedy<T>(getMergeConditionTesterFactory());
   }
 

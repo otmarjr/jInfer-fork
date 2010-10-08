@@ -38,4 +38,11 @@ public final class IGGUtils {
   static {
     ATTR_FROM_QUERY.put("from.query", Boolean.TRUE);
   }
+
+  public static final Map<String, Object> METADATA_SENTINEL = new HashMap<String, Object>(1);
+
+  static {
+    METADATA_SENTINEL.put("is_sentinel", Boolean.TRUE);
+  }
+
 }

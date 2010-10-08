@@ -23,6 +23,7 @@ import java.util.List;
  *  
  * @author vektor
  */
+// TODO vektor remove this when noone will be using it
 public class Cluster {
 
   /** A rule that represents this cluster. Should be also contained in content. */

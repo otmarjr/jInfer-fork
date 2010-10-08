@@ -108,7 +108,8 @@ public class CloneHelperTest {
     new CloneHelper().cloneClusters(clusters);
   }
 
-  // TODO vektor Repair this test
+  // TODO vektor Repair this test - anti: is it really necessary? cluster should be removed from base
+
   // @Test
   public void testCloneClustersSmall() {
     System.out.println("cloneClustersSmall");

@@ -262,6 +262,17 @@ public class Automaton<T> {
     }
   }
 
+  public void mergeStates(final List<State<T>> lst) {
+    if (lst.isEmpty()) {
+      LOG.info("Empty list at automaton merge states.");
+      return;
+    }
+    State<T> state= lst.get(0);
+    for (State<T> anotherState : lst.subList(1, lst.size())) {
+      this.mergeStates(state, anotherState);
+    }
+  }
+
   public void mergeStates(final State<T> _mainState, final State<T> _mergedState) {
     final State<T> mainState= this.getRealState(_mainState);
     final State<T> mergedState= this.getRealState(_mergedState);

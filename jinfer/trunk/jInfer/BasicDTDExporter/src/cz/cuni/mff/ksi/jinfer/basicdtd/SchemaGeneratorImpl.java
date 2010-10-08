@@ -143,11 +143,11 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
         return contentString + intervalString;
       case CONCATENATION:
-        return comboToString(regexp, ',');
+        return comboToString(regexp, ",");
       case ALTERNATION:
-        return comboToString(regexp, '|');
+        return comboToString(regexp, "|");
       case PERMUTATION:
-        return comboToString(regexp, '|');
+        return comboToString(regexp, "|");
       default:
         throw new IllegalArgumentException("Unknown enum member: " + regexp.getType());
     }
@@ -165,7 +165,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return false;
   }
 
-  private String comboToString(final Regexp<AbstractStructuralNode> regexp, Character delimiter) {
+  private String comboToString(final Regexp<AbstractStructuralNode> regexp, String delimiter) {
     if (!containsPCDATA(regexp.getTokens())) {
       return listToString(regexp.getChildren(), delimiter) +
               regexp.getInterval().toString();
@@ -210,7 +210,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     return CollectionToString.colToString(
             distinctContent,
-            '|',
+            "|",
             new CollectionToString.ToString<AbstractStructuralNode>() {
               @Override
               public String toString(final AbstractStructuralNode t) {
@@ -220,7 +220,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
   
   private String listToString(final List<Regexp<AbstractStructuralNode>> list,
-          final char separator) {
+          final String separator) {
     return CollectionToString.colToString(
             list,
             separator,

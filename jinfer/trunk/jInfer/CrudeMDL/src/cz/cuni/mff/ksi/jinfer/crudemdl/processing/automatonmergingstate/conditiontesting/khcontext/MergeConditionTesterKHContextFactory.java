@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditi
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -51,7 +51,7 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
 
   @Override
   public List<String> getCapabilities() {
-    return Collections.<String>emptyList();
+    return Arrays.asList("k,h-context");
   }
 
   @Override

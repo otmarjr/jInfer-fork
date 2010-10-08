@@ -18,11 +18,11 @@ package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;

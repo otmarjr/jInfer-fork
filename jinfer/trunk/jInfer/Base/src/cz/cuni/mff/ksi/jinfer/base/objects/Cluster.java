@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
 /**

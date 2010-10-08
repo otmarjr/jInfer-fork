@@ -17,9 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -17,13 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.runner;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;

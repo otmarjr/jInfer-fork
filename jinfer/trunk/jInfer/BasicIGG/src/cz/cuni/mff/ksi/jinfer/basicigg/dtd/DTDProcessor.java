@@ -16,10 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
-import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
@@ -91,8 +91,8 @@ public class DTDProcessor implements Processor {
   }
 
   private static Element processElement(final ElementType e) {
-    List<cz.cuni.mff.ksi.jinfer.base.objects.Attribute> attList=
-            new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.Attribute>();
+    List<cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute> attList=
+            new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute>();
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
@@ -100,8 +100,8 @@ public class DTDProcessor implements Processor {
         final Map<String, Object> nodeAttrs = new HashMap<String, Object>(1);
         nodeAttrs.put("required",
                 Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
-        final cz.cuni.mff.ksi.jinfer.base.objects.Attribute at =
-                new cz.cuni.mff.ksi.jinfer.base.objects.Attribute(null,
+        final cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute at =
+                new cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute(null,
                                 a.name.getLocalName(), nodeAttrs, null, 
                                 new ArrayList<String>(0));
         attList.add(at);

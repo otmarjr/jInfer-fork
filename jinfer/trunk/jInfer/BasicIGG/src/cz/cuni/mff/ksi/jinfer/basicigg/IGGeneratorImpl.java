@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;

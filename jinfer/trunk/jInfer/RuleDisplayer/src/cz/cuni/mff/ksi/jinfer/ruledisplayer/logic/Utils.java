@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Color;
 import java.awt.Graphics2D;

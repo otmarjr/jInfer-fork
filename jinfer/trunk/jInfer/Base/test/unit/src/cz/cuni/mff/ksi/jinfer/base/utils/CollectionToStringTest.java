@@ -31,27 +31,27 @@ public class CollectionToStringTest {
   @Test(expected=NullPointerException.class)
   public void testColToStringEmpty() {
     System.out.println("colToStringEmpty");
-    CollectionToString.colToString(null, ',', null);
+    CollectionToString.colToString(null, ",", null);
   }
 
   @Test
   public void testColToStringOne() {
     System.out.println("colToStringOne");
-    final String res = CollectionToString.colToString(Arrays.asList("lala"), ',', CollectionToString.IDEMPOTENT);
+    final String res = CollectionToString.colToString(Arrays.asList("lala"), ",", CollectionToString.IDEMPOTENT);
     Assert.assertEquals("(lala)", res);
   }
 
   @Test
   public void testColToStringTwo() {
     System.out.println("colToStringTwo");
-    final String res = CollectionToString.colToString(Arrays.asList("lala", "baf"), ',', CollectionToString.IDEMPOTENT);
+    final String res = CollectionToString.colToString(Arrays.asList("lala", "baf"), ",", CollectionToString.IDEMPOTENT);
     Assert.assertEquals("(lala,baf)", res);
   }
 
   @Test
   public void testColToStringTwoDifferent() {
     System.out.println("colToStringTwoDifferent");
-    final String res = CollectionToString.colToString(Arrays.asList("lala ", "baf"), ' ', CollectionToString.IDEMPOTENT);
+    final String res = CollectionToString.colToString(Arrays.asList("lala ", "baf"), " ", CollectionToString.IDEMPOTENT);
     Assert.assertEquals("(lala  baf)", res);
   }
 

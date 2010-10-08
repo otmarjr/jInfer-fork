@@ -94,7 +94,7 @@ public final class DomainUtils {
       Collections.sort(domainValues);
       return " " + CollectionToString.colToString(
               domainValues,
-              '|',
+              "|",
               CollectionToString.IDEMPOTENT) + " ";
     }
     return ATTRIBUTE_CDATA;

@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import java.util.List;
@@ -73,5 +72,5 @@ import java.util.List;
  * @author anti
  */
 public interface MergeConditionTester<T> {
-  List<List<Pair<State<T>, State<T>>>> getMergableStates(State<T> mainState, State<T> mergedState, Automaton<T> automaton);
+  List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton);
 }

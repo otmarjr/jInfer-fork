@@ -435,11 +435,11 @@ public class Regexp<T> {
     }
   }
 
-  private static char getDelimiter(final RegexpType t) {
+  private static String getDelimiter(final RegexpType t) {
     switch (t) {
-      case CONCATENATION: return ',';
-      case ALTERNATION: return '|';
-      case PERMUTATION: return '&';
+      case CONCATENATION: return ",";
+      case ALTERNATION: return "|";
+      case PERMUTATION: return "&";
       default:
         throw new IllegalStateException("Invalid regexp type at this point: " + t);
     }

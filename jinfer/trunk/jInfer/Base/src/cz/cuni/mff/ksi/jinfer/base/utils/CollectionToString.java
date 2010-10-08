@@ -64,7 +64,7 @@ public class CollectionToString {
    * @return String representing the collection.
    */
   public static <T> String colToString(final Collection<T> collection,
-          final char separator, final ToString<T> toStringStrategy) {
+          final String separator, final ToString<T> toStringStrategy) {
     final StringBuilder ret = new StringBuilder();
     ret.append('(');
     boolean first = true;

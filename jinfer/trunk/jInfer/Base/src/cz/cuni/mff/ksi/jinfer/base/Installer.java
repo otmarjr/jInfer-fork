@@ -69,9 +69,10 @@ public class Installer extends ModuleInstall {
           break;
       }
 
+      // TODO riacik rio check if kosher
       final String lgName= le.getLoggerName();
-      final String message = "[" + le.getLevel().toString() + "] " +
-              lgName.substring(lgName.lastIndexOf(".") + 1) + ": " +
+      final String message = le.getLevel().toString() +
+              " [" + lgName.substring(lgName.lastIndexOf(".") + 1) + "]: " +
               this.layout.format(le);
       if (IOColorPrint.isSupported(io)) {
         try {

@@ -22,8 +22,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.khcontext.MergeConditionTesterKHContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,6 +46,9 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
 
   public AutomatonSimplifierGreedy(final MergeConditionTesterFactory mergeConditionTesterFactory) {
     this.mergeConditionTester= mergeConditionTesterFactory.<T>create();
+    if (mergeConditionTesterFactory.getCapabilities().contains("k,h-context")) {
+      ((MergeConditionTesterKHContext<T>) mergeConditionTester).setKH(2, 1);
+    }
   }
 
   /**
@@ -58,12 +64,6 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
    */
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException {
-    final List<MergeConditionTester<T>> l= new ArrayList<MergeConditionTester<T>>();
-    l.add(mergeConditionTester);
-    return this.simplify(inputAutomaton, l);
-  }
-
-  private Automaton<T> simplify(final Automaton<T> inputAutomaton, final List<MergeConditionTester<T>> mergeConditionTesters) throws InterruptedException {
     final Map<State<T>, Set<Step<T>>> delta= inputAutomaton.getDelta();
 //    final Map<State<T>, Set<Step<T>>> reverseDelta= inputAutomaton.getReverseDelta();
 
@@ -73,13 +73,11 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
         throw new InterruptedException();
       }
       search= false;
-      List<List<Pair<State<T>, State<T>>>> mergableStates= new LinkedList<List<Pair<State<T>, State<T>>>>();
+      List<List<List<State<T>>>> mergableStates= new ArrayList<List<List<State<T>>>>();
       boolean found= false;
       for (State<T> mainState : delta.keySet()) {
         for (State<T> mergedState : delta.keySet()) {
-          for (MergeConditionTester<T> mergeConditionTester : mergeConditionTesters) {
-            mergableStates.addAll(mergeConditionTester.getMergableStates(mainState, mergedState, inputAutomaton));
-          }
+          mergableStates.addAll(mergeConditionTester.getMergableStates(mainState, mergedState, inputAutomaton));
           if (!mergableStates.isEmpty()) {
             found= true;
             break;
@@ -91,10 +89,17 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
       }
       if (found) {
         LOG.debug("Found states to merge\n");
-        for (List<Pair<State<T>, State<T>>> mergableAlternative : mergableStates) {
-          for (Pair<State<T>, State<T>> mergePair : mergableAlternative) {
-            LOG.debug("Merging states: " + mergePair.getFirst() + " " + mergePair.getSecond() + "\n");
-            inputAutomaton.mergeStates(mergePair.getFirst(), mergePair.getSecond());
+        for (List<List<State<T>>> mergableAlternative : mergableStates) {
+          for (List<State<T>> mergeSeq : mergableAlternative) {
+            String st= CollectionToString.<State<T>>colToString(mergeSeq, " + ",
+                    new CollectionToString.ToString<State<T>>() {
+                      @Override
+                      public String toString(State<T> t) {
+                        return t.toString();
+                      }
+              });
+            LOG.debug("Merging states: " + st + "\n");
+            inputAutomaton.mergeStates(mergeSeq);
           }
         }
         mergableStates.clear();

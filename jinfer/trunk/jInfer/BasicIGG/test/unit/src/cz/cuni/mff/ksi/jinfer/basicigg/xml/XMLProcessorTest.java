@@ -132,9 +132,9 @@ public class XMLProcessorTest {
           "</continent>";
 
   private static final String[] CITIES_RESULTS = {
-    "continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA\nnull:  ,)",
-    "continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA\nnull:  ,)",
-    "continent: ELEMENT\n(continent/name: ATTRIBUTE\nnull: Europe ,continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA\nnull:  ,),continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA\nnull:  ,),)"};
+    "continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA\nnull:  )",
+    "continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA\nnull:  )",
+    "continent: ELEMENT\n(continent/name: ATTRIBUTE\nnull: Europe ,continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA\nnull:  ),continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA\nnull:  ))"};
 
   @Test
   public void testProcessSimpleData() {
@@ -160,9 +160,9 @@ public class XMLProcessorTest {
           "</p>";
 
   private static final String[] HTML_RESULTS = {
-    "p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA\nnull:  ,)",
-    "p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA\nnull:  ,)",
-    "p: ELEMENT\n(p/This is a: SIMPLE_DATA\nnull:  ,p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA\nnull:  ,),p/text. And some: SIMPLE_DATA\nnull:  ,p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA\nnull:  ,),)"};
+    "p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA\nnull:  )",
+    "p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA\nnull:  )",
+    "p: ELEMENT\n(p/This is a: SIMPLE_DATA\nnull:  ,p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA\nnull:  ),p/text. And some: SIMPLE_DATA\nnull:  ,p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA\nnull:  ))"};
 
   @Test
   public void testProcessMixed() {

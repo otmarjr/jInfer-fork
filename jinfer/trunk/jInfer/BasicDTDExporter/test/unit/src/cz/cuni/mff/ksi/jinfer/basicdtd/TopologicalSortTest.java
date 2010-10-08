@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicdtd;
 
+import java.util.HashMap;
+import java.util.Map;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -37,6 +39,9 @@ import static org.junit.Assert.*;
  */
 public class TopologicalSortTest {
 
+  private static final List<String> EMPTY_CONTEXT = new ArrayList<String>(0);
+  private static final Map<String, Object> EMPTY_METADATA = new HashMap<String, Object>();
+
   @Test(expected=NullPointerException.class)
   public void testNull() {
     final TopologicalSort s = new TopologicalSort(null);
@@ -51,7 +56,7 @@ public class TopologicalSortTest {
 
   @Test
   public void testOne() {
-    final Element e = new Element(null, "test", null,
+    final Element e = new Element(EMPTY_CONTEXT, "test", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
@@ -63,21 +68,21 @@ public class TopologicalSortTest {
 
   @Test
   public void testSort() {
-    final Element e1 = new Element(null, "test1", null,
+    final Element e1 = new Element(EMPTY_CONTEXT, "test1", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e2 = new Element(null, "test2", null,
+    final Element e2 = new Element(EMPTY_CONTEXT, "test2", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e3 = new Element(null, "test3", null,
+    final Element e3 = new Element(EMPTY_CONTEXT, "test3", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e4 = new Element(null, "test4", null,
+    final Element e4 = new Element(EMPTY_CONTEXT, "test4", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e5 = new Element(null, "test5", null,
+    final Element e5 = new Element(EMPTY_CONTEXT, "test5", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e6 = new Element(null, "test6", null,
+    final Element e6 = new Element(EMPTY_CONTEXT, "test6", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e7 = new Element(null, "test7", null,
+    final Element e7 = new Element(EMPTY_CONTEXT, "test7", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e8 = new Element(null, "test8", null,
+    final Element e8 = new Element(EMPTY_CONTEXT, "test8", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
@@ -125,13 +130,13 @@ public class TopologicalSortTest {
 
   @Test
   public void testMore() {
-    final Element e1 = new Element(null, "test1", null,
+    final Element e1 = new Element(EMPTY_CONTEXT, "test1", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e2 = new Element(null, "test2", null,
+    final Element e2 = new Element(EMPTY_CONTEXT, "test2", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e3 = new Element(null, "test3", null,
+    final Element e3 = new Element(EMPTY_CONTEXT, "test3", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e4 = new Element(null, "test4", null,
+    final Element e4 = new Element(EMPTY_CONTEXT, "test4", EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
 
     e1.getSubnodes().setType(RegexpType.CONCATENATION);

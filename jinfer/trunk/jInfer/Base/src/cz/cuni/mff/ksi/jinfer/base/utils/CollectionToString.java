@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.basicdtd.utils;
+package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.Collection;
 
@@ -30,6 +30,8 @@ public class CollectionToString {
    */
   private CollectionToString() {
   }
+
+  // TODO vektor Parametrize braces 
 
   /*
    * Interface defining a strategy how to convert an object to a string.

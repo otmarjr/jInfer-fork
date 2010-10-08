@@ -36,6 +36,9 @@ import static org.junit.Assert.*;
 @SuppressWarnings("PMD.SystemPrintln")
 public class CloneHelperTest {
 
+  private static final List<String> EMPTY_CONTEXT = new ArrayList<String>(0);
+  private static final Map<String, Object> EMPTY_METADATA = new HashMap<String, Object>();
+
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull() {
     System.out.println("cloneRulesNull");
@@ -51,7 +54,8 @@ public class CloneHelperTest {
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull3() {
     System.out.println("cloneRulesNull3");
-    new CloneHelper().cloneRules(Arrays.<Element>asList(new Element(null, "e", null, null, null), null));
+    new CloneHelper().cloneRules(Arrays.<Element>asList(new Element(EMPTY_CONTEXT, "e", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(),
+            new ArrayList<Attribute>(0)), null));
   }
 
   @Test
@@ -63,14 +67,14 @@ public class CloneHelperTest {
 
     final List<Regexp<AbstractStructuralNode>> altChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
     altChildren.add(Regexp.getToken(
-            (AbstractStructuralNode) new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getLambda(),
+            (AbstractStructuralNode) new Element(EMPTY_CONTEXT, "e1", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(),
             new ArrayList<Attribute>(0))));
 
     final List<Regexp<AbstractStructuralNode>> children = new ArrayList<Regexp<AbstractStructuralNode>>();
     children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((AbstractStructuralNode) new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getLambda(), new ArrayList<Attribute>(0))));
+    children.add(Regexp.getToken((AbstractStructuralNode) new Element(EMPTY_CONTEXT, "e2", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), new ArrayList<Attribute>(0))));
 
-    final Element e = new Element(null, "e", m, Regexp.getConcatenation(children), new ArrayList<Attribute>(0));
+    final Element e = new Element(EMPTY_CONTEXT, "e", m, Regexp.getConcatenation(children), new ArrayList<Attribute>(0));
     final List<Element> l = new ArrayList<Element>(1);
     l.add(e);
     final List<Element> result = new CloneHelper().cloneRules(l);
@@ -89,8 +93,8 @@ public class CloneHelperTest {
   public void testCycle() {
     System.out.println("cycle");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
+    final Element e1 = new Element(EMPTY_CONTEXT, "e1", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
+    final Element e2 = new Element(EMPTY_CONTEXT, "e2", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
     e1.getSubnodes().addChild(
             Regexp.<AbstractStructuralNode>getToken(e2)
             );
@@ -124,8 +128,8 @@ public class CloneHelperTest {
   public void testCycleTokens() {
     System.out.println("cycleTokens");
 
-    final Element e1 = new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
-    final Element e2 = new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getToken(e1), new ArrayList<Attribute>(0));
+    final Element e1 = new Element(EMPTY_CONTEXT, "e1", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getMutable(), new ArrayList<Attribute>(0));
+    final Element e2 = new Element(EMPTY_CONTEXT, "e2", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getToken(e1), new ArrayList<Attribute>(0));
     e1.getSubnodes().setContent(e2);
     e1.getSubnodes().setInterval(RegexpInterval.getOnce());
     e1.getSubnodes().setType(RegexpType.TOKEN);

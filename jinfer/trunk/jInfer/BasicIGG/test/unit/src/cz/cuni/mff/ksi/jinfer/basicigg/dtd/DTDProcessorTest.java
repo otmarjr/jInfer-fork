@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -35,8 +36,8 @@ public class DTDProcessorTest {
   @Test(expected = RuntimeException.class)
   public void testProcessNull() {
     System.out.println("processNull");
-    final List<AbstractStructuralNode> expResult = new ArrayList<AbstractStructuralNode>(0);
-    final List<AbstractStructuralNode> result = new DTDProcessor().process(null);
+    final List<Element> expResult = new ArrayList<Element>(0);
+    final List<Element> result = new DTDProcessor().process(null);
     assertEquals(expResult, result);
   }
 
@@ -44,8 +45,8 @@ public class DTDProcessorTest {
   public void testProcessEmpty() {
     System.out.println("processEmpty");
     final InputStream s = new ByteArrayInputStream("".getBytes());
-    final List<AbstractStructuralNode> expResult = new ArrayList<AbstractStructuralNode>(0);
-    final List<AbstractStructuralNode> result = new DTDProcessor().process(s);
+    final List<Element> expResult = new ArrayList<Element>(0);
+    final List<Element> result = new DTDProcessor().process(s);
     assertEquals(expResult, result);
   }
 
@@ -53,8 +54,8 @@ public class DTDProcessorTest {
   public void testProcessEmpty2() {
     System.out.println("processEmpty2");
     final InputStream s = new ByteArrayInputStream("<!-- Inferred on Sat Jul 24 17:53:09 CEST 2010 by Trivial IG Generator, Modular Simplifier, Trivial DTD exporter -->\n\n\n".getBytes());
-    final List<AbstractStructuralNode> expResult = new ArrayList<AbstractStructuralNode>(0);
-    final List<AbstractStructuralNode> result = new DTDProcessor().process(s);
+    final List<Element> expResult = new ArrayList<Element>(0);
+    final List<Element> result = new DTDProcessor().process(s);
     assertEquals(expResult, result);
   }
   private static final String ZOO =
@@ -70,7 +71,7 @@ public class DTDProcessorTest {
   public void testProcess() {
     System.out.println("process");
     final InputStream s = new ByteArrayInputStream(ZOO.getBytes());
-    final List<AbstractStructuralNode> result = new DTDProcessor().process(s);
+    final List<Element> result = new DTDProcessor().process(s);
     assertEquals(ZOO_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, ZOO_RESULTS[i], result.get(i).toString());
@@ -91,7 +92,7 @@ public class DTDProcessorTest {
   public void testProcessAttrs() {
     System.out.println("processAttrs");
     final InputStream s = new ByteArrayInputStream(ATTRIBUTES.getBytes());
-    final List<AbstractStructuralNode> result = new DTDProcessor().process(s);
+    final List<Element> result = new DTDProcessor().process(s);
     assertEquals(ATTR_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, ATTR_RESULTS[i], result.get(i).toString());

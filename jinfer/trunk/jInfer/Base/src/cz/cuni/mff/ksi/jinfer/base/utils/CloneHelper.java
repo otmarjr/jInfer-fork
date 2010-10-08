@@ -38,10 +38,10 @@ public class CloneHelper {
 
   private final Map<Element, Element> cloned = new HashMap<Element, Element>();
 
-  public List<AbstractStructuralNode> cloneRules(final List<AbstractStructuralNode> l) {
-    final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>(l.size());
-    for (final AbstractStructuralNode n : l) {
-      ret.add(cloneAbstractNode(n));
+  public List<Element> cloneRules(final List<Element> l) {
+    final List<Element> ret = new ArrayList<Element>(l.size());
+    for (final Element n : l) {
+      ret.add(cloneElement(n));
     }
     return ret;
   }
@@ -168,6 +168,6 @@ public class CloneHelper {
   }
 
   private Cluster cloneCluster(final Cluster c) {
-    return new Cluster(cloneAbstractNode(c.getRepresentant()), cloneRules(c.getContent()));
+    return new Cluster(cloneElement(c.getRepresentant()), cloneRules(c.getContent()));
   }
 }

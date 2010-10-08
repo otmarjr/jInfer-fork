@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import java.util.List;
 
 /**
@@ -32,5 +32,5 @@ public interface SimplifierCallback {
    *
    * @param grammar Simplified grammar.
    */
-  void finished(final List<AbstractStructuralNode> grammar);
+  void finished(final List<Element> grammar);
 }

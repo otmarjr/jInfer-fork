@@ -68,12 +68,12 @@ public class DTDProcessor implements Processor {
    * @return List of IG rules retrieved from it.
    */
   @Override
-  public List<AbstractStructuralNode> process(final InputStream s) {
+  public List<Element> process(final InputStream s) {
     try {
       final DTDParser parser = new DTDParser();
       final DTD result = parser.parseExternalSubset(new InputSource(s), null);
 
-      final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
+      final List<Element> ret = new ArrayList<Element>();
 
       for (final Object o : result.elementTypes.values()) {
         ret.add(processElement((ElementType) o));

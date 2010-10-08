@@ -46,9 +46,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class TrivialHandler extends DefaultHandler {
 
   /** Stack to hold currently open nodes. */
-  private final Stack<AbstractStructuralNode> stack = new Stack<AbstractStructuralNode>();
+  private final Stack<Element> stack = new Stack<Element>();
   /** Rules that have been inferred so far. */
-  private final List<AbstractStructuralNode> rules = new ArrayList<AbstractStructuralNode>();
+  private final List<Element> rules = new ArrayList<Element>();
 
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
@@ -99,16 +99,15 @@ public class TrivialHandler extends DefaultHandler {
     super.endElement(uri, localName, qName);
 
     // current element ends, it is time to give out its rule
-    final AbstractStructuralNode end = stack.pop();
+    final Element end = stack.pop();
 
     if (!end.getName().equals(qName)) {
       throw new IllegalArgumentException("unpaired element");
     }
-    Element e = (Element) end;
-    e.getSubnodes().setType(RegexpType.CONCATENATION);
-    e.getSubnodes().setInterval(RegexpInterval.getOnce());
-    e.getSubnodes().setImmutable();
-    e.setImmutable();
+    end.getSubnodes().setType(RegexpType.CONCATENATION);
+    end.getSubnodes().setInterval(RegexpInterval.getOnce());
+    end.getSubnodes().setImmutable();
+    end.setImmutable();
     
     rules.add(end);
   }
@@ -134,7 +133,7 @@ public class TrivialHandler extends DefaultHandler {
     }
   }
 
-  public List<AbstractStructuralNode> getRules() {
+  public List<Element> getRules() {
     return rules;
   }
 

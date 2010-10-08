@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -40,7 +39,6 @@ public class RulePainter {
 
   /** Maximum rules drawn (in each cluster). */
   private final int maxRules;
-
   private final Component root;
   private Image image;
 
@@ -58,33 +56,6 @@ public class RulePainter {
     root.repaint();
   }
 
-  public void setClusters(final List<Cluster> clusters) {
-    final List<Image> clusterImgs = new ArrayList<Image>(clusters.size());
-    int width = 0;
-    int height = 0;
-    
-    for (final Cluster cluster : clusters) {
-      final Image i = drawRules(cluster.getContent());
-      clusterImgs.add(i);
-      width = Math.max(width, i.getWidth(null));
-      height += i.getHeight(null) + 5;
-    }
-
-    final BufferedImage ret = Utils.getImage(width, height);
-    int offset = 0;
-    final Graphics2D g = ret.createGraphics();
-    for (final Image i : clusterImgs) {
-      g.drawImage(i, 0, offset, null);      
-      offset += i.getHeight(null) + 5;
-      g.setColor(Utils.getColorForeground());
-      g.drawLine(0, offset - 4, 30, offset - 4);
-    }
-
-    this.image = ret;
-    root.setPreferredSize(new Dimension(image.getWidth(null), image.getHeight(null)));
-    root.repaint();
-  }
-  
   public void paint(final Graphics2D g) {
     g.setColor(Utils.getColorBackground());
     g.fillRect(0, 0, root.getWidth(), root.getHeight());
@@ -134,5 +105,4 @@ public class RulePainter {
 
     return ret;
   }
-
 }

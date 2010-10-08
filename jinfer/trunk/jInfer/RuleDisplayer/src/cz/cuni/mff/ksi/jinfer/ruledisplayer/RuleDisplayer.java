@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.ruledisplayer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
@@ -41,19 +40,6 @@ public final class RuleDisplayer {
       @Override
       public void run() {
         RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
-      }
-    });
-  }
-
-  public static void showClustersAsync(final String panelName, final List<Cluster> clusters, final boolean render) {
-    if (!render || BaseUtils.isEmpty(clusters)) {
-      return;
-    }
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
-      @Override
-      public void run() {
-        RuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setClusters(clusters);
       }
     });
   }

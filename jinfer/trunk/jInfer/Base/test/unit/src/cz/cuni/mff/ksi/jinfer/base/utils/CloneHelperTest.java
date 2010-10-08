@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
 import java.util.Map;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -80,81 +79,6 @@ public class CloneHelperTest {
     assert (l != result);
     final Element other = result.get(0);
     assert (e != other);
-    assert (e.getSubnodes() != other.getSubnodes());
-    assert (e.getSubnodes().getChild(0) != other.getSubnodes().getChild(0));
-    assert (e.getSubnodes().getChild(0).getChild(0) != other.getSubnodes().getChild(0).getChild(0));
-    assert (e.getSubnodes().getChild(1) != other.getSubnodes().getChild(1));
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void testCloneClustersNull1() {
-    System.out.println("cloneClustersNull1");
-    new CloneHelper().cloneClusters(null);
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void testCloneClustersNull2() {
-    System.out.println("cloneClustersNull2");
-    final List<Cluster> clusters = new ArrayList<Cluster>();
-    clusters.add(null);
-    new CloneHelper().cloneClusters(clusters);
-  }
-
-  @Test(expected = NullPointerException.class)
-  public void testCloneClustersNull3() {
-    System.out.println("cloneClustersNull3");
-    final List<Cluster> clusters = new ArrayList<Cluster>();
-    clusters.add(new Cluster(null, null));
-    new CloneHelper().cloneClusters(clusters);
-  }
-
-  // TODO vektor Repair this test - anti: is it really necessary? cluster should be removed from base
-
-  // @Test
-  public void testCloneClustersSmall() {
-    System.out.println("cloneClustersSmall");
-
-    final List<Element> l = new ArrayList<Element>(1);
-    l.add(null);
-
-    final List<Cluster> clusters = new ArrayList<Cluster>();
-    clusters.add(new Cluster(null, l));
-    final List<Cluster> result = new CloneHelper().cloneClusters(clusters);
-    assertEquals(1, result.size());
-    assertEquals(null, result.get(0).getRepresentant());
-    assertEquals(null, result.get(0).getContent().get(0));
-  }
-
-  @Test
-  public void testCloneClusters() {
-    System.out.println("cloneClusters");
-
-    final Map<String, Object> m = new HashMap<String, Object>();
-    m.put("one", Integer.valueOf(1));
-    m.put("two", Integer.valueOf(2));
-
-    final List<Regexp<AbstractStructuralNode>> altChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
-    altChildren.add(Regexp.getToken((AbstractStructuralNode) new Element(null, "e1", null, Regexp.<AbstractStructuralNode>getLambda(), new ArrayList<Attribute>(0))));
-
-    final List<Regexp<AbstractStructuralNode>> children = new ArrayList<Regexp<AbstractStructuralNode>>();
-    children.add(Regexp.getAlternation(altChildren));
-    children.add(Regexp.getToken((AbstractStructuralNode) new Element(null, "e2", null, Regexp.<AbstractStructuralNode>getLambda(), new ArrayList<Attribute>(0))));
-
-    final Element e = new Element(null, "e", m, Regexp.getConcatenation(children), new ArrayList<Attribute>(0));
-    final List<Element> l = new ArrayList<Element>(1);
-    l.add(e);
-
-    final List<Cluster> clusters = new ArrayList<Cluster>();
-    clusters.add(new Cluster(e, l));
-    final List<Cluster> result = new CloneHelper().cloneClusters(clusters);
-
-    assertEquals(1, result.size());
-    assert (clusters != result);
-    final List<Element> otherList = result.get(0).getContent();
-    assert (l != otherList);
-    final Element other = otherList.get(0);
-    assert (e != other);
-    assert (e != result.get(0).getContent());
     assert (e.getSubnodes() != other.getSubnodes());
     assert (e.getSubnodes().getChild(0) != other.getSubnodes().getChild(0));
     assert (e.getSubnodes().getChild(0).getChild(0) != other.getSubnodes().getChild(0).getChild(0));

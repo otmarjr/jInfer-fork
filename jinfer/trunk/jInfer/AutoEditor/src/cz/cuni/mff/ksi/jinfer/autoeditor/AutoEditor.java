@@ -19,22 +19,22 @@ package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.apache.commons.collections15.Transformer;
 import org.openide.windows.WindowManager;
 
 /**
@@ -65,6 +65,14 @@ import org.openide.windows.WindowManager;
  * @author rio
  */
 public class AutoEditor<T> {
+  private SymbolToString<T> symbolToString;
+
+  public AutoEditor(SymbolToString<T> symbolToString) {
+    this.symbolToString= symbolToString;
+  }
+
+  public AutoEditor() {
+  }
 
   /**
    * Variable used to pass data to the GUI and gets the result of user
@@ -79,7 +87,7 @@ public class AutoEditor<T> {
    * @param automaton automaton to be drawn
    * @return if user picks exactly two states returns Pair of them otherwise null
    */
-  public Pair<State<T>, State<T>> drawAutomatonToPickTwoStates(final Automaton<T> automaton) {
+  public List<State<T>> drawAutomatonToPickTwoStates(final Automaton<T> automaton) {
     if (!AutoEditorTopComponent.getAskUser()) {
       return null;
     }
@@ -107,7 +115,13 @@ public class AutoEditor<T> {
     //visualizationViewer.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
     visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
-    visualizationViewer.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
+    visualizationViewer.getRenderContext().setEdgeLabelTransformer(
+            new Transformer<Step<T>, String>() {
+              @Override
+              public String transform(Step<T> i) {
+                return symbolToString.toString(i.getAcceptSymbol());
+              }
+    });
 
     final PluggableGraphMouse gm = new PluggableGraphMouse();
     gm.add(new PickingUnlimitedGraphMousePlugin<State<T>, Step<T>>());
@@ -136,10 +150,7 @@ public class AutoEditor<T> {
      * VisualizationViewer should give us the information about picked vertices.
      */
     final Set<State<T>> pickedSet = visualizationViewer.getPickedVertexState().getPicked();
-    if (pickedSet.size() == 2) {
-      return new Pair<State<T>, State<T>>((State<T>)pickedSet.toArray()[0], (State<T>)pickedSet.toArray()[1]);
-    } else {
-      return null;
-    }
+    List<State<T>> lst = new ArrayList<State<T>>(pickedSet);
+    return lst;
   }
 }

@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
@@ -63,7 +64,7 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
    * @throws InterruptedException
    */
   @Override
-  public Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException {
+  public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {
     final Map<State<T>, Set<Step<T>>> delta= inputAutomaton.getDelta();
 //    final Map<State<T>, Set<Step<T>>> reverseDelta= inputAutomaton.getReverseDelta();
 

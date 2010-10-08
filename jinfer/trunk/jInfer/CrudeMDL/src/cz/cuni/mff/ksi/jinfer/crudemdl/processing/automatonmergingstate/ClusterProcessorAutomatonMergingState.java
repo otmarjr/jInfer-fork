@@ -17,13 +17,13 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomaton;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
@@ -50,12 +50,22 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingState.class);
   private final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier;
   private final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier;
-  
+
+  private class AbstractStructuralNodeSymbolToString implements SymbolToString<AbstractStructuralNode> {
+    @Override
+    public String toString(AbstractStructuralNode symbol) {
+      return symbol.isElement() ? symbol.getName() : "#CDATA";
+    }
+  };
+
+  final AbstractStructuralNodeSymbolToString symbolToString;
+
   public ClusterProcessorAutomatonMergingState(
           final AutomatonSimplifierFactory automatonSimplifierFactory,
           final RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory) {
     this.automatonSimplifier= automatonSimplifierFactory.<AbstractStructuralNode>create();
     this.regexpAutomatonSimplifier= regexpAutomatonSimplifierFactory.<AbstractStructuralNode>create();
+    this.symbolToString= new AbstractStructuralNodeSymbolToString();
   }
 
   @Override
@@ -78,7 +88,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
 
       final List<AbstractStructuralNode> symbolString= new LinkedList<AbstractStructuralNode>();
       for (AbstractStructuralNode token : rightSideTokens) {
-        symbolString.add(clusterer.getRepresentantForItem(token) );
+        symbolString.add(clusterer.getRepresentantForItem(token));
      }
       automaton.buildPTAOnSymbol(symbolString);
     }
@@ -89,7 +99,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton);
+    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, symbolToString);
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
 

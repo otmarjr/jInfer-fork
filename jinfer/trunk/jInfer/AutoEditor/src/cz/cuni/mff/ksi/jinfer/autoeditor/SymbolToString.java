@@ -15,16 +15,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying;
-
-import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 /**
  * TODO anti Comment!
  *
+ * @param <T> 
  * @author anti
  */
-public interface AutomatonSimplifier<T> {
-  Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException;
+public interface SymbolToString<T> {
+  String toString(T symbol);
 }

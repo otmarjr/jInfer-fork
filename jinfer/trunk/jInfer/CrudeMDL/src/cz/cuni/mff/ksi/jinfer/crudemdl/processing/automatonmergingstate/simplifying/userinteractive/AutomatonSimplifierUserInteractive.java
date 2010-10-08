@@ -19,9 +19,10 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
+import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -33,20 +34,19 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierUserInteractive.class);
   
   @Override
-  public Automaton<T> simplify(final Automaton<T> inputAutomaton) throws InterruptedException {
-    final AutoEditor<T> gui= new AutoEditor<T>();
-    Pair<State<T>, State<T>> mergePair;
+  public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolTostring) throws InterruptedException {
+    final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
+    List<State<T>> mergeLst;
     do {
-      mergePair = gui.drawAutomatonToPickTwoStates(inputAutomaton);
+      mergeLst = gui.drawAutomatonToPickTwoStates(inputAutomaton);
 
-      if (mergePair != null) {
-        LOG.debug("AUTO EDITOR selected: " + mergePair.toString());
-        inputAutomaton.mergeStates(mergePair.getFirst(), mergePair.getSecond());
-        LOG.debug("After merge:"
-                );
+      if (!mergeLst.isEmpty()) {
+        LOG.debug("AUTO EDITOR selected: " + mergeLst.toString());
+        inputAutomaton.mergeStates(mergeLst);
+        LOG.debug("After merge:");
         LOG.debug(inputAutomaton);
       }
-    } while (mergePair != null);
+    } while (!mergeLst.isEmpty());
     return inputAutomaton;
   }
 }

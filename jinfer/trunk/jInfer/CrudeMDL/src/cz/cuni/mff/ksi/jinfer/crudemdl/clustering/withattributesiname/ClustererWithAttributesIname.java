@@ -25,8 +25,8 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +50,7 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
   public ClustererWithAttributesIname() {
     this.nodeClusters= new LinkedList<Cluster<AbstractStructuralNode>>();
     this.items= new LinkedList<AbstractStructuralNode>();
-    this.attributeClusterers= new HashMap<AbstractStructuralNode, Clusterer<Attribute>>();
+    this.attributeClusterers= new LinkedHashMap<AbstractStructuralNode, Clusterer<Attribute>>();
   }
 
   private AbstractStructuralNode addNode(final AbstractStructuralNode item) throws InterruptedException {

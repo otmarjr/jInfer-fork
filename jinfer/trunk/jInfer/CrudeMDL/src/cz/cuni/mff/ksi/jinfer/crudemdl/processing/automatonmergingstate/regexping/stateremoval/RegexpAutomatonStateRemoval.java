@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -143,7 +143,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     }
 
     /* Bucketing according to source of step */
-    final Map<State<Regexp<T>>, List<Step<Regexp<T>>>> inStepBuckets= new HashMap<State<Regexp<T>>, List<Step<Regexp<T>>>>();
+    final Map<State<Regexp<T>>, List<Step<Regexp<T>>>> inStepBuckets= new LinkedHashMap<State<Regexp<T>>, List<Step<Regexp<T>>>>();
     for (Step<Regexp<T>> inStep : inSteps) {
       if (!inStepBuckets.containsKey(inStep.getSource())) {
         inStepBuckets.put(inStep.getSource(), new LinkedList<Step<Regexp<T>>>());
@@ -188,7 +188,7 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
     }
 
     /* outSteps */
-    final Map<State<Regexp<T>>, List<Step<Regexp<T>>>> outStepBuckets= new HashMap<State<Regexp<T>>, List<Step<Regexp<T>>>>();
+    final Map<State<Regexp<T>>, List<Step<Regexp<T>>>> outStepBuckets= new LinkedHashMap<State<Regexp<T>>, List<Step<Regexp<T>>>>();
     /* bucket according to outstep destination */
     for (Step<Regexp<T>> outStep : outSteps) {
       if (!outStepBuckets.containsKey(outStep.getDestination())) {

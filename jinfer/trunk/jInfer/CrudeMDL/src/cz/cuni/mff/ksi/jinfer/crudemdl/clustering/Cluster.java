@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -33,7 +33,7 @@ public class Cluster<T> {
 
   public Cluster(final T representant) {
     this.representant= representant;
-    this.members= new HashSet<T>();
+    this.members= new LinkedHashSet<T>();
     this.members.add(representant);
   }
 

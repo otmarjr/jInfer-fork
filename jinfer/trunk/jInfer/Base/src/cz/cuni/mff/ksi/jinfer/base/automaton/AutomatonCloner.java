@@ -17,8 +17,8 @@
 
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -50,15 +50,15 @@ public class AutomatonCloner<A, B> {
     final Map<State<A>, Set<Step<A>>> anotherDelta= anotherAutomaton.getDelta();
     final Map<State<A>, Set<Step<A>>> anotherReverseDelta= anotherAutomaton.getReverseDelta();
 
-    final Map<State<A>, State<B>> stateConversionMap= new HashMap<State<A>, State<B>>();
+    final Map<State<A>, State<B>> stateConversionMap= new LinkedHashMap<State<A>, State<B>>();
     for (State<A> anotherState : anotherDelta.keySet()) {
       final State<B> newState=new State<B>(
                 anotherState.getFinalCount(), anotherState.getName()
               );
       stateConversionMap.put(anotherState, newState);
-      newAutomaton.delta.put(newState, new HashSet<Step<B>>());
-      newAutomaton.reverseDelta.put(newState, new HashSet<Step<B>>());
-      newAutomaton.reverseMergedStates.put(newState, new HashSet<State<B>>());
+      newAutomaton.delta.put(newState, new LinkedHashSet<Step<B>>());
+      newAutomaton.reverseDelta.put(newState, new LinkedHashSet<Step<B>>());
+      newAutomaton.reverseMergedStates.put(newState, new LinkedHashSet<State<B>>());
       for (State<A> anotherState2 : anotherAutomaton.getReverseMergedStates().get(anotherState)) {
         final State<B> newState2=new State<B>(
                   anotherState2.getFinalCount(), anotherState2.getName()

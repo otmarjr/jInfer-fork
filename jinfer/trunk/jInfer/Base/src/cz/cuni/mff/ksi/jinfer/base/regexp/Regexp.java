@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.base.regexp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -400,8 +401,13 @@ public class Regexp<T> {
   private String comboToString(final String delimiter) {
     final StringBuilder ret = new StringBuilder();
     ret.append('(');
-    for (final Regexp<T> child : children) {
-      ret.append(child.toString()).append(delimiter);
+    Iterator<Regexp<T>> it= children.iterator();
+    while (it.hasNext()) {
+      final Regexp<T> child = it.next();
+      ret.append(child.toString());
+      if (it.hasNext()) {
+        ret.append(delimiter);
+      }
     }
     ret.append(')');
     return ret.toString();

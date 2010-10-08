@@ -23,13 +23,14 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralNodeType;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -96,22 +97,20 @@ public class TwoStepSimplifierImpl implements Simplifier {
   public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
-//    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
-    // 1. cluster elements according to name
-    final ClustererFactory clustererFactory= this.getClustererFactory();
-    final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
-
+    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
-
     for (final Element e : initialGrammar) {
       abstracts.add(e);
     }
 
+    // 1. cluster elements according to name
+    final ClustererFactory clustererFactory= this.getClustererFactory();
+    final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
     clusterer.addAll(abstracts);
     clusterer.cluster();
 
     // 2. prepare emtpy final grammar
-    final List<AbstractStructuralNode> finalGrammar= new LinkedList<AbstractStructuralNode>();
+    final List<Element> finalGrammar= new LinkedList<Element>();
 
     // 3. process rules
     final ClusterProcessor<AbstractStructuralNode> processor= this.getClusterProcessorFactory().create();
@@ -164,15 +163,7 @@ public class TwoStepSimplifierImpl implements Simplifier {
               );
     }
 
-//    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
-
-    final List<Element> ret = new ArrayList<Element>(finalGrammar.size());
-    for (final AbstractStructuralNode n : finalGrammar) {
-      if (!n.isElement()) {
-        throw new IllegalArgumentException();
-      }
-      ret.add((Element)n);
-    }
-    callback.finished(ret);
+    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
+    callback.finished(finalGrammar);
   }
 }

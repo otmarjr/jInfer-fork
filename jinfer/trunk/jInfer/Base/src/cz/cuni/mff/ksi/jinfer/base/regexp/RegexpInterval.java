@@ -48,6 +48,13 @@ public class RegexpInterval {
     this.unbounded= true;
   }
 
+  public RegexpInterval getCopy() {
+    if (unbounded) {
+      return RegexpInterval.getUnbounded(min);
+    }
+    return RegexpInterval.getBounded(min, max);
+  }
+
   /**
    * get a bounded interval, specify min, max integers
    * @param min

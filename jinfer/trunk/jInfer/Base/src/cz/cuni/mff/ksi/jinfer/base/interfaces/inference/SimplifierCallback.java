@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
+package cz.cuni.mff.ksi.jinfer.base.interfaces.inference;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
 /**

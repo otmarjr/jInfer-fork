@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.basicdtd.utils;
 
 import java.util.Collections;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

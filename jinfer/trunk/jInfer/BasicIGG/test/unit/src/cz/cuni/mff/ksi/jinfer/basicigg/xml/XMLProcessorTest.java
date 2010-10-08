@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;

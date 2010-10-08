@@ -15,18 +15,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.base.objects;
-
-import java.util.List;
+package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
 
 /**
- * Interface representing basic work cycle with nodes, that have content.
- * It is used to work with content of text nodes (SimpleData) and attributes
- * (Attribute)
+ * Interface for nodes that form structure of document tree.
+ * That are elements and text nodes (classes Element and SimpleData).
+ *
+ * Contains isElement() and isSimpleData() functions to recognize actual instance.
  *
  * @author anti
  */
-public interface ContentNode extends NamedNode {
-  String getContentType();
-  List<String> getContent();
+public interface StructuralNode extends NamedNode {
+  StructuralNodeType getType();
+  boolean isElement();
+  boolean isSimpleData();
 }

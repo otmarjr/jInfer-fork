@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.ruledisplayer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
 import org.openide.windows.WindowManager;

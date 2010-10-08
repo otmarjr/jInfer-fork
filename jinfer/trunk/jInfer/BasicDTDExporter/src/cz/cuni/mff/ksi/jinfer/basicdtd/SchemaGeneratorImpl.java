@@ -17,11 +17,11 @@
 package cz.cuni.mff.ksi.jinfer.basicdtd;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vektor
+ *  Copyright (C) 2010 anti
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,23 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Element;
+package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
+
 import java.util.List;
 
 /**
- * Interface defining a response to IGGenerator finishing its work.
+ * Interface representing basic work cycle with nodes, that have content.
+ * It is used to work with content of text nodes (SimpleData) and attributes
+ * (Attribute)
  *
- * @author vektor
+ * @author anti
  */
-public interface IGGeneratorCallback {
-
-  /**
-   * This method is called by a IGGenerator implementation, after it has
-   * finished its work.
-   *
-   * @param grammar Initial grammar as retrieved from input files.
-   */
-  void finished(final List<Element> grammar);
+public interface ContentNode extends NamedNode {
+  String getContentType();
+  List<String> getContent();
 }

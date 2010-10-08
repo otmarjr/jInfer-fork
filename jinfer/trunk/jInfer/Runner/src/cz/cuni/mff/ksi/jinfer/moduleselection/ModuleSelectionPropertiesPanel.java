@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.moduleselection;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.IGGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.SchemaGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.Properties;

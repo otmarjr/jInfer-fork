@@ -62,9 +62,13 @@ public class Attribute extends AbstractNamedNode implements ContentNode {
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());
     ret.append(": ").append("ATTRIBUTE");
-    ret.append('\n').append(contentType).append(": ");
-    for (final Object o : content) {
-      ret.append(o).append(' ');
+    ret.append('#').append(contentType).append(": ");
+    boolean first = true;
+    for (final String str : content) {
+      if (!first) {
+        ret.append(' ');
+      }
+      ret.append(str.toString());
     }
     return ret.toString();
   }

@@ -64,7 +64,7 @@ public class XMLProcessorTest {
           "<cars manufacturer=\"audi\"/>";
 
   private static final String[] CARS_RESULTS_ATTR = {
-    "cars: ELEMENT\n(cars/manufacturer: ATTRIBUTE\nnull: audi ,)"};
+    "cars: ELEMENT <cars/manufacturer: ATTRIBUTE#null: audi>\n()"};
 
   @Test
   public void testProcessSimpleAttr() {
@@ -98,11 +98,11 @@ public class XMLProcessorTest {
           "</people><!-- comment -->";
 
   private static final String[] PEOPLE_RESULTS = {
-    "people/person/name: ELEMENT\n(people/person/name/first: ATTRIBUTE\nnull: John ,people/person/name/last: ATTRIBUTE\nnull: Doe ,)",
-    "people/person: ELEMENT\n(people/person/name: ELEMENT\n(people/person/name/first: ATTRIBUTE\nnull: John ,people/person/name/last: ATTRIBUTE\nnull: Doe ,),)",
-    "people/person/name: ELEMENT\n(people/person/name/first: ATTRIBUTE\nnull: Jane ,people/person/name/last: ATTRIBUTE\nnull: Doe ,)",
-    "people/person: ELEMENT\n(people/person/name: ELEMENT\n(people/person/name/first: ATTRIBUTE\nnull: Jane ,people/person/name/last: ATTRIBUTE\nnull: Doe ,),)",
-    "people: ELEMENT\n(people/person: ELEMENT\n(people/person/name: ELEMENT\n(people/person/name/first: ATTRIBUTE\nnull: John ,people/person/name/last: ATTRIBUTE\nnull: Doe ,),),people/person: ELEMENT\n(people/person/name: ELEMENT\n(people/person/name/first: ATTRIBUTE\nnull: Jane ,people/person/name/last: ATTRIBUTE\nnull: Doe ,),),)"};
+    "people/person/name: ELEMENT <people/person/name/first: ATTRIBUTE#null: John; people/person/name/last: ATTRIBUTE#null: Doe>\n()",
+    "people/person: ELEMENT\n(people/person/name: ELEMENT <people/person/name/first: ATTRIBUTE#null: John; people/person/name/last: ATTRIBUTE#null: Doe>\n())",
+    "people/person/name: ELEMENT <people/person/name/first: ATTRIBUTE#null: Jane; people/person/name/last: ATTRIBUTE#null: Doe>\n()",
+    "people/person: ELEMENT\n(people/person/name: ELEMENT <people/person/name/first: ATTRIBUTE#null: Jane; people/person/name/last: ATTRIBUTE#null: Doe>\n())",
+    "people: ELEMENT\n(people/person: ELEMENT\n(people/person/name: ELEMENT <people/person/name/first: ATTRIBUTE#null: John; people/person/name/last: ATTRIBUTE#null: Doe>\n())\n,people/person: ELEMENT\n(people/person/name: ELEMENT <people/person/name/first: ATTRIBUTE#null: Jane; people/person/name/last: ATTRIBUTE#null: Doe>\n()))"};
 
   @Test
   public void testProcess() {
@@ -132,10 +132,9 @@ public class XMLProcessorTest {
           "</continent>";
 
   private static final String[] CITIES_RESULTS = {
-    "continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA\nnull:  )",
-    "continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA\nnull:  )",
-    "continent: ELEMENT\n(continent/name: ATTRIBUTE\nnull: Europe ,continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA\nnull:  ),continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA\nnull:  ))"};
-
+    "continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA#null: )",
+    "continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA#null: )",
+    "continent: ELEMENT <continent/name: ATTRIBUTE#null: Europe>\n(continent/city: ELEMENT\n(continent/city/Bratislava: SIMPLE_DATA#null: )\n,continent/city: ELEMENT\n(continent/city/Prague: SIMPLE_DATA#null: ))"};
   @Test
   public void testProcessSimpleData() {
     System.out.println("testProcessSimpleData");
@@ -160,9 +159,9 @@ public class XMLProcessorTest {
           "</p>";
 
   private static final String[] HTML_RESULTS = {
-    "p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA\nnull:  )",
-    "p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA\nnull:  )",
-    "p: ELEMENT\n(p/This is a: SIMPLE_DATA\nnull:  ,p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA\nnull:  ),p/text. And some: SIMPLE_DATA\nnull:  ,p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA\nnull:  ))"};
+    "p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA#null: )",
+    "p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA#null: )",
+    "p: ELEMENT\n(p/This is a: SIMPLE_DATA#null: \n,p/b: ELEMENT\n(p/b/bold: SIMPLE_DATA#null: )\n,p/text. And some: SIMPLE_DATA#null: \n,p/i: ELEMENT\n(p/i/italics: SIMPLE_DATA#null: ))"};
 
   @Test
   public void testProcessMixed() {

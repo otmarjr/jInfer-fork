@@ -101,6 +101,17 @@ public class Element extends AbstractStructuralNode {
   @Override
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());
+    // output attributes in form <att1, att2, att3>
+    if (attributes != null && !attributes.isEmpty()) {
+      ret.append(' ').append('<');
+      for (int i = 0; i < attributes.size(); ++i) {
+        ret.append(attributes.get(i));
+        if (i != (attributes.size() -1)) {
+          ret.append("; ");
+        }
+      }
+      ret.append('>');
+    }
     if (subnodes != null) {
       ret.append('\n').append(subnodes.toString());
     }

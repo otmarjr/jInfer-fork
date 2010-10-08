@@ -20,8 +20,8 @@ package cz.cuni.mff.ksi.jinfer.base.automaton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -104,10 +104,10 @@ public class Automaton<T> {
    */
   public Automaton() {
     this.newStateName= 1;
-    this.delta= new HashMap<State<T>, Set<Step<T>>>();
-    this.reverseDelta= new HashMap<State<T>, Set<Step<T>>>();
-    this.mergedStates= new HashMap<State<T>, State<T>>();
-    this.reverseMergedStates= new HashMap<State<T>, Set<State<T>>>();
+    this.delta= new LinkedHashMap<State<T>, Set<Step<T>>>();
+    this.reverseDelta= new LinkedHashMap<State<T>, Set<Step<T>>>();
+    this.mergedStates= new LinkedHashMap<State<T>, State<T>>();
+    this.reverseMergedStates= new LinkedHashMap<State<T>, Set<State<T>>>();
   }
 
   /**
@@ -138,7 +138,7 @@ public class Automaton<T> {
 
   /**
    * Creates new state and return it. This is preferred way to extend automaton
-   * states. It initializes delta map, and revesre delta map with empty hashsets
+   * states. It initializes delta map, and revesre delta map with empty linkedhashsets
    * of steps, increments newstatename.
    *
    * Process of extending automaton is therefore:
@@ -151,9 +151,9 @@ public class Automaton<T> {
   protected final State<T> createNewState() {
     final State<T> newState= new State<T>(0, this.newStateName);
     this.newStateName++;
-    this.delta.put(newState, new HashSet<Step<T>>());
-    this.reverseDelta.put(newState, new HashSet<Step<T>>());
-    this.reverseMergedStates.put(newState, new HashSet<State<T>>());
+    this.delta.put(newState, new LinkedHashSet<Step<T>>());
+    this.reverseDelta.put(newState, new LinkedHashSet<Step<T>>());
+    this.reverseMergedStates.put(newState, new LinkedHashSet<State<T>>());
     return newState;
   }
 
@@ -214,9 +214,9 @@ public class Automaton<T> {
   }
 
   private void collapseStepsAfterMerge(final State<T> mainState) {
-    final Map<State<T>, Map<T, Step<T>>> inBuckets= new HashMap<State<T>, Map<T, Step<T>>>();
+    final Map<State<T>, Map<T, Step<T>>> inBuckets= new LinkedHashMap<State<T>, Map<T, Step<T>>>();
 
-    final Set<Step<T>> inSteps= new HashSet<Step<T>>(this.reverseDelta.get(mainState));
+    final Set<Step<T>> inSteps= new LinkedHashSet<Step<T>>(this.reverseDelta.get(mainState));
     for (Step<T> inStep : inSteps) {
       if (inBuckets.containsKey(inStep.getSource())) {
         if (inBuckets.get(inStep.getSource()).containsKey(inStep.getAcceptSymbol())) {
@@ -227,13 +227,13 @@ public class Automaton<T> {
           inBuckets.get(inStep.getSource()).put(inStep.getAcceptSymbol(), inStep);
         }
       } else {
-        inBuckets.put(inStep.getSource(), new HashMap<T, Step<T>>());
+        inBuckets.put(inStep.getSource(), new LinkedHashMap<T, Step<T>>());
         inBuckets.get(inStep.getSource()).put(inStep.getAcceptSymbol(), inStep);
       }
     }
 
-    final Map<State<T>, Map<T, Step<T>>> outBuckets= new HashMap<State<T>, Map<T, Step<T>>>();
-    final Set<Step<T>> outSteps= new HashSet<Step<T>>(this.delta.get(mainState));
+    final Map<State<T>, Map<T, Step<T>>> outBuckets= new LinkedHashMap<State<T>, Map<T, Step<T>>>();
+    final Set<Step<T>> outSteps= new LinkedHashSet<Step<T>>(this.delta.get(mainState));
     for (Step<T> outStep : outSteps) {
       if (outBuckets.containsKey(outStep.getDestination())) {
         if (outBuckets.get(outStep.getDestination()).containsKey(outStep.getAcceptSymbol())) {
@@ -244,7 +244,7 @@ public class Automaton<T> {
           outBuckets.get(outStep.getDestination()).put(outStep.getAcceptSymbol(), outStep);
         }
       } else {
-        outBuckets.put(outStep.getDestination(), new HashMap<T, Step<T>>());
+        outBuckets.put(outStep.getDestination(), new LinkedHashMap<T, Step<T>>());
         outBuckets.get(outStep.getDestination()).put(outStep.getAcceptSymbol(), outStep);
       }
     }

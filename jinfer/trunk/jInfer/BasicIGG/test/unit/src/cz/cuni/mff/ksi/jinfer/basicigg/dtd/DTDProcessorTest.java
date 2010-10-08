@@ -85,8 +85,8 @@ public class DTDProcessorTest {
           + "	clas (prima|sekunda) #IMPLIED>" + NL
           + "<!ELEMENT elements ((elem)*)>" + NL;
   private static final String[] ATTR_RESULTS = {
-    "elem: ELEMENT\n()",
-    "elements: ELEMENT\n(elem: ELEMENT\n(),)"};
+    "elem: ELEMENT <name: ATTRIBUTE#null: ; clas: ATTRIBUTE#null: ; id: ATTRIBUTE#null: >\n()",
+    "elements: ELEMENT\n(elem: ELEMENT\n\u03BB)"};
 
   // TODO vektor Problem is, that the DTD importer returns the rules in nondeterministic order...
   @Test

@@ -137,9 +137,6 @@ public class Regexp<T> {
     return getConcatenation(children, RegexpInterval.getOnce());
   }
 
-  public static <T> Regexp<T> getConcatenationMutable() {
-    return new Regexp<T>(null,  new ArrayList<Regexp<T>>(0), RegexpType.CONCATENATION, null, true);
-  }
 
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children, final RegexpInterval interval) {
     if (children == null) {
@@ -396,21 +393,6 @@ public class Regexp<T> {
     return ret;
   }
 
-  private String comboToString(final String delimiter) {
-    final StringBuilder ret = new StringBuilder();
-    ret.append('(');
-    Iterator<Regexp<T>> it= children.iterator();
-    while (it.hasNext()) {
-      final Regexp<T> child = it.next();
-      ret.append(child.toString());
-      if (it.hasNext()) {
-        ret.append(delimiter);
-      }
-    }
-    ret.append(')');
-    return ret.toString();
-  }
-
   @Override
   public String toString() {
     switch (type) {
@@ -437,9 +419,9 @@ public class Regexp<T> {
 
   private static String getDelimiter(final RegexpType t) {
     switch (t) {
-      case CONCATENATION: return ",";
-      case ALTERNATION: return "|";
-      case PERMUTATION: return "&";
+      case CONCATENATION: return "\n,";
+      case ALTERNATION: return "\n|";
+      case PERMUTATION: return "\n&";
       default:
         throw new IllegalStateException("Invalid regexp type at this point: " + t);
     }

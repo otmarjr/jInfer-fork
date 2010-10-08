@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -414,17 +415,33 @@ public class Regexp<T> {
   public String toString() {
     switch (type) {
       case TOKEN:
-          return content.toString() + interval.toString();
+        return content.toString() + interval.toString();
       case CONCATENATION:
-        return comboToString(",") + interval.toString();
       case ALTERNATION:
-        return comboToString("|") + interval.toString();
       case PERMUTATION:
-        return comboToString("&") + interval.toString();
+        return CollectionToString.colToString(children, getDelimiter(type),
+                new CollectionToString.ToString<Regexp<T>>() {
+
+                  @Override
+                  public String toString(Regexp<T> t) {
+                    return t.toString();
+                  }
+                })
+                + interval.toString();
       case LAMBDA:
         return "\u03BB";
       default:
-        throw new IllegalArgumentException("Unknown enum member.");
+        throw new IllegalArgumentException("Unknown enum member " + type);
+    }
+  }
+
+  private static char getDelimiter(final RegexpType t) {
+    switch (t) {
+      case CONCATENATION: return ',';
+      case ALTERNATION: return '|';
+      case PERMUTATION: return '&';
+      default:
+        throw new IllegalStateException("Invalid regexp type at this point: " + t);
     }
   }
 }

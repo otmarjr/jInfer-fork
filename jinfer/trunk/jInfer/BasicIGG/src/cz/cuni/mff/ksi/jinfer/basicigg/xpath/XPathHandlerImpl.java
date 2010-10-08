@@ -41,6 +41,8 @@ import org.jaxen.saxpath.helpers.DefaultXPathHandler;
  */
 public class XPathHandlerImpl extends DefaultXPathHandler {
 
+  private static final List<String> EMPTY_CONTEXT = new ArrayList<String>(0);
+
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
   /** Rules that have been inferred so far. */
@@ -89,7 +91,8 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         break;
       case Axis.ATTRIBUTE:
         if (lastElement != null) {
-          final Attribute newAttr = new Attribute(null, localName, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+          final Attribute newAttr = new Attribute(EMPTY_CONTEXT, localName,
+                  IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
           lastElement.getAttributes().add(newAttr);
           lastAttribute = newAttr;
           rules.add(lastElement);
@@ -126,9 +129,11 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
             && lastElement != null) {
       final SimpleData newSimpleData;
       if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
-        newSimpleData = new SimpleData(null, lastLiteral, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+        newSimpleData = new SimpleData(EMPTY_CONTEXT, lastLiteral,
+                IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       } else {
-        newSimpleData = new SimpleData(null, "simple data", IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+        newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
+                IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
       lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newSimpleData));
       rules.add(lastElement);
@@ -148,9 +153,11 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     if (lastElement != null) {
       final SimpleData newSimpleData;
       if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
-        newSimpleData = new SimpleData(null, null, IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+        newSimpleData = new SimpleData(EMPTY_CONTEXT, null,
+                IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       } else {
-        newSimpleData = new SimpleData(null, "simple data", IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+        newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
+                IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
       lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newSimpleData));
       rules.add(lastElement);
@@ -171,7 +178,6 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     for (Element node : rules) {
       node.getSubnodes().setType(RegexpType.CONCATENATION);
       node.getSubnodes().setInterval(RegexpInterval.getOnce());
-      node.getSubnodes().setImmutable();
       node.setImmutable();
     }
 

@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicdtd.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import java.util.Arrays;
@@ -33,6 +35,9 @@ public class DomainUtilsTest {
   private static final int THRESHOLD = 3;
   private static final double DOMINANCE_RATIO = 0.75;
 
+  private static final List<String> EMPTY_CONTEXT = new ArrayList<String>(0);
+  private static final Map<String, Object> EMPTY_METADATA = new HashMap<String, Object>();
+
   @Test(expected = NullPointerException.class)
   public void testGetDomainNull() {
     System.out.println("testGetDomainNull");
@@ -42,7 +47,7 @@ public class DomainUtilsTest {
   @Test
   public void testGetDomainEmpty() {
     System.out.println("testGetDomainEmpty");
-    final Attribute a = new Attribute(null, "a", null, null, Collections.<String>emptyList());
+    final Attribute a = new Attribute(EMPTY_CONTEXT, "a", EMPTY_METADATA, null, Collections.<String>emptyList());
     if (!DomainUtils.getDomain(a).isEmpty()) {
       fail();
     }
@@ -51,7 +56,7 @@ public class DomainUtilsTest {
   @Test
   public void testGetDomainSimple() {
     System.out.println("testGetDomainSimple");
-    final Attribute a = new Attribute(null, "a", null, null, Arrays.asList("a", "b", "c"));
+    final Attribute a = new Attribute(EMPTY_CONTEXT, "a", EMPTY_METADATA, null, Arrays.asList("a", "b", "c"));
     final Map<String, Integer> domain = DomainUtils.getDomain(a);
     assertEquals(domain.size(), 3);
     assertEquals(Integer.valueOf(1), domain.get("a"));
@@ -62,7 +67,7 @@ public class DomainUtilsTest {
   @Test
   public void testGetDomainMoreComplex() {
     System.out.println("testGetDomainMoreComplex");
-    final Attribute a = new Attribute(null, "a", null, null, Arrays.asList("a", "a", "b", "a", "c", "c"));
+    final Attribute a = new Attribute(EMPTY_CONTEXT, "a", EMPTY_METADATA, null, Arrays.asList("a", "a", "b", "a", "c", "c"));
     final Map<String, Integer> domain = DomainUtils.getDomain(a);
     assertEquals(domain.size(), 3);
     assertEquals(Integer.valueOf(3), domain.get("a"));
@@ -73,7 +78,7 @@ public class DomainUtilsTest {
   @Test
   public void testGetDomainComplex() {
     System.out.println("testGetDomainComplex");
-    final Attribute a = new Attribute(null, "a", null, null, Arrays.asList("c", "a", "a", "d", "b", "a", "c", "c"));
+    final Attribute a = new Attribute(EMPTY_CONTEXT, "a", EMPTY_METADATA, null, Arrays.asList("c", "a", "a", "d", "b", "a", "c", "c"));
     final Map<String, Integer> domain = DomainUtils.getDomain(a);
     assertEquals(domain.size(), 4);
     assertEquals(Integer.valueOf(3), domain.get("a"));

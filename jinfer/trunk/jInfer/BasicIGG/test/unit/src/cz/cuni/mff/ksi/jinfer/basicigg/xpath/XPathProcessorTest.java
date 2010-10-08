@@ -63,12 +63,12 @@ public class XPathProcessorTest {
 
   private static final String[] ZOO_RESULTS = {
     "zoo: ELEMENT\n()",
-    "zoo: ELEMENT\n(lion: ELEMENT\n(),)",
+    "zoo: ELEMENT\n(lion: ELEMENT\n())",
     "lion: ELEMENT\n()",
-    "zoo: ELEMENT\n(lion: ELEMENT\n(paw: ELEMENT\n(),),)",
-    "lion: ELEMENT\n(paw: ELEMENT\n(),)",
+    "zoo: ELEMENT\n(lion: ELEMENT\n(paw: ELEMENT\n()))",
+    "lion: ELEMENT\n(paw: ELEMENT\n())",
     "paw: ELEMENT\n()",
-    "zoo: ELEMENT\n(lion: ELEMENT\n(),)",
+    "zoo: ELEMENT\n(lion: ELEMENT\n())",
     "lion: ELEMENT\n()",
     "giraffe: ELEMENT\n()",
     "zebra: ELEMENT\n()",
@@ -96,7 +96,7 @@ public class XPathProcessorTest {
   private static final String[] CARS_RESULTS = {
     "car: ELEMENT\n()",
     "wheel: ELEMENT\n()",
-    "car: ELEMENT\n(front: ELEMENT\n(),)",
+    "car: ELEMENT\n(front: ELEMENT\n())",
     "front: ELEMENT\n()",
     "wheel: ELEMENT\n()"};
 

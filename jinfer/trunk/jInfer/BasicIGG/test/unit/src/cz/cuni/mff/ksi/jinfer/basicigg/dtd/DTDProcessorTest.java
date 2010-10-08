@@ -64,7 +64,7 @@ public class DTDProcessorTest {
           + "<!ELEMENT zoo (animal*) >" + NL;
   private static final String[] ZOO_RESULTS = {
     "zoos: ELEMENT\n()",
-    "zoo: ELEMENT\n(animal: ELEMENT\n(),)",
+    "zoo: ELEMENT\n(animal: ELEMENT\n\u03BB)",
     "animal: ELEMENT\n()"};
 
   @Test
@@ -85,9 +85,10 @@ public class DTDProcessorTest {
           + "	clas (prima|sekunda) #IMPLIED>" + NL
           + "<!ELEMENT elements ((elem)*)>" + NL;
   private static final String[] ATTR_RESULTS = {
-    "elem: ELEMENT\n(name: ATTRIBUTE\nnull: ,clas: ATTRIBUTE\nnull: ,id: ATTRIBUTE\nnull: ,)",
+    "elem: ELEMENT\n()",
     "elements: ELEMENT\n(elem: ELEMENT\n(),)"};
 
+  // TODO vektor Problem is, that the DTD importer returns the rules in nondeterministic order...
   @Test
   public void testProcessAttrs() {
     System.out.println("processAttrs");

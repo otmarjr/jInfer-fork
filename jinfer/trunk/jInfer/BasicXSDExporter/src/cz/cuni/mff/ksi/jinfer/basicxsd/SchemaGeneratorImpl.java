@@ -28,7 +28,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.XSDUtils;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -72,30 +71,17 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<AbstractStructuralNode> grammar, final SchemaGeneratorCallback callback) throws InterruptedException {
+  public void start(final List<Element> grammar, final SchemaGeneratorCallback callback) throws InterruptedException {
     LOG.info("XSD Exporter: got " + grammar.size()
             + " rules.");
-    
-    // Filter only the elements. Everything else can be accessed through the elements.
-    final List<Element> elements = new ArrayList<Element>();
-    for (final AbstractStructuralNode node : grammar) {
-      if (node.isElement()) {
-        elements.add((Element) node);
-      } else {
-        throw new IllegalArgumentException("The output grammar can contain only elements. Got " + node.toString());
-      }
-    }
 
-    LOG.info("XSD Exporter: that is " + elements.size()
-            + " elements.");
-
-    if (elements.isEmpty()) {
+    if (grammar.isEmpty()) {
       LOG.warn("XSD Exporter: nothing to export.");
       callback.finished("", "xsd");
       return;
     }
 
-    assert(verifyInput(elements));
+    assert(verifyInput(grammar));
 
     final Properties properties = RunningProject.getActiveProjectProps(XSDExportPropertiesPanel.NAME);
 
@@ -109,7 +95,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(XSDExportPropertiesPanel.GENERATE_GLOBAL, String.valueOf(XSDExportPropertiesPanel.GENERATE_GLOBAL_DEFAULT)));
     final int numberToGlobal = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL, String.valueOf(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_DEFAULT)));
-    preprocessor = new Preprocessor(elements, generateGlobal, numberToGlobal);
+    preprocessor = new Preprocessor(grammar, generateGlobal, numberToGlobal);
     preprocessor.run();
 
     typenamePrefix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_PREFIX, XSDExportPropertiesPanel.TYPENAME_PREFIX_DEFAULT);

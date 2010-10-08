@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import java.util.List;
 
 /**
@@ -41,6 +41,6 @@ public interface Simplifier extends NamedModule, Capabilities {
    *  the resulting list of rules must be sent to the last stage by calling
    *  the <code>finished()</code> method of this object.
    */
-  void start(final List<AbstractStructuralNode> initialGrammar,
+  void start(final List<Element> initialGrammar,
           final SimplifierCallback callback) throws InterruptedException;
 }

@@ -29,7 +29,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -68,7 +67,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<AbstractStructuralNode> grammar,
+  public void start(final List<Element> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
 
     LOG.info("DTD Exporter: got " + grammar.size()
@@ -83,21 +82,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             DTDExportPropertiesPanel.MIN_DEFAULT_RATIO, Float.toString(
             DTDExportPropertiesPanel.MIN_DEFAULT_RATIO_DEFAULT)));
 
-    // filter only the elements
-    final List<Element> elements = new ArrayList<Element>();
-    for (final AbstractStructuralNode node : grammar) {
-      if (node.isElement()) {
-        elements.add((Element) node);
-      } else {
-        throw new IllegalArgumentException("The output grammar can contain only elements. Got " + node.toString());
-      }
-    }
-
-    LOG.info("DTD Exporter: that is " + elements.size()
-            + " elements.");
-
     // sort elements topologically
-    final TopologicalSort s = new TopologicalSort(elements);
+    final TopologicalSort s = new TopologicalSort(grammar);
     final List<Element> toposorted = s.sort();
 
     // generate DTD schema

@@ -23,7 +23,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
@@ -45,7 +44,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
   /** Rules that have been inferred so far. */
-  private final List<AbstractStructuralNode> rules = new ArrayList<AbstractStructuralNode>();
+  private final List<Element> rules = new ArrayList<Element>();
   /** The element we were looking at the last time. */
   private Element lastElement = null;
   /** Has lastElement already been written to output? */
@@ -162,21 +161,18 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   /**
    * Returns the list of rules that were collected while parsing the query.
    */
-  public List<AbstractStructuralNode> getRules() {
-    //final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
+  public List<Element> getRules() {
     if (lastElement != null && dirty) {
       rules.add(lastElement);
     }
     lastElement = null;
     dirty = false;
 
-    for (AbstractStructuralNode node : rules) {
-      Element e = (Element) node;
-
-      e.getSubnodes().setType(RegexpType.CONCATENATION);
-      e.getSubnodes().setInterval(RegexpInterval.getOnce());
-      e.getSubnodes().setImmutable();
-      e.setImmutable();
+    for (Element node : rules) {
+      node.getSubnodes().setType(RegexpType.CONCATENATION);
+      node.getSubnodes().setInterval(RegexpInterval.getOnce());
+      node.getSubnodes().setImmutable();
+      node.setImmutable();
     }
 
     return rules;

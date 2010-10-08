@@ -80,16 +80,10 @@ public class TwoStepSimplifierImpl implements Simplifier {
     return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(PROPERTIES_CLUSTER_PROCESSOR));
   }
 
-  private void verifyInput(final List<AbstractStructuralNode> initialGrammar) throws InterruptedException {
+  private void verifyInput(final List<Element> initialGrammar) throws InterruptedException {
     for (AbstractStructuralNode node : initialGrammar) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
-      }
-      if (!StructuralNodeType.ELEMENT.equals(node.getType())) {
-        final StringBuilder sb = new StringBuilder("Initial grammar contains rule with ");
-        sb.append(node.getType().toString());
-        sb.append(" as left side.");
-        throw new IllegalArgumentException(sb.toString());
       }
       if (node == null) {
         throw new IllegalArgumentException("Got null as left side in grammar.");
@@ -97,15 +91,23 @@ public class TwoStepSimplifierImpl implements Simplifier {
     }
   }
 
+  // TODO anti Display rules!
   @Override
-  public void start(final List<AbstractStructuralNode> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+  public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
 //    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     // 1. cluster elements according to name
     final ClustererFactory clustererFactory= this.getClustererFactory();
     final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
-    clusterer.addAll(initialGrammar);
+
+    final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
+
+    for (final Element e : initialGrammar) {
+      abstracts.add(e);
+    }
+
+    clusterer.addAll(abstracts);
     clusterer.cluster();
 
     // 2. prepare emtpy final grammar
@@ -163,6 +165,14 @@ public class TwoStepSimplifierImpl implements Simplifier {
     }
 
 //    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
-    callback.finished( finalGrammar );
+
+    final List<Element> ret = new ArrayList<Element>(finalGrammar.size());
+    for (final AbstractStructuralNode n : finalGrammar) {
+      if (!n.isElement()) {
+        throw new IllegalArgumentException();
+      }
+      ret.add((Element)n);
+    }
+    callback.finished(ret);
   }
 }

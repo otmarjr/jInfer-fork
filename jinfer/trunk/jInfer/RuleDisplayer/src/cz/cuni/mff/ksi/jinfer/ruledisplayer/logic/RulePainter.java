@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.Cluster;
+import cz.cuni.mff.ksi.jinfer.base.objects.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
@@ -51,7 +52,7 @@ public class RulePainter {
   /**
    * Set the rules this painter will render.
    */
-  public void setRules(final List<AbstractStructuralNode> rules) {
+  public void setRules(final List<Element> rules) {
     this.image = drawRules(rules);
     root.setPreferredSize(new Dimension(image.getWidth(null), image.getHeight(null)));
     root.repaint();
@@ -90,12 +91,12 @@ public class RulePainter {
     g.drawImage(image, 0, 0, null);
   }
 
-  private Image drawRules(final List<AbstractStructuralNode> rules) {
+  private Image drawRules(final List<Element> rules) {
     if (rules == null) {
       return null;
     }
 
-    final List<AbstractStructuralNode> rulesUsed;
+    final List<Element> rulesUsed;
     final boolean rulesTrimmed;
     if (rules.size() > maxRules) {
       rulesUsed = rules.subList(0, maxRules);

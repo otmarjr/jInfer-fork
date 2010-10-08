@@ -90,7 +90,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
     if (!attributes.isEmpty()) {
       sb.append("<!ATTLIST ");
       sb.append(e.getName());
-      sb.append(' ');
+      sb.append('\n');
       sb.append(attributesToString(attributes));
       sb.append(">\n");
     }
@@ -118,7 +118,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
 
   private String structuralToString(AbstractStructuralNode node) {
     if (node.isSimpleData()) {
-      return "CDATA " + contentToString(((SimpleData) node).getContent());
+      return "#CDATA";
     }
     return node.getName();
   }
@@ -140,11 +140,16 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
 
   private String attributesToString(List<Attribute> attributes) {
     StringBuilder sb = new StringBuilder();
-    for (Attribute att : attributes) {
+    Iterator<Attribute> it = attributes.iterator();
+    while (it.hasNext()) {
+      final Attribute att= it.next();
+      sb.append("\t");
       sb.append(att.getName());
       sb.append(" ");
       sb.append(contentToString(att.getContent()));
-      sb.append("\n");
+      if (it.hasNext()) {
+        sb.append("\n");
+      }
     }
     return sb.toString();
   }

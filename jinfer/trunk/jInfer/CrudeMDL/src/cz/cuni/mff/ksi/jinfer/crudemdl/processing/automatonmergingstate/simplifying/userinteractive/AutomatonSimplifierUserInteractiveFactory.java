@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplify
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,9 +31,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimplifierFactory {
-
+  private static final Logger LOG = Logger.getLogger(AutomatonSimplifierUserInteractiveFactory.class);
+  
   @Override
   public <T> AutomatonSimplifier<T> create() {
+    LOG.debug("Creating new AutomatonSimplifierUserInteractive.");
     return new AutomatonSimplifierUserInteractive<T>();
   }
 

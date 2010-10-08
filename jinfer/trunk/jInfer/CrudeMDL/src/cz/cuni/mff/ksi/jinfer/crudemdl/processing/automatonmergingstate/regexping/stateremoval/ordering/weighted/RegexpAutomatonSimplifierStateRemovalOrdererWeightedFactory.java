@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexpin
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.RegexpAutomatonSimplifierStateRemovalOrdererFactory;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,9 +31,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegexpAutomatonSimplifierStateRemovalOrdererFactory.class)
 public class RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory implements RegexpAutomatonSimplifierStateRemovalOrdererFactory {
+  private static final Logger LOG = Logger.getLogger(RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory.class);
 
   @Override
   public <T> RegexpAutomatonSimplifierStateRemovalOrderer<T> create() {
+    LOG.debug("Creating new RegexpAutomatonSimplifierStateRemovalOrdererWeighted.");
     return new RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T>();
   }
 

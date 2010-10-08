@@ -122,10 +122,10 @@ public class TrivialHandler extends DefaultHandler {
     if (stack.peek().getType().equals(StructuralNodeType.ELEMENT)) {
       final SimpleData sd;
       if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
-        sd = new SimpleData(getContext(), text, null, null, Arrays.asList(""));
+        sd = new SimpleData(getContext(), text, new HashMap<String, Object>(), null, Arrays.asList(""));
       }
       else {
-        sd = new SimpleData(getContext(), "simple data", null, null, Arrays.asList(""));
+        sd = new SimpleData(getContext(), "simple data", new HashMap<String, Object>(), null, Arrays.asList(""));
       }
       ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(sd));
     } else {

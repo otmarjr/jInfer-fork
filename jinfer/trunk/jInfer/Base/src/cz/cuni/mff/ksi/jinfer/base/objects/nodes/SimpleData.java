@@ -35,6 +35,12 @@ public class SimpleData extends AbstractStructuralNode implements ContentNode {
    * contains only one item. */
   private final List<String> content;
 
+  private void checkConstraits() {
+    if (content == null) {
+      throw new IllegalArgumentException("Content must not be null");
+    }
+  }
+
   public SimpleData(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
@@ -43,22 +49,19 @@ public class SimpleData extends AbstractStructuralNode implements ContentNode {
     this(context, name, metadata, contentType, content, false);
   }
 
-  public SimpleData(final List<String> context,
+  private SimpleData(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
           final String contentType,
           final List<String> content, final boolean mutable) {
     super(context, name, metadata, mutable);
 
-    if (content == null) {
-      throw new IllegalArgumentException("Content must not be null");
-    }
-
     this.contentType = contentType;
     this.content = content;
+    checkConstraits();
   }
 
-  public static AbstractNamedNode getMutable() {
+  public static SimpleData getMutable() {
     return new SimpleData(new ArrayList<String>(),
             null,
             new HashMap<String, Object>(),
@@ -81,6 +84,12 @@ public class SimpleData extends AbstractStructuralNode implements ContentNode {
   @Override
   public List<String> getContent() {
     return content;
+  }
+
+  @Override
+  public void setImmutable() {
+    super.setImmutable();
+    checkConstraits();
   }
 
   @Override

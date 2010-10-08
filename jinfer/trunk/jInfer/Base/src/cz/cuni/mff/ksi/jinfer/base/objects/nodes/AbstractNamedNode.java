@@ -41,6 +41,15 @@ public abstract class AbstractNamedNode implements NamedNode {
   private final Map<String, Object> metadata;
   protected boolean mutable;
 
+  private void checkConstraits() {
+    if (context == null) {
+      throw new IllegalArgumentException("Context has to be non-null.");
+    }
+    if (metadata == null) {
+      throw new IllegalArgumentException("Metadata has to be non-null.");
+    }
+  }
+
   protected AbstractNamedNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata, final boolean mutable) {
@@ -48,6 +57,7 @@ public abstract class AbstractNamedNode implements NamedNode {
     this.name = name;
     this.metadata = metadata;
     this.mutable= mutable;
+    checkConstraits();
   }
 
   public AbstractNamedNode(final List<String> context,
@@ -93,10 +103,11 @@ public abstract class AbstractNamedNode implements NamedNode {
 
   public void setImmutable() {
     if (this.mutable) {
-      this.mutable = false;
+      mutable = false;
     } else {
       throw new IllegalStateException("Trying to set inmutable regexp, that is once inmutable.");
     }
+    checkConstraits();
   }
 
   @Override

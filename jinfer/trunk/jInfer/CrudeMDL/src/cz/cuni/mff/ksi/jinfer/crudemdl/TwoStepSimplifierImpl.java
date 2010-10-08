@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -114,16 +115,21 @@ public class TwoStepSimplifierImpl implements Simplifier {
 
     // 3. process rules
     final ClusterProcessor<AbstractStructuralNode> processor= this.getClusterProcessorFactory().create();
-    // TODO anti getGrammarClusters
     for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      if (cluster.getRepresentant().isSimpleData()) {
-        continue; //TODO anti heat point
-      }
 
-      final AbstractStructuralNode node =  processor.processCluster(clusterer, cluster);
+      List<AbstractStructuralNode> rules= BaseUtils.<AbstractStructuralNode>filter(
+              new ArrayList<AbstractStructuralNode>(cluster.getMembers()),
+              new BaseUtils.Predicate<AbstractStructuralNode>() {
+                @Override
+                public boolean apply(AbstractStructuralNode argument) {
+                  return !Boolean.TRUE.equals(
+                          argument.getMetadata().get("is_sentinel"));
+                }
+              });
+      final AbstractStructuralNode node =  processor.processCluster(clusterer, rules);
 
       // 3.1 process attributes if supported
       final List<Attribute> attList= new ArrayList<Attribute>();

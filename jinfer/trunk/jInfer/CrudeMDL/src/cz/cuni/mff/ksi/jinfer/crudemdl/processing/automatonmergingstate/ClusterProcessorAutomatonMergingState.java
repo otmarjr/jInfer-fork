@@ -31,6 +31,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexpin
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -58,18 +59,18 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
   }
 
   @Override
-  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final Cluster<AbstractStructuralNode> cluster) throws InterruptedException {
+  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final List<AbstractStructuralNode> rules) throws InterruptedException {
+    if (rules.isEmpty()) {
+      throw new IllegalArgumentException("Rules has to be non-empty.");
+    }
     // 3.1 construct PTA
     final Automaton<AbstractStructuralNode> automaton = new Automaton<AbstractStructuralNode>(true);
 
-    for (AbstractStructuralNode instance : cluster.getMembers()) {
+    for (AbstractStructuralNode instance : rules) {
       final Element element = (Element) instance;
       final Regexp<AbstractStructuralNode> rightSide= element.getSubnodes();
 
       if (!rightSide.isConcatenation()) {
-        if (rightSide.isLambda()) {
-          continue;
-        }
         throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp. It is " + element.toString());
       }
 
@@ -83,7 +84,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     }
 
     LOG.debug("--- AutomatonMergingStateProcessor on element:");
-    LOG.debug(cluster.getRepresentant());
+    LOG.debug(rules.get(0));
     LOG.debug(">>> PTA automaton:");
     LOG.debug(automaton);
 
@@ -103,9 +104,9 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
 
     // 3.4 return element with regexp
     return new Element(
-          cluster.getRepresentant().getContext(),
-          cluster.getRepresentant().getName(),
-          cluster.getRepresentant().getMetadata(),
+          new ArrayList<String>(),
+          rules.get(0).getName(),
+          new HashMap<String, Object>(),
           regexp,
           new ArrayList<Attribute>()
           );

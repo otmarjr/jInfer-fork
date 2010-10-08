@@ -29,6 +29,7 @@ import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -97,12 +98,12 @@ public class DTDProcessor implements Processor {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
         final Attribute a = (Attribute) oa;
-        final Map<String, Object> nodeAttrs = new HashMap<String, Object>(1);
-        nodeAttrs.put("required",
+        final Map<String, Object> nodeMetadata = new HashMap<String, Object>(1);
+        nodeMetadata.put("required",
                 Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
         final cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute at =
-                new cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute(null,
-                                a.name.getLocalName(), nodeAttrs, null, 
+                new cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute(new ArrayList<String>(0),
+                                a.name.getLocalName(), nodeMetadata, null,
                                 new ArrayList<String>(0));
         attList.add(at);
       }
@@ -119,9 +120,8 @@ public class DTDProcessor implements Processor {
         final Element child = Element.getMutable();
         child.setName(c.name.getLocalName());
         child.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
+        child.getMetadata().putAll(IGGUtils.METADATA_SENTINEL);
         child.getSubnodes().setType(RegexpType.LAMBDA);
-        child.getSubnodes().setInterval(RegexpInterval.getOnce());
-        child.getSubnodes().setImmutable();
         child.setImmutable();
         ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(child));
       }
@@ -129,14 +129,14 @@ public class DTDProcessor implements Processor {
 
     // if there is #PCDATA inside...
     if (e.contentType == ElementType.CONTENT_MIXED || e.contentType == ElementType.CONTENT_PCDATA) {
+      SimpleData sd = SimpleData.getMutable();
+      sd.setImmutable();
       ret.getSubnodes().addChild(
-              Regexp.<AbstractStructuralNode>getToken(
-                    new SimpleData(null, null, null, null, new ArrayList<String>(0))));
+              Regexp.<AbstractStructuralNode>getToken(sd));
     }
 
     ret.getSubnodes().setType(RegexpType.CONCATENATION);
     ret.getSubnodes().setInterval(RegexpInterval.getOnce());
-    ret.getSubnodes().setImmutable();
     ret.setImmutable();
 
     return ret;

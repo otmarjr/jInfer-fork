@@ -17,8 +17,8 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
+import java.util.List;
 
 /**
  * Interface representing one box in chain. Process one element at a time, given
@@ -38,6 +38,6 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 public interface ClusterProcessor<T> {
   T processCluster(
           final Clusterer<T> clusterer,
-          final Cluster<T> cluster
+          final List<T> rules
           ) throws InterruptedException;
 }

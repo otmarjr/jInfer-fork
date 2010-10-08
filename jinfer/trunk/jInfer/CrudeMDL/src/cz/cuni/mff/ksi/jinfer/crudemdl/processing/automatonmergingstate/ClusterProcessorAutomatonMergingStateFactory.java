@@ -27,6 +27,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplify
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -36,12 +37,15 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
+  private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingStateFactory.class);
+
   public static final String NAME = "ClusterProcessorAutomatonMergingState";
   public static final String PROPERTIES_AUTOMATON_SIMPLIFIER = "automaton-simplifier";
   public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER = "regexp-automaton-simplifier";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
+    LOG.debug("Creating new ClusterProcessorAutomatonMergingState.");
     return new ClusterProcessorAutomatonMergingState(getAutomatonSimplifierFactory(), getRegexpAutomatonSimplifierFactory());
   }
 

@@ -36,6 +36,15 @@ public class Element extends AbstractStructuralNode {
   private final Regexp<AbstractStructuralNode> subnodes;
   private final List<Attribute> attributes;
 
+  private void checkConstraits() {
+    if (subnodes == null) {
+      throw new IllegalArgumentException("Subnodes has to be non-null.");
+    }
+    if (attributes == null) {
+      throw new IllegalArgumentException("Attributes has to be non-null.");
+    }
+  }
+
   public Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
@@ -50,6 +59,7 @@ public class Element extends AbstractStructuralNode {
     super(context, name, metadata, mutable);
     this.subnodes = subnodes;
     this.attributes= attributes;
+    checkConstraits();
   }
 
   public static Element getMutable() {
@@ -79,6 +89,13 @@ public class Element extends AbstractStructuralNode {
       return attributes;
     }
     return Collections.unmodifiableList(attributes);
+  }
+
+  @Override
+  public void setImmutable() {
+    super.setImmutable();
+    checkConstraits();
+    subnodes.setImmutable();
   }
 
   @Override

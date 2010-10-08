@@ -18,9 +18,9 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.passrepresentant;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
+import java.util.List;
 
 /**
  * Trivial cluster processor to prove concept of changing submodules of simplifier.
@@ -32,8 +32,8 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 public class ClusterProcessorPassRepresentant implements ClusterProcessor<AbstractStructuralNode> {
 
   @Override
-  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final Cluster<AbstractStructuralNode> cluster) throws InterruptedException {
-    return cluster.getRepresentant();
+  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final List<AbstractStructuralNode> rules) throws InterruptedException {
+    return rules.get(0);
   }
 
 }

@@ -20,10 +20,10 @@ import java.awt.Color;
 import java.io.IOException;
 import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.EnhancedPatternLayout;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 import org.openide.modules.ModuleInstall;
@@ -69,7 +69,10 @@ public class Installer extends ModuleInstall {
           break;
       }
 
-      final String message = this.layout.format(le);
+      final String lgName= le.getLoggerName();
+      final String message = "[" + le.getLevel().toString() + "] " +
+              lgName.substring(lgName.lastIndexOf(".") + 1) + ": " +
+              this.layout.format(le);
       if (IOColorPrint.isSupported(io)) {
         try {
           IOColorPrint.print(io, message, textColor);
@@ -101,14 +104,14 @@ public class Installer extends ModuleInstall {
     ROOTLOG.setLevel(Level.ALL);
 
     // configure appender to the Output window
-    final PatternLayout outputWindowLayout = new PatternLayout("%m%n");
+    final EnhancedPatternLayout outputWindowLayout = new EnhancedPatternLayout("%m%n");
     final Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
     ROOTLOG.addAppender(outputWindowAppender);
 
     LOG = Logger.getLogger(Installer.class);
 
     // configure appender to a logfile
-    final PatternLayout fileLayout = new PatternLayout(
+    final EnhancedPatternLayout fileLayout = new EnhancedPatternLayout(
             "(%d{dd MMM yyyy HH:mm:ss,SSS}) %p [%t] %c (%F:%L) - %m%n");
     try {
       final String logfileName = System.getProperty("user.home") + "/.jinfer/jinfer.errors.log";
@@ -118,7 +121,7 @@ public class Installer extends ModuleInstall {
       // max file size if 100KB
       logfileAppender.setMaximumFileSize(100 * 1024);
       // log to file only errors and stronger levels
-      logfileAppender.setThreshold(Level.ERROR);
+      logfileAppender.setThreshold(Level.WARN);
       ROOTLOG.addAppender(logfileAppender);
 
       LOG.info("Log initialized.");

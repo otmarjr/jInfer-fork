@@ -27,13 +27,13 @@ import java.util.Map;
  * @author vektor
  */
 public abstract class AbstractStructuralNode extends AbstractNamedNode implements StructuralNode {
-  public AbstractStructuralNode(final List<String> context,
+  protected AbstractStructuralNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata, final boolean mutable) {
     super(context, name, metadata, mutable);
   }
 
-  public AbstractStructuralNode(final List<String> context,
+  protected AbstractStructuralNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata) {
     super(context, name, metadata);

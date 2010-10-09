@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 /**
@@ -29,5 +30,5 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
  * @author anti
  */
 public interface RegexpAutomatonSimplifier<T> {
-  Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton) throws InterruptedException;
+  Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException;
 }

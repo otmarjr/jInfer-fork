@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -47,11 +48,11 @@ public class RegexpAutomatonSimplifierStateRemoval<T> implements RegexpAutomaton
   }
   
   @Override
-  public Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton) throws InterruptedException {
+  public Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
     final RegexpAutomatonStateRemoval<T> stateRemovalAutomaton= new RegexpAutomatonStateRemoval<T>(inputAutomaton);
 
     while (stateRemovalAutomaton.getDelta().size() > 2) {
-      final State<Regexp<T>> toRemoveState= orderer.getStateToRemove(stateRemovalAutomaton);
+      final State<Regexp<T>> toRemoveState= orderer.getStateToRemove(stateRemovalAutomaton, symbolToString);
 
       stateRemovalAutomaton.removeState(toRemoveState);
     }

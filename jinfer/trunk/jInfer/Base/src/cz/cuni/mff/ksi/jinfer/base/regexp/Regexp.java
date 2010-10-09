@@ -90,17 +90,23 @@ public class Regexp<T> {
    * @param interval
    */
   public Regexp(final T content,
-          final List<Regexp<T>> children, final RegexpType type, final RegexpInterval interval) {
+          final List<Regexp<T>> children,
+          final RegexpType type,
+          final RegexpInterval interval) {
     this(content, children, type, interval, false);
   }
 
-  private Regexp(final T content, final List<Regexp<T>> children,
-          final RegexpType type, final RegexpInterval interval, final boolean mutable) {
+  private Regexp(final T content,
+          final List<Regexp<T>> children,
+          final RegexpType type,
+          final RegexpInterval interval,
+          final boolean mutable) {
+
     this.content = content;
     this.children = children;
     this.type = type;
-    this.interval= interval;
-    this.mutable= mutable;
+    this.interval = interval;
+    this.mutable = mutable;
     checkConstraits();
   }
 
@@ -136,7 +142,6 @@ public class Regexp<T> {
   public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children) {
     return getConcatenation(children, RegexpInterval.getOnce());
   }
-
 
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children, final RegexpInterval interval) {
     if (children == null) {
@@ -301,14 +306,13 @@ public class Regexp<T> {
    * 
    * @return
    */
-/*  public boolean isEmpty() {
-    if (isToken()) {
-      return content == null;
-    }
-    return BaseUtils.isEmpty(children);
+  /*  public boolean isEmpty() {
+  if (isToken()) {
+  return content == null;
   }
-*/
-  
+  return BaseUtils.isEmpty(children);
+  }
+   */
   /**
    * <p>Converts the i-th position of this concatenation to alternation and
    * inserts the rest as the one and only of its children.</p>
@@ -386,7 +390,7 @@ public class Regexp<T> {
       newChildren.add(getChild(i));
     }
 
-    final Regexp<T> ret= Regexp.<T>getMutable();
+    final Regexp<T> ret = Regexp.<T>getMutable();
     ret.getChildren().addAll(children);
     ret.setType(RegexpType.CONCATENATION);
     ret.setInterval(RegexpInterval.getOnce());
@@ -419,9 +423,12 @@ public class Regexp<T> {
 
   private static String getDelimiter(final RegexpType t) {
     switch (t) {
-      case CONCATENATION: return "\n,";
-      case ALTERNATION: return "\n|";
-      case PERMUTATION: return "\n&";
+      case CONCATENATION:
+        return "\n,";
+      case ALTERNATION:
+        return "\n|";
+      case PERMUTATION:
+        return "\n&";
       default:
         throw new IllegalStateException("Invalid regexp type at this point: " + t);
     }

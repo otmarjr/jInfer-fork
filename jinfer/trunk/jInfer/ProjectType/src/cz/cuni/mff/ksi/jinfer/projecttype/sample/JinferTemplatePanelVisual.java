@@ -172,7 +172,7 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
   public boolean valid(final WizardDescriptor wizardDescriptor) {
 
     if (projectNameTextField.getText().length() == 0) {
-      // TODO if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_ERROR_MESSAGE:
+      // TODO sviro if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_ERROR_MESSAGE:
       wizardDescriptor.putProperty(WIZARD_ERROR_MESSAGE,
               "Project Name is not a valid folder name.");
       return false; // Display name not specified

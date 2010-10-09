@@ -30,7 +30,15 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
+ * Extending automaton to support operations for method of state removal conversion
+ * of automaton into regular expression. By subsequently calling removeState
+ * automaton gets smaller and smaller, and combines regular expressions
+ * on transitions being removed. Resulting an automaton with two phantom states
+ * and one transition with final regular expression.
+ *
+ * Two phantom states are superInitialState and superFinalState, they are created
+ * as new states when creating automaton from another automaton.
+ * All other states have to be removed to obtain regular expression.
  *
  * @author anti
  */
@@ -207,7 +215,6 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
       final List<Regexp<T>> outStepRegexps= new LinkedList<Regexp<T>>();
       boolean isOptional= false;
       for (Step<Regexp<T>> outBucketStep : outStepBuckets.get(outBucketDestinationState)) {
-        // TODO anti Ak lambda medzi nimi, je nepovinny
         if (outBucketStep.getAcceptSymbol().isLambda()) {
           isOptional= true;
         } else {
@@ -324,7 +331,8 @@ public class RegexpAutomatonStateRemoval<T> extends RegexpAutomaton<T> {
   }
 
   /**
-   * TODO anti Comment!
+   * If someone is interested which steps of outSteps are loops, this method
+   * will tell him.
    * 
    * @param state
    * @return

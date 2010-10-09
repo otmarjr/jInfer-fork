@@ -32,7 +32,10 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment!
+ * Exporter to DTD-like format but without employing any DTD restrictions.
+ * It simply exports ELEMENT sth (regexp) and ATTLIST sth (each attribute)
+ *
+ * The format of export may be changed for debugging purposes of inferring method.
  *
  * @author anti
  */

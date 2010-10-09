@@ -24,7 +24,7 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * TODO anti Comment!
+ * Properties panel for AutomatonSimplifierGreedy.
  * @author anti
  */
 public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractPropertiesPanel {
@@ -87,7 +87,6 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   }// </editor-fold>//GEN-END:initComponents
 
   private void comboConditionTesterChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboConditionTesterChanged
-    // TODO add your handling code here:
     descContitionTester.setText(
             ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
             (String) comboConditionTester.getSelectedItem()).getDisplayModuleDescription()

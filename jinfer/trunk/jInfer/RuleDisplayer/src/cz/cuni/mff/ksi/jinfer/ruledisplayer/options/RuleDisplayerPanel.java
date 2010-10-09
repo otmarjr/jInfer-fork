@@ -34,7 +34,7 @@ public final class RuleDisplayerPanel extends JPanel {
   public RuleDisplayerPanel(RuleDisplayerOptionsPanelController controller) {
     this.controller = controller;
     initComponents();
-    // TODO listen to changes in form fields and call controller.changed()
+    // TODO vektor listen to changes in form fields and call controller.changed()
   }
 
   @SuppressWarnings("PMD")

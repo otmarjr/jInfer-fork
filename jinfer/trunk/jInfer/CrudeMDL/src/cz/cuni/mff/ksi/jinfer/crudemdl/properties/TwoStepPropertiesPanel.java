@@ -25,7 +25,7 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * TODO anti Comment!
+ * Properties panel for TwoStepSimplifierImpl.
  * @author anti
  */
 public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
@@ -130,7 +130,6 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void clustererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clustererChanged
-    // TODO add your handling code here:
     descClusterer.setText(
             ModuleSelectionHelper.lookupImpl(ClustererFactory.class,
             (String) clusterer.getSelectedItem()).getDisplayModuleDescription()
@@ -138,7 +137,6 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
   }//GEN-LAST:event_clustererChanged
 
   private void clusterProcessorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterProcessorChanged
-    // TODO add your handling code here:
     descClusterProcessor.setText(
             ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class,
             (String) clusterProcessor.getSelectedItem()).getDisplayModuleDescription()

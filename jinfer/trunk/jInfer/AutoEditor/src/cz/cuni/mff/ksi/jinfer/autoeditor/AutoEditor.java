@@ -19,11 +19,9 @@ package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
-import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
+import edu.uci.ics.jung.algorithms.layout.DAGLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -62,6 +60,7 @@ import org.openide.windows.WindowManager;
  *   caller of AutoEditor. So the call of AutoEditor can be considered
  *   as synchronous.
  *
+ * @param <T>
  * @author rio
  */
 public class AutoEditor<T> {
@@ -108,7 +107,7 @@ public class AutoEditor<T> {
     }
 
     // TODO rio find suitable layout
-    final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
+    final Layout<State<T>, Step<T>> layout = new DAGLayout<State<T>, Step<T>>(graph);
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space
 
     visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layout);

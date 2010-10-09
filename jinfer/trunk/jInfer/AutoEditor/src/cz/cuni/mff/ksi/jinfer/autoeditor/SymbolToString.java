@@ -18,7 +18,11 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 /**
- * TODO anti Comment!
+ * When automaton is being renderer in AutoEditor, this interface is used to
+ * convert symbols on transitions to strings drawn about lines.
+ * Along with passing automaton to drawing procedure in AutoEditor one has to
+ * pass class implementing this interface, which will convert type T on
+ * Automaton<T> to string. (type of symbol on automaton transitions).
  *
  * @param <T> 
  * @author anti

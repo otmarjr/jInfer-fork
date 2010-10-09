@@ -23,7 +23,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -160,6 +159,8 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
     if (totalSame) {
       return Collections.<List<List<State<T>>>>emptyList();
     }
-    return Arrays.<List<List<State<T>>>>asList(result);
+    List<List<List<State<T>>>> r= new ArrayList<List<List<State<T>>>>();
+    r.add(result);
+    return r;
   }
 }

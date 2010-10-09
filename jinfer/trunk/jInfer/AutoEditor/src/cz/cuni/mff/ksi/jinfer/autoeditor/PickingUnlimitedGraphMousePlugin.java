@@ -144,7 +144,7 @@ public class PickingUnlimitedGraphMousePlugin<V, E> extends AbstractGraphMousePl
   @Override
   public void mousePressed(final MouseEvent e) {
     down = e.getPoint();
-    final VisualizationViewer<V, E> vv = (VisualizationViewer) e.getSource();
+    final VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e.getSource();
     final GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
     final PickedState<V> pickedVertexState = vv.getPickedVertexState();
 //    PickedState<E> pickedEdgeState = vv.getPickedEdgeState();
@@ -220,7 +220,7 @@ public class PickingUnlimitedGraphMousePlugin<V, E> extends AbstractGraphMousePl
   @SuppressWarnings("unchecked")
   @Override
   public void mouseReleased(final MouseEvent e) {
-    final VisualizationViewer<V, E> vv = (VisualizationViewer) e.getSource();
+    final VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e.getSource();
     if (e.getModifiers() == modifiers && down != null) {
       final Point2D out = e.getPoint();
 
@@ -247,7 +247,7 @@ public class PickingUnlimitedGraphMousePlugin<V, E> extends AbstractGraphMousePl
   @Override
   public void mouseDragged(MouseEvent e) {
     if (!locked) {
-      final VisualizationViewer<V, E> vv = (VisualizationViewer) e.getSource();
+      final VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e.getSource();
       if (vertex != null) {
         final Point p = e.getPoint();
         final Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(

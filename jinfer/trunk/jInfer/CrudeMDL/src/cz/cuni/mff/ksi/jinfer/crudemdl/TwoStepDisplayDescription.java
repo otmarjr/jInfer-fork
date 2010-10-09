@@ -18,7 +18,9 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
 /**
- * TODO anti Comment!
+ * Interface which must be implemented by factory classes of submodules.
+ * The description should be renderer in properties panel of module, which
+ * provides user a selection of submodules. Should be 10-20 lines in length.
  *
  * @author anti
  */

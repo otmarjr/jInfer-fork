@@ -37,7 +37,16 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
+ * Greedy simplifier, given MergeContitionTester by a factory, will merge all states
+ * (in all alternatives) that tester returns.
+ *
+ * It will ask the tester for capability - by which he can identify the tester.
+ * When the tester is one from known, it will set parameters to it according
+ * to user preference. If it is not known, it is created with factory,
+ * so tester have to have some reasonable default parameter setting or own
+ * properties panel for user to enter defaults.
+ * 
+ * TODO anti rewrite when parametrization complete
  *
  * @author anti
  */

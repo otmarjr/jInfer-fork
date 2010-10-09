@@ -22,6 +22,10 @@ import java.util.List;
  * Interface of inference modules that have capabilities.
  * TODO vektor Comment more, how are capabilities represented, is this optional
  * or required to implement this?
+ * anti: i suppose for required, once upon a time, one would like to implement
+ * new chain of modules, and how can he find if lookup found new module, or old
+ * one. he can add capabilities to new one, but if old one doesn't even implement
+ * he cannot ask for them to find out, if he is using new or old.
  * 
  * @author vektor
  */

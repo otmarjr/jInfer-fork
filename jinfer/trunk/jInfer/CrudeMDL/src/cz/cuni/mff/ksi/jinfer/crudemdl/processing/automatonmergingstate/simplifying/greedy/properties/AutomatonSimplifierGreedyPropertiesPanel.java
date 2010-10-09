@@ -59,7 +59,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   private void initComponents() {
     java.awt.GridBagConstraints gridBagConstraints;
 
-    labelConditionTester = new javax.swing.JLabel();
+    jLabel1 = new javax.swing.JLabel();
     comboConditionTester = new javax.swing.JComboBox();
     jScrollPane3 = new javax.swing.JScrollPane();
     descContitionTester = new javax.swing.JTextPane();
@@ -69,19 +69,14 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     setPreferredSize(new java.awt.Dimension(500, 50));
     setLayout(new java.awt.GridBagLayout());
 
-    labelConditionTester.setText("MergeConditionTester");
-    labelConditionTester.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-    labelConditionTester.setMaximumSize(null);
-    labelConditionTester.setMinimumSize(new java.awt.Dimension(22, 22));
-    labelConditionTester.setPreferredSize(new java.awt.Dimension(200, 22));
-    labelConditionTester.setRequestFocusEnabled(false);
+    jLabel1.setText("MergeConditionTester");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(labelConditionTester, gridBagConstraints);
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(jLabel1, gridBagConstraints);
 
     comboConditionTester.setMinimumSize(new java.awt.Dimension(200, 22));
     comboConditionTester.setPreferredSize(new java.awt.Dimension(200, 22));
@@ -92,15 +87,17 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(comboConditionTester, gridBagConstraints);
 
     jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 22));
     jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 22));
 
+    descContitionTester.setEditable(false);
     descContitionTester.setMinimumSize(new java.awt.Dimension(200, 22));
     descContitionTester.setPreferredSize(new java.awt.Dimension(200, 22));
     jScrollPane3.setViewportView(descContitionTester);
@@ -110,10 +107,9 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     gridBagConstraints.gridy = 1;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.insets = new java.awt.Insets(2, 1, 2, 1);
     add(jScrollPane3, gridBagConstraints);
 
     panelParams.setMinimumSize(new java.awt.Dimension(200, 22));
@@ -123,10 +119,9 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     gridBagConstraints.gridy = 2;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(panelParams, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
@@ -148,6 +143,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
         ar.setRows(10);
         ar.setWrapStyleWord(true);
         ar.setLineWrap(true);
+        ar.setEditable(false);
         t.setColumns(10);
         l.setLabelFor(t);
         panelParams.add(l);
@@ -182,8 +178,8 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox comboConditionTester;
   private javax.swing.JTextPane descContitionTester;
+  private javax.swing.JLabel jLabel1;
   private javax.swing.JScrollPane jScrollPane3;
-  private javax.swing.JLabel labelConditionTester;
   private javax.swing.JPanel panelParams;
   // End of variables declaration//GEN-END:variables
 }

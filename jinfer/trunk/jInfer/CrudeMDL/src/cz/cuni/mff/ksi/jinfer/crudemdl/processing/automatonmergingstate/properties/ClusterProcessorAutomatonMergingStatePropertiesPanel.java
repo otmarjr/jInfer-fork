@@ -64,8 +64,11 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
 
     labelAutomatonSimplifier.setText("AutomatonSimplifier");
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelAutomatonSimplifier, gridBagConstraints);
 
     automatonSimplifier.setMinimumSize(new java.awt.Dimension(400, 22));
@@ -76,11 +79,15 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(automatonSimplifier, gridBagConstraints);
 
+    descAutomatonSimplifier.setEditable(false);
     jScrollPane3.setViewportView(descAutomatonSimplifier);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -88,7 +95,9 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
     gridBagConstraints.gridy = 1;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.ipady = 150;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane3, gridBagConstraints);
 
     labelRegexpAutomatonSimplifier.setText("RegexpAutomatonSimplifier");
@@ -96,9 +105,11 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelRegexpAutomatonSimplifier, gridBagConstraints);
 
+    descRegexpAutomatonSimplifier.setEditable(false);
     jScrollPane4.setViewportView(descRegexpAutomatonSimplifier);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -106,7 +117,9 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
     gridBagConstraints.gridy = 3;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.ipady = 150;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane4, gridBagConstraints);
 
     regexpAutomatonSimplifier.setMinimumSize(new java.awt.Dimension(400, 22));
@@ -121,7 +134,8 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
     gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(regexpAutomatonSimplifier, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 

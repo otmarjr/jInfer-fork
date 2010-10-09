@@ -60,8 +60,11 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
 
     labelOrderer.setText("StateRemovalOrderer");
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelOrderer, gridBagConstraints);
 
     comboOrderer.setMinimumSize(new java.awt.Dimension(400, 22));
@@ -72,11 +75,15 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(comboOrderer, gridBagConstraints);
 
+    descOrderer.setEditable(false);
     jScrollPane3.setViewportView(descOrderer);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -84,7 +91,9 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
     gridBagConstraints.gridy = 1;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.ipady = 150;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 

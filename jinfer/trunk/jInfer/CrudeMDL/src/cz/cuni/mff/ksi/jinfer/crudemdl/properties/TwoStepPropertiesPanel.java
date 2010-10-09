@@ -64,23 +64,30 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
 
     labelClusterer.setText("Clusterer");
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelClusterer, gridBagConstraints);
 
     clusterer.setMinimumSize(new java.awt.Dimension(400, 22));
-    clusterer.setPreferredSize(new java.awt.Dimension(400, 22));
+    clusterer.setPreferredSize(new java.awt.Dimension(150, 22));
     clusterer.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         clustererChanged(evt);
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(clusterer, gridBagConstraints);
 
+    descClusterer.setEditable(false);
     jScrollPane3.setViewportView(descClusterer);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -88,7 +95,9 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridy = 1;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.ipady = 150;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane3, gridBagConstraints);
 
     labelClusterProcessor.setText("ClusterProcessor");
@@ -96,11 +105,12 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelClusterProcessor, gridBagConstraints);
 
     clusterProcessor.setMinimumSize(new java.awt.Dimension(400, 22));
-    clusterProcessor.setPreferredSize(new java.awt.Dimension(400, 22));
+    clusterProcessor.setPreferredSize(new java.awt.Dimension(150, 22));
     clusterProcessor.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         clusterProcessorChanged(evt);
@@ -111,12 +121,13 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(clusterProcessor, gridBagConstraints);
 
     jScrollPane1.setMinimumSize(null);
 
-    descClusterProcessor.setMinimumSize(null);
+    descClusterProcessor.setEditable(false);
     descClusterProcessor.setPreferredSize(null);
     jScrollPane1.setViewportView(descClusterProcessor);
 
@@ -125,7 +136,9 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridy = 3;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.ipady = 150;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane1, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 

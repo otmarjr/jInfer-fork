@@ -53,6 +53,7 @@ public class FileNode extends FilterNode {
   @Override
   public void destroy() throws IOException {
     final FolderNode folderNode = (FolderNode) this.getParentNode();
+    @SuppressWarnings("unchecked")
     final Collection<File> files = (Collection<File>) folderNode.getLookup().
             lookup(Collection.class);
     final DataNode orig = (DataNode) this.getOriginal();

@@ -139,6 +139,7 @@ public final class InputFiles {
     try {
       final JAXBContext context = JAXBContext.newInstance(Tjinfer.class.getPackage().getName());
       final Unmarshaller unmarshaller = context.createUnmarshaller();
+      @SuppressWarnings("unchecked")
       final JAXBElement<Tjinfer> jinferElement = (JAXBElement<Tjinfer>) unmarshaller.unmarshal(
               inputStream);
       final Tjinfer jinfer = jinferElement.getValue();

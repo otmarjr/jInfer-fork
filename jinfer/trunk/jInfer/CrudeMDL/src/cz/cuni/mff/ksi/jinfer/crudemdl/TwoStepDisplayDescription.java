@@ -23,5 +23,10 @@ package cz.cuni.mff.ksi.jinfer.crudemdl;
  * @author anti
  */
 public interface TwoStepDisplayDescription {
+  /**
+   * Text to be displayed to user in properties panel as a moderate description
+   * of module. 10-20 lines.
+   * @return
+   */
   String getDisplayModuleDescription();
 }

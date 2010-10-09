@@ -153,12 +153,23 @@ public class Step<T> {
     final StringBuilder sb = new StringBuilder("from ");
     sb.append(this.source.getName());
     sb.append(" on {");
-    sb.append(this.acceptSymbol.toString().replaceAll("\n", ""));
+    sb.append(this.acceptSymbol.toString());
     sb.append("|");
     sb.append(this.useCount);
     sb.append("} to ");
     sb.append(this.destination.getName());
-    sb.append("\n");
+    return sb.toString();
+  }
+
+  public String toTestString() {
+    final StringBuilder sb = new StringBuilder();
+    sb.append(this.source.getName());
+    sb.append("--");
+    sb.append(this.acceptSymbol.toString());
+    sb.append("|");
+    sb.append(this.useCount);
+    sb.append("--");
+    sb.append(this.destination.getName());
     return sb.toString();
   }
 }

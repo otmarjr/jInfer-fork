@@ -49,8 +49,17 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = Simplifier.class)
 public class TwoStepSimplifierImpl implements Simplifier {
+  /**
+   * Name of the module in constant, for use in classes in this module.
+   */
   public static final String NAME = "TwoStepSimplifier";
+  /**
+   * Property name of clusterer submodule.
+   */
   public static final String PROPERTIES_CLUSTERER = "clusterer";
+  /**
+   * Property name of cluster processor submodule.
+   */
   public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
 
   private static final Logger LOG = Logger.getLogger(Simplifier.class);

@@ -23,12 +23,12 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.log4j.Logger;
 
 /**
  * Using class KHContext, we build 2,x-context condition merger.
@@ -42,7 +42,6 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T> {
-  private static final Logger LOG = Logger.getLogger(MergeConditionTesterKHContext.class);
   
   private int k;
   private int h;
@@ -124,43 +123,32 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
     final List<List<Step<T>>> state2KHContexts= this.findKHContexts(k, state2, reverseDelta);
     for (List<Step<T>> context1 : state1KHContexts) {
       for (List<Step<T>> context2 : state2KHContexts) {
-        if (areEquivalentContexts(context1, context2)) {
-          alternatives.add(getAlternative(context1, context2));
-        }
+        alternatives.addAll(getAlternatives(context1, context2));
       }
     }
     return alternatives;
   }
 
-  private boolean areEquivalentContexts(final List<Step<T>> context1, final List<Step<T>> context2) {
+  private List<List<List<State<T>>>> getAlternatives(final List<Step<T>> context1, final List<Step<T>> context2) {
     if ((context1.size() != k)||(context2.size() != k)) {
-      return false;
+      return Collections.<List<List<State<T>>>>emptyList();
     }
-    boolean totalSame= true;
-    for (int i = 0; i < k; i++) {
-      LOG.fatal(context1.get(i).getAcceptSymbol());
-      if (!context1.get(i).getAcceptSymbol().equals(context2.get(i).getAcceptSymbol())) {
-        return false;
-      }
-      if ((i >= k - h - 1)&&(!context1.get(i).getDestination().equals(context2.get(i).getDestination()))) {
-        totalSame= false;
-      }
-    }
-    return !totalSame;
-  }
-
-  private List<List<State<T>>> getAlternative(final List<Step<T>> context1, final List<Step<T>> context2) {
     List<List<State<T>>> result= new ArrayList<List<State<T>>>();
 
     boolean totalSame= true;
-    for (int i = k - h; i < k; i++) {
-      final List<State<T>> mergePair= new ArrayList<State<T>>();
-      if (!context1.get(i).getSource().equals(context2.get(i).getSource())) {
+    for (int i = 0; i < k; i++) {
+      if (!context1.get(i).getAcceptSymbol().equals(context2.get(i).getAcceptSymbol())) {
+        return Collections.<List<List<State<T>>>>emptyList();
+      }
+      if ((i >= k - h)&&(!context1.get(i).getSource().equals(context2.get(i).getSource()))) {
         totalSame= false;
       }
-      mergePair.add(context1.get(i).getSource());
-      mergePair.add(context2.get(i).getSource());
-      result.add(mergePair);
+      if (i >= k - h) {
+        final List<State<T>> mergePair= new ArrayList<State<T>>();
+        mergePair.add(context1.get(i).getSource());
+        mergePair.add(context2.get(i).getSource());
+        result.add(mergePair);
+      }
     }
     final List<State<T>> mergePair= new ArrayList<State<T>>();
     if (!context1.get(k - 1).getDestination().equals(context2.get(k - 1).getDestination())) {
@@ -170,8 +158,8 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
     mergePair.add(context2.get(k - 1).getDestination());
     result.add(mergePair);
     if (totalSame) {
-      return Collections.<List<State<T>>>emptyList();
+      return Collections.<List<List<State<T>>>>emptyList();
     }
-    return result;
+    return Arrays.<List<List<State<T>>>>asList(result);
   }
 }

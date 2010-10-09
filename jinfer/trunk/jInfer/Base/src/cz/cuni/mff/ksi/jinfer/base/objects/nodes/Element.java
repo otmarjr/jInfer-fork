@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,14 +49,18 @@ public class Element extends AbstractStructuralNode {
   public Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<AbstractStructuralNode> subnodes, final List<Attribute> attributes) {
+          final Regexp<AbstractStructuralNode> subnodes,
+          final List<Attribute> attributes) {
     this(context, name, metadata, subnodes, attributes, false);
   }
 
   private Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<AbstractStructuralNode> subnodes, final List<Attribute> attributes, final boolean mutable) {
+          final Regexp<AbstractStructuralNode> subnodes, 
+          final List<Attribute> attributes,
+          final boolean mutable) {
+    
     super(context, name, metadata, mutable);
     this.subnodes = subnodes;
     this.attributes= attributes;
@@ -102,7 +107,7 @@ public class Element extends AbstractStructuralNode {
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());
     // output attributes in form <att1, att2, att3>
-    if (attributes != null && !attributes.isEmpty()) {
+    if (!BaseUtils.isEmpty(attributes)) {
       ret.append(' ').append('<');
       for (int i = 0; i < attributes.size(); ++i) {
         ret.append(attributes.get(i));
@@ -113,6 +118,7 @@ public class Element extends AbstractStructuralNode {
       ret.append('>');
     }
     if (subnodes != null) {
+      // for vektor330: we really want to print this even if the collection is empty!
       ret.append('\n').append(subnodes.toString());
     }
     return ret.toString();

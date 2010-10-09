@@ -36,7 +36,7 @@ public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierS
   @Override
   public <T> RegexpAutomatonSimplifierStateRemovalOrderer<T> create() {
     LOG.debug("Creating new RegexpAutomatonSimplifierStateRemovalOrdererWeighted.");
-    throw new UnsupportedOperationException("Not supported yet.");
+    return new OrdererUserInteractive<T>();
   }
 
   @Override

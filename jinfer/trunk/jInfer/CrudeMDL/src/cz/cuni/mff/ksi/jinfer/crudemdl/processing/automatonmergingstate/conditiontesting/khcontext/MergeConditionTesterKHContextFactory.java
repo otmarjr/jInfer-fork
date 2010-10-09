@@ -59,7 +59,12 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   // TODO anti write here
   @Override
   public String getDisplayModuleDescription() {
-    return "TODO anti write here";
+    StringBuilder sb = new StringBuilder(getName());
+    sb.append(" find all k,h-context of states being tested. If there are two"
+            + " contexts that are equivalent (same symbol string), the states"
+            + " are considered mergable (k,h-equivalent). With merging ending"
+            + " states, also h preceeding states in contexts are merged.");
+    return sb.toString();
   }
 
   @Override

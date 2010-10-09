@@ -44,7 +44,7 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
   
   private int k;
   private int h;
-  private boolean parametersSet;
+  private boolean parametersSet=false;
 
   private void checkConstraits() {
     if (!parametersSet) {
@@ -66,10 +66,6 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
     this.h= h;
     this.parametersSet= true;
     checkConstraits();
-  }
-
-  public MergeConditionTesterKHContext() {
-    this.parametersSet=false;
   }
 
   public void setKH(int k, int h) {

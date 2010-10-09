@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
+import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
@@ -113,10 +114,11 @@ public class AutoEditor<T> {
       }
     }
 
-    Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(automaton.getMap());
+//    Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(automaton.getMap());
 
     // TODO rio find suitable layout
-    final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph, trans);
+//    final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph, trans);
+    final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
 
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space
 

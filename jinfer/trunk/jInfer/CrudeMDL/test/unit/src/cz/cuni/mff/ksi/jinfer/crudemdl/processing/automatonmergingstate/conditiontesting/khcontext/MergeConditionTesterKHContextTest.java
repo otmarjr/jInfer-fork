@@ -59,7 +59,7 @@ public class MergeConditionTesterKHContextTest {
     Automaton<String> automaton = new Automaton<String>(true);
     automaton.buildPTAOnSymbol(Arrays.<String>asList(
             ));
-    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>();
+    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>(2, 1);
     List<List<List<State<String>>>> result = instance.getMergableStates(automaton.getInitialState(), automaton.getInitialState(), automaton);
   }
 

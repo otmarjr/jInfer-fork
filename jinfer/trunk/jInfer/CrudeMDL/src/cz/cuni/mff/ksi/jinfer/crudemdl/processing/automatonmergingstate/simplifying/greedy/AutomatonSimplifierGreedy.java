@@ -19,19 +19,17 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
+import cz.cuni.mff.ksi.jinfer.crudemdl.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.khcontext.MergeConditionTesterKHContext;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -54,11 +52,19 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierGreedy.class);
   private final MergeConditionTester<T> mergeConditionTester;
 
-  public AutomatonSimplifierGreedy(final MergeConditionTesterFactory mergeConditionTesterFactory) {
-    this.mergeConditionTester= mergeConditionTesterFactory.<T>create();
-    if (mergeConditionTesterFactory.getCapabilities().contains("k,h-context")) {
-      ((MergeConditionTesterKHContext<T>) mergeConditionTester).setKH(2, 1);
+  public AutomatonSimplifierGreedy(final MergeConditionTesterFactory mergeConditionTesterFactory, final Properties properties) {
+    if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
+      ModuleParameters factoryParam= ((ModuleParameters) mergeConditionTesterFactory);
+      List<String> parameterNames= factoryParam.getParameterNames();
+
+      // TODO anti what is returned by property, if it is not set
+      for (String parameterName : parameterNames) {
+        String value= properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
+        int intValue= Integer.parseInt(value);
+        factoryParam.setParameter(parameterName, intValue);
+      }
     }
+    this.mergeConditionTester= mergeConditionTesterFactory.<T>create();
   }
 
   /**

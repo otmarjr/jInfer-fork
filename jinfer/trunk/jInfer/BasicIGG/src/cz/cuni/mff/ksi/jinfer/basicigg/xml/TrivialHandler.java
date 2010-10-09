@@ -86,7 +86,7 @@ public class TrivialHandler extends DefaultHandler {
     // if there is parent element, it sits at the top of the stack
     // we add the current element to its parent's rule
     if (!stack.isEmpty() && (stack.peek().getType().equals(StructuralNodeType.ELEMENT))) {
-      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e));
+      stack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e));
     }
 
     // push the current element to the stack with an empty rule
@@ -126,7 +126,7 @@ public class TrivialHandler extends DefaultHandler {
       else {
         sd = new SimpleData(getContext(), "simple data", new HashMap<String, Object>(), null, Arrays.asList(""));
       }
-      ((Element) stack.peek()).getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(sd));
+      stack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(sd));
     } else {
       throw new IllegalArgumentException("Element expected");
     }

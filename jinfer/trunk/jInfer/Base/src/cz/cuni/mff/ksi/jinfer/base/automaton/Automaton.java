@@ -317,17 +317,7 @@ public class Automaton<T> {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("Automaton\n");
-    final Comparator<State<T>> stateComparator= new Comparator<State<T>>() {
-      @Override
-      public int compare(final State<T> o1, final State<T> o2) {
-        return o1.getName() - o2.getName();
-      }
-    };
-
-    final List<State<T>> deltaKeys= new ArrayList<State<T>>();
-    deltaKeys.addAll(this.delta.keySet());
-    Collections.sort(deltaKeys, stateComparator);
-    for (State<T> state: deltaKeys) {
+    for (State<T> state: delta.keySet()) {
       sb.append(state);
       for (State<T> mergedState : this.reverseMergedStates.get(state)) {
         sb.append(" + ");
@@ -339,11 +329,8 @@ public class Automaton<T> {
       }
     }
 
-    final List<State<T>> reverseDeltaKeys= new ArrayList<State<T>>();
-    reverseDeltaKeys.addAll(this.reverseDelta.keySet());
-    Collections.sort(reverseDeltaKeys, stateComparator);
     sb.append("reversed:\n");
-    for (State<T> state: reverseDeltaKeys) {
+    for (State<T> state: reverseDelta.keySet()) {
       sb.append(state);
       for (State<T> mergedState: this.reverseMergedStates.get(state)) {
         sb.append(" + ");
@@ -352,6 +339,45 @@ public class Automaton<T> {
       sb.append(" inSteps:\n");
       for (Step<T> step : this.reverseDelta.get(state)) {
         sb.append(step);
+      }
+    }
+    return sb.toString();
+  }
+
+  public String toTestString() {
+    final StringBuilder sb = new StringBuilder();
+    for (State<T> state: delta.keySet()) {
+      sb.append(state);
+      for (State<T> mergedState : this.reverseMergedStates.get(state)) {
+        sb.append("+");
+        sb.append(mergedState);
+      }
+      if (this.delta.get(state).isEmpty()) {
+        sb.append("   ");
+      } else {
+        sb.append(">>");
+      }
+      for (Step<T> step : this.delta.get(state)) {
+        sb.append(step.toTestString());
+        sb.append("   ");
+      }
+    }
+
+    sb.append("@@@");
+    for (State<T> state: reverseDelta.keySet()) {
+      sb.append(state);
+      for (State<T> mergedState: this.reverseMergedStates.get(state)) {
+        sb.append("+");
+        sb.append(mergedState);
+      }
+      if (this.reverseDelta.get(state).isEmpty()) {
+        sb.append("   ");
+      } else {
+        sb.append("<<");
+      }
+      for (Step<T> step : this.reverseDelta.get(state)) {
+        sb.append(step.toTestString());
+        sb.append("   ");
       }
     }
     return sb.toString();

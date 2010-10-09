@@ -38,6 +38,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = SchemaGenerator.class)
 public class TwoStepPseudoExporter implements SchemaGenerator {
+  /**
+   * Name of this module.
+   */
   public static final String NAME = "TwoStepPseudoExporter";
 
   private static final Logger LOG = Logger.getLogger(TwoStepPseudoExporter.class);

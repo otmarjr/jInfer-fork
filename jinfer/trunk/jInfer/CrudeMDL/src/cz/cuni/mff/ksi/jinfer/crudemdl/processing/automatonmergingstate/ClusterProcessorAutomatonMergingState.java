@@ -58,14 +58,23 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     }
   };
 
-  final AbstractStructuralNodeSymbolToString symbolToString;
+  private class RegexpAbstractSymbolToString implements SymbolToString<Regexp<AbstractStructuralNode>> {
+    @Override
+    public String toString(Regexp<AbstractStructuralNode> symbol) {
+      return symbol.toString();
+    }
+  };
+
+  private final AbstractStructuralNodeSymbolToString elementSymbolToString;
+  private final RegexpAbstractSymbolToString regexpAbstractToString;
 
   public ClusterProcessorAutomatonMergingState(
           final AutomatonSimplifierFactory automatonSimplifierFactory,
           final RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory) {
     this.automatonSimplifier= automatonSimplifierFactory.<AbstractStructuralNode>create();
     this.regexpAutomatonSimplifier= regexpAutomatonSimplifierFactory.<AbstractStructuralNode>create();
-    this.symbolToString= new AbstractStructuralNodeSymbolToString();
+    this.elementSymbolToString= new AbstractStructuralNodeSymbolToString();
+    this.regexpAbstractToString= new RegexpAbstractSymbolToString();
   }
 
   @Override
@@ -99,7 +108,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, symbolToString);
+    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, elementSymbolToString);
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
 
@@ -107,7 +116,7 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     final RegexpAutomaton<AbstractStructuralNode> regexpAutomaton= new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
-    final Regexp<AbstractStructuralNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton);
+    final Regexp<AbstractStructuralNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton, regexpAbstractToString);
     LOG.debug(">>> And the regexp is:");
     LOG.debug(regexp);
     LOG.debug("--- End");

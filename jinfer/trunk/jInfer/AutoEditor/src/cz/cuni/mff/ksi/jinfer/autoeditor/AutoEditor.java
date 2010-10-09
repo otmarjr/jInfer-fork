@@ -93,11 +93,11 @@ public class AutoEditor<T> {
    * @param automaton automaton to be drawn
    * @return if user picks exactly two states returns Pair of them otherwise null
    */
-  public List<State<T>> drawAutomatonToPickTwoStates(final Automaton<T> aaa) {
+  public List<State<T>> drawAutomatonToPickTwoStates(final Automaton<T> automaton) {
     if (!AutoEditorTopComponent.getAskUser()) {
       return null;
     }
-    DisplayAutomaton<T> automaton= new DisplayAutomaton<T>(aaa);
+ //   DisplayAutomaton<T> automaton= new DisplayAutomaton<T>(aaa);
 
     final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
     final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();

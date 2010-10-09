@@ -45,11 +45,14 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
         continue;
       }
       if (removeLst.size()==1) {
+        State<Regexp<T>> sel = removeLst.get(0);
+        if ((sel.equals(automaton.getSuperFinalState()))||(sel.equals(automaton.getSuperInitialState()))) {
+          continue;
+        }
         LOG.debug("AUTO EDITOR selected: " + removeLst.toString());
         return removeLst.get(0);
       }
-    } while (!removeLst.isEmpty());
-    return null;
+    } while (true);
   }
 
 }

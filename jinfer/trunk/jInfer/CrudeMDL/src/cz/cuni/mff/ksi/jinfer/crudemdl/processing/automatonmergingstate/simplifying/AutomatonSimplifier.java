@@ -21,7 +21,8 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 
 /**
- * TODO anti Comment!
+ * Interface for simplifying automaton - given PTA should return something
+ * reasonable sized, accepting more general language.
  *
  * @author anti
  */

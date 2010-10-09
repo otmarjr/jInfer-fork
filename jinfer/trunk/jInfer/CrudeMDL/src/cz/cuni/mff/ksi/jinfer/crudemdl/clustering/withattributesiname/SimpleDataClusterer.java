@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * Helper class to cluster simpleData inside one element.
  *
  * @author anti
  */

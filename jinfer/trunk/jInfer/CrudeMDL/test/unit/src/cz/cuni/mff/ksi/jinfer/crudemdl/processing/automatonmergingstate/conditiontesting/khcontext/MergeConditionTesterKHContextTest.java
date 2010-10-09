@@ -29,7 +29,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * TODO anti Comment!
+ * Test suite of MergeConditionTesterKHContext.
  *
  * @author anti
  */

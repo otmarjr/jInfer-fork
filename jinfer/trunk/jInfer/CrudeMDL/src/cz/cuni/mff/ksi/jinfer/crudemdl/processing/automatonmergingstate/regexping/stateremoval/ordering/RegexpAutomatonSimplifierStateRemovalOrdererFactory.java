@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
 
 /**
- * TODO anti Comment!
+ * Factory interface for RegexpAutomatonSimplifierStateRemovalOrderer.
  *
  * @author anti
  */

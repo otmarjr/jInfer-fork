@@ -24,7 +24,8 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * TODO anti Comment!
+ * Properties panel for RegexpAutomatonSimplifierStateRemoval.
+ * 
  * @author anti
  */
 public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends AbstractPropertiesPanel {
@@ -88,7 +89,6 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
   }// </editor-fold>//GEN-END:initComponents
 
   private void comboOrdererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdererChanged
-    // TODO add your handling code here:
     descOrderer.setText(
             ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class,
             (String) comboOrderer.getSelectedItem()).getDisplayModuleDescription()

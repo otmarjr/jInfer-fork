@@ -122,7 +122,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
       if (c instanceof JComponent) { // assume Swing components
         final JComponent jc = (JComponent) c;
         // Step #.
-        // TODO if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_*:
+        // TODO sviro if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_*:
         jc.putClientProperty("WizardPanel_contentSelectedIndex", Integer.valueOf(i));
         // Step name (actually the whole list for reference).
         jc.putClientProperty("WizardPanel_contentData", steps);

@@ -25,8 +25,15 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 
 /**
- * TODO anti Comment!
+ * Most simple ordering of states to remove from RegexpAutomaton is implemented
+ * here.
  *
+ * Each state get a number assigned to it - called weight. Weight of a state
+ * is calculated as sum of length (=count of tokens) of regular expression
+ * on each {in-step, loop, out-step}
+ *
+ * The state with minimum weight is returned as a state to be removed first.
+ * 
  * @author anti
  */
 public class RegexpAutomatonSimplifierStateRemovalOrdererWeighted<T> implements RegexpAutomatonSimplifierStateRemovalOrderer<T> {

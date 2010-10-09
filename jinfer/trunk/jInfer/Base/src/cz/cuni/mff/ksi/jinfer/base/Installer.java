@@ -69,7 +69,7 @@ public class Installer extends ModuleInstall {
           break;
       }
 
-      // TODO riacik rio check if kosher
+      // TODO riacik rio check if kosher - i changed log format to LEVEL [ClassNameNotFull]: string
       final String lgName= le.getLoggerName();
       final String message = le.getLevel().toString() +
               " [" + lgName.substring(lgName.lastIndexOf(".") + 1) + "]: " +

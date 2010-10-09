@@ -43,8 +43,22 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment! STILL UNDER HEAVY DEVELOPMENT, after more is done, comment
- * will be written (at least i hope so)
+ * TwoStepSimplifier works in two step for simplification.
+ * First it searches for a suitable clusterer submodule, to which it passes whole initialGrammar.
+ * Clusterer is responsible to cluster elements properly. Cluster of elements
+ * is then considered to be one, and the same element, with various instances
+ * in input files.
+ *
+ * For every cluster of elements, the clusterProcessor submodule is called.
+ * Given the clusterer and list of observed positive examples (grammar = list
+ * of elements), cluster processor is expected to produce one Element instance,
+ * on which proper definition of regular expression representing content model
+ * of the element children will be held.
+ *
+ * The attributes of elements in the cluster are processed separately afterwards.
+ * Currently, only simple processing is done - required/optional. This will be
+ * extended in future to separated attribute processor submodule.
+ * TODO anti Comment when submodule attributeProcessor done
  * @author anti
  */
 @ServiceProvider(service = Simplifier.class)
@@ -102,7 +116,6 @@ public class TwoStepSimplifierImpl implements Simplifier {
     }
   }
 
-  // TODO anti Display rules!
   @Override
   public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     this.verifyInput(initialGrammar);
@@ -111,6 +124,7 @@ public class TwoStepSimplifierImpl implements Simplifier {
      * Testing, testing .. can you hear me?
      * Gordon doesn't need to hear all this, he is a highly trained professional!
      * I'm sure nothing will go wrong.
+     * We've got a system failure 20 minutes ago, i'm still trying to find my files.
      */
     LOG.debug("# Begin of rules dump");
     for (AbstractStructuralNode node : initialGrammar) {

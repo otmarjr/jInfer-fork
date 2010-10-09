@@ -25,7 +25,7 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * TODO anti Comment!
+ * Properties panel for ClusterProcessorAutomatonMergingState.
  * @author anti
  */
 public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends AbstractPropertiesPanel {
@@ -126,7 +126,6 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
   }// </editor-fold>//GEN-END:initComponents
 
   private void automatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automatonSimplifierChanged
-    // TODO add your handling code here:
     descAutomatonSimplifier.setText(
             ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
             (String) automatonSimplifier.getSelectedItem()).getDisplayModuleDescription()
@@ -134,7 +133,6 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
   }//GEN-LAST:event_automatonSimplifierChanged
 
   private void regexpAutomatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regexpAutomatonSimplifierChanged
-    // TODO add your handling code here:
     descRegexpAutomatonSimplifier.setText(
             ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierFactory.class,
             (String) regexpAutomatonSimplifier.getSelectedItem()).getDisplayModuleDescription()

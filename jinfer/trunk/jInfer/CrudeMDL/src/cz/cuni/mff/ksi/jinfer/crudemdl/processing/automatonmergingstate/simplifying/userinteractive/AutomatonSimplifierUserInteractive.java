@@ -26,7 +26,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
+ * Works simply - renders automaton to user. When returned list of states user
+ * had selected, merges them. And cycle goes on. If user select no states,
+ * it is considered that user is satisfied with automaton, so automaton is returned
+ * in current form.
  *
  * @author anti
  */

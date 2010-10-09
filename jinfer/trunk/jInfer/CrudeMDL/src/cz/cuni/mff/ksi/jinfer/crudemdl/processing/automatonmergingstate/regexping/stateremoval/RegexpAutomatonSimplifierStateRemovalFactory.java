@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment!
+ * Factory for RegexpAutomatonSimplifierStateRemoval.
  *
  * @author anti
  */

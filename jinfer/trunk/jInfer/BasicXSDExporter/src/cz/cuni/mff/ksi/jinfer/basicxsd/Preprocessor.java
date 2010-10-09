@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
-/** TODO translate
+/** TODO rio translate
  * Preprocessing vstupu z IGG pred samotnym generovanim schemy. Dostane list
  * elementov, vyhodi z neho nedosiahnutelne, poznaci, ak odhali viac top level
  * elementov, rozhodne, ktore elementy by sa definovat globalne ako typy.

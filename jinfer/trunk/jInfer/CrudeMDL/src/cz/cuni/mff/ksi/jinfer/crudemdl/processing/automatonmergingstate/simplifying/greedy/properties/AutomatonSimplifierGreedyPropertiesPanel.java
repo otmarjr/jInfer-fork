@@ -18,10 +18,19 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.crudemdl.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy.AutomatonSimplifierGreedyFactory;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * Properties panel for AutomatonSimplifierGreedy.
@@ -30,6 +39,9 @@ import javax.swing.DefaultComboBoxModel;
 public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractPropertiesPanel {
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
+  private static Map<String, JTextField> dynamicComponents;
+  private static Map<String, String> dynamicParameters;
+
 
   /** Creates new form ModuleSelectionJPanel */
   public AutomatonSimplifierGreedyPropertiesPanel(final Properties properties) {
@@ -51,30 +63,46 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     comboConditionTester = new javax.swing.JComboBox();
     jScrollPane3 = new javax.swing.JScrollPane();
     descContitionTester = new javax.swing.JTextPane();
+    panelParams = new javax.swing.JPanel();
 
     setMinimumSize(new java.awt.Dimension(600, 62));
-    setPreferredSize(new java.awt.Dimension(600, 62));
+    setPreferredSize(new java.awt.Dimension(500, 50));
     setLayout(new java.awt.GridBagLayout());
 
     labelConditionTester.setText("MergeConditionTester");
+    labelConditionTester.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+    labelConditionTester.setMaximumSize(null);
+    labelConditionTester.setMinimumSize(new java.awt.Dimension(22, 22));
+    labelConditionTester.setPreferredSize(new java.awt.Dimension(200, 22));
+    labelConditionTester.setRequestFocusEnabled(false);
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+    gridBagConstraints.weightx = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelConditionTester, gridBagConstraints);
 
-    comboConditionTester.setMinimumSize(new java.awt.Dimension(400, 22));
-    comboConditionTester.setPreferredSize(new java.awt.Dimension(400, 22));
+    comboConditionTester.setMinimumSize(new java.awt.Dimension(200, 22));
+    comboConditionTester.setPreferredSize(new java.awt.Dimension(200, 22));
     comboConditionTester.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         comboConditionTesterChanged(evt);
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(comboConditionTester, gridBagConstraints);
 
+    jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 22));
+    jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 22));
+
+    descContitionTester.setMinimumSize(new java.awt.Dimension(200, 22));
+    descContitionTester.setPreferredSize(new java.awt.Dimension(200, 22));
     jScrollPane3.setViewportView(descContitionTester);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -82,15 +110,53 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     gridBagConstraints.gridy = 1;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.ipady = 150;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jScrollPane3, gridBagConstraints);
+
+    panelParams.setMinimumSize(new java.awt.Dimension(200, 22));
+    panelParams.setPreferredSize(new java.awt.Dimension(200, 22));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(panelParams, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void comboConditionTesterChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboConditionTesterChanged
-    descContitionTester.setText(
-            ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
-            (String) comboConditionTester.getSelectedItem()).getDisplayModuleDescription()
-            );
+    MergeConditionTesterFactory factory= ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
+            (String) comboConditionTester.getSelectedItem());
+    descContitionTester.setText(factory.getDisplayModuleDescription());
+
+    panelParams.removeAll();
+    dynamicComponents= new HashMap<String, JTextField>();
+    dynamicParameters= new HashMap<String, String>();
+    if (factory.getCapabilities().contains("parameters")) {
+      ModuleParameters factParams= (ModuleParameters) factory;
+      for (String parameterName : factParams.getParameterNames()) {
+        JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName));
+        JLabel l= new JLabel(parameterName);
+        JTextArea ar= new JTextArea(factParams.getParameterDisplayDescription(parameterName));
+        ar.setColumns(30);
+        ar.setRows(10);
+        ar.setWrapStyleWord(true);
+        ar.setLineWrap(true);
+        t.setColumns(10);
+        l.setLabelFor(t);
+        panelParams.add(l);
+        panelParams.add(t);
+        panelParams.add(ar);
+        dynamicComponents.put(parameterName, t);
+        dynamicParameters.put(parameterName, factory.getName() + parameterName);
+      }
+    }
   }//GEN-LAST:event_comboConditionTesterChanged
 
   @Override
@@ -106,11 +172,18 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   public void store() {
     properties.setProperty(AutomatonSimplifierGreedyFactory.PROPERTIES_CONDITION_TESTER,
             (String) comboConditionTester.getSelectedItem());
+
+    for (String parameterName : dynamicComponents.keySet()) {
+      properties.setProperty(
+              dynamicParameters.get(parameterName),
+              dynamicComponents.get(parameterName).getText());
+    }
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox comboConditionTester;
   private javax.swing.JTextPane descContitionTester;
   private javax.swing.JScrollPane jScrollPane3;
   private javax.swing.JLabel labelConditionTester;
+  private javax.swing.JPanel panelParams;
   // End of variables declaration//GEN-END:variables
 }

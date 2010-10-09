@@ -43,7 +43,9 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
   @Override
   public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new AutomatonSimplifierGreedy.");
-    return new AutomatonSimplifierGreedy<T>(getMergeConditionTesterFactory());
+    return new AutomatonSimplifierGreedy<T>(
+            getMergeConditionTesterFactory(),
+            RunningProject.getActiveProjectProps(getName()));
   }
 
   @Override

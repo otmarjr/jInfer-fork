@@ -32,11 +32,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = MergeConditionTesterFactory.class)
 public class MergeConditionTesterKHContextFactory implements MergeConditionTesterFactory {
   private static final Logger LOG = Logger.getLogger(MergeConditionTesterKHContextFactory.class);
+  private int parameterK = 0;
+  private int parameterH = 0;
 
   @Override
   public <T> MergeConditionTester<T> create() {
     LOG.debug("Creating new MergeConditionTesterKHContext.");
-    return new MergeConditionTesterKHContext<T>();
+    return new MergeConditionTesterKHContext<T>(parameterK, parameterH);
   }
 
   @Override
@@ -51,12 +53,41 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
 
   @Override
   public List<String> getCapabilities() {
-    return Arrays.asList("k,h-context");
+    return Arrays.asList("parameters");
   }
 
+  // TODO anti write here
   @Override
   public String getDisplayModuleDescription() {
     return "TODO anti write here";
+  }
+
+  @Override
+  public List<String> getParameterNames() {
+    return Arrays.<String>asList("k", "h");
+  }
+
+  @Override
+  public String getParameterDisplayDescription(String parameterName) {
+    if ("k".equals(parameterName)) {
+      return "k in k,h-context. That is the number of transitions that have to"
+              + "be same (by means of symbols) before state.";
+    }
+    if ("h".equals(parameterName)) {
+      return "h in k,h-context. That is the number of preceeding states merged,"
+              + " not including the states tested for k,h-context equivality.";
+    }
+    throw new IllegalArgumentException("Asking for a description of unknown parameter");
+  }
+
+  @Override
+  public void setParameter(String parameterName, int newValue) {
+    if ("k".equals(parameterName)) {
+      this.parameterK= newValue;
+    }
+    if ("h".equals(parameterName)) {
+      this.parameterH= newValue;
+    }
   }
 
 }

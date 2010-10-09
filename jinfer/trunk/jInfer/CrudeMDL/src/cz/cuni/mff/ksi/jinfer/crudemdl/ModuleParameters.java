@@ -15,18 +15,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting;
+package cz.cuni.mff.ksi.jinfer.crudemdl;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.crudemdl.ModuleParameters;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+import java.util.List;
 
 /**
- * Factory interface for MergeConditionTester.
+ * Interface giving access to parameters of module, if it supports "parameters"
+ * capability.
  *
  * @author anti
  */
-public interface MergeConditionTesterFactory extends NamedModule, Capabilities, TwoStepDisplayDescription, ModuleParameters {
-  <T> MergeConditionTester<T> create();
+public interface ModuleParameters {
+  List<String> getParameterNames();
+  String getParameterDisplayDescription(final String parameterName);
+  void setParameter(final String parameterName, final int newValue);
 }

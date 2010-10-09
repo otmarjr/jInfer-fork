@@ -17,11 +17,11 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.StructuralAbstractNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
-import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.properties.XSDImportPropertiesPanel;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
@@ -34,10 +34,10 @@ import org.openide.util.lookup.ServiceProvider;
  * @author reseto
  */
 @ServiceProvider(service = Processor.class)
-public class XSDProcessorSAX implements Processor {
+public class XSDProcessor implements Processor {
 
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
-  private static final Logger LOG = Logger.getLogger(XSDProcessorSAX.class);
+  private static final Logger LOG = Logger.getLogger(XSDProcessor.class);
 
   @Override
   public FolderType getFolder() {
@@ -50,14 +50,22 @@ public class XSDProcessorSAX implements Processor {
   }
 
   @Override
-  public List<StructuralAbstractNode> process(InputStream stream) {
-    final XSDSimpleHandler handler = new XSDSimpleHandler();
+  public List<Element> process(InputStream stream) {
+    
     try {
-      
-      PARSER_FACTORY.newSAXParser().parse(stream, handler);
-      return handler.getRules();
+      if (Integer.parseInt(RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME).getProperty(XSDImportPropertiesPanel.PARSER, "0")) == 0) {
+        //SAX parser selected
+        final SAXHandler handler = new SAXHandler();
+        PARSER_FACTORY.newSAXParser().parse(stream, handler);
+        //TODO reseto return normal rules
+        return Collections.emptyList();
+      } else {
+        //DOM parser selected
+        //TODO reseto return normal rules
+        return Collections.emptyList();
+      }
     } catch (final Exception e) {
-      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME).getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error parsing XSD schema file.", e);
       } else {
         LOG.warn("Error parsing XSD schema file, ignoring and going on.", e);

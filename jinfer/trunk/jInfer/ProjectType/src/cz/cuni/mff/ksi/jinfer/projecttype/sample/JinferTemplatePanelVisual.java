@@ -134,7 +134,7 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     final String command = evt.getActionCommand();
     if ("BROWSE".equals(command)) {
       final JFileChooser chooser = new JFileChooser();
-      FileUtil.preventFileChooserSymlinkTraversal(chooser, null);
+      chooser.setCurrentDirectory(null);
       chooser.setDialogTitle("Select Project Location");
       chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
       final String path = this.projectLocationTextField.getText();

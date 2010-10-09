@@ -21,19 +21,25 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.algorithms.layout.DAGLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.collections15.TransformerUtils;
 import org.openide.windows.WindowManager;
+import sun.security.pkcs11.P11TlsKeyMaterialGenerator;
 
 /**
  * Provides a way to draw automata in a GUI component and return a result of
@@ -86,10 +92,11 @@ public class AutoEditor<T> {
    * @param automaton automaton to be drawn
    * @return if user picks exactly two states returns Pair of them otherwise null
    */
-  public List<State<T>> drawAutomatonToPickTwoStates(final Automaton<T> automaton) {
+  public List<State<T>> drawAutomatonToPickTwoStates(final Automaton<T> aaa) {
     if (!AutoEditorTopComponent.getAskUser()) {
       return null;
     }
+    DisplayAutomaton<T> automaton= new DisplayAutomaton<T>(aaa);
 
     final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
     final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
@@ -106,8 +113,11 @@ public class AutoEditor<T> {
       }
     }
 
+    Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(automaton.getMap());
+
     // TODO rio find suitable layout
-    final Layout<State<T>, Step<T>> layout = new DAGLayout<State<T>, Step<T>>(graph);
+    final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph, trans);
+
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space
 
     visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layout);

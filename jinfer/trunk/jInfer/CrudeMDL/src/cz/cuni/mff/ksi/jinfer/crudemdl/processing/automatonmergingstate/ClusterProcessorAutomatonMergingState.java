@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
@@ -59,8 +60,40 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
   };
 
   private class RegexpAbstractSymbolToString implements SymbolToString<Regexp<AbstractStructuralNode>> {
+    private AbstractStructuralNodeSymbolToString g= new AbstractStructuralNodeSymbolToString();
+
     @Override
     public String toString(Regexp<AbstractStructuralNode> symbol) {
+      switch (symbol.getType()) {
+        case LAMBDA:
+          return symbol.toString();
+        case TOKEN:
+          return g.toString(symbol.getContent());
+        case CONCATENATION:
+          return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), ",",
+            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+              @Override
+              public String toString(Regexp<AbstractStructuralNode> t) {
+                return RegexpAbstractSymbolToString.this.toString(t);
+              }
+          });
+        case ALTERNATION:
+          return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), "|",
+            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+              @Override
+              public String toString(Regexp<AbstractStructuralNode> t) {
+                return RegexpAbstractSymbolToString.this.toString(t);
+              }
+          });
+        case PERMUTATION:
+          return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), "&",
+            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+              @Override
+              public String toString(Regexp<AbstractStructuralNode> t) {
+                return RegexpAbstractSymbolToString.this.toString(t);
+              }
+          });
+      }
       return symbol.toString();
     }
   };

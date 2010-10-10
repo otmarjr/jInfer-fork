@@ -51,7 +51,7 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
       throw new IllegalStateException("No parameters set.");
     }
     if (h > k) {
-      throw  new IllegalArgumentException("K must be greater than h");
+      throw  new IllegalArgumentException("Parameter k must be greater than h");
     }
   }
 

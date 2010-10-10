@@ -97,7 +97,6 @@ public class AutoEditor<T> {
     if (!AutoEditorTopComponent.getAskUser()) {
       return null;
     }
- //   DisplayAutomaton<T> automaton= new DisplayAutomaton<T>(aaa);
 
     final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
     final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
@@ -114,10 +113,8 @@ public class AutoEditor<T> {
       }
     }
 
-//    Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(automaton.getMap());
 
     // TODO rio find suitable layout
-//    final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph, trans);
     final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
 
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space

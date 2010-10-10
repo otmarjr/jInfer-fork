@@ -24,7 +24,7 @@ import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 /**
- *
+ * This class defines second step in new jInfer project wizard.
  * @author sviro
  */
 public class ModuleSelectionWizardPanel1 implements WizardDescriptor.Panel {

@@ -28,18 +28,14 @@ import org.openide.WizardValidationException;
 import org.openide.filesystems.FileUtil;
 
 /**
- * // TODO sviro version 0.2 Comment!
+ * JPanel which defines first step in new jInfer project wizard.
  * @author sviro
  */
 public class JinferTemplatePanelVisual extends JPanel implements DocumentListener {
 
   public static final String PROP_PROJECT_NAME = "projectName";
-
-  public static final String WIZARD_ERROR_MESSAGE = "WizardPanel_errorMessage";
-
   private static final long serialVersionUID = 785187562L;
-
-  private JinferTemplateWizardPanel panel;
+  private final JinferTemplateWizardPanel panel;
 
   public JinferTemplatePanelVisual(final JinferTemplateWizardPanel panel) {
     super();
@@ -172,41 +168,44 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
   public boolean valid(final WizardDescriptor wizardDescriptor) {
 
     if (projectNameTextField.getText().length() == 0) {
-      // TODO sviro if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_ERROR_MESSAGE:
-      wizardDescriptor.putProperty(WIZARD_ERROR_MESSAGE,
+      wizardDescriptor.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE,
               "Project Name is not a valid folder name.");
       return false; // Display name not specified
     }
-    final File f = FileUtil.normalizeFile(new File(projectLocationTextField.getText()).getAbsoluteFile());
+    final File f = FileUtil.normalizeFile(new File(projectLocationTextField.getText()).
+            getAbsoluteFile());
     if (!f.isDirectory()) {
-      wizardDescriptor.putProperty(WIZARD_ERROR_MESSAGE, "Project Folder is not a valid path.");
+      wizardDescriptor.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE,
+              "Project Folder is not a valid path.");
       return false;
     }
-    final File destFolder = FileUtil.normalizeFile(new File(createdFolderTextField.getText()).getAbsoluteFile());
+    final File destFolder = FileUtil.normalizeFile(new File(createdFolderTextField.getText()).
+            getAbsoluteFile());
 
     File projLoc = destFolder;
     while (projLoc != null && !projLoc.exists()) {
       projLoc = projLoc.getParentFile();
     }
     if (projLoc == null || !projLoc.canWrite()) {
-      wizardDescriptor.putProperty(WIZARD_ERROR_MESSAGE,
+      wizardDescriptor.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE,
               "Project Folder cannot be created.");
       return false;
     }
 
     if (FileUtil.toFileObject(projLoc) == null) {
-      wizardDescriptor.putProperty(WIZARD_ERROR_MESSAGE, "Project Folder is not a valid path.");
+      wizardDescriptor.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE,
+              "Project Folder is not a valid path.");
       return false;
     }
 
     final File[] kids = destFolder.listFiles();
     if (destFolder.exists() && kids != null && kids.length > 0) {
       // Folder exists and is not empty
-      wizardDescriptor.putProperty(WIZARD_ERROR_MESSAGE,
+      wizardDescriptor.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE,
               "Project Folder already exists and is not empty.");
       return false;
     }
-    wizardDescriptor.putProperty(WIZARD_ERROR_MESSAGE, "");
+    wizardDescriptor.putProperty(WizardDescriptor.PROP_ERROR_MESSAGE, "");
     return true;
   }
 
@@ -220,7 +219,8 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
 
   public void read(final WizardDescriptor settings) {
     File projectLocation = (File) settings.getProperty("projdir");
-    if (projectLocation == null || projectLocation.getParentFile() == null || !projectLocation.getParentFile().isDirectory()) {
+    if (projectLocation == null || projectLocation.getParentFile() == null || !projectLocation.
+            getParentFile().isDirectory()) {
       projectLocation = ProjectChooser.getProjectsFolder();
     } else {
       projectLocation = projectLocation.getParentFile();

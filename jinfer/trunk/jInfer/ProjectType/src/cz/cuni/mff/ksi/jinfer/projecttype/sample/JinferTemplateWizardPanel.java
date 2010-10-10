@@ -27,7 +27,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 
 /**
- * TODO sviro comment
+ * This class defines first step in new jInfer project wizard.
  * @author sviro
  */
 public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,

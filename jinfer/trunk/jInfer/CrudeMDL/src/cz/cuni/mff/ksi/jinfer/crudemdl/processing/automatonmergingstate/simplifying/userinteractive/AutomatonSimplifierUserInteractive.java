@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -43,16 +44,13 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
     do {
       mergeLst = gui.drawAutomatonToPickTwoStates(inputAutomaton);
 
-      if (mergeLst == null) {
-        return inputAutomaton;
-      }
-      if (!mergeLst.isEmpty()) {
+      if (!BaseUtils.isEmpty(mergeLst)) {
         LOG.debug("AUTO EDITOR selected: " + mergeLst.toString());
         inputAutomaton.mergeStates(mergeLst);
         LOG.debug("After merge:");
         LOG.debug(inputAutomaton);
       }
-    } while (!mergeLst.isEmpty());
+    } while (!BaseUtils.isEmpty(mergeLst));
     return inputAutomaton;
   }
 }

@@ -32,7 +32,6 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463434L;
-
   public static final String NAME = "moduleselector";
   public static final String INITIAL_GRAMMAR = "initialgrammar";
   public static final String SIMPLIFIER = "simplifier";
@@ -144,8 +143,6 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     initialGrammar.setSelectedItem(properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT));
     simplifier.setSelectedItem(properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT));
     schemaGenerator.setSelectedItem(properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT));
-
-    // TODO sviro Treba doriesit ak neexistuje modul co je nacitany z properties a ak neexistuje ziaden modul danej kategorie
   }
 
   @Override
@@ -157,7 +154,6 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     properties.setProperty(SCHEMA_GENERATOR,
             (String) schemaGenerator.getSelectedItem());
   }
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox initialGrammar;
   private javax.swing.JLabel jLabel1;

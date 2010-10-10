@@ -26,8 +26,8 @@ public class ModuleProperties extends Properties {
 
   private final String moduleName;
   private final Properties properties;
-// TODO sviro PMD run super() in constructor
   public ModuleProperties(final String moduleName, final Properties properties) {
+    super();
     this.moduleName = moduleName;
     this.properties = properties;
   }

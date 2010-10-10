@@ -49,7 +49,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
- *  TODO sviro comment
+ *  Iterator for new jInfer project wizard. This iterator creates panels for each step
+ *  of the wizard and creates new project.
+ * 
  * @author sviro
  */
 public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress*/InstantiatingIterator {
@@ -122,10 +124,9 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
       if (c instanceof JComponent) { // assume Swing components
         final JComponent jc = (JComponent) c;
         // Step #.
-        // TODO sviro if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_*:
-        jc.putClientProperty("WizardPanel_contentSelectedIndex", Integer.valueOf(i));
+        jc.putClientProperty(WizardDescriptor.PROP_CONTENT_SELECTED_INDEX, Integer.valueOf(i));
         // Step name (actually the whole list for reference).
-        jc.putClientProperty("WizardPanel_contentData", steps);
+        jc.putClientProperty(WizardDescriptor.PROP_CONTENT_DATA, steps);
       }
     }
   }

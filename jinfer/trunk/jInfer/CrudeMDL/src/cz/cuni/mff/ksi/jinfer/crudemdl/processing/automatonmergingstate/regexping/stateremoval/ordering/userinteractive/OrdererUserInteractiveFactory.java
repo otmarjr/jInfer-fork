@@ -29,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author anti
  */
-@ServiceProvider(service = RegexpAutomatonSimplifierStateRemovalOrdererFactory.class)
+//@ServiceProvider(service = RegexpAutomatonSimplifierStateRemovalOrdererFactory.class)
 public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierStateRemovalOrdererFactory {
   private static final Logger LOG = Logger.getLogger(OrdererUserInteractiveFactory.class);
   

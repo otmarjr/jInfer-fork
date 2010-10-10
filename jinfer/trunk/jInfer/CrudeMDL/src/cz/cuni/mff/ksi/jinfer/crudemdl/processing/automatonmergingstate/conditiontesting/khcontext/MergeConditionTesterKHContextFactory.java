@@ -32,8 +32,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = MergeConditionTesterFactory.class)
 public class MergeConditionTesterKHContextFactory implements MergeConditionTesterFactory {
   private static final Logger LOG = Logger.getLogger(MergeConditionTesterKHContextFactory.class);
-  private int parameterK = 0;
-  private int parameterH = 0;
+  private int parameterK = -1;
+  private int parameterH = -1;
 
   @Override
   public <T> MergeConditionTester<T> create() {

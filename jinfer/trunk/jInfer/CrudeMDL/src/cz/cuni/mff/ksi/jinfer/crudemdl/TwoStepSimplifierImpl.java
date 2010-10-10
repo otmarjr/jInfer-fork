@@ -126,12 +126,13 @@ public class TwoStepSimplifierImpl implements Simplifier {
      * I'm sure nothing will go wrong.
      * We've got a system failure 20 minutes ago, i'm still trying to find my files.
      */
-    LOG.debug("# Begin of rules dump");
+/*    LOG.debug("# Begin of rules dump");
     for (AbstractStructuralNode node : initialGrammar) {
       LOG.debug(node.toString());
     }
     LOG.debug("# End of rules dump");
-
+*/
+    
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
     final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
     for (final Element e : initialGrammar) {

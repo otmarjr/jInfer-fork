@@ -60,8 +60,19 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
       // TODO anti what is returned by property, if it is not set
       for (String parameterName : parameterNames) {
         String value= properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
-        int intValue= Integer.parseInt(value);
-        factoryParam.setParameter(parameterName, intValue);
+        int intValue;
+        try {
+          intValue= Integer.parseInt(value);
+          factoryParam.setParameter(parameterName, intValue);
+        } catch (NumberFormatException e) {
+          LOG.error("Parameter named "
+                  + parameterName + 
+                  " which should be set for using submodule " 
+                  + mergeConditionTesterFactory.getName() + 
+                  " is not a number. "
+                  + "Submodule will use some default value. "
+                  + "This error was triggered by exception: " + e.toString());
+        }
       }
     }
     this.mergeConditionTester= mergeConditionTesterFactory.<T>create();

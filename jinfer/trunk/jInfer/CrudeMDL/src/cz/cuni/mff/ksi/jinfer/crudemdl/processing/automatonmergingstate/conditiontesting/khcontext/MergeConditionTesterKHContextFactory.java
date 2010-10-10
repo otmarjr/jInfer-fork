@@ -38,7 +38,17 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   @Override
   public <T> MergeConditionTester<T> create() {
     LOG.debug("Creating new MergeConditionTesterKHContext.");
-    return new MergeConditionTesterKHContext<T>(parameterK, parameterH);
+    if ((parameterH >= 0)&&(parameterK >= parameterH)) {
+      return new MergeConditionTesterKHContext<T>(parameterK, parameterH);
+    } else {
+      LOG.warn("Wrong parameters set k: "
+              + String.valueOf(parameterK)
+              + ", h: "
+              + String.valueOf(parameterH)
+              + ". Parameters have to satisfy: k >= h >= 0."
+              + " Using default values of k = 2, h = 1.");
+      return new MergeConditionTesterKHContext<T>(2, 1);
+    }
   }
 
   @Override

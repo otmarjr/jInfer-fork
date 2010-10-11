@@ -361,7 +361,10 @@ public class Regexp<T> {
     final List<Regexp<T>> c = new ArrayList<Regexp<T>>();
     c.add(concat);
 
-    newChildren.add(Regexp.<T>getAlternation(c));
+    final Regexp<T> emptyConcat = Regexp.getMutable();
+    emptyConcat.setType(RegexpType.CONCATENATION);
+    emptyConcat.setInterval(RegexpInterval.getOnce());
+    newChildren.add(emptyConcat);
 
     children.clear();
     children.addAll(newChildren);

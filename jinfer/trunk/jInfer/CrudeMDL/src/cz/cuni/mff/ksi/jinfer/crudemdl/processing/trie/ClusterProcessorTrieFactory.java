@@ -21,11 +21,13 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author vektor
  */
+@ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorTrieFactory implements ClusterProcessorFactory {
 
   public static final String NAME = "ClusterProcessorTrie";

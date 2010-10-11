@@ -24,7 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -93,7 +93,7 @@ public class AutoEditor<T> {
       throw new IllegalStateException("User does not want to interact with the inferrence anymore.");
     }
 
-    final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
+    final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
     final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
 
     // Get vertices = states of automaton

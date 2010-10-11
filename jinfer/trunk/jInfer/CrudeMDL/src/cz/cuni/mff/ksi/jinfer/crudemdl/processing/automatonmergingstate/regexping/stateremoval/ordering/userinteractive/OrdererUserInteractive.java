@@ -39,7 +39,7 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
     final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
     List<State<Regexp<T>>> removeLst;
     do {
-      removeLst = gui.drawAutomatonToPickTwoStates(automaton);
+      removeLst = gui.drawAutomatonToPickStates(automaton);
 
       if (removeLst == null) {
         continue;

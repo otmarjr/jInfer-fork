@@ -92,6 +92,15 @@ public class SimpleData extends AbstractStructuralNode implements ContentNode {
     checkConstraits();
   }
 
+  public String toTestString() {
+    final StringBuilder ret = new StringBuilder(super.toString());
+    ret.append('\n').append(contentType).append(": ");
+    for (final Object o : content) {
+      ret.append(o.toString()).append(' ');
+    }
+    return ret.toString();
+  }
+
   @Override
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());

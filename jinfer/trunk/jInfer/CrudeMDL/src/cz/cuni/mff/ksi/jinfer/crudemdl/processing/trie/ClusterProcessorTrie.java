@@ -14,10 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.alternations;
+package cz.cuni.mff.ksi.jinfer.crudemdl.processing.trie;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
@@ -25,12 +26,10 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import java.util.List;
 
 /**
- * Trivial implementation of ClusterProcessor - simply returns all possible
- * right sides as alternation in the resulting rule.
- * 
+ *
  * @author vektor
  */
-public class ClusterProcessorAlternations implements ClusterProcessor<AbstractStructuralNode> {
+public class ClusterProcessorTrie implements ClusterProcessor<AbstractStructuralNode> {
 
   @Override
   public AbstractStructuralNode processCluster(
@@ -40,7 +39,8 @@ public class ClusterProcessorAlternations implements ClusterProcessor<AbstractSt
 
     ret.setName(rules.get(0).getName());
     ret.getContext().addAll(rules.get(0).getContext());
-    ret.getSubnodes().setType(RegexpType.ALTERNATION);
+
+    ret.getSubnodes().setType(RegexpType.CONCATENATION);
     ret.getSubnodes().setInterval(RegexpInterval.getOnce());
 
     for (final AbstractStructuralNode n : rules) {
@@ -51,12 +51,19 @@ public class ClusterProcessorAlternations implements ClusterProcessor<AbstractSt
         throw new IllegalArgumentException("Expecting element here.");
       }
       final Element e = (Element) n;
-      ret.getSubnodes().addChild(e.getSubnodes());
+
+      addBranchToTree(ret.getSubnodes(), e.getSubnodes());
     }
 
     // TODO vektor Probably losing attributes
 
     ret.setImmutable();
+
     return ret;
+  }
+
+  private void addBranchToTree(final Regexp<AbstractStructuralNode> tree,
+          final Regexp<AbstractStructuralNode> branch) {
+    throw new UnsupportedOperationException("Not yet implemented");
   }
 }

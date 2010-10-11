@@ -103,6 +103,14 @@ public class Element extends AbstractStructuralNode {
     subnodes.setImmutable();
   }
 
+  public String toTestString() {
+    final StringBuilder ret = new StringBuilder(super.toString());
+    if (subnodes != null) {
+      ret.append('\n').append(subnodes.toString());
+    }
+    return ret.toString();
+  }
+
   @Override
   public String toString() {
     final StringBuilder ret = new StringBuilder(super.toString());

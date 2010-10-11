@@ -400,6 +400,42 @@ public class Regexp<T> {
     return ret;
   }
 
+  private String getTestDelimiter(final RegexpType t) {
+    switch (t) {
+      case CONCATENATION:
+        return ",";
+      case ALTERNATION:
+        return "|";
+      case PERMUTATION:
+        return "&";
+      default:
+        throw new IllegalStateException("Invalid regexp type at this point: " + t);
+    }
+  }
+
+  public String toTestString() {
+    switch (type) {
+      case TOKEN:
+        return content.toString() + interval.toString();
+      case CONCATENATION:
+      case ALTERNATION:
+      case PERMUTATION:
+        return CollectionToString.colToString(children, getTestDelimiter(type),
+                new CollectionToString.ToString<Regexp<T>>() {
+
+                  @Override
+                  public String toString(Regexp<T> t) {
+                    return t.toString();
+                  }
+                })
+                + interval.toString();
+      case LAMBDA:
+        return "\u03BB";
+      default:
+        throw new IllegalArgumentException("Unknown enum member " + type);
+    }
+  }
+
   @Override
   public String toString() {
     switch (type) {

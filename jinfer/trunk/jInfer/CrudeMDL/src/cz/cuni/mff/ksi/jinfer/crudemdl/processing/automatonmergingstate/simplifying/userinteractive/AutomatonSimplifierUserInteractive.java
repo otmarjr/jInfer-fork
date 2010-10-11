@@ -42,7 +42,7 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
     final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
     List<State<T>> mergeLst;
     do {
-      mergeLst = gui.drawAutomatonToPickTwoStates(inputAutomaton);
+      mergeLst = gui.drawAutomatonToPickStates(inputAutomaton);
 
       if (!BaseUtils.isEmpty(mergeLst)) {
         LOG.debug("AUTO EDITOR selected: " + mergeLst.toString());

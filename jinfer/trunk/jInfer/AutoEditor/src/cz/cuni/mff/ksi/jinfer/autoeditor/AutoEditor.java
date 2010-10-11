@@ -18,29 +18,24 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.AutomatonLayoutTransformer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.algorithms.layout.ISOMLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import java.awt.Point;
-import java.awt.geom.Point2D;
+import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.TransformerUtils;
 import org.openide.windows.WindowManager;
-import sun.security.pkcs11.P11TlsKeyMaterialGenerator;
 
 /**
  * Provides a way to draw automata in a GUI component and return a result of
@@ -87,15 +82,15 @@ public class AutoEditor<T> {
   private VisualizationViewer<State<T>, Step<T>> visualizationViewer;
 
   /**
-   * Draws automaton and waits until user picks two states and clicks
+   * Draws automaton and waits until user picks some states and clicks
    * 'continue' button.
    *
    * @param automaton automaton to be drawn
-   * @return if user picks exactly two states returns Pair of them otherwise null
+   * @return returns picked states in a list
    */
-  public List<State<T>> drawAutomatonToPickTwoStates(final Automaton<T> automaton) {
+  public List<State<T>> drawAutomatonToPickStates(final Automaton<T> automaton) {
     if (!AutoEditorTopComponent.getAskUser()) {
-      return null;
+      throw new IllegalStateException("User does not want to interact with the inferrence anymore.");
     }
 
     final DirectedSparseGraph<State<T>, Step<T>> graph = new DirectedSparseGraph<State<T>, Step<T>>();
@@ -115,7 +110,15 @@ public class AutoEditor<T> {
 
 
     // TODO rio find suitable layout
-    final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
+    //final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
+
+    // TODO rio toto je kod Julie
+    final int	MIN_X_SIZE	= 7;
+	final int	MIN_Y_SIZE	= 3;
+	final int	SQUARE_SIZE	= 100;
+    final AutomatonLayoutTransformer<T> automatonLayoutTransformer = new AutomatonLayoutTransformer<T>(MIN_X_SIZE, MIN_Y_SIZE, SQUARE_SIZE, graph, automaton);
+    final Dimension dimension = automatonLayoutTransformer.getDimension();
+	final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph, automatonLayoutTransformer, dimension);
 
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space
 

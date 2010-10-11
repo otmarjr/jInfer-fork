@@ -36,6 +36,12 @@ import java.util.List;
  * @author anti
  */
 public interface ClusterProcessor<T> {
+
+  // TODO anti What sense does it make to pass clusterer as a parameter?
+  // Shouldn't all necessary data be in a Cluster parameter replacing the current two?
+
+  // TODO anti Is it necessary to have this class generic?
+
   T processCluster(
           final Clusterer<T> clusterer,
           final List<T> rules

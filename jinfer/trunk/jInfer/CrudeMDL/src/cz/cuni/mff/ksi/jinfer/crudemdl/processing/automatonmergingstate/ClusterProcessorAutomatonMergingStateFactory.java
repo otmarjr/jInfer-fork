@@ -37,6 +37,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
+
+  // TODO anti Consider renaming all ClusterProcessorXYZs to CPXYZ.
+
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingStateFactory.class);
 
   public static final String NAME = "ClusterProcessorAutomatonMergingState";
@@ -82,6 +85,7 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   @Override
   public String getDisplayModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
+    // TODO anti Very bad way to use StringBuilder, defies the purpose - don't use + inside!
     sb.append(" constructs prefix tree automaton from positive examples"
             + " in the cluster. The it selects AutomatonSimplifier class,"
             + " to which it passes automaton to merge some states. AutomatonSimplifier"

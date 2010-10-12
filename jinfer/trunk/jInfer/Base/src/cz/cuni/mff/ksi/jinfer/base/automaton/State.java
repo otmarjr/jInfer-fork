@@ -38,7 +38,7 @@ public class State<T> {
   /**
    * finalCount - number the times the state was final for some input string.
    */
-  private Integer finalCount;
+  private int finalCount;
   /**
    * Just unique number as name, to visualize and log automaton correctly.
    */
@@ -51,7 +51,7 @@ public class State<T> {
    * @param name
    * @param parentAutomaton
    */
-  public State(final Integer finalCount, final int name) {
+  public State(final int finalCount, final int name) {
     this.finalCount= finalCount;
     this.name= name;
   }
@@ -59,14 +59,14 @@ public class State<T> {
   /**
    * @return the finalCount
    */
-  public Integer getFinalCount() {
+  public int getFinalCount() {
     return finalCount;
   }
 
   /**
    * @param finalCount the finalCount to set
    */
-  public void setFinalCount(final Integer finalCount) {
+  public void setFinalCount(final int finalCount) {
     this.finalCount = finalCount;
   }
 
@@ -103,6 +103,15 @@ public class State<T> {
   @Override
   public String toString() {
   //  return super.toString();
+    final StringBuilder sb = new StringBuilder("[");
+    sb.append(this.getName());
+    sb.append("|");
+    sb.append(this.finalCount);
+    sb.append("]");
+    return sb.toString();
+  }
+
+  public String toTestString() {
     final StringBuilder sb = new StringBuilder("[");
     sb.append(this.getName());
     sb.append("|");

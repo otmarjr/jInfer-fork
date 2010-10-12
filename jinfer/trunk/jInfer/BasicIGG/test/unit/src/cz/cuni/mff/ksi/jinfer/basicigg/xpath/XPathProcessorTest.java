@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -122,18 +123,18 @@ public class XPathProcessorTest {
           + "# this must not show" + NL;
 
   private static final String[] PEOPLE_RESULTS = {
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,)",
-    "people: ELEMENT\n(person: ELEMENT\n(name: ATTRIBUTE\nnull: ,),)",
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,)",
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,)",
+    "person:name{()}",
+    "people{(person:name{()})}",
+    "person:name{()}",
+    "person:name{()}",
     // Explanation: upon finding name, an attribute is added to the element and that element is added to rules.
     // Upon finding age, an attribute is added to the same element and it is added to rules once again.
     // Because we work with references, rules contain two references to the same element with two attributes inside.
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,age: ATTRIBUTE\nnull: ,)",
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,age: ATTRIBUTE\nnull: ,)",
+    "person:name,age{()}",
+    "person:name,age{()}",
     // End of explained part.
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: john ,)",
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,)"};
+    "person:name{()}",
+    "person:name{()}"};
 
   @Test
   public void testProcessAttributes() {
@@ -143,7 +144,7 @@ public class XPathProcessorTest {
     final List<Element> result = instance.process(s);
     assertEquals(PEOPLE_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
-      assertEquals("Iteration " + i, PEOPLE_RESULTS[i], result.get(i).toString());
+      assertEquals("Iteration " + i, PEOPLE_RESULTS[i], TestUtils.elementToStr(result.get(i)));
     }
   }
   
@@ -153,10 +154,10 @@ public class XPathProcessorTest {
   private static final String[] PEOPLE_RESULTS2 = {
     // Explanation: the same as above. First rule is for the relation
     // person -> @name, second for person -> address.
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,address: ELEMENT\n(),)",
-    "person: ELEMENT\n(name: ATTRIBUTE\nnull: ,address: ELEMENT\n(),)",
+    "person:name{(address{()})}",
+    "person:name{(address{()})}",
     // End of explained part.
-    "address: ELEMENT\n()"
+    "address{()}"
   };
 
   @Test
@@ -167,7 +168,7 @@ public class XPathProcessorTest {
     final List<Element> result = instance.process(s);
     assertEquals(PEOPLE_RESULTS2.length, result.size());
     for (int i = 0; i < result.size(); i++) {
-      assertEquals("Iteration " + i, PEOPLE_RESULTS2[i], result.get(i).toString());
+      assertEquals("Iteration " + i, PEOPLE_RESULTS2[i], TestUtils.elementToStr(result.get(i)));
     }
   }
 
@@ -179,15 +180,15 @@ public class XPathProcessorTest {
           + "chapter[text() = \"Lorem ipsum\"]/b";
 
   private static final String[] BOOKS_RESULTS = {
-    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,)",
-    "chapter: ELEMENT\n()",
-    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,)",
-    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,)",
-    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,)",
-    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,b: ELEMENT\n(),)",
-    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,b: ELEMENT\n(),)",
-    "chapter: ELEMENT\n(null: SIMPLE_DATA\nnull: ,Lorem ipsum: SIMPLE_DATA\nnull: ,b: ELEMENT\n(),)",
-    "b: ELEMENT\n()"};
+    "chapter{(\"null\")}",
+    "chapter{()}",
+    "chapter{(\"null\")}",
+    "chapter{(\"null\",\"Lorem ipsum\")}",
+    "chapter{(\"null\",\"Lorem ipsum\")}",
+    "chapter{(\"null\",\"Lorem ipsum\",b{()})}",
+    "chapter{(\"null\",\"Lorem ipsum\",b{()})}",
+    "chapter{(\"null\",\"Lorem ipsum\",b{()})}",
+    "b{()}"};
 
   @Test
   public void testProcessSimpleData() {
@@ -197,7 +198,7 @@ public class XPathProcessorTest {
     final List<Element> result = instance.process(s);
     assertEquals(BOOKS_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
-      assertEquals("Iteration " + i, BOOKS_RESULTS[i], result.get(i).toString());
+      assertEquals("Iteration " + i, BOOKS_RESULTS[i], TestUtils.elementToStr(result.get(i)));
     }
   }
 }

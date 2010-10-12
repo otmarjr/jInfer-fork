@@ -81,7 +81,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         newElement.setName(localName);
         newElement.getMetadata().put("from.query", Boolean.TRUE);
         if (lastElement != null) {
-          lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newElement));
+          lastElement.getSubnodes().addChild(getToken(newElement));
           rules.add(lastElement);
         }
         lastElement = newElement;
@@ -135,7 +135,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
-      lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newSimpleData));
+      lastElement.getSubnodes().addChild(getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
       isSimpleData = false;
@@ -159,7 +159,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
-      lastElement.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(newSimpleData));
+      lastElement.getSubnodes().addChild(getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
     }
@@ -178,9 +178,20 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     for (Element node : rules) {
       node.getSubnodes().setType(RegexpType.CONCATENATION);
       node.getSubnodes().setInterval(RegexpInterval.getOnce());
-      node.setImmutable();
+
+      // TODO vektor No idea which regexp inside this is immutable... so not closing at all...
+      //node.setImmutable();
     }
 
     return rules;
+  }
+  
+  // TODO vektor Merge with the same method from ClusterProcessorTrieTest
+  private Regexp<AbstractStructuralNode> getToken(final AbstractStructuralNode n) {
+    final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
+    ret.setType(RegexpType.TOKEN);
+    ret.setInterval(RegexpInterval.getOnce());
+    ret.setContent(n);
+    return ret;
   }
 }

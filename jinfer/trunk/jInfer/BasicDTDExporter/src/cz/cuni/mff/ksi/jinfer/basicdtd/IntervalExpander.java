@@ -114,7 +114,7 @@ public class IntervalExpander {
         m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getKleeneCross()));
         return Regexp.<AbstractStructuralNode>getConcatenation(m);
       default:
-        throw new IllegalArgumentException("Unknown regexp type");
+        throw new IllegalArgumentException("Unknown regexp type" + regexp.getType());
     }
   }
 

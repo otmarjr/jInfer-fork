@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.properties;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierImpl;
+import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.Properties;
@@ -57,6 +58,10 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     clusterProcessor = new javax.swing.JComboBox();
     jScrollPane1 = new javax.swing.JScrollPane();
     descClusterProcessor = new javax.swing.JTextPane();
+    labelCleaner = new javax.swing.JLabel();
+    cleaner = new javax.swing.JComboBox();
+    jScrollPane2 = new javax.swing.JScrollPane();
+    descCleaner = new javax.swing.JTextPane();
 
     setMinimumSize(new java.awt.Dimension(600, 62));
     setPreferredSize(new java.awt.Dimension(600, 62));
@@ -140,6 +145,42 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane1, gridBagConstraints);
+
+    labelCleaner.setText("Regular expression cleaner");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(labelCleaner, gridBagConstraints);
+
+    cleaner.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cleanerChanged(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(cleaner, gridBagConstraints);
+
+    descCleaner.setEditable(false);
+    jScrollPane2.setViewportView(descCleaner);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 5;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(jScrollPane2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void clustererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clustererChanged
@@ -156,6 +197,13 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
             );
   }//GEN-LAST:event_clusterProcessorChanged
 
+  private void cleanerChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanerChanged
+    descCleaner.setText(
+            ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
+            (String) cleaner.getSelectedItem()).getDisplayModuleDescription()
+            );
+  }//GEN-LAST:event_cleanerChanged
+
   @Override
   public final void load() {
     clusterer.setModel(new DefaultComboBoxModel(
@@ -170,6 +218,13 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     clusterProcessor.setSelectedItem(properties.getProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR,
             DEFAULT_MENU_TEXT));
     clusterProcessorChanged(null);
+
+    cleaner.setModel(new DefaultComboBoxModel(
+           ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class).toArray()
+           ));
+    cleaner.setSelectedItem(properties.getProperty(TwoStepSimplifierImpl.PROPERTIES_CLEANER,
+            DEFAULT_MENU_TEXT));
+    cleanerChanged(null);
   }
 
   @Override
@@ -178,14 +233,20 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
             (String) clusterer.getSelectedItem());
     properties.setProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR,
             (String) clusterProcessor.getSelectedItem());
+    properties.setProperty(TwoStepSimplifierImpl.PROPERTIES_CLEANER,
+            (String) cleaner.getSelectedItem());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JComboBox cleaner;
   private javax.swing.JComboBox clusterProcessor;
   private javax.swing.JComboBox clusterer;
+  private javax.swing.JTextPane descCleaner;
   private javax.swing.JTextPane descClusterProcessor;
   private javax.swing.JTextPane descClusterer;
   private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JScrollPane jScrollPane3;
+  private javax.swing.JLabel labelCleaner;
   private javax.swing.JLabel labelClusterProcessor;
   private javax.swing.JLabel labelClusterer;
   // End of variables declaration//GEN-END:variables

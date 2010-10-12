@@ -27,6 +27,8 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
+import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
@@ -75,6 +77,10 @@ public class TwoStepSimplifierImpl implements Simplifier {
    * Property name of cluster processor submodule.
    */
   public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
+  /**
+   * TODO anti Comment
+   */
+  public static final String PROPERTIES_CLEANER = "cleaner";
 
   private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
@@ -104,6 +110,13 @@ public class TwoStepSimplifierImpl implements Simplifier {
 
     return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(PROPERTIES_CLUSTER_PROCESSOR));
   }
+
+  private RegularExpressionCleanerFactory getRegularExpressionCleanerFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(this.getName());
+
+    return ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, p.getProperty(PROPERTIES_CLEANER));
+  }
+
 
   private void verifyInput(final List<Element> initialGrammar) throws InterruptedException {
     for (AbstractStructuralNode node : initialGrammar) {
@@ -150,6 +163,7 @@ public class TwoStepSimplifierImpl implements Simplifier {
 
     // 3. process rules
     final ClusterProcessor<AbstractStructuralNode> processor= this.getClusterProcessorFactory().create();
+    final RegularExpressionCleaner<AbstractStructuralNode> cleaner= this.getRegularExpressionCleanerFactory().<AbstractStructuralNode>create();
     for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -200,8 +214,11 @@ public class TwoStepSimplifierImpl implements Simplifier {
       }
       LOG.debug(sb);
       finalGrammar.add(
-              new Element(node.getContext(), node.getName(), node.getMetadata(), ((Element) node).getSubnodes(), attList)
-              );
+              new Element(node.getContext(), 
+              node.getName(),
+              node.getMetadata(),
+              cleaner.cleanRegularExpression(((Element) node).getSubnodes()),
+              attList));
     }
 
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);

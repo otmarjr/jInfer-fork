@@ -53,13 +53,13 @@ public class MergeConditionTesterKHContextTest {
   /**
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
-  @Test(expected = IllegalStateException.class)
-  public void testNoKHset() {
-    System.out.println("k,h not set");
+  @Test(expected = IllegalArgumentException.class)
+  public void testBadKHSet() {
+    System.out.println("k,h bad values set");
     Automaton<String> automaton = new Automaton<String>(true);
     automaton.buildPTAOnSymbol(Arrays.<String>asList(
             ));
-    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>(2, 1);
+    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>(3, 4);
     List<List<List<State<String>>>> result = instance.getMergableStates(automaton.getInitialState(), automaton.getInitialState(), automaton);
   }
 

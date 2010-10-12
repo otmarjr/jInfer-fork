@@ -44,14 +44,10 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
   
   private int k;
   private int h;
-  private boolean parametersSet=false;
 
   private void checkConstraits() {
-    if (!parametersSet) {
-      throw new IllegalStateException("No parameters set.");
-    }
-    if (h > k) {
-      throw  new IllegalArgumentException("Parameter k must be greater than h");
+    if (!((h >= 0)&&(k >= h))) {
+      throw  new IllegalArgumentException("Parameter k must be greater than h, be grater than zero. k >= h => 0.");
     }
   }
 
@@ -64,14 +60,12 @@ public class MergeConditionTesterKHContext<T> implements MergeConditionTester<T>
   public MergeConditionTesterKHContext(int k, int h) {
     this.k= k;
     this.h= h;
-    this.parametersSet= true;
     checkConstraits();
   }
 
   public void setKH(int k, int h) {
     this.k= k;
     this.h= h;
-    this.parametersSet= true;
     checkConstraits();
   }
   

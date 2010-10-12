@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.trie;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import java.util.Collections;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.StructuralNodeType;
@@ -73,27 +76,27 @@ public class ClusterProcessorTrieTest {
   @Test
   public final void test01() {
     final Regexp<AbstractStructuralNode> t = getTestTree();
-    System.out.println(t.toString());
-    assertEquals("(1: ELEMENT\n()\n,2: ELEMENT\n()\n,((3: ELEMENT\n()\n,5: ELEMENT\n())\n|(4: ELEMENT\n()\n,((6: ELEMENT\n())\n|(7: ELEMENT\n())))))",
-            t.toString());
+    System.out.println(regexpToStr(t));
+    assertEquals("(1{()},2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))",
+            regexpToStr(t));
 
     // add 1 - a split should occur right after it
     final List<Regexp<AbstractStructuralNode>> l1 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
     l1.add(getToken(getElement("1")));
     final Regexp<AbstractStructuralNode> a1 = getConcatOf(l1);
     ClusterProcessorTrie.addBranchToTree(t, a1);
-    System.out.println(t.toString());
-    assertEquals("(1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)",
-            t.toString());
+    System.out.println(regexpToStr(t));
+    assertEquals("(1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))))",
+            regexpToStr(t));
 
     // add 7 - it should be added to the root
     final List<Regexp<AbstractStructuralNode>> l2 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
     l2.add(getToken(getElement("7")));
     final Regexp<AbstractStructuralNode> a2 = getConcatOf(l2);
     ClusterProcessorTrie.addBranchToTree(t, a2);
-    System.out.println(t.toString());
-    assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|),)|(7: ELEMENT,)|),)",
-            t.toString());
+    System.out.println(regexpToStr(t));
+    assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))))|(7{()})))",
+            regexpToStr(t));
 
     // add 1 8
     final List<Regexp<AbstractStructuralNode>> l3 = new ArrayList<Regexp<AbstractStructuralNode>>(2);
@@ -101,9 +104,9 @@ public class ClusterProcessorTrieTest {
     l3.add(getToken(getElement("8")));
     final Regexp<AbstractStructuralNode> a3 = getConcatOf(l3);
     ClusterProcessorTrie.addBranchToTree(t, a3);
-    System.out.println(t.toString());
-    assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|),)|(7: ELEMENT,)|),)",
-            t.toString());
+    System.out.println(regexpToStr(t));
+    assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))|(8{()})))|(7{()})))",
+            regexpToStr(t));
 
     // add 1 7 9
     final List<Regexp<AbstractStructuralNode>> l4 = new ArrayList<Regexp<AbstractStructuralNode>>(3);
@@ -112,9 +115,9 @@ public class ClusterProcessorTrieTest {
     l4.add(getToken(getElement("9")));
     final Regexp<AbstractStructuralNode> a4 = getConcatOf(l4);
     ClusterProcessorTrie.addBranchToTree(t, a4);
-    System.out.println(t.toString());
-    assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,)|),)|(7: ELEMENT,)|),)",
-            t.toString());
+    System.out.println(regexpToStr(t));
+    assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))|(8{()})|(7{()},9{()})))|(7{()})))",
+            regexpToStr(t));
 
     // add 1 7 9 2
     final List<Regexp<AbstractStructuralNode>> l5 = new ArrayList<Regexp<AbstractStructuralNode>>(4);
@@ -124,9 +127,9 @@ public class ClusterProcessorTrieTest {
     l5.add(getToken(getElement("2")));
     final Regexp<AbstractStructuralNode> a5 = getConcatOf(l5);
     ClusterProcessorTrie.addBranchToTree(t, a5);
-    System.out.println(t.toString());
-    assertEquals("(((1: ELEMENT,(()|(2: ELEMENT,((3: ELEMENT,5: ELEMENT,)|(4: ELEMENT,((6: ELEMENT,)|(7: ELEMENT,)|),)|),)|(8: ELEMENT,)|(7: ELEMENT,9: ELEMENT,(()|(2: ELEMENT,)|),)|),)|(7: ELEMENT,)|),)",
-            t.toString());
+    System.out.println(regexpToStr(t));
+    assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))|(8{()})|(7{()},9{()},(\u03BB|(2{()})))))|(7{()})))",
+            regexpToStr(t));
   }
 
   /**
@@ -153,6 +156,8 @@ public class ClusterProcessorTrieTest {
     assertEquals(1, b1.getSubnodes().getChildren().size());
     assertEquals(StructuralNodeType.SIMPLE_DATA, b1.getSubnodes().getChild(0).getContent().getType());
   }
+
+  // TODO vektor These methods deserve to be somewhere shared
 
   private Regexp<AbstractStructuralNode> getToken(final AbstractStructuralNode n) {
     final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
@@ -184,5 +189,58 @@ public class ClusterProcessorTrieTest {
     ret.setInterval(RegexpInterval.getOnce());
     ret.getChildren().addAll(from);
     return ret;
+  }
+
+  public String elementToStr(final Element e) {
+    final StringBuilder ret = new StringBuilder(e.getName());
+    if (!BaseUtils.isEmpty(e.getAttributes())) {
+      ret.append(':');
+      ret.append(CollectionToString.colToString(e.getAttributes(), ",",
+              new CollectionToString.ToString<Attribute>() {
+        @Override
+        public String toString(final Attribute t) {
+          return t.getName();
+        }
+      }, "", ""));
+    }
+    ret.append('{').append(regexpToStr(e.getSubnodes())).append('}');
+    return ret.toString();
+  }
+
+  public String regexpToStr(final Regexp<AbstractStructuralNode> r) {
+    switch (r.getType()) {
+      case TOKEN:
+        return elementToStr((Element)r.getContent()) + r.getInterval().toString();
+      case CONCATENATION:
+      case ALTERNATION:
+      case PERMUTATION:
+        return CollectionToString.colToString(r.getChildren(),
+                getDelimiter(r.getType()),
+                new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+
+                  @Override
+                  public String toString(final Regexp<AbstractStructuralNode> t) {
+                    return regexpToStr(t);
+                  }
+                })
+                + r.getInterval().toString();
+      case LAMBDA:
+        return "\u03BB";
+      default:
+        throw new IllegalArgumentException("Unknown enum member " + r.getType());
+    }
+  }
+
+  private static String getDelimiter(final RegexpType t) {
+    switch (t) {
+      case CONCATENATION:
+        return ",";
+      case ALTERNATION:
+        return "|";
+      case PERMUTATION:
+        return "&";
+      default:
+        throw new IllegalStateException("Invalid regexp type at this point: " + t);
+    }
   }
 }

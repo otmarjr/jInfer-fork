@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -299,21 +298,6 @@ public class Regexp<T> {
   }
 
   /**
-   * Returns true, if this is a token and its content is null;
-   * or if the children are empty.
-   *
-   * Regexp should be considered to represent λ (lambda) iff it is empty.
-   * 
-   * @return
-   */
-  /*  public boolean isEmpty() {
-  if (isToken()) {
-  return content == null;
-  }
-  return BaseUtils.isEmpty(children);
-  }
-   */
-  /**
    * <p>Converts the i-th position of this concatenation to alternation and
    * inserts the rest as the one and only of its children.</p>
    *
@@ -362,7 +346,8 @@ public class Regexp<T> {
     c.add(concat);
 
     final Regexp<T> emptyConcat = Regexp.getMutable();
-    emptyConcat.setType(RegexpType.CONCATENATION);
+    emptyConcat.setType(RegexpType.ALTERNATION);
+    emptyConcat.getChildren().addAll(c);
     emptyConcat.setInterval(RegexpInterval.getOnce());
     newChildren.add(emptyConcat);
 
@@ -394,46 +379,10 @@ public class Regexp<T> {
     }
 
     final Regexp<T> ret = Regexp.<T>getMutable();
-    ret.getChildren().addAll(children);
+    ret.getChildren().addAll(newChildren);
     ret.setType(RegexpType.CONCATENATION);
     ret.setInterval(RegexpInterval.getOnce());
     return ret;
-  }
-
-  private String getTestDelimiter(final RegexpType t) {
-    switch (t) {
-      case CONCATENATION:
-        return ",";
-      case ALTERNATION:
-        return "|";
-      case PERMUTATION:
-        return "&";
-      default:
-        throw new IllegalStateException("Invalid regexp type at this point: " + t);
-    }
-  }
-
-  public String toTestString() {
-    switch (type) {
-      case TOKEN:
-        return content.toString() + interval.toString();
-      case CONCATENATION:
-      case ALTERNATION:
-      case PERMUTATION:
-        return CollectionToString.colToString(children, getTestDelimiter(type),
-                new CollectionToString.ToString<Regexp<T>>() {
-
-                  @Override
-                  public String toString(Regexp<T> t) {
-                    return t.toString();
-                  }
-                })
-                + interval.toString();
-      case LAMBDA:
-        return "\u03BB";
-      default:
-        throw new IllegalArgumentException("Unknown enum member " + type);
-    }
   }
 
   @Override

@@ -18,7 +18,6 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import java.awt.geom.Ellipse2D;
 
 /**
  * Maps states, ellipses and points for the plotting purposes.
@@ -30,68 +29,35 @@ public class StateMapping<T> {
 
 	private final State<T>[]	states;
 
-	private final Ellipse2D[]	ellipses;
-
-	private final int[][]		points;
+	private final Point[]		points;
 
 	private int					actual	= 0;
 
 	public StateMapping(final int size) {
 		states = new State[size];
-		ellipses = new Ellipse2D[size];
-		points = new int[size][2];
+		points = new Point[size];
 	}
 
-	public void add(final State<T> state, final Ellipse2D ellipse, final int[] point) {
+	public void add(final State<T> state, final Point point) {
 		if (actual < states.length) {
 			states[actual] = state;
-			ellipses[actual] = ellipse;
 			points[actual] = point;
 			actual++;
 		}
 	}
 
-	public State<T> getState(final int[] point) {
+	public State<T> getState(final Point point) {
 		for (int i = 0; i < points.length; i++) {
-			if (points[i][0] == point[0] && points[i][1] == point[1])
+          if (points[i] == null) {
+            continue;
+          }
+			if (points[i].equals(point))
 				return states[i];
 		}
 		return null;
 	}
 
-	public State<T> getState(final Ellipse2D ellipse) {
-		for (int i = 0; i < ellipses.length; i++) {
-			if (ellipses[i] == ellipse)
-				return states[i];
-		}
-		return null;
-	}
-
-	public Ellipse2D getEllipse(final int[] point) {
-		for (int i = 0; i < points.length; i++) {
-			if (points[i][0] == point[0] && points[i][1] == point[1])
-				return ellipses[i];
-		}
-		return null;
-	}
-
-	public Ellipse2D getEllipse(final State<T> state) {
-		for (int i = 0; i < states.length; i++) {
-			if (states[i] == state)
-				return ellipses[i];
-		}
-		return null;
-	}
-
-	public int[] getPoint(final Ellipse2D ellipse) {
-		for (int i = 0; i < ellipses.length; i++) {
-			if (ellipses[i] == ellipse)
-				return points[i];
-		}
-		return null;
-	}
-
-	public int[] getPoint(final State<T> state) {
+	public Point getPoint(final State<T> state) {
 		for (int i = 0; i < states.length; i++) {
 			if (states[i] == state)
 				return points[i];

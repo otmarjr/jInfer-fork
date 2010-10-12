@@ -31,8 +31,6 @@ public class CollectionToString {
   private CollectionToString() {
   }
 
-  // TODO vektor Parametrize braces 
-
   /*
    * Interface defining a strategy how to convert an object to a string.
    */
@@ -65,8 +63,15 @@ public class CollectionToString {
    */
   public static <T> String colToString(final Collection<T> collection,
           final String separator, final ToString<T> toStringStrategy) {
+    return colToString(collection, separator, toStringStrategy, "(", ")");
+  }
+
+  // TODO vektor Comment!
+  public static <T> String colToString(final Collection<T> collection,
+          final String separator, final ToString<T> toStringStrategy,
+          final String braceOpen, final String braceClose) {
     final StringBuilder ret = new StringBuilder();
-    ret.append('(');
+    ret.append(braceOpen);
     boolean first = true;
     for (final T child : collection) {
       if (!first) {
@@ -75,7 +80,7 @@ public class CollectionToString {
       first = false;
       ret.append(toStringStrategy.toString(child));
     }
-    ret.append(')');
+    ret.append(braceClose);
     return ret.toString();
   }
 }

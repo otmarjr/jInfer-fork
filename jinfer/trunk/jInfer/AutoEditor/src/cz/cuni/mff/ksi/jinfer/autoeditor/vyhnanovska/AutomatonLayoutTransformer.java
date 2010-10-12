@@ -49,8 +49,6 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
 	private final StateMapping	stateGridMapping;
 
-	private int[]				i;
-
 	private static final double	FILL_FACTOR	= 1.3;
 
     // TODO rio vyhodit automaton
@@ -65,7 +63,6 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 		final int vertexCount = graph.getVertexCount();
 		gridAxes = computeGridSize((int) Math.round(vertexCount * FILL_FACTOR));
 		stateGridMapping = new StateMapping(vertexCount);
-		i = new int[] {1, 1};
 	}
 
 	public Dimension getDimension() {
@@ -78,11 +75,11 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
         // TODO rio getId() == 1 znamena, ze je pociatocny??
 		//if (state.getId() == 1) {
         if (state.equals(automaton.getInitialState())) {
-			i = new int[] {1, 1};
-			stateGridMapping.add(state, null, i);
-			return getPoint(i);
+			final Point statePosition = new Point(1, 1);
+			stateGridMapping.add(state, statePosition);
+			return getPoint(statePosition);
 		}
-		int[] prev = null;
+		Point prev = null;
 		for (final Step<T> backEdge : automaton.getReverseDelta().get(state)) {
 			prev = stateGridMapping.getPoint(backEdge.getSource());
 			if (prev != null) {
@@ -90,34 +87,34 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 			}
 		}
 		if (prev == null) {
-			prev = i;
+			prev = new Point(1, 1);
 		}
 
-		int[] nextI = prev;
-		log.info("nextI: " + nextI[0] + " " + nextI[1]);
-		while (stateGridMapping.getState(nextI) != null || (nextI[0] == 1 && nextI[1] == 1)) {
+		Point nextI = prev;
+		log.info("nextI: " + nextI.getX() + " " + nextI.getY());
+		while (stateGridMapping.getState(nextI) != null || (nextI.equals(new Point(1, 1)))) {
 			log.info("obsazeno!");
 			nextI = getNextI(prev, nextI, gridAxes);
 			if (nextI != null) {
-				log.info("nextI: " + nextI[0] + " " + nextI[1]);
-				if (nextI[0] < 1 || nextI[1] < 1) {
-					log.error("invalid grid index: " + nextI[0] + " " + nextI[1]);
+				log.info("nextI: " + nextI.getX() + " " + nextI.getY());
+				if (nextI.getX() < 1 || nextI.getY() < 1) {
+					log.error("invalid grid index: " + nextI.getX() + " " + nextI.getY());
 					return null;
 				}
 			}
 		}
 
 		if (nextI != null) {
-			stateGridMapping.add(state, null, nextI);
+			stateGridMapping.add(state, nextI);
 			return getPoint(nextI);
 		}
 
 		return null;
 	}
 
-	private Point2D getPoint(final int[] i) {
-		final double x = i[0] * squareSize - squareSize / 2;
-		final double y = i[1] * squareSize - squareSize / 2;
+	private Point2D getPoint(final Point i) {
+		final double x = i.getX() * squareSize - squareSize / 2;
+		final double y = i.getY() * squareSize - squareSize / 2;
 		return new Point2D.Double(x, y);
 	}
 
@@ -144,18 +141,18 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 	 *
 	 * | - - ->2 | | ->1 | | | X | | | - - | | - - - - |
 	 */
-	private int[] getNextI(final int[] start, final int[] actual, final int[] gridAxes) {
+	private Point getNextI(final Point start, final Point actual, final int[] gridAxes) {
 
-		// vlastne vzdalenost actual vuci vychozimu bodu i
-		final int[] point = {actual[0] - start[0], actual[1] - start[1]};
-		log.info("point: " + point[0] + ":" + point[1]);
+		// vlastne vzdalenost actual vuci vychozimu bodu statePosition
+		final Point point = new Point(actual.getX() - start.getX(), actual.getY() - start.getY());
+		log.info("point: " + point.getX() + ":" + point.getY());
 
 		// index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
-		final int index = Math.max(Math.abs(point[0]), Math.abs(point[1]));
+		final int index = Math.max(Math.abs(point.getX()), Math.abs(point.getY()));
 		log.info("index: " + index);
 
 		// pokud jsem dokoncila ctverec, posunu se na dalsi
-		if (point[0] == index && point[1] == -index) {
+		if (point.equals(new Point(index, -index))) {
 			return goNewIndex(start, gridAxes, index + 1);
 		}
 		// jinak spocitam dalsi pozici
@@ -164,89 +161,89 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 		}
 	}
 
-	private int[] goNextI(final int[] i, final int[] actual, final int[] gridAxes) {
+	private Point goNextI(final Point i, final Point actual, final int[] gridAxes) {
 		log.info("goNextI");
-		// vlastne vzdalenost actual vuci vychozimu bodu i
-		final int[] point = {actual[0] - i[0], actual[1] - i[1]};
-		log.info("point: " + point[0] + ":" + point[1]);
+		// vlastne vzdalenost actual vuci vychozimu bodu statePosition
+		final Point point = new Point(actual.getX() - i.getX(), actual.getY() - i.getY());
+		log.info("point: " + point.getX() + ":" + point.getY());
 
 		// index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
-		final int index = Math.max(Math.abs(point[0]), Math.abs(point[1]));
+		final int index = Math.max(Math.abs(point.getX()), Math.abs(point.getY()));
 		log.info("index: " + index);
 
 		// prava hrana, postupujeme dolu
-		if (point[0] == index && point[1] < index) {
+		if (point.getX() == index && point.getY() < index) {
 			log.info("prava hrana, postupujeme dolu");
-			if (actual[1] == gridAxes[1]) { // nemuzu dolu, zkusime doleva
+			if (actual.getY() == gridAxes[1]) { // nemuzu dolu, zkusime doleva
 				log.info("nemuzu dolu, zkusim doleva");
-				if ((actual[0] - 2 * index) <= 0) { // nemuzu ani doleva, zkusim nahoru
+				if ((actual.getX() - 2 * index) <= 0) { // nemuzu ani doleva, zkusim nahoru
 					log.info("nemuzu ani doleva, zkusim nahoru");
 					return goUp(i, gridAxes, index);
 				}
-				final int[] ret = {actual[0] - 2 * index, actual[1]};
-				log.info("ret: " + ret[0] + ":" + ret[1]);
+				final Point ret = new Point(actual.getX() - 2 * index, actual.getY());
+				log.info("ret: " + ret);
 				return ret;
 			}
-			final int[] ret = {actual[0], actual[1] + 1};
-			log.info("ret: " + ret[0] + ":" + ret[1]);
+			final Point ret = new Point(actual.getX(), actual.getY() + 1);
+			log.info("ret: " + ret);
 			return ret;
 		}
 
 		// spodni hrana, postupujeme doleva
-		if (point[1] == index && point[0] > -index) {
+		if (point.getY() == index && point.getX() > -index) {
 			log.info("spodni hrana, postupuju doleva");
-			if (actual[0] == 1) { // nemuzu jit doleva, skocim nahoru
+			if (actual.getX() == 1) { // nemuzu jit doleva, skocim nahoru
 				log.info("nemuzu jit doleva, skocim nahoru");
 				return goUp(i, gridAxes, index);
 			}
-			final int[] ret = {actual[0] - 1, actual[1]};
-			log.info("ret: " + ret[0] + ":" + ret[1]);
+			final Point ret = new Point(actual.getX() - 1, actual.getY());
+			log.info("ret: " + ret);
 			return ret;
 		}
 
 		// leva hrana, postupujeme nahoru
-		if (point[0] == -index && point[1] > -index) {
+		if (point.getX() == -index && point.getY() > -index) {
 			log.info("leva hrana, postupujeme nahoru");
-			if (actual[1] == 1) { // nemuzu jit nahoru, zaciname s novym indexem
+			if (actual.getY() == 1) { // nemuzu jit nahoru, zaciname s novym indexem
 				log.info("nemuzu jit nahoru, zacinam s novym indexem");
 				return goNewIndex(i, gridAxes, index + 1);
 			}
-			final int[] ret = {actual[0], actual[1] - 1};
-			log.info("ret: " + ret[0] + ":" + ret[1]);
+			final Point ret = new Point (actual.getX(), actual.getY() - 1);
+			log.info("ret: " + ret);
 			return ret;
 
 		}
 
 		// horni hrana, jdeme doprava
-		if (point[1] == -index && point[0] < index) {
+		if (point.getY() == -index && point.getX() < index) {
 			log.info("horni hrana, jdeme doprava");
-			if (actual[0] == gridAxes[0]) { // nemuzu jit doleva, zacinam s novym indexem
+			if (actual.getX() == gridAxes[0]) { // nemuzu jit doleva, zacinam s novym indexem
 				log.info("nemuzu jit doleva, zacinam s novym indexem");
 				return goNewIndex(i, gridAxes, index + 1);
 			}
-			if (point[0] + 1 == index) { // jsem na konci, zacinam novy index
+			if (point.getX() + 1 == index) { // jsem na konci, zacinam novy index
 				log.info("jsem na konci, zacinam novy index");
 				return goNewIndex(i, gridAxes, index + 1);
 			}
-			final int[] ret = {actual[0] + 1, actual[1]};
-			log.info("ret: " + ret[0] + ":" + ret[1]);
+			final Point ret = new Point(actual.getX() + 1, actual.getY());
+			log.info("ret: " + ret);
 			return ret;
 		}
 		return null;
 	}
 
-	private int[] goUp(final int[] i, final int[] gridAxes, final int index) {
+	private Point goUp(final Point i, final int[] gridAxes, final int index) {
 		log.info("goUp");
-		if (i[1] - index <= 0) {// nemuzu jit ani nahoru, zaciname s novym indexem.
+		if (i.getY() - index <= 0) {// nemuzu jit ani nahoru, zaciname s novym indexem.
 			log.info("nemuzu jit ani nahoru, zacinam s novym indexem");
 			return goNewIndex(i, gridAxes, index + 1);
 		}
-		final int[] ret = {1, i[1] - index};
-		log.info("ret: " + ret[0] + ":" + ret[1]);
+		final Point ret = new Point(1, i.getY() - index);
+		log.info("ret: " + ret);
 		return ret;
 	}
 
-	private int[] goNewIndex(final int[] i, final int[] gridAxes, final int index) {
+	private Point goNewIndex(final Point i, final int[] gridAxes, final int index) {
 		log.info("goNewIndex: " + index);
 		// uz neni kam dal jit
 		if (index >= Math.max(gridAxes[0], gridAxes[1])) {
@@ -254,20 +251,20 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 			return null;
 		}
 
-		int actualX = i[0] + index;
-		int actualY = i[1] - index;
+		int actualX = i.getX() + index;
+		int actualY = i.getY() - index;
 		if (actualX > gridAxes[0]) {
 			// pravou hranu nemuzu, prejdu rovnou dolu
-			actualY = i[1] + index;
+			actualY = i.getY() + index;
 			actualX = gridAxes[0] + 1;
 			if (actualY > gridAxes[1]) {
 				// spodni hranu taky nemuzu, takze doleva
 				actualY = gridAxes[1] + 1;
-				actualX = i[0] - index;
+				actualX = i.getX() - index;
 				if (actualX < 1) {
 					// levou hranu taky ne... jdu nahoru
 					actualX = 0;
-					actualY = i[1] - index;
+					actualY = i.getY() - index;
 					if (actualY < 1) {
 						// nahoru taky nemuzu...
 						return null;
@@ -279,7 +276,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 		if (actualY < 0) {
 			actualY = 0;
 		}
-		final int[] actual = {actualX, actualY};
+		final Point actual = new Point(actualX, actualY);
 		return goNextI(i, actual, gridAxes);
 	}
 }

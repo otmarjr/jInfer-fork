@@ -108,6 +108,7 @@ public class Automaton<T> {
     this.reverseDelta= new LinkedHashMap<State<T>, Set<Step<T>>>();
     this.mergedStates= new LinkedHashMap<State<T>, State<T>>();
     this.reverseMergedStates= new LinkedHashMap<State<T>, Set<State<T>>>();
+    this.initialState= null;
   }
 
   /**
@@ -250,7 +251,10 @@ public class Automaton<T> {
     }
   }
 
-  private State<T> getRealState(final State<T> state) {
+  protected State<T> getRealState(final State<T> state) {
+    if (state == null) {
+      return null;
+    }
     if (this.delta.containsKey(state)) {
       return state;
     } else {
@@ -263,9 +267,13 @@ public class Automaton<T> {
   }
 
   public void mergeStates(final List<State<T>> lst) {
-    if (lst.isEmpty()) {
-      LOG.info("Empty list at automaton merge states.");
-      return;
+    if (lst == null) {
+      throw new IllegalArgumentException("List with states to merge has to be non-null"
+              + " and at have at least 2 items.");
+    }
+    if (lst.size() <= 1) {
+      throw new IllegalArgumentException("List with states to merge has to have"
+              + " at least 2 items.");
     }
     State<T> state= lst.get(0);
     for (State<T> anotherState : lst.subList(1, lst.size())) {
@@ -326,6 +334,7 @@ public class Automaton<T> {
       sb.append(" outSteps:\n");
       for (Step<T> step : this.delta.get(state)) {
         sb.append(step);
+        sb.append("\n");
       }
     }
 
@@ -339,6 +348,7 @@ public class Automaton<T> {
       sb.append(" inSteps:\n");
       for (Step<T> step : this.reverseDelta.get(state)) {
         sb.append(step);
+        sb.append("\n");
       }
     }
     return sb.toString();

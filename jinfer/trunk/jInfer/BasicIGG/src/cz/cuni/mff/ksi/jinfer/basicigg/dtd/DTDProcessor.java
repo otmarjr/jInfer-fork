@@ -24,7 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.io.InputStream;
@@ -54,6 +54,11 @@ public class DTDProcessor implements Processor {
   @Override
   public String getExtension() {
     return "dtd";
+  }
+
+  @Override
+  public boolean processUndefined() {
+    return false;
   }
 
   @Override

@@ -16,12 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.AbstractAction;
@@ -29,6 +31,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileChooserBuilder;
 import org.openide.nodes.Node;
+import org.openide.util.Lookup;
 
 /**
  * Action for folder node which add specific file into input folder.
@@ -53,21 +56,52 @@ public class FileAddAction extends AbstractAction {
 
   @Override
   public void actionPerformed(final ActionEvent e) {
+    final Collection<? extends Processor> processors = Lookup.getDefault().
+            lookupAll(Processor.class);
+
+    final StringBuilder builder = new StringBuilder();
+
+    if (FolderType.XML.equals(type)) {
+      builder.append("XML files (");
+    } else if (FolderType.SCHEMA.equals(type)) {
+      builder.append("Schema files (");
+    } else if (FolderType.QUERY.equals(type)) {
+      //
+    }
+
+    boolean first = true;
+    for (Processor processor : processors) {
+      if (type.equals(processor.getFolder())) {
+        if (first) {
+          first = false;
+          builder.append("*.").append(processor.getExtension());
+        } else {
+          builder.append(", *.").append(processor.getExtension());
+        }
+      }
+    }
+
+    builder.append(")");
+
     FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).
             setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add " + type.getName() + " files").setFilesOnly(true);
-    if (FolderType.XML.equals(type)) {
-      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
-              "XML files (*.xml)", "xml"));
-    } else if (FolderType.SCHEMA.equals(type)) {
-      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
-              "Schema files (*.dtd, *.xsd)", "dtd", "xsd"));
-    } else if (FolderType.QUERY.equals(type)) {
+
+    if (FolderType.QUERY.equals(type)) {
       fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
               "XPath files (*.xpath)", "xpath")).addFileFilter(new FileNameExtensionFilter(
               "Text files (*.txt)", "txt")).addFileFilter(new FileNameExtensionFilter(
               "Text and XPath files (*.txt, *.xpath)",
               "txt", "xpath"));
+    } else {
+      final ArrayList<String> extensions = new ArrayList<String>();
+      for (Processor processor : processors) {
+        if (type.equals(processor.getFolder())) {
+          extensions.add(processor.getExtension());
+        }
+      }
+      fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
+              builder.toString(), extensions.toArray(new String[extensions.size()])));
     }
 
     final File[] selectedFiles = fileChooserBuilder.showMultiOpenDialog();

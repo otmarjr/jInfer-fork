@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
-import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -131,6 +131,9 @@ public class IGGeneratorImpl implements IGGenerator {
     }
 
     for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
+      if (p.processUndefined()) {
+        ret.get(p.getFolder()).put("*", p);
+      }
       ret.get(p.getFolder()).put(p.getExtension(), p);
     }
 

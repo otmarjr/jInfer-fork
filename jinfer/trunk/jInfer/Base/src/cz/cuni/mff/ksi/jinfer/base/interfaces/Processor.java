@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.basicigg.interfaces;
+package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
@@ -39,6 +39,15 @@ public interface Processor {
    * Which extension can this processor process.
    */
   String getExtension();
+
+  /**
+   * Returns true if this processor process file with extension
+   * which is not defined by method getExtension().
+   * 
+   * @return true if this processor process file with extension
+   * which is not defined by method getExtension().
+   */
+  boolean processUndefined();
 
   /**
    * Returns the rules contained in the input.

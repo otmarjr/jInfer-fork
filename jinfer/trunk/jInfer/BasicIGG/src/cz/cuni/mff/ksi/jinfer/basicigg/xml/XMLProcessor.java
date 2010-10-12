@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicigg.xml;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import java.io.InputStream;
 import java.util.Collections;
@@ -41,7 +41,12 @@ public class XMLProcessor implements Processor {
 
   @Override
   public String getExtension() {
-    return "*";
+    return "xml";
+  }
+
+  @Override
+  public boolean processUndefined() {
+    return true;
   }
 
   @Override
@@ -57,7 +62,8 @@ public class XMLProcessor implements Processor {
       PARSER_FACTORY.newSAXParser().parse(f, handler);
       return handler.getRules();
     } catch (final Exception e) {
-      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
+      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).
+              getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error parsing XML file.", e);
       } else {
         LOG.warn("Error parsing XML file, ignoring and going on.", e);

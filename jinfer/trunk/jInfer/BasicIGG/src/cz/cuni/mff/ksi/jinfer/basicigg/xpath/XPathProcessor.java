@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -47,9 +47,14 @@ public class XPathProcessor implements Processor {
 
   @Override
   public String getExtension() {
-    return "*";
+    return "xpath";
   }
 
+  @Override
+  public boolean processUndefined() {
+    return true;
+  }
+  
   @Override
   public FolderType getFolder() {
     return FolderType.QUERY;
@@ -104,4 +109,5 @@ public class XPathProcessor implements Processor {
       }
     }
   }
+
 }

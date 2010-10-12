@@ -16,15 +16,21 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -33,6 +39,7 @@ import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.openide.filesystems.FileChooserBuilder;
 import org.openide.filesystems.FileUtil;
 import org.openide.nodes.Node;
+import org.openide.util.Lookup;
 
 /**
  * Action to add files to all input folders of jInfer project.
@@ -50,17 +57,38 @@ public class FilesAddAction extends AbstractAction {
 
   @Override
   public void actionPerformed(final ActionEvent e) {
-    final FileFilter fileFilter = new FileNameExtensionFilter("Files (*.xml, *.xsd, *.dtd, *.xpath)",
-            "xml", "xsd", "dtd", "xpath");
+    final List<String> extensions = getExtensions();
+
+    final StringBuilder builder = new StringBuilder("Files (");
+    boolean first = true;
+    for (String ext : extensions) {
+      if (first) {
+        first = false;
+        builder.append("*.").append(ext);
+      } else {
+        builder.append(", *.").append(ext);
+      }
+    }
+    builder.append(")");
+
+    final FileFilter fileFilter = new FileNameExtensionFilter(builder.toString(),
+            extensions.toArray(new String[extensions.size()]));
 
     final File[] selectedFiles = new FileChooserBuilder(FilesAddAction.class).
             setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add files").setFileFilter(fileFilter).setFilesOnly(true).showMultiOpenDialog();
 
     if (selectedFiles != null) {
-      final Collection<File> xmlFiles = getSpecificFiles(selectedFiles, "xml");
-      final Collection<File> schemaFiles = getSpecificFiles(selectedFiles, "xsd", "dtd");
-      final Collection<File> queryFiles = getSpecificFiles(selectedFiles, "xpath");
+      // find processor mappings for all folders
+      final Map<FolderType, List<String>> registeredProcessors = getRegisteredProcessors();
+
+
+      final Collection<File> xmlFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
+              FolderType.XML));
+      final Collection<File> schemaFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
+              FolderType.SCHEMA));
+      final Collection<File> queryFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
+              FolderType.QUERY));
 
       final Input input = project.getLookup().lookup(Input.class);
       input.getDocuments().addAll(xmlFiles);
@@ -83,17 +111,39 @@ public class FilesAddAction extends AbstractAction {
 
   }
 
-  private Collection<File> getSpecificFiles(final File[] files, final String... extensions) {
+  private Collection<File> getSpecificFiles(final File[] files, final List<String> extensions) {
     final Collection<File> result = new ArrayList<File>();
 
-    for (int i = 0; i < files.length; i++) {
-      File file = files[i];
-      for (String ext : extensions) {
-        if (ext.equalsIgnoreCase(FileUtil.toFileObject(file).getExt())) {
-          result.add(file);
-        }
+    for (File file : files) {
+      final String ext = FileUtils.getExtension(file.getAbsolutePath()).toLowerCase(Locale.ENGLISH);
+      if (extensions.contains(ext)) {
+        result.add(file);
       }
     }
+
     return result;
+  }
+
+  private List<String> getExtensions() {
+    final ArrayList<String> result = new ArrayList<String>();
+    for (Processor processor : Lookup.getDefault().lookupAll(Processor.class)) {
+      result.add(processor.getExtension().toLowerCase(Locale.ENGLISH));
+    }
+    return result;
+  }
+
+  private Map<FolderType, List<String>> getRegisteredProcessors() {
+    final Map<FolderType, List<String>> ret =
+            new HashMap<FolderType, List<String>>();
+
+    for (final FolderType ft : FolderType.values()) {
+      ret.put(ft, new ArrayList<String>());
+    }
+
+    for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
+      ret.get(p.getFolder()).add(p.getExtension().toLowerCase(Locale.ENGLISH));
+    }
+
+    return ret;
   }
 }

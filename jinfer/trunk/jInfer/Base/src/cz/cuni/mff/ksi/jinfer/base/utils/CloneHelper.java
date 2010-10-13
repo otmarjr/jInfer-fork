@@ -65,7 +65,6 @@ public class CloneHelper {
             cloneList(s.getContent()));
   }
 
-  // TODO vektor Test attribute cloning
   private Element cloneElement(final Element e) {
     if (cloned.containsKey(e)) {
       return cloned.get(e);

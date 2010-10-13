@@ -16,14 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.xpath;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         newElement.setName(localName);
         newElement.getMetadata().put("from.query", Boolean.TRUE);
         if (lastElement != null) {
-          lastElement.getSubnodes().addChild(getToken(newElement));
+          lastElement.getSubnodes().addChild(TestUtils.getToken(newElement));
           rules.add(lastElement);
         }
         lastElement = newElement;
@@ -135,7 +134,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
-      lastElement.getSubnodes().addChild(getToken(newSimpleData));
+      lastElement.getSubnodes().addChild(TestUtils.getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
       isSimpleData = false;
@@ -159,7 +158,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
-      lastElement.getSubnodes().addChild(getToken(newSimpleData));
+      lastElement.getSubnodes().addChild(TestUtils.getToken(newSimpleData));
       rules.add(lastElement);
       dirty = false;
     }
@@ -184,14 +183,5 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     }
 
     return rules;
-  }
-  
-  // TODO vektor Merge with the same method from ClusterProcessorTrieTest
-  private Regexp<AbstractStructuralNode> getToken(final AbstractStructuralNode n) {
-    final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
-    ret.setType(RegexpType.TOKEN);
-    ret.setInterval(RegexpInterval.getOnce());
-    ret.setContent(n);
-    return ret;
   }
 }

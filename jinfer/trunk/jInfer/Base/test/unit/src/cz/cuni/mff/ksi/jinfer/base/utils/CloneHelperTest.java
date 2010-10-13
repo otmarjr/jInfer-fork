@@ -149,4 +149,75 @@ public class CloneHelperTest {
     assert (e2o != e2);
     assert (e1o == e1oo);
   }
+
+  @Test
+  public void testAttributesOne() {
+    System.out.println("attributesOne");
+
+    final Element e1 = Element.getMutable();
+    e1.setName("test");
+    e1.getSubnodes().setType(RegexpType.LAMBDA);
+    final Attribute a1 = new Attribute(EMPTY_CONTEXT, "id", EMPTY_METADATA, null, EMPTY_CONTEXT);
+    e1.getAttributes().add(a1);
+
+    final List<Element> l = new ArrayList<Element>(1);
+    l.add(e1);
+    final List<Element> result = new CloneHelper().cloneRules(l);
+
+    assertEquals(1, result.size());
+    final Element e1o = result.get(0);
+    assertEquals(e1.getName(), e1o.getName());
+    assert (e1o != e1);
+    assertEquals(1, e1o.getAttributes().size());
+    assertEquals(e1.getAttributes().get(0).getName(), e1o.getAttributes().get(0).getName());
+    assert (e1.getAttributes().get(0) != e1o.getAttributes().get(0));
+  }
+
+  @Test
+  public void testAttributesTwo() {
+    System.out.println("attributesTwo");
+
+    final Element e1 = Element.getMutable();
+    e1.setName("test");
+    e1.getSubnodes().setType(RegexpType.LAMBDA);
+
+    final Attribute a1 = new Attribute(EMPTY_CONTEXT, "id", EMPTY_METADATA, null, EMPTY_CONTEXT);
+    e1.getAttributes().add(a1);
+
+    final Element e2 = Element.getMutable();
+    e2.setName("test2");
+    e2.getSubnodes().setType(RegexpType.LAMBDA);
+
+    final Attribute a2 = new Attribute(EMPTY_CONTEXT, "id2", EMPTY_METADATA, null, EMPTY_CONTEXT);
+    e2.getAttributes().add(a2);
+
+    final Attribute a3 = new Attribute(EMPTY_CONTEXT, "id3", EMPTY_METADATA, null, EMPTY_CONTEXT);
+    e1.getAttributes().add(a3);
+    e2.getAttributes().add(a3);
+
+    final List<Element> l = new ArrayList<Element>(1);
+    l.add(e1);
+    l.add(e2);
+    final List<Element> result = new CloneHelper().cloneRules(l);
+
+    assertEquals(2, result.size());
+    final Element e1o = result.get(0);
+    assertEquals(e1.getName(), e1o.getName());
+    assert (e1o != e1);
+
+    final Element e2o = result.get(1);
+    assertEquals(e2.getName(), e2o.getName());
+    assert (e2o != e2);
+
+    assertEquals(2, e1o.getAttributes().size());
+    assertEquals(2, e2o.getAttributes().size());
+    assertEquals(e1.getAttributes().get(0).getName(), e1o.getAttributes().get(0).getName());
+    assertEquals(e1.getAttributes().get(1).getName(), e1o.getAttributes().get(1).getName());
+    assertEquals(e2.getAttributes().get(0).getName(), e2o.getAttributes().get(0).getName());
+    assertEquals(e2.getAttributes().get(1).getName(), e2o.getAttributes().get(1).getName());
+    assert (e1.getAttributes().get(0) != e1o.getAttributes().get(0));
+    assert (e1.getAttributes().get(1) != e1o.getAttributes().get(1));
+    assert (e2.getAttributes().get(0) != e2o.getAttributes().get(0));
+    assert (e2.getAttributes().get(1) != e2o.getAttributes().get(1));
+  }
 }

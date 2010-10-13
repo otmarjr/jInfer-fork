@@ -27,7 +27,7 @@ import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 
 /**
- * TODO vektor Comment!
+ * TODO rio Comment!
  * @author vektor
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.autoeditor.gui//AutoEditor//EN",

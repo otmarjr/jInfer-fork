@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 
 /**
@@ -33,7 +34,10 @@ public final class TestUtils {
   private TestUtils() {
   }
 
-  // TODO vektor Comment!
+  /**
+   * Returns a simple textual representation of specified element, fit for using
+   * in unit tests.
+   */
   public static String elementToStr(final Element e) {
     final StringBuilder ret = new StringBuilder(e.getName());
     if (!BaseUtils.isEmpty(e.getAttributes())) {
@@ -50,7 +54,10 @@ public final class TestUtils {
     return ret.toString();
   }
 
-  // TODO vektor Comment!
+  /**
+   * Returns a simple textual representation of specified regexp, fit for using
+   * in unit tests.
+   */
   public static String regexpToStr(final Regexp<AbstractStructuralNode> r) {
     switch (r.getType()) {
       case TOKEN:
@@ -75,6 +82,19 @@ public final class TestUtils {
       default:
         throw new IllegalArgumentException("Unknown enum member " + r.getType());
     }
+  }
+
+  /**
+   * Encapsulates the specified node into a mutable token regexp with interval
+   * "once".
+   */
+  public static Regexp<AbstractStructuralNode> getToken(
+          final AbstractStructuralNode n) {
+    final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
+    ret.setType(RegexpType.TOKEN);
+    ret.setInterval(RegexpInterval.getOnce());
+    ret.setContent(n);
+    return ret;
   }
 
   private static String getDelimiter(final RegexpType t) {

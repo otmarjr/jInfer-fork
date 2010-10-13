@@ -22,16 +22,16 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska;
  * @author rio
  * TODO rio comment
  */
-public class Point {
+public class Coordinate {
   private int x;
   private int y;
 
-  public Point() {
+  public Coordinate() {
     x = 0;
     y = 0;
   }
 
-  public Point(final int x, final int y) {
+  public Coordinate(final int x, final int y) {
     this.x = x;
     this.y = y;
   }
@@ -49,7 +49,7 @@ public class Point {
     return y;
   }
 
-  public boolean equals(final Point other) {
+  public boolean equals(final Coordinate other) {
     return (this.x == other.x && this.y == other.y);
   }
 

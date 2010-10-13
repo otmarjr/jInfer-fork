@@ -14,54 +14,53 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 
-/**
- * Maps states, ellipses and points for the plotting purposes.
+/** TODO rio refactor
+ * Maps states, ellipses and stateCoordinates for the plotting purposes.
  *
  * @author Julie Vyhnanovska
  *
  */
 public class StateMapping<T> {
 
-	private final State<T>[]	states;
+  private final State<T>[] states;
+  private final Coordinate[] stateCoordinates;
+  private int actual = 0;
 
-	private final Point[]		points;
+  public StateMapping(final int numberOfStates) {
+    states = new State[numberOfStates];
+    stateCoordinates = new Coordinate[numberOfStates];
+  }
 
-	private int					actual	= 0;
+  public void addStateCoordinate(final State<T> state, final Coordinate coordinate) {
+    assert(actual < states.length);
 
-	public StateMapping(final int size) {
-		states = new State[size];
-		points = new Point[size];
-	}
+    states[actual] = state;
+    stateCoordinates[actual] = coordinate;
+    ++actual;
+  }
 
-	public void add(final State<T> state, final Point point) {
-		if (actual < states.length) {
-			states[actual] = state;
-			points[actual] = point;
-			actual++;
-		}
-	}
+  public State<T> getStateAtCoordinate(final Coordinate coordinate) {
+    for (int i = 0; i < stateCoordinates.length; ++i) {
+      if (stateCoordinates[i] == null) {
+        continue;
+      }
+      if (stateCoordinates[i].equals(coordinate)) {
+        return states[i];
+      }
+    }
+    return null;
+  }
 
-	public State<T> getState(final Point point) {
-		for (int i = 0; i < points.length; i++) {
-          if (points[i] == null) {
-            continue;
-          }
-			if (points[i].equals(point))
-				return states[i];
-		}
-		return null;
-	}
-
-	public Point getPoint(final State<T> state) {
-		for (int i = 0; i < states.length; i++) {
-			if (states[i] == state)
-				return points[i];
-		}
-		return null;
-	}
+  public Coordinate getStateCoordinate(final State<T> state) {
+    for (int i = 0; i < states.length; i++) {
+      if (states[i] == state) {
+        return stateCoordinates[i];
+      }
+    }
+    return null;
+  }
 }

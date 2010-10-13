@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
+import cz.cuni.mff.ksi.jinfer.autoeditor.BububuEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -39,12 +40,12 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolTostring) throws InterruptedException {
-    final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
+    final AutoEditor<T> gui= new BububuEditor<T>(symbolTostring);
     List<State<T>> mergeLst;
     do {
       mergeLst = gui.drawAutomatonToPickStates(inputAutomaton);
 
-      if (!BaseUtils.isEmpty(mergeLst)) {
+      if ((!BaseUtils.isEmpty(mergeLst))&&(mergeLst.size() >= 2)) {
         LOG.debug("AUTO EDITOR selected: " + mergeLst.toString());
         inputAutomaton.mergeStates(mergeLst);
         LOG.debug("After merge:");

@@ -37,7 +37,7 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
   private static final Logger LOG = Logger.getLogger(ClustererWithAttributesInameFactory.class);
 
   @Override
-  public Clusterer<AbstractStructuralNode> create() {
+  public Clusterer create() {
     LOG.debug("Creating new ClustererWithAttributesIname.");
     return new ClustererWithAttributesIname();
   }

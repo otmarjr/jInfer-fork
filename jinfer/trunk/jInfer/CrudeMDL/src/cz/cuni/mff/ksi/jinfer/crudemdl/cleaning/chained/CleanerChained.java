@@ -15,22 +15,22 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
+package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Factory interface for ClusterProcessor. Implementations should be annotated
+ * TODO anti Comment!
  *
- * \@ServiceProvider(service = ClusterProcessorFactory.class)
- *
- * to enable simplifier to find implementation by lookups.
- * 
  * @author anti
  */
-public interface ClusterProcessorFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
-  <T> ClusterProcessor<T> create();
+public class CleanerChained<T> implements RegularExpressionCleaner<T> {
+  @Override
+  public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
+    return regexp;
+  }
 }

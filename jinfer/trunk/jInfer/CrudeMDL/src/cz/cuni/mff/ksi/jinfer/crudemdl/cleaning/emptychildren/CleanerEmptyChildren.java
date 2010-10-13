@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.nestedconcatenation;
+package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.emptychildren;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @author anti
  */
-public class CleanerNestedConcatenation<T> implements RegularExpressionCleaner<T> {
+public class CleanerEmptyChildren<T> implements RegularExpressionCleaner<T> {
   @Override
   public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
     switch (regexp.getType()) {
@@ -38,15 +38,15 @@ public class CleanerNestedConcatenation<T> implements RegularExpressionCleaner<T
       case ALTERNATION:
       case PERMUTATION:
       case CONCATENATION:
+        if (regexp.getChildren().isEmpty()) {
+          return Regexp.<T>getLambda();
+        }
+        if (regexp.getChildren().size() == 1) {
+          return cleanRegularExpression(regexp);
+        }
         List<Regexp<T>> newChildren= new ArrayList<Regexp<T>>();
         for (Regexp<T> child : regexp.getChildren()) {
-          if (child.isConcatenation()&&regexp.isConcatenation()) {
-            for (Regexp<T> subChild : child.getChildren()) {
-              newChildren.add(cleanRegularExpression(subChild));
-            }
-          } else {
-            newChildren.add(cleanRegularExpression(child));
-          }
+          newChildren.add(cleanRegularExpression(child));
         }
         Regexp<T> newRegexp= Regexp.<T>getMutable();
         newRegexp.setInterval(regexp.getInterval());

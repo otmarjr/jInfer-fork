@@ -77,22 +77,23 @@ public final class RunnerPanel extends javax.swing.JPanel {
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.ipadx = 100;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(openSchema, gridBagConstraints);
 
     namePattern.setText(org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.namePattern.text")); // NOI18N
+    namePattern.setMaximumSize(new java.awt.Dimension(100, 27));
+    namePattern.setMinimumSize(new java.awt.Dimension(100, 27));
+    namePattern.setPreferredSize(new java.awt.Dimension(100, 27));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.ipadx = 100;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(namePattern, gridBagConstraints);
 
-    nameTemplateHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13)); // NOI18N
+    nameTemplateHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13));
     org.openide.awt.Mnemonics.setLocalizedText(nameTemplateHelp, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.nameTemplateHelp.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -101,7 +102,7 @@ public final class RunnerPanel extends javax.swing.JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel1.add(nameTemplateHelp, gridBagConstraints);
 
-    openSchemaHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13)); // NOI18N
+    openSchemaHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13));
     org.openide.awt.Mnemonics.setLocalizedText(openSchemaHelp, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.openSchemaHelp.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -150,7 +151,7 @@ public final class RunnerPanel extends javax.swing.JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel2.add(jLabel1, gridBagConstraints);
 
-    jLabel2.setFont(new java.awt.Font("DejaVu Sans", 2, 13)); // NOI18N
+    jLabel2.setFont(new java.awt.Font("DejaVu Sans", 2, 13));
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jLabel2.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -187,11 +188,11 @@ public final class RunnerPanel extends javax.swing.JPanel {
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 1172, Short.MAX_VALUE)
+      .addGap(0, 796, Short.MAX_VALUE)
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 209, Short.MAX_VALUE)
+      .addGap(0, 202, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

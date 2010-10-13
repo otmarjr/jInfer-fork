@@ -49,21 +49,21 @@ public class ClusterProcessorTrieTest {
    */
   private Regexp<AbstractStructuralNode> getTestTree() {
     final List<Regexp<AbstractStructuralNode>> c0 = new ArrayList<Regexp<AbstractStructuralNode>>(3);
-    c0.add(getToken(getElement("1")));
-    c0.add(getToken(getElement("2")));
+    c0.add(TestUtils.getToken(getElement("1")));
+    c0.add(TestUtils.getToken(getElement("2")));
     final List<Regexp<AbstractStructuralNode>> c1 = new ArrayList<Regexp<AbstractStructuralNode>>(2);
     final List<Regexp<AbstractStructuralNode>> c2 = new ArrayList<Regexp<AbstractStructuralNode>>(2);
-    c2.add(getToken(getElement("3")));
-    c2.add(getToken(getElement("5")));
+    c2.add(TestUtils.getToken(getElement("3")));
+    c2.add(TestUtils.getToken(getElement("5")));
     c1.add(getConcatOf(c2));
     final List<Regexp<AbstractStructuralNode>> c3 = new ArrayList<Regexp<AbstractStructuralNode>>(2);
-    c3.add(getToken(getElement("4")));
+    c3.add(TestUtils.getToken(getElement("4")));
     final List<Regexp<AbstractStructuralNode>> c4 = new ArrayList<Regexp<AbstractStructuralNode>>(2);
     final List<Regexp<AbstractStructuralNode>> c5 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
-    c5.add(getToken(getElement("6")));
+    c5.add(TestUtils.getToken(getElement("6")));
     c4.add(getConcatOf(c5));
     final List<Regexp<AbstractStructuralNode>> c6 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
-    c6.add(getToken(getElement("7")));
+    c6.add(TestUtils.getToken(getElement("7")));
     c4.add(getConcatOf(c6));
     c3.add(getAltOf(c4));
     c1.add(getConcatOf(c3));
@@ -80,7 +80,7 @@ public class ClusterProcessorTrieTest {
 
     // add 1 - a split should occur right after it
     final List<Regexp<AbstractStructuralNode>> l1 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
-    l1.add(getToken(getElement("1")));
+    l1.add(TestUtils.getToken(getElement("1")));
     final Regexp<AbstractStructuralNode> a1 = getConcatOf(l1);
     ClusterProcessorTrie.addBranchToTree(t, a1);
     System.out.println(TestUtils.regexpToStr(t));
@@ -89,7 +89,7 @@ public class ClusterProcessorTrieTest {
 
     // add 7 - it should be added to the root
     final List<Regexp<AbstractStructuralNode>> l2 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
-    l2.add(getToken(getElement("7")));
+    l2.add(TestUtils.getToken(getElement("7")));
     final Regexp<AbstractStructuralNode> a2 = getConcatOf(l2);
     ClusterProcessorTrie.addBranchToTree(t, a2);
     System.out.println(TestUtils.regexpToStr(t));
@@ -98,8 +98,8 @@ public class ClusterProcessorTrieTest {
 
     // add 1 8
     final List<Regexp<AbstractStructuralNode>> l3 = new ArrayList<Regexp<AbstractStructuralNode>>(2);
-    l3.add(getToken(getElement("1")));
-    l3.add(getToken(getElement("8")));
+    l3.add(TestUtils.getToken(getElement("1")));
+    l3.add(TestUtils.getToken(getElement("8")));
     final Regexp<AbstractStructuralNode> a3 = getConcatOf(l3);
     ClusterProcessorTrie.addBranchToTree(t, a3);
     System.out.println(TestUtils.regexpToStr(t));
@@ -108,9 +108,9 @@ public class ClusterProcessorTrieTest {
 
     // add 1 7 9
     final List<Regexp<AbstractStructuralNode>> l4 = new ArrayList<Regexp<AbstractStructuralNode>>(3);
-    l4.add(getToken(getElement("1")));
-    l4.add(getToken(getElement("7")));
-    l4.add(getToken(getElement("9")));
+    l4.add(TestUtils.getToken(getElement("1")));
+    l4.add(TestUtils.getToken(getElement("7")));
+    l4.add(TestUtils.getToken(getElement("9")));
     final Regexp<AbstractStructuralNode> a4 = getConcatOf(l4);
     ClusterProcessorTrie.addBranchToTree(t, a4);
     System.out.println(TestUtils.regexpToStr(t));
@@ -119,10 +119,10 @@ public class ClusterProcessorTrieTest {
 
     // add 1 7 9 2
     final List<Regexp<AbstractStructuralNode>> l5 = new ArrayList<Regexp<AbstractStructuralNode>>(4);
-    l5.add(getToken(getElement("1")));
-    l5.add(getToken(getElement("7")));
-    l5.add(getToken(getElement("9")));
-    l5.add(getToken(getElement("2")));
+    l5.add(TestUtils.getToken(getElement("1")));
+    l5.add(TestUtils.getToken(getElement("7")));
+    l5.add(TestUtils.getToken(getElement("9")));
+    l5.add(TestUtils.getToken(getElement("2")));
     final Regexp<AbstractStructuralNode> a5 = getConcatOf(l5);
     ClusterProcessorTrie.addBranchToTree(t, a5);
     System.out.println(TestUtils.regexpToStr(t));
@@ -156,14 +156,6 @@ public class ClusterProcessorTrieTest {
   }
 
   // TODO vektor These methods deserve to be somewhere shared
-
-  private Regexp<AbstractStructuralNode> getToken(final AbstractStructuralNode n) {
-    final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
-    ret.setType(RegexpType.TOKEN);
-    ret.setInterval(RegexpInterval.getOnce());
-    ret.setContent(n);
-    return ret;
-  }
 
   private AbstractStructuralNode getElement(final String name) {
     final Element ret = Element.getMutable();

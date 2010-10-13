@@ -66,7 +66,20 @@ public class CollectionToString {
     return colToString(collection, separator, toStringStrategy, "(", ")");
   }
 
-  // TODO vektor Comment!
+  /**
+   * Converts a collection to a string looking like this: (a,b,c,d).
+   *
+   * Separator and strategy of turning collection elements to string is configurable.
+   *
+   * @param <T> Type on which we work.
+   * @param collection Collection to be turned into a string.
+   * @param separator A character that will separate the elements.
+   * @param toStringStrategy Strategy how to convert an element of the
+   *  collection to a string.
+   * @param braceOpen How to opening brace should look like (empty string is OK).
+   * @param braceClose How to closing brace should look like (empty string is OK).
+   * @return String representing the collection.
+   */
   public static <T> String colToString(final Collection<T> collection,
           final String separator, final ToString<T> toStringStrategy,
           final String braceOpen, final String braceClose) {

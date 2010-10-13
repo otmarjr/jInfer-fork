@@ -147,7 +147,7 @@ public final class ValidateAction extends NodeAction {
                 println("(" + file.getName() + "." + file.getExt() + ":" + realLineNum + "/" + e.getColumnNumber() + ")",
                 new ValiadtionOutputListener(file, realLineNum, e.getColumnNumber()));
       } catch (IOException ex) {
-        //TODO VEKTOR co s tymto?? (previously anonym todo, given to vektor by anti)
+        // TODO sviro what to do here?? (previously anonym todo, given to sviro by vektor)
         ioResult.getOut().close();
       }
       ioResult.getOut().close();

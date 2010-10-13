@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: cz.cuni.mff.ksi.jinfer.modularsimplifier/3
-OpenIDE-Module-Implementation-Version: 3
-OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/modularsimplifier/Bundle.properties
-OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.Simplifier
-

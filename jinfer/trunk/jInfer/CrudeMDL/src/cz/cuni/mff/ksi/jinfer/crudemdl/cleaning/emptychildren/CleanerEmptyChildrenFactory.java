@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,9 +31,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegularExpressionCleanerFactory.class)
 public class CleanerEmptyChildrenFactory implements RegularExpressionCleanerFactory {
+  private static final Logger LOG = Logger.getLogger(CleanerEmptyChildrenFactory.class);
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {
+    LOG.debug("Creating new CleanerEmptyChildren.");
     return new CleanerEmptyChildren<T>();
   }
 

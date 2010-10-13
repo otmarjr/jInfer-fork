@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
@@ -26,9 +25,14 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
+import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import java.awt.Dimension;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,15 +70,15 @@ import org.openide.windows.WindowManager;
  * @author rio
  */
 public class AutoEditor<T> {
+
   private SymbolToString<T> symbolToString;
 
   public AutoEditor(SymbolToString<T> symbolToString) {
-    this.symbolToString= symbolToString;
+    this.symbolToString = symbolToString;
   }
 
   public AutoEditor() {
   }
-
   /**
    * Variable used to pass data to the GUI and gets the result of user
    * interaction.
@@ -113,39 +117,47 @@ public class AutoEditor<T> {
     //final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
 
     // TODO rio toto je kod Julie
-    final int	MIN_X_SIZE	= 7;
-	final int	MIN_Y_SIZE	= 3;
-	final int	SQUARE_SIZE	= 100;
-    final AutomatonLayoutTransformer<T> automatonLayoutTransformer = new AutomatonLayoutTransformer<T>(MIN_X_SIZE, MIN_Y_SIZE, SQUARE_SIZE, graph, automaton);
+    final int MIN_X_SIZE = 7;
+    final int MIN_Y_SIZE = 3;
+    final int SQUARE_SIZE = 100;
+    final AutomatonLayoutTransformer<T> automatonLayoutTransformer = new AutomatonLayoutTransformer<T>(
+            MIN_X_SIZE, MIN_Y_SIZE, SQUARE_SIZE, graph, automaton);
     final Dimension dimension = automatonLayoutTransformer.getDimension();
-	final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph, automatonLayoutTransformer, dimension);
+    final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph,
+            automatonLayoutTransformer, dimension);
 
     //layout.setSize(new Dimension(300,300)); // sets the initial size of the space
 
     visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layout);
     //visualizationViewer.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
-    visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
+    visualizationViewer.getRenderContext().setVertexLabelTransformer(
+            new ToStringLabeller<State<T>>());
     visualizationViewer.getRenderContext().setEdgeLabelTransformer(
             new Transformer<Step<T>, String>() {
+
               @Override
               public String transform(Step<T> i) {
                 return symbolToString.toString(i.getAcceptSymbol());
               }
-    });
+            });
 
     final PluggableGraphMouse gm = new PluggableGraphMouse();
     gm.add(new PickingUnlimitedGraphMousePlugin<State<T>, Step<T>>());
+    gm.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0));
+    gm.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK | MouseEvent.CTRL_MASK));
     visualizationViewer.setGraphMouse(gm);
 
     // Call GUI in a special thread. Required by NB.
-    synchronized(this) {
+    synchronized (this) {
       WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
         @Override
         public void run() {
           // Pass this as argument so the thread will be able to wake us up.
-          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(AutoEditor.this, visualizationViewer, "Please select two states to be merged together.");
+          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(
+                  AutoEditor.this, visualizationViewer,
+                  "Please select two states to be merged together.");
         }
       });
 

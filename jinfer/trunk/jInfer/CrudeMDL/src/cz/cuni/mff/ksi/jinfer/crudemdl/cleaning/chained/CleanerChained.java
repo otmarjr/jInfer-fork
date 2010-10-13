@@ -18,9 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
-import java.util.ArrayList;
+import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import java.util.List;
 
 /**
@@ -29,8 +28,18 @@ import java.util.List;
  * @author anti
  */
 public class CleanerChained<T> implements RegularExpressionCleaner<T> {
+  final List<RegularExpressionCleanerFactory> cleanerFactories;
+
+  public CleanerChained(List<RegularExpressionCleanerFactory> cleanerFactories) {
+    this.cleanerFactories= cleanerFactories;
+  }
+
   @Override
   public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
-    return regexp;
+    Regexp<T> newRegexp= regexp;
+    for (RegularExpressionCleanerFactory f : cleanerFactories) {
+      newRegexp= f.<T>create().cleanRegularExpression(newRegexp);
+    }
+    return newRegexp;
   }
 }

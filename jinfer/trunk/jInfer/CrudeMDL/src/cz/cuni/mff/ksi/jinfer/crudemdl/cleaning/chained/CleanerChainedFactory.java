@@ -17,10 +17,15 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,13 +35,17 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegularExpressionCleanerFactory.class)
 public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
+  private static final Logger LOG = Logger.getLogger(CleanerChainedFactory.class);
+  
   public static final String NAME = "RegularExpressionCleanerChained";
   public static final String DISPLAY_NAME = "Chaining another existing cleaners cleaner";
   public static final String PROPERTIES_PREFIX = "chain";
+  public static final String PROPERTIES_COUNT = "count";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {
-    return new CleanerChained<T>();
+    LOG.debug("Creating new CleanerChained.");
+    return new CleanerChained<T>(getCleanerFactories());
   }
 
   @Override
@@ -61,4 +70,21 @@ public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
     return sb.toString();
   }
 
+  public List<RegularExpressionCleanerFactory> getCleanerFactories() {
+    Properties p = RunningProject.getActiveProjectProps(NAME);
+    List<RegularExpressionCleanerFactory> result= new ArrayList<RegularExpressionCleanerFactory>();
+
+    String _count = p.getProperty(PROPERTIES_COUNT);
+    int count;
+    try {
+      count = Integer.valueOf(_count);
+    } catch (NumberFormatException e) {
+      count = 0;
+    }
+    for (int c = 0; c < count; c++) {
+      String name = p.getProperty(PROPERTIES_PREFIX + String.valueOf(c));
+      result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, name));
+    }
+    return result;
+  }
 }

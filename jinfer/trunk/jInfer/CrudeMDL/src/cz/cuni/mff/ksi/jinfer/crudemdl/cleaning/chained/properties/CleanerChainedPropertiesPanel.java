@@ -138,15 +138,15 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void store() {
+    int lastSet= 0;
     for (Integer i : dynamicComponents.keySet()) {
       if (dynamicComponents.get(i).getSelectedIndex() > 0) {
-        properties.setProperty(CleanerChainedFactory.PROPERTIES_PREFIX + String.valueOf(i),
+        properties.setProperty(CleanerChainedFactory.PROPERTIES_PREFIX + lastSet,
               (String) dynamicComponents.get(i).getSelectedItem());
-      } else {
-        properties.setProperty(CleanerChainedFactory.PROPERTIES_PREFIX + String.valueOf(i),
-              "");
+        lastSet++;
       }
     }
+    properties.setProperty(CleanerChainedFactory.PROPERTIES_COUNT, String.valueOf(lastSet));
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   // End of variables declaration//GEN-END:variables

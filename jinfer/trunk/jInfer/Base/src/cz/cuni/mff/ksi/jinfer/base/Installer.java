@@ -70,10 +70,10 @@ public class Installer extends ModuleInstall {
       }
 
       // TODO riacik rio check if kosher - i changed log format to LEVEL [ClassNameNotFull]: string
-      final String lgName= le.getLoggerName();
-      final String message = le.getLevel().toString() +
-              " [" + lgName.substring(lgName.lastIndexOf(".") + 1) + "]: " +
-              this.layout.format(le);
+      final String lgName = le.getLoggerName();
+      final String message = le.getLevel().toString()
+              + " [" + lgName.substring(lgName.lastIndexOf('.') + 1) + "]: "
+              + this.layout.format(le);
       if (IOColorPrint.isSupported(io)) {
         try {
           IOColorPrint.print(io, message, textColor);

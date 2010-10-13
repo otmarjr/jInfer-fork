@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.regexp;
 
 /**
@@ -32,20 +31,21 @@ package cz.cuni.mff.ksi.jinfer.base.regexp;
  * @author anti
  */
 public class RegexpInterval {
+
   private final int min;
   private final int max;
   private final boolean unbounded;
 
   private RegexpInterval(final int min, final int max) {
-    this.min= min;
-    this.max= max;
-    this.unbounded= false;
+    this.min = min;
+    this.max = max;
+    this.unbounded = false;
   }
 
   private RegexpInterval(final int min) {
-    this.min= min;
-    this.max= -1;
-    this.unbounded= true;
+    this.min = min;
+    this.max = -1;
+    this.unbounded = true;
   }
 
   public RegexpInterval getCopy() {
@@ -80,7 +80,7 @@ public class RegexpInterval {
    * @return
    */
   public static RegexpInterval getOnce() {
-    return new RegexpInterval(1,1);
+    return new RegexpInterval(1, 1);
   }
 
   /**
@@ -154,5 +154,4 @@ public class RegexpInterval {
       return "{" + min + "," + max + "}";
     }
   }
-
 }

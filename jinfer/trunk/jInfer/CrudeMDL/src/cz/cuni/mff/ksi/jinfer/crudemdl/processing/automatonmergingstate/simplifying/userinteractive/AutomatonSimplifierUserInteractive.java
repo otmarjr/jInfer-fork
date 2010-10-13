@@ -40,7 +40,7 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolTostring) throws InterruptedException {
-    final AutoEditor<T> gui= new BububuEditor<T>(symbolTostring);
+    final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
     List<State<T>> mergeLst;
     do {
       mergeLst = gui.drawAutomatonToPickStates(inputAutomaton);

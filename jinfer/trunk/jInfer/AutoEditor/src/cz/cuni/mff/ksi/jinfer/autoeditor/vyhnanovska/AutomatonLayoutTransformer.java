@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
@@ -28,255 +27,260 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.graph.Graph;
 import org.apache.log4j.Logger;
 
-/**
- * Transforms the state to a point on which it should be plotted. - A visualisation tool
+/** TODO rio refactor
+ * Transforms the state to a distance on which it should be plotted. - A visualisation tool
  *
  * @author Julie Vyhnanovska
  *
  */
 public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Point2D> {
 
-  // TODO rio rename to LOG
-	private static Logger log = Logger.getLogger(AutomatonLayoutTransformer.class);
+  private static Logger LOG = Logger.getLogger(AutomatonLayoutTransformer.class);
 
-	private final int			minXsize;
+  // minimalne rozmery mriezky a podla ich pomeru sa vypocitava gridSize
+  private final int minXsize;
+  private final int minYsize;
 
-	private final int			minYsize;
+  // velkost jedneho stvorca v mriezke
+  private final int squareSize;
 
-	private final int			squareSize;
+  // dimenzia mriezky = pocet stvorcov na x-ovej osy a pocet stvorcov na y-ovej osy
+  private final Dimension gridDimension;
 
-	private final int[]			gridAxes;
+  private final StateMapping stateGridMapping;
+  private static final double FILL_FACTOR = 3;
+  // TODO rio vyhodit automaton
+  private Automaton<T> automaton;
 
-	private final StateMapping	stateGridMapping;
+  // TODO rio vyhodit automaton
+  public AutomatonLayoutTransformer(final int minXsize, final int minYsize, final int square_size, final Graph<State<T>, Step<T>> graph, final Automaton<T> automaton) {
+    this.automaton = automaton;
+    this.minXsize = minXsize;
+    this.minYsize = minYsize;
+    this.squareSize = square_size;
+    final int vertexCount = graph.getVertexCount();
+    gridDimension = computeGridDimension((int) Math.round(vertexCount * FILL_FACTOR));
+    stateGridMapping = new StateMapping(vertexCount);
+  }
 
-	private static final double	FILL_FACTOR	= 1.3;
+  public Dimension getDimension() {
+    return new Dimension(gridDimension.width * squareSize, gridDimension.height * squareSize);
+  }
 
-    // TODO rio vyhodit automaton
-    private Automaton<T> automaton;
+  @Override
+  public Point2D transform(final State<T> state) {
+    LOG.info("transform location of " + state);
+    // TODO rio getId() == 1 znamena, ze je pociatocny??
+    //if (state.getId() == 1) {
+    // Pociatocny stav umiestni na [1,1].
+    if (state.equals(automaton.getInitialState())) {
+      final Coordinate statePosition = new Coordinate(1, 1);
+      stateGridMapping.addStateCoordinate(state, statePosition);
+      return getPoint(statePosition);
+    }
 
-    // TODO rio vyhodit automaton
-	public AutomatonLayoutTransformer(final int minXsize, final int minYsize, final int square_size, final Graph<State<T>, Step<T>> graph, final Automaton<T> automaton) {
-        this.automaton = automaton;
-		this.minXsize = minXsize;
-		this.minYsize = minYsize;
-		this.squareSize = square_size;
-		final int vertexCount = graph.getVertexCount();
-		gridAxes = computeGridSize((int) Math.round(vertexCount * FILL_FACTOR));
-		stateGridMapping = new StateMapping(vertexCount);
-	}
+    // Najdi nejaky (? skutocne nejaky?) stav, z ktoreho vedie hrana do tohoto
+    // stavu a je uz nakresleny.
+    // Ak taky neexistuje, vezmi, ze je to [1,1].
+    Coordinate prev = null;
+    for (final Step<T> backEdge : automaton.getReverseDelta().get(state)) {
+      prev = stateGridMapping.getStateCoordinate(backEdge.getSource());
+      if (prev != null) {
+        break;
+      }
+    }
+    if (prev == null) {
+      prev = new Coordinate(1, 1);
+    }
 
-	public Dimension getDimension() {
-		return new Dimension(gridAxes[0] * squareSize, gridAxes[1] * squareSize);
-	}
+    Coordinate nextI = prev;
+    LOG.info("nextI: " + nextI.getX() + " " + nextI.getY());
+    // Kym je na pozicii nextI obsadene alebo kym je nextI [1,1] (je nutna druha podmienka??) TODO
+    while (stateGridMapping.getStateAtCoordinate(nextI) != null || (nextI.equals(new Coordinate(1, 1)))) {
+      LOG.info("obsazeno!");
+      nextI = getNextCoordinate(prev, nextI, gridDimension);
+      if (nextI != null) {
+        LOG.info("nextI: " + nextI.getX() + " " + nextI.getY());
+        if (nextI.getX() < 1 || nextI.getY() < 1) {
+          LOG.error("invalid grid index: " + nextI.getX() + " " + nextI.getY());
+          return null;
+        }
+      }
+    }
 
-	@Override
-	public Point2D transform(final State<T> state) {
-		log.info("paint " + state);
-        // TODO rio getId() == 1 znamena, ze je pociatocny??
-		//if (state.getId() == 1) {
-        if (state.equals(automaton.getInitialState())) {
-			final Point statePosition = new Point(1, 1);
-			stateGridMapping.add(state, statePosition);
-			return getPoint(statePosition);
-		}
-		Point prev = null;
-		for (final Step<T> backEdge : automaton.getReverseDelta().get(state)) {
-			prev = stateGridMapping.getPoint(backEdge.getSource());
-			if (prev != null) {
-				break;
-			}
-		}
-		if (prev == null) {
-			prev = new Point(1, 1);
-		}
+    if (nextI != null) {
+      stateGridMapping.addStateCoordinate(state, nextI);
+      return getPoint(nextI);
+    }
 
-		Point nextI = prev;
-		log.info("nextI: " + nextI.getX() + " " + nextI.getY());
-		while (stateGridMapping.getState(nextI) != null || (nextI.equals(new Point(1, 1)))) {
-			log.info("obsazeno!");
-			nextI = getNextI(prev, nextI, gridAxes);
-			if (nextI != null) {
-				log.info("nextI: " + nextI.getX() + " " + nextI.getY());
-				if (nextI.getX() < 1 || nextI.getY() < 1) {
-					log.error("invalid grid index: " + nextI.getX() + " " + nextI.getY());
-					return null;
-				}
-			}
-		}
+    return null;
+  }
 
-		if (nextI != null) {
-			stateGridMapping.add(state, nextI);
-			return getPoint(nextI);
-		}
+  private Point2D getPoint(final Coordinate i) {
+    final double x = i.getX() * squareSize - squareSize / 2;
+    final double y = i.getY() * squareSize - squareSize / 2;
+    return new Point2D.Double(x, y);
+  }
 
-		return null;
-	}
+  private Dimension computeGridDimension(final int minGridSize) {
+    final Dimension dimension = new Dimension();
 
-	private Point2D getPoint(final Point i) {
-		final double x = i.getX() * squareSize - squareSize / 2;
-		final double y = i.getY() * squareSize - squareSize / 2;
-		return new Point2D.Double(x, y);
-	}
+    if (minGridSize < (minXsize * minYsize)) {
+      dimension.setSize(minXsize, minXsize);
+    } else {
+      dimension.width = (int) Math.round(Math.sqrt(minGridSize * minYsize / minXsize));
+      dimension.height = (int) Math.floor(minGridSize / dimension.width) + 1;
+    }
 
-	private int[] computeGridSize(final int minGridSize) {
-		final int[] axesSize = new int[2];
+    return dimension;
+  }
 
-		if (minGridSize < (minXsize * minYsize)) {
-			axesSize[0] = minXsize;
-			axesSize[1] = minYsize;
-		}
-		else {
-			axesSize[1] = (int) Math.round(Math.sqrt(minGridSize * minYsize / minXsize));
-			axesSize[0] = (int) Math.floor(minGridSize / axesSize[1]) + 1;
-		}
+  /*
+   * Vrati dalsi pole pro umisteni vrcholu, se stredem hledani ve startingCoordinate a aktualni pozici actualCoordinate. Pohybujeme se v
+   * mantinelech gridSize. Postupujeme od nejblizsich ctvercu po vzdalenejsi. Zaciname v pravem hornim rohu. X je
+   * stred hledani. Zaciname na 1 a postupujeme dolu, doleva, nahoru a dopava. Pote prejdeme do ctverce o jedno vyssi
+   * a opakujeme Kontrolujeme mantinely gridSize.
+   *
+   * | - - ->2 | | ->1 | | | X | | | - - | | - - - - |
+   */
+  private Coordinate getNextCoordinate(final Coordinate startingCoordinate, final Coordinate actualCoordinate, final Dimension gridDimension) {
 
-		return axesSize;
-	}
+    // vlastne vzdalenost actualCoordinate vuci vychozimu bodu startingCoordinate
+    final Coordinate distance = new Coordinate(actualCoordinate.getX() - startingCoordinate.getX(), actualCoordinate.getY() - startingCoordinate.getY());
+    LOG.info("distance: " + distance.getX() + ":" + distance.getY());
 
-	/*
-	 * Vrati dalsi pole pro umisteni vrcholu, se stredem hledani ve start a aktualni pozici actual. Pohybujeme se v
-	 * mantinelech gridAxes. Postupujeme od nejblizsich ctvercu po vzdalenejsi. Zaciname v pravem hornim rohu. X je
-	 * stred hledani. Zaciname na 1 a postupujeme dolu, doleva, nahoru a dopava. Pote prejdeme do ctverce o jedno vyssi
-	 * a opakujeme Kontrolujeme mantinely gridAxes.
-	 *
-	 * | - - ->2 | | ->1 | | | X | | | - - | | - - - - |
-	 */
-	private Point getNextI(final Point start, final Point actual, final int[] gridAxes) {
+    // index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
+    final int index = Math.max(Math.abs(distance.getX()), Math.abs(distance.getY()));
+    LOG.info("index: " + index);
 
-		// vlastne vzdalenost actual vuci vychozimu bodu statePosition
-		final Point point = new Point(actual.getX() - start.getX(), actual.getY() - start.getY());
-		log.info("point: " + point.getX() + ":" + point.getY());
+    // pokud jsem dokoncila ctverec, posunu se na dalsi
+    if (distance.equals(new Coordinate(index, -index))) {
+      return goNewIndex(startingCoordinate, gridDimension, index + 1);
+    } // jinak spocitam dalsi pozici
+    else {
+      return goNextI(startingCoordinate, actualCoordinate, gridDimension);
+    }
+  }
 
-		// index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
-		final int index = Math.max(Math.abs(point.getX()), Math.abs(point.getY()));
-		log.info("index: " + index);
+  private Coordinate goNextI(final Coordinate startingCoordinate, final Coordinate actualCoordinate, final Dimension gridDimension) {
+    LOG.info("goNextI");
+    // vlastne vzdalenost actualCoordinate vuci vychozimu bodu statePosition
+    final Coordinate point = new Coordinate(actualCoordinate.getX() - startingCoordinate.getX(), actualCoordinate.getY() - startingCoordinate.getY());
+    LOG.info("point: " + point.getX() + ":" + point.getY());
 
-		// pokud jsem dokoncila ctverec, posunu se na dalsi
-		if (point.equals(new Point(index, -index))) {
-			return goNewIndex(start, gridAxes, index + 1);
-		}
-		// jinak spocitam dalsi pozici
-		else {
-			return goNextI(start, actual, gridAxes);
-		}
-	}
+    // index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
+    final int index = Math.max(Math.abs(point.getX()), Math.abs(point.getY()));
+    LOG.info("index: " + index);
 
-	private Point goNextI(final Point i, final Point actual, final int[] gridAxes) {
-		log.info("goNextI");
-		// vlastne vzdalenost actual vuci vychozimu bodu statePosition
-		final Point point = new Point(actual.getX() - i.getX(), actual.getY() - i.getY());
-		log.info("point: " + point.getX() + ":" + point.getY());
+    // prava hrana, postupujeme dolu
+    if (point.getX() == index && point.getY() < index) {
+      LOG.info("prava hrana, postupujeme dolu");
+      if (actualCoordinate.getY() == gridDimension.height) { // nemuzu dolu, zkusime doleva
+        LOG.info("nemuzu dolu, zkusim doleva");
+        // TODO rio povodne tu bolo ...getX() - 2 * index
+        if (actualCoordinate.getX() <= startingCoordinate.getX() - index || actualCoordinate.getX() <= 1) { // nemuzu ani doleva, zkusim nahoru
+          LOG.info("nemuzu ani doleva, zkusim nahoru");
+          return goUp(startingCoordinate, gridDimension, index);
+        }
+        // TODO rio povodne tu bolo ...getX() - 2 * index
+        final Coordinate ret = new Coordinate(actualCoordinate.getX() - 1, actualCoordinate.getY());
+        LOG.info("ret: " + ret);
+        return ret;
+      }
+      final Coordinate ret = new Coordinate(actualCoordinate.getX(), actualCoordinate.getY() + 1);
+      LOG.info("ret: " + ret);
+      return ret;
+    }
 
-		// index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
-		final int index = Math.max(Math.abs(point.getX()), Math.abs(point.getY()));
-		log.info("index: " + index);
+    // spodni hrana, postupujeme doleva
+    if (point.getY() == index && point.getX() > -index) {
+      LOG.info("spodni hrana, postupuju doleva");
+      if (actualCoordinate.getX() == 1) { // nemuzu jit doleva, skocim nahoru
+        LOG.info("nemuzu jit doleva, skocim nahoru");
+        return goUp(startingCoordinate, gridDimension, index);
+      }
+      final Coordinate ret = new Coordinate(actualCoordinate.getX() - 1, actualCoordinate.getY());
+      LOG.info("ret: " + ret);
+      return ret;
+    }
 
-		// prava hrana, postupujeme dolu
-		if (point.getX() == index && point.getY() < index) {
-			log.info("prava hrana, postupujeme dolu");
-			if (actual.getY() == gridAxes[1]) { // nemuzu dolu, zkusime doleva
-				log.info("nemuzu dolu, zkusim doleva");
-				if ((actual.getX() - 2 * index) <= 0) { // nemuzu ani doleva, zkusim nahoru
-					log.info("nemuzu ani doleva, zkusim nahoru");
-					return goUp(i, gridAxes, index);
-				}
-				final Point ret = new Point(actual.getX() - 2 * index, actual.getY());
-				log.info("ret: " + ret);
-				return ret;
-			}
-			final Point ret = new Point(actual.getX(), actual.getY() + 1);
-			log.info("ret: " + ret);
-			return ret;
-		}
+    // leva hrana, postupujeme nahoru
+    if (point.getX() == -index && point.getY() > -index) {
+      LOG.info("leva hrana, postupujeme nahoru");
+      if (actualCoordinate.getY() == 1) { // nemuzu jit nahoru, zaciname s novym indexem
+        LOG.info("nemuzu jit nahoru, zacinam s novym indexem");
+        return goNewIndex(startingCoordinate, gridDimension, index + 1);
+      }
+      final Coordinate ret = new Coordinate(actualCoordinate.getX(), actualCoordinate.getY() - 1);
+      LOG.info("ret: " + ret);
+      return ret;
 
-		// spodni hrana, postupujeme doleva
-		if (point.getY() == index && point.getX() > -index) {
-			log.info("spodni hrana, postupuju doleva");
-			if (actual.getX() == 1) { // nemuzu jit doleva, skocim nahoru
-				log.info("nemuzu jit doleva, skocim nahoru");
-				return goUp(i, gridAxes, index);
-			}
-			final Point ret = new Point(actual.getX() - 1, actual.getY());
-			log.info("ret: " + ret);
-			return ret;
-		}
+    }
 
-		// leva hrana, postupujeme nahoru
-		if (point.getX() == -index && point.getY() > -index) {
-			log.info("leva hrana, postupujeme nahoru");
-			if (actual.getY() == 1) { // nemuzu jit nahoru, zaciname s novym indexem
-				log.info("nemuzu jit nahoru, zacinam s novym indexem");
-				return goNewIndex(i, gridAxes, index + 1);
-			}
-			final Point ret = new Point (actual.getX(), actual.getY() - 1);
-			log.info("ret: " + ret);
-			return ret;
+    // horni hrana, jdeme doprava
+    if (point.getY() == -index && point.getX() < index) {
+      LOG.info("horni hrana, jdeme doprava");
+      if (actualCoordinate.getX() == gridDimension.width) { // nemuzu jit doleva, zacinam s novym indexem
+        LOG.info("nemuzu jit doleva, zacinam s novym indexem");
+        return goNewIndex(startingCoordinate, gridDimension, index + 1);
+      }
+      if (point.getX() + 1 == index) { // jsem na konci, zacinam novy index
+        LOG.info("jsem na konci, zacinam novy index");
+        return goNewIndex(startingCoordinate, gridDimension, index + 1);
+      }
+      final Coordinate ret = new Coordinate(actualCoordinate.getX() + 1, actualCoordinate.getY());
+      LOG.info("ret: " + ret);
+      return ret;
+    }
+    return null;
+  }
 
-		}
+  private Coordinate goUp(final Coordinate i, final Dimension gridDimension, final int index) {
+    LOG.info("goUp");
+    // TODO rio povodne: if (i.getY() - index <= 0)
+    if (i.getY() - index <= 0) {// nemuzu jit ani nahoru, zaciname s novym indexem.
+      LOG.info("nemuzu jit ani nahoru, zacinam s novym indexem");
+      return goNewIndex(i, gridDimension, index + 1);
+    }
+    final Coordinate ret = new Coordinate(1, i.getY() - index);
+    LOG.info("ret: " + ret);
+    return ret;
+  }
 
-		// horni hrana, jdeme doprava
-		if (point.getY() == -index && point.getX() < index) {
-			log.info("horni hrana, jdeme doprava");
-			if (actual.getX() == gridAxes[0]) { // nemuzu jit doleva, zacinam s novym indexem
-				log.info("nemuzu jit doleva, zacinam s novym indexem");
-				return goNewIndex(i, gridAxes, index + 1);
-			}
-			if (point.getX() + 1 == index) { // jsem na konci, zacinam novy index
-				log.info("jsem na konci, zacinam novy index");
-				return goNewIndex(i, gridAxes, index + 1);
-			}
-			final Point ret = new Point(actual.getX() + 1, actual.getY());
-			log.info("ret: " + ret);
-			return ret;
-		}
-		return null;
-	}
+  private Coordinate goNewIndex(final Coordinate i, final Dimension gridDimension, final int index) {
+    LOG.info("goNewIndex: " + index);
+    // uz neni kam dal jit
+    if (index >= Math.max(gridDimension.width, gridDimension.height)) {
+      LOG.info("Go new index - Uz neni kam dal jit");
+      return null;
+    }
 
-	private Point goUp(final Point i, final int[] gridAxes, final int index) {
-		log.info("goUp");
-		if (i.getY() - index <= 0) {// nemuzu jit ani nahoru, zaciname s novym indexem.
-			log.info("nemuzu jit ani nahoru, zacinam s novym indexem");
-			return goNewIndex(i, gridAxes, index + 1);
-		}
-		final Point ret = new Point(1, i.getY() - index);
-		log.info("ret: " + ret);
-		return ret;
-	}
+    int actualX = i.getX() + index;
+    int actualY = i.getY() - index;
+    if (actualX > gridDimension.width) {
+      // pravou hranu nemuzu, prejdu rovnou dolu
+      actualY = i.getY() + index;
+      actualX = gridDimension.width + 1;
+      if (actualY > gridDimension.height) {
+        // spodni hranu taky nemuzu, takze doleva
+        actualY = gridDimension.height + 1;
+        actualX = i.getX() - index;
+        if (actualX < 1) {
+          // levou hranu taky ne... jdu nahoru
+          actualX = 0;
+          actualY = i.getY() - index;
+          if (actualY < 1) {
+            // nahoru taky nemuzu...
+            return null;
+          }
 
-	private Point goNewIndex(final Point i, final int[] gridAxes, final int index) {
-		log.info("goNewIndex: " + index);
-		// uz neni kam dal jit
-		if (index >= Math.max(gridAxes[0], gridAxes[1])) {
-			log.info("Go new index - Uz neni kam dal jit");
-			return null;
-		}
-
-		int actualX = i.getX() + index;
-		int actualY = i.getY() - index;
-		if (actualX > gridAxes[0]) {
-			// pravou hranu nemuzu, prejdu rovnou dolu
-			actualY = i.getY() + index;
-			actualX = gridAxes[0] + 1;
-			if (actualY > gridAxes[1]) {
-				// spodni hranu taky nemuzu, takze doleva
-				actualY = gridAxes[1] + 1;
-				actualX = i.getX() - index;
-				if (actualX < 1) {
-					// levou hranu taky ne... jdu nahoru
-					actualX = 0;
-					actualY = i.getY() - index;
-					if (actualY < 1) {
-						// nahoru taky nemuzu...
-						return null;
-					}
-
-				}
-			}
-		}
-		if (actualY < 0) {
-			actualY = 0;
-		}
-		final Point actual = new Point(actualX, actualY);
-		return goNextI(i, actual, gridAxes);
-	}
+        }
+      }
+    }
+    if (actualY < 0) {
+      actualY = 0;
+    }
+    final Coordinate actual = new Coordinate(actualX, actualY);
+    return goNextI(i, actual, gridDimension);
+  }
 }

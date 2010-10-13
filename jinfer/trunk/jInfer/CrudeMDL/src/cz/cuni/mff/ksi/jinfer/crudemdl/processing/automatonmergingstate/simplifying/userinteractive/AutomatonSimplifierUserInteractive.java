@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.BububuEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;

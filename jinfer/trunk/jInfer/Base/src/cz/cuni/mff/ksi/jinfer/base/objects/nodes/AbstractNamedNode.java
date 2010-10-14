@@ -101,6 +101,10 @@ public abstract class AbstractNamedNode implements NamedNode {
     return Collections.unmodifiableMap(metadata);
   }
 
+  public boolean isMutable() {
+    return this.mutable;
+  }
+
   public void setImmutable() {
     if (this.mutable) {
       mutable = false;

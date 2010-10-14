@@ -32,5 +32,5 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
  * @author anti
  */
 public interface ClusterProcessorFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
-  <T> ClusterProcessor<T> create();
+  ClusterProcessor<AbstractStructuralNode> create();
 }

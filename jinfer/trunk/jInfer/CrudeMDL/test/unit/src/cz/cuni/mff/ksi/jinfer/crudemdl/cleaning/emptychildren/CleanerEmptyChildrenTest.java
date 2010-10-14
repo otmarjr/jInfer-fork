@@ -17,9 +17,11 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.emptychildren;
 
+import java.util.Deque;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import java.util.ArrayDeque;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -33,7 +35,12 @@ public class CleanerEmptyChildrenTest {
     public CleanerEmptyChildrenTest() {
     }
 
-  private Regexp<String> createRegexp() {
+  /**
+   * Test of cleanRegularExpression method, of class CleanerEmptyChildren.
+   */
+  @Test
+  public void testCleanRegularExpression() {
+    System.out.println("cleanRegularExpression");
     Regexp<String> r1= Regexp.<String>getMutable();
     r1.setInterval(RegexpInterval.getOnce());
     r1.setType(RegexpType.CONCATENATION);
@@ -55,19 +62,43 @@ public class CleanerEmptyChildrenTest {
     r2.addChild(r1);
     r2.setImmutable();
 
-    return r2;
+    Regexp<String> regexp= r2;
+    CleanerEmptyChildren<String> instance = new CleanerEmptyChildren<String>();
+    Regexp<String> result = instance.cleanRegularExpression(regexp);
+    assertEquals("a", result.toString());
   }
 
   /**
    * Test of cleanRegularExpression method, of class CleanerEmptyChildren.
    */
   @Test
-  public void testCleanRegularExpression() {
-    System.out.println("cleanRegularExpression");
-    Regexp<String> regexp = createRegexp();
+  public void testCleanRegularExpression1() {
+    System.out.println("cleanRegularExpression1");
+
+    Regexp<String> r3= Regexp.<String>getMutable();
+    r3.setInterval(RegexpInterval.getOnce());
+    r3.setType(RegexpType.TOKEN);
+    r3.setContent("a");
+    r3.setImmutable();
+
+    Regexp<String> r2= Regexp.<String>getMutable();
+    r2.setInterval(RegexpInterval.getOnce());
+    r2.setType(RegexpType.CONCATENATION);
+    r2.addChild(r3);
+    r2.addChild(r3);
+    r2.addChild(r3);
+    r2.addChild(r3);
+    r2.setImmutable();
+
+    Regexp<String> r1= Regexp.<String>getMutable();
+    r1.setInterval(RegexpInterval.getOnce());
+    r1.setType(RegexpType.CONCATENATION);
+    r1.addChild(r2);
+    r1.setImmutable();
+
+    Regexp<String> regexp= r1;
     CleanerEmptyChildren<String> instance = new CleanerEmptyChildren<String>();
     Regexp<String> result = instance.cleanRegularExpression(regexp);
-    assertEquals("(a)", result.toString());
+    assertEquals("(a\n,a\n,a\n,a)", result.toString());
   }
-
 }

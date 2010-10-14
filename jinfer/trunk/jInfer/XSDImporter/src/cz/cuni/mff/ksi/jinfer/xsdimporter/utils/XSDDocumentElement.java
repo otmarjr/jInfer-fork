@@ -26,15 +26,26 @@ import java.util.Map;
  */
 public class XSDDocumentElement {
 
+  /**
+   * Name of element in the schema, trimmed of namespace.
+   * For example <code><xs:element name="Car" /></code>
+   * the name <code>trimmedQName</code> will be 'element'.
+   */
   private final String trimmedQName;
+  /**
+   * All attributes of the element.
+   */
   private final Map<String, SAXAttributeData> attrs;
 
   /* determines if the current XSDDocElem is a direct successor
    of named complex type (so it's a sequence/all/choice or complexContent/ext)
   */
-  private String associatedCTypeName;
-  private boolean associatedWithUnnamedCType;
+  private boolean associated;
 
+  /**
+   * Constructs an instance with given name and empty attribute list.
+   * @param trimmedQName Name of the schema element, should be set in lowercase.
+   */
   public XSDDocumentElement(final String trimmedQName) {
     if (trimmedQName == null || trimmedQName.equals("")) {
       throw new IllegalArgumentException("XDS Document Element: can't have empty or null element name!");
@@ -42,16 +53,7 @@ public class XSDDocumentElement {
       this.trimmedQName = trimmedQName;
     }
     attrs = new HashMap<String, SAXAttributeData>();
-    associatedCTypeName = "";
-    associatedWithUnnamedCType = false;
-  }
-
-  public String getAssociatedCTypeName() {
-    return associatedCTypeName;
-  }
-  
-  public void setAssociatedCTypeName(String associatedCTypeName) {
-    this.associatedCTypeName = associatedCTypeName;
+    associated = false;
   }
 
   public Map<String, SAXAttributeData> getAttrs() {
@@ -61,21 +63,35 @@ public class XSDDocumentElement {
   public String getName() {
     return trimmedQName;
   }
+
+  public String attributeNameValue() {
+    return attrs.get("name").getValue();
+  }
   
   public boolean isNamedComplexType() {
-    SAXAttributeData nameAttr = attrs.get("name");
-    return (nameAttr != null && !nameAttr.getQName().equals("") && isComplexType()) ? true : false;
+    final SAXAttributeData nameAttr = attrs.get("name");
+    return (nameAttr != null && !nameAttr.getQName().equals("") && !nameAttr.getValue().equals("") && isComplexType()) ? true : false;
   }
 
   public boolean isComplexType() {
     return (trimmedQName.equalsIgnoreCase("complextype")) ? true : false;
   }
 
-  public void associateWithUnnamedCType() {
-    this.associatedWithUnnamedCType = true;
+  /**
+   * Check if element is one of xs:choice, xs:sequence, xs:all.
+   * @return true if it is, false otherwise.
+   */
+  public boolean isOrderIndicator() {
+    return (trimmedQName.equalsIgnoreCase("choice")
+            || trimmedQName.equalsIgnoreCase("all")
+            || trimmedQName.equalsIgnoreCase("sequence")) ? true : false;
+  }
+
+  public void associate() {
+    this.associated = true;
   }
 
   public boolean isAssociated() {
-    return associatedWithUnnamedCType;
+    return associated;
   }
 }

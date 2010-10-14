@@ -31,6 +31,10 @@ import java.util.List;
 public class CleanerEmptyChildren<T> implements RegularExpressionCleaner<T> {
   @Override
   public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
+    return cleanRecursive(regexp, true);
+  }
+
+  private Regexp<T> cleanRecursive(Regexp<T> regexp, boolean root) {
     switch (regexp.getType()) {
       case TOKEN:
       case LAMBDA:
@@ -38,15 +42,21 @@ public class CleanerEmptyChildren<T> implements RegularExpressionCleaner<T> {
       case ALTERNATION:
       case PERMUTATION:
       case CONCATENATION:
-        if (regexp.getChildren().isEmpty()) {
-          return Regexp.<T>getLambda();
-        }
-        if (regexp.getChildren().size() == 1) {
-          return cleanRegularExpression(regexp);
-        }
         List<Regexp<T>> newChildren= new ArrayList<Regexp<T>>();
         for (Regexp<T> child : regexp.getChildren()) {
-          newChildren.add(cleanRegularExpression(child));
+          Regexp<T> cleanChild= cleanRecursive(child, false);
+          if (cleanChild != null) {
+            newChildren.add(cleanChild);
+          }
+        }
+        if (newChildren.isEmpty()) {
+          if (root) {
+            return Regexp.<T>getLambda();
+          }
+          return null;
+        }
+        if (newChildren.size() == 1) {
+          return newChildren.get(0);
         }
         Regexp<T> newRegexp= Regexp.<T>getMutable();
         newRegexp.setInterval(regexp.getInterval());

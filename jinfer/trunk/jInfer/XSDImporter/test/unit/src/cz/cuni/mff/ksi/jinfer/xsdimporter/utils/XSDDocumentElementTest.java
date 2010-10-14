@@ -18,11 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 import java.util.Map;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
@@ -30,17 +27,6 @@ import static org.junit.Assert.*;
  * @author reseto
  */
 public class XSDDocumentElementTest {
-
-  @Test
-  public void testGetAssociatedCTypeName() {
-    System.out.println("getAssociatedCTypeName");
-    XSDDocumentElement instance = new XSDDocumentElement("testElement");
-    assertEquals("", instance.getAssociatedCTypeName()); // default in constructor
-    instance.setAssociatedCTypeName("myHorrendouslyNamedCType");
-    String expResult = "myHorrendouslyNamedCType";
-    String result = instance.getAssociatedCTypeName();
-    assertEquals(expResult, result);
-  }
 
   @Test
   public void testGetAttrs0() {
@@ -157,7 +143,7 @@ public class XSDDocumentElementTest {
     boolean expResult = false;
     boolean result = instance.isAssociated();
     assertEquals(expResult, result);
-    instance.associateWithUnnamedCType();
+    instance.associate();
     expResult = true;
     result = instance.isAssociated();
     assertEquals(expResult, result);

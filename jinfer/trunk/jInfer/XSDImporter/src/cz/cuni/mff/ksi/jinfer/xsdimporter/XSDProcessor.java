@@ -17,10 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.basicigg.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.properties.XSDImportPropertiesPanel;
 import java.io.InputStream;
 import java.util.Collections;
@@ -50,7 +50,7 @@ public class XSDProcessor implements Processor {
   }
 
   @Override
-  public List<Element> process(InputStream stream) {
+  public List<Element> process(final InputStream stream) {
     
     try {
       if (Integer.parseInt(RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME).getProperty(XSDImportPropertiesPanel.PARSER, "0")) == 0) {
@@ -58,20 +58,28 @@ public class XSDProcessor implements Processor {
         final SAXHandler handler = new SAXHandler();
         PARSER_FACTORY.newSAXParser().parse(stream, handler);
         //TODO reseto return normal rules
-        return Collections.emptyList();
+        return handler.getRules();
       } else {
         //DOM parser selected
-        //TODO reseto return normal rules
-        return Collections.emptyList();
+        //final DOMParserImpl parser = new DOMParserImpl(new SymbolTable());
+        //parser.parse(new XMLInputSource(null, null, null, stream, null));
+        final DOMHandler handler = new DOMHandler();
+        handler.parse(stream);
+        return handler.getRules();
       }
     } catch (final Exception e) {
       if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME).getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error parsing XSD schema file.", e);
       } else {
-        LOG.warn("Error parsing XSD schema file, ignoring and going on.", e);
+        LOG.error("Error parsing XSD schema file, ignoring and going on.", e);
         return Collections.emptyList();
       }
     }
+  }
+
+  @Override
+  public boolean processUndefined() {
+    return false;
   }
 
 }

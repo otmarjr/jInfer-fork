@@ -23,6 +23,10 @@ import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.SimpleDataTypes;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDMetadata;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,6 +51,10 @@ class SAXHandler extends DefaultHandler {
   private final Stack<XSDDocumentElement> docElementStack = new Stack<XSDDocumentElement>();
   /** Rules that have been inferred so far. */
   private final List<Element> rules = new ArrayList<Element>();
+  /**
+   * List of elements with unknown type when they were processed.
+   */
+  private final List<Element> unresolved = new ArrayList<Element>();
   /** HashMap of named complextypes, saved as templates for creating rules */
   private final Map<String, Regexp<AbstractStructuralNode>> namedTypes = new HashMap<String, Regexp<AbstractStructuralNode>>();
 
@@ -55,8 +63,31 @@ class SAXHandler extends DefaultHandler {
  * Pseudo-unique name for the container elements that are pushed in contentStack
  * the name should be distict from every element name in the actual schema
  */
-  private final String CONTAINER_NAME = "__conTAIner__";
+  private static final String CONTAINER_NAME = "__conTAIner__";
 
+  /** Process start of XSDelement.
+   * When XSDelement starts, we have to check for several things.
+   * Firstly we maintain the stack of all XSDelements in the schema
+   * to check if it's well formed (documentElementStack).
+   *
+   * Depending on what XSDelement started we create a new mutable Element
+   * and push it to contentStack. This is the case if qName is 'element'
+   * or 'complexType' and the complexType has a defined attribute name.
+   * The type of this mutable Element is unknown at start, and is determined
+   * by the outermost OrderIndicator (choice,sequence,all) in its content.
+   * If there is no OrderIndicator, we pronounce the mutable Element a LAMBDA.
+   *
+   * The outermost OrderIndicator is said to be associated with a complexType,
+   * it determines the type of the associated CType and therefore we don't
+   * create a container.
+   * If the O.I. is not associated - it is nested, and a container is needed.
+   *
+   * @param uri
+   * @param localName
+   * @param qName
+   * @param attributes
+   * @throws SAXException
+   */
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
     super.startElement(uri, localName, qName, attributes);
@@ -65,88 +96,98 @@ class SAXHandler extends DefaultHandler {
 
     // first, create xsd-element that can be pushed into documentElementStack
     // this contains all attributes of the schema element
-    XSDDocumentElement docElement = new XSDDocumentElement(trimNS(qName));
+    final XSDDocumentElement docElement = new XSDDocumentElement(trimNS(qName));
     for (int i = 0; i < attributes.getLength(); i++) {
-      SAXAttributeData data = new SAXAttributeData(attributes.getURI(i), attributes.getLocalName(i), attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
+      final SAXAttributeData data = new SAXAttributeData(attributes.getURI(i), attributes.getLocalName(i), attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
       docElement.getAttrs().put(attributes.getQName(i).toLowerCase(), data);
     }
 
-    if (!docElementStack.isEmpty()) {
-      // there is a special case when element follows
-      if (docElementStack.peek().isNamedComplexType()) {
-        // remember: name of the complex type is the value of its attribute 'name'
-        String name = docElementStack.peek().getAttrs().get("name").getValue();
-        docElement.setAssociatedCTypeName(name);
-      } else if (docElementStack.peek().isComplexType()) {
-        docElement.associateWithUnnamedCType();
-      }
+    if (!docElementStack.isEmpty() 
+            && docElementStack.peek().isComplexType()
+            && docElement.isOrderIndicator()) {
+      // there is a special case when OrderI. follows a complex type
+      docElement.associate();
     }
 
     if (docElement.getName().equalsIgnoreCase("element")) {
       createAndPushContent(docElement, false);
-    } else if (isOrderIndicator(docElement)) {
+
+    } else if (docElement.isNamedComplexType()) {
+      // named CType has no element to contain it, we must create a container
       createAndPushContent(docElement, true);
+
+    } else if (docElement.isOrderIndicator()) {
+      if (docElement.isAssociated()) {
+        contentStack.peek().getSubnodes().setType(determineRegexpType(docElement));
+      } else {
+        //OrderIndicator is nested, we create and push a container
+        createAndPushContent(docElement, true);
+      }
     } else if (docElement.getName().equalsIgnoreCase("complexcontent")) {
-      LOG.warn("XSD handler: unsupported element complexContent, behavior is undefined");
+      LOG.warn("Unsupported element complexContent, behavior is undefined");
     } else if (docElement.getName().equalsIgnoreCase("simplecontent")) {
-      LOG.warn("XSD handler: unsupported element simpleContent, behavior is undefined");
+      LOG.warn("Unsupported element simpleContent, behavior is undefined");
     }
 
     docElementStack.push(docElement);
   }
 
   @Override
-  public void endElement(String uri, String localName, String qName) throws SAXException {
+  public void endDocument() throws SAXException {
+    super.endDocument();
+
+    LOG.info("Schema registered following " + namedTypes.size() + " named types");
+    for (final Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
+      final String name = it.next();
+
+      if (!BaseUtils.isEmpty(namedTypes.get(name).getChildren())) {
+        final int numChildren = namedTypes.get(name).getChildren().size();
+        LOG.info("\t" + name + ": " + namedTypes.get(name).getType().toString().toLowerCase() + " has " + numChildren + " children:");
+        for (int i = 0; i < numChildren; i++) {
+          final Regexp<AbstractStructuralNode> child = namedTypes.get(name).getChild(i);
+          if (child.getContent() == null) {
+            LOG.info("\t\t<unnamed> " + child.getType().toString().toLowerCase());
+          } else {
+            LOG.info("\t\t"+ child.getContent().getName());
+          }
+        } //end for children
+      } else {
+        LOG.info("\t" + name + ": " + namedTypes.get(name).getType() + " has 0 children.");
+      }
+    }
+  }
+
+  @Override
+  public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     super.endElement(uri, localName, qName);
 
-    XSDDocumentElement docElement = docElementStack.pop();
+    final XSDDocumentElement docElement = docElementStack.pop();
     
     if ( !docElement.getName().equalsIgnoreCase(trimNS(qName)) ) {
-      throw new IllegalArgumentException("XSD handler: unpaired element");
+      LOG.error("Unpaired element " + docElement.getName() + " and " + qName);
+      throw new IllegalArgumentException("Unpaired element" + docElement.getName() + " and " + qName);
     }
 
-    // BIG IF -> we check what type of element ended [ element|complextype|schema| (choice|sequence|all) ]
+    // BIG IF -> we check what type of element ended
     if (trimNS(qName).equalsIgnoreCase("element")) {
+      processEndOfElement(docElement);
 
-      Element old = contentStack.pop();
+    } else if (docElement.isNamedComplexType()) {
+      final Element container = contentStack.pop();
+      if (!isContainer(container)) {
+        LOG.error("Popped wrong element from stack " + container.getName());
+        throw new IllegalArgumentException("Popped wrong element from stack " + container.getName());
+      }
+      namedTypes.put(docElement.attributeNameValue(), container.getSubnodes());
 
-      String name = docElement.getAttrs().get("name").getValue();
-      if (!old.getName().equals(name)) {
-        throw new IllegalArgumentException("XSD handler: unexpected element on stack " + name);
-      }
-      
-      if (docElement.getAttrs().containsKey("type")) {
-        // deal with element that has specified type
-        processTypedElement(old, docElement);
-      } else {
-        // element doesn't have a declared type => it must be empty or locally defined
-        processUntypedElement(old);
-      }
-    } else if (isOrderIndicator(docElement)) {
+    } else if (docElement.isOrderIndicator()) {
       // this branch is for choice|sequence|all
       processEndOfOrderIndicator(docElement);
-    } else if (trimNS(qName).equalsIgnoreCase("schema")) {
-      // schema element closes, do additional checking
-      LOG.warn("XSD handler: schema registered following " + namedTypes.size() + " named types");
-      for (Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
-        String name = it.next();
-        int numChildren = namedTypes.get(name).getChildren().size();
-        LOG.warn("\t" + name + "-" + namedTypes.get(name).getType().toString().toLowerCase() + " has " + numChildren + " children:");
-        for (int i = 0; i < numChildren; i++) {
-          Regexp<AbstractStructuralNode> child = namedTypes.get(name).getChild(i);
-          if (child.getContent()==null) {
-            LOG.warn("\t\t<unnamed> " + child.getType().toString().toLowerCase());
-          } else {
-            LOG.warn("\t\t"+ child.getContent().getName());
-          }
-        }
-      }
     }
-
     //TODO reseto take care of arguments
   }
 
-  List<Element> getRules() {
+  public List<Element> getRules() {
     return rules;
   }
 
@@ -155,8 +196,14 @@ class SAXHandler extends DefaultHandler {
   /**
    * Trims (cuts) namespace prefix from the beginning of element qName
    */
-  private String trimNS(String qName) {
+  private String trimNS(final String qName) {
     return qName.substring(qName.lastIndexOf(':') + 1).toLowerCase();
+  }
+
+  private boolean isContainer(final Element elem) {
+    return (elem.getName().equals(CONTAINER_NAME)
+            && elem.getMetadata().containsKey(CONTAINER_NAME)
+            && elem.getMetadata().get(CONTAINER_NAME).equals(Boolean.TRUE));
   }
 
   /**
@@ -164,26 +211,27 @@ class SAXHandler extends DefaultHandler {
    * and add it to rules.
    * @param elem
    */
-  private void addChildAndRule(Element elem) {
-    if (!elem.getMetadata().containsKey("from.schema")) {
-      elem.getMetadata().put("from.schema", Boolean.TRUE);
+  private void addChildAndRule(final Element elem) {
+    if (elem.getSubnodes().getType() == null) {
+      elem.getSubnodes().setType(RegexpType.CONCATENATION);
     }
+    elem.setImmutable();
+    //add self as token to parent
     if (!contentStack.isEmpty()) {
       contentStack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(elem));
     }
-    //TODO reseto reconsider this:
-    //if (!docElementStack.isEmpty() && docElementStack.peek().getName().equalsIgnoreCase("schema")) {
+    //LOG.debug("ADDING RULE:" + elem.toString());
     rules.add(elem);
   }
 
   private List<String> getContext() {
 
-    final List<String> ret;
+    List<String> ret;
 
     if (contentStack.isEmpty()) {
       ret = new ArrayList<String>(0);
     } else {
-      Element parent = contentStack.peek();
+      final Element parent = contentStack.peek();
       ret = new ArrayList<String>(parent.getContext());
       
       if (contentStack.peek().getName().equals(CONTAINER_NAME)) {
@@ -199,16 +247,22 @@ class SAXHandler extends DefaultHandler {
     }
     return ret;
   }
-
-  /**
-   * Check if element is one of xs:choice, xs:sequence, xs:all.
-   * @param docElem
-   * @return
-   */
-  private boolean isOrderIndicator(XSDDocumentElement docElem) {
-    return (docElem.getName().equalsIgnoreCase("choice")
-            || docElem.getName().equalsIgnoreCase("all")
-            || docElem.getName().equalsIgnoreCase("sequence")) ? true : false;
+  
+  private RegexpType determineRegexpType(final XSDDocumentElement docElement) {
+    if (docElement.getName().equalsIgnoreCase("sequence")) {
+      return RegexpType.CONCATENATION;
+    } else if (docElement.getName().equalsIgnoreCase("choice")) {
+      //TODO reseto allow alternation
+      return RegexpType.CONCATENATION;
+    } else if (docElement.getName().equalsIgnoreCase("all")) {
+      //TODO reseto allow permutation
+      return RegexpType.CONCATENATION;
+    } else {
+      // else it's a regular element, we don't know the type yet
+      // this has to stay null,
+      // because the element can have a type defined in some named CType
+      return null;
+    }
   }
 
   // *************************************************** private complex methods
@@ -218,93 +272,61 @@ class SAXHandler extends DefaultHandler {
    * @param old Element from contentStack, expected to be regular element.
    * @param docElement Node from documentElementStack.
    */
-  private void processTypedElement(Element old, XSDDocumentElement docElement) {
-    final String TYPE = docElement.getAttrs().get("type").getValue();
+  private void processEndOfElement(final XSDDocumentElement docElement) {
 
-    if (SimpleDataTypes.isSimpleDataType(TYPE)) {
-      // this element is simple => has no children
-      addChildAndRule(old);
-    } else {
-      // we have to pair this element with its defined type
-      // the problem is, that the complexType it may be associated with
-      // can be declared later in the schema than this element
-      if (namedTypes.containsKey(TYPE)) {
-        // we are lucky and can be done with this element
-        Element ruleElement = new Element(old.getContext(), old.getName(), old.getMetadata(), namedTypes.get(TYPE));
-        addChildAndRule(ruleElement);
-      } else {
-        //TODO reseto add this to parent element as UNRESOLVED node
-        LOG.warn("XSD handler: can't resolve the type of element " + old.getName());
-        addChildAndRule(old);
-      }
+    final Element old = contentStack.pop();
+    final String name = docElement.attributeNameValue();
+    boolean resolved = true;
+
+    if (!old.getName().equals(name)) {
+      LOG.error("Unexpected element on stack " + name);
+      throw new IllegalArgumentException("Unexpected element on stack " + name);
     }
-  }
-  /**
-   * Processes an element with NO 'type' attribute.
-   * @param old Element from contentStack, expected to be regular element.
-   */
-  private void processUntypedElement(Element old) {
-    int size = old.getSubnodes().getChildren().size();
 
-    if (size == 0) {
-      // this is an empty element, we can add this directly as a child to the parent
-      addChildAndRule(old);
-    } else if (size == 1) {
-      // this should be an element containing a complextype with nested container
-      // we need to remove this element entirely, because it may have wrong type of Subnodes
-      if (old.getSubnodes().getChild(0).isToken() && old.getSubnodes().getChild(0).getContent().getName().equals(CONTAINER_NAME) ) {
-        Element newContent = (Element) old.getSubnodes().getChild(0).getContent();
-        Element ruleElement = new Element(old.getContext(), old.getName(), old.getMetadata(), newContent.getSubnodes());
-        addChildAndRule(ruleElement);
-      } else {
-        //TODO reseto probably handle a single argument?
-        addChildAndRule(old);
-      }
-    } else {
-      int hit = -1;
-      for (int i=0; i<size; ++i) {
-        if (old.getSubnodes().getChild(i).isToken() && old.getSubnodes().getChild(i).getContent().getName().equals(CONTAINER_NAME)) {
-          hit = i;
-          break;
+    if (docElement.getAttrs().containsKey("type")) {
+      // deal with element that has specified type
+      final String TYPE = docElement.getAttrs().get("type").getValue();
+
+      if (!SimpleDataTypes.isSimpleDataType(TYPE)) {
+        // we have to pair this element with its defined type
+        // the problem is, that the complexType it may be associated with
+        // can be declared later in the schema than this element
+        if (namedTypes.containsKey(TYPE)) {
+          
+          if (old.getSubnodes().getType() != null) {
+            LOG.error("Element " + old.getName()
+                    + " should have type " + TYPE
+                    + " but its content already set its type to "
+                    + old.getSubnodes().getType());
+            // serious problem! element has attribute 'type', 
+            // but also has content that determines its type before
+            throw new IllegalArgumentException("Element " + old.getName()
+                    + " should have type " + TYPE
+                    + " but its content already set its type to "
+                    + old.getSubnodes().getType());
+          } else {
+            old.getSubnodes().setType(namedTypes.get(TYPE).getType());
+          }
+
+          for (Regexp<AbstractStructuralNode> child : namedTypes.get(TYPE).getChildren()) {
+            old.getSubnodes().addChild(child);
+          }
+        } else {
+          //TODO reseto add this to parent element as UNRESOLVED node
+          unresolved.add(old);
+          LOG.debug("Can't resolve the type of element " + old.getName());
         }
       }
-      if (hit < 0) {
-        throw new IllegalArgumentException("XSD Handler: element has no contents");
-      }
-
-      Element newContent = (Element) old.getSubnodes().getChild(hit).getContent();
-      Element ruleElement = new Element(old.getContext(), old.getName(), old.getMetadata(), newContent.getSubnodes());
-
-      // and now add all other children from old element to the new one
-      for (int i=0; i<size; ++i) {
-        if (i != hit) {
-          ruleElement.getSubnodes().addChild(old.getSubnodes().getChild(i));
-        }
-      }
-      addChildAndRule(ruleElement);
     }
+
+    addChildAndRule(old);
   }
 
-  private void processEndOfOrderIndicator(XSDDocumentElement docElement) {
-    // ^^ here we have a container on the contentStack,
-    // we can forget its entire contents except for Subnodes!
-    Element container = contentStack.pop();
-
-    if (docElement.getAssociatedCTypeName().equals("")) {
-      // container is not associated to any named complexType
-      // it is a local declaration of complexType, or nested container
-      // now we have to add its contents as its parent's child
-
-      if (docElement.isAssociated()) {
-        contentStack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(container));
-      } else {
-        contentStack.peek().getSubnodes().addChild(container.getSubnodes());
-      }
-    } else {
-      // this container is associated with a named complexType,
-      // we don't have to add it as a child to parent element (there is none)
-      // just create a mapping with this name
-      namedTypes.put(docElement.getAssociatedCTypeName(), container.getSubnodes());
+  private void processEndOfOrderIndicator(final XSDDocumentElement docElement) {
+    if (!docElement.isAssociated()) {
+      // we are dealing with a nested container
+      final Element container = contentStack.pop();
+      contentStack.peek().getSubnodes().addChild(container.getSubnodes());
     }
   }
 
@@ -332,64 +354,69 @@ class SAXHandler extends DefaultHandler {
    * @param docElement Currently processed internal element.
    * @param isContainer True if docElement is an order indicator (choice,sequence,all). False if docElement is a proper xs:element.
    */
-  private void createAndPushContent(XSDDocumentElement docElement, boolean isContainer) {
+  private void createAndPushContent(final XSDDocumentElement docElement, final boolean isContainer) {
     
     final Map<String, Object> metadata = new HashMap<String, Object>();
 
     String name = "";
+    RegexpInterval interval = RegexpInterval.getOnce();
+
     if (isContainer) {
       metadata.put(CONTAINER_NAME, Boolean.TRUE);
       name = CONTAINER_NAME;
     } else {
-      String key = "minoccurs";
-      determineOccurence(docElement, metadata, key);
-      key = "maxoccurs";
-      determineOccurence(docElement, metadata, key);
-      name = docElement.getAttrs().get("name").getValue();
+      // this is a normal element, create its metadata in the designated object
+      final XSDMetadata xsdmd = new XSDMetadata();
+
+      determineOccurence(docElement, xsdmd);
+      
+      if (docElement.getAttrs().containsKey("name")) {
+        name = docElement.attributeNameValue();
+      } else if (docElement.getAttrs().containsKey("ref")) {
+        name = docElement.getAttrs().get("ref").getValue();
+        xsdmd.setRef(name);
+      }
+
+      metadata.put("from.schema", Boolean.TRUE);
+      metadata.put("schema.data", xsdmd);
+      interval = xsdmd.getInterval();
     }
 
-    Element elem;
-    final List<String> context = getContext();
+    final Element elem = Element.getMutable();
+    elem.getContext().addAll(getContext());
+    elem.setName(name);
+    elem.getMetadata().putAll(metadata);
+    elem.getSubnodes().setType(determineRegexpType(docElement));
+    elem.getSubnodes().setInterval(interval);
 
-    if (docElement.getName().equalsIgnoreCase("sequence")) {
-      elem = new Element(context, name, metadata, Regexp.<AbstractStructuralNode>getConcatenation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
-    } else if (docElement.getName().equalsIgnoreCase("choice")) {
-      //TODO reseto allow alternation
-      //elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getAlternation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
-      elem = new Element(context, name, metadata, Regexp.<AbstractStructuralNode>getConcatenation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
-    } else if (docElement.getName().equalsIgnoreCase("all")) {
-      //TODO reseto allow kleene
-      //elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getKleene(new ArrayList<Regexp<StructuralAbstractNode>>()) );
-      elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getConcatenation(new ArrayList<Regexp<StructuralAbstractNode>>()) );
-    } else {
-      // this in not a container, create element with regexp of any type,
-      // it will be changed later to the correct one
-      // TODO reseto Don't use getConcatenationMutable(), ask anti for help with new version of regexps:)
-      elem = new Element(context, name, metadata, Regexp.<StructuralAbstractNode>getConcatenationMutable());
-    }
-        
-    // push the current element to the stack with an empty rule
     contentStack.push(elem);
   }
 
-  /** Add information about element occurence to its metadata.
-   * To be used with keys "minoccurs" and "maxoccurs".
-   * @param docElement
-   * @param metadata
-   * @param key
-   */
-  private void determineOccurence(XSDDocumentElement docElement, Map<String, Object> metadata, String key) {
-    if (docElement.getAttrs().containsKey(key)) {
-      SAXAttributeData data = docElement.getAttrs().get(key);
-      if (data.getValue().equalsIgnoreCase("unbounded")) {
-        if (key.equalsIgnoreCase("minoccurs")) {
-          throw new IllegalArgumentException("Attribute minOccurs cannot be 'unbounded'.");
-        }
-        metadata.put(key, new Integer(-1));
+  
+  private void determineOccurence(final XSDDocumentElement docElement, final XSDMetadata xsdmd) {
+    // occurences
+    int min = 1, max = 1; //default values from XSD specification
+
+    if (docElement.getAttrs().containsKey("minoccurs")) {
+      min = Integer.parseInt(docElement.getAttrs().get("minoccurs").getValue());
+    }
+
+    if (docElement.getAttrs().containsKey("maxoccurs")) {
+      final String s = docElement.getAttrs().get("maxoccurs").getValue();
+      if ("unbounded".equals(s)) {
+        xsdmd.setInterval(RegexpInterval.getUnbounded(min));
+        return;
       } else {
-        // if parseInt crashes, it's not our problem - valid schema uses only non negative integers
-        metadata.put(key, Integer.parseInt(data.getValue()));
+        max = Integer.parseInt(s);
       }
+    }
+
+    if (min > max) {
+      throw new IllegalArgumentException("minOccurs > maxOccurs!");
+    }
+
+    if (xsdmd.getInterval() == null) {
+      xsdmd.setInterval(RegexpInterval.getBounded(min, max));
     }
   }
   

@@ -71,7 +71,8 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   }
 
   @Override
-  public void startNameStep(final int axis, final String prefix, final String localName) throws SAXPathException {
+  public void startNameStep(final int axis, final String prefix,
+          final String localName) throws SAXPathException {
     super.startNameStep(axis, prefix, localName);
 
     switch (axis) {
@@ -79,6 +80,8 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
         final Element newElement = Element.getMutable();
         newElement.setName(localName);
         newElement.getMetadata().put("from.query", Boolean.TRUE);
+        newElement.getSubnodes().setType(RegexpType.CONCATENATION);
+        newElement.getSubnodes().setInterval(RegexpInterval.getOnce());
         if (lastElement != null) {
           lastElement.getSubnodes().addChild(TestUtils.getToken(newElement));
           rules.add(lastElement);
@@ -174,12 +177,10 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     lastElement = null;
     dirty = false;
 
-    for (Element node : rules) {
-      node.getSubnodes().setType(RegexpType.CONCATENATION);
-      node.getSubnodes().setInterval(RegexpInterval.getOnce());
-
-      // TODO vektor No idea which regexp inside this is immutable... so not closing at all...
-      //node.setImmutable();
+    for (final Element node : rules) {
+      if (node.isMutable()) {
+        node.setImmutable();
+      }
     }
 
     return rules;

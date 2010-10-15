@@ -67,7 +67,7 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
     sb.append(" generates regular expression from automaton by sequentially"
             + " removing states from it. When a state is removed, all transitions"

@@ -134,8 +134,6 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
      }
       automaton.buildPTAOnSymbol(symbolString);
     }
-    AutomatonToDot<AbstractStructuralNode> dotter = new AutomatonToDot<AbstractStructuralNode>();
-
     LOG.debug("--- AutomatonMergingStateProcessor on element:");
     LOG.debug(rules.get(0));
     LOG.debug(">>> PTA automaton:");
@@ -145,7 +143,6 @@ public class ClusterProcessorAutomatonMergingState implements ClusterProcessor<A
     final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, elementSymbolToString);
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
-    LOG.error(dotter.convertToDot(simplifiedAutomaton, elementSymbolToString));
 
     // 3.3 convert to regexpautomaton
     final RegexpAutomaton<AbstractStructuralNode> regexpAutomaton= new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);

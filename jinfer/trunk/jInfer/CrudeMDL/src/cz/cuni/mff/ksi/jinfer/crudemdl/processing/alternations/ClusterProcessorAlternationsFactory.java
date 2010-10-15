@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,12 +31,14 @@ import org.openide.util.lookup.ServiceProvider;
  * @author vektor
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
-public class ClusteProcessorAlternationsFactory implements ClusterProcessorFactory {
+public class ClusterProcessorAlternationsFactory implements ClusterProcessorFactory {
+  private static final Logger LOG = Logger.getLogger(ClusterProcessorAlternationsFactory.class);
 
   public static final String NAME = "ClusterProcessorAlternations";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
+    LOG.debug("Creating new ClusterProcessorAlternations.");
     return new ClusterProcessorAlternations();
   }
 
@@ -46,7 +49,7 @@ public class ClusteProcessorAlternationsFactory implements ClusterProcessorFacto
 
   @Override
   public String getModuleDescription() {
-    return NAME;
+    return getName();
   }
 
   @Override
@@ -55,7 +58,7 @@ public class ClusteProcessorAlternationsFactory implements ClusterProcessorFacto
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     return "A trivial implementation of Cluster Processor. Simply takes all "
             + "right sides from rules in a cluster and converts them to an "
             + "alternation for the resulting element.";

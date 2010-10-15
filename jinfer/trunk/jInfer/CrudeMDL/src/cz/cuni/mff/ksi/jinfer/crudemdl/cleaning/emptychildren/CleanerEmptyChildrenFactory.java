@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import java.util.Collections;
 import java.util.List;
+import java.util.jar.Attributes.Name;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -33,6 +34,8 @@ import org.openide.util.lookup.ServiceProvider;
 public class CleanerEmptyChildrenFactory implements RegularExpressionCleanerFactory {
   private static final Logger LOG = Logger.getLogger(CleanerEmptyChildrenFactory.class);
 
+  public static final String NAME = "RegularExpressionCleanerEmptyChildren";
+  
   @Override
   public <T> RegularExpressionCleaner<T> create() {
     LOG.debug("Creating new CleanerEmptyChildren.");
@@ -41,12 +44,12 @@ public class CleanerEmptyChildrenFactory implements RegularExpressionCleanerFact
 
   @Override
   public String getName() {
-    return "RegularExpressionCleanerEmptyChildren";
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    return "Empty children cleaner";
+    return getName();
   }
 
   @Override
@@ -55,9 +58,12 @@ public class CleanerEmptyChildrenFactory implements RegularExpressionCleanerFact
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getModuleDescription());
-    sb.append(" cleans empty children and children with one child.");
+    sb.append(" cleans empty children and children with one child. For example");
+    sb.append(" regular expression: ((), a, (b)), gets cleaned to (a, b).");
+    sb.append(" First empty concatenation () is removed, and concatenation (b)");
+    sb.append(" with only one child is replaced by token b.");
     return sb.toString();
   }
 

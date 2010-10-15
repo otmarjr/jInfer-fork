@@ -35,6 +35,7 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   private int parameterK = -1;
   private int parameterH = -1;
 
+  public static final String NAME = "MergeConditionTesterKHContext";
   @Override
   public <T> MergeConditionTester<T> create() {
     LOG.debug("Creating new MergeConditionTesterKHContext.");
@@ -53,7 +54,7 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
 
   @Override
   public String getName() {
-    return "MergeConditionTesterKHContext";
+    return NAME;
   }
 
   @Override
@@ -66,9 +67,8 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
     return Arrays.asList("parameters");
   }
 
-  // TODO anti write here
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getName());
     sb.append(" find all k,h-context of states being tested. If there are two"
             + " contexts that are equivalent (same symbol string), the states"
@@ -104,5 +104,4 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
       this.parameterH= newValue;
     }
   }
-
 }

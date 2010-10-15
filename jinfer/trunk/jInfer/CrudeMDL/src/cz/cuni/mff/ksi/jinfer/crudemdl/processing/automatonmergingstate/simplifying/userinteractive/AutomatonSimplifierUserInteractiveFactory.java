@@ -32,7 +32,9 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimplifierFactory {
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierUserInteractiveFactory.class);
-  
+
+  public static final String NAME = "AutomatonSimplifierUserInteractive";
+
   @Override
   public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new AutomatonSimplifierUserInteractive.");
@@ -41,7 +43,7 @@ public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimpl
 
   @Override
   public String getName() {
-    return "AutomatonSimplifierUserInteractive";
+    return NAME;
   }
 
   @Override
@@ -50,7 +52,7 @@ public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimpl
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
     sb.append(" instead of using MergeConditionTester, we use AutoEditor,"
             + " which displays automaton to user, wait for input of states to merge,"
@@ -64,5 +66,4 @@ public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimpl
   public List<String> getCapabilities() {
     return Collections.<String>emptyList();
   }
-
 }

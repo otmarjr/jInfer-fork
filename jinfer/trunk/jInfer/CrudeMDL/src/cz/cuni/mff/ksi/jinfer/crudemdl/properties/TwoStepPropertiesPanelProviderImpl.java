@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierImpl;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierFactory;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -38,7 +38,7 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
 
   @Override
   public String getName() {
-    return TwoStepSimplifierImpl.NAME;
+    return TwoStepSimplifierFactory.NAME;
   }
 
   @Override

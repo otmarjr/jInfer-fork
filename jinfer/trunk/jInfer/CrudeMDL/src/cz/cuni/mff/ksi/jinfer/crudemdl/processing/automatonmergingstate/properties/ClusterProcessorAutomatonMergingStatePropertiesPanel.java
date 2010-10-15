@@ -142,14 +142,14 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
   private void automatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automatonSimplifierChanged
     descAutomatonSimplifier.setText(
             ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
-            (String) automatonSimplifier.getSelectedItem()).getDisplayModuleDescription()
+            (String) automatonSimplifier.getSelectedItem()).getUserModuleDescription()
             );
   }//GEN-LAST:event_automatonSimplifierChanged
 
   private void regexpAutomatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regexpAutomatonSimplifierChanged
     descRegexpAutomatonSimplifier.setText(
             ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierFactory.class,
-            (String) regexpAutomatonSimplifier.getSelectedItem()).getDisplayModuleDescription()
+            (String) regexpAutomatonSimplifier.getSelectedItem()).getUserModuleDescription()
             );
   }//GEN-LAST:event_regexpAutomatonSimplifierChanged
 

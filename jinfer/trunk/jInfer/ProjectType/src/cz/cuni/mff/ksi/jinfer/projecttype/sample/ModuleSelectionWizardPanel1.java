@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.sample;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
 import cz.cuni.mff.ksi.jinfer.moduleselection.ModuleSelectionPropertiesPanel;
 import java.awt.Component;
 import java.util.Properties;
@@ -44,7 +45,8 @@ public class ModuleSelectionWizardPanel1 implements WizardDescriptor.Panel {
   @Override
   public Component getComponent() {
     if (component == null) {
-      component = new ModuleSelectionPropertiesPanel(getProperties());
+      component = new ModuleSelectionPropertiesPanel(new ModuleProperties(ModuleSelectionPropertiesPanel.NAME,
+              getProperties()));
       component.setName(NbBundle.getMessage(JinferTemplateWizardIterator.class, "LBL_SetModulesStep"));
     }
     return component;

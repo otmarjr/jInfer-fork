@@ -69,7 +69,7 @@ public class TwoStepSimplifier {
   public List<Element> simplify(final List<Element> initialGrammar) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
-    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
+    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar, null), true);
     final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
     for (final Element e : initialGrammar) {
       abstracts.add(e);
@@ -143,7 +143,7 @@ public class TwoStepSimplifier {
               attList));
     }
 
-    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
+    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar, null), true);
     return finalGrammar;
   }
 }

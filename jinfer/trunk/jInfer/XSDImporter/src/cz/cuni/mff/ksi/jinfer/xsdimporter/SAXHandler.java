@@ -28,6 +28,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDMetadata;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -358,7 +359,12 @@ class SAXHandler extends DefaultHandler {
       }
       // add all children
       for (Regexp<AbstractStructuralNode> child : pair.getFirst().getSubnodes().getChildren()) {
-        old.getSubnodes().addChild(child);
+        List<String> prefix = new ArrayList<String>();
+        if (!BaseUtils.isEmpty(old.getContext())) {
+          prefix.addAll(old.getContext());
+        }
+        prefix.add(old.getName());
+        old.getSubnodes().addChild(new CloneHelper().cloneRegexp(child, prefix));
       }
       // copy rules to global
       rules.addAll(pair.getSecond());

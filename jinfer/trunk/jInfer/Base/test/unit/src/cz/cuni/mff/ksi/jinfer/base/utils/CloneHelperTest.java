@@ -42,20 +42,20 @@ public class CloneHelperTest {
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull() {
     System.out.println("cloneRulesNull");
-    new CloneHelper().cloneRules(null);
+    new CloneHelper().cloneRules(null, null);
   }
 
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull2() {
     System.out.println("cloneRulesNull2");
-    new CloneHelper().cloneRules(Arrays.<Element>asList(null));
+    new CloneHelper().cloneRules(Arrays.<Element>asList(null), null);
   }
 
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull3() {
     System.out.println("cloneRulesNull3");
     new CloneHelper().cloneRules(Arrays.<Element>asList(new Element(EMPTY_CONTEXT, "e", EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(),
-            new ArrayList<Attribute>(0)), null));
+            new ArrayList<Attribute>(0)), null), null);
   }
 
   @Test
@@ -77,7 +77,7 @@ public class CloneHelperTest {
     final Element e = new Element(EMPTY_CONTEXT, "e", m, Regexp.getConcatenation(children), new ArrayList<Attribute>(0));
     final List<Element> l = new ArrayList<Element>(1);
     l.add(e);
-    final List<Element> result = new CloneHelper().cloneRules(l);
+    final List<Element> result = new CloneHelper().cloneRules(l, null);
 
     assertEquals(1, result.size());
     assert (l != result);
@@ -111,7 +111,7 @@ public class CloneHelperTest {
 
     final List<Element> l = new ArrayList<Element>(1);
     l.add(e1);
-    final List<Element> result = new CloneHelper().cloneRules(l);
+    final List<Element> result = new CloneHelper().cloneRules(l, null);
 
     assertEquals(1, result.size());
     final Element e1o = result.get(0);
@@ -137,7 +137,7 @@ public class CloneHelperTest {
 
     final List<Element> l = new ArrayList<Element>(1);
     l.add(e1);
-    final List<Element> result = new CloneHelper().cloneRules(l);
+    final List<Element> result = new CloneHelper().cloneRules(l, null);
 
     assertEquals(1, result.size());
     final Element e1o = result.get(0);
@@ -162,7 +162,7 @@ public class CloneHelperTest {
 
     final List<Element> l = new ArrayList<Element>(1);
     l.add(e1);
-    final List<Element> result = new CloneHelper().cloneRules(l);
+    final List<Element> result = new CloneHelper().cloneRules(l, null);
 
     assertEquals(1, result.size());
     final Element e1o = result.get(0);
@@ -198,7 +198,7 @@ public class CloneHelperTest {
     final List<Element> l = new ArrayList<Element>(1);
     l.add(e1);
     l.add(e2);
-    final List<Element> result = new CloneHelper().cloneRules(l);
+    final List<Element> result = new CloneHelper().cloneRules(l, null);
 
     assertEquals(2, result.size());
     final Element e1o = result.get(0);

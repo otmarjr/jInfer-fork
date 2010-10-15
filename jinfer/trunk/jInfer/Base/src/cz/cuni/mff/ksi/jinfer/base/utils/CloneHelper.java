@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.NamedNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -37,35 +38,35 @@ public class CloneHelper {
 
   private final Map<Element, Element> cloned = new HashMap<Element, Element>();
 
-  public List<Element> cloneRules(final List<Element> l) {
+  public List<Element> cloneRules(final List<Element> l, final List<String> contextPrefix) {
     final List<Element> ret = new ArrayList<Element>(l.size());
     for (final Element n : l) {
-      ret.add(cloneElement(n));
+      ret.add(cloneElement(n, null));
     }
     return ret;
   }
 
-  private static Attribute cloneAttribute(final Attribute a) {
-    return new Attribute(cloneList(a.getContext()), String.valueOf(a.getName()),
+  private static Attribute cloneAttribute(final Attribute a, final List<String> contextPrefix) {
+    return new Attribute(getPrefixedContext(a, contextPrefix), String.valueOf(a.getName()),
             cloneMap(a.getMetadata()), String.valueOf(a.getContentType()),
             cloneList(a.getContent()));
   }
 
-  private static List<Attribute> cloneAttributes(final List<Attribute> attrs) {
+  private static List<Attribute> cloneAttributes(final List<Attribute> attrs, final List<String> contextPrefix) {
     final List<Attribute> ret = new ArrayList<Attribute>(attrs.size());
     for (final Attribute a : attrs) {
-      ret.add(cloneAttribute(a));
+      ret.add(cloneAttribute(a, contextPrefix));
     }
     return ret;
   }
 
-  private static SimpleData cloneSimpleData(final SimpleData s) {
-    return new SimpleData(cloneList(s.getContext()), String.valueOf(s.getName()),
+  private static SimpleData cloneSimpleData(final SimpleData s, final List<String> contextPrefix) {
+    return new SimpleData(getPrefixedContext(s, contextPrefix), String.valueOf(s.getName()),
             cloneMap(s.getMetadata()), String.valueOf(s.getContentType()),
             cloneList(s.getContent()));
   }
 
-  private Element cloneElement(final Element e) {
+  private Element cloneElement(final Element e, final List<String> contextPrefix) {
     if (cloned.containsKey(e)) {
       return cloned.get(e);
     }
@@ -73,31 +74,31 @@ public class CloneHelper {
     Element clone;
 
     if (e.getSubnodes().isLambda()) {
-      clone = new Element(cloneList(e.getContext()), String.valueOf(e.getName()),
-              cloneMap(e.getMetadata()), cloneRegexp(e.getSubnodes()),
-              cloneAttributes(e.getAttributes()));
+      clone = new Element(getPrefixedContext(e, contextPrefix), String.valueOf(e.getName()),
+              cloneMap(e.getMetadata()), cloneRegexp(e.getSubnodes(), contextPrefix),
+              cloneAttributes(e.getAttributes(), contextPrefix));
       cloned.put(e, clone);
       return clone;
     }
 
-    clone = new Element(cloneList(e.getContext()),
+    clone = new Element(getPrefixedContext(e, contextPrefix),
             String.valueOf(e.getName()),
             cloneMap(e.getMetadata()),
             Regexp.<AbstractStructuralNode>getMutable(),
-            cloneAttributes(e.getAttributes()));
+            cloneAttributes(e.getAttributes(), contextPrefix));
     cloned.put(e, clone);
     clone.getSubnodes().setInterval(e.getSubnodes().getInterval());
 
     if (e.getSubnodes().isToken()) {
       clone.getSubnodes().setType(RegexpType.TOKEN);
-      final AbstractStructuralNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent());
+      final AbstractStructuralNode clonedToken = cloneAbstractNode(e.getSubnodes().getContent(), contextPrefix);
       clone.getSubnodes().setContent(clonedToken);
       clone.getSubnodes().setImmutable();
       return clone;
     }
 
     clone.getSubnodes().setType(e.getSubnodes().getType());
-    final Regexp<AbstractStructuralNode> clonedRegexp = cloneRegexp(e.getSubnodes());
+    final Regexp<AbstractStructuralNode> clonedRegexp = cloneRegexp(e.getSubnodes(), contextPrefix);
     clone.getSubnodes().getChildren().addAll(clonedRegexp.getChildren());
     clone.getSubnodes().setImmutable();
     return clone;
@@ -122,37 +123,49 @@ public class CloneHelper {
     return ret;
   }
 
-  private Regexp<AbstractStructuralNode> cloneRegexp(
-          final Regexp<AbstractStructuralNode> r) {
+  public Regexp<AbstractStructuralNode> cloneRegexp(
+          final Regexp<AbstractStructuralNode> r, final List<String> contextPrefix) {
     return new Regexp<AbstractStructuralNode>(
-            cloneAbstractNode(r.getContent()),
-            cloneChildren(r.getChildren()),
+            cloneAbstractNode(r.getContent(), contextPrefix),
+            cloneChildren(r.getChildren(), contextPrefix),
             r.getType(),
             r.getInterval());
   }
 
   private List<Regexp<AbstractStructuralNode>> cloneChildren(
-          final List<Regexp<AbstractStructuralNode>> c) {
+          final List<Regexp<AbstractStructuralNode>> c, final List<String> contextPrefix) {
     if (c == null) {
       return null;
     }
     final List<Regexp<AbstractStructuralNode>> ret = new ArrayList<Regexp<AbstractStructuralNode>>(c.size());
     for (final Regexp<AbstractStructuralNode> r : c) {
-      ret.add(cloneRegexp(r));
+      ret.add(cloneRegexp(r, contextPrefix));
     }
     return ret;
   }
 
-  private AbstractStructuralNode cloneAbstractNode(final AbstractStructuralNode n) {
+  private AbstractStructuralNode cloneAbstractNode(final AbstractStructuralNode n, final List<String> contextPrefix) {
     if (n == null) {
       return null;
     }
     if (n instanceof SimpleData) {
-      return cloneSimpleData((SimpleData) n);
+      return cloneSimpleData((SimpleData) n, contextPrefix);
     }
     if (n instanceof Element) {
-      return cloneElement((Element) n);
+      return cloneElement((Element) n, contextPrefix);
     }
     throw new IllegalArgumentException("Unknown abstract node: " + n);
+  }
+
+  private static List<String> getPrefixedContext (final NamedNode node, final List<String> contextPrefix) {
+    if (BaseUtils.isEmpty(contextPrefix)) {
+      return cloneList(node.getContext());
+    } else {
+      final List<String> res = cloneList(contextPrefix);
+      if (node.getContext() != null) {
+        res.addAll(cloneList(node.getContext()));
+      }
+      return res;
+    }
   }
 }

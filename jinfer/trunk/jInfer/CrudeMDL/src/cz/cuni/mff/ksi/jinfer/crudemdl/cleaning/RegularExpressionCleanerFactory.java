@@ -19,13 +19,13 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public interface RegularExpressionCleanerFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
+public interface RegularExpressionCleanerFactory extends NamedModule, Capabilities, TwoStepUserDescription {
   <T> RegularExpressionCleaner<T> create();
 }

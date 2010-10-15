@@ -34,6 +34,8 @@ import org.openide.util.lookup.ServiceProvider;
 public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
   private static final Logger LOG = Logger.getLogger(ClusterProcessorPassRepresentantFactory.class);
 
+  public static final String NAME= "ClusterProcessorPassRepresentant";
+
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
     LOG.debug("Creating new ClusterProcessorPassRepresentant.");
@@ -42,7 +44,7 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
 
   @Override
   public String getName() {
-    return "ClusterProcessorPassRepresentant";
+    return NAME;
   }
 
   @Override
@@ -51,7 +53,7 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
     sb.append(" is really dummy processor of element cluster. The grammar"
             + " inferred for whole cluster of elements it returns"

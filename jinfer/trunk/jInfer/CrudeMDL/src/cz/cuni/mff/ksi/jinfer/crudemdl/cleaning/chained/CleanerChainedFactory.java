@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
@@ -38,14 +39,13 @@ public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
   private static final Logger LOG = Logger.getLogger(CleanerChainedFactory.class);
   
   public static final String NAME = "RegularExpressionCleanerChained";
-  public static final String DISPLAY_NAME = "Chaining another existing cleaners cleaner";
   public static final String PROPERTIES_PREFIX = "chain";
   public static final String PROPERTIES_COUNT = "count";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {
     LOG.debug("Creating new CleanerChained.");
-    return new CleanerChained<T>(getCleanerFactories());
+    return new CleanerChained<T>(getRegularexpressionCleanerFactories());
   }
 
   @Override
@@ -55,7 +55,17 @@ public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
 
   @Override
   public String getModuleDescription() {
-    return "Chaining another existing cleaners cleaner";
+    StringBuilder sb = new StringBuilder(getName());
+    sb.append(CollectionToString.colToString(
+            getRegularexpressionCleanerFactories(),
+            ", ",
+            new CollectionToString.ToString<RegularExpressionCleanerFactory>() {
+              @Override
+              public String toString(RegularExpressionCleanerFactory t) {
+                return t.getModuleDescription();
+              }
+            }));
+    return sb.toString();
   }
 
   @Override
@@ -64,13 +74,14 @@ public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getModuleDescription());
-    sb.append(" chains another existing cleaners in a row.");
+    sb.append(" chains another existing cleaners in a sequence pipelining output of");
+    sb.append(" first cleaner to input of second cleaner and so on.");
     return sb.toString();
   }
 
-  public List<RegularExpressionCleanerFactory> getCleanerFactories() {
+  public List<RegularExpressionCleanerFactory> getRegularexpressionCleanerFactories() {
     Properties p = RunningProject.getActiveProjectProps(NAME);
     List<RegularExpressionCleanerFactory> result= new ArrayList<RegularExpressionCleanerFactory>();
 

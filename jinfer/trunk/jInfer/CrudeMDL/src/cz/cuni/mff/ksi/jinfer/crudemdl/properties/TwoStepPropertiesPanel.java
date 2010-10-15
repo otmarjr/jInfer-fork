@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierImpl;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
@@ -26,7 +26,7 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * Properties panel for TwoStepSimplifierImpl.
+ * Properties panel for TwoStepSimplifierFactory.
  * @author anti
  */
 public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
@@ -186,21 +186,21 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
   private void clustererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clustererChanged
     descClusterer.setText(
             ModuleSelectionHelper.lookupImpl(ClustererFactory.class,
-            (String) clusterer.getSelectedItem()).getDisplayModuleDescription()
+            (String) clusterer.getSelectedItem()).getUserModuleDescription()
             );
   }//GEN-LAST:event_clustererChanged
 
   private void clusterProcessorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterProcessorChanged
     descClusterProcessor.setText(
             ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class,
-            (String) clusterProcessor.getSelectedItem()).getDisplayModuleDescription()
+            (String) clusterProcessor.getSelectedItem()).getUserModuleDescription()
             );
   }//GEN-LAST:event_clusterProcessorChanged
 
   private void cleanerChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanerChanged
     descCleaner.setText(
             ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-            (String) cleaner.getSelectedItem()).getDisplayModuleDescription()
+            (String) cleaner.getSelectedItem()).getUserModuleDescription()
             );
   }//GEN-LAST:event_cleanerChanged
 
@@ -209,31 +209,31 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     clusterer.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(ClustererFactory.class).toArray()
             ));
-    clusterer.setSelectedItem(properties.getProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
+    clusterer.setSelectedItem(properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
     clustererChanged(null);
 
     clusterProcessor.setModel(new DefaultComboBoxModel(
            ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()
            ));
-    clusterProcessor.setSelectedItem(properties.getProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR,
+    clusterProcessor.setSelectedItem(properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR,
             DEFAULT_MENU_TEXT));
     clusterProcessorChanged(null);
 
     cleaner.setModel(new DefaultComboBoxModel(
            ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class).toArray()
            ));
-    cleaner.setSelectedItem(properties.getProperty(TwoStepSimplifierImpl.PROPERTIES_CLEANER,
+    cleaner.setSelectedItem(properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER,
             DEFAULT_MENU_TEXT));
     cleanerChanged(null);
   }
 
   @Override
   public void store() {
-    properties.setProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTERER,
+    properties.setProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTERER,
             (String) clusterer.getSelectedItem());
-    properties.setProperty(TwoStepSimplifierImpl.PROPERTIES_CLUSTER_PROCESSOR,
+    properties.setProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR,
             (String) clusterProcessor.getSelectedItem());
-    properties.setProperty(TwoStepSimplifierImpl.PROPERTIES_CLEANER,
+    properties.setProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER,
             (String) cleaner.getSelectedItem());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -20,7 +20,6 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained.properties;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained.CleanerChainedFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.ClusterProcessorAutomatonMergingStateFactory;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -44,12 +43,11 @@ public class CleanerChainedPanelProviderImpl implements PropertiesPanelProvider 
 
   @Override
   public String getDisplayName() {
-    return CleanerChainedFactory.DISPLAY_NAME;
+    return getName();
   }
 
   @Override
   public int getPriority() {
     return PANEL_PRIORITY;
   }
-
 }

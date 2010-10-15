@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
 
 /**
  * Factory interface for ClusterProcessor. Implementations should be annotated
@@ -31,6 +31,6 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
  * 
  * @author anti
  */
-public interface ClusterProcessorFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
+public interface ClusterProcessorFactory extends NamedModule, Capabilities, TwoStepUserDescription {
   ClusterProcessor<AbstractStructuralNode> create();
 }

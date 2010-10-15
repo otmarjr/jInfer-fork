@@ -14,109 +14,46 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package cz.cuni.mff.ksi.jinfer.crudemdl;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import org.apache.log4j.Logger;
-import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TwoStepSimplifier works in two step for simplification.
- * First it searches for a suitable clusterer submodule, to which it passes whole initialGrammar.
- * Clusterer is responsible to cluster elements properly. Cluster of elements
- * is then considered to be one, and the same element, with various instances
- * in input files.
+ * TODO anti Comment!
  *
- * For every cluster of elements, the clusterProcessor submodule is called.
- * Given the clusterer and list of observed positive examples (grammar = list
- * of elements), cluster processor is expected to produce one Element instance,
- * on which proper definition of regular expression representing content model
- * of the element children will be held.
- *
- * The attributes of elements in the cluster are processed separately afterwards.
- * Currently, only simple processing is done - required/optional. This will be
- * extended in future to separated attribute processor submodule.
- * TODO anti Comment when submodule attributeProcessor done
  * @author anti
  */
-@ServiceProvider(service = Simplifier.class)
-public class TwoStepSimplifierImpl implements Simplifier {
-  /**
-   * Name of the module in constant, for use in classes in this module.
-   */
-  public static final String NAME = "TwoStepSimplifier";
-  /**
-   * Property name of clusterer submodule.
-   */
-  public static final String PROPERTIES_CLUSTERER = "clusterer";
-  /**
-   * Property name of cluster processor submodule.
-   */
-  public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
-  /**
-   * TODO anti Comment
-   */
-  public static final String PROPERTIES_CLEANER = "cleaner";
+public class TwoStepSimplifier {
+  private static final Logger LOG = Logger.getLogger(TwoStepSimplifier.class);
+  private final ClustererFactory clustererFactory;
+  private final ClusterProcessorFactory clusterProcessorFactory;
+  private final RegularExpressionCleanerFactory regularExpressionCleanerFactory;
 
-  private static final Logger LOG = Logger.getLogger(Simplifier.class);
-
-  @Override
-  public String getName() {
-    return NAME;
+  public TwoStepSimplifier(ClustererFactory clustererFactory, ClusterProcessorFactory clusterProcessorFactory, RegularExpressionCleanerFactory regularExpressionCleanerFactory) {
+    this.clustererFactory = clustererFactory;
+    this.clusterProcessorFactory = clusterProcessorFactory;
+    this.regularExpressionCleanerFactory = regularExpressionCleanerFactory;
   }
-
-  @Override
-  public String getModuleDescription() {
-    return getName() + "(" + this.getClustererFactory().getModuleDescription() + ", " + this.getClusterProcessorFactory().getModuleDescription() + ")";
-  }
-
-  @Override
-  public List<String> getCapabilities() {
-    return Collections.emptyList();
-  }
-
-  private ClustererFactory getClustererFactory() {
-    final Properties p = RunningProject.getActiveProjectProps(this.getName());
-
-    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(PROPERTIES_CLUSTERER));
-  }
-
-  private ClusterProcessorFactory getClusterProcessorFactory() {
-    final Properties p = RunningProject.getActiveProjectProps(this.getName());
-
-    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(PROPERTIES_CLUSTER_PROCESSOR));
-  }
-
-  private RegularExpressionCleanerFactory getRegularExpressionCleanerFactory() {
-    final Properties p = RunningProject.getActiveProjectProps(this.getName());
-
-    return ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, p.getProperty(PROPERTIES_CLEANER));
-  }
-
 
   private void verifyInput(final List<Element> initialGrammar) throws InterruptedException {
     for (AbstractStructuralNode node : initialGrammar) {
@@ -129,8 +66,7 @@ public class TwoStepSimplifierImpl implements Simplifier {
     }
   }
 
-  @Override
-  public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+  public List<Element> simplify(final List<Element> initialGrammar) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
     RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneRules(initialGrammar), true);
@@ -140,7 +76,6 @@ public class TwoStepSimplifierImpl implements Simplifier {
     }
 
     // 1. cluster elements according to name
-    final ClustererFactory clustererFactory= this.getClustererFactory();
     final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
     clusterer.addAll(abstracts);
     clusterer.cluster();
@@ -149,8 +84,7 @@ public class TwoStepSimplifierImpl implements Simplifier {
     final List<Element> finalGrammar= new LinkedList<Element>();
 
     // 3. process rules
-    final ClusterProcessor<AbstractStructuralNode> processor= this.getClusterProcessorFactory().create();
-    final RegularExpressionCleaner<AbstractStructuralNode> cleaner= this.getRegularExpressionCleanerFactory().<AbstractStructuralNode>create();
+    final ClusterProcessor<AbstractStructuralNode> processor= clusterProcessorFactory.create();
     for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -200,8 +134,9 @@ public class TwoStepSimplifierImpl implements Simplifier {
         sb.append(att);
       }
       LOG.debug(sb);
+      final RegularExpressionCleaner<AbstractStructuralNode> cleaner= regularExpressionCleanerFactory.<AbstractStructuralNode>create();
       finalGrammar.add(
-              new Element(node.getContext(), 
+              new Element(node.getContext(),
               node.getName(),
               node.getMetadata(),
               cleaner.cleanRegularExpression(((Element) node).getSubnodes()),
@@ -209,6 +144,6 @@ public class TwoStepSimplifierImpl implements Simplifier {
     }
 
     RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneRules(finalGrammar), true);
-    callback.finished(finalGrammar);
+    return finalGrammar;
   }
 }

@@ -19,13 +19,13 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexpi
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
 
 /**
  * Factory for  RegexpAutomatonSimplifier.
  *
  * @author anti
  */
-public interface RegexpAutomatonSimplifierFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
+public interface RegexpAutomatonSimplifierFactory extends NamedModule, Capabilities, TwoStepUserDescription {
   <T> RegexpAutomatonSimplifier<T> create();
 }

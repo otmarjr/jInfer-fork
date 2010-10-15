@@ -36,6 +36,8 @@ import org.openide.util.lookup.ServiceProvider;
 public class ClustererWithAttributesInameFactory implements ClustererFactory {
   private static final Logger LOG = Logger.getLogger(ClustererWithAttributesInameFactory.class);
 
+  public static final String NAME ="ClustererInameWithAttributes";
+
   @Override
   public Clusterer<AbstractStructuralNode> create() {
     LOG.debug("Creating new ClustererWithAttributesIname.");
@@ -44,7 +46,7 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
 
   @Override
   public String getName() {
-    return "ClustererInameWithAttributes";
+    return NAME;
   }
 
   @Override
@@ -60,7 +62,7 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
     sb.append(" clusters Elements in initial grammar. It considers two elements"
             + " equivalent exactly when their names equals (with ignoring case)."

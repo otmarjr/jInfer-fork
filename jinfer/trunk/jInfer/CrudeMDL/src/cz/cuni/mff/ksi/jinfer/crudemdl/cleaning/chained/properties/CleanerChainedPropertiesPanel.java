@@ -104,7 +104,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
             } else {
               desc.setText(
                       ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-                      (String) cmb.getSelectedItem()).getDisplayModuleDescription()
+                      (String) cmb.getSelectedItem()).getUserModuleDescription()
                       );
             }
           }

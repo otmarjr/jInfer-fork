@@ -63,7 +63,7 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
     sb.append(" takes one MergeConditionTester and merges all states"
             + " that can be merged. E.g. with k,h-context condition tester"

@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.nullcleaner;
 
+import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.cleanernull.CleanerNullFactory;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
@@ -71,14 +72,14 @@ public class CleanerNullFactoryTest {
   }
 
   /**
-   * Test of getDisplayModuleDescription method, of class CleanerNullFactory.
+   * Test of getUserModuleDescription method, of class CleanerNullFactory.
    */
   @Test
   public void testGetDisplayModuleDescription() {
     System.out.println("getDisplayModuleDescription");
     CleanerNullFactory instance = new CleanerNullFactory();
     String expResult = "RegularExpressionCleanerNull";
-    String result = instance.getDisplayModuleDescription();
+    String result = instance.getUserModuleDescription();
     assertFalse(expResult.equals(result));
     assertFalse(result.isEmpty());
   }

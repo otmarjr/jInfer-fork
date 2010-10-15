@@ -20,13 +20,13 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditi
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.crudemdl.ModuleParameters;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
 
 /**
  * Factory interface for MergeConditionTester.
  *
  * @author anti
  */
-public interface MergeConditionTesterFactory extends NamedModule, Capabilities, TwoStepDisplayDescription, ModuleParameters {
+public interface MergeConditionTesterFactory extends NamedModule, Capabilities, TwoStepUserDescription, ModuleParameters {
   <T> MergeConditionTester<T> create();
 }

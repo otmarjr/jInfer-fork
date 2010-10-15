@@ -100,7 +100,7 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
   private void comboOrdererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdererChanged
     descOrderer.setText(
             ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class,
-            (String) comboOrderer.getSelectedItem()).getDisplayModuleDescription()
+            (String) comboOrderer.getSelectedItem()).getUserModuleDescription()
             );
   }//GEN-LAST:event_comboOrdererChanged
 

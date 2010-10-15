@@ -56,7 +56,7 @@ public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierS
 
   // TODO anti elaborate more
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getName());
     sb.append(" orders states in automaton by prompting user which state remove first.");
     return sb.toString();

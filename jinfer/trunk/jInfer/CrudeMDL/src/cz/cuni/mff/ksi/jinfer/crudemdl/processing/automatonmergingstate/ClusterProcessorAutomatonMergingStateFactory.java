@@ -83,7 +83,7 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
     // TODO anti Very bad way to use StringBuilder, defies the purpose - don't use + inside!
     sb.append(" constructs prefix tree automaton from positive examples"

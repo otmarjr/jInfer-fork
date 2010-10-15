@@ -128,7 +128,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   private void comboConditionTesterChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboConditionTesterChanged
     MergeConditionTesterFactory factory= ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
             (String) comboConditionTester.getSelectedItem());
-    descContitionTester.setText(factory.getDisplayModuleDescription());
+    descContitionTester.setText(factory.getUserModuleDescription());
 
     panelParams.removeAll();
     dynamicComponents= new HashMap<String, JTextField>();

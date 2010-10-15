@@ -15,12 +15,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.nullcleaner;
+package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.cleanernull;
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,20 +31,24 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegularExpressionCleanerFactory.class)
 public class CleanerNullFactory implements RegularExpressionCleanerFactory {
+  private static final Logger LOG = Logger.getLogger(CleanerNullFactory.class);
+
+  public static final String NAME = "RegularExpressionCleanerNull";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {
+    LOG.debug("Creating new CleanerNull.");
     return new CleanerNull<T>();
   }
 
   @Override
   public String getName() {
-    return "RegularExpressionCleanerNull";
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    return "Null cleaner (does nothing)";
+    return getName();
   }
 
   @Override
@@ -52,7 +57,7 @@ public class CleanerNullFactory implements RegularExpressionCleanerFactory {
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getModuleDescription());
     sb.append(" is not editing regular expressions. It just passes input unchanged.");
     sb.append(" This is useful for seeing the real output from cluster processing algorithm");

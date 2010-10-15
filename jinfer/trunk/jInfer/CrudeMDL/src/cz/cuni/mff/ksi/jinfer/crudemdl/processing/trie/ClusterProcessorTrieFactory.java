@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -29,11 +30,13 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorTrieFactory implements ClusterProcessorFactory {
+  private static final Logger LOG = Logger.getLogger(ClusterProcessorTrieFactory.class);
 
   public static final String NAME = "ClusterProcessorTrie";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
+    LOG.debug("Creating new ClusterProcessorTrie.");
     return new ClusterProcessorTrie();
   }
 
@@ -44,7 +47,7 @@ public class ClusterProcessorTrieFactory implements ClusterProcessorFactory {
 
   @Override
   public String getModuleDescription() {
-    return NAME;
+    return getName();
   }
 
   @Override
@@ -53,7 +56,7 @@ public class ClusterProcessorTrieFactory implements ClusterProcessorFactory {
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     return "Processes the input cluster by creating a prefix tree (trie) of all "
             + "the right sides of input rules.";
   }

@@ -33,6 +33,8 @@ import org.openide.util.lookup.ServiceProvider;
 public class CleanerNestedConcatenationFactory implements RegularExpressionCleanerFactory {
   private static final Logger LOG = Logger.getLogger(CleanerNestedConcatenationFactory.class);
 
+  public static final String NAME = "RegularExpressionCleanerNestedConcatenation";
+
   @Override
   public <T> RegularExpressionCleaner<T> create() {
     LOG.debug("Creating new CleanerNestedConcatenation.");
@@ -41,12 +43,12 @@ public class CleanerNestedConcatenationFactory implements RegularExpressionClean
 
   @Override
   public String getName() {
-    return "RegularExpressionCleanerNestedConcatenation";
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    return "Nested concatenation cleaner";
+    return getName();
   }
 
   @Override
@@ -55,11 +57,10 @@ public class CleanerNestedConcatenationFactory implements RegularExpressionClean
   }
 
   @Override
-  public String getDisplayModuleDescription() {
+  public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getModuleDescription());
     sb.append(" replaces nested concatenations is resulting regular expressions.");
     sb.append(" For example expression: (a, (b, c)) will be transformed to nicer expression: (a, b, c)");
     return sb.toString();
   }
-
 }

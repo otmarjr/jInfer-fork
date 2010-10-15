@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.clustering;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
+import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
 
 /**
  * Factory interface for Clusterer interface. Implementing factories
@@ -33,6 +33,6 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepDisplayDescription;
  *
  * @author anti
  */
-public interface ClustererFactory extends NamedModule, Capabilities, TwoStepDisplayDescription {
+public interface ClustererFactory extends NamedModule, Capabilities, TwoStepUserDescription {
   Clusterer<AbstractStructuralNode> create();
 }

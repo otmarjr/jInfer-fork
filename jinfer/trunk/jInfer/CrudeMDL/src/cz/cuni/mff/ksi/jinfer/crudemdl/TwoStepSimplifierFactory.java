@@ -64,7 +64,7 @@ public class TwoStepSimplifierFactory implements Simplifier {
    */
   public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
   /**
-   * TODO anti Comment
+   * Property name of regular expression cleaner submodule.
    */
   public static final String PROPERTIES_CLEANER = "cleaner";
 

@@ -15,18 +15,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.nullcleaner;
+package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.cleanernull;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.cleanernull.CleanerNullFactory;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * TODO anti Comment!
+ * Tests for CleanerNullFactory.
  *
  * @author anti
  */
@@ -56,7 +52,7 @@ public class CleanerNullFactoryTest {
     CleanerNullFactory instance = new CleanerNullFactory();
     String expResult = "RegularExpressionCleanerNull";
     String result = instance.getModuleDescription();
-    assertFalse(expResult.equals(result));
+    assertEquals(expResult, result);
     assertFalse(result.isEmpty());
   }
 

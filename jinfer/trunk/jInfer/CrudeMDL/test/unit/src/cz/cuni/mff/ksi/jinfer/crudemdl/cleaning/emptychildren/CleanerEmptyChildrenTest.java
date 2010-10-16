@@ -17,16 +17,14 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.emptychildren;
 
-import java.util.Deque;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import java.util.ArrayDeque;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * TODO anti Comment!
+ * Tests for CleanerEmptyChildren.
  *
  * @author anti
  */

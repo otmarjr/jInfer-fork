@@ -15,9 +15,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.nullcleaner;
+package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.cleanernull;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.cleanernull.CleanerNull;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -25,7 +24,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * TODO anti Comment!
+ * Tests for CleanerNull.
  *
  * @author anti
  */

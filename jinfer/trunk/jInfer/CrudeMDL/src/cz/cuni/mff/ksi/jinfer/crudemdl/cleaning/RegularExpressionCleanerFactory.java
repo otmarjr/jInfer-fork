@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
 
 /**
- * TODO anti Comment!
+ * Factory for RegularExpressionCleaner.
  *
  * @author anti
  */

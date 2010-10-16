@@ -23,7 +23,9 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * Chains one or more cleaners in a row, pipelining output from first one
+ * to input of second one, and so on. Resulting in sequentially applying
+ * cleaners selected in preferences.
  *
  * @author anti
  */

@@ -57,7 +57,6 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
       ModuleParameters factoryParam= ((ModuleParameters) mergeConditionTesterFactory);
       List<String> parameterNames= factoryParam.getParameterNames();
 
-      // TODO anti what is returned by property, if it is not set
       for (String parameterName : parameterNames) {
         String value= properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
         int intValue;

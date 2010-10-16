@@ -20,8 +20,10 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 /**
- * TODO anti Comment!
- *
+ * Interface for all regular expression cleaners.
+ * Cleaner take one regular expression tree and outputs
+ * another one, with equal language, but simpler in some sort.
+  *
  * @author anti
  */
 public interface RegularExpressionCleaner<T> {

@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * replaces nested concatenations is resulting regular expressions.
+ * For example expression: (a, (b, c)) will be transformed to nicer expression: (a, b, c).
  *
  * @author anti
  */

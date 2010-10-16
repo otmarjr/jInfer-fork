@@ -37,9 +37,6 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProcessorFactory {
-
-  // TODO anti Consider renaming all ClusterProcessorXYZs to CPXYZ.
-
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingStateFactory.class);
 
   public static final String NAME = "ClusterProcessorAutomatonMergingState";
@@ -85,14 +82,13 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   @Override
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getName());
-    // TODO anti Very bad way to use StringBuilder, defies the purpose - don't use + inside!
-    sb.append(" constructs prefix tree automaton from positive examples"
-            + " in the cluster. The it selects AutomatonSimplifier class,"
-            + " to which it passes automaton to merge some states. AutomatonSimplifier"
-            + " is believed to return some sort of generalized automaton."
-            + " This generalized automaton is then sent to RegexpAutomatonSimplifier"
-            + " class, which has to create regular expression from automaton somehow."
-            + " This regular expression is returned as grammar for cluster of elements.");
+    sb.append(" constructs prefix tree automaton from positive examples");
+    sb.append(" in the cluster. The it selects AutomatonSimplifier class,");
+    sb.append(" to which it passes automaton to merge some states. AutomatonSimplifier");
+    sb.append(" is believed to return some sort of generalized automaton.");
+    sb.append(" This generalized automaton is then sent to RegexpAutomatonSimplifier");
+    sb.append(" class, which has to create regular expression from automaton somehow.");
+    sb.append(" This regular expression is returned as grammar for cluster of elements.");
     return sb.toString();
 
   }

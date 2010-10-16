@@ -178,7 +178,9 @@ public class NodePainter {
   private Image drawAttribute(final Attribute a) {
     final FontMetrics fm = graphics.getFontMetrics();
 
-    final String label = a.getName();
+    final boolean required = a.getMetadata().containsKey("required");
+
+    final String label = a.getName() + (required ? " (REQUIRED)" : "");
 
     final int labelWidth = (int)(fm.stringWidth(label) * 1.5);
     final int labelHeight = fm.getHeight() - fm.getDescent();

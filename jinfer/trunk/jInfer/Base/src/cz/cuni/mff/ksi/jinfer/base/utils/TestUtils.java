@@ -23,6 +23,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A few utilities to be used in JUnit tests.
@@ -33,6 +36,10 @@ public final class TestUtils {
 
   private TestUtils() {
   }
+
+
+  public static final List<String> EMPTY_CONTEXT = Collections.emptyList();
+  public static final Map<String, Object> EMPTY_METADATA = Collections.emptyMap();
 
   /**
    * Returns a simple textual representation of specified element, fit for using
@@ -82,6 +89,40 @@ public final class TestUtils {
       default:
         throw new IllegalArgumentException("Unknown enum member " + r.getType());
     }
+  }
+
+  /**
+   * Returns an element with provided name and subnodes. The element is otherwise
+   * empty: context and metadata are empty. The element will be created as immutable.
+   *
+   * @param name Name for this element.
+   * @param subnodes Subnodes of this element.
+   * @return Constructed element.
+   */
+  public static Element getElement(final String name,
+          final Regexp<AbstractStructuralNode> subnodes) {
+    return new Element(
+            EMPTY_CONTEXT,
+            name,
+            EMPTY_METADATA,
+            subnodes,
+            Collections.<Attribute>emptyList());
+  }
+
+  /**
+   * Returns an attribute with provided name. The attribute is otherwise empty:
+   * context, metadata and content are empty, content type is null.
+   *
+   * @param name Name for this attribute.
+   * @return Constructed attribute.
+   */
+  public static Attribute getAttribute(final String name) {
+    return new Attribute(
+            EMPTY_CONTEXT,
+            name,
+            EMPTY_METADATA,
+            null,
+            EMPTY_CONTEXT);
   }
 
   /**

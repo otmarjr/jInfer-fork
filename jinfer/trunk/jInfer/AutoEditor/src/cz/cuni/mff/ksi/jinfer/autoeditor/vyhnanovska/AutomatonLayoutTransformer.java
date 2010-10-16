@@ -95,7 +95,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
     Coordinate nextI = prev;
     LOG.info("nextI: " + nextI.getX() + " " + nextI.getY());
-    // Kym je na pozicii nextI obsadene alebo kym je nextI [1,1] (je nutna druha podmienka??) TODO
+    // TODO rio Kym je na pozicii nextI obsadene alebo kym je nextI [1,1] (je nutna druha podmienka??) TODO
     while (stateGridMapping.getStateAtCoordinate(nextI) != null || (nextI.equals(new Coordinate(1, 1)))) {
       LOG.info("obsazeno!");
       nextI = getNextCoordinate(prev, nextI, gridDimension);

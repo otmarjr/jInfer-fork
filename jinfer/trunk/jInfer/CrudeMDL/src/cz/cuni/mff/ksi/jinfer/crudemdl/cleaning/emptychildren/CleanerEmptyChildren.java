@@ -24,7 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO anti Comment!
+ * cleans empty children and children with one child. For example
+ * regular expression: ((), a, (b)), gets cleaned to (a, b).
+ * First empty concatenation () is removed, and concatenation (b)
+ * with only one child is replaced by token b.
  *
  * @author anti
  */

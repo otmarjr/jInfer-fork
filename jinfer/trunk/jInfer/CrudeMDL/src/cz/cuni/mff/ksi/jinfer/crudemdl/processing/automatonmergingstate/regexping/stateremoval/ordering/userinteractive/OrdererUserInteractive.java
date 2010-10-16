@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 
 /**
  * TODO anti Comment!
+ * Not using it, we don't have proper GUI - one click removing states.
  *
  * @author anti
  */

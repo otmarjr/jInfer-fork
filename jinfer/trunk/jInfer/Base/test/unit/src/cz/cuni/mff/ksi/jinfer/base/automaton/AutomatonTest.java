@@ -30,7 +30,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * TODO anti Comment!
+ * Basic tests for automaton.
  *
  * @author anti
  */

@@ -21,11 +21,15 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.NoRouteToHostException;
 import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -62,6 +66,14 @@ public class XMLProcessor implements Processor {
       PARSER_FACTORY.newSAXParser().parse(f, handler);
       return handler.getRules();
     } catch (final Exception e) {
+      if (e instanceof NoRouteToHostException
+              || e instanceof IOException) {
+        final NotifyDescriptor message = new NotifyDescriptor.Message(
+                "This XML document has external schema definition, but the schema could not be retrieved."
+                + "\nMake sure you're connected to the Internet and the schema URL is valid."
+                + "\nAlternatively, remove the schema definition from the document.");
+        DialogDisplayer.getDefault().notify(message);
+      }
       if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).
               getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error parsing XML file.", e);

@@ -79,8 +79,6 @@ public final class Utils {
     switch (n.getType()) {
       case ELEMENT:
         return getColorElement();
-//      case ATTRIBUTE:
-//        return getColorAttribute();
       case SIMPLE_DATA:
         return getColorSimpleData();
       default:
@@ -88,18 +86,53 @@ public final class Utils {
     }
   }
 
+  /**
+   * Creates an image of specified dimension, filled with the background color.
+   * 
+   * @param width Positive integer representing the width of the image.
+   * @param height Positive integer representing the height of the image.
+   * @return BufferedImage of specified dimension.
+   */
   public static BufferedImage getImage(final int width, final int height) {
+    return getImage(width, height, getColorBackground());
+  }
+
+  /**
+   * Creates an image of specified dimension, filled with the specified color.
+   *
+   * @param width Positive integer representing the width of the image.
+   * @param height Positive integer representing the height of the image.
+   * @color Background color of the image.
+   * @return BufferedImage of specified dimension.
+   */
+  public static BufferedImage getImage(final int width, final int height,
+          final Color color) {
+    if (width <= 0 || height <= 0) {
+      throw new IllegalArgumentException("Image dimension must be positive integers.");
+    }
     final BufferedImage ret = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     final Graphics2D g = ret.createGraphics();
-    g.setColor(getColorBackground());
+    g.setColor(color);
     g.fillRect(0, 0, width, height);
     return ret;
   }
+  
+  /**
+   * Returns the width of the specified image.
+   *
+   * @return Width of the image, 0 if it is <code>null</code>.
+   */
+  public static int getWidth(final Image image) {
+    return image == null ? 0 : image.getWidth(null);
+  }
 
-  public static void drawArrow(final Graphics2D g, final int x, final int height) {
-    g.drawLine(x, height / 2, x + 10, height / 2);
-    g.drawLine(x + 5, height / 4, x + 10, height / 2);
-    g.drawLine(x + 5, (3 * height) / 4, x + 10, height / 2);
+  /**
+   * Returns the height of the specified image.
+   *
+   * @return Height of the image, 0 if it is <code>null</code>.
+   */
+  public static int getHeight(final Image image) {
+    return image == null ? 0 : image.getHeight(null);
   }
 
   private static Image loadStatic(final String url) {

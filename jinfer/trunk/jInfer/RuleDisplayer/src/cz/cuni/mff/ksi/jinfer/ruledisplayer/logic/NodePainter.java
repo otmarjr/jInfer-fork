@@ -18,6 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -71,8 +72,8 @@ public class NodePainter {
 
     final String label = r.getContent().getName() + r.getInterval().toString();
 
-    final int nameWidth = (int)(fm.stringWidth(label) * 1.5);
-    final int nameHeight = fm.getHeight() - fm.getDescent();
+    final int labelWidth = (int)(fm.stringWidth(label) * 1.5);
+    final int labelHeight = fm.getHeight() - fm.getDescent();
 
     final Image children = isVisited(r.getContent()) ? Utils.ARROW : drawSubnodes(r.getContent(), level + 1);
     if (r.getContent().isElement()) {
@@ -83,22 +84,19 @@ public class NodePainter {
     final int height;
 
     if (children != null) {
-      width =  Math.max(nameWidth, children.getWidth(null)) + 2 * margin;
+      width =  Math.max(labelWidth, children.getWidth(null)) + 2 * margin;
       height = children.getHeight(null) + fm.getHeight() + 3 * margin;
     }
     else {
-      width = nameWidth + 2 * margin;
+      width = labelWidth + 2 * margin;
       height = fm.getHeight() + 2 * margin;
     }
 
-    final BufferedImage ret = Utils.getImage(width, height);
-
+    final BufferedImage ret = Utils.getImage(width, height, Utils.getNodeColor(r.getContent()));
     final Graphics2D g = ret.createGraphics();
 
-    g.setColor(Utils.getNodeColor(r.getContent()));
-    g.fillRect(0, 0, width, height);
     g.setColor(Utils.getColorBackground());
-    g.drawString(label, margin, nameHeight + margin);
+    g.drawString(label, margin, labelHeight + margin);
     g.setColor(Utils.getColorForeground());
     g.drawRect(0, 0, width - 1, height - 1);
 
@@ -112,11 +110,93 @@ public class NodePainter {
     if (!n.isElement()) {
       return null;
     }
-    final Regexp<AbstractStructuralNode> subnodes = ((Element)n).getSubnodes();
-    if (subnodes == null) {
-      return null;
+    final Element e = (Element) n;
+    final Image imgSubnodes;
+    final Image imgAttrs;
+    if (e.getSubnodes() != null) {
+      imgSubnodes = drawRegexp(e.getSubnodes(), level + 1);
+    } else {
+      imgSubnodes = null;
     }
-    return drawRegexp(subnodes, level + 1);
+    if (!BaseUtils.isEmpty(e.getAttributes())) {
+      imgAttrs = drawAttributes(e.getAttributes());
+    }
+    else {
+      imgAttrs = null;
+    }
+
+    final BufferedImage ret = Utils.getImage(
+            Math.max(Utils.getWidth(imgSubnodes), Utils.getWidth(imgAttrs)),
+            Utils.getHeight(imgSubnodes) + Utils.getHeight(imgAttrs),
+            Utils.getColorElement());
+    final Graphics2D g = ret.createGraphics();
+    if (imgAttrs != null) {
+      g.drawImage(imgAttrs, 0, 0, null);
+    }
+    if (imgSubnodes != null) {
+      g.drawImage(imgSubnodes, 0, Utils.getHeight(imgAttrs), null);
+    }
+
+    return ret;
+  }
+
+  private Image drawAttributes(final List<Attribute> attributes) {
+    final List<Image> attrImages = getAttrImages(attributes);
+    int width = 0;
+    int height = 0;
+    for (final Image img : attrImages) {
+      width += img.getWidth(null) + margin;
+      height = Math.max(height, img.getHeight(null));
+    }
+    final BufferedImage concatRet = Utils.getImage(width + margin, 
+            height + 2 * margin,
+            Utils.getColorElement());
+    final Graphics2D g = concatRet.createGraphics();
+
+    int offset = margin;
+    for (final Image img : attrImages) {
+      g.drawImage(img, offset, margin, null);
+      offset += img.getWidth(null) + margin;
+    }
+    return concatRet;
+  }
+
+  private List<Image> getAttrImages(final List<Attribute> attributes) {
+    final List<Image> ret = new ArrayList<Image>(attributes.size());
+    int count = 0;
+    for (final Attribute a : attributes) {
+      ret.add(drawAttribute(a));
+      if (count >= maxLevel) {
+        ret.add(Utils.DOTS);
+        return ret;
+      }
+      count++;
+    }
+    return ret;
+  }
+
+  private Image drawAttribute(final Attribute a) {
+    final FontMetrics fm = graphics.getFontMetrics();
+
+    final String label = a.getName();
+
+    final int labelWidth = (int)(fm.stringWidth(label) * 1.5);
+    final int labelHeight = fm.getHeight() - fm.getDescent();
+
+    final int width = labelWidth + 2 * margin;
+    final int height = fm.getHeight() + 2 * margin;
+
+    final BufferedImage ret = Utils.getImage(width, height);
+    final Graphics2D g = ret.createGraphics();
+
+    g.setColor(Utils.getColorAttribute());
+    g.fillRect(0, 0, width, height);
+    g.setColor(Utils.getColorBackground());
+    g.drawString(label, margin, labelHeight + margin);
+    g.setColor(Utils.getColorForeground());
+    g.drawRect(0, 0, width - 1, height - 1);
+
+    return ret;
   }
 
   private Image drawRegexp(final Regexp<AbstractStructuralNode> subnodes, final int level) {
@@ -146,6 +226,7 @@ public class NodePainter {
         ret.add(Utils.DOTS);
         return ret;
       }
+      count++;
     }
     return ret;
   }
@@ -162,10 +243,10 @@ public class NodePainter {
       width = Math.max(width, img.getWidth(null));
       height += img.getHeight(null) + margin;
     }
-    final BufferedImage altRet = Utils.getImage(width + 2 * margin, height + margin);
+    final BufferedImage altRet = Utils.getImage(width + 2 * margin, 
+            height + margin,
+            Utils.getColorAlternation());
     final Graphics2D g = altRet.createGraphics();
-    g.setColor(Utils.getColorAlternation());
-    g.fillRect(0, 0, width + 2 * margin, height + margin);
 
     int offset = margin;
     for (final Image img : altImgs) {
@@ -187,10 +268,10 @@ public class NodePainter {
       width += img.getWidth(null) + margin;
       height = Math.max(height, img.getHeight(null));
     }
-    final BufferedImage concatRet = Utils.getImage(width + margin, height + 2 * margin);
+    final BufferedImage concatRet = Utils.getImage(width + margin, 
+            height + 2 * margin,
+            Utils.getColorConcatenation());
     final Graphics2D g = concatRet.createGraphics();
-    g.setColor(Utils.getColorConcatenation());
-    g.fillRect(0, 0, width + margin, height + 2 * margin);
 
     int offset = margin;
     for (final Image img : concatImgs) {

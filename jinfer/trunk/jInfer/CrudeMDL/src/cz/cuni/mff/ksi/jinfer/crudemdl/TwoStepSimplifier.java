@@ -39,7 +39,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
+ * Look at TwoStepSimplifierFactory for description.
  *
  * @author anti
  */

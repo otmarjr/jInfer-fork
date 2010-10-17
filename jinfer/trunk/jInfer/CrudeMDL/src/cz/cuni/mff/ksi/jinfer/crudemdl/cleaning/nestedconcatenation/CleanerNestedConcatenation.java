@@ -38,23 +38,29 @@ public class CleanerNestedConcatenation<T> implements RegularExpressionCleaner<T
         return regexp;
       case ALTERNATION:
       case PERMUTATION:
-      case CONCATENATION:
-        List<Regexp<T>> newChildren= new ArrayList<Regexp<T>>();
-        for (Regexp<T> child : regexp.getChildren()) {
-          if (child.isConcatenation()&&regexp.isConcatenation()) {
-            for (Regexp<T> subChild : child.getChildren()) {
-              newChildren.add(cleanRegularExpression(subChild));
-            }
-          } else {
-            newChildren.add(cleanRegularExpression(child));
-          }
-        }
         Regexp<T> newRegexp= Regexp.<T>getMutable();
         newRegexp.setInterval(regexp.getInterval());
         newRegexp.setType(regexp.getType());
-        newRegexp.getChildren().addAll(newChildren);
+        for (Regexp<T> child : regexp.getChildren()) {
+          newRegexp.getChildren().add(cleanRegularExpression(child));
+        }
         newRegexp.setImmutable();
         return newRegexp;
+      case CONCATENATION:
+        Regexp<T> newRegexp2= Regexp.<T>getMutable();
+        newRegexp2.setInterval(regexp.getInterval());
+        newRegexp2.setType(regexp.getType());
+        for (Regexp<T> child : regexp.getChildren()) {
+          if (child.isConcatenation()) {
+            newRegexp2.getChildren().addAll(
+                    cleanRegularExpression(child).getChildren()
+                    );
+          } else {
+            newRegexp2.getChildren().add(cleanRegularExpression(child));
+          }
+        }
+        newRegexp2.setImmutable();
+        return newRegexp2;
       default:
         throw new IllegalArgumentException("Unknown regexp type: " + regexp.getType());
     }

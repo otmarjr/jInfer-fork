@@ -113,6 +113,7 @@ public class NodePainter {
     final Element e = (Element) n;
     final Image imgSubnodes;
     final Image imgAttrs;
+
     if (e.getSubnodes() != null) {
       imgSubnodes = drawRegexp(e.getSubnodes(), level + 1);
     } else {
@@ -123,6 +124,9 @@ public class NodePainter {
     }
     else {
       imgAttrs = null;
+    }
+    if (imgSubnodes == null && imgAttrs == null) {
+      return null;
     }
 
     final BufferedImage ret = Utils.getImage(

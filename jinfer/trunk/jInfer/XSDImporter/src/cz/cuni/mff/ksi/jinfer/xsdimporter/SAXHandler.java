@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDDocumentElement;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.SAXAttributeData;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.SimpleDataTypes;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.BuiltInDataTypes;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -126,6 +126,11 @@ class SAXHandler extends DefaultHandler {
       currentRuleListName = docElement.attributeNameValue();
       
     } else if (docElement.isOrderIndicator()) {
+      if (docElementStack.peek().getName().equalsIgnoreCase("element")) {
+        final String msg = "Schema not valid! " + docElement.getName() + " can't follow an element.";
+        LOG.error(msg);
+        throw new IllegalArgumentException(msg);
+      }
       if (docElement.isAssociated()) {
         contentStack.peek().getSubnodes().setType(determineRegexpType(docElement));
       } else {
@@ -182,8 +187,9 @@ class SAXHandler extends DefaultHandler {
     final XSDDocumentElement docElement = docElementStack.pop();
     
     if ( !docElement.getName().equalsIgnoreCase(trimNS(qName)) ) {
-      LOG.error("Unpaired element " + docElement.getName() + " and " + qName);
-      throw new IllegalArgumentException("Unpaired element" + docElement.getName() + " and " + qName);
+      final String msg = "Unpaired element " + docElement.getName() + " and " + qName;
+      LOG.error(msg);
+      throw new IllegalArgumentException(msg);
     }
 
     // BIG IF -> we check what type of element ended
@@ -193,13 +199,14 @@ class SAXHandler extends DefaultHandler {
     } else if (docElement.isNamedComplexType()) {
       final Element container = contentStack.pop();
       if (!isContainer(container)) {
-        LOG.error("Popped wrong element from stack " + container.getName());
-        throw new IllegalArgumentException("Popped wrong element from stack " + container.getName());
+        final String msg = "Unexpected element on stack " + container.getName();
+        LOG.error(msg);
+        throw new IllegalArgumentException(msg);
       }
       
       final List<Element> oldRules = namedTypes.get(docElement.attributeNameValue()).getSecond();
       namedTypes.remove(docElement.attributeNameValue());
-      namedTypes.put(docElement.attributeNameValue(), new Pair(container, oldRules));
+      namedTypes.put(docElement.attributeNameValue(), new Pair<Element, List<Element>>(container, oldRules));
       // stop adding rules to that CTypes rules
       currentRuleListName = "";
 
@@ -243,7 +250,7 @@ class SAXHandler extends DefaultHandler {
    * and add it to rules.
    * @param elem
    */
-  private void addChildAndRule(final Element elem, boolean resolved) {
+  private void addChildAndRule(final Element elem, final boolean resolved) {
     if (elem.getSubnodes().getType() == null) {
       elem.getSubnodes().setType(RegexpType.CONCATENATION);
     }
@@ -255,9 +262,9 @@ class SAXHandler extends DefaultHandler {
       contentStack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(elem));
     }
 
-    if (currentRuleListName.equals("")) {
+    if ("".equals(currentRuleListName)) {
       // add element to global rules
-      //LOG.debug("ADDING RULE:" + elem.toString());
+      LOG.debug("ADDING RULE:" + elem.toString());
       rules.add(elem);
     } else {
       // add element to rules for the active CType
@@ -314,15 +321,16 @@ class SAXHandler extends DefaultHandler {
     boolean resolved = true;
 
     if (!old.getName().equals(name)) {
-      LOG.error("Unexpected element on stack " + name);
-      throw new IllegalArgumentException("Unexpected element on stack " + name);
+      final String msg = "Unexpected element on stack " + name;
+      LOG.error(msg);
+      throw new IllegalArgumentException(msg);
     }
 
     if (docElement.getAttrs().containsKey("type")) {
       // deal with element that has specified type
       final String TYPE = docElement.getAttrs().get("type").getValue();
 
-      if (!SimpleDataTypes.isSimpleDataType(TYPE)) {
+      if (!BuiltInDataTypes.isSimpleDataType(TYPE)) {
         // try to pair this element with its defined type
         // the problem is, that the complexType it may be associated with
         // can be declared later in the schema than this element
@@ -348,10 +356,10 @@ class SAXHandler extends DefaultHandler {
         //check if the type is not the same
         if (!old.getSubnodes().getType().equals(pair.getFirst().getSubnodes().getType())) {
           // serious problem, type conflict
-          LOG.error("Element " + old.getName() + " should have type " + TYPE
-                  + " but its content already set its type to " + old.getSubnodes().getType());
-          throw new IllegalArgumentException("Element " + old.getName() + " should have type " + TYPE
-                  + " but its content already set its type to " + old.getSubnodes().getType());
+          final String msg = "Element " + old.getName() + " should have type " + TYPE
+                  + " but its content already set its type to " + old.getSubnodes().getType();
+          LOG.error(msg);
+          throw new IllegalArgumentException(msg);
         }
       } else {
         // set correct type
@@ -359,7 +367,7 @@ class SAXHandler extends DefaultHandler {
       }
       // add all children
       for (Regexp<AbstractStructuralNode> child : pair.getFirst().getSubnodes().getChildren()) {
-        List<String> prefix = new ArrayList<String>();
+        final List<String> prefix = new ArrayList<String>();
         if (!BaseUtils.isEmpty(old.getContext())) {
           prefix.addAll(old.getContext());
         }
@@ -367,6 +375,7 @@ class SAXHandler extends DefaultHandler {
         old.getSubnodes().addChild(new CloneHelper().cloneRegexp(child, prefix));
       }
       // copy rules to global
+      LOG.debug("...copying rules from ctype " + TYPE);
       rules.addAll(pair.getSecond());
       // add all attributes
       for (Attribute at : pair.getFirst().getAttributes()) {

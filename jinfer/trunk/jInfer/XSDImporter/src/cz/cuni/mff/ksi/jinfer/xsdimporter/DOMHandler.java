@@ -70,7 +70,7 @@ public class DOMHandler {
     return Collections.emptyList();
   }
 
-  private void addNamedCType(org.w3c.dom.Element el) {
+  private void addNamedCType(final org.w3c.dom.Element el) {
     LOG.info("Adding complextype: " + el.toString());
   }
 

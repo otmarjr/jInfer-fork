@@ -31,7 +31,7 @@ public class SimpleDataTypesTest {
   public void testIsStringType0() {
     System.out.println("isStringType0(null)");
     String type = null;
-    SimpleDataTypes.isStringType(type);
+    BuiltInDataTypes.isStringType(type);
   }
 
   @Test
@@ -39,7 +39,7 @@ public class SimpleDataTypesTest {
     System.out.println("isStringType1(xs:string)");
     String type = "xs:string";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isStringType(type);
+    boolean result = BuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
@@ -48,7 +48,7 @@ public class SimpleDataTypesTest {
     System.out.println("isStringType2(XS:QName)");
     String type = "XS:QName";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isStringType(type);
+    boolean result = BuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
@@ -57,7 +57,7 @@ public class SimpleDataTypesTest {
     System.out.println("isStringType3(empty)");
     String type = "";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isStringType(type);
+    boolean result = BuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
@@ -66,7 +66,7 @@ public class SimpleDataTypesTest {
     System.out.println("isStringType4(xs:xs:)");
     String type = "xs:xs:";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isStringType(type);
+    boolean result = BuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
@@ -75,7 +75,7 @@ public class SimpleDataTypesTest {
     System.out.println("isStringType5(definedType)");
     String type = "definedType";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isStringType(type);
+    boolean result = BuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
@@ -84,7 +84,7 @@ public class SimpleDataTypesTest {
     System.out.println("isStringType6(double)");
     String type = "double";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isStringType(type);
+    boolean result = BuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
   // --------------------------------------------------------------- DATE TYPES
@@ -93,7 +93,7 @@ public class SimpleDataTypesTest {
   public void testIsDateType0() {
     System.out.println("isDateType0(null)");
     String type = null;
-    SimpleDataTypes.isDateType(type);
+    BuiltInDataTypes.isDateType(type);
   }
 
   @Test
@@ -101,7 +101,7 @@ public class SimpleDataTypesTest {
     System.out.println("isDateType1(xs:date)");
     String type = "xs:date";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isDateType(type);
+    boolean result = BuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
 
@@ -110,7 +110,7 @@ public class SimpleDataTypesTest {
     System.out.println("isDateType2(XS:gYearMonth)");
     String type = "XS:gYearMonth";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isDateType(type);
+    boolean result = BuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
 
@@ -119,7 +119,7 @@ public class SimpleDataTypesTest {
     System.out.println("isDateType3(empty)");
     String type = "";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isDateType(type);
+    boolean result = BuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
   
@@ -128,7 +128,7 @@ public class SimpleDataTypesTest {
     System.out.println("isDateType4(xs:string)");
     String type = "xs:string";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isDateType(type);
+    boolean result = BuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
 
@@ -138,7 +138,7 @@ public class SimpleDataTypesTest {
   public void testIsNumericType0() {
     System.out.println("isNumericType0(null)");
     String type = null;
-    SimpleDataTypes.isNumericType(type);
+    BuiltInDataTypes.isNumericType(type);
   }
 
   @Test
@@ -146,7 +146,7 @@ public class SimpleDataTypesTest {
     System.out.println("isNumericType1(xs:integer)");
     String type = "xs:integer";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isNumericType(type);
+    boolean result = BuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -155,7 +155,7 @@ public class SimpleDataTypesTest {
     System.out.println("isNumericType2(XS:unsignedInt)");
     String type = "XS:unsignedInt";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isNumericType(type);
+    boolean result = BuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -164,7 +164,7 @@ public class SimpleDataTypesTest {
     System.out.println("isNumericType3(empty)");
     String type = "";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isNumericType(type);
+    boolean result = BuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -173,7 +173,7 @@ public class SimpleDataTypesTest {
     System.out.println("isNumericType4(XS:gYearMonth)");
     String type = "XS:gYearMonth";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isNumericType(type);
+    boolean result = BuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -183,7 +183,7 @@ public class SimpleDataTypesTest {
   public void testIsTrickyNumericType0() {
     System.out.println("isTrickyNumericType0(null)");
     String type = null;
-    SimpleDataTypes.isTrickyNumericType(type);
+    BuiltInDataTypes.isTrickyNumericType(type);
   }
 
   @Test
@@ -191,7 +191,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyNumericType1(xs:byte)");
     String type = "xs:byte";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isTrickyNumericType(type);
+    boolean result = BuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -200,7 +200,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyNumericType2(XS:int)");
     String type = "XS:int";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isTrickyNumericType(type);
+    boolean result = BuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -209,7 +209,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyNumericType3(empty)");
     String type = "";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isTrickyNumericType(type);
+    boolean result = BuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -218,7 +218,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyNumericType4(XS:)");
     String type = "XS:";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isTrickyNumericType(type);
+    boolean result = BuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -227,7 +227,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyNumericType5(XS:boolean)");
     String type = "XS:";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isTrickyNumericType(type);
+    boolean result = BuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
@@ -237,7 +237,7 @@ public class SimpleDataTypesTest {
   public void testIsTrickyMiscType0() {
     System.out.println("isTrickyMiscType0(null)");
     String type = null;
-    SimpleDataTypes.isTrickyNumericType(type);
+    BuiltInDataTypes.isTrickyNumericType(type);
   }
 
   @Test
@@ -245,7 +245,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyMiscType1(xs:boolean)");
     String type = "xs:boolean";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isTrickyMiscType(type);
+    boolean result = BuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -254,7 +254,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyMiscType2(XS:float)");
     String type = "XS:float";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isTrickyMiscType(type);
+    boolean result = BuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -263,7 +263,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyMiscType3(empty)");
     String type = "";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isTrickyMiscType(type);
+    boolean result = BuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -272,7 +272,7 @@ public class SimpleDataTypesTest {
     System.out.println("isTrickyMiscType4(XS:BOOLEAN)");
     String type = "XS:BOOLEAN";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isTrickyMiscType(type);
+    boolean result = BuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -282,7 +282,7 @@ public class SimpleDataTypesTest {
   public void testIsMiscType0() {
     System.out.println("isMiscType0(null)");
     String type = null;
-    SimpleDataTypes.isMiscType(type);
+    BuiltInDataTypes.isMiscType(type);
   }
 
   @Test
@@ -290,7 +290,7 @@ public class SimpleDataTypesTest {
     System.out.println("isMiscType1(xs:QName)");
     String type = "xs:QName";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isMiscType(type);
+    boolean result = BuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -299,7 +299,7 @@ public class SimpleDataTypesTest {
     System.out.println("isMiscType2(XS:base64Binary)");
     String type = "XS:base64Binary";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isMiscType(type);
+    boolean result = BuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -308,7 +308,7 @@ public class SimpleDataTypesTest {
     System.out.println("isMiscType3(empty)");
     String type = "";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isMiscType(type);
+    boolean result = BuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -317,7 +317,7 @@ public class SimpleDataTypesTest {
     System.out.println("isMiscType4(xs:gYearMonth)");
     String type = "xs:gYearMonth";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isMiscType(type);
+    boolean result = BuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
@@ -327,7 +327,7 @@ public class SimpleDataTypesTest {
   public void testIsSimpleDataType0() {
     System.out.println("isSimpleDataType0(null)");
     String type = null;
-    SimpleDataTypes.isSimpleDataType(type);
+    BuiltInDataTypes.isSimpleDataType(type);
   }
 
   @Test
@@ -335,7 +335,7 @@ public class SimpleDataTypesTest {
     System.out.println("isSimpleDataType1(xs:token)");
     String type = "xs:token";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isSimpleDataType(type);
+    boolean result = BuiltInDataTypes.isSimpleDataType(type);
     assertEquals(expResult, result);
   }
 
@@ -344,7 +344,7 @@ public class SimpleDataTypesTest {
     System.out.println("isSimpleDataType2(XS:base64Binary)");
     String type = "XS:base64Binary";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isSimpleDataType(type);
+    boolean result = BuiltInDataTypes.isSimpleDataType(type);
     assertEquals(expResult, result);
   }
 
@@ -353,7 +353,7 @@ public class SimpleDataTypesTest {
     System.out.println("isMiscType3(empty)");
     String type = "";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isSimpleDataType(type);
+    boolean result = BuiltInDataTypes.isSimpleDataType(type);
     assertEquals(expResult, result);
   }
 
@@ -362,7 +362,7 @@ public class SimpleDataTypesTest {
     System.out.println("isSimpleDataType4(xs:myType)");
     String type = "xs:myType";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isSimpleDataType(type);
+    boolean result = BuiltInDataTypes.isSimpleDataType(type);
     assertEquals(expResult, result);
   }
 
@@ -370,7 +370,7 @@ public class SimpleDataTypesTest {
     System.out.println("isSimpleDataType5(xs:BOOLEAN)");
     String type = "xs:BOOLEAN";
     boolean expResult = false;
-    boolean result = SimpleDataTypes.isSimpleDataType(type);
+    boolean result = BuiltInDataTypes.isSimpleDataType(type);
     assertEquals(expResult, result);
   }
 
@@ -379,7 +379,7 @@ public class SimpleDataTypesTest {
     System.out.println("isSimpleDataType6(xs:string)");
     String type = "xs:string";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isSimpleDataType(type);
+    boolean result = BuiltInDataTypes.isSimpleDataType(type);
     assertEquals(expResult, result);
   }
 
@@ -388,7 +388,7 @@ public class SimpleDataTypesTest {
     System.out.println("isSimpleDataType7(xs:int)");
     String type = "xs:int";
     boolean expResult = true;
-    boolean result = SimpleDataTypes.isSimpleDataType(type);
+    boolean result = BuiltInDataTypes.isSimpleDataType(type);
     assertEquals(expResult, result);
   }
 }

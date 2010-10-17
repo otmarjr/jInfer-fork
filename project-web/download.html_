@@ -1,43 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<title>jInfer</title>
-	<link rel="stylesheet" type="text/css" href="style.css"/>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-18775335-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>	
-</head>
-<body>
-
-<div id="outer-header">
-<div id="header">
-	<div id="header-content">
-		<a href="index.html"><img src="images/jinfer-logo.png" /></a>
-	</div>
-</div>
-</div>
-<div id="menu">
-	<div id="menu-content">
-		<a href="index.html">Home</a>&nbsp;<span></span>
-		<a href="about.html">About/The Team</a>&nbsp;<span></span>
-		<a href="download.html">Download</a>&nbsp;<span></span>
-		<a href="documentation.html">Documentation</a>&nbsp;<span></span>
-		<a href="help.html">Help</a>&nbsp;<span></span>
-		<a href="legal.html">Legal</a>
-	</div>
-</div>
+#include "header.html_"
 
 <div id="content">
 	<h1>Downloading jInfer</h1>
@@ -87,14 +48,4 @@
 	<div class="clear"></div>
 </div>
 
-<div id="footer">
-	<div id="footer-content">
-		<a href="http://sourceforge.net/">SF.NET</a>&nbsp;<span></span>
-		<a href="http://www.cuni.cz/">CUNI</a>&nbsp;<span></span>
-		<a href="http://www.mff.cuni.cz/">MFF</a>&nbsp;<span></span>
-		<a href="http://www.ksi.mff.cuni.cz/en/">KSI</a>
-	</div>
-</div>
-
-</body>
-</html>
+#include "footer.html_"

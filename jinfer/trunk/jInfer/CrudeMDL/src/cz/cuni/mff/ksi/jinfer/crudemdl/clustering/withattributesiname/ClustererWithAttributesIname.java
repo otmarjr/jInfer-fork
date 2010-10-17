@@ -94,6 +94,8 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
   }
 
   @Override
+
+  // TODO anti Consistency check, was there a node on right side not clustered because of inproper use?
   public void cluster() throws InterruptedException {
     for (AbstractStructuralNode node : items) {
       final AbstractStructuralNode representant= this.addNode(node);
@@ -109,9 +111,7 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
                       new SimpleDataClusterer());
             }
             this.simpleDataClusterers.get(representant).add((SimpleData) subNode);
-          }// else {
-           // this.addNode(subNode);
-         // }
+          }
         }
         for (Attribute attribute : ((Element) node).getAttributes()) {
           if (!this.attributeClusterers.containsKey(representant)) {

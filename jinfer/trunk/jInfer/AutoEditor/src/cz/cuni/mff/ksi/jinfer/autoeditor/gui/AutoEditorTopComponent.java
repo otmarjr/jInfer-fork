@@ -150,7 +150,7 @@ public final class AutoEditorTopComponent extends TopComponent {
   }//GEN-LAST:event_jButton1ActionPerformed
 
   private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-    askUser = false;
+    askUser = !(jCheckBox1.isSelected());
   }//GEN-LAST:event_jCheckBox1ActionPerformed
 
   public <T> void drawAutomatonBasicVisualizationServer(final AutoEditor autoEditorInstance, final BasicVisualizationServer<State<T>, Step<T>> bvs, final String labelText) {

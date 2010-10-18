@@ -31,7 +31,6 @@ import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import java.awt.Dimension;
-import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +115,7 @@ public class AutoEditor<T> {
     // TODO rio find suitable layout
     //final Layout<State<T>, Step<T>> layout = new ISOMLayout<State<T>, Step<T>>(graph);
 
-    // TODO rio toto je kod Julie
+    // TODO rio Julia's code fragment
     final int MIN_X_SIZE = 7;
     final int MIN_Y_SIZE = 3;
     final int SQUARE_SIZE = 100;

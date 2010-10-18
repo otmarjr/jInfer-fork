@@ -84,8 +84,8 @@ public class NodePainter {
     final int height;
 
     if (children != null) {
-      width =  Math.max(labelWidth, children.getWidth(null)) + 2 * margin;
-      height = children.getHeight(null) + fm.getHeight() + 3 * margin;
+      width =  Math.max(labelWidth, Utils.getWidth(children)) + 2 * margin;
+      height = Utils.getHeight(children) + fm.getHeight() + 3 * margin;
     }
     else {
       width = labelWidth + 2 * margin;
@@ -149,8 +149,8 @@ public class NodePainter {
     int width = 0;
     int height = 0;
     for (final Image img : attrImages) {
-      width += img.getWidth(null) + margin;
-      height = Math.max(height, img.getHeight(null));
+      width += Utils.getWidth(img) + margin;
+      height = Math.max(height, Utils.getHeight(img));
     }
     final BufferedImage concatRet = Utils.getImage(width + margin, 
             height + 2 * margin,
@@ -160,7 +160,7 @@ public class NodePainter {
     int offset = margin;
     for (final Image img : attrImages) {
       g.drawImage(img, offset, margin, null);
-      offset += img.getWidth(null) + margin;
+      offset += Utils.getWidth(img) + margin;
     }
     return concatRet;
   }
@@ -246,8 +246,8 @@ public class NodePainter {
     int width = 0;
     int height = 0;
     for (final Image img : altImgs) {
-      width = Math.max(width, img.getWidth(null));
-      height += img.getHeight(null) + margin;
+      width = Math.max(width, Utils.getWidth(img));
+      height += Utils.getHeight(img) + margin;
     }
     final BufferedImage altRet = Utils.getImage(width + 2 * margin, 
             height + margin,
@@ -257,7 +257,7 @@ public class NodePainter {
     int offset = margin;
     for (final Image img : altImgs) {
       g.drawImage(img, margin, offset, null);
-      offset += img.getHeight(null) + margin;
+      offset += Utils.getHeight(img) + margin;
     }
     return altRet;
   }
@@ -271,8 +271,8 @@ public class NodePainter {
     int width = 0;
     int height = 0;
     for (final Image img : concatImgs) {
-      width += img.getWidth(null) + margin;
-      height = Math.max(height, img.getHeight(null));
+      width += Utils.getWidth(img) + margin;
+      height = Math.max(height, Utils.getHeight(img));
     }
     final BufferedImage concatRet = Utils.getImage(width + margin, 
             height + 2 * margin,
@@ -282,7 +282,7 @@ public class NodePainter {
     int offset = margin;
     for (final Image img : concatImgs) {
       g.drawImage(img, offset, margin, null);
-      offset += img.getWidth(null) + margin;
+      offset += Utils.getWidth(img) + margin;
     }
     return concatRet;
   }

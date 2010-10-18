@@ -387,25 +387,29 @@ public class Regexp<T> {
 
   @Override
   public String toString() {
-    switch (type) {
-      case TOKEN:
-        return content.toString() + interval.toString();
-      case CONCATENATION:
-      case ALTERNATION:
-      case PERMUTATION:
-        return CollectionToString.colToString(children, getDelimiter(type),
-                new CollectionToString.ToString<Regexp<T>>() {
+    if (type != null) {
+      switch (type) {
+        case TOKEN:
+          return content.toString() + interval.toString();
+        case CONCATENATION:
+        case ALTERNATION:
+        case PERMUTATION:
+          return CollectionToString.colToString(children, getDelimiter(type),
+                  new CollectionToString.ToString<Regexp<T>>() {
 
-                  @Override
-                  public String toString(Regexp<T> t) {
-                    return t.toString();
-                  }
-                })
-                + interval.toString();
-      case LAMBDA:
-        return "\u03BB";
-      default:
-        throw new IllegalArgumentException("Unknown enum member " + type);
+                    @Override
+                    public String toString(Regexp<T> t) {
+                      return t.toString();
+                    }
+                  })
+                  + interval.toString();
+        case LAMBDA:
+          return "\u03BB";
+        default:
+          throw new IllegalArgumentException("Unknown enum member " + type);
+      }
+    } else {
+      return "RegexpType=null";
     }
   }
 

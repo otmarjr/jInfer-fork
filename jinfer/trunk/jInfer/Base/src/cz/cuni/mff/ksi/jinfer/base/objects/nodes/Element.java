@@ -57,24 +57,23 @@ public class Element extends AbstractStructuralNode {
   private Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
-          final Regexp<AbstractStructuralNode> subnodes, 
+          final Regexp<AbstractStructuralNode> subnodes,
           final List<Attribute> attributes,
           final boolean mutable) {
-    
+
     super(context, name, metadata, mutable);
     this.subnodes = subnodes;
-    this.attributes= attributes;
+    this.attributes = attributes;
     checkConstraits();
   }
 
   public static Element getMutable() {
-    return new Element(new ArrayList<String>(), 
-            null, 
+    return new Element(new ArrayList<String>(),
+            null,
             new HashMap<String, Object>(),
             Regexp.<AbstractStructuralNode>getMutable(),
             new ArrayList<Attribute>(),
-            true
-            );
+            true);
   }
 
   @Override
@@ -111,7 +110,7 @@ public class Element extends AbstractStructuralNode {
       ret.append(' ').append('<');
       for (int i = 0; i < attributes.size(); ++i) {
         ret.append(attributes.get(i));
-        if (i != (attributes.size() -1)) {
+        if (i != (attributes.size() - 1)) {
           ret.append("; ");
         }
       }

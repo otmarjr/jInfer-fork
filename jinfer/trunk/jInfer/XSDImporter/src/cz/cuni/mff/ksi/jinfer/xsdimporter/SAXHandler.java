@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
@@ -69,14 +68,12 @@ class SAXHandler extends DefaultHandler {
    * List of elements with unknown type when they were processed.
    */
   private final List<Pair<String, Element>> unresolved = new ArrayList<Pair<String, Element>>();
-
   private static final Logger LOG = Logger.getLogger(SAXHandler.class);
-/**
- * Pseudo-unique name for the container elements that are pushed in contentStack
- * the name should be distict from every element name in the actual schema
- */
+  /**
+   * Pseudo-unique name for the container elements that are pushed in contentStack
+   * the name should be distict from every element name in the actual schema
+   */
   private static final String CONTAINER_NAME = "__conTAIner__";
-
   private String currentRuleListName = "";
 
   /**
@@ -128,7 +125,7 @@ class SAXHandler extends DefaultHandler {
       docElement.getAttrs().put(attributes.getQName(i).toLowerCase(), data);
     }
 
-    if (!docElementStack.isEmpty() 
+    if (!docElementStack.isEmpty()
             && docElementStack.peek().isComplexType()
             && docElement.isOrderIndicator()) {
       // there is a special case when OrderI. follows any complex type
@@ -143,9 +140,9 @@ class SAXHandler extends DefaultHandler {
       createAndPushContent(docElement, true);
       // every element that is a descendant under a namedCType 
       // is not added to the global rules, but to the rules of a current CType
-      namedTypes.put(docElement.attributeNameValue(), new NamedType() );
+      namedTypes.put(docElement.attributeNameValue(), new NamedType());
       currentRuleListName = docElement.attributeNameValue();
-      
+
     } else if (docElement.isOrderIndicator()) {
       if (docElementStack.peek().getName().equalsIgnoreCase("element")) {
         final String msg = "Schema not valid! " + docElement.getName() + " can't follow an element.";
@@ -172,8 +169,8 @@ class SAXHandler extends DefaultHandler {
     super.endElement(uri, localName, qName);
 
     final XSDDocumentElement docElement = docElementStack.pop();
-    
-    if ( !docElement.getName().equalsIgnoreCase(trimNS(qName)) ) {
+
+    if (!docElement.getName().equalsIgnoreCase(trimNS(qName))) {
       final String msg = "Unpaired element " + docElement.getName() + " and " + qName;
       LOG.error(msg);
       throw new IllegalArgumentException(msg);
@@ -199,7 +196,7 @@ class SAXHandler extends DefaultHandler {
     } else if (docElement.isOrderIndicator()) {
       // this branch is for choice|sequence|all
       processEndOfOrderIndicator(docElement);
-      
+
     } else if (docElement.getName().equalsIgnoreCase("attribute")) {
       //TODO reseto take care of arguments
       final HashMap<String, Object> metadata = new HashMap<String, Object>();
@@ -209,7 +206,7 @@ class SAXHandler extends DefaultHandler {
       contentStack.peek().getAttributes().add(
               new Attribute(getContext(), docElement.attributeNameValue(), metadata, null, new ArrayList<String>(0)));
     }
-    
+
   }
 
   private void processEndOfOrderIndicator(final XSDDocumentElement docElement) {
@@ -219,7 +216,6 @@ class SAXHandler extends DefaultHandler {
       contentStack.peek().getSubnodes().addChild(container.getSubnodes());
     }
   }
-
 
   /**
    * Trims (cuts) namespace prefix from the beginning of element qName
@@ -239,16 +235,15 @@ class SAXHandler extends DefaultHandler {
             && elem.getMetadata().get(CONTAINER_NAME).equals(Boolean.TRUE));
   }
 
-
   private List<String> getContext() {
     List<String> ret;
-    
+
     if (contentStack.isEmpty()) {
       ret = new ArrayList<String>(0);
     } else {
       final Element parent = contentStack.peek();
       ret = new ArrayList<String>(parent.getContext());
-      
+
       if (!isContainer(parent)) {
         // parent is not a container, add its name to the context
         ret.add(parent.getName());
@@ -256,7 +251,7 @@ class SAXHandler extends DefaultHandler {
     }
     return ret;
   }
-  
+
   private RegexpType determineRegexpType(final XSDDocumentElement docElement) {
     if (docElement.getName().equalsIgnoreCase("sequence")) {
       return RegexpType.CONCATENATION;
@@ -345,8 +340,8 @@ class SAXHandler extends DefaultHandler {
     if (namedTypes.containsKey(TYPE) && namedTypes.get(TYPE).getContainer() != null) {
 
       final NamedType entry = namedTypes.get(TYPE);
-      
-      
+
+
       if (old.getSubnodes().getType() != null) {
         // if the type is already set, check if it's the same
         if (!old.getSubnodes().getType().equals(entry.getContainer().getSubnodes().getType())) {
@@ -389,7 +384,7 @@ class SAXHandler extends DefaultHandler {
         //arrrrgh stupid context, i kill u 2:30 in the morning
         old.getAttributes().add(new Attribute(CloneHelper.getPrefixedContext(at, prefix), at.getName(), at.getMetadata(), at.getContentType(), at.getContent()));
       }
-      LOG.debug("Resolved element '" + old.getName() +"' to type '" + TYPE + "' and it now looks like this:\n" + old.toString());
+      LOG.debug("Resolved element '" + old.getName() + "' to type '" + TYPE + "' and it now looks like this:\n" + old.toString());
       return true;
     } else {
       return false;
@@ -397,31 +392,31 @@ class SAXHandler extends DefaultHandler {
   }
 
   /** If current docElement is an OrderIndicator (sequence/all/choice)
-     * we add it to the ruleElementStack, but it's not a regular Element, it's only a container
-     * it's there only to support recursive definitions like this:
-     *
-     * <xs:complexType name="personinfo">
-     *   <xs:sequence>
-     *     <xs:element name="firstname" type="xs:string"/>
-     *     <xs:element name="lastname" type="xs:string"/>
-     *     <xs:choice>
-     *        <xs:element name="homePhone" type="xs:string"/>
-     *        <xs:element name="mobilePhone" type="xs:string"/>
-     *        <xs:element name="workPhone" type="xs:string"/>
-     *     </xs:choice>
-     *   </xs:sequence>
-     * </xs:complexType>
-     *
-     * On the other hand, when an element starts, we have to put something on the stack,
-     * to remember the context, but we don't know the type of it's Regexp
-     * -> by default it's CONCATENATION,
-     * but when the element ends it's changed according to its content
-     * => that is why an element is added as a child only when it ends!!
+   * we add it to the ruleElementStack, but it's not a regular Element, it's only a container
+   * it's there only to support recursive definitions like this:
+   *
+   * <xs:complexType name="personinfo">
+   *   <xs:sequence>
+   *     <xs:element name="firstname" type="xs:string"/>
+   *     <xs:element name="lastname" type="xs:string"/>
+   *     <xs:choice>
+   *        <xs:element name="homePhone" type="xs:string"/>
+   *        <xs:element name="mobilePhone" type="xs:string"/>
+   *        <xs:element name="workPhone" type="xs:string"/>
+   *     </xs:choice>
+   *   </xs:sequence>
+   * </xs:complexType>
+   *
+   * On the other hand, when an element starts, we have to put something on the stack,
+   * to remember the context, but we don't know the type of it's Regexp
+   * -> by default it's CONCATENATION,
+   * but when the element ends it's changed according to its content
+   * => that is why an element is added as a child only when it ends!!
    * @param docElement Currently processed internal element.
    * @param isContainer True if docElement is an order indicator (choice,sequence,all). False if docElement is a proper xs:element.
    */
   private void createAndPushContent(final XSDDocumentElement docElement, final boolean isContainer) {
-    
+
     final Map<String, Object> metadata = new HashMap<String, Object>();
 
     String name = "";
@@ -435,7 +430,7 @@ class SAXHandler extends DefaultHandler {
       final XSDMetadata xsdmd = new XSDMetadata();
 
       determineOccurence(docElement, xsdmd);
-      
+
       if (docElement.getAttrs().containsKey("name")) {
         name = docElement.attributeNameValue();
       } else if (docElement.getAttrs().containsKey("ref")) {
@@ -515,7 +510,7 @@ class SAXHandler extends DefaultHandler {
           if (child.getContent() == null) {
             LOG.info("\t\t<unnamed> " + child.getType().toString().toLowerCase());
           } else {
-            LOG.info("\t\t"+ child.getContent().getName());
+            LOG.info("\t\t" + child.getContent().getName());
           }
         } //end for children
       } else {
@@ -532,5 +527,4 @@ class SAXHandler extends DefaultHandler {
       }
     }
   }
-  
 }

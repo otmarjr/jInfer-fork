@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
@@ -25,19 +24,14 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
  */
 public class XSDMetadata {
 
-  RegexpInterval interval;
-  String ref;
-
-  public XSDMetadata() {
-    interval = null;
-    ref = null;
-  }
+  private RegexpInterval interval = null;
+  private String ref = null;
 
   public RegexpInterval getInterval() {
     return interval;
   }
 
-  public void setInterval(RegexpInterval interval) {
+  public void setInterval(final RegexpInterval interval) {
     this.interval = interval;
   }
 
@@ -45,12 +39,11 @@ public class XSDMetadata {
     return ref;
   }
 
-  public void setRef(String ref) {
+  public void setRef(final String ref) {
     this.ref = ref;
   }
 
   public boolean hasOccurence() {
     return (interval != null);
   }
-
 }

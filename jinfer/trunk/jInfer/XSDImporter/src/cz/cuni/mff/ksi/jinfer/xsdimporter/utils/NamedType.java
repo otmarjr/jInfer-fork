@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -26,6 +25,7 @@ import java.util.List;
  * @author reseto
  */
 public class NamedType {
+
   private Element container;
   private List<Element> rules;
   private boolean alreadyCopied = false;
@@ -34,7 +34,6 @@ public class NamedType {
     this.container = null;
     this.rules = new ArrayList<Element>(0);
   }
-
 
   public boolean isAlreadyCopied() {
     return alreadyCopied;
@@ -59,6 +58,4 @@ public class NamedType {
   public void setRules(List<Element> rules) {
     this.rules = rules;
   }
-
-  
 }

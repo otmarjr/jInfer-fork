@@ -26,6 +26,7 @@ import java.util.Map;
  * @author vektor
  */
 public class Attribute extends AbstractNamedNode implements ContentNode {
+
   /** Unspecific type of textual data. */
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list

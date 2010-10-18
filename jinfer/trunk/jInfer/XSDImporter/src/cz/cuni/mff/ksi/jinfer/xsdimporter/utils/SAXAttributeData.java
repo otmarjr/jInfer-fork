@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
@@ -25,7 +24,7 @@ public class SAXAttributeData {
 
   private String uri, local, qname, type, value;
 
-  public SAXAttributeData(String uri, String local, String qname, String type, String value) {
+  public SAXAttributeData(final String uri, final String local, final String qname, final String type, final String value) {
     this.uri = uri;
     this.local = local;
     this.qname = qname;
@@ -45,7 +44,7 @@ public class SAXAttributeData {
     return local;
   }
 
-  public void setLocal(String local) {
+  public void setLocal(final String local) {
     this.local = local;
   }
 
@@ -53,7 +52,7 @@ public class SAXAttributeData {
     return qname;
   }
 
-  public void setName(String qname) {
+  public void setName(final String qname) {
     this.qname = qname;
   }
 
@@ -61,7 +60,7 @@ public class SAXAttributeData {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(final String type) {
     this.type = type;
   }
 
@@ -69,7 +68,7 @@ public class SAXAttributeData {
     return uri;
   }
 
-  public void setUri(String uri) {
+  public void setUri(final String uri) {
     this.uri = uri;
   }
 
@@ -77,9 +76,7 @@ public class SAXAttributeData {
     return value;
   }
 
-  public void setValue(String value) {
+  public void setValue(final String value) {
     this.value = value;
   }
-  
-  
 }

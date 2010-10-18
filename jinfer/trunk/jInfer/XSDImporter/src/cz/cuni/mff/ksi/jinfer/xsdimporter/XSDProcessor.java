@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
@@ -51,7 +50,7 @@ public class XSDProcessor implements Processor {
 
   @Override
   public List<Element> process(final InputStream stream) {
-    
+
     try {
       if (Integer.parseInt(RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME).getProperty(XSDImportPropertiesPanel.PARSER, "0")) == 0) {
         //SAX parser selected
@@ -81,5 +80,4 @@ public class XSDProcessor implements Processor {
   public boolean processUndefined() {
     return false;
   }
-
 }

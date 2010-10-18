@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 import java.util.HashMap;
@@ -38,8 +37,8 @@ public class XSDDocumentElement {
   private final Map<String, SAXAttributeData> attrs;
 
   /* determines if the current XSDDocElem is a direct successor
-   of named complex type (so it's a sequence/all/choice or complexContent/ext)
-  */
+  of named complex type (so it's a sequence/all/choice or complexContent/ext)
+   */
   private boolean associated;
 
   /**
@@ -67,7 +66,7 @@ public class XSDDocumentElement {
   public String attributeNameValue() {
     return attrs.get("name").getValue();
   }
-  
+
   public boolean isNamedComplexType() {
     final SAXAttributeData nameAttr = attrs.get("name");
     return (nameAttr != null && !nameAttr.getQName().equals("") && !nameAttr.getValue().equals("") && isComplexType()) ? true : false;

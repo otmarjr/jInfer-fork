@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.NamedNode;
@@ -33,6 +32,7 @@ import java.util.Map;
  * @author anti
  */
 public abstract class AbstractNamedNode implements NamedNode {
+
   /** Names of all elements along the path from root to this element (excluded). */
   private final List<String> context;
   /** Name of this node. */
@@ -56,7 +56,7 @@ public abstract class AbstractNamedNode implements NamedNode {
     this.context = context;
     this.name = name;
     this.metadata = metadata;
-    this.mutable= mutable;
+    this.mutable = mutable;
     checkConstraits();
   }
 
@@ -84,7 +84,7 @@ public abstract class AbstractNamedNode implements NamedNode {
 
   public void setName(final String name) {
     if (mutable) {
-      this.name= name;
+      this.name = name;
     } else {
       throw new IllegalStateException("Trying to change content of immutable NamedAbstractNode.");
     }

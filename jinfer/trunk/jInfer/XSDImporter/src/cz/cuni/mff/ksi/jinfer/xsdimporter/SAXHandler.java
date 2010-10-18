@@ -30,6 +30,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDMetadata;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.NamedType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,8 +55,16 @@ class SAXHandler extends DefaultHandler {
   private final Stack<Element> contentStack = new Stack<Element>();
   /** Rules that have been inferred so far. */
   private final List<Element> rules = new ArrayList<Element>();
-  /** HashMap of named complextypes, saved as templates for creating rules */
-  private final Map<String, Pair<Element, List<Element>>> namedTypes = new HashMap<String, Pair<Element, List<Element>>>();
+  /** HashMap of named complexTypes, saved as templates for creating rules
+   * The structure is indexed by the name of the type - the String in the Map.
+   * The value of an entry is a Pair of Element, and List<Element>
+   * - the first is a container with all the children of the complexType 
+   *   (this container is added to the pair when the complexType closing tag is parsed)
+   * - the second is a list of all the rules within the complexType,
+   *   these rules are not added to the global rules immediately.
+   *   They are copied to the global rules, every time the complexType was used.
+   */
+  private final Map<String, NamedType> namedTypes = new HashMap<String, NamedType>();
   /**
    * List of elements with unknown type when they were processed.
    */
@@ -69,6 +78,18 @@ class SAXHandler extends DefaultHandler {
   private static final String CONTAINER_NAME = "__conTAIner__";
 
   private String currentRuleListName = "";
+
+  /**
+   * Return global rules for the schema.
+   * @return List<Element> rules.
+   */
+  public List<Element> getRules() {
+    LOG.info("Schema imported with following rules:");
+    for (Element elem : rules) {
+      LOG.info(elem.toString());
+    }
+    return rules;
+  }
 
   /** Process start of XSDelement.
    * When XSDelement starts, we have to check for several things.
@@ -122,7 +143,7 @@ class SAXHandler extends DefaultHandler {
       createAndPushContent(docElement, true);
       // every element that is a descendant under a namedCType 
       // is not added to the global rules, but to the rules of a current CType
-      namedTypes.put(docElement.attributeNameValue(), new Pair<Element, List<Element>>(null, new ArrayList<Element>(0)) );
+      namedTypes.put(docElement.attributeNameValue(), new NamedType() );
       currentRuleListName = docElement.attributeNameValue();
       
     } else if (docElement.isOrderIndicator()) {
@@ -144,40 +165,6 @@ class SAXHandler extends DefaultHandler {
     }
 
     docElementStack.push(docElement);
-  }
-
-  @Override
-  public void endDocument() throws SAXException {
-    super.endDocument();
-
-    LOG.info("Schema registered following " + namedTypes.size() + " named types");
-    for (final Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
-      final String name = it.next();
-
-      if (!BaseUtils.isEmpty(namedTypes.get(name).getFirst().getSubnodes().getChildren())) {
-        final int numChildren = namedTypes.get(name).getFirst().getSubnodes().getChildren().size();
-        LOG.info("\t" + name + ": " + namedTypes.get(name).getFirst().getSubnodes().getType().toString().toLowerCase() + " has " + numChildren + " children:");
-        for (int i = 0; i < numChildren; i++) {
-          final Regexp<AbstractStructuralNode> child = namedTypes.get(name).getFirst().getSubnodes().getChild(i);
-          if (child.getContent() == null) {
-            LOG.info("\t\t<unnamed> " + child.getType().toString().toLowerCase());
-          } else {
-            LOG.info("\t\t"+ child.getContent().getName());
-          }
-        } //end for children
-      } else {
-        LOG.info("\t" + name + ": " + namedTypes.get(name).getFirst().getSubnodes().getType() + " has 0 children.");
-      }
-    }
-
-    for (Pair<String, Element> pair : unresolved) {
-      final boolean resolved = tryResolveElementType(pair.getFirst(), pair.getSecond());
-      if (resolved) {
-        pair.getSecond().setImmutable();
-      } else {
-        LOG.warn("Can't resolve the type of element " + pair.getSecond().getName() + "!");
-      }
-    }
   }
 
   @Override
@@ -203,10 +190,9 @@ class SAXHandler extends DefaultHandler {
         LOG.error(msg);
         throw new IllegalArgumentException(msg);
       }
-      
-      final List<Element> oldRules = namedTypes.get(docElement.attributeNameValue()).getSecond();
-      namedTypes.remove(docElement.attributeNameValue());
-      namedTypes.put(docElement.attributeNameValue(), new Pair<Element, List<Element>>(container, oldRules));
+
+      // add the container to the correct named type
+      namedTypes.get(docElement.attributeNameValue()).setContainer(container);
       // stop adding rules to that CTypes rules
       currentRuleListName = "";
 
@@ -226,11 +212,14 @@ class SAXHandler extends DefaultHandler {
     
   }
 
-  public List<Element> getRules() {
-    return rules;
+  private void processEndOfOrderIndicator(final XSDDocumentElement docElement) {
+    if (!docElement.isAssociated()) {
+      // we are dealing with a nested container
+      final Element container = contentStack.pop();
+      contentStack.peek().getSubnodes().addChild(container.getSubnodes());
+    }
   }
 
-  // **************************************************** private simple methods
 
   /**
    * Trims (cuts) namespace prefix from the beginning of element qName
@@ -239,39 +228,17 @@ class SAXHandler extends DefaultHandler {
     return qName.substring(qName.lastIndexOf(':') + 1).toLowerCase();
   }
 
+  /**
+   * Finds out if Element elem is only a temporary container with the name set by CONTAINER_NAME constant.
+   * @param elem Element to be decided.
+   * @return True if elem is a container, false if not.
+   */
   private boolean isContainer(final Element elem) {
     return (elem.getName().equals(CONTAINER_NAME)
             && elem.getMetadata().containsKey(CONTAINER_NAME)
             && elem.getMetadata().get(CONTAINER_NAME).equals(Boolean.TRUE));
   }
 
-  /**
-   * Add parameter as a child (token) to its parent (if it exists)
-   * and add it to rules.
-   * @param elem
-   */
-  private void addChildAndRule(final Element elem, final boolean resolved) {
-    if (elem.getSubnodes().getType() == null) {
-      elem.getSubnodes().setType(RegexpType.CONCATENATION);
-    }
-    if (resolved) {
-      elem.setImmutable();
-    }
-    //add self as token to parent
-    if (!contentStack.isEmpty()) {
-      contentStack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(elem));
-    }
-
-    if ("".equals(currentRuleListName)) {
-      // add element to global rules
-      LOG.debug("ADDING RULE:" + elem.toString());
-      rules.add(elem);
-    } else {
-      // add element to rules for the active CType
-      // these are copied to global when the CType is used
-      namedTypes.get(currentRuleListName).getSecond().add(elem);
-    }
-  }
 
   private List<String> getContext() {
     List<String> ret;
@@ -307,8 +274,6 @@ class SAXHandler extends DefaultHandler {
     }
   }
 
-  // *************************************************** private complex methods
-
   /**
    * Processes an element with declared 'type' attribute.
    * @param old Element from contentStack, expected to be regular element.
@@ -338,64 +303,96 @@ class SAXHandler extends DefaultHandler {
         if (!resolved) {
           //TODO reseto add this to parent element as UNRESOLVED node
           unresolved.add(new Pair<String, Element>(TYPE, old));
-          LOG.debug("Can't resolve the type of element " + old.getName() + " on first try.");
+          LOG.debug("Can't resolve the type of element '" + old.getName() + "' on first try.");
         }
       }
     }
 
-
     addChildAndRule(old, resolved);
+  }
+
+  /**
+   * Add parameter as a child (token) to its parent (if it exists)
+   * and add it to rules.
+   * @param elem
+   */
+  private void addChildAndRule(final Element elem, final boolean resolved) {
+    if (elem.getSubnodes().getType() == null) {
+      elem.getSubnodes().setType(RegexpType.CONCATENATION);
+    }
+    if (resolved) {
+      elem.setImmutable();
+    }
+    // TODO reseto: only add the rule if resolved, else it would be there multiple times?
+    if ("".equals(currentRuleListName)) {
+      // add element to global rules
+      rules.add(elem);
+      LOG.warn("Adding to rules element: " + elem.toString());
+    } else {
+      // add element to rules for the active CType
+      // these are copied to global when the CType is used
+      namedTypes.get(currentRuleListName).getRules().add(elem);
+    }
+
+    // always add self as token to parent
+    if (!contentStack.isEmpty()) {
+      contentStack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(elem));
+    }
   }
 
   private boolean tryResolveElementType(final String TYPE, final Element old) throws IllegalArgumentException {
 
-    if (namedTypes.containsKey(TYPE) && namedTypes.get(TYPE).getFirst() != null) {
+    if (namedTypes.containsKey(TYPE) && namedTypes.get(TYPE).getContainer() != null) {
 
-      final Pair<Element, List<Element>> pair = namedTypes.get(TYPE);
+      final NamedType entry = namedTypes.get(TYPE);
+      
+      
       if (old.getSubnodes().getType() != null) {
-        //check if the type is not the same
-        if (!old.getSubnodes().getType().equals(pair.getFirst().getSubnodes().getType())) {
-          // serious problem, type conflict
-          final String msg = "Element " + old.getName() + " should have type " + TYPE
-                  + " but its content already set its type to " + old.getSubnodes().getType();
+        // if the type is already set, check if it's the same
+        if (!old.getSubnodes().getType().equals(entry.getContainer().getSubnodes().getType())) {
+          // it's not the same type, serious problem, conflict
+          final String msg = "Element '" + old.getName() + "' should have type '" + TYPE
+                  + "' but its content already set its type to: " + old.getSubnodes().getType();
           LOG.error(msg);
           throw new IllegalArgumentException(msg);
         }
       } else {
         // set correct type
-        old.getSubnodes().setType(pair.getFirst().getSubnodes().getType());
+        old.getSubnodes().setType(entry.getContainer().getSubnodes().getType());
       }
+      // create correct prefix
+      final List<String> context = old.getContext();
+      final List<String> prefix = new ArrayList<String>();
+      if (!BaseUtils.isEmpty(context)) {
+        prefix.addAll(context);
+      }
+      prefix.add(old.getName());
+
       // add all children
-      for (Regexp<AbstractStructuralNode> child : pair.getFirst().getSubnodes().getChildren()) {
-        final List<String> prefix = new ArrayList<String>();
-        if (!BaseUtils.isEmpty(old.getContext())) {
-          prefix.addAll(old.getContext());
-        }
-        prefix.add(old.getName());
+      for (Regexp<AbstractStructuralNode> child : entry.getContainer().getSubnodes().getChildren()) {
         old.getSubnodes().addChild(new CloneHelper().cloneRegexp(child, prefix));
       }
-      // copy rules to global
-      LOG.debug("...copying rules from ctype " + TYPE);
-      rules.addAll(pair.getSecond());
-      // add all attributes
-      for (Attribute at : pair.getFirst().getAttributes()) {
-        //arrrrgh stupid context, i kill u 2:30 in the morning
-        final List<String> context = old.getContext();
-        context.add(old.getName());
-        context.addAll(at.getContext());
-        old.getAttributes().add(new Attribute(context, at.getName(), at.getMetadata(), at.getContentType(), at.getContent()));
+      // copy rules
+      if ("".equals(currentRuleListName)) {
+        if (!entry.isAlreadyCopied() && !BaseUtils.isEmpty(entry.getRules())) {
+          rules.addAll(entry.getRules());
+          LOG.debug("Copying rules from complexType '" + TYPE + "' to global rules.");
+          entry.setAlreadyCopied();
+        }
+      } else {
+        namedTypes.get(currentRuleListName).getRules().addAll(entry.getRules());
+        LOG.debug("Copying rules from complexType '" + TYPE + "' to rules of complexType '" + currentRuleListName + "'");
       }
+
+      // add all attributes
+      for (Attribute at : entry.getContainer().getAttributes()) {
+        //arrrrgh stupid context, i kill u 2:30 in the morning
+        old.getAttributes().add(new Attribute(CloneHelper.getPrefixedContext(at, prefix), at.getName(), at.getMetadata(), at.getContentType(), at.getContent()));
+      }
+      LOG.debug("Resolved element '" + old.getName() +"' to type '" + TYPE + "' and it now looks like this:\n" + old.toString());
       return true;
     } else {
       return false;
-    }
-  }
-
-  private void processEndOfOrderIndicator(final XSDDocumentElement docElement) {
-    if (!docElement.isAssociated()) {
-      // we are dealing with a nested container
-      final Element container = contentStack.pop();
-      contentStack.peek().getSubnodes().addChild(container.getSubnodes());
     }
   }
 
@@ -449,6 +446,15 @@ class SAXHandler extends DefaultHandler {
       metadata.put("from.schema", Boolean.TRUE);
       metadata.put("schema.data", xsdmd);
       interval = xsdmd.getInterval();
+
+      // when element is the first level child inside a complexType
+      // it should be set a sentinel
+      // when under a complexType, the rule list name is set to the complexType's name
+      // and the context is empty, because complexTypes are defined immediately inside the xs:schema element
+      if (!"".equals(currentRuleListName) && getContext().isEmpty()) {
+        //metadata.put("is_sentinel", Boolean.TRUE);
+        metadata.put("nejde.to", Boolean.TRUE);
+      }
     }
 
     final Element elem = Element.getMutable();
@@ -461,9 +467,13 @@ class SAXHandler extends DefaultHandler {
     contentStack.push(elem);
   }
 
-  
+  /** Find out minOccurs and maxOccurs for given docElement and save them in metadata xsdmd.
+   * 
+   * @param docElement
+   * @param xsdmd
+   * @throws IllegalArgumentException
+   */
   private void determineOccurence(final XSDDocumentElement docElement, final XSDMetadata xsdmd) throws IllegalArgumentException {
-    // occurences
     int min = 1, max = 1; //default values from XSD specification
 
     if (docElement.getAttrs().containsKey("minoccurs")) {
@@ -486,6 +496,40 @@ class SAXHandler extends DefaultHandler {
 
     if (xsdmd.getInterval() == null) {
       xsdmd.setInterval(RegexpInterval.getBounded(min, max));
+    }
+  }
+
+  @Override
+  public void endDocument() throws SAXException {
+    super.endDocument();
+
+    LOG.info("Schema registered following " + namedTypes.size() + " named types");
+    for (final Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
+      final String name = it.next();
+
+      if (!BaseUtils.isEmpty(namedTypes.get(name).getContainer().getSubnodes().getChildren())) {
+        final int numChildren = namedTypes.get(name).getContainer().getSubnodes().getChildren().size();
+        LOG.info("\t'" + name + "': " + namedTypes.get(name).getContainer().getSubnodes().getType().toString().toLowerCase() + " has " + numChildren + " children:");
+        for (int i = 0; i < numChildren; i++) {
+          final Regexp<AbstractStructuralNode> child = namedTypes.get(name).getContainer().getSubnodes().getChild(i);
+          if (child.getContent() == null) {
+            LOG.info("\t\t<unnamed> " + child.getType().toString().toLowerCase());
+          } else {
+            LOG.info("\t\t"+ child.getContent().getName());
+          }
+        } //end for children
+      } else {
+        LOG.info("\t" + name + ": " + namedTypes.get(name).getContainer().getSubnodes().getType() + " has 0 children.");
+      }
+    }
+
+    for (Pair<String, Element> pair : unresolved) {
+      final boolean resolved = tryResolveElementType(pair.getFirst(), pair.getSecond());
+      if (resolved) {
+        pair.getSecond().setImmutable();
+      } else {
+        LOG.warn("Can't resolve the type of element " + pair.getSecond().getName() + "!");
+      }
     }
   }
   

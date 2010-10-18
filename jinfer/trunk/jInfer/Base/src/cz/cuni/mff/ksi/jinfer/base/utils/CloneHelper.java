@@ -157,7 +157,7 @@ public class CloneHelper {
     throw new IllegalArgumentException("Unknown abstract node: " + n);
   }
 
-  public static List<String> getPrefixedContext (final NamedNode node, final List<String> contextPrefix) {
+  public static List<String> getPrefixedContext(final NamedNode node, final List<String> contextPrefix) {
     if (BaseUtils.isEmpty(contextPrefix)) {
       return cloneList(node.getContext());
     } else {

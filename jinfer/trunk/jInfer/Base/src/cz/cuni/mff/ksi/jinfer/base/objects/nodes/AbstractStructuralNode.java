@@ -27,6 +27,7 @@ import java.util.Map;
  * @author vektor
  */
 public abstract class AbstractStructuralNode extends AbstractNamedNode implements StructuralNode {
+
   protected AbstractStructuralNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata, final boolean mutable) {
@@ -54,7 +55,7 @@ public abstract class AbstractStructuralNode extends AbstractNamedNode implement
 
   @Override
   public String toString() {
-    StringBuilder sb= new StringBuilder(super.toString());
+    StringBuilder sb = new StringBuilder(super.toString());
     sb.append(": ");
     sb.append(getType());
     return sb.toString();

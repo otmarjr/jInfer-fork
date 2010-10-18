@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
@@ -25,6 +24,7 @@ public class BuiltInDataTypes {
 
   // ALL TYPES ARE CASE SENSITIVE!!!
   public enum StringType {
+
     ENTITIES,
     ENTITY,
     ID,
@@ -42,6 +42,7 @@ public class BuiltInDataTypes {
   }
 
   public enum DateType {
+
     date,
     dateTime,
     duration,
@@ -55,6 +56,7 @@ public class BuiltInDataTypes {
 
   // these types should be lowercase, but it conflicts with Java
   public enum TrickyNumericType {
+
     BYTE,
     INT,
     LONG,
@@ -62,6 +64,7 @@ public class BuiltInDataTypes {
   }
 
   public enum NumericType {
+
     decimal,
     integer,
     negativeInteger,
@@ -73,14 +76,16 @@ public class BuiltInDataTypes {
     unsignedShort,
     unsignedByte;
   }
-  
+
   public enum TrickyMiscType {
+
     BOOLEAN,
     DOUBLE,
     FLOAT;
   }
 
   public enum MiscType {
+
     anyURI,
     base64Binary,
     hexBinary,
@@ -96,7 +101,7 @@ public class BuiltInDataTypes {
       return false;
     }
   }
-  
+
   public static boolean isDateType(String type) {
     try {
       DateType.valueOf(trimNS(type));
@@ -114,7 +119,7 @@ public class BuiltInDataTypes {
       return false;
     }
   }
-  
+
   public static boolean isTrickyNumericType(String type) {
     return (TrickyNumericType.BYTE.toString().toLowerCase().equals(trimNS(type))
             || TrickyNumericType.INT.toString().toLowerCase().equals(trimNS(type))

@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
@@ -51,7 +50,7 @@ public class DOMHandler {
       final NodeList nl = root.getElementsByTagName("complexType");
       for (int i = 0; i < nl.getLength(); i++) {
         final org.w3c.dom.Element el = (org.w3c.dom.Element) nl.item(i);
-        if (el.hasAttribute("name")){
+        if (el.hasAttribute("name")) {
           addNamedCType(el);
         }
       }
@@ -73,5 +72,4 @@ public class DOMHandler {
   private void addNamedCType(final org.w3c.dom.Element el) {
     LOG.info("Adding complextype: " + el.toString());
   }
-
 }

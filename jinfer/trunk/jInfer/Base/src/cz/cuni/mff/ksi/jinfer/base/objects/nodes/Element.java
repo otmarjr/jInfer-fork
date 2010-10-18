@@ -118,7 +118,7 @@ public class Element extends AbstractStructuralNode {
       ret.append('>');
     }
     if (subnodes != null) {
-      // for vektor330: we really want to print this even if the collection is empty!
+      // we really want to print this even if the collection is empty
       ret.append('\n').append(subnodes.toString());
     }
     return ret.toString();

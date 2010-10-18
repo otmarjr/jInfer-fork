@@ -372,9 +372,9 @@ public final class WelcomeTopComponent extends TopComponent {
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     try {
       final JFileChooser projectChooser = ProjectChooser.projectChooser();
-      projectChooser.showOpenDialog(null);
-      final File selectedFile = projectChooser.getSelectedFile();
-      if (selectedFile != null) {
+      final int returnVal = projectChooser.showOpenDialog(null);
+      if (returnVal == JFileChooser.APPROVE_OPTION) {
+        final File selectedFile = projectChooser.getSelectedFile();
         final FileObject projectFileObject = FileUtil.toFileObject(selectedFile);
         final Project project = ProjectManager.getDefault().findProject(projectFileObject);
         final Project[] array = new Project[]{project};
@@ -387,7 +387,6 @@ public final class WelcomeTopComponent extends TopComponent {
       Exceptions.printStackTrace(ex);
     }
   }//GEN-LAST:event_jButton1ActionPerformed
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
   private javax.swing.JLabel L2developingjInfer;

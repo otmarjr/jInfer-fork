@@ -54,17 +54,25 @@ public class Installer extends ModuleInstall {
       Color textColor = null;
 
       switch (le.getLevel().toInt()) {
-        case Level.WARN_INT:
-          textColor = Color.ORANGE;
+        case Level.TRACE_INT:
+          textColor = Color.GRAY;
           break;
         case Level.DEBUG_INT:
           float[] hsb = Color.RGBtoHSB(7, 105, 45, null);
           textColor = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
           break;
+        case Level.INFO_INT:
+          textColor =  Color.BLACK;
+          break;
+        case Level.WARN_INT:
+          textColor = Color.ORANGE;
+          break;
         case Level.ERROR_INT:
           textColor = Color.RED;
           break;
-        case Level.INFO_INT:
+        case Level.FATAL_INT:
+          textColor = Color.MAGENTA;
+          break;
         default:
           break;
       }

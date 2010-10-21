@@ -47,7 +47,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
   // dimenzia mriezky = pocet stvorcov na x-ovej osy a pocet stvorcov na y-ovej osy
   private final Dimension gridDimension;
 
-  private final StateMapping stateGridMapping;
+  private final StateMapping<T> stateGridMapping;
   private static final double FILL_FACTOR = 3;
   // TODO rio vyhodit automaton
   private Automaton<T> automaton;
@@ -60,7 +60,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
     this.squareSize = square_size;
     final int vertexCount = graph.getVertexCount();
     gridDimension = computeGridDimension((int) Math.round(vertexCount * FILL_FACTOR));
-    stateGridMapping = new StateMapping(vertexCount);
+    stateGridMapping = new StateMapping<T>(vertexCount);
   }
 
   public Dimension getDimension() {

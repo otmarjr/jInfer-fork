@@ -17,6 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import java.util.ArrayList;
+import java.util.List;
 
 /** TODO rio refactor
  * Maps states, ellipses and stateCoordinates for the plotting purposes.
@@ -26,39 +28,35 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
  */
 public class StateMapping<T> {
 
-  private final State<T>[] states;
-  private final Coordinate[] stateCoordinates;
-  private int actual = 0;
+  private final List<State<T>> states;
+  private final List<Coordinate> stateCoordinates;
 
   public StateMapping(final int numberOfStates) {
-    states = new State[numberOfStates];
-    stateCoordinates = new Coordinate[numberOfStates];
+    states = new ArrayList<State<T>>(numberOfStates);
+    stateCoordinates = new ArrayList<Coordinate>(numberOfStates);
   }
 
   public void addStateCoordinate(final State<T> state, final Coordinate coordinate) {
-    assert(actual < states.length);
-
-    states[actual] = state;
-    stateCoordinates[actual] = coordinate;
-    ++actual;
+    states.add(state);
+    stateCoordinates.add(coordinate);
   }
 
   public State<T> getStateAtCoordinate(final Coordinate coordinate) {
-    for (int i = 0; i < stateCoordinates.length; ++i) {
-      if (stateCoordinates[i] == null) {
+    for (int i = 0; i < stateCoordinates.size(); ++i) {
+      if (stateCoordinates.get(i) == null) {
         continue;
       }
-      if (stateCoordinates[i].equals(coordinate)) {
-        return states[i];
+      if (stateCoordinates.get(i).equals(coordinate)) {
+        return states.get(i);
       }
     }
     return null;
   }
 
   public Coordinate getStateCoordinate(final State<T> state) {
-    for (int i = 0; i < states.length; i++) {
-      if (states[i] == state) {
-        return stateCoordinates[i];
+    for (int i = 0; i < states.size(); i++) {
+      if (states.get(i) == state) {
+        return stateCoordinates.get(i);
       }
     }
     return null;

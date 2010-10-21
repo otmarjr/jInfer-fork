@@ -114,6 +114,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
 
     panelParams.setMinimumSize(new java.awt.Dimension(200, 22));
     panelParams.setPreferredSize(new java.awt.Dimension(200, 22));
+    panelParams.setLayout(new java.awt.GridBagLayout());
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
@@ -133,24 +134,54 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     panelParams.removeAll();
     dynamicComponents= new HashMap<String, JTextField>();
     dynamicParameters= new HashMap<String, String>();
+    java.awt.GridBagConstraints gridBagConstraints;
     if (factory.getCapabilities().contains("parameters")) {
       ModuleParameters factParams= (ModuleParameters) factory;
+      int i = 0;
       for (String parameterName : factParams.getParameterNames()) {
-        JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName));
         JLabel l= new JLabel(parameterName);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2*i;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        panelParams.add(l, gridBagConstraints);
+
+
+        JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName));
+        l.setLabelFor(t);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2*i;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        t.setColumns(10);
+        panelParams.add(t, gridBagConstraints);
+
         JTextArea ar= new JTextArea(factParams.getParameterDisplayDescription(parameterName));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2*i+1;
+        gridBagConstraints.gridwidth= 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.CENTER;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
         ar.setColumns(30);
         ar.setRows(10);
         ar.setWrapStyleWord(true);
         ar.setLineWrap(true);
         ar.setEditable(false);
-        t.setColumns(10);
-        l.setLabelFor(t);
-        panelParams.add(l);
-        panelParams.add(t);
-        panelParams.add(ar);
+        panelParams.add(ar, gridBagConstraints);
+        
         dynamicComponents.put(parameterName, t);
         dynamicParameters.put(parameterName, factory.getName() + parameterName);
+        ++i;
       }
     }
   }//GEN-LAST:event_comboConditionTesterChanged

@@ -194,7 +194,7 @@ public final class RunnerPanel extends javax.swing.JPanel {
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 408, Short.MAX_VALUE)
+      .addGap(0, 108, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

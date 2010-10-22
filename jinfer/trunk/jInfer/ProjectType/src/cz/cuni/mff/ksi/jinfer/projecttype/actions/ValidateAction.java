@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +28,6 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -43,7 +40,6 @@ import net.socialchange.doctype.DoctypeImpl;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.cookies.LineCookie;
-import org.openide.cookies.OpenCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
@@ -71,7 +67,7 @@ public final class ValidateAction extends NodeAction {
 
   private static ValidateAction action = null;
 
-  String[] schemas = new String[]{"xsd", "dtd"};
+  private String[] schemas = new String[]{"xsd", "dtd"};
 
   private static class ValiadtionOutputListener implements OutputListener {
     private final FileObject file;

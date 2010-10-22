@@ -21,11 +21,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import org.apache.log4j.Logger;
 
 /** TODO rio translate
@@ -140,7 +140,7 @@ public final class Preprocessor {
    */
   private Map<String, Integer> countOccurrences(final List<Element> toposortedElements) {
     final Map<String, Integer> occurrenceCounts = new HashMap<String, Integer>();
-    final List<Element> visited = new ArrayList<Element>();
+    final Stack<Element> recursionStack = new Stack<Element>();
     
     // initialize counts to 0s
     for (Element e : toposortedElements) {
@@ -149,7 +149,7 @@ public final class Preprocessor {
     
     // run recursion from the top element
     final Element topElement = toposortedElements.get(toposortedElements.size() - 1);
-    countOccurrencesRecursion(toposortedElements, occurrenceCounts, topElement, visited);
+    countOccurrencesRecursion(toposortedElements, occurrenceCounts, topElement, recursionStack);
 
     return occurrenceCounts;
   }
@@ -159,21 +159,26 @@ public final class Preprocessor {
    * @param elements topologically sorted elements
    * @param occurrenceCounts output parameter - holds counts of occurrences, at start it must be initialized to 0s
    * @param root element to start recursion at
+   * @param recursionStack stack of elements as they are processed, helps avoid infinite recursion
    */
-  private void countOccurrencesRecursion(final List<Element> elements, final Map<String, Integer> occurrenceCounts, final Element root, final List<Element> visited) {
-    for (Element element : visited) {
+  private void countOccurrencesRecursion(final List<Element> elements, final Map<String, Integer> occurrenceCounts, final Element root, final Stack<Element> recursionStack) {
+    for (Element element : recursionStack) {
       if (element == root) {
+        // Cycle detected. It indicates recursive element, so the element's occurrence is set to maxint.
+        occurrenceCounts.put(root.getName(), Integer.MAX_VALUE);
         return;
       }
     }
-    visited.add(root);
+    recursionStack.push(root);
 
     occurrenceCounts.put(root.getName(), occurrenceCounts.get(root.getName()) + 1);
     for (AbstractStructuralNode node : root.getSubnodes().getTokens()) {
       if (node.getType().equals(StructuralNodeType.ELEMENT)) {
-        countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()), visited);
+        countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()), recursionStack);
       }
     }
+
+    recursionStack.pop();
   }
 
   /** TODO rio translate

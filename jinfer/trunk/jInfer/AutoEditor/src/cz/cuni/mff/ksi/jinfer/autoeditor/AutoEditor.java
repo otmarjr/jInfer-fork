@@ -156,7 +156,7 @@ public class AutoEditor<T> {
           // Pass this as argument so the thread will be able to wake us up.
           AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(
                   AutoEditor.this, visualizationViewer,
-                  "Please select two states to be merged together.");
+                  "Please select states to be merged together.");
         }
       });
 

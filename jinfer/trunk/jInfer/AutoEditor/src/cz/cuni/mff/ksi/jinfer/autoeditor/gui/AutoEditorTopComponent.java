@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import java.awt.GridBagConstraints;
 import java.util.logging.Logger;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -44,7 +45,7 @@ public final class AutoEditorTopComponent extends TopComponent {
    * Instance of AutoEditor which AutoEditor thread sleeps on.
    * When user interaction is done we should call notify() on this variable.
    */
-  private AutoEditor autoEditorInstance;
+  private AutoEditor autoEditorInstance = null;
 
   public AutoEditorTopComponent() {
     initComponents();
@@ -123,6 +124,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     synchronized(autoEditorInstance) {
       autoEditorInstance.notify();
     }
+    autoEditorInstance = null;
     /*final DirectedSparseMultigraph<Integer, String> g = new DirectedSparseMultigraph<Integer, String>();
     g.addVertex(10);
     g.addVertex(20);
@@ -157,7 +159,11 @@ public final class AutoEditorTopComponent extends TopComponent {
     assert(askUser);
     this.autoEditorInstance = autoEditorInstance;
     jPanel1.removeAll();
-    jPanel1.add(bvs);
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.weightx = 1.0;
+    constraints.weighty = 1.0;
+    constraints.fill = GridBagConstraints.BOTH;
+    jPanel1.add(bvs, constraints);
     jPanel1.validate();
     jButton1.setEnabled(true);
     jLabel1.setText(labelText);
@@ -214,6 +220,11 @@ public final class AutoEditorTopComponent extends TopComponent {
 
   @Override
   public void componentClosed() {
+  }
+
+  @Override
+  public boolean canClose() {
+    return (autoEditorInstance == null ? true : false);
   }
 
   private void writeProperties(java.util.Properties p) {

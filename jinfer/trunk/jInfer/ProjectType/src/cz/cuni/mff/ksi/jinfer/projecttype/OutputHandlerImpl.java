@@ -80,7 +80,7 @@ public class OutputHandlerImpl implements OutputHandler {
   }
 
   private String generateDate(final String name) {
-    final DateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault());
+    final DateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
     final String date = df.format(new Date());
 
     return name.replaceAll(DATE_PATTERN, date);

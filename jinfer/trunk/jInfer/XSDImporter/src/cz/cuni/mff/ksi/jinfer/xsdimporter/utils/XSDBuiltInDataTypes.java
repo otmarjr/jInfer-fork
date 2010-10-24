@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
  *
  * @author reseto
  */
-public class BuiltInDataTypes {
+public class XSDBuiltInDataTypes {
 
   // ALL TYPES ARE CASE SENSITIVE!!!
   public enum StringType {

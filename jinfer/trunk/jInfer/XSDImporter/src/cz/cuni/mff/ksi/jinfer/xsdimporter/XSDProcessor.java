@@ -19,12 +19,16 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.properties.XSDImportPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
-import javax.xml.parsers.SAXParserFactory;
+import java.util.Properties;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -35,7 +39,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = Processor.class)
 public class XSDProcessor implements Processor {
 
-  private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
   private static final Logger LOG = Logger.getLogger(XSDProcessor.class);
 
   @Override
@@ -51,23 +54,27 @@ public class XSDProcessor implements Processor {
   @Override
   public List<Element> process(final InputStream stream) {
 
+    //TODO reseto refactor, ask sviro
+    final Properties properties = RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME);
+    final XSDParser parser = ModuleSelectionHelper.lookupImpl(XSDParser.class,
+                                                              properties.getProperty(XSDImportPropertiesPanel.PARSER));
+
+    final Level level = Level.toLevel(properties.getProperty(XSDImportPropertiesPanel.LOG_LEVEL),
+                                      Logger.getRootLogger().getLevel());
+    LOG.setLevel(level);
+    
     try {
-      if (Integer.parseInt(RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME).getProperty(XSDImportPropertiesPanel.PARSER, "0")) == 0) {
-        //SAX parser selected
-        final SAXHandler handler = new SAXHandler();
-        PARSER_FACTORY.newSAXParser().parse(stream, handler);
-        //TODO reseto return normal rules
-        return handler.getRules();
+      if (parser != null) {
+        //SAX or DOM parser selected
+        parser.process(stream);
+        return parser.getRules();
       } else {
-        //DOM parser selected
-        //final DOMParserImpl parser = new DOMParserImpl(new SymbolTable());
-        //parser.parse(new XMLInputSource(null, null, null, stream, null));
-        final DOMHandler handler = new DOMHandler();
-        handler.parse(stream);
-        return handler.getRules();
+        //no parser selected
+        LOG.error("NO PARSER selected for importing XSD schemas, all rules are empty!");
+        return Collections.emptyList();
       }
-    } catch (final Exception e) {
-      if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME).getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR, "true"))) {
+    } catch (final XSDException e) {
+      if (Boolean.parseBoolean(properties.getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error parsing XSD schema file.", e);
       } else {
         LOG.error("Error parsing XSD schema file, ignoring and going on.", e);

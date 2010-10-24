@@ -14,10 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xsdimporter;
+package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -37,10 +38,15 @@ import org.xml.sax.SAXException;
  */
 public class DOMHandler {
 
-  private static final Logger LOG = Logger.getLogger(SAXHandler.class);
+  private final XSDImportSettings settings = new XSDImportSettings();
+  private static final Logger LOG = Logger.getLogger(DOMHandler.class);
+  private final boolean verbose = settings.isVerbose();
+
+  public DOMHandler() {
+    LOG.setLevel(settings.logLevel());
+  }
 
   public void parse(final InputStream stream) {
-    LOG.info("Parsing with DOM");
     try {
       final DOMParser parser = new DOMParser();
       parser.parse(new InputSource(stream));

@@ -66,15 +66,16 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class ValidateAction extends NodeAction {
 
   private static ValidateAction action = null;
-
   private String[] schemas = new String[]{"xsd", "dtd"};
 
   private static class ValiadtionOutputListener implements OutputListener {
+
     private final FileObject file;
     private final int lineNumber;
     private final int columnNumber;
 
-    public ValiadtionOutputListener(final FileObject file, final int lineNumber, final int columnNumber) {
+    public ValiadtionOutputListener(final FileObject file, final int lineNumber,
+            final int columnNumber) {
       this.file = file;
       this.lineNumber = lineNumber;
       this.columnNumber = columnNumber;
@@ -120,11 +121,10 @@ public final class ValidateAction extends NodeAction {
 
     @Override
     public void error(final SAXParseException e) throws SAXException {
-        final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
-        printErrorMessage(ioResult, e);
-        result = false;
+      final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
+      printErrorMessage(ioResult, e);
+      result = false;
     }
-
 
     @Override
     public void fatalError(final SAXParseException e) throws SAXException {
@@ -132,19 +132,21 @@ public final class ValidateAction extends NodeAction {
       printErrorMessage(ioResult, e);
       result = false;
     }
-    
+
     private void printErrorMessage(final InputOutput ioResult, final SAXParseException e) {
-      ioResult.getOut().print(e.getMessage());
-
       final int realLineNum = e.getLineNumber() - lineDiff;
+      if (realLineNum > 0) {
+        ioResult.getOut().print(e.getMessage());
 
-      try {
-        ioResult.getOut().
-                println("(" + file.getName() + "." + file.getExt() + ":" + realLineNum + "/" + e.getColumnNumber() + ")",
-                new ValiadtionOutputListener(file, realLineNum, e.getColumnNumber()));
-      } catch (IOException ex) {
-        // TODO sviro what to do here?? (previously anonym todo, given to sviro by vektor)
-        ioResult.getOut().close();
+        try {
+          ioResult.getOut().
+                  println("(" + file.getName() + "." + file.getExt() + ":" + realLineNum + "/" + e.
+                  getColumnNumber() + ")",
+                  new ValiadtionOutputListener(file, realLineNum, e.getColumnNumber()));
+        } catch (IOException ex) {
+          // TODO sviro what to do here?? (previously anonym todo, given to sviro by vektor)
+          ioResult.getOut().close();
+        }
       }
       ioResult.getOut().close();
     }
@@ -221,13 +223,15 @@ public final class ValidateAction extends NodeAction {
     final Document doc = builder.parse(FileUtil.toFile(xmlFile));
 
     final String rootNode = doc.getDocumentElement().getNodeName();
-    final String schemaText = schemaFile.asText();
+    String schemaText = schemaFile.asText();
+    final String schema = schemaText.replaceFirst("<\\?xml.*?\\?>", "");
+
     changer = new DoctypeChangerStream(inputStream);
     changer.setGenerator(new DoctypeGenerator() {
 
       @Override
       public Doctype generate(final Doctype dctp) {
-        return new DoctypeImpl(rootNode, null, null, schemaText);
+        return new DoctypeImpl(rootNode, null, null, schema);
       }
     });
 

@@ -39,7 +39,6 @@ import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.filesystems.FileChooserBuilder;
-import org.openide.filesystems.FileUtil;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -52,7 +51,7 @@ public class FilesAddAction extends AbstractAction {
 
   private final JInferProject project;
   public static final String COMMAND_FILES_ADD = "FilesAddAction";
-  private boolean notifyShowed = false;
+  private int filesCount;
 
   public FilesAddAction(final JInferProject project) {
     super("Add files");
@@ -86,6 +85,7 @@ public class FilesAddAction extends AbstractAction {
       // find processor mappings for all folders
       final Map<FolderType, List<String>> registeredProcessors = getRegisteredProcessors();
 
+      filesCount = 0;
 
       final Collection<File> xmlFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
               FolderType.XML));
@@ -93,6 +93,11 @@ public class FilesAddAction extends AbstractAction {
               FolderType.SCHEMA));
       final Collection<File> queryFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
               FolderType.QUERY));
+
+      if (selectedFiles.length > filesCount) {
+        DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(NbBundle.getMessage(FilesAddAction.class,
+                "FilesAddAction.ignoreUnknownFiles"), NotifyDescriptor.INFORMATION_MESSAGE));
+      }
 
       final Input input = project.getLookup().lookup(Input.class);
       input.getDocuments().addAll(xmlFiles);
@@ -122,10 +127,7 @@ public class FilesAddAction extends AbstractAction {
       final String ext = FileUtils.getExtension(file.getAbsolutePath()).toLowerCase(Locale.ENGLISH);
       if (extensions.contains(ext)) {
         result.add(file);
-      } else if (!notifyShowed){
-        notifyShowed = true;
-        DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(NbBundle.getMessage(FilesAddAction.class,
-                "FilesAddAction.ignoreUnknownFiles"), NotifyDescriptor.INFORMATION_MESSAGE));
+        filesCount++;
       }
     }
 

@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
+package cz.cuni.mff.ksi.jinfer.xsdimportsax.utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ import java.util.Map;
  *
  * @author reseto
  */
-public class XSDDocumentElement {
+public class SAXDocumentElement {
 
   /**
    * Name of element in the schema, trimmed of namespace.
@@ -45,7 +45,7 @@ public class XSDDocumentElement {
    * Constructs an instance with given name and empty attribute list.
    * @param trimmedQName Name of the schema element, should be set in lowercase.
    */
-  public XSDDocumentElement(final String trimmedQName) {
+  public SAXDocumentElement(final String trimmedQName) {
     if (trimmedQName == null || trimmedQName.equals("")) {
       throw new IllegalArgumentException("XDS Document Element: can't have empty or null element name!");
     } else {

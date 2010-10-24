@@ -18,7 +18,15 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import javax.swing.DefaultComboBoxModel;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 /**
  *
@@ -29,11 +37,23 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
   public static final String NAME = "XSDImport";
   public static final String PARSER = "parser";
   public static final String STOP_ON_ERROR = "stop.on.error";
+  public static final String VERBOSE_INFO = "verbose.info";
+  public static final String LOG_LEVEL = "log.level";
+  private static final String DEFAULT_MENU_TEXT = "<none available>";
+  private List<String> levels = new ArrayList<String>();
 
     /** Creates new form XSDImportPropertiesPanel */
     public XSDImportPropertiesPanel(final Properties properties) {
       super(properties);
-        initComponents();
+      levels.add(Level.ALL.toString());
+      levels.add(Level.TRACE.toString());
+      levels.add(Level.DEBUG.toString());
+      levels.add(Level.INFO.toString());
+      levels.add(Level.WARN.toString());
+      levels.add(Level.ERROR.toString());
+      levels.add(Level.FATAL.toString());
+      levels.add(Level.OFF.toString());
+      initComponents();
     }
 
     /** This method is called from within the constructor to
@@ -48,13 +68,20 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     parserComboBox = new javax.swing.JComboBox();
     stopOnError = new javax.swing.JCheckBox();
     parserLabel = new javax.swing.JLabel();
-
-    parserComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SAX", "DOM" }));
+    verbose = new javax.swing.JCheckBox();
+    loglevelLabel = new javax.swing.JLabel();
+    logLevelCombo = new javax.swing.JComboBox();
 
     stopOnError.setSelected(true);
     stopOnError.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.stopOnError.text")); // NOI18N
 
     parserLabel.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.parserLabel.text")); // NOI18N
+
+    verbose.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.verbose.text")); // NOI18N
+    verbose.setToolTipText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.verbose.toolTipText")); // NOI18N
+
+    loglevelLabel.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel.text")); // NOI18N
+    loglevelLabel.setToolTipText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel.toolTipText")); // NOI18N
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -62,50 +89,78 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addGroup(layout.createSequentialGroup()
-            .addGap(10, 10, 10)
-            .addComponent(stopOnError))
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+          .addComponent(verbose)
           .addGroup(layout.createSequentialGroup()
             .addComponent(parserLabel)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        .addContainerGap(211, Short.MAX_VALUE))
+            .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(loglevelLabel)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addComponent(logLevelCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(stopOnError))
+        .addContainerGap(159, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(parserLabel)
-          .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+          .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+          .addComponent(parserLabel))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(loglevelLabel)
+          .addComponent(logLevelCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(stopOnError)
-        .addContainerGap(244, Short.MAX_VALUE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(verbose)
+        .addContainerGap(195, Short.MAX_VALUE))
     );
   }// </editor-fold>//GEN-END:initComponents
 
   @Override
   public void store() {
     properties.setProperty(PARSER,
-            String.valueOf(parserComboBox.getSelectedIndex()));
+            (String) parserComboBox.getSelectedItem());
+    properties.setProperty(LOG_LEVEL,
+            (String) logLevelCombo.getSelectedItem());
     properties.setProperty(STOP_ON_ERROR,
             Boolean.toString(stopOnError.isSelected()));
+    properties.setProperty(VERBOSE_INFO,
+            Boolean.toString(verbose.isSelected()));
   }
 
   @Override
   public void load() {
-    parserComboBox.setSelectedIndex(
-            Integer.parseInt(properties.getProperty(PARSER, "0")));
+    final List<String> names = ModuleSelectionHelper.lookupNames(XSDParser.class);
+    parserComboBox.setModel(new DefaultComboBoxModel(names.toArray()));
+
+    if (names.contains("SAX Parser")) {
+      parserComboBox.setSelectedItem(properties.getProperty(PARSER, "SAX Parser"));
+    } else {
+      parserComboBox.setSelectedItem(properties.getProperty(PARSER, DEFAULT_MENU_TEXT));
+    }
+
+    logLevelCombo.setModel(new DefaultComboBoxModel(levels.toArray()));
+    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, Logger.getRootLogger().getLevel().toString()));
+
     stopOnError.setSelected(
             Boolean.parseBoolean(properties.getProperty(STOP_ON_ERROR, "true")));
+    verbose.setSelected(
+            Boolean.parseBoolean(properties.getProperty(VERBOSE_INFO, "false")));
   }
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JComboBox logLevelCombo;
+  private javax.swing.JLabel loglevelLabel;
   private javax.swing.JComboBox parserComboBox;
   private javax.swing.JLabel parserLabel;
   private javax.swing.JCheckBox stopOnError;
+  private javax.swing.JCheckBox verbose;
   // End of variables declaration//GEN-END:variables
 
 }

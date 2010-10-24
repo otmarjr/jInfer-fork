@@ -24,13 +24,13 @@ import java.util.List;
  *
  * @author reseto
  */
-public class NamedType {
+public class XSDNamedType {
 
   private Element container;
   private List<Element> rules;
   private boolean alreadyCopied = false;
 
-  public NamedType() {
+  public XSDNamedType() {
     this.container = null;
     this.rules = new ArrayList<Element>(0);
   }

@@ -14,12 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xsdimporter;
+package cz.cuni.mff.ksi.jinfer.xsdimportsax;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDDocumentElement;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.SAXAttributeData;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.BuiltInDataTypes;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -28,8 +25,13 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDNamedType;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDBuiltInDataTypes;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDMetadata;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.NamedType;
+import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.SAXAttributeData;
+import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.SAXDocumentElement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,8 +50,12 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 class SAXHandler extends DefaultHandler {
 
+  private final XSDImportSettings settings = new XSDImportSettings();
+  private static final Logger LOG = Logger.getLogger(SAXHandler.class);
+  private final boolean verbose = settings.isVerbose();
+
   /** Stack of XSDDocumentElements to be used only internally for storing data and correct nesting */
-  private final Stack<XSDDocumentElement> docElementStack = new Stack<XSDDocumentElement>();
+  private final Stack<SAXDocumentElement> docElementStack = new Stack<SAXDocumentElement>();
   /** Stack of elements of type Element, to be used for creating rules */
   private final Stack<Element> contentStack = new Stack<Element>();
   /** Rules that have been inferred so far. */
@@ -63,12 +69,11 @@ class SAXHandler extends DefaultHandler {
    *   these rules are not added to the global rules immediately.
    *   They are copied to the global rules, every time the complexType was used.
    */
-  private final Map<String, NamedType> namedTypes = new HashMap<String, NamedType>();
+  private final Map<String, XSDNamedType> namedTypes = new HashMap<String, XSDNamedType>();
   /**
    * List of elements with unknown type when they were processed.
    */
   private final List<Pair<String, Element>> unresolved = new ArrayList<Pair<String, Element>>();
-  private static final Logger LOG = Logger.getLogger(SAXHandler.class);
   /**
    * Pseudo-unique name for the container elements that are pushed in contentStack
    * the name should be distict from every element name in the actual schema
@@ -76,14 +81,23 @@ class SAXHandler extends DefaultHandler {
   private static final String CONTAINER_NAME = "__conTAIner__";
   private String currentRuleListName = "";
 
+  public SAXHandler() {
+    super();
+    LOG.setLevel(settings.logLevel());
+  }
+
   /**
    * Return global rules for the schema.
    * @return List<Element> rules.
    */
   public List<Element> getRules() {
-    LOG.info("Schema imported with following rules:");
-    for (Element elem : rules) {
-      LOG.info(elem.toString());
+    if (verbose) {
+      LOG.info("Schema imported with following rules:");
+      for (Element elem : rules) {
+        LOG.info(elem.toString());
+      }
+    } else {
+      LOG.info("Schema imported with " + rules.size() + " rules.");
     }
     return rules;
   }
@@ -112,14 +126,14 @@ class SAXHandler extends DefaultHandler {
    * @throws SAXException
    */
   @Override
-  public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+  public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException, XSDException {
     super.startElement(uri, localName, qName, attributes);
 
-    //TODO reseto debug? LOG.warn("XSD handler: start of element '" + qName + "' with " + attributes.getLength() + " attributes.");
+    //TODO reseto debug? LOG.debug("XSD handler: start of element '" + qName + "' with " + attributes.getLength() + " attributes.");
 
     // first, create xsd-element that can be pushed into documentElementStack
     // this contains all attributes of the schema element
-    final XSDDocumentElement docElement = new XSDDocumentElement(trimNS(qName));
+    final SAXDocumentElement docElement = new SAXDocumentElement(trimNS(qName));
     for (int i = 0; i < attributes.getLength(); i++) {
       final SAXAttributeData data = new SAXAttributeData(attributes.getURI(i), attributes.getLocalName(i), attributes.getQName(i), attributes.getType(i), attributes.getValue(i));
       docElement.getAttrs().put(attributes.getQName(i).toLowerCase(), data);
@@ -140,14 +154,14 @@ class SAXHandler extends DefaultHandler {
       createAndPushContent(docElement, true);
       // every element that is a descendant under a namedCType 
       // is not added to the global rules, but to the rules of a current CType
-      namedTypes.put(docElement.attributeNameValue(), new NamedType());
+      namedTypes.put(docElement.attributeNameValue(), new XSDNamedType());
       currentRuleListName = docElement.attributeNameValue();
 
     } else if (docElement.isOrderIndicator()) {
       if (docElementStack.peek().getName().equalsIgnoreCase("element")) {
         final String msg = "Schema not valid! " + docElement.getName() + " can't follow an element.";
         LOG.error(msg);
-        throw new IllegalArgumentException(msg);
+        throw new XSDException(msg);
       }
       if (docElement.isAssociated()) {
         contentStack.peek().getSubnodes().setType(determineRegexpType(docElement));
@@ -165,15 +179,15 @@ class SAXHandler extends DefaultHandler {
   }
 
   @Override
-  public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+  public void endElement(final String uri, final String localName, final String qName) throws SAXException, XSDException {
     super.endElement(uri, localName, qName);
 
-    final XSDDocumentElement docElement = docElementStack.pop();
+    final SAXDocumentElement docElement = docElementStack.pop();
 
     if (!docElement.getName().equalsIgnoreCase(trimNS(qName))) {
       final String msg = "Unpaired element " + docElement.getName() + " and " + qName;
       LOG.error(msg);
-      throw new IllegalArgumentException(msg);
+      throw new XSDException(msg);
     }
 
     // BIG IF -> we check what type of element ended
@@ -185,7 +199,7 @@ class SAXHandler extends DefaultHandler {
       if (!isContainer(container)) {
         final String msg = "Unexpected element on stack " + container.getName();
         LOG.error(msg);
-        throw new IllegalArgumentException(msg);
+        throw new XSDException(msg);
       }
 
       // add the container to the correct named type
@@ -209,7 +223,7 @@ class SAXHandler extends DefaultHandler {
 
   }
 
-  private void processEndOfOrderIndicator(final XSDDocumentElement docElement) {
+  private void processEndOfOrderIndicator(final SAXDocumentElement docElement) {
     if (!docElement.isAssociated()) {
       // we are dealing with a nested container
       final Element container = contentStack.pop();
@@ -252,7 +266,7 @@ class SAXHandler extends DefaultHandler {
     return ret;
   }
 
-  private RegexpType determineRegexpType(final XSDDocumentElement docElement) {
+  private RegexpType determineRegexpType(final SAXDocumentElement docElement) {
     if (docElement.getName().equalsIgnoreCase("sequence")) {
       return RegexpType.CONCATENATION;
     } else if (docElement.getName().equalsIgnoreCase("choice")) {
@@ -274,7 +288,7 @@ class SAXHandler extends DefaultHandler {
    * @param old Element from contentStack, expected to be regular element.
    * @param docElement Node from documentElementStack.
    */
-  private void processEndOfElement(final XSDDocumentElement docElement) throws IllegalArgumentException {
+  private void processEndOfElement(final SAXDocumentElement docElement) throws XSDException {
 
     final Element old = contentStack.pop();
     final String name = docElement.attributeNameValue();
@@ -283,14 +297,14 @@ class SAXHandler extends DefaultHandler {
     if (!old.getName().equals(name)) {
       final String msg = "Unexpected element on stack " + name;
       LOG.error(msg);
-      throw new IllegalArgumentException(msg);
+      throw new XSDException(msg);
     }
 
     if (docElement.getAttrs().containsKey("type")) {
       // deal with element that has specified type
       final String TYPE = docElement.getAttrs().get("type").getValue();
 
-      if (!BuiltInDataTypes.isSimpleDataType(TYPE)) {
+      if (!XSDBuiltInDataTypes.isSimpleDataType(TYPE)) {
         // try to pair this element with its defined type
         // the problem is, that the complexType it may be associated with
         // can be declared later in the schema than this element
@@ -318,11 +332,11 @@ class SAXHandler extends DefaultHandler {
     if (resolved) {
       elem.setImmutable();
     }
-    // TODO reseto: only add the rule if resolved, else it would be there multiple times?
+
     if ("".equals(currentRuleListName)) {
       // add element to global rules
       rules.add(elem);
-      LOG.warn("Adding to rules element: " + elem.toString());
+      LOG.debug("Adding to rules element: " + elem.toString());
     } else {
       // add element to rules for the active CType
       // these are copied to global when the CType is used
@@ -335,11 +349,11 @@ class SAXHandler extends DefaultHandler {
     }
   }
 
-  private boolean tryResolveElementType(final String TYPE, final Element old) throws IllegalArgumentException {
+  private boolean tryResolveElementType(final String TYPE, final Element old) throws XSDException {
 
     if (namedTypes.containsKey(TYPE) && namedTypes.get(TYPE).getContainer() != null) {
 
-      final NamedType entry = namedTypes.get(TYPE);
+      final XSDNamedType entry = namedTypes.get(TYPE);
 
 
       if (old.getSubnodes().getType() != null) {
@@ -349,7 +363,7 @@ class SAXHandler extends DefaultHandler {
           final String msg = "Element '" + old.getName() + "' should have type '" + TYPE
                   + "' but its content already set its type to: " + old.getSubnodes().getType();
           LOG.error(msg);
-          throw new IllegalArgumentException(msg);
+          throw new XSDException(msg);
         }
       } else {
         // set correct type
@@ -384,7 +398,7 @@ class SAXHandler extends DefaultHandler {
         //arrrrgh stupid context, i kill u 2:30 in the morning
         old.getAttributes().add(new Attribute(CloneHelper.getPrefixedContext(at, prefix), at.getName(), at.getMetadata(), at.getContentType(), at.getContent()));
       }
-      LOG.debug("Resolved element '" + old.getName() + "' to type '" + TYPE + "' and it now looks like this:\n" + old.toString());
+      //LOG.debug("Resolved element '" + old.getName() + "' to type '" + TYPE + "' and it now looks like this:\n" + old.toString());
       return true;
     } else {
       return false;
@@ -415,7 +429,7 @@ class SAXHandler extends DefaultHandler {
    * @param docElement Currently processed internal element.
    * @param isContainer True if docElement is an order indicator (choice,sequence,all). False if docElement is a proper xs:element.
    */
-  private void createAndPushContent(final XSDDocumentElement docElement, final boolean isContainer) {
+  private void createAndPushContent(final SAXDocumentElement docElement, final boolean isContainer) {
 
     final Map<String, Object> metadata = new HashMap<String, Object>();
 
@@ -466,9 +480,9 @@ class SAXHandler extends DefaultHandler {
    * 
    * @param docElement
    * @param xsdmd
-   * @throws IllegalArgumentException
+   * @throws XSDException
    */
-  private void determineOccurence(final XSDDocumentElement docElement, final XSDMetadata xsdmd) throws IllegalArgumentException {
+  private void determineOccurence(final SAXDocumentElement docElement, final XSDMetadata xsdmd) throws XSDException {
     int min = 1, max = 1; //default values from XSD specification
 
     if (docElement.getAttrs().containsKey("minoccurs")) {
@@ -486,7 +500,7 @@ class SAXHandler extends DefaultHandler {
     }
 
     if (min > max) {
-      throw new IllegalArgumentException("minOccurs > maxOccurs!");
+      throw new XSDException("minOccurs > maxOccurs!");
     }
 
     if (xsdmd.getInterval() == null) {
@@ -498,26 +512,27 @@ class SAXHandler extends DefaultHandler {
   public void endDocument() throws SAXException {
     super.endDocument();
 
-    LOG.info("Schema registered following " + namedTypes.size() + " named types");
-    for (final Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
-      final String name = it.next();
+    if (verbose) {
+      LOG.info("Schema registered following " + namedTypes.size() + " named types");
+      for (final Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
+        final String name = it.next();
 
-      if (!BaseUtils.isEmpty(namedTypes.get(name).getContainer().getSubnodes().getChildren())) {
-        final int numChildren = namedTypes.get(name).getContainer().getSubnodes().getChildren().size();
-        LOG.info("\t'" + name + "': " + namedTypes.get(name).getContainer().getSubnodes().getType().toString().toLowerCase() + " has " + numChildren + " children:");
-        for (int i = 0; i < numChildren; i++) {
-          final Regexp<AbstractStructuralNode> child = namedTypes.get(name).getContainer().getSubnodes().getChild(i);
-          if (child.getContent() == null) {
-            LOG.info("\t\t<unnamed> " + child.getType().toString().toLowerCase());
-          } else {
-            LOG.info("\t\t" + child.getContent().getName());
-          }
-        } //end for children
-      } else {
-        LOG.info("\t" + name + ": " + namedTypes.get(name).getContainer().getSubnodes().getType() + " has 0 children.");
+        if (!BaseUtils.isEmpty(namedTypes.get(name).getContainer().getSubnodes().getChildren())) {
+          final int numChildren = namedTypes.get(name).getContainer().getSubnodes().getChildren().size();
+          LOG.info("\t'" + name + "': " + namedTypes.get(name).getContainer().getSubnodes().getType().toString().toLowerCase() + " has " + numChildren + " children:");
+          for (int i = 0; i < numChildren; i++) {
+            final Regexp<AbstractStructuralNode> child = namedTypes.get(name).getContainer().getSubnodes().getChild(i);
+            if (child.getContent() == null) {
+              LOG.info("\t\t<unnamed> " + child.getType().toString().toLowerCase());
+            } else {
+              LOG.info("\t\t" + child.getContent().getName());
+            }
+          } //end for children
+        } else {
+          LOG.info("\t" + name + ": " + namedTypes.get(name).getContainer().getSubnodes().getType() + " has 0 children.");
+        }
       }
     }
-
     for (Pair<String, Element> pair : unresolved) {
       final boolean resolved = tryResolveElementType(pair.getFirst(), pair.getSecond());
       if (resolved) {

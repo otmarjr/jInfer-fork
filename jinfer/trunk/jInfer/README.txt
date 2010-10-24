@@ -1,7 +1,7 @@
 
                                jInfer
                 Java framework for XML schema inference
-                             version 0.2
+                             version 0.3
 
 
   What is it?
@@ -58,14 +58,19 @@ NetBeans, build & start hacking.
 
   jInfer is free software licensed under the GPL v3.0 located in gpl30.txt file.
 jInfer uses multiple FOSS libraries:
-  - log4j, version 1.2.16, http://logging.apache.org/log4j,
+  - log4j, version 1.2.16, http://logging.apache.org/log4j ,
     Apache License, Version 2.0, http://logging.apache.org/license.html
-  - dtdparser, version 2, http://www.rpbourret.com/dtdparser/index.htm,
+  - dtdparser, version 2, http://www.rpbourret.com/dtdparser/index.htm ,
     no copyright
-  - jaxen, version 1.1.3, http://jaxen.codehaus.org/,
+  - jaxen, version 1.1.3, http://jaxen.codehaus.org/ ,
     license located in jaxen-license.txt
-  - DoctypeChanger, version 1.1, http://doctypechanger.sourceforge.net/,
+  - JUNG, version 2.0.1, http://jung.sourceforge.net/ ,
+    Berkeley Software Distribution (BSD) license,
+    http://opensource.org/licenses/bsd-license.php
+  - DoctypeChanger, version 1.1, http://doctypechanger.sourceforge.net/ ,
     license located in doctypeChanger-license.txt
+  Furthermore, jInfer uses portions of source code from Julie Vyhnanovska's
+Master's Thesis (http://www.ksi.mff.cuni.cz/~mlynkova/dp/Vyhnanovska.pdf).
 
   Contacts
   --------

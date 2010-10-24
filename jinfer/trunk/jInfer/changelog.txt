@@ -4,6 +4,16 @@
 
                               CHANGELOG
 
+  Version 0.3
+  -----------
+
+  New features:
+  - Supports import from XSD schemas.
+  - Unified simplifiers into one module, added more algorithms.
+  - Added finite state automaton editor.
+  Major changes in object model.
+  Various bugfixes.
+
   Version 0.2
   -----------
 

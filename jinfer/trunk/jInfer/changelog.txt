@@ -9,7 +9,13 @@
 
   New features:
   - Supports import from XSD schemas.
-  - Unified simplifiers into one module, added more algorithms.
+  - Unified simplifiers into one module: TwoStepSimplifier, added more algorithms.
+  - Rewritten k,h-context conditiontester
+  - Clusterer and element processor can be replaced
+  - Default iname clusterer supports attribute clustering
+  - Automaton cluster processor have replacable submodule: automatonSimplifier
+  - RegexpAutomaton simplifiyng made replacable, ordering submodule made replacable
+  - Added nice properties panels for all submodules
   - Added finite state automaton editor.
   Major changes in object model.
   Various bugfixes.

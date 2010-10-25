@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
-import org.openide.nodes.Children;
 import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 
@@ -34,7 +33,7 @@ public class OutputChildren extends FilterNode.Children{
   }
 
   @Override
-  protected Node[] createNodes(Node key) {
+  protected Node[] createNodes(final Node key) {
     return new Node[] {new OutputFileNode(super.createNodes(key)[0])};
   }
 

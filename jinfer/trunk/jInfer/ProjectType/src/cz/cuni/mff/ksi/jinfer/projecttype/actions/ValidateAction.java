@@ -66,7 +66,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class ValidateAction extends NodeAction {
 
   private static ValidateAction action = null;
-  private String[] schemas = new String[]{"xsd", "dtd"};
+  private final String[] schemas = new String[]{"xsd", "dtd"};
 
   private static class ValiadtionOutputListener implements OutputListener {
 
@@ -95,6 +95,7 @@ public final class ValidateAction extends NodeAction {
         final Line original = lineCookie.getLineSet().getOriginal(lineNumber - 1);
         original.show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, columnNumber - 1);
       } catch (DataObjectNotFoundException ex) {
+        //TODO sviro
         Exceptions.printStackTrace(ex);
       }
 
@@ -278,6 +279,7 @@ public final class ValidateAction extends NodeAction {
       }
 
     } catch (IOException ex) {
+      //TODO sviro
       Exceptions.printStackTrace(ex);
     } catch (SAXException ex) {
       final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
@@ -286,6 +288,7 @@ public final class ValidateAction extends NodeAction {
       ioResult.getOut().close();
       return false;
     } catch (ParserConfigurationException ex) {
+      //TODO sviro
       Exceptions.printStackTrace(ex);
     }
     return false;

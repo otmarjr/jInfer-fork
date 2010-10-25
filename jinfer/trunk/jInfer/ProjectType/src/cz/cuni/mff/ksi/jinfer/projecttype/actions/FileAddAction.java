@@ -60,28 +60,7 @@ public class FileAddAction extends AbstractAction {
             lookupAll(Processor.class);
 
     final StringBuilder builder = new StringBuilder();
-
-    if (FolderType.XML.equals(type)) {
-      builder.append("XML files (");
-    } else if (FolderType.SCHEMA.equals(type)) {
-      builder.append("Schema files (");
-    } else if (FolderType.QUERY.equals(type)) {
-      //
-    }
-
-    boolean first = true;
-    for (Processor processor : processors) {
-      if (type.equals(processor.getFolder())) {
-        if (first) {
-          first = false;
-          builder.append("*.").append(processor.getExtension());
-        } else {
-          builder.append(", *.").append(processor.getExtension());
-        }
-      }
-    }
-
-    builder.append(")");
+    buildFilterName(builder, processors);
 
     FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).
             setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
@@ -113,5 +92,28 @@ public class FileAddAction extends AbstractAction {
 
       project.getLookup().lookup(ProjectState.class).markModified();
     }
+  }
+
+  private void buildFilterName(final StringBuilder builder,
+          final Collection<? extends Processor> processors) {
+    if (FolderType.XML.equals(type)) {
+      builder.append("XML files (");
+    } else if (FolderType.SCHEMA.equals(type)) {
+      builder.append("Schema files (");
+    } else if (FolderType.QUERY.equals(type)) {
+      //
+    }
+    boolean first = true;
+    for (Processor processor : processors) {
+      if (type.equals(processor.getFolder())) {
+        if (first) {
+          first = false;
+          builder.append("*.").append(processor.getExtension());
+        } else {
+          builder.append(", *.").append(processor.getExtension());
+        }
+      }
+    }
+    builder.append(")");
   }
 }

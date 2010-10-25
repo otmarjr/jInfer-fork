@@ -33,8 +33,8 @@ public class OutputFileNode extends FilterNode{
   }
 
   @Override
-  public Action[] getActions(boolean context) {
-    Action[] actions = super.getActions(context);
+  public Action[] getActions(final boolean context) {
+    final Action[] actions = super.getActions(context);
     Action[] result = new Action[actions.length + 1];
 
     System.arraycopy(actions, 0, result, 0, actions.length);

@@ -62,10 +62,8 @@ public class InputFilesList extends ArrayList<File> {
   public boolean addAll(final Collection<? extends File> c) {
     final List<File> list = new InputFilesList();
     for (File file : c) {
-      if (!this.contains(file)) {
-        if (list.add(file)) {
-          FileUtil.addFileChangeListener(listener, file);
-        }
+      if (!this.contains(file) && list.add(file)) {
+        FileUtil.addFileChangeListener(listener, file);
       }
     }
     return super.addAll(list);

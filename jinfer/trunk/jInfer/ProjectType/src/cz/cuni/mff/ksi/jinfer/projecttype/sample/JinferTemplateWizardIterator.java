@@ -77,7 +77,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
   }
 
   @Override
-  public Set/*<FileObject>*/ instantiate(/*ProgressHandle handle*/) throws IOException {
+  public Set<FileObject> instantiate(/*ProgressHandle handle*/) throws IOException {
     final Set<FileObject> resultSet = new LinkedHashSet<FileObject>();
     final File dirF = FileUtil.normalizeFile((File) wiz.getProperty("projdir"));
     dirF.mkdirs();

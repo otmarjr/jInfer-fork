@@ -81,6 +81,7 @@ public final class InputFiles {
       marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
       marshaller.marshal(jinferInput, fileOutputStream);
     } catch (JAXBException ex) {
+      //TODO sviro
       Exceptions.printStackTrace(ex);
     } finally {
       Thread.currentThread().setContextClassLoader(orig);
@@ -90,6 +91,7 @@ public final class InputFiles {
       try {
         fileOutputStream.close();
       } catch (IOException ex) {
+        //TODO sviro
         Exceptions.printStackTrace(ex);
       }
     }
@@ -156,6 +158,7 @@ public final class InputFiles {
               org.openide.util.NbBundle.getMessage(Input.class, "Input.fileBroken.message"),
               NotifyDescriptor.INFORMATION_MESSAGE));
     } catch (JAXBException ex) {
+      //TODO sviro
       Exceptions.printStackTrace(ex);
     } finally {
       Thread.currentThread().setContextClassLoader(orig);

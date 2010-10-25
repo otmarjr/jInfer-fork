@@ -82,6 +82,7 @@ public class JInferProject implements Project {
       try {
         result = projectDir.createFolder(OUTPUT_DIR);
       } catch (IOException ex) {
+        //TODO sviro
         Exceptions.printStackTrace(ex);
       }
     }
@@ -103,6 +104,7 @@ public class JInferProject implements Project {
         try {
           properties.load(fob.getInputStream());
         } catch (Exception e) {
+          //TODO sviro
           Exceptions.printStackTrace(e);
         }
       }
@@ -125,6 +127,7 @@ public class JInferProject implements Project {
         try {
           InputFiles.load(inputFilesFileOb.getInputStream(), input);
         } catch (Exception e) {
+          //TODO sviro
           Exceptions.printStackTrace(e);
         }
       }

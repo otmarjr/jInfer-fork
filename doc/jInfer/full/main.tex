@@ -1,0 +1,44 @@
+\documentclass[a4paper,10pt,oneside,twocolumn]{article}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{import}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{26cm}
+\setlength{\textwidth}{18cm}
+
+
+
+\def\mftitle{jInfer - Framework for Automatic XML Schema Inference}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+\maketitle
+
+\input{00abstract}
+
+\input{01introduction}
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{literature}
+
+\end{document}

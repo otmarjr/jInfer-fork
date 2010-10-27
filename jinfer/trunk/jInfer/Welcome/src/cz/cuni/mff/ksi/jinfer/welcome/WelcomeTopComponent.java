@@ -19,8 +19,10 @@ package cz.cuni.mff.ksi.jinfer.welcome;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.prefs.Preferences;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -40,7 +42,10 @@ import org.netbeans.spi.project.ui.support.ProjectChooser;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
+import org.openide.util.Lookup.Result;
+import org.openide.util.Lookup.Template;
 import org.openide.util.NbPreferences;
+import org.openide.util.lookup.Lookups;
 
 /**
  * jInfer welcome window shown on the first run.
@@ -52,6 +57,8 @@ autostore = false)
 public final class WelcomeTopComponent extends TopComponent {
 
   public static final String SHOW_ON_STARTUP = "show.startup";
+  private static final String CHECK_FOR_UPDATES_ACTION_FOLDER = "Actions/System/";
+  private static final String CHECK_FOR_UPDATES_ACTION_INSTANCE = "org-netbeans-modules-autoupdate-ui-actions-CheckForUpdatesAction";
   private static final long serialVersionUID = 789451321321l;
   private static WelcomeTopComponent instance;
   /** path to the icon used by the component and its open action */
@@ -156,7 +163,12 @@ public final class WelcomeTopComponent extends TopComponent {
     org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel14.text")); // NOI18N
 
     org.openide.awt.Mnemonics.setLocalizedText(jLabel15, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.jLabel15.text")); // NOI18N
-    jLabel15.setEnabled(false);
+    jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+    jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        jLabel15MouseClicked(evt);
+      }
+    });
 
     L2developingjInfer.setFont(L2developingjInfer.getFont().deriveFont(L2developingjInfer.getFont().getStyle() | java.awt.Font.BOLD, L2developingjInfer.getFont().getSize()+3));
     org.openide.awt.Mnemonics.setLocalizedText(L2developingjInfer, org.openide.util.NbBundle.getMessage(WelcomeTopComponent.class, "WelcomeTopComponent.L2developingjInfer.text")); // NOI18N
@@ -264,8 +276,7 @@ public final class WelcomeTopComponent extends TopComponent {
                       .addComponent(step2addFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                       .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                       .addComponent(step1project, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                      .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE))))
-                .addGap(68, 68, 68))))
+                      .addComponent(step3runProject, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)))))))
           .addComponent(showOnStartup)
           .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1084, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -338,11 +349,11 @@ public final class WelcomeTopComponent extends TopComponent {
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 740, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -387,6 +398,19 @@ public final class WelcomeTopComponent extends TopComponent {
       Exceptions.printStackTrace(ex);
     }
   }//GEN-LAST:event_jButton1ActionPerformed
+
+  private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
+    final Lookup pathLookup = Lookups.forPath(CHECK_FOR_UPDATES_ACTION_FOLDER);
+    final Template<Action> actionTemplate = new Template<Action>(Action.class,
+            CHECK_FOR_UPDATES_ACTION_FOLDER + CHECK_FOR_UPDATES_ACTION_INSTANCE, null);
+    final Result<Action> lookupResult = pathLookup.lookup(actionTemplate);
+    final Collection<? extends Action> foundActions = lookupResult.allInstances();
+
+    //For each instance (should ony be one) call actionPerformed()
+    for (Action action : foundActions) {
+      action.actionPerformed(null);
+    }
+  }//GEN-LAST:event_jLabel15MouseClicked
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel L1welcome;
   private javax.swing.JLabel L2developingjInfer;

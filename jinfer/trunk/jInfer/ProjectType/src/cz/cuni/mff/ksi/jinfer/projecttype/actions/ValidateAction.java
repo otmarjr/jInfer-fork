@@ -204,11 +204,7 @@ public final class ValidateAction extends NodeAction {
 
   private boolean isSchemaFile(final FileObject file) {
     final String ext = file.getExt();
-    if ("xsd".equalsIgnoreCase(ext) || "dtd".equalsIgnoreCase(ext)) {
-      return true;
-    }
-
-    return false;
+    return Arrays.asList(schemas).contains(ext);
   }
 
   private boolean validateDTD(final FileObject xmlFile, final FileObject schemaFile) throws
@@ -297,26 +293,20 @@ public final class ValidateAction extends NodeAction {
   @Override
   protected boolean enable(final Node[] activatedNodes) {
     boolean result = true;
+    boolean isXMLSelected = false;
     boolean isSchemaSelected = false;
     for (Node node : activatedNodes) {
-      final DataObject dataObject = node.getLookup().lookup(DataObject.class);
-
-
-      boolean isSchemaNode = false;
-      if (dataObject != null) {
-        final FileObject fileObject = dataObject.getPrimaryFile();
-        if (fileObject.isFolder()) {
-          return false;
-        }
-
-        isSchemaNode = Arrays.asList(schemas).contains(fileObject.getExt());
-      }
-
-      if (isSchemaSelected && isSchemaNode) {
+      if (isFolder(node)) {
         return false;
       }
 
-      if (!isSchemaSelected && isSchemaNode) {
+      boolean isSchemaNode = isSchemaFile(node);
+
+      if (isSchemaNode && isSchemaSelected) {
+        return false;
+      }
+
+      if (isSchemaNode && !isSchemaSelected) {
         isSchemaSelected = true;
         continue;
       }
@@ -324,13 +314,45 @@ public final class ValidateAction extends NodeAction {
       final boolean isXMLNode = FolderType.XML.getName().equals(
               node.getParentNode().getDisplayName());
 
-      if (!isXMLNode) {
+      if (isXMLNode) {
+        isXMLSelected = true;
+      } else {
         result = false;
       }
     }
 
-    if (!isSchemaSelected) {
+    if (!isSchemaSelected || !isXMLSelected) {
       return false;
+    }
+
+    return result;
+  }
+
+  private boolean isFolder(final Node node) {
+    boolean result = false;
+
+    final DataObject dataObject = node.getLookup().lookup(DataObject.class);
+    if (dataObject != null) {
+      final FileObject fileObject = dataObject.getPrimaryFile();
+      if (fileObject.isFolder()) {
+        result = true;
+      }
+    } else {
+      result = true;
+    }
+
+    return result;
+  }
+
+  private boolean isSchemaFile(final Node node) {
+    boolean result = false;
+
+    final DataObject dataObject = node.getLookup().lookup(DataObject.class);
+    if (dataObject != null) {
+      final FileObject fileObject = dataObject.getPrimaryFile();
+      if (fileObject.isData()) {
+        result = isSchemaFile(fileObject);
+      }
     }
 
     return result;

@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingAutomatonVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.OneButtonComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
@@ -44,7 +44,7 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
     //final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
     List<State<T>> mergeLst;
     do {
-      final AutomatonVisualizer<T> visualizer = new AutomatonVisualizer<T>(inputAutomaton, symbolTostring);
+      final StatePickingAutomatonVisualizer<T> visualizer = new StatePickingAutomatonVisualizer<T>(inputAutomaton, symbolTostring);
       final OneButtonComponent panel = new OneButtonComponent("Please select two states to be merged together.");
       mergeLst = AutoEditor.drawAutomatonToPickStates(panel, visualizer);
 

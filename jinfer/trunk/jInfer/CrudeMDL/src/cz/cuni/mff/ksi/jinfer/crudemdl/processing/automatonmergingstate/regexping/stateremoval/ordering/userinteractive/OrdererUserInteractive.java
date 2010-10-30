@@ -18,7 +18,9 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.OneButtonComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonStateRemoval;
@@ -37,10 +39,12 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
   
   @Override
   public State<Regexp<T>> getStateToRemove(RegexpAutomatonStateRemoval<T> automaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
-    final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
+    //final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
     List<State<Regexp<T>>> removeLst;
     do {
-      removeLst = gui.drawAutomatonToPickStates(automaton);
+      final AutomatonVisualizer<Regexp<T>> visualizer = new AutomatonVisualizer<Regexp<T>>(automaton, symbolToString);
+      final OneButtonComponent component = new OneButtonComponent("Please select states to be merged together");
+      removeLst = AutoEditor.drawAutomatonToPickStates(component, visualizer);
 
       if (removeLst == null) {
         continue;

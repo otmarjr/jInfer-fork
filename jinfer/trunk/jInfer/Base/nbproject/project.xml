@@ -72,6 +72,7 @@
                 </test-type>
             </test-dependencies>
             <public-packages>
+                <package>cz.cuni.mff.ksi.jinfer.base.automaton</package>
                 <package>cz.cuni.mff.ksi.jinfer.base.interfaces</package>
                 <package>cz.cuni.mff.ksi.jinfer.base.interfaces.inference</package>
                 <package>cz.cuni.mff.ksi.jinfer.base.interfaces.nodes</package>

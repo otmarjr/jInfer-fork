@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;

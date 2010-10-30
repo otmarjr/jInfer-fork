@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 anti
+ *  Copyright (C) 2010 rio
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,17 +15,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying;
+package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import javax.swing.JPanel;
 
 /**
- * Interface for simplifying automaton - given PTA should return something
- * reasonable sized, accepting more general language.
  *
- * @author anti
+ * @author rio
+ * TODO rio comment
  */
-public interface AutomatonSimplifier<T> {
-  Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException;
+public abstract class AutoEditorComponent extends JPanel {
+
+  private final Object monitor;
+
+  protected AutoEditorComponent() {
+    monitor = new Object();
+  }
+
+  abstract public JPanel getAutomatonDrawPanel();
+
+  public void waitForGUIDone() throws InterruptedException {
+    synchronized (monitor) {
+      monitor.wait();
+    }
+  }
+
+  protected void GUIDone() {
+    synchronized (monitor) {
+      monitor.notifyAll();
+    }
+  }
 }

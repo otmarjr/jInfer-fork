@@ -19,7 +19,9 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.OneButtonComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -39,10 +41,12 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolTostring) throws InterruptedException {
-    final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
+    //final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
     List<State<T>> mergeLst;
     do {
-      mergeLst = gui.drawAutomatonToPickStates(inputAutomaton);
+      final AutomatonVisualizer<T> visualizer = new AutomatonVisualizer<T>(inputAutomaton, symbolTostring);
+      final OneButtonComponent panel = new OneButtonComponent("Please select two states to be merged together.");
+      mergeLst = AutoEditor.drawAutomatonToPickStates(panel, visualizer);
 
       if ((!BaseUtils.isEmpty(mergeLst))&&(mergeLst.size() >= 2)) {
         LOG.debug("AUTO EDITOR selected: " + mergeLst.toString());

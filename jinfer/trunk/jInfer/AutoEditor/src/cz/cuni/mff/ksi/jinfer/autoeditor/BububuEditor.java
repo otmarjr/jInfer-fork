@@ -17,7 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.AutoEditorTopComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonToDot;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.PickingUnlimitedGraphMousePlugin;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.OneButtonComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -76,8 +79,8 @@ public class BububuEditor<T> extends AutoEditor<T> {
    * @param automaton automaton to be drawn
    * @return if user picks exactly two states returns Pair of them otherwise null
    */
-  @Override
-  public List<State<T>> drawAutomatonToPickStates(final Automaton<T> automaton) {
+  //@Override
+  public List<State<T>> drawAutomatonToPickStates(final OneButtonComponent panel, final Automaton<T> automaton) {
 
 
     final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
@@ -166,7 +169,7 @@ public class BububuEditor<T> extends AutoEditor<T> {
         @Override
         public void run() {
           // Pass this as argument so the thread will be able to wake us up.
-          AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(BububuEditor.this, visualizationViewer, "Please select two states to be merged together.");
+          //AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(BububuEditor.this, visualizationViewer, "Please select two states to be merged together.");
         }
       });
 

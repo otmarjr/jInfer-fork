@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;

@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingAutomatonVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.OneButtonComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -42,7 +42,7 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
     //final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
     List<State<Regexp<T>>> removeLst;
     do {
-      final AutomatonVisualizer<Regexp<T>> visualizer = new AutomatonVisualizer<Regexp<T>>(automaton, symbolToString);
+      final StatePickingAutomatonVisualizer<Regexp<T>> visualizer = new StatePickingAutomatonVisualizer<Regexp<T>>(automaton, symbolToString);
       final OneButtonComponent component = new OneButtonComponent("Please select states to be merged together");
       removeLst = AutoEditor.drawAutomatonToPickStates(component, visualizer);
 

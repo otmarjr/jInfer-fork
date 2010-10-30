@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingAutomatonVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent.AutoEditorTopComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.OneButtonComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -65,8 +65,8 @@ public class AutoEditor<T> {
    * @param automaton automaton to be drawn
    * @return returns picked states in a list
    */
-  public static <T> List<State<T>> drawAutomatonToPickStates(final OneButtonComponent panel, final AutomatonVisualizer<T> visualizer) {
-    panel.getAutomatonDrawPanel().add(visualizer.getBVS());
+  public static <T> List<State<T>> drawAutomatonToPickStates(final OneButtonComponent panel, final StatePickingAutomatonVisualizer<T> visualizer) {
+    panel.getAutomatonDrawPanel().add(visualizer.getBasicVisualizationServer());
 
     // Call GUI in a special thread. Required by NB.
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
@@ -88,7 +88,7 @@ public class AutoEditor<T> {
     /* AutoEditorTopComponent wakes us up. Get the result and return it.
      * VisualizationViewer should give us the information about picked vertices.
      */
-    final Set<State<T>> pickedSet = visualizer.getBVS().getPickedVertexState().getPicked();
+    final Set<State<T>> pickedSet = visualizer.getBasicVisualizationServer().getPickedVertexState().getPicked();
     List<State<T>> lst = new ArrayList<State<T>>(pickedSet);
     return lst;
   }

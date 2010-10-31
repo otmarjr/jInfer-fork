@@ -44,7 +44,8 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
     do {
       final StatePickingAutomatonVisualizer<Regexp<T>> visualizer = new StatePickingAutomatonVisualizer<Regexp<T>>(automaton, symbolToString);
       final StatePickingComponent component = new StatePickingComponent();
-      removeLst = AutoEditor.drawAutomatonToPickStates(component, visualizer);
+      AutoEditor.drawComponentAndWaitForGUI(component, visualizer);
+      removeLst = component.getPickedStates();
 
       if (removeLst == null) {
         continue;

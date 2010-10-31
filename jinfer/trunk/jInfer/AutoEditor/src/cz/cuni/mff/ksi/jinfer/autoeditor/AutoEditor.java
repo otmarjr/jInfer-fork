@@ -17,14 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingAutomatonVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AutoEditorComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent.AutoEditorTopComponent;
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatePickingComponent;
-import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import org.openide.windows.WindowManager;
 
 /**
@@ -85,23 +79,5 @@ public class AutoEditor {
         AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(component);
       }
     });
-  }
-
-  /**
-   * Draws automaton and waits until user picks some states and clicks
-   * 'continue' button.
-   *
-   * @param automaton automaton to be drawn
-   * @return returns picked states in a list
-   */
-  public static <T> List<State<T>> drawAutomatonToPickStates(final StatePickingComponent component, final StatePickingAutomatonVisualizer<T> visualizer) {
-    drawComponentAndWaitForGUI(component, visualizer);
-
-    /* AutoEditorTopComponent wakes us up. Get the result and return it.
-     * VisualizationViewer should give us the information about picked vertices.
-     */
-    final Set<State<T>> pickedSet = visualizer.getBasicVisualizationServer().getPickedVertexState().getPicked();
-    List<State<T>> lst = new ArrayList<State<T>>(pickedSet);
-    return lst;
   }
 }

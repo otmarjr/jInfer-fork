@@ -46,7 +46,8 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
     do {
       final StatePickingAutomatonVisualizer<T> visualizer = new StatePickingAutomatonVisualizer<T>(inputAutomaton, symbolTostring);
       final StatePickingComponent panel = new StatePickingComponent();
-      mergeLst = AutoEditor.drawAutomatonToPickStates(panel, visualizer);
+      AutoEditor.drawComponentAndWaitForGUI(panel, visualizer);
+      mergeLst = panel.getPickedStates();
 
       if ((!BaseUtils.isEmpty(mergeLst))&&(mergeLst.size() >= 2)) {
         LOG.debug("AUTO EDITOR selected: " + mergeLst.toString());

@@ -24,20 +24,24 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AutoEditorComponent;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
  *
  * @author rio
  */
-public class StatePickingComponent extends AutoEditorComponent {
+public class StatePickingComponent<T> extends AutoEditorComponent {
 
     private boolean shallAskUser = true;
 
     // TODO rio set button text
     public StatePickingComponent() {
         initComponents();
-        jLabel1.setText("Please select states to be merged together");
     }
 
     public boolean shallAskUser() {
@@ -127,5 +131,10 @@ public class StatePickingComponent extends AutoEditorComponent {
   @Override
   public JPanel getAutomatonDrawPanel() {
     return jPanel1;
+  }
+
+  public List<State<T>> getPickedStates() {
+    final BasicVisualizationServer<State<T>, Step<T>> bvs = (BasicVisualizationServer<State<T>, Step<T>>)(getAutomatonDrawPanel().getComponent(0));
+    return new ArrayList(bvs.getPickedVertexState().getPicked());
   }
 }

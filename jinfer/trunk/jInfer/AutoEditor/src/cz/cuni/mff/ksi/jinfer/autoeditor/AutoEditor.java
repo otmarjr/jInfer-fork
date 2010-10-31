@@ -16,9 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingAutomatonVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AutoEditorComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent.AutoEditorTopComponent;
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.OneButtonComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatePickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +55,36 @@ import org.openide.windows.WindowManager;
  * @param <T>
  * @author rio
  */
-public class AutoEditor<T> {
+public class AutoEditor {
 
-  public AutoEditor() {
+  private AutoEditor() {
+  }
+
+  public static <T> void drawComponentAsync(final AutoEditorComponent component, final AutomatonVisualizer<T> visualizer) {
+    component.getAutomatonDrawPanel().add(visualizer.getBasicVisualizationServer());
+    drawInGUI(component);
+  }
+
+  public static <T> boolean drawComponentAndWaitForGUI(final AutoEditorComponent component, final AutomatonVisualizer<T> visualizer) {
+    drawComponentAsync(component, visualizer);
+    try {
+      component.waitForGUIDone();
+    } catch (final InterruptedException e) {
+      return false;
+    }
+    return true;
+  }
+
+  private static void drawInGUI(final AutoEditorComponent component) {
+    // Call GUI in a special thread. Required by NB.
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        // Pass this as argument so the thread will be able to wake us up.
+        AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(component);
+      }
+    });
   }
 
   /**
@@ -65,25 +94,8 @@ public class AutoEditor<T> {
    * @param automaton automaton to be drawn
    * @return returns picked states in a list
    */
-  public static <T> List<State<T>> drawAutomatonToPickStates(final OneButtonComponent panel, final StatePickingAutomatonVisualizer<T> visualizer) {
-    panel.getAutomatonDrawPanel().add(visualizer.getBasicVisualizationServer());
-
-    // Call GUI in a special thread. Required by NB.
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
-      @Override
-      public void run() {
-        // Pass this as argument so the thread will be able to wake us up.
-        AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(panel);
-      }
-    });
-
-    try {
-      // Sleep on this.
-      panel.waitForGUIDone();
-    } catch (InterruptedException e) {
-      return null;
-    }
+  public static <T> List<State<T>> drawAutomatonToPickStates(final StatePickingComponent component, final StatePickingAutomatonVisualizer<T> visualizer) {
+    drawComponentAndWaitForGUI(component, visualizer);
 
     /* AutoEditorTopComponent wakes us up. Get the result and return it.
      * VisualizationViewer should give us the information about picked vertices.

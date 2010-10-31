@@ -16,7 +16,7 @@
  */
 
 /*
- * OneButtonComponent.java
+ * StatePickingComponent.java
  *
  * Created on Oct 20, 2010, 1:23:27 PM
  */
@@ -30,14 +30,14 @@ import javax.swing.JPanel;
  *
  * @author rio
  */
-public class OneButtonComponent extends AutoEditorComponent {
+public class StatePickingComponent extends AutoEditorComponent {
 
     private boolean shallAskUser = true;
 
     // TODO rio set button text
-    public OneButtonComponent(final String description) {
+    public StatePickingComponent() {
         initComponents();
-        jLabel1.setText(description);
+        jLabel1.setText("Please select states to be merged together");
     }
 
     public boolean shallAskUser() {
@@ -59,9 +59,9 @@ public class OneButtonComponent extends AutoEditorComponent {
     jPanel1 = new javax.swing.JPanel();
     jCheckBox1 = new javax.swing.JCheckBox();
 
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(OneButtonComponent.class, "OneButtonComponent.jLabel1.text")); // NOI18N
+    jLabel1.setText(org.openide.util.NbBundle.getMessage(StatePickingComponent.class, "StatePickingComponent.jLabel1.text")); // NOI18N
 
-    jButton1.setLabel(org.openide.util.NbBundle.getMessage(OneButtonComponent.class, "OneButtonComponent.jButton1.label")); // NOI18N
+    jButton1.setLabel(org.openide.util.NbBundle.getMessage(StatePickingComponent.class, "StatePickingComponent.jButton1.label")); // NOI18N
     jButton1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton1ActionPerformed(evt);
@@ -71,7 +71,7 @@ public class OneButtonComponent extends AutoEditorComponent {
     jPanel1.setLayout(new java.awt.GridBagLayout());
     jScrollPane1.setViewportView(jPanel1);
 
-    jCheckBox1.setText(org.openide.util.NbBundle.getMessage(OneButtonComponent.class, "OneButtonComponent.jCheckBox1.text")); // NOI18N
+    jCheckBox1.setText(org.openide.util.NbBundle.getMessage(StatePickingComponent.class, "StatePickingComponent.jCheckBox1.text")); // NOI18N
     jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jCheckBox1ActionPerformed(evt);

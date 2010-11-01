@@ -16,8 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunAction;
+import java.util.Arrays;
+import java.util.List;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.DefaultProjectOperations;
 import org.openide.util.Lookup;
@@ -30,7 +33,8 @@ import org.openide.util.Lookup;
 public class ActionProviderImpl implements ActionProvider {
 
   private final String[] supported = new String[]{ActionProvider.COMMAND_DELETE,
-    ActionProvider.COMMAND_COPY, ActionProvider.COMMAND_RUN, FilesAddAction.COMMAND_FILES_ADD};
+    ActionProvider.COMMAND_COPY, ActionProvider.COMMAND_RUN, ActionProvider.COMMAND_RENAME,
+    ActionProvider.COMMAND_MOVE, FilesAddAction.COMMAND_FILES_ADD};
   private final JInferProject project;
 
   public ActionProviderImpl(final JInferProject project) {
@@ -56,13 +60,21 @@ public class ActionProviderImpl implements ActionProvider {
     if (action.equalsIgnoreCase(FilesAddAction.COMMAND_FILES_ADD)) {
       new FilesAddAction(project).actionPerformed(null);
     }
+    if (action.equalsIgnoreCase(ActionProvider.COMMAND_RENAME)) {
+      DefaultProjectOperations.performDefaultRenameOperation(project, null);
+    }
+    if (action.equalsIgnoreCase(ActionProvider.COMMAND_MOVE)) {
+      DefaultProjectOperations.performDefaultMoveOperation(project);
+    }
   }
 
   @Override
   public boolean isActionEnabled(final String action, final Lookup lookup) throws
           IllegalArgumentException {
-    if ((action.equals(ActionProvider.COMMAND_DELETE)) || (action.equals(ActionProvider.COMMAND_COPY)) || (action.
-            equals(ActionProvider.COMMAND_RUN) || action.equals(FilesAddAction.COMMAND_FILES_ADD))) {
+    final List<String> supportedActions = Arrays.asList(supported);
+    if (RunningProject.isActiveProject() && RunningProject.getActiveProject().equals(project)) {
+      return false;
+    } else if (supportedActions.contains(action)) {
       return true;
     } else {
       throw new IllegalArgumentException(action);

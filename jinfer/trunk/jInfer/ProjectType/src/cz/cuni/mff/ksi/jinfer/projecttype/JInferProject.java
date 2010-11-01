@@ -34,6 +34,8 @@ import org.openide.util.lookup.Lookups;
 public class JInferProject implements Project {
 
   public static final String OUTPUT_DIR = "output";
+  public static final String JINFER_PROJECT_NAME_PROPERTY = "jInferProjectProperty";
+
   private final FileObject projectDir;
   private final ProjectState state;
   private Lookup lookup;
@@ -64,7 +66,8 @@ public class JInferProject implements Project {
                 new JInferLogicalView(this),
                 new ActionProviderImpl(this),
                 new JInferCopyOperation(),
-                new JInferDeleteOperation(this)
+                new JInferDeleteOperation(this),
+                new JInferMoveOrRenameOperation(this)
               });
     }
     return lookup;

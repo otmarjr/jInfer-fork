@@ -36,7 +36,7 @@ import org.openide.nodes.Node;
 public class FileNode extends FilterNode {
 
   public FileNode(final Node node) {
-    super(node, new FilterNode.Children(node), node.getLookup());
+    super(node, Children.LEAF, node.getLookup());
     disableDelegation(DELEGATE_DESTROY);
   }
 

@@ -25,6 +25,7 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
+import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
 import org.openide.loaders.DataFolder;
 import org.openide.nodes.AbstractNode;
@@ -79,7 +80,7 @@ public class RootNode extends AbstractNode {
 
   @Override
   public String getDisplayName() {
-    return project.getProjectDirectory().getName();
+    return ProjectUtils.getInformation(project).getDisplayName();
   }
 
   @Override
@@ -88,6 +89,8 @@ public class RootNode extends AbstractNode {
     nodeActions.add(new FilesAddAction(project));
     nodeActions.add(new RunAction(project));
     nodeActions.add(null); //separator
+    nodeActions.add(CommonProjectActions.renameProjectAction());
+    nodeActions.add(CommonProjectActions.moveProjectAction());
     nodeActions.add(CommonProjectActions.copyProjectAction());
     nodeActions.add(CommonProjectActions.deleteProjectAction());
     nodeActions.add(null); //separator

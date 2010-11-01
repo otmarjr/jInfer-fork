@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import java.beans.PropertyChangeListener;
+import java.util.Properties;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.netbeans.api.project.Project;
@@ -43,7 +44,7 @@ public class JInferProjectInformation implements ProjectInformation {
 
   @Override
   public String getDisplayName() {
-    return getName();
+    return project.getLookup().lookup(Properties.class).getProperty(JInferProject.JINFER_PROJECT_NAME_PROPERTY, getName());
   }
 
   @Override

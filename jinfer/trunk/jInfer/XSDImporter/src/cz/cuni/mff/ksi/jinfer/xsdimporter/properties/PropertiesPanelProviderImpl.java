@@ -19,6 +19,8 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -29,6 +31,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
   private static final int PANEL_PRIORITY = 20000;
+  public static final String PROCESSORS_CATEGORY = "Processors";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -48,6 +51,16 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
   @Override
   public int getPriority() {
     return PANEL_PRIORITY;
+  }
+
+  @Override
+  public String getParent() {
+    return PROCESSORS_CATEGORY;
+  }
+
+  @Override
+  public List<Pair<String, String>> getSubCategories() {
+    return null;
   }
 
 }

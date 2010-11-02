@@ -17,6 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -57,4 +59,8 @@ public interface PropertiesPanelProvider {
    * @return priority to sort by.
    */
   int getPriority();
+
+  String getParent();
+
+  List<Pair<String, String>> getSubCategories();
 }

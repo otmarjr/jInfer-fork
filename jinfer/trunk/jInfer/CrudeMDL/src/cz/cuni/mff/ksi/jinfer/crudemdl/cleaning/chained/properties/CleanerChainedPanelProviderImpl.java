@@ -19,7 +19,9 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained.CleanerChainedFactory;
+import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -30,6 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class CleanerChainedPanelProviderImpl implements PropertiesPanelProvider {
   private static final int PANEL_PRIORITY = 400000;
+  public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaner";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -49,5 +52,15 @@ public class CleanerChainedPanelProviderImpl implements PropertiesPanelProvider 
   @Override
   public int getPriority() {
     return PANEL_PRIORITY;
+  }
+
+  @Override
+  public String getParent() {
+    return TWOSTEP_SIMPLIFIER_CLEANER;
+  }
+
+  @Override
+  public List<Pair<String, String>> getSubCategories() {
+    return null;
   }
 }

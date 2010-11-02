@@ -19,7 +19,9 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.greedy.AutomatonSimplifierGreedyFactory;
+import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -30,6 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class AutomatonSimpifierGreedyPropertiesPanelProviderImpl implements PropertiesPanelProvider {
   private static final int PANEL_PRIORITY = 400000;
+  public static final String MERGING_STATE_AUTOMATON_SIMPLIFIER = "AutomatonSimplifier";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -49,6 +52,16 @@ public class AutomatonSimpifierGreedyPropertiesPanelProviderImpl implements Prop
   @Override
   public int getPriority() {
     return PANEL_PRIORITY;
+  }
+
+  @Override
+  public String getParent() {
+    return MERGING_STATE_AUTOMATON_SIMPLIFIER;
+  }
+
+  @Override
+  public List<Pair<String, String>> getSubCategories() {
+    return null;
   }
 
 }

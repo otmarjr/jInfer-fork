@@ -18,16 +18,19 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.Dialog;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
 import javax.swing.JPanel;
 import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.spi.project.ui.CustomizerProvider;
@@ -52,20 +55,20 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
   private void init() {
     final Properties properties = project.getLookup().lookup(Properties.class);
-    final List<Category> categoriesList = new ArrayList<Category>();
 
-    final Map<Category, JPanel> panels = lookupCategoriesPanels(properties, categoriesList);
-    categories = categoriesList.toArray(new Category[categoriesList.size()]);
+    final Map<Category, JPanel> panels = getCategoriesPanels(properties);
 
     componentProvider = new JInferComponentProvider(panels);
 
   }
 
-  private Map<Category, JPanel> lookupCategoriesPanels(final Properties properties, final List<Category> categories) {
-    final Map<Category, JPanel> result = new HashMap<Category, JPanel>();
+  private Map<Category, JPanel> getCategoriesPanels(final Properties properties) {
+    final Map<Category, JPanel> result = new LinkedHashMap<Category, JPanel>();
+    final List<PropertiesPanelProvider> providersList = new ArrayList<PropertiesPanelProvider>(Lookup.
+            getDefault().
+            lookupAll(PropertiesPanelProvider.class));
 
-    final Map<PropertiesPanelProvider, Category> categoriesMap = new TreeMap<PropertiesPanelProvider, Category>(
-            new Comparator<PropertiesPanelProvider>() {
+    Collections.sort(providersList, new Comparator<PropertiesPanelProvider>() {
 
       @Override
       public int compare(final PropertiesPanelProvider panel1, final PropertiesPanelProvider panel2) {
@@ -80,22 +83,107 @@ public class JInferCustomizerProvider implements CustomizerProvider {
       }
     });
 
-    final Lookup lkp = Lookup.getDefault();
-    for (final PropertiesPanelProvider propPanelProvider : lkp.lookupAll(
-            PropertiesPanelProvider.class)) {
-      final Category category = Category.create(propPanelProvider.getName(),
-              propPanelProvider.getDisplayName(), null);
-      
-      final String moduleName = propPanelProvider.getName();
-      final AbstractPropertiesPanel panel = propPanelProvider.getPanel(new ModuleProperties(
+    final List<PropertiesPanelProvider> topLevelProviders = new ArrayList<PropertiesPanelProvider>();
+    for (PropertiesPanelProvider provider : providersList) {
+      if (provider.getParent() == null) {
+        topLevelProviders.add(provider);
+      }
+    }
+
+    List<Category> categoriesList = new ArrayList<Category>();
+    for (PropertiesPanelProvider topLevelProvider : topLevelProviders) {
+      categoriesList.add(buildCategory(topLevelProvider, providersList, result, properties));
+    }
+
+    categories = categoriesList.toArray(new Category[categoriesList.size()]);
+
+    return result;
+  }
+
+  private Category buildCategory(final PropertiesPanelProvider provider,
+          final Collection<? extends PropertiesPanelProvider> providers,
+          final Map<Category, JPanel> result, final Properties properties) {
+    final String moduleName = provider.getName();
+    Category category = null;
+
+    if (provider.getSubCategories() == null) {
+      category = Category.create(moduleName,
+              provider.getDisplayName(), null);
+    } else {
+      final List<Category> subCategories = new ArrayList<Category>();
+      for (Pair<String, String> subCategory : provider.getSubCategories()) {
+        final String subCategoryId = subCategory.getFirst();
+        final List<PropertiesPanelProvider> subCategoryProviders = getProvidersByParentId(
+                subCategoryId,
+                providers);
+
+        final ArrayList<Category> subCateg = new ArrayList<Category>();
+        for (PropertiesPanelProvider subCategoryProvider : subCategoryProviders) {
+          subCateg.add(buildCategory(subCategoryProvider, providers, result, properties));
+        }
+
+        subCategories.add(Category.create(subCategoryId, subCategory.getSecond(), null, subCateg.toArray(new Category[subCateg.
+                size()])));
+      }
+
+      category = Category.create(moduleName, provider.getDisplayName(), null, subCategories.toArray(
+              new Category[subCategories.size()]));
+    }
+    
+    final AbstractPropertiesPanel panel = provider.getPanel(new ModuleProperties(
+            moduleName, properties));
+    panel.load();
+
+    result.put(category, panel);
+
+    return category;
+  }
+
+  private List<PropertiesPanelProvider> getProvidersByParentId(final String subCategoryId,
+          final Collection<? extends PropertiesPanelProvider> providers) {
+    final List<PropertiesPanelProvider> result = new ArrayList<PropertiesPanelProvider>();
+    for (PropertiesPanelProvider provider : providers) {
+      if (provider.getParent() != null && provider.getParent().equals(subCategoryId)) {
+        result.add(provider);
+      }
+    }
+
+    return result;
+  }
+
+  private Map<Category, JPanel> lookupCategoriesPanels(final Properties properties) {
+
+    final Map<Category, JPanel> result = new LinkedHashMap<Category, JPanel>();
+    final List<PropertiesPanelProvider> providersList = new ArrayList<PropertiesPanelProvider>(Lookup.
+            getDefault().
+            lookupAll(PropertiesPanelProvider.class));
+
+    Collections.sort(providersList, new Comparator<PropertiesPanelProvider>() {
+
+      @Override
+      public int compare(final PropertiesPanelProvider panel1, final PropertiesPanelProvider panel2) {
+        final int priority1 = panel1.getPriority();
+        final int priority2 = panel2.getPriority();
+
+        if (priority1 == priority2) {
+          return panel1.getDisplayName().compareTo(panel2.getDisplayName());
+        }
+
+        return priority2 - priority1;
+      }
+    });
+
+    for (PropertiesPanelProvider provider : providersList) {
+      final String moduleName = provider.getName();
+      final Category category = Category.create(moduleName,
+              provider.getDisplayName(), null);
+
+      final AbstractPropertiesPanel panel = provider.getPanel(new ModuleProperties(
               moduleName, properties));
       panel.load();
 
       result.put(category, panel);
-      categoriesMap.put(propPanelProvider, category);
     }
-
-    categories.addAll(categoriesMap.values());
 
     return result;
   }

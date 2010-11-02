@@ -19,7 +19,10 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierFactory;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -29,7 +32,12 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvider {
+  public static final String TWOSTEP_SIMPIFIER_CLUSTERER = "Clusterers";
+  public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
+  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR = "ClustererProcessor";
+  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY = "Clusterer Processors";
   private static final int PANEL_PRIORITY = 400000;
+  public static final String SIMPLIFIER_CATEGORY = "Simplifier";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -51,4 +59,18 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
     return PANEL_PRIORITY;
   }
 
+  @Override
+  public String getParent() {
+    return SIMPLIFIER_CATEGORY;
+  }
+
+  @Override
+  public List<Pair<String, String>> getSubCategories() {
+    List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
+    result.add(new Pair<String, String>(TWOSTEP_SIMPIFIER_CLUSTERER, TWOSTEP_SIMPIFIER_CLUSTERER));
+    result.add(new Pair<String, String>(TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR, TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY));
+    result.add(new Pair<String, String>(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER));
+
+    return result;
+  }
 }

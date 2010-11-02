@@ -19,7 +19,10 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.propert
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.ClusterProcessorAutomatonMergingStateFactory;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -29,7 +32,12 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class ClusterProcessorAutomatonMergingStatePanelProviderImpl implements PropertiesPanelProvider {
+  public static final String MERGING_STATE_AUTOMATON_SIMPLIFIER = "AutomatonSimplifier";
+  public static final String MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY = "Automaton Simplifier";
+  public static final String MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER = "RegexpAutomatonSimplifier";
+  public static final String MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY = "Regexp Automaton Simplifier";
   private static final int PANEL_PRIORITY = 400000;
+  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR = "ClustererProcessor";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -51,4 +59,19 @@ public class ClusterProcessorAutomatonMergingStatePanelProviderImpl implements P
     return PANEL_PRIORITY;
   }
 
+  @Override
+  public String getParent() {
+    return TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR;
+  }
+
+  @Override
+  public List<Pair<String, String>> getSubCategories() {
+    List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
+    result.add(new Pair<String, String>(MERGING_STATE_AUTOMATON_SIMPLIFIER,
+            MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY));
+    result.add(new Pair<String, String>(MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER,
+            MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY));
+
+    return result;
+  }
 }

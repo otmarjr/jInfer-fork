@@ -70,6 +70,9 @@
             <public-packages>
                 <package>cz.cuni.mff.ksi.jinfer.autoeditor</package>
                 <package>cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer</package>
+                <package>cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins</package>
+                <package>cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts</package>
+                <package>cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer</package>
                 <package>cz.cuni.mff.ksi.jinfer.autoeditor.gui.component</package>
                 <package>cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples</package>
             </public-packages>

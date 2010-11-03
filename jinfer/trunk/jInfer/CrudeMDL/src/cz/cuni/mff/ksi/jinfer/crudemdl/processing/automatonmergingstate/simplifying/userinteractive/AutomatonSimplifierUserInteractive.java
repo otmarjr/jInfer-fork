@@ -19,9 +19,10 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingAutomatonVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatePickingComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.StatesPickingVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -41,11 +42,12 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolTostring) throws InterruptedException {
-    //final AutoEditor<T> gui= new AutoEditor<T>(symbolTostring);
     List<State<T>> mergeLst;
     do {
-      final StatePickingAutomatonVisualizer<T> visualizer = new StatePickingAutomatonVisualizer<T>(inputAutomaton, symbolTostring);
-      final StatePickingComponent panel = new StatePickingComponent();
+      //final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(symbolTostring, LayoutFactory.createGraphvizLayout(inputAutomaton, symbolTostring));
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(inputAutomaton, symbolTostring);
+
+      final StatesPickingComponent panel = new StatesPickingComponent();
       AutoEditor.drawComponentAndWaitForGUI(panel, visualizer);
       mergeLst = panel.getPickedStates();
 

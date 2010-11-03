@@ -14,14 +14,15 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
@@ -34,7 +35,7 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-public class StatePickingAutomatonVisualizer<T> extends AutomatonVisualizer<T> {
+public class StatesPickingVisualizer<T> extends AutomatonVisualizer<T> {
 
   /**
    * Variable used to pass data to the GUI and gets the result of user
@@ -42,9 +43,7 @@ public class StatePickingAutomatonVisualizer<T> extends AutomatonVisualizer<T> {
    */
   final private BasicVisualizationServer<State<T>, Step<T>> bvs;
 
-  public StatePickingAutomatonVisualizer(final Automaton<T> automaton, final SymbolToString<T> symbolToString) {
-    final Graph<State<T>, Step<T>> graph = createGraph(automaton);
-    final Layout<State<T>, Step<T>> layout = LayoutFactory.createGridLayout(automaton, graph);
+  public StatesPickingVisualizer(final SymbolToString<T> symbolToString, final Layout<State<T>, Step<T>> layout) {
     final VisualizationViewer<State<T>, Step<T>> visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layout);
     //visualizationViewer.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
@@ -55,11 +54,16 @@ public class StatePickingAutomatonVisualizer<T> extends AutomatonVisualizer<T> {
     for (final GraphMousePlugin plugin : getDefaultGraphMousePlugins()) {
       gm.add(plugin);
     }
-    gm.add(new PickingUnlimitedGraphMousePlugin<State<T>, Step<T>>());
+    gm.add(new VerticesPickingGraphMousePlugin<State<T>, Step<T>>());
     visualizationViewer.setGraphMouse(gm);
 
     bvs = visualizationViewer;
-}
+  }
+
+  // default
+  public StatesPickingVisualizer(final Automaton<T> automaton, final SymbolToString<T> symbolToString) {
+    this(symbolToString, LayoutFactory.createGridLayout(automaton));
+  }
 
   @Override
   public BasicVisualizationServer<State<T>, Step<T>> getBasicVisualizationServer() {

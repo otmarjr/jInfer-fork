@@ -20,8 +20,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import javax.xml.XMLConstants;
@@ -113,6 +116,8 @@ public final class ValidateAction extends NodeAction {
     private final FileObject file;
     private final int lineDiff;
 
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
+
     public JInferErrorHandler(final FileObject file, final int lineDiff) {
       super();
       this.file = file;
@@ -137,7 +142,7 @@ public final class ValidateAction extends NodeAction {
     private void printErrorMessage(final InputOutput ioResult, final SAXParseException e) {
       final int realLineNum = e.getLineNumber() - lineDiff;
       if (realLineNum > 0) {
-        ioResult.getOut().print(e.getMessage());
+        ioResult.getOut().print("[" + DATE_FORMAT.format(new Date()) + "] " + e.getMessage());
 
         try {
           ioResult.getOut().

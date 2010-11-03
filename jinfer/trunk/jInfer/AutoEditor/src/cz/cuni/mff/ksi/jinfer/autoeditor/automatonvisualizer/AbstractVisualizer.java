@@ -33,11 +33,11 @@ import java.util.List;
  * @author rio
  * TODO rio comment
  */
-public abstract class AutomatonVisualizer<T> {
+public abstract class AbstractVisualizer<T> {
 
   public abstract BasicVisualizationServer<State<T>, Step<T>> getBasicVisualizationServer();
 
-  protected static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
+  public static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
     final LinkedList<GraphMousePlugin> list = new LinkedList<GraphMousePlugin>();
     list.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0));
     list.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK | MouseEvent.CTRL_MASK));

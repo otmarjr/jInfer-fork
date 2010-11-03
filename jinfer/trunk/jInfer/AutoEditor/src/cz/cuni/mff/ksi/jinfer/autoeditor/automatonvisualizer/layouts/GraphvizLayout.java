@@ -40,7 +40,7 @@ import org.openide.util.Exceptions;
  * @author rio
  * TODO rio comment
  */
-public class GraphvizLayout<T> extends LayoutHolder<T> {
+public class GraphvizLayout<T> extends AbstractLayout<T> {
 
   private final Automaton<T> automaton;
   private final Transformer<Step<T>, String> edgeLabelTransformer;

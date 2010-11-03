@@ -15,11 +15,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -27,11 +25,11 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-public class RegexpEdgeLabeller implements Transformer<Step<Regexp<AbstractStructuralNode>>, String> {
+public class AbstractStructuralNodeToStringTransformer implements Transformer<AbstractStructuralNode, String> {
 
   @Override
-  public String transform(Step<Regexp<AbstractStructuralNode>> step) {
-    Regexp<AbstractStructuralNode> regexp = step.getAcceptSymbol();
-    return new RegexpToStringTransformer().transform(regexp);
+  public String transform(AbstractStructuralNode node) {
+    return node.isElement() ? node.getName() : "#CDATA";
   }
+
 }

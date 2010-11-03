@@ -23,8 +23,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.Graph;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
@@ -33,9 +31,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
 import org.openide.util.Exceptions;
@@ -45,13 +41,18 @@ import org.openide.util.Exceptions;
  * @author rio
  * TODO rio comment
  */
-public class LayoutFactory {
+public class GraphvizLayout<T> extends LayoutHolder<T> {
 
-  public static <T> Layout<State<T>, Step<T>> createGridLayout(final Automaton<T> automaton) {
-    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, createGraph(automaton));
+  private Automaton<T> automaton;
+  private SymbolToString<T> symbolToString;
+
+  public GraphvizLayout(final Automaton<T> automaton, SymbolToString<T> symbolToString) {
+    this.automaton = automaton;
+    this.symbolToString = symbolToString;
   }
 
-  public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, SymbolToString<T> symbolToString) {
+  @Override
+  public Layout<State<T>, Step<T>> getLayout() {
     final Map<State<T>, Point2D> positions= new HashMap<State<T>, Point2D>();
 
     ProcessBuilder p = new ProcessBuilder(Arrays.asList(
@@ -98,22 +99,16 @@ public class LayoutFactory {
     return new StaticLayout<State<T>, Step<T>>(createGraph(automaton), trans);
   }
 
-  private static <T> Graph<State<T>, Step<T>> createGraph(final Automaton<T> automaton) {
-    final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
-    final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
+  // TODO rio remove this and use Transformer instead of SymbolToString
+  @Override
+  public Transformer<Step<T>, String> getEdgeLabelTransformer() {
+    return new Transformer<Step<T>, String>() {
 
-    // Get vertices = states of automaton
-    for (final Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      graph.addVertex(entry.getKey());
-    }
-
-    // Get edges of automaton
-    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      for (Step<T> step : entry.getValue()) {
-        graph.addEdge(step, step.getSource(), step.getDestination());
+      @Override
+      public String transform(Step<T> step) {
+        return symbolToString.toString(step.getAcceptSymbol());
       }
-    }
-
-    return graph;
+    };
   }
+  
 }

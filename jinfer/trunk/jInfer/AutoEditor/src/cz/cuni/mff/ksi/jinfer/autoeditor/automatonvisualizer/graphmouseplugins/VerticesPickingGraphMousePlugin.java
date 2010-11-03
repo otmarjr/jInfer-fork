@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins;
 
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -41,7 +41,7 @@ import javax.swing.JComponent;
  *
  * @author sviro
  */
-public class PickingUnlimitedGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
+public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlugin
         implements MouseListener, MouseMotionListener {
 
   /**
@@ -81,7 +81,7 @@ public class PickingUnlimitedGraphMousePlugin<V, E> extends AbstractGraphMousePl
   /**
    * create an instance with default settings
    */
-  public PickingUnlimitedGraphMousePlugin() {
+  public VerticesPickingGraphMousePlugin() {
     super(InputEvent.BUTTON1_MASK);
     this.lensPaintable = new LensPaintable();
     this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);

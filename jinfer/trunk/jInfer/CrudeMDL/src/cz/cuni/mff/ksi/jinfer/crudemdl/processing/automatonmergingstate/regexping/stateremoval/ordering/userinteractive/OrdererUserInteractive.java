@@ -18,9 +18,9 @@
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.ordering.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingAutomatonVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatePickingComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.StatesPickingVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonStateRemoval;
@@ -42,8 +42,8 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
     //final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
     List<State<Regexp<T>>> removeLst;
     do {
-      final StatePickingAutomatonVisualizer<Regexp<T>> visualizer = new StatePickingAutomatonVisualizer<Regexp<T>>(automaton, symbolToString);
-      final StatePickingComponent component = new StatePickingComponent();
+      final StatesPickingVisualizer<Regexp<T>> visualizer = new StatesPickingVisualizer<Regexp<T>>(automaton, symbolToString);
+      final StatesPickingComponent component = new StatesPickingComponent();
       AutoEditor.drawComponentAndWaitForGUI(component, visualizer);
       removeLst = component.getPickedStates();
 

@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexping;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 /**

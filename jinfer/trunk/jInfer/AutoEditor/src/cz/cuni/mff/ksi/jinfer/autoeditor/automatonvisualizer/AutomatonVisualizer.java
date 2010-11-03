@@ -17,11 +17,8 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
@@ -30,9 +27,6 @@ import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  *
@@ -42,25 +36,6 @@ import java.util.Set;
 public abstract class AutomatonVisualizer<T> {
 
   public abstract BasicVisualizationServer<State<T>, Step<T>> getBasicVisualizationServer();
-
-  protected static <T> Graph<State<T>, Step<T>> createGraph(final Automaton<T> automaton) {
-    final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
-    final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
-
-    // Get vertices = states of automaton
-    for (final Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      graph.addVertex(entry.getKey());
-    }
-
-    // Get edges of automaton
-    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      for (Step<T> step : entry.getValue()) {
-        graph.addEdge(step, step.getSource(), step.getDestination());
-      }
-    }
-
-    return graph;
-  }
 
   protected static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
     final LinkedList<GraphMousePlugin> list = new LinkedList<GraphMousePlugin>();

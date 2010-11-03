@@ -17,10 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.algorithms.layout.Layout;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -28,23 +25,11 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-public class GridLayout<T> extends LayoutHolder<T> {
-
-  private final Automaton<T> automaton;
-  private final Transformer<Step<T>, String> edgeLabelTransformer;
-
-  public GridLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    this.automaton = automaton;
-    this.edgeLabelTransformer = edgeLabelTransformer;
-  }
-
-   @Override
-  public Layout<State<T>, Step<T>> getLayout() {
-    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, createGraph(automaton));
-  }
+public class AbstractStructuralNodeToStringTransformer implements Transformer<AbstractStructuralNode, String> {
 
   @Override
-  public Transformer<Step<T>, String> getEdgeLabelTransformer() {
-    return edgeLabelTransformer;
+  public String transform(AbstractStructuralNode node) {
+    return node.isElement() ? node.getName() : "#CDATA";
   }
+
 }

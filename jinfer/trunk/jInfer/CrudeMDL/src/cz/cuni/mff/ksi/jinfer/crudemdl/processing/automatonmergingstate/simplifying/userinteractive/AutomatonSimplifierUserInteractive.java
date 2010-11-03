@@ -14,21 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GraphvizLayout;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHolder;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.StatesPickingVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.SymbolToString;
+import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
+import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 
 /**
@@ -40,10 +38,11 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifier<T> {
+
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierUserInteractive.class);
-  
+
   @Override
-  public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolTostring) throws InterruptedException {
+  public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {
     List<State<T>> mergeLst;
     do {
       // graphviz
@@ -51,13 +50,19 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
       // vyhnanovska
       //final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(new GridLayout<T>(inputAutomaton, symbolTostring));
       // default - vyhnanovska
-      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(inputAutomaton, symbolTostring);
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(inputAutomaton, new Transformer<Step<T>, String>() {
+
+        @Override
+        public String transform(Step<T> step) {
+          return symbolToString.toString(step.getAcceptSymbol());
+        }
+      });
 
       final StatesPickingComponent panel = new StatesPickingComponent();
       AutoEditor.drawComponentAndWaitForGUI(panel, visualizer);
       mergeLst = panel.getPickedStates();
 
-      if ((!BaseUtils.isEmpty(mergeLst))&&(mergeLst.size() >= 2)) {
+      if ((!BaseUtils.isEmpty(mergeLst)) && (mergeLst.size() >= 2)) {
         LOG.debug("AUTO EDITOR selected: " + mergeLst.toString());
         inputAutomaton.mergeStates(mergeLst);
         LOG.debug("After merge:");

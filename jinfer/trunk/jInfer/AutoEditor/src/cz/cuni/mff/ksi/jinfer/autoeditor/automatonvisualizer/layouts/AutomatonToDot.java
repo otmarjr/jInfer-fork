@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -27,6 +26,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.collections15.Transformer;
 
 /**
  * TODO anti Comment!
@@ -34,7 +34,7 @@ import java.util.Set;
  * @author anti
  */
 public class AutomatonToDot<T> {
-  public String convertToDot(Automaton<T> automaton, SymbolToString<T> symbolToString) {
+  public String convertToDot(Automaton<T> automaton, Transformer<Step<T>, String> edgeLabelTransformer) {
     StringBuilder sb = new StringBuilder();
     sb.append("digraph finite_state_machine {\n"
             + "\trankdir=LR;\n"
@@ -55,7 +55,7 @@ public class AutomatonToDot<T> {
         sb.append(" -> ");
         sb.append(step.getDestination().getName());
         sb.append(" [ label = \"");
-        sb.append(symbolToString.toString(step.getAcceptSymbol()));
+        sb.append(edgeLabelTransformer.transform(step));
         sb.append("|");
         sb.append(step.getUseCount());
         sb.append("\" ];\n");

@@ -27,6 +27,7 @@ import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
+import org.apache.commons.collections15.Transformer;
 
 /**
  *
@@ -59,8 +60,8 @@ public class StatesPickingVisualizer<T> extends AutomatonVisualizer<T> {
   }
 
   // default layout- remove maybe
-  public StatesPickingVisualizer(final Automaton<T> automaton, final SymbolToString<T> symbolToString) {
-    this(new GridLayout<T>(automaton, symbolToString));
+  public StatesPickingVisualizer(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
+    this(new GridLayout<T>(automaton, edgeLabelTransformer));
   }
 
   @Override

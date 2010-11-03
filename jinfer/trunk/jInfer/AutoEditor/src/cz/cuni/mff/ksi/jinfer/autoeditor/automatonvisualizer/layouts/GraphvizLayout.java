@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -43,12 +42,12 @@ import org.openide.util.Exceptions;
  */
 public class GraphvizLayout<T> extends LayoutHolder<T> {
 
-  private Automaton<T> automaton;
-  private SymbolToString<T> symbolToString;
+  private final Automaton<T> automaton;
+  private final Transformer<Step<T>, String> edgeLabelTransformer;
 
-  public GraphvizLayout(final Automaton<T> automaton, SymbolToString<T> symbolToString) {
+  public GraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
     this.automaton = automaton;
-    this.symbolToString = symbolToString;
+    this.edgeLabelTransformer = edgeLabelTransformer;
   }
 
   @Override
@@ -61,7 +60,7 @@ public class GraphvizLayout<T> extends LayoutHolder<T> {
     try {
       Process k = p.start();
       k.getOutputStream().write(
-              (new AutomatonToDot<T>()).convertToDot(automaton, symbolToString).getBytes()
+              (new AutomatonToDot<T>()).convertToDot(automaton, edgeLabelTransformer).getBytes()
               );
       k.getOutputStream().flush();
       BufferedReader b = new BufferedReader(new InputStreamReader( k.getInputStream() ) );
@@ -99,16 +98,9 @@ public class GraphvizLayout<T> extends LayoutHolder<T> {
     return new StaticLayout<State<T>, Step<T>>(createGraph(automaton), trans);
   }
 
-  // TODO rio remove this and use Transformer instead of SymbolToString
   @Override
   public Transformer<Step<T>, String> getEdgeLabelTransformer() {
-    return new Transformer<Step<T>, String>() {
-
-      @Override
-      public String transform(Step<T> step) {
-        return symbolToString.toString(step.getAcceptSymbol());
-      }
-    };
+    return edgeLabelTransformer;
   }
   
 }

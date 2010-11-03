@@ -18,17 +18,15 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisua
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHolder;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import org.apache.commons.collections15.Transformer;
 
 /**
  *
@@ -43,12 +41,12 @@ public class StatesPickingVisualizer<T> extends AutomatonVisualizer<T> {
    */
   final private BasicVisualizationServer<State<T>, Step<T>> bvs;
 
-  public StatesPickingVisualizer(final SymbolToString<T> symbolToString, final Layout<State<T>, Step<T>> layout) {
-    final VisualizationViewer<State<T>, Step<T>> visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layout);
+  public StatesPickingVisualizer(final LayoutHolder<T> layoutHolder) {
+    final VisualizationViewer<State<T>, Step<T>> visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layoutHolder.getLayout());
     //visualizationViewer.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
-    visualizationViewer.getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
-    visualizationViewer.getRenderContext().setEdgeLabelTransformer(makeTransformer(symbolToString));
+    visualizationViewer.getRenderContext().setVertexLabelTransformer(layoutHolder.getVertexLabelTransformer());
+    visualizationViewer.getRenderContext().setEdgeLabelTransformer(layoutHolder.getEdgeLabelTransformer());
 
     final PluggableGraphMouse gm = new PluggableGraphMouse();
     for (final GraphMousePlugin plugin : getDefaultGraphMousePlugins()) {
@@ -60,24 +58,13 @@ public class StatesPickingVisualizer<T> extends AutomatonVisualizer<T> {
     bvs = visualizationViewer;
   }
 
-  // default
+  // default layout- remove maybe
   public StatesPickingVisualizer(final Automaton<T> automaton, final SymbolToString<T> symbolToString) {
-    this(symbolToString, LayoutFactory.createGridLayout(automaton));
+    this(new GridLayout<T>(automaton, symbolToString));
   }
 
   @Override
   public BasicVisualizationServer<State<T>, Step<T>> getBasicVisualizationServer() {
     return bvs;
-  }
-
-  // TODO rio remove this and use Transformer instead of SymbolToString
-  private static <T> Transformer<Step<T>, String> makeTransformer(final SymbolToString<T> symbolToString) {
-    return new Transformer<Step<T>, String>() {
-
-      @Override
-      public String transform(Step<T> step) {
-        return symbolToString.toString(step.getAcceptSymbol());
-      }
-    };
   }
 }

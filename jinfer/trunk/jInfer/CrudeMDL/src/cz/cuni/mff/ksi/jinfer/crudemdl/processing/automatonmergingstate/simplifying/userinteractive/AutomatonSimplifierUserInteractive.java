@@ -19,7 +19,9 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GraphvizLayout;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHolder;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.StatesPickingVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.statespickingvisualizer.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.examples.StatesPickingComponent;
@@ -44,7 +46,11 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolTostring) throws InterruptedException {
     List<State<T>> mergeLst;
     do {
-      //final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(symbolTostring, LayoutFactory.createGraphvizLayout(inputAutomaton, symbolTostring));
+      // graphviz
+      //final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(new GraphvizLayout<T>(inputAutomaton, symbolTostring));
+      // vyhnanovska
+      //final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(new GridLayout<T>(inputAutomaton, symbolTostring));
+      // default - vyhnanovska
       final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(inputAutomaton, symbolTostring);
 
       final StatesPickingComponent panel = new StatesPickingComponent();

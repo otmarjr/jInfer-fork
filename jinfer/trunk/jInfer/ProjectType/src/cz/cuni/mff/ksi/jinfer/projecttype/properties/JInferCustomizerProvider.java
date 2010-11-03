@@ -48,6 +48,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   private final JInferProject project;
   private ProjectCustomizer.Category[] categories;
   private ProjectCustomizer.CategoryComponentProvider componentProvider;
+  private Map<Category, JPanel> panels;
 
   public JInferCustomizerProvider(final JInferProject project) {
     this.project = project;
@@ -56,7 +57,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   private void init() {
     final Properties properties = project.getLookup().lookup(Properties.class);
 
-    final Map<Category, JPanel> panels = getCategoriesPanels(properties);
+    panels = getCategoriesPanels(properties);
 
     componentProvider = new JInferComponentProvider(panels);
 
@@ -201,8 +202,8 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
   }
 
-  public Category[] getCategories() {
-    return categories;
+  public List<Category> getCategories() {
+    return new ArrayList<Category>(panels.keySet());
   }
 
   public CategoryComponentProvider getComponentProvider() {

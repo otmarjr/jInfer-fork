@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AutoEditorComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import java.awt.GridBagConstraints;
 import java.util.logging.Logger;
@@ -74,7 +74,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     );
   }// </editor-fold>//GEN-END:initComponents
 
-  public <T> void drawAutomatonBasicVisualizationServer(final AutoEditorComponent component) {
+  public <T> void drawAutomatonBasicVisualizationServer(final AbstractComponent component) {
     jPanel1.removeAll();
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.weightx = 1.0;

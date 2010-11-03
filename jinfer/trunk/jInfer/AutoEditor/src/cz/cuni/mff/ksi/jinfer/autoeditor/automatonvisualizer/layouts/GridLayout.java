@@ -28,7 +28,7 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-public class GridLayout<T> extends LayoutHolder<T> {
+public class GridLayout<T> extends AbstractLayout<T> {
 
   private final Automaton<T> automaton;
   private final Transformer<Step<T>, String> edgeLabelTransformer;

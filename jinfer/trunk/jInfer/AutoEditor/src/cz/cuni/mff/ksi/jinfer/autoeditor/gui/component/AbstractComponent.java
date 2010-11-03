@@ -15,21 +15,34 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
+package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import org.apache.commons.collections15.Transformer;
+import javax.swing.JPanel;
 
 /**
  *
  * @author rio
  * TODO rio comment
  */
-public class AbstractStructuralNodeToStringTransformer implements Transformer<AbstractStructuralNode, String> {
+public abstract class AbstractComponent extends JPanel {
 
-  @Override
-  public String transform(AbstractStructuralNode node) {
-    return node.isElement() ? node.getName() : "#CDATA";
+  private final Object monitor;
+
+  protected AbstractComponent() {
+    monitor = new Object();
   }
 
+  abstract public JPanel getAutomatonDrawPanel();
+
+  public void waitForGUIDone() throws InterruptedException {
+    synchronized (monitor) {
+      monitor.wait();
+    }
+  }
+
+  protected void GUIDone() {
+    synchronized (monitor) {
+      monitor.notifyAll();
+    }
+  }
 }

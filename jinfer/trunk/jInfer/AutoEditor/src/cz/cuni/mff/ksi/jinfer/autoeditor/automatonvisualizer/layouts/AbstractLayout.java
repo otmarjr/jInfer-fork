@@ -35,7 +35,7 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-abstract public class LayoutHolder<T> {
+abstract public class AbstractLayout<T> {
   abstract public Layout<State<T>, Step<T>> getLayout();
 
   // TODO rio !!!!!!!! dorobit, sviro mal pozret, ako by sa dali menit v JUNGu hrany

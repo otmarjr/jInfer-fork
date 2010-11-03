@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AutomatonVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AutoEditorComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AbstractVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent.AutoEditorTopComponent;
 import org.openide.windows.WindowManager;
 
@@ -54,12 +54,12 @@ public class AutoEditor {
   private AutoEditor() {
   }
 
-  public static <T> void drawComponentAsync(final AutoEditorComponent component, final AutomatonVisualizer<T> visualizer) {
+  public static <T> void drawComponentAsync(final AbstractComponent component, final AbstractVisualizer<T> visualizer) {
     component.getAutomatonDrawPanel().add(visualizer.getBasicVisualizationServer());
     drawInGUI(component);
   }
 
-  public static <T> boolean drawComponentAndWaitForGUI(final AutoEditorComponent component, final AutomatonVisualizer<T> visualizer) {
+  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component, final AbstractVisualizer<T> visualizer) {
     drawComponentAsync(component, visualizer);
     try {
       component.waitForGUIDone();
@@ -69,7 +69,7 @@ public class AutoEditor {
     return true;
   }
 
-  private static void drawInGUI(final AutoEditorComponent component) {
+  private static void drawInGUI(final AbstractComponent component) {
     // Call GUI in a special thread. Required by NB.
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 

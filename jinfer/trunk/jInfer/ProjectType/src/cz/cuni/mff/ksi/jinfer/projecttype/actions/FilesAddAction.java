@@ -20,17 +20,22 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.AddFilesPropPanelProvider;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.ProjectPropertiesPanel;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import javax.swing.AbstractAction;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -51,7 +56,6 @@ public class FilesAddAction extends AbstractAction {
 
   private final JInferProject project;
   public static final String COMMAND_FILES_ADD = "FilesAddAction";
-  private int filesCount;
 
   public FilesAddAction(final JInferProject project) {
     super("Add files");
@@ -85,18 +89,38 @@ public class FilesAddAction extends AbstractAction {
       // find processor mappings for all folders
       final Map<FolderType, List<String>> registeredProcessors = getRegisteredProcessors();
 
-      filesCount = 0;
 
-      final Collection<File> xmlFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
+
+      final List<File> selectedFilesList = new ArrayList<File>(Arrays.asList(selectedFiles));
+
+      final Collection<File> xmlFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
               FolderType.XML));
-      final Collection<File> schemaFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
+      final Collection<File> schemaFiles = getSpecificFiles(selectedFilesList, registeredProcessors.
+              get(
               FolderType.SCHEMA));
-      final Collection<File> queryFiles = getSpecificFiles(selectedFiles, registeredProcessors.get(
+      final Collection<File> queryFiles = getSpecificFiles(selectedFilesList, registeredProcessors.
+              get(
               FolderType.QUERY));
 
-      if (selectedFiles.length > filesCount) {
-        DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(NbBundle.getMessage(FilesAddAction.class,
-                "FilesAddAction.ignoreUnknownFiles"), NotifyDescriptor.INFORMATION_MESSAGE));
+
+      selectedFilesList.removeAll(xmlFiles);
+      selectedFilesList.removeAll(schemaFiles);
+      selectedFilesList.removeAll(queryFiles);
+
+      if (!selectedFilesList.isEmpty()) {
+        final Properties properties = new ModuleProperties(AddFilesPropPanelProvider.CATEGORY_NAME, project.
+                getLookup().lookup(Properties.class));
+        final String defaultFolder = properties.getProperty(ProjectPropertiesPanel.FOLDER_TYPE,
+                ProjectPropertiesPanel.FOLDER_TYPE_DEFAULT);
+        if (defaultFolder.equals(FolderType.XML.getName())) {
+          xmlFiles.addAll(selectedFilesList);
+        }
+        if (defaultFolder.equals(FolderType.SCHEMA.getName())) {
+          schemaFiles.addAll(selectedFilesList);
+        }
+        if (defaultFolder.equals(FolderType.QUERY.getName())) {
+          queryFiles.addAll(selectedFilesList);
+        }
       }
 
       final Input input = project.getLookup().lookup(Input.class);
@@ -120,14 +144,13 @@ public class FilesAddAction extends AbstractAction {
 
   }
 
-  private Collection<File> getSpecificFiles(final File[] files, final List<String> extensions) {
+  private Collection<File> getSpecificFiles(final List<File> files, final List<String> extensions) {
     final Collection<File> result = new ArrayList<File>();
 
     for (File file : files) {
       final String ext = FileUtils.getExtension(file.getAbsolutePath()).toLowerCase(Locale.ENGLISH);
       if (extensions.contains(ext)) {
         result.add(file);
-        filesCount++;
       }
     }
 

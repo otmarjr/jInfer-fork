@@ -18,15 +18,12 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.LogLevels;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 
 /**
  *
@@ -40,21 +37,12 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
   public static final String VERBOSE_INFO = "verbose.info";
   public static final String LOG_LEVEL = "log.level";
   private static final String DEFAULT_MENU_TEXT = "<none available>";
-  private List<String> levels = new ArrayList<String>();
 
-    /** Creates new form XSDImportPropertiesPanel */
-    public XSDImportPropertiesPanel(final Properties properties) {
-      super(properties);
-      levels.add(Level.ALL.toString());
-      levels.add(Level.TRACE.toString());
-      levels.add(Level.DEBUG.toString());
-      levels.add(Level.INFO.toString());
-      levels.add(Level.WARN.toString());
-      levels.add(Level.ERROR.toString());
-      levels.add(Level.FATAL.toString());
-      levels.add(Level.OFF.toString());
-      initComponents();
-    }
+  /** Creates new form XSDImportPropertiesPanel */
+  public XSDImportPropertiesPanel(final Properties properties) {
+    super(properties);
+    initComponents();
+  }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -83,6 +71,8 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     loglevelLabel.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel.text")); // NOI18N
     loglevelLabel.setToolTipText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel.toolTipText")); // NOI18N
 
+    logLevelCombo.setModel(LogLevels.getDefaultModel());
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -94,13 +84,13 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
           .addGroup(layout.createSequentialGroup()
             .addComponent(parserLabel)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
           .addGroup(layout.createSequentialGroup()
             .addComponent(loglevelLabel)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(logLevelCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
           .addComponent(stopOnError))
-        .addContainerGap(159, Short.MAX_VALUE))
+        .addContainerGap(109, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,8 +134,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
       parserComboBox.setSelectedItem(properties.getProperty(PARSER, DEFAULT_MENU_TEXT));
     }
 
-    logLevelCombo.setModel(new DefaultComboBoxModel(levels.toArray()));
-    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, Logger.getRootLogger().getLevel().toString()));
+    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
 
     stopOnError.setSelected(
             Boolean.parseBoolean(properties.getProperty(STOP_ON_ERROR, "true")));

@@ -86,6 +86,10 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
         LOG.debug("After merge:");
         LOG.debug(inputAutomaton);
       }
+
+      if (panel.shallAskUser() == false) {
+        break;
+      }
     } while (!BaseUtils.isEmpty(mergeLst));
     return inputAutomaton;
   }

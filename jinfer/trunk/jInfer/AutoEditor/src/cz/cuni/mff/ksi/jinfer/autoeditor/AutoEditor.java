@@ -28,6 +28,7 @@ import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
+import java.awt.GridBagConstraints;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,7 +71,11 @@ public class AutoEditor {
   }
 
   public static <T> void drawComponentAsync(final AbstractComponent component, final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
-    component.getAutomatonDrawPanel().add(visualizer);
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.weightx = 1.0;
+    constraints.weighty = 1.0;
+    constraints.fill = GridBagConstraints.BOTH;
+    component.getAutomatonDrawPanel().add(visualizer, constraints);
     drawInGUI(component);
   }
 
@@ -82,6 +87,18 @@ public class AutoEditor {
       return false;
     }
     return true;
+  }
+
+  public static void closeTab() {
+    // Call GUI in a special thread. Required by NB.
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        // Pass this as argument so the thread will be able to wake us up.
+        AutoEditorTopComponent.findInstance().close();
+      }
+    });
   }
 
   public static <T> Graph<State<T>, Step<T>> createGraph(final Automaton<T> automaton) {

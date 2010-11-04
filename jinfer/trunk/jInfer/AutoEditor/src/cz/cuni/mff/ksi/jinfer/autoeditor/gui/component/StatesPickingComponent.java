@@ -60,6 +60,7 @@ public class StatesPickingComponent<T> extends AbstractComponent {
     jPanel1 = new javax.swing.JPanel();
     jCheckBox1 = new javax.swing.JCheckBox();
     jButton1 = new javax.swing.JButton();
+    jLabel2 = new javax.swing.JLabel();
 
     jLabel1.setText(org.openide.util.NbBundle.getMessage(StatesPickingComponent.class, "StatesPickingComponent.jLabel1.text")); // NOI18N
 
@@ -80,29 +81,41 @@ public class StatesPickingComponent<T> extends AbstractComponent {
       }
     });
 
+    jLabel2.setText(org.openide.util.NbBundle.getMessage(StatesPickingComponent.class, "StatesPickingComponent.jLabel2.text")); // NOI18N
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+      .addGroup(layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-          .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
+            .addComponent(jLabel1)
+            .addContainerGap(464, Short.MAX_VALUE))
+          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addComponent(jButton1)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 321, Short.MAX_VALUE)
-            .addComponent(jCheckBox1))
-          .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
-        .addGap(43, 43, 43))
+            .addComponent(jCheckBox1)
+            .addGap(132, 132, 132))
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(jLabel2)
+            .addContainerGap(233, Short.MAX_VALUE))
+          .addGroup(layout.createSequentialGroup()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
+            .addGap(132, 132, 132))))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
+        .addGap(12, 12, 12)
         .addComponent(jLabel1)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addComponent(jLabel2)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jCheckBox1)
           .addComponent(jButton1))
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -121,6 +134,7 @@ public class StatesPickingComponent<T> extends AbstractComponent {
   private javax.swing.JButton jButton1;
   private javax.swing.JCheckBox jCheckBox1;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JScrollPane jScrollPane1;
   // End of variables declaration//GEN-END:variables

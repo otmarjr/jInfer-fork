@@ -18,12 +18,9 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.AbstractLayout;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
@@ -39,7 +36,7 @@ public class StatesPickingVisualizer<T> extends VisualizationViewer<State<T>, St
 
   public StatesPickingVisualizer(final AbstractLayout<T> layout, final Transformer<Step<T>, String> edgeLabelTransformer) {
     super(layout.getLayout());
-    //visualizationViewer.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
+    //setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
     getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
     getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer);

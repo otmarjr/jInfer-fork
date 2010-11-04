@@ -18,12 +18,15 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.awt.GridBagConstraints;
 import java.util.logging.Logger;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 
 /**
  * TODO rio Comment!
@@ -61,6 +64,8 @@ public final class AutoEditorTopComponent extends TopComponent {
   private void initComponents() {
 
     jPanel1 = new javax.swing.JPanel();
+
+    jPanel1.setLayout(new java.awt.GridBagLayout());
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -135,7 +140,17 @@ public final class AutoEditorTopComponent extends TopComponent {
 
   @Override
   public boolean canClose() {
-    return (autoEditorInstance == null ? true : false);
+    // TODO rio je to spravne? vyhodit dialog s potvrdenim
+    if (RunningProject.isActiveProject()) {
+      NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Do you really want to stop the inferrence process?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
+      if (DialogDisplayer.getDefault().notify(notifyDescriptor) == NotifyDescriptor.OK_OPTION) {
+        RunningProject.removeActiveProject();
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return true;
   }
 
   private void writeProperties(java.util.Properties p) {

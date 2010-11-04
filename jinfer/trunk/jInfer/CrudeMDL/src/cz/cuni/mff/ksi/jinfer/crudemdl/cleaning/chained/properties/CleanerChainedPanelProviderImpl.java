@@ -32,7 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class CleanerChainedPanelProviderImpl implements PropertiesPanelProvider {
   private static final int PANEL_PRIORITY = 400000;
-  public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaner";
+  public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {

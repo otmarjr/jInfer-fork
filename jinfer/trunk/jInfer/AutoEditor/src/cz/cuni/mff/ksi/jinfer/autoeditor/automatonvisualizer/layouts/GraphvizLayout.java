@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -95,12 +96,7 @@ public class GraphvizLayout<T> extends AbstractLayout<T> {
     }
     Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(positions);
 
-    return new StaticLayout<State<T>, Step<T>>(createGraph(automaton), trans);
-  }
-
-  @Override
-  public Transformer<Step<T>, String> getEdgeLabelTransformer() {
-    return edgeLabelTransformer;
+    return new StaticLayout<State<T>, Step<T>>(AutoEditor.createGraph(automaton), trans);
   }
   
 }

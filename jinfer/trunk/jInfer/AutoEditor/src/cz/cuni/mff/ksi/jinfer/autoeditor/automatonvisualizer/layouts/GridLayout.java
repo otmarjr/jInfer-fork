@@ -17,11 +17,11 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import org.apache.commons.collections15.Transformer;
 
 /**
  *
@@ -31,20 +31,13 @@ import org.apache.commons.collections15.Transformer;
 public class GridLayout<T> extends AbstractLayout<T> {
 
   private final Automaton<T> automaton;
-  private final Transformer<Step<T>, String> edgeLabelTransformer;
 
-  public GridLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
+  public GridLayout(final Automaton<T> automaton) {
     this.automaton = automaton;
-    this.edgeLabelTransformer = edgeLabelTransformer;
   }
 
    @Override
   public Layout<State<T>, Step<T>> getLayout() {
-    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, createGraph(automaton));
-  }
-
-  @Override
-  public Transformer<Step<T>, String> getEdgeLabelTransformer() {
-    return edgeLabelTransformer;
+    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, AutoEditor.createGraph(automaton));
   }
 }

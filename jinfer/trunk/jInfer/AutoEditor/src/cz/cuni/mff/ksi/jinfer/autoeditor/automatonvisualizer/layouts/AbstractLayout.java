@@ -17,18 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import org.apache.commons.collections15.Transformer;
 
 /**
  *
@@ -36,37 +28,12 @@ import org.apache.commons.collections15.Transformer;
  * TODO rio comment
  */
 abstract public class AbstractLayout<T> {
+  
   abstract public Layout<State<T>, Step<T>> getLayout();
 
   // TODO rio !!!!!!!! dorobit, sviro mal pozret, ako by sa dali menit v JUNGu hrany
   public List<T> getEdges() {
     return null;
   }
-
-  public Transformer<State<T>, String> getVertexLabelTransformer() {
-    return new ToStringLabeller<State<T>>();
-  }
-
-  public Transformer<Step<T>, String> getEdgeLabelTransformer() {
-    return new ToStringLabeller<Step<T>>();
-  }
-
-  protected static <T> Graph<State<T>, Step<T>> createGraph(final Automaton<T> automaton) {
-    final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
-    final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
-
-    // Get vertices = states of automaton
-    for (final Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      graph.addVertex(entry.getKey());
-    }
-
-    // Get edges of automaton
-    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      for (Step<T> step : entry.getValue()) {
-        graph.addEdge(step, step.getSource(), step.getDestination());
-      }
-    }
-
-    return graph;
-  }
+  
 }

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.AbstractLayout;
@@ -26,6 +27,7 @@ import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
+import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -33,38 +35,21 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-public class StatesPickingVisualizer<T> extends AbstractVisualizer<T> {
+public class StatesPickingVisualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
-  /**
-   * Variable used to pass data to the GUI and gets the result of user
-   * interaction.
-   */
-  final private BasicVisualizationServer<State<T>, Step<T>> bvs;
-
-  public StatesPickingVisualizer(final AbstractLayout<T> layoutHolder) {
-    final VisualizationViewer<State<T>, Step<T>> visualizationViewer = new VisualizationViewer<State<T>, Step<T>>(layoutHolder.getLayout());
+  public StatesPickingVisualizer(final AbstractLayout<T> layout, final Transformer<Step<T>, String> edgeLabelTransformer) {
+    super(layout.getLayout());
     //visualizationViewer.setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
-    visualizationViewer.getRenderContext().setVertexLabelTransformer(layoutHolder.getVertexLabelTransformer());
-    visualizationViewer.getRenderContext().setEdgeLabelTransformer(layoutHolder.getEdgeLabelTransformer());
+    getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
+    getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer);
 
     final PluggableGraphMouse gm = new PluggableGraphMouse();
-    for (final GraphMousePlugin plugin : getDefaultGraphMousePlugins()) {
+    for (final GraphMousePlugin plugin : AutoEditor.getDefaultGraphMousePlugins()) {
       gm.add(plugin);
     }
     gm.add(new VerticesPickingGraphMousePlugin<State<T>, Step<T>>());
-    visualizationViewer.setGraphMouse(gm);
-
-    bvs = visualizationViewer;
+    setGraphMouse(gm);
   }
-
-  // default layout- remove maybe
-  public StatesPickingVisualizer(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    this(new GridLayout<T>(automaton, edgeLabelTransformer));
-  }
-
-  @Override
-  public BasicVisualizationServer<State<T>, Step<T>> getBasicVisualizationServer() {
-    return bvs;
-  }
+  
 }

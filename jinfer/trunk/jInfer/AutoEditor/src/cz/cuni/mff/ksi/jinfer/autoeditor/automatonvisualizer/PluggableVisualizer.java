@@ -20,13 +20,10 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.AbstractLayout;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
-import java.util.List;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -34,53 +31,27 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-public class PluggableVisualizer<T> extends AbstractVisualizer<T> {
+public final class PluggableVisualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
-  final VisualizationViewer<State<T>, Step<T>> vv;
-  final PluggableGraphMouse pluggableGraphMouse;
+  private final PluggableGraphMouse pluggableGraphMouse;
 
-  public PluggableVisualizer(final Layout<State<T>, Step<T>> layout) {
-    this(layout, new ToStringLabeller<State<T>>(), new ToStringLabeller<Step<T>>());
-  }
-
-  public PluggableVisualizer(final Layout<State<T>, Step<T>> layout, final List<GraphMousePlugin> graphMousePlugins) {
-    this(layout, new ToStringLabeller<State<T>>(), new ToStringLabeller<Step<T>>(), graphMousePlugins);
-  }
-
-  public PluggableVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<State<T>, String> vertexLabelTransformer, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    this(layout, vertexLabelTransformer, edgeLabelTransformer, null);
-  }
-
-  public PluggableVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<State<T>, String> vertexLabelTransformer, final Transformer<Step<T>, String> edgeLabelTransformer, final List<GraphMousePlugin> graphMousePlugins) {
-    vv = new VisualizationViewer<State<T>, Step<T>>(layout);
-    vv.getRenderContext().setVertexLabelTransformer(vertexLabelTransformer);
-    vv.getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer);
-
+  public PluggableVisualizer(final AbstractLayout<T> layout) {
+    super(layout.getLayout());
+    setVertexLabelTransformer(new ToStringLabeller<State<T>>());
+    setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
     pluggableGraphMouse = new PluggableGraphMouse();
-    if (graphMousePlugins != null) {
-      for (final GraphMousePlugin graphMousePlugin : graphMousePlugins) {
-        pluggableGraphMouse.add(graphMousePlugin);
-      }
-    }
-  }
-
-  public PluggableVisualizer(final AbstractLayout<T> layoutHolder) {
-    this(layoutHolder.getLayout(), layoutHolder.getVertexLabelTransformer(), layoutHolder.getEdgeLabelTransformer());
-  }
-
-  public PluggableVisualizer(final AbstractLayout<T> layoutHolder, final List<GraphMousePlugin> graphMousePlugins) {
-    this(layoutHolder.getLayout(), layoutHolder.getVertexLabelTransformer(), layoutHolder.getEdgeLabelTransformer(), graphMousePlugins);
   }
 
   public void addGraphMousePlugin(final GraphMousePlugin graphMousePlugin) {
     pluggableGraphMouse.add(graphMousePlugin);
+    setGraphMouse(pluggableGraphMouse);
   }
 
-  @Override
-  public BasicVisualizationServer<State<T>, Step<T>> getBasicVisualizationServer() {
-    vv.setGraphMouse(pluggableGraphMouse);
-    return vv;
+  public void setVertexLabelTransformer(final Transformer<State<T>, String> vertexLabelTransformer) {
+    getRenderContext().setVertexLabelTransformer(vertexLabelTransformer);
   }
 
-  
+  public void setEdgeLabelTransformer(final Transformer<Step<T>, String> edgeLabelTransformer) {
+    getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer);
+  }
 }

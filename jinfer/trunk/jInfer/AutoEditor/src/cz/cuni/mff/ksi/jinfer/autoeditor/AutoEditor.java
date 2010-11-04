@@ -16,9 +16,24 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AbstractVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent.AutoEditorTopComponent;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
+import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
+import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
+import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.openide.windows.WindowManager;
 
 /**
@@ -54,12 +69,12 @@ public class AutoEditor {
   private AutoEditor() {
   }
 
-  public static <T> void drawComponentAsync(final AbstractComponent component, final AbstractVisualizer<T> visualizer) {
-    component.getAutomatonDrawPanel().add(visualizer.getBasicVisualizationServer());
+  public static <T> void drawComponentAsync(final AbstractComponent component, final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
+    component.getAutomatonDrawPanel().add(visualizer);
     drawInGUI(component);
   }
 
-  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component, final AbstractVisualizer<T> visualizer) {
+  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component, final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
     drawComponentAsync(component, visualizer);
     try {
       component.waitForGUIDone();
@@ -67,6 +82,32 @@ public class AutoEditor {
       return false;
     }
     return true;
+  }
+
+  public static <T> Graph<State<T>, Step<T>> createGraph(final Automaton<T> automaton) {
+    final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
+    final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
+
+    // Get vertices = states of automaton
+    for (final Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
+      graph.addVertex(entry.getKey());
+    }
+
+    // Get edges of automaton
+    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
+      for (Step<T> step : entry.getValue()) {
+        graph.addEdge(step, step.getSource(), step.getDestination());
+      }
+    }
+
+    return graph;
+  }
+
+  public static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
+    final LinkedList<GraphMousePlugin> list = new LinkedList<GraphMousePlugin>();
+    list.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0));
+    list.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK | MouseEvent.CTRL_MASK));
+    return list;
   }
 
   private static void drawInGUI(final AbstractComponent component) {

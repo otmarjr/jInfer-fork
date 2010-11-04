@@ -18,11 +18,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.AbstractVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.PluggableVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GraphvizLayout;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatesPickingComponent;
@@ -30,7 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import java.util.List;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
@@ -60,45 +55,26 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
       }));*/
 
       // vyhnanovska
-      /*final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(new GridLayout<T>(inputAutomaton, new Transformer<Step<T>, String>() {
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(new GridLayout<T>(inputAutomaton), new Transformer<Step<T>, String>() {
         @Override
         public String transform(Step<T> step) {
           return symbolToString.toString(step.getAcceptSymbol());
         }
-      }));*/
-
-      // default - vyhnanovska
-      /*final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(inputAutomaton, new Transformer<Step<T>, String>() {
-        @Override
-        public String transform(Step<T> step) {
-          return symbolToString.toString(step.getAcceptSymbol());
-        }
-      });*/
-
-      // custom plugin list
-      /*final List<GraphMousePlugin> mousePlugins = new LinkedList<GraphMousePlugin>();
-      for (final GraphMousePlugin mousePlugin : AbstractVisualizer.getDefaultGraphMousePlugins()) {
-        mousePlugins.add(mousePlugin);
-      }
-      mousePlugins.add(new VerticesPickingGraphMousePlugin());
-      final PluggableVisualizer<T> visualizer = new PluggableVisualizer<T>(new GridLayout<T>(inputAutomaton, new Transformer<Step<T>, String>() {
-        @Override
-        public String transform(Step<T> step) {
-          return symbolToString.toString(step.getAcceptSymbol());
-        }
-      }), mousePlugins);*/
+      });
 
       // custom plugins
-      final PluggableVisualizer<T> visualizer = new PluggableVisualizer<T>(new GridLayout<T>(inputAutomaton, new Transformer<Step<T>, String>() {
+      /*final PluggableVisualizer<T> visualizer = new PluggableVisualizer<T>(new GridLayout<T>(inputAutomaton));
+      visualizer.setEdgeLabelTransformer(new Transformer<Step<T>, String>() {
         @Override
         public String transform(Step<T> step) {
           return symbolToString.toString(step.getAcceptSymbol());
         }
-      }));
-      for (final GraphMousePlugin mousePlugin : AbstractVisualizer.getDefaultGraphMousePlugins()) {
+      });
+      for (final GraphMousePlugin mousePlugin : AutoEditor.getDefaultGraphMousePlugins()) {
         visualizer.addGraphMousePlugin(mousePlugin);
       }
       visualizer.addGraphMousePlugin(new VerticesPickingGraphMousePlugin());
+      */
 
       final StatesPickingComponent panel = new StatesPickingComponent();
       AutoEditor.drawComponentAndWaitForGUI(panel, visualizer);

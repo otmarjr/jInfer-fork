@@ -24,6 +24,7 @@ import org.apache.log4j.EnhancedPatternLayout;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 import org.openide.modules.ModuleInstall;
@@ -114,7 +115,9 @@ public class Installer extends ModuleInstall {
 
     // configure appender to the Output window
     final EnhancedPatternLayout outputWindowLayout = new EnhancedPatternLayout("%m%n");
-    final Appender outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
+    final AppenderSkeleton outputWindowAppender = new Log4jOutputWindowAppender(outputWindowLayout);
+    outputWindowAppender.setThreshold(ROOTLOG.getLevel());
+    outputWindowAppender.setName("console");
     ROOTLOG.addAppender(outputWindowAppender);
 
     LOG = Logger.getLogger(Installer.class);
@@ -131,6 +134,8 @@ public class Installer extends ModuleInstall {
       logfileAppender.setMaximumFileSize(100 * 1024);
       // log to file only errors and stronger levels
       logfileAppender.setThreshold(Level.WARN);
+      logfileAppender.setName("file");
+
       ROOTLOG.addAppender(logfileAppender);
 
       LOG.info("Log initialized.");

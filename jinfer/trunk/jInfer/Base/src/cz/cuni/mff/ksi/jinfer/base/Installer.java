@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.LogLevelUtils;
 import java.awt.Color;
 import java.io.IOException;
 import org.apache.log4j.Appender;
@@ -52,31 +53,8 @@ public class Installer extends ModuleInstall {
     @Override
     protected void append(final LoggingEvent le) {
       final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
-      Color textColor = null;
 
-      switch (le.getLevel().toInt()) {
-        case Level.TRACE_INT:
-          textColor = Color.GRAY;
-          break;
-        case Level.DEBUG_INT:
-          float[] hsb = Color.RGBtoHSB(7, 105, 45, null);
-          textColor = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
-          break;
-        case Level.INFO_INT:
-          textColor =  Color.BLACK;
-          break;
-        case Level.WARN_INT:
-          textColor = Color.ORANGE;
-          break;
-        case Level.ERROR_INT:
-          textColor = Color.RED;
-          break;
-        case Level.FATAL_INT:
-          textColor = Color.MAGENTA;
-          break;
-        default:
-          break;
-      }
+      Color textColor = getLogLevelColor(le.getLevel());
 
       // TODO riacik rio check if kosher - i changed log format to LEVEL [ClassNameNotFull]: string
       final String lgName = le.getLoggerName();
@@ -94,6 +72,34 @@ public class Installer extends ModuleInstall {
         io.getOut().print(message);
         io.getOut().close();
       }
+    }
+
+    private Color getLogLevelColor(final Level level) {
+      Color textColor;
+      switch (level.toInt()) {
+        case Level.TRACE_INT:
+          textColor = LogLevelUtils.getColorTrace();
+          break;
+        case Level.DEBUG_INT:
+          textColor = LogLevelUtils.getColorDebug();
+          break;
+        case Level.INFO_INT:
+          textColor = LogLevelUtils.getColorInfo();
+          break;
+        case Level.WARN_INT:
+          textColor = LogLevelUtils.getColorWarn();
+          break;
+        case Level.ERROR_INT:
+          textColor = LogLevelUtils.getColorError();
+          break;
+        case Level.FATAL_INT:
+          textColor = LogLevelUtils.getColorFatal();
+          break;
+        default:
+          textColor = Color.BLACK;
+          break;
+      }
+      return textColor;
     }
 
     @Override

@@ -16,16 +16,26 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.options;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.LogLevelUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.LogLevels;
+import java.awt.Color;
 import java.util.prefs.Preferences;
+import javax.swing.JColorChooser;
 import org.openide.util.NbPreferences;
 
-final class LoggerPanel extends javax.swing.JPanel {
+public final class LoggerPanel extends javax.swing.JPanel {
 
   private final LoggerOptionsPanelController controller;
   private final Preferences preferences = NbPreferences.forModule(LoggerPanel.class);
   public static final String INTERNAL_LOG_LEVEL = "log.level.console";
   public static final String EXTERNAL_LOG_LEVEL = "log.level.file";
+
+  public static final String TRACE_COLOR = "trace.color";
+  public static final String DEBUG_COLOR = "debug.color";
+  public static final String INFO_COLOR = "info.color";
+  public static final String WARN_COLOR = "warn.color";
+  public static final String ERROR_COLOR = "error.color";
+  public static final String FATAL_COLOR = "fatal.color";
 
   LoggerPanel(LoggerOptionsPanelController controller) {
     this.controller = controller;
@@ -40,71 +50,397 @@ final class LoggerPanel extends javax.swing.JPanel {
    */
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
+    java.awt.GridBagConstraints gridBagConstraints;
 
     jPanel1 = new javax.swing.JPanel();
     internalLabel = new javax.swing.JLabel();
     externalLabel = new javax.swing.JLabel();
     externalLogCombo = new javax.swing.JComboBox();
     internalLogCombo = new javax.swing.JComboBox();
+    jPanel2 = new javax.swing.JPanel();
+    jPanel3 = new javax.swing.JPanel();
+    jLabel1 = new javax.swing.JLabel();
+    jLabel2 = new javax.swing.JLabel();
+    jLabel3 = new javax.swing.JLabel();
+    jLabel4 = new javax.swing.JLabel();
+    jLabel5 = new javax.swing.JLabel();
+    jLabel6 = new javax.swing.JLabel();
+    panelTrace = new javax.swing.JPanel();
+    panelDebug = new javax.swing.JPanel();
+    panelInfo = new javax.swing.JPanel();
+    panelWarn = new javax.swing.JPanel();
+    panelError = new javax.swing.JPanel();
+    panelFatal = new javax.swing.JPanel();
+    jButton1 = new javax.swing.JButton();
+    jPanel4 = new javax.swing.JPanel();
 
-    setPreferredSize(new java.awt.Dimension(400, 300));
+    setLayout(new java.awt.GridBagLayout());
 
     jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jPanel1.border.title"))); // NOI18N
+    jPanel1.setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(internalLabel, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.internalLabel.text")); // NOI18N
     internalLabel.setToolTipText(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.internalLabel.toolTipText")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel1.add(internalLabel, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(externalLabel, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.externalLabel.text")); // NOI18N
     externalLabel.setToolTipText(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.externalLabel.toolTipText")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel1.add(externalLabel, gridBagConstraints);
 
     externalLogCombo.setModel(LogLevels.getDefaultModel());
+    externalLogCombo.setMinimumSize(new java.awt.Dimension(100, 27));
+    externalLogCombo.setPreferredSize(new java.awt.Dimension(100, 27));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    jPanel1.add(externalLogCombo, gridBagConstraints);
 
     internalLogCombo.setModel(LogLevels.getDefaultModel());
+    internalLogCombo.setMinimumSize(new java.awt.Dimension(100, 27));
+    internalLogCombo.setPreferredSize(new java.awt.Dimension(100, 27));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    jPanel1.add(internalLogCombo, gridBagConstraints);
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addGroup(jPanel1Layout.createSequentialGroup()
-            .addComponent(internalLabel)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(internalLogCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-          .addGroup(jPanel1Layout.createSequentialGroup()
-            .addComponent(externalLabel)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(externalLogCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        .addContainerGap(111, Short.MAX_VALUE))
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
     );
-    jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel1Layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(externalLabel)
-          .addComponent(externalLogCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(internalLabel)
-          .addComponent(internalLogCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addContainerGap(32, Short.MAX_VALUE))
+    jPanel2Layout.setVerticalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
     );
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-    this.setLayout(layout);
-    layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    jPanel1.add(jPanel2, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+    gridBagConstraints.weightx = 1.0;
+    add(jPanel1, gridBagConstraints);
+
+    jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jPanel3.border.title"))); // NOI18N
+    jPanel3.setLayout(new java.awt.GridBagLayout());
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jLabel1.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel3.add(jLabel1, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jLabel2.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel3.add(jLabel2, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jLabel3.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel3.add(jLabel3, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jLabel4.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel3.add(jLabel4, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jLabel5.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel3.add(jLabel5, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jLabel6.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel3.add(jLabel6, gridBagConstraints);
+
+    panelTrace.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    panelTrace.setMaximumSize(new java.awt.Dimension(20, 20));
+    panelTrace.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelTrace.setPreferredSize(new java.awt.Dimension(20, 20));
+    panelTrace.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        panelTraceMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout panelTraceLayout = new javax.swing.GroupLayout(panelTrace);
+    panelTrace.setLayout(panelTraceLayout);
+    panelTraceLayout.setHorizontalGroup(
+      panelTraceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
     );
-    layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(184, Short.MAX_VALUE))
+    panelTraceLayout.setVerticalGroup(
+      panelTraceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
     );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel3.add(panelTrace, gridBagConstraints);
+
+    panelDebug.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    panelDebug.setMaximumSize(new java.awt.Dimension(20, 20));
+    panelDebug.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelDebug.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        panelDebugMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout panelDebugLayout = new javax.swing.GroupLayout(panelDebug);
+    panelDebug.setLayout(panelDebugLayout);
+    panelDebugLayout.setHorizontalGroup(
+      panelDebugLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+    panelDebugLayout.setVerticalGroup(
+      panelDebugLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel3.add(panelDebug, gridBagConstraints);
+
+    panelInfo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    panelInfo.setMaximumSize(new java.awt.Dimension(20, 20));
+    panelInfo.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        panelInfoMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout panelInfoLayout = new javax.swing.GroupLayout(panelInfo);
+    panelInfo.setLayout(panelInfoLayout);
+    panelInfoLayout.setHorizontalGroup(
+      panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+    panelInfoLayout.setVerticalGroup(
+      panelInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel3.add(panelInfo, gridBagConstraints);
+
+    panelWarn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    panelWarn.setMaximumSize(new java.awt.Dimension(20, 20));
+    panelWarn.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelWarn.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        panelWarnMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout panelWarnLayout = new javax.swing.GroupLayout(panelWarn);
+    panelWarn.setLayout(panelWarnLayout);
+    panelWarnLayout.setHorizontalGroup(
+      panelWarnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+    panelWarnLayout.setVerticalGroup(
+      panelWarnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel3.add(panelWarn, gridBagConstraints);
+
+    panelError.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    panelError.setMaximumSize(new java.awt.Dimension(20, 20));
+    panelError.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelError.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        panelErrorMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout panelErrorLayout = new javax.swing.GroupLayout(panelError);
+    panelError.setLayout(panelErrorLayout);
+    panelErrorLayout.setHorizontalGroup(
+      panelErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+    panelErrorLayout.setVerticalGroup(
+      panelErrorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel3.add(panelError, gridBagConstraints);
+
+    panelFatal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    panelFatal.setMaximumSize(new java.awt.Dimension(20, 20));
+    panelFatal.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelFatal.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        panelFatalMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout panelFatalLayout = new javax.swing.GroupLayout(panelFatal);
+    panelFatal.setLayout(panelFatalLayout);
+    panelFatalLayout.setHorizontalGroup(
+      panelFatalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+    panelFatalLayout.setVerticalGroup(
+      panelFatalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel3.add(panelFatal, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jButton1.text")); // NOI18N
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1ActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 4;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 20, 2, 2);
+    jPanel3.add(jButton1, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    add(jPanel3, gridBagConstraints);
+
+    javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+    jPanel4.setLayout(jPanel4Layout);
+    jPanel4Layout.setHorizontalGroup(
+      jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 383, Short.MAX_VALUE)
+    );
+    jPanel4Layout.setVerticalGroup(
+      jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 65, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 1.0;
+    add(jPanel4, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
+
+  private void panelTraceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelTraceMouseClicked
+    final Color c = JColorChooser.showDialog(LoggerPanel.this, "Choose the trace log color", panelTrace.
+            getBackground());
+    if (c != null) {
+      panelTrace.setBackground(c);
+    }
+  }//GEN-LAST:event_panelTraceMouseClicked
+
+  private void panelDebugMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelDebugMouseClicked
+    final Color c = JColorChooser.showDialog(LoggerPanel.this, "Choose the debug log color", panelDebug.
+            getBackground());
+    if (c != null) {
+      panelDebug.setBackground(c);
+    }
+  }//GEN-LAST:event_panelDebugMouseClicked
+
+  private void panelInfoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelInfoMouseClicked
+    final Color c = JColorChooser.showDialog(LoggerPanel.this, "Choose the info log color", panelInfo.
+            getBackground());
+    if (c != null) {
+      panelInfo.setBackground(c);
+    }
+  }//GEN-LAST:event_panelInfoMouseClicked
+
+  private void panelWarnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelWarnMouseClicked
+    final Color c = JColorChooser.showDialog(LoggerPanel.this, "Choose the warn log color", panelWarn.
+            getBackground());
+    if (c != null) {
+      panelWarn.setBackground(c);
+    }
+  }//GEN-LAST:event_panelWarnMouseClicked
+
+  private void panelErrorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelErrorMouseClicked
+    final Color c = JColorChooser.showDialog(LoggerPanel.this, "Choose the error log color", panelError.
+            getBackground());
+    if (c != null) {
+      panelError.setBackground(c);
+    }
+  }//GEN-LAST:event_panelErrorMouseClicked
+
+  private void panelFatalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFatalMouseClicked
+    final Color c = JColorChooser.showDialog(LoggerPanel.this, "Choose the fatal log color", panelFatal.
+            getBackground());
+    if (c != null) {
+      panelFatal.setBackground(c);
+    }
+  }//GEN-LAST:event_panelFatalMouseClicked
+
+  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    panelTrace.setBackground(LogLevelUtils.TRACE_DEFAULT);
+    panelDebug.setBackground(LogLevelUtils.DEBUG_DEFAULT);
+    panelInfo.setBackground(LogLevelUtils.INFO_DEFAULT);
+    panelWarn.setBackground(LogLevelUtils.WARN_DEFAULT);
+    panelError.setBackground(LogLevelUtils.ERROR_DEFAULT);
+    panelFatal.setBackground(LogLevelUtils.FATAL_DEFAULT);
+  }//GEN-LAST:event_jButton1ActionPerformed
 
   void load() {
     final String consoleLevel = preferences.get(INTERNAL_LOG_LEVEL, LogLevels.getConsoleThreshold());
@@ -115,17 +451,31 @@ final class LoggerPanel extends javax.swing.JPanel {
 
     LogLevels.setConsoleThreshold(consoleLevel);
     LogLevels.setFileThreshold(fileLevel);
+
+    panelTrace.setBackground(LogLevelUtils.getColorTrace());
+    panelDebug.setBackground(LogLevelUtils.getColorDebug());
+    panelInfo.setBackground(LogLevelUtils.getColorInfo());
+    panelWarn.setBackground(LogLevelUtils.getColorWarn());
+    panelError.setBackground(LogLevelUtils.getColorError());
+    panelFatal.setBackground(LogLevelUtils.getColorFatal());
   }
 
   void store() {
     final String consoleLevel = (String) internalLogCombo.getSelectedItem();
     final String fileLevel = (String) externalLogCombo.getSelectedItem();
-    
+
     preferences.put(INTERNAL_LOG_LEVEL, consoleLevel);
     preferences.put(EXTERNAL_LOG_LEVEL, fileLevel);
 
     LogLevels.setConsoleThreshold(consoleLevel);
     LogLevels.setFileThreshold(fileLevel);
+
+    preferences.put(TRACE_COLOR, String.valueOf(panelTrace.getBackground().getRGB()));
+    preferences.put(DEBUG_COLOR, String.valueOf(panelDebug.getBackground().getRGB()));
+    preferences.put(INFO_COLOR, String.valueOf(panelInfo.getBackground().getRGB()));
+    preferences.put(WARN_COLOR, String.valueOf(panelWarn.getBackground().getRGB()));
+    preferences.put(ERROR_COLOR, String.valueOf(panelError.getBackground().getRGB()));
+    preferences.put(FATAL_COLOR, String.valueOf(panelFatal.getBackground().getRGB()));
   }
 
   boolean valid() {
@@ -137,6 +487,22 @@ final class LoggerPanel extends javax.swing.JPanel {
   private javax.swing.JComboBox externalLogCombo;
   private javax.swing.JLabel internalLabel;
   private javax.swing.JComboBox internalLogCombo;
+  private javax.swing.JButton jButton1;
+  private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
+  private javax.swing.JLabel jLabel3;
+  private javax.swing.JLabel jLabel4;
+  private javax.swing.JLabel jLabel5;
+  private javax.swing.JLabel jLabel6;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
+  private javax.swing.JPanel jPanel3;
+  private javax.swing.JPanel jPanel4;
+  private javax.swing.JPanel panelDebug;
+  private javax.swing.JPanel panelError;
+  private javax.swing.JPanel panelFatal;
+  private javax.swing.JPanel panelInfo;
+  private javax.swing.JPanel panelTrace;
+  private javax.swing.JPanel panelWarn;
   // End of variables declaration//GEN-END:variables
 }

@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,6 +50,9 @@ public final class BaseUtils {
    * @return A new collection with selected elements.
    */
   public static <T> List<T> filter(final List<T> target, final Predicate<T> predicate) {
+    if (target == null || predicate == null) {
+      throw new IllegalArgumentException("Target list and the predicate must not be null.");
+    }
     final List<T> result = new ArrayList<T>();
     for (final T element : target) {
       if (predicate.apply(element)) {
@@ -77,5 +81,31 @@ public final class BaseUtils {
    */
   public static boolean isEmpty(final String s) {
     return s == null || "".equals(s);
+  }
+
+  /**
+   * Creates a list containing the specified list N times in a row.
+   * 
+   * @param l List to be cloned. Must not be <code>null</code>.
+   * @param n How many times should the list be cloned. Must be non-negative.
+   * @return Flat list containing the input list N times in a row. If the input
+   * list is empty, or N = 0, the result is an empty list.
+   */
+  public static <T> List<T> cloneList(final List<T> l, final int n) {
+    if (l == null) {
+      throw new IllegalArgumentException("The list to be cloned must not be null.");
+    }
+    if (n < 0) {
+      throw new IllegalArgumentException("When cloning a list, N must be non-negative (" + n + ")");
+    }
+    if (n == 0 || isEmpty(l)) {
+      return Collections.emptyList();
+    }
+    
+    final List<T> ret = new ArrayList<T>();
+    for (int i = 0; i < n; i++) {
+      ret.addAll(l);
+    }
+    return ret;
   }
 }

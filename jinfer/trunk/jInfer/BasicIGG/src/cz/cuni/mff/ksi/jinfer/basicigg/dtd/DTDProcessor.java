@@ -16,13 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
@@ -34,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.InputSource;
 import org.xmlmiddleware.schemas.dtds.Attribute;
@@ -84,6 +84,14 @@ public class DTDProcessor implements Processor {
         ret.add(processElement((ElementType) o));
       }
 
+      // if the next module cannot handle complex regexps, help it by expanding our result
+      if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
+        // lookup expander
+        final Expander expander = Lookup.getDefault().lookup(Expander.class);
+        // return expanded
+        return expander.expand(ret);
+      }
+
       return ret;
     } catch (final Exception e) {
       if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
@@ -96,54 +104,35 @@ public class DTDProcessor implements Processor {
   }
 
   private static Element processElement(final ElementType e) {
-    List<cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute> attList=
+    final Regexp<AbstractStructuralNode> re = DTD2RETranslator.particle2Regexp(e.content,
+            e.contentType == ElementType.CONTENT_MIXED
+              || e.contentType == ElementType.CONTENT_PCDATA);
+
+    final Element el = new Element(Collections.<String>emptyList(),
+            e.name.getLocalName(),
+            new HashMap<String, Object>(IGGUtils.ATTR_FROM_SCHEMA),
+            re, getAttributes(e));
+
+    return el;
+  }
+
+  private static List<cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute>
+          getAttributes(final ElementType e) {
+    final List<cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute> attList =
             new ArrayList<cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute>();
     if (e.attributes.size() > 0) {
       // for each attribute, add a subnode representing it
       for (final Object oa : e.attributes.values()) {
         final Attribute a = (Attribute) oa;
         final Map<String, Object> nodeMetadata = new HashMap<String, Object>(1);
-        nodeMetadata.put("required",
-                Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
+        nodeMetadata.put("required", Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
         final cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute at =
-                new cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute(new ArrayList<String>(0),
-                                a.name.getLocalName(), nodeMetadata, null,
-                                new ArrayList<String>(0));
+                new cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute(
+                new ArrayList<String>(0), a.name.getLocalName(),
+                nodeMetadata, null, new ArrayList<String>(0));
         attList.add(at);
       }
     }
-    final Element ret = Element.getMutable();
-    ret.setName(e.name.getLocalName());
-    ret.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
-    ret.getAttributes().addAll(attList);
-
-    // for each subelement ditto
-    if (e.children.size() > 0) {
-      for (final Object oc : e.children.values()) {
-        final ElementType c = (ElementType) oc;
-        final Element child = Element.getMutable();
-        child.setName(c.name.getLocalName());
-        child.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
-        child.getMetadata().putAll(IGGUtils.METADATA_SENTINEL);
-        child.getSubnodes().setType(RegexpType.LAMBDA);
-        child.setImmutable();
-        ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(child));
-      }
-    }
-
-    // if there is #PCDATA inside...
-    if (e.contentType == ElementType.CONTENT_MIXED || e.contentType == ElementType.CONTENT_PCDATA) {
-      SimpleData sd = SimpleData.getMutable();
-      sd.setImmutable();
-      ret.getSubnodes().addChild(
-              Regexp.<AbstractStructuralNode>getToken(sd));
-    }
-
-    ret.getSubnodes().setType(RegexpType.CONCATENATION);
-    ret.getSubnodes().setInterval(RegexpInterval.getOnce());
-    ret.setImmutable();
-
-    return ret;
+    return attList;
   }
-
 }

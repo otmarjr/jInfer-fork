@@ -51,6 +51,7 @@ public class Regexp<T> {
   private RegexpInterval interval;
   private boolean mutable;
 
+  // TODO anti Please move away from the top of the file
   private void checkConstraits() {
     if (!mutable) {
       if (type == null) {

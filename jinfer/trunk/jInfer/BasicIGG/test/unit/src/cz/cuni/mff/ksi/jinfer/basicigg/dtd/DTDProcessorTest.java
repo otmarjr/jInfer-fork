@@ -63,9 +63,11 @@ public class DTDProcessorTest {
           + "<!ELEMENT animal EMPTY>" + NL
           + "<!ELEMENT zoo (animal*) >" + NL;
   private static final String[] ZOO_RESULTS = {
-    "zoos: ELEMENT\n()",
+    "zoos: ELEMENT\n\u03BB",
+    "zoo: ELEMENT\n\u03BB",
     "zoo: ELEMENT\n(animal: ELEMENT\n\u03BB)",
-    "animal: ELEMENT\n()"};
+    "zoo: ELEMENT\n(animal: ELEMENT\n\u03BB\n,animal: ELEMENT\n\u03BB\n,animal: ELEMENT\n\u03BB)",
+    "animal: ELEMENT\n\u03BB"};
 
   @Test
   public void testProcess() {
@@ -85,10 +87,11 @@ public class DTDProcessorTest {
           + "	clas (prima|sekunda) #IMPLIED>" + NL
           + "<!ELEMENT elements ((elem)*)>" + NL;
   private static final String[] ATTR_RESULTS = {
-    "elem: ELEMENT <name: ATTRIBUTE#null: ; clas: ATTRIBUTE#null: ; id: ATTRIBUTE#null: >\n()",
-    "elements: ELEMENT\n(elem: ELEMENT\n\u03BB)"};
+    "elem: ELEMENT <name: ATTRIBUTE#null: ; clas: ATTRIBUTE#null: ; id: ATTRIBUTE#null: >\n\u03BB",
+    "elements: ELEMENT\n\u03BB",
+    "elements: ELEMENT\n(elem: ELEMENT\n\u03BB)",
+    "elements: ELEMENT\n(elem: ELEMENT\n\u03BB\n,elem: ELEMENT\n\u03BB\n,elem: ELEMENT\n\u03BB)"};
 
-  // TODO vektor Problem is, that the DTD importer returns the rules in nondeterministic order...
   @Test
   public void testProcessAttrs() {
     System.out.println("processAttrs");
@@ -96,6 +99,7 @@ public class DTDProcessorTest {
     final List<Element> result = new DTDProcessor().process(s);
     assertEquals(ATTR_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
+      System.out.println(i + " " + result.get(i).toString());
       assertEquals("Iteration " + i, ATTR_RESULTS[i], result.get(i).toString());
     }
   }

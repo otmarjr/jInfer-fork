@@ -298,42 +298,6 @@ public class Regexp<T> {
     return RegexpType.LAMBDA.equals(type);
   }
 
-  // TODO vektor JUnit test!
-
-  /**
-   * Returns flag if this regexp is a simple concatenation.
-   * Regexp is a simple concatenation if all these conditions hold:
-   * <ul>
-   *  <li>Its type is {@see RegexpType#CONCATENATION}.</li>
-   *  <li>Its interval is "once" ({@see RegexpInterval#isOnce()}).</li>
-   *  <li>
-   *   For each of its children holds:
-   *    <ul>
-   *      <li>The child is {@see RegexpType#TOKEN}</li>
-   *      <li>The child's interval is "once" ({@see RegexpInterval#isOnce()}).</li>
-   *    </ul>
-   *  </li>
-   * </ul>
-   * @return
-   */
-  public boolean isSimpleConcatenation() {
-    if (!isConcatenation()) {
-      return false;
-    }
-    if (!getInterval().isOnce()) {
-      return false;
-    }
-    for (final Regexp<T> child : getChildren()) {
-      if (!child.isToken()) {
-        return false;
-      }
-      if (!child.getInterval().isOnce()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   /**
    * <p>Converts the i-th position of this concatenation to alternation and
    * inserts the rest as the one and only of its children.</p>

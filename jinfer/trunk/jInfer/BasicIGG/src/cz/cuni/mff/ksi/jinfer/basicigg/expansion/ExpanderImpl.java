@@ -48,7 +48,7 @@ public class ExpanderImpl implements Expander {
   }
 
   private static List<Element> expandElement(final Element e) {
-    if (e.getSubnodes().isSimpleConcatenation()) {
+    if (isSimpleConcatenation(e.getSubnodes())) {
       return Arrays.asList(e);
     }
 
@@ -154,5 +154,44 @@ public class ExpanderImpl implements Expander {
     }
 
     return ret;
+  }
+
+    // TODO vektor JUnit test!
+
+  /**
+   * Returns flag if the provided regexp is a simple concatenation.
+   * Regexp is a simple concatenation if all these conditions hold:
+   * <ul>
+   *  <li>Its type is {@see RegexpType#CONCATENATION}.</li>
+   *  <li>Its interval is "once" ({@see RegexpInterval#isOnce()}).</li>
+   *  <li>
+   *   For each of its children holds:
+   *    <ul>
+   *      <li>The child is {@see RegexpType#TOKEN}</li>
+   *      <li>The child's interval is "once" ({@see RegexpInterval#isOnce()}).</li>
+   *    </ul>
+   *  </li>
+   * </ul>
+   * 
+   * @param r Regexp to be examined.
+   * @return True if the regexp is a simple concatenation, false otherwise.
+   */
+  public static boolean isSimpleConcatenation(
+          final Regexp<AbstractStructuralNode> r) {
+    if (!r.isConcatenation()) {
+      return false;
+    }
+    if (!r.getInterval().isOnce()) {
+      return false;
+    }
+    for (final Regexp<AbstractStructuralNode> child : r.getChildren()) {
+      if (!child.isToken()) {
+        return false;
+      }
+      if (!child.getInterval().isOnce()) {
+        return false;
+      }
+    }
+    return true;
   }
 }

@@ -48,7 +48,7 @@ public class ExpanderImpl implements Expander {
   }
 
   private static List<Element> expandElement(final Element e) {
-    if (isSimpleConcatenation(e)) {
+    if (e.getSubnodes().isSimpleConcatenation()) {
       return Arrays.asList(e);
     }
 
@@ -80,13 +80,13 @@ public class ExpanderImpl implements Expander {
       case TOKEN:
         final List<List<AbstractStructuralNode>> tokenRet = new ArrayList<List<AbstractStructuralNode>>(1);
         tokenRet.add(Arrays.asList(r.getContent()));
-        return applyRI(tokenRet, r.getInterval());
+        return applyInterval(tokenRet, r.getInterval());
       case PERMUTATION:
         throw new IllegalArgumentException("Sorry, there is not enough time till the end of the universe");
       case CONCATENATION:
-        return applyRI(unpackConcat(r.getChildren()), r.getInterval());
+        return applyInterval(unpackConcat(r.getChildren()), r.getInterval());
       case ALTERNATION:
-        return applyRI(unpackAlternation(r.getChildren()), r.getInterval());
+        return applyInterval(unpackAlternation(r.getChildren()), r.getInterval());
     }
     throw new IllegalArgumentException("Unknown regexp type: " + r.getType());
   }
@@ -125,7 +125,7 @@ public class ExpanderImpl implements Expander {
     return ret;
   }
 
-  private static List<List<AbstractStructuralNode>> applyRI(
+  private static List<List<AbstractStructuralNode>> applyInterval(
           final List<List<AbstractStructuralNode>> input,
           final RegexpInterval ri) {
     final List<List<AbstractStructuralNode>> ret = new ArrayList<List<AbstractStructuralNode>>();
@@ -154,28 +154,5 @@ public class ExpanderImpl implements Expander {
     }
 
     return ret;
-  }
-
-  private static boolean isSimpleConcatenation(final Element e) {
-    final Regexp<AbstractStructuralNode> r = e.getSubnodes();
-    if (!(r.isLambda() || r.isConcatenation())) {
-      return false;
-    }
-    for (final Regexp<AbstractStructuralNode> child : r.getChildren()) {
-      if (!(
-              child.isLambda()
-              || child.isToken())) {
-        return false;
-      }
-      if (!child.getInterval().isOnce()) {
-        return false;
-      }
-      if (!(
-              child.getContent().isElement()
-              || child.getContent().isSimpleData())) {
-        return false;
-      }
-    }
-    return true;
   }
 }

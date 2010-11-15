@@ -107,6 +107,7 @@ public class RegexpInterval {
     return new RegexpInterval(1);
   }
 
+  // TODO anti JavaDoc for all the isXYZ() and getXYZ() methods
   public boolean isUnbounded() {
     return unbounded;
   }

@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -37,27 +36,23 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = Expander.class)
 public class ExpanderImpl implements Expander {
 
-  private static final Logger LOG = Logger.getLogger(ExpanderImpl.class);
-
   @Override
   public List<Element> expand(final List<Element> grammar) {
     final List<Element> ret = new ArrayList<Element>();
 
     for (final Element e : grammar) {
-      ret.addAll(expandRule(e));
+      ret.addAll(expandElement(e));
     }
 
     return ret;
   }
 
-  private static List<Element> expandRule(final Element e) {
-    if (alreadyOk(e)) {
-      LOG.info("Element \"" + e.getName() + "\" already expanded.");
+  private static List<Element> expandElement(final Element e) {
+    if (isSimpleConcatenation(e)) {
       return Arrays.asList(e);
     }
 
     final List<Element> ret = new ArrayList<Element>();
-
     final List<List<AbstractStructuralNode>> exploded = unpackRE(e.getSubnodes());
 
     for (final List<AbstractStructuralNode> line : exploded) {
@@ -74,7 +69,6 @@ public class ExpanderImpl implements Expander {
       ret.add(new Element(e.getContext(), e.getName(), e.getMetadata(), subnodes, e.getAttributes()));
     }
 
-    LOG.info("Element \"" + e.getName() + "\" expanded into " + ret.size() + " new elements.");
     return ret;
   }
 
@@ -90,37 +84,45 @@ public class ExpanderImpl implements Expander {
       case PERMUTATION:
         throw new IllegalArgumentException("Sorry, there is not enough time till the end of the universe");
       case CONCATENATION:
-        final List<List<AbstractStructuralNode>> concatRet = new ArrayList<List<AbstractStructuralNode>>(1);
-
-        int maxChildSize = 0;
-        final List<List<List<AbstractStructuralNode>>> children = new ArrayList<List<List<AbstractStructuralNode>>>();
-        for (final Regexp<AbstractStructuralNode> child : r.getChildren()) {
-          final List<List<AbstractStructuralNode>> childList = unpackRE(child);
-          children.add(childList);
-          maxChildSize = Math.max(maxChildSize, childList.size());
-        }
-
-        LOG.info("Max child size in concat is " + maxChildSize);
-
-        for (int i = 0; i < maxChildSize; i++) {
-          final List<AbstractStructuralNode> resultLine = new ArrayList<AbstractStructuralNode>();
-
-          for (int j = 0; j < r.getChildren().size(); j++) {
-            resultLine.addAll(children.get(j).get(i % children.get(j).size()));
-          }
-
-          concatRet.add(resultLine);
-        }
-
-        return applyRI(concatRet, r.getInterval());
+        return applyRI(unpackConcat(r.getChildren()), r.getInterval());
       case ALTERNATION:
-        final List<List<AbstractStructuralNode>> altRet = new ArrayList<List<AbstractStructuralNode>>();
-        for (final Regexp<AbstractStructuralNode> child : r.getChildren()) {
-          altRet.addAll(unpackRE(child));
-        }
-        return applyRI(altRet, r.getInterval());
+        return applyRI(unpackAlternation(r.getChildren()), r.getInterval());
     }
     throw new IllegalArgumentException("Unknown regexp type: " + r.getType());
+  }
+
+  private static List<List<AbstractStructuralNode>> unpackConcat(
+          final List<Regexp<AbstractStructuralNode>> children) {
+    final List<List<AbstractStructuralNode>> ret = new ArrayList<List<AbstractStructuralNode>>(1);
+
+    int maxChildSize = 0;
+    final List<List<List<AbstractStructuralNode>>> childWords = new ArrayList<List<List<AbstractStructuralNode>>>();
+    for (final Regexp<AbstractStructuralNode> child : children) {
+      final List<List<AbstractStructuralNode>> childList = unpackRE(child);
+      childWords.add(childList);
+      maxChildSize = Math.max(maxChildSize, childList.size());
+    }
+    
+    for (int i = 0; i < maxChildSize; i++) {
+      final List<AbstractStructuralNode> resultLine = new ArrayList<AbstractStructuralNode>();
+
+      for (int j = 0; j < children.size(); j++) {
+        resultLine.addAll(childWords.get(j).get(i % childWords.get(j).size()));
+      }
+
+      ret.add(resultLine);
+    }
+
+    return ret;
+  }
+
+  private static List<List<AbstractStructuralNode>> unpackAlternation(
+          final List<Regexp<AbstractStructuralNode>> children) {
+    final List<List<AbstractStructuralNode>> ret = new ArrayList<List<AbstractStructuralNode>>();
+    for (final Regexp<AbstractStructuralNode> child : children) {
+      ret.addAll(unpackRE(child));
+    }
+    return ret;
   }
 
   private static List<List<AbstractStructuralNode>> applyRI(
@@ -136,34 +138,25 @@ public class ExpanderImpl implements Expander {
     } else if (ri.isKleeneCross()) {
       for (final List<AbstractStructuralNode> l : input) {
         ret.add(l);
-        ret.add(cloneList(l, 3));
+        ret.add(BaseUtils.cloneList(l, 3));
       }
     } else if (ri.isKleeneStar()) {
       ret.add(Collections.<AbstractStructuralNode>emptyList());
       for (final List<AbstractStructuralNode> l : input) {
         ret.add(l);
-        ret.add(cloneList(l, 3));
+        ret.add(BaseUtils.cloneList(l, 3));
       }
     } else {
       for (final List<AbstractStructuralNode> l : input) {
-        ret.add(cloneList(l, ri.getMin()));
-        ret.add(cloneList(l, ri.getMax()));
+        ret.add(BaseUtils.cloneList(l, ri.getMin()));
+        ret.add(BaseUtils.cloneList(l, ri.getMax()));
       }
     }
 
     return ret;
   }
 
-  private static List<AbstractStructuralNode> cloneList(
-          final List<AbstractStructuralNode> l, final int times) {
-    final List<AbstractStructuralNode> ret = new ArrayList<AbstractStructuralNode>();
-    for (int i = 0; i < times; i++) {
-      ret.addAll(l);
-    }
-    return ret;
-  }
-
-  private static boolean alreadyOk(final Element e) {
+  private static boolean isSimpleConcatenation(final Element e) {
     final Regexp<AbstractStructuralNode> r = e.getSubnodes();
     if (!(r.isLambda() || r.isConcatenation())) {
       return false;

@@ -16,29 +16,27 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
 /**
- * Interface of inference modules that have capabilities. Every inference module
- * should implement this interface.
- * 
+ * Interface of a (sub)module providing expansion of complex regular expressions
+ * into simple concatenations. (Most simplifiers want their input in exactly
+ * that format.) The class must work as a singleton, subsequent calls to
+ * {@see Expander#expand()} will be on the same instance.
+ *
  * @author vektor
  */
-public interface Capabilities {
+public interface Expander {
 
   /**
-   * Returns the list of capabilities (strings) of this module.
+   * Expands complicated regular expressions in the provided initial grammar
+   * and returns a new grammar containing only concatenations on the right hand
+   * sides.
    * 
-   * @return List of capability names.
+   * @param grammar Grammar to be simplified.
+   * @return Simplified grammar.
    */
-  List<String> getCapabilities();
-
-  // TODO vektor It's not very nice to have constants in interfaces
-  // (and even less so in the "defining" interface), therefore consider moving
-  // this(these) constant(s) somewhere else
-
-  /** Capability of a Simplifier implementation meaning that it can receive
-   more complex inputs than simple concatenations. */
-  String CAN_HANDLE_COMPLEX_REGEXPS = "can.handle.complex.regexps";
+  List<Element> expand(final List<Element> grammar);
 
 }

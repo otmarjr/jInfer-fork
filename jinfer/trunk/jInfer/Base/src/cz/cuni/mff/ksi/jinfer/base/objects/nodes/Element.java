@@ -37,6 +37,7 @@ public class Element extends AbstractStructuralNode {
   private final Regexp<AbstractStructuralNode> subnodes;
   private final List<Attribute> attributes;
 
+  // TODO anti Please move away from the top of the file
   private void checkConstraits() {
     if (subnodes == null) {
       throw new IllegalArgumentException("Subnodes has to be non-null.");

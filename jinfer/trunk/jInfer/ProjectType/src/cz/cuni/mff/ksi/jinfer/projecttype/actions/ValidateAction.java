@@ -20,12 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -40,27 +36,18 @@ import net.socialchange.doctype.Doctype;
 import net.socialchange.doctype.DoctypeChangerStream;
 import net.socialchange.doctype.DoctypeGenerator;
 import net.socialchange.doctype.DoctypeImpl;
+import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.cookies.LineCookie;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.Node;
-import org.openide.text.Line;
 import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
-import org.openide.windows.IOProvider;
-import org.openide.windows.IOSelect;
-import org.openide.windows.InputOutput;
-import org.openide.windows.OutputEvent;
-import org.openide.windows.OutputListener;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
@@ -68,99 +55,9 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public final class ValidateAction extends NodeAction {
 
+  private static final Logger LOG = Logger.getLogger(ValidateAction.class);
   private static ValidateAction action = null;
   private final String[] schemas = new String[]{"xsd", "dtd"};
-
-  private static class ValiadtionOutputListener implements OutputListener {
-
-    private final FileObject file;
-    private final int lineNumber;
-    private final int columnNumber;
-
-    public ValiadtionOutputListener(final FileObject file, final int lineNumber,
-            final int columnNumber) {
-      this.file = file;
-      this.lineNumber = lineNumber;
-      this.columnNumber = columnNumber;
-    }
-
-    @Override
-    public void outputLineSelected(OutputEvent ev) {
-      //
-    }
-
-    @Override
-    public void outputLineAction(OutputEvent ev) {
-      try {
-        final DataObject dataObj = DataObject.find(file);
-
-        final LineCookie lineCookie = dataObj.getCookie(LineCookie.class);
-        final Line original = lineCookie.getLineSet().getOriginal(lineNumber - 1);
-        original.show(Line.ShowOpenType.OPEN, Line.ShowVisibilityType.FOCUS, columnNumber - 1);
-      } catch (DataObjectNotFoundException ex) {
-        //TODO sviro
-        Exceptions.printStackTrace(ex);
-      }
-
-    }
-
-    @Override
-    public void outputLineCleared(OutputEvent ev) {
-      //
-    }
-  }
-
-  private static class JInferErrorHandler extends DefaultHandler {
-
-    private Boolean result;
-    private final FileObject file;
-    private final int lineDiff;
-
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
-
-    public JInferErrorHandler(final FileObject file, final int lineDiff) {
-      super();
-      this.file = file;
-      this.lineDiff = lineDiff;
-      result = true;
-    }
-
-    @Override
-    public void error(final SAXParseException e) throws SAXException {
-      final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
-      printErrorMessage(ioResult, e);
-      result = false;
-    }
-
-    @Override
-    public void fatalError(final SAXParseException e) throws SAXException {
-      final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
-      printErrorMessage(ioResult, e);
-      result = false;
-    }
-
-    private void printErrorMessage(final InputOutput ioResult, final SAXParseException e) {
-      final int realLineNum = e.getLineNumber() - lineDiff;
-      if (realLineNum > 0) {
-        ioResult.getOut().print("[" + DATE_FORMAT.format(new Date()) + "] " + e.getMessage());
-
-        try {
-          ioResult.getOut().
-                  println("(" + file.getName() + "." + file.getExt() + ":" + realLineNum + "/" + e.
-                  getColumnNumber() + ")",
-                  new ValiadtionOutputListener(file, realLineNum, e.getColumnNumber()));
-        } catch (IOException ex) {
-          // TODO sviro what to do here?? (previously anonym todo, given to sviro by vektor)
-          ioResult.getOut().close();
-        }
-      }
-      ioResult.getOut().close();
-    }
-
-    public Boolean getResult() {
-      return result;
-    }
-  }
 
   private ValidateAction() {
     super();
@@ -214,40 +111,52 @@ public final class ValidateAction extends NodeAction {
 
   private boolean validateDTD(final FileObject xmlFile, final FileObject schemaFile) throws
           IOException, SAXException, ParserConfigurationException {
-    DoctypeChangerStream changer = null;
-
-    final InputStream inputStream = new FileInputStream(FileUtil.toFile(xmlFile));
-
     final DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
-    DocumentBuilder builder;
 
-    builder = fact.newDocumentBuilder();
-    final Document doc = builder.parse(FileUtil.toFile(xmlFile));
+    final JInferErrorHandler errorHandler = new JInferErrorHandler(null);
 
-    final String rootNode = doc.getDocumentElement().getNodeName();
-    String schemaText = schemaFile.asText();
+
+    final String schemaText = schemaFile.asText();
     final String schema = schemaText.replaceFirst("<\\?xml.*?\\?>", "");
 
-    changer = new DoctypeChangerStream(inputStream);
+    final InputStream inputStream = new FileInputStream(FileUtil.toFile(xmlFile));
+    final DoctypeChangerStream changer = new DoctypeChangerStream(inputStream);
     changer.setGenerator(new DoctypeGenerator() {
 
       @Override
       public Doctype generate(final Doctype dctp) {
-        return new DoctypeImpl(rootNode, null, null, schema);
+        if (dctp != null && dctp.getRootElement() != null) {
+          return new DoctypeImpl(dctp.getRootElement(), null, null, schema);
+        }
+
+        DocumentBuilder builder;
+        try {
+          fact.setValidating(false);
+          builder = fact.newDocumentBuilder();
+          builder.setErrorHandler(errorHandler);
+          final Document doc = builder.parse(FileUtil.toFile(xmlFile));
+          final String rootNode = doc.getDocumentElement().getNodeName();
+          return new DoctypeImpl(rootNode, null, null, schema);
+        } catch (ParserConfigurationException ex) {
+          //nothing to do
+        } catch (SAXException ex) {
+          //nothing to do
+        } catch (IOException ex) {
+          //nothing to do
+        }
+        return dctp;
       }
     });
 
     if (changer != null) {
-      final int lineDiff = schemaFile.asLines().size() + (doc.getDoctype() == null ? 2 : 1) + 1;
 
       fact.setNamespaceAware(true);
       fact.setValidating(true);
-      builder = fact.newDocumentBuilder();
-      final JInferErrorHandler handler = new JInferErrorHandler(xmlFile, lineDiff);
-      builder.setErrorHandler(handler);
+      final DocumentBuilder builder = fact.newDocumentBuilder();
+      builder.setErrorHandler(errorHandler);
       builder.parse(changer);
 
-      return handler.getResult().booleanValue();
+      return errorHandler.getResult();
     }
 
     return false;
@@ -266,28 +175,24 @@ public final class ValidateAction extends NodeAction {
 
       if (schemaLanguage != null) {
         final SchemaFactory factory = SchemaFactory.newInstance(schemaLanguage);
+        factory.setErrorHandler(new JInferErrorHandler(schemaFile));
 
         final Schema schema = factory.newSchema(FileUtil.toFile(schemaFile));
 
         final Validator validator = schema.newValidator();
-        final JInferErrorHandler errorHandler = new JInferErrorHandler(xmlFile, 0);
+        final JInferErrorHandler errorHandler = new JInferErrorHandler(xmlFile);
         validator.setErrorHandler(errorHandler);
         final Source source = new StreamSource(FileUtil.toFile(xmlFile));
-
         validator.validate(source);
 
         return errorHandler.getResult();
       }
 
     } catch (IOException ex) {
-      //TODO sviro
-      Exceptions.printStackTrace(ex);
+      LOG.error(ex);
+      //throw new RuntimeException(ex);
     } catch (SAXException ex) {
-      final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
-      ioResult.getOut().println(ex);
-      IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
-      ioResult.getOut().close();
-      return false;
+      //do nothing, error hanlder catch all SAXException
     } catch (ParserConfigurationException ex) {
       //TODO sviro
       Exceptions.printStackTrace(ex);

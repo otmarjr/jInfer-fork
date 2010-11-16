@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -63,11 +62,11 @@ public class DTDProcessorTest {
           + "<!ELEMENT animal EMPTY>" + NL
           + "<!ELEMENT zoo (animal*) >" + NL;
   private static final String[] ZOO_RESULTS = {
-    "zoos: ELEMENT\n\u03BB",
-    "zoo: ELEMENT\n\u03BB",
-    "zoo: ELEMENT\n(animal: ELEMENT\n\u03BB)",
-    "zoo: ELEMENT\n(animal: ELEMENT\n\u03BB\n,animal: ELEMENT\n\u03BB\n,animal: ELEMENT\n\u03BB)",
-    "animal: ELEMENT\n\u03BB"};
+    "zoos: ELEMENT\n()",
+    "zoo: ELEMENT\n()",
+    "zoo: ELEMENT\n(animal: ELEMENT\n())",
+    "zoo: ELEMENT\n(animal: ELEMENT\n()\n,animal: ELEMENT\n()\n,animal: ELEMENT\n())",
+    "animal: ELEMENT\n()"};
 
   @Test
   public void testProcess() {
@@ -87,10 +86,10 @@ public class DTDProcessorTest {
           + "	clas (prima|sekunda) #IMPLIED>" + NL
           + "<!ELEMENT elements ((elem)*)>" + NL;
   private static final String[] ATTR_RESULTS = {
-    "elem: ELEMENT <name: ATTRIBUTE#null: ; clas: ATTRIBUTE#null: ; id: ATTRIBUTE#null: >\n\u03BB",
-    "elements: ELEMENT\n\u03BB",
-    "elements: ELEMENT\n(elem: ELEMENT\n\u03BB)",
-    "elements: ELEMENT\n(elem: ELEMENT\n\u03BB\n,elem: ELEMENT\n\u03BB\n,elem: ELEMENT\n\u03BB)"};
+    "elem: ELEMENT <name: ATTRIBUTE#null: ; clas: ATTRIBUTE#null: ; id: ATTRIBUTE#null: >\n()",
+    "elements: ELEMENT\n()",
+    "elements: ELEMENT\n(elem: ELEMENT\n())",
+    "elements: ELEMENT\n(elem: ELEMENT\n()\n,elem: ELEMENT\n()\n,elem: ELEMENT\n())"};
 
   @Test
   public void testProcessAttrs() {

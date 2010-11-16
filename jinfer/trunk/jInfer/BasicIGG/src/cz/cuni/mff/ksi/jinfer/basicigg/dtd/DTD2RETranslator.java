@@ -17,14 +17,19 @@
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.basicigg.expansion.ExpansionHelper;
 import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import org.xmlmiddleware.schemas.dtds.ElementType;
 import org.xmlmiddleware.schemas.dtds.Group;
@@ -57,17 +62,16 @@ public final class DTD2RETranslator {
   public static Regexp<AbstractStructuralNode> particle2Regexp(final Particle p,
           final boolean simpleData) {
     if (p == null) {
+      final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
+      ret.setInterval(RegexpInterval.getOnce());
+      ret.setType(RegexpType.CONCATENATION);
       if (simpleData) {
-        final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
-        ret.setInterval(RegexpInterval.getOnce());
-        ret.setType(RegexpType.CONCATENATION);
         final SimpleData sd = SimpleData.getMutable();
         sd.setImmutable();
         ret.addChild(Regexp.<AbstractStructuralNode>getToken(sd));
-        ret.setImmutable();
-        return ret;
       }
-      return Regexp.getLambda();
+      ret.setImmutable();
+      return ret;
     }
     final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
 
@@ -96,12 +100,14 @@ public final class DTD2RETranslator {
   }
 
   private static Element elementType2Element(final ElementType et) {
-    final Element ret = Element.getMutable();
-    ret.setName(et.name.getLocalName());
-    ret.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
-    ret.getMetadata().putAll(IGGUtils.METADATA_SENTINEL);
-    ret.getSubnodes().setType(RegexpType.LAMBDA);
-    ret.setImmutable();
+    final Map<String, Object> metadata = new HashMap<String, Object>();
+    metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
+    metadata.putAll(IGGUtils.METADATA_SENTINEL);
+    final Element ret = new Element(Collections.<String>emptyList(),
+            et.name.getLocalName(),
+            metadata,
+            ExpansionHelper.getEmptyConcat(),
+            Collections.<Attribute>emptyList());
     return ret;
   }
 

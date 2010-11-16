@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class ExpanderImpl implements Expander {
   }
 
   private static List<Element> expandElement(final Element e) {
-    if (isSimpleConcatenation(e.getSubnodes())) {
+    if (ExpansionHelper.isSimpleConcatenation(e.getSubnodes())) {
       return Arrays.asList(e);
     }
 
@@ -58,7 +59,7 @@ public class ExpanderImpl implements Expander {
     for (final List<AbstractStructuralNode> line : exploded) {
       final Regexp<AbstractStructuralNode> subnodes;
       if (BaseUtils.isEmpty(line)) {
-        subnodes = Regexp.getLambda();
+        subnodes = ExpansionHelper.getEmptyConcat();
       } else {
         final List<Regexp<AbstractStructuralNode>> regexpChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
         for (final AbstractStructuralNode n : line) {
@@ -80,13 +81,13 @@ public class ExpanderImpl implements Expander {
       case TOKEN:
         final List<List<AbstractStructuralNode>> tokenRet = new ArrayList<List<AbstractStructuralNode>>(1);
         tokenRet.add(Arrays.asList(r.getContent()));
-        return applyInterval(tokenRet, r.getInterval());
+        return ExpansionHelper.applyInterval(tokenRet, r.getInterval());
+      case CONCATENATION:
+        return ExpansionHelper.applyInterval(unpackConcat(r.getChildren()), r.getInterval());
+      case ALTERNATION:
+        return ExpansionHelper.applyInterval(unpackAlternation(r.getChildren()), r.getInterval());
       case PERMUTATION:
         throw new IllegalArgumentException("Sorry, there is not enough time till the end of the universe");
-      case CONCATENATION:
-        return applyInterval(unpackConcat(r.getChildren()), r.getInterval());
-      case ALTERNATION:
-        return applyInterval(unpackAlternation(r.getChildren()), r.getInterval());
     }
     throw new IllegalArgumentException("Unknown regexp type: " + r.getType());
   }
@@ -123,75 +124,5 @@ public class ExpanderImpl implements Expander {
       ret.addAll(unpackRE(child));
     }
     return ret;
-  }
-
-  private static List<List<AbstractStructuralNode>> applyInterval(
-          final List<List<AbstractStructuralNode>> input,
-          final RegexpInterval ri) {
-    final List<List<AbstractStructuralNode>> ret = new ArrayList<List<AbstractStructuralNode>>();
-
-    if (ri.isOnce()) {
-      return input;
-    } else if (ri.isOptional()) {
-      ret.add(Collections.<AbstractStructuralNode>emptyList());
-      ret.addAll(input);
-    } else if (ri.isKleeneCross()) {
-      for (final List<AbstractStructuralNode> l : input) {
-        ret.add(l);
-        ret.add(BaseUtils.cloneList(l, 3));
-      }
-    } else if (ri.isKleeneStar()) {
-      ret.add(Collections.<AbstractStructuralNode>emptyList());
-      for (final List<AbstractStructuralNode> l : input) {
-        ret.add(l);
-        ret.add(BaseUtils.cloneList(l, 3));
-      }
-    } else {
-      for (final List<AbstractStructuralNode> l : input) {
-        ret.add(BaseUtils.cloneList(l, ri.getMin()));
-        ret.add(BaseUtils.cloneList(l, ri.getMax()));
-      }
-    }
-
-    return ret;
-  }
-
-    // TODO vektor JUnit test!
-
-  /**
-   * Returns flag if the provided regexp is a simple concatenation.
-   * Regexp is a simple concatenation if all these conditions hold:
-   * <ul>
-   *  <li>Its type is {@see RegexpType#CONCATENATION}.</li>
-   *  <li>Its interval is "once" ({@see RegexpInterval#isOnce()}).</li>
-   *  <li>
-   *   For each of its children holds:
-   *    <ul>
-   *      <li>The child is {@see RegexpType#TOKEN}</li>
-   *      <li>The child's interval is "once" ({@see RegexpInterval#isOnce()}).</li>
-   *    </ul>
-   *  </li>
-   * </ul>
-   * 
-   * @param r Regexp to be examined.
-   * @return True if the regexp is a simple concatenation, false otherwise.
-   */
-  public static boolean isSimpleConcatenation(
-          final Regexp<AbstractStructuralNode> r) {
-    if (!r.isConcatenation()) {
-      return false;
-    }
-    if (!r.getInterval().isOnce()) {
-      return false;
-    }
-    for (final Regexp<AbstractStructuralNode> child : r.getChildren()) {
-      if (!child.isToken()) {
-        return false;
-      }
-      if (!child.getInterval().isOnce()) {
-        return false;
-      }
-    }
-    return true;
   }
 }

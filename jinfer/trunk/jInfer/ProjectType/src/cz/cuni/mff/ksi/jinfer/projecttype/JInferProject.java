@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.JInferCustomizerProvider;
 import java.io.IOException;
 import java.util.Properties;
+import org.apache.log4j.Logger;
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileObject;
@@ -35,6 +36,7 @@ public class JInferProject implements Project {
 
   public static final String OUTPUT_DIR = "output";
   public static final String JINFER_PROJECT_NAME_PROPERTY = "jInferProjectProperty";
+  private static final Logger LOG = Logger.getLogger(JInferProject.class);
 
   private final FileObject projectDir;
   private final ProjectState state;
@@ -81,12 +83,20 @@ public class JInferProject implements Project {
    */
   public FileObject getOutputFolder(final boolean create) {
     FileObject result = projectDir.getFileObject(OUTPUT_DIR);
+    if (result != null && result.isData()) {
+      try {
+        result.delete();
+      } catch (IOException ex) {
+        LOG.error("file " + result.getPath() + "cannot be deleted." , ex);
+        throw new RuntimeException(ex);
+      }
+      result = null;
+    }
     if (result == null && create) {
       try {
         result = projectDir.createFolder(OUTPUT_DIR);
       } catch (IOException ex) {
-        //TODO sviro
-        Exceptions.printStackTrace(ex);
+        LOG.error("Output folder cannot be created.", ex);
       }
     }
 
@@ -103,12 +113,11 @@ public class JInferProject implements Project {
       final FileObject fob = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
               + "/" + JInferProjectFactory.PROJECT_PROPFILE);
       properties = new NotifyProperties(state);
-      if (fob != null) {
+      if (fob != null && fob.isData()) {
         try {
           properties.load(fob.getInputStream());
-        } catch (Exception e) {
-          //TODO sviro
-          Exceptions.printStackTrace(e);
+        } catch (IOException ex) {
+          LOG.error(ex);
         }
       }
     }
@@ -126,13 +135,13 @@ public class JInferProject implements Project {
               + "/" + JInferProjectFactory.PROJECT_INPUTFILE);
 
       input = new Input(new InputFilesList(), new InputFilesList(), new InputFilesList());
-      if (inputFilesFileOb != null) {
+      if (inputFilesFileOb != null && inputFilesFileOb.isData()) {
         try {
           InputFiles.load(inputFilesFileOb.getInputStream(), input);
-        } catch (Exception e) {
-          //TODO sviro
-          Exceptions.printStackTrace(e);
+        } catch (IOException ex) {
+          LOG.error(ex);
         }
+
       }
     }
 

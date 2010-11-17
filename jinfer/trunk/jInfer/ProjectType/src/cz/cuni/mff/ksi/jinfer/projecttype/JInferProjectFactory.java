@@ -41,7 +41,8 @@ public class JInferProjectFactory implements ProjectFactory {
 
   @Override
   public boolean isProject(final FileObject projectDirectory) {
-    return projectDirectory.getFileObject(PROJECT_DIR) != null;
+    return projectDirectory.getFileObject(PROJECT_DIR) != null && projectDirectory.getFileObject(
+            PROJECT_DIR).isFolder();
   }
 
   @Override
@@ -61,6 +62,11 @@ public class JInferProjectFactory implements ProjectFactory {
 
     final String propertiesPath = PROJECT_DIR + "/" + PROJECT_PROPFILE;
     FileObject propertiesFile = projectRoot.getFileObject(propertiesPath);
+    if (propertiesFile != null && propertiesFile.isFolder()) {
+      propertiesFile.delete();
+      propertiesFile = null;
+    }
+
     if (propertiesFile == null) {
       propertiesFile = projectRoot.getFileObject(PROJECT_DIR).createData(PROJECT_PROPFILE);
     }
@@ -71,6 +77,11 @@ public class JInferProjectFactory implements ProjectFactory {
 
     final String inputFilesPath = PROJECT_DIR + "/" + PROJECT_INPUTFILE;
     FileObject inputFilesFile = projectRoot.getFileObject(inputFilesPath);
+    if (inputFilesFile != null && inputFilesFile.isFolder()) {
+      inputFilesFile.delete();
+      inputFilesFile = null;
+    }
+
     if (inputFilesFile == null) {
       inputFilesFile = projectRoot.getFileObject(PROJECT_DIR).createData(PROJECT_INPUTFILE);
     }

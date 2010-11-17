@@ -62,6 +62,13 @@ public final class ExpansionHelper {
   public static <T> List<List<T>> applyInterval(
           final List<List<T>> input,
           final RegexpInterval ri) {
+    if (ri == null) {
+      throw new IllegalArgumentException("Regexp interval must not be null.");
+    }
+    if (input == null) {
+      throw new IllegalArgumentException("Input list of words must not be null.");
+    }
+
     final List<List<T>> ret = new ArrayList<List<T>>();
 
     if (ri.isOnce()) {
@@ -134,8 +141,8 @@ public final class ExpansionHelper {
   /**
    * Returns an empty, immutable concatenation with interval "once".
    */
-  public static Regexp<AbstractStructuralNode> getEmptyConcat() {
-    final Regexp<AbstractStructuralNode> ret = Regexp.getMutable();
+  public static <T> Regexp<T> getEmptyConcat() {
+    final Regexp<T> ret = Regexp.getMutable();
     ret.setType(RegexpType.CONCATENATION);
     ret.setInterval(RegexpInterval.getOnce());
     ret.setImmutable();

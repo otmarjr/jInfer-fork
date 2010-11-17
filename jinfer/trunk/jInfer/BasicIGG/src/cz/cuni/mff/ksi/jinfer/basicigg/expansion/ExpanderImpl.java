@@ -39,6 +39,10 @@ public class ExpanderImpl implements Expander {
 
   @Override
   public List<Element> expand(final List<Element> grammar) {
+    if (grammar == null) {
+      throw new IllegalArgumentException("Grammar to expand must not be null.");
+    }
+    
     final List<Element> ret = new ArrayList<Element>();
 
     for (final Element e : grammar) {

@@ -106,7 +106,7 @@ public final class DTD2RETranslator {
     final Element ret = new Element(Collections.<String>emptyList(),
             et.name.getLocalName(),
             metadata,
-            ExpansionHelper.getEmptyConcat(),
+            ExpansionHelper.<AbstractStructuralNode>getEmptyConcat(),
             Collections.<Attribute>emptyList());
     return ret;
   }

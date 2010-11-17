@@ -35,15 +35,18 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * TODO sviro
  * @author sviro
  */
 public final class InputFiles {
+
+  private static final Logger LOG = Logger.getLogger(InputFiles.class);
 
   private InputFiles() {}
 
@@ -81,8 +84,7 @@ public final class InputFiles {
       marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
       marshaller.marshal(jinferInput, fileOutputStream);
     } catch (JAXBException ex) {
-      //TODO sviro
-      Exceptions.printStackTrace(ex);
+      LOG.error(ex);
     } finally {
       Thread.currentThread().setContextClassLoader(orig);
     }
@@ -91,8 +93,7 @@ public final class InputFiles {
       try {
         fileOutputStream.close();
       } catch (IOException ex) {
-        //TODO sviro
-        Exceptions.printStackTrace(ex);
+        LOG.error(ex);
       }
     }
 
@@ -158,8 +159,7 @@ public final class InputFiles {
               org.openide.util.NbBundle.getMessage(Input.class, "Input.fileBroken.message"),
               NotifyDescriptor.INFORMATION_MESSAGE));
     } catch (JAXBException ex) {
-      //TODO sviro
-      Exceptions.printStackTrace(ex);
+      LOG.error(ex);
     } finally {
       Thread.currentThread().setContextClassLoader(orig);
     }

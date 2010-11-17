@@ -138,7 +138,7 @@ public final class ValidateAction extends NodeAction {
           final String rootNode = doc.getDocumentElement().getNodeName();
           return new DoctypeImpl(rootNode, null, null, schema);
         } catch (ParserConfigurationException ex) {
-          //nothing to do
+          LOG.error(ex);
         } catch (SAXException ex) {
           //nothing to do
         } catch (IOException ex) {
@@ -194,8 +194,7 @@ public final class ValidateAction extends NodeAction {
     } catch (SAXException ex) {
       //do nothing, error hanlder catch all SAXException
     } catch (ParserConfigurationException ex) {
-      //TODO sviro
-      Exceptions.printStackTrace(ex);
+      LOG.error(ex);
     }
     return false;
   }

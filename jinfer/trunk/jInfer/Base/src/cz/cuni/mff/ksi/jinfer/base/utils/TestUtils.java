@@ -110,6 +110,24 @@ public final class TestUtils {
   }
 
   /**
+   * Returns an element with provided name. The element is otherwise
+   * empty: context and metadata are empty, the subnodes are
+   * {@see RegexpType#LAMBDA}.
+   * The element will be created as immutable.
+   *
+   * @param name Name for this element.
+   * @return Constructed element.
+   */
+  public static Element getElement(final String name) {
+    return new Element(
+            EMPTY_CONTEXT,
+            name,
+            EMPTY_METADATA,
+            Regexp.<AbstractStructuralNode>getLambda(),
+            Collections.<Attribute>emptyList());
+  }
+
+  /**
    * Returns an attribute with provided name. The attribute is otherwise empty:
    * context, metadata and content are empty, content type is null.
    *

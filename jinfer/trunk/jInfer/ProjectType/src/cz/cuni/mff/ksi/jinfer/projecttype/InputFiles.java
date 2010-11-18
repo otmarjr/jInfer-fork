@@ -41,7 +41,7 @@ import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
 
 /**
- * TODO sviro
+ * Class for storing and loading Input files into/from project folder.
  * @author sviro
  */
 public final class InputFiles {

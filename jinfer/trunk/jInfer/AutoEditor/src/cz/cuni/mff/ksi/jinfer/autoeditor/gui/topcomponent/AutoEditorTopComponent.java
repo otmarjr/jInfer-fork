@@ -79,7 +79,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     );
   }// </editor-fold>//GEN-END:initComponents
 
-  public <T> void drawAutomatonBasicVisualizationServer(final AbstractComponent component) {
+  public void drawAutomatonBasicVisualizationServer(final AbstractComponent component) {
     jPanel1.removeAll();
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.weightx = 1.0;

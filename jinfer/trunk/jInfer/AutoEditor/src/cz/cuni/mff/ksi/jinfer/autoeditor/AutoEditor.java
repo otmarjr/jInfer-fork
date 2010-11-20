@@ -62,13 +62,9 @@ import org.openide.windows.WindowManager;
  *   caller of AutoEditor. So the call of AutoEditor can be considered
  *   as synchronous.
  *
- * @param <T>
  * @author rio
  */
 public class AutoEditor {
-
-  private AutoEditor() {
-  }
 
   public static <T> void drawComponentAsync(final AbstractComponent component, final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
     GridBagConstraints constraints = new GridBagConstraints();

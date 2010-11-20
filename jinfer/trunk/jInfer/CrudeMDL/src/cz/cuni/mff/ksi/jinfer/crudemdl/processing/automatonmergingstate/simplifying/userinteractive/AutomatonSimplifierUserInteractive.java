@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplif
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
@@ -55,7 +55,7 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
       }));*/
 
       // vyhnanovska
-      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(new GridLayout<T>(inputAutomaton), new Transformer<Step<T>, String>() {
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutFactory.createVyhnanovskaGridLayout(inputAutomaton), new Transformer<Step<T>, String>() {
         @Override
         public String transform(Step<T> step) {
           return symbolToString.toString(step.getAcceptSymbol());

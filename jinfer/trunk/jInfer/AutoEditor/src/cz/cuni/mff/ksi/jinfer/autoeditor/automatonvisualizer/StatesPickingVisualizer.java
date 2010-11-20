@@ -18,12 +18,13 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.AbstractLayout;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
+import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import org.apache.commons.collections15.Transformer;
 
@@ -34,12 +35,14 @@ import org.apache.commons.collections15.Transformer;
  */
 public class StatesPickingVisualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
-  public StatesPickingVisualizer(final AbstractLayout<T> layout, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    super(layout.getLayout());
+  public StatesPickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer) {
+    super(layout);
     //setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
     getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
     getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer);
+
+    getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<State<T>, Step<T>>());
 
     final PluggableGraphMouse gm = new PluggableGraphMouse();
     for (final GraphMousePlugin plugin : AutoEditor.getDefaultGraphMousePlugins()) {

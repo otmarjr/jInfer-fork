@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
@@ -39,20 +38,14 @@ import org.openide.util.Exceptions;
 /**
  *
  * @author rio
- * TODO rio comment
  */
-public class GraphvizLayout<T> extends AbstractLayout<T> {
+public class LayoutFactory {
 
-  private final Automaton<T> automaton;
-  private final Transformer<Step<T>, String> edgeLabelTransformer;
-
-  public GraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    this.automaton = automaton;
-    this.edgeLabelTransformer = edgeLabelTransformer;
+  public static <T> Layout<State<T>, Step<T>> createVyhnanovskaGridLayout(final Automaton<T> automaton) {
+    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, AutoEditor.createGraph(automaton));
   }
 
-  @Override
-  public Layout<State<T>, Step<T>> getLayout() {
+  public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
     final Map<State<T>, Point2D> positions= new HashMap<State<T>, Point2D>();
 
     ProcessBuilder p = new ProcessBuilder(Arrays.asList(
@@ -98,5 +91,4 @@ public class GraphvizLayout<T> extends AbstractLayout<T> {
 
     return new StaticLayout<State<T>, Step<T>>(AutoEditor.createGraph(automaton), trans);
   }
-  
 }

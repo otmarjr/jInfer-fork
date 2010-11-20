@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.regexpi
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.GridLayout;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -45,7 +45,7 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
     //final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
     List<State<Regexp<T>>> removeLst;
     do {
-      final StatesPickingVisualizer<Regexp<T>> visualizer = new StatesPickingVisualizer<Regexp<T>>(new GridLayout(automaton), new Transformer<Step<Regexp<T>>, String>() {
+      final StatesPickingVisualizer<Regexp<T>> visualizer = new StatesPickingVisualizer<Regexp<T>>(LayoutFactory.createVyhnanovskaGridLayout(automaton), new Transformer<Step<Regexp<T>>, String>() {
 
         @Override
         public String transform(Step<Regexp<T>> step) {

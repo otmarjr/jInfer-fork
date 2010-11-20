@@ -17,9 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.AbstractLayout;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
@@ -35,8 +35,8 @@ public final class PluggableVisualizer<T> extends VisualizationViewer<State<T>, 
 
   private final PluggableGraphMouse pluggableGraphMouse;
 
-  public PluggableVisualizer(final AbstractLayout<T> layout) {
-    super(layout.getLayout());
+  public PluggableVisualizer(final Layout<State<T>, Step<T>> layout) {
+    super(layout);
     setVertexLabelTransformer(new ToStringLabeller<State<T>>());
     setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
     pluggableGraphMouse = new PluggableGraphMouse();

@@ -66,7 +66,7 @@ public class CloneHelper {
             cloneList(s.getContent()));
   }
 
-  private Element cloneElement(final Element e, final List<String> contextPrefix) {
+  public Element cloneElement(final Element e, final List<String> contextPrefix) {
     if (cloned.containsKey(e)) {
       return cloned.get(e);
     }

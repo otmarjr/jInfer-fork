@@ -76,8 +76,9 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
       visualizer.addGraphMousePlugin(new VerticesPickingGraphMousePlugin());
       */
 
-      final StatesPickingComponent panel = new StatesPickingComponent();
-      AutoEditor.drawComponentAndWaitForGUI(panel, visualizer);
+      final StatesPickingComponent<T> panel = new StatesPickingComponent<T>();
+      panel.setVisualizer(visualizer);
+      AutoEditor.drawComponentAndWaitForGUI(panel);
       mergeLst = panel.getPickedStates();
 
       if ((!BaseUtils.isEmpty(mergeLst)) && (mergeLst.size() >= 2)) {

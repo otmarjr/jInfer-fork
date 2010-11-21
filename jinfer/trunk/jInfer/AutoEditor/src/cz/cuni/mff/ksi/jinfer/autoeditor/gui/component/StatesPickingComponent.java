@@ -34,12 +34,12 @@ import javax.swing.JPanel;
  *
  * @author rio
  */
-public class StatesPickingComponent<T> extends AbstractComponent {
+public class StatesPickingComponent<T> extends AbstractComponent<T> {
 
     private boolean shallAskUser = true;
 
     public StatesPickingComponent() {
-        initComponents();
+      initComponents();
     }
 
     public boolean shallAskUser() {
@@ -145,7 +145,7 @@ public class StatesPickingComponent<T> extends AbstractComponent {
   }
 
   public List<State<T>> getPickedStates() {
-    final BasicVisualizationServer<State<T>, Step<T>> bvs = (BasicVisualizationServer<State<T>, Step<T>>)(getAutomatonDrawPanel().getComponent(0));
-    return new ArrayList(bvs.getPickedVertexState().getPicked());
+    final BasicVisualizationServer<State<T>, Step<T>> visualizer = getVisualizer();
+    return new ArrayList<State<T>>(visualizer.getPickedVertexState().getPicked());
   }
 }

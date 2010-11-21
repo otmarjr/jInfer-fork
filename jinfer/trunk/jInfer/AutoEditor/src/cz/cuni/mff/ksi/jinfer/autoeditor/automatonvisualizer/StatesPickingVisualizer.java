@@ -32,6 +32,8 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author rio
  * TODO rio comment
+ *
+ * TODO mozno vyrobit class Visualizer<T> ktora bude len VisualizationViewer<State<T>, Step<T>> a to iste s Layoutom - skusit
  */
 public class StatesPickingVisualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 

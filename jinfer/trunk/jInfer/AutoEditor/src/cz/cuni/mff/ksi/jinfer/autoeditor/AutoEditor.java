@@ -66,17 +66,15 @@ import org.openide.windows.WindowManager;
  */
 public class AutoEditor {
 
-  public static <T> void drawComponentAsync(final AbstractComponent component, final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.weightx = 1.0;
-    constraints.weighty = 1.0;
-    constraints.fill = GridBagConstraints.BOTH;
-    component.getAutomatonDrawPanel().add(visualizer, constraints);
+  public static <T> void drawComponentAsync(final AbstractComponent component) {
+    if (component.getVisualizer() == null) {
+      throw new IllegalStateException("Visualizer has not been set");
+    }
     drawInGUI(component);
   }
 
-  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component, final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
-    drawComponentAsync(component, visualizer);
+  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component) {
+    drawComponentAsync(component);
     try {
       component.waitForGUIDone();
     } catch (final InterruptedException e) {

@@ -91,26 +91,27 @@ public class CloneHelperTest {
   @Test
   public void testEqualBranch() {
     System.out.println("equal branch");
+    // test if one instance of an element in two regexps is cloned as the same instance
 
     final Element root = TestUtils.getElement("root", Regexp.<AbstractStructuralNode>getMutable());
+    final Element e0 = TestUtils.getElement("e0", Regexp.<AbstractStructuralNode>getMutable());
     final Element e1 = TestUtils.getElement("e1", Regexp.<AbstractStructuralNode>getMutable());
-    final Element e2 = TestUtils.getElement("e2", Regexp.<AbstractStructuralNode>getMutable());
     final Element same = TestUtils.getElement("same");
 
     root.getSubnodes().setType(RegexpType.CONCATENATION);
     root.getSubnodes().setInterval(RegexpInterval.getKleeneCross());
+    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e0));
     root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e1));
-    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e2));
     root.getSubnodes().setImmutable();
 
+    e0.getSubnodes().setType(RegexpType.CONCATENATION);
+    e0.getSubnodes().setInterval(RegexpInterval.getOptional());
+    e0.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(same));
+    e0.getSubnodes().setImmutable();
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
-    e1.getSubnodes().setInterval(RegexpInterval.getOptional());
+    e1.getSubnodes().setInterval(RegexpInterval.getKleeneStar());
     e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(same));
     e1.getSubnodes().setImmutable();
-    e2.getSubnodes().setType(RegexpType.CONCATENATION);
-    e2.getSubnodes().setInterval(RegexpInterval.getKleeneStar());
-    e2.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(same));
-    e2.getSubnodes().setImmutable();
 
     final String one = "one";
     final String two = "two";
@@ -122,8 +123,8 @@ public class CloneHelperTest {
     assertFalse("cloned element is immutable", cloned.isMutable());
     final List<AbstractStructuralNode> tokens = cloned.getSubnodes().getTokens();
     assertEquals("cloned element has 2 tokens", tokens.size(), 2);
-    assertTrue("cloned e1 is an element", tokens.get(0).isElement());
-    assertTrue("cloned e2 is an element", tokens.get(1).isElement());
+    assertTrue("cloned e0 is an element", tokens.get(0).isElement());
+    assertTrue("cloned e1 is an element", tokens.get(1).isElement());
 
     final Element ce0 = (Element) tokens.get(0);
     assertEquals("ce0 size has 1 token", ce0.getSubnodes().getTokens().size(), 1);
@@ -131,35 +132,52 @@ public class CloneHelperTest {
     final Element ce1 = (Element) tokens.get(1);
     assertEquals("ce1 size has 1 token", ce1.getSubnodes().getTokens().size(), 1);
     assertFalse("ce1 element is immutable", ce1.isMutable());
+
+    assertTrue("ce0/same is an Element", ce0.getSubnodes().getTokens().get(0).isElement());
+    assertTrue("ce1/same is an Element", ce1.getSubnodes().getTokens().get(0).isElement());
+    final Element ce0s = (Element) ce0.getSubnodes().getTokens().get(0);
+    final Element ce1s = (Element) ce1.getSubnodes().getTokens().get(0);
+    assertFalse("the same element is immutable", ce0s.isMutable());
+    assertTrue("ce0/same.name equals ce1/same.name", ce0s.getName().equals(ce1s.getName()));
     
-    assertEquals("b1/same == b2/same", ce0.getSubnodes().getTokens().get(0), ce1.getSubnodes().getTokens().get(0));
-    assertTrue("b1/same equals b2/same", ce0.getSubnodes().getTokens().get(0).equals(ce1.getSubnodes().getTokens().get(0)));
+    assertSame("ce0/same == ce1/same", ce0s, ce1s);
+    
+    //elements must pass any implementation of equals, because it's the same instance
+    assertEquals("ce0/same equals ce1/same", ce0s, ce1s);
+
+    // test prefix (there is no real context, but prefix should be there)
+    assertTrue(prefix.equals(cloned.getContext()));
+    assertTrue(prefix.equals(ce0.getContext()));
+    assertTrue(prefix.equals(ce1.getContext()));
+    assertTrue(prefix.equals(ce0s.getContext()));
+    assertTrue(prefix.equals(ce1s.getContext()));
   }
 
   @Test
   public void testNonequalBranch() {
     System.out.println("Nonequal branch");
+    // test if two elements with same names, but distinct instances are cloned as two instances
 
     final Element root = TestUtils.getElement("root", Regexp.<AbstractStructuralNode>getMutable());
+    final Element e0 = TestUtils.getElement("e0", Regexp.<AbstractStructuralNode>getMutable());
     final Element e1 = TestUtils.getElement("e1", Regexp.<AbstractStructuralNode>getMutable());
-    final Element e2 = TestUtils.getElement("e2", Regexp.<AbstractStructuralNode>getMutable());
+    final Element s0 = TestUtils.getElement("same");
     final Element s1 = TestUtils.getElement("same");
-    final Element s2 = TestUtils.getElement("same");
 
     root.getSubnodes().setType(RegexpType.CONCATENATION);
     root.getSubnodes().setInterval(RegexpInterval.getKleeneCross());
+    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e0));
     root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e1));
-    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e2));
     root.getSubnodes().setImmutable();
 
+    e0.getSubnodes().setType(RegexpType.CONCATENATION);
+    e0.getSubnodes().setInterval(RegexpInterval.getOptional());
+    e0.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(s0));
+    e0.getSubnodes().setImmutable();
     e1.getSubnodes().setType(RegexpType.CONCATENATION);
-    e1.getSubnodes().setInterval(RegexpInterval.getOptional());
+    e1.getSubnodes().setInterval(RegexpInterval.getKleeneStar());
     e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(s1));
     e1.getSubnodes().setImmutable();
-    e2.getSubnodes().setType(RegexpType.CONCATENATION);
-    e2.getSubnodes().setInterval(RegexpInterval.getKleeneStar());
-    e2.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(s2));
-    e2.getSubnodes().setImmutable();
 
     final String one = "one";
     final String two = "two";
@@ -171,8 +189,8 @@ public class CloneHelperTest {
     assertFalse("cloned element is immutable", cloned.isMutable());
     final List<AbstractStructuralNode> tokens = cloned.getSubnodes().getTokens();
     assertEquals("cloned element has 2 tokens", tokens.size(), 2);
-    assertTrue("cloned e1 is an element", tokens.get(0).isElement());
-    assertTrue("cloned e2 is an element", tokens.get(1).isElement());
+    assertTrue("cloned e0 is an element", tokens.get(0).isElement());
+    assertTrue("cloned e1 is an element", tokens.get(1).isElement());
 
     final Element ce0 = (Element) tokens.get(0);
     assertEquals("ce0 size has 1 token", ce0.getSubnodes().getTokens().size(), 1);
@@ -181,8 +199,22 @@ public class CloneHelperTest {
     assertEquals("ce1 size has 1 token", ce1.getSubnodes().getTokens().size(), 1);
     assertFalse("ce1 element is immutable", ce1.isMutable());
 
-    assertNotSame("b1/same == b2/same", ce0.getSubnodes().getTokens().get(0), ce1.getSubnodes().getTokens().get(0));
-    assertFalse("b1/same equals b2/same", ce0.getSubnodes().getTokens().get(0).equals(ce1.getSubnodes().getTokens().get(0)));
+    assertTrue("ce0/same is an Element", ce0.getSubnodes().getTokens().get(0).isElement());
+    assertTrue("ce1/same is an Element", ce1.getSubnodes().getTokens().get(0).isElement());
+    final Element ce0s = (Element) ce0.getSubnodes().getTokens().get(0);
+    final Element ce1s = (Element) ce1.getSubnodes().getTokens().get(0);
+    assertFalse("s0 element is immutable", ce0s.isMutable());
+    assertFalse("s1 same element is immutable", ce1s.isMutable());
+    assertTrue("ce0/same.name equals ce1/same.name", ce0s.getName().equals(ce1s.getName()));
+
+    assertNotSame("ce0/same != ce1/same", ce0s, ce1s);
+
+    // test prefix (there is no real context, but prefix should be there)
+    assertTrue(prefix.equals(cloned.getContext()));
+    assertTrue(prefix.equals(ce0.getContext()));
+    assertTrue(prefix.equals(ce1.getContext()));
+    assertTrue(prefix.equals(ce0s.getContext()));
+    assertTrue(prefix.equals(ce1s.getContext()));
   }
 
   @Test

@@ -89,6 +89,103 @@ public class CloneHelperTest {
   }
 
   @Test
+  public void testEqualBranch() {
+    System.out.println("equal branch");
+
+    final Element root = TestUtils.getElement("root", Regexp.<AbstractStructuralNode>getMutable());
+    final Element e1 = TestUtils.getElement("e1", Regexp.<AbstractStructuralNode>getMutable());
+    final Element e2 = TestUtils.getElement("e2", Regexp.<AbstractStructuralNode>getMutable());
+    final Element same = TestUtils.getElement("same");
+
+    root.getSubnodes().setType(RegexpType.CONCATENATION);
+    root.getSubnodes().setInterval(RegexpInterval.getKleeneCross());
+    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e1));
+    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e2));
+    root.getSubnodes().setImmutable();
+
+    e1.getSubnodes().setType(RegexpType.CONCATENATION);
+    e1.getSubnodes().setInterval(RegexpInterval.getOptional());
+    e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(same));
+    e1.getSubnodes().setImmutable();
+    e2.getSubnodes().setType(RegexpType.CONCATENATION);
+    e2.getSubnodes().setInterval(RegexpInterval.getKleeneStar());
+    e2.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(same));
+    e2.getSubnodes().setImmutable();
+
+    final String one = "one";
+    final String two = "two";
+    final List<String> prefix = new ArrayList<String>();
+    prefix.add(one);
+    prefix.add(two);
+    final Element cloned = new CloneHelper().cloneElement(root, prefix);
+    assertTrue("cloned element is an Element", cloned.isElement());
+    assertFalse("cloned element is immutable", cloned.isMutable());
+    final List<AbstractStructuralNode> tokens = cloned.getSubnodes().getTokens();
+    assertEquals("cloned element has 2 tokens", tokens.size(), 2);
+    assertTrue("cloned e1 is an element", tokens.get(0).isElement());
+    assertTrue("cloned e2 is an element", tokens.get(1).isElement());
+
+    final Element ce0 = (Element) tokens.get(0);
+    assertEquals("ce0 size has 1 token", ce0.getSubnodes().getTokens().size(), 1);
+    assertFalse("ce0 element is immutable", ce0.isMutable());
+    final Element ce1 = (Element) tokens.get(1);
+    assertEquals("ce1 size has 1 token", ce1.getSubnodes().getTokens().size(), 1);
+    assertFalse("ce1 element is immutable", ce1.isMutable());
+    
+    assertEquals("b1/same == b2/same", ce0.getSubnodes().getTokens().get(0), ce1.getSubnodes().getTokens().get(0));
+    assertTrue("b1/same equals b2/same", ce0.getSubnodes().getTokens().get(0).equals(ce1.getSubnodes().getTokens().get(0)));
+  }
+
+  @Test
+  public void testNonequalBranch() {
+    System.out.println("Nonequal branch");
+
+    final Element root = TestUtils.getElement("root", Regexp.<AbstractStructuralNode>getMutable());
+    final Element e1 = TestUtils.getElement("e1", Regexp.<AbstractStructuralNode>getMutable());
+    final Element e2 = TestUtils.getElement("e2", Regexp.<AbstractStructuralNode>getMutable());
+    final Element s1 = TestUtils.getElement("same");
+    final Element s2 = TestUtils.getElement("same");
+
+    root.getSubnodes().setType(RegexpType.CONCATENATION);
+    root.getSubnodes().setInterval(RegexpInterval.getKleeneCross());
+    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e1));
+    root.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e2));
+    root.getSubnodes().setImmutable();
+
+    e1.getSubnodes().setType(RegexpType.CONCATENATION);
+    e1.getSubnodes().setInterval(RegexpInterval.getOptional());
+    e1.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(s1));
+    e1.getSubnodes().setImmutable();
+    e2.getSubnodes().setType(RegexpType.CONCATENATION);
+    e2.getSubnodes().setInterval(RegexpInterval.getKleeneStar());
+    e2.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(s2));
+    e2.getSubnodes().setImmutable();
+
+    final String one = "one";
+    final String two = "two";
+    final List<String> prefix = new ArrayList<String>();
+    prefix.add(one);
+    prefix.add(two);
+    final Element cloned = new CloneHelper().cloneElement(root, prefix);
+    assertTrue("cloned element is an Element", cloned.isElement());
+    assertFalse("cloned element is immutable", cloned.isMutable());
+    final List<AbstractStructuralNode> tokens = cloned.getSubnodes().getTokens();
+    assertEquals("cloned element has 2 tokens", tokens.size(), 2);
+    assertTrue("cloned e1 is an element", tokens.get(0).isElement());
+    assertTrue("cloned e2 is an element", tokens.get(1).isElement());
+
+    final Element ce0 = (Element) tokens.get(0);
+    assertEquals("ce0 size has 1 token", ce0.getSubnodes().getTokens().size(), 1);
+    assertFalse("ce0 element is immutable", ce0.isMutable());
+    final Element ce1 = (Element) tokens.get(1);
+    assertEquals("ce1 size has 1 token", ce1.getSubnodes().getTokens().size(), 1);
+    assertFalse("ce1 element is immutable", ce1.isMutable());
+
+    assertNotSame("b1/same == b2/same", ce0.getSubnodes().getTokens().get(0), ce1.getSubnodes().getTokens().get(0));
+    assertFalse("b1/same equals b2/same", ce0.getSubnodes().getTokens().get(0).equals(ce1.getSubnodes().getTokens().get(0)));
+  }
+
+  @Test
   public void testCycle() {
     System.out.println("cycle");
 

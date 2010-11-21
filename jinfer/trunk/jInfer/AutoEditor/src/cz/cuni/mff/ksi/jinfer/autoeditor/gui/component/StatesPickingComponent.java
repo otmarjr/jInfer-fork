@@ -23,9 +23,8 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.Visualizer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -145,7 +144,7 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
   }
 
   public List<State<T>> getPickedStates() {
-    final BasicVisualizationServer<State<T>, Step<T>> visualizer = getVisualizer();
+    final Visualizer<T> visualizer = getVisualizer();
     return new ArrayList<State<T>>(visualizer.getPickedVertexState().getPicked());
   }
 }

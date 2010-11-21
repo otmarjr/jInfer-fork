@@ -17,6 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import java.awt.GridBagConstraints;
 import javax.swing.JPanel;
 
 /**
@@ -24,15 +28,32 @@ import javax.swing.JPanel;
  * @author rio
  * TODO rio comment
  */
-public abstract class AbstractComponent extends JPanel {
+public abstract class AbstractComponent<T> extends JPanel {
 
   private final Object monitor;
+  private BasicVisualizationServer<State<T>, Step<T>> visualizer = null;
 
   protected AbstractComponent() {
     monitor = new Object();
   }
 
-  abstract public JPanel getAutomatonDrawPanel();
+  abstract protected JPanel getAutomatonDrawPanel();
+
+  public void setVisualizer(final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
+    this.visualizer = visualizer;
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.weightx = 1.0;
+    constraints.weighty = 1.0;
+    constraints.fill = GridBagConstraints.BOTH;
+    final JPanel panel = getAutomatonDrawPanel();
+    panel.removeAll();
+    panel.add(visualizer, constraints);
+  }
+
+  public BasicVisualizationServer<State<T>, Step<T>> getVisualizer() {
+    return visualizer;
+  }
 
   public void waitForGUIDone() throws InterruptedException {
     synchronized (monitor) {

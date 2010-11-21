@@ -52,8 +52,9 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
           return symbolToString.toString(step.getAcceptSymbol());
         }
       });
-      final StatesPickingComponent component = new StatesPickingComponent();
-      AutoEditor.drawComponentAndWaitForGUI(component, visualizer);
+      final StatesPickingComponent<Regexp<T>> component = new StatesPickingComponent<Regexp<T>>();
+      component.setVisualizer(visualizer);
+      AutoEditor.drawComponentAndWaitForGUI(component);
       removeLst = component.getPickedStates();
 
       if (removeLst == null) {

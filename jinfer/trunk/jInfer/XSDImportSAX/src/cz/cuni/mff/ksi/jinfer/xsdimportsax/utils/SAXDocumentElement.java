@@ -64,7 +64,13 @@ public class SAXDocumentElement {
   }
 
   public String attributeNameValue() {
-    return attrs.get("name").getValue();
+    if (attrs.containsKey("name")) {
+      return attrs.get("name").getValue();
+    } else if (attrs.containsKey("ref")) {
+      return attrs.get("ref").getValue();
+    } else {
+      return null;
+    }
   }
 
   public boolean isNamedComplexType() {
@@ -92,5 +98,9 @@ public class SAXDocumentElement {
 
   public boolean isAssociated() {
     return associated;
+  }
+
+  public boolean isSchema() {
+    return (trimmedQName.equalsIgnoreCase("schema")) ? true : false;
   }
 }

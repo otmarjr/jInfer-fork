@@ -35,7 +35,7 @@ import org.apache.commons.collections15.Transformer;
  *
  * TODO mozno vyrobit class Visualizer<T> ktora bude len VisualizationViewer<State<T>, Step<T>> a to iste s Layoutom - skusit
  */
-public class StatesPickingVisualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
+public class StatesPickingVisualizer<T> extends Visualizer<T> {
 
   public StatesPickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer) {
     super(layout);

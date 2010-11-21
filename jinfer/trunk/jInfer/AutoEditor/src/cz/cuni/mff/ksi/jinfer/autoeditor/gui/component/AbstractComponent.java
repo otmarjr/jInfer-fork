@@ -17,9 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.visualization.BasicVisualizationServer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.Visualizer;
 import java.awt.GridBagConstraints;
 import javax.swing.JPanel;
 
@@ -31,7 +29,7 @@ import javax.swing.JPanel;
 public abstract class AbstractComponent<T> extends JPanel {
 
   private final Object monitor;
-  private BasicVisualizationServer<State<T>, Step<T>> visualizer = null;
+  private Visualizer<T> visualizer = null;
 
   protected AbstractComponent() {
     monitor = new Object();
@@ -39,7 +37,7 @@ public abstract class AbstractComponent<T> extends JPanel {
 
   abstract protected JPanel getAutomatonDrawPanel();
 
-  public void setVisualizer(final BasicVisualizationServer<State<T>, Step<T>> visualizer) {
+  public void setVisualizer(final Visualizer<T> visualizer) {
     this.visualizer = visualizer;
 
     GridBagConstraints constraints = new GridBagConstraints();
@@ -51,7 +49,7 @@ public abstract class AbstractComponent<T> extends JPanel {
     panel.add(visualizer, constraints);
   }
 
-  public BasicVisualizationServer<State<T>, Step<T>> getVisualizer() {
+  public Visualizer<T> getVisualizer() {
     return visualizer;
   }
 

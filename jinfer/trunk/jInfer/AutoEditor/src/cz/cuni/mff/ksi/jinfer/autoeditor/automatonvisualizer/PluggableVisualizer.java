@@ -20,7 +20,6 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
@@ -31,7 +30,7 @@ import org.apache.commons.collections15.Transformer;
  * @author rio
  * TODO rio comment
  */
-public final class PluggableVisualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
+public final class PluggableVisualizer<T> extends Visualizer<T> {
 
   private final PluggableGraphMouse pluggableGraphMouse;
 

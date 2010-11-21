@@ -20,13 +20,15 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.awt.GridBagConstraints;
-import java.util.logging.Logger;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.filesystems.FileChooserBuilder;
+import org.openide.windows.WindowManager;
 
 /**
  * TODO rio Comment!
@@ -41,12 +43,12 @@ public final class AutoEditorTopComponent extends TopComponent {
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
   private static final String PREFERRED_ID = "AutoEditorTopComponent";
   private static final long serialVersionUID = 87543L;
-
   /**
    * Instance of AutoEditor which AutoEditor thread sleeps on.
    * When user interaction is done we should call notify() on this variable.
    */
   private AutoEditor autoEditorInstance = null;
+  private AbstractComponent component;
 
   public AutoEditorTopComponent() {
     initComponents();
@@ -64,36 +66,70 @@ public final class AutoEditorTopComponent extends TopComponent {
   private void initComponents() {
 
     jPanel1 = new javax.swing.JPanel();
+    jButton1 = new javax.swing.JButton();
 
     jPanel1.setLayout(new java.awt.GridBagLayout());
+
+    org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(AutoEditorTopComponent.class, "AutoEditorTopComponent.jButton1.text")); // NOI18N
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1ActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jButton1)
+        .addContainerGap(354, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+      .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jButton1)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
     );
   }// </editor-fold>//GEN-END:initComponents
 
+  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    try {
+      final FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(AutoEditorTopComponent.class);
+      fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("JPEG files", "jpg"));
+
+      // TODO rio spolahlivejsie handlovanie vynimiek
+      component.getVisualizer().saveJpg(fileChooserBuilder.showSaveDialog());
+    } catch (Exception e) {
+      NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message("Image file cannot be saved:\n" + e.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
+      DialogDisplayer.getDefault().notify(notifyDescriptor);
+    }
+  }//GEN-LAST:event_jButton1ActionPerformed
+
   public void drawAutomatonBasicVisualizationServer(final AbstractComponent component) {
-    jPanel1.removeAll();
+    this.component = component;
+
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.weightx = 1.0;
     constraints.weighty = 1.0;
     constraints.fill = GridBagConstraints.BOTH;
+    jPanel1.removeAll();
     jPanel1.add(component, constraints);
     jPanel1.validate();
+
     this.open();
     this.requestActive();
-  }
+ }
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton jButton1;
   private javax.swing.JPanel jPanel1;
   // End of variables declaration//GEN-END:variables
+
   /**
    * Gets default instance. Do not use directly: reserved for *.settings files only,
    * i.e. deserialization routines; otherwise you could get a non-deserialized instance.
@@ -112,14 +148,14 @@ public final class AutoEditorTopComponent extends TopComponent {
   public static synchronized AutoEditorTopComponent findInstance() {
     TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
-      Logger.getLogger(AutoEditorTopComponent.class.getName()).warning(
+      Logger.getLogger(AutoEditorTopComponent.class.getName()).warn(
               "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
       return getDefault();
     }
     if (win instanceof AutoEditorTopComponent) {
       return (AutoEditorTopComponent) win;
     }
-    Logger.getLogger(AutoEditorTopComponent.class.getName()).warning(
+    Logger.getLogger(AutoEditorTopComponent.class.getName()).warn(
             "There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();

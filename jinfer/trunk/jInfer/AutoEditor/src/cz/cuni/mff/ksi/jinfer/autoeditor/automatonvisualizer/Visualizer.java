@@ -26,6 +26,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import javax.imageio.ImageIO;
 
 /**
@@ -34,12 +36,21 @@ import javax.imageio.ImageIO;
  */
 public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
+  final Set<String> supportedImageFormatNames;
+
   public Visualizer(final Layout<State<T>, Step<T>> layout) {
     super(layout);
+    supportedImageFormatNames = new HashSet<String>();
+    for (final String imageFormatName : ImageIO.getWriterFormatNames()) {
+      supportedImageFormatNames.add(imageFormatName);
+    }
   }
 
-  // TODO rio verify format is supported
   public void saveImage(final File file, final String formatName) throws IOException {
+    if (!supportedImageFormatNames.contains(formatName)) {
+      throw new IllegalArgumentException("Image format '" + formatName + "' is not suported");
+    }
+
     boolean isDoubleBuffered = isDoubleBuffered();
     setDoubleBuffered(false);
 
@@ -51,14 +62,6 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
     setDoubleBuffered(isDoubleBuffered);
 
     ImageIO.write(bi, formatName, file);
-  }
-
-  public void saveJPEG(final File file) throws IOException {
-    saveImage(file, "jpg");
-  }
-
-  public void savePNG(final File file) throws IOException {
-    saveImage(file, "png");
   }
 
 }

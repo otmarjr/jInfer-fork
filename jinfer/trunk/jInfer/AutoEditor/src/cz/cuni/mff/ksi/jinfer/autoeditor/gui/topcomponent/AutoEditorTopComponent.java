@@ -20,6 +20,8 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.awt.GridBagConstraints;
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
@@ -27,7 +29,6 @@ import org.openide.windows.TopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.filesystems.FileChooserBuilder;
 import org.openide.windows.WindowManager;
 
 /**
@@ -67,6 +68,7 @@ public final class AutoEditorTopComponent extends TopComponent {
 
     jPanel1 = new javax.swing.JPanel();
     jButton1 = new javax.swing.JButton();
+    jSeparator2 = new javax.swing.JSeparator();
 
     jPanel1.setLayout(new java.awt.GridBagLayout());
 
@@ -81,29 +83,44 @@ public final class AutoEditorTopComponent extends TopComponent {
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(jButton1)
         .addContainerGap(354, Short.MAX_VALUE))
+      .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(jButton1)
+        .addGap(2, 2, 2)
+        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE))
     );
   }// </editor-fold>//GEN-END:initComponents
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     try {
-      final FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(AutoEditorTopComponent.class);
+      /*final FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(AutoEditorTopComponent.class);
       fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("JPEG files", "jpg"));
 
       // TODO rio spolahlivejsie handlovanie vynimiek
-      component.getVisualizer().saveJpg(fileChooserBuilder.showSaveDialog());
+      component.getVisualizer().saveJPEG(fileChooserBuilder.showSaveDialog());*/
+      final JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setAcceptAllFileFilterUsed(false);
+      fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG Image", "jpg"));
+      fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
+      if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+        final File file = fileChooser.getSelectedFile();
+        final String fileName = file.getPath();
+        final FileNameExtensionFilter fileFilter = (FileNameExtensionFilter)fileChooser.getFileFilter();
+        final String extension = fileFilter.getExtensions()[0];
+        component.getVisualizer().saveImage(new File(fileName + '.' + extension), extension);
+      }
+
     } catch (Exception e) {
       NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message("Image file cannot be saved:\n" + e.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
       DialogDisplayer.getDefault().notify(notifyDescriptor);
@@ -128,6 +145,7 @@ public final class AutoEditorTopComponent extends TopComponent {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JSeparator jSeparator2;
   // End of variables declaration//GEN-END:variables
 
   /**

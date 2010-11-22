@@ -38,7 +38,8 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
     super(layout);
   }
 
-  public void saveJpg(final File file) throws IOException {
+  // TODO rio verify format is supported
+  public void saveImage(final File file, final String formatName) throws IOException {
     boolean isDoubleBuffered = isDoubleBuffered();
     setDoubleBuffered(false);
 
@@ -49,7 +50,15 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
     setDoubleBuffered(isDoubleBuffered);
 
-    ImageIO.write(bi, "jpeg", file);
+    ImageIO.write(bi, formatName, file);
+  }
+
+  public void saveJPEG(final File file) throws IOException {
+    saveImage(file, "jpg");
+  }
+
+  public void savePNG(final File file) throws IOException {
+    saveImage(file, "png");
   }
 
 }

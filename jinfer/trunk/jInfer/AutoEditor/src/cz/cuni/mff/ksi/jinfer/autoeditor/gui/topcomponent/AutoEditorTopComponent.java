@@ -49,12 +49,44 @@ public final class AutoEditorTopComponent extends TopComponent {
   private static final long serialVersionUID = 87543L;
 
   private AbstractComponent component;
+  private final JFileChooser fileChooser;
 
   public AutoEditorTopComponent() {
     initComponents();
     setName(NbBundle.getMessage(AutoEditorTopComponent.class, "CTL_AutoEditorTopComponent"));
     setToolTipText(NbBundle.getMessage(AutoEditorTopComponent.class, "HINT_AutoEditorTopComponent"));
 //        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+    
+    // Initialize FileChooser.
+    // Get all supported image format names.
+    String[] supportedFormatNames = ImageIO.getWriterFormatNames();
+    /* Format names can contain duplicites like "jpg", "JPG", "JPEG".
+     * Remove them and for each unique format name create an appropriate
+     * FileNameExtensionFilter.
+     */
+    // TODO rio set other properties of FileChooser
+    fileChooser = new JFileChooser();
+    Map<String, FileNameExtensionFilter> supportedFormatNameSet = new HashMap<String, FileNameExtensionFilter>();
+    for (String format : supportedFormatNames) {
+      format = format.toLowerCase();
+      if (format.equals("jpg")) {
+        format = "jpeg";
+      }
+      if (!supportedFormatNameSet.containsKey(format)) {
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(format.toUpperCase() + " Image", format);
+        supportedFormatNameSet.put(format, filter);
+        fileChooser.addChoosableFileFilter(filter);
+      }
+    }
+
+    // Remove default filter which shows all files.
+    fileChooser.setAcceptAllFileFilterUsed(false);
+
+    // If PNG image is supported, make it default in a save dialog.
+    if (supportedFormatNameSet.containsKey("png")) {
+      fileChooser.setFileFilter(supportedFormatNameSet.get("png"));
+    }
+
   }
 
   /** This method is called from within the constructor to
@@ -83,53 +115,25 @@ public final class AutoEditorTopComponent extends TopComponent {
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
         .addComponent(jButton1)
-        .addContainerGap(354, Short.MAX_VALUE))
-      .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
+        .addContainerGap())
+      .addGroup(layout.createSequentialGroup()
+        .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+        .addContainerGap())
       .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
         .addComponent(jButton1)
         .addGap(2, 2, 2)
         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE))
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE))
     );
   }// </editor-fold>//GEN-END:initComponents
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    // Get all supported image format names.
-    String[] supportedFormatNames = ImageIO.getWriterFormatNames();
-    /* Format names can contain duplicites like "jpg", "JPG", "JPEG".
-     * Remove them and for each unique format name create an appropriate
-     * FileNameExtensionFilter.
-     */
-    final JFileChooser fileChooser = new JFileChooser();
-    Map<String, FileNameExtensionFilter> supportedFormatNameSet = new HashMap<String, FileNameExtensionFilter>();
-    for (String format : supportedFormatNames) {
-      format = format.toLowerCase();
-      if (format.equals("jpg")) {
-        format = "jpeg";
-      }
-      if (!supportedFormatNameSet.containsKey(format)) {
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(format.toUpperCase() + " Image", format);
-        supportedFormatNameSet.put(format, filter);
-        fileChooser.addChoosableFileFilter(filter);
-      }
-    }
-
-    // Remove default filter which shows all files.
-    fileChooser.setAcceptAllFileFilterUsed(false);
-
-    // If PNG image is supported, make it default in a save dialog.
-    if (supportedFormatNameSet.containsKey("png")) {
-      fileChooser.setFileFilter(supportedFormatNameSet.get("png"));
-    }
-
     /* Show the save dialog and get a selected file if user approved it.
      * Get selected extension filter, append appropriate extension to the
      * selected file, and save visualizer to it.

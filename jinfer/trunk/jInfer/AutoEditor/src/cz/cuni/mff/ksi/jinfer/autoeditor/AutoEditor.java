@@ -71,13 +71,19 @@ public class AutoEditor {
     drawInGUI(component);
   }
 
-  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component) {
+  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component) throws InterruptedException {
     drawComponentAsync(component);
     try {
       component.waitForGUIDone();
     } catch (final InterruptedException e) {
+      // TODO rio what should we do with this exception?
       return false;
     }
+
+    if (component.GUIInterrupted()) {
+      throw new InterruptedException();
+    }
+
     return true;
   }
 

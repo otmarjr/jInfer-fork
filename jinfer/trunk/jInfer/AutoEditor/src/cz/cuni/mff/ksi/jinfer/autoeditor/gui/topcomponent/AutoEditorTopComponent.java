@@ -17,10 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
-import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.awt.GridBagConstraints;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.log4j.Logger;
@@ -44,11 +47,7 @@ public final class AutoEditorTopComponent extends TopComponent {
 //    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
   private static final String PREFERRED_ID = "AutoEditorTopComponent";
   private static final long serialVersionUID = 87543L;
-  /**
-   * Instance of AutoEditor which AutoEditor thread sleeps on.
-   * When user interaction is done we should call notify() on this variable.
-   */
-  private AutoEditor autoEditorInstance = null;
+
   private AbstractComponent component;
 
   public AutoEditorTopComponent() {
@@ -103,27 +102,66 @@ public final class AutoEditorTopComponent extends TopComponent {
   }// </editor-fold>//GEN-END:initComponents
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    try {
-      /*final FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(AutoEditorTopComponent.class);
-      fileChooserBuilder.addFileFilter(new FileNameExtensionFilter("JPEG files", "jpg"));
+    // Get all supported image format names.
+    String[] supportedFormatNames = ImageIO.getWriterFormatNames();
+    /* Format names can contain duplicites like "jpg", "JPG", "JPEG".
+     * Remove them and for each unique format name create an appropriate
+     * FileNameExtensionFilter.
+     */
+    final JFileChooser fileChooser = new JFileChooser();
+    Map<String, FileNameExtensionFilter> supportedFormatNameSet = new HashMap<String, FileNameExtensionFilter>();
+    for (String format : supportedFormatNames) {
+      format = format.toLowerCase();
+      if (format.equals("jpg")) {
+        format = "jpeg";
+      }
+      if (!supportedFormatNameSet.containsKey(format)) {
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(format.toUpperCase() + " Image", format);
+        supportedFormatNameSet.put(format, filter);
+        fileChooser.addChoosableFileFilter(filter);
+      }
+    }
 
-      // TODO rio spolahlivejsie handlovanie vynimiek
-      component.getVisualizer().saveJPEG(fileChooserBuilder.showSaveDialog());*/
-      final JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setAcceptAllFileFilterUsed(false);
-      fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG Image", "jpg"));
-      fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
-      if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-        final File file = fileChooser.getSelectedFile();
-        final String fileName = file.getPath();
-        final FileNameExtensionFilter fileFilter = (FileNameExtensionFilter)fileChooser.getFileFilter();
-        final String extension = fileFilter.getExtensions()[0];
-        component.getVisualizer().saveImage(new File(fileName + '.' + extension), extension);
+    // Remove default filter which shows all files.
+    fileChooser.setAcceptAllFileFilterUsed(false);
+
+    // If PNG image is supported, make it default in a save dialog.
+    if (supportedFormatNameSet.containsKey("png")) {
+      fileChooser.setFileFilter(supportedFormatNameSet.get("png"));
+    }
+
+    /* Show the save dialog and get a selected file if user approved it.
+     * Get selected extension filter, append appropriate extension to the
+     * selected file, and save visualizer to it.
+     */
+    if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+      final File file = fileChooser.getSelectedFile();
+      String fileName = file.getPath();
+      final FileNameExtensionFilter fileFilter = (FileNameExtensionFilter)fileChooser.getFileFilter();
+      final String extension = fileFilter.getExtensions()[0];
+
+      final int fileNameLastDotIndex = fileName.lastIndexOf('.');
+      if (fileNameLastDotIndex == -1) {
+        // Extension is not present, append it.
+        fileName = fileName + '.' + extension;
+      } else if (fileNameLastDotIndex == fileName.length() - 1) {
+        // File name ends with '.', append extension.
+        fileName += extension;
+      } else if (!fileName.substring(fileNameLastDotIndex + 1).equals(extension)) {
+        // File has another extenstion, keep it and append the appropriate one.
+        fileName += extension;
+      }
+      // If file name is just the extension, prefix it with default name.
+      if (fileNameLastDotIndex == 0) {
+        fileName = "unnamed" + fileName;
       }
 
-    } catch (Exception e) {
-      NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message("Image file cannot be saved:\n" + e.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
-      DialogDisplayer.getDefault().notify(notifyDescriptor);
+      try {
+        component.getVisualizer().saveImage(new File(fileName), extension);
+      } catch (IOException e) {
+        NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message("Saving of image '" + fileName + "' failed:\n" + e.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
+        DialogDisplayer.getDefault().notify(notifyDescriptor);
+      }
     }
   }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -176,11 +176,10 @@ public final class AutoEditorTopComponent extends TopComponent {
 
   @Override
   public boolean canClose() {
-    // TODO rio je to spravne? vyhodit dialog s potvrdenim
     if (RunningProject.isActiveProject()) {
       NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Do you really want to stop the inferrence process?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
       if (DialogDisplayer.getDefault().notify(notifyDescriptor) == NotifyDescriptor.OK_OPTION) {
-        RunningProject.removeActiveProject();
+        component.GUIInterrupt();
         return true;
       } else {
         return false;

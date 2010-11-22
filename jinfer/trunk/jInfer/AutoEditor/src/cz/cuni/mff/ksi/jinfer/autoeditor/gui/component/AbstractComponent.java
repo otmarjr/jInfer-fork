@@ -30,6 +30,7 @@ public abstract class AbstractComponent<T> extends JPanel {
 
   private final Object monitor;
   private Visualizer<T> visualizer = null;
+  private boolean interrupted = false;
 
   protected AbstractComponent() {
     monitor = new Object();
@@ -63,5 +64,14 @@ public abstract class AbstractComponent<T> extends JPanel {
     synchronized (monitor) {
       monitor.notifyAll();
     }
+  }
+
+  public void GUIInterrupt() {
+    interrupted = true;
+    GUIDone();
+  }
+
+  public boolean GUIInterrupted() {
+    return interrupted;
   }
 }

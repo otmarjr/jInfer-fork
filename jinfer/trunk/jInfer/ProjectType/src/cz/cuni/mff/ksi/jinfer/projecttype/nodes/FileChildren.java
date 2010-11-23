@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
-import cz.cuni.mff.ksi.jinfer.projecttype.NoDataObjectException;
 import java.io.File;
 import java.util.Collection;
+import org.apache.log4j.Logger;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
@@ -32,6 +32,7 @@ import org.openide.nodes.Node;
 public class FileChildren extends Children.Keys<File> {
 
   private final Collection<File> files;
+  private static final Logger LOG = Logger.getLogger(FileChildren.class);
 
   public FileChildren(final Collection<File> files) {
     super();
@@ -56,7 +57,8 @@ public class FileChildren extends Children.Keys<File> {
     try {
       return new Node[]{new FileNode(DataObject.find(FileUtil.toFileObject(file)).getNodeDelegate())};
     } catch (DataObjectNotFoundException ex) {
-      throw new NoDataObjectException(ex.getMessage());
+      LOG.error(ex);
+      throw new RuntimeException(ex);
     }
   }
 }

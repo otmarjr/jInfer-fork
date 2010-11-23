@@ -24,7 +24,7 @@ import org.openide.filesystems.FileUtil;
 import org.openide.nodes.Children;
 
 /**
- *
+ * Array list of {@link File} types that contains no duplicate elements.
  * @author sviro
  */
 public class InputFilesList extends ArrayList<File> {
@@ -38,6 +38,11 @@ public class InputFilesList extends ArrayList<File> {
     this.listener = new InputFilesListener(this);
   }
 
+  /**
+   * Appends the specified element to the end of this list if this element is not already part of this list.
+   * @param e element to be appended to this list.
+   * @return <tt>true</tt> (as specified by {@link Collection#add})
+   */
   @Override
   public boolean add(final File e) {
     if (e == null) {
@@ -53,13 +58,36 @@ public class InputFilesList extends ArrayList<File> {
     return result;
   }
 
+  /**
+   * This method is unsupported.
+   * @param index
+   * @param element
+   * @throws UnsupportedOperationException {@inheritDoc}
+   */
   @Override
   public void add(final int index, final File element) {
     throw new UnsupportedOperationException(UNSUPPORTED_OPERATION);
   }
 
+  /**
+   * Appends all of the elements in the specified collection which are not already in this list to the end of
+   * this list, in the order that they are returned by the
+   * specified collection's Iterator.  The behavior of this operation is
+   * undefined if the specified collection is modified while the operation
+   * is in progress.  (This implies that the behavior of this call is
+   * undefined if the specified collection is this list, and this
+   * list is nonempty.)
+   *
+   * @param c collection containing elements to be added to this list
+   * @return <tt>true</tt> if this list changed as a result of the call
+   * @throws NullPointerException if the specified collection is null
+   */
   @Override
   public boolean addAll(final Collection<? extends File> c) {
+    if (c == null) {
+      throw new NullPointerException();
+    }
+
     final List<File> list = new InputFilesList();
     for (File file : c) {
       if (!this.contains(file) && list.add(file)) {
@@ -69,11 +97,22 @@ public class InputFilesList extends ArrayList<File> {
     return super.addAll(list);
   }
 
+  /**
+   * This method is unsupported.
+   * @param index
+   * @param c
+   * @return
+   * @throws UnsupportedOperationException {@inheritDoc}
+   */
   @Override
   public boolean addAll(final int index, final Collection<? extends File> c) {
     throw new UnsupportedOperationException(UNSUPPORTED_OPERATION);
   }
 
+  /**
+   * Removes all of the elements from this list.  The list will
+   * be empty after this call returns.
+   */
   @Override
   public void clear() {
     for (File file : this) {
@@ -82,6 +121,19 @@ public class InputFilesList extends ArrayList<File> {
     super.clear();
   }
 
+  /**
+   * Removes the first occurrence of the specified element from this list,
+   * if it is present.  If the list does not contain the element, it is
+   * unchanged.  More formally, removes the element with the lowest index
+   * <tt>i</tt> such that
+   * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>
+   * (if such an element exists).  Returns <tt>true</tt> if this list
+   * contained the specified element (or equivalently, if this list
+   * changed as a result of the call).
+   *
+   * @param o element to be removed from this list, if present
+   * @return <tt>true</tt> if this list contained the specified element
+   */
   @Override
   public boolean remove(final Object o) {
     final boolean result = super.remove(o);
@@ -92,6 +144,15 @@ public class InputFilesList extends ArrayList<File> {
     return result;
   }
 
+  /**
+   * Removes the element at the specified position in this list.
+   * Shifts any subsequent elements to the left (subtracts one from their
+   * indices).
+   *
+   * @param index the index of the element to be removed
+   * @return the element that was removed from the list
+   * @throws IndexOutOfBoundsException {@inheritDoc}
+   */
   @Override
   public File remove(final int index) {
     final File result = super.remove(index);
@@ -101,20 +162,41 @@ public class InputFilesList extends ArrayList<File> {
     return result;
   }
 
+  /**
+   * This method is unsupported.
+   * @param c
+   * @return
+   * @throws UnsupportedOperationException {@inheritDoc}
+   */
   @Override
   public boolean removeAll(final Collection<?> c) {
     throw new UnsupportedOperationException(UNSUPPORTED_OPERATION);
   }
 
+  /**
+   * This method is unsupported.
+   * @param index
+   * @param element
+   * @return
+   * @throws UnsupportedOperationException {@inheritDoc}
+   */
   @Override
   public File set(final int index, final File element) {
     throw new UnsupportedOperationException(UNSUPPORTED_OPERATION);
   }
 
+  /**
+   * Get {@link Children} represented by this list.
+   * @return {@link Children} represented by this list.
+   */
   public Children getFileChildren() {
     return fileChildren;
   }
 
+  /**
+   * Set {@link Children} represented by this list.
+   * @param fileChildren {@link Children} to be represented by this list.
+   */
   public void setFileChildren(final Children fileChildren) {
     this.fileChildren = fileChildren;
   }

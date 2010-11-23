@@ -24,9 +24,9 @@ import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.Tqueries;
 import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.Tschemas;
 import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.Txml;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.rmi.UnmarshalException;
 import java.util.Collection;
 import java.util.List;
@@ -38,25 +38,25 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.util.Exceptions;
 
 /**
- * Class for storing and loading Input files into/from project folder.
+ * Class for storing and loading {@link Input} into/from project folder.
  * @author sviro
  */
 public final class InputFiles {
 
   private static final Logger LOG = Logger.getLogger(InputFiles.class);
 
-  private InputFiles() {}
+  private InputFiles() {
+  }
 
   /**
-   * Writes this input files to the output stream in a format suitable for loading
-   * into an Input using the load(InputStream) method.
+   * Writes project {@link Input} to the output stream in a XML format.
    *
-   * @param fileOutputStream an output stream.
+   * @param outputStream an output stream.
+   * @param input Input to store into provided output stream.
    */
-  public static void store(final FileOutputStream fileOutputStream, final Input input) {
+  public static void store(final OutputStream outputStream, final Input input) {
     final ObjectFactory objFactory = new ObjectFactory();
 
     final Tjinfer jinfer = objFactory.createTjinfer();
@@ -82,16 +82,16 @@ public final class InputFiles {
       final JAXBContext context = JAXBContext.newInstance(Tjinfer.class.getPackage().getName());
       final Marshaller marshaller = context.createMarshaller();
       marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-      marshaller.marshal(jinferInput, fileOutputStream);
+      marshaller.marshal(jinferInput, outputStream);
     } catch (JAXBException ex) {
       LOG.error(ex);
     } finally {
       Thread.currentThread().setContextClassLoader(orig);
     }
 
-    if (fileOutputStream != null) {
+    if (outputStream != null) {
       try {
-        fileOutputStream.close();
+        outputStream.close();
       } catch (IOException ex) {
         LOG.error(ex);
       }
@@ -131,9 +131,10 @@ public final class InputFiles {
   }
 
   /**
-   * Reads an Input from the input byte stream.
+   * Loads and store {@link Input} from the XML input stream.
    *
    * @param inputStream the input stream.
+   * @param input Input to store data.
    * @throws IOException if an error occurred when reading from the input stream.
    */
   public static void load(final InputStream inputStream, final Input input) throws IOException {

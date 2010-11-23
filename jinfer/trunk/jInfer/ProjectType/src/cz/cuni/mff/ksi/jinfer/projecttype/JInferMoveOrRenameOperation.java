@@ -29,7 +29,7 @@ import org.openide.filesystems.FileObject;
 import org.openide.nodes.Node;
 
 /**
- *
+ * Provides move or remove operation for jInfer project.
  * @author sviro
  */
 public class JInferMoveOrRenameOperation implements MoveOrRenameOperationImplementation {

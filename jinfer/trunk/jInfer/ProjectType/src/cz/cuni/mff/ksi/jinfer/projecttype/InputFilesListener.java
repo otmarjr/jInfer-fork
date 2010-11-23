@@ -28,7 +28,7 @@ import org.openide.filesystems.FileUtil;
 import org.openide.nodes.Children;
 
 /**
- *
+ * {@link FileChangeListener} for refreshing input node after removing input file from project.
  * @author sviro
  */
 public class InputFilesListener implements FileChangeListener {

@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileObject;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
 
@@ -34,10 +33,15 @@ import org.openide.util.lookup.Lookups;
  */
 public class JInferProject implements Project {
 
+  /**
+   * Name of output folder in jInfer project file hierarchy saved on disk.
+   */
   public static final String OUTPUT_DIR = "output";
+  /**
+   * Name of jInfer project property file.
+   */
   public static final String JINFER_PROJECT_NAME_PROPERTY = "jInferProjectProperty";
   private static final Logger LOG = Logger.getLogger(JInferProject.class);
-
   private final FileObject projectDir;
   private final ProjectState state;
   private Lookup lookup;
@@ -87,7 +91,7 @@ public class JInferProject implements Project {
       try {
         result.delete();
       } catch (IOException ex) {
-        LOG.error("file " + result.getPath() + "cannot be deleted." , ex);
+        LOG.error("file " + result.getPath() + "cannot be deleted.", ex);
         throw new RuntimeException(ex);
       }
       result = null;

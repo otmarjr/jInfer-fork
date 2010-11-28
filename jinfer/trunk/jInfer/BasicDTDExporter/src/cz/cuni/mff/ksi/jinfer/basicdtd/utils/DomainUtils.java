@@ -39,7 +39,9 @@ public final class DomainUtils {
   private DomainUtils() {
   }
 
+  /** DTD's way of saying the attribute has an implied value. */
   public static final String ATTRIBUTE_IMPLIED = "#IMPLIED";
+  /** DTD's way of saying the attribute contains character data. */
   public static final String ATTRIBUTE_CDATA = " CDATA ";
 
   /**

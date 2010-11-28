@@ -21,6 +21,8 @@ import cz.cuni.mff.ksi.jinfer.basicdtd.SchemaGeneratorImpl;
 import java.util.Properties;
 
 /**
+ * Properties panel of the Basic DTD Exporter module.
+ * 
  * @author vektor
  */
 public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {

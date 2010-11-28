@@ -47,34 +47,77 @@ public final class Utils {
   public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/dots.png");
   public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/arrow.png");
 
+  /**
+   * Returns the background color for an element from the options.
+   * 
+   * @return Background color for an element.
+   */
   public static Color getColorElement() {
     return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("element.color", String.valueOf(COLOR_ELEMENT.getRGB())));
   }
 
+  /**
+   * Returns the background color for an attribute from the options.
+   *
+   * @return Background color for an attribute.
+   */
   public static Color getColorAttribute() {
     return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("attribute.color", String.valueOf(COLOR_ATTRIBUTE.getRGB())));
   }
 
+  /**
+   * Returns the background color for simple data from the options.
+   *
+   * @return Background color for simple data.
+   */
   public static Color getColorSimpleData() {
     return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("simple.data.color", String.valueOf(COLOR_SIMPLE_DATA.getRGB())));
   }
 
+  /**
+   * Returns the background color for a concatenation from the options.
+   *
+   * @return Background color for a concatenation.
+   */
   public static Color getColorConcatenation() {
     return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("concatenation.color", String.valueOf(COLOR_CONCATENATION.getRGB())));
   }
 
+  /**
+   * Returns the background color for an alternation from the options.
+   *
+   * @return Background color for an alternation.
+   */
   public static Color getColorAlternation() {
     return Color.decode(Preferences.userNodeForPackage(RuleDisplayerPanel.class).get("alternation.color", String.valueOf(COLOR_ALTERNATION.getRGB())));
   }
-
+  
+  /**
+   * Returns the background color for the rule displayer.
+   *
+   * @return Background color for the rule displayer - taken from the background
+   * color of a tabbed pane.
+   */
   public static Color getColorBackground() {
     return UIManager.getDefaults().getColor("TabbedPane.background");
   }
 
+  /**
+   * Returns the foreground color for the rule displayer.
+   *
+   * @return Foreground color for the rule displayer - taken from the foreground
+   * color of a tabbed pane.
+   */
   public static Color getColorForeground() {
     return UIManager.getDefaults().getColor("TabbedPane.foreground");
   }
 
+  /**
+   * Return the background color for the specified node.
+   * 
+   * @param n Node for which the background color should be found.
+   * @return Background color based on the type of the node specified.
+   */
   public static Color getNodeColor(final AbstractStructuralNode n) {
     switch (n.getType()) {
       case ELEMENT:

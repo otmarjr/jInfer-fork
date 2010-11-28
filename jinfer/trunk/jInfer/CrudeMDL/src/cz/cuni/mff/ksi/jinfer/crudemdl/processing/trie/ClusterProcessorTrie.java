@@ -26,7 +26,9 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import java.util.List;
 
 /**
- *
+ * Trie (prefix tree) implementation of
+ * {@see cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor}.
+ * 
  * @author vektor
  */
 public class ClusterProcessorTrie implements ClusterProcessor<AbstractStructuralNode> {

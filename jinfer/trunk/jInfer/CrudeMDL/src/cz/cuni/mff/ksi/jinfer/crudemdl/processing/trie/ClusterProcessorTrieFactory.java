@@ -25,6 +25,8 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Factory for a Trie (prefix tree) implementation of
+ * {@see cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor}.
  *
  * @author vektor
  */

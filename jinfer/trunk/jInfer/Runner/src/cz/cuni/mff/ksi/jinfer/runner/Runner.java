@@ -224,7 +224,7 @@ public class Runner {
     IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
 
     // display a message box
-    NotifyDescriptor message = new NotifyDescriptor.Message("Process of inferrence caused an unexpected error:\n\n" + t.toString() + "\n\n Detailed information was logged to the logfile and inferrence was cancelled.", NotifyDescriptor.ERROR_MESSAGE);
+    final NotifyDescriptor message = new NotifyDescriptor.Message("Process of inferrence caused an unexpected error:\n\n" + t.toString() + "\n\n Detailed information was logged to the logfile and inferrence was cancelled.", NotifyDescriptor.ERROR_MESSAGE);
     DialogDisplayer.getDefault().notify(message);
   }
 

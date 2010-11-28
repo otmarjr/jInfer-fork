@@ -75,12 +75,13 @@ public class XPathProcessor implements Processor {
     try {
       final DataInputStream in = new DataInputStream(s);
       final BufferedReader br = new BufferedReader(new InputStreamReader(in));
-      String strLine;
-      while ((strLine = br.readLine()) != null) {
+      String strLine = br.readLine();
+      while (strLine != null) {
         if (!BaseUtils.isEmpty(strLine.trim())
                 && strLine.trim().charAt(0) != '#') {
           ret.addAll(parsePath(strLine));
         }
+        strLine = br.readLine();
       }
       in.close();
       return ret;

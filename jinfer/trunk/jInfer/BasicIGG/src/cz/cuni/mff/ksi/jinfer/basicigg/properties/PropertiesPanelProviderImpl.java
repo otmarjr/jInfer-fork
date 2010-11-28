@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicigg.properties;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
@@ -61,8 +61,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   @Override
   public List<Pair<String, String>> getSubCategories() {
-    List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
-    result.add(new Pair<String, String>(PROCESSORS_CATEGORY, IGG_CATEGORY));
-    return result;
+    return Arrays.<Pair<String, String>>asList(
+            new Pair<String, String>(PROCESSORS_CATEGORY, IGG_CATEGORY));
   }
 }

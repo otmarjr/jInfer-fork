@@ -63,7 +63,7 @@ public class IntervalExpander {
             treeBase.getAttributes());
   }
 
-  private boolean isSafeInterval(RegexpInterval interval) {
+  private boolean isSafeInterval(final RegexpInterval interval) {
     if (interval.isOnce()
             || interval.isOptional()
             || interval.isKleeneStar()
@@ -73,19 +73,20 @@ public class IntervalExpander {
     return false;
   }
 
-  private Regexp<AbstractStructuralNode> expandIntervalsRegexp(final Regexp<AbstractStructuralNode> regexp) {
+  private Regexp<AbstractStructuralNode> expandIntervalsRegexp(
+          final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
         return regexp;
       case TOKEN:
         if (StructuralNodeType.ELEMENT.equals(regexp.getContent().getType())) {
-          AbstractStructuralNode expandedContent = expandIntervalsElement((Element) regexp.getContent());
+          final AbstractStructuralNode expandedContent = expandIntervalsElement((Element) regexp.getContent());
 
           if (isSafeInterval(regexp.getInterval())) {
             return Regexp.<AbstractStructuralNode>getToken(expandedContent, regexp.getInterval());
           }
 
-          List<Regexp<AbstractStructuralNode>> l = new ArrayList<Regexp<AbstractStructuralNode>>();
+          final List<Regexp<AbstractStructuralNode>> l = new ArrayList<Regexp<AbstractStructuralNode>>();
           for (int i = 0; i < regexp.getInterval().getMin() - 1; i++) {
             l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent));
           }
@@ -105,7 +106,7 @@ public class IntervalExpander {
           return new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), regexp.getInterval());
         }
 
-        List<Regexp<AbstractStructuralNode>> m = new ArrayList<Regexp<AbstractStructuralNode>>();
+        final List<Regexp<AbstractStructuralNode>> m = new ArrayList<Regexp<AbstractStructuralNode>>();
         for (int i = 0; i < regexp.getInterval().getMin() - 1; i++) {
           m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getOnce()));
         }

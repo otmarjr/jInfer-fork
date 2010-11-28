@@ -30,7 +30,7 @@ public class Installer extends ModuleInstall {
   @Override
   public boolean closing() {
     WelcomeTopComponent topComp = null;
-    Set<TopComponent> tcs = TopComponent.getRegistry().getOpened();
+    final Set<TopComponent> tcs = TopComponent.getRegistry().getOpened();
     for (TopComponent tc : tcs) {
       if (tc instanceof WelcomeTopComponent) {
         topComp = (WelcomeTopComponent) tc;

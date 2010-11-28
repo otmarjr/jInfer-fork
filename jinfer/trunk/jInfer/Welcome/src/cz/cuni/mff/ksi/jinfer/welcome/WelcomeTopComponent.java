@@ -493,7 +493,7 @@ public final class WelcomeTopComponent extends TopComponent {
   }
 
   private void setShowOnStartup(final boolean show) {
-    boolean oldValue = isShowOnStartup();
+    final boolean oldValue = isShowOnStartup();
     if (oldValue == show) {
       return;
     }

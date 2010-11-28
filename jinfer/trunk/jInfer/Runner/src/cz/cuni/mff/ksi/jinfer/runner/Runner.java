@@ -50,6 +50,12 @@ import org.openide.windows.InputOutput;
  * Runner is responsible for running other modules in process of inference,
  * ensuring correct order and passing data from output of a module
  * to input of another.
+ *
+ * <p>
+ *  Note that a constructed instance of Runner remembers the modules selected
+ *  for that specific inference run: every Runner should be used for one
+ *  inference only!
+ * </p>
  * 
  * @author rio
  */

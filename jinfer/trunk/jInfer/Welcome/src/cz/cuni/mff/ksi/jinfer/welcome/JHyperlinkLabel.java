@@ -27,10 +27,13 @@ import javax.swing.JLabel;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * TODO sviro Comment!
+ * 
  * @author sviro
  */
 public class JHyperlinkLabel extends JLabel {
+
+  // TODO sviro Perhaps move to Base? This sounds useful and shareable.
 
   private final String uri;
 

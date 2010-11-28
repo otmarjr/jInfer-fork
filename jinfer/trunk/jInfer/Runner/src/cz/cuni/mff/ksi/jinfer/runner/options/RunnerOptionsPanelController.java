@@ -24,7 +24,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 /**
- * Panel Controller for Runner option panel.
+ * Panel controller for Runner option panel.
  *
  * @author sviro
  */

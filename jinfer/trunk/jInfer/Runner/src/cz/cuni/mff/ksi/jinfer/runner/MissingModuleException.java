@@ -17,13 +17,19 @@
 package cz.cuni.mff.ksi.jinfer.runner;
 
 /**
- *
+ * TODO rio Comment!
+ * 
  * @author rio
  */
 public class MissingModuleException extends RuntimeException {
   
   private static final long serialVersionUID = 87942132L;
 
+  /**
+   * TODO rio Comment!
+   * 
+   * @param message
+   */
   public MissingModuleException(final String message) {
     super(message);
   }

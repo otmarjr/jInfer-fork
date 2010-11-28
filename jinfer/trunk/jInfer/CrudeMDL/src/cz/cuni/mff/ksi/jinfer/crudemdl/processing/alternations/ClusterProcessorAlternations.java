@@ -25,7 +25,9 @@ import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
 import java.util.List;
 
 /**
- * Trivial implementation of ClusterProcessor - simply returns all possible
+ * Trivial implementation of
+ * {@see cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor}
+ * - simply returns all possible
  * right sides as alternation in the resulting rule.
  * 
  * @author vektor

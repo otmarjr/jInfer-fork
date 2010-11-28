@@ -93,8 +93,8 @@
                 </test-type>
             </test-dependencies>
             <public-packages>
-                <package>cz.cuni.mff.ksi.jinfer.moduleselection</package>
                 <package>cz.cuni.mff.ksi.jinfer.runner</package>
+                <package>cz.cuni.mff.ksi.jinfer.runner.properties</package>
             </public-packages>
         </data>
     </configuration>

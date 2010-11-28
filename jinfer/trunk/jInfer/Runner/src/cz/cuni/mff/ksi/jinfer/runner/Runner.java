@@ -27,7 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.moduleselection.ModuleSelectionPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.runner.properties.ModuleSelectionPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.runner.options.RunnerPanel;
 import java.util.Date;
 import java.util.EnumSet;

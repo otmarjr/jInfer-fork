@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.sample;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
-import cz.cuni.mff.ksi.jinfer.moduleselection.ModuleSelectionPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.runner.properties.ModuleSelectionPropertiesPanel;
 import java.awt.Component;
 import java.util.Properties;
 import javax.swing.event.ChangeListener;

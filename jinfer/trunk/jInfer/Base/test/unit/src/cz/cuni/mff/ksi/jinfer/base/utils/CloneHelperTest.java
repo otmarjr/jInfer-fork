@@ -139,10 +139,12 @@ public class CloneHelperTest {
     final Element ce1s = (Element) ce1.getSubnodes().getTokens().get(0);
     assertFalse("the same element is immutable", ce0s.isMutable());
     assertTrue("ce0/same.name equals ce1/same.name", ce0s.getName().equals(ce1s.getName()));
-    
+
+    // these two references must the same
     assertSame("ce0/same == ce1/same", ce0s, ce1s);
     
-    //elements must pass any implementation of equals, because it's the same instance
+    // but the elements must pass any implementation of equals,
+    // because it's the "same" instance
     assertEquals("ce0/same equals ce1/same", ce0s, ce1s);
 
     // test prefix (there is no real context, but prefix should be there)

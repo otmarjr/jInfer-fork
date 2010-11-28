@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import org.xmlmiddleware.schemas.dtds.ElementType;
 import org.xmlmiddleware.schemas.dtds.Group;
 import org.xmlmiddleware.schemas.dtds.Particle;
@@ -111,7 +110,7 @@ public final class DTD2RETranslator {
     return ret;
   }
 
-  private static List<Regexp<AbstractStructuralNode>> members2Children(final Vector members) {
+  private static List<Regexp<AbstractStructuralNode>> members2Children(final List members) {
     final List<Regexp<AbstractStructuralNode>> ret =
             new ArrayList<Regexp<AbstractStructuralNode>>(members.size());
 
@@ -152,7 +151,8 @@ public final class DTD2RETranslator {
         return RegexpType.ALTERNATION;
       case Particle.TYPE_SEQUENCE:
         return RegexpType.CONCATENATION;
+      default:
+        throw new IllegalArgumentException("Unkown particle type: " + p.type);
     }
-    throw new IllegalArgumentException("Unkown particle type: " + p.type);
   }
 }

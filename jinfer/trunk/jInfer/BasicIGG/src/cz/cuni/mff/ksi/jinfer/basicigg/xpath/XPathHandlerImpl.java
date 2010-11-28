@@ -75,32 +75,28 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
           final String localName) throws SAXPathException {
     super.startNameStep(axis, prefix, localName);
 
-    switch (axis) {
-      case Axis.CHILD:
-        final Element newElement = Element.getMutable();
-        newElement.setName(localName);
-        newElement.getMetadata().put("from.query", Boolean.TRUE);
-        newElement.getSubnodes().setType(RegexpType.CONCATENATION);
-        newElement.getSubnodes().setInterval(RegexpInterval.getOnce());
-        if (lastElement != null) {
-          lastElement.getSubnodes().addChild(TestUtils.getToken(newElement));
-          rules.add(lastElement);
-        }
-        lastElement = newElement;
-        dirty = true;
-        lastAttribute = null;
-        isSimpleData = false;
-        break;
-      case Axis.ATTRIBUTE:
-        if (lastElement != null) {
-          final Attribute newAttr = new Attribute(EMPTY_CONTEXT, localName,
-                  IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
-          lastElement.getAttributes().add(newAttr);
-          lastAttribute = newAttr;
-          rules.add(lastElement);
-          dirty = false;
-        }
-        break;
+    if (axis == Axis.CHILD) {
+      final Element newElement = Element.getMutable();
+      newElement.setName(localName);
+      newElement.getMetadata().put("from.query", Boolean.TRUE);
+      newElement.getSubnodes().setType(RegexpType.CONCATENATION);
+      newElement.getSubnodes().setInterval(RegexpInterval.getOnce());
+      if (lastElement != null) {
+        lastElement.getSubnodes().addChild(TestUtils.getToken(newElement));
+        rules.add(lastElement);
+      }
+      lastElement = newElement;
+      dirty = true;
+      lastAttribute = null;
+      isSimpleData = false;
+    } else if (axis == Axis.ATTRIBUTE
+            && lastElement != null) {
+      final Attribute newAttr = new Attribute(EMPTY_CONTEXT, localName,
+              IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
+      lastElement.getAttributes().add(newAttr);
+      lastAttribute = newAttr;
+      rules.add(lastElement);
+      dirty = false;
     }
   }
 
@@ -120,10 +116,11 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
   public void endEqualityExpr(final int operator) throws SAXPathException {
     super.endEqualityExpr(operator);
 
-    if (operator == Operator.EQUALS && lastLiteral != null && lastAttribute != null) {
-      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES, "true"))) {
-        lastAttribute.getContent().add(lastLiteral);
-      }
+    if (operator == Operator.EQUALS
+            && lastLiteral != null
+            && lastAttribute != null
+            && Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES, "true"))) {
+      lastAttribute.getContent().add(lastLiteral);
     }
     if (operator == Operator.EQUALS
             && lastLiteral != null

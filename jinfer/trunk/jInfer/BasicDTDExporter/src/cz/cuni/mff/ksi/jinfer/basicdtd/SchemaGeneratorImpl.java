@@ -104,7 +104,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private String elementToString(final Element e) {
     final StringBuilder ret = new StringBuilder();
     ret.append("<!ELEMENT ").append(e.getName()).append(' ');
-    Regexp<AbstractStructuralNode> regexp= e.getSubnodes();
+    final Regexp<AbstractStructuralNode> regexp = e.getSubnodes();
     if (regexp.isToken()) {
       ret.append("(");
     }
@@ -136,8 +136,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case LAMBDA:
         return "EMPTY";
       case TOKEN:
-        String intervalString= regexp.getInterval().toString();
-        String contentString= regexp.getContent().isSimpleData() ? "#PCDATA" : regexp.getContent().getName();
+        final String intervalString= regexp.getInterval().toString();
+        final String contentString= regexp.getContent().isSimpleData() ? "#PCDATA" : regexp.getContent().getName();
         if (regexp.getContent().isSimpleData()) {
           return contentString;
         }
@@ -165,7 +165,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return false;
   }
 
-  private String comboToString(final Regexp<AbstractStructuralNode> regexp, String delimiter) {
+  private String comboToString(final Regexp<AbstractStructuralNode> regexp, 
+          final String delimiter) {
     if (!containsPCDATA(regexp.getTokens())) {
       return listToString(regexp.getChildren(), delimiter) +
               regexp.getInterval().toString();
@@ -192,7 +193,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       private Set<String> encountered= new HashSet<String>();
       private boolean encounteredSimpleData= false;
       @Override
-      public boolean apply(AbstractStructuralNode argument) {
+      public boolean apply(final AbstractStructuralNode argument) {
         if (argument.isSimpleData()) {
           if (encounteredSimpleData) {
             return false;

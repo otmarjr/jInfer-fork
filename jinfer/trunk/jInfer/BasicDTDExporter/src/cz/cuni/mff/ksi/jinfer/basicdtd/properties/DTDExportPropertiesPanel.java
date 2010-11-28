@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.basicdtd.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.basicdtd.SchemaGeneratorImpl;
 import java.util.Properties;
 
 /**

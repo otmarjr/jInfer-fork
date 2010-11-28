@@ -114,7 +114,7 @@ public class ExpansionHelperTest {
   @Test(expected = IllegalArgumentException.class)
   public void testIsSimpleConcatenationNull() {
     System.out.println("isSimpleConcatenationNull");
-    boolean result = ExpansionHelper.isSimpleConcatenation(null);
+    ExpansionHelper.isSimpleConcatenation(null);
   }
 
   @Test

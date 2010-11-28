@@ -73,17 +73,17 @@ public final class RunnerOptionsPanelController extends OptionsPanelController {
   }
 
   @Override
-  public JComponent getComponent(Lookup masterLookup) {
+  public JComponent getComponent(final Lookup masterLookup) {
     return getPanel();
   }
 
   @Override
-  public void addPropertyChangeListener(PropertyChangeListener l) {
+  public void addPropertyChangeListener(final PropertyChangeListener l) {
     pcs.addPropertyChangeListener(l);
   }
 
   @Override
-  public void removePropertyChangeListener(PropertyChangeListener l) {
+  public void removePropertyChangeListener(final PropertyChangeListener l) {
     pcs.removePropertyChangeListener(l);
   }
 
@@ -94,7 +94,7 @@ public final class RunnerOptionsPanelController extends OptionsPanelController {
     return panel;
   }
 
-  void changed() {
+  private void changed() {
     if (!changed) {
       changed = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);

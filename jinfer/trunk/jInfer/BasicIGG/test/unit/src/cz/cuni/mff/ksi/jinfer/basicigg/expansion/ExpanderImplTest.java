@@ -74,7 +74,7 @@ public class ExpanderImplTest {
     assertEquals(e2, ret2.get(1));
   }
 
-  private static String[] EXPANDED = {
+  private static final String[] EXPANDED = {
     "ABCFFF",
     "AAABCDEFFFFF",
     "ABCDEDEDEGGG",

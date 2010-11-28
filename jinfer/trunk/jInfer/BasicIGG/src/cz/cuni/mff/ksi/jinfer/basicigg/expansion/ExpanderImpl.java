@@ -20,8 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,8 +91,9 @@ public class ExpanderImpl implements Expander {
         return ExpansionHelper.applyInterval(unpackAlternation(r.getChildren()), r.getInterval());
       case PERMUTATION:
         throw new IllegalArgumentException("Sorry, there is not enough time till the end of the universe");
+      default:
+        throw new IllegalArgumentException("Unknown regexp type: " + r.getType());
     }
-    throw new IllegalArgumentException("Unknown regexp type: " + r.getType());
   }
 
   private static List<List<AbstractStructuralNode>> unpackConcat(

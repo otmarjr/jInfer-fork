@@ -30,20 +30,28 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Utilities for rule cloning.
+ * Utilities for cloning. Note that this class uses an inner cache of
+ * already cloned elements to deal with cyclic dependencies, and should be used
+ * to clone at most one full grammar. If not sure, create a new instance of this
+ * class to clone something.
  * 
  * @author vektor
  */
 public class CloneHelper {
 
-  // TODO vektor Comment!
-
   private final Map<Element, Element> cloned = new HashMap<Element, Element>();
 
-  public List<Element> cloneRules(final List<Element> l, final List<String> contextPrefix) {
-    final List<Element> ret = new ArrayList<Element>(l.size());
-    for (final Element n : l) {
-      ret.add(cloneElement(n, null));
+  /**
+   * Clones the whole grammar at once.
+   * 
+   * @param grammar Grammar to be cloned.
+   * @return Cloned grammar: contains the same elements, but in different object
+   * instances.
+   */
+  public List<Element> cloneGrammar(final List<Element> grammar) {
+    final List<Element> ret = new ArrayList<Element>(grammar.size());
+    for (final Element e : grammar) {
+      ret.add(cloneElement(e, null));
     }
     return ret;
   }
@@ -68,6 +76,13 @@ public class CloneHelper {
             cloneList(s.getContent()));
   }
 
+  /**
+   * Clones a single element.
+   *
+   * @param e Element to be cloned.
+   * @param contextPrefix TODO reseto What is this???
+   * @return Cloned element: equal, but different instance.
+   */
   public Element cloneElement(final Element e, final List<String> contextPrefix) {
     if (cloned.containsKey(e)) {
       return cloned.get(e);
@@ -125,6 +140,13 @@ public class CloneHelper {
     return ret;
   }
 
+  /**
+   * Clones a regular expression.
+   *
+   * @param r Regexp to be cloned.
+   * @param contextPrefix TODO reseto What is this???
+   * @return Cloned regexp: equal, but different instance.
+   */
   public Regexp<AbstractStructuralNode> cloneRegexp(
           final Regexp<AbstractStructuralNode> r, final List<String> contextPrefix) {
     return new Regexp<AbstractStructuralNode>(
@@ -159,6 +181,13 @@ public class CloneHelper {
     throw new IllegalArgumentException("Unknown abstract node: " + n);
   }
 
+  /**
+   * TODO reseto Comment!
+   * 
+   * @param node
+   * @param contextPrefix
+   * @return
+   */
   public static List<String> getPrefixedContext(final NamedNode node, final List<String> contextPrefix) {
     if (BaseUtils.isEmpty(contextPrefix)) {
       return cloneList(node.getContext());

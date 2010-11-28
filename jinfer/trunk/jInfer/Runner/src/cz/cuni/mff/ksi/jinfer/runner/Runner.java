@@ -81,6 +81,9 @@ public class Runner {
     }
   };
 
+  /**
+   * Default, nonparametric constructor. Looks up all the inference modules.
+   */
   public Runner() {
     final Properties projectProperties = RunningProject.getActiveProjectProps(ModuleSelectionPropertiesPanel.NAME);
 
@@ -93,7 +96,8 @@ public class Runner {
   }
 
   /**
-   * Starts process of inference.
+   * Starts process of inference. Runs the first module and passes it the
+   * reference to a callback to run when it finishes.
    */
   public void run() {
     runAsync(new Runnable() {
@@ -114,7 +118,7 @@ public class Runner {
     }, "Retrieving IG");
   }
 
-  public void finishedIGGenerator(final List<Element> grammar) {
+  private void finishedIGGenerator(final List<Element> grammar) {
     LOG.info("Runner: initial grammar contains " + grammar.size()
             + " rules.");
 
@@ -134,7 +138,7 @@ public class Runner {
     }, "Inferring the schema");
   }
 
-  public void finishedSimplifier(final List<Element> grammar) {
+  private void finishedSimplifier(final List<Element> grammar) {
     LOG.info("Runner: simplified grammar contains " + grammar.size()
             + " rules.");
 
@@ -154,7 +158,7 @@ public class Runner {
     }, "Generating result schema");
   }
 
-  public void finishedSchemaGenerator(final String schema, final String extension) {
+  private void finishedSchemaGenerator(final String schema, final String extension) {
     LOG.info("Runner: writing schema.");
     final String commentedSchema = getCommentedSchema(schema);
 

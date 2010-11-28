@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.runner.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
@@ -26,7 +25,8 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Properties panel provider for module selection category.
+ * Properties panel provider of the Runner module.
+ *
  * @author sviro
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)

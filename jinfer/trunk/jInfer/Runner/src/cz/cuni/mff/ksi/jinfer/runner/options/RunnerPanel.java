@@ -37,10 +37,10 @@ public final class RunnerPanel extends javax.swing.JPanel {
 
   private final RunnerOptionsPanelController controller;
 
-  RunnerPanel(RunnerOptionsPanelController controller) {
+  public RunnerPanel(RunnerOptionsPanelController controller) {
     this.controller = controller;
     initComponents();
-    // TODO vektor listen to changes in form fields and call controller.changed()
+    // TODO listen to changes in form fields and call controller.changed()
   }
 
   /** This method is called from within the constructor to
@@ -205,13 +205,13 @@ public final class RunnerPanel extends javax.swing.JPanel {
     add(jPanel3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
-  void load() {
+  public void load() {
     openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, SCHEMA_OPEN_DEFAULT));
     showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, OUTPUT_SHOW_DEFAULT));
     namePattern.setText(NbPreferences.forModule(RunnerPanel.class).get(NAME_PATTERN, NAME_PATTERN_DEFAULT));
   }
 
-  void store() {
+  public void store() {
     NbPreferences.forModule(RunnerPanel.class).putBoolean(SCHEMA_OPEN, openSchema.isSelected());
     NbPreferences.forModule(RunnerPanel.class).putBoolean(OUTPUT_SHOW, showOutputWindow.isSelected());
     if (namePattern.getText().trim().isEmpty()) {
@@ -221,7 +221,7 @@ public final class RunnerPanel extends javax.swing.JPanel {
     NbPreferences.forModule(RunnerPanel.class).put(NAME_PATTERN, namePattern.getText());
   }
 
-  boolean valid() {
+  public boolean valid() {
     Pattern p = Pattern.compile("\\{n\\}");
     Matcher matcher = p.matcher(namePattern.getText());
     int matches = 0;

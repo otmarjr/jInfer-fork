@@ -42,6 +42,11 @@ public class RulePainter {
   private final Component root;
   private Image image;
 
+  /**
+   * Full constructor.
+   * 
+   * @param root Root component, in which rules will be rendered.
+   */
   public RulePainter(final Component root) {
     this.root = root;
     maxRules = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.rules", 50);
@@ -56,6 +61,11 @@ public class RulePainter {
     root.repaint();
   }
 
+  /**
+   * Paint the rendered image to the specified graphics object.
+   *
+   * @param g Graphics object to paint rendered rules to.
+   */
   public void paint(final Graphics2D g) {
     g.setColor(Utils.getColorBackground());
     g.fillRect(0, 0, root.getWidth(), root.getHeight());

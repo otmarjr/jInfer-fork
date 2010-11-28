@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.prefs.Preferences;
 
 /**
+ * Class for painting XML nodes.
+ * 
  * @author vektor
  */
 public class NodePainter {
@@ -45,6 +47,11 @@ public class NodePainter {
 
   private final int margin;
 
+  /**
+   * Full constructor.
+   *
+   * @param graphics Graphics object used to get font metrics.
+   */
   public NodePainter(final Graphics2D graphics) {
     this.maxLevel = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25);
     this.margin = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("margin", 2);

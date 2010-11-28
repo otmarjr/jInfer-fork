@@ -34,7 +34,7 @@ import org.jaxen.saxpath.SAXPathException;
 import org.jaxen.saxpath.helpers.DefaultXPathHandler;
 
 /**
- * XPath handler for the IGGenerator module.
+ * XPath handler for the Basic IGG module.
  *
  * @author vektor
  */

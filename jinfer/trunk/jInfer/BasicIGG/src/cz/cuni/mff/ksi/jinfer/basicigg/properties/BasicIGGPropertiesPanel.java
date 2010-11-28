@@ -20,6 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
 
 /**
+ * Properties panel of the Basic IGG module.
+ * 
  * @author vektor
  */
 public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {

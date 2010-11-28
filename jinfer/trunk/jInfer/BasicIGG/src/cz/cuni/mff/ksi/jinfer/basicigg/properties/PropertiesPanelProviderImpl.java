@@ -25,6 +25,8 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Properties panel provider of the Basic IGG module.
+ *
  * @author vektor
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)

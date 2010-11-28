@@ -24,6 +24,8 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 /**
+ * Options controller of the Rule Displayer module.
+ * 
  * @author vektor
  */
 @OptionsPanelController.SubRegistration(location = "jInfer",

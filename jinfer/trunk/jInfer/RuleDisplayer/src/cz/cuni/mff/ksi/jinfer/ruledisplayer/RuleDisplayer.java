@@ -22,7 +22,7 @@ import java.util.List;
 import org.openide.windows.WindowManager;
 
 /**
- * Class with some static methods to display a list of rules or their clusters.
+ * Helper class for displaying a list of rules.
  * 
  * @author vektor
  */
@@ -31,7 +31,16 @@ public final class RuleDisplayer {
   private RuleDisplayer() {
   }
 
-  public static void showRulesAsync(final String panelName, final List<Element> rules, final boolean render) {
+  /**
+   * Display a list of rules. The list will be rendered as an image and put into
+   * the Rule Displayer window, in a named panel.
+   *
+   * @param panelName Title of the panel where these rules will be displayed.
+   * @param rules List of rules to display.
+   * @param render Flag whether to actually do anything.
+   */
+  public static void showRulesAsync(final String panelName,
+          final List<Element> rules, final boolean render) {
     if (!render || BaseUtils.isEmpty(rules)) {
       return;
     }

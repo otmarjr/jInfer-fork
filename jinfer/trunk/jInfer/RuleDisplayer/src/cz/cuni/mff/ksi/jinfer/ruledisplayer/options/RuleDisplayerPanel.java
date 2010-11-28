@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import org.openide.util.NbPreferences;
 
 /**
+ * Options panel of the Rule Displayer module.
+ *
  * @author vektor
  */
 public final class RuleDisplayerPanel extends JPanel {
@@ -31,7 +33,7 @@ public final class RuleDisplayerPanel extends JPanel {
 
   private final RuleDisplayerOptionsPanelController controller;
 
-  public RuleDisplayerPanel(RuleDisplayerOptionsPanelController controller) {
+  public RuleDisplayerPanel(final RuleDisplayerOptionsPanelController controller) {
     this.controller = controller;
     initComponents();
   }

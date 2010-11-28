@@ -32,6 +32,8 @@ import java.util.Map;
  */
 public class Element extends AbstractStructuralNode {
 
+  // TODO anti Comment public methods, including constructors!
+
   /** List of all subnodes of this element, in the same order as in the
    * document. */
   private final Regexp<AbstractStructuralNode> subnodes;

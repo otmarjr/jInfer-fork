@@ -36,6 +36,11 @@ public class CollectionToString {
    */
   public interface ToString<T> {
 
+    /**
+     * Converts the parameter to a string.
+     * @param t Parameter to be converted to a string.
+     * @return String representation of the parameter.
+     */
     String toString(T t);
   }
   /**

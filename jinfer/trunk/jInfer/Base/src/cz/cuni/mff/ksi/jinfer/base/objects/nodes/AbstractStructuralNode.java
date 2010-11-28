@@ -28,6 +28,8 @@ import java.util.Map;
  */
 public abstract class AbstractStructuralNode extends AbstractNamedNode implements StructuralNode {
 
+  // TODO anti Comment public methods, including constructors!
+
   protected AbstractStructuralNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata, final boolean mutable) {

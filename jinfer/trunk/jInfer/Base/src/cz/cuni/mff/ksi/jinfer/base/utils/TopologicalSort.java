@@ -34,10 +34,21 @@ public final class TopologicalSort {
   private final List<Element> ret = new ArrayList<Element>();
   private final List<Element> visited = new ArrayList<Element>();
 
+  /**
+   * Constructor of the toposorting class. All elements that should be sorted
+   * must be specified at this moment.
+   * 
+   * @param elements Elements to be toposorted.
+   */
   public TopologicalSort(final List<Element> elements) {
     this.elements = elements;
   }
 
+  /**
+   * Performs the topological sorting and returns a list of sorted elements.
+   * 
+   * @return List of toposorted elements.
+   */
   public List<Element> sort() {
     for (final Element e : elements) {
       visit(e);

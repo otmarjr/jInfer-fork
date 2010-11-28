@@ -23,6 +23,11 @@ import java.util.prefs.Preferences;
 import javax.swing.JColorChooser;
 import org.openide.util.NbPreferences;
 
+/**
+ * TODO reseto Comment this class!
+ *
+ * @author reseto
+ */
 public final class LoggerPanel extends javax.swing.JPanel {
 
   private final LoggerOptionsPanelController controller;

@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
 
 import java.util.List;
@@ -26,7 +25,11 @@ import java.util.Map;
  * @author anti
  */
 public interface NamedNode {
+
+  // TODO anti Comment!
   List<String> getContext();
+
   String getName();
+
   Map<String, Object> getMetadata();
 }

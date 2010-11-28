@@ -30,6 +30,8 @@ import java.util.Map;
  */
 public class SimpleData extends AbstractStructuralNode implements ContentNode {
 
+  // TODO anti Comment public methods, including constructors!
+
   /** Unspecific type of textual data. */
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list

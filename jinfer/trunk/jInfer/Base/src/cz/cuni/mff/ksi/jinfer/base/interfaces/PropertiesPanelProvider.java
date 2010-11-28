@@ -60,6 +60,11 @@ public interface PropertiesPanelProvider {
    */
   int getPriority();
 
+  /**
+   * TODO sviro Comment!
+   * 
+   * @return
+   */
   String getParent();
 
   List<Pair<String, String>> getSubCategories();

@@ -27,6 +27,8 @@ import java.util.Map;
  */
 public class Attribute extends AbstractNamedNode implements ContentNode {
 
+  // TODO anti Comment public methods, including constructors!
+
   /** Unspecific type of textual data. */
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list

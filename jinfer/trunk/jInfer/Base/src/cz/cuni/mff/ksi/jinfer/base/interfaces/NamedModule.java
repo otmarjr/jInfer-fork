@@ -17,7 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 /**
- *
+ * Interface of a module with a name and description.
+ * 
  * @author sviro
  */
 public interface NamedModule {
@@ -34,6 +35,8 @@ public interface NamedModule {
    * Most of the time will be equal to a call to {@see getName()}, but if the
    * module for example consists of more sub-modules, their names should be
    * listed here.
+   *
+   * @return String describing inner structure of the module.
    */
   String getModuleDescription();
 }

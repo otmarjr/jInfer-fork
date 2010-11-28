@@ -30,7 +30,7 @@ package cz.cuni.mff.ksi.jinfer.base.regexp;
  *
  * @author anti
  */
-public class RegexpInterval {
+public final class RegexpInterval {
 
   // TODO anti Comment public methods, including constructors!
 

@@ -24,9 +24,13 @@ import org.openide.util.NbPreferences;
  *
  * @author sviro
  */
-public class LogLevelUtils {
+public final class LogLevelUtils {
 
   // TODO sviro Comment!
+
+  private LogLevelUtils() {
+    
+  }
 
   public static final Color TRACE_DEFAULT = Color.GRAY;
   public static final Color DEBUG_DEFAULT = new Color(7, 105, 45);

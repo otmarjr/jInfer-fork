@@ -19,13 +19,11 @@ package cz.cuni.mff.ksi.jinfer.base;
 import cz.cuni.mff.ksi.jinfer.base.utils.LogLevelUtils;
 import java.awt.Color;
 import java.io.IOException;
-import org.apache.log4j.Appender;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.EnhancedPatternLayout;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.apache.log4j.RollingFileAppender;
 import org.apache.log4j.spi.LoggingEvent;
 import org.openide.modules.ModuleInstall;
@@ -54,7 +52,7 @@ public class Installer extends ModuleInstall {
     protected void append(final LoggingEvent le) {
       final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
 
-      Color textColor = getLogLevelColor(le.getLevel());
+      final Color textColor = getLogLevelColor(le.getLevel());
 
       // TODO riacik rio check if kosher - i changed log format to LEVEL [ClassNameNotFull]: string
       final String lgName = le.getLoggerName();

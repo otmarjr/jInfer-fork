@@ -71,6 +71,7 @@ public class Attribute extends AbstractNamedNode implements ContentNode {
       if (!first) {
         ret.append(' ');
       }
+      first = false;
       ret.append(str.toString());
     }
     return ret.toString();

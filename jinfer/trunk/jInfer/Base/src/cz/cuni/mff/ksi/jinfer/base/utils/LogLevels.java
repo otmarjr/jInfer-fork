@@ -18,24 +18,24 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
-import org.apache.log4j.RollingFileAppender;
 
 /**
  *
  * @author reseto
  */
-public class LogLevels {
+public final class LogLevels {
 
   // TODO reseto Comment!
+
+  private LogLevels() {
+    
+  }
 
   private static List<String> levels;
 

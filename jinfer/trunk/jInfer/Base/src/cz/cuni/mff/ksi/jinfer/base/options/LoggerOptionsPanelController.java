@@ -64,15 +64,15 @@ public final class LoggerOptionsPanelController extends OptionsPanelController {
     return null; // new HelpCtx("...ID") if you have a help set
   }
 
-  public JComponent getComponent(Lookup masterLookup) {
+  public JComponent getComponent(final Lookup masterLookup) {
     return getPanel();
   }
 
-  public void addPropertyChangeListener(PropertyChangeListener l) {
+  public void addPropertyChangeListener(final PropertyChangeListener l) {
     pcs.addPropertyChangeListener(l);
   }
 
-  public void removePropertyChangeListener(PropertyChangeListener l) {
+  public void removePropertyChangeListener(final PropertyChangeListener l) {
     pcs.removePropertyChangeListener(l);
   }
 
@@ -83,7 +83,7 @@ public final class LoggerOptionsPanelController extends OptionsPanelController {
     return panel;
   }
 
-  void changed() {
+  public void changed() {
     if (!changed) {
       changed = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);

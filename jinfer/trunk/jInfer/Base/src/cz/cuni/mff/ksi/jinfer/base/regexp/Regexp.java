@@ -401,7 +401,7 @@ public class Regexp<T> {
                   new CollectionToString.ToString<Regexp<T>>() {
 
                     @Override
-                    public String toString(Regexp<T> t) {
+                    public String toString(final Regexp<T> t) {
                       return t.toString();
                     }
                   })

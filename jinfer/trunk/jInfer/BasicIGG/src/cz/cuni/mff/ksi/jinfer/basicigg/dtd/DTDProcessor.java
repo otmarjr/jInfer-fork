@@ -42,7 +42,8 @@ import org.xmlmiddleware.schemas.dtds.DTDParser;
 import org.xmlmiddleware.schemas.dtds.ElementType;
 
 /**
- * Contains logic for IG retrieval from DTD schemas.
+ * Implementation of {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * providing logic for IG retrieval from DTD schemas.
  * 
  * @author vektor
  */

@@ -38,7 +38,10 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * A trivial implementation of IGGenerator module. Works only with XML documents.
+ * A trivial implementation of IGGenerator module. Works with XML documents,
+ * DTD schemas, XPath queries and provides an extension framework to enable
+ * support for additional languages
+ * (see {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}).
  * 
  * @author vektor
  */
@@ -70,10 +73,12 @@ public class IGGeneratorImpl implements IGGenerator {
     // find processor mappings for all folders
     final Map<FolderType, Map<String, Processor>> registeredProcessors = getRegisteredProcessors();
 
+    // run processors on input, gather IG rules
     ret.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.XML)));
     ret.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
     ret.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
 
+    // return collected rules
     callback.finished(ret);
   }
 

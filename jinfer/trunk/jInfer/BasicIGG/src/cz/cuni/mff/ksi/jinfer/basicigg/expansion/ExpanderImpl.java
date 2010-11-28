@@ -30,7 +30,8 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * A simple implementation of the Expander interface.
+ * A simple implementation of the 
+ * {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface.
  * 
  * @author vektor
  */

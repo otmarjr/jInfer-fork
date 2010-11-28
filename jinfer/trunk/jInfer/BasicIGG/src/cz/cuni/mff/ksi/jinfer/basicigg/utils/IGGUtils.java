@@ -26,19 +26,26 @@ import java.util.Map;
  */
 public final class IGGUtils {
 
+  // TODO vektor Move all instances of these String constants to Base!
+
   private IGGUtils() {
   }
+
+  /** Metadata map containing a single piece of metadata: "Node comes from a schema". */
   public static final Map<String, Object> ATTR_FROM_SCHEMA = new HashMap<String, Object>(1);
 
   static {
     ATTR_FROM_SCHEMA.put("from.schema", Boolean.TRUE);
   }
+
+  /** Metadata map containing a single piece of metadata: "Node comes from a query". */
   public static final Map<String, Object> ATTR_FROM_QUERY = new HashMap<String, Object>(1);
 
   static {
     ATTR_FROM_QUERY.put("from.query", Boolean.TRUE);
   }
 
+  /** Metadata map containing a single piece of metadata: "Node is a sentinel". */
   public static final Map<String, Object> METADATA_SENTINEL = new HashMap<String, Object>(1);
 
   static {

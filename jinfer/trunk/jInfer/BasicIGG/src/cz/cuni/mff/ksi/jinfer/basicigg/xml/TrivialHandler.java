@@ -39,7 +39,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * SAX handler for the IGGenerator module.
+ * SAX handler for the Basic IGG module.
  * 
  * @author vektor
  */
@@ -51,6 +51,14 @@ public class TrivialHandler extends DefaultHandler {
   private final List<Element> rules = new ArrayList<Element>();
 
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
+
+  /**
+   * Returns rules collected by this handler's run.
+   * @return
+   */
+  public List<Element> getRules() {
+    return rules;
+  }
 
   @Override
   public void startElement(final String uri, final String localName,
@@ -130,10 +138,6 @@ public class TrivialHandler extends DefaultHandler {
     } else {
       throw new IllegalArgumentException("Element expected");
     }
-  }
-
-  public List<Element> getRules() {
-    return rules;
   }
 
   private List<String> getContext() {

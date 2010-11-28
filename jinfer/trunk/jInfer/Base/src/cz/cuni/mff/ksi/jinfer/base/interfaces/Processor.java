@@ -52,7 +52,7 @@ public interface Processor {
    * 
    * @return True if this processor can process files with extensions
    * different from what 
-   * {@see cz.cuni.mff.ksi.jinfer.base.interfacesProcessor#getExtension()}
+   * {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#getExtension()}
    * reports. False otherwise.
    */
   boolean processUndefined();

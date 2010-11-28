@@ -14,42 +14,49 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.basicigg.utils;
+package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Utilities for IGG.
+ * Utilities and constants for IGG.
  *
  * @author vektor
  */
 public final class IGGUtils {
 
-  // TODO vektor Move all instances of these String constants to Base!
-
   private IGGUtils() {
   }
+
+  /** Metadata string meaning "Node comes from a schema". */
+  public static final String FROM_SCHEMA = "from.schema";
+  /** Metadata string meaning "Node comes from a query". */
+  public static final String FROM_QUERY = "from.query";
+  /** Metadata string meaning "Node is a sentinel". */
+  public static final String IS_SENTINEL = "is.sentinel";
+  /** Metadata string meaning "Original schema data". */
+  public static final String SCHEMA_DATA = "schema.data";
 
   /** Metadata map containing a single piece of metadata: "Node comes from a schema". */
   public static final Map<String, Object> ATTR_FROM_SCHEMA = new HashMap<String, Object>(1);
 
   static {
-    ATTR_FROM_SCHEMA.put("from.schema", Boolean.TRUE);
+    ATTR_FROM_SCHEMA.put(FROM_SCHEMA, Boolean.TRUE);
   }
 
   /** Metadata map containing a single piece of metadata: "Node comes from a query". */
   public static final Map<String, Object> ATTR_FROM_QUERY = new HashMap<String, Object>(1);
 
   static {
-    ATTR_FROM_QUERY.put("from.query", Boolean.TRUE);
+    ATTR_FROM_QUERY.put(FROM_QUERY, Boolean.TRUE);
   }
 
   /** Metadata map containing a single piece of metadata: "Node is a sentinel". */
   public static final Map<String, Object> METADATA_SENTINEL = new HashMap<String, Object>(1);
 
   static {
-    METADATA_SENTINEL.put("is_sentinel", Boolean.TRUE);
+    METADATA_SENTINEL.put(IS_SENTINEL, Boolean.TRUE);
   }
 
 }

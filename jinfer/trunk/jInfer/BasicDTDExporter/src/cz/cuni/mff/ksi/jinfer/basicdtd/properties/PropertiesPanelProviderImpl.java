@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.basicdtd.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
@@ -25,11 +24,13 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Properties panel provider of the Basic DTD Exporter module.
+ * 
  * @author sviro
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
+
   private static final int PANEL_PRIORITY = 100000;
   public static final String EXPORTER_CATEGORY = "Exporter";
 

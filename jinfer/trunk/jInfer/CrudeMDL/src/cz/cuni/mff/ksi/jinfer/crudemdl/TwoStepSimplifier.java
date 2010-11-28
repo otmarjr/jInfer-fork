@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
@@ -96,7 +97,7 @@ public class TwoStepSimplifier {
                 @Override
                 public boolean apply(AbstractStructuralNode argument) {
                   return !Boolean.TRUE.equals(
-                          argument.getMetadata().get("is_sentinel"));
+                          argument.getMetadata().get(IGGUtils.IS_SENTINEL));
                 }
               });
       final AbstractStructuralNode node =  processor.processCluster(clusterer, rules);

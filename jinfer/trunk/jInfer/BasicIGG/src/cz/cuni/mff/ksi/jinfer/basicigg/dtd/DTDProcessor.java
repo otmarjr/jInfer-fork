@@ -25,7 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;

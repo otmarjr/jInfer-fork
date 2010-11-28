@@ -24,7 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.basicigg.expansion.ExpansionHelper;
-import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

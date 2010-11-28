@@ -36,7 +36,6 @@ public final class Utils {
 
   private Utils() { }
 
-  // TODO vektor Choose some sensible defaults
   public static final Color COLOR_ELEMENT = Color.gray;
   public static final Color COLOR_ATTRIBUTE = Color.blue;
   public static final Color COLOR_SIMPLE_DATA = Color.black;

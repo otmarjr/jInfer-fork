@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
@@ -102,7 +103,7 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
       
       if (node.isElement()) {
         for (AbstractStructuralNode subNode: ((Element) node).getSubnodes().getTokens()) {
-          if (Boolean.TRUE.equals(subNode.getMetadata().get("is_sentinel"))) {
+          if (Boolean.TRUE.equals(subNode.getMetadata().get(IGGUtils.IS_SENTINEL))) {
             this.addNode(subNode);
           }
           if (subNode.isSimpleData()) {

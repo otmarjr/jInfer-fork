@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDNamedType;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDBuiltInDataTypes;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
@@ -474,8 +475,8 @@ if (false) {
         xsdmd.setRef(name);
       }
 
-      metadata.put("from.schema", Boolean.TRUE);
-      metadata.put("schema.data", xsdmd);
+      metadata.put(IGGUtils.FROM_SCHEMA, Boolean.TRUE);
+      metadata.put(IGGUtils.SCHEMA_DATA, xsdmd);
       interval = xsdmd.getInterval();
 
       // when element is the first level child inside a complexType
@@ -483,7 +484,7 @@ if (false) {
       // when under a complexType, the rule list name is set to the complexType's name
       // and the context is empty, because complexTypes are defined immediately inside the xs:schema element
       if (!"".equals(currentRuleListName) && getContext().isEmpty()) {
-        //metadata.put("is_sentinel", Boolean.TRUE);
+        //metadata.put(IGGUtils.IS_SENTINEL, Boolean.TRUE);
         //metadata.put("nejde.to", Boolean.TRUE);
       }
     }

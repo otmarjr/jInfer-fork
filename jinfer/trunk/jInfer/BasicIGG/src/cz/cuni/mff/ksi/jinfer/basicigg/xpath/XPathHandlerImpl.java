@@ -24,7 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.basicigg.utils.IGGUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -78,7 +78,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     if (axis == Axis.CHILD) {
       final Element newElement = Element.getMutable();
       newElement.setName(localName);
-      newElement.getMetadata().put("from.query", Boolean.TRUE);
+      newElement.getMetadata().put(IGGUtils.FROM_QUERY, Boolean.TRUE);
       newElement.getSubnodes().setType(RegexpType.CONCATENATION);
       newElement.getSubnodes().setInterval(RegexpInterval.getOnce());
       if (lastElement != null) {

@@ -57,7 +57,7 @@ public abstract class AbstractStructuralNode extends AbstractNamedNode implement
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder(super.toString());
+    final StringBuilder sb = new StringBuilder(super.toString());
     sb.append(": ");
     sb.append(getType());
     return sb.toString();

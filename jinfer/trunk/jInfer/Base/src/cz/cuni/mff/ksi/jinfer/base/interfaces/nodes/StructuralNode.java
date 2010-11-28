@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
 
 /**
@@ -26,7 +25,11 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
  * @author anti
  */
 public interface StructuralNode extends NamedNode {
+
+  // TODO anti Comment!
   StructuralNodeType getType();
+
   boolean isElement();
+
   boolean isSimpleData();
 }

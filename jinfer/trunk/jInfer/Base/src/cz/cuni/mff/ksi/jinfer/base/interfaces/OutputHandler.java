@@ -31,7 +31,10 @@ public interface OutputHandler {
    * @param fileName Name of file to be added without extension.
    * @param data content of the added file.
    * @param extension Extension of file to be added without starting dot.
+   * @param showOutput Flag whether to open a new window and show the resulting
+   * schema.
    */
-  void addOutput(final String fileName, final String data, final String extension, final boolean showOutput);
+  void addOutput(final String fileName, final String data,
+          final String extension, final boolean showOutput);
 
 }

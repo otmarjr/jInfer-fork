@@ -37,8 +37,16 @@ public final class TestUtils {
   private TestUtils() {
   }
 
-
+  /**
+   * Empty context, can be used in
+   * {@see cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
+   */
   public static final List<String> EMPTY_CONTEXT = Collections.emptyList();
+  
+  /**
+   * Empty metadata, can be used in
+   * {@see cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
+   */
   public static final Map<String, Object> EMPTY_METADATA = Collections.emptyMap();
 
   /**

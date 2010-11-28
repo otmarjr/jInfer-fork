@@ -32,6 +32,8 @@ package cz.cuni.mff.ksi.jinfer.base.regexp;
  */
 public class RegexpInterval {
 
+  // TODO anti Comment public methods, including constructors!
+
   private final int min;
   private final int max;
   private final boolean unbounded;

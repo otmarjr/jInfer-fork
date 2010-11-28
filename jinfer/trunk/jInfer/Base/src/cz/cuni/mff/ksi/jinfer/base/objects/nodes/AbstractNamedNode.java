@@ -33,6 +33,8 @@ import java.util.Map;
  */
 public abstract class AbstractNamedNode implements NamedNode {
 
+  // TODO anti Comment public methods, including constructors!
+
   /** Names of all elements along the path from root to this element (excluded). */
   private final List<String> context;
   /** Name of this node. */

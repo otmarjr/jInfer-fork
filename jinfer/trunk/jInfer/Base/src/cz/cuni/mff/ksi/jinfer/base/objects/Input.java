@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Documents, schemas, queries etc constituting the input for inference.
+ * XML documents, schemas, queries etc constituting the input for inference.
  * Immutable class.
  * 
  * @author vektor
@@ -40,20 +40,37 @@ public class Input {
     this.queries = queries;
   }
 
+  /**
+   * Create a new, empty instance.
+   */
   public Input() {
     this(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
   }
 
+  /**
+   * Returns the list of XML documents in this input object.
+   * 
+   * @return All XML documents in this object.
+   */
   public Collection<File> getDocuments() {
     return documents;
   }
 
+  /**
+   * Returns the list of schemas in this input object.
+   *
+   * @return All schemas in this object.
+   */
   public Collection<File> getSchemas() {
     return schemas;
   }
 
+  /**
+   * Returns the list of queries in this input object.
+   *
+   * @return All queries in this object.
+   */
   public Collection<File> getQueries() {
     return queries;
   }
-
 }

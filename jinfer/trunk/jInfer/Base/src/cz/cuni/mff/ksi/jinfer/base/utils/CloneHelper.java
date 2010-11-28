@@ -36,6 +36,8 @@ import java.util.Map.Entry;
  */
 public class CloneHelper {
 
+  // TODO vektor Comment!
+
   private final Map<Element, Element> cloned = new HashMap<Element, Element>();
 
   public List<Element> cloneRules(final List<Element> l, final List<String> contextPrefix) {

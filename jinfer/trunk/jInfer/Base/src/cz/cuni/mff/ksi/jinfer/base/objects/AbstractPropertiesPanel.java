@@ -27,6 +27,8 @@ import javax.swing.JPanel;
  */
 public abstract class AbstractPropertiesPanel extends JPanel {
 
+  // TODO sviro Repair comments.
+
   protected final Properties properties;
 
   /**

@@ -24,6 +24,8 @@ import java.util.Properties;
  */
 public class ModuleProperties extends Properties {
 
+  // TODO sviro Comment!
+
   private final String moduleName;
   private final Properties properties;
   public ModuleProperties(final String moduleName, final Properties properties) {

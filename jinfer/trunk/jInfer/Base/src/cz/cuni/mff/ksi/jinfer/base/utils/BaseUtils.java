@@ -33,10 +33,18 @@ public final class BaseUtils {
   
   /**
    * Interface describing an object that decides whether the predicate
-   * (described by this object) appliest to an argument or not.
+   * (described by this object) applies to an argument or not.
    */
   public interface Predicate<T> {
 
+    /**
+     * This method represents the fact whether the predicate representing
+     * this object applies to a specific argument.
+     *
+     * @param argument Argument to decide whether this predicate applies.
+     * @return True if the predicate represented by this object applies to the
+     * specified argument. False otherwise.
+     */
     boolean apply(final T argument);
   }
 

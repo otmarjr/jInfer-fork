@@ -22,6 +22,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
  */
 public enum FolderType {
 
+  // TODO sviro Comment!
+
   XML("XML"),
   SCHEMA("schema"),
   QUERY("query");

@@ -23,6 +23,11 @@ import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
+/**
+ * TODO reseto Comment this class!
+ * 
+ * @author reseto
+ */
 @OptionsPanelController.SubRegistration(location = "jInfer",
                                         displayName = "#AdvancedOption_DisplayName_Logger",
                                         keywords = "#AdvancedOption_Keywords_Logger",

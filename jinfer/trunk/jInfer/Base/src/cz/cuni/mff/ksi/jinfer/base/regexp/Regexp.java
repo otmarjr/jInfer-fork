@@ -43,6 +43,8 @@ import java.util.List;
  */
 public class Regexp<T> {
 
+  // TODO anti Comment public methods, including constructors!
+
   /** If this is a token, its token. */
   private T content;
   /** If this is not a token, list of children. */

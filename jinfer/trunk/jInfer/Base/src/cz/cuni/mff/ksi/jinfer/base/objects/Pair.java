@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 /**
@@ -27,15 +26,30 @@ public class Pair<S, T> {
   private final S first;
   private final T second;
 
+  /**
+   * Full constructor. Both members of this pair must be specified.
+   * @param first First member of this pair.
+   * @param second Second member of this pair.
+   */
   public Pair(final S first, final T second) {
     this.first = first;
     this.second = second;
   }
 
+  /**
+   * Returns the first member of this pair.
+   * 
+   * @return First member of this pair.
+   */
   public S getFirst() {
     return first;
   }
-
+  
+  /**
+   * Returns the second member of this pair.
+   *
+   * @return Second member of this pair.
+   */
   public T getSecond() {
     return second;
   }
@@ -44,6 +58,4 @@ public class Pair<S, T> {
   public String toString() {
     return "Pair:" + first.toString() + ":" + second.toString() + ";";
   }
-
-
 }

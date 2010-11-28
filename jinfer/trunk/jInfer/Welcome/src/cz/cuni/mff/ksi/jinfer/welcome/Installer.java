@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.welcome;
 
 import java.util.Set;
@@ -22,34 +21,33 @@ import org.openide.modules.ModuleInstall;
 import org.openide.windows.TopComponent;
 
 /**
- *
+ * TODO sviro Comment!
+ * 
  * @author sviro
  */
-public class Installer extends ModuleInstall{
+public class Installer extends ModuleInstall {
 
   @Override
   public boolean closing() {
     WelcomeTopComponent topComp = null;
-        Set<TopComponent> tcs = TopComponent.getRegistry().getOpened();
-        for (TopComponent tc: tcs) {
-            if (tc instanceof WelcomeTopComponent) {
-                topComp = (WelcomeTopComponent) tc;
-                break;
-            }
-        }
-        if( WelcomeTopComponent.getDefault().isShowOnStartup() ) {
-            if(topComp == null){
-                topComp = WelcomeTopComponent.findInstance();
-            }
-            //activate welcome screen at shutdown to avoid editor initialization
-            //before the welcome screen is activated again at startup
-            topComp.open();
-            topComp.requestActive();
-        } else if( topComp != null ) {
-            topComp.close();
-        }
-        return super.closing();
+    Set<TopComponent> tcs = TopComponent.getRegistry().getOpened();
+    for (TopComponent tc : tcs) {
+      if (tc instanceof WelcomeTopComponent) {
+        topComp = (WelcomeTopComponent) tc;
+        break;
+      }
+    }
+    if (WelcomeTopComponent.getDefault().isShowOnStartup()) {
+      if (topComp == null) {
+        topComp = WelcomeTopComponent.findInstance();
+      }
+      // activate welcome screen at shutdown to avoid editor initialization
+      // before the welcome screen is activated again at startup
+      topComp.open();
+      topComp.requestActive();
+    } else if (topComp != null) {
+      topComp.close();
+    }
+    return super.closing();
   }
-
-
 }

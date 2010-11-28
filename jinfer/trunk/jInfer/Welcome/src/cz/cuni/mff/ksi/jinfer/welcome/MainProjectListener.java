@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.welcome;
 
 import java.beans.PropertyChangeEvent;
@@ -22,30 +21,30 @@ import java.beans.PropertyChangeListener;
 import org.netbeans.api.project.ui.OpenProjects;
 
 /**
- *
+ * TODO sviro Comment!
+ * 
  * @author sviro
  */
-public class MainProjectListener implements PropertyChangeListener{
+public class MainProjectListener implements PropertyChangeListener {
 
   private final WelcomeTopComponent topComponent;
 
-  MainProjectListener(final WelcomeTopComponent topComponent) {
+  public MainProjectListener(final WelcomeTopComponent topComponent) {
     this.topComponent = topComponent;
   }
 
   @Override
   public void propertyChange(final PropertyChangeEvent evt) {
-   if (evt.getPropertyName().equals(OpenProjects.PROPERTY_MAIN_PROJECT)) {
-     if (OpenProjects.getDefault().getMainProject() != null) {
-      topComponent.getStep3runProject().setEnabled(true);
-      topComponent.getStep2addFiles().setEnabled(true);
-     } else {
-      topComponent.getStep3runProject().setEnabled(false);
-      topComponent.getStep2addFiles().setEnabled(false);
-     }
-   }
+    if (evt.getPropertyName().equals(OpenProjects.PROPERTY_MAIN_PROJECT)) {
+      if (OpenProjects.getDefault().getMainProject() != null) {
+        topComponent.getStep3runProject().setEnabled(true);
+        topComponent.getStep2addFiles().setEnabled(true);
+      } else {
+        topComponent.getStep3runProject().setEnabled(false);
+        topComponent.getStep2addFiles().setEnabled(false);
+      }
+    }
 
 
   }
-
 }

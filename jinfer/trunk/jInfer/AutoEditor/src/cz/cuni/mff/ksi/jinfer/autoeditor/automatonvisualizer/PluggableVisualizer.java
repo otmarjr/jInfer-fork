@@ -20,37 +20,89 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
+import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.List;
 import org.apache.commons.collections15.Transformer;
 
 /**
+ * Extension of {@link Visualizer} that provides an easy way of adding JUNG
+ * graph mouse plugins.
+ *
+ * @see GraphMousePlugin
  *
  * @author rio
- * TODO rio comment
  */
-public final class PluggableVisualizer<T> extends Visualizer<T> {
+public class PluggableVisualizer<T> extends Visualizer<T> {
 
   private final PluggableGraphMouse pluggableGraphMouse;
 
+  /**
+   * Constructs instance with specified {@link Layout}, default graph mouse
+   * plugins and {@link ToStringLabeller}s as vertex and edge label {@link Transformer}s.
+   *
+   * @param layout Layout instance.
+   */
   public PluggableVisualizer(final Layout<State<T>, Step<T>> layout) {
     super(layout);
+
     setVertexLabelTransformer(new ToStringLabeller<State<T>>());
     setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
+    
     pluggableGraphMouse = new PluggableGraphMouse();
+    for (final GraphMousePlugin graphMousePlugin : getDefaultGraphMousePlugins()) {
+      pluggableGraphMouse.add(graphMousePlugin);
+    }
+    setGraphMouse(pluggableGraphMouse);
   }
 
+  /**
+   * Adds graph mouse plugin.
+   *
+   * @param graphMousePlugin
+   */
   public void addGraphMousePlugin(final GraphMousePlugin graphMousePlugin) {
     pluggableGraphMouse.add(graphMousePlugin);
     setGraphMouse(pluggableGraphMouse);
   }
 
-  public void setVertexLabelTransformer(final Transformer<State<T>, String> vertexLabelTransformer) {
+  /**
+   * Replaces vertex label transformer.
+   *
+   * @param vertexLabelTransformer
+   */
+  public void replaceVertexLabelTransformer(final Transformer<State<T>, String> vertexLabelTransformer) {
+    setVertexLabelTransformer(vertexLabelTransformer);
+  }
+
+  /**
+   * Replaces edge label transformer.
+   *
+   * @param edgeLabelTransformer
+   */
+  public void replaceEdgeLabelTransformer(final Transformer<Step<T>, String> edgeLabelTransformer) {
+    setEdgeLabelTransformer(edgeLabelTransformer);
+  }
+
+  private void setVertexLabelTransformer(final Transformer<State<T>, String> vertexLabelTransformer) {
     getRenderContext().setVertexLabelTransformer(vertexLabelTransformer);
   }
 
-  public void setEdgeLabelTransformer(final Transformer<Step<T>, String> edgeLabelTransformer) {
+  private void setEdgeLabelTransformer(final Transformer<Step<T>, String> edgeLabelTransformer) {
     getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer);
+  }
+
+  private static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
+    // TODO rio add this plugins in constructor
+    final LinkedList<GraphMousePlugin> list = new LinkedList<GraphMousePlugin>();
+    list.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0));
+    list.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK | MouseEvent.CTRL_MASK));
+    return list;
   }
 }

@@ -16,42 +16,35 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.PluggableGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import org.apache.commons.collections15.Transformer;
 
 /**
+ * Visualizer with support of vertex picking and straight line edges with custom
+ * label.
  *
  * @author rio
- * TODO rio comment
- *
- * TODO mozno vyrobit class Visualizer<T> ktora bude len VisualizationViewer<State<T>, Step<T>> a to iste s Layoutom - skusit
  */
-public class StatesPickingVisualizer<T> extends Visualizer<T> {
+public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
 
+  /**
+   * Constructs instance with specified {@link Layout} and edge label {@link Transformer}.
+
+   * @param layout
+   * @param edgeLabelTransformer
+   */
   public StatesPickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer) {
     super(layout);
     //setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
-    getRenderContext().setVertexLabelTransformer(new ToStringLabeller<State<T>>());
-    getRenderContext().setEdgeLabelTransformer(edgeLabelTransformer);
-
+    replaceEdgeLabelTransformer(edgeLabelTransformer);
     getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<State<T>, Step<T>>());
 
-    final PluggableGraphMouse gm = new PluggableGraphMouse();
-    for (final GraphMousePlugin plugin : AutoEditor.getDefaultGraphMousePlugins()) {
-      gm.add(plugin);
-    }
-    gm.add(new VerticesPickingGraphMousePlugin<State<T>, Step<T>>());
-    setGraphMouse(gm);
+    addGraphMousePlugin(new VerticesPickingGraphMousePlugin<State<T>, Step<T>>());
   }
   
 }

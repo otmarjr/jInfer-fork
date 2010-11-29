@@ -38,6 +38,7 @@ import java.util.Collection;
 import javax.swing.JComponent;
 
 /**
+ * Graph mouse plugin providing picking of vertices.
  *
  * @author sviro
  */
@@ -79,7 +80,7 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
   private boolean firstPick = true;
 
   /**
-   * create an instance with default settings
+   * Create an instance with default settings.
    */
   public VerticesPickingGraphMousePlugin() {
     super(InputEvent.BUTTON1_MASK);

@@ -16,12 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.Graph;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
@@ -30,21 +31,41 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
 import org.openide.util.Exceptions;
 
 /**
+ * Factory of custom JUNG {@link Layout}s.
  *
  * @author rio
  */
-public class LayoutFactory {
+public final class LayoutFactory {
 
+  /**
+   * Creates {@link Layout} written by Julia Vyhnanovska as a part of her master thesis.
+   *
+   * @param <T> Type parameter of specified automaton.
+   * @param automaton Automaton to create layout from.
+   * @return
+   */
   public static <T> Layout<State<T>, Step<T>> createVyhnanovskaGridLayout(final Automaton<T> automaton) {
-    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, AutoEditor.createGraph(automaton));
+    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, createGraph(automaton));
   }
 
+  /**
+   * Creates {@link Layout} using Graphviz tool. Graphviz must be installed.
+   *
+   * TODO rio understand and comment
+   *
+   * @param <T> Type parameter of specified automaton.
+   * @param automaton Automaton to create layout from.
+   * @param edgeLabelTransformer TODO
+   * @return
+   */
   public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
     final Map<State<T>, Point2D> positions= new HashMap<State<T>, Point2D>();
 
@@ -89,6 +110,32 @@ public class LayoutFactory {
     }
     Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(positions);
 
-    return new StaticLayout<State<T>, Step<T>>(AutoEditor.createGraph(automaton), trans);
+    return new StaticLayout<State<T>, Step<T>>(createGraph(automaton), trans);
+  }
+
+  /**
+   * Creates JUNG representation of {@link Automaton}.
+   *
+   * @param <T> Type parameter of specified automaton.
+   * @param automaton Automaton instance.
+   * @return Automaton as JUNG graph.
+   */
+  private static <T> Graph<State<T>, Step<T>> createGraph(final Automaton<T> automaton) {
+    final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
+    final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
+
+    // Get vertices = states of automaton
+    for (final Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
+      graph.addVertex(entry.getKey());
+    }
+
+    // Get edges of automaton
+    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
+      for (Step<T> step : entry.getValue()) {
+        graph.addEdge(step, step.getSource(), step.getDestination());
+      }
+    }
+
+    return graph;
   }
 }

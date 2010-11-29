@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -31,13 +32,23 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 /**
+ * Base class for visualization of {@link Automaton} extending JUNG
+ * {@link VisualizationViewer} with support of saving as images.
+ *
+ * This class does not handle layout of vertices. It is provided by {@link Layout},
+ * instance of which has to be specified in construction.
  *
  * @author rio
  */
 public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
-  final Set<String> supportedImageFormatNames;
+  private final Set<String> supportedImageFormatNames;
 
+  /**
+   * Constructs instance with specified {@link Layout}.
+   *
+   * @param layout Layout instance.
+   */
   public Visualizer(final Layout<State<T>, Step<T>> layout) {
     super(layout);
     supportedImageFormatNames = new HashSet<String>();
@@ -46,6 +57,13 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
     }
   }
 
+  /**
+   * Saves this visual representation as image and store it in file.
+   *
+   * @param file File to store the image.
+   * @param formatName Name of format of the image. See {@link #getSupportedImageFormatNames()}.
+   * @throws IOException Saving to file failed.
+   */
   public void saveImage(final File file, final String formatName) throws IOException {
     if (!supportedImageFormatNames.contains(formatName)) {
       throw new IllegalArgumentException("Image format '" + formatName + "' is not suported");
@@ -62,6 +80,13 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
     setDoubleBuffered(isDoubleBuffered);
 
     ImageIO.write(bi, formatName, file);
+  }
+
+  /**
+   * Retrieves set of all image format names supported by {@link #saveImage(java.io.File, java.lang.String)}.
+   */
+  public Set<String> getSupportedImageFormatNames() {
+    return supportedImageFormatNames;
   }
 
 }

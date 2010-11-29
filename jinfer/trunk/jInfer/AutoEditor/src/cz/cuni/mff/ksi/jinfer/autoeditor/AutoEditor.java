@@ -16,62 +16,47 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.Visualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent.AutoEditorTopComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
-import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
-import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
-import java.awt.event.MouseEvent;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import org.openide.windows.WindowManager;
 
 /**
- * Provides a way to draw automata in a GUI component and return a result of
- * user interaction with the drawing.
  *
- * How does it work?
- * - AutoEditor is called in a particular thread (AutoEditor thread). It
- *   prepares a visualization of a given automaton and runs an
- *   AutoEditorTopComponent function in a special thread (GUI thread, running
- *   in special thread is required by NB). Arguments passed to the
- *   AutoEditorTopComponent function are:
- *   1) reference to an instance of visualization of the automaton
- *   2) reference to this (this instance of AutoEditor).
- *   Then AutoEditor thread sleeps on its own instance.
- * - GUI thread stores the instance of AutoEditor in an instance of
- *   AutoEditorTopComponent class and draws what is be drawn. AutoEditor thread
- *   still sleeps.
- * - User interaction (i.e. button click) is handled in some NB thread
- *   (maybe it is the GUI thread - it is not important) which can access
- *   the same instance of AutoEditorTopComponent, so it can access
- *   the instance of AutoEditor, so it wakes AutoEditor thread up.
- * - AutoEditor thread gets the result of user interaction from the instance
- *   of visualization (which was passed to GUI thread) and returns it to the
- *   caller of AutoEditor. So the call of AutoEditor can be considered
- *   as synchronous.
+ * Contains static function for displaying visualized {@link Automaton} in NB GUI.
  *
  * @author rio
  */
 public class AutoEditor {
 
-  public static <T> void drawComponentAsync(final AbstractComponent component) {
+  /**
+   * Asynchronously draws component in the AutoEditor tab.
+   *
+   * This function is asynchronous, which means that the drawing is not done
+   * in a thread which this function is executed in. So this function can return
+   * before the drawing is done.
+   *
+   * @param component Component with initialized instance of {@link Visualizer}.
+   */
+  public static void drawComponentAsync(final AbstractComponent component) {
     if (component.getVisualizer() == null) {
       throw new IllegalStateException("Visualizer has not been set");
     }
     drawInGUI(component);
   }
 
-  public static <T> boolean drawComponentAndWaitForGUI(final AbstractComponent component) throws InterruptedException {
+  /**
+   * Draws component in the AutoEditor tab.
+   *
+   * This function is synchronous. It returns when drawn component signals it.
+   *
+   * @param component Component with initialized instance of {@link Visualizer}.
+   * @return Value of <code>true</code> if the component signaled return,
+   * <code>false</code> if waiting was interrupted by another thread.
+   * @throws InterruptedException If the AutoEditor tab was closed.
+   */
+  public static boolean drawComponentAndWaitForGUI(final AbstractComponent component) throws InterruptedException {
     drawComponentAsync(component);
     try {
       component.waitForGUIDone();
@@ -87,6 +72,9 @@ public class AutoEditor {
     return true;
   }
 
+  /**
+   * Closes the AutoEditor tab.
+   */
   public static void closeTab() {
     // Call GUI in a special thread. Required by NB.
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
@@ -97,32 +85,6 @@ public class AutoEditor {
         AutoEditorTopComponent.findInstance().close();
       }
     });
-  }
-
-  public static <T> Graph<State<T>, Step<T>> createGraph(final Automaton<T> automaton) {
-    final DirectedSparseMultigraph<State<T>, Step<T>> graph = new DirectedSparseMultigraph<State<T>, Step<T>>();
-    final Map<State<T>, Set<Step<T>>> automatonDelta = automaton.getDelta();
-
-    // Get vertices = states of automaton
-    for (final Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      graph.addVertex(entry.getKey());
-    }
-
-    // Get edges of automaton
-    for (Entry<State<T>, Set<Step<T>>> entry : automatonDelta.entrySet()) {
-      for (Step<T> step : entry.getValue()) {
-        graph.addEdge(step, step.getSource(), step.getDestination());
-      }
-    }
-
-    return graph;
-  }
-
-  public static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
-    final LinkedList<GraphMousePlugin> list = new LinkedList<GraphMousePlugin>();
-    list.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0));
-    list.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK | MouseEvent.CTRL_MASK));
-    return list;
   }
 
   private static void drawInGUI(final AbstractComponent component) {

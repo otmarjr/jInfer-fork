@@ -19,7 +19,7 @@ It was decided that jInfer will be open source, at first triple-licensing was co
 	<h2>Hosting</h2>
 
 	<p>
-		Because of NetBeans' tight binding to the Kenai platform, this was our first choice. We started using their SVN repository and JIRA issue tracker and would stick to it, but there were talks of the whole site closing down. Even though this wasn’t the case, it was enough of a scare to move jInfer to SourceForge.<br/>
+		Because of NetBeans' tight binding to the Kenai platform, this was our first choice. We started using their SVN repository and JIRA issue tracker and would stick to it, but there were talks of the whole site closing down. Even though this wasn't the case, it was enough of a scare to move jInfer to SourceForge.<br/>
 We are using mainly 4 of the facilities SF.net provides: SVN repository, default issue tracker (called ingeniously Tracker), file publishing and project web. The best way to access them all is via http://sourceforge.net/projects/jinfer/.
 	</p>
 
@@ -34,7 +34,7 @@ We are using mainly 4 of the facilities SF.net provides: SVN repository, default
 		<h3>NetBeans</h3>
 
 		<p>
-			Setting NB to report all warnings it recognizes is a first (and possibly most important) step in process of keeping code clean. Refactoring capabilities don’t match those of Eclipse, but are impressive and extremely helpful anyway. Integrated Subversion client simplifies usual repository tasks to the point of triviality.
+			Setting NB to report all warnings it recognizes is a first (and possibly most important) step in process of keeping code clean. Refactoring capabilities don't match those of Eclipse, but are impressive and extremely helpful anyway. Integrated Subversion client simplifies usual repository tasks to the point of triviality.
 		</p>
 		
 		<h3>SVN</h3>

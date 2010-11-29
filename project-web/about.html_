@@ -58,9 +58,14 @@
 				</td>
 			</tr>
 		</table>
-  	</div>
+	</div>
 	
 	<div class="clear"></div>
+	
+	<h2>Making of</h2>
+	<p>
+	    A short <a href="makingof.html">overview</a> of technologies, tools and practices used in jInfer development.
+	</p>
 </div>
 
 #include "footer.html_"

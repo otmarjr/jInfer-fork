@@ -1,0 +1,107 @@
+#include "header.html_"
+
+<div id="content">
+
+	<h1>The Making of: jInfer</h1>
+
+	<p>
+		This is a short report of various tools and practices we used to create jInfer. It is written from the perspective of project lead Matej Vitasek.
+	</p>
+
+	<h2>Platform</h2>
+
+	<p>
+		It was clear from the beginning that we will need a modular framework, and we decided to use an existing solution. Next important requirement was Java, which left us with only two big options: NetBeans and Eclipse platforms. Due to mainly my personal affection, we chose NetBeans. Even though this choice prove to be frustrating at times, the platform mostly met our requirements.<br/>
+Since the project’s inception there were a few NB releases, none of which broke any of our existing code, one actually fixing a pretty annoying problem with option windows.<br/>
+It was decided that jInfer will be open source, at first triple-licensing was considered (such as Firefox), but finally GPL 3.0 was chosen.
+	</p>
+	
+	<h2>Hosting</h2>
+
+	<p>
+		Because of NetBeans’ tight binding to the Kenai platform, this was our first choice. We started using their SVN repository and JIRA issue tracker and would stick to it, but there were talks of the whole site closing down. Even though this wasn’t the case, it was enough of a scare to move jInfer to SourceForge.<br/>
+We are using mainly 4 of the facilities SF.net provides: SVN repository, default issue tracker (called ingeniously Tracker), file publishing and project web. The best way to access them all is via http://sourceforge.net/projects/jinfer/.
+	</p>
+
+	<h2>Development</h2>
+
+	<p>
+		Being written in Java, jInfer tries to be as multi-platform as possible. It was developed (and tested) on all major platforms that NetBeans supports: Windows, various flavors of Linux and Mac OS X.
+	</p>
+
+	<h2>Tools</h2>
+
+		<h3>NetBeans</h3>
+
+		<p>
+			Setting NB to report all warnings it recognizes is a first (and possibly most important) step in process of keeping code clean. Refactoring capabilities don’t match those of Eclipse, but are impressive and extremely helpful anyway. Integrated Subversion client simplifies usual repository tasks to the point of triviality.
+		</p>
+		
+		<h3>SVN</h3>
+		
+		<p>
+			A software project involving more developers is unthinkable without some kind of version control tool, and even though Subversion is quite old and perhaps superseded by distributed tools such as Git,  it is still a simple and powerful tool. We decided to put the whole project, including tools, documentation and the project web into a single repository. For jInfer itself we keep trunk, branches and tags. We branch every time an experimental change needs to be committed, or if some changes in trunk should be removed from the version that is about to be released. We tag every release.
+		</p>
+
+		<h3>PMD</h3>
+
+		<p>
+			This static code analysis tool can find a surprising number potential bugs and bad coding practices. We use all the rules from the default installation, except for
+			<ul>
+				<li>AvoidFinalLocalVariable</li>
+				<li>AvoidInstantiatingObjectsInLoops</li>
+				<li>BeanMembersShouldSerialize</li>
+				<li>ConfusingTernary</li>
+				<li>DoNotUseThreads</li>
+				<li>JUnitAssertionsShouldIncludeMessage</li>
+				<li>LongVariable</li>
+				<li>OnlyOneReturn</li>
+				<li>ShortVariable</li>
+			</ul>
+		</p>
+
+		<h3>JUnit</h3>
+
+		<p>
+			Even though the main task of jInfer, inference of schemas from existing data, cannot be directly tested with unit tests, we try to write them for each module and function where feasible.
+		</p>
+
+		<h3>StatSVN</h3>
+
+		<p>
+			We use this tool to track our progress in various metrics, such as number of files, LOC, distribution of commits over time etc. It is also a very useful tool to measure performance of each team member :-)<br/>
+
+TODO screenshot
+		</p>
+
+		<h3>Hudson</h3>
+
+		<p>
+			To automatize our process of building and testing, we deployed a Hudson continuous integration server. Every 3 hours, this builds and tests the whole project and reports any problems. Additionally, Hudson daily generates JavaDoc and StatSVN reports and publishes them.<br/>
+
+TODO screenshot
+		</p>
+
+	<h2>Practices</h2>
+
+	<p>
+		To be prepared for the “sharp” jInfer release, I decided to release 3 beta versions in advance. A few months in between provide us with a time frame to complete tasks, test them and try to deliver a working product.
+	</p>
+
+	<h2>Communication</h2>
+
+	<p>
+		Since the beginning of the project we have a private Google Groups mailing list. For this reason, we are not using mailing lists provided by SF.net.<br/>
+		We are using Google Docs as a platform for creating and sharing various development documents. One of them is of particular interest: Inventory, containing all NB modules jInfer consists of, along with their responsible developer, version and history of versions in past jInfer releases. This document also tracks every 3rd party library jInfer uses, with licensing information, project URL etc.<br/>
+		We use a mix of instant messaging and e-mails to communicate, VoIP calls didn’t prove useful.
+	</p>
+
+	<h2>Documentation</h2>
+
+	<p>
+		TODO
+	</p>
+
+</div>
+
+#include "footer.html_"

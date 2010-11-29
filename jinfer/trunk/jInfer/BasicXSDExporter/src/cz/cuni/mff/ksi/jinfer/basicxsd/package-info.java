@@ -15,18 +15,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.basicxsd.utils;
-
 /**
- * Enumeration to represent a category of XSD type.
- *
- * @author rio
+ * Main package of the Basic XSD Exporter module. This module provides an
+ * implementation of the {@link cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator}
+ * interface. It exports simplified grammar into XSD.
  */
-public enum TypeCategory {
-  /** Type that is one of the XSD built-in types. */
-  BUILTIN,
-  /** Type that is a XSD user defined simple type. */
-  SIMPLE,
-  /** Type that is a XSD user defined complex type. */
-  COMPLEX;
-}
+package cz.cuni.mff.ksi.jinfer.basicxsd;

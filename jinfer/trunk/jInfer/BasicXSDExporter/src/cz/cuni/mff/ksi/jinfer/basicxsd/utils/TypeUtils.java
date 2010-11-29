@@ -22,23 +22,29 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 /**
+ * Utility functions for element type handling.
  *
  * @author rio
  */
-public final class XSDUtils {
-  private XSDUtils() {
+public final class TypeUtils {
+  private TypeUtils() {
   }
 
-  public static TypeCategory getTypeCategory(final Element e) {
-    if (!e.getAttributes().isEmpty()) {
+  /**
+   * Determinate XSD type category for specified element.
+   *
+   * @param element Element instance.
+   */
+  public static TypeCategory getTypeCategory(final Element element) {
+    if (!element.getAttributes().isEmpty()) {
       return TypeCategory.COMPLEX;
     }
 
-    if (hasMixedContent(e)) {
+    if (hasMixedContent(element)) {
       return TypeCategory.COMPLEX;
     }
     
-    Regexp<AbstractStructuralNode> subnodes = e.getSubnodes();
+    Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
 
     if (subnodes.isLambda()) {
       // TODO rio skutocne built-in??
@@ -74,22 +80,40 @@ public final class XSDUtils {
     return TypeCategory.COMPLEX;
   }
 
-  public static boolean hasBuiltinType(final Element e) {
-    TypeCategory typeCategory = XSDUtils.getTypeCategory(e);
+  /**
+   * {@link #getTypeCategory(cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element)} wrapper.
+   * Determinate whether specified element is one of the XSD built-in types.
+   *
+   * @param element Element instance.
+   */
+  public static boolean isOfBuiltinType(final Element element) {
+    TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
     return typeCategory.equals(TypeCategory.BUILTIN) ? true : false;
   }
 
-  public static boolean hasComplexType(final Element e) {
-    TypeCategory typeCategory = XSDUtils.getTypeCategory(e);
+  /**
+   * {@link #getTypeCategory(cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element)} wrapper.
+   * Determinate whether specified element is an user defined XSD complex type.
+   *
+   * @param element Element instance.
+   */
+  public static boolean isOfComplexType(final Element element) {
+    TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
     return typeCategory.equals(TypeCategory.COMPLEX) ? true : false;
   }
 
-  public static boolean hasMixedContent(final Element e) {
-    final Regexp<AbstractStructuralNode> regexp = e.getSubnodes();
+  /**
+   * Determinate whether specified element has mixed content. Element has mixed
+   * content if contains both sub elements and some constant data.
+   *
+   * @param element Element instance.
+   */
+  public static boolean hasMixedContent(final Element element) {
+    final Regexp<AbstractStructuralNode> regexp = element.getSubnodes();
 
     boolean hasSimpleData = false;
     boolean hasElements = false;
-    boolean hasAttributes = !e.getAttributes().isEmpty();
+    boolean hasAttributes = !element.getAttributes().isEmpty();
 
     for (final AbstractStructuralNode token : regexp.getTokens()) {
       if (token.isSimpleData()) {

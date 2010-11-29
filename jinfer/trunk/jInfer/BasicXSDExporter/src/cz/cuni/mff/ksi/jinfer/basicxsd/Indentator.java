@@ -17,10 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
-// TODO rio comment
-
-/** TODO rio translate
- * Stara sa o odsadenie riadkov.
+/**
+ * Helper class keeping an inserted text and an indentation level, providing methods
+ * to alter the level and to append another text. Formatted text is retrieved by
+ * {@link #toString()} method.
  *
  * @author rio
  */
@@ -31,18 +31,33 @@ public class Indentator {
   private final int spacesPerIndent;
   
 
-  /** Constructor.
+  /**
+   * Constructs an instance with zero level of indentation.
+   *
+   * @param spacesPerIndent Number of space characters per one level of indentation.
    */
   public Indentator(final int spacesPerIndent) {
     this.builder = new StringBuilder();
     this.spacesPerIndent = spacesPerIndent;
   }
 
+  /**
+   * Indent specified text and append it. No new line character is inserted, this is responsibility
+   * of a caller.
+   *
+   * @param string Text to indent and append.
+   */
   public void indent(final String string) {
     builder.append(makeIndentation());
     builder.append(string);
   }
 
+  /**
+   * Appends specified text without indentation. No new line character is inserted, this is responsibility
+   * of a caller.
+   *
+   * @param string Text to append.
+   */
   public void append(final String string) {
     builder.append(string);
   }
@@ -52,10 +67,16 @@ public class Indentator {
     return builder.toString();
   }
 
+  /**
+   * Increases the indentation level per one.
+   */
   public void increaseIndentation() {
     indentationLevel += spacesPerIndent;
   }
 
+  /**
+   * decreases the indentation level per one.
+   */
   public void decreaseIndentation() {
     assert (indentationLevel >= spacesPerIndent);
     indentationLevel -= spacesPerIndent;

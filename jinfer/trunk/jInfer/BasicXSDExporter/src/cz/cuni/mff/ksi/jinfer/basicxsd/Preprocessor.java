@@ -28,12 +28,8 @@ import java.util.Map;
 import java.util.Stack;
 import org.apache.log4j.Logger;
 
-/** TODO rio translate
- * Preprocessing vstupu z IGG pred samotnym generovanim schemy. Dostane list
- * elementov, vyhodi z neho nedosiahnutelne, poznaci, ak odhali viac top level
- * elementov, rozhodne, ktore elementy by sa definovat globalne ako typy.
- *
- * Pred pouzitim verejnych metod je nutne zavolat run().
+/**
+ * Provides preprocessing of IG grammar.
  *
  * @author rio
  */
@@ -48,26 +44,43 @@ public final class Preprocessor {
    * global type or not.
    */
   private Map<String, Boolean> globalElementFlags = null;
-  /// Generate global definitions of elements types.
-  private boolean generateGlobal;
+  private final boolean generateGlobal;
   /// Number of occurrences of element to consider it as a global type.
   private final int numberToGlobal;
-  
 
-  /** Constructor
+  
+  /**
+   * Constructs an instance and performs preprocessing without determination
+   * of global element types. Results can be retrieved by public methods.
    *
-   * @param elements Non empty list of elements from IGG.
+   * @param elements A non empty list of elements.
    */
-  public Preprocessor(final List<Element> elements, final boolean generateGlobal, final int numberToGlobal) {
-    assert (!elements.isEmpty());
-    this.originalElements = elements;
-    this.generateGlobal = generateGlobal;
-    this.numberToGlobal = numberToGlobal;
+  public Preprocessor(final List<Element> elements) {
+    this(elements, Integer.MIN_VALUE);
   }
 
-  /** Need to be called before calling of any other public method.
+  /**
+   * Constructs an instance and performs preprocessing with determination
+   * of global element types. Results can be retrieved by public methods.
+   *
+   * @param elements Input grammar - a non empty list of elements.
+   * @param numberToGlobal Number of occurrences of an element to consider its type
+   * as a global type. Passing of a non positive integer means no generation of global types.
    */
-  public void run() {
+  public Preprocessor(final List<Element> elements, final int numberToGlobal) {
+    if (elements.isEmpty()) {
+      throw new IllegalStateException("An empty grammar was passed in.");
+    }
+    this.originalElements = elements;
+    this.generateGlobal = numberToGlobal > 0 ? true : false;
+    this.numberToGlobal = numberToGlobal;
+    run();
+  }
+
+  /**
+   * Need to be called before calling of any other public method.
+   */
+  private void run() {
     assert (!originalElements.isEmpty());
 
     // sort elements topologically
@@ -88,10 +101,11 @@ public final class Preprocessor {
     globalElementFlags = makeGlobalFlags(toposortedElements, elementOccurrenceCounts);
   }
 
-  /** Returns element by name.
+  /**
+   * Returns an element reference by its name.
    *
-   * @param elementName name of element
-   * @return element or null if element with specified name is not in IG
+   * @param elementName Name of a desired element.
+   * @return Valid reference or <code>null</code> if the element is not present in the grammar.
    */
   public Element getElementByName(final String elementName) {
     for (Element element : originalElements) {
@@ -102,26 +116,25 @@ public final class Preprocessor {
     return null;
   }
 
-  /** Decides whether a given element should be defined as a global type.
+  /**
+   * Decides whether a given element's type can be considered a global type.
    *
-   * @param elementName name of an element
-   * @return true of false
+   * @param elementName Name of an element.
    */
   public boolean isElementGlobal(final String elementName) {
     return globalElementFlags.get(elementName).booleanValue();
   }
 
-  /** Returns a top level element.
-   *
-   * @return top level element
+  /** 
+   * Returns a top level (root) element.
    */
   public Element getTopElement() {
     return toposortedElements.get(toposortedElements.size() - 1);
   }
 
-  /** Return list of elements that should be defined as global types.
-   *
-   * @return list of elements that should be defined as global types
+  /** 
+   * Returns a list of global elements. Global elements are those which types
+   * have been considered global types.
    */
   public List<Element> getGlobalElements() {
     final List<Element> globalElements = new LinkedList<Element>();

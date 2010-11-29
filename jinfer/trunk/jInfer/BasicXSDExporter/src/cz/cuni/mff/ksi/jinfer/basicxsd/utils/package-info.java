@@ -15,18 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.basicxsd.utils;
-
 /**
- * Enumeration to represent a category of XSD type.
- *
- * @author rio
+ * This package contains utilities used by Basic XSD Exporter.
  */
-public enum TypeCategory {
-  /** Type that is one of the XSD built-in types. */
-  BUILTIN,
-  /** Type that is a XSD user defined simple type. */
-  SIMPLE,
-  /** Type that is a XSD user defined complex type. */
-  COMPLEX;
-}
+package cz.cuni.mff.ksi.jinfer.basicxsd.utils;

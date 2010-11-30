@@ -4,7 +4,7 @@ CPP=/usr/bin/cpp -P -w -C
 
 all: outputdir about.html doc_developer.html doc_tutorial.html documentation.html doc_user.html download.html empty.html footer.html header.html help.html index.html legal.html makingof.html images photos style
 
-IMGS= jinfer-logo.png document-save-2.png edit-find-4.png configure-4.png help-hint.png background3.png box-downleft.png
+IMGS= jinfer-logo.png document-save-2.png edit-find-4.png configure-4.png help-hint.png background3.png box-downleft.png screen-hudson.png screen-statsvn.png
 PHTS= anti.jpg reseto.jpg rio.jpg sviro.jpg vektor.jpg
 
 outputdir:

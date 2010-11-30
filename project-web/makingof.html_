@@ -11,16 +11,16 @@
 	<h2>Platform</h2>
 
 	<p>
-		It was clear from the beginning that we will need a modular framework, and we decided to use an existing solution. Next important requirement was Java, which left us with only two big options: NetBeans and Eclipse platforms. Due to mainly my personal affection, we chose NetBeans. Even though this choice prove to be frustrating at times, the platform mostly met our requirements.<br/>
+		It was clear from the beginning that we will need a modular framework, and we decided to use an existing solution. Next important requirement was Java, which left us with only two big options: <a href="http://netbeans.org/features/platform/">NetBeans</a> and <a href="http://wiki.eclipse.org/index.php/Rich_Client_Platform">Eclipse platforms</a>. Due to mainly my personal affection, we chose NetBeans. Even though this choice prove to be frustrating at times, the platform mostly met our requirements.<br/>
 Since the project's inception there were a few NB releases, none of which broke any of our existing code, one actually fixing a pretty annoying problem with option windows.<br/>
-It was decided that jInfer will be open source, at first triple-licensing was considered (such as Firefox), but finally GPL 3.0 was chosen.
+It was decided that jInfer will be open source, at first triple-licensing was considered (such as Firefox), but finally <a href="http://gplv3.fsf.org/">GPL 3.0</a> was chosen.
 	</p>
 	
 	<h2>Hosting</h2>
 
 	<p>
-		Because of NetBeans' tight binding to the Kenai platform, this was our first choice. We started using their SVN repository and JIRA issue tracker and would stick to it, but there were talks of the whole site closing down. Even though this wasn't the case, it was enough of a scare to move jInfer to SourceForge.<br/>
-We are using mainly 4 of the facilities SF.net provides: SVN repository, default issue tracker (called ingeniously Tracker), file publishing and project web. The best way to access them all is via http://sourceforge.net/projects/jinfer/.
+		Because of NetBeans' tight binding to the <a href="http://kenai.com/">Kenai</a> platform, this was our first choice. We started using their SVN repository and JIRA issue tracker and would stick to it, but there were talks of the whole site closing down. Even though this wasn't the case, it was enough of a scare to move jInfer to <a href="http://sourceforge.net">SourceForge</a>.<br/>
+We are using mainly 4 of the facilities SF.net provides: <a href="https://sourceforge.net/scm/?type=svn&group_id=302779">SVN repository</a>, default <a href="https://sourceforge.net/tracker/?group_id=302779&atid=1276495">issue tracker</a> (called ingeniously Tracker), <a href="https://sourceforge.net/projects/jinfer/files/">file publishing</a> and <a href="http://jinfer.sourceforge.net/">project web</a>. The best way to access them all is via <a href="http://sourceforge.net/projects/jinfer/">http://sourceforge.net/projects/jinfer/</a>.
 	</p>
 
 	<h2>Development</h2>
@@ -43,37 +43,37 @@ We are using mainly 4 of the facilities SF.net provides: SVN repository, default
 			A software project involving more developers is unthinkable without some kind of version control tool, and even though Subversion is quite old and perhaps superseded by distributed tools such as Git,  it is still a simple and powerful tool. We decided to put the whole project, including tools, documentation and the project web into a single repository. For jInfer itself we keep trunk, branches and tags. We branch every time an experimental change needs to be committed, or if some changes in trunk should be removed from the version that is about to be released. We tag every release.
 		</p>
 
-		<h3>PMD</h3>
+		<h3><a href="http://pmd.sourceforge.net/">PMD</a></h3>
 
 		<p>
 			This static code analysis tool can find a surprising number potential bugs and bad coding practices. We use all the rules from the default installation, except for
 			<ul>
-				<li>AvoidFinalLocalVariable</li>
-				<li>AvoidInstantiatingObjectsInLoops</li>
-				<li>BeanMembersShouldSerialize</li>
-				<li>ConfusingTernary</li>
-				<li>DoNotUseThreads</li>
-				<li>JUnitAssertionsShouldIncludeMessage</li>
-				<li>LongVariable</li>
-				<li>OnlyOneReturn</li>
-				<li>ShortVariable</li>
+				<li><code>AvoidFinalLocalVariable</code></li>
+				<li><code>AvoidInstantiatingObjectsInLoops</code></li>
+				<li><code>BeanMembersShouldSerialize</code></li>
+				<li><code>ConfusingTernary</code></li>
+				<li><code>DoNotUseThreads</code></li>
+				<li><code>JUnitAssertionsShouldIncludeMessage</code></li>
+				<li><code>LongVariable</code></li>
+				<li><code>OnlyOneReturn</code></li>
+				<li><code>ShortVariable</code></li>
 			</ul>
 		</p>
 
-		<h3>JUnit</h3>
+		<h3><a href="http://www.junit.org/">JUnit</a></h3>
 
 		<p>
 			Even though the main task of jInfer, inference of schemas from existing data, cannot be directly tested with unit tests, we try to write them for each module and function where feasible.
 		</p>
 
-		<h3>StatSVN</h3>
+		<h3><a href="http://www.statsvn.org/">StatSVN</a></h3>
 
 		<p>
 			We use this tool to track our progress in various metrics, such as number of files, LOC, distribution of commits over time etc. It is also a very useful tool to measure performance of each team member :-)<br/>
 			<img src="images/screen-statsvn.png" alt="StatSVN screenshot" style="width: 35em;"/>
 		</p>
 
-		<h3>Hudson</h3>
+		<h3><a href="http://java.net/projects/hudson/">Hudson</a></h3>
 
 		<p>
 			To automatize our process of building and testing, we deployed a Hudson continuous integration server. Every 3 hours, this builds and tests the whole project and reports any problems. Additionally, Hudson daily generates JavaDoc and StatSVN reports and publishes them.<br/>

@@ -70,14 +70,14 @@ We are using mainly 4 of the facilities SF.net provides: <a href="https://source
 
 		<p>
 			We use this tool to track our progress in various metrics, such as number of files, LOC, distribution of commits over time etc. It is also a very useful tool to measure performance of each team member :-)<br/>
-			<img src="images/screen-statsvn.png" alt="StatSVN screenshot" style="width: 35em; padding: 0.5em; border: 1px solid #7f7f7f;"/>
+			<img src="images/screen-statsvn.png" alt="StatSVN screenshot" style="width: 35em; margin: 0.25em; padding: 0.25em; border: 1px solid #7f7f7f;"/>
 		</p>
 
 		<h3><a href="http://java.net/projects/hudson/">Hudson</a></h3>
 
 		<p>
 			To automatize our process of building and testing, we deployed a Hudson continuous integration server. Every 3 hours, this builds and tests the whole project and reports any problems. Additionally, Hudson daily generates JavaDoc and StatSVN reports and publishes them.<br/>
-			<img src="images/screen-hudson.png" alt="Hudson screenshot" style="width: 35em; padding: 0.5em; border: 1px solid #7f7f7f;"/>
+			<img src="images/screen-hudson.png" alt="Hudson screenshot" style="width: 35em; margin: 0.25em; padding: 0.25em; border: 1px solid #7f7f7f;"/>
 		</p>
 
 	<h2>Practices</h2>

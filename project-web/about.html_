@@ -20,7 +20,7 @@
 			<tr>
 				<td class="member_photo"><img src="photos/anti.jpg" alt="anti" /></td>
 				<td class="member_info">
-					<div><span class="member_name">Michal Klempa</span><span class="member_function">theory guru</span></div> <br />
+					<div><span class="member_name">Michal Klempa</span></div> <br />
 					<div class="member_email">michal~anti~gemail~kom</div><br />
 					<div class="member_http"><a href="http://riesky.sk/~anti">http://riesky.sk/~anti</a></div>
 				</td>
@@ -28,7 +28,7 @@
 			<tr>
 				<td class="member_photo"><img src="photos/rio.jpg" alt="rio" /></td>
 				<td class="member_info">
-					<div><span class="member_name">Mário Mikula</span><span class="member_function">code guru</span></div> <br />
+					<div><span class="member_name">Mário Mikula</span></div> <br />
 					<div class="member_email"></div><br />
 					<a href=""></a>
 				</td>
@@ -36,7 +36,7 @@
 			<tr>
 				<td class="member_photo"><img src="photos/reseto.jpg" alt="reseto" /></td>
 				<td class="member_info">
-					<div><span class="member_name">Robert Smetana</span><span class="member_function">documentation guru</span></div> <br />
+					<div><span class="member_name">Robert Smetana</span></div> <br />
 					<div class="member_email"></div><br />
 					<a href=""></a>
 				</td>
@@ -44,7 +44,7 @@
 			<tr>
 				<td class="member_photo"><img src="photos/sviro.jpg" alt="sviro" /></td>
 				<td class="member_info">
-					<div><span class="member_name">Michal Švirec</span><span class="member_function">NetBeans guru</span></div> <br />
+					<div><span class="member_name">Michal Švirec</span></div> <br />
 					<div class="member_email"></div><br />
 					<a href=""></a>
 				</td>
@@ -52,7 +52,7 @@
 			<tr>
 				<td class="member_photo"><img src="photos/vektor.jpg" alt="vektor" /></td>
 				<td class="member_info">
-					<div><span class="member_name">Matej Vitásek</span><span class="member_function">lead</span></div> <br />
+					<div><span class="member_name">Matej Vitásek</span></div> <br />
 					<div class="member_email">vektor330~gmail~com</div><br />
 					<div class="member_http"><a href="http://www.google.com/profiles/vektor330">http://www.google.com/profiles/vektor330</a></div>
 				</td>

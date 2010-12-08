@@ -93,7 +93,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelBehaviour.add(nestingLevel, gridBagConstraints);
 
-    jLabel2.setFont(jLabel2.getFont().deriveFont((jLabel2.getFont().getStyle() | java.awt.Font.ITALIC)));
+    jLabel2.setFont(jLabel2.getFont().deriveFont((jLabel2.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel2.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -119,7 +119,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelBehaviour.add(maxRules, gridBagConstraints);
 
-    jLabel4.setFont(jLabel4.getFont().deriveFont((jLabel4.getFont().getStyle() | java.awt.Font.ITALIC)));
+    jLabel4.setFont(jLabel4.getFont().deriveFont((jLabel4.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel4.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -144,7 +144,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelBehaviour.add(margin, gridBagConstraints);
 
-    jLabel12.setFont(jLabel12.getFont().deriveFont((jLabel12.getFont().getStyle() | java.awt.Font.ITALIC)));
+    jLabel12.setFont(jLabel12.getFont().deriveFont((jLabel12.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel12.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -170,7 +170,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelBehaviour.add(maxPanels, gridBagConstraints);
 
-    jLabel14.setFont(jLabel14.getFont().deriveFont((jLabel14.getFont().getStyle() | java.awt.Font.ITALIC)));
+    jLabel14.setFont(jLabel14.getFont().deriveFont((jLabel14.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel14.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -293,7 +293,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(panelSimpleData, gridBagConstraints);
 
-    jLabel8.setFont(jLabel8.getFont().deriveFont((jLabel8.getFont().getStyle() | java.awt.Font.ITALIC)));
+    jLabel8.setFont(jLabel8.getFont().deriveFont((jLabel8.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel8.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -404,7 +404,7 @@ public final class RuleDisplayerPanel extends JPanel {
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 14, Short.MAX_VALUE)
+      .addGap(0, 12, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

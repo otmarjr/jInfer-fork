@@ -107,19 +107,21 @@ public final class LoggerPanel extends JPanel {
     jPanel1.add(externalLabel, gridBagConstraints);
 
     externalLogCombo.setModel(LogLevels.getDefaultModel());
-    externalLogCombo.setMinimumSize(new java.awt.Dimension(100, 27));
-    externalLogCombo.setPreferredSize(new java.awt.Dimension(100, 27));
+    externalLogCombo.setMinimumSize(new java.awt.Dimension(100, 22));
+    externalLogCombo.setPreferredSize(new java.awt.Dimension(100, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(externalLogCombo, gridBagConstraints);
 
     internalLogCombo.setModel(LogLevels.getDefaultModel());
-    internalLogCombo.setMinimumSize(new java.awt.Dimension(100, 27));
-    internalLogCombo.setPreferredSize(new java.awt.Dimension(100, 27));
+    internalLogCombo.setMinimumSize(new java.awt.Dimension(100, 22));
+    internalLogCombo.setPreferredSize(new java.awt.Dimension(100, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(internalLogCombo, gridBagConstraints);
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -383,7 +385,7 @@ public final class LoggerPanel extends JPanel {
     );
     jPanel4Layout.setVerticalGroup(
       jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 65, Short.MAX_VALUE)
+      .addGap(0, 71, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

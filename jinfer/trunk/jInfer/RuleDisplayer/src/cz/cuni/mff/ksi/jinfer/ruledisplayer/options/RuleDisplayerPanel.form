@@ -65,7 +65,7 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jLabel2" italic="true" property="font" relativeSize="true" size="0"/>
+                <Font component="jLabel2" italic="true" property="font" relativeSize="false" size="10"/>
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -109,7 +109,7 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jLabel4" italic="true" property="font" relativeSize="true" size="0"/>
+                <Font component="jLabel4" italic="true" property="font" relativeSize="false" size="10"/>
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -153,7 +153,7 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jLabel12" italic="true" property="font" relativeSize="true" size="0"/>
+                <Font component="jLabel12" italic="true" property="font" relativeSize="false" size="10"/>
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -197,7 +197,7 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jLabel14" italic="true" property="font" relativeSize="true" size="0"/>
+                <Font component="jLabel14" italic="true" property="font" relativeSize="false" size="10"/>
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -390,7 +390,7 @@
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
               <FontInfo relative="true">
-                <Font component="jLabel8" italic="true" property="font" relativeSize="true" size="0"/>
+                <Font component="jLabel8" italic="true" property="font" relativeSize="false" size="10"/>
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
@@ -532,12 +532,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="531" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>

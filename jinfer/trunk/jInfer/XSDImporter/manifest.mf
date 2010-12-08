@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: false
 OpenIDE-Module: cz.cuni.mff.ksi.jinfer.xsdimporter/2
 OpenIDE-Module-Implementation-Version: 2
 OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/xsdimporter/Bundle.properties

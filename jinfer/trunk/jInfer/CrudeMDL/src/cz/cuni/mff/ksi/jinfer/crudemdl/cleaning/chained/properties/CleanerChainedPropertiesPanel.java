@@ -72,20 +72,20 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
         modelStrings.add(name);
       }
     }
-    int i = 0;
+    int i;
     for (i = 0; i < modelStrings.size() - 1; i++) {
         final JLabel lbl = new javax.swing.JLabel();
         final JComboBox cmb = new javax.swing.JComboBox();
         final JScrollPane scr = new javax.swing.JScrollPane();
         final JTextPane desc = new javax.swing.JTextPane();
 
-        lbl.setText("#" + String.valueOf(i + 1) + ":");
+        lbl.setText("#" + (i + 1) + ":");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2*i;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
         add(lbl, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -129,7 +129,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
         add(scr, gridBagConstraints);
     }
     if (i == 0) {
-      JTextPane noImplInfo = new JTextPane();
+      final JTextPane noImplInfo = new JTextPane();
       noImplInfo.setEditable(false);
       noImplInfo.setText("No implementation, other than myself, of RegularExpressionCleanerFactory found.");
       add(noImplInfo);

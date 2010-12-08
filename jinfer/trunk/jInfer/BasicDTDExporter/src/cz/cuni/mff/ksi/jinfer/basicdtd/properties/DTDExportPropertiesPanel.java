@@ -50,28 +50,43 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel1 = new javax.swing.JPanel();
     jPanel2 = new javax.swing.JPanel();
 
+    setMinimumSize(new java.awt.Dimension(500, 300));
+    setPreferredSize(new java.awt.Dimension(500, 300));
     setLayout(new java.awt.GridBagLayout());
 
+    jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel1.text")); // NOI18N
     jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel1.toolTipText")); // NOI18N
+    jLabel1.setMaximumSize(new java.awt.Dimension(80, 14));
+    jLabel1.setMinimumSize(new java.awt.Dimension(80, 14));
+    jLabel1.setPreferredSize(new java.awt.Dimension(80, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
     maxEnumSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
     maxEnumSize.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.maxEnumSize.toolTipText")); // NOI18N
-    maxEnumSize.setMinimumSize(new java.awt.Dimension(150, 22));
-    maxEnumSize.setPreferredSize(new java.awt.Dimension(150, 22));
+    maxEnumSize.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+    maxEnumSize.setMinimumSize(new java.awt.Dimension(40, 22));
+    maxEnumSize.setPreferredSize(new java.awt.Dimension(60, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 0.5;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(maxEnumSize, gridBagConstraints);
 
+    jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
     org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel3.text")); // NOI18N
     jLabel3.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel3.toolTipText")); // NOI18N
+    jLabel3.setMaximumSize(new java.awt.Dimension(80, 14));
+    jLabel3.setMinimumSize(new java.awt.Dimension(80, 14));
+    jLabel3.setPreferredSize(new java.awt.Dimension(80, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -79,15 +94,18 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel3, gridBagConstraints);
 
-    minDefaultRatio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+    minDefaultRatio.setHorizontalAlignment(javax.swing.JTextField.LEFT);
     minDefaultRatio.setText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.minDefaultRatio.text")); // NOI18N
     minDefaultRatio.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.minDefaultRatio.toolTipText")); // NOI18N
-    minDefaultRatio.setMinimumSize(new java.awt.Dimension(150, 22));
-    minDefaultRatio.setPreferredSize(new java.awt.Dimension(150, 22));
+    minDefaultRatio.setMaximumSize(new java.awt.Dimension(32767, 32767));
+    minDefaultRatio.setMinimumSize(new java.awt.Dimension(40, 22));
+    minDefaultRatio.setPreferredSize(new java.awt.Dimension(60, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 0.5;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(minDefaultRatio, gridBagConstraints);
 
@@ -95,11 +113,11 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 322, Short.MAX_VALUE)
+      .addGap(0, 500, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 114, Short.MAX_VALUE)
+      .addGap(0, 248, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -110,11 +128,13 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.weighty = 1.0;
     add(jPanel1, gridBagConstraints);
 
+    jPanel2.setPreferredSize(new java.awt.Dimension(20, 52));
+
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 66, Short.MAX_VALUE)
+      .addGap(0, 228, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

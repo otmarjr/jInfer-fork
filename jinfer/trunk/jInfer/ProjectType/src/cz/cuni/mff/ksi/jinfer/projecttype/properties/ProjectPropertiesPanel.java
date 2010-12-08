@@ -46,29 +46,60 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
     java.awt.GridBagConstraints gridBagConstraints;
 
     jPanel1 = new javax.swing.JPanel();
-    jComboBox1 = new javax.swing.JComboBox();
     jLabel1 = new javax.swing.JLabel();
+    jComboBox1 = new javax.swing.JComboBox();
+    jPanel3 = new javax.swing.JPanel();
     jPanel2 = new javax.swing.JPanel();
 
+    setPreferredSize(new java.awt.Dimension(330, 59));
     setLayout(new java.awt.GridBagLayout());
 
     jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jPanel1.border.title"))); // NOI18N
+    jPanel1.setMinimumSize(new java.awt.Dimension(200, 100));
+    jPanel1.setPreferredSize(new java.awt.Dimension(330, 60));
     jPanel1.setLayout(new java.awt.GridBagLayout());
 
-    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+    jLabel1.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jLabel1.text")); // NOI18N
+    jLabel1.setMinimumSize(new java.awt.Dimension(100, 80));
+    jLabel1.setPreferredSize(new java.awt.Dimension(200, 28));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    jPanel1.add(jComboBox1, gridBagConstraints);
+    jPanel1.add(jLabel1, gridBagConstraints);
 
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jLabel1.text")); // NOI18N
+    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+    jComboBox1.setMinimumSize(new java.awt.Dimension(80, 20));
+    jComboBox1.setPreferredSize(new java.awt.Dimension(80, 20));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    jPanel1.add(jLabel1, gridBagConstraints);
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel1.add(jComboBox1, gridBagConstraints);
+
+    jPanel3.setMinimumSize(new java.awt.Dimension(0, 0));
+    jPanel3.setPreferredSize(new java.awt.Dimension(12, 28));
+    jPanel3.setRequestFocusEnabled(false);
+
+    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+    jPanel3.setLayout(jPanel3Layout);
+    jPanel3Layout.setHorizontalGroup(
+      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 31, Short.MAX_VALUE)
+    );
+    jPanel3Layout.setVerticalGroup(
+      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 28, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    jPanel1.add(jPanel3, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -111,5 +142,6 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
   private javax.swing.JLabel jLabel1;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
+  private javax.swing.JPanel jPanel3;
   // End of variables declaration//GEN-END:variables
 }

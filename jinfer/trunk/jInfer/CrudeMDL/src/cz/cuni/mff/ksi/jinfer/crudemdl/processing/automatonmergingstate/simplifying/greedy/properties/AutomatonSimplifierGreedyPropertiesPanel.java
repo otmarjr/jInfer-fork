@@ -65,7 +65,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     descContitionTester = new javax.swing.JTextPane();
     panelParams = new javax.swing.JPanel();
 
-    setMinimumSize(new java.awt.Dimension(600, 62));
+    setMinimumSize(new java.awt.Dimension(500, 300));
     setPreferredSize(new java.awt.Dimension(500, 50));
     setLayout(new java.awt.GridBagLayout());
 
@@ -74,8 +74,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
     comboConditionTester.setMinimumSize(new java.awt.Dimension(200, 22));
@@ -145,8 +144,8 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
         gridBagConstraints.gridy = 2*i;
         gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
         panelParams.add(l, gridBagConstraints);
 
 

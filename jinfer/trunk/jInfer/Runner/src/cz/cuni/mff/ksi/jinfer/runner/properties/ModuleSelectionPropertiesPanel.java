@@ -59,34 +59,37 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
     setLayout(new java.awt.GridBagLayout());
 
-    initialGrammar.setMinimumSize(new java.awt.Dimension(200, 22));
-    initialGrammar.setPreferredSize(new java.awt.Dimension(200, 22));
+    initialGrammar.setMinimumSize(new java.awt.Dimension(150, 22));
+    initialGrammar.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(initialGrammar, gridBagConstraints);
 
-    simplifier.setMinimumSize(new java.awt.Dimension(200, 22));
-    simplifier.setPreferredSize(new java.awt.Dimension(200, 22));
+    simplifier.setMinimumSize(new java.awt.Dimension(150, 22));
+    simplifier.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(simplifier, gridBagConstraints);
 
-    schemaGenerator.setMinimumSize(new java.awt.Dimension(200, 22));
-    schemaGenerator.setPreferredSize(new java.awt.Dimension(200, 22));
+    schemaGenerator.setMinimumSize(new java.awt.Dimension(150, 22));
+    schemaGenerator.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(schemaGenerator, gridBagConstraints);
 
     jLabel1.setText(org.openide.util.NbBundle.getMessage(ModuleSelectionPropertiesPanel.class, "ModuleSelectionPropertiesPanel.jLabel1.text")); // NOI18N
@@ -114,15 +117,18 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     add(jLabel3, gridBagConstraints);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.gridwidth = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
     add(jPanel1, gridBagConstraints);
+
+    jPanel2.setMinimumSize(new java.awt.Dimension(0, 10));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridheight = 4;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weightx = 0.5;
     add(jPanel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 

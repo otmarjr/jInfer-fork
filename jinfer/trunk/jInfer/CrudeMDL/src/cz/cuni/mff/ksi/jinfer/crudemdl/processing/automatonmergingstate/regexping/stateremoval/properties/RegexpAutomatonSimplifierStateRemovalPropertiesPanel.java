@@ -54,8 +54,8 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
     jScrollPane3 = new javax.swing.JScrollPane();
     descOrderer = new javax.swing.JTextPane();
 
-    setMinimumSize(new java.awt.Dimension(600, 62));
-    setPreferredSize(new java.awt.Dimension(600, 62));
+    setMinimumSize(new java.awt.Dimension(500, 300));
+    setPreferredSize(new java.awt.Dimension(500, 300));
     setLayout(new java.awt.GridBagLayout());
 
     labelOrderer.setText("StateRemovalOrderer");
@@ -63,12 +63,11 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelOrderer, gridBagConstraints);
 
-    comboOrderer.setMinimumSize(new java.awt.Dimension(400, 22));
-    comboOrderer.setPreferredSize(new java.awt.Dimension(400, 22));
+    comboOrderer.setMinimumSize(new java.awt.Dimension(200, 22));
+    comboOrderer.setPreferredSize(new java.awt.Dimension(200, 22));
     comboOrderer.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         comboOrdererChanged(evt);

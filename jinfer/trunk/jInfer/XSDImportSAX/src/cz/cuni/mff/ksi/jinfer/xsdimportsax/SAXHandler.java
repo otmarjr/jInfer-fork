@@ -82,7 +82,7 @@ class SAXHandler extends DefaultHandler {
    */
   private static final String CONTAINER_NAME = "__conTAIner__";
   private String currentRuleListName = "";
-  private final List<Element> roots = new ArrayList<Element>();;
+  private final List<Element> roots = new ArrayList<Element>();
 
   public SAXHandler() {
     super();
@@ -132,8 +132,6 @@ class SAXHandler extends DefaultHandler {
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException, XSDException {
     super.startElement(uri, localName, qName, attributes);
 
-    //TODO reseto debug? LOG.debug("XSD handler: start of element '" + qName + "' with " + attributes.getLength() + " attributes.");
-
     // first, create xsd-element that can be pushed into documentElementStack
     // this contains all attributes of the schema element
     final SAXDocumentElement docElement = new SAXDocumentElement(trimNS(qName));
@@ -155,7 +153,7 @@ class SAXHandler extends DefaultHandler {
     } else if (docElement.isNamedComplexType()) {
       // named CType has no element to contain it, we must create a container
       createAndPushContent(docElement, true);
-      // every element that is a descendant under a namedCType 
+      // every element that is a descendant under a namedType 
       // is not added to the global rules, but to the rules of a current CType
       namedTypes.put(docElement.attributeNameValue(), new XSDNamedType());
       currentRuleListName = docElement.attributeNameValue();

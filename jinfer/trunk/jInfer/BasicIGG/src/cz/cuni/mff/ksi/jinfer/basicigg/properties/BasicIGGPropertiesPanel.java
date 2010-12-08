@@ -62,7 +62,7 @@ public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(keepAttributeValues, gridBagConstraints);
 
     keepSimpleData.setSelected(true);
@@ -71,7 +71,7 @@ public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(keepSimpleData, gridBagConstraints);
 
     stopOnError.setSelected(true);
@@ -80,7 +80,7 @@ public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(stopOnError, gridBagConstraints);
 
     javax.swing.GroupLayout fillLayout = new javax.swing.GroupLayout(fill);

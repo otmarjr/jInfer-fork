@@ -98,7 +98,7 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(namePattern, gridBagConstraints);
 
-    nameTemplateHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13));
+    nameTemplateHelp.setFont(nameTemplateHelp.getFont().deriveFont((nameTemplateHelp.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(nameTemplateHelp, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.nameTemplateHelp.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -108,7 +108,7 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel1.add(nameTemplateHelp, gridBagConstraints);
 
-    openSchemaHelp.setFont(new java.awt.Font("DejaVu Sans", 2, 13));
+    openSchemaHelp.setFont(openSchemaHelp.getFont().deriveFont((openSchemaHelp.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(openSchemaHelp, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.openSchemaHelp.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -158,7 +158,7 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel2.add(jLabel1, gridBagConstraints);
 
-    jLabel2.setFont(new java.awt.Font("DejaVu Sans", 2, 13));
+    jLabel2.setFont(jLabel2.getFont().deriveFont((jLabel2.getFont().getStyle() | java.awt.Font.ITALIC), 10));
     org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jLabel2.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -199,7 +199,7 @@ public final class RunnerPanel extends JPanel {
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 108, Short.MAX_VALUE)
+      .addGap(0, 128, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

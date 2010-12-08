@@ -31,6 +31,8 @@ import org.apache.commons.collections15.Transformer;
  */
 public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
 
+  private static final long serialVersionUID = 3523135;
+
   /**
    * Constructs instance with specified {@link Layout} and edge label {@link Transformer}.
 

@@ -110,7 +110,7 @@ public final class DTD2RETranslator {
     return ret;
   }
 
-  private static List<Regexp<AbstractStructuralNode>> members2Children(final List members) {
+  private static List<Regexp<AbstractStructuralNode>> members2Children(final List<?> members) {
     final List<Regexp<AbstractStructuralNode>> ret =
             new ArrayList<Regexp<AbstractStructuralNode>>(members.size());
 

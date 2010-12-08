@@ -41,6 +41,8 @@ import org.apache.commons.collections15.Transformer;
  */
 public class PluggableVisualizer<T> extends Visualizer<T> {
 
+  private static final long serialVersionUID = 353474565;
+
   private final PluggableGraphMouse pluggableGraphMouse;
 
   /**

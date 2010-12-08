@@ -105,10 +105,11 @@ public class ExpansionHelperTest {
     assertEquals(BaseUtils.cloneList(getWords().get(1), 5), result.get(3));
   }
 
+  @SuppressWarnings("unchecked")
   private static List<List<String>> getWords() {
     return Arrays.asList(
-            Arrays.asList("a", "b"),
-            Arrays.asList("c", "d", "e"));
+             Arrays.<String>asList("a", "b"),
+             Arrays.<String>asList("c", "d", "e"));
   }
 
   @Test(expected = IllegalArgumentException.class)

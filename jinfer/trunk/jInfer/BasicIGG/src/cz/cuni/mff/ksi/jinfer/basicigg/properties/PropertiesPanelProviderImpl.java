@@ -60,6 +60,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public List<Pair<String, String>> getSubCategories() {
     return Arrays.<Pair<String, String>>asList(
             new Pair<String, String>(PROCESSORS_CATEGORY, IGG_CATEGORY));

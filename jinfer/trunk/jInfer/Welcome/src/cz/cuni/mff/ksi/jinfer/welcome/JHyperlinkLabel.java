@@ -33,6 +33,8 @@ import org.openide.util.Exceptions;
  */
 public class JHyperlinkLabel extends JLabel {
 
+  private static final long serialVersionUID = 35898975;
+
   // TODO sviro Perhaps move to Base? This sounds useful and shareable.
 
   private final String uri;

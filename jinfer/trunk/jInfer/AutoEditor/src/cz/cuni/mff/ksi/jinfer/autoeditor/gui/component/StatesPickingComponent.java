@@ -35,6 +35,8 @@ import javax.swing.JPanel;
  */
 public class StatesPickingComponent<T> extends AbstractComponent<T> {
 
+    private static final long serialVersionUID = 3531235;
+
     private boolean shallAskUser = true;
 
     public StatesPickingComponent() {

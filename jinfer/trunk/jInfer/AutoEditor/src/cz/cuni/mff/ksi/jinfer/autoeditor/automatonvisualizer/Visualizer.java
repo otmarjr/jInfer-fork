@@ -42,6 +42,8 @@ import javax.imageio.ImageIO;
  */
 public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
+  private static final long serialVersionUID = 38097345;
+
   private final Set<String> supportedImageFormatNames;
 
   /**

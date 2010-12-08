@@ -46,7 +46,7 @@ public class CloneHelperTest {
   @Test(expected = NullPointerException.class)
   public void testCloneRulesNull2() {
     System.out.println("cloneRulesNull2");
-    new CloneHelper().cloneGrammar(Arrays.<Element>asList(null));
+    new CloneHelper().cloneGrammar(Arrays.<Element>asList((Element)null));
   }
 
   @Test(expected = NullPointerException.class)

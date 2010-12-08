@@ -158,6 +158,8 @@ public class JInferProject implements Project {
    */
   private static class NotifyProperties extends Properties {
 
+    private static final long serialVersionUID = 3534789;
+
     private final ProjectState state;
 
     NotifyProperties(final ProjectState state) {

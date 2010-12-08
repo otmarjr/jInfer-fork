@@ -52,63 +52,130 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     @SuppressWarnings("PMD")
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
+    java.awt.GridBagConstraints gridBagConstraints;
 
-    parserComboBox = new javax.swing.JComboBox();
-    stopOnError = new javax.swing.JCheckBox();
     parserLabel = new javax.swing.JLabel();
-    verbose = new javax.swing.JCheckBox();
+    parserComboBox = new javax.swing.JComboBox();
     loglevelLabel = new javax.swing.JLabel();
     logLevelCombo = new javax.swing.JComboBox();
+    stopLabel = new javax.swing.JLabel();
+    stopOnError = new javax.swing.JCheckBox();
+    verboseLabel = new javax.swing.JLabel();
+    verbose = new javax.swing.JCheckBox();
+    jPanel1 = new javax.swing.JPanel();
+    jPanel2 = new javax.swing.JPanel();
 
-    stopOnError.setSelected(true);
-    stopOnError.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.stopOnError.text")); // NOI18N
+    setMinimumSize(new java.awt.Dimension(500, 300));
+    setPreferredSize(new java.awt.Dimension(500, 300));
+    setLayout(new java.awt.GridBagLayout());
 
     parserLabel.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.parserLabel.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(parserLabel, gridBagConstraints);
 
-    verbose.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.verbose.text")); // NOI18N
-    verbose.setToolTipText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.verbose.toolTipText")); // NOI18N
+    parserComboBox.setMinimumSize(new java.awt.Dimension(100, 22));
+    parserComboBox.setPreferredSize(new java.awt.Dimension(100, 22));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(parserComboBox, gridBagConstraints);
 
     loglevelLabel.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel.text")); // NOI18N
     loglevelLabel.setToolTipText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel.toolTipText")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(loglevelLabel, gridBagConstraints);
 
+    logLevelCombo.setMaximumRowCount(12);
     logLevelCombo.setModel(LogLevels.getDefaultModel());
+    logLevelCombo.setMinimumSize(new java.awt.Dimension(100, 22));
+    logLevelCombo.setPreferredSize(new java.awt.Dimension(100, 22));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(logLevelCombo, gridBagConstraints);
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-    this.setLayout(layout);
-    layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-          .addComponent(verbose)
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(parserLabel)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(loglevelLabel)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(logLevelCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-          .addComponent(stopOnError))
-        .addContainerGap(109, Short.MAX_VALUE))
+    stopLabel.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.stopLabel.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(stopLabel, gridBagConstraints);
+
+    stopOnError.setSelected(true);
+    stopOnError.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.stopOnError.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(stopOnError, gridBagConstraints);
+
+    verboseLabel.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.verboseLabel.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(verboseLabel, gridBagConstraints);
+
+    verbose.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.verbose.text")); // NOI18N
+    verbose.setToolTipText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.verbose.toolTipText")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(verbose, gridBagConstraints);
+
+    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 499, Short.MAX_VALUE)
     );
-    layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(parserComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addComponent(parserLabel))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(loglevelLabel)
-          .addComponent(logLevelCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(stopOnError)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(verbose)
-        .addContainerGap(195, Short.MAX_VALUE))
+    jPanel1Layout.setVerticalGroup(
+      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 234, Short.MAX_VALUE)
     );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 4;
+    gridBagConstraints.gridwidth = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 1.0;
+    add(jPanel1, gridBagConstraints);
+
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 155, Short.MAX_VALUE)
+    );
+    jPanel2Layout.setVerticalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 102, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridheight = 4;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    add(jPanel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   @Override
@@ -144,12 +211,16 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
   private javax.swing.JComboBox logLevelCombo;
   private javax.swing.JLabel loglevelLabel;
   private javax.swing.JComboBox parserComboBox;
   private javax.swing.JLabel parserLabel;
+  private javax.swing.JLabel stopLabel;
   private javax.swing.JCheckBox stopOnError;
   private javax.swing.JCheckBox verbose;
+  private javax.swing.JLabel verboseLabel;
   // End of variables declaration//GEN-END:variables
 
 }

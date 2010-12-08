@@ -63,8 +63,8 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     jScrollPane2 = new javax.swing.JScrollPane();
     descCleaner = new javax.swing.JTextPane();
 
-    setMinimumSize(new java.awt.Dimension(600, 62));
-    setPreferredSize(new java.awt.Dimension(600, 62));
+    setMinimumSize(new java.awt.Dimension(500, 300));
+    setPreferredSize(new java.awt.Dimension(500, 300));
     setLayout(new java.awt.GridBagLayout());
 
     labelClusterer.setText("Clusterer");
@@ -72,12 +72,11 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelClusterer, gridBagConstraints);
 
-    clusterer.setMinimumSize(new java.awt.Dimension(400, 22));
-    clusterer.setPreferredSize(new java.awt.Dimension(150, 22));
+    clusterer.setMinimumSize(new java.awt.Dimension(200, 22));
+    clusterer.setPreferredSize(new java.awt.Dimension(200, 22));
     clusterer.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         clustererChanged(evt);
@@ -110,12 +109,11 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelClusterProcessor, gridBagConstraints);
 
-    clusterProcessor.setMinimumSize(new java.awt.Dimension(400, 22));
-    clusterProcessor.setPreferredSize(new java.awt.Dimension(150, 22));
+    clusterProcessor.setMinimumSize(new java.awt.Dimension(200, 22));
+    clusterProcessor.setPreferredSize(new java.awt.Dimension(200, 22));
     clusterProcessor.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         clusterProcessorChanged(evt);
@@ -151,10 +149,11 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 4;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelCleaner, gridBagConstraints);
 
+    cleaner.setMinimumSize(new java.awt.Dimension(200, 22));
+    cleaner.setPreferredSize(new java.awt.Dimension(200, 22));
     cleaner.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         cleanerChanged(evt);

@@ -18,10 +18,13 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
- *
+ * TODO reseto Comment!
+ * 
  * @author reseto
  */
 public class XSDException extends RuntimeException {
+
+  private static final long serialVersionUID = 3534453468l;
 
   public XSDException(final String message, final Throwable cause) {
     super(message, cause);

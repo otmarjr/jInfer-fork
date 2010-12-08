@@ -14,22 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/*
- * XSDExportPropertiesPanel.java
- *
- * Created on Aug 13, 2010, 10:49:44 PM
- */
 package cz.cuni.mff.ksi.jinfer.basicxsd.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
 
 /**
- *
+ * TODO rio Comment!
+ * 
  * @author rio
  */
 public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
+
+  private static final long serialVersionUID = 35787687;
 
   public static final String NAME = "basicxsdexporter";
   public static final String GENERATE_GLOBAL = "generate.global";

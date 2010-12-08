@@ -50,10 +50,13 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * TODO sviro Comment!
+ * 
  * @author sviro
  */
 public final class ValidateAction extends NodeAction {
+
+  private static final long serialVersionUID = 3123414;
 
   private static final Logger LOG = Logger.getLogger(ValidateAction.class);
   private static ValidateAction action = null;

@@ -29,10 +29,13 @@ import org.openide.util.Lookup;
 import org.openide.text.DataEditorSupport;
 
 /**
+ * TODO sviro Comment!
  * 
  * @author sviro
  */
 public class XPathDataObject extends MultiDataObject {
+
+  private static final long serialVersionUID = 3534512312l;
 
   public XPathDataObject(final FileObject pf, final MultiFileLoader loader) throws DataObjectExistsException,
           IOException {

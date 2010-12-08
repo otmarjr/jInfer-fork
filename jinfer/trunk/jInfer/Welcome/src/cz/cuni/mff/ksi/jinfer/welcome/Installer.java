@@ -27,6 +27,8 @@ import org.openide.windows.TopComponent;
  */
 public class Installer extends ModuleInstall {
 
+  private static final long serialVersionUID = 353356475;
+
   @Override
   public boolean closing() {
     WelcomeTopComponent topComp = null;

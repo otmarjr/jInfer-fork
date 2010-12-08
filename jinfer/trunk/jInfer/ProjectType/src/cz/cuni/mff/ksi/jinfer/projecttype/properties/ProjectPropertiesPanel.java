@@ -22,10 +22,14 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- *
+ * TODO sviro Comment!
+ * 
  * @author sviro
  */
 public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
+
+  private static final long serialVersionUID = 35345345345l;
+
   public static final String FOLDER_TYPE = "folderType";
   public static final String FOLDER_TYPE_DEFAULT = "XML";
 

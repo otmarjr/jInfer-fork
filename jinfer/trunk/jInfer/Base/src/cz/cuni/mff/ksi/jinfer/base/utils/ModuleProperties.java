@@ -24,6 +24,8 @@ import java.util.Properties;
  */
 public class ModuleProperties extends Properties {
 
+  private static final long serialVersionUID = 31245345;
+
   // TODO sviro Comment!
 
   private final String moduleName;

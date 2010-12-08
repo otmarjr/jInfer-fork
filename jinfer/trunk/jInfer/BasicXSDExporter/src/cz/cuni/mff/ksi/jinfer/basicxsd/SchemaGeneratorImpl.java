@@ -487,7 +487,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private boolean verifyInput(final List<Element> input) {
-    final Set<String> set = new HashSet<String>() {};
+    final Set<String> set = new HashSet<String>();
 
     for (Element element : input) {
       if (set.contains(element.getName().toLowerCase())) {

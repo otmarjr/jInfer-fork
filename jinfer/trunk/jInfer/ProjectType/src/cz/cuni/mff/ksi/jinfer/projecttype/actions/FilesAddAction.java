@@ -54,6 +54,8 @@ import org.openide.util.NbBundle;
  */
 public class FilesAddAction extends AbstractAction {
 
+  private static final long serialVersionUID = 35345345;
+
   private final JInferProject project;
   public static final String COMMAND_FILES_ADD = "FilesAddAction";
 

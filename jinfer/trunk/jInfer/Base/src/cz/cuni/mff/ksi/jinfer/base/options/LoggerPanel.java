@@ -31,6 +31,8 @@ import org.openide.util.NbPreferences;
  */
 public final class LoggerPanel extends JPanel {
 
+  private static final long serialVersionUID = 35345345456l;
+
   private final LoggerOptionsPanelController controller;
   private final Preferences preferences = NbPreferences.forModule(LoggerPanel.class);
   public static final String INTERNAL_LOG_LEVEL = "log.level.console";

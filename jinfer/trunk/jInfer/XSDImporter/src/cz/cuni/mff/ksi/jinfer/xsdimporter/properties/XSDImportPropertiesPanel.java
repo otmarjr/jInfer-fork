@@ -31,6 +31,8 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
+  private static final long serialVersionUID = 35344234;
+
   public static final String NAME = "XSDImport";
   public static final String PARSER = "parser";
   public static final String STOP_ON_ERROR = "stop.on.error";

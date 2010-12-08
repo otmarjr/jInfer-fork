@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.runner.options;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JPanel;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.NbPreferences;
@@ -27,7 +28,10 @@ import org.openide.util.NbPreferences;
  *
  * @author sviro
  */
-public final class RunnerPanel extends javax.swing.JPanel {
+public final class RunnerPanel extends JPanel {
+
+  private static final long serialVersionUID = 3534679876l;
+
   public static final String OUTPUT_SHOW = "output.show";
   public static final String SCHEMA_OPEN = "schema.open";
   public static final String NAME_PATTERN = "name.pattern";

@@ -29,6 +29,8 @@ import org.openide.nodes.Children;
  */
 public class InputFilesList extends ArrayList<File> {
 
+  private static final long serialVersionUID = 353231345;
+
   private static final String UNSUPPORTED_OPERATION = "This operation is not supported in InputFilesList.";
   private final InputFilesListener listener;
   private Children fileChildren = null;

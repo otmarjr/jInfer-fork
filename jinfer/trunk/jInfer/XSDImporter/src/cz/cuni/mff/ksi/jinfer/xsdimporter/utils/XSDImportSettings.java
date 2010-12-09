@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.properties.XSDImportPropertiesPanel;
 import java.util.Properties;
@@ -24,21 +25,25 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * Helper class for accessing settings from module's properties panel.
  * @author reseto
  */
 public class XSDImportSettings {
   private final Properties properties = RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME);
 
+  public XSDParser getParser() {
+    return ModuleSelectionHelper.lookupImpl(XSDParser.class, properties.getProperty(XSDImportPropertiesPanel.PARSER));
+  }
+
   public boolean isVerbose() {
-    return Boolean.parseBoolean(properties.getProperty(XSDImportPropertiesPanel.VERBOSE_INFO));
+    return Boolean.parseBoolean(properties.getProperty(XSDImportPropertiesPanel.VERBOSE_INFO, "false"));
   }
 
   public Level logLevel() {
     return Level.toLevel(properties.getProperty(XSDImportPropertiesPanel.LOG_LEVEL), Logger.getRootLogger().getLevel());
   }
 
-  private boolean isStopOnError() {
-    return Boolean.parseBoolean(properties.getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR));
+  public boolean stopOnError() {
+    return Boolean.parseBoolean(properties.getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR, "true"));
   }
 }

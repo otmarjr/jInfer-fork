@@ -19,21 +19,18 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.properties.XSDImportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Class providing logic for IG retrieval from XSD schemas.
+ * Implementation of {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
  * @author reseto
  */
 @ServiceProvider(service = Processor.class)
@@ -53,16 +50,11 @@ public class XSDProcessor implements Processor {
 
   @Override
   public List<Element> process(final InputStream stream) {
+    final XSDImportSettings settings = new XSDImportSettings();
 
-    //TODO reseto refactor, ask sviro
-    final Properties properties = RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME);
-    final XSDParser parser = ModuleSelectionHelper.lookupImpl(XSDParser.class,
-                                                              properties.getProperty(XSDImportPropertiesPanel.PARSER));
+    LOG.setLevel(settings.logLevel());
+    final XSDParser parser = settings.getParser();
 
-    final Level level = Level.toLevel(properties.getProperty(XSDImportPropertiesPanel.LOG_LEVEL),
-                                      Logger.getRootLogger().getLevel());
-    LOG.setLevel(level);
-    
     try {
       if (parser != null) {
         //SAX or DOM parser selected
@@ -74,7 +66,7 @@ public class XSDProcessor implements Processor {
         return Collections.emptyList();
       }
     } catch (final XSDException e) {
-      if (Boolean.parseBoolean(properties.getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR, "true"))) {
+      if (settings.stopOnError()) {
         throw new RuntimeException("Error parsing XSD schema file.", e);
       } else {
         LOG.error("Error parsing XSD schema file, ignoring and going on.", e);

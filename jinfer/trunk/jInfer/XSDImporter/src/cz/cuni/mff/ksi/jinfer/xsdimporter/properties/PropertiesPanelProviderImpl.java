@@ -25,7 +25,7 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Properties panel provider for XSD Import.
  * @author reseto
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)

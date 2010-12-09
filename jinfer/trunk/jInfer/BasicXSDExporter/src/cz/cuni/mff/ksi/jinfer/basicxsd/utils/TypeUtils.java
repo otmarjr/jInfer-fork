@@ -31,7 +31,7 @@ public final class TypeUtils {
   }
 
   /**
-   * Determinate XSD type category for specified element.
+   * Determine XSD type category for specified element.
    *
    * @param element Element instance.
    */
@@ -82,7 +82,7 @@ public final class TypeUtils {
 
   /**
    * {@link #getTypeCategory(cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element)} wrapper.
-   * Determinate whether specified element is one of the XSD built-in types.
+   * Determine whether specified element is one of the XSD built-in types.
    *
    * @param element Element instance.
    */
@@ -103,7 +103,7 @@ public final class TypeUtils {
   }
 
   /**
-   * Determinate whether specified element has mixed content. Element has mixed
+   * Determine whether specified element has mixed content. Element has mixed
    * content if contains both sub elements and some constant data.
    *
    * @param element Element instance.

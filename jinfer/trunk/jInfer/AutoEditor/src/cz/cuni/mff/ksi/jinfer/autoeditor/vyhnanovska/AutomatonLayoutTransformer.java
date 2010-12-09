@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
 /** TODO rio refactor
  * Transforms the state to a distance on which it should be plotted. - A visualisation tool
  *
- * @author Julie Vyhnanovska
+ * @author Julie Vyhnanovska, rio
  *
  */
 public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Point2D> {

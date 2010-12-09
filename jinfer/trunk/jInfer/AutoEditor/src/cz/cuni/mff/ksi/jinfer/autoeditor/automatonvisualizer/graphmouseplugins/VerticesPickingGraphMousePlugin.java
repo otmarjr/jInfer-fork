@@ -105,7 +105,7 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
   /**
    * a Paintable to draw the rectangle used to pick multiple
    * Vertices
-   * @author Tom Nelson
+   * @author Tom Nelson, sviro
    *
    */
   class LensPaintable implements Paintable {

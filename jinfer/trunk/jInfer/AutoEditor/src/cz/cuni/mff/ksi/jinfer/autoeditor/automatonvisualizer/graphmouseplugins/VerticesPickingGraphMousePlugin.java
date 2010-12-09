@@ -103,9 +103,11 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
   }
 
   /**
-   * a Paintable to draw the rectangle used to pick multiple
-   * Vertices
-   * @author Tom Nelson
+   * A Paintable to draw the rectangle used to pick multiple
+   * vertices.
+   *
+   * (original implementation by Tom Nelson)
+   * @author sviro
    *
    */
   class LensPaintable implements Paintable {
@@ -127,12 +129,12 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
   /**
    * For primary modifiers (default, MouseButton1):
    * pick a single Vertex or Edge that
-   * is under the mouse pointer. If no Vertex or edge is under
-   * the pointer, unselect all picked Vertices and edges, and
+   * is under the mouse pointer. If no vertex or edge is under
+   * the pointer, deselect all picked vertices and edges, and
    * set up to draw a rectangle for multiple selection
    * of contained Vertices.
    * For additional selection (default Shift+MouseButton1):
-   * Add to the selection, a single Vertex or Edge that is
+   * Add to the selection a single Vertex or Edge that is
    * under the mouse pointer. If a previously picked Vertex
    * or Edge is under the pointer, it is un-picked.
    * If no vertex or Edge is under the pointer, set up
@@ -214,9 +216,9 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
 
   /**
    * If the mouse is dragging a rectangle, pick the
-   * Vertices contained in that rectangle
+   * vertices contained in that rectangle.
    *
-   * clean up settings from mousePressed
+   * Clean up settings from mousePressed.
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -240,8 +242,8 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
   /**
    * If the mouse is over a picked vertex, drag all picked
    * vertices with the mouse.
-   * If the mouse is not over a Vertex, draw the rectangle
-   * to select multiple Vertices
+   * If the mouse is not over a vertex, draw the rectangle
+   * to select multiple vertices.
    *
    */
   @SuppressWarnings("unchecked")
@@ -283,9 +285,9 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
   }
 
   /**
-   * rejects picking if the rectangle is too small, like
-   * if the user meant to select one vertex but moved the
-   * mouse slightly
+   * Rejects picking if the rectangle is too small.
+   * For example if the user meant to select one vertex but moved the
+   * mouse slightly.
    * @param p
    * @param q
    * @param min

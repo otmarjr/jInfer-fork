@@ -23,7 +23,8 @@ import java.util.List;
 /** TODO rio refactor
  * Maps states, ellipses and stateCoordinates for the plotting purposes.
  *
- * @author Julie Vyhnanovska
+ * (original implementation by Julie Vyhnanovska at Charles University in Prague)
+ * @author rio
  *
  */
 public class StateMapping<T> {

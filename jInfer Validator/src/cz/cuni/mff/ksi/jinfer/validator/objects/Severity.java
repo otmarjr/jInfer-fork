@@ -18,5 +18,5 @@ package cz.cuni.mff.ksi.jinfer.validator.objects;
 
 public enum Severity {
 
-  WARNING, ERROR
+  TODO, WARNING, ERROR
 }

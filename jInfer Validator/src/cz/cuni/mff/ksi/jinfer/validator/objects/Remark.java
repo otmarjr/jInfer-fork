@@ -94,6 +94,9 @@ public class Remark {
       case ERROR:
         ret.append('E');
         break;
+      case TODO:
+        ret.append('T');
+        break;
       default:
         throw new IllegalArgumentException();
     }

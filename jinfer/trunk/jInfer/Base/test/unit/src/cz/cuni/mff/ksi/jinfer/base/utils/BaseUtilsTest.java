@@ -25,9 +25,6 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- * @author vektor
- */
 public class BaseUtilsTest {
 
   @Test(expected = IllegalArgumentException.class)

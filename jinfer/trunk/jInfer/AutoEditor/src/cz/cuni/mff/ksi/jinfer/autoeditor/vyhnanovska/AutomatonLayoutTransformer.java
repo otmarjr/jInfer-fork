@@ -28,10 +28,9 @@ import edu.uci.ics.jung.graph.Graph;
 import org.apache.log4j.Logger;
 
 /** TODO rio refactor
- * Transforms the state to a distance on which it should be plotted. - A visualization tool
+ * Transforms the state to a distance on which it should be plotted. - A visualisation tool
  *
- * (original implementation by Julie Vyhnanovska at Charles University in Prague)
- * @author rio
+ * @author Julie Vyhnanovska
  *
  */
 public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Point2D> {

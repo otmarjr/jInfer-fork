@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Helper class for defining XSD Schema complexType elements with defined "name" attribute.
  * @author reseto
  */
 public class XSDNamedType {

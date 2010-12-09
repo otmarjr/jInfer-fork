@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
- * TODO reseto Comment!
+ * Exception thrown when an error occurs during the import of XSD Schema.
  * 
  * @author reseto
  */
@@ -26,10 +26,19 @@ public class XSDException extends RuntimeException {
 
   private static final long serialVersionUID = 3534453468l;
 
+  /**
+   * Creates an exception with detailed message and its cause.
+   * @param message Detail message explaining the cause of exception.
+   * @param cause The cause.
+   */
   public XSDException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
+  /**
+   * Creates an exception with a message describing the error that occurred.
+   * @param message Detail message.
+   */
   public XSDException(final String message) {
     super(message);
   }

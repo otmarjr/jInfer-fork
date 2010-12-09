@@ -26,7 +26,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * Helper class providing static methods for easier integration of log4j logging.
  * @author reseto
  */
 public final class LogLevels {
@@ -52,8 +52,10 @@ public final class LogLevels {
 
   /**
    * Creates a combo box model with all allowed log levels sorted by severity.
-   * Level OFF is at the top, followed by most severe FATAL. There are 8 levels.
-   * @return
+   * Level OFF is at the top, followed by most severe FATAL. There are 8 levels taken from log4j.Level.
+   * @return New DefaultComboBoxModel with all 8 levels supported by log4j.
+   * @see javax.swing.DefaultComboBoxModel
+   * @see org.apache.log4j.Level
    */
   public static ComboBoxModel getDefaultModel() {
     return new DefaultComboBoxModel(getList().toArray());

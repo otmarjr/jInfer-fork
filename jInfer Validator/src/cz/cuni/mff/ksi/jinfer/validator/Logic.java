@@ -31,7 +31,7 @@ import java.util.List;
 
 public final class Logic {
 
-  private static final List<String> AUTHORS = Arrays.asList("vektor", "sviro", "anti", "rio", "riacik", "reseto");
+  private static final List<String> AUTHORS = Arrays.asList("vektor", "sviro", "anti", "rio", "riacik", "reseto", "Julie Vyhnanovska");
 
   private Logic() {
   }
@@ -144,6 +144,11 @@ public final class Logic {
               null, Severity.WARNING, "License comment not found"));
     }
 
+    if (fileStr.startsWith("/**") && !isSpecialCase(file)) {
+      ret.getRemarks().add(new Remark(module, file,
+              null, Severity.WARNING, "File starts with JavaDoc"));
+    }
+
     final List<String> lines = FileHelper.getFileLines(fileStr);
 
     int lineNum = 1;
@@ -152,7 +157,7 @@ public final class Logic {
     for (final String line : lines) {
       // TODOs
       if (line.contains("TODO")) {
-        ret.getRemarks().add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("TODO"))));
+        ret.getRemarks().add(new Remark(module, file, lineNum, Severity.TODO, line.substring(line.indexOf("TODO"))));
       }
       if (line.contains("FIXME")) {
         ret.getRemarks().add(new Remark(module, file, lineNum, Severity.WARNING, line.substring(line.indexOf("FIXME"))));
@@ -182,10 +187,10 @@ public final class Logic {
             && !fileAuthor.equals(classAuthor)) {
       ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "File and class authors differ: " + fileAuthor + " vs. " + classAuthor));
     } else {
-      if (fileAuthor == null) {
+      if (fileAuthor == null && !isSpecialCase(file)) {
         ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "File has no author in license comment"));
       }
-      if (classAuthor == null) {
+      if (classAuthor == null && !isSpecialCase(file)) {
         ret.getRemarks().add(new Remark(module, file, null, Severity.ERROR, "Class has no author in JavaDoc"));
       }
     }
@@ -199,5 +204,12 @@ public final class Logic {
     }
 
     return ret;
+  }
+
+  private static boolean isSpecialCase(final File file) {
+    if (file.getName().equals("package-info.java")) {
+      return true;
+    }
+    return false;
   }
 }

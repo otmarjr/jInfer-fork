@@ -24,7 +24,7 @@ import java.util.List;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Interface providing common API for XSD importers.
  * @author reseto
  */
 public interface XSDParser extends NamedModule {

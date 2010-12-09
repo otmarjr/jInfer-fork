@@ -26,6 +26,12 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
+ * Properties panel of the XSD Importer module.
+ * The "Parser" setting selects whether SAX or DOM parser is used.
+ * The "Log level" setting determines the minimal priority for a message from this module to be logged.
+ * If "Stop on error" checkbox is set, parsing halts on the first error;
+ * if it's not set, then the file that caused the error is simply skipped and not imported.
+ * The "Verbose" setting enables logging of some additional messages like imported rules etc.
  *
  * @author reseto
  */

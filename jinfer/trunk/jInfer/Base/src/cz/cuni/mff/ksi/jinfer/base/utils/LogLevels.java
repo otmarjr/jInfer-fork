@@ -31,8 +31,6 @@ import org.apache.log4j.Logger;
  */
 public final class LogLevels {
 
-  // TODO reseto Comment!
-
   private LogLevels() {
     
   }
@@ -52,32 +50,65 @@ public final class LogLevels {
     return levels;
   }
 
+  /**
+   * Creates a combo box model with all allowed log levels sorted by severity.
+   * Level OFF is at the top, followed by most severe FATAL. There are 8 levels.
+   * @return
+   */
   public static ComboBoxModel getDefaultModel() {
     return new DefaultComboBoxModel(getList().toArray());
   }
 
+  /**
+   * Get the log level which is currently set for all outputs.
+   * Messages with priority semantically lower than this level will be discarded.
+   * This setting also defines the default log level for every module.
+   * @return Current ROOT log level.
+   */
   public static String getRootLogLevel() {
     return Logger.getRootLogger().getLevel().toString();
   }
 
+  /**
+   * Set a new log level for all outputs.
+   * Messages with priority semantically lower than this level will be discarded.
+   * This setting also defines the default log level for every module.
+   * @param level New ROOT and default log level.
+   */
   public static void setRootLogLevel(final String level) {
     Logger.getRootLogger().setLevel(Level.toLevel(level, Level.ALL));
   }
 
+  /**
+   * Get the log level that is written to file output which is currently set.
+   * @return Log level for file output.
+   */
   public static String getFileThreshold() {
     final Level lev = Level.toLevel(((AppenderSkeleton) Logger.getRootLogger().getAppender("file")).getThreshold().toInt());
     return lev.toString();
   }
 
+  /**
+   * Get the log level that is written to console output which is currently set.
+   * @return Log level for console output.
+   */
   public static String getConsoleThreshold() {
     final Level lev = Level.toLevel(((AppenderSkeleton) Logger.getRootLogger().getAppender("console")).getThreshold().toInt());
     return lev.toString();
   }
 
+  /**
+   * Set the log level for messages written to file output.
+   * @param level New file log level.
+   */
   public static void setFileThreshold(final String level) {
     ((AppenderSkeleton) Logger.getRootLogger().getAppender("file")).setThreshold(Level.toLevel(level, Level.WARN));
   }
 
+  /**
+   * Set the log level for messages written to console output.
+   * @param level New console log level.
+   */
   public static void setConsoleThreshold(final String level) {
     ((AppenderSkeleton) Logger.getRootLogger().getAppender("console")).setThreshold(Level.toLevel(level, Logger.getRootLogger().getLevel()));
   }

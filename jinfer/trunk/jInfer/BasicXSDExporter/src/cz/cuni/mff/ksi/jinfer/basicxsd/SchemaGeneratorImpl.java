@@ -399,7 +399,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       {
         // SPECIAL CASE
         // simple alternation (lambda | Element)
-        // TODO what if the second child is token but not an element (simpleData?)
+        // TODO rio what if the second child is token but not an element (simpleData?)
         if (regexp.getChildren().size() == 2) {
           if (regexp.getChild(0).isLambda()) {
             if (regexp.getChild(1).isToken()) {
@@ -411,7 +411,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
         // SPECIAL CASE
         // alternation (simpleData | Element)
-        // TODO what if the second child is token but not an element (simpleData?)
+        // TODO rio what if the second child is token but not an element (simpleData?)
         if (regexp.getChildren().size() == 2) {
           if (regexp.getChild(0).isToken() && regexp.getChild(0).getContent().isSimpleData()) {
             if (regexp.getChild(1).isToken()) {

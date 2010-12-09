@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import org.openide.util.NbPreferences;
 
 /**
- * TODO reseto Comment this class!
+ * Panel displaying options for setting logging levels and log colors in jInfer Option panel section.
  *
  * @author reseto
  */
@@ -48,7 +48,6 @@ public final class LoggerPanel extends JPanel {
   public LoggerPanel(final LoggerOptionsPanelController controller) {
     this.controller = controller;
     initComponents();
-    // TODO listen to changes in form fields and call controller.changed()
   }
 
   /** This method is called from within the constructor to
@@ -490,7 +489,6 @@ public final class LoggerPanel extends JPanel {
   }
 
   public boolean valid() {
-    // TODO check whether form is consistent and complete
     return true;
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

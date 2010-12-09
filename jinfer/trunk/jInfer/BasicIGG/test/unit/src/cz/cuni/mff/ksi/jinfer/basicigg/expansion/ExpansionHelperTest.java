@@ -29,6 +29,9 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * @author vektor
+ */
 public class ExpansionHelperTest {
 
   @Test(expected = IllegalArgumentException.class)

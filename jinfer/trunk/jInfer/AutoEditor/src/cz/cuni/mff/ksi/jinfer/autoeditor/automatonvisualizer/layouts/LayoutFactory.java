@@ -63,7 +63,7 @@ public final class LayoutFactory {
    *
    * @param <T> Type parameter of specified automaton.
    * @param automaton Automaton to create layout from.
-   * @param edgeLabelTransformer TODO
+   * @param edgeLabelTransformer TODO rio comment
    * @return
    */
   public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {

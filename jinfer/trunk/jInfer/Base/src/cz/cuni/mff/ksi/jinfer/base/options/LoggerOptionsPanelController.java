@@ -24,7 +24,7 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 /**
- * TODO reseto Comment this class!
+ * Panel controller for Logger option panel.
  * 
  * @author reseto
  */

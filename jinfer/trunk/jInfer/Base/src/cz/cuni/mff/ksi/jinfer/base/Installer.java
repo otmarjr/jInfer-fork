@@ -54,7 +54,7 @@ public class Installer extends ModuleInstall {
 
       final Color textColor = getLogLevelColor(le.getLevel());
 
-      // TODO riacik rio check if kosher - i changed log format to LEVEL [ClassNameNotFull]: string
+      // TODO rio check if kosher - i changed log format to LEVEL [ClassNameNotFull]: string
       final String lgName = le.getLoggerName();
       final String message = le.getLevel().toString()
               + " [" + lgName.substring(lgName.lastIndexOf('.') + 1) + "]: "

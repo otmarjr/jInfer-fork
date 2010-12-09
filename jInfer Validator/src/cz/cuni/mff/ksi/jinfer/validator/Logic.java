@@ -175,9 +175,15 @@ public final class Logic {
       }
 
       // imports
-      if (line.contains("import ")) {
+      try {
+        if (line.trim().startsWith("import ")) {
         ret.getConsumedPackages().add(new ConsumedPackage(module, file.getName(),
                 line.substring(line.indexOf("import ") + 7, line.indexOf(";"))));
+        }
+      } catch (IndexOutOfBoundsException e) {
+        System.err.println("Index out of bounds when checking for imports in file " + file.getName());
+        e.printStackTrace();
+        System.err.println("Try to clean and build jInfer project.");
       }
 
       lineNum++;

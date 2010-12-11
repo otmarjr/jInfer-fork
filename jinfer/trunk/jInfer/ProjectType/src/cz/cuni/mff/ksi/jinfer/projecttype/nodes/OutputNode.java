@@ -39,6 +39,11 @@ final class OutputNode extends FilterNode {
   }
 
   @Override
+  public String getDisplayName() {
+    return "Output";
+  }
+
+  @Override
   public Image getIcon(final int type) {
     return ImageUtilities.loadImage("cz/cuni/mff/ksi/jinfer/projecttype/graphics/folder.png");
   }

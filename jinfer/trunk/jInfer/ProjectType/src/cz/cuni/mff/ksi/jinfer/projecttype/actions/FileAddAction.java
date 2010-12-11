@@ -48,7 +48,7 @@ public class FileAddAction extends AbstractAction {
   public FileAddAction(final JInferProject project, final Node node, final Collection<File> files) {
     super();
     type = ((FolderNode) node).getFolderType();
-    putValue(NAME, "Add " + type + " files");
+    putValue(NAME, "Add " + type.getName() + " files");
     this.project = project;
     this.files = files;
     this.node = node;

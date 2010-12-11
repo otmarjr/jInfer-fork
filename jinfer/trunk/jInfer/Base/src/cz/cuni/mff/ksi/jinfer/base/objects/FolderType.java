@@ -25,8 +25,8 @@ public enum FolderType {
   // TODO sviro Comment!
 
   XML("XML"),
-  SCHEMA("schema"),
-  QUERY("query");
+  SCHEMA("Schema"),
+  QUERY("Query");
   
   private final String name;
 

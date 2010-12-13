@@ -66,7 +66,7 @@
 
             <li>
               <span class="gloss-term">Regexp</span>
-              <span class="gloss-definition">Regular expression, usually referring to jInfer’s data structures representing regular expressions.</span>
+              <span class="gloss-definition">Regular expression, usually referring to jInfer's data structures representing regular expressions.</span>
             </li>
 
             <li>

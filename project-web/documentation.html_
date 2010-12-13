@@ -2,6 +2,10 @@
 
 <div id="content">
 	<h1>jInfer documentation</h1>
+
+        <p>
+          <i>Confused by technobabble or mysterious shortcuts? Try <a href="glossary.html">glossary</a>.</i>
+        </p>
 	
 	<h3>User's documentation</h3>
 	  Following the <a href="doc_tutorial.html">tutorial</a>,

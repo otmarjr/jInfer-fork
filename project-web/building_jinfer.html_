@@ -18,7 +18,7 @@
 	Go to <a href="https://sourceforge.net/projects/jinfer/files/">
 https://sourceforge.net/projects/jinfer/files/</a>.
   </li><li>Download the latest jInfer sources (jInfer-X.Y-src.zip).
-  </li><li>Unpack the ZIP, you'll get a few directories. One of them will be <tt>src</tt>.
+  </li><li>Unpack the ZIP, you'll get a few directories. One of them will be <code>src</code>.
   </li><li>Continue by building jInfer.
   </li></ol><p>Second way, checking out Subversion repository: you will need a
   Subversion client, such as the command line client or TortoiseSVN. In any case,
@@ -26,7 +26,7 @@ https://sourceforge.net/projects/jinfer/files/</a>.
 might be a good place to start. To check out
   jInfer, use the following URL:<br/>
 
-  <tt>https://jinfer.svn.sourceforge.net/svnroot/jinfer</tt></p><p>After the
+  <code>https://jinfer.svn.sourceforge.net/svnroot/jinfer</code></p><p>After the
   checkout, continue by building jInfer.</p>
 <h2>Building from NetBeans</h2><p>
   <i>This is perhaps the easier, more user friendly way of building jInfer.
@@ -56,24 +56,24 @@ might be a good place to start. To check out
   <i>Create NBMs</i> from the context menu. They will be created in
   <i>build/updates</i> directory.</p>
 <h2>Building with Ant</h2><p>Each jInfer module and jInfer suite itself has 
-  its own <tt>build.xml</tt> Ant build file. The most important one, for the
-  whole jInfer suite, is located in the <tt>src</tt> folder.<br/>
+  its own <code>build.xml</code> Ant build file. The most important one, for the
+  whole jInfer suite, is located in the <code>src</code> folder.<br/>
 
   It is possible to use vanilla Ant from Apache, but perhaps safer to resort 
   to the Ant bundled with NetBeans. This one should be located in <i>NetBeans
-    install directory</i> &gt; <tt>java/ant/bin/ant</tt>.<br/>
+    install directory</i> &gt; <code>java/ant/bin/ant</code>.<br/>
 
   Whichever Ant is chosen, to build jInfer do the following on command line:
 </p><ol type=1><li>
-	Change directory to jInfer's <tt>src</tt>.
-  </li><li>Run <tt>ant [chosen target]</tt>. Interesting targets include:
+	Change directory to jInfer's <code>src</code>.
+  </li><li>Run <code>ant [chosen target]</code>. Interesting targets include:
     <ul><li>
-        <tt>clean</tt>: removes any build artefacts.
-      </li><li><tt>build</tt>: compiles and builds jInfer.
-      </li><li><tt>clean build</tt>: performs a clean build, useful if something "stops working".
-      </li><li><tt>nbms</tt>: creates a distribution by packaging jInfer modules in NBM files.
+        <code>clean</code>: removes any build artefacts.
+      </li><li><code>build</code>: compiles and builds jInfer.
+      </li><li><code>clean build</code>: performs a clean build, useful if something "stops working".
+      </li><li><code>nbms</code>: creates a distribution by packaging jInfer modules in NBM files.
       </li></ul>
-  </li></ol><p>Chosen target may be empty, which should default to <tt>build</tt>.</p>
+  </li></ol><p>Chosen target may be empty, which should default to <code>build</code>.</p>
 
 	<div class="clear"></div>
 </div>

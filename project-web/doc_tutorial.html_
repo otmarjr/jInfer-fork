@@ -5,7 +5,7 @@
 
         <p>Target audience: jInfer users. Anyone who needs to use jInfer to create DTD, XSD or another schema from existing XML documents, schemas (again: DTD, XSD, ...) or queries (such as XPath).<br/>
 
-  <i>Note: we use the term </i><i><b>inference</b></i><i> for the act of creation of schema throughout this and other jInfer documents.</i><br/>
+  <span class="prerequisities">Note: we use the term <b>inference</b> for the act of creation of schema throughout this and other jInfer documents.</span><br/>
 
 </p>
 <h2>Overview</h2><ol type=1><li>
@@ -14,14 +14,15 @@
   </li><li>Infer schema.
   </li></ol>
 <h2>NetBeans</h2><p>
-  <i>Do this if you don't have any NetBeans installed. If you have an older version than 6.9, jInfer will not run - please update it first.</i>
+  <span class="prerequisities">Do this if you don't have any NetBeans installed. If you have an older version than 6.9, jInfer will not run - please update it first.</span>
 </p><ol type=1><li>
 	Go to <a href="http://netbeans.org/">http://netbeans.org/</a>.
   </li><li>Download NetBeans 6.9+, whichever bundle will do.
   </li><li>Follow installation instructions.
   </li></ol>
 <h2>jInfer</h2><p>
-  <i>Do this if you have the correct version of NetBeans installed. Note that jInfer features automatic update - you don't need to follow these steps each time new version comes out.</i></p><ol type=1><li>
+  <span class="prerequisities">Do this if you have the correct version of NetBeans installed. Note that jInfer features automatic update - you don't need to follow these steps each time new version comes out.</span></p>
+<ol type=1><li>
 	Go to <a href="https://sourceforge.net/projects/jinfer/files/">https://sourceforge.net/projects/jinfer/files/</a>.
   </li><li>Download the latest jInfer binaries (jInfer-X.Y-bin.zip).
   </li><li>Unpack the ZIP, you'll get a few NBM files.
@@ -33,7 +34,7 @@
   </li><li>Restart NetBeans.
   </li></ol>
 <h2>Basic Inference</h2><p>
-  <i>This section assumes you have NetBeans and jInfer installed. After the first run, a jInfer Welcome window will appear, guiding you through basically the same steps that will be covered here. You might want to follow them instead.</i><br/>
+  <span class="prerequisities">This section assumes you have NetBeans and jInfer installed. After the first run, a jInfer Welcome window will appear, guiding you through basically the same steps that will be covered here. You might want to follow them instead.</span><br/>
 
   Let's assume that you have one or more XML files, and you want to create XSD schema from them.<br/>
 
@@ -63,7 +64,7 @@
       </li></ol>
   </li></ol>
 <h2>Project files</h2><p>
-  <i>This section assumes you have successfully inferred at least one schema.</i>
+  <span class="prerequisities">This section assumes you have successfully inferred at least one schema.</span>
 </p><ul><li>
 	To add input files to a specific folder (XML documents, schemas, queries) without relying on jInfer to guess the folder from the extension, right click the folder and select <i>Add XYZ files</i>.
   </li><li>Note that input folders are virtual - files in them still reside at their original locations. You can't actually delete them from disk from within jInfer, just remove them from these virtual folders by selecting <i>Delete</i> from their context menu.
@@ -71,7 +72,7 @@
   </li><li>You might want to see a diff between two input documents, or old and inferred schema - just select both files at once, right-click and select <i>Tools</i> &gt; <i>Diff</i> from their context menu.
   </li></ul>
 <h2>Setting up jInfer</h2><p>
-  <i>This section assumes that you have successfully inferred at least one schema and know how to manipulate input and output files in a project.</i><br/>
+  <span class="prerequisities">This section assumes that you have successfully inferred at least one schema and know how to manipulate input and output files in a project.</span><br/>
 
   To change jInfer settings, you have to first realize whether it is a change affecting a single project at a time (for example, changing the output language from XSD to DTD) or whole jInfer at once (whether schema should open in Editor window after the inference finishes).
 </p><ol type=1><li>

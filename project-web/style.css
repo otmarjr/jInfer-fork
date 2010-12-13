@@ -291,3 +291,12 @@ table.people {
 .member_email, .member_http {
 	text-indent: 1em;
 }
+
+.gloss-term {
+  font-weight: bold;
+  color: #666666;
+}
+
+.gloss-definition {
+  text-indent: 1em;
+}

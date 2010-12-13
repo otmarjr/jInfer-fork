@@ -41,7 +41,7 @@
 	
 	<p>
 	  <ul>
-	    <li>Compiling jInfer from sources</li>
+	    <li><a href="building_jinfer.html">Compiling jInfer from sources</a></li>
 	    <li>Architecture</li>
 	    <li>Data structures</li>
 	    <li>Inference modules</li>

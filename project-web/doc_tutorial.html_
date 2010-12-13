@@ -3,11 +3,12 @@
 <div id="content">
 	<h1>Tutorial</h1>
 
-        <p>Target audience: jInfer users. Anyone who needs to use jInfer to create DTD, XSD or another schema from existing XML documents, schemas (again: DTD, XSD, ...) or queries (such as XPath).<br/>
-
-  <span class="prerequisities">Note: we use the term <b>inference</b> for the act of creation of schema throughout this and other jInfer documents.</span><br/>
-
-</p>
+        <p>
+          Target audience: jInfer users. Anyone who needs to use jInfer to create DTD, XSD or another schema from existing XML documents, schemas (again: DTD, XSD, ...) or queries (such as XPath).
+        </p>
+        <p>
+          <span class="prerequisities">Note: we use the term <b>inference</b> for the act of creation of schema throughout this and other jInfer documents.</span>
+        </p>
 <h2>Overview</h2><ol type=1><li>
 	Get &amp; install NetBeans.
   </li><li>Get &amp; install jInfer.

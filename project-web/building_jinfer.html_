@@ -2,19 +2,27 @@
 
 <div id="content">
 	<h1>Building jInfer from sources</h1>
-<p>Target audience: jInfer power users. Anyone who needs to build jInfer from sources.<br/>
-
+<p>
+  Target audience: jInfer power users. Anyone who needs to build jInfer from sources.
+</p>
+<p>
   <span class="prerequisities">This document assumes that your computer is set to use jInfer, meaning you
-    have correct version of NetBeans installed and you can run jInfer.</span></p>
-<h2>Getting jInfer sources</h2><p>
-  There are two main ways of obtaining jInfer source files: from a version 
+    have correct version of NetBeans installed and you can run jInfer.</span>
+</p>
+
+<h2>Getting jInfer sources</h2>
+<p>
+There are two main ways of obtaining jInfer source files: from a version 
   distribution, or from the Subversion repository. The first way might be more
   convenient and secure (version distributions are usually more stable than the
   bleeding edge code in repository), however you might prefer to build the
-  latest code.<br/>
+  latest code.
+</p>
 
+<p>
   The first way, obtaining sources from version distribution:
-</p><ol type=1><li>
+</p>
+<ol type=1><li>
 	Go to <a href="https://sourceforge.net/projects/jinfer/files/">
 https://sourceforge.net/projects/jinfer/files/</a>.
   </li><li>Download the latest jInfer sources (jInfer-X.Y-src.zip).
@@ -28,10 +36,13 @@ might be a good place to start. To check out
 
   <code>https://jinfer.svn.sourceforge.net/svnroot/jinfer</code></p><p>After the
   checkout, continue by building jInfer.</p>
-<h2>Building from NetBeans</h2><p>
+
+<h2>Building from NetBeans</h2>
+<p>
   <span class="prerequisities">This is perhaps the easier, more user friendly way of building jInfer.
     If you however wish to automate the building process, you might want to
-    try using Ant - in that case, see the next section.</span></p>
+    try using Ant - in that case, see the next section.</span>
+</p>
 <ol type=1><li>
 	Start NetBeans, select <i>File</i> &gt; <i>Open Project...</i> from the main menu.
   </li><li>In the dialog window, navigate to the root folder with jInfer sources.
@@ -55,7 +66,10 @@ might be a good place to start. To check out
   If you now want to create your own distribution (= NBM modules), select 
   <i>Create NBMs</i> from the context menu. They will be created in
   <i>build/updates</i> directory.</p>
-<h2>Building with Ant</h2><p>Each jInfer module and jInfer suite itself has 
+
+<h2>Building with Ant</h2>
+<p>
+  Each jInfer module and jInfer suite itself has
   its own <code>build.xml</code> Ant build file. The most important one, for the
   whole jInfer suite, is located in the <code>src</code> folder.<br/>
 
@@ -64,7 +78,8 @@ might be a good place to start. To check out
     install directory</i> &gt; <code>java/ant/bin/ant</code>.<br/>
 
   Whichever Ant is chosen, to build jInfer do the following on command line:
-</p><ol type=1><li>
+</p>
+<ol type=1><li>
 	Change directory to jInfer's <code>src</code>.
   </li><li>Run <code>ant [chosen target]</code>. Interesting targets include:
     <ul><li>

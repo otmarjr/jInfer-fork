@@ -4,8 +4,8 @@
 	<h1>Building jInfer from sources</h1>
 <p>Target audience: jInfer power users. Anyone who needs to build jInfer from sources.<br/>
 
-  <i>This document assumes that your computer is set to use jInfer, meaning you
-    have correct version of NetBeans installed and you can run jInfer.</i></p>
+  <span class="prerequisities">This document assumes that your computer is set to use jInfer, meaning you
+    have correct version of NetBeans installed and you can run jInfer.</span></p>
 <h2>Getting jInfer sources</h2><p>
   There are two main ways of obtaining jInfer source files: from a version 
   distribution, or from the Subversion repository. The first way might be more
@@ -29,9 +29,9 @@ might be a good place to start. To check out
   <code>https://jinfer.svn.sourceforge.net/svnroot/jinfer</code></p><p>After the
   checkout, continue by building jInfer.</p>
 <h2>Building from NetBeans</h2><p>
-  <i>This is perhaps the easier, more user friendly way of building jInfer.
+  <span class="prerequisities">This is perhaps the easier, more user friendly way of building jInfer.
     If you however wish to automate the building process, you might want to
-    try using Ant - in that case, see the next section.</i></p>
+    try using Ant - in that case, see the next section.</span></p>
 <ol type=1><li>
 	Start NetBeans, select <i>File</i> &gt; <i>Open Project...</i> from the main menu.
   </li><li>In the dialog window, navigate to the root folder with jInfer sources.

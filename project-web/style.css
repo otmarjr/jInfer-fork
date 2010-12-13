@@ -292,6 +292,11 @@ table.people {
 	text-indent: 1em;
 }
 
+.prerequisities {
+  color: #666666;
+  font-style: oblique;
+}
+
 .glossary {
   margin-bottom: 0.5em;
 }

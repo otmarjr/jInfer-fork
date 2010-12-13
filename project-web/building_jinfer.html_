@@ -28,14 +28,19 @@ https://sourceforge.net/projects/jinfer/files/</a>.
   </li><li>Download the latest jInfer sources (jInfer-X.Y-src.zip).
   </li><li>Unpack the ZIP, you'll get a few directories. One of them will be <code>src</code>.
   </li><li>Continue by building jInfer.
-  </li></ol><p>Second way, checking out Subversion repository: you will need a
+  </li></ol>
+
+<p>
+  Second way, checking out Subversion repository: you will need a
   Subversion client, such as the command line client or TortoiseSVN. In any case,
   <a href="http://subversion.apache.org/">http://subversion.apache.org/</a>
 might be a good place to start. To check out
-  jInfer, use the following URL:<br/>
+  jInfer, use the following URL:
 
-  <code>https://jinfer.svn.sourceforge.net/svnroot/jinfer</code></p><p>After the
-  checkout, continue by building jInfer.</p>
+  <div class="code">https://jinfer.svn.sourceforge.net/svnroot/jinfer</div>
+
+  After thecheckout, continue by building jInfer.
+</p>
 
 <h2>Building from NetBeans</h2>
 <p>

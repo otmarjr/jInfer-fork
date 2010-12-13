@@ -292,6 +292,10 @@ table.people {
 	text-indent: 1em;
 }
 
+.glossary {
+  margin-bottom: 0.5em;
+}
+
 .gloss-term {
   font-weight: bold;
   color: #666666;
@@ -299,5 +303,4 @@ table.people {
 
 .gloss-definition {
   text-indent: 1em;
-  margin-bottom: 0.5em;
 }

@@ -9,87 +9,87 @@
 
         <p>
           <ul>
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Exporter</span>
               <span class="gloss-definition">Module creating output schema from simplified grammar.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Grammar</span>
               <span class="gloss-definition">A list of rules, most commonly represented by a list of elements. See also: Initial Grammar</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Inference</span>
               <span class="gloss-definition">Process of extracting schema from input documents, schemas and queries.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Initial Grammar (IG)</span>
               <span class="gloss-definition">Grammar generated from input documents, schemas and queries with almost no processing.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Initial Grammar Generator (IGG)</span>
               <span class="gloss-definition">Module creating IG from input documents, schemas and queries.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">LHS</span>
               <span class="gloss-definition">Left hand side (of a rule).</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Metadata</span>
               <span class="gloss-definition">Unstructured textual information attached to a node.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Module</span>
               <span class="gloss-definition">Basic building block of jInfer suite, NetBeans Platform module. Examples: Base, BasicIGG.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">NB</span>
               <span class="gloss-definition"><a href="http://netbeans.org/">NetBeans</a></span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">NBP</span>
               <span class="gloss-definition"><a href="http://netbeans.org/features/platform/index.html">NetBeans Platform</a></span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Node</span>
               <span class="gloss-definition">XML element, simple text data or attribute. See also: Structural Node.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Regexp</span>
               <span class="gloss-definition">Regular expression, usually referring to jInfer's data structures representing regular expressions.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">RHS</span>
               <span class="gloss-definition">Right hand side (of a rule).</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Rule</span>
               <span class="gloss-definition">Tuple (left hand side, right hand side), representing a production rule (for example, A -> B, C, D). In jInfer most commonly represented as an element - element itself is the LHS, its subnodes are the RHS.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">SF.net</span>
               <span class="gloss-definition"><a href="https://sourceforge.net/">SourceForge.net</a>, open source development platform hosting jInfer.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Simplifier</span>
               <span class="gloss-definition">Module processing IG into a simpler grammar.</span>
             </li>
 
-            <li>
+            <li class="glossary">
               <span class="gloss-term">Structural node</span>
               <span class="gloss-definition">XML element or simple text data.</span>
             </li>

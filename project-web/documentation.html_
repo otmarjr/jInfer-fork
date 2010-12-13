@@ -3,14 +3,9 @@
 <div id="content">
 	<h1>jInfer documentation</h1>
 	
-	<h3>User's tutorial</h3>
-	
-	<p>
-	  Following <a href="doc_tutorial.html">these</a> simple steps, you'll have jInfer running and productive in no time!
-	</p>
-	
 	<h3>User's documentation</h3>
-	<p>
+	  Following the <a href="doc_tutorial.html">tutorial</a>,
+          you'll have jInfer running and productive in no time!<br/>
 	  Exhausting <a href="doc_user.html">user documentation</a> is also available.
 	</p>
 	

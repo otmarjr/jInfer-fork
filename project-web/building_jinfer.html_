@@ -15,13 +15,15 @@
 
   The first way, obtaining sources from version distribution:
 </p><ol type=1><li>
-	Go to https://sourceforge.net/projects/jinfer/files/
+	Go to <a href="https://sourceforge.net/projects/jinfer/files/">
+https://sourceforge.net/projects/jinfer/files/</a>.
   </li><li>Download the latest jInfer sources (jInfer-X.Y-src.zip).
-  </li><li>Unpack the ZIP, you’ll get a few directories. One of them will be <tt>src</tt>.
+  </li><li>Unpack the ZIP, you'll get a few directories. One of them will be <tt>src</tt>.
   </li><li>Continue by building jInfer.
   </li></ol><p>Second way, checking out Subversion repository: you will need a
   Subversion client, such as the command line client or TortoiseSVN. In any case,
-  http://subversion.apache.org/ might be a good place to start. To check out
+  <a href="http://subversion.apache.org/">http://subversion.apache.org/</a>
+might be a good place to start. To check out
   jInfer, use the following URL:<br/>
 
   <tt>https://jinfer.svn.sourceforge.net/svnroot/jinfer</tt></p><p>After the
@@ -45,7 +47,7 @@
   pieces icon) context menu. If jInfer is the main project, clicking the
   green "Play" icon in the toolbar should work too.<br/>
 
-  If you want to build jInfer, for example to test if your changes didn’t break
+  If you want to build jInfer, for example to test if your changes didn't break
   something, select <i>Build</i> from the context menu. Sometimes it might be
   necessary to run <i>Clean &amp; Build</i>, try this if it "stops working".
   If you want to run JUnit test, select <i>Test</i> from the same context menu.<br/>
@@ -63,7 +65,7 @@
 
   Whichever Ant is chosen, to build jInfer do the following on command line:
 </p><ol type=1><li>
-	Change directory to jInfer’s <tt>src</tt>.
+	Change directory to jInfer's <tt>src</tt>.
   </li><li>Run <tt>ant [chosen target]</tt>. Interesting targets include:
     <ul><li>
         <tt>clean</tt>: removes any build artefacts.

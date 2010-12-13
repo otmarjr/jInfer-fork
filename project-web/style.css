@@ -293,6 +293,7 @@ table.people {
 }
 
 .prerequisities {
+  font-size: smaller;
   color: #666666;
   font-style: oblique;
 }

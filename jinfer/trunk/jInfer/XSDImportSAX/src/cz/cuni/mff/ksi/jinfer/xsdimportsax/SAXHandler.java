@@ -51,6 +51,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author reseto
  */
 class SAXHandler extends DefaultHandler {
+  //TODO reseto MASSIVE REFACTOR exception throwing by nbBundle!!
+  //TODO reseto incorporate Expander
 
   private final XSDImportSettings settings = new XSDImportSettings();
   private static final Logger LOG = Logger.getLogger(SAXHandler.class);
@@ -233,7 +235,7 @@ class SAXHandler extends DefaultHandler {
   }
 
   /**
-   * Trims (cuts) namespace prefix from the beginning of element qName
+   * Trims (cuts) namespace prefix from the beginning of element qName and returns it in lowercase.
    */
   private String trimNS(final String qName) {
     return qName.substring(qName.lastIndexOf(':') + 1).toLowerCase();

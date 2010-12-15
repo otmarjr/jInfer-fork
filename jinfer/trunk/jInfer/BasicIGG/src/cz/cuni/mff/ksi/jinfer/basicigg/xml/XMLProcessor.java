@@ -33,8 +33,9 @@ import org.openide.NotifyDescriptor;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Contains logic for IG retrieval from XML documents.
- * 
+ * Implementation of {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * providing logic for IG retrieval from XML documents.
+ *
  * @author vektor
  */
 @ServiceProvider(service = Processor.class)

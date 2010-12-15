@@ -14,16 +14,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl;
+package cz.cuni.mff.ksi.jinfer.twostep;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;

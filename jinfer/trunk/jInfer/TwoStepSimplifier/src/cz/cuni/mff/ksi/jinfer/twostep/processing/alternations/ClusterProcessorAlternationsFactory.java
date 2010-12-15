@@ -14,11 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.alternations;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.alternations;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -26,7 +26,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Factory for a trivial implementation of
- * {@see cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor} -
+ * {@see cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor} -
  * simply returns all possible right sides as alternation in the resulting rule.
  *
  * @author vektor

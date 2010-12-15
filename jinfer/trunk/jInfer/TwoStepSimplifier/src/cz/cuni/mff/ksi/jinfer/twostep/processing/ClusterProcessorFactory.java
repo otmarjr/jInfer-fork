@@ -14,16 +14,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing;
+package cz.cuni.mff.ksi.jinfer.twostep.processing;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.twostep.TwoStepUserDescription;
 
 /**
  * Factory interface for 
- * {@see cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor}.
+ * {@see cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor}.
  * Implementations should be annotated
  *
  * \@ServiceProvider(service = ClusterProcessorFactory.class)

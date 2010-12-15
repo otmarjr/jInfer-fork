@@ -14,12 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained.properties;
+package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained.CleanerChainedFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.CleanerChainedFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

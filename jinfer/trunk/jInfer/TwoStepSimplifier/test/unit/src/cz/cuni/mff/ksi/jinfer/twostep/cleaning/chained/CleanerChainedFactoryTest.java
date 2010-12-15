@@ -15,9 +15,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.chained;
+package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;

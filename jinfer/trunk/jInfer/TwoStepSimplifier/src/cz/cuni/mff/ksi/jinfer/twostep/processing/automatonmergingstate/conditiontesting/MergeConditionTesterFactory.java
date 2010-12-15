@@ -15,12 +15,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate.conditiontesting;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.crudemdl.ModuleParameters;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
+import cz.cuni.mff.ksi.jinfer.twostep.TwoStepUserDescription;
 
 /**
  * Factory interface for MergeConditionTester.

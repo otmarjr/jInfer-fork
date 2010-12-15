@@ -39,13 +39,13 @@ public final class TestUtils {
 
   /**
    * Empty context, can be used in
-   * {@see cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
+   * {@link cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
    */
   public static final List<String> EMPTY_CONTEXT = Collections.emptyList();
   
   /**
    * Empty metadata, can be used in
-   * {@see cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
+   * {@link cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
    */
   public static final Map<String, Object> EMPTY_METADATA = Collections.emptyMap();
 
@@ -120,7 +120,7 @@ public final class TestUtils {
   /**
    * Returns an element with provided name. The element is otherwise
    * empty: context and metadata are empty, the subnodes are
-   * {@see RegexpType#LAMBDA}.
+   * {@link RegexpType#LAMBDA}.
    * The element will be created as immutable.
    *
    * @param name Name for this element.

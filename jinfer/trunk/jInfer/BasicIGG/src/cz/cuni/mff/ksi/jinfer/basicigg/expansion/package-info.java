@@ -1,5 +1,5 @@
 /**
  * This package provides a simple implementation of the
- * {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface.
+ * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface.
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.expansion;

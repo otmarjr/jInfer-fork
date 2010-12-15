@@ -35,7 +35,7 @@ import org.apache.commons.collections15.Transformer;
  * Extension of {@link Visualizer} that provides an easy way of adding JUNG
  * graph mouse plugins.
  *
- * @see GraphMousePlugin
+ * @link GraphMousePlugin
  *
  * @author rio
  */

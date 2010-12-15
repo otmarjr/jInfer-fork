@@ -41,7 +41,7 @@ import org.openide.util.lookup.ServiceProvider;
  * A trivial implementation of IGGenerator module. Works with XML documents,
  * DTD schemas, XPath queries and provides an extension framework to enable
  * support for additional languages
- * (see {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}).
+ * (see {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}).
  * 
  * @author vektor
  */

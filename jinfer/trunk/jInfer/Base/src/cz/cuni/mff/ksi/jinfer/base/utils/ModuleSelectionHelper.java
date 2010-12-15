@@ -59,9 +59,9 @@ public final class ModuleSelectionHelper {
 
   /**
    * Returns a list of names
-   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
+   * ({@link cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
    * of all the implementations of requested interface registered via
-   * {@see org.openide.util.lookup.ServiceProvider}.
+   * {@link org.openide.util.lookup.ServiceProvider}.
    *
    * @param <T> Interface for which the names are to be found.
    * Must extend NamedModule.
@@ -69,7 +69,7 @@ public final class ModuleSelectionHelper {
    * Must extend NamedModule.
    *
    * @return Alphabetically sorted list of all names of modules registered as
-   * {@see org.openide.util.lookup.ServiceProvider} implementing the requested
+   * {@link org.openide.util.lookup.ServiceProvider} implementing the requested
    * interface.
    */
   public static <T extends NamedModule> List<String> lookupNames(
@@ -89,7 +89,7 @@ public final class ModuleSelectionHelper {
    * @param <T> Interface to be found. Must extend NamedModule.
    * @param clazz Interface to be found. Must extend NamedModule.
    * @param name Module name. This parameter will be compared to the names
-   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
+   * ({@link cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
    * of all implementations of the requested interface.
    * 
    * @return Implementation with the correct name. If there is no implementation
@@ -108,7 +108,7 @@ public final class ModuleSelectionHelper {
    * @param <T> Interface to be found. Must extend NamedModule.
    * @param clazz Interface to be found. Must extend NamedModule.
    * @param name Module name. This parameter will be compared to the names
-   * ({@see cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
+   * ({@link cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
    * of all implementations of the requested interface.
    * @param fallback Defines what to do if no implementation with correct name
    * is found.
@@ -116,7 +116,7 @@ public final class ModuleSelectionHelper {
    * @return Implementation with the correct name. If there is no implementation
    * of this interface <cite>at all</cite>, runtime exception. If there are
    * implementations but none has the correct name, the behaviour depends on the
-   * fallback parameter. See {@see Fallback}.
+   * fallback parameter. See {@link Fallback}.
    */
   public static <T extends NamedModule> T lookupImpl(final Class<T> clazz,
           final String name, final Fallback fallback) {

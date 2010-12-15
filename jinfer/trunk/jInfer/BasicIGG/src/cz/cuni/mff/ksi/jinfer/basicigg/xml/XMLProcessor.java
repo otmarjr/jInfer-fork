@@ -33,7 +33,7 @@ import org.openide.NotifyDescriptor;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Implementation of {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
  * providing logic for IG retrieval from XML documents.
  *
  * @author vektor

@@ -30,7 +30,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Class providing logic for IG retrieval from XSD schemas.
- * Implementation of {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
  * @author reseto
  */
 @ServiceProvider(service = Processor.class)

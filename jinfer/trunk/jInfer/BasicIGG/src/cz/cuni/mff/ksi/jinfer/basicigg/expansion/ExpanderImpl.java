@@ -29,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * A simple implementation of the 
- * {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface.
+ * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface.
  * 
  * @author vektor
  */

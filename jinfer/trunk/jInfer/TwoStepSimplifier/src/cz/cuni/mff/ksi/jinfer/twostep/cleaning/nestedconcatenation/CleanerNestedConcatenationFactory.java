@@ -15,10 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.nestedconcatenation;
+package cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation;
 
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;

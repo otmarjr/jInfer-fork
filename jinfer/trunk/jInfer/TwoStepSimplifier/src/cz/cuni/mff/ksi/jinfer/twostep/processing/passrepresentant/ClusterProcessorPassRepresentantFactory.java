@@ -15,11 +15,11 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.passrepresentant;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.passrepresentant;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;

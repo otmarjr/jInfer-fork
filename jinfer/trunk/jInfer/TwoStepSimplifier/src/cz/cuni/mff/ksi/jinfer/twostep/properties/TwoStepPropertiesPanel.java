@@ -14,14 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl.properties;
+package cz.cuni.mff.ksi.jinfer.twostep.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.crudemdl.TwoStepSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.TwoStepSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 

@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.automatonmergingstate;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate;
 
 /**
  * When automaton is being renderer in AutoEditor, this interface is used to

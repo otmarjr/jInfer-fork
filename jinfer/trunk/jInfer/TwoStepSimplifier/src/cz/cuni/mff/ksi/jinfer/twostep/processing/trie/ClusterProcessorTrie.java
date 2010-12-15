@@ -14,20 +14,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.crudemdl.processing.trie;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.trie;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
 import java.util.List;
 
 /**
  * Trie (prefix tree) implementation of
- * {@see cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor}.
+ * {@see cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor}.
  * 
  * @author vektor
  */

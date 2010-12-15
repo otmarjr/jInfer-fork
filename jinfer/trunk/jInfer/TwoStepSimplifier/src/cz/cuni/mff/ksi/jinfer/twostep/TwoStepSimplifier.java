@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.crudemdl;
+package cz.cuni.mff.ksi.jinfer.twostep;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
@@ -23,14 +23,14 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleaner;
-import cz.cuni.mff.ksi.jinfer.crudemdl.cleaning.RegularExpressionCleanerFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Cluster;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.Clusterer;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererFactory;
-import cz.cuni.mff.ksi.jinfer.crudemdl.clustering.ClustererWithAttributes;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessor;
-import cz.cuni.mff.ksi.jinfer.crudemdl.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.Cluster;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererWithAttributes;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.ArrayList;
 import java.util.HashMap;

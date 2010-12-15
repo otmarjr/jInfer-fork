@@ -36,7 +36,7 @@ import org.jaxen.saxpath.helpers.XPathReaderFactory;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Implementation of {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
  * providing logic for IG retrieval from XPath 1.0 queries.
  *
  * @author vektor

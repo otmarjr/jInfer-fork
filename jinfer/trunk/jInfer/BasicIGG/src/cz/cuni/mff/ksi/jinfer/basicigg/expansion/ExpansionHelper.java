@@ -37,7 +37,7 @@ public final class ExpansionHelper {
 
   /**
    * Applies the regexp interval on the set of words. For this function,
-   * word is a {@see List} of its letters (see type parameter).
+   * word is a {@link List} of its letters (see type parameter).
    * The actual list of generated words depends on the interval in following way:
    *
    * <ul>
@@ -101,13 +101,13 @@ public final class ExpansionHelper {
    * Returns flag if the provided regexp is a simple concatenation.
    * Regexp is a simple concatenation if all these conditions hold:
    * <ul>
-   *  <li>Its type is {@see RegexpType#CONCATENATION}.</li>
-   *  <li>Its interval is "once" ({@see RegexpInterval#isOnce()}).</li>
+   *  <li>Its type is {@link RegexpType#CONCATENATION}.</li>
+   *  <li>Its interval is "once" ({@link RegexpInterval#isOnce()}).</li>
    *  <li>
    *   For each of its children holds:
    *    <ul>
-   *      <li>The child is {@see RegexpType#TOKEN}</li>
-   *      <li>The child's interval is "once" ({@see RegexpInterval#isOnce()}).</li>
+   *      <li>The child is {@link RegexpType#TOKEN}</li>
+   *      <li>The child's interval is "once" ({@link RegexpInterval#isOnce()}).</li>
    *    </ul>
    *  </li>
    * </ul>

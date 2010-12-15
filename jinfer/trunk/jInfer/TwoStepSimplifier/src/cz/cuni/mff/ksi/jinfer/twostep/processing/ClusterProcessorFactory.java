@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.twostep.TwoStepUserDescription;
 
 /**
  * Factory interface for 
- * {@see cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor}.
+ * {@link cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor}.
  * Implementations should be annotated
  *
  * \@ServiceProvider(service = ClusterProcessorFactory.class)

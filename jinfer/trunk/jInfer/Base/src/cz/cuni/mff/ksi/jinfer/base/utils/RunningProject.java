@@ -93,7 +93,7 @@ public final class RunningProject {
    * Returns the capabilities of the next module in the inference chain.
    *
    * @return Capabilities of the next module in the inference chain. Empty
-   * capabilities ({@see Capabilities} object returning an empty list of capabilities)
+   * capabilities ({@link Capabilities} object returning an empty list of capabilities)
    * if next module is <code>null</code> for any reason.
    */
   public static Capabilities getNextModuleCaps() {

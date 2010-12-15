@@ -26,7 +26,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Factory for a trivial implementation of
- * {@see cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor} -
+ * {@link cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor} -
  * simply returns all possible right sides as alternation in the resulting rule.
  *
  * @author vektor

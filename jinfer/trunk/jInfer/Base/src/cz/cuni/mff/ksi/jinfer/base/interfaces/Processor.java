@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Interface of any class that can take an InputStream and produce IG rules 
  * from it. The class must work as a singleton, subsequent calls to
- * {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#process()}
+ * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#process()}
  * will be on the same instance.
  * 
  * @author vektor
@@ -48,11 +48,11 @@ public interface Processor {
   /**
    * Whether this processor can process also different extensions than that
    * specified in 
-   * {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#getExtension()}.
+   * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#getExtension()}.
    * 
    * @return True if this processor can process files with extensions
    * different from what 
-   * {@see cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#getExtension()}
+   * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#getExtension()}
    * reports. False otherwise.
    */
   boolean processUndefined();

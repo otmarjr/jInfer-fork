@@ -132,7 +132,7 @@ public class DOMHandler {
    * Determine if given node is in fact <i>org.w3c.dom.Element</i> and return a type cast if so.
    * @param node
    * @return Parameter cast to <i>org.w3c.dom.Element</i>, or <code>null</code>.
-   * @see org.w3c.dom.Element
+   * @link org.w3c.dom.Element
    */
   private org.w3c.dom.Element isDOMElement(final Node node) {
     if (node.getNodeType() == Node.ELEMENT_NODE) { // means the node is a DOM ELEMENT

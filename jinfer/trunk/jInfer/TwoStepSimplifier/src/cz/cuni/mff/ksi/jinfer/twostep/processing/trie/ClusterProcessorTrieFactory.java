@@ -26,7 +26,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Factory for a Trie (prefix tree) implementation of
- * {@see cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor}.
+ * {@link cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor}.
  *
  * @author vektor
  */

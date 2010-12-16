@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Interface of any class that can take an InputStream and produce IG rules 
  * from it. The class must work as a singleton, subsequent calls to
- * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#process()}
+ * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#process(InputStream)}
  * will be on the same instance.
  * 
  * @author vektor

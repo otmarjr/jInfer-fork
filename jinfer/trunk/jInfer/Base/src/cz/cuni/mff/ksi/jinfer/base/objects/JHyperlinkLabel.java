@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.welcome;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -27,18 +27,20 @@ import javax.swing.JLabel;
 import org.openide.util.Exceptions;
 
 /**
- * TODO sviro Comment!
+ * JLabel which behaves like clickable hyperlink. The link is opened in default
+ * system browser.
  * 
  * @author sviro
  */
 public class JHyperlinkLabel extends JLabel {
 
   private static final long serialVersionUID = 35898975;
-
-  // TODO sviro Perhaps move to Base? This sounds useful and shareable.
-
   private final String uri;
 
+  /**
+   * Default constructor. Parameter is uri where the label is pointing to.
+   * @param uri URI where this labels' link is pointing to.
+   */
   public JHyperlinkLabel(final String uri) {
     super();
 

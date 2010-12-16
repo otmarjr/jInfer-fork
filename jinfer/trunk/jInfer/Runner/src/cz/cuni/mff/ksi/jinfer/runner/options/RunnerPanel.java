@@ -31,14 +31,12 @@ import org.openide.util.NbPreferences;
 public final class RunnerPanel extends JPanel {
 
   private static final long serialVersionUID = 3534679876l;
-
   public static final String OUTPUT_SHOW = "output.show";
   public static final String SCHEMA_OPEN = "schema.open";
   public static final String NAME_PATTERN = "name.pattern";
   public static final boolean OUTPUT_SHOW_DEFAULT = false;
   public static final boolean SCHEMA_OPEN_DEFAULT = true;
   public static final String NAME_PATTERN_DEFAULT = "generated-schema{n}";
-
   private final RunnerOptionsPanelController controller;
 
   public RunnerPanel(final RunnerOptionsPanelController controller) {
@@ -210,12 +208,18 @@ public final class RunnerPanel extends JPanel {
     add(jPanel3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  /**
+   * Load previously entered values into the fields.
+   */
   public void load() {
     openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, SCHEMA_OPEN_DEFAULT));
     showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, OUTPUT_SHOW_DEFAULT));
     namePattern.setText(NbPreferences.forModule(RunnerPanel.class).get(NAME_PATTERN, NAME_PATTERN_DEFAULT));
   }
 
+  /**
+   * Save entered values of fields.
+   */
   public void store() {
     NbPreferences.forModule(RunnerPanel.class).putBoolean(SCHEMA_OPEN, openSchema.isSelected());
     NbPreferences.forModule(RunnerPanel.class).putBoolean(OUTPUT_SHOW, showOutputWindow.isSelected());
@@ -226,6 +230,10 @@ public final class RunnerPanel extends JPanel {
     NbPreferences.forModule(RunnerPanel.class).put(NAME_PATTERN, namePattern.getText());
   }
 
+  /**
+   * Check if the values entered by user are valid.
+   * @return <tt>true</tt> if all values entered by user are valid.
+   */
   public boolean valid() {
     Pattern p = Pattern.compile("\\{n\\}");
     Matcher matcher = p.matcher(namePattern.getText());

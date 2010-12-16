@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.welcome;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.JHyperlinkLabel;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import java.io.File;
 import java.io.IOException;
@@ -488,6 +489,10 @@ public final class WelcomeTopComponent extends TopComponent {
     }
   }
 
+  /**
+   * Returns <tt>true</tt> if this panel is shown on startup.
+   * @return <tt>true</tt> if this panel is shown on startup.
+   */
   public boolean isShowOnStartup() {
     return prefs().getBoolean(SHOW_ON_STARTUP, true);
   }
@@ -525,11 +530,19 @@ public final class WelcomeTopComponent extends TopComponent {
     return PREFERRED_ID;
   }
 
-  public JButton getStep3runProject() {
+  /**
+   * Get {@link JButton button} for run project.
+   * @return Button for run project.
+   */
+  protected JButton getStep3runProject() {
     return step3runProject;
   }
 
-  public JButton getStep2addFiles() {
+  /**
+   * Get {@link JButton button} for add files.
+   * @return Button for add files.
+   */
+  protected JButton getStep2addFiles() {
     return step2addFiles;
   }
 }

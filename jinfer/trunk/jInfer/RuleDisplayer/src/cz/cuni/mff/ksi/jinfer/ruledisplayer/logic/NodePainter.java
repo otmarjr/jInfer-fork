@@ -61,7 +61,7 @@ public class NodePainter {
   /**
    * Renders an abstract node and returns its image representation.
    * 
-   * @param n Node to be rendered. Must not be null.
+   * @param r Node to be rendered. Must not be null.
    * @param level Level of recursion - how deep in the tree are we.
    * @return Image representation of this node. If the level is higher that the
    * threshold from configuration, an image of three dots is returned.

@@ -144,7 +144,7 @@ public final class Utils {
    *
    * @param width Positive integer representing the width of the image.
    * @param height Positive integer representing the height of the image.
-   * @color Background color of the image.
+   * @param color Background color of the image.
    * @return BufferedImage of specified dimension.
    */
   public static BufferedImage getImage(final int width, final int height,

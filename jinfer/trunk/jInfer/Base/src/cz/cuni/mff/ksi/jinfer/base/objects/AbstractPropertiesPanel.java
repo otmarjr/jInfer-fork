@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import java.util.Properties;
@@ -26,8 +25,6 @@ import javax.swing.JPanel;
  * @author sviro
  */
 public abstract class AbstractPropertiesPanel extends JPanel {
-
-  // TODO sviro Repair comments.
 
   protected final Properties properties;
 
@@ -42,21 +39,20 @@ public abstract class AbstractPropertiesPanel extends JPanel {
   }
 
   /**
-   * method used to store data from panel to properties.
+   * Method used to store data from panel to properties.
    */
   public abstract void store();
 
   /**
-   * method used to load data from properties to panel.
+   * Method used to load data from properties to panel.
    */
-  public abstract  void load();
+  public abstract void load();
 
   /**
-   * 
+   * Get Properties associated with this panel.
    * @return Properties used to load and store data to panel.
    */
   public Properties getProperties() {
     return properties;
   }
-
 }

@@ -29,8 +29,10 @@ import org.openide.NotifyDescriptor;
 import org.openide.nodes.Node;
 
 /**
- * Action for folder node which delete all input files in folder.
+ * Action for folder node which deletes all input files in particular folder.
+ *
  * @author sviro
+ * @see FolderNode
  */
 public class DeleteAllAction extends AbstractAction {
 

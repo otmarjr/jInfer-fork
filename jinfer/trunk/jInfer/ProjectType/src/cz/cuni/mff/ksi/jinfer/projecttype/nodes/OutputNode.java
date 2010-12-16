@@ -31,7 +31,7 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author sviro
  */
-final class OutputNode extends FilterNode {
+public final class OutputNode extends FilterNode {
 
   public OutputNode(final Node node, final JInferProject project) {
     super(node, new OutputChildren(node),

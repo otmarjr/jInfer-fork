@@ -26,8 +26,11 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 
 /**
- * Creates children for folder node.
+ * Creates children for folder node. For each {@link File}, {@link FileNode} which
+ * represents particular file in project tree is created.
+ * 
  * @author sviro
+ * @see FolderNode
  */
 public class FileChildren extends Children.Keys<File> {
 

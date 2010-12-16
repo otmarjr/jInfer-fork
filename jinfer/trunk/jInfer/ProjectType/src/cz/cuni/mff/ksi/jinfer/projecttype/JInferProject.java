@@ -80,9 +80,9 @@ public class JInferProject implements Project {
   }
 
   /**
-   * Get FileObject of output folder. If not exist and create is true, then it's created.
+   * Get {@link FileObject} of output folder. If not exist and create is true, then it's created.
    * 
-   * @param create If is folder created when it not exist.
+   * @param create If folder is created when it not exist.
    * @return FileObject of output folder.
    */
   public FileObject getOutputFolder(final boolean create) {

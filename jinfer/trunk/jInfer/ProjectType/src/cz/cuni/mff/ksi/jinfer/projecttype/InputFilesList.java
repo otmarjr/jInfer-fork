@@ -42,7 +42,7 @@ public class InputFilesList extends ArrayList<File> {
 
   /**
    * Appends the specified element to the end of this list if this element is not already part of this list.
-   * @param e element to be appended to this list.
+   * @param e Element to be appended to this list.
    * @return <tt>true</tt> (as specified by {@link Collection#add})
    */
   @Override
@@ -80,7 +80,7 @@ public class InputFilesList extends ArrayList<File> {
    * undefined if the specified collection is this list, and this
    * list is nonempty.)
    *
-   * @param c collection containing elements to be added to this list
+   * @param c Collection containing elements to be added to this list
    * @return <tt>true</tt> if this list changed as a result of the call
    * @throws NullPointerException if the specified collection is null
    */
@@ -112,7 +112,7 @@ public class InputFilesList extends ArrayList<File> {
   }
 
   /**
-   * Removes all of the elements from this list.  The list will
+   * Removes all of the elements from this list. The list will
    * be empty after this call returns.
    */
   @Override
@@ -133,7 +133,7 @@ public class InputFilesList extends ArrayList<File> {
    * contained the specified element (or equivalently, if this list
    * changed as a result of the call).
    *
-   * @param o element to be removed from this list, if present
+   * @param o Element to be removed from this list, if present
    * @return <tt>true</tt> if this list contained the specified element
    */
   @Override
@@ -151,8 +151,8 @@ public class InputFilesList extends ArrayList<File> {
    * Shifts any subsequent elements to the left (subtracts one from their
    * indices).
    *
-   * @param index the index of the element to be removed
-   * @return the element that was removed from the list
+   * @param index The index of the element to be removed
+   * @return The element that was removed from the list
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
   @Override

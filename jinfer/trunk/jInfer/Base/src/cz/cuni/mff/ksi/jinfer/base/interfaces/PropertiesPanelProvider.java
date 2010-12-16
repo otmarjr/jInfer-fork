@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Interface of Properties panel provider for module selection category.
+ * PropertiesPanelProvider creates visual representation of one Project properties category, and manages communication between Project properties and this panel.
  *
  * @author sviro
  */
@@ -61,11 +61,16 @@ public interface PropertiesPanelProvider {
   int getPriority();
 
   /**
-   * TODO sviro Comment!
+   * Get Id of parent category for this category.
    * 
-   * @return
+   * @return Id of parent category.
    */
   String getParent();
 
+  /**
+   * Get List of Pairs of all children categories of this category. Each Pair contains
+   * id and name of child category.
+   * @return List of Pairs(id, name) of all children categories.
+   */
   List<Pair<String, String>> getSubCategories();
 }

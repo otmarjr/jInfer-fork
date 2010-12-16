@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Abstract class defining folder complex type.
  * @author sviro
  */
 @XmlTransient

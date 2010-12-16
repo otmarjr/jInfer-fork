@@ -31,7 +31,8 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
 /**
- * Provide node for input folder.
+ * Provide node for input folder. Each folder node has associated {@link FileAddAction} and
+ * {@link DeleteAllAction}.
  * @author sviro
  */
 public class FolderNode extends AbstractNode {
@@ -40,6 +41,13 @@ public class FolderNode extends AbstractNode {
   private final Collection<File> files;
   private final JInferProject project;
 
+  /**
+   * Default FolderNode contructor. For each FolderNode is determined for which 
+   * type of input files is used for.
+   * @param project Project to be associated with.
+   * @param folderType Type of input files for which is FolderNode created.
+   * @param files Collection to store files added to this FolderNode.
+   */
   public FolderNode(final JInferProject project, final FolderType folderType,
           final Collection<File> files) {
     this(project, folderType, files, new InstanceContent());

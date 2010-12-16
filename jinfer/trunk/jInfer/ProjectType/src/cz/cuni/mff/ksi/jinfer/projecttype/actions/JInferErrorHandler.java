@@ -36,7 +36,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- *
+ * Class for handling errors from {@link ValidateAction}.
  * @author sviro
  */
 public class JInferErrorHandler extends DefaultHandler {
@@ -91,7 +91,7 @@ public class JInferErrorHandler extends DefaultHandler {
     result = true;
   }
 
-  protected void printErrorMessage(final SAXParseException e) {
+  private void printErrorMessage(final SAXParseException e) {
     if (result) {
       final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
       ioResult.getOut().print("[" + DATE_FORMAT.format(new Date()) + "] " + e.getMessage());
@@ -127,6 +127,10 @@ public class JInferErrorHandler extends DefaultHandler {
     throw e;
   }
 
+  /**
+   * Get result of the validation. If some error occurs, <tt>false</tt> is returned.
+   * @return <tt>true</tt> if validation was successful, otherwise return <tt>false</tt>.
+   */
   public Boolean getResult() {
     return result;
   }

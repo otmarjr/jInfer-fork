@@ -19,17 +19,22 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 import java.util.Properties;
 
 /**
- *
+ * Properties that extend standard {@link Properties} that prefix each setting
+ * with a specific module name. By default this Properties are used for jInfer
+ * Project Properties.
  * @author sviro
  */
 public class ModuleProperties extends Properties {
 
   private static final long serialVersionUID = 31245345;
-
-  // TODO sviro Comment!
-
   private final String moduleName;
   private final Properties properties;
+
+  /**
+   * Default constructor.
+   * @param moduleName Unique name that will be used as prefix.
+   * @param properties Properties that are extended.
+   */
   public ModuleProperties(final String moduleName, final Properties properties) {
     super();
     this.moduleName = moduleName;

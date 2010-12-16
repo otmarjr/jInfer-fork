@@ -23,7 +23,8 @@ import java.util.List;
  * Interface of a (sub)module providing expansion of complex regular expressions
  * into simple concatenations. (Most simplifiers want their input in exactly
  * that format.) The class must work as a singleton, subsequent calls to
- * {@link Expander#expand(List<Element>)} will be on the same instance.
+ * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Expander#expand(java.util.List) }
+ * will be on the same instance.
  *
  * @author vektor
  */

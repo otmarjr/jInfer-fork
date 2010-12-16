@@ -23,8 +23,9 @@ import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 
 /**
- *
+ * Node which encapsulates output Files in output node.
  * @author sviro
+ * @see OutputNode
  */
 public class OutputFileNode extends FilterNode{
 

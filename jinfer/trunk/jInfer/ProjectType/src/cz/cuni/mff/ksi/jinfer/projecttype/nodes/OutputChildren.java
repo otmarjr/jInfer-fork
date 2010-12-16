@@ -21,7 +21,8 @@ import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 
 /**
- *
+ * Creates children for output folder node. For each {@link File}, {@link OutputFileNode} which
+ * represents particular file in project tree is created.
  * @author sviro
  */
 public class OutputChildren extends FilterNode.Children{

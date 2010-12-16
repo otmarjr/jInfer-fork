@@ -42,6 +42,7 @@ import org.openide.util.Lookup;
 /**
  * Creates jInfer project Properties Dialog.
  * @author sviro
+ * @see CustomizerProvider
  */
 public class JInferCustomizerProvider implements CustomizerProvider {
 
@@ -202,10 +203,18 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
   }
 
+  /**
+   * Get List of categories is this Project properties dialog.
+   * @return List of categories is this Project properties dialog.
+   */
   public List<Category> getCategories() {
     return new ArrayList<Category>(panels.keySet());
   }
 
+  /**
+   * Get {@link CategoryComponentProvider} for this Project properties dialog.
+   * @return CategoryComponentProvider for this Project properties dialog.
+   */
   public CategoryComponentProvider getComponentProvider() {
     return componentProvider;
   }

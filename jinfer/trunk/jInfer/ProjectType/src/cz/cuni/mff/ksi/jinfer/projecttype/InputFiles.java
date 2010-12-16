@@ -51,10 +51,10 @@ public final class InputFiles {
   }
 
   /**
-   * Writes project {@link Input} to the output stream in a XML format.
+   * Writes project {@link Input} to the Output Stream in a XML format.
    *
-   * @param outputStream an output stream.
-   * @param input Input to store into provided output stream.
+   * @param outputStream The Output Stream.
+   * @param input Input to store into provided Output Stream.
    */
   public static void store(final OutputStream outputStream, final Input input) {
     final ObjectFactory objFactory = new ObjectFactory();
@@ -131,11 +131,11 @@ public final class InputFiles {
   }
 
   /**
-   * Loads and store {@link Input} from the XML input stream.
+   * Loads and store {@link Input} from the XML Input Stream.
    *
-   * @param inputStream the input stream.
+   * @param inputStream The Input Stream.
    * @param input Input to store data.
-   * @throws IOException if an error occurred when reading from the input stream.
+   * @throws IOException if an error occurred when reading from the Input Stream.
    */
   public static void load(final InputStream inputStream, final Input input) throws IOException {
     final ClassLoader orig = Thread.currentThread().getContextClassLoader();

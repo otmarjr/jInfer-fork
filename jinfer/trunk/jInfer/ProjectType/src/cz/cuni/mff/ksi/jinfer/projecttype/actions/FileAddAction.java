@@ -34,8 +34,9 @@ import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 
 /**
- * Action for folder node which add specific file into input folder.
+ * Action for folder node which adds specific file into input folder.
  * @author sviro
+ * @see FolderNode
  */
 public class FileAddAction extends AbstractAction {
 

@@ -35,8 +35,8 @@ import org.openide.util.ImageUtilities;
 import org.openide.util.lookup.Lookups;
 
 /**
- * Provides node for jInfer project root. This node has 4 children: three input nodes and one output
- * node. This node also provides som basic project actions like close, delete, Set as Main Project etc.
+ * Provides node for jInfer project root. This node has four children: three input nodes and one output
+ * node. This node also provides some basic project actions like close, delete, Set as Main Project etc.
  * 
  * @author sviro
  */

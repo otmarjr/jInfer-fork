@@ -35,8 +35,17 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ProjectFactory.class)
 public class JInferProjectFactory implements ProjectFactory {
 
+  /**
+   * Name of directory containing important files for jInfer project.
+   */
   public static final String PROJECT_DIR = "jinferproject";
+  /**
+   * Name of properties file for jInfer project.
+   */
   public static final String PROJECT_PROPFILE = "project.properties";
+  /**
+   * Name of file for storing paths to Input files for jInfer project.
+   */
   public static final String PROJECT_INPUTFILE = "input.files";
 
   @Override

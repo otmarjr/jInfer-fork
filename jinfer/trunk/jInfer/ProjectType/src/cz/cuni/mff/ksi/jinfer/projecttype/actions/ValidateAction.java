@@ -50,7 +50,9 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
- * TODO sviro Comment!
+ * Action for validating input XML files against DTD or XML Schema. This action
+ * is availible from context menu of input/output files only if there is at least
+ * one XML file and exactly one schema file(DTD or XML schema) selected.
  * 
  * @author sviro
  */

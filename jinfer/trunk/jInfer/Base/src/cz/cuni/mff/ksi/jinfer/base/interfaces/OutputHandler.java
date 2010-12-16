@@ -29,7 +29,7 @@ public interface OutputHandler {
    * defined by filename, extension and data to be added.
    * 
    * @param fileName Name of file to be added without extension.
-   * @param data content of the added file.
+   * @param data Content of the added file.
    * @param extension Extension of file to be added without starting dot.
    * @param showOutput Flag whether to open a new window and show the resulting
    * schema.

@@ -30,8 +30,9 @@ import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
 
 /**
- * Node which encapsulate input Files in folder node. For this node is disabled copy and cut.
+ * Node which encapsulates input Files in folder node. For this node is disabled copy and cut.
  * @author sviro
+ * @see FolderNode
  */
 public class FileNode extends FilterNode {
 

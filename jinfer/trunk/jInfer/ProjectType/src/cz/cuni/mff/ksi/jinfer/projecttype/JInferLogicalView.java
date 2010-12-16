@@ -27,8 +27,9 @@ import org.openide.util.lookup.Lookups;
 import org.openide.util.lookup.ProxyLookup;
 
 /**
- * Creates logical view of the jInfer Project, which means that it return root node.
- * This root node contains three input folders: XML, schema, query and one outup folder.
+ * Creates logical view of the jInfer Project, which means that it returns root node of the
+ * project tree. This root node contains three input folders: XML, schema, query
+ * and one output folder.
  * @author sviro
  */
 public class JInferLogicalView implements LogicalViewProvider {

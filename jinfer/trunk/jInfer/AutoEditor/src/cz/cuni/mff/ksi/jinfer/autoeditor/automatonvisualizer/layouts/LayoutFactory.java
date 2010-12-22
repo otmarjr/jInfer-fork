@@ -50,7 +50,7 @@ public final class LayoutFactory {
    *
    * @param <T> Type parameter of specified automaton.
    * @param automaton Automaton to create layout from.
-   * @return
+   * @return Grid layout.
    */
   public static <T> Layout<State<T>, Step<T>> createVyhnanovskaGridLayout(final Automaton<T> automaton) {
     return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, createGraph(automaton));
@@ -64,7 +64,7 @@ public final class LayoutFactory {
    * @param <T> Type parameter of specified automaton.
    * @param automaton Automaton to create layout from.
    * @param edgeLabelTransformer TODO rio comment
-   * @return
+   * @return Graphviz layout.
    */
   public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
     final Map<State<T>, Point2D> positions= new HashMap<State<T>, Point2D>();

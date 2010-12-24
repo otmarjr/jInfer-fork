@@ -17,14 +17,14 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers;
 
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import org.apache.commons.collections15.Transformer;
 
 /**
- *
+ * Transformation of {@link Step} (in {@link Automaton}&#60;{@link AbstractStructuralNode}&#62;) to {@link String}.
  * @author rio
- * TODO rio comment
  */
 public class AbstractStructuralNodeEdgeLabeller implements Transformer<Step<AbstractStructuralNode>, String> {
 

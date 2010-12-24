@@ -101,7 +101,6 @@ public class PluggableVisualizer<T> extends Visualizer<T> {
   }
 
   private static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
-    // TODO rio add this plugins in constructor
     final LinkedList<GraphMousePlugin> list = new LinkedList<GraphMousePlugin>();
     list.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0));
     list.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK | MouseEvent.CTRL_MASK));

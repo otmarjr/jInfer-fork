@@ -23,9 +23,8 @@ import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import org.apache.commons.collections15.Transformer;
 
 /**
- *
+ * Transformation of {@link Regexp}&#60;{@link AbstractStructuralNode}&#62; to {@link String}.
  * @author rio
- * TODO rio comment
  */
 public class RegexpToStringTransformer implements Transformer<Regexp<AbstractStructuralNode>, String> {
 

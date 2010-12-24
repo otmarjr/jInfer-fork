@@ -18,12 +18,16 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import org.apache.commons.collections15.Transformer;
 
 /**
+ * Transformation of {@link AbstractStructuralNode} to {@link String}.
+ *
+ * If node is an {@link Element} result of transformation is its name else it is
+ * string "#CDATA".
  *
  * @author rio
- * TODO rio comment
  */
 public class AbstractStructuralNodeToStringTransformer implements Transformer<AbstractStructuralNode, String> {
 

@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.twostep;
 
+import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.AdvancedRuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -70,7 +71,7 @@ public class TwoStepSimplifier {
   public List<Element> simplify(final List<Element> initialGrammar) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
-    RuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneGrammar(initialGrammar), true);
+    AdvancedRuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneGrammar(initialGrammar), true);
     final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
     for (final Element e : initialGrammar) {
       abstracts.add(e);
@@ -144,7 +145,7 @@ public class TwoStepSimplifier {
               attList));
     }
 
-    RuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneGrammar(finalGrammar), true);
+    AdvancedRuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneGrammar(finalGrammar), true);
     return finalGrammar;
   }
 }

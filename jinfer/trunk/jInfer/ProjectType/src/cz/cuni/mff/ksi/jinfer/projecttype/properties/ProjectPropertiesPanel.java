@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
+import cz.cuni.mff.ksi.jinfer.base.utils.LogLevels;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
@@ -29,9 +30,10 @@ import javax.swing.DefaultComboBoxModel;
 public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 35345345345l;
-
+  
   public static final String FOLDER_TYPE = "folderType";
   public static final String FOLDER_TYPE_DEFAULT = "XML";
+  public static final String LOG_LEVEL = "logLevel";
 
   /** Creates new form ProjectPropertiesPanel */
   public ProjectPropertiesPanel(final Properties properties) {
@@ -54,6 +56,9 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
     jComboBox1 = new javax.swing.JComboBox();
     jPanel3 = new javax.swing.JPanel();
     jPanel2 = new javax.swing.JPanel();
+    jPanel4 = new javax.swing.JPanel();
+    logLevelCombo = new javax.swing.JComboBox();
+    loglevelLabel = new javax.swing.JLabel();
 
     setPreferredSize(new java.awt.Dimension(330, 59));
     setLayout(new java.awt.GridBagLayout());
@@ -93,7 +98,7 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 31, Short.MAX_VALUE)
+      .addGap(0, 57, Short.MAX_VALUE)
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,21 +130,60 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
     gridBagConstraints.weighty = 1.0;
     add(jPanel2, gridBagConstraints);
+
+    jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jPanel4.border.title"))); // NOI18N
+    jPanel4.setMinimumSize(new java.awt.Dimension(200, 100));
+    jPanel4.setPreferredSize(new java.awt.Dimension(330, 60));
+    jPanel4.setLayout(new java.awt.GridBagLayout());
+
+    logLevelCombo.setMaximumRowCount(12);
+    logLevelCombo.setModel(LogLevels.getDefaultModel());
+    logLevelCombo.setMinimumSize(new java.awt.Dimension(100, 22));
+    logLevelCombo.setPreferredSize(new java.awt.Dimension(100, 22));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel4.add(logLevelCombo, gridBagConstraints);
+
+    loglevelLabel.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.loglevelLabel.text")); // NOI18N
+    loglevelLabel.setToolTipText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.loglevelLabel.toolTipText")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel4.add(loglevelLabel, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    add(jPanel4, gridBagConstraints);
+    jPanel4.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jPanel4.AccessibleContext.accessibleName")); // NOI18N
   }// </editor-fold>//GEN-END:initComponents
 
   @Override
   public void store() {
     properties.setProperty(FOLDER_TYPE, ((FolderType) jComboBox1.getSelectedItem()).getName());
+
+    // TODO rio ask sviro how to get this property value in other modules
+    properties.setProperty(LOG_LEVEL, (String) logLevelCombo.getSelectedItem());
   }
 
   @Override
   public void load() {
     jComboBox1.setModel(new DefaultComboBoxModel(FolderType.values()));
-    jComboBox1.setSelectedItem(properties.getProperty( FOLDER_TYPE, FOLDER_TYPE_DEFAULT));
+    jComboBox1.setSelectedItem(properties.getProperty(FOLDER_TYPE, FOLDER_TYPE_DEFAULT));
+
+    // TODO rio correct logLevelCombo position,
+    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox jComboBox1;
@@ -147,5 +191,8 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel3;
+  private javax.swing.JPanel jPanel4;
+  private javax.swing.JComboBox logLevelCombo;
+  private javax.swing.JLabel loglevelLabel;
   // End of variables declaration//GEN-END:variables
 }

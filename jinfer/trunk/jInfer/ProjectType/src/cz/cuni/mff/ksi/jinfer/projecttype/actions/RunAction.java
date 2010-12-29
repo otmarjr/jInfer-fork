@@ -16,10 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.LogLevels;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.AddFilesPropPanelProvider;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.ProjectPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.runner.Runner;
 import java.awt.event.ActionEvent;
+import java.util.Properties;
 import javax.swing.AbstractAction;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -41,6 +45,11 @@ public class RunAction extends AbstractAction {
   @Override
   public void actionPerformed(final ActionEvent e) {
     if (RunningProject.setActiveProject(project)) {
+      final Properties properties = RunningProject.getActiveProjectProps(AddFilesPropPanelProvider.CATEGORY_NAME);
+      final String logLevel = properties.getProperty(ProjectPropertiesPanel.LOG_LEVEL,
+              LogLevels.getRootLogLevel());
+      LogLevels.setRootLogLevel(logLevel);
+
       new Runner().run();
     } else {
       DialogDisplayer.getDefault().notifyLater(new NotifyDescriptor.Message(

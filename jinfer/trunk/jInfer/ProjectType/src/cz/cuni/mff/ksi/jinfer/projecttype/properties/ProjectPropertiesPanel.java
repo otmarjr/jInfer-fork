@@ -172,8 +172,6 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public void store() {
     properties.setProperty(FOLDER_TYPE, ((FolderType) jComboBox1.getSelectedItem()).getName());
-
-    // TODO rio ask sviro how to get this property value in other modules
     properties.setProperty(LOG_LEVEL, (String) logLevelCombo.getSelectedItem());
   }
 
@@ -181,8 +179,6 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
   public void load() {
     jComboBox1.setModel(new DefaultComboBoxModel(FolderType.values()));
     jComboBox1.setSelectedItem(properties.getProperty(FOLDER_TYPE, FOLDER_TYPE_DEFAULT));
-
-    // TODO rio correct logLevelCombo position,
     logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

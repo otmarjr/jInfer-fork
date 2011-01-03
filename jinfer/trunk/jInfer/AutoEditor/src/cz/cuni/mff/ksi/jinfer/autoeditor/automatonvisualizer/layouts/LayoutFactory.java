@@ -16,27 +16,20 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.LayoutF;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
-import java.awt.Point;
-import java.awt.geom.Point2D;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
+import java.util.Properties;
 import java.util.Set;
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.collections15.TransformerUtils;
-import org.openide.util.Exceptions;
 
 /**
  * Factory of custom JUNG {@link Layout}s.
@@ -53,7 +46,7 @@ public final class LayoutFactory {
    * @return Grid layout.
    */
   public static <T> Layout<State<T>, Step<T>> createVyhnanovskaGridLayout(final Automaton<T> automaton) {
-    return cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory.createLayout(automaton, createGraph(automaton));
+    return (new cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory()).createLayout(automaton, createGraph(automaton), null);
   }
 
   /**
@@ -67,50 +60,24 @@ public final class LayoutFactory {
    * @return Graphviz layout.
    */
   public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    final Map<State<T>, Point2D> positions= new HashMap<State<T>, Point2D>();
+    return (new cz.cuni.mff.ksi.jinfer.autoeditor.graphviz.GraphvizLayoutFactory()).createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
+  }
 
-    ProcessBuilder p = new ProcessBuilder(Arrays.asList(
-            "/usr/bin/dot",
-            "-Tplain"));
-    try {
-      Process k = p.start();
-      k.getOutputStream().write(
-              (new AutomatonToDot<T>()).convertToDot(automaton, edgeLabelTransformer).getBytes()
-              );
-      k.getOutputStream().flush();
-      BufferedReader b = new BufferedReader(new InputStreamReader( k.getInputStream() ) );
-      k.getOutputStream().close();
+  /**
+   * Creates {@link Layout} which user selected in preferences.
+   *
+   * TODO rio understand and comment
+   *
+   * @param <T> Type parameter of specified automaton.
+   * @param automaton Automaton to create layout from.
+   * @param edgeLabelTransformer TODO rio comment
+   * @return
+   */
+  public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
+    Properties p = RunningProject.getActiveProjectProps("AutoEditor");
 
-      Scanner s = new Scanner(b);
-      s.next();
-      s.next();
-      double width= s.nextDouble();
-      double height= s.nextDouble();
-      double windowW= 500;
-      double windowH= 300;
-
-      while (s.hasNext()) {
-        if (s.next().equals("node")) {
-          int nodeName = s.nextInt();
-          double x= s.nextDouble();
-          double y= s.nextDouble();
-          for (State<T> state : automaton.getDelta().keySet()) {
-            if (state.getName() == nodeName) {
-              positions.put(state, new Point(
-                      (int) (windowW * x / width),
-                      (int) (windowH * y / height)
-                      ));
-              break;
-            }
-          }
-        }
-      }
-    } catch (IOException ex) {
-      Exceptions.printStackTrace(ex);
-    }
-    Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(positions);
-
-    return new StaticLayout<State<T>, Step<T>>(createGraph(automaton), trans);
+    LayoutF f= ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));
+    return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
   }
 
   /**

@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.LayoutF;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -24,15 +25,22 @@ import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
 import java.awt.Dimension;
+import java.util.Collections;
+import java.util.List;
+import org.apache.commons.collections15.Transformer;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author rio
  * TODO rio comment & refactor
  */
-public class LayoutFactory {
+@ServiceProvider(service = LayoutF.class)
+public class LayoutFactory implements LayoutF {
+  public static final String NAME= "VyhnanovskaLayuot";
   
-  public static <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph) {
+  @Override
+  public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {
     final int MIN_X_SIZE = 7;
     final int MIN_Y_SIZE = 3;
     final int SQUARE_SIZE = 100;
@@ -42,5 +50,20 @@ public class LayoutFactory {
     final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(graph,
             automatonLayoutTransformer, dimension);
     return layout;
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.<String>emptyList();
   }
 }

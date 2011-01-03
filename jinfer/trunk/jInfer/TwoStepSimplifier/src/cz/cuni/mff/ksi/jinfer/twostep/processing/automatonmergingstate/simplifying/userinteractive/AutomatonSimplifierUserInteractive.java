@@ -45,22 +45,14 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {
     List<State<T>> mergeLst;
+      Transformer<Step<T>, String> t = new Transformer<Step<T>, String>() {
+        @Override
+        public String transform(Step<T> step) {
+          return symbolToString.toString(step.getAcceptSymbol());
+        }
+      };
     do {
-      // graphviz
-      /*final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(new GraphvizLayout<T>(inputAutomaton, new Transformer<Step<T>, String>() {
-        @Override
-        public String transform(Step<T> step) {
-          return symbolToString.toString(step.getAcceptSymbol());
-        }
-      }));*/
-
-      // vyhnanovska
-      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutFactory.createVyhnanovskaGridLayout(inputAutomaton), new Transformer<Step<T>, String>() {
-        @Override
-        public String transform(Step<T> step) {
-          return symbolToString.toString(step.getAcceptSymbol());
-        }
-      });
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutFactory.createGraphvizLayout(inputAutomaton, t), t);
 
       // custom plugins
       /*final PluggableVisualizer<T> visualizer = new PluggableVisualizer<T>(new GridLayout<T>(inputAutomaton));

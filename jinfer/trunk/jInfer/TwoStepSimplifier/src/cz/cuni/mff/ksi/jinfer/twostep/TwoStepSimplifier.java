@@ -32,7 +32,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererWithAttributes;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.RuleDisplayer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;

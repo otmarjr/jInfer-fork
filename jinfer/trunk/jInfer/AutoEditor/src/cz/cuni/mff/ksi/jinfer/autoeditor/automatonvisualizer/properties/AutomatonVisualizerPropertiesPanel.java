@@ -28,7 +28,7 @@ import javax.swing.JTextField;
  * Properties panel for AutomatonSimplifierGreedy.
  * @author anti
  */
-public class AutomatonRendererPropertiesPanel extends AbstractPropertiesPanel {
+public class AutomatonVisualizerPropertiesPanel extends AbstractPropertiesPanel {
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
   private static Map<String, JTextField> dynamicComponents;
@@ -36,7 +36,7 @@ public class AutomatonRendererPropertiesPanel extends AbstractPropertiesPanel {
 
 
   /** Creates new form ModuleSelectionJPanel */
-  public AutomatonRendererPropertiesPanel(final Properties properties) {
+  public AutomatonVisualizerPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
   }
@@ -60,7 +60,7 @@ public class AutomatonRendererPropertiesPanel extends AbstractPropertiesPanel {
     setPreferredSize(new java.awt.Dimension(500, 50));
     setLayout(new java.awt.GridBagLayout());
 
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(AutomatonRendererPropertiesPanel.class, "AutomatonRendererPropertiesPanel.jLabel1.text")); // NOI18N
+    jLabel1.setText(org.openide.util.NbBundle.getMessage(AutomatonVisualizerPropertiesPanel.class, "AutomatonVisualizerPropertiesPanel.jLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -70,6 +70,11 @@ public class AutomatonRendererPropertiesPanel extends AbstractPropertiesPanel {
 
     graphRenderer.setMinimumSize(new java.awt.Dimension(200, 22));
     graphRenderer.setPreferredSize(new java.awt.Dimension(200, 22));
+    graphRenderer.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        graphRendererActionPerformed(evt);
+      }
+    });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
@@ -97,6 +102,12 @@ public class AutomatonRendererPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 1, 2, 1);
     add(jScrollPane3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
+
+  private void graphRendererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphRendererActionPerformed
+    LayoutF factory= ModuleSelectionHelper.lookupImpl(LayoutF.class,
+            (String) graphRenderer.getSelectedItem());
+    desc.setText(factory.getModuleDescription());
+  }//GEN-LAST:event_graphRendererActionPerformed
 
   @Override
   public final void load() {

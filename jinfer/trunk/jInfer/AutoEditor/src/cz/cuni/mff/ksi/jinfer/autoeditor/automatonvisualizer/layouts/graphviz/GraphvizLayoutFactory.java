@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
@@ -74,7 +75,7 @@ public class GraphvizLayoutFactory implements LayoutF {
       s.next();
       double width= s.nextDouble();
       double height= s.nextDouble();
-      double windowW= 500;
+      double windowW= 700;
       double windowH= 300;
 
       while (s.hasNext()) {
@@ -101,7 +102,7 @@ public class GraphvizLayoutFactory implements LayoutF {
     }
     Transformer<State<T>, Point2D> trans= TransformerUtils.mapTransformer(positions);
 
-    return new StaticLayout<State<T>, Step<T>>(graph, trans);
+    return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(700,300));
   }
 
   @Override

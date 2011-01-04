@@ -14,12 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHelperFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -38,20 +37,23 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierStateRemovalOrderer<T> {
+
   private static final Logger LOG = Logger.getLogger(OrdererUserInteractive.class);
-  
+
   @Override
   public State<Regexp<T>> getStateToRemove(RegexpAutomatonStateRemoval<T> automaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
     //final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
+    Transformer<Step<Regexp<T>>, String> t = new Transformer<Step<Regexp<T>>, String>() {
+
+      @Override
+      public String transform(Step<Regexp<T>> step) {
+        return symbolToString.toString(step.getAcceptSymbol());
+      }
+    };
+
     List<State<Regexp<T>>> removeLst;
     do {
-      final StatesPickingVisualizer<Regexp<T>> visualizer = new StatesPickingVisualizer<Regexp<T>>(LayoutFactory.createVyhnanovskaGridLayout(automaton), new Transformer<Step<Regexp<T>>, String>() {
-
-        @Override
-        public String transform(Step<Regexp<T>> step) {
-          return symbolToString.toString(step.getAcceptSymbol());
-        }
-      });
+      final StatesPickingVisualizer<Regexp<T>> visualizer = new StatesPickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t);
       final StatesPickingComponent<Regexp<T>> component = new StatesPickingComponent<Regexp<T>>();
       component.setVisualizer(visualizer);
       AutoEditor.drawComponentAndWaitForGUI(component);
@@ -60,9 +62,9 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
       if (removeLst == null) {
         continue;
       }
-      if (removeLst.size()==1) {
+      if (removeLst.size() == 1) {
         State<Regexp<T>> sel = removeLst.get(0);
-        if ((sel.equals(automaton.getSuperFinalState()))||(sel.equals(automaton.getSuperInitialState()))) {
+        if ((sel.equals(automaton.getSuperFinalState())) || (sel.equals(automaton.getSuperInitialState()))) {
           continue;
         }
         LOG.debug("AUTO EDITOR selected: " + removeLst.toString());
@@ -70,5 +72,4 @@ public class OrdererUserInteractive<T> implements RegexpAutomatonSimplifierState
       }
     } while (true);
   }
-
 }

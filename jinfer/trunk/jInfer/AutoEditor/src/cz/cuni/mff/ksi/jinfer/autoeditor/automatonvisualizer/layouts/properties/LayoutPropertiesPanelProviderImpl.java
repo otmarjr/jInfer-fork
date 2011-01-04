@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.properties;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
@@ -29,20 +29,20 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
-public class AutomatonRendererPropertiesPanelProviderImpl implements PropertiesPanelProvider {
+public class LayoutPropertiesPanelProviderImpl implements PropertiesPanelProvider {
+  private static final String LAYOUT = "Layout";
+  private static final String LAYOUT_DISPLAY = "Layout";
 
-  public static final String GRAPH_RENDERER = "GraphRenderer";
-  public static final String GRAPH_RENDERER_DISPLAY = "Graph renderer";
-  private static final int PANEL_PRIORITY = 400000;
+  private static final int PANEL_PRIORITY = 300000;
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new AutomatonVisualizerPropertiesPanel(properties);
+    return new LayoutPropertiesPanel(properties);
   }
 
   @Override
   public String getName() {
-    return "GraphRenderer";
+    return "Automaton visualizer";
   }
 
   @Override
@@ -57,14 +57,14 @@ public class AutomatonRendererPropertiesPanelProviderImpl implements PropertiesP
 
   @Override
   public String getParent() {
-    return "AutomatonRenderer";
+    return null;
   }
 
   @Override
   public List<Pair<String, String>> getSubCategories() {
     List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
-    result.add(new Pair<String, String>(GRAPH_RENDERER,
-            GRAPH_RENDERER_DISPLAY));
+    result.add(new Pair<String, String>(LAYOUT,
+            LAYOUT_DISPLAY));
 
     return result;
   }

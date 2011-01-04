@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;

@@ -15,9 +15,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.LayoutF;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -37,7 +37,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = LayoutF.class)
 public class LayoutFactory implements LayoutF {
-  public static final String NAME= "VyhnanovskaLayuot";
+  public static final String NAME= "VyhnanovskaLayout";
   
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {

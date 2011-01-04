@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.LayoutF;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -36,17 +35,18 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author rio
  */
-public final class LayoutFactory {
+public final class LayoutHelperFactory {
 
   /**
    * Creates {@link Layout} written by Julia Vyhnanovska as a part of her master thesis.
    *
    * @param <T> Type parameter of specified automaton.
    * @param automaton Automaton to create layout from.
+   * @param edgeLabelTransformer
    * @return Grid layout.
    */
-  public static <T> Layout<State<T>, Step<T>> createVyhnanovskaGridLayout(final Automaton<T> automaton) {
-    return (new cz.cuni.mff.ksi.jinfer.autoeditor.vyhnanovska.LayoutFactory()).createLayout(automaton, createGraph(automaton), null);
+  public static <T> Layout<State<T>, Step<T>> createVyhnanovskaGridLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
+    return (new cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska.LayoutFactory()).createLayout(automaton, createGraph(automaton), null);
   }
 
   /**
@@ -60,7 +60,7 @@ public final class LayoutFactory {
    * @return Graphviz layout.
    */
   public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    return (new cz.cuni.mff.ksi.jinfer.autoeditor.graphviz.GraphvizLayoutFactory()).createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
+    return (new cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.GraphvizLayoutFactory()).createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
   }
 
   /**
@@ -76,7 +76,7 @@ public final class LayoutFactory {
   public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
     Properties p = RunningProject.getActiveProjectProps("GraphRenderer");
 
-    LayoutF f= ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));
+    LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));
     return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
   }
 

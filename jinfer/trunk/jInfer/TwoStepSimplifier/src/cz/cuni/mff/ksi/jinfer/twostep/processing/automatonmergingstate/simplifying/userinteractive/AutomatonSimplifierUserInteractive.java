@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplify
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHelperFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
@@ -53,7 +53,7 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
       };
 
     do {
-      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutFactory.createUserLayout(inputAutomaton, t), t);
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutHelperFactory.createUserLayout(inputAutomaton, t), t);
 
       // custom plugins
       /*final PluggableVisualizer<T> visualizer = new PluggableVisualizer<T>(new GridLayout<T>(inputAutomaton));

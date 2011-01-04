@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.properties;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.LayoutF;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.Map;
@@ -28,7 +28,7 @@ import javax.swing.JTextField;
  * Properties panel for AutomatonSimplifierGreedy.
  * @author anti
  */
-public class AutomatonVisualizerPropertiesPanel extends AbstractPropertiesPanel {
+public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
   private static Map<String, JTextField> dynamicComponents;
@@ -36,7 +36,7 @@ public class AutomatonVisualizerPropertiesPanel extends AbstractPropertiesPanel 
 
 
   /** Creates new form ModuleSelectionJPanel */
-  public AutomatonVisualizerPropertiesPanel(final Properties properties) {
+  public LayoutPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
   }
@@ -60,7 +60,7 @@ public class AutomatonVisualizerPropertiesPanel extends AbstractPropertiesPanel 
     setPreferredSize(new java.awt.Dimension(500, 50));
     setLayout(new java.awt.GridBagLayout());
 
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(AutomatonVisualizerPropertiesPanel.class, "AutomatonVisualizerPropertiesPanel.jLabel1.text")); // NOI18N
+    jLabel1.setText("Layout");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;

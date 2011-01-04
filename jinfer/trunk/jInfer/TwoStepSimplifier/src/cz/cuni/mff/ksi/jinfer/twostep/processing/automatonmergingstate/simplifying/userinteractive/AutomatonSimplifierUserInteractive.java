@@ -51,8 +51,9 @@ public class AutomatonSimplifierUserInteractive<T> implements AutomatonSimplifie
           return symbolToString.toString(step.getAcceptSymbol());
         }
       };
+
     do {
-      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutFactory.createGraphvizLayout(inputAutomaton, t), t);
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutFactory.createUserLayout(inputAutomaton, t), t);
 
       // custom plugins
       /*final PluggableVisualizer<T> visualizer = new PluggableVisualizer<T>(new GridLayout<T>(inputAutomaton));

@@ -60,6 +60,7 @@ public class GraphvizLayoutFactory implements LayoutF {
     ProcessBuilder p = new ProcessBuilder(Arrays.asList(
             "/usr/bin/dot",
             "-Tplain"));
+   
     try {
       Process k = p.start();
       k.getOutputStream().write(

@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.collections15.Transformer;
+import org.apache.log4j.Logger;
 
 /**
  * TODO anti Comment!
@@ -40,16 +41,18 @@ public class AutomatonToDot<T> {
     sb.append("digraph finite_state_machine {\n"
             + "\trankdir=LR;\n"
             + "\tnode [shape = circle];\n");
-    List<State<T>> finiteStates= new LinkedList<State<T>>();
     Deque<State<T>> queue = new ArrayDeque<State<T>>();
-    Set<State<T>> visited= new HashSet<State<T>>();
-    queue.addLast(automaton.getInitialState());
-    visited.add(automaton.getInitialState());
+    queue.addAll(automaton.getDelta().keySet());
+    
     while (!queue.isEmpty()) {
       State<T> actual = queue.removeFirst();
       if (actual.getFinalCount() > 0) {
-        finiteStates.add(actual);
+        sb.append("\tnode [shape = doublecircle]; ");
+      } else {
+        sb.append("\tnode [shape = circle]; ");
       }
+      sb.append(actual.getName());
+      sb.append(";\n");
       for (Step<T> step : automaton.getDelta().get(actual)) {
         sb.append("\t");
         sb.append(step.getSource().getName());
@@ -60,10 +63,6 @@ public class AutomatonToDot<T> {
         sb.append("|");
         sb.append(step.getUseCount());
         sb.append("\" ];\n");
-        if (!visited.contains(step.getDestination())) {
-          queue.addLast(step.getDestination());
-          visited.add(step.getDestination());
-        }
       }
     }
     sb.append("\n}");

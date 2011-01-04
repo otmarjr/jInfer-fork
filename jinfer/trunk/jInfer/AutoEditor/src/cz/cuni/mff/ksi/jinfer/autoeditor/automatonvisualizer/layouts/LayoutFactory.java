@@ -74,7 +74,7 @@ public final class LayoutFactory {
    * @return
    */
   public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    Properties p = RunningProject.getActiveProjectProps("AutoEditor");
+    Properties p = RunningProject.getActiveProjectProps("GraphRenderer");
 
     LayoutF f= ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));
     return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);

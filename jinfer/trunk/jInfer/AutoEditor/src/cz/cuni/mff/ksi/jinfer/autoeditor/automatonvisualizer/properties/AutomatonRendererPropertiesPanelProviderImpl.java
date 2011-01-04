@@ -37,7 +37,7 @@ public class AutomatonRendererPropertiesPanelProviderImpl implements PropertiesP
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new AutomatonRendererPropertiesPanel(properties);
+    return new AutomatonVisualizerPropertiesPanel(properties);
   }
 
   @Override

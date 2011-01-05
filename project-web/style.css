@@ -320,5 +320,6 @@ img.screenshot {
 }
 
 div.screenshot {
-  border: 0.5em;
+  border-top: 1em;
+  border-bottom: 1em;
 }

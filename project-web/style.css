@@ -311,3 +311,10 @@ table.people {
 .gloss-definition {
   text-indent: 1em;
 }
+
+img.screenshot {
+  width: 35em;
+  margin: 0.25em;
+  padding: 0.25em;
+  border: 1px solid #7f7f7f;
+}

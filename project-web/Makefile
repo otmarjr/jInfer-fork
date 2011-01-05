@@ -2,9 +2,10 @@ CPP=/usr/bin/cpp -P -w -C
 
 .PHONY: images photos style outputdir
 
-all: outputdir about.html doc_developer.html doc_tutorial.html documentation.html doc_user.html download.html empty.html footer.html header.html help.html index.html legal.html makingof.html building_jinfer.html glossary.html images photos style
+all: outputdir about.html doc_developer.html doc_tutorial.html documentation.html doc_user.html download.html empty.html footer.html header.html help.html index.html legal.html makingof.html building_jinfer.html glossary.html screenshots.html images photos style
 
-IMGS= jinfer-logo.png document-save-2.png edit-find-4.png configure-4.png help-hint.png background3.png box-downleft.png screen-hudson.png screen-statsvn.png
+IMGS= jinfer-logo.png document-save-2.png edit-find-4.png configure-4.png help-hint.png background3.png box-downleft.png screen-hudson.png screen-statsvn.png screen-1-overall.png screen-5-properties.png screen-2-advacedruledisplayer.png screen-6-result.png screen-3-autoeditor.png screen-4-autoeditor-complex.png
+
 PHTS= anti.jpg reseto.jpg rio.jpg sviro.jpg vektor.jpg
 
 outputdir:

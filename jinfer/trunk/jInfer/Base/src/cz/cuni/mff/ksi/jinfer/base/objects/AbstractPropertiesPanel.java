@@ -26,6 +26,8 @@ import javax.swing.JPanel;
  */
 public abstract class AbstractPropertiesPanel extends JPanel {
 
+  protected static final String DEFAULT_MENU_TEXT = "<none available>";
+
   protected final Properties properties;
 
   /**

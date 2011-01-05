@@ -31,7 +31,6 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
-  private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463434L;
   public static final String NAME = "moduleselector";
   public static final String INITIAL_GRAMMAR = "initialgrammar";

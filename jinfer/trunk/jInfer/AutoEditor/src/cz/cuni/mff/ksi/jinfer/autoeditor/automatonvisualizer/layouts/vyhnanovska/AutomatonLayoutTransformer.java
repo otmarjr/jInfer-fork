@@ -27,7 +27,7 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.graph.Graph;
 import org.apache.log4j.Logger;
 
-/** TODO rio refactor
+/** TODO rio refactor, Translate to english!
  * Transforms the state to a distance on which it should be plotted. - A visualisation tool
  *
  * @author Julie Vyhnanovska, rio

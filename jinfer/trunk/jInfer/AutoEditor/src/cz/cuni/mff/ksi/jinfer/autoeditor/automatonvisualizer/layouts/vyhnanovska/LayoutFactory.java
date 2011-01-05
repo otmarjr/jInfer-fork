@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
@@ -34,11 +33,14 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author rio
  * TODO rio comment & refactor
+ * TODO rio Rename - this class clearly implements Vyhnanovska's logic - why is
+ * it called "Layout Factory" then?
  */
 @ServiceProvider(service = LayoutF.class)
 public class LayoutFactory implements LayoutF {
-  public static final String NAME= "VyhnanovskaLayout";
-  
+
+  public static final String NAME = "VyhnanovskaLayout";
+
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {
     final int MIN_X_SIZE = 7;

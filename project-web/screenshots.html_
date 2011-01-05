@@ -5,12 +5,35 @@
 
         <p>A few screenshots illustrating jInfer's GUI.</p>
 
-        <img src="images/screen-1-overall.png" alt="Overall view of jInfer GUI." class="screenshot"/>
-        <img src="images/screen-2-advacedruledisplayer.png" alt="Rule displayer." class="screenshot"/>
-        <img src="images/screen-3-autoeditor.png" alt="Automaton editor - simple case." class="screenshot"/>
-        <img src="images/screen-4-autoeditor-complex.png" alt="Automaton editor - more complex case." class="screenshot"/>
-        <img src="images/screen-5-properties.png" alt="Project properties window." class="screenshot"/>
-        <img src="images/screen-6-result.png" alt="Result of an inference run - XSD schema." class="screenshot"/>
+        <div class="screenshot">
+          <img src="images/screen-1-overall.png" alt="Overall view of jInfer GUI." class="screenshot"/>
+          <div>Overall view of jInfer GUI.</div>
+        </div>
+
+        <div class="screenshot">
+          <img src="images/screen-2-advacedruledisplayer.png" alt="Rule displayer." class="screenshot"/>
+          <div>Rule displayer showing a simple <a href="glossary.html">initial grammar</a>.</div>
+        </div>
+
+        <div class="screenshot">
+          <img src="images/screen-3-autoeditor.png" alt="Automaton editor - simple case." class="screenshot"/>
+          <div>Automaton editor used for interactive simplification showing an easy case to simplify.</div>
+        </div>
+
+        <div class="screenshot">
+          <img src="images/screen-4-autoeditor-complex.png" alt="Automaton editor - more complex case." class="screenshot"/>
+          <div>The same editor showing a slightly more complex case.</div>
+        </div>
+
+        <div class="screenshot">
+          <img src="images/screen-5-properties.png" alt="Project properties window." class="screenshot"/>
+          <div>Properties window of a jInfer project.</div>
+        </div>
+
+        <div class="screenshot">
+          <img src="images/screen-6-result.png" alt="Result of an inference run - XSD schema." class="screenshot"/>
+          <div>Result of an inference run - new XSD schema.</div>
+        </div>
 
 	<div class="clear"></div>
 </div>

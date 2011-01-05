@@ -37,7 +37,7 @@ import javax.swing.JTextField;
  * @author anti
  */
 public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractPropertiesPanel {
-  private static final String DEFAULT_MENU_TEXT = "<none available>";
+
   private static final long serialVersionUID = 784463431L;
   private static Map<String, JTextField> dynamicComponents;
   private static Map<String, String> dynamicParameters;

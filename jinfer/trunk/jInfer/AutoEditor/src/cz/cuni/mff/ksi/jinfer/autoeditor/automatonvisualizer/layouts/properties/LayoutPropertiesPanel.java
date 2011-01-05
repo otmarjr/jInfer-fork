@@ -29,7 +29,6 @@ import javax.swing.JTextField;
  * @author anti
  */
 public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
-  private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
   // TODO rio What are these two for??
   private static Map<String, JTextField> dynamicComponents;

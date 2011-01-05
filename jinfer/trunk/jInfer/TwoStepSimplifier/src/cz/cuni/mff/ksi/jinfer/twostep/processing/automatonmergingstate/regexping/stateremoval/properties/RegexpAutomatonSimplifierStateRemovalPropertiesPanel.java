@@ -30,7 +30,6 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends AbstractPropertiesPanel {
 
-  private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463431L;
 
   /** Creates new form ModuleSelectionJPanel */

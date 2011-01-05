@@ -44,7 +44,6 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
   public static final String STOP_ON_ERROR = "stop.on.error";
   public static final String VERBOSE_INFO = "verbose.info";
   public static final String LOG_LEVEL = "log.level";
-  private static final String DEFAULT_MENU_TEXT = "<none available>";
 
   /** Creates new form XSDImportPropertiesPanel */
   public XSDImportPropertiesPanel(final Properties properties) {

@@ -37,7 +37,6 @@ import javax.swing.JTextPane;
  */
 public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
 
-  private static final String DEFAULT_MENU_TEXT = "<none available>";
   private static final long serialVersionUID = 784463433L;
   private Map<Integer, JComboBox> dynamicComponents;
 

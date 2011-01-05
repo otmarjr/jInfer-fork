@@ -38,32 +38,6 @@ import org.apache.commons.collections15.Transformer;
 public final class LayoutHelperFactory {
 
   /**
-   * Creates {@link Layout} written by Julia Vyhnanovska as a part of her master thesis.
-   *
-   * @param <T> Type parameter of specified automaton.
-   * @param automaton Automaton to create layout from.
-   * @param edgeLabelTransformer
-   * @return Grid layout.
-   */
-  public static <T> Layout<State<T>, Step<T>> createVyhnanovskaGridLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    return (new cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska.LayoutFactory()).createLayout(automaton, createGraph(automaton), null);
-  }
-
-  /**
-   * Creates {@link Layout} using Graphviz tool. Graphviz must be installed.
-   *
-   * TODO rio understand and comment
-   *
-   * @param <T> Type parameter of specified automaton.
-   * @param automaton Automaton to create layout from.
-   * @param edgeLabelTransformer Transformation of edge to string.
-   * @return Graphviz layout.
-   */
-  public static <T> Layout<State<T>, Step<T>> createGraphvizLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    return (new cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.GraphvizLayoutFactory()).createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
-  }
-
-  /**
    * Creates {@link Layout} which user selected in preferences.
    *
    * TODO rio understand and comment
@@ -74,7 +48,8 @@ public final class LayoutHelperFactory {
    * @return
    */
   public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    Properties p = RunningProject.getActiveProjectProps("GraphRenderer");
+    // TODO rio Replace the hard-coded text with a reference to a string constant!
+    Properties p = RunningProject.getActiveProjectProps("Automaton visualizer");
 
     LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));
     return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);

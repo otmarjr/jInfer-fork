@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
@@ -27,10 +26,11 @@ import edu.uci.ics.jung.graph.Graph;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * TODO anti Comment!
+ * TODO anti Comment! And rename - what does "F" mean?
  *
  * @author anti
  */
 public interface LayoutF extends NamedModule, Capabilities {
-  <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph,  final Transformer<Step<T>, String> edgeLabelTransformer);
+
+  <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer);
 }

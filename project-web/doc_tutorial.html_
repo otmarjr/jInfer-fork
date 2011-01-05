@@ -119,6 +119,7 @@ To try this out, do the following with your jInfer project:
       to select states to be merged in each step of simplification. 
       After selecting these states, proceed by clicking <i>Continue</i>.</li>
 </ol>
+<!-- TODO vektor Rename after completing issue with Project Properties cleanup. And this seriously needs screenshots. --!>
 
 </div>
 

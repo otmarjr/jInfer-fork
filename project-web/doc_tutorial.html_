@@ -9,11 +9,13 @@
         <p>
           <span class="prerequisities">Note: we use the term <b>inference</b> for the act of creation of schema throughout this and other jInfer documents.</span>
         </p>
+
 <h2>Overview</h2><ol type=1><li>
 	Get &amp; install NetBeans.
   </li><li>Get &amp; install jInfer.
   </li><li>Infer schema.
   </li></ol>
+
 <h2>NetBeans</h2><p>
   <span class="prerequisities">Do this if you don't have any NetBeans installed. If you have an older version than 6.9, jInfer will not run - please update it first.</span>
 </p><ol type=1>
@@ -21,6 +23,7 @@
   </li><li>Download NetBeans 6.9+, whichever bundle will do.
   </li><li>Follow installation instructions.
   </li></ol>
+
 <h2>jInfer</h2><p>
   <span class="prerequisities">Do this if you have the correct version of NetBeans installed. Note that jInfer features automatic update - you don't need to follow these steps each time new version comes out.</span>
 </p>
@@ -35,6 +38,7 @@
   </li><li>Click <i>Install</i> and follow the instructions.
   </li><li>Restart NetBeans.
   </li></ol>
+
 <h2>Basic Inference</h2>
 <p>
   <span class="prerequisities">This section assumes you have NetBeans and jInfer installed. After the first run, a jInfer Welcome window will appear, guiding you through basically the same steps that will be covered here. You might want to follow them instead.</span>
@@ -67,6 +71,7 @@
       </li><li>You will find the file with the schema in your project (location from step <a href="#project-location">1d</a>, folder <i>output</i>).
       </li></ol>
   </li></ol>
+
 <h2>Project files</h2><p>
   <span class="prerequisities">This section assumes you have successfully inferred at least one schema.</span>
 </p>
@@ -76,16 +81,44 @@
   </li><li><i>Output</i> folder is, on the other hand, a faithful representation of the folder <i>output</i> inside your jInfer project (step <a href="#project-location">1d</a>). If you delete a schema here, it will be deleted from the disk too.
   </li><li>You might want to see a diff between two input documents, or old and inferred schema - just select both files at once, right-click and select <i>Tools</i> &gt; <i>Diff</i> from their context menu.
   </li></ul>
+
 <h2>Setting up jInfer</h2>
 <p>
   <span class="prerequisities">This section assumes that you have successfully inferred at least one schema and know how to manipulate input and output files in a project.</span>
 </p>
 <p>
   To change jInfer settings, you have to first realize whether it is a change affecting a single project at a time (for example, changing the output language from XSD to DTD) or whole jInfer at once (whether schema should open in Editor window after the inference finishes).
-</p><ol type=1><li>
+</p>
+<ol type=1><li>
 	First type of settings is found in so called Project Preferences. You can access them from the respective jInfer project's context menu: right click the project and select <i>Properties</i>.
   </li><li>Second type is called jInfer Options and can be found among NetBeans' options: open them (Windows, Linux: <i>Tools</i> &gt; <i>Preferences...</i>, Mac: <i>NetBeans</i> &gt; <i>Preferences...</i>) and switch to <i>jInfer</i> tab.
   </li></ol>
+
+<h2>Interactive simplification</h2>
+<p>
+  <span class="prerequisities">This section assumes that you have successfully 
+inferred a few schemas and would like to play with the process, interfere with it.</span>
+</p>
+<p>
+  Default simplifier that jInfer uses is non-interactive: after it is run, it will
+work for a while and then display the generated schema. However, jInfer bundles also
+a way to guide the inference process interactively, by selecting states in an
+automaton that should be merged together (see the documentation for TwoStep simplifier). <!-- TODO vektor Link! --!>
+To try this out, do the following with your jInfer project:
+</p>
+
+<ol type=1>
+  <li>Open </i>Project Preferences</i>.</li>
+  <li>Navigate to <i>TwoStepSimplifier</i> &gt;
+      <i>ClusterProcessorAutomatonMergingState</i>.</li>
+  <li>In the <i>AutomatonSimplifier</i> combobox select
+      <i>AutomatonSimplifierUserInteractive</i>.</li>
+  <li>Save the preferences by clicking <i>OK</i>.</li>
+  <li>Run the inference again.</li>
+  <li>A new window will appear, which will require you
+      to select states to be merged in each step of simplification. 
+      After selecting these states, proceed by clicking <i>Continue</i>.</li>
+</ol>
 
 </div>
 

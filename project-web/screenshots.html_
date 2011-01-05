@@ -1,0 +1,11 @@
+#include "header.html_"
+
+<div id="content">
+	<h1>Screenshots</h1>
+
+        <p>A few screenshots illustrating jInfer's GUI.</p>
+
+	<div class="clear"></div>
+</div>
+
+#include "footer.html_"

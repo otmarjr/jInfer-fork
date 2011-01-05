@@ -4,7 +4,6 @@
     <folder name="Actions">
         <folder name="Window">
             <file name="cz-cuni-mff-ksi-jinfer-advancedruledisplayer-AdvancedRuleDisplayerAction.instance">
-                <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/advancedruledisplayer/graphics/icon16.png"/>
                 <attr name="component" methodvalue="cz.cuni.mff.ksi.jinfer.advancedruledisplayer.AdvancedRuleDisplayerTopComponent.findInstance"/>
                 <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.advancedruledisplayer.Bundle#CTL_AdvancedRuleDisplayerAction"/>
                 <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>

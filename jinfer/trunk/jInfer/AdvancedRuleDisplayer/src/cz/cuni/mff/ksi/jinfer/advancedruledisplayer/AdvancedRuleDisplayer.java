@@ -27,12 +27,14 @@ import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Forest;
 import edu.uci.ics.jung.graph.Tree;
+import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
+import java.awt.Dimension;
 import java.util.List;
 import org.openide.windows.WindowManager;
 
@@ -98,14 +100,14 @@ public final class AdvancedRuleDisplayer {
     }
     Forest<Regexp<AbstractStructuralNode>, RegexpInterval> graph = getForestFromRules(rules);
     Layout<Regexp<AbstractStructuralNode>, RegexpInterval> layout = new TreeLayout<Regexp<AbstractStructuralNode>, RegexpInterval>(graph, 150, 150);
-    final VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval>(layout);
+    final VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval>(layout, new Dimension(400, 300));
 
     vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
     vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<RegexpInterval>());
     vv.getRenderContext().setVertexLabelTransformer(new RegexpTransformer());
     vv.getRenderer().getVertexLabelRenderer().setPosition(Position.W);
 
-    DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval> gm = new DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval>();
+    DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval> gm = new DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval>(1/1.1f, 1.1f);
     gm.setMode(Mode.TRANSFORMING);
     vv.setGraphMouse(gm);
 
@@ -113,7 +115,7 @@ public final class AdvancedRuleDisplayer {
 
       @Override
       public void run() {
-        AdvancedRuleDisplayerTopComponent.findInstance().createNewPanel(panelName, vv);
+        AdvancedRuleDisplayerTopComponent.findInstance().createNewPanel(panelName, new GraphZoomScrollPane(vv));
       }
     });
   }

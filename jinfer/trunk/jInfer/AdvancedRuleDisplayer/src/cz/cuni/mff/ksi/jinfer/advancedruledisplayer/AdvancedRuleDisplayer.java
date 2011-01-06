@@ -35,6 +35,8 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.openide.windows.WindowManager;
 
@@ -43,6 +45,17 @@ import org.openide.windows.WindowManager;
  * @author sviro
  */
 public final class AdvancedRuleDisplayer {
+
+  private static List<Regexp<AbstractStructuralNode>> getRootVertices(Forest<Regexp<AbstractStructuralNode>, RegexpInterval> graph) {
+    List<Regexp<AbstractStructuralNode>> result = new ArrayList<Regexp<AbstractStructuralNode>>();
+    Collection<Tree<Regexp<AbstractStructuralNode>, RegexpInterval>> trees = graph.getTrees();
+    for (Tree<Regexp<AbstractStructuralNode>, RegexpInterval> tree : trees) {
+      result.add(tree.getRoot());
+    }
+
+    return result;
+  }
+
 
   private static Forest<Regexp<AbstractStructuralNode>, RegexpInterval> getForestFromRules(List<Element> rules) {
     DelegateForest<Regexp<AbstractStructuralNode>, RegexpInterval> result = new DelegateForest<Regexp<AbstractStructuralNode>, RegexpInterval>();
@@ -105,6 +118,7 @@ public final class AdvancedRuleDisplayer {
     vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
     vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<RegexpInterval>());
     vv.getRenderContext().setVertexLabelTransformer(new RegexpTransformer());
+    vv.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer(getRootVertices(graph)));
     vv.getRenderer().getVertexLabelRenderer().setPosition(Position.W);
 
     DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval> gm = new DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval>(1/1.1f, 1.1f);

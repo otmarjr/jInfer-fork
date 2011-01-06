@@ -319,6 +319,12 @@ img.screenshot {
   border: 1px solid #7f7f7f;
 }
 
+img.screenshot-small {
+  width: 5em;
+  margin: 0.25em;
+  padding: 0.25em;
+}
+
 div.screenshot {
   padding-top: 1em;
   padding-bottom: 1em;

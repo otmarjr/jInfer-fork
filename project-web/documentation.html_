@@ -12,9 +12,16 @@
         <div class="right-box-outer">
           <div class="right-box box bg-orange">
             <div class="box-inner">
-              <img src="images/screen-1-overall.png" style="width: 100px"/>
-              <img src="images/screen-1-overall.png" style="width: 100px"/>
-              <img src="images/screen-1-overall.png" style="width: 100px"/>
+              <table class="layout box-table">
+			<tr>
+				<td class="box-head">SCREENSHOTS</td>
+			</tr>
+			<tr><td class="box-content">
+				<img src="images/screen-1-overall.png" class="screenshot-small"/>
+                                <img src="images/screen-2-advacedruledisplayer.png" class="screenshot-small"/>
+                                <img src="images/screen-3-autoeditor.png" class="screenshot-small"/>
+			</td></tr>
+		</table>
             </div>
           </div>
 	</div>
@@ -28,8 +35,7 @@
 
 	<p>
 	  <ul>
-            <li><a href="screenshots.html">Screenshots of the GUI</a></li>
-	    <li>Using jInfer to infer schemas</li>
+            <li>Using jInfer to infer schemas</li>
 	    <li>Full documentation to default modules</li>
 	  </ul>
 	</p>

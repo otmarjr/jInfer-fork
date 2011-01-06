@@ -8,6 +8,17 @@
         </p>
 	
 	<h3>User's documentation</h3>
+
+        <div class="right-box-outer">
+          <div class="right-box box bg-orange">
+            <div class="box-inner">
+              <img src="screen-1-overall.png" style="width: 100px"/>
+              <img src="screen-1-overall.png" style="width: 100px"/>
+              <img src="screen-1-overall.png" style="width: 100px"/>
+            </div>
+          </div>
+	</div>
+
 	  Following the <a href="doc_tutorial.html">tutorial</a>,
           you'll have jInfer running and productive in no time! Exhaustive
           <a href="doc_user.html">user documentation</a> is also available.

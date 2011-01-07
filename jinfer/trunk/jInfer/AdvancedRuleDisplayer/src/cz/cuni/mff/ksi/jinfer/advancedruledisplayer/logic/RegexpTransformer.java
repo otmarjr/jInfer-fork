@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.advancedruledisplayer;
+package cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -25,7 +25,7 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author sviro
  */
-class RegexpTransformer implements Transformer<Regexp<AbstractStructuralNode>, String>{
+public class RegexpTransformer implements Transformer<Regexp<AbstractStructuralNode>, String>{
 
   public RegexpTransformer() {
   }

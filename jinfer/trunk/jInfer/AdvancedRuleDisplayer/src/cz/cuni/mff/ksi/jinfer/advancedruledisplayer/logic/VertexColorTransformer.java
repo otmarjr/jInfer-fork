@@ -14,55 +14,54 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.advancedruledisplayer;
+package cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic.Utils;
-import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.options.AdvancedRuleDisplayerPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import java.awt.Color;
+import java.awt.Paint;
 import java.util.List;
 import org.apache.commons.collections15.Transformer;
-import org.openide.util.NbPreferences;
 
 /**
  *
  * @author sviro
  */
-public class VertexSizeTransformer implements Transformer<Regexp<AbstractStructuralNode>, Integer> {
+public class VertexColorTransformer implements Transformer<Regexp<AbstractStructuralNode>, Paint> {
 
+  private Color rootColor;
+  private Color tokenColor;
+  private Color concatColor;
+  private Color alterColor;
+  private Color permutColor;
   private final List<Regexp<AbstractStructuralNode>> roots;
-  private int root;
-  private int token;
-  private int concat;
-  private int alter;
-  private int permut;
 
-  public VertexSizeTransformer(List<Regexp<AbstractStructuralNode>> roots) {
+  public VertexColorTransformer(List<Regexp<AbstractStructuralNode>> roots) {
+    this.rootColor = Utils.getColorProperty(Utils.ROOT_COLOR_PROP, Utils.ROOT_COLOR_DEFAULT);
+    this.tokenColor = Utils.getColorProperty(Utils.TOKEN_COLOR_PROP, Utils.TOKEN_COLOR_DEFAULT);
+    this.concatColor = Utils.getColorProperty(Utils.CONCAT_COLOR_PROP, Utils.CONCAT_COLOR_DEFAULT);
+    this.alterColor = Utils.getColorProperty(Utils.ALTER_COLOR_PROP, Utils.ALTER_COLOR_DEFAULT);
+    this.permutColor = Utils.getColorProperty(Utils.PERMUT_COLOR_PROP, Utils.PERMUT_COLOR_DEFAULT);
     this.roots = roots;
-    root = Utils.getProperty(Utils.ROOT_SIZE_PROP, Utils.ROOT_SIZE_DEFAULT);
-    token = Utils.getProperty(Utils.TOKEN_SIZE_PROP, Utils.TOKEN_SIZE_DEFAULT);
-    concat = Utils.getProperty(Utils.CONCAT_SIZE_PROP, Utils.CONCAT_SIZE_DEFAULT);
-    alter = Utils.getProperty(Utils.ALTER_SIZE_PROP, Utils.ALTER_SIZE_DEFAULT);
-    permut = Utils.getProperty(Utils.PERMUT_SIZE_PROP, Utils.PERMUT_SIZE_DEFAULT);
   }
 
   @Override
-  public Integer transform(Regexp<AbstractStructuralNode> regexp) {
+  public Paint transform(Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
-        return 50;
+        return Color.blue;
       case TOKEN:
         if (roots.contains(regexp)) {
-          return root;
+          return rootColor;
         } else {
-          return token;
+          return tokenColor;
         }
       case ALTERNATION:
-        return alter;
+        return alterColor;
       case CONCATENATION:
-        return concat;
+        return concatColor;
       case PERMUTATION:
-        return permut;
+        return permutColor;
       default:
         return null;
     }

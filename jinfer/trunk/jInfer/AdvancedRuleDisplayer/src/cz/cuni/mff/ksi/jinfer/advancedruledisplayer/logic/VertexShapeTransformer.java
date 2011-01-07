@@ -14,9 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.advancedruledisplayer;
+package cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic.Utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
@@ -28,13 +27,13 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author sviro
  */
-class VertexShapeTransformer implements Transformer<Regexp<AbstractStructuralNode>, Shape> {
+public class VertexShapeTransformer implements Transformer<Regexp<AbstractStructuralNode>, Shape> {
   private final List<Regexp<AbstractStructuralNode>> roots;
 
   private VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory;
   private Utils utils;
 
-  public VertexShapeTransformer(List<Regexp<AbstractStructuralNode>> roots) {
+  public VertexShapeTransformer(List<Regexp<AbstractStructuralNode>> roots, Utils utils) {
     shapeFactory = new VertexShapeFactory<Regexp<AbstractStructuralNode>>(new VertexSizeTransformer(roots), new Transformer<Regexp<AbstractStructuralNode>, Float>() {
 
       @Override
@@ -43,7 +42,7 @@ class VertexShapeTransformer implements Transformer<Regexp<AbstractStructuralNod
       }
     });
     this.roots = roots;
-    this.utils = new Utils();
+    this.utils = utils;
   }
 
   @Override

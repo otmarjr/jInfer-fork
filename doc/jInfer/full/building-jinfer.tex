@@ -1,0 +1,99 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{import}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{26cm}
+\setlength{\textwidth}{18cm}
+
+
+
+\def\mftitle{Building jInfer}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+\maketitle
+
+Target audience: jInfer power users. Anyone who needs to build jInfer from sources.\\
+
+\textit{This document assumes that your computer is set to use jInfer, meaning you have correct version of NetBeans installed and you can run jInfer.}
+
+\section{Getting jInfer sources}
+There are two main ways of obtaining jInfer source files: from a version distribution, or from the Subversion repository. The first way might be more convenient and secure (version distributions are usually more stable than the bleeding edge code in repository), however you might prefer to build the latest code.\\
+
+The first way, obtaining sources from version distribution:
+\begin{enumerate}
+	\item Go to https://sourceforge.net/projects/jinfer/files/
+	\item Download the latest jInfer sources (jInfer-X.Y-src.zip).
+	\item Unpack the ZIP, you’ll get a few directories. One of them will be \texttt{src}.
+	\item Continue by building jInfer.
+\end{enumerate}
+
+Second way, checking out Subversion repository: you will need a Subversion client, such as the command line client or TortoiseSVN. In any case, http://subversion.apache.org/ might be a good place to start. To check out jInfer, use the following URL:\\
+
+\texttt{https://jinfer.svn.sourceforge.net/svnroot/jinfer}
+
+After the checkout, continue by building jInfer.
+
+\section{Building from NetBeans}
+\textit{This is perhaps the easier, more user friendly way of building jInfer. If you however wish to automate the building process, you might want to try using Ant - in that case, see the next section.}
+
+\begin{enumerate}
+	\item Start NetBeans, select \textit{File} > \textit{Open Project...} from the main menu.
+	\item In the dialog window, navigate to the root folder with jInfer sources. Its icon should look like two brown puzzle pieces.
+	\item You should see the name "jInfer" in the dialog window.
+	\item Make sure the \textit{Open Required Projects} check box is checked.
+	\item You might want checking the \textit{Open as Main Project} checkbox.
+	\item Click \textit{Open Project}. After a while, all jInfer projects should open and be visible in the \textit{Projects} window.
+\end{enumerate}
+
+At this moment, you might want to look around, play with the code a bit or apply some patches. If you want to try modified jInfer in a running NetBeans, select \textit{Run} from project jInfer (two brown puzzle pieces icon) context menu. If jInfer is the main project, clicking the green "Play" icon in the toolbar should work too.\\
+
+If you want to build jInfer, for example to test if your changes didn't break something, select \textit{Build} from the context menu. Sometimes it might be necessary to run \textit{Clean \& Build}, try this if it "stops working". If you want to run JUnit test, select \textit{Test} from the same context menu.\\
+
+If you now want to create your own distribution (= NBM modules), select \textit{Create NBMs} from the context menu. They will be created in \textit{build/updates} directory.
+
+\section{Building with Ant}
+
+Each jInfer module and jInfer suite itself has its own \texttt{build.xml} Ant build file. The most important one, for the whole jInfer suite, is located in the \texttt{src} folder.\\
+
+It is possible to use vanilla Ant from Apache, but perhaps safer to resort to the Ant bundled with NetBeans. This one should be located in \textit{NetBeans install directory} > \texttt{java/ant/bin/ant}.\\
+
+Whichever Ant is chosen, to build jInfer do the following on command line:
+\begin{enumerate}
+	\item Change directory to jInfer's \texttt{src}.
+	\item Run \texttt{ant [chosen target]}. Interesting targets include:
+	\begin{itemize}
+		\item \texttt{clean}: removes any build artefacts.
+		\item \texttt{build}: compiles and builds jInfer.
+		\item \texttt{clean build}: performs a clean build, useful if something "stops working".
+		\item \texttt{nbms}: creates a distribution by packaging jInfer modules in NBM files.
+	\end{itemize}
+\end{enumerate}
+
+Chosen target may be empty, which should default to \texttt{build}.
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{literature}
+
+\end{document}

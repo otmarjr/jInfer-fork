@@ -22,7 +22,7 @@ import java.util.List;
 import org.apache.commons.collections15.Transformer;
 
 /**
- *
+ * Transformer for Rule Tree Vertex which transform {@link Regexp} into Vertex size.
  * @author sviro
  */
 public class VertexSizeTransformer implements Transformer<Regexp<AbstractStructuralNode>, Integer> {

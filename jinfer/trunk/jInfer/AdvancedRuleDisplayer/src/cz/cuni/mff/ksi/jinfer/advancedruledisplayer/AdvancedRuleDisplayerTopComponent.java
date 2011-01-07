@@ -29,7 +29,8 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.util.ImageUtilities;
 
 /**
- * Top component which displays something.
+ * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
+ * @author sviro
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.advancedruledisplayer//AdvancedRuleDisplayer//EN",
 autostore = false)
@@ -38,7 +39,6 @@ public final class AdvancedRuleDisplayerTopComponent extends TopComponent {
   private static AdvancedRuleDisplayerTopComponent instance;
   static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/advancedruledisplayer/graphics/icon16.png";
   private static final String PREFERRED_ID = "AdvancedRuleDisplayerTopComponent";
-
   private int panelSequence = 0;
 
   public AdvancedRuleDisplayerTopComponent() {
@@ -61,16 +61,11 @@ public final class AdvancedRuleDisplayerTopComponent extends TopComponent {
           panels.remove(tabIndex);
         }
       }
-
     });
   }
 
-    /**
+  /**
    * Creates a new panel with provided name.
-   *
-   * @return The RulePainter assigned to the newly created panel. It can be
-   *  immediately used to draw a set of rules
-   *  (via the RulePainter.setRules() method).
    */
   public void createNewPanel(final String name, JPanel graphPanel) {
     panelSequence++;

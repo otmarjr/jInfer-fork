@@ -22,17 +22,21 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
 import java.awt.Color;
 import java.awt.Shape;
+import java.util.List;
 import org.openide.util.NbPreferences;
 
 /**
- *
+ * Some Rule Displayer utils.
  * @author sviro
  */
 public class Utils {
 
-  public enum SHAPE_TYPE {
+  /**
+   * All the vertex types which occur in rules.
+   */
+  public enum VERTEX_TYPE {
 
-    ROOT, TOKEN, CONCAT, ALTER, PERMUT
+    ROOT, TOKEN, CONCAT, ALTER, PERMUT, LAMBDA
   };
   public static final String BG_COLOR_PROP = "background.color";
   public static final Color BG_COLOR_DEFAULT = Color.white;
@@ -58,6 +62,8 @@ public class Utils {
   public static final int ALTER_SHAPE_DEFAULT = 2;
   public static final String PERMUT_SHAPE_PROP = "permut.shape";
   public static final int PERMUT_SHAPE_DEFAULT = 2;
+  public static final String LAMBDA_SHAPE_PROP = "lambda.shape";
+  public static final int LAMBDA_SHAPE_DEFAULT = 0;
   public static final String ROOT_SIZE_PROP = "root.size";
   public static final int ROOT_SIZE_DEFAULT = 40;
   public static final String TOKEN_SIZE_PROP = "token.size";
@@ -68,6 +74,8 @@ public class Utils {
   public static final int ALTER_SIZE_DEFAULT = 40;
   public static final String PERMUT_SIZE_PROP = "permut.size";
   public static final int PERMUT_SIZE_DEFAULT = 40;
+  public static final String LAMBDA_SIZE_PROP = "lambda.size";
+  public static final int LAMBDA_SIZE_DEFAULT = 40;
   public static final String ROOT_COLOR_PROP = "root.color";
   public static final Color ROOT_COLOR_DEFAULT = Color.cyan;
   public static final String TOKEN_COLOR_PROP = "token.color";
@@ -78,16 +86,21 @@ public class Utils {
   public static final Color ALTER_COLOR_DEFAULT = Color.yellow;
   public static final String PERMUT_COLOR_PROP = "permut.color";
   public static final Color PERMUT_COLOR_DEFAULT = Color.green;
+  public static final String LAMBDA_COLOR_PROP = "lambda.color";
+  public static final Color LAMBDA_COLOR_DEFAULT = Color.gray;
   private int rootShape;
   private int tokenShape;
   private int concatShape;
   private int alterShape;
   private int permutShape;
+  private int lambdaShape;
   private Color bgColor;
   private int horizontalDistance;
   private int verticalDistance;
+  private List<Regexp<AbstractStructuralNode>> roots;
 
-  public Utils() {
+  public Utils(List<Regexp<AbstractStructuralNode>> roots) {
+    this.roots = roots;
     this.bgColor = getColorProperty(BG_COLOR_PROP, BG_COLOR_DEFAULT);
     this.horizontalDistance = getProperty(HORIZONTAL_DISTANCE_PROP, HORIZONTAL_DISTANCE_DEFAULT);
     this.verticalDistance = getProperty(VERTICAL_DISTANCE_PROP, VERTICAL_DISTANCE_DEFAULT);
@@ -96,35 +109,57 @@ public class Utils {
     this.concatShape = getProperty(CONCAT_SHAPE_PROP, CONCAT_SHAPE_DEFAULT);
     this.alterShape = getProperty(ALTER_SHAPE_PROP, ALTER_SHAPE_DEFAULT);
     this.permutShape = getProperty(PERMUT_SHAPE_PROP, PERMUT_SHAPE_DEFAULT);
+    this.lambdaShape = getProperty(LAMBDA_SHAPE_PROP, LAMBDA_SHAPE_DEFAULT);
   }
 
+  /**
+   * Get property value for particular property.
+   * @param property Property for which to get value.
+   * @param defaultValue Default value to be returned, if no value is saved for particular property.
+   * @return Property value if exists for particular property, otherwise is returned defaultValue.
+   */
   public static int getProperty(String property, int defaultValue) {
     return NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).getInt(property, defaultValue);
   }
 
+  /**
+   * Get {@link Color} property value for particular property.
+   * @param property Property for which to get value.
+   * @param defaultValue Default value to be returned, if no value is saved for particular property.
+   * @return Property value if exists for particular property, otherwise is returned defaultValue.
+   */
   public static Color getColorProperty(String property, Color defaultValue) {
     return Color.decode(NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).get(property, String.valueOf(defaultValue.getRGB())));
   }
 
-  public Shape getVertexShape(SHAPE_TYPE shapeType, VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, Regexp<AbstractStructuralNode> regexp) {
-    switch (shapeType) {
-      case ROOT:
-        return getShape(rootShape, shapeFactory, regexp);
+  /**
+   * Get {@link Shape} of Vertex for particular {@link Regexp}.
+   * @param shapeFactory Shape facotry which creates shape for particular regexp.
+   * @param regexp Regexp for which is shape returned.
+   * @return Shape of Vertex for particular regexp.
+   */
+  public Shape getVertexShape(VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, Regexp<AbstractStructuralNode> regexp) {
+    switch (regexp.getType()) {
+      case LAMBDA: return getShape(lambdaShape, shapeFactory, regexp);
       case TOKEN:
-        return getShape(tokenShape, shapeFactory, regexp);
-      case CONCAT:
-        return getShape(concatShape, shapeFactory, regexp);
-      case ALTER:
+        if (roots.contains(regexp)) {
+          return getShape(rootShape, shapeFactory, regexp);
+        } else {
+          return getShape(tokenShape, shapeFactory, regexp);
+        }
+      case ALTERNATION:
         return getShape(alterShape, shapeFactory, regexp);
-      case PERMUT:
+      case CONCATENATION:
+        return getShape(concatShape, shapeFactory, regexp);
+      case PERMUTATION:
         return getShape(permutShape, shapeFactory, regexp);
       default:
         return null;
     }
   }
 
-  private Shape getShape(int rootShape, VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, Regexp<AbstractStructuralNode> regexp) {
-    switch (rootShape) {
+  private Shape getShape(int shape, VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, Regexp<AbstractStructuralNode> regexp) {
+    switch (shape) {
       case 0:
         return shapeFactory.getEllipse(regexp);
       case 1:
@@ -140,15 +175,36 @@ public class Utils {
     }
   }
 
+  /**
+   * Get background color of canvas.
+   * @return
+   */
   public Color getBackgroundColor() {
     return bgColor;
   }
 
+  /**
+   * Get horizontal distance between vertices in rule trees.
+   * @return
+   */
   public int getHorizontalDistance() {
     return horizontalDistance;
   }
 
+  /**
+   * Get vertical distance between vertices in rule trees.
+   * @return
+   */
   public int getVerticalDistance() {
     return verticalDistance;
   }
+
+  /**
+   * Get list of regexp which are represented as root vertex in each rule tree.
+   * @return list of regexp which are represented as root vertex in each rule tree.
+   */
+  public List<Regexp<AbstractStructuralNode>> getRoots() {
+    return roots;
+  }
+
 }

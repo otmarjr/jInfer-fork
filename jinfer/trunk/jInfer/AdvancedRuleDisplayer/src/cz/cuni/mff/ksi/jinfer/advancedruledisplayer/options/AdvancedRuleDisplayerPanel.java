@@ -22,6 +22,11 @@ import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import org.openide.util.NbPreferences;
 
+/**
+ * Options panel of the Advanced Rule Displayer module.
+ *
+ * @author sviro
+ */
 public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
 
   private final AdvancedRuleDisplayerOptionsPanelController controller;
@@ -78,6 +83,10 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
     jLabel3 = new javax.swing.JLabel();
     jPanel1 = new javax.swing.JPanel();
     jButton1 = new javax.swing.JButton();
+    jLabel10 = new javax.swing.JLabel();
+    lambdaCombo = new javax.swing.JComboBox();
+    lambdaColor = new javax.swing.JPanel();
+    lambdaSpinner = new javax.swing.JSpinner();
     fill = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
@@ -492,7 +501,7 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 5;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridheight = 6;
+    gridBagConstraints.gridheight = 7;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.weightx = 1.0;
     shape.add(jPanel1, gridBagConstraints);
@@ -505,8 +514,58 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 4;
-    gridBagConstraints.gridy = 5;
+    gridBagConstraints.gridy = 6;
     shape.add(jButton1, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel10.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 6;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    shape.add(jLabel10, gridBagConstraints);
+
+    lambdaCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Circle", "Square", "Rounded Square", "Polygon", "Star" }));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 6;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    shape.add(lambdaCombo, gridBagConstraints);
+
+    lambdaColor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    lambdaColor.setMaximumSize(new java.awt.Dimension(20, 20));
+    lambdaColor.setMinimumSize(new java.awt.Dimension(20, 20));
+    lambdaColor.setPreferredSize(new java.awt.Dimension(20, 20));
+    lambdaColor.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        colorMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout lambdaColorLayout = new javax.swing.GroupLayout(lambdaColor);
+    lambdaColor.setLayout(lambdaColorLayout);
+    lambdaColorLayout.setHorizontalGroup(
+      lambdaColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+    lambdaColorLayout.setVerticalGroup(
+      lambdaColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 6;
+    gridBagConstraints.insets = new java.awt.Insets(2, 15, 2, 15);
+    shape.add(lambdaColor, gridBagConstraints);
+
+    lambdaSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 6;
+    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    shape.add(lambdaSpinner, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -519,11 +578,11 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
     fill.setLayout(fillLayout);
     fillLayout.setHorizontalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 547, Short.MAX_VALUE)
+      .addGap(0, 677, Short.MAX_VALUE)
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 50, Short.MAX_VALUE)
+      .addGap(0, 18, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -551,21 +610,21 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
     concatCombo.setSelectedIndex(Utils.CONCAT_SHAPE_DEFAULT);
     alterCombo.setSelectedIndex(Utils.ALTER_SHAPE_DEFAULT);
     permutCombo.setSelectedIndex(Utils.PERMUT_SHAPE_DEFAULT);
+    lambdaCombo.setSelectedIndex(Utils.LAMBDA_SHAPE_DEFAULT);
 
     rootSpinner.setValue(Utils.ROOT_SIZE_DEFAULT);
     tokenSpinner.setValue(Utils.TOKEN_SIZE_DEFAULT);
     concatSpinner.setValue(Utils.CONCAT_SIZE_DEFAULT);
     alterSpinner.setValue(Utils.ALTER_SIZE_DEFAULT);
     permutSpinner.setValue(Utils.PERMUT_SIZE_DEFAULT);
+    lambdaSpinner.setValue(Utils.LAMBDA_SIZE_DEFAULT);
 
     rootColor.setBackground(Utils.ROOT_COLOR_DEFAULT);
     tokenColor.setBackground(Utils.TOKEN_COLOR_DEFAULT);
     concatColor.setBackground(Utils.CONCAT_COLOR_DEFAULT);
     alterColor.setBackground(Utils.ALTER_COLOR_DEFAULT);
     permutColor.setBackground(Utils.PERMUT_COLOR_DEFAULT);
-
-
-
+    lambdaColor.setBackground(Utils.LAMBDA_COLOR_DEFAULT);
   }//GEN-LAST:event_jButton1ActionPerformed
 
   void load() {
@@ -578,19 +637,23 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
     concatCombo.setSelectedIndex(Utils.getProperty(Utils.CONCAT_SHAPE_PROP, Utils.CONCAT_SHAPE_DEFAULT));
     alterCombo.setSelectedIndex(Utils.getProperty(Utils.ALTER_SHAPE_PROP, Utils.ALTER_SHAPE_DEFAULT));
     permutCombo.setSelectedIndex(Utils.getProperty(Utils.PERMUT_SHAPE_PROP, Utils.PERMUT_SHAPE_DEFAULT));
+    lambdaCombo.setSelectedIndex(Utils.getProperty(Utils.LAMBDA_SHAPE_PROP, Utils.LAMBDA_SHAPE_DEFAULT));
 
     rootSpinner.setValue(Utils.getProperty(Utils.ROOT_SIZE_PROP, Utils.ROOT_SIZE_DEFAULT));
     tokenSpinner.setValue(Utils.getProperty(Utils.TOKEN_SIZE_PROP, Utils.TOKEN_SIZE_DEFAULT));
     concatSpinner.setValue(Utils.getProperty(Utils.CONCAT_SIZE_PROP, Utils.CONCAT_SIZE_DEFAULT));
     alterSpinner.setValue(Utils.getProperty(Utils.ALTER_SIZE_PROP, Utils.ALTER_SIZE_DEFAULT));
     permutSpinner.setValue(Utils.getProperty(Utils.PERMUT_SIZE_PROP, Utils.PERMUT_SIZE_DEFAULT));
+    lambdaSpinner.setValue(Utils.getProperty(Utils.LAMBDA_SIZE_PROP, Utils.LAMBDA_SIZE_DEFAULT));
 
     rootColor.setBackground(Utils.getColorProperty(Utils.ROOT_COLOR_PROP, Utils.ROOT_COLOR_DEFAULT));
     tokenColor.setBackground(Utils.getColorProperty(Utils.TOKEN_COLOR_PROP, Utils.TOKEN_COLOR_DEFAULT));
     concatColor.setBackground(Utils.getColorProperty(Utils.CONCAT_COLOR_PROP, Utils.CONCAT_COLOR_DEFAULT));
     alterColor.setBackground(Utils.getColorProperty(Utils.ALTER_COLOR_PROP, Utils.ALTER_COLOR_DEFAULT));
     permutColor.setBackground(Utils.getColorProperty(Utils.PERMUT_COLOR_PROP, Utils.PERMUT_COLOR_DEFAULT));
+    lambdaColor.setBackground(Utils.getColorProperty(Utils.LAMBDA_COLOR_PROP, Utils.LAMBDA_COLOR_DEFAULT));
   }
+
 
   void store() {
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.BG_COLOR_PROP, String.valueOf(backgroundColor.getBackground().getRGB()));
@@ -635,6 +698,7 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
   private javax.swing.JSpinner horizontalDistance;
   private javax.swing.JButton jButton1;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel10;
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
@@ -645,6 +709,9 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
   private javax.swing.JLabel jLabel9;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
+  private javax.swing.JPanel lambdaColor;
+  private javax.swing.JComboBox lambdaCombo;
+  private javax.swing.JSpinner lambdaSpinner;
   private javax.swing.JPanel permutColor;
   private javax.swing.JComboBox permutCombo;
   private javax.swing.JLabel permutLabel;

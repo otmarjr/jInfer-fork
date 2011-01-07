@@ -23,7 +23,7 @@ import java.util.List;
 import org.openide.windows.WindowManager;
 
 /**
- *
+ * Helper class for displaying a list of rules.
  * @author sviro
  */
 public final class AdvancedRuleDisplayer {

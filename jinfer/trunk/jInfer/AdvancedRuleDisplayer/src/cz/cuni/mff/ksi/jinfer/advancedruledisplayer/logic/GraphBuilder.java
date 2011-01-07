@@ -42,6 +42,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /**
+ * Class responsible for rendering a set of rules as a rule trees.
  *
  * @author sviro
  */
@@ -100,19 +101,25 @@ public class GraphBuilder {
     }
   }
 
+  /**
+   * Get panel with rendered rule trees.
+   * @param rules Rules to be created rule trees from.
+   * @return Panel with rendered rule trees.
+   */
   public static JPanel buildGraphPanel(final List<Element> rules) {
-    Utils utils = new Utils();
+
     Forest<Regexp<AbstractStructuralNode>, RegexpInterval> graph = getForestFromRules(rules);
+    List<Regexp<AbstractStructuralNode>> roots = getRootVertices(graph);
+    Utils utils = new Utils(roots);
+
     Layout<Regexp<AbstractStructuralNode>, RegexpInterval> layout = new TreeLayout<Regexp<AbstractStructuralNode>, RegexpInterval>(graph, utils.getHorizontalDistance(), utils.getVerticalDistance());
     final VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval>(layout, new Dimension(400, 300));
 
     vv.setBackground(utils.getBackgroundColor());
-    List<Regexp<AbstractStructuralNode>> roots = getRootVertices(graph);
-
     vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
     vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<RegexpInterval>());
     vv.getRenderContext().setVertexLabelTransformer(new RegexpTransformer());
-    vv.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer(roots, utils));
+    vv.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer(utils));
     vv.getRenderContext().setVertexFillPaintTransformer(new VertexColorTransformer(roots));
     vv.getRenderer().getVertexLabelRenderer().setPosition(Position.W);
 

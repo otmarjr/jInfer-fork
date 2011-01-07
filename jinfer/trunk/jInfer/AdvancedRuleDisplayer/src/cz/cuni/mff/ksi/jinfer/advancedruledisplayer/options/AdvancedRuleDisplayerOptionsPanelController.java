@@ -23,6 +23,10 @@ import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
+/**
+ * Options controller of the Advanced Rule Displayer module.
+ * @author sviro
+ */
 @OptionsPanelController.SubRegistration(location = "jInfer",
 displayName = "#AdvancedOption_DisplayName_AdvancedRuleDisplayer",
 keywords = "#AdvancedOption_Keywords_AdvancedRuleDisplayer",

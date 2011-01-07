@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import org.apache.commons.collections15.Transformer;
 
 /**
+ * Transformer for Rule Tree Vertex which transform {@link Regexp} into readeble Vertex label.
  *
  * @author sviro
  */

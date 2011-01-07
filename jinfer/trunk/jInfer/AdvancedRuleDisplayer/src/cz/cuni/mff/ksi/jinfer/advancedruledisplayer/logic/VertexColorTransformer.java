@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.commons.collections15.Transformer;
 
 /**
- *
+ * Transformer for Rule Tree Vertex which transform {@link Regexp} into Vertex color.
  * @author sviro
  */
 public class VertexColorTransformer implements Transformer<Regexp<AbstractStructuralNode>, Paint> {

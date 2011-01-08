@@ -75,7 +75,7 @@ public class Utils {
   public static final String PERMUT_SIZE_PROP = "permut.size";
   public static final int PERMUT_SIZE_DEFAULT = 25;
   public static final String LAMBDA_SIZE_PROP = "lambda.size";
-  public static final int LAMBDA_SIZE_DEFAULT = 40;
+  public static final int LAMBDA_SIZE_DEFAULT = 20;
   public static final String ROOT_COLOR_PROP = "root.color";
   public static final Color ROOT_COLOR_DEFAULT = Color.decode("-13861729");
   public static final String TOKEN_COLOR_PROP = "token.color";

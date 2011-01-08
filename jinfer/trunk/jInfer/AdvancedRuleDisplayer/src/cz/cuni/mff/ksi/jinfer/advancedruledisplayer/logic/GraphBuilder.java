@@ -121,6 +121,7 @@ public class GraphBuilder {
     vv.getRenderContext().setVertexLabelTransformer(new RegexpTransformer());
     vv.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer(utils));
     vv.getRenderContext().setVertexFillPaintTransformer(new VertexColorTransformer(roots));
+    vv.getRenderContext().setVertexFontTransformer(new VertexFontTransformer());
     vv.getRenderer().getVertexLabelRenderer().setPosition(Position.W);
 
     DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval> gm = new DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval>(1 / 1.1f, 1.1f);

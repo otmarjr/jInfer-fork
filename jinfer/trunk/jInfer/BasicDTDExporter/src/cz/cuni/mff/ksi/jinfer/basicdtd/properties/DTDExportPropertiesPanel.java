@@ -57,9 +57,9 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
     org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel1.text")); // NOI18N
     jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel1.toolTipText")); // NOI18N
-    jLabel1.setMaximumSize(new java.awt.Dimension(80, 14));
-    jLabel1.setMinimumSize(new java.awt.Dimension(80, 14));
-    jLabel1.setPreferredSize(new java.awt.Dimension(80, 14));
+    jLabel1.setMaximumSize(new java.awt.Dimension(100, 14));
+    jLabel1.setMinimumSize(new java.awt.Dimension(100, 14));
+    jLabel1.setPreferredSize(new java.awt.Dimension(100, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -84,9 +84,9 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
     org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel3.text")); // NOI18N
     jLabel3.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.jLabel3.toolTipText")); // NOI18N
-    jLabel3.setMaximumSize(new java.awt.Dimension(80, 14));
-    jLabel3.setMinimumSize(new java.awt.Dimension(80, 14));
-    jLabel3.setPreferredSize(new java.awt.Dimension(80, 14));
+    jLabel3.setMaximumSize(new java.awt.Dimension(120, 14));
+    jLabel3.setMinimumSize(new java.awt.Dimension(120, 14));
+    jLabel3.setPreferredSize(new java.awt.Dimension(120, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -134,7 +134,7 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 228, Short.MAX_VALUE)
+      .addGap(0, 202, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

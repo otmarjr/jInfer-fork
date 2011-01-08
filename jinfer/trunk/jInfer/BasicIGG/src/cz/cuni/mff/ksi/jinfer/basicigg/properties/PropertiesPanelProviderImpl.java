@@ -31,7 +31,6 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
-  public static final String PROCESSORS_CATEGORY = "Processors";
   public static final String IGG_CATEGORY = "IGG";
 
   @Override
@@ -62,7 +61,6 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
   @Override
   @SuppressWarnings("unchecked")
   public List<Pair<String, String>> getSubCategories() {
-    return Arrays.<Pair<String, String>>asList(
-            new Pair<String, String>(PROCESSORS_CATEGORY, IGG_CATEGORY));
+    return null;
   }
 }

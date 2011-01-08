@@ -66,8 +66,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
   private Map<Category, JPanel> getCategoriesPanels(final Properties properties) {
     final Map<Category, JPanel> result = new LinkedHashMap<Category, JPanel>();
-    final List<PropertiesPanelProvider> providersList = new ArrayList<PropertiesPanelProvider>(Lookup.
-            getDefault().
+    final List<PropertiesPanelProvider> providersList = new ArrayList<PropertiesPanelProvider>(Lookup.getDefault().
             lookupAll(PropertiesPanelProvider.class));
 
     Collections.sort(providersList, new Comparator<PropertiesPanelProvider>() {
@@ -102,6 +101,44 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     return result;
   }
 
+//  private Category buildCategory(final PropertiesPanelProvider provider,
+//          final Collection<? extends PropertiesPanelProvider> providers,
+//          final Map<Category, JPanel> result, final Properties properties) {
+//    final String moduleName = provider.getName();
+//    Category category = null;
+//
+//    if (provider.getSubCategories() == null) {
+//      category = Category.create(moduleName,
+//              provider.getDisplayName(), null);
+//    } else {
+//      final List<Category> subCategories = new ArrayList<Category>();
+//      for (Pair<String, String> subCategory : provider.getSubCategories()) {
+//        final String subCategoryId = subCategory.getFirst();
+//        final List<PropertiesPanelProvider> subCategoryProviders = getProvidersByParentId(
+//                subCategoryId,
+//                providers);
+//
+//        final ArrayList<Category> subCateg = new ArrayList<Category>();
+//        for (PropertiesPanelProvider subCategoryProvider : subCategoryProviders) {
+//          subCateg.add(buildCategory(subCategoryProvider, providers, result, properties));
+//        }
+//
+//        subCategories.add(Category.create(subCategoryId, subCategory.getSecond(), null, subCateg.toArray(new Category[subCateg.size()])));
+//      }
+//
+//      category = Category.create(moduleName, provider.getDisplayName(), null, subCategories.toArray(
+//              new Category[subCategories.size()]));
+//    }
+//
+//    final AbstractPropertiesPanel panel = provider.getPanel(new ModuleProperties(
+//            moduleName, properties));
+//    panel.load();
+//
+//    result.put(category, panel);
+//
+//    return category;
+//  }
+
   private Category buildCategory(final PropertiesPanelProvider provider,
           final Collection<? extends PropertiesPanelProvider> providers,
           final Map<Category, JPanel> result, final Properties properties) {
@@ -109,8 +146,21 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     Category category = null;
 
     if (provider.getSubCategories() == null) {
-      category = Category.create(moduleName,
-              provider.getDisplayName(), null);
+      final List<PropertiesPanelProvider> subCategoryProviders = getProvidersByParentId(
+              moduleName,
+              providers);
+
+      if (!subCategoryProviders.isEmpty()) {
+        final ArrayList<Category> subCategories = new ArrayList<Category>();
+        for (PropertiesPanelProvider subCategoryProvider : subCategoryProviders) {
+          subCategories.add(buildCategory(subCategoryProvider, providers, result, properties));
+        }
+
+        category = Category.create(moduleName, provider.getDisplayName(), null, subCategories.toArray(
+                new Category[subCategories.size()]));
+      } else {
+        category = Category.create(moduleName, provider.getDisplayName(), null);
+      }
     } else {
       final List<Category> subCategories = new ArrayList<Category>();
       for (Pair<String, String> subCategory : provider.getSubCategories()) {
@@ -119,19 +169,22 @@ public class JInferCustomizerProvider implements CustomizerProvider {
                 subCategoryId,
                 providers);
 
+        if (subCategoryProviders.isEmpty()) {
+          continue;
+        }
+
         final ArrayList<Category> subCateg = new ArrayList<Category>();
         for (PropertiesPanelProvider subCategoryProvider : subCategoryProviders) {
           subCateg.add(buildCategory(subCategoryProvider, providers, result, properties));
         }
 
-        subCategories.add(Category.create(subCategoryId, subCategory.getSecond(), null, subCateg.toArray(new Category[subCateg.
-                size()])));
+        subCategories.add(Category.create(subCategoryId, subCategory.getSecond(), null, subCateg.toArray(new Category[subCateg.size()])));
       }
 
       category = Category.create(moduleName, provider.getDisplayName(), null, subCategories.toArray(
               new Category[subCategories.size()]));
     }
-    
+
     final AbstractPropertiesPanel panel = provider.getPanel(new ModuleProperties(
             moduleName, properties));
     panel.load();
@@ -141,6 +194,16 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     return category;
   }
 
+  private boolean isNotVirtualCategory(final String categoryId, final Collection<? extends PropertiesPanelProvider> providers) {
+    for (PropertiesPanelProvider provider : providers) {
+      if (provider.getName().equals(categoryId)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   private List<PropertiesPanelProvider> getProvidersByParentId(final String subCategoryId,
           final Collection<? extends PropertiesPanelProvider> providers) {
     final List<PropertiesPanelProvider> result = new ArrayList<PropertiesPanelProvider>();
@@ -148,43 +211,6 @@ public class JInferCustomizerProvider implements CustomizerProvider {
       if (provider.getParent() != null && provider.getParent().equals(subCategoryId)) {
         result.add(provider);
       }
-    }
-
-    return result;
-  }
-
-  private Map<Category, JPanel> lookupCategoriesPanels(final Properties properties) {
-
-    final Map<Category, JPanel> result = new LinkedHashMap<Category, JPanel>();
-    final List<PropertiesPanelProvider> providersList = new ArrayList<PropertiesPanelProvider>(Lookup.
-            getDefault().
-            lookupAll(PropertiesPanelProvider.class));
-
-    Collections.sort(providersList, new Comparator<PropertiesPanelProvider>() {
-
-      @Override
-      public int compare(final PropertiesPanelProvider panel1, final PropertiesPanelProvider panel2) {
-        final int priority1 = panel1.getPriority();
-        final int priority2 = panel2.getPriority();
-
-        if (priority1 == priority2) {
-          return panel1.getDisplayName().compareTo(panel2.getDisplayName());
-        }
-
-        return priority2 - priority1;
-      }
-    });
-
-    for (PropertiesPanelProvider provider : providersList) {
-      final String moduleName = provider.getName();
-      final Category category = Category.create(moduleName,
-              provider.getDisplayName(), null);
-
-      final AbstractPropertiesPanel panel = provider.getPanel(new ModuleProperties(
-              moduleName, properties));
-      panel.load();
-
-      result.put(category, panel);
     }
 
     return result;

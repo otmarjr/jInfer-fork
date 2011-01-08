@@ -33,6 +33,7 @@ public class VertexSizeTransformer implements Transformer<Regexp<AbstractStructu
   private int concat;
   private int alter;
   private int permut;
+  private int lambda;
 
   public VertexSizeTransformer(List<Regexp<AbstractStructuralNode>> roots) {
     this.roots = roots;
@@ -41,13 +42,14 @@ public class VertexSizeTransformer implements Transformer<Regexp<AbstractStructu
     concat = Utils.getProperty(Utils.CONCAT_SIZE_PROP, Utils.CONCAT_SIZE_DEFAULT);
     alter = Utils.getProperty(Utils.ALTER_SIZE_PROP, Utils.ALTER_SIZE_DEFAULT);
     permut = Utils.getProperty(Utils.PERMUT_SIZE_PROP, Utils.PERMUT_SIZE_DEFAULT);
+    lambda = Utils.getProperty(Utils.LAMBDA_SIZE_PROP, Utils.LAMBDA_SIZE_DEFAULT);
   }
 
   @Override
   public Integer transform(Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
-        return 50;
+        return lambda;
       case TOKEN:
         if (roots.contains(regexp)) {
           return root;

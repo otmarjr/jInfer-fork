@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2011 sviro
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,27 +19,23 @@ package cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import java.awt.Font;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * Transformer for Rule Tree Vertex which transform {@link Regexp} into readeble Vertex label.
  *
  * @author sviro
  */
-public class RegexpTransformer implements Transformer<Regexp<AbstractStructuralNode>, String>{
+class VertexFontTransformer implements Transformer<Regexp<AbstractStructuralNode>, Font>{
 
-  public RegexpTransformer() {
+  public VertexFontTransformer() {
   }
 
   @Override
-  public String transform(Regexp<AbstractStructuralNode> regexp) {
+  public Font transform(Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
-      case LAMBDA: return "\u03BB";
-      case TOKEN: return regexp.getContent().getName();
-      case ALTERNATION:
-      case CONCATENATION:
-      case PERMUTATION: return regexp.getType().toString();
-      default: return null;
+      case LAMBDA: return new Font(null, Font.BOLD, 20);
+      default: return new Font(null, Font.PLAIN, 12);
     }
   }
 

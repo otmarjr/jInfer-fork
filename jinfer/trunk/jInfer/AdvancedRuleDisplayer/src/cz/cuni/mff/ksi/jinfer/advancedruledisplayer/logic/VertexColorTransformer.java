@@ -34,6 +34,7 @@ public class VertexColorTransformer implements Transformer<Regexp<AbstractStruct
   private Color concatColor;
   private Color alterColor;
   private Color permutColor;
+  private Color lambdaColor;
   private final List<Regexp<AbstractStructuralNode>> roots;
 
   public VertexColorTransformer(List<Regexp<AbstractStructuralNode>> roots) {
@@ -42,6 +43,7 @@ public class VertexColorTransformer implements Transformer<Regexp<AbstractStruct
     this.concatColor = Utils.getColorProperty(Utils.CONCAT_COLOR_PROP, Utils.CONCAT_COLOR_DEFAULT);
     this.alterColor = Utils.getColorProperty(Utils.ALTER_COLOR_PROP, Utils.ALTER_COLOR_DEFAULT);
     this.permutColor = Utils.getColorProperty(Utils.PERMUT_COLOR_PROP, Utils.PERMUT_COLOR_DEFAULT);
+    this.lambdaColor = Utils.getColorProperty(Utils.LAMBDA_COLOR_PROP, Utils.LAMBDA_COLOR_DEFAULT);
     this.roots = roots;
   }
 
@@ -49,7 +51,7 @@ public class VertexColorTransformer implements Transformer<Regexp<AbstractStruct
   public Paint transform(Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
-        return Color.blue;
+        return lambdaColor;
       case TOKEN:
         if (roots.contains(regexp)) {
           return rootColor;

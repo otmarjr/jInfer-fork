@@ -39,11 +39,11 @@ public class Utils {
     ROOT, TOKEN, CONCAT, ALTER, PERMUT, LAMBDA
   };
   public static final String BG_COLOR_PROP = "background.color";
-  public static final Color BG_COLOR_DEFAULT = Color.white;
+  public static final Color BG_COLOR_DEFAULT = Color.decode("-1");
   public static final String HORIZONTAL_DISTANCE_PROP = "horizontal.distance";
-  public static final int HORIZONTAL_DISTANCE_DEFAULT = 150;
+  public static final int HORIZONTAL_DISTANCE_DEFAULT = 100;
   public static final String VERTICAL_DISTANCE_PROP = "vertical.distance";
-  public static final int VERTICAL_DISTANCE_DEFAULT = 150;
+  public static final int VERTICAL_DISTANCE_DEFAULT = 100;
 
   /*
    * Circle - 0
@@ -53,39 +53,39 @@ public class Utils {
    * Star - 4
    */
   public static final String ROOT_SHAPE_PROP = "root.shape";
-  public static final int ROOT_SHAPE_DEFAULT = 4;
+  public static final int ROOT_SHAPE_DEFAULT = 0;
   public static final String TOKEN_SHAPE_PROP = "token.shape";
-  public static final int TOKEN_SHAPE_DEFAULT = 0;
+  public static final int TOKEN_SHAPE_DEFAULT = 2;
   public static final String CONCAT_SHAPE_PROP = "concat.shape";
-  public static final int CONCAT_SHAPE_DEFAULT = 2;
+  public static final int CONCAT_SHAPE_DEFAULT = 3;
   public static final String ALTER_SHAPE_PROP = "alter.shape";
-  public static final int ALTER_SHAPE_DEFAULT = 2;
+  public static final int ALTER_SHAPE_DEFAULT = 1;
   public static final String PERMUT_SHAPE_PROP = "permut.shape";
-  public static final int PERMUT_SHAPE_DEFAULT = 2;
+  public static final int PERMUT_SHAPE_DEFAULT = 4;
   public static final String LAMBDA_SHAPE_PROP = "lambda.shape";
   public static final int LAMBDA_SHAPE_DEFAULT = 0;
   public static final String ROOT_SIZE_PROP = "root.size";
-  public static final int ROOT_SIZE_DEFAULT = 40;
+  public static final int ROOT_SIZE_DEFAULT = 30;
   public static final String TOKEN_SIZE_PROP = "token.size";
-  public static final int TOKEN_SIZE_DEFAULT = 40;
+  public static final int TOKEN_SIZE_DEFAULT = 20;
   public static final String CONCAT_SIZE_PROP = "concat.size";
-  public static final int CONCAT_SIZE_DEFAULT = 40;
+  public static final int CONCAT_SIZE_DEFAULT = 25;
   public static final String ALTER_SIZE_PROP = "alter.size";
-  public static final int ALTER_SIZE_DEFAULT = 40;
+  public static final int ALTER_SIZE_DEFAULT = 25;
   public static final String PERMUT_SIZE_PROP = "permut.size";
-  public static final int PERMUT_SIZE_DEFAULT = 40;
+  public static final int PERMUT_SIZE_DEFAULT = 25;
   public static final String LAMBDA_SIZE_PROP = "lambda.size";
   public static final int LAMBDA_SIZE_DEFAULT = 40;
   public static final String ROOT_COLOR_PROP = "root.color";
-  public static final Color ROOT_COLOR_DEFAULT = Color.cyan;
+  public static final Color ROOT_COLOR_DEFAULT = Color.decode("-13861729");
   public static final String TOKEN_COLOR_PROP = "token.color";
-  public static final Color TOKEN_COLOR_DEFAULT = Color.blue;
+  public static final Color TOKEN_COLOR_DEFAULT = Color.decode("-10837573");
   public static final String CONCAT_COLOR_PROP = "concat.color";
-  public static final Color CONCAT_COLOR_DEFAULT = Color.red;
+  public static final Color CONCAT_COLOR_DEFAULT = Color.decode("-1936099");
   public static final String ALTER_COLOR_PROP = "alter.color";
-  public static final Color ALTER_COLOR_DEFAULT = Color.yellow;
+  public static final Color ALTER_COLOR_DEFAULT = Color.decode("-1985536");
   public static final String PERMUT_COLOR_PROP = "permut.color";
-  public static final Color PERMUT_COLOR_DEFAULT = Color.green;
+  public static final Color PERMUT_COLOR_DEFAULT = Color.decode("-8473082");
   public static final String LAMBDA_COLOR_PROP = "lambda.color";
   public static final Color LAMBDA_COLOR_DEFAULT = Color.gray;
   private int rootShape;

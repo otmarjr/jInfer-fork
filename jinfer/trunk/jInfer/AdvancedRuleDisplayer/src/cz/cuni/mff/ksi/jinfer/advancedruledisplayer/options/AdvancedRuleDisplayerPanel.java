@@ -665,18 +665,21 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.CONCAT_SHAPE_PROP, concatCombo.getSelectedIndex());
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.ALTER_SHAPE_PROP, alterCombo.getSelectedIndex());
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.PERMUT_SHAPE_PROP, permutCombo.getSelectedIndex());
+    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.LAMBDA_SHAPE_PROP, lambdaCombo.getSelectedIndex());
 
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.ROOT_SIZE_PROP, (Integer) rootSpinner.getValue());
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.TOKEN_SIZE_PROP, (Integer) tokenSpinner.getValue());
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.CONCAT_SIZE_PROP, (Integer) concatSpinner.getValue());
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.ALTER_SIZE_PROP, (Integer) alterSpinner.getValue());
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.PERMUT_SIZE_PROP, (Integer) permutSpinner.getValue());
+    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.LAMBDA_SIZE_PROP, (Integer) lambdaSpinner.getValue());
 
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.ROOT_COLOR_PROP, String.valueOf(rootColor.getBackground().getRGB()));
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.TOKEN_COLOR_PROP, String.valueOf(tokenColor.getBackground().getRGB()));
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.CONCAT_COLOR_PROP, String.valueOf(concatColor.getBackground().getRGB()));
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.ALTER_COLOR_PROP, String.valueOf(alterColor.getBackground().getRGB()));
     NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.PERMUT_COLOR_PROP, String.valueOf(permutColor.getBackground().getRGB()));
+    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.LAMBDA_COLOR_PROP, String.valueOf(lambdaColor.getBackground().getRGB()));
   }
 
   boolean valid() {

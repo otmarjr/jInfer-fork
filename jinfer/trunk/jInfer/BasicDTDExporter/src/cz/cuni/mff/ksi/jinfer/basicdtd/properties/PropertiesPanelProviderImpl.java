@@ -46,7 +46,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   @Override
   public String getDisplayName() {
-    return "DTD export";
+    return "DTD Export";
   }
 
   @Override

@@ -35,7 +35,7 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
   public static final String TWOSTEP_SIMPIFIER_CLUSTERER = "Clusterers";
   public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
   public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR = "ClustererProcessor";
-  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY = "Clusterer Processors";
+  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY = "Cluster Processors";
   private static final int PANEL_PRIORITY = 400000;
   public static final String SIMPLIFIER_CATEGORY = "Simplifier";
 

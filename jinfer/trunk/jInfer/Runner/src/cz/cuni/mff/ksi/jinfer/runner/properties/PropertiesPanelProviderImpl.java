@@ -34,7 +34,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
   public static final String EXPORTER_CATEGORY = "Exporter";
   public static final String EXPORTER_CATEGORY_DISPLAY = "Exporters";
   public static final String IGG_CATEGORY = "IGG";
-  public static final String IGG_CATEGORY_DISPLAY = "Initial grammar generator";
+  public static final String IGG_CATEGORY_DISPLAY = "Initial grammar generators";
   public static final String SIMPLIFIER_CATEGORY = "Simplifier";
   public static final String SIMPLIFIER_CATEGORY_DISPLAY = "Simplifiers";
   private static final int PANEL_PRIORITY = 500000;

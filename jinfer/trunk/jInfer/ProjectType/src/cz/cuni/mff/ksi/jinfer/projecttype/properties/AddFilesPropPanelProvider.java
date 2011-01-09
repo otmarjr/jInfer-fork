@@ -27,10 +27,11 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  * PropertiesPanelProvider for Project properties category.
  * @author sviro
+ * TODO sviro This is a PropertiesPanelProvider, yet the name is weird...
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class AddFilesPropPanelProvider implements PropertiesPanelProvider{
-  public static final String CATEGORY_DISPLAY_NAME = "Project properties";
+  public static final String CATEGORY_DISPLAY_NAME = "Miscellaneous";
   public static final String CATEGORY_NAME = "ProjectProps";
 
   @Override

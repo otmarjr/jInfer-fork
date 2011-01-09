@@ -1,44 +1,31 @@
 default: all
 
-main.dvi: *.tex *.bib Makefile
-	rm -f *.toc
-	latex main
-	bibtex main
-	latex main
-	latex main
-
 main.ps: main.dvi
 	dvips main.dvi
 
-main.pdf: *.tex *.bib Makefile
+%.dvi: %.tex *.bib Makefile
 	rm -f *.toc
-	latex main
-	bibtex main
-	latex main
-	latex main
-	dvipdfmx main
+	latex $< 
+	bibtex $(<:.tex=.aux)
+	latex $<
+	latex $< 
 
-main.html: *.tex *.bib Makefile
+%.pdf: %.dvi
+	dvipdfmx $<
+
+%.html: %.tex *.bib Makefile
 	rm -f *.toc
-	hevea main
-	bibtex main
-	hevea main
-	hevea main
+	hevea -O -pedantic $<
+	bibtex $(<:.tex=.aux)
+	hevea -O -pedantic $<
+	hevea -O -pedantic $<
 
-dvi: main.dvi
-
-ps: main.ps
-
-pdf: main.pdf
-
-html: main.html
-
-all: pdf ps html
+all: architecture.pdf building-jinfer.pdf main.pdf user-tutorial.pdf
 
 clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux main.ps main.pdf
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux main.ps *.pdf
 dist-clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux main.ps main.pdf
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux main.ps *.pdf
 
 booklet: main.ps
 	cat main.ps | psbook | psnup -2 >main-booklet.ps

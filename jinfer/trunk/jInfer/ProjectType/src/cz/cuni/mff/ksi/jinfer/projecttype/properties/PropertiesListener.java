@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JComponent;
 import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;
 
 /**
@@ -38,7 +39,10 @@ public class PropertiesListener implements ActionListener {
   public void actionPerformed(final ActionEvent e) {
     if ("ok".equalsIgnoreCase(e.getActionCommand())) {
       for (Category category : customizerProvider.getCategories()) {
-        ((AbstractPropertiesPanel) customizerProvider.getComponentProvider().create(category)).store();
+        JComponent panel = customizerProvider.getComponentProvider().create(category);
+        if (panel instanceof AbstractPropertiesPanel) {
+          ((AbstractPropertiesPanel) panel).store();
+        }
       }
     }
   }

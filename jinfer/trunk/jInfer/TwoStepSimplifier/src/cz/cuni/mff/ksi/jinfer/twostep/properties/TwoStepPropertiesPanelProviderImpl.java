@@ -19,8 +19,12 @@ package cz.cuni.mff.ksi.jinfer.twostep.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.TwoStepSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -65,11 +69,11 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
   }
 
   @Override
-  public List<Pair<String, String>> getSubCategories() {
-    List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
-    result.add(new Pair<String, String>(TWOSTEP_SIMPIFIER_CLUSTERER, TWOSTEP_SIMPIFIER_CLUSTERER));
-    result.add(new Pair<String, String>(TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR, TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY));
-    result.add(new Pair<String, String>(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER));
+  public List<VirtualCategoryPanel> getSubCategories() {
+    List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPIFIER_CLUSTERER, TWOSTEP_SIMPIFIER_CLUSTERER, ModuleSelectionHelper.lookupNames(ClustererFactory.class)));
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR, TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY, ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class)));
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER, ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class)));
 
     return result;
   }

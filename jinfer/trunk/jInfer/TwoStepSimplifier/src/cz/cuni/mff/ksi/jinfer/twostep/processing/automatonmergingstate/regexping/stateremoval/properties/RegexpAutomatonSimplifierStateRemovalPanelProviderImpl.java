@@ -20,6 +20,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexpin
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonSimplifierStateRemovalFactory;
 import java.util.List;
 import java.util.Properties;
@@ -60,7 +61,7 @@ public class RegexpAutomatonSimplifierStateRemovalPanelProviderImpl implements P
   }
 
   @Override
-  public List<Pair<String, String>> getSubCategories() {
+  public List<VirtualCategoryPanel> getSubCategories() {
     return null;
   }
 

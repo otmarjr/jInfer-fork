@@ -26,11 +26,9 @@ import org.openide.nodes.Node;
  * @author sviro
  */
 public class OutputChildren extends FilterNode.Children{
-  private final Node node;
 
   public OutputChildren(final Node node) {
     super(node);
-    this.node = node;
   }
 
   @Override

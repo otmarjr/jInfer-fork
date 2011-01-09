@@ -35,18 +35,18 @@ public final class AdvancedRuleDisplayerOptionsPanelController extends OptionsPa
 
   private AdvancedRuleDisplayerPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-  private boolean changed;
+  private boolean optionsChanged;
 
   @Override
   public void update() {
     getPanel().load();
-    changed = false;
+    optionsChanged = false;
   }
 
   @Override
   public void applyChanges() {
     getPanel().store();
-    changed = false;
+    optionsChanged = false;
   }
 
   @Override
@@ -61,7 +61,7 @@ public final class AdvancedRuleDisplayerOptionsPanelController extends OptionsPa
 
   @Override
   public boolean isChanged() {
-    return changed;
+    return optionsChanged;
   }
 
   @Override
@@ -70,17 +70,17 @@ public final class AdvancedRuleDisplayerOptionsPanelController extends OptionsPa
   }
 
   @Override
-  public JComponent getComponent(Lookup masterLookup) {
+  public JComponent getComponent(final Lookup masterLookup) {
     return getPanel();
   }
 
   @Override
-  public void addPropertyChangeListener(PropertyChangeListener l) {
+  public void addPropertyChangeListener(final PropertyChangeListener l) {
     pcs.addPropertyChangeListener(l);
   }
 
   @Override
-  public void removePropertyChangeListener(PropertyChangeListener l) {
+  public void removePropertyChangeListener(final PropertyChangeListener l) {
     pcs.removePropertyChangeListener(l);
   }
 
@@ -91,9 +91,9 @@ public final class AdvancedRuleDisplayerOptionsPanelController extends OptionsPa
     return panel;
   }
 
-  void changed() {
-    if (!changed) {
-      changed = true;
+  public void changed() {
+    if (!optionsChanged) {
+      optionsChanged = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
     }
     pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);

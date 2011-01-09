@@ -48,12 +48,12 @@ public class InputFilesList extends ArrayList<File> {
   @Override
   public boolean add(final File e) {
     if (e == null) {
-      throw new NullPointerException();
+      throw new NullPointerException(); //NOPMD
     }
     if (this.contains(e)) {
       return false;
     }
-    boolean result = super.add(e);
+    final boolean result = super.add(e);
     if (result) {
       FileUtil.addFileChangeListener(listener, e);
     }
@@ -87,7 +87,7 @@ public class InputFilesList extends ArrayList<File> {
   @Override
   public boolean addAll(final Collection<? extends File> c) {
     if (c == null) {
-      throw new NullPointerException();
+      throw new NullPointerException(); //NOPMD
     }
 
     final List<File> list = new InputFilesList();

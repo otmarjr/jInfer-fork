@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
+@SuppressWarnings("PMD")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Tqueries", propOrder = {
   "file"

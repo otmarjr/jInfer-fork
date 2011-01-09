@@ -18,13 +18,11 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.Dialog;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -92,7 +90,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
       }
     }
 
-    List<Category> categoriesList = new ArrayList<Category>();
+    final List<Category> categoriesList = new ArrayList<Category>();
     for (PropertiesPanelProvider topLevelProvider : topLevelProviders) {
       categoriesList.add(buildCategory(topLevelProvider, providersList, result, properties));
     }
@@ -101,44 +99,6 @@ public class JInferCustomizerProvider implements CustomizerProvider {
 
     return result;
   }
-
-//  private Category buildCategory(final PropertiesPanelProvider provider,
-//          final Collection<? extends PropertiesPanelProvider> providers,
-//          final Map<Category, JPanel> result, final Properties properties) {
-//    final String moduleName = provider.getName();
-//    Category category = null;
-//
-//    if (provider.getSubCategories() == null) {
-//      category = Category.create(moduleName,
-//              provider.getDisplayName(), null);
-//    } else {
-//      final List<Category> subCategories = new ArrayList<Category>();
-//      for (Pair<String, String> subCategory : provider.getSubCategories()) {
-//        final String subCategoryId = subCategory.getFirst();
-//        final List<PropertiesPanelProvider> subCategoryProviders = getProvidersByParentId(
-//                subCategoryId,
-//                providers);
-//
-//        final ArrayList<Category> subCateg = new ArrayList<Category>();
-//        for (PropertiesPanelProvider subCategoryProvider : subCategoryProviders) {
-//          subCateg.add(buildCategory(subCategoryProvider, providers, result, properties));
-//        }
-//
-//        subCategories.add(Category.create(subCategoryId, subCategory.getSecond(), null, subCateg.toArray(new Category[subCateg.size()])));
-//      }
-//
-//      category = Category.create(moduleName, provider.getDisplayName(), null, subCategories.toArray(
-//              new Category[subCategories.size()]));
-//    }
-//
-//    final AbstractPropertiesPanel panel = provider.getPanel(new ModuleProperties(
-//            moduleName, properties));
-//    panel.load();
-//
-//    result.put(category, panel);
-//
-//    return category;
-//  }
 
   private Category buildCategory(final PropertiesPanelProvider provider,
           final Collection<? extends PropertiesPanelProvider> providers,
@@ -178,7 +138,7 @@ public class JInferCustomizerProvider implements CustomizerProvider {
         for (PropertiesPanelProvider subCategoryProvider : subCategoryProviders) {
           subCateg.add(buildCategory(subCategoryProvider, providers, result, properties));
         }
-        Category subCategory = Category.create(subCategoryId, subCategoryPanel.getCategoryName(), null, subCateg.toArray(new Category[subCateg.size()]));
+        final Category subCategory = Category.create(subCategoryId, subCategoryPanel.getCategoryName(), null, subCateg.toArray(new Category[subCateg.size()]));
         result.put(subCategory, subCategoryPanel);
 
         subCategories.add(subCategory);
@@ -195,16 +155,6 @@ public class JInferCustomizerProvider implements CustomizerProvider {
     result.put(category, panel);
 
     return category;
-  }
-
-  private boolean isNotVirtualCategory(final String categoryId, final Collection<? extends PropertiesPanelProvider> providers) {
-    for (PropertiesPanelProvider provider : providers) {
-      if (provider.getName().equals(categoryId)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   private List<PropertiesPanelProvider> getProvidersByParentId(final String subCategoryId,

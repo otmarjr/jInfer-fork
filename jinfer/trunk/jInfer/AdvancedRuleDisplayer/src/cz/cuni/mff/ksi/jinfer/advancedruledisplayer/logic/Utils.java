@@ -88,18 +88,22 @@ public class Utils {
   public static final Color PERMUT_COLOR_DEFAULT = Color.decode("-8473082");
   public static final String LAMBDA_COLOR_PROP = "lambda.color";
   public static final Color LAMBDA_COLOR_DEFAULT = Color.gray;
-  private int rootShape;
-  private int tokenShape;
-  private int concatShape;
-  private int alterShape;
-  private int permutShape;
-  private int lambdaShape;
-  private Color bgColor;
-  private int horizontalDistance;
-  private int verticalDistance;
-  private List<Regexp<AbstractStructuralNode>> roots;
+  private final int rootShape;
+  private final int tokenShape;
+  private final int concatShape;
+  private final int alterShape;
+  private final int permutShape;
+  private final int lambdaShape;
+  private final Color bgColor;
+  private final int horizontalDistance;
+  private final int verticalDistance;
+  private final List<Regexp<AbstractStructuralNode>> roots;
 
-  public Utils(List<Regexp<AbstractStructuralNode>> roots) {
+  /**
+   * Default contructor.
+   * @param roots List of root Regexp of each rule tree.
+   */
+  public Utils(final List<Regexp<AbstractStructuralNode>> roots) {
     this.roots = roots;
     this.bgColor = getColorProperty(BG_COLOR_PROP, BG_COLOR_DEFAULT);
     this.horizontalDistance = getProperty(HORIZONTAL_DISTANCE_PROP, HORIZONTAL_DISTANCE_DEFAULT);
@@ -118,7 +122,7 @@ public class Utils {
    * @param defaultValue Default value to be returned, if no value is saved for particular property.
    * @return Property value if exists for particular property, otherwise is returned defaultValue.
    */
-  public static int getProperty(String property, int defaultValue) {
+  public static int getProperty(final String property, final int defaultValue) {
     return NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).getInt(property, defaultValue);
   }
 
@@ -128,7 +132,7 @@ public class Utils {
    * @param defaultValue Default value to be returned, if no value is saved for particular property.
    * @return Property value if exists for particular property, otherwise is returned defaultValue.
    */
-  public static Color getColorProperty(String property, Color defaultValue) {
+  public static Color getColorProperty(final String property, final Color defaultValue) {
     return Color.decode(NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).get(property, String.valueOf(defaultValue.getRGB())));
   }
 
@@ -138,7 +142,7 @@ public class Utils {
    * @param regexp Regexp for which is shape returned.
    * @return Shape of Vertex for particular regexp.
    */
-  public Shape getVertexShape(VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, Regexp<AbstractStructuralNode> regexp) {
+  public Shape getVertexShape(final VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA: return getShape(lambdaShape, shapeFactory, regexp);
       case TOKEN:
@@ -158,7 +162,7 @@ public class Utils {
     }
   }
 
-  private Shape getShape(int shape, VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, Regexp<AbstractStructuralNode> regexp) {
+  private Shape getShape(final int shape, final VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, final Regexp<AbstractStructuralNode> regexp) {
     switch (shape) {
       case 0:
         return shapeFactory.getEllipse(regexp);

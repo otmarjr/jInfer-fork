@@ -34,7 +34,6 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,14 +45,14 @@ import javax.swing.JPanel;
  *
  * @author sviro
  */
-public class GraphBuilder {
+public final class GraphBuilder {
 
   private GraphBuilder() {
   }
 
-  private static List<Regexp<AbstractStructuralNode>> getRootVertices(Forest<Regexp<AbstractStructuralNode>, RegexpInterval> graph) {
-    List<Regexp<AbstractStructuralNode>> result = new ArrayList<Regexp<AbstractStructuralNode>>();
-    Collection<Tree<Regexp<AbstractStructuralNode>, RegexpInterval>> trees = graph.getTrees();
+  private static List<Regexp<AbstractStructuralNode>> getRootVertices(final Forest<Regexp<AbstractStructuralNode>, RegexpInterval> graph) {
+    final List<Regexp<AbstractStructuralNode>> result = new ArrayList<Regexp<AbstractStructuralNode>>();
+    final Collection<Tree<Regexp<AbstractStructuralNode>, RegexpInterval>> trees = graph.getTrees();
     for (Tree<Regexp<AbstractStructuralNode>, RegexpInterval> tree : trees) {
       result.add(tree.getRoot());
     }
@@ -61,16 +60,16 @@ public class GraphBuilder {
     return result;
   }
 
-  private static Forest<Regexp<AbstractStructuralNode>, RegexpInterval> getForestFromRules(List<Element> rules) {
-    DelegateForest<Regexp<AbstractStructuralNode>, RegexpInterval> result = new DelegateForest<Regexp<AbstractStructuralNode>, RegexpInterval>();
+  private static Forest<Regexp<AbstractStructuralNode>, RegexpInterval> getForestFromRules(final List<Element> rules) {
+    final DelegateForest<Regexp<AbstractStructuralNode>, RegexpInterval> result = new DelegateForest<Regexp<AbstractStructuralNode>, RegexpInterval>();
     for (Element element : rules) {
       result.addTree(getRuleTree(element));
     }
     return result;
   }
 
-  private static Tree<Regexp<AbstractStructuralNode>, RegexpInterval> getRuleTree(Element element) {
-    DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval> result = new DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval>();
+  private static Tree<Regexp<AbstractStructuralNode>, RegexpInterval> getRuleTree(final Element element) {
+    final DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval> result = new DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval>();
     final Regexp<AbstractStructuralNode> root = Regexp.getToken((AbstractStructuralNode) element, RegexpInterval.getOnce());
     result.addVertex(root);
     result.addEdge(root.getInterval().getCopy(), root, element.getSubnodes());
@@ -78,19 +77,22 @@ public class GraphBuilder {
     return result;
   }
 
-  private static void parseRegexp(DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval> tree, Regexp<AbstractStructuralNode> regexp) {
+  private static void parseRegexp(final DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval> tree, final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
       case TOKEN:
-        return;
+        break;
       case ALTERNATION:
       case PERMUTATION:
       case CONCATENATION:
         addEdges(tree, regexp);
+        break;
+      default:
+        throw new IllegalArgumentException();
     }
   }
 
-  private static void addEdges(DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval> tree, Regexp<AbstractStructuralNode> regexp) {
+  private static void addEdges(final DelegateTree<Regexp<AbstractStructuralNode>, RegexpInterval> tree, final Regexp<AbstractStructuralNode> regexp) {
     if (BaseUtils.isEmpty(regexp.getChildren())) {
       return;
     }
@@ -107,12 +109,11 @@ public class GraphBuilder {
    * @return Panel with rendered rule trees.
    */
   public static JPanel buildGraphPanel(final List<Element> rules) {
+    final Forest<Regexp<AbstractStructuralNode>, RegexpInterval> graph = getForestFromRules(rules);
+    final List<Regexp<AbstractStructuralNode>> roots = getRootVertices(graph);
+    final Utils utils = new Utils(roots);
 
-    Forest<Regexp<AbstractStructuralNode>, RegexpInterval> graph = getForestFromRules(rules);
-    List<Regexp<AbstractStructuralNode>> roots = getRootVertices(graph);
-    Utils utils = new Utils(roots);
-
-    Layout<Regexp<AbstractStructuralNode>, RegexpInterval> layout = new TreeLayout<Regexp<AbstractStructuralNode>, RegexpInterval>(graph, utils.getHorizontalDistance(), utils.getVerticalDistance());
+    final Layout<Regexp<AbstractStructuralNode>, RegexpInterval> layout = new TreeLayout<Regexp<AbstractStructuralNode>, RegexpInterval>(graph, utils.getHorizontalDistance(), utils.getVerticalDistance());
     final VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval>(layout, new Dimension(400, 300));
 
     vv.setBackground(utils.getBackgroundColor());
@@ -124,7 +125,7 @@ public class GraphBuilder {
     vv.getRenderContext().setVertexFontTransformer(new VertexFontTransformer());
     vv.getRenderer().getVertexLabelRenderer().setPosition(Position.W);
 
-    DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval> gm = new DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval>(1 / 1.1f, 1.1f);
+    final DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval> gm = new DefaultModalGraphMouse<Regexp<AbstractStructuralNode>, RegexpInterval>(1 / 1.1f, 1.1f);
     gm.setMode(Mode.TRANSFORMING);
     vv.setGraphMouse(gm);
 

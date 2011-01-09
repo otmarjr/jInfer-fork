@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * @author sviro
  */
+@SuppressWarnings("PMD")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Tfile")
 public class Tfile {

@@ -52,7 +52,6 @@ import org.openide.util.Lookup;
 public class FilesAddAction extends AbstractAction {
 
   private static final long serialVersionUID = 35345345;
-
   private final JInferProject project;
   public static final String COMMAND_FILES_ADD = "FilesAddAction";
 
@@ -63,63 +62,25 @@ public class FilesAddAction extends AbstractAction {
 
   @Override
   public void actionPerformed(final ActionEvent e) {
-    final List<String> extensions = getExtensions();
-
-    final StringBuilder builder = new StringBuilder("Files (");
-    boolean first = true;
-    for (String ext : extensions) {
-      if (first) {
-        first = false;
-        builder.append("*.").append(ext);
-      } else {
-        builder.append(", *.").append(ext);
-      }
-    }
-    builder.append(")");
-
-    final FileFilter fileFilter = new FileNameExtensionFilter(builder.toString(),
-            extensions.toArray(new String[extensions.size()]));
-
-    final File[] selectedFiles = new FileChooserBuilder(FilesAddAction.class).
-            setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
-            setTitle("Add files").setFileFilter(fileFilter).setFilesOnly(true).showMultiOpenDialog();
+    final File[] selectedFiles = getSelectedFiles();
 
     if (selectedFiles != null) {
       // find processor mappings for all folders
       final Map<FolderType, List<String>> registeredProcessors = getRegisteredProcessors();
 
-
-
       final List<File> selectedFilesList = new ArrayList<File>(Arrays.asList(selectedFiles));
 
       final Collection<File> xmlFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
               FolderType.XML));
-      final Collection<File> schemaFiles = getSpecificFiles(selectedFilesList, registeredProcessors.
-              get(
+      final Collection<File> schemaFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
               FolderType.SCHEMA));
-      final Collection<File> queryFiles = getSpecificFiles(selectedFilesList, registeredProcessors.
-              get(
+      final Collection<File> queryFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
               FolderType.QUERY));
 
-
-      selectedFilesList.removeAll(xmlFiles);
-      selectedFilesList.removeAll(schemaFiles);
-      selectedFilesList.removeAll(queryFiles);
+      removeKnownSelectegFiles(selectedFilesList, xmlFiles, schemaFiles, queryFiles);
 
       if (!selectedFilesList.isEmpty()) {
-        final Properties properties = new ModuleProperties(AddFilesPropPanelProvider.CATEGORY_NAME, project.
-                getLookup().lookup(Properties.class));
-        final String defaultFolder = properties.getProperty(ProjectPropertiesPanel.FOLDER_TYPE,
-                ProjectPropertiesPanel.FOLDER_TYPE_DEFAULT);
-        if (defaultFolder.equals(FolderType.XML.getName())) {
-          xmlFiles.addAll(selectedFilesList);
-        }
-        if (defaultFolder.equals(FolderType.SCHEMA.getName())) {
-          schemaFiles.addAll(selectedFilesList);
-        }
-        if (defaultFolder.equals(FolderType.QUERY.getName())) {
-          queryFiles.addAll(selectedFilesList);
-        }
+        addRemainingFilesToDefault(selectedFilesList, xmlFiles,  schemaFiles, queryFiles);
       }
 
       final Input input = project.getLookup().lookup(Input.class);
@@ -139,8 +100,47 @@ public class FilesAddAction extends AbstractAction {
         }
       }
     }
+  }
 
+  private void addRemainingFilesToDefault(final List<File> selectedFilesList, final Collection<File> xmlFiles,  final Collection<File> schemaFiles, final Collection<File> queryFiles) {
+    final Properties properties = new ModuleProperties(AddFilesPropPanelProvider.CATEGORY_NAME, project.getLookup().lookup(Properties.class));
+    final String defaultFolder = properties.getProperty(ProjectPropertiesPanel.FOLDER_TYPE, ProjectPropertiesPanel.FOLDER_TYPE_DEFAULT);
+    if (defaultFolder.equals(FolderType.XML.getName())) {
+      xmlFiles.addAll(selectedFilesList);
+    }
+    if (defaultFolder.equals(FolderType.SCHEMA.getName())) {
+      schemaFiles.addAll(selectedFilesList);
+    }
+    if (defaultFolder.equals(FolderType.QUERY.getName())) {
+      queryFiles.addAll(selectedFilesList);
+    }
+  }
 
+  private void removeKnownSelectegFiles(final List<File> selectedFilesList, final Collection<File> xmlFiles, final Collection<File> schemaFiles, final Collection<File> queryFiles) {
+    selectedFilesList.removeAll(xmlFiles);
+    selectedFilesList.removeAll(schemaFiles);
+    selectedFilesList.removeAll(queryFiles);
+  }
+
+  private File[] getSelectedFiles() {
+    final List<String> extensions = getExtensions();
+    final FileFilter fileFilter = new FileNameExtensionFilter(getFileFilterDesc(extensions), extensions.toArray(new String[extensions.size()]));
+    return new FileChooserBuilder(FilesAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).setTitle("Add files").setFileFilter(fileFilter).setFilesOnly(true).showMultiOpenDialog();
+  }
+
+  private String getFileFilterDesc(final List<String> extensions) {
+    final StringBuilder builder = new StringBuilder("Files (");
+    boolean first = true;
+    for (String ext : extensions) {
+      if (first) {
+        first = false;
+      } else {
+        builder.append(", ");
+      }
+      builder.append("*.").append(ext);
+    }
+    builder.append(")");
+    return builder.toString();
   }
 
   private Collection<File> getSpecificFiles(final List<File> files, final List<String> extensions) {

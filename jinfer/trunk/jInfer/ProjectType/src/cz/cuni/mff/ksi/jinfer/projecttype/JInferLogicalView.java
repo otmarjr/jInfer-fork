@@ -17,14 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.RootNode;
-import java.awt.Image;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
-import org.openide.nodes.FilterNode;
 import org.openide.nodes.Node;
-import org.openide.util.ImageUtilities;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.Lookups;
-import org.openide.util.lookup.ProxyLookup;
 
 /**
  * Creates logical view of the jInfer Project, which means that it returns root node of the

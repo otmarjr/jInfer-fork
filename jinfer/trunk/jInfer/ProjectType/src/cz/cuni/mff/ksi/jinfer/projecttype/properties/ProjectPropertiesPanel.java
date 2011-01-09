@@ -51,130 +51,135 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
   private void initComponents() {
     java.awt.GridBagConstraints gridBagConstraints;
 
-    jPanel1 = new javax.swing.JPanel();
-    jComboBox1 = new javax.swing.JComboBox();
-    jLabel1 = new javax.swing.JLabel();
-    jLabel2 = new javax.swing.JLabel();
-    jPanel2 = new javax.swing.JPanel();
-    jPanel4 = new javax.swing.JPanel();
-    logLevelCombo = new javax.swing.JComboBox();
-    loglevelLabel = new javax.swing.JLabel();
+    defaultFolder = new javax.swing.JComboBox();
+    logLevel = new javax.swing.JComboBox();
+    loglevelLabel2 = new javax.swing.JLabel();
+    defaultFolderLabel2 = new javax.swing.JLabel();
+    defaultFolderLabel1 = new javax.swing.JLabel();
+    logLevelLabel1 = new javax.swing.JLabel();
+    fill1 = new javax.swing.JPanel();
+    fill2 = new javax.swing.JPanel();
 
     setPreferredSize(new java.awt.Dimension(330, 59));
     setLayout(new java.awt.GridBagLayout());
 
-    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jPanel1.border.title"))); // NOI18N
-    jPanel1.setMinimumSize(new java.awt.Dimension(200, 100));
-    jPanel1.setPreferredSize(new java.awt.Dimension(330, 60));
-    jPanel1.setLayout(new java.awt.GridBagLayout());
-
-    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-    jComboBox1.setMinimumSize(new java.awt.Dimension(80, 20));
-    jComboBox1.setPreferredSize(new java.awt.Dimension(80, 20));
+    defaultFolder.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+    defaultFolder.setMinimumSize(new java.awt.Dimension(80, 20));
+    defaultFolder.setPreferredSize(new java.awt.Dimension(80, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridheight = 2;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.weightx = 0.5;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(jComboBox1, gridBagConstraints);
-
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jLabel1.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 10, 0, 10);
-    jPanel1.add(jLabel1, gridBagConstraints);
-
-    jLabel2.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jLabel2.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(0, 10, 2, 10);
-    jPanel1.add(jLabel2, gridBagConstraints);
-
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.weightx = 1.0;
-    add(jPanel1, gridBagConstraints);
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(defaultFolder, gridBagConstraints);
 
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
-    );
-    jPanel2Layout.setVerticalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
-    );
-
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
-    gridBagConstraints.weighty = 1.0;
-    add(jPanel2, gridBagConstraints);
-
-    jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jPanel4.border.title"))); // NOI18N
-    jPanel4.setMinimumSize(new java.awt.Dimension(200, 100));
-    jPanel4.setPreferredSize(new java.awt.Dimension(330, 60));
-    jPanel4.setLayout(new java.awt.GridBagLayout());
-
-    logLevelCombo.setMaximumRowCount(12);
-    logLevelCombo.setModel(LogLevels.getDefaultModel());
-    logLevelCombo.setMinimumSize(new java.awt.Dimension(100, 22));
-    logLevelCombo.setPreferredSize(new java.awt.Dimension(100, 22));
+    logLevel.setMaximumRowCount(12);
+    logLevel.setModel(LogLevels.getDefaultModel());
+    logLevel.setMinimumSize(new java.awt.Dimension(100, 22));
+    logLevel.setPreferredSize(new java.awt.Dimension(100, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.weightx = 0.5;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel4.add(logLevelCombo, gridBagConstraints);
+    add(logLevel, gridBagConstraints);
 
-    loglevelLabel.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.loglevelLabel.text")); // NOI18N
-    loglevelLabel.setToolTipText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.loglevelLabel.toolTipText")); // NOI18N
+    loglevelLabel2.setFont(loglevelLabel2.getFont().deriveFont((loglevelLabel2.getFont().getStyle() | java.awt.Font.ITALIC), 10));
+    loglevelLabel2.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.loglevelLabel2.text")); // NOI18N
+    loglevelLabel2.setToolTipText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.loglevelLabel2.toolTipText")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    add(loglevelLabel2, gridBagConstraints);
+
+    defaultFolderLabel2.setFont(defaultFolderLabel2.getFont().deriveFont((defaultFolderLabel2.getFont().getStyle() | java.awt.Font.ITALIC), 10));
+    defaultFolderLabel2.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.defaultFolderLabel2.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    add(defaultFolderLabel2, gridBagConstraints);
+
+    defaultFolderLabel1.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.defaultFolderLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    jPanel4.add(loglevelLabel, gridBagConstraints);
+    add(defaultFolderLabel1, gridBagConstraints);
 
+    logLevelLabel1.setText(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.logLevelLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    add(jPanel4, gridBagConstraints);
-    jPanel4.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(ProjectPropertiesPanel.class, "ProjectPropertiesPanel.jPanel4.AccessibleContext.accessibleName")); // NOI18N
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(logLevelLabel1, gridBagConstraints);
+
+    javax.swing.GroupLayout fill1Layout = new javax.swing.GroupLayout(fill1);
+    fill1.setLayout(fill1Layout);
+    fill1Layout.setHorizontalGroup(
+      fill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 544, Short.MAX_VALUE)
+    );
+    fill1Layout.setVerticalGroup(
+      fill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 138, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridwidth = 4;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 1.0;
+    add(fill1, gridBagConstraints);
+
+    javax.swing.GroupLayout fill2Layout = new javax.swing.GroupLayout(fill2);
+    fill2.setLayout(fill2Layout);
+    fill2Layout.setHorizontalGroup(
+      fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 41, Short.MAX_VALUE)
+    );
+    fill2Layout.setVerticalGroup(
+      fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 50, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    add(fill2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   @Override
   public void store() {
-    properties.setProperty(FOLDER_TYPE, ((FolderType) jComboBox1.getSelectedItem()).getName());
-    properties.setProperty(LOG_LEVEL, (String) logLevelCombo.getSelectedItem());
+    properties.setProperty(FOLDER_TYPE, ((FolderType) defaultFolder.getSelectedItem()).getName());
+    properties.setProperty(LOG_LEVEL, (String) logLevel.getSelectedItem());
   }
 
   @Override
   public void load() {
-    jComboBox1.setModel(new DefaultComboBoxModel(FolderType.values()));
-    jComboBox1.setSelectedItem(properties.getProperty(FOLDER_TYPE, FOLDER_TYPE_DEFAULT));
-    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
+    defaultFolder.setModel(new DefaultComboBoxModel(FolderType.values()));
+    defaultFolder.setSelectedItem(properties.getProperty(FOLDER_TYPE, FOLDER_TYPE_DEFAULT));
+    logLevel.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JComboBox jComboBox1;
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JPanel jPanel2;
-  private javax.swing.JPanel jPanel4;
-  private javax.swing.JComboBox logLevelCombo;
-  private javax.swing.JLabel loglevelLabel;
+  private javax.swing.JComboBox defaultFolder;
+  private javax.swing.JLabel defaultFolderLabel1;
+  private javax.swing.JLabel defaultFolderLabel2;
+  private javax.swing.JPanel fill1;
+  private javax.swing.JPanel fill2;
+  private javax.swing.JComboBox logLevel;
+  private javax.swing.JLabel logLevelLabel1;
+  private javax.swing.JLabel loglevelLabel2;
   // End of variables declaration//GEN-END:variables
 }

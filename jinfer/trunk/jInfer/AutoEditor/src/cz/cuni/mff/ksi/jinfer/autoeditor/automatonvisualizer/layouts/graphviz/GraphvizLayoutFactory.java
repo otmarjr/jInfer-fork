@@ -57,6 +57,10 @@ public class GraphvizLayoutFactory implements LayoutF {
   public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph,  final Transformer<Step<T>, String> edgeLabelTransformer) {
     final Map<State<T>, Point2D> positions= new HashMap<State<T>, Point2D>();
 
+    //TODO anti v triede GraphvizUtils mas dve metody: isBinaryValid() a getPath()
+    //pricom prva ti povie ci je spravne nacitana binarka, a druha ti vrati cestu na nu
+    //pouzi podla potreby.
+
     ProcessBuilder p = new ProcessBuilder(Arrays.asList(
             "/usr/bin/dot",
             "-Tplain"));

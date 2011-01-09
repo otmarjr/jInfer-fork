@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import java.awt.Dialog;
@@ -163,8 +164,8 @@ public class JInferCustomizerProvider implements CustomizerProvider {
       }
     } else {
       final List<Category> subCategories = new ArrayList<Category>();
-      for (Pair<String, String> subCategory : provider.getSubCategories()) {
-        final String subCategoryId = subCategory.getFirst();
+      for (VirtualCategoryPanel subCategoryPanel : provider.getSubCategories()) {
+        final String subCategoryId = subCategoryPanel.getCategoryId();
         final List<PropertiesPanelProvider> subCategoryProviders = getProvidersByParentId(
                 subCategoryId,
                 providers);
@@ -177,8 +178,10 @@ public class JInferCustomizerProvider implements CustomizerProvider {
         for (PropertiesPanelProvider subCategoryProvider : subCategoryProviders) {
           subCateg.add(buildCategory(subCategoryProvider, providers, result, properties));
         }
+        Category subCategory = Category.create(subCategoryId, subCategoryPanel.getCategoryName(), null, subCateg.toArray(new Category[subCateg.size()]));
+        result.put(subCategory, subCategoryPanel);
 
-        subCategories.add(Category.create(subCategoryId, subCategory.getSecond(), null, subCateg.toArray(new Category[subCateg.size()])));
+        subCategories.add(subCategory);
       }
 
       category = Category.create(moduleName, provider.getDisplayName(), null, subCategories.toArray(

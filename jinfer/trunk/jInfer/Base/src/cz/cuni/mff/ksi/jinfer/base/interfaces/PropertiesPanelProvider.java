@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import java.util.List;
 import java.util.Properties;
 
@@ -68,9 +69,10 @@ public interface PropertiesPanelProvider {
   String getParent();
 
   /**
-   * Get List of Pairs of all children categories of this category. Each Pair contains
-   * id and name of child category.
-   * @return List of Pairs(id, name) of all children categories.
+   * Get List of all children virtual categories of this category. Each virtual category is
+   * defined by {@link VirtualCategoryPanel}
+   *
+   * @return List of {@link VirtualCategoryPanel} of all children virtual categories.
    */
-  List<Pair<String, String>> getSubCategories();
+  List<VirtualCategoryPanel> getSubCategories();
 }

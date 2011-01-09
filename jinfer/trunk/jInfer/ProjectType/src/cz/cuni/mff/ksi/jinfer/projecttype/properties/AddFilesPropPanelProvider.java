@@ -20,6 +20,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype.properties;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
@@ -59,7 +60,7 @@ public class AddFilesPropPanelProvider implements PropertiesPanelProvider{
   }
 
   @Override
-  public List<Pair<String, String>> getSubCategories() {
+  public List<VirtualCategoryPanel> getSubCategories() {
     return null;
   }
 

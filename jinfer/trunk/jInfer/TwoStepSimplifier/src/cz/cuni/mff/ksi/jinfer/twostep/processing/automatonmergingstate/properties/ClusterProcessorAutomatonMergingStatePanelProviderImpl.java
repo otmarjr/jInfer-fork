@@ -19,8 +19,11 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.properti
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.ClusterProcessorAutomatonMergingStateFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -68,14 +71,11 @@ public class ClusterProcessorAutomatonMergingStatePanelProviderImpl implements P
   }
 
   @Override
-  public List<Pair<String, String>> getSubCategories() {
-    List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
-    result.add(new Pair<String, String>(MERGING_STATE_AUTOMATON_SIMPLIFIER,
-            MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY));
-    result.add(new Pair<String, String>(MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER,
-            MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY));
-    result.add(new Pair<String, String>(MERGING_STATE_AUTOMATON_RENDERER,
-            MERGING_STATE_AUTOMATON_RENDERER_DISPLAY));
+  public List<VirtualCategoryPanel> getSubCategories() {
+    List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
+    result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_SIMPLIFIER, MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupNames(AutomatonSimplifierFactory.class)));
+    result.add(new VirtualCategoryPanel(MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER, MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierFactory.class)));
+    result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_RENDERER, MERGING_STATE_AUTOMATON_RENDERER_DISPLAY, null));
 
     return result;
   }

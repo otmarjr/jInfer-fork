@@ -17,8 +17,12 @@
 package cz.cuni.mff.ksi.jinfer.runner.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -65,11 +69,11 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
   }
 
   @Override
-  public List<Pair<String, String>> getSubCategories() {
-    final List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
-    result.add(new Pair<String, String>(IGG_CATEGORY, IGG_CATEGORY_DISPLAY));
-    result.add(new Pair<String, String>(SIMPLIFIER_CATEGORY, SIMPLIFIER_CATEGORY_DISPLAY));
-    result.add(new Pair<String, String>(EXPORTER_CATEGORY, EXPORTER_CATEGORY_DISPLAY));
+  public List<VirtualCategoryPanel> getSubCategories() {
+    final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
+    result.add(new VirtualCategoryPanel(IGG_CATEGORY, IGG_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupNames(IGGenerator.class)));
+    result.add(new VirtualCategoryPanel(SIMPLIFIER_CATEGORY, SIMPLIFIER_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupNames(Simplifier.class)));
+    result.add(new VirtualCategoryPanel(EXPORTER_CATEGORY, EXPORTER_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupNames(SchemaGenerator.class)));
 
     return result;
   }

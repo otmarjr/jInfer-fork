@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicigg.properties;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -59,8 +60,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
-  public List<Pair<String, String>> getSubCategories() {
+  public List<VirtualCategoryPanel> getSubCategories() {
     return null;
   }
 }

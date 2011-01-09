@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.Gr
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -60,9 +61,7 @@ public class GraphvizLayoutPropertiesPanelProviderImpl implements PropertiesPane
   }
 
   @Override
-  public List<Pair<String, String>> getSubCategories() {
-    List<Pair<String, String>> result = new ArrayList<Pair<String, String>>();
-
-    return result;
+  public List<VirtualCategoryPanel> getSubCategories() {
+    return null;
   }
 }

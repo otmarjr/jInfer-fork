@@ -26,10 +26,18 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
  */
 public interface StructuralNode extends NamedNode {
 
-  // TODO anti Comment!
+  /**
+   * @return enum value of type of actual instance.
+   */
   StructuralNodeType getType();
 
+  /**
+   * @return true if node type is element.
+   */
   boolean isElement();
 
+  /**
+   * @return true if node type is simple data.
+   */
   boolean isSimpleData();
 }

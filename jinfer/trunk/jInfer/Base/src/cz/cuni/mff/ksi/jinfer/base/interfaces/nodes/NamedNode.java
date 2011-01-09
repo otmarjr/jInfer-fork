@@ -21,15 +21,35 @@ import java.util.Map;
 
 /**
  * Interface representing general node in grammar structure.
+ * Elements, attributes and content nodes are all descendants.
  *
  * @author anti
  */
 public interface NamedNode {
 
-  // TODO anti Comment!
+  /**
+   * Context of a node is it's absolute XPath in document.
+   * For example from document
+   * <a><b><c></c></b></a>
+   *
+   * Element c has context a/b/.
+   *
+   * @return list of strings = list of names of elements in XPath
+   */
   List<String> getContext();
 
+  /**
+   * @return name of the node.
+   */
   String getName();
 
+  /**
+   * General map of objects not coming from document data, but describing
+   * more precisely how the data was seen. For example may contain location from
+   * where the node comes from (from xml file, from query, from schema).
+   * And any extensional data needed by inferring methods.
+   *
+   * @return map <string name of meta data, object representing meta data>
+   */
   Map<String, Object> getMetadata();
 }

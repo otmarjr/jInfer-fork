@@ -23,6 +23,12 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
  */
 public enum StructuralNodeType {
 
+  /**
+   * For xml elements.
+   */
   ELEMENT,
+  /**
+   * For text nodes inside elements.
+   */
   SIMPLE_DATA;
 }

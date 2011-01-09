@@ -19,17 +19,31 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces.nodes;
 import java.util.List;
 
 /**
- * Interface representing basic work cycle with nodes, that have content.
- * It is used to work with content of text nodes (SimpleData) and attributes
- * (Attribute)
+ * Interface representing nodes, that have content.
+ * Both text nodes and attributes have content, so they implement this interface.
  *
  * @author anti
  */
 public interface ContentNode extends NamedNode {
 
-  // TODO anti Comment!
-  // TODO anti What is "basic work cycle" from the class comment? Please clarify.
+  /**
+   * General way o describing content of node.
+   * Reserved for further extensibility by content analyzing module developers.
+   * 
+   * @return future developer defined name of content type.
+   */
   String getContentType();
 
+  /**
+   * General way o describing content of node.
+   * Reserved for further extensibility by content analyzing module developers.
+   * 
+   * At initial crawling, each content node may have only one element in this list.
+   * 
+   * Inferrence methods can take advantage of list by groups similar contents
+   * to one node.
+   *  
+   * @return list of strings - content assigned to this node.
+   */
   List<String> getContent();
 }

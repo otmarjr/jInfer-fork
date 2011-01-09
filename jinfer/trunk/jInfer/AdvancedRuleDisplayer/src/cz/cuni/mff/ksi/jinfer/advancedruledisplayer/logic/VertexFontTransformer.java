@@ -14,11 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.awt.Font;
 import org.apache.commons.collections15.Transformer;
 
@@ -26,17 +26,14 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author sviro
  */
-class VertexFontTransformer implements Transformer<Regexp<AbstractStructuralNode>, Font>{
-
-  public VertexFontTransformer() {
-  }
+class VertexFontTransformer implements Transformer<Regexp<AbstractStructuralNode>, Font> {
 
   @Override
-  public Font transform(Regexp<AbstractStructuralNode> regexp) {
-    switch (regexp.getType()) {
-      case LAMBDA: return new Font(null, Font.BOLD, 20);
-      default: return new Font(null, Font.PLAIN, 12);
+  public Font transform(final Regexp<AbstractStructuralNode> regexp) {
+    if (RegexpType.LAMBDA.equals(regexp.getType())) {
+      return new Font(null, Font.BOLD, 20);
     }
-  }
 
+    return new Font(null, Font.PLAIN, 12);
+  }
 }

@@ -49,7 +49,7 @@ public class DeleteAllAction extends AbstractAction {
   }
 
   @Override
-  public void actionPerformed(ActionEvent e) {
+  public void actionPerformed(final ActionEvent e) {
     final String folderName = ((FolderNode) node).getDisplayName();
     final NotifyDescriptor.Confirmation descriptor = new NotifyDescriptor.Confirmation(
             "Are you sure you want to remove all files in " + folderName + " folder?");

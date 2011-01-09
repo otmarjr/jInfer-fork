@@ -30,6 +30,7 @@ public class VirtualCategoryPanel extends javax.swing.JPanel {
 
   /** Creates new form VirtualCategoryPanel */
   public VirtualCategoryPanel(final String categoryId, final String categoryName, final List<String> modules) {
+    super();
     this.categoryId = categoryId;
     this.categoryName = categoryName;
     this.overallLabel = getOverallLabel(modules);
@@ -37,9 +38,9 @@ public class VirtualCategoryPanel extends javax.swing.JPanel {
   }
 
   private String getOverallLabel(final List<String> modules) {
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
     if (modules != null) {
-      boolean isOne = modules.size() == 1;
+      final boolean isOne = modules.size() == 1;
       builder.append("<html>There ");
       builder.append(isOne ? "is " : "are ");
       builder.append("currently ").append(modules.size()).append(" ");
@@ -47,7 +48,7 @@ public class VirtualCategoryPanel extends javax.swing.JPanel {
 
       boolean first = true;
       for (int i = 0; i < modules.size(); i++) {
-        String module = modules.get(i);
+        final String module = modules.get(i);
 
         if (first) {
           first = false;

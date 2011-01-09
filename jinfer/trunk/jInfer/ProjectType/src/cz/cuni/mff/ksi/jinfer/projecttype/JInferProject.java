@@ -92,7 +92,7 @@ public class JInferProject implements Project {
         result.delete();
       } catch (IOException ex) {
         LOG.error("file " + result.getPath() + "cannot be deleted.", ex);
-        throw new RuntimeException(ex);
+        throw new RuntimeException(ex); //NOPMD
       }
       result = null;
     }

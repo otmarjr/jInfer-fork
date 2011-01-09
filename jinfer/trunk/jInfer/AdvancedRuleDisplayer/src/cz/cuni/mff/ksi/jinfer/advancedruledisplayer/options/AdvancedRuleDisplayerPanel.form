@@ -277,14 +277,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="tokenCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Circle"/>
-                <StringItem index="1" value="Square"/>
-                <StringItem index="2" value="Rounded Square"/>
-                <StringItem index="3" value="Polygon"/>
-                <StringItem index="4" value="Star"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(SHAPES)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -295,14 +289,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="concatCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Circle"/>
-                <StringItem index="1" value="Square"/>
-                <StringItem index="2" value="Rounded Square"/>
-                <StringItem index="3" value="Polygon"/>
-                <StringItem index="4" value="Star"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(SHAPES)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -313,14 +301,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="alterCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Circle"/>
-                <StringItem index="1" value="Square"/>
-                <StringItem index="2" value="Rounded Square"/>
-                <StringItem index="3" value="Polygon"/>
-                <StringItem index="4" value="Star"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(SHAPES)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -331,14 +313,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="permutCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Circle"/>
-                <StringItem index="1" value="Square"/>
-                <StringItem index="2" value="Rounded Square"/>
-                <StringItem index="3" value="Polygon"/>
-                <StringItem index="4" value="Star"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(SHAPES)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -409,14 +385,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="rootCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Circle"/>
-                <StringItem index="1" value="Square"/>
-                <StringItem index="2" value="Rounded Square"/>
-                <StringItem index="3" value="Polygon"/>
-                <StringItem index="4" value="Star"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(SHAPES)" type="code"/>
             </Property>
           </Properties>
           <Constraints>
@@ -710,7 +680,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setDefaultValues"/>
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -732,14 +702,8 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="lambdaCombo">
           <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Circle"/>
-                <StringItem index="1" value="Square"/>
-                <StringItem index="2" value="Rounded Square"/>
-                <StringItem index="3" value="Polygon"/>
-                <StringItem index="4" value="Star"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new javax.swing.DefaultComboBoxModel(SHAPES)" type="code"/>
             </Property>
           </Properties>
           <Constraints>

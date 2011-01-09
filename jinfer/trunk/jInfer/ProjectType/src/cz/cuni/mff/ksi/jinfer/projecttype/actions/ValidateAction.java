@@ -43,7 +43,6 @@ import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
-import org.openide.util.Exceptions;
 import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 import org.w3c.dom.Document;
@@ -144,9 +143,9 @@ public final class ValidateAction extends NodeAction {
           return new DoctypeImpl(rootNode, null, null, schema);
         } catch (ParserConfigurationException ex) {
           LOG.error(ex);
-        } catch (SAXException ex) {
+        } catch (SAXException ex) { //NOPMD
           //nothing to do
-        } catch (IOException ex) {
+        } catch (IOException ex) {  //NOPMD
           //nothing to do
         }
         return dctp;
@@ -196,7 +195,7 @@ public final class ValidateAction extends NodeAction {
     } catch (IOException ex) {
       LOG.error(ex);
       //throw new RuntimeException(ex);
-    } catch (SAXException ex) {
+    } catch (SAXException ex) { //NOPMD
       //do nothing, error hanlder catch all SAXException
     } catch (ParserConfigurationException ex) {
       LOG.error(ex);
@@ -214,7 +213,7 @@ public final class ValidateAction extends NodeAction {
         return false;
       }
 
-      boolean isSchemaNode = isSchemaFile(node);
+      final boolean isSchemaNode = isSchemaFile(node);
 
       if (isSchemaNode && isSchemaSelected) {
         return false;

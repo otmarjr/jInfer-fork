@@ -36,9 +36,9 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class ClusterProcessorAutomatonMergingStatePanelProviderImpl implements PropertiesPanelProvider {
   public static final String MERGING_STATE_AUTOMATON_SIMPLIFIER = "AutomatonSimplifier";
-  public static final String MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY = "Automaton Simplifier";
+  public static final String MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY = "Automaton Simplifiers";
   public static final String MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER = "RegexpAutomatonSimplifier";
-  public static final String MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY = "Regexp Automaton Simplifier";
+  public static final String MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY = "Regexp Automaton Simplifiers";
   public static final String MERGING_STATE_AUTOMATON_RENDERER = "AutomatonRenderer";
   public static final String MERGING_STATE_AUTOMATON_RENDERER_DISPLAY = "Automaton Renderer";
 

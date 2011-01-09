@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
 import java.awt.Shape;
-import java.util.List;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -28,14 +27,19 @@ import org.apache.commons.collections15.Transformer;
  * @author sviro
  */
 public class VertexShapeTransformer implements Transformer<Regexp<AbstractStructuralNode>, Shape> {
-  private VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory;
-  private Utils utils;
+  private final VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory;
+  private final Utils utils;
 
-  public VertexShapeTransformer(Utils utils) {
+  /**
+   * Default contructor.
+   *
+   * @param utils Utils used for vertex shape resolving.
+   */
+  public VertexShapeTransformer(final Utils utils) {
     shapeFactory = new VertexShapeFactory<Regexp<AbstractStructuralNode>>(new VertexSizeTransformer(utils.getRoots()), new Transformer<Regexp<AbstractStructuralNode>, Float>() {
 
       @Override
-      public Float transform(Regexp<AbstractStructuralNode> i) {
+      public Float transform(final Regexp<AbstractStructuralNode> i) {
         return 1f;
       }
     });
@@ -43,7 +47,7 @@ public class VertexShapeTransformer implements Transformer<Regexp<AbstractStruct
   }
 
   @Override
-  public Shape transform(Regexp<AbstractStructuralNode> regexp) {
+  public Shape transform(final Regexp<AbstractStructuralNode> regexp) {
     return utils.getVertexShape(shapeFactory, regexp);
   }
 }

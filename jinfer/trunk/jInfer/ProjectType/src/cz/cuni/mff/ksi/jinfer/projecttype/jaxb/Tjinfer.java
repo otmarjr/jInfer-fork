@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * @author sviro
  */
+@SuppressWarnings("PMD")
 @XmlRootElement(name="jinferinput")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Tjinfer", propOrder = {

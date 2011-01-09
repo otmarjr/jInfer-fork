@@ -28,14 +28,18 @@ import org.apache.commons.collections15.Transformer;
 public class VertexSizeTransformer implements Transformer<Regexp<AbstractStructuralNode>, Integer> {
 
   private final List<Regexp<AbstractStructuralNode>> roots;
-  private int root;
-  private int token;
-  private int concat;
-  private int alter;
-  private int permut;
-  private int lambda;
+  private final int root;
+  private final int token;
+  private final int concat;
+  private final int alter;
+  private final int permut;
+  private final int lambda;
 
-  public VertexSizeTransformer(List<Regexp<AbstractStructuralNode>> roots) {
+  /**
+   * Default contructor.
+   * @param roots List of root Regexp of each rule tree.
+   */
+  public VertexSizeTransformer(final List<Regexp<AbstractStructuralNode>> roots) {
     this.roots = roots;
     root = Utils.getProperty(Utils.ROOT_SIZE_PROP, Utils.ROOT_SIZE_DEFAULT);
     token = Utils.getProperty(Utils.TOKEN_SIZE_PROP, Utils.TOKEN_SIZE_DEFAULT);
@@ -46,7 +50,7 @@ public class VertexSizeTransformer implements Transformer<Regexp<AbstractStructu
   }
 
   @Override
-  public Integer transform(Regexp<AbstractStructuralNode> regexp) {
+  public Integer transform(final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
         return lambda;

@@ -72,11 +72,13 @@ public class ModuleSelectionWizardPanel1 implements WizardDescriptor.Panel {
   }
 
   @Override
-  public final void addChangeListener(ChangeListener l) {
+  public final void addChangeListener(final ChangeListener l) {
+    //do nothing
   }
 
   @Override
-  public final void removeChangeListener(ChangeListener l) {
+  public final void removeChangeListener(final ChangeListener l) {
+    //do nothing
   }
   /*
   private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
@@ -107,13 +109,13 @@ public class ModuleSelectionWizardPanel1 implements WizardDescriptor.Panel {
   // WizardDescriptor.getProperty & putProperty to store information entered
   // by the user.
   @Override
-  public void readSettings(Object settings) {
+  public void readSettings(final Object settings) {
     getComponent();
     component.load();
   }
 
   @Override
-  public void storeSettings(Object settings) {
+  public void storeSettings(final Object settings) {
     getComponent();
     component.store();
     final WizardDescriptor d = (WizardDescriptor) settings;

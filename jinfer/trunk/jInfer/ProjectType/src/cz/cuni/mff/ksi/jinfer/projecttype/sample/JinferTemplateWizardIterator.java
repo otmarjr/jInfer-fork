@@ -191,7 +191,7 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
     try {
       final ZipInputStream str = new ZipInputStream(source);
       ZipEntry entry;
-      while ((entry = str.getNextEntry()) != null) {
+      while ((entry = str.getNextEntry()) != null) {  //NOPMD
         if (entry.isDirectory()) {
           FileUtil.createFolder(projectRoot, entry.getName());
         } else {

@@ -19,15 +19,15 @@ package cz.cuni.mff.ksi.jinfer.projecttype.jaxb;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Abstract class defining folder complex type.
  * @author sviro
  */
+@SuppressWarnings("PMD")
 @XmlTransient
-public abstract class FolderType {
+public class FolderType {
   
     protected List<Tfile> file;
 

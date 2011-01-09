@@ -39,7 +39,7 @@ public class PropertiesListener implements ActionListener {
   public void actionPerformed(final ActionEvent e) {
     if ("ok".equalsIgnoreCase(e.getActionCommand())) {
       for (Category category : customizerProvider.getCategories()) {
-        JComponent panel = customizerProvider.getComponentProvider().create(category);
+        final JComponent panel = customizerProvider.getComponentProvider().create(category);
         if (panel instanceof AbstractPropertiesPanel) {
           ((AbstractPropertiesPanel) panel).store();
         }

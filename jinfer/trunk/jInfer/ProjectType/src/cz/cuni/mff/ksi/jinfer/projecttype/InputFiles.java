@@ -77,7 +77,7 @@ public final class InputFiles {
     final JAXBElement<Tjinfer> jinferInput = objFactory.createJinferinput(jinfer);
 
     final ClassLoader orig = Thread.currentThread().getContextClassLoader();
-    Thread.currentThread().setContextClassLoader(Tjinfer.class.getClassLoader());
+    Thread.currentThread().setContextClassLoader(Tjinfer.class.getClassLoader()); //NOPMD
     try {
       final JAXBContext context = JAXBContext.newInstance(Tjinfer.class.getPackage().getName());
       final Marshaller marshaller = context.createMarshaller();
@@ -139,7 +139,7 @@ public final class InputFiles {
    */
   public static void load(final InputStream inputStream, final Input input) throws IOException {
     final ClassLoader orig = Thread.currentThread().getContextClassLoader();
-    Thread.currentThread().setContextClassLoader(Tjinfer.class.getClassLoader());
+    Thread.currentThread().setContextClassLoader(Tjinfer.class.getClassLoader()); //NOPMD
     try {
       final JAXBContext context = JAXBContext.newInstance(Tjinfer.class.getPackage().getName());
       final Unmarshaller unmarshaller = context.createUnmarshaller();

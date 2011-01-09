@@ -28,11 +28,8 @@ import org.apache.commons.collections15.Transformer;
  */
 public class RegexpTransformer implements Transformer<Regexp<AbstractStructuralNode>, String>{
 
-  public RegexpTransformer() {
-  }
-
   @Override
-  public String transform(Regexp<AbstractStructuralNode> regexp) {
+  public String transform(final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA: return "\u03BB";
       case TOKEN: return regexp.getContent().getName();

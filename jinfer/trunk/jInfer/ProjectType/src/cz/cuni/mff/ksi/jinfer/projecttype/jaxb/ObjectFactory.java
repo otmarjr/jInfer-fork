@@ -39,6 +39,7 @@ import javax.xml.namespace.QName;
  * @author sviro
  * 
  */
+@SuppressWarnings("PMD")
 @XmlRegistry
 public class ObjectFactory {
 

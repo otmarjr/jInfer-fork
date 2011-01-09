@@ -101,7 +101,7 @@ public class FileAddAction extends AbstractAction {
       builder.append("XML files (");
     } else if (FolderType.SCHEMA.equals(type)) {
       builder.append("Schema files (");
-    } else if (FolderType.QUERY.equals(type)) {
+    } else if (FolderType.QUERY.equals(type)) { //NOPMD - QUERY is handling separately
       //
     }
     boolean first = true;

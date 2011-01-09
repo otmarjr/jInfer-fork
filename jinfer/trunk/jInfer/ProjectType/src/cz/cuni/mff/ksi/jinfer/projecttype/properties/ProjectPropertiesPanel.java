@@ -23,7 +23,7 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * TODO sviro Comment!
+ * Properties panel of miscellaneous project properties.
  * 
  * @author sviro
  */

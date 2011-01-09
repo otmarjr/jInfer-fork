@@ -42,6 +42,7 @@ public interface SchemaGenerator extends NamedModule, Capabilities {
    * @param callback A callback object. After the schema is created, it must be
    *  returned to the caller by invoking the <code>finished()</code>
    *  method on this object.
+   * @throws InterruptedException 
    */
   void start(final List<Element> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException;

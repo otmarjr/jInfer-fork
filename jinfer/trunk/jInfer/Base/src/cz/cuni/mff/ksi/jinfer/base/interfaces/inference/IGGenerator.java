@@ -41,6 +41,7 @@ public interface IGGenerator extends NamedModule, Capabilities {
    * @param callback A callback object. After all the IG rules are retrieved, their
    *  list must be sent to the next stages by calling the <code>finished()</code>
    *  method of this object.
+   * @throws InterruptedException
    */
   void start(final Input input, final IGGeneratorCallback callback)
           throws InterruptedException;

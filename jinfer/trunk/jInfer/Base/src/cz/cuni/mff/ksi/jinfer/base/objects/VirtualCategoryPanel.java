@@ -57,7 +57,11 @@ public class VirtualCategoryPanel extends javax.swing.JPanel {
         builder.append("<b>").append(module).append("</b>");
       }
 
-      builder.append(".</html>");
+      builder.append(".<br/><br/>")
+              .append("Nodes under this one provide configuration for ")
+              .append(categoryName).append(" that need it.");
+
+      builder.append("</html>");
     }
     return builder.toString();
   }

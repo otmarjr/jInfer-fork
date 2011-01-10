@@ -1,9 +1,6 @@
 default: all
 
-main.ps: main.dvi
-	dvips main.dvi
-
-%.dvi: %.tex *.bib Makefile
+%.dvi: %.tex *.eps *.bib Makefile
 	rm -f *.toc
 	latex $< 
 	bibtex $(<:.tex=.aux)
@@ -20,7 +17,10 @@ main.ps: main.dvi
 	hevea -O -pedantic $<
 	hevea -O -pedantic $<
 
-all: architecture.pdf building-jinfer.pdf main.pdf user-tutorial.pdf
+%.eps: %.gv Makefile
+	dot -Teps $< > $@
+
+all: architecture.pdf
 
 clean:
 	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux main.ps *.pdf

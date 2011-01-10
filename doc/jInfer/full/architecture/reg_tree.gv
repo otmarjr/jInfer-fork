@@ -1,0 +1,10 @@
+digraph reg_tree {
+	1 [label = ","];
+	1 -> a;
+	1 -> b;
+	2 [label = "|"];
+	1 -> 2;
+	2 -> c;
+	2 -> d;
+	 
+}

@@ -89,8 +89,7 @@ public final class Preprocessor {
 
     // count occurrences of elements
     final Map<String, Integer> elementOccurrenceCounts = countOccurrences(toposortedElementsWithUnused);
-    // TODO rio remove debug log
-    //LOG.info(elementOccurrenceCounts);
+    
     toposortedElements = removeUnused(toposortedElementsWithUnused, elementOccurrenceCounts);
     // presence of any unused elements means there is more than one top level element
     if (!toposortedElements.equals(toposortedElementsWithUnused)) {
@@ -194,13 +193,15 @@ public final class Preprocessor {
     recursionStack.pop();
   }
 
-  /** TODO rio translate
-   * Dostane list elementov a ich pocty vyskytov a vrati novy list, kde su len pouzite elementy (vyskyt > 0).
-   * Zachovava poradie -> zachovava topologicke usporiadanie.
+  /**
+   * From a given list of elements and map of their occurrence counts creates
+   * a new list of elements. The new list holds only elements with occurrence
+   * count at least one.
+   * Order of elements is retained -> retains topological order.
    *
-   * @param elements list of elements that can contains unused elements
-   * @param occurrenceCounts occurrence counts of elements in IG
-   * @return list of elements which occurrence count is at least one
+   * @param elements List of elements that can contains unused elements.
+   * @param occurrenceCounts Occurrence counts of elements in IG.
+   * @return List of elements which occurrence count is at least one.
    */
   private List<Element> removeUnused(final List<Element> elements, final Map<String, Integer> occurrenceCounts) {
     final List<Element> occurredElements = new LinkedList<Element>();

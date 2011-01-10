@@ -143,7 +143,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.append("\"");
 
     // If its type is one of built-in types we don't have much work to do
-    // TODO rio dalsie built-in typy
+    // We should support also other built-in types.
     if (TypeUtils.isOfBuiltinType(element)) {
       indentator.append(" type=\"xs:string\"");
       processOccurrences(interval);
@@ -296,7 +296,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         checkInterrupt();
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
-        // TODO rio types of attributes
+        // In the future it would be nice to support types of attributes.
         indentator.append("\" type=\"xs:string\"");
 
         if (attribute.getMetadata().containsKey("required")) {
@@ -309,15 +309,15 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  /** TODO rio comment
+  /**
+   * Given one node from result of getSubnodes method call. We are interested
+   * only in elements, so if the node does not contain any elements, function
+   * terminates.
+   * This filtering also prevents generation of empty xs elements, which may
+   * occurs for example if all TOKENs are SIMPLE_DATA.
    *
-   * Dostane jeden prvok z getSubnodes. Ak je ten prvok TOKEN, zaujima nas len
-   * element. To je osetrene ziskanim vsetkych elementov a ak je ich pocet nula,
-   * koncime. To zaroven osetruje, ze sa nebudu generovat prazdne xs elementy,
-   * ktory by sa mohli vygenerovat kebyze vsetky TOKENy su napriklad SIMPLE_DATA.
-   *
-   * @param regexp
-   * @throws InterruptedException
+   * @param regexp Node to process its sub elements.
+   * @throws InterruptedException When inference was interrupted.
    */
   private void processSubElements(final Regexp<AbstractStructuralNode> regexp) throws InterruptedException {
     checkInterrupt();
@@ -350,7 +350,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       }*/
       case CONCATENATION:
       {
-        // specialny pripad konkatenacie alternacie(A|lambda)
+        // special case: CONCATENATION of ALTENATION (A|lambda)
         List<Regexp<AbstractStructuralNode>> simpleAlternations = new LinkedList<Regexp<AbstractStructuralNode>>();
         for (final Regexp<AbstractStructuralNode> child : regexp.getChildren()) {
           if (child.isAlternation()) {

@@ -30,16 +30,14 @@ import org.apache.commons.collections15.Transformer;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Can create instance of {@link Layout} implemented by Julie Vyhnanovska.
  *
- * @author rio
- * TODO rio comment & refactor
- * TODO rio Rename - this class clearly implements Vyhnanovska's logic - why is
- * it called "Layout Factory" then?
+ * @author Julie Vyhnanovska, rio, anti
  */
 @ServiceProvider(service = LayoutF.class)
-public class LayoutFactory implements LayoutF {
+public class VyhnanovskaLayoutFactory implements LayoutF {
 
-  public static final String NAME = "VyhnanovskaLayout";
+  private static final String NAME = "VyhnanovskaLayout";
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {

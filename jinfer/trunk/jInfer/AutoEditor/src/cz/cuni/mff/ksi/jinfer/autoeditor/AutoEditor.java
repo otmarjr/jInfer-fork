@@ -58,12 +58,7 @@ public class AutoEditor {
    */
   public static boolean drawComponentAndWaitForGUI(final AbstractComponent component) throws InterruptedException {
     drawComponentAsync(component);
-    try {
-      component.waitForGUIDone();
-    } catch (final InterruptedException e) {
-      // TODO rio what should we do with this exception?
-      return false;
-    }
+    component.waitForGUIDone();
 
     if (component.GUIInterrupted()) {
       throw new InterruptedException();
@@ -94,7 +89,7 @@ public class AutoEditor {
       @Override
       public void run() {
         // Pass this as argument so the thread will be able to wake us up.
-        AutoEditorTopComponent.findInstance().drawAutomatonBasicVisualizationServer(component);
+        AutoEditorTopComponent.findInstance().drawComponent(component);
       }
     });
   }

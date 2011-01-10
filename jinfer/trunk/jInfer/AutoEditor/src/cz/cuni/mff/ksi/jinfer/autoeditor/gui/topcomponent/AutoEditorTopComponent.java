@@ -35,7 +35,9 @@ import org.openide.NotifyDescriptor;
 import org.openide.windows.WindowManager;
 
 /**
- * TODO rio Comment!
+ * Represents AutoEditor tab in GUI. {@link AbstractComponent} can be plotted
+ * in this component.
+ *
  * @author vektor
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.autoeditor.gui//AutoEditor//EN",
@@ -64,7 +66,6 @@ public final class AutoEditorTopComponent extends TopComponent {
      * Remove them and for each unique format name create an appropriate
      * FileNameExtensionFilter.
      */
-    // TODO rio set other properties of FileChooser
     fileChooser = new JFileChooser();
     Map<String, FileNameExtensionFilter> supportedFormatNameSet = new HashMap<String, FileNameExtensionFilter>();
     for (String format : supportedFormatNames) {
@@ -169,7 +170,14 @@ public final class AutoEditorTopComponent extends TopComponent {
     }
   }//GEN-LAST:event_jButton1ActionPerformed
 
-  public void drawAutomatonBasicVisualizationServer(final AbstractComponent component) {
+  /**
+   * Specified component is drawn on this top component. Only one component can
+   * be drawn at a time. Component will be replaced by a new one specified in
+   * a next call.
+   *
+   * @param component Component to be drawn.
+   */
+  public void drawComponent(final AbstractComponent component) {
     this.component = component;
 
     GridBagConstraints constraints = new GridBagConstraints();

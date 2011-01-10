@@ -20,27 +20,44 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import java.util.ArrayList;
 import java.util.List;
 
-/** TODO rio refactor
- * Maps states, ellipses and stateCoordinates for the plotting purposes.
+/**
+ * Maps {@link State}s and {@link Coordinate}s for the plotting purposes.
  *
  * @author Julie Vyhnanovska, rio
- *
  */
 public class StateMapping<T> {
 
   private final List<State<T>> states;
   private final List<Coordinate> stateCoordinates;
 
+  /**
+   * Number of states must be known before creation and has to be specified
+   * in this constructor.
+   *
+   * @param numberOfStates Number of states we would like to map.
+   */
   public StateMapping(final int numberOfStates) {
     states = new ArrayList<State<T>>(numberOfStates);
     stateCoordinates = new ArrayList<Coordinate>(numberOfStates);
   }
 
+  /**
+   * Adds {@link State} &lt;--&gt; {@link Coordinate} mapping.
+   *
+   * @param state
+   * @param coordinate
+   */
   public void addStateCoordinate(final State<T> state, final Coordinate coordinate) {
     states.add(state);
     stateCoordinates.add(coordinate);
   }
 
+  /**
+   * Get {@link State} mapped with a specified {@link Coordinate}.
+   *
+   * @param coordinate {@link Coordinate} mapped with desired {@link State}.
+   * @return {@link State} mapped with specified {@link Coordinate}.
+   */
   public State<T> getStateAtCoordinate(final Coordinate coordinate) {
     for (int i = 0; i < stateCoordinates.size(); ++i) {
       if (stateCoordinates.get(i) == null) {
@@ -53,6 +70,12 @@ public class StateMapping<T> {
     return null;
   }
 
+  /**
+   * Get {@link Coordinate} mapped with a specified {@link State}.
+   *
+   * @param state {@link State} mapped with desired {@link Coordinate}.
+   * @return {@link Coordinate} mapped with specified {@link State}.
+   */
   public Coordinate getStateCoordinate(final State<T> state) {
     for (int i = 0; i < states.size(); i++) {
       if (states.get(i) == state) {

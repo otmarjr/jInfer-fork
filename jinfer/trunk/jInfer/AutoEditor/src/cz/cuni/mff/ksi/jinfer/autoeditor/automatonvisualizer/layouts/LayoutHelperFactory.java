@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties.LayoutPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -40,16 +41,13 @@ public final class LayoutHelperFactory {
   /**
    * Creates {@link Layout} which user selected in preferences.
    *
-   * TODO rio understand and comment
-   *
    * @param <T> Type parameter of specified automaton.
    * @param automaton Automaton to create layout from.
-   * @param edgeLabelTransformer TODO rio comment
-   * @return
+   * @param edgeLabelTransformer Transformer that can transform edge to string, which is displayed as its label.
+   * @return Layout by user selection.
    */
   public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
-    // TODO rio Replace the hard-coded text with a reference to a string constant!
-    Properties p = RunningProject.getActiveProjectProps("Automaton visualizer");
+    Properties p = RunningProject.getActiveProjectProps(LayoutPropertiesPanel.NAME);
 
     LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));
     return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);

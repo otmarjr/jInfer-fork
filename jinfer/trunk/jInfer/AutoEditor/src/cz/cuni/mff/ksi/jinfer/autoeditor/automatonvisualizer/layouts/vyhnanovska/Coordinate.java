@@ -18,24 +18,39 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska;
 
 /**
+ * Representation of 2D coordinate.
  *
- * @author rio
- * TODO rio comment
+ * @author Julie Vyhnanovska
  */
 public class Coordinate {
   private int x;
   private int y;
 
+  /**
+   * Creates default coordinate [0,0].
+   */
   public Coordinate() {
     x = 0;
     y = 0;
   }
 
+  /**
+   * Creates coordinate with specified values.
+   *
+   * @param x
+   * @param y
+   */
   public Coordinate(final int x, final int y) {
     this.x = x;
     this.y = y;
   }
 
+  /**
+   * Sets values of coordinate.
+   *
+   * @param x
+   * @param y
+   */
   public void setLocation(final int x, final int y) {
     this.x = x;
     this.y = y;

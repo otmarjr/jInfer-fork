@@ -22,16 +22,12 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 import org.apache.commons.collections15.Transformer;
-import org.apache.log4j.Logger;
 
 /**
+ * Converts {@link Automaton} to dot string representation.
+ *
  * TODO anti Comment!
- * TODO rio understand and comment
  *
  * @author anti
  */

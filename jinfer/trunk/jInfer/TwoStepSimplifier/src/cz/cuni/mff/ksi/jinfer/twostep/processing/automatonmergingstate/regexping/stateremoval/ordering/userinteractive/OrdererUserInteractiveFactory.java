@@ -31,6 +31,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 //@ServiceProvider(service = RegexpAutomatonSimplifierStateRemovalOrdererFactory.class)
 public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierStateRemovalOrdererFactory {
+  public static final String NAME = "OrdererUserInteractive";
+  public static final String DISPLAY_NAME = "Orderer User Interactive";
   private static final Logger LOG = Logger.getLogger(OrdererUserInteractiveFactory.class);
   
   @Override
@@ -41,7 +43,7 @@ public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierS
 
   @Override
   public String getName() {
-    return "OrdererUserInteractive";
+    return NAME;
   }
 
   @Override
@@ -60,6 +62,11 @@ public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierS
     StringBuilder sb = new StringBuilder(getName());
     sb.append(" orders states in automaton by prompting user which state remove first.");
     return sb.toString();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 
 }

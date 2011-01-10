@@ -37,6 +37,7 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
   private static final Logger LOG = Logger.getLogger(ClustererWithAttributesInameFactory.class);
 
   public static final String NAME ="ClustererInameWithAttributes";
+  public static final String DISPLAY_NAME ="Clusterer Iname With Attributes";
 
   @Override
   public Clusterer<AbstractStructuralNode> create() {
@@ -71,5 +72,10 @@ public class ClustererWithAttributesInameFactory implements ClustererFactory {
             + " element. It does not provide any heuristic to find out, whether"
             + " some attributes are same across different elements.");
      return sb.toString();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

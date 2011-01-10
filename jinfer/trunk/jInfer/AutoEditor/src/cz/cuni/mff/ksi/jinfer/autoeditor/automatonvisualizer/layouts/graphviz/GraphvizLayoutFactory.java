@@ -51,6 +51,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = LayoutF.class)
 public class GraphvizLayoutFactory implements LayoutF {
   public static final String NAME= "GraphvizLayout";
+  public static final String DISPLAY_NAME= "Graphviz Layout";
   public static final String PROPERTIES_DOTBIN = "dotbin";
   private static Logger LOG = Logger.getLogger(GraphvizLayoutFactory.class);
   
@@ -123,5 +124,10 @@ public class GraphvizLayoutFactory implements LayoutF {
   @Override
   public List<String> getCapabilities() {
     return Collections.<String>emptyList();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

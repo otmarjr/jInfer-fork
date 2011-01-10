@@ -30,6 +30,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = XSDParser.class)
 public class DOMParser implements XSDParser {
+  public static final String NAME = "DOMParser";
+  public static final String DISPLAY_NAME = "DOM Parser";
 
   private DOMHandler handler;
   private static final Logger LOG = Logger.getLogger(DOMParser.class);
@@ -57,11 +59,16 @@ public class DOMParser implements XSDParser {
 
   @Override
   public String getName() {
-    return "DOM Parser";
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
     return "Module providing DOM parser implementation for XSDImporter";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

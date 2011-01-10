@@ -31,6 +31,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegexpAutomatonSimplifierStateRemovalOrdererFactory.class)
 public class RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory implements RegexpAutomatonSimplifierStateRemovalOrdererFactory {
+  public static final String NAME = "RegexpAutomatonSimplifierStateRemovalOrdererWeighted";
+  public static final String DISPLAY_NAME = "Regexp Automaton Simplifier State Removal Orderer Weighted";
   private static final Logger LOG = Logger.getLogger(RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory.class);
 
   @Override
@@ -41,7 +43,7 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory impleme
 
   @Override
   public String getName() {
-    return "RegexpAutomatonSimplifierStateRemovalOrdererWeighted";
+    return NAME;
   }
 
   @Override
@@ -61,5 +63,10 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory impleme
             + " Weight of the state is the sum of length of all regular expressions"
             + " on in-transitions, out-transitions and loops.");
     return sb.toString();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

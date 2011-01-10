@@ -48,12 +48,14 @@ import org.openide.util.lookup.ServiceProvider;
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
+  private static final String NAME = "Basic_DTD_exporter";
+  private static final String DISPLAY_NAME = "Basic DTD exporter";
   private int maxEnumSize;
   private double minDefaultRatio;
 
   @Override
   public String getName() {
-    return "Basic DTD exporter";
+    return NAME;
   }
 
   @Override
@@ -261,5 +263,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
     }
     return ret.toString();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

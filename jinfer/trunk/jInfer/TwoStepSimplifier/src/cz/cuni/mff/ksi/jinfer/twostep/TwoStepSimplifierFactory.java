@@ -55,6 +55,7 @@ public class TwoStepSimplifierFactory implements Simplifier {
    * Name of the module in constant, for use in classes in this module.
    */
   public static final String NAME = "TwoStepSimplifier";
+  public static final String DISPLAY_NAME = "Two Step Simplifier";
   /**
    * Property name of clusterer submodule.
    */
@@ -119,5 +120,10 @@ public class TwoStepSimplifierFactory implements Simplifier {
     callback.finished(
             simplifier.simplify(initialGrammar)
             );
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

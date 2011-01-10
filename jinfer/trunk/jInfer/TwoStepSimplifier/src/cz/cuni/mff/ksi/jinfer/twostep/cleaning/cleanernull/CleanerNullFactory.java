@@ -34,6 +34,7 @@ public class CleanerNullFactory implements RegularExpressionCleanerFactory {
   private static final Logger LOG = Logger.getLogger(CleanerNullFactory.class);
 
   public static final String NAME = "RegularExpressionCleanerNull";
+  public static final String DISPLAY_NAME = "Regular Expression Cleaner Null";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {
@@ -64,6 +65,11 @@ public class CleanerNullFactory implements RegularExpressionCleanerFactory {
     sb.append(" to perfrom comparison of algorithm performance. And is it useful");
     sb.append(" for debugging purposes of course.");
     return sb.toString();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 
 }

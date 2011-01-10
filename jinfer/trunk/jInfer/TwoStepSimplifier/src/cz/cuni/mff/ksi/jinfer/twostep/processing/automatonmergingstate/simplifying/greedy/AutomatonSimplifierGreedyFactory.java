@@ -38,6 +38,7 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierGreedyFactory.class);
 
   public static final String NAME = "AutomatonSimplifierGreedy";
+  public static final String DISPLAY_NAME = "Automaton Simplifier Greedy";
   public static final String PROPERTIES_CONDITION_TESTER = "condition-tester";
 
   @Override
@@ -80,5 +81,10 @@ public class AutomatonSimplifierGreedyFactory implements AutomatonSimplifierFact
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, p.getProperty(PROPERTIES_CONDITION_TESTER));
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

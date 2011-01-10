@@ -39,6 +39,7 @@ public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
   private static final Logger LOG = Logger.getLogger(CleanerChainedFactory.class);
   
   public static final String NAME = "RegularExpressionCleanerChained";
+  public static final String DISPLAY_NAME = "Regular Expression Cleaner Chained";
   public static final String PROPERTIES_PREFIX = "chain";
   public static final String PROPERTIES_COUNT = "count";
 
@@ -97,5 +98,10 @@ public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
       result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, name));
     }
     return result;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

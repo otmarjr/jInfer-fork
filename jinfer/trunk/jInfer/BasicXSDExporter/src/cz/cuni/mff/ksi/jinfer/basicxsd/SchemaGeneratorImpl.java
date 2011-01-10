@@ -53,10 +53,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   private static final int MINOCCURS_DEFAULT = 1;
   private static final int MAXOCCURS_DEFAULT = 1;
+  private static final String NAME = "Basic_XSD_exporter";
+  private static final String DISPLAY_NAME = "Basic XSD exporter";
 
   @Override
   public String getName() {
-    return "Basic XSD exporter";
+    return NAME;
   }
 
   @Override
@@ -497,5 +499,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
 
     return true;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

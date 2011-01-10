@@ -38,6 +38,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class VyhnanovskaLayoutFactory implements LayoutF {
 
   private static final String NAME = "VyhnanovskaLayout";
+  private static final String DISPLAY_NAME = "Vyhnanovska Layout";
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {
@@ -65,5 +66,10 @@ public class VyhnanovskaLayoutFactory implements LayoutF {
   @Override
   public List<String> getCapabilities() {
     return Collections.<String>emptyList();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

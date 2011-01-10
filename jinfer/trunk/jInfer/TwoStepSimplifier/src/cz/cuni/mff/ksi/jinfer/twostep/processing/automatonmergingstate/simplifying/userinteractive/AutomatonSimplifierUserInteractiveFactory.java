@@ -34,6 +34,7 @@ public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimpl
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierUserInteractiveFactory.class);
 
   public static final String NAME = "AutomatonSimplifierUserInteractive";
+  public static final String DISPLAY_NAME = "Automaton Simplifier User Interactive";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
@@ -65,5 +66,10 @@ public class AutomatonSimplifierUserInteractiveFactory implements AutomatonSimpl
   @Override
   public List<String> getCapabilities() {
     return Collections.<String>emptyList();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

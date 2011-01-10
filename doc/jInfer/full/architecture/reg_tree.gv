@@ -1,10 +1,15 @@
 digraph reg_tree {
-	1 [label = ","];
+	node [shape = rectangle, style= rounded];
+	1 [label = "CONCATENATION"];
 	1 -> a;
 	1 -> b;
-	2 [label = "|"];
+	2 [label = "ALTERNATION"];
 	1 -> 2;
-	2 -> c;
-	2 -> d;
-	 
+	3 [label = "CONCATENATION"];
+	2 -> 3;
+	2 -> e;
+	2 -> f;
+	3 -> c;
+	3 -> d;
+	1 -> g;
 }

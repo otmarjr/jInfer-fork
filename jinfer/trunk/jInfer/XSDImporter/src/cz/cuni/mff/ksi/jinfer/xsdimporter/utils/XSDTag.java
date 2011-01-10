@@ -60,8 +60,15 @@ public enum XSDTag {
     return INVALID;
   }
 
-  public boolean isOrderIndicator(final XSDTag tag) {
+  public static boolean isOrderIndicator(final XSDTag tag) {
     if (tag == SEQUENCE || tag == CHOICE || tag == ALL) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isOrderIndicator() {
+    if (this == SEQUENCE || this == CHOICE || this == ALL) {
       return true;
     }
     return false;

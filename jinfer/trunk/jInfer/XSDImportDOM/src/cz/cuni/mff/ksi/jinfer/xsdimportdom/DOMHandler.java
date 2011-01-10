@@ -27,7 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 import org.w3c.dom.Document;
@@ -50,10 +52,32 @@ public class DOMHandler {
   private static final String NAME = "name";
   private static final String REF = "ref";
 
-  private List<Element> roots = new ArrayList<Element>();
+  private final List<Element> roots = new ArrayList<Element>();
+  private final Map<String, org.w3c.dom.Element> namedCTypes = new HashMap<String, org.w3c.dom.Element>();
+
 
   public DOMHandler() {
     LOG.setLevel(settings.logLevel());
+  }
+
+  public List<Element> getRules() {
+    final List<Element> rules = new ArrayList<Element>();
+    for (Element root : roots) {
+      //final List<Element> elementRules = new ArrayList<Element>();
+      rules.add(root);
+      //getRulesFromElement(root, elementRules);
+      //rules.addAll(elementRules);
+    }
+    return rules;
+  }
+
+  private void getRulesFromElement(final Element root, final List<Element> elementRules) {
+    for (AbstractStructuralNode node : root.getSubnodes().getTokens()) {
+      if (node.isElement()) {
+        elementRules.add((Element) node);
+        getRulesFromElement((Element) node, elementRules);
+      }
+    }
   }
 
   public void parse(final InputStream stream) {
@@ -62,36 +86,9 @@ public class DOMHandler {
       parser.parse(new InputSource(stream));
       final Document doc = parser.getDocument();
       final org.w3c.dom.Element root = doc.getDocumentElement();
-
-      final NodeList namedCTypes = root.getElementsByTagName(XSDTag.COMPLEXTYPE.getName());
-      for (int i = 0; i < namedCTypes.getLength(); i++) {
-        final org.w3c.dom.Element el = (org.w3c.dom.Element) namedCTypes.item(i);
-        if (el.hasAttribute(NAME)) {
-          addNamedCType(el);
-        }
-      }
-
-      final NodeList rootChildren = root.getChildNodes();
-      for (int i = 0; i < rootChildren.getLength(); i++) {
-        final org.w3c.dom.Element domEl = isDOMElement(rootChildren.item(i));
-        if (domEl != null) {
-          final XSDTag nameTag = XSDTag.matchName(trimNS(domEl.getNodeName()));
-          switch(nameTag) {
-            case ELEMENT:
-              break;
-            case COMPLEXTYPE:
-              if (domEl.hasAttribute(NAME)) {
-                addNamedCType(domEl);
-              } else {
-                throw new XSDException("ComplexType declaration directly under schema tag must have a name attribute specified.");
-              }
-              break;
-            default:
-              //TODO reseto use this, it is strong ;)
-          }
-          roots.add(getElementFromDOMElement(domEl));
-        }
-      }
+      
+      registerNamedCTypes(root);
+      registerRootElements(root);
 
     } catch (SAXException ex) {
       Exceptions.printStackTrace(ex);
@@ -101,22 +98,36 @@ public class DOMHandler {
 
   }
 
-  public List<Element> getRules() {
-    final List<Element> rules = new ArrayList<Element>();
-    for (Element root : roots) {
-      final List<Element> elementRules = new ArrayList<Element>();
-      rules.add(root);
-      getRulesFromElement(root, elementRules);
-      rules.addAll(elementRules);
+  private void registerNamedCTypes(final org.w3c.dom.Element root) {
+    final NodeList namedCTypeNodes = root.getElementsByTagName(XSDTag.COMPLEXTYPE.getName());
+    for (int i = 0; i < namedCTypeNodes.getLength(); i++) {
+      final org.w3c.dom.Element el = (org.w3c.dom.Element) namedCTypeNodes.item(i);
+      if (el.hasAttribute(NAME)) {
+        addNamedCType(el);
+      }
     }
-    return rules;
   }
-  
-  private void getRulesFromElement(final Element root, final List<Element> elementRules) {
-    for (AbstractStructuralNode node : root.getSubnodes().getTokens()) {
-      if (node.isElement()) {
-        elementRules.add((Element) node);
-        getRulesFromElement((Element) node, elementRules);
+
+  private void registerRootElements(final org.w3c.dom.Element root) throws XSDException {
+    final NodeList rootChildren = root.getChildNodes();
+    for (int i = 0; i < rootChildren.getLength(); i++) {
+      final org.w3c.dom.Element domEl = isDOMElement(rootChildren.item(i));
+      if (domEl != null) {
+        final XSDTag nameTag = XSDTag.matchName(trimNS(domEl.getNodeName()));
+        switch (nameTag) {
+          case ELEMENT:
+            roots.add(getElementFromDOMElement(domEl, Collections.<String>emptyList()));
+            break;
+          case COMPLEXTYPE:
+            if (domEl.hasAttribute(NAME)) {
+              addNamedCType(domEl);
+            } else {
+              throw new XSDException("ComplexType declaration directly under schema tag must have a name attribute specified.");
+            }
+            break;
+          default:
+        //TODO reseto use this, it is strong ;)
+        }
       }
     }
   }
@@ -143,30 +154,78 @@ public class DOMHandler {
 
   private void addNamedCType(final org.w3c.dom.Element el) {
     LOG.info("Adding complextype: " + el.toString());
+    final String name = el.getAttribute(NAME);
+    if (!namedCTypes.containsKey(name)) {
+      namedCTypes.put(name, el);
+    }
   }
 
-  private Element getElementFromDOMElement(final org.w3c.dom.Element el) {
+  private Element getElementFromDOMElement(final org.w3c.dom.Element el, List<String> context) {
     final Element ret = Element.getMutable();
     ret.setName(getNameOrRef(el));
+    ret.getContext().addAll(context);
+    //TODO reseto what if element has ref ...
     //TODO reseto implement logic! :)
-    // recursion to add all children to the ret
-    final NodeList children = el.getChildNodes();
-      for (int i = 0; i < children.getLength(); i++) {
-        final org.w3c.dom.Element domEl = isDOMElement(children.item(i));
-        if (domEl != null) {
 
-          ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(getElementFromDOMElement(domEl)));
+    // firstly inspect self
+
+    // inspect each child by the tag name (type)
+    final NodeList children = el.getChildNodes();
+    for (int i = 0; i < children.getLength(); i++) {
+      final org.w3c.dom.Element domEl = isDOMElement(children.item(i));
+      if (domEl != null) {
+        final XSDTag tagName = XSDTag.matchName(trimNS(domEl.getNodeName()));
+        switch(tagName) {
+          case ELEMENT:
+            // recursion to add all relevant children to the ret
+            ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(getElementFromDOMElement(el, null)));
+            break;
+          case COMPLEXTYPE:
+            if (XSDTag.matchName(el.getNodeName()).equals(XSDTag.COMPLEXTYPE))
+            if (!domEl.hasAttribute(NAME)) {
+              final Element container = getElementFromDOMElement(domEl, null);
+              ret.getAttributes().addAll(container.getAttributes());
+
+              // add all children
+              for (Regexp<AbstractStructuralNode> child : container.getSubnodes().getChildren()) {
+                ret.getSubnodes().addChild(child);
+              }
+            } else {
+              throw new XSDException("ComplexType declaration under element tag must NOT have a name attribute specified.");
+            }
+            break;
+          case ALL:
+            break;
+          case CHOICE:
+            break;
+          case SEQUENCE:
+            break;
+          default:
+            //TODO reseto use this, it is strong ;)
         }
+        ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(getElementFromDOMElement(domEl, null)));
       }
+    }
+    //TODO reseto test if ret has 0 subnodes and set type to lambda if so
     
     return ret;
   }
 
-  private String getNameOrRef(final org.w3c.dom.Element el) {
+  private String getNameAttr(final org.w3c.dom.Element el) {
     if (el.hasAttribute(NAME) && !el.getAttribute(NAME).equals("")) {
       return el.getAttribute(NAME);
-    } else if (el.hasAttribute(REF) && !el.getAttribute(REF).equals("")) {
-      return el.getAttribute(REF);
+    } else {
+      return null;
+    }
+  }
+
+  private String getNameOrRef(final org.w3c.dom.Element el) {
+    String ret = getNameAttr(el);
+    if (ret == null && el.hasAttribute(REF) && !el.getAttribute(REF).equals("")) {
+      ret = el.getAttribute(REF);
+    }
+    if (ret != null) {
+      return ret;
     } else {
       throw new XSDException("Unable to create Element with no name.");
     }

@@ -23,6 +23,10 @@ import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
+/**
+ * Options controller of the Graphiz layout binary selection.
+ * @author sviro
+ */
 @OptionsPanelController.SubRegistration(location = "jInfer",
 displayName = "#AdvancedOption_DisplayName_GraphvizLayout",
 keywords = "#AdvancedOption_Keywords_GraphvizLayout",
@@ -31,18 +35,18 @@ public final class GraphvizLayoutOptionsPanelController extends OptionsPanelCont
 
   private GraphvizLayoutPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-  private boolean changed;
+  private boolean fieldsChanged;
 
   @Override
   public void update() {
     getPanel().load();
-    changed = false;
+    fieldsChanged = false;
   }
 
   @Override
   public void applyChanges() {
     getPanel().store();
-    changed = false;
+    fieldsChanged = false;
   }
 
   @Override
@@ -57,7 +61,7 @@ public final class GraphvizLayoutOptionsPanelController extends OptionsPanelCont
 
   @Override
   public boolean isChanged() {
-    return changed;
+    return fieldsChanged;
   }
 
   @Override
@@ -66,17 +70,17 @@ public final class GraphvizLayoutOptionsPanelController extends OptionsPanelCont
   }
 
   @Override
-  public JComponent getComponent(Lookup masterLookup) {
+  public JComponent getComponent(final Lookup masterLookup) {
     return getPanel();
   }
 
   @Override
-  public void addPropertyChangeListener(PropertyChangeListener l) {
+  public void addPropertyChangeListener(final PropertyChangeListener l) {
     pcs.addPropertyChangeListener(l);
   }
 
   @Override
-  public void removePropertyChangeListener(PropertyChangeListener l) {
+  public void removePropertyChangeListener(final PropertyChangeListener l) {
     pcs.removePropertyChangeListener(l);
   }
 
@@ -87,9 +91,12 @@ public final class GraphvizLayoutOptionsPanelController extends OptionsPanelCont
     return panel;
   }
 
-  void changed() {
-    if (!changed) {
-      changed = true;
+  /**
+   * Call to indicate that some field is changed in options panel.
+   */
+  public void changed() {
+    if (!fieldsChanged) {
+      fieldsChanged = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
     }
     pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);

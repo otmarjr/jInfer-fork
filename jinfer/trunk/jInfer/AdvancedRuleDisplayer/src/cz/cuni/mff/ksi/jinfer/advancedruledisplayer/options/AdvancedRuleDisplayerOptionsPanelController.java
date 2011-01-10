@@ -91,6 +91,9 @@ public final class AdvancedRuleDisplayerOptionsPanelController extends OptionsPa
     return panel;
   }
 
+  /**
+   * Call to indicate that some field is changed in options panel.
+   */
   public void changed() {
     if (!optionsChanged) {
       optionsChanged = true;

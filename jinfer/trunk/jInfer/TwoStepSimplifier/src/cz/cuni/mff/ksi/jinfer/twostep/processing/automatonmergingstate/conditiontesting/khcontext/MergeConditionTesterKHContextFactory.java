@@ -36,6 +36,7 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   private int parameterH = -1;
 
   public static final String NAME = "MergeConditionTesterKHContext";
+  public static final String DISPLAY_NAME = "Merge Condition Tester KH Context";
   @Override
   public <T> MergeConditionTester<T> create() {
     LOG.debug("Creating new MergeConditionTesterKHContext.");
@@ -103,5 +104,10 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
     if ("h".equals(parameterName)) {
       this.parameterH= newValue;
     }
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

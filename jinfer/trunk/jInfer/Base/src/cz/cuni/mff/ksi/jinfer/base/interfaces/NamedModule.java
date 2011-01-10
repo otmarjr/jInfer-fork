@@ -31,6 +31,12 @@ public interface NamedModule {
   String getName();
 
   /**
+   * Returns a user friendly name of the module. This name is not neccessary unique.
+   * @return Displayable module name.
+   */
+  String getDisplayName();
+
+  /**
    * Returns the information about this module's inner workings.
    * Most of the time will be equal to a call to 
    * {@link NamedModule#getName()}, but if the

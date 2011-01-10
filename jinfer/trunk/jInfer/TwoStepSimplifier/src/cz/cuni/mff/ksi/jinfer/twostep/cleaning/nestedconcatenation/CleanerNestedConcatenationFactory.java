@@ -34,6 +34,7 @@ public class CleanerNestedConcatenationFactory implements RegularExpressionClean
   private static final Logger LOG = Logger.getLogger(CleanerNestedConcatenationFactory.class);
 
   public static final String NAME = "RegularExpressionCleanerNestedConcatenation";
+  public static final String DISPLAY_NAME = "Regular Expression Cleaner Nested Concatenation";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {
@@ -62,5 +63,10 @@ public class CleanerNestedConcatenationFactory implements RegularExpressionClean
     sb.append(" replaces nested concatenations is resulting regular expressions.");
     sb.append(" For example expression: (a, (b, c)) will be transformed to nicer expression: (a, b, c)");
     return sb.toString();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

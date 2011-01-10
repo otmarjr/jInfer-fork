@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.passrepresentant;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -32,9 +31,10 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class ClusterProcessorPassRepresentantFactory implements ClusterProcessorFactory {
-  private static final Logger LOG = Logger.getLogger(ClusterProcessorPassRepresentantFactory.class);
 
-  public static final String NAME= "ClusterProcessorPassRepresentant";
+  private static final Logger LOG = Logger.getLogger(ClusterProcessorPassRepresentantFactory.class);
+  public static final String NAME = "ClusterProcessorPassRepresentant";
+  public static final String DISPLAY_NAME = "Cluster Processor Pass Representant";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
@@ -66,5 +66,10 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
   @Override
   public List<String> getCapabilities() {
     return Collections.<String>emptyList();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

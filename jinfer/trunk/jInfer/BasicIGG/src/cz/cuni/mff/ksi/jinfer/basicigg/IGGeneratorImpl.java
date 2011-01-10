@@ -49,10 +49,13 @@ import org.openide.util.lookup.ServiceProvider;
 public class IGGeneratorImpl implements IGGenerator {
 
   private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class);
+  private static final String NAME = "Basic_IG_Generator";
+  private static final String DISPLAY_NAME = "Basic IG Generator";
+
 
   @Override
   public String getName() {
-    return "Basic IG Generator";
+    return NAME;
   }
 
   @Override
@@ -143,5 +146,10 @@ public class IGGeneratorImpl implements IGGenerator {
     }
 
     return ret;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

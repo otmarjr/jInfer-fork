@@ -36,6 +36,7 @@ public class ClusterProcessorAlternationsFactory implements ClusterProcessorFact
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAlternationsFactory.class);
 
   public static final String NAME = "ClusterProcessorAlternations";
+  public static final String DISPLAY_NAME = "Cluster Processor Alternations";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
@@ -63,5 +64,10 @@ public class ClusterProcessorAlternationsFactory implements ClusterProcessorFact
     return "A trivial implementation of Cluster Processor. Simply takes all "
             + "right sides from rules in a cluster and converts them to an "
             + "alternation for the resulting element.";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

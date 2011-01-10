@@ -40,6 +40,7 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   private static final Logger LOG = Logger.getLogger(ClusterProcessorAutomatonMergingStateFactory.class);
 
   public static final String NAME = "ClusterProcessorAutomatonMergingState";
+  public static final String DISPLAY_NAME = "Cluster Processor Automaton Merging State";
   public static final String PROPERTIES_AUTOMATON_SIMPLIFIER = "automaton-simplifier";
   public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER = "regexp-automaton-simplifier";
 
@@ -96,5 +97,10 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
   @Override
   public List<String> getCapabilities() {
     return Collections.<String>emptyList();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

@@ -35,6 +35,7 @@ public class CleanerEmptyChildrenFactory implements RegularExpressionCleanerFact
   private static final Logger LOG = Logger.getLogger(CleanerEmptyChildrenFactory.class);
 
   public static final String NAME = "RegularExpressionCleanerEmptyChildren";
+  public static final String DISPLAY_NAME = "Regular Expression Cleaner Empty Children";
   
   @Override
   public <T> RegularExpressionCleaner<T> create() {
@@ -65,6 +66,11 @@ public class CleanerEmptyChildrenFactory implements RegularExpressionCleanerFact
     sb.append(" First empty concatenation () is removed, and concatenation (b)");
     sb.append(" with only one child is replaced by token b.");
     return sb.toString();
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 
 }

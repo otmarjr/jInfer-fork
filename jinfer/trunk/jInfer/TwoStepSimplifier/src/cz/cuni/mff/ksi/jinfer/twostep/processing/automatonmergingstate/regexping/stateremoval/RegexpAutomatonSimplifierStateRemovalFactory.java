@@ -38,6 +38,7 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
   private static final Logger LOG = Logger.getLogger(RegexpAutomatonSimplifierStateRemovalFactory.class);
 
   public static final String NAME = "RegexpAutomatonSimplifierStateRemoval";
+  public static final String DISPLAY_NAME = "Regexp Automaton Simplifier State Removal";
   public static final String PROPERTIES_ORDERER = "orderer";
 
   @Override
@@ -87,6 +88,11 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
 
     return ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class,
             p.getProperty(PROPERTIES_ORDERER));
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 
 }

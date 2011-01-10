@@ -35,6 +35,7 @@ public class ClusterProcessorTrieFactory implements ClusterProcessorFactory {
   private static final Logger LOG = Logger.getLogger(ClusterProcessorTrieFactory.class);
 
   public static final String NAME = "ClusterProcessorTrie";
+  public static final String DISPLAY_NAME = "Cluster Processor Trie";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
@@ -61,5 +62,10 @@ public class ClusterProcessorTrieFactory implements ClusterProcessorFactory {
   public String getUserModuleDescription() {
     return "Processes the input cluster by creating a prefix tree (trie) of all "
             + "the right sides of input rules.";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 }

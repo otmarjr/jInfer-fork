@@ -36,6 +36,8 @@ import org.xml.sax.SAXException;
  */
 @ServiceProvider(service = XSDParser.class)
 public class SAXParser implements XSDParser {
+  public static final String NAME = "SAXParser";
+  public static final String DISPLAY_NAME = "SAX Parser";
 
   private SAXHandler handler;
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
@@ -71,12 +73,17 @@ public class SAXParser implements XSDParser {
 
   @Override
   public String getName() {
-    return "SAX Parser";
+    return NAME;
   }
 
   @Override
   public String getModuleDescription() {
     return "Module providing SAX parser implementation for XSD Importer";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
   }
 
 }

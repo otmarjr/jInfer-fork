@@ -24,34 +24,54 @@ import java.io.InputStreamReader;
 import org.openide.util.NbPreferences;
 
 /**
+ * Utility class for Graphviz layout binary.
  *
  * @author sviro
  */
-public class GraphvizUtils {
+public final class GraphvizUtils {
 
   public static final String BINARY_PATH_PROP = "dot.binary";
   public static final String BINARY_PATH_DEFAULT = "";
 
+  private GraphvizUtils() {};
+
+  /**
+   * Get path to graphviz dot binary saved in global options. If there is no path saved, this
+   * method returns empty {@link String}.
+   * @return Path to graphviz binary if it's saved in options, othervise returns empty String.
+   */
   public static String getPath() {
     return NbPreferences.forModule(GraphvizLayoutPanel.class).get(BINARY_PATH_PROP, BINARY_PATH_DEFAULT);
   }
 
+  /**
+   * Check if path to graphviz dot binary is valid i.e. this path points to existing dot binary.
+   * @return <tt>true</tt> if path points to existing dot binary, otherwise return <tt>false</tt>.
+   */
   public static boolean isBinaryValid() {
-    return isBinaryValid(getPath());
+    return isBinaryValid(getPath(), false);
   }
 
-  public static boolean isBinaryValid(String pathToBinary) {
-    if ("".equals(pathToBinary)) {
+  /**
+   * Check if provided path is valid i.e. this path points to existing dot binary. If isEmptyValid flag
+   * is <tt>true</tt> and provided path is empty {@link String},
+   * this path is also considered as valid.
+   * @param pathToBinary Path to be checked.
+   * @param isEmptyValid flag to indicate if empty String is valid path.
+   * @return <tt>true</tt> if provided path is valid, otherwise return <tt>false</tt>.
+   */
+  public static boolean isBinaryValid(final String pathToBinary, boolean isEmptyValid) {
+    if (isEmptyValid && "".equals(pathToBinary)) {
       return true;
     }
 
-    File binaryFile = new File(pathToBinary);
+    final File binaryFile = new File(pathToBinary);
     if (binaryFile.isFile() && binaryFile.canExecute()) {
-      ProcessBuilder pb = new ProcessBuilder(pathToBinary, "-V");
+      final ProcessBuilder pb = new ProcessBuilder(pathToBinary, "-V");
       try {
-        Process process = pb.start();
-        BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        String output = errorReader.readLine();
+        final Process process = pb.start();
+        final BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        final String output = errorReader.readLine();
         if (output != null && output.startsWith("dot - graphviz version")) {
           return true;
         }

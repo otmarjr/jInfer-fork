@@ -698,8 +698,8 @@ public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
   }
 
   /**
-   * Check if values entered in fields are valid.
-   * @return
+   * Check if values entered in fields are valid. In this panel is no check for validity.
+   * @return <tt>true</tt>.
    */
   public boolean valid() {
     // TODO check whether form is consistent and complete

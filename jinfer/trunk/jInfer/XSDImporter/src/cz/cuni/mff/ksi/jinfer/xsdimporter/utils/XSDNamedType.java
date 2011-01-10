@@ -26,12 +26,11 @@ import java.util.List;
  */
 public class XSDNamedType {
 
-  private Element container;
+  private Element container = null;
   private List<Element> rules;
   private boolean alreadyCopied = false;
 
   public XSDNamedType() {
-    this.container = null;
     this.rules = new ArrayList<Element>(0);
   }
 
@@ -47,7 +46,7 @@ public class XSDNamedType {
     return container;
   }
 
-  public void setContainer(Element container) {
+  public void setContainer(final Element container) {
     this.container = container;
   }
 
@@ -55,7 +54,7 @@ public class XSDNamedType {
     return rules;
   }
 
-  public void setRules(List<Element> rules) {
+  public void setRules(final List<Element> rules) {
     this.rules = rules;
   }
 }

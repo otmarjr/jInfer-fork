@@ -27,8 +27,11 @@ import org.apache.commons.collections15.Transformer;
 import edu.uci.ics.jung.graph.Graph;
 import org.apache.log4j.Logger;
 
-/** TODO rio refactor, Translate to english!
- * Transforms the state to a distance on which it should be plotted. - A visualisation tool
+/** 
+ * Transforms {@link State} to a {@link Point2D} on which it should be plotted.
+ *
+ * Most of the code is the original code by Julie Vyhnanovska. May need some
+ * refactoring to fit our conventions.
  *
  * @author Julie Vyhnanovska, rio
  *
@@ -37,22 +40,30 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
   private static Logger LOG = Logger.getLogger(AutomatonLayoutTransformer.class);
 
-  // minimalne rozmery mriezky a podla ich pomeru sa vypocitava gridSize
+  // minimal dimensions of a grid (in squares)
   private final int minXsize;
   private final int minYsize;
 
-  // velkost jedneho stvorca v mriezke
+  // size of one square (in pixels)
   private final int squareSize;
 
-  // dimenzia mriezky = pocet stvorcov na x-ovej osy a pocet stvorcov na y-ovej osy
+  // grid dimension = (number of squares on axis x) * (number of squares on axis y)
   private final Dimension gridDimension;
 
   private final StateMapping<T> stateGridMapping;
   private static final double FILL_FACTOR = 3;
-  // TODO rio vyhodit automaton
+  // TODO rio remove reference to automaton
   private Automaton<T> automaton;
 
-  // TODO rio vyhodit automaton
+  /**
+   * Constructs transformer according to specified values.
+   *
+   * @param minXsize Minimal vertical size of a grid in squares.
+   * @param minYsize Minimal horizontal size of a grid in squares.
+   * @param square_size Size of one square in the grid in pixels.
+   * @param graph Graph created from Automaton.
+   * @param automaton
+   */
   public AutomatonLayoutTransformer(final int minXsize, final int minYsize, final int square_size, final Graph<State<T>, Step<T>> graph, final Automaton<T> automaton) {
     this.automaton = automaton;
     this.minXsize = minXsize;
@@ -63,6 +74,11 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
     stateGridMapping = new StateMapping<T>(vertexCount);
   }
 
+  /**
+   * Getter for a dimension of the grid
+   *
+   * @return Dimension of the grid in pixels.
+   */
   public Dimension getDimension() {
     return new Dimension(gridDimension.width * squareSize, gridDimension.height * squareSize);
   }
@@ -70,18 +86,17 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
   @Override
   public Point2D transform(final State<T> state) {
     LOG.info("transform location of " + state);
-    // TODO rio getId() == 1 znamena, ze je pociatocny??
-    //if (state.getId() == 1) {
-    // Pociatocny stav umiestni na [1,1].
+    // Starting state position at [1,1].
     if (state.equals(automaton.getInitialState())) {
       final Coordinate statePosition = new Coordinate(1, 1);
       stateGridMapping.addStateCoordinate(state, statePosition);
       return getPoint(statePosition);
     }
 
-    // Najdi nejaky (? skutocne nejaky?) stav, z ktoreho vedie hrana do tohoto
-    // stavu a je uz nakresleny.
-    // Ak taky neexistuje, vezmi, ze je to [1,1].
+    /* Find a state which has been drawn already and there is an edge from that
+     * state to a current state.
+     * If there is not such state, take [1,1].
+     */
     Coordinate prev = null;
     for (final Step<T> backEdge : automaton.getReverseDelta().get(state)) {
       prev = stateGridMapping.getStateCoordinate(backEdge.getSource());
@@ -95,7 +110,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
     Coordinate nextI = prev;
     LOG.info("nextI: " + nextI.getX() + " " + nextI.getY());
-    // TODO rio Kym je na pozicii nextI obsadene alebo kym je nextI [1,1] (je nutna druha podmienka??) TODO
+    // While posistion of nextI is not empty or nextI equals [1,1] (is the second condition necessary?)
     while (stateGridMapping.getStateAtCoordinate(nextI) != null || (nextI.equals(new Coordinate(1, 1)))) {
       LOG.info("obsazeno!");
       nextI = getNextCoordinate(prev, nextI, gridDimension);
@@ -136,27 +151,36 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
   }
 
   /*
+   * Gets coordinate of next state with a centre of search in startingCoordinate, actual coordinate is actualCoordinate.
+   * Searching area is bounded by gridDimension and starts from the nearest coordinates, continues through a futher ones to the furthest.
+   *
+   * First from the nearest coordinates is the upper right one. Centre of search is X. Starting with 1, continues down, then to the left, up and to the right.
+   * This repeats in a larger square.
+   *
+   * Original text by Julie Vyhnanovska:
+   * ------------------------------------------------------------
    * Vrati dalsi pole pro umisteni vrcholu, se stredem hledani ve startingCoordinate a aktualni pozici actualCoordinate. Pohybujeme se v
    * mantinelech gridSize. Postupujeme od nejblizsich ctvercu po vzdalenejsi. Zaciname v pravem hornim rohu. X je
    * stred hledani. Zaciname na 1 a postupujeme dolu, doleva, nahoru a dopava. Pote prejdeme do ctverce o jedno vyssi
    * a opakujeme Kontrolujeme mantinely gridSize.
    *
    * | - - ->2 | | ->1 | | | X | | | - - | | - - - - |
+   * ------------------------------------------------------------
    */
   private Coordinate getNextCoordinate(final Coordinate startingCoordinate, final Coordinate actualCoordinate, final Dimension gridDimension) {
 
-    // vlastne vzdalenost actualCoordinate vuci vychozimu bodu startingCoordinate
+    // distance of actualCoordinate from the startingCoordinate
     final Coordinate distance = new Coordinate(actualCoordinate.getX() - startingCoordinate.getX(), actualCoordinate.getY() - startingCoordinate.getY());
     LOG.info("distance: " + distance.getX() + ":" + distance.getY());
 
-    // index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
+    // index of a square around the starting coordinate on which the search is actually performed
     final int index = Math.max(Math.abs(distance.getX()), Math.abs(distance.getY()));
     LOG.info("index: " + index);
 
-    // pokud jsem dokoncila ctverec, posunu se na dalsi
+    // if done on the square, moves to the next one
     if (distance.equals(new Coordinate(index, -index))) {
       return goNewIndex(startingCoordinate, gridDimension, index + 1);
-    } // jinak spocitam dalsi pozici
+    } // else computes the next coordinate
     else {
       return goNextI(startingCoordinate, actualCoordinate, gridDimension);
     }
@@ -164,25 +188,25 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
   private Coordinate goNextI(final Coordinate startingCoordinate, final Coordinate actualCoordinate, final Dimension gridDimension) {
     LOG.info("goNextI");
-    // vlastne vzdalenost actualCoordinate vuci vychozimu bodu statePosition
+    // distance of actualCoordinate from the starting startingCoordinate
     final Coordinate point = new Coordinate(actualCoordinate.getX() - startingCoordinate.getX(), actualCoordinate.getY() - startingCoordinate.getY());
     LOG.info("point: " + point.getX() + ":" + point.getY());
 
-    // index ctverce okolo vychoziho bodu na kterem se zrovna pohybuju
+    // index of a square around the starting coordinate on which the search is actually performed
     final int index = Math.max(Math.abs(point.getX()), Math.abs(point.getY()));
     LOG.info("index: " + index);
 
-    // prava hrana, postupujeme dolu
+    // right side, moves down
     if (point.getX() == index && point.getY() < index) {
       LOG.info("prava hrana, postupujeme dolu");
-      if (actualCoordinate.getY() == gridDimension.height) { // nemuzu dolu, zkusime doleva
+      if (actualCoordinate.getY() == gridDimension.height) { // cannot move down, try to the left
         LOG.info("nemuzu dolu, zkusim doleva");
-        // TODO rio povodne tu bolo ...getX() - 2 * index
-        if (actualCoordinate.getX() <= startingCoordinate.getX() - index || actualCoordinate.getX() <= 1) { // nemuzu ani doleva, zkusim nahoru
+        // Original code before 'fixing', this is not tested properly: ...getX() - 2 * index
+        if (actualCoordinate.getX() <= startingCoordinate.getX() - index || actualCoordinate.getX() <= 1) { // cannot to the left, try up
           LOG.info("nemuzu ani doleva, zkusim nahoru");
           return goUp(startingCoordinate, gridDimension, index);
         }
-        // TODO rio povodne tu bolo ...getX() - 2 * index
+        // Original code before 'fixing', this is not tested properly: ...getX() - 2 * index
         final Coordinate ret = new Coordinate(actualCoordinate.getX() - 1, actualCoordinate.getY());
         LOG.info("ret: " + ret);
         return ret;
@@ -192,10 +216,10 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
       return ret;
     }
 
-    // spodni hrana, postupujeme doleva
+    // down side, moves to the left
     if (point.getY() == index && point.getX() > -index) {
       LOG.info("spodni hrana, postupuju doleva");
-      if (actualCoordinate.getX() == 1) { // nemuzu jit doleva, skocim nahoru
+      if (actualCoordinate.getX() == 1) { // cannot to the left, go up
         LOG.info("nemuzu jit doleva, skocim nahoru");
         return goUp(startingCoordinate, gridDimension, index);
       }
@@ -204,10 +228,10 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
       return ret;
     }
 
-    // leva hrana, postupujeme nahoru
+    // left side, moves up
     if (point.getX() == -index && point.getY() > -index) {
       LOG.info("leva hrana, postupujeme nahoru");
-      if (actualCoordinate.getY() == 1) { // nemuzu jit nahoru, zaciname s novym indexem
+      if (actualCoordinate.getY() == 1) { // cannot move up, start with a new index
         LOG.info("nemuzu jit nahoru, zacinam s novym indexem");
         return goNewIndex(startingCoordinate, gridDimension, index + 1);
       }
@@ -217,14 +241,14 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
     }
 
-    // horni hrana, jdeme doprava
+    // up side, moves to the right
     if (point.getY() == -index && point.getX() < index) {
       LOG.info("horni hrana, jdeme doprava");
-      if (actualCoordinate.getX() == gridDimension.width) { // nemuzu jit doleva, zacinam s novym indexem
+      if (actualCoordinate.getX() == gridDimension.width) { // cannot move to the left, start with a new index
         LOG.info("nemuzu jit doleva, zacinam s novym indexem");
         return goNewIndex(startingCoordinate, gridDimension, index + 1);
       }
-      if (point.getX() + 1 == index) { // jsem na konci, zacinam novy index
+      if (point.getX() + 1 == index) { // at the end, start a new index
         LOG.info("jsem na konci, zacinam novy index");
         return goNewIndex(startingCoordinate, gridDimension, index + 1);
       }
@@ -237,8 +261,8 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
   private Coordinate goUp(final Coordinate i, final Dimension gridDimension, final int index) {
     LOG.info("goUp");
-    // TODO rio povodne: if (i.getY() - index <= 0)
-    if (i.getY() - index <= 0) {// nemuzu jit ani nahoru, zaciname s novym indexem.
+    // Original code before 'fixing', this is not tested properly: if (i.getY() - index <= 0)
+    if (i.getY() - index <= 0) {// cannot move up, start with a new index
       LOG.info("nemuzu jit ani nahoru, zacinam s novym indexem");
       return goNewIndex(i, gridDimension, index + 1);
     }
@@ -249,7 +273,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
   private Coordinate goNewIndex(final Coordinate i, final Dimension gridDimension, final int index) {
     LOG.info("goNewIndex: " + index);
-    // uz neni kam dal jit
+    // there are not any free coordinates anymore
     if (index >= Math.max(gridDimension.width, gridDimension.height)) {
       LOG.info("Go new index - Uz neni kam dal jit");
       return null;
@@ -258,19 +282,19 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
     int actualX = i.getX() + index;
     int actualY = i.getY() - index;
     if (actualX > gridDimension.width) {
-      // pravou hranu nemuzu, prejdu rovnou dolu
+      // connot move at the right side, move to the down side
       actualY = i.getY() + index;
       actualX = gridDimension.width + 1;
       if (actualY > gridDimension.height) {
-        // spodni hranu taky nemuzu, takze doleva
+        // cannot move at the down side too, move to the left side
         actualY = gridDimension.height + 1;
         actualX = i.getX() - index;
         if (actualX < 1) {
-          // levou hranu taky ne... jdu nahoru
+          // left one is not possible as well, move to the up side
           actualX = 0;
           actualY = i.getY() - index;
           if (actualY < 1) {
-            // nahoru taky nemuzu...
+            // and the up one is not possible too
             return null;
           }
 

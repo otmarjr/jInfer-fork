@@ -55,47 +55,34 @@ All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, 
 \section{Data structures}
 \subsection{Regular expressions}
 
-For general information on regular expressions, please refer to \cite{wikiregexp}, \cite{Hopcroft:2006:IAT:1177300}.
-
+For general information on regular expressions, please refer to \cite{wikiregexp}, \cite{automatatheory}.
 All classes pertaining to regular expressions can be found in the package \code{cz.cuni.mff.ksi.jinfer.base.regexp}.
+In jInfer, we use extended regular expressions as they give us nicer syntax (and easier programming).
 
-In theory, regular expression is defined recursively:
+Regular expression is implemented as class \code{Regexp} with supplementing classes \code{RegexpInterval} and \code{RegexpType}.
+Each \code{Regexp} instance has one of the enum \code{RegexpType} type:
 \begin{itemize}
-	\item Every symbol $x$ from alphabet is regular expression representing language ${x}$.
-	\item If $R_1, R_2, \dots, R_n$ are regular expressions representing languages $L_1, L_2, \dots, L_n$, then $R_1 | R_2 | \dots | R_n$
-	is regular expression representing language $\bigcup_{i = 1}^{n}{L_i}$. Operation $|$ is called alternation.
-	\item If $R_1, R_2, \dots, R_n$ are regular expressions representing languages $L_1, L_2, \dots, L_n$, then $R_1, R_2 , \dots , R_n$
-	is regular expression representing language $L_1 \cdot L_2 \cdot \ldots \cdot L_n$. Where $\cdot$ is languague concatenation,
-	and operation $,$ is called concatenation as well.
-	\item If $R$ is regular expression representing language $L$, then $R*$ 
-	is regular expression representing language $L*$. In regular expressions, operator $*$ is called Kleene star.
+	\item Lambda - empty string (also called $\epsilon$ in literature),
+	\item Token - a letter of the alphabet,
+	\item Concatenation - one or more regular expression in an ordered sequence. Eg. $(a, b, c, d)$,
+	\item Alternation - a choice between one or more regular expressions. Eg. $(a | b | c | d)$,
+	\item Permutation - shortcut for all possible permutations of regular expressions. Our syntax to write down permutation is $(a\& b\& c\& d)$.
 \end{itemize}
 
-
-
-In common practice, extended regular expressions are commonly used. Although they are not extending set of
-languages representable by regular expressions, they give us nicer syntax. Extended regular expression adds syntax:
+Each \code{Regexp} instance has one instance of \code{RegexpInterval} as member.
+Class \code{RegexpInterval} represents POSIX-like intervals for expression:
 \begin{itemize}
-	\item $R{m,n}$, where $m,n \in N$ with meaning of $R$ at least $m$-times, at most $n$-times,
-	\item $R{m,}$ with meaning at least $m$-times,
-	\item $R?$ with meaning $R{0,1}$,
-	\item $R+$ with meaning $R{1,}$.
+	\item $a\{m,n\}$ means $a$ at least $m$-times, at most $n$-times,
+	\item $a\{m,\}$ means at least $m$-times (unbounded).
 \end{itemize}
 
-By this syntax, Kleene star is simply interval ${0,}$. This is just syntactic shortcut for long expresssions like $R, R, R, R?, R?$, which is just $R{3,5}$.
-
-In jInfer, we implement regular expresssions as class \code{Regexp} with supplementing classes \code{RegexpInterval} and \code{RegexpType}.
-Each \code{Regexp} instance has one of the \code{RegexpType} type:
-\begin{itemize}
-	\item Token - a letter of the language.
-	\item Concatenation - one or more regular expression in an ordered sequence. Eg. $(a, b, c, d)$.
-	\item Alternation - a choice between one or more regular expressions. Eg. $(a | b | c | d)$.
-	\item Permutation - shortcut for all possible permutations of regular expressions (to work with \code{xs:all} in future).
-	Our syntax to write down permutation is $(a  b c  d)$.
-\end{itemize}
-
-Each \code{Regexp} instance has interval associated with it (as a member). Class \code{RegexpInterval} represents all kinds of intervals
-${m,n}; {m,}$. 
+Class \code{Regexp} can represent regular expression over any alphabet.
+This is done by using java generics, \code{Regexp} is implemented as \code{Regexp<T>}.
+Regular expression is in fact $n$-ary tree, for example expression $(a, b, (c | d))$ can be viewed as in figure \ref{reg:tree}.
+\begin{figure}
+\caption{Example tree for regular expression $(a, b, (c | d))$} \label{reg:tree}
+\includegraphics[scale=1]{reg_tree}
+\end{figure}
 
 \nocite{*}
 \bibliographystyle{alpha}

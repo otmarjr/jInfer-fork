@@ -1,5 +1,7 @@
 default: all
 
+architecture.dvi: nodes.eps interfaces_nodes.eps reg_tree.eps
+
 %.dvi: %.tex *.eps *.bib Makefile
 	rm -f *.toc
 	latex $< 
@@ -19,13 +21,14 @@ default: all
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	epstopdf $@
 
 all: architecture.pdf
 
 clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux main.ps *.pdf
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux
 dist-clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux main.ps *.pdf
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf *.eps
 
 booklet: main.ps
 	cat main.ps | psbook | psnup -2 >main-booklet.ps

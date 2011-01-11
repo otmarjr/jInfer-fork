@@ -1,5 +1,7 @@
 #include "header.html_"
 
+<!-- TODO link to architecture, inference etc. articles --!>
+
 <div id="content">
 	<h1>Module Developer's Tutorial</h1>
 
@@ -8,40 +10,37 @@
         </p>
         <p>
           <span class="prerequisities">
-            This tutorial assumes that you are a seasoned Java developer. Having experience with programming in some kind of framework (NetBeans Platform above all) will help you a lot.
+            This tutorial assumes that you are a seasoned Java developer. Having experience with programming in some kind of framework (NetBeans Platform above all) will help you a lot.<br/>
+            Make sure you have read the articles on architecture, data structures and inference process to understand what you will be implementing.<br/>
             Also, before starting this tutorial, make sure you can <a href="building_jinfer.html">build jInfer from sources</a>.
           </span>
         </p>
 
 <h2>Overview</h2>
   <ol type=1>
-    <li>Get &amp; install NetBeans.</li>
-    <li>Get &amp; install jInfer.</li>
-    <li>Infer schema.</li>
+    <li>Get NetBeans, jInfer sources, try a build.</li>
+    <li>Decide on the type of module you want to create.</li>
+    <li>Create new NetBeans module.</li>
+    <li>Implement jInfer-specific interfaces.</li>
+    <li>Implement your logic.</li>
   </ol>
 
-<h2>NetBeans</h2><p>
-  <span class="prerequisities">Do this if you don't have any NetBeans installed. If you have an older version than 6.9, jInfer will not run - please update it first.</span>
-</p><ol type=1>
-  <li>Go to <a href="http://netbeans.org/">http://netbeans.org/</a>.
-  </li><li>Download NetBeans 6.9+, whichever bundle will do.
-  </li><li>Follow installation instructions.
-  </li></ol>
-
-<h2>jInfer</h2><p>
-  <span class="prerequisities">Do this if you have the correct version of NetBeans installed. Note that jInfer features automatic update - you don't need to follow these steps each time new version comes out.</span>
-</p>
-<ol type=1>
-  <li>Go to <a href="https://sourceforge.net/projects/jinfer/files/">https://sourceforge.net/projects/jinfer/files/</a>.
-  </li><li>Download the latest jInfer binaries (jInfer-X.Y-bin.zip).
-  </li><li>Unpack the ZIP, you'll get a few NBM files.
-  </li><li>Start NetBeans, open <i>Tools</i> &gt; <i>Plugins</i> from the main menu.
-  </li><li>Switch to <i>Downloaded</i> tab.
-  </li><li>Click <i>Add Plugins...</i>.
-  </li><li>Select all the unpacked NBM files.
-  </li><li>Click <i>Install</i> and follow the instructions.
-  </li><li>Restart NetBeans.
-  </li></ol>
+<h2>Building jInfer from sources</h2>
+  <p>
+    Refer to the <a href="building_jinfer.html">official instructions</a>.
+  </p>
+  
+<h2>What type of module?</h2>
+  <p>
+    First thing you need to realize is what kind of module you will be
+    implementing. Is it going to be a part of the inference? If yes, what stage?
+    Importing the initial grammar? Simplifying it? Exporting to resulting schema?
+    If you are not sure what these terms mean, go read the articles on interence process again.
+  </p>
+  <p>
+    If your logic doesn't belong to the inference process, it might just extend
+    one of the existing modules. Try looking for the code you would like to change.
+  </p>
 
 <h2>Basic Inference</h2>
 <p>

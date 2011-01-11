@@ -6,10 +6,15 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{palatino}
+%\usepackage{palatino}
+\usepackage[T1]{fontenc}
+\usepackage[sc]{mathpazo}
+\linespread{1.05}
+
 \usepackage{listings}
 \usepackage{textcomp}
 \usepackage{upquote}
+
 
 \definecolor{listinggray}{gray}{0.9}
 \definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
@@ -21,7 +26,7 @@
         basicstyle=\small\ttfamily,
         basewidth=0.51em,
         upquote=true,
-        aboveskip={1.5\baselineskip},
+%        aboveskip={1.5\baselineskip},
         columns=fixed,
         showstringspaces=false,
         extendedchars=true,
@@ -31,7 +36,7 @@
         showtabs=false,
         showspaces=false,
         showstringspaces=false,
-        identifierstyle=\ttfamily,
+%        identifierstyle=\ttfamily,
 %        keywordstyle=\color[rgb]{0,0,1},
 %        commentstyle=\color[rgb]{0.133,0.545,0.133},
 %        stringstyle=\color[rgb]{0.627,0.126,0.941},
@@ -128,7 +133,7 @@ Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c |
 \caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
 \centering\includegraphics[scale=0.5]{reg_tree.eps}
 \end{figure}
-We implement this tree by member of \code{Regexp} class called \code{children}, which is of type \code{List<Regexp<T>>}.
+We implement this tree by member of \code{Regexp} class called \code{children}, which is of type \code{List<Regexp<T>{}>}.
 List contains children of regexp in means of regexp tree.
 
 Regexp has to obey constraits:

@@ -58,8 +58,11 @@
         Otherwise choose something like <code><i>tld.company.jinfer.yourmodule</i></code>.
       </li>
       <li><i>Module display name</i>: pretty obvious.</li>
+      <li><i>Generate XML layer</i>: you may want to check this option, but it doesn't really matter at this stage.</li>
     </ul>
+    Rest of the options is uninteresting in most cases.
   </li>
+  <li>Click <i>Finish</i>.</li>
 </ol>
 
 <h2>Implement jInfer's specifics</h2>
@@ -67,6 +70,38 @@
 TODO
 
 <h2>Implement your logic</h2>
+
+TODO
+
+<h2>Dealing with jInfer and NetBeans Platform</h2>
+
+This section deals with a few important but pretty specific parts of interface
+between your module (or any logic you implement) and either jInfer or NetBeans
+Platform. Not nearly everything regarding interaction with NBP is mentioned here,
+please refer to the relevant FAQ.
+
+<h3>Module visibility</h3>
+<h3></h3>
+
+TODO
+
+<h3>Error handling</h3>
+
+TODO
+
+<h3>Dialogs</h3>
+
+TODO message, open, save
+
+<h3>Configuration - options, preferences</h3>
+
+TODO
+
+<h3>Rule display</h3>
+
+TODO
+
+<h3>Console output</h3>
 
 TODO
 

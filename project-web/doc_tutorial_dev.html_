@@ -71,7 +71,11 @@ TODO
 
 <h2>Implement your logic</h2>
 
-TODO
+This is the part where you actually have to do some thinking :-) Implementing
+an importer? Take that <code>InputStream</code> and create some rules of it! Simplifier?
+Take the rules you got and compact them somehow! Exporter? Take those rules and
+write them out as a <code>String</code>! It only depends on which module you are
+in and algorithm you're implementing.
 
 <h2>Dealing with jInfer and NetBeans Platform</h2>
 
@@ -81,7 +85,6 @@ Platform. Not nearly everything regarding interaction with NBP is mentioned here
 please refer to the relevant FAQ.
 
 <h3>Module visibility</h3>
-<h3></h3>
 
 TODO
 

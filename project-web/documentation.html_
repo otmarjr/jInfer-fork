@@ -66,7 +66,7 @@
 	<h3>Module developer's tutorial</h3>
 	
 	<p>
-	  Want to try out the algorithm you read about? Follow <a href="doc_developer.html">these</a> steps to write your own inference module!
+	  Want to try out the algorithm you read about? Follow <a href="doc_tutorial_dev.html">these</a> steps to write your own inference module!
 	</p>
 	
 	<h3>Developing jInfer</h3>

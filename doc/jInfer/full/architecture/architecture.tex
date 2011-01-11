@@ -121,12 +121,12 @@ Testing interval commonly follows routine:
 That is, first check interval for being unbounded, only if it is bounded, you can ask for maximum.
 
 Class \code{Regexp} can represent regular expression over any alphabet.
-This is done by using java generics, \code{Regexp} is implemented as \code{Regexp<T>}.
+This is done by using java generics, \code{Regexp} evinceis implemented as \code{Regexp<T>}.
 Only token regexps hold instance of type \code{T} in member \code{content}.
 
-Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in figure \ref{reg:tree}.
+Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in figure \ref{reg_tree}.
 \begin{figure}
-\caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg:tree}
+\caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
 \centering\includegraphics[scale=0.5]{reg_tree.eps}
 \end{figure}
 We implement this tree by member of \code{Regexp} class called \code{children}, which is of type \code{List<Regexp<T>>}.
@@ -167,10 +167,59 @@ For these cases, special \code{getMutable()} method is implemented to obtain reg
 	r.setImmutable();
 \end{lstlisting}
 	
-
 Finally, regexp contain one useful method for obtaining all leaves in the regexp tree, it is called \code{getTokens()} and it recursively traverses tree returning list of leaves (token type regexps).
 
 \subsection{XML representation}
+XML data basically contains elements, text nodes (characters inside elements) and attributes.
+For maximum generality, we decided to break apart theese objects.
+We define three basic interfaces: \code{NamedNode}, \code{StructuralNode} and \code{ContentNode} (see package \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes}). 
+
+The first stands for bare node in XML document tree, it has its name and context withing the tree (path from root).
+The latter two extends \code{NamedNode} interface.
+\code{StructuralNode} is for nodes, which form structure of XML document tree: elements and text nodes.
+\code{ContentNode} is for nodes, that have content in XML documents: text nodes and attributes.
+We have three classes: \code{Element} for elements, \code{SimpleData} for text nodes, \code{Attribute} for attributes (see package \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes}).
+In theory, the classes and interfaces would be layed out as on figure \ref{interfaces_nodes}
+\begin{figure}
+\caption{How should interfaces and classes for XML representation look like in theory} \label{interfaces_nodes}
+\centering\includegraphics[scale=0.5]{interfaces_nodes.eps}
+\end{figure}
+\begin{figure}
+\caption{How are interfaces and classes for XML representation arranged in practice} \label{nodes}
+\centering\includegraphics[scale=0.5]{nodes.eps}
+\end{figure}
+\begin{figure}
+\caption{XML representing interfaces and classes in detail} \label{nodes_full}
+\centering\includegraphics[scale=0.3]{nodes_full.eps}
+\end{figure}
+
+For even more generality in design, we decided to implement abstract classes in midlevel:
+\begin{itemize}
+	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later),
+	\item \code{AbstractStructuralNode}, which implements only task of deciding if instance is \code{Element} or \code{SimpleData} actually.
+\end{itemize}
+As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node.
+However methods for content devising don't need to know, if they are working on infering model for content of attribute or text node.
+
+Finally, our interface/class model for representing XML nodes is drafted on figure \ref{nodes}. Those, who are brave enough, can look on figure \ref{nodes_full}.
+
+In result, \code{Element} and \code{SimpleData} have method \code{getType()} to devise type of \code{AbstractStructuralNode} variables. And \code{SimpleData} and \code{Attribute} have methods \code{getContentType()} and \code{getContent()} to work with content model.
+
+
+Class \code{Element} has two important members of course:
+\begin{itemize}
+	\item \code{Regexp<AbstractStructuralNode> subnodes} - for representing right side of grammar rule in resulting infered schema,
+	\item \code{List<Attribute> attributes} - for representing all attributes in resulting infered schema.
+\end{itemize}
+Theese two are filled by import modules, processed further by infering (simplifying) modules and finally exported by exporter modules. We will look at proper interfaces later.
+
+As in regular expressions, classes pertaining XML nodes are by default immutable.
+For elements, it means no adding of attributes and changing regexp reference (regexp instance itself is immutable).
+Same \code{getMutable()} principles and good usage practises hold for theese classes.
+
+\subsection{Module interfaces}
+
+
 
 \nocite{*}
 \bibliographystyle{alpha}

@@ -1,0 +1,18 @@
+digraph interfaces_nodes {
+	rankdir = BT;
+	node [shape = rectangle];
+	interface;
+	class [style= rounded];
+	NamedNode;
+	StructuralNode;
+	ContentNode;
+	Element [style= rounded];
+	SimpleData [style= rounded];
+	Attribute [style= rounded];
+	StructuralNode -> NamedNode [label = "extends"];
+	ContentNode -> NamedNode [label = "extends"];
+	Element -> StructuralNode [style = dashed, label = "implements"];
+	SimpleData -> StructuralNode [style = dashed, label = "implements"];
+	SimpleData -> ContentNode [style = dashed, label = "implements"];
+	Attribute -> ContentNode [style = dashed, label = "implements"];
+}

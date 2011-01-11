@@ -1,0 +1,29 @@
+digraph nodes {
+	rankdir = BT;
+	node [shape = rectangle];
+	interface [style = solid];
+	class [style= rounded, label = "class"];
+	
+	NamedNode;
+	StructuralNode;
+	ContentNode;
+	Element [style= rounded];
+	SimpleData [style= rounded];
+	Attribute [style= rounded];
+	AbstractNamedNode [style= rounded];
+	AbstractStructuralNode [style= rounded];
+	
+	StructuralNode -> NamedNode [label = "extends"];
+	ContentNode -> NamedNode [label = "extends"];
+	AbstractNamedNode -> NamedNode [style = dashed, label = "implements"];
+	
+	AbstractStructuralNode -> StructuralNode [style = dashed, label = "implements"];
+	AbstractStructuralNode -> AbstractNamedNode [label = "extends"];
+	
+	Element -> AbstractStructuralNode [label = "extends"];
+	SimpleData -> AbstractStructuralNode [label = "extends"];
+	SimpleData -> ContentNode [style = dashed, label = "implements"];
+	
+	Attribute -> AbstractNamedNode [label = "extends"];
+	Attribute -> ContentNode [style = dashed, label = "implements"];
+}

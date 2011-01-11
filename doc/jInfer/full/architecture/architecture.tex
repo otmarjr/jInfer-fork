@@ -6,9 +6,8 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{import}
+\usepackage{palatino}
 \usepackage{listings}
-\usepackage{color}
 \usepackage{textcomp}
 \usepackage{upquote}
 
@@ -124,7 +123,7 @@ Class \code{Regexp} can represent regular expression over any alphabet.
 This is done by using java generics, \code{Regexp} evinceis implemented as \code{Regexp<T>}.
 Only token regexps hold instance of type \code{T} in member \code{content}.
 
-Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in figure \ref{reg_tree}.
+Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in fig. \ref{reg_tree}.
 \begin{figure}
 \caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
 \centering\includegraphics[scale=0.5]{reg_tree.eps}
@@ -179,7 +178,7 @@ The latter two extends \code{NamedNode} interface.
 \code{StructuralNode} is for nodes, which form structure of XML document tree: elements and text nodes.
 \code{ContentNode} is for nodes, that have content in XML documents: text nodes and attributes.
 We have three classes: \code{Element} for elements, \code{SimpleData} for text nodes, \code{Attribute} for attributes (see package \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes}).
-In theory, the classes and interfaces would be layed out as on figure \ref{interfaces_nodes}
+In theory, the classes and interfaces would be layed out as on fig. \ref{interfaces_nodes}
 \begin{figure}
 \caption{How should interfaces and classes for XML representation look like in theory} \label{interfaces_nodes}
 \centering\includegraphics[scale=0.5]{interfaces_nodes.eps}
@@ -201,10 +200,9 @@ For even more generality in design, we decided to implement abstract classes in 
 As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node.
 However methods for content devising don't need to know, if they are working on infering model for content of attribute or text node.
 
-Finally, our interface/class model for representing XML nodes is drafted on figure \ref{nodes}. Those, who are brave enough, can look on figure \ref{nodes_full}.
+Finally, our interface/class model for representing XML nodes is drafted on fig. \ref{nodes}. Those, who are brave enough, can look on fig. \ref{nodes_full}.
 
 In result, \code{Element} and \code{SimpleData} have method \code{getType()} to devise type of \code{AbstractStructuralNode} variables. And \code{SimpleData} and \code{Attribute} have methods \code{getContentType()} and \code{getContent()} to work with content model.
-
 
 Class \code{Element} has two important members of course:
 \begin{itemize}

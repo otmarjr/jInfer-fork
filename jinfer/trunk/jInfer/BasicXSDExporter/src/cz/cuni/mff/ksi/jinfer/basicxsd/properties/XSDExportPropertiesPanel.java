@@ -20,8 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.util.Properties;
 
 /**
- * TODO rio Comment!
- * 
+ * Properties panel of the XSD Exporter.
+ *
  * @author rio
  */
 public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
@@ -104,7 +104,8 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(countToGlobal, gridBagConstraints);
 
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel1.text")); // NOI18N
+    jLabel1.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel1.text_1")); // NOI18N
+    jLabel1.setToolTipText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel1.toolTipText")); // NOI18N
     jLabel1.setMinimumSize(new java.awt.Dimension(150, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -127,7 +128,8 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(spacesPerIndent, gridBagConstraints);
 
-    jLabel2.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel2.text")); // NOI18N
+    jLabel2.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel2.text_1")); // NOI18N
+    jLabel2.setToolTipText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel2.toolTipText")); // NOI18N
     jLabel2.setMinimumSize(new java.awt.Dimension(150, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -150,7 +152,8 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(typenamePrefix, gridBagConstraints);
 
-    jLabel3.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel3.text")); // NOI18N
+    jLabel3.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel3.text_1")); // NOI18N
+    jLabel3.setToolTipText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel3.toolTipText")); // NOI18N
     jLabel3.setMinimumSize(new java.awt.Dimension(150, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -173,7 +176,8 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(typenamePostfix, gridBagConstraints);
 
-    jLabel4.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel4.text")); // NOI18N
+    jLabel4.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel4.text_1")); // NOI18N
+    jLabel4.setToolTipText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel4.toolTipText")); // NOI18N
     jLabel4.setMinimumSize(new java.awt.Dimension(150, 14));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -188,7 +192,7 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 142, Short.MAX_VALUE)
+      .addGap(0, 88, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,7 +217,7 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 179, Short.MAX_VALUE)
+      .addGap(0, 178, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -224,7 +228,8 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.weighty = 1.0;
     add(jPanel2, gridBagConstraints);
 
-    jLabel5.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.generateGlobalTypes.text"));
+    jLabel5.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel5.text")); // NOI18N
+    jLabel5.setToolTipText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.jLabel5.toolTipText")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -257,7 +262,6 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void load() {
-    // TODO rio tooltips
     generateGlobalTypes.setSelected(Boolean.parseBoolean(properties
             .getProperty(GENERATE_GLOBAL, String.valueOf(GENERATE_GLOBAL_DEFAULT))));
     countToGlobal.setValue(Integer.valueOf(properties

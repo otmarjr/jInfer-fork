@@ -1,0 +1,24 @@
+digraph inference_process {
+	node [shape = rectangle, style= rounded];
+	input_xml [label = "XML"];
+	input_dtd [label = "DTD"];
+	input_xpath [label = "XPath"];
+	input_misc [label ="..."];
+	input_xml -> 1;
+	input_dtd -> 1;
+	input_xpath -> 1;
+	input_misc -> 1;
+	1 [label = "Initial Grammar Generator" style = "filled" fillcolor = "grey"];
+	1 -> 2 [label = "Initial Grammar"];
+	user_input [label = "User input"];
+	user_input -> 2;
+	2 [label = "Simplifier" style = "filled" fillcolor = "grey"];
+	2 -> 3 [label = "Simplifier grammar"];
+	3 [label = "Schema Generator" style = "filled" fillcolor = "grey"];
+	output_dtd [label = "DTD"];
+	output_xsd [label = "XSD"];
+	output_misc [label = "..."];
+	3 -> output_dtd;
+	3 -> output_xsd;
+	3 -> output_misc;
+}

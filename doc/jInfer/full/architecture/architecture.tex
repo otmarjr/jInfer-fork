@@ -4,6 +4,9 @@
 \usepackage{url}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -90,7 +93,7 @@ Only token regexps hold instance of type \code{T} in member \code{content}.
 Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in fig. \ref{reg_tree}.
 \begin{figure}
 \caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
-\centering\includegraphics[scale=0.5]{reg_tree}
+\centering\includegraphics[scale=\myscale]{reg_tree}
 \end{figure}
 We implement this tree by member of \code{Regexp} class called \code{children}, which is of type \code{List<Regexp<T>{}>}.
 List contains children of regexp in means of regexp tree.
@@ -145,11 +148,11 @@ We have three classes: \code{Element} for elements, \code{SimpleData} for text n
 In theory, the classes and interfaces would be layed out as on fig. \ref{interfaces_nodes}
 \begin{figure}
 \caption{How should interfaces and classes for XML representation look like in theory} \label{interfaces_nodes}
-\centering\includegraphics[scale=0.5]{interfaces_nodes}
+\centering\includegraphics[scale=\myscale]{interfaces_nodes}
 \end{figure}
 \begin{figure}
 \caption{How are interfaces and classes for XML representation arranged in practice} \label{nodes}
-\centering\includegraphics[scale=0.5]{nodes}
+\centering\includegraphics[scale=\myscale]{nodes}
 \end{figure}
 \begin{figure}
 \caption{XML representing interfaces and classes in detail} \label{nodes_full}

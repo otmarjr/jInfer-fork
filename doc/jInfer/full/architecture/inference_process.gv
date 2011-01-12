@@ -1,7 +1,6 @@
 digraph inference_process {
 	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
-	rankdir = LR;
 
 	node [style= rounded];
 	input_xml [label = "XML"];

@@ -184,7 +184,21 @@ Same \code{getMutable()} principles and good usage practises hold for theese cla
 
 \subsection{(Nondeterministic) Finite Automaton}
 
-% TODO explain what IG (or a grammar, for that matter) is
+\subsection{Rules, Grammars, etc}
+
+jInfer and its documentation uses extended context-free grammars. % TODO vektor Cite, for example http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf
+\textit{Rules} in such grammar are in the form
+% TODO anti Please make a proper arrow
+\[  Left Hand Side (LHS)  -> Right Hand Side (RHS) \]
+where LHS is a letter of the alphabet (token), RHS is a regular expression over this alphabet. Example would be
+\begin{verbatim}
+  a -> b, (c | d)*
+\end{verbatim}
+
+In jInfer each such rule is represented with an \code{Element} instance. In this representation, the \code{Element} itself is the LHS, its \code{subnodes} are the RHS.\\
+
+Another important notion is a \textit{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \textit{Initial Grammar}, which for us is a grammar consisting of rules with \textit{simple} right hand sides, i.e. just concatenations of tokens. Initial Grammar is produced by Initial Grammar Generator. % TODO vektor Link
+
 % TODO explain metadata and those that we already use
 % TODO section about NBMs
 
@@ -201,14 +215,13 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 	\item Initial Grammar (IG) generation: done by the \textit{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
 	% TODO anti: how about the whole examples in italic?
 	For example, a trivial XML document
-	% TODO anti: please format the indentation	
 	\begin{verbatim}
-		<a>
-			<b>
-				<c/>
-			</b>
-			<d/>
-		</a>
+  <a>
+    <b>
+      <c/>
+    </b>
+    <d/>
+  </a>
 	\end{verbatim}
 	would translate into the following IG rules
 	\begin{verbatim}
@@ -291,12 +304,12 @@ Because the run of each inference module is encapsulated in a \code{try-catch} b
 User running the inference might change his mind and try to stop this. For this reason, modules have to check for this case in every time-consuming place such as long loops with the following code
 % TODO anti Please indent
 \begin{verbatim}
-for (forever) {
-  if (Thread.interrupted()) {
-    throw new InterruptedException();
+  for (forever) {
+    if (Thread.interrupted()) {
+      throw new InterruptedException();
+    }
+    doStuff();
   }
-  doStuff();
-}
 \end{verbatim}
 
 \subsubsection{Runner}

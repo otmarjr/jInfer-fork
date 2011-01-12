@@ -1,6 +1,6 @@
 default: all
 
-architecture.dvi: nodes.eps interfaces_nodes.eps inference_process.eps reg_tree.eps
+architecture.dvi: nodes.eps interfaces_nodes.eps inference_process.eps reg_tree.eps xml_example.eps
 
 %.dvi: %.tex *.eps *.bib Makefile
 	rm -f *.toc

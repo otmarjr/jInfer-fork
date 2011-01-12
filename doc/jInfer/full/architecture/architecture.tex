@@ -34,7 +34,7 @@
 \maketitle
 Target audience: developers willing to extend jInfer.\\
 
-\textit{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}\\
+\emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}\\
 
 The description of jInfer architecture will commence by describing the data
 structures, namely representations of regular expressions and XML elements,
@@ -51,7 +51,7 @@ All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, 
 
 \section{Data structures}
 \subsection{Regular expressions}
-
+% TODO anti lambda, epsilon notation
 For general information on regular expressions, please refer to \cite{wikiregexp}, \cite{automatatheory}.
 All classes pertaining to regular expressions can be found in the package \code{cz.cuni.mff.ksi.jinfer.base.regexp}.
 In jInfer, we use extended regular expressions as they give us nicer syntax (and easier programming).
@@ -114,7 +114,7 @@ For these cases, special \code{getMutable()} method is implemented to obtain reg
 	Regexp<T> r = Regexp.<T>getMutable();
 	r.setInterval(...);
 	r.setType(RegexpType.LAMBDA);
-	r.setImmutable();
+	r.setImmutable();cz.cuni.mff.ksi.jinfer.base
 \end{verbatim}
 \begin{verbatim}
 	Regexp<T> r = Regexp.<T>getMutable();
@@ -178,29 +178,52 @@ Class \code{Element} has two important members of course:
 \end{itemize}
 Theese two are filled by import modules, processed further by infering (simplifying) modules and finally exported by exporter modules. We will look at proper interfaces later.
 
+\begin{figure}
+\caption{XML document representation} \label{xml_example}
+\centering\includegraphics[scale=\myscale]{xml_example}
+\end{figure}
+Let's take an example, the following XML document would be represented as on fig. \ref{xml_example}.
+\begin{verbatim}
+  <person name="john" surname="smith">
+    <info>
+      Some text
+      <note/>
+    </info>
+    <more/>
+  </person>
+\end{verbatim}
+
 As in regular expressions, classes pertaining XML nodes are by default immutable.
 For elements, it means no adding of attributes and changing regexp reference (regexp instance itself is immutable).
 Same \code{getMutable()} principles and good usage practises hold for theese classes.
 
-\subsection{(Nondeterministic) Finite Automaton}
-
 \subsection{Rules, Grammars, etc}
 
-jInfer and its documentation uses extended context-free grammars. % TODO vektor Cite, for example http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf
-\textit{Rules} in such grammar are in the form
-% TODO anti Please make a proper arrow
-\[  Left Hand Side (LHS)  -> Right Hand Side (RHS) \]
+jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}. % TODO vektor seee literature.bib and repair citation http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf
+\emph{Rules} in such grammar are in the form
+% TODO vektor read "the not so short introduction to latex" and math mode section
+$$
+  \textnormal{Left Hand Side (LHS)} \to \textnormal{Right Hand Side (RHS)}
+$$
 where LHS is a letter of the alphabet (token), RHS is a regular expression over this alphabet. Example would be
-\begin{verbatim}
-  a -> b, (c | d)*
-\end{verbatim}
-
+$$
+  a \to b, (c | d)\ast
+$$
 In jInfer each such rule is represented with an \code{Element} instance. In this representation, the \code{Element} itself is the LHS, its \code{subnodes} are the RHS.\\
 
-Another important notion is a \textit{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \textit{Initial Grammar}, which for us is a grammar consisting of rules with \textit{simple} right hand sides, i.e. just concatenations of tokens. Initial Grammar is produced by Initial Grammar Generator. % TODO vektor Link
-
+Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens. Initial Grammar is produced by Initial Grammar Generator. % TODO vektor Link
+% TODO vektor don't forget about advanced interface by capabilities.... don't know if to be mentioned right here, but don't forget
 % TODO explain metadata and those that we already use
-% TODO section about NBMs
+% TODO section about NBMs (anti: but i suppose it on the end of document)
+
+\subsection{Nondeterministic Finite Automaton}
+For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
+Implementation consists of 4 classes: \code{Automaton<T>}, \code{Step<T>}, \code{State<T>} and \code{AutomatonCloner<A, B>} (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
+Whole implementation uses java generics for representation of symbol of alphabet, we denote by \code{T} the java type of symbol.
+
+Let's begin by smalles of the classes, the \code{State<T>}.
+It represents automaton state, it has its \code{name} member (integer)
+
 
 \section{Inference process}
 \begin{figure}
@@ -208,12 +231,12 @@ Another important notion is a \textit{grammar}. A grammar consists of its rules,
 	\centering\includegraphics[scale=\myscale]{inference_process}
 \end{figure}
 
-% TODO anti: is it really necessary to write fig. by hand? Shouldn't it be automatic?
+% TODO anti: is it really necessary to write fig. by hand? Shouldn't it be automatic? anti: don't know, who cares... once it figure, once picture and maybe painting :D
 
 The process by which jInfer infers the resulting schema from various inputs (inference process) is summarized by fig. \ref{inference_process}. From the high-level viewpoint, it consists of three consecutive steps carried out by three different modules:
 \begin{enumerate}
-	\item Initial Grammar (IG) generation: done by the \textit{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
-	% TODO anti: how about the whole examples in italic?
+	\item Initial Grammar (IG) generation: done by the \emph{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
+	% TODO anti: how about the whole examples in italic? anti: bleee
 	For example, a trivial XML document
 	\begin{verbatim}
   <a>
@@ -224,26 +247,28 @@ The process by which jInfer infers the resulting schema from various inputs (inf
   </a>
 	\end{verbatim}
 	would translate into the following IG rules
-	\begin{verbatim}
-		a -> b, d
-		b -> c
-	\end{verbatim}	
-	\item Simplification: done by the \textit{Simplifier} module, this is the process of simplifying, compressing or somehow compactly describing the IG by a smaller number of (more complex) rules. User interaction might be used in this step to help achieve better simplification. At the end of this step, all rules are sent to the last step.\\
+	\begin{eqnarray*}
+		a & \to &  b, d \\
+		b & \to & c \\
+		c & \to & \lambda \\
+		d & \to & \lambda 
+	\end{eqnarray*}
+	\item Simplification: done by the \emph{Simplifier} module, this is the process of simplifying, compressing or somehow compactly describing the IG by a smaller number of (more complex) rules. User interaction might be used in this step to help achieve better simplification. At the end of this step, all rules are sent to the last step.\\
 	For example, rules
-	\begin{verbatim}
-		a -> b
-		a -> c, d, d, d
-	\end{verbatim}
+	\begin{eqnarray*}
+		a & \to & b \\
+		a & \to & c, d, d, d
+	\end{eqnarray*}
 	could be simplified to a single rule
-	\begin{verbatim}
-		a -> b | (c, d*)
-	\end{verbatim}
-	\item Schema export: done by the \textit{Schema Generator (SchemaGen)} module, this is the process of actually creating the resulting schema from the simplified rules. Result of this step is a string representation of the schema, which is sent back to the framework (and later displayed, saved, etc).\\
+	\begin{eqnarray*}
+		a & \to & b | (c, d\ast)
+	\end{eqnarray*}
+	\item Schema export: done by the \emph{Schema Generator (SchemaGen)} module, this is the process of actually creating the resulting schema from the simplified rules. Result of this step is a string representation of the schema, which is sent back to the framework (and later displayed, saved, etc).\\
 	% TODO vektor Example
 \end{enumerate}
-Important thing to note here is that all these steps are executed consecutively. That means, \textit{Simplifier} is only started \textit{after} the \textit{IGG} completely finished its work and returned IG to be simplified. Similarly, \textit{SchemaGen} gets all the rules to export at once, in one list.\\
+Important thing to note here is that all these steps are executed consecutively. That means, \emph{Simplifier} is only started \emph{after} the \emph{IGG} completely finished its work and returned IG to be simplified. Similarly, \emph{SchemaGen} gets all the rules to export at once, in one list.\\
 
-This modular architecture means that (at least theoretically) it is possible to replace any and all of these modules with \textit{something} else that does similar job. In practice, it might be useful to use the logic already implemented in \textit{BasicIGG} and just extend it to handle new input type.
+This modular architecture means that (at least theoretically) it is possible to replace any and all of these modules with \emph{something} else that does similar job. In practice, it might be useful to use the logic already implemented in \emph{BasicIGG} and just extend it to handle new input type.
 
 % TODO vektor Describe requirements on what gets passed on between modules
 
@@ -275,9 +300,9 @@ The most important method in each module is \code{start}, defined in each of the
 \subsubsection{Module input}
 Each inference module takes the actual input data as the first parameter of its \code{start} method. The type of the argument differs based on the inference module.\\
 
-\textit{Initial Grammar Generator} takes an object of type \textit{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
+\emph{Initial Grammar Generator} takes an object of type \emph{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
 
-\textit{Simplifier} and \textit{Schema Generator} take grammar, % TODO vektor Link to grammar definition
+\emph{Simplifier} and \emph{Schema Generator} take grammar, % TODO vektor Link to grammar definition
 in other words a list of rules as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
 
 \subsubsection{Module output}
@@ -289,7 +314,7 @@ Second parameter of each inference module's \code{start} method is a callback ob
 	\item \code{SchemaGeneratorCallback}
 \end{itemize}
 
-Each callback interface naturally belongs to the similarly named module interface. As their respective interfaces, also callbacks define one crucial method: \textit{finished}. Each inference module is responsible for invoking this method on the callback it got as a parameter after it has finished its work and has results to be passed on. Again, these 3 finished methods have different arguments based on the inference module.\\
+Each callback interface naturally belongs to the similarly named module interface. As their respective interfaces, also callbacks define one crucial method: \emph{finished}. Each inference module is responsible for invoking this method on the callback it got as a parameter after it has finished its work and has results to be passed on. Again, these 3 finished methods have different arguments based on the inference module.\\
 
 \code{IGGeneratorCallback.finished()} and \code{SimplifierCallback.finished()} have a grammar (Initial Grammar in case of IGG) as their only argument.\\
 
@@ -302,7 +327,6 @@ Because the run of each inference module is encapsulated in a \code{try-catch} b
 \subsubsection{Interruptions}
 
 User running the inference might change his mind and try to stop this. For this reason, modules have to check for this case in every time-consuming place such as long loops with the following code
-% TODO anti Please indent
 \begin{verbatim}
   for (forever) {
     if (Thread.interrupted()) {

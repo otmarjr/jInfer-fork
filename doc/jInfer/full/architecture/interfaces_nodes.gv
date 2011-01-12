@@ -6,11 +6,12 @@ digraph interfaces_nodes {
 	interface;
 	class [style= rounded];
 	NamedNode;
-	StructuralNode;
 	ContentNode;
-	Element [style= rounded];
-	SimpleData [style= rounded];
+	StructuralNode;
 	Attribute [style= rounded];
+	SimpleData [style= rounded];
+	Element [style= rounded];
+
 	StructuralNode -> NamedNode [label = "extends"];
 	ContentNode -> NamedNode [label = "extends"];
 	Element -> StructuralNode [style = dashed, label = "implements"];

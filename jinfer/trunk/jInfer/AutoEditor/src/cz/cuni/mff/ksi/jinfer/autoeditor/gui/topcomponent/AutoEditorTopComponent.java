@@ -245,7 +245,7 @@ public final class AutoEditorTopComponent extends TopComponent {
   @Override
   public boolean canClose() {
     if (RunningProject.isActiveProject()) {
-      NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Do you really want to stop the inferrence process?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
+      NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Closing this window will stop the inference. Proceed?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
       if (DialogDisplayer.getDefault().notify(notifyDescriptor) == NotifyDescriptor.OK_OPTION) {
         component.GUIInterrupt();
         return true;

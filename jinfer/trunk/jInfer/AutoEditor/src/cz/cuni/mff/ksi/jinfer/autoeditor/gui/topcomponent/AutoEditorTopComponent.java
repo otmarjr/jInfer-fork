@@ -98,11 +98,11 @@ public final class AutoEditorTopComponent extends TopComponent {
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    jPanel1 = new javax.swing.JPanel();
+    jScrollPane1 = new javax.swing.JScrollPane();
+    jPanel2 = new javax.swing.JPanel();
     jButton1 = new javax.swing.JButton();
     jSeparator2 = new javax.swing.JSeparator();
-
-    jPanel1.setLayout(new java.awt.GridBagLayout());
+    jPanel1 = new javax.swing.JPanel();
 
     org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(AutoEditorTopComponent.class, "AutoEditorTopComponent.jButton1.text")); // NOI18N
     jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -111,26 +111,45 @@ public final class AutoEditorTopComponent extends TopComponent {
       }
     });
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-    this.setLayout(layout);
-    layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
-        .addComponent(jButton1)
+    jPanel1.setLayout(new java.awt.GridBagLayout());
+
+    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    jPanel2.setLayout(jPanel2Layout);
+    jPanel2Layout.setHorizontalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addGroup(jPanel2Layout.createSequentialGroup()
+            .addComponent(jButton1)
+            .addGap(276, 276, 276))
+          .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+          .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE))
         .addContainerGap())
-      .addGroup(layout.createSequentialGroup()
-        .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
-        .addContainerGap())
-      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
     );
-    layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(layout.createSequentialGroup()
+    jPanel2Layout.setVerticalGroup(
+      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        .addContainerGap()
         .addComponent(jButton1)
         .addGap(2, 2, 2)
         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE))
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+        .addContainerGap())
+    );
+
+    jScrollPane1.setViewportView(jPanel2);
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    this.setLayout(layout);
+    layout.setHorizontalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+    );
+    layout.setVerticalGroup(
+      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
     );
   }// </editor-fold>//GEN-END:initComponents
 
@@ -195,6 +214,8 @@ public final class AutoEditorTopComponent extends TopComponent {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;
   private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
+  private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JSeparator jSeparator2;
   // End of variables declaration//GEN-END:variables
 

@@ -1,6 +1,8 @@
 digraph interfaces_nodes {
 	rankdir = BT;
-	node [shape = rectangle];
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
 	interface;
 	class [style= rounded];
 	NamedNode;

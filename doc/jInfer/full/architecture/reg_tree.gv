@@ -1,5 +1,7 @@
 digraph reg_tree {
-	node [shape = rectangle, style= rounded];
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	node [style= rounded];
 	1 [label = "CONCATENATION"];
 	1 -> a;
 	1 -> b;

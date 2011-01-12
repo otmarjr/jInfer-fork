@@ -47,7 +47,7 @@ public final class TypeUtils {
     Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
 
     if (subnodes.isLambda()) {
-      // TODO rio skutocne built-in??
+      // Type of element without sub nodes is considered a built-in type.
       return TypeCategory.BUILTIN;
     }
 

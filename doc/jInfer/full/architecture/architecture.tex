@@ -179,11 +179,141 @@ As in regular expressions, classes pertaining XML nodes are by default immutable
 For elements, it means no adding of attributes and changing regexp reference (regexp instance itself is immutable).
 Same \code{getMutable()} principles and good usage practises hold for theese classes.
 
-\subsection{Something that will vektor declare priority}
-
 \subsection{(Nondeterministic) Finite Automaton}
 
+% TODO explain what IG (or a grammar, for that matter) is
+% TODO explain metadata and those that we already use
+% TODO section about NBMs
 
+\section{Inference process}
+\begin{figure}
+	\caption{High-level view of the inference process} \label{inference_process}
+	\centering\includegraphics[scale=0.5]{inference_process}
+\end{figure}
+
+% TODO anti: is it really necessary to write fig. by hand? Shouldn't it be automatic?
+
+The process by which jInfer infers the resulting schema from various inputs (inference process) is summarized by fig. \ref{inference_process}. From the high-level viewpoint, it consists of three consecutive steps carried out by three different modules:
+\begin{enumerate}
+	\item Initial Grammar (IG) generation: done by the \textit{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
+	% TODO anti: how about the whole examples in italic?
+	For example, a trivial XML document
+	% TODO anti: please format the indentation	
+	\begin{verbatim}
+		<a>
+			<b>
+				<c/>
+			</b>
+			<d/>
+		</a>
+	\end{verbatim}
+	would translate into the following IG rules
+	\begin{verbatim}
+		a -> b, d
+		b -> c
+	\end{verbatim}	
+	\item Simplification: done by the \textit{Simplifier} module, this is the process of simplifying, compressing or somehow compactly describing the IG by a smaller number of (more complex) rules. User interaction might be used in this step to help achieve better simplification. At the end of this step, all rules are sent to the last step.\\
+	For example, rules
+	\begin{verbatim}
+		a -> b
+		a -> c, d, d, d
+	\end{verbatim}
+	could be simplified to a single rule
+	\begin{verbatim}
+		a -> b | (c, d*)
+	\end{verbatim}
+	\item Schema export: done by the \textit{Schema Generator (SchemaGen)} module, this is the process of actually creating the resulting schema from the simplified rules. Result of this step is a string representation of the schema, which is sent back to the framework (and later displayed, saved, etc).\\
+	% TODO vektor Example
+\end{enumerate}
+Important thing to note here is that all these steps are executed consecutively. That means, \textit{Simplifier} is only started \textit{after} the \textit{IGG} completely finished its work and returned IG to be simplified. Similarly, \textit{SchemaGen} gets all the rules to export at once, in one list.\\
+
+This modular architecture means that (at least theoretically) it is possible to replace any and all of these modules with \textit{something} else that does similar job. In practice, it might be useful to use the logic already implemented in \textit{BasicIGG} and just extend it to handle new input type.
+
+% TODO vektor Describe requirements on what gets passed on between modules
+
+\subsection{Programmatic view}
+
+From developer's point of view, inference modules are just properly annotated classes implementing one of the following interfaces (all found under \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference})
+
+\begin{itemize}
+	\item \code{IGGenerator}
+	\item \code{Simplifier}
+	\item \code{SchemaGenerator}
+\end{itemize}
+
+A nice way to name such a class is by adding \code{-Impl} to the name of implemented interface, for example \code{SimplifierImpl}.\\
+
+% TODO vektor Connection to NBMs
+
+Annotation required for the framework to recognize such a class as an inference module is the following
+\begin{verbatim}
+	@ServiceProvider(service = <interface>.class)
+\end{verbatim}
+for example
+\begin{verbatim}
+	@ServiceProvider(service = Simplifier.class)
+\end{verbatim}
+
+The most important method in each module is \code{start}, defined in each of the interfaces. This method is called by the framework when the respective step of inference is being executed. It has always two parameters: the actual input data for the module, and a callback object to report to when this step is finished. We will look at both parameter now in more detail. 
+
+\subsubsection{Module input}
+Each inference module takes the actual input data as the first parameter of its \code{start} method. The type of the argument differs based on the inference module.\\
+
+\textit{Initial Grammar Generator} takes an object of type \textit{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
+
+\textit{Simplifier} and \textit{Schema Generator} take grammar, % TODO vektor Link to grammar definition
+in other words a list of rules as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
+
+\subsubsection{Module output}
+Second parameter of each inference module's \code{start} method is a callback object. There are 3 callback interfaces defined in the \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package
+
+\begin{itemize}
+	\item \code{IGGeneratorCallback}
+	\item \code{SimplifierCallback}
+	\item \code{SchemaGeneratorCallback}
+\end{itemize}
+
+Each callback interface naturally belongs to the similarly named module interface. As their respective interfaces, also callbacks define one crucial method: \textit{finished}. Each inference module is responsible for invoking this method on the callback it got as a parameter after it has finished its work and has results to be passed on. Again, these 3 finished methods have different arguments based on the inference module.\\
+
+\code{IGGeneratorCallback.finished()} and \code{SimplifierCallback.finished()} have a grammar (Initial Grammar in case of IGG) as their only argument.\\
+
+\code{SchemaGeneratorCallback.finished} has two \code{String}s as arguments: \code{schema} is the actual string representation of the resulting schema, \code{extension} is a file extension of the result (such as "dtd" or "xsd") which the framework will use when saving the result in a file.
+
+\subsubsection{Error handling}
+
+Because the run of each inference module is encapsulated in a \code{try-catch} block by the framework, it is safe to throw any exception out of the \code{start} method: it will get logged, presented to the user and inference will stop. However, if the module uses threads that could throw an exception, it is responsible for catching these exceptions and possibly re-throwing them in the thread where \code{start} runs.
+
+\subsubsection{Interruptions}
+
+User running the inference might change his mind and try to stop this. For this reason, modules have to check for this case in every time-consuming place such as long loops with the following code
+% TODO anti Please indent
+\begin{verbatim}
+	for (forever) {
+		if (Thread.interrupted()) {
+			throw new InterruptedException();
+		}
+		doStuff();
+	}
+\end{verbatim}
+
+\subsubsection{Runner}
+
+The part of framework responsible for actually gathering user input, running all modules one after another and presenting the results is the \code{Runner} class  in \code{cz.cuni.mff.ksi.jinfer.runner} package.\\
+
+A new instance of \code{Runner} is constructed for each inference run. While being created, \code{Runner}  loads the preferences for current project and looks up user-selected inference modules. Also, callback objects pointing back to methods in \code{Runner} are created. The inference process itself is then as follows
+
+% TODO vektor Picture!!!
+\begin{enumerate}
+	\item Selected IGG's \code{start} is encapsulated with error/interruption handling and executed, passing \code{Input} and first callback as parameters.
+	\item When IGG finishes, it invokes callback's \code{finish} method, passing the IG as parameter.
+	\item This in turn causes \code{Runner} to encapsulate and execute Simplifier's \code{start}, passing IG from the first callback and the second callback as parameters.
+	\item When Simplifier finishes, it invokes callback's \code{finish} method, passing the simplified grammar as parameter.
+	\item This again causes \code{Runner} to encapsulate and execute SchemaGen's \code{start}, passing the simplified grammar from the second callback and the third callback as parameters.
+	\item SchemaGen finishes and invokes the last callback's \code{finish}, passing the resulting schema and its extension as parameters.
+	\item \code{Runner} receives the resulting schema and based on preferences, saves it to a file, displays it, etc.
+\end{enumerate}
+
+% TODO vektor Talk about Capabilities
 
 \nocite{*}
 \bibliographystyle{alpha}

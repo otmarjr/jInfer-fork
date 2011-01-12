@@ -161,7 +161,7 @@ In theory, the classes and interfaces would be layed out as on fig. \ref{interfa
 
 For even more generality in design, we decided to implement abstract classes in midlevel:
 \begin{itemize}
-	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later),
+	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later), % TODO anti Link to proper subsection
 	\item \code{AbstractStructuralNode}, which implements only task of deciding if instance is \code{Element} or \code{SimpleData} actually.
 \end{itemize}
 As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node.
@@ -197,6 +197,8 @@ As in regular expressions, classes pertaining XML nodes are by default immutable
 For elements, it means no adding of attributes and changing regexp reference (regexp instance itself is immutable).
 Same \code{getMutable()} principles and good usage practises hold for theese classes.
 
+TODO anti
+
 \subsection{Rules, Grammars, etc}
 
 jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}. % TODO vektor seee literature.bib and repair citation http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf
@@ -212,9 +214,21 @@ $$
 In jInfer each such rule is represented with an \code{Element} instance. In this representation, the \code{Element} itself is the LHS, its \code{subnodes} are the RHS.\\
 
 Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens. Initial Grammar is produced by Initial Grammar Generator. % TODO vektor Link
-% TODO vektor don't forget about advanced interface by capabilities.... don't know if to be mentioned right here, but don't forget
-% TODO explain metadata and those that we already use
-% TODO section about NBMs (anti: but i suppose it on the end of document)
+
+\subsection{Metadata}
+To allow simple extensibility of our rules, each descendant of \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
+
+At the present, jInfer modules use the following metadata, all defined in \textit{IGGUtils} class:
+\begin{itemize}
+	\item \code{from.schema}, filled in by BasicIGG and XSDImport modules: means that this rule was created (originates from) from a schema.
+	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
+	\item \code{is.sentinel}, filled in by XSDImport module: TODO anti Explain
+	\item \code{schema.data}, filled in by XSDImport module: TODO reseto Explain
+\end{itemize}
+
+\section{NetBeans Modules}
+
+TODO vektor
 
 \subsection{Nondeterministic Finite Automaton}
 For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
@@ -231,12 +245,9 @@ It represents automaton state, it has its \code{name} member (integer)
 	\centering\includegraphics[scale=\myscale]{inference_process}
 \end{figure}
 
-% TODO anti: is it really necessary to write fig. by hand? Shouldn't it be automatic? anti: don't know, who cares... once it figure, once picture and maybe painting :D
-
 The process by which jInfer infers the resulting schema from various inputs (inference process) is summarized by fig. \ref{inference_process}. From the high-level viewpoint, it consists of three consecutive steps carried out by three different modules:
 \begin{enumerate}
 	\item Initial Grammar (IG) generation: done by the \emph{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
-	% TODO anti: how about the whole examples in italic? anti: bleee
 	For example, a trivial XML document
 	\begin{verbatim}
   <a>

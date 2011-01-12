@@ -291,12 +291,12 @@ Because the run of each inference module is encapsulated in a \code{try-catch} b
 User running the inference might change his mind and try to stop this. For this reason, modules have to check for this case in every time-consuming place such as long loops with the following code
 % TODO anti Please indent
 \begin{verbatim}
-	for (forever) {
-		if (Thread.interrupted()) {
-			throw new InterruptedException();
-		}
-		doStuff();
-	}
+for (forever) {
+  if (Thread.interrupted()) {
+    throw new InterruptedException();
+  }
+  doStuff();
+}
 \end{verbatim}
 
 \subsubsection{Runner}

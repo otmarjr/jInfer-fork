@@ -74,7 +74,7 @@ public class CleanerNullFactoryTest {
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
     CleanerNullFactory instance = new CleanerNullFactory();
-    String expResult = "RegularExpressionCleanerNull";
+    String expResult = "Regular Expression Cleaner Null";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
     assertFalse(result.isEmpty());

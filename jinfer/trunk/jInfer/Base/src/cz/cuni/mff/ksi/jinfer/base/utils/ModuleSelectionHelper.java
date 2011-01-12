@@ -37,7 +37,7 @@ public final class ModuleSelectionHelper {
 
     @Override
     public int compare(final NamedModule o1, final NamedModule o2) {
-      return o1.getName().compareTo(o2.getName());
+      return o1.getDisplayName().compareTo(o2.getDisplayName());
     }
   };
 
@@ -72,15 +72,30 @@ public final class ModuleSelectionHelper {
    * {@link org.openide.util.lookup.ServiceProvider} implementing the requested
    * interface.
    */
-  public static <T extends NamedModule> List<String> lookupNames(
+  public static <T extends NamedModule> List<NamedModule> lookupNames(
           final Class<T> clazz) {
-    
-    final List<String> ret = new ArrayList<String>();
-    for (final T implementation : Lookup.getDefault().lookupAll(clazz)) {
-      ret.add(implementation.getName());
-    }
-    Collections.sort(ret);
+    final List<NamedModule> ret = new ArrayList<NamedModule>(Lookup.getDefault().lookupAll(clazz));
+    Collections.sort(ret, MODULE_NAME_CMP);
     return ret;
+  }
+
+  public static <T extends NamedModule> NamedModule lookupName(
+          final Class<T> clazz, final String name) {
+    final List<NamedModule> ret = lookupNames(clazz);
+
+    if (BaseUtils.isEmpty(ret)) {
+      throw new IllegalArgumentException("No implementations of "
+              + clazz.getCanonicalName() + " found.");
+    }
+
+    Collections.sort(ret, MODULE_NAME_CMP);
+    for (NamedModule namedModule : ret) {
+      if (namedModule.getName().equals(name)) {
+        return namedModule;
+      }
+    }
+
+    return ret.get(0);
   }
 
   /**
@@ -143,8 +158,8 @@ public final class ModuleSelectionHelper {
                 + clazz.getCanonicalName() + " with name " + name + " was found.");
       case FIRST:
         LOG.warn("No implementation of "
-                + clazz.getCanonicalName() + " with name " + name +
-                " was found, using the first one.");
+                + clazz.getCanonicalName() + " with name " + name
+                + " was found, using the first one.");
         return implementations.get(0);
       default:
         throw new IllegalArgumentException("Unknown fallback type: " + fallback);

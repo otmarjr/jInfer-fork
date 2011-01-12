@@ -16,10 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.runner.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
@@ -58,6 +60,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
     setLayout(new java.awt.GridBagLayout());
 
+    initialGrammar.setRenderer(new ProjectPropsComboRenderer());
     initialGrammar.setMinimumSize(new java.awt.Dimension(150, 22));
     initialGrammar.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -69,6 +72,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(initialGrammar, gridBagConstraints);
 
+    simplifier.setRenderer(new ProjectPropsComboRenderer());
     simplifier.setMinimumSize(new java.awt.Dimension(150, 22));
     simplifier.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -80,6 +84,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(simplifier, gridBagConstraints);
 
+    schemaGenerator.setRenderer(new ProjectPropsComboRenderer());
     schemaGenerator.setMinimumSize(new java.awt.Dimension(150, 22));
     schemaGenerator.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -140,19 +145,19 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     schemaGenerator.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(SchemaGenerator.class).toArray()));
 
-    initialGrammar.setSelectedItem(properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT));
-    simplifier.setSelectedItem(properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT));
-    schemaGenerator.setSelectedItem(properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT));
+    initialGrammar.setSelectedItem(ModuleSelectionHelper.lookupName(IGGenerator.class, properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT)));
+    simplifier.setSelectedItem(ModuleSelectionHelper.lookupName(Simplifier.class, properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT)));
+    schemaGenerator.setSelectedItem(ModuleSelectionHelper.lookupName(SchemaGenerator.class, properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT)));
   }
 
   @Override
   public void store() {
     properties.setProperty(INITIAL_GRAMMAR,
-            (String) initialGrammar.getSelectedItem());
+            ((NamedModule) initialGrammar.getSelectedItem()).getName());
     properties.setProperty(SIMPLIFIER,
-            (String) simplifier.getSelectedItem());
+            ((NamedModule) simplifier.getSelectedItem()).getName());
     properties.setProperty(SCHEMA_GENERATOR,
-            (String) schemaGenerator.getSelectedItem());
+            ((NamedModule) schemaGenerator.getSelectedItem()).getName());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox initialGrammar;

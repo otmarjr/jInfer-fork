@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class VirtualCategoryPanel extends javax.swing.JPanel {
   private final String categoryName;
 
   /** Creates new form VirtualCategoryPanel */
-  public VirtualCategoryPanel(final String categoryId, final String categoryName, final List<String> modules) {
+  public VirtualCategoryPanel(final String categoryId, final String categoryName, final List<NamedModule> modules) {
     super();
     this.categoryId = categoryId;
     this.categoryName = categoryName;
@@ -37,7 +38,7 @@ public class VirtualCategoryPanel extends javax.swing.JPanel {
     initComponents();
   }
 
-  private String getOverallLabel(final List<String> modules) {
+  private String getOverallLabel(final List<NamedModule> modules) {
     final StringBuilder builder = new StringBuilder();
     if (modules != null) {
       final boolean isOne = modules.size() == 1;
@@ -48,7 +49,7 @@ public class VirtualCategoryPanel extends javax.swing.JPanel {
 
       boolean first = true;
       for (int i = 0; i < modules.size(); i++) {
-        final String module = modules.get(i);
+        final String module = modules.get(i).getDisplayName();
 
         if (first) {
           first = false;

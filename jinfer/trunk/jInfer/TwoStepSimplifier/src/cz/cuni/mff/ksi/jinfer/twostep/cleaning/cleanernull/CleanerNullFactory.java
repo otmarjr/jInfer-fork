@@ -49,7 +49,7 @@ public class CleanerNullFactory implements RegularExpressionCleanerFactory {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

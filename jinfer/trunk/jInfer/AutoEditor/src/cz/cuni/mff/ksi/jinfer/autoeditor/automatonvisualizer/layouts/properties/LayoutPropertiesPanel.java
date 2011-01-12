@@ -17,7 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.Map;
 import java.util.Properties;
@@ -29,14 +31,13 @@ import javax.swing.JTextField;
  * @author anti
  */
 public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
+
   private static final long serialVersionUID = 784463431L;
   // TODO rio What are these two for?? Rio: I don't know, not my code :)
   // TODO ?anti?    -- || --
   private static Map<String, JTextField> dynamicComponents;
   private static Map<String, String> dynamicParameters;
-
   public static final String NAME = "Automaton visualizer";
-
 
   /** Creates new form ModuleSelectionJPanel */
   public LayoutPropertiesPanel(final Properties properties) {
@@ -71,6 +72,7 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
+    graphRenderer.setRenderer(new ProjectPropsComboRenderer());
     graphRenderer.setMinimumSize(new java.awt.Dimension(200, 22));
     graphRenderer.setPreferredSize(new java.awt.Dimension(200, 22));
     graphRenderer.addActionListener(new java.awt.event.ActionListener() {
@@ -107,23 +109,22 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void graphRendererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphRendererActionPerformed
-    LayoutF factory= ModuleSelectionHelper.lookupImpl(LayoutF.class,
-            (String) graphRenderer.getSelectedItem());
+    LayoutF factory = ModuleSelectionHelper.lookupImpl(LayoutF.class,
+            ((NamedModule) graphRenderer.getSelectedItem()).getName());
     desc.setText(factory.getModuleDescription());
   }//GEN-LAST:event_graphRendererActionPerformed
 
   @Override
   public final void load() {
     graphRenderer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(LayoutF.class).toArray()
-            ));
-    graphRenderer.setSelectedItem(properties.getProperty("user-layout", DEFAULT_MENU_TEXT));
+            ModuleSelectionHelper.lookupNames(LayoutF.class).toArray()));
+    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupName(LayoutF.class, properties.getProperty("user-layout", DEFAULT_MENU_TEXT)));
   }
 
   @Override
   public void store() {
     properties.setProperty("user-layout",
-            (String) graphRenderer.getSelectedItem());
+            ((NamedModule) graphRenderer.getSelectedItem()).getName());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextPane desc;

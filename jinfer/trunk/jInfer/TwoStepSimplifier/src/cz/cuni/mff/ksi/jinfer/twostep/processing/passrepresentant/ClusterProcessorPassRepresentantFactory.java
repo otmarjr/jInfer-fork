@@ -49,12 +49,12 @@ public class ClusterProcessorPassRepresentantFactory implements ClusterProcessor
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override
   public String getUserModuleDescription() {
-    final StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" is really dummy processor of element cluster. The grammar"
             + " inferred for whole cluster of elements it returns"
             + " is just the representant of cluster. That is, no inferring"

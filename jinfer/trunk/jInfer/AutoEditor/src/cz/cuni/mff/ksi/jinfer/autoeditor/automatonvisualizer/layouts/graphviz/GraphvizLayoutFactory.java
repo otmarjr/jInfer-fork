@@ -118,7 +118,7 @@ public class GraphvizLayoutFactory implements LayoutF {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

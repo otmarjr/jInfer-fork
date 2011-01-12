@@ -16,19 +16,18 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.AutomatonSimplifierGreedyFactory;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -41,7 +40,6 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   private static final long serialVersionUID = 784463431L;
   private static Map<String, JTextField> dynamicComponents;
   private static Map<String, String> dynamicParameters;
-
 
   /** Creates new form ModuleSelectionJPanel */
   public AutomatonSimplifierGreedyPropertiesPanel(final Properties properties) {
@@ -77,6 +75,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
+    comboConditionTester.setRenderer(new ProjectPropsComboRenderer());
     comboConditionTester.setMinimumSize(new java.awt.Dimension(200, 22));
     comboConditionTester.setPreferredSize(new java.awt.Dimension(200, 22));
     comboConditionTester.addActionListener(new java.awt.event.ActionListener() {
@@ -126,22 +125,22 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   }// </editor-fold>//GEN-END:initComponents
 
   private void comboConditionTesterChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboConditionTesterChanged
-    MergeConditionTesterFactory factory= ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
-            (String) comboConditionTester.getSelectedItem());
+    MergeConditionTesterFactory factory = ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
+            ((NamedModule) comboConditionTester.getSelectedItem()).getName());
     descContitionTester.setText(factory.getUserModuleDescription());
 
     panelParams.removeAll();
-    dynamicComponents= new HashMap<String, JTextField>();
-    dynamicParameters= new HashMap<String, String>();
+    dynamicComponents = new HashMap<String, JTextField>();
+    dynamicParameters = new HashMap<String, String>();
     java.awt.GridBagConstraints gridBagConstraints;
     if (factory.getCapabilities().contains("parameters")) {
-      ModuleParameters factParams= (ModuleParameters) factory;
+      ModuleParameters factParams = (ModuleParameters) factory;
       int i = 0;
       for (String parameterName : factParams.getParameterNames()) {
-        JLabel l= new JLabel(parameterName);
+        JLabel l = new JLabel(parameterName);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2*i;
+        gridBagConstraints.gridy = 2 * i;
         gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 0.0;
@@ -153,7 +152,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
         l.setLabelFor(t);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2*i;
+        gridBagConstraints.gridy = 2 * i;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 1.0;
@@ -161,11 +160,11 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
         t.setColumns(10);
         panelParams.add(t, gridBagConstraints);
 
-        JTextArea ar= new JTextArea(factParams.getParameterDisplayDescription(parameterName));
+        JTextArea ar = new JTextArea(factParams.getParameterDisplayDescription(parameterName));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2*i+1;
-        gridBagConstraints.gridwidth= 2;
+        gridBagConstraints.gridy = 2 * i + 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.CENTER;
         gridBagConstraints.weightx = 1.0;
@@ -177,7 +176,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
         ar.setLineWrap(true);
         ar.setEditable(false);
         panelParams.add(ar, gridBagConstraints);
-        
+
         dynamicComponents.put(parameterName, t);
         dynamicParameters.put(parameterName, factory.getName() + parameterName);
         ++i;
@@ -188,16 +187,15 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
   @Override
   public final void load() {
     comboConditionTester.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(MergeConditionTesterFactory.class).toArray()
-            ));
-    comboConditionTester.setSelectedItem(properties.getProperty(AutomatonSimplifierGreedyFactory.PROPERTIES_CONDITION_TESTER, DEFAULT_MENU_TEXT));
+            ModuleSelectionHelper.lookupNames(MergeConditionTesterFactory.class).toArray()));
+    comboConditionTester.setSelectedItem(ModuleSelectionHelper.lookupName(MergeConditionTesterFactory.class, properties.getProperty(AutomatonSimplifierGreedyFactory.PROPERTIES_CONDITION_TESTER, DEFAULT_MENU_TEXT)));
     comboConditionTesterChanged(null);
   }
 
   @Override
   public void store() {
     properties.setProperty(AutomatonSimplifierGreedyFactory.PROPERTIES_CONDITION_TESTER,
-            (String) comboConditionTester.getSelectedItem());
+            ((NamedModule) comboConditionTester.getSelectedItem()).getName());
 
     for (String parameterName : dynamicComponents.keySet()) {
       properties.setProperty(

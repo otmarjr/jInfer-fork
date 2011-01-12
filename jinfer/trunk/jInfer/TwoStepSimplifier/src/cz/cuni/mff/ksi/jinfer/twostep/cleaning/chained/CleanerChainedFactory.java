@@ -56,7 +56,7 @@ public class CleanerChainedFactory implements RegularExpressionCleanerFactory {
 
   @Override
   public String getModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(CollectionToString.colToString(
             getRegularexpressionCleanerFactories(),
             ", ",

@@ -78,7 +78,7 @@ public class TwoStepSimplifierFactory implements Simplifier {
 
   @Override
   public String getModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append("(");
     sb.append(getClustererFactory().getModuleDescription());
     sb.append(", ");

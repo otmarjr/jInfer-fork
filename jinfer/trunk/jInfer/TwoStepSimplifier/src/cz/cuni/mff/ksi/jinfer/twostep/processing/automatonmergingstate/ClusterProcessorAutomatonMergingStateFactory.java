@@ -57,7 +57,7 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
 
   @Override
   public String getModuleDescription() {
-    final StringBuilder sb= new StringBuilder(getName());
+    final StringBuilder sb= new StringBuilder(getDisplayName());
     sb.append("(");
     sb.append(getAutomatonSimplifierFactory().getModuleDescription());
     sb.append(", ");
@@ -82,7 +82,7 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
 
   @Override
   public String getUserModuleDescription() {
-    final StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" constructs prefix tree automaton from positive examples");
     sb.append(" in the cluster. The it selects AutomatonSimplifier class,");
     sb.append(" to which it passes automaton to merge some states. AutomatonSimplifier");

@@ -48,7 +48,7 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory impleme
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override
@@ -58,7 +58,7 @@ public class RegexpAutomatonSimplifierStateRemovalOrdererWeightedFactory impleme
 
   @Override
   public String getUserModuleDescription() {
-    final StringBuilder sb= new StringBuilder(getName());
+    final StringBuilder sb= new StringBuilder(getDisplayName());
     sb.append(" weights states and returns state with minimum weight to be removed."
             + " Weight of the state is the sum of length of all regular expressions"
             + " on in-transitions, out-transitions and loops.");

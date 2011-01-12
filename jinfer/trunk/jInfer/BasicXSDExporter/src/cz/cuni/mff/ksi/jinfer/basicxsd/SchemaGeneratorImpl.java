@@ -63,7 +63,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

@@ -16,7 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.TwoStepSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
@@ -74,6 +76,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelClusterer, gridBagConstraints);
 
+    clusterer.setRenderer(new ProjectPropsComboRenderer());
     clusterer.setMinimumSize(new java.awt.Dimension(200, 22));
     clusterer.setPreferredSize(new java.awt.Dimension(200, 22));
     clusterer.addActionListener(new java.awt.event.ActionListener() {
@@ -111,6 +114,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelClusterProcessor, gridBagConstraints);
 
+    clusterProcessor.setRenderer(new ProjectPropsComboRenderer());
     clusterProcessor.setMinimumSize(new java.awt.Dimension(200, 22));
     clusterProcessor.setPreferredSize(new java.awt.Dimension(200, 22));
     clusterProcessor.addActionListener(new java.awt.event.ActionListener() {
@@ -151,6 +155,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelCleaner, gridBagConstraints);
 
+    cleaner.setRenderer(new ProjectPropsComboRenderer());
     cleaner.setMinimumSize(new java.awt.Dimension(200, 22));
     cleaner.setPreferredSize(new java.awt.Dimension(200, 22));
     cleaner.addActionListener(new java.awt.event.ActionListener() {
@@ -184,55 +189,49 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
   private void clustererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clustererChanged
     descClusterer.setText(
             ModuleSelectionHelper.lookupImpl(ClustererFactory.class,
-            (String) clusterer.getSelectedItem()).getUserModuleDescription()
-            );
+            ((NamedModule) clusterer.getSelectedItem()).getName()).getUserModuleDescription());
   }//GEN-LAST:event_clustererChanged
 
   private void clusterProcessorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterProcessorChanged
     descClusterProcessor.setText(
             ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class,
-            (String) clusterProcessor.getSelectedItem()).getUserModuleDescription()
-            );
+            ((NamedModule) clusterProcessor.getSelectedItem()).getName()).getUserModuleDescription());
   }//GEN-LAST:event_clusterProcessorChanged
 
   private void cleanerChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanerChanged
     descCleaner.setText(
             ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-            (String) cleaner.getSelectedItem()).getUserModuleDescription()
-            );
+            ((NamedModule) cleaner.getSelectedItem()).getName()).getUserModuleDescription());
   }//GEN-LAST:event_cleanerChanged
 
   @Override
   public final void load() {
     clusterer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(ClustererFactory.class).toArray()
-            ));
-    clusterer.setSelectedItem(properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT));
+            ModuleSelectionHelper.lookupNames(ClustererFactory.class).toArray()));
+    clusterer.setSelectedItem(ModuleSelectionHelper.lookupName(ClustererFactory.class, properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT)));
     clustererChanged(null);
 
     clusterProcessor.setModel(new DefaultComboBoxModel(
-           ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()
-           ));
-    clusterProcessor.setSelectedItem(properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR,
-            DEFAULT_MENU_TEXT));
+            ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()));
+    clusterProcessor.setSelectedItem(ModuleSelectionHelper.lookupName(ClusterProcessorFactory.class, properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR,
+            DEFAULT_MENU_TEXT)));
     clusterProcessorChanged(null);
 
     cleaner.setModel(new DefaultComboBoxModel(
-           ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class).toArray()
-           ));
-    cleaner.setSelectedItem(properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER,
-            DEFAULT_MENU_TEXT));
+            ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class).toArray()));
+    cleaner.setSelectedItem(ModuleSelectionHelper.lookupName(RegularExpressionCleanerFactory.class, properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER,
+            DEFAULT_MENU_TEXT)));
     cleanerChanged(null);
   }
 
   @Override
   public void store() {
     properties.setProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTERER,
-            (String) clusterer.getSelectedItem());
+            ((NamedModule) clusterer.getSelectedItem()).getName());
     properties.setProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR,
-            (String) clusterProcessor.getSelectedItem());
+            ((NamedModule) clusterProcessor.getSelectedItem()).getName());
     properties.setProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER,
-            (String) cleaner.getSelectedItem());
+            ((NamedModule) cleaner.getSelectedItem()).getName());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox cleaner;

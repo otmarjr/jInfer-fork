@@ -77,7 +77,7 @@ public class CleanerEmptyChildrenFactoryTest {
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
     CleanerEmptyChildrenFactory instance = new CleanerEmptyChildrenFactory();
-    String expResult = "RegularExpressionCleanerEmptyChildren";
+    String expResult = "Regular Expression Cleaner Empty Children";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
   }

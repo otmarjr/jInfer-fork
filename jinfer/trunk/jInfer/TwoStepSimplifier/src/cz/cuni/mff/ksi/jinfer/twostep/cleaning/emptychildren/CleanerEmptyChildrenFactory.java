@@ -50,7 +50,7 @@ public class CleanerEmptyChildrenFactory implements RegularExpressionCleanerFact
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

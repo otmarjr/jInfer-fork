@@ -50,7 +50,7 @@ public class ClusterProcessorTrieFactory implements ClusterProcessorFactory {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

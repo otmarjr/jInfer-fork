@@ -60,7 +60,7 @@ public class IGGeneratorImpl implements IGGenerator {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

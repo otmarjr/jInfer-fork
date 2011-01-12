@@ -16,7 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.CleanerChainedFactory;
@@ -44,7 +46,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
   public CleanerChainedPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
-    dynamicComponents= new HashMap<Integer, JComboBox>();
+    dynamicComponents = new HashMap<Integer, JComboBox>();
   }
 
   /** This method is called from within the constructor to
@@ -63,69 +65,86 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
   public final void load() {
     java.awt.GridBagConstraints gridBagConstraints;
     setLayout(new java.awt.GridBagLayout());
-    List<String> cleanerNames= ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class);
-    List<String> modelStrings= new ArrayList<String>();
-    modelStrings.add("No cleaner");
-    for (String name : cleanerNames) {
-      if (!name.equals(CleanerChainedFactory.NAME)) {
+    List<NamedModule> cleanerNames = ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class);
+    List<NamedModule> modelStrings = new ArrayList<NamedModule>();
+    modelStrings.add(new NamedModule() {
+
+      @Override
+      public String getName() {
+        return "No cleaner";
+      }
+
+      @Override
+      public String getDisplayName() {
+        return getName();
+      }
+
+      @Override
+      public String getModuleDescription() {
+        return getDisplayName();
+      }
+    });
+    for (NamedModule name : cleanerNames) {
+      if (!name.getName().equals(CleanerChainedFactory.NAME)) {
         modelStrings.add(name);
       }
     }
     int i;
     for (i = 0; i < modelStrings.size() - 1; i++) {
-        final JLabel lbl = new javax.swing.JLabel();
-        final JComboBox cmb = new javax.swing.JComboBox();
-        final JScrollPane scr = new javax.swing.JScrollPane();
-        final JTextPane desc = new javax.swing.JTextPane();
+      final JLabel lbl = new javax.swing.JLabel();
+      final JComboBox cmb = new JComboBox();
+      cmb.setRenderer(new ProjectPropsComboRenderer());
+      final JScrollPane scr = new javax.swing.JScrollPane();
+      final JTextPane desc = new javax.swing.JTextPane();
 
-        lbl.setText("#" + (i + 1) + ":");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2*i;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-        add(lbl, gridBagConstraints);
+      lbl.setText("#" + (i + 1) + ":");
+      gridBagConstraints = new java.awt.GridBagConstraints();
+      gridBagConstraints.gridx = 0;
+      gridBagConstraints.gridy = 2 * i;
+      gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+      gridBagConstraints.weightx = 0.0;
+      gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+      add(lbl, gridBagConstraints);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2*i;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        cmb.setModel(new DefaultComboBoxModel(modelStrings.toArray()));
-        cmb.addActionListener(new java.awt.event.ActionListener() {
-          @Override
-          public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (cmb.getSelectedIndex() == 0) {
-              desc.setText("");
-            } else {
-              desc.setText(
-                      ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-                      (String) cmb.getSelectedItem()).getUserModuleDescription()
-                      );
-            }
+      gridBagConstraints = new java.awt.GridBagConstraints();
+      gridBagConstraints.gridx = 1;
+      gridBagConstraints.gridy = 2 * i;
+      gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+      gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+      gridBagConstraints.weightx = 1.0;
+      gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+      cmb.setModel(new DefaultComboBoxModel(modelStrings.toArray()));
+      cmb.addActionListener(new java.awt.event.ActionListener() {
+
+        @Override
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+          if (cmb.getSelectedIndex() == 0) {
+            desc.setText("");
+          } else {
+            desc.setText(
+                    ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
+                    ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription());
           }
-        });
-        cmb.setSelectedItem(properties.getProperty(CleanerChainedFactory.PROPERTIES_PREFIX + i, DEFAULT_MENU_TEXT));
-        cmb.getActionListeners()[0].actionPerformed(null);
-        add(cmb, gridBagConstraints);
-        dynamicComponents.put(Integer.valueOf(i), cmb);
-        
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2*i+1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        desc.setEditable(false);
-        scr.setViewportView(desc);
-        
-        add(scr, gridBagConstraints);
+        }
+      });
+      cmb.setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, properties.getProperty(CleanerChainedFactory.PROPERTIES_PREFIX + i, DEFAULT_MENU_TEXT)));
+      cmb.getActionListeners()[0].actionPerformed(null);
+      add(cmb, gridBagConstraints);
+      dynamicComponents.put(Integer.valueOf(i), cmb);
+
+      gridBagConstraints = new java.awt.GridBagConstraints();
+      gridBagConstraints.gridx = 0;
+      gridBagConstraints.gridy = 2 * i + 1;
+      gridBagConstraints.gridwidth = 2;
+      gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+      gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+      gridBagConstraints.weightx = 1.0;
+      gridBagConstraints.weighty = 1.0;
+      gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+      desc.setEditable(false);
+      scr.setViewportView(desc);
+
+      add(scr, gridBagConstraints);
     }
     if (i == 0) {
       final JTextPane noImplInfo = new JTextPane();
@@ -137,11 +156,11 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void store() {
-    int lastSet= 0;
+    int lastSet = 0;
     for (Integer i : dynamicComponents.keySet()) {
       if (dynamicComponents.get(i).getSelectedIndex() > 0) {
         properties.setProperty(CleanerChainedFactory.PROPERTIES_PREFIX + lastSet,
-              (String) dynamicComponents.get(i).getSelectedItem());
+                ((NamedModule) dynamicComponents.get(i).getSelectedItem()).getName());
         lastSet++;
       }
     }

@@ -56,7 +56,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

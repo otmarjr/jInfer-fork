@@ -48,7 +48,7 @@ public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierS
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override
@@ -59,7 +59,7 @@ public class OrdererUserInteractiveFactory implements RegexpAutomatonSimplifierS
   // TODO anti elaborate more
   @Override
   public String getUserModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" orders states in automaton by prompting user which state remove first.");
     return sb.toString();
   }

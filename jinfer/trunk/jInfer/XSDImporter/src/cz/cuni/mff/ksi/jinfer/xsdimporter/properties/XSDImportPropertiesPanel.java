@@ -17,7 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimporter.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.LogLevels;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
@@ -82,6 +84,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(parserLabel, gridBagConstraints);
 
+    parserComboBox.setRenderer(new ProjectPropsComboRenderer());
     parserComboBox.setMinimumSize(new java.awt.Dimension(100, 22));
     parserComboBox.setPreferredSize(new java.awt.Dimension(100, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -171,7 +174,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 155, Short.MAX_VALUE)
+      .addGap(0, 178, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +191,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public void store() {
     properties.setProperty(PARSER,
-            (String) parserComboBox.getSelectedItem());
+            ((NamedModule) parserComboBox.getSelectedItem()).getName());
     properties.setProperty(LOG_LEVEL,
             (String) logLevelCombo.getSelectedItem());
     properties.setProperty(STOP_ON_ERROR,
@@ -199,14 +202,15 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void load() {
-    final List<String> names = ModuleSelectionHelper.lookupNames(XSDParser.class);
+    final List<NamedModule> names = ModuleSelectionHelper.lookupNames(XSDParser.class);
     parserComboBox.setModel(new DefaultComboBoxModel(names.toArray()));
 
-    if (names.contains("SAX Parser")) {
-      parserComboBox.setSelectedItem(properties.getProperty(PARSER, "SAX Parser"));
-    } else {
-      parserComboBox.setSelectedItem(properties.getProperty(PARSER, DEFAULT_MENU_TEXT));
-    }
+    //TODO changed implementation of names what to do?
+//    if (names.contains("SAX Parser")) {
+//      parserComboBox.setSelectedItem(properties.getProperty(PARSER, "SAX Parser"));
+//    } else {
+      parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupName(XSDParser.class, properties.getProperty(PARSER, DEFAULT_MENU_TEXT)));
+//    }
 
     logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
 

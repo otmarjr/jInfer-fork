@@ -51,7 +51,7 @@ public class ClusterProcessorAlternationsFactory implements ClusterProcessorFact
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

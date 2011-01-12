@@ -16,7 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.RegexpAutomatonSimplifierStateRemovalFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.RegexpAutomatonSimplifierStateRemovalOrdererFactory;
@@ -65,6 +67,7 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelOrderer, gridBagConstraints);
 
+    comboOrderer.setRenderer(new ProjectPropsComboRenderer());
     comboOrderer.setMinimumSize(new java.awt.Dimension(200, 22));
     comboOrderer.setPreferredSize(new java.awt.Dimension(200, 22));
     comboOrderer.addActionListener(new java.awt.event.ActionListener() {
@@ -98,24 +101,22 @@ public class RegexpAutomatonSimplifierStateRemovalPropertiesPanel extends Abstra
   private void comboOrdererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdererChanged
     descOrderer.setText(
             ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class,
-            (String) comboOrderer.getSelectedItem()).getUserModuleDescription()
-            );
+            ((NamedModule) comboOrderer.getSelectedItem()).getName()).getUserModuleDescription());
   }//GEN-LAST:event_comboOrdererChanged
 
   @Override
   public final void load() {
     comboOrderer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class).toArray()
-            ));
+            ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class).toArray()));
 
-    comboOrderer.setSelectedItem(properties.getProperty(RegexpAutomatonSimplifierStateRemovalFactory.PROPERTIES_ORDERER, DEFAULT_MENU_TEXT));
+    comboOrderer.setSelectedItem(ModuleSelectionHelper.lookupName(RegexpAutomatonSimplifierStateRemovalOrdererFactory.class, properties.getProperty(RegexpAutomatonSimplifierStateRemovalFactory.PROPERTIES_ORDERER, DEFAULT_MENU_TEXT)));
     comboOrdererChanged(null);
   }
 
   @Override
   public void store() {
     properties.setProperty(RegexpAutomatonSimplifierStateRemovalFactory.PROPERTIES_ORDERER,
-            (String) comboOrderer.getSelectedItem());
+            ((NamedModule) comboOrderer.getSelectedItem()).getName());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox comboOrderer;

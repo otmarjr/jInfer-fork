@@ -49,7 +49,7 @@ public class CleanerNestedConcatenationFactory implements RegularExpressionClean
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

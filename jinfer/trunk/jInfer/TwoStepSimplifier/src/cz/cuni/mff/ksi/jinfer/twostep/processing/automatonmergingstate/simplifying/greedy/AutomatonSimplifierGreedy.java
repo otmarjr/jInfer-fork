@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
@@ -49,32 +48,33 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
+
   private static final Logger LOG = Logger.getLogger(AutomatonSimplifierGreedy.class);
   private final MergeConditionTester<T> mergeConditionTester;
 
   public AutomatonSimplifierGreedy(final MergeConditionTesterFactory mergeConditionTesterFactory, final Properties properties) {
     if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
-      ModuleParameters factoryParam= ((ModuleParameters) mergeConditionTesterFactory);
-      List<String> parameterNames= factoryParam.getParameterNames();
+      ModuleParameters factoryParam = ((ModuleParameters) mergeConditionTesterFactory);
+      List<String> parameterNames = factoryParam.getParameterNames();
 
       for (String parameterName : parameterNames) {
-        String value= properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
+        String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
         int intValue;
         try {
-          intValue= Integer.parseInt(value);
+          intValue = Integer.parseInt(value);
           factoryParam.setParameter(parameterName, intValue);
         } catch (NumberFormatException e) {
           LOG.error("Parameter named "
-                  + parameterName + 
-                  " which should be set for using submodule " 
-                  + mergeConditionTesterFactory.getName() + 
-                  " is not a number. "
+                  + parameterName
+                  + " which should be set for using submodule "
+                  + mergeConditionTesterFactory.getName()
+                  + " is not a number. "
                   + "Submodule will use some default value. "
                   + "This error was triggered by exception: " + e.toString());
         }
       }
     }
-    this.mergeConditionTester= mergeConditionTesterFactory.<T>create();
+    this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
   }
 
   /**
@@ -90,22 +90,22 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
    */
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {
-    final Map<State<T>, Set<Step<T>>> delta= inputAutomaton.getDelta();
+    final Map<State<T>, Set<Step<T>>> delta = inputAutomaton.getDelta();
 //    final Map<State<T>, Set<Step<T>>> reverseDelta= inputAutomaton.getReverseDelta();
 
-    boolean search= true;
+    boolean search = true;
     while (search) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      search= false;
-      List<List<List<State<T>>>> mergableStates= new ArrayList<List<List<State<T>>>>();
-      boolean found= false;
+      search = false;
+      List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
+      boolean found = false;
       for (State<T> mainState : delta.keySet()) {
         for (State<T> mergedState : delta.keySet()) {
           mergableStates.addAll(mergeConditionTester.getMergableStates(mainState, mergedState, inputAutomaton));
           if (!mergableStates.isEmpty()) {
-            found= true;
+            found = true;
             break;
           }
         }
@@ -117,19 +117,20 @@ public class AutomatonSimplifierGreedy<T> implements AutomatonSimplifier<T> {
         LOG.debug("Found states to merge\n");
         for (List<List<State<T>>> mergableAlternative : mergableStates) {
           for (List<State<T>> mergeSeq : mergableAlternative) {
-            String st= CollectionToString.<State<T>>colToString(mergeSeq, " + ",
+            String st = CollectionToString.<State<T>>colToString(mergeSeq, " + ",
                     new CollectionToString.ToString<State<T>>() {
+
                       @Override
                       public String toString(State<T> t) {
                         return t.toString();
                       }
-              });
+                    });
             LOG.debug("Merging states: " + st + "\n");
             inputAutomaton.mergeStates(mergeSeq);
           }
         }
         mergableStates.clear();
-        search= true;
+        search = true;
       }
     }
     return inputAutomaton;

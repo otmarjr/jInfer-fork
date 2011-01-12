@@ -55,7 +55,7 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
 
   @Override
   public String getModuleDescription() {
-    final StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append("(");
     sb.append(getRegexpAutomatonSimplifierStateRemovalOrdererFactory().getModuleDescription());
     sb.append(")");
@@ -69,7 +69,7 @@ public class RegexpAutomatonSimplifierStateRemovalFactory implements RegexpAutom
 
   @Override
   public String getUserModuleDescription() {
-    final StringBuilder sb = new StringBuilder(getName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" generates regular expression from automaton by sequentially"
             + " removing states from it. When a state is removed, all transitions"
             + " to and from it are collapsed. All loops are collapsed to one"

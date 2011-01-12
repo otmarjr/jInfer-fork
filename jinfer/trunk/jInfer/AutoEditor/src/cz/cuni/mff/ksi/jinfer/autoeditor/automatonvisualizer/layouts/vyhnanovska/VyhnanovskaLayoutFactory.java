@@ -60,7 +60,7 @@ public class VyhnanovskaLayoutFactory implements LayoutF {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

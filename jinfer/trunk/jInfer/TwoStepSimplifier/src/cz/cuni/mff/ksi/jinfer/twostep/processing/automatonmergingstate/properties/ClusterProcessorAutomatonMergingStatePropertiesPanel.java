@@ -16,7 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.properties;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.ClusterProcessorAutomatonMergingStateFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
@@ -69,6 +71,7 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelAutomatonSimplifier, gridBagConstraints);
 
+    automatonSimplifier.setRenderer(new ProjectPropsComboRenderer());
     automatonSimplifier.setMinimumSize(new java.awt.Dimension(400, 22));
     automatonSimplifier.setPreferredSize(new java.awt.Dimension(400, 22));
     automatonSimplifier.addActionListener(new java.awt.event.ActionListener() {
@@ -119,6 +122,7 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane4, gridBagConstraints);
 
+    regexpAutomatonSimplifier.setRenderer(new ProjectPropsComboRenderer());
     regexpAutomatonSimplifier.setMinimumSize(new java.awt.Dimension(400, 22));
     regexpAutomatonSimplifier.setPreferredSize(new java.awt.Dimension(400, 22));
     regexpAutomatonSimplifier.addActionListener(new java.awt.event.ActionListener() {
@@ -139,41 +143,37 @@ public class ClusterProcessorAutomatonMergingStatePropertiesPanel extends Abstra
   private void automatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automatonSimplifierChanged
     descAutomatonSimplifier.setText(
             ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
-            (String) automatonSimplifier.getSelectedItem()).getUserModuleDescription()
-            );
+            ((NamedModule) automatonSimplifier.getSelectedItem()).getName()).getUserModuleDescription());
   }//GEN-LAST:event_automatonSimplifierChanged
 
   private void regexpAutomatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regexpAutomatonSimplifierChanged
     descRegexpAutomatonSimplifier.setText(
             ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierFactory.class,
-            (String) regexpAutomatonSimplifier.getSelectedItem()).getUserModuleDescription()
-            );
+            ((NamedModule) regexpAutomatonSimplifier.getSelectedItem()).getName()).getUserModuleDescription());
   }//GEN-LAST:event_regexpAutomatonSimplifierChanged
 
   @Override
   public final void load() {
     automatonSimplifier.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(AutomatonSimplifierFactory.class).toArray()
-            ));
+            ModuleSelectionHelper.lookupNames(AutomatonSimplifierFactory.class).toArray()));
 
-    automatonSimplifier.setSelectedItem(properties.getProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT));
+    automatonSimplifier.setSelectedItem(ModuleSelectionHelper.lookupName(AutomatonSimplifierFactory.class, properties.getProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT)));
     automatonSimplifierChanged(null);
 
     regexpAutomatonSimplifier.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierFactory.class).toArray()
-            ));
+            ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierFactory.class).toArray()));
 
-    regexpAutomatonSimplifier.setSelectedItem(properties.getProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT));
+    regexpAutomatonSimplifier.setSelectedItem(ModuleSelectionHelper.lookupName(RegexpAutomatonSimplifierFactory.class, properties.getProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT)));
     regexpAutomatonSimplifierChanged(null);
   }
 
   @Override
   public void store() {
     properties.setProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER,
-            (String) automatonSimplifier.getSelectedItem());
+            ((NamedModule) automatonSimplifier.getSelectedItem()).getName());
 
     properties.setProperty(ClusterProcessorAutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER,
-            (String) regexpAutomatonSimplifier.getSelectedItem());
+            ((NamedModule) regexpAutomatonSimplifier.getSelectedItem()).getName());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox automatonSimplifier;

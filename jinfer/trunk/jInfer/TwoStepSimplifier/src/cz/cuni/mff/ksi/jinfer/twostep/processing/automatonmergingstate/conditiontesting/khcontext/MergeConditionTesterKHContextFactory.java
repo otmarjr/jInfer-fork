@@ -60,7 +60,7 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override
@@ -70,7 +70,7 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
 
   @Override
   public String getUserModuleDescription() {
-    StringBuilder sb = new StringBuilder(getName());
+    StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" find all k,h-context of states being tested. If there are two"
             + " contexts that are equivalent (same symbol string), the states"
             + " are considered mergable (k,h-equivalent). With merging ending"

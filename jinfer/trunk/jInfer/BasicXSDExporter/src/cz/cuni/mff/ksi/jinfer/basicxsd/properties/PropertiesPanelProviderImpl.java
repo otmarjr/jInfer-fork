@@ -19,16 +19,15 @@ package cz.cuni.mff.ksi.jinfer.basicxsd.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Properties panel provider of the XSD Exporter module.
  *
  * @author rio
- * TODO rio comment
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{

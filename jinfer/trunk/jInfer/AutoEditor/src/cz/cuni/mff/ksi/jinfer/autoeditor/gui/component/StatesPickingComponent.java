@@ -92,6 +92,9 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+            .addContainerGap())
+          .addGroup(layout.createSequentialGroup()
             .addComponent(jLabel1)
             .addContainerGap(464, Short.MAX_VALUE))
           .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -101,10 +104,7 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
             .addGap(132, 132, 132))
           .addGroup(layout.createSequentialGroup()
             .addComponent(jLabel2)
-            .addContainerGap(233, Short.MAX_VALUE))
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 553, Short.MAX_VALUE)
-            .addGap(132, 132, 132))))
+            .addContainerGap(233, Short.MAX_VALUE))))
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

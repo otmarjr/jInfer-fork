@@ -11,6 +11,7 @@
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\jmodule}[1]{\emph{#1}}
 
 \setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
 \setlength{\voffset}{-1in} %analogous voffset
@@ -40,42 +41,39 @@ The description of jInfer architecture will commence by describing the data
 structures, namely representations of regular expressions and XML elements,
 attributes and simple data.
 
-Afterwards the interfaces of basic inference modules - Initial Grammar Gen-
-erator, Simplifier and Schema Generator - will be explained.
+Afterwards the interfaces of basic inference modules - \jmodule{Initial Grammar Generator}, \jmodule{Simplifier} and \jmodule{Schema Generator} - will be explained.
 
 Finally, the process of inference will be described.
 
 \section{Package naming conventions}
-All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, normalized name of the module (e.g. \code{base}) and finally the package structure in this module (e.g. \texttt{objects.utils}). All in all, a package in the Base module could look like 
-\code{cz.cuni.mff.ksi.jinfer.base.objects.utils}
+All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, normalized name of the module (e.g. \code{base}) and finally the package structure in this module (e.g. \texttt{objects.utils}). All in all, a package in the \jmodule{Base} module could look like \code{cz.cuni.mff.ksi.jinfer.base.objects.utils}.
 
 \section{Data structures}
 \subsection{Regular expressions}
-% TODO anti lambda, epsilon notation
 For general information on regular expressions, please refer to \cite{wikiregexp}, \cite{automatatheory}.
 All classes pertaining to regular expressions can be found in the package \code{cz.cuni.mff.ksi.jinfer.base.regexp}.
 In jInfer, we use extended regular expressions as they give us nicer syntax (and easier programming).
 
-Regular expression is implemented as class \code{Regexp} with supplementing classes \code{RegexpInterval} and \code{RegexpType}.
-Each \code{Regexp} instance has one of the enum \code{RegexpType} type:
+Regular expression is implemented as class \code{Regexp<T>} with supplementing classes \code{RegexpInterval} and \code{RegexpType}.
+Each \code{Regexp<T>} instance has one of the enum \code{RegexpType} type:
 \begin{itemize}
-	\item Lambda - empty string (also called $\epsilon$ in literature),
+	\item Lambda ($\lambda$) - empty string (also called $\epsilon$ in literature),
 	\item Token - a letter of the alphabet,
 	\item Concatenation - one or more regular expression in an ordered sequence. Eg. $(a, b, c, d)$,
 	\item Alternation - a choice between one or more regular expressions. Eg. $(a | b | c | d)$,
 	\item Permutation - shortcut for all possible permutations of regular expressions. Our syntax to write down permutation is $(a\& b\& c\& d)$.
 \end{itemize}
 
-Type of regexp is held in \code{type} member in class \code{Regexp} and can be tested by calling methods \code{isLambda()}, \code{isToken()} etc.
+Type of regexp is held in \code{type} member in class \code{Regexp<T>} and can be tested by calling methods \code{isLambda()}, \code{isToken()} etc.
 
-Each \code{Regexp} instance has one instance of \code{RegexpInterval} as member.
+Each \code{Regexp<T>} instance has one instance of \code{RegexpInterval} as member.
 Class \code{RegexpInterval} represents POSIX-like intervals for expression:
 \begin{itemize}
 	\item $a\{m,n\}$ means $a$ at least $m$-times, at most $n$-times,
 	\item $a\{m,\}$ means at least $m$-times (unbounded).
 \end{itemize}
-Interval is either bounded (you have to set both lower and upper bound integers), or unbounded (you have to set only lower bound).
-Testing interval commonly follows routine:
+Interval can be either bounded (you have to set both lower and upper bound integers), or unbounded (you have to set only lower bound).
+Testing interval value commonly follows routine:
 \begin{verbatim}
 RegexpInterval i = r.getInterval();
 if (i.isUnbounded()) {
@@ -86,8 +84,8 @@ if (i.isUnbounded()) {
 \end{verbatim}
 That is, first check interval for being unbounded, only if it is bounded, you can ask for maximum.
 
-Class \code{Regexp} can represent regular expression over any alphabet.
-This is done by using java generics, \code{Regexp} evinceis implemented as \code{Regexp<T>}.
+Class \code{Regexp<T>} can represent regular expression over any alphabet.
+This is done by using java generics.
 Only token regexps hold instance of type \code{T} in member \code{content}.
 
 Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in fig. \ref{reg_tree}.
@@ -95,7 +93,7 @@ Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c |
 \caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
 \centering\includegraphics[scale=\myscale]{reg_tree}
 \end{figure}
-We implement this tree by member of \code{Regexp} class called \code{children}, which is of type \code{List<Regexp<T>{}>}.
+We implement this tree by member of \code{Regexp<T>} class called \code{children}, which is of type \code{List<Regexp<T>{}>}.
 List contains children of regexp in means of regexp tree.
 
 Regexp has to obey constraits:
@@ -161,7 +159,7 @@ In theory, the classes and interfaces would be layed out as on fig. \ref{interfa
 
 For even more generality in design, we decided to implement abstract classes in midlevel:
 \begin{itemize}
-	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later), % TODO anti Link to proper subsection
+	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later in section \ref{section_metada}),
 	\item \code{AbstractStructuralNode}, which implements only task of deciding if instance is \code{Element} or \code{SimpleData} actually.
 \end{itemize}
 As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node.
@@ -176,13 +174,17 @@ Class \code{Element} has two important members of course:
 	\item \code{Regexp<AbstractStructuralNode> subnodes} - for representing right side of grammar rule in resulting infered schema,
 	\item \code{List<Attribute> attributes} - for representing all attributes in resulting infered schema.
 \end{itemize}
-Theese two are filled by import modules, processed further by infering (simplifying) modules and finally exported by exporter modules. We will look at proper interfaces later.
+Theese two are filled by import modules, processed further by infering (simplifying) modules and finally exported by exporter modules.
+
+As in regular expressions, classes pertaining XML nodes are by default immutable.
+For elements, it means no adding of attributes and changing regexp reference (regexp instance itself is immutable as well).
+Same \code{getMutable()} principles and good usage practises as for regexps, hold for theese classes.
 
 \begin{figure}
 \caption{XML document representation} \label{xml_example}
 \centering\includegraphics[scale=\myscale]{xml_example}
 \end{figure}
-Let's take an example, the following XML document would be represented as on fig. \ref{xml_example}.
+Let's take an example, the following XML document would be represented as tree on fig. \ref{xml_example}.
 \begin{verbatim}
   <person name="john" surname="smith">
     <info>
@@ -192,18 +194,16 @@ Let's take an example, the following XML document would be represented as on fig
     <more/>
   </person>
 \end{verbatim}
-
-As in regular expressions, classes pertaining XML nodes are by default immutable.
-For elements, it means no adding of attributes and changing regexp reference (regexp instance itself is immutable).
-Same \code{getMutable()} principles and good usage practises hold for theese classes.
+Although in example we present whole document tree, input modules produce slightly different format (consisting of rules).
 
 TODO anti
+% hey vektor, what to DO here?
 
 \subsection{Rules, Grammars, etc}
 
-jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}. % TODO vektor seee literature.bib and repair citation http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf
+jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}.
+% TODO vektor check citation of http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf in literature.bib
 \emph{Rules} in such grammar are in the form
-% TODO vektor read "the not so short introduction to latex" and math mode section
 $$
   \textnormal{Left Hand Side (LHS)} \to \textnormal{Right Hand Side (RHS)}
 $$
@@ -213,18 +213,7 @@ $$
 $$
 In jInfer each such rule is represented with an \code{Element} instance. In this representation, the \code{Element} itself is the LHS, its \code{subnodes} are the RHS.\\
 
-Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens. Initial Grammar is produced by Initial Grammar Generator. % TODO vektor Link
-
-\subsection{Metadata}
-To allow simple extensibility of our rules, each descendant of \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
-
-At the present, jInfer modules use the following metadata, all defined in \textit{IGGUtils} class:
-\begin{itemize}
-	\item \code{from.schema}, filled in by BasicIGG and XSDImport modules: means that this rule was created (originates from) from a schema.
-	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
-	\item \code{is.sentinel}, filled in by XSDImport module: TODO anti Explain
-	\item \code{schema.data}, filled in by XSDImport module: TODO reseto Explain
-\end{itemize}
+Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens (even with no children, see fig. \ref{xml_example} again). Initial Grammar is produced by \jmodule{Initial Grammar Generator}. % TODO vektor Link
 
 \section{NetBeans Modules}
 
@@ -282,6 +271,18 @@ Important thing to note here is that all these steps are executed consecutively.
 This modular architecture means that (at least theoretically) it is possible to replace any and all of these modules with \emph{something} else that does similar job. In practice, it might be useful to use the logic already implemented in \emph{BasicIGG} and just extend it to handle new input type.
 
 % TODO vektor Describe requirements on what gets passed on between modules
+
+% anti : should be after IGG explained, to fulfil is.sentinel explanation i will refer back.
+\subsection{Node metadata} \label{section_metadata}
+To allow simple extensibility of rules, class \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
+
+At the present, jInfer modules use the following metadata, all defined in \code{IGGUtils} class:
+\begin{itemize}
+	\item \code{from.schema}, filled in by BasicIGG and XSDImport modules: means that this rule was created (originates from) from a schema.
+	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
+	\item \code{is.sentinel}, filled in by  BasicIGG and XSDImport module: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import) but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling node as sentinel.
+	\item \code{schema.data}, filled in by XSDImport module: TODO reseto Explain
+\end{itemize}
 
 \subsection{Programmatic view}
 

@@ -52,7 +52,6 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
   private final StateMapping<T> stateGridMapping;
   private static final double FILL_FACTOR = 3;
-  // TODO rio remove reference to automaton
   private Automaton<T> automaton;
 
   /**

@@ -3,9 +3,12 @@ digraph interfaces_nodes {
 	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
 
+{
+	rank = same;
 	interface;
 	class [style= rounded];
 	NamedNode;
+}
 	ContentNode;
 	StructuralNode;
 	Attribute [style= rounded];

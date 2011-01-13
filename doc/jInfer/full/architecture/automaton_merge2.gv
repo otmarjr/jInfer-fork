@@ -1,6 +1,6 @@
 digraph automaton_merge2 {
-	node [shape = circle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
-	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	node [shape = circle, fontname = "SFTT1000", fontsize = 10];
+	edge [fontname = "SFTT1000", fontsize = 10];
 	rankdir = LR;
 
 	0 [style = invisible];

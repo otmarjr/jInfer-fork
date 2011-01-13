@@ -2,10 +2,13 @@ digraph nodes {
 	rankdir = BT;
 	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+{
+	rank = same;
 	interface [style = solid];
 	class [style= rounded, label = "class"];
 	
 	NamedNode;
+}
 	StructuralNode;
 	ContentNode;
 	Element [style= rounded];

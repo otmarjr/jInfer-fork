@@ -154,7 +154,7 @@ In theory, the classes and interfaces would be layed out as on fig. \ref{interfa
 \caption{How are interfaces and classes for XML representation arranged in practice} \label{nodes}
 \end{figure}
 \begin{figure}
-\centering\includegraphics[scale=0.3]{nodes_full}
+\centering\includegraphics[scale=\myscale]{nodes_full}
 \caption{XML representing interfaces and classes in detail} \label{nodes_full}
 \end{figure}
 
@@ -268,7 +268,6 @@ You will get PTA with useCounts and finalCounts set properly on steps/states.
 	}
 	\caption{Sample automaton.} \label{automaton_merge}
 \end{figure}
-
 The biggest thing we offer to scientists is state merging by simply calling \code{mergeStates(state1, state2)} method.
 Method merges second state given into first one (or an overloaded version - all states in list into first one in list).
 All \{in|out\}-transitions are redirected properly (or discarted as needed).
@@ -279,6 +278,8 @@ One asks to merge states 3 and 4.
 State 3 then becomes final state with loop and state 4 disappears (fig. \ref{automaton_merge2}).
 If then one ask to merge states 2 and 4, automaton properly handles situation by knowing, that old state 4, was merged into state 3, and merges states 2 and 3 (see fig. \ref{automaton_merge3}).
 This can be useful in $k,h-context$ and $s,k-strings$ implementations (find all context/strings, then supply list of states to merge and don't bother with state names updates).
+
+\paragraph{AutomatonCloner} 
 
 \section{Inference process}
 \begin{figure}

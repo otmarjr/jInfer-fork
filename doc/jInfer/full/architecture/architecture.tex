@@ -365,10 +365,10 @@ The most important method in each module is \code{start}, defined in each of the
 \subsubsection{Module input}
 Each inference module takes the actual input data as the first parameter of its \code{start} method. The type of the argument differs based on the inference module.\\
 
-\jmodule{Initial Grammar Generator} takes an object of type \emph{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
+\jmodule{Initial Grammar Generator} takes an object of type \code{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
 
-\emph{Simplifier} and \emph{Schema Generator} take grammar, % TODO vektor Link to grammar definition
-in other words a list of rules as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
+\jmodule{Simplifier} and \jmodule{Schema Generator} take grammar, % TODO vektor Link to grammar definition
+in other words a list of \code{Element}s as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
 
 \subsubsection{Module output}
 Second parameter of each inference module's \code{start} method is a callback object. There are 3 callback interfaces defined in the \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package
@@ -379,11 +379,11 @@ Second parameter of each inference module's \code{start} method is a callback ob
 	\item \code{SchemaGeneratorCallback}
 \end{itemize}
 
-Each callback interface naturally belongs to the similarly named module interface. As their respective interfaces, also callbacks define one crucial method: \emph{finished}. Each inference module is responsible for invoking this method on the callback it got as a parameter after it has finished its work and has results to be passed on. Again, these 3 finished methods have different arguments based on the inference module.\\
+Each callback interface naturally belongs to the similarly named module interface. As their respective interfaces, also callbacks define one crucial method: \emph{finished}. Each inference module is responsible for invoking this method on the callback it got as a parameter, after it has finished its work and has results to be passed on. Again, these 3 finished methods have different arguments based on the inference module.\\
 
 \code{IGGeneratorCallback.finished()} and \code{SimplifierCallback.finished()} have a grammar (Initial Grammar in case of IGG) as their only argument.\\
 
-\code{SchemaGeneratorCallback.finished} has two \code{String}s as arguments: \code{schema} is the actual string representation of the resulting schema, \code{extension} is a file extension of the result (such as "dtd" or "xsd") which the framework will use when saving the result in a file.
+\code{SchemaGeneratorCallback.finished()} has two \code{String}s as arguments: \code{schema} is the actual string representation of the resulting schema, \code{extension} is a file extension of the result (such as "dtd" or "xsd") which the framework will use when saving the result in a file.
 
 \subsubsection{Error handling}
 
@@ -391,7 +391,7 @@ Because the run of each inference module is encapsulated in a \code{try-catch} b
 
 \subsubsection{Interruptions}
 
-User running the inference might change his mind and try to stop this. For this reason, modules have to check for this case in every time-consuming place such as long loops with the following code
+User running the inference might change his mind and try to stop this. For this reason, modules have to check for this case in every time-consuming place such as long loops with the following code:
 \begin{verbatim}
   for (forever) {
     if (Thread.interrupted()) {
@@ -408,6 +408,11 @@ The part of framework responsible for actually gathering user input, running all
 A new instance of \code{Runner} is constructed for each inference run. While being created, \code{Runner}  loads the preferences for current project and looks up user-selected inference modules. Also, callback objects pointing back to methods in \code{Runner} are created. The inference process itself is then as follows
 
 % TODO vektor Picture!!!
+\begin{figure}
+\centering\includegraphics[scale=\myscale]{runner}
+\caption{Runner} \label{runner}
+\end{figure}
+
 \begin{enumerate}
 	\item Selected IGG's \code{start} is encapsulated with error/interruption handling and executed, passing \code{Input} and first callback as parameters.
 	\item When IGG finishes, it invokes callback's \code{finish} method, passing the IG as parameter.

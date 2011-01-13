@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{url}
+\usepackage{subfigure}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{tgpagella}
@@ -90,8 +91,8 @@ Only token regexps hold instance of type \code{T} in member \code{content}.
 
 Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in fig. \ref{reg_tree}.
 \begin{figure}
-\caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
 \centering\includegraphics[scale=\myscale]{reg_tree}
+\caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
 \end{figure}
 We implement this tree by member of \code{Regexp<T>} class called \code{children}, which is of type \code{List<Regexp<T>{}>}.
 List contains children of regexp in means of regexp tree.
@@ -145,16 +146,16 @@ The latter two extends \code{NamedNode} interface.
 We have three classes: \code{Element} for elements, \code{SimpleData} for text nodes, \code{Attribute} for attributes (see package \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes}).
 In theory, the classes and interfaces would be layed out as on fig. \ref{interfaces_nodes}
 \begin{figure}
-\caption{How should interfaces and classes for XML representation look like in theory} \label{interfaces_nodes}
 \centering\includegraphics[scale=\myscale]{interfaces_nodes}
+\caption{How should interfaces and classes for XML representation look like in theory} \label{interfaces_nodes}
 \end{figure}
 \begin{figure}
-\caption{How are interfaces and classes for XML representation arranged in practice} \label{nodes}
 \centering\includegraphics[scale=\myscale]{nodes}
+\caption{How are interfaces and classes for XML representation arranged in practice} \label{nodes}
 \end{figure}
 \begin{figure}
-\caption{XML representing interfaces and classes in detail} \label{nodes_full}
 \centering\includegraphics[scale=0.3]{nodes_full}
+\caption{XML representing interfaces and classes in detail} \label{nodes_full}
 \end{figure}
 
 For even more generality in design, we decided to implement abstract classes in midlevel:
@@ -181,8 +182,8 @@ For elements, it means no adding of attributes and changing regexp reference (re
 Same \code{getMutable()} principles and good usage practises as for regexps, hold for theese classes.
 
 \begin{figure}
-\caption{XML document representation} \label{xml_example}
 \centering\includegraphics[scale=\myscale]{xml_example}
+\caption{XML document representation} \label{xml_example}
 \end{figure}
 Let's take an example, the following XML document would be represented as tree on fig. \ref{xml_example}.
 \begin{verbatim}
@@ -219,24 +220,15 @@ Another important notion is a \emph{grammar}. A grammar consists of its rules, s
 
 TODO vektor
 
-\subsection{Nondeterministic Finite Automaton}
-For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
-Implementation consists of 4 classes: \code{Automaton<T>}, \code{Step<T>}, \code{State<T>} and \code{AutomatonCloner<A, B>} (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
-Whole implementation uses java generics for representation of symbol of alphabet, we denote by \code{T} the java type of symbol.
-
-Let's begin by smalles of the classes, the \code{State<T>}.
-It represents automaton state, it has its \code{name} member (integer)
-
-
 \section{Inference process}
 \begin{figure}
-	\caption{High-level view of the inference process} \label{inference_process}
 	\centering\includegraphics[scale=\myscale]{inference_process}
+	\caption{High-level view of the inference process} \label{inference_process}
 \end{figure}
 
 The process by which jInfer infers the resulting schema from various inputs (inference process) is summarized by fig. \ref{inference_process}. From the high-level viewpoint, it consists of three consecutive steps carried out by three different modules:
 \begin{enumerate}
-	\item Initial Grammar (IG) generation: done by the \emph{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
+	\item Initial Grammar (IG) generation: done by the \jmodule{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
 	For example, a trivial XML document
 	\begin{verbatim}
   <a>
@@ -253,7 +245,7 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 		c & \to & \lambda \\
 		d & \to & \lambda 
 	\end{eqnarray*}
-	\item Simplification: done by the \emph{Simplifier} module, this is the process of simplifying, compressing or somehow compactly describing the IG by a smaller number of (more complex) rules. User interaction might be used in this step to help achieve better simplification. At the end of this step, all rules are sent to the last step.\\
+	\item Simplification: done by the \jmodule{Simplifier} module, this is the process of simplifying, compressing or somehow compactly describing the IG by a smaller number of (more complex) rules (exactly one rule for each element). User interaction might be used in this step to help achieve better simplification. At the end of this step, all rules are sent to the export step.\\
 	For example, rules
 	\begin{eqnarray*}
 		a & \to & b \\
@@ -263,14 +255,12 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 	\begin{eqnarray*}
 		a & \to & b | (c, d\ast)
 	\end{eqnarray*}
-	\item Schema export: done by the \emph{Schema Generator (SchemaGen)} module, this is the process of actually creating the resulting schema from the simplified rules. Result of this step is a string representation of the schema, which is sent back to the framework (and later displayed, saved, etc).\\
+	\item Schema export: done by the \jmodule{Schema Generator (SchemaGen)} module, this is the process of actually creating the resulting schema file from the simplified rules. Result of this step is a string representation of the schema, which is sent back to the framework (and later displayed, saved, etc).\\
 	% TODO vektor Example
 \end{enumerate}
-Important thing to note here is that all these steps are executed consecutively. That means, \emph{Simplifier} is only started \emph{after} the \emph{IGG} completely finished its work and returned IG to be simplified. Similarly, \emph{SchemaGen} gets all the rules to export at once, in one list.\\
+Important thing to note here is that all these steps are executed consecutively. That means, \jmodule{Simplifier} is only started \emph{after} the \jmodule{IGG} completely finished its work and returned IG to be simplified. Similarly, \jmodule{SchemaGen} gets all the rules to export at once, in one list.\\
 
-This modular architecture means that (at least theoretically) it is possible to replace any and all of these modules with \emph{something} else that does similar job. In practice, it might be useful to use the logic already implemented in \emph{BasicIGG} and just extend it to handle new input type.
-
-% TODO vektor Describe requirements on what gets passed on between modules
+This modular architecture means that it is possible to replace any and/or all of these modules with \emph{something} else that does similar job. In practice, scientists will probably implement new \jmodule{Simplifier} modules, while using our implementation of BasicIGG and export modules. This modular scheme is used inside our modules to divide them into submodules. It is possible to add new file format processing to import/export. One can extend automaton merging state algorithm of our implementation of \cite{ahonen} in TwoStepSimplifier module by replacing submodules.
 
 % anti : should be after IGG explained, to fulfil is.sentinel explanation i will refer back.
 \subsection{Node metadata} \label{section_metadata}
@@ -280,9 +270,74 @@ At the present, jInfer modules use the following metadata, all defined in \code{
 \begin{itemize}
 	\item \code{from.schema}, filled in by BasicIGG and XSDImport modules: means that this rule was created (originates from) from a schema.
 	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
-	\item \code{is.sentinel}, filled in by  BasicIGG and XSDImport module: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import) but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling node as sentinel.
+	\item \code{is.sentinel}, filled in by  BasicIGG and XSDImport module: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import), but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling the node as sentinel.
 	\item \code{schema.data}, filled in by XSDImport module: TODO reseto Explain
+	All of these metadata are of set/not set character (using \code{Boolean.TRUE}).
 \end{itemize}
+
+% TODO vektor Describe requirements on what gets passed on between modules
+
+\subsection{Nondeterministic Finite Automaton}
+For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
+Implementation consists of 4 classes: \code{Automaton<T>}, \code{Step<T>}, \code{State<T>} and \code{AutomatonCloner<A, B>} (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
+Whole implementation uses java generics for representation of symbol of alphabet, we denote by \code{T} the java type of symbol.
+
+Let's begin by smallest of the classes, the \code{State<T>}.
+It represents automaton state, it has two integer members: \code{name} and \code{finalCount}.
+Name clearly serves as name of state in visualization and to string conversion.
+Final count is for representing whether the state is final in automaton.
+The field is not true/false but integral to help algorithms use stastistics over automatons (how many times in XML input is this state final?).
+
+Next we have \code{Step<T>} which stands for automaton transition.
+It has its \code{source} and \code{destination} states references.
+Symbol accepted by using this transition is store in \code{acceptsSymbol} member of generic type \code{T}.
+And finally member \code{useCount}, which is integer stating how many times the transition was used when constructing prefix tree automaton from input data.
+Simplifying algorithm can use this number for statistic purposes.
+
+\code{Automaton<T>} class puts theese together into nondeterministic finite automaton.
+It has reference to \code{initialState}, it has \code{newStateName} integer value to assure unique state names inside one automaton (incrementing every time new state creates).
+We use two maps to implement transition function (delta($\delta$) function  in most literature).
+One map of type \code{Map<State<T>, Set<Step<T>>>} called \code{delta} represents mapping from state into set of all outgoing transitions from state.
+Second is just reversed map, called \code{reverseDelta}, which holds all incoming transitions into state (for better perfomance).
+There exist only one instance of each step from one state to another.
+That instance is referenced in delta map (on place of source state), and in reverse delta map (on place of destination state).
+Loops are no speciality, just source = destination.
+
+Automaton supports creating automaton as a copy of another one (not reference copy, but true copy), this can be used when searching solution space to create more versions of automaton to edit.
+We implemented building of prefix-tree automaton (PTA) in \code{buildPTAOnSymbol()} method.
+Create empty automaton and then call this method for every positive example input string of language.
+You will get PTA with useCounts and finalCounts set properly on steps/states.
+
+\begin{figure}
+	\centering
+	\subfigure[Before merge.]
+	{
+		\includegraphics[scale=\myscale]{automaton_merge1}
+		\label{automaton_merge1}
+	}
+	\subfigure[After states 3 and 4 merged.]
+	{
+		\centering\includegraphics[scale=\myscale]{automaton_merge2}
+		\label{automaton_merge2}
+	}
+	\subfigure[After states 2 and 4 merged.]
+	{
+		\centering\includegraphics[scale=\myscale]{automaton_merge3}
+		\label{automaton_merge3}
+	}
+	\caption{Sample automaton.} \label{automaton_merge}
+\end{figure}
+
+The biggest thing we offer to scientists is state merging by simply calling \code{mergeStates()} method.
+Method merges second state given into first one (or all states in list into first one in list).
+All \{in | out\}-transitions are redirected properly (or discarted as needed).
+Use count and final count are updated as sums of values from merging transitions/states.
+One can ask for merging states, that are merged out from automaton already.
+Take example automaton of fig. \ref{automaton_merge1} (states are labeled [name|finalCount], steps by \{symbol|useCount\}).
+One asks to merge states 3 and 4.
+State 3 then becomes final state with loop and state 4 disappears (fig. \ref{automaton_merge2}).
+If then one ask to merge states 2 and 4, automaton properly handles situation by knowing, that old state 4, was merged into state 3, and merges states 2 and 3 (see fig. \ref{automaton_merge3}).
+This can be useful in $k,h-context$ and $s,k-strings$ implementations (find all context/strings, then supply list of states to merge and don't bother with state names updates).
 
 \subsection{Programmatic view}
 

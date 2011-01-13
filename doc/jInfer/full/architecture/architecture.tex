@@ -160,7 +160,7 @@ In theory, the classes and interfaces would be layed out as on fig. \ref{interfa
 
 For even more generality in design, we decided to implement abstract classes in midlevel:
 \begin{itemize}
-	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later in section \ref{section_metada}),
+	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later in section \ref{section_metadata}),
 	\item \code{AbstractStructuralNode}, which implements only task of deciding if instance is \code{Element} or \code{SimpleData} actually.
 \end{itemize}
 As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node.
@@ -197,10 +197,8 @@ Let's take an example, the following XML document would be represented as tree o
 \end{verbatim}
 Although in example we present whole document tree, input modules produce slightly different format (consisting of rules).
 
-TODO anti
-% hey vektor, what to DO here?
 
-\subsection{Rules, Grammars, etc}
+\subsection{Rules and grammars}
 
 jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}.
 % TODO vektor check citation of http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf in literature.bib
@@ -216,9 +214,71 @@ In jInfer each such rule is represented with an \code{Element} instance. In this
 
 Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens (even with no children, see fig. \ref{xml_example} again). Initial Grammar is produced by \jmodule{Initial Grammar Generator}. % TODO vektor Link
 
-\section{NetBeans Modules}
+\subsection{Nondeterministic Finite Automaton}
+We recommend skipping this section in first read as it describes advanced features.
+For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
+Implementation consists of 4 classes: \code{Automaton<T>}, \code{Step<T>}, \code{State<T>} and \code{AutomatonCloner<A, B>} (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
+Whole implementation uses java generics for representation of symbol of alphabet, we denote by \code{T} the java type of symbol.
 
-TODO vektor
+\paragraph{State}
+Let's begin by smallest of the classes, the \code{State<T>}.
+It represents automaton state, it has two integer members: \code{name} and \code{finalCount}.
+Name clearly serves as name of state in visualization and to string conversion.
+Final count is for representing whether the state is final in automaton.
+The field is not true/false but integral to help algorithms use stastistics over automatons (how many times in XML input is this state final?).
+
+\paragraph{Step}
+Next we have \code{Step<T>} which stands for automaton transition.
+It has its \code{source} and \code{destination} states references.
+Symbol accepted by using this transition is store in \code{acceptsSymbol} member of generic type \code{T}.
+And finally member \code{useCount}, which is integer stating how many times the transition was used when constructing prefix tree automaton from input data.
+Simplifying algorithm can use this number for statistic purposes.
+
+\paragraph{Automaton}
+\code{Automaton<T>} class puts theese together into nondeterministic finite automaton.
+It has reference to \code{initialState}, it has \code{newStateName} integer value to assure unique state names inside one automaton (incrementing every time new state is created).
+We use two maps to implement transition function ($\delta$-function).
+One map of type \code{Map<State<T>, Set<Step<T>{}>{}>} called \code{delta} represents mapping from state into set of all outgoing transitions from state.
+Second is just reversed map, called \code{reverseDelta}, which holds all incoming transitions into state (for better perfomance).
+There exist only one instance of each step from one state to another.
+That instance is referenced in delta map (on place of source state), and in reverse delta map (on place of destination state).
+Loops are no speciality, just source = destination.
+
+Automaton supports creating automaton as a copy of another one (not reference copy, but true copy), this can be used when searching solution space to create more versions of automaton to edit.
+We implemented building of prefix-tree automaton (PTA) in \code{buildPTAOnSymbol()} method.
+Create empty automaton and then call this method for every input string of language.
+You will get PTA with useCounts and finalCounts set properly on steps/states.
+
+\begin{figure}
+	\centering
+	\subfigure[Before merge.]
+	{
+		\includegraphics[scale=\myscale]{automaton_merge1}
+		\label{automaton_merge1}
+	}
+	\subfigure[After states 3 and 4 merged.]
+	{
+		\centering\includegraphics[scale=\myscale]{automaton_merge2}
+		\label{automaton_merge2}
+	}
+	\subfigure[After states 2 and 4 merged.]
+	{
+		\centering\includegraphics[scale=\myscale]{automaton_merge3}
+		\label{automaton_merge3}
+	}
+	\caption{Sample automaton.} \label{automaton_merge}
+\end{figure}
+
+The biggest thing we offer to scientists is state merging by simply calling \code{mergeStates(state1, state2)} method.
+Method merges second state given into first one (or an overloaded version - all states in list into first one in list).
+All \{in|out\}-transitions are redirected properly (or discarted as needed).
+Variables useCount and finalCount are updated to sums of values from merged transitions/states.
+One can ask for merging states, that are merged out from automaton already.
+Lets take example automaton of fig. \ref{automaton_merge1} (states are labeled [name|finalCount], steps by \{symbol|useCount\}).
+One asks to merge states 3 and 4.
+State 3 then becomes final state with loop and state 4 disappears (fig. \ref{automaton_merge2}).
+If then one ask to merge states 2 and 4, automaton properly handles situation by knowing, that old state 4, was merged into state 3, and merges states 2 and 3 (see fig. \ref{automaton_merge3}).
+This can be useful in $k,h-context$ and $s,k-strings$ implementations (find all context/strings, then supply list of states to merge and don't bother with state names updates).
 
 \section{Inference process}
 \begin{figure}
@@ -272,72 +332,10 @@ At the present, jInfer modules use the following metadata, all defined in \code{
 	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
 	\item \code{is.sentinel}, filled in by  BasicIGG and XSDImport module: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import), but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling the node as sentinel.
 	\item \code{schema.data}, filled in by XSDImport module: TODO reseto Explain
-	All of these metadata are of set/not set character (using \code{Boolean.TRUE}).
 \end{itemize}
+All of these metadata are of set/not set character (using \code{Boolean.TRUE}).
 
 % TODO vektor Describe requirements on what gets passed on between modules
-
-\subsection{Nondeterministic Finite Automaton}
-For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
-Implementation consists of 4 classes: \code{Automaton<T>}, \code{Step<T>}, \code{State<T>} and \code{AutomatonCloner<A, B>} (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
-Whole implementation uses java generics for representation of symbol of alphabet, we denote by \code{T} the java type of symbol.
-
-Let's begin by smallest of the classes, the \code{State<T>}.
-It represents automaton state, it has two integer members: \code{name} and \code{finalCount}.
-Name clearly serves as name of state in visualization and to string conversion.
-Final count is for representing whether the state is final in automaton.
-The field is not true/false but integral to help algorithms use stastistics over automatons (how many times in XML input is this state final?).
-
-Next we have \code{Step<T>} which stands for automaton transition.
-It has its \code{source} and \code{destination} states references.
-Symbol accepted by using this transition is store in \code{acceptsSymbol} member of generic type \code{T}.
-And finally member \code{useCount}, which is integer stating how many times the transition was used when constructing prefix tree automaton from input data.
-Simplifying algorithm can use this number for statistic purposes.
-
-\code{Automaton<T>} class puts theese together into nondeterministic finite automaton.
-It has reference to \code{initialState}, it has \code{newStateName} integer value to assure unique state names inside one automaton (incrementing every time new state creates).
-We use two maps to implement transition function (delta($\delta$) function  in most literature).
-One map of type \code{Map<State<T>, Set<Step<T>>>} called \code{delta} represents mapping from state into set of all outgoing transitions from state.
-Second is just reversed map, called \code{reverseDelta}, which holds all incoming transitions into state (for better perfomance).
-There exist only one instance of each step from one state to another.
-That instance is referenced in delta map (on place of source state), and in reverse delta map (on place of destination state).
-Loops are no speciality, just source = destination.
-
-Automaton supports creating automaton as a copy of another one (not reference copy, but true copy), this can be used when searching solution space to create more versions of automaton to edit.
-We implemented building of prefix-tree automaton (PTA) in \code{buildPTAOnSymbol()} method.
-Create empty automaton and then call this method for every positive example input string of language.
-You will get PTA with useCounts and finalCounts set properly on steps/states.
-
-\begin{figure}
-	\centering
-	\subfigure[Before merge.]
-	{
-		\includegraphics[scale=\myscale]{automaton_merge1}
-		\label{automaton_merge1}
-	}
-	\subfigure[After states 3 and 4 merged.]
-	{
-		\centering\includegraphics[scale=\myscale]{automaton_merge2}
-		\label{automaton_merge2}
-	}
-	\subfigure[After states 2 and 4 merged.]
-	{
-		\centering\includegraphics[scale=\myscale]{automaton_merge3}
-		\label{automaton_merge3}
-	}
-	\caption{Sample automaton.} \label{automaton_merge}
-\end{figure}
-
-The biggest thing we offer to scientists is state merging by simply calling \code{mergeStates()} method.
-Method merges second state given into first one (or all states in list into first one in list).
-All \{in | out\}-transitions are redirected properly (or discarted as needed).
-Use count and final count are updated as sums of values from merging transitions/states.
-One can ask for merging states, that are merged out from automaton already.
-Take example automaton of fig. \ref{automaton_merge1} (states are labeled [name|finalCount], steps by \{symbol|useCount\}).
-One asks to merge states 3 and 4.
-State 3 then becomes final state with loop and state 4 disappears (fig. \ref{automaton_merge2}).
-If then one ask to merge states 2 and 4, automaton properly handles situation by knowing, that old state 4, was merged into state 3, and merges states 2 and 3 (see fig. \ref{automaton_merge3}).
-This can be useful in $k,h-context$ and $s,k-strings$ implementations (find all context/strings, then supply list of states to merge and don't bother with state names updates).
 
 \subsection{Programmatic view}
 
@@ -362,12 +360,12 @@ for example
 	@ServiceProvider(service = Simplifier.class)
 \end{verbatim}
 
-The most important method in each module is \code{start}, defined in each of the interfaces. This method is called by the framework when the respective step of inference is being executed. It has always two parameters: the actual input data for the module, and a callback object to report to when this step is finished. We will look at both parameter now in more detail. 
+The most important method in each module is \code{start}, defined in each of the interfaces. This method is called by the framework when the respective step of inference is to be executed. It has always two parameters: the actual input data for the module, and a callback object to report to when this step is finished. We will look at both parameters now in more detail. 
 
 \subsubsection{Module input}
 Each inference module takes the actual input data as the first parameter of its \code{start} method. The type of the argument differs based on the inference module.\\
 
-\emph{Initial Grammar Generator} takes an object of type \emph{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
+\jmodule{Initial Grammar Generator} takes an object of type \emph{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
 
 \emph{Simplifier} and \emph{Schema Generator} take grammar, % TODO vektor Link to grammar definition
 in other words a list of rules as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
@@ -421,6 +419,10 @@ A new instance of \code{Runner} is constructed for each inference run. While bei
 \end{enumerate}
 
 % TODO vektor Talk about Capabilities
+\section{NetBeans Modules}
+
+TODO vektor
+
 
 \nocite{*}
 \bibliographystyle{alpha}

@@ -43,10 +43,10 @@ import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Can create instance of {@link Layout} using external Graphviz dot executable.
  *
- * @author rio
- * TODO rio comment & refactor
  * TODO anti Comment!
+ * @author anti, rio
  */
 @ServiceProvider(service = LayoutF.class)
 public class GraphvizLayoutFactory implements LayoutF {

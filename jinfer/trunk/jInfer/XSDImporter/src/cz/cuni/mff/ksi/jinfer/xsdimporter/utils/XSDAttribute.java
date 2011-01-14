@@ -25,11 +25,14 @@ public enum XSDAttribute {
 
   NAME("name"),
   REF("ref"),
+  TYPE("type"),
+  USE("use"),
   MINOCCURS("minOccurs"),
   MAXOCCURS("maxOccurs"),
   INVALID("InVAlid");
 
   private final String name;
+  private static final String METADATA_PREFIX = "XSDSchema.";
 
   private XSDAttribute(final String name) {
     this.name = name;
@@ -42,6 +45,10 @@ public enum XSDAttribute {
 
   public String getName() {
     return name;
+  }
+
+  public String getMetadataName() {
+    return METADATA_PREFIX + name;
   }
 
   public static XSDAttribute matchName(final String name) {

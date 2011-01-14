@@ -93,7 +93,12 @@ public class XSDBuiltInDataTypes {
     QName;
   }
 
-  public static boolean isStringType(String type) {
+  /**
+   * Check if type falls into {@link StringType } category.
+   * @param type Type to be checked.
+   * @return True if the enum contains given type, false otherwise.
+   */
+  public static boolean isStringType(final String type) {
     try {
       StringType.valueOf(trimNS(type));
       return true;
@@ -102,7 +107,12 @@ public class XSDBuiltInDataTypes {
     }
   }
 
-  public static boolean isDateType(String type) {
+  /**
+   * Check if type falls into {@link DateType } category.
+   * @param type Type to be checked.
+   * @return True if the enum contains given type, false otherwise.
+   */
+  public static boolean isDateType(final String type) {
     try {
       DateType.valueOf(trimNS(type));
       return true;
@@ -111,7 +121,12 @@ public class XSDBuiltInDataTypes {
     }
   }
 
-  public static boolean isNumericType(String type) {
+  /**
+   * Check if type falls into {@link NumericType } category.
+   * @param type Type to be checked.
+   * @return True if the enum contains given type, false otherwise.
+   */
+  public static boolean isNumericType(final String type) {
     try {
       NumericType.valueOf(trimNS(type));
       return true;
@@ -120,20 +135,35 @@ public class XSDBuiltInDataTypes {
     }
   }
 
-  public static boolean isTrickyNumericType(String type) {
+  /**
+   * Check if type falls into {@link TrickyNumericType } category.
+   * @param type Type to be checked.
+   * @return True if the enum contains given type, false otherwise.
+   */
+  public static boolean isTrickyNumericType(final String type) {
     return (TrickyNumericType.BYTE.toString().toLowerCase().equals(trimNS(type))
             || TrickyNumericType.INT.toString().toLowerCase().equals(trimNS(type))
             || TrickyNumericType.LONG.toString().toLowerCase().equals(trimNS(type))
             || TrickyNumericType.SHORT.toString().toLowerCase().equals(trimNS(type)));
   }
 
-  public static boolean isTrickyMiscType(String type) {
+  /**
+   * Check if type falls into {@link TrickyMiscType } category.
+   * @param type Type to be checked.
+   * @return True if the enum contains given type, false otherwise.
+   */
+  public static boolean isTrickyMiscType(final String type) {
     return (TrickyMiscType.BOOLEAN.toString().toLowerCase().equals(trimNS(type))
             || TrickyMiscType.DOUBLE.toString().toLowerCase().equals(trimNS(type))
             || TrickyMiscType.FLOAT.toString().toLowerCase().equals(trimNS(type)));
   }
 
-  public static boolean isMiscType(String type) {
+  /**
+   * Check if type falls into {@link MiscType } category.
+   * @param type Type to be checked.
+   * @return True if the enum contains given type, false otherwise.
+   */
+  public static boolean isMiscType(final String type) {
     try {
       MiscType.valueOf(trimNS(type));
       return true;
@@ -142,7 +172,12 @@ public class XSDBuiltInDataTypes {
     }
   }
 
-  public static boolean isSimpleDataType(String type) {
+  /**
+   * Check if type falls into any of the built in data types defined in XSD Schema.
+   * @param type Type to be checked.
+   * @return True if eny of the enums contain given type, false otherwise.
+   */
+  public static boolean isSimpleDataType(final String type) {
     return (isStringType(type)
             || isDateType(type)
             || isNumericType(type)
@@ -151,7 +186,7 @@ public class XSDBuiltInDataTypes {
             || isMiscType(type));
   }
 
-  private static String trimNS(String qName) {
+  private static String trimNS(final String qName) {
     return qName.substring(qName.lastIndexOf(':') + 1);
   }
 }

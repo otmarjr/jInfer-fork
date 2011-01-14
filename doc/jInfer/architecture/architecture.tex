@@ -218,7 +218,13 @@ Another important notion is a \emph{grammar}. A grammar consists of its rules, s
 We recommend skipping this section in first read as it describes advanced features.
 For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
 Implementation consists of 4 classes: \code{Automaton<T>}, \code{Step<T>}, \code{State<T>} and \code{AutomatonCloner<A, B>} (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
-Whole implementation uses java generics for representation of symbol of alphabet, we denote by \code{T} the java type of symbol.
+Whole implementation uses java generics for representation of symbol of alphabet.
+We denote \code{T} the java type of symbol.
+Take care of symbol class and its \code{equals()} implementation.
+Automaton uses \code{equals()} to compare symbols on transitions (when building prefix-tree automaton and when merging states).
+If you are using strings, you're just fine, but with complicated objects, either take care, that equivalent objects are properly tested in \code{equals()}.
+Or (maybe faster) solution is to cluster objects into classes of equivalence before inserting them into automaton.
+Then give automaton only cluster representant object (which will use java \code{Object.equals()} with reference comparison) for each object encountered.
 
 \paragraph{State}
 Let's begin by smallest of the classes, the \code{State<T>}.
@@ -230,7 +236,7 @@ The field is not true/false but integral to help algorithms use stastistics over
 \paragraph{Step}
 Next we have \code{Step<T>} which stands for automaton transition.
 It has its \code{source} and \code{destination} states references.
-Symbol accepted by using this transition is store in \code{acceptsSymbol} member of generic type \code{T}.
+Symbol accepted by using this transition is stored in \code{acceptsSymbol} member of generic type \code{T}.
 And finally member \code{useCount}, which is integer stating how many times the transition was used when constructing prefix tree automaton from input data.
 Simplifying algorithm can use this number for statistic purposes.
 
@@ -244,7 +250,7 @@ There exist only one instance of each step from one state to another.
 That instance is referenced in delta map (on place of source state), and in reverse delta map (on place of destination state).
 Loops are no speciality, just source = destination.
 
-Automaton supports creating automaton as a copy of another one (not reference copy, but true copy), this can be used when searching solution space to create more versions of automaton to edit.
+Automaton supports creating of automaton as a copy of another one (not reference copy, but deep copy expect of symbols), this can be used when searching solution space to create more versions of automaton to edit.
 We implemented building of prefix-tree automaton (PTA) in \code{buildPTAOnSymbol()} method.
 Create empty automaton and then call this method for every input string of language.
 You will get PTA with useCounts and finalCounts set properly on steps/states.
@@ -279,7 +285,20 @@ State 3 then becomes final state with loop and state 4 disappears (fig. \ref{aut
 If then one ask to merge states 2 and 4, automaton properly handles situation by knowing, that old state 4, was merged into state 3, and merges states 2 and 3 (see fig. \ref{automaton_merge3}).
 This can be useful in $k,h-context$ and $s,k-strings$ implementations (find all context/strings, then supply list of states to merge and don't bother with state names updates).
 
-\paragraph{AutomatonCloner} 
+\paragraph{AutomatonCloner}
+Class \code{AutomatonCloner<A, B>} has one overloaded method \code{convertAutomaton()}.
+First version accepts automaton and class implementing \code{AutomatonClonerSymbolConverter<A, B>} interface, and returns new automaton with same structure, but with symbols on transitions from alphabet of java type \code{B}.
+Second version takes two automatons, second one has to be empty (without initial state created), and symbol converter.
+It fills in second automaton to have same structure as first one, but with symbols of type \code{B}.
+
+To fulfill symbol conversion, one have to provide imlementation of \code{AutomatonClonerSymbolConverter<A, B>} interface.
+Interface has one method:
+\begin{verbatim}
+	B convertSymbol(final A symbol);
+\end{verbatim}
+Its purpose is to give mapping from symbol over one domain to new symbols.
+Implementation have to be \code{equals} consistent, if in first automaton are two transitions with symbols \code{a}, \code{b} such that
+\code{a.equals(b) == true}, convertor has to produce new symbols that are equal.
 
 \section{Inference process}
 \begin{figure}

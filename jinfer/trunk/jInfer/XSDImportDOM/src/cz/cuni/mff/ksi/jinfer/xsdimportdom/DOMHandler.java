@@ -18,12 +18,14 @@ package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDBuiltInDataTypes;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDTag;
@@ -56,6 +58,8 @@ public class DOMHandler {
   private final boolean verbose = settings.isVerbose();
 
   private static final String STAR = "*";
+  private static final String CONTAINER_CTYPE = "::container::complextype::";
+  private static final String CONTAINER_ORDER = "::container::order::";
 
   /**
    * List of all element tags in current schema that are immediate children of the schema tag itself.
@@ -154,7 +158,9 @@ public class DOMHandler {
     if (BaseUtils.isEmpty(name) && domElem.hasAttribute(XSDAttribute.REF.toString())) {
       roots.add(createSentinel(domElem, new ArrayList<String>(), XSDAttribute.REF));
     } else {
-      roots.add(buildRuleSubtree(domElem, new ArrayList<String>(), domElem));
+      List<org.w3c.dom.Element> visited = new ArrayList<org.w3c.dom.Element>();
+      visited.add(domElem);
+      roots.add(buildRuleSubtree(domElem, new ArrayList<String>(), visited));
     }
   }
 
@@ -213,8 +219,193 @@ public class DOMHandler {
     }
   }
 
-  private Element buildRuleSubtree(org.w3c.dom.Element currentNode, List<String> context, org.w3c.dom.Element subRoot) {
-    return Element.getMutable();
+  /**
+   * Determine if ret has no children and thus can be retyped to <code>LAMBDA</code>.
+   * On return from this method, the parameter is set to {@link RegexpType#LAMBDA }
+   * with all the valid constraints, and then it is made immutable.
+   * @param ret Element to check for children.
+   */
+  private void checkForLambda(final Element ret) {
+    if (ret.getSubnodes().getChildren().isEmpty() && !ret.getSubnodes().getType().equals(RegexpType.LAMBDA)) {
+      ret.getSubnodes().setInterval(null);
+      ret.getSubnodes().setContent(null);
+      ret.getSubnodes().setType(RegexpType.LAMBDA);
+      ret.setImmutable();
+    }
+  }
+
+  private Element buildRuleSubtree(final org.w3c.dom.Element currentNode, final List<String> context, final List<org.w3c.dom.Element> visited) {
+    final Element ret = Element.getMutable();
+    final List<org.w3c.dom.Element> newVisited = new ArrayList<org.w3c.dom.Element>(visited);
+    final List<String> newContext = new ArrayList<String>(context);
+    final Map<String, Object> metadata = ret.getMetadata();
+    int min = 1, max = 1;
+
+    ret.getContext().addAll(context);
+    metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
+    
+    // determine occurence ( oo kurence )
+    try {
+      final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
+      if (!BaseUtils.isEmpty(maxOccurence)) {
+        metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), maxOccurence);
+        max = Integer.parseInt(maxOccurence);
+      }
+    } catch (NumberFormatException e) {
+      max = 1;
+    }
+
+    try {
+      final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
+      if (!BaseUtils.isEmpty(minOccurence)) {
+        metadata.put(XSDAttribute.MINOCCURS.getMetadataName(), currentNode.getAttribute(XSDAttribute.MINOCCURS.toString()));
+        min = Integer.parseInt(minOccurence);
+      }
+    } catch (NumberFormatException e) {
+      min = 1;
+    }
+
+    
+    // inspect self
+    final XSDTag tag = XSDTag.matchName(trimNS(currentNode.getNodeName()));
+    switch (tag) {
+      case ELEMENT:
+        for (org.w3c.dom.Element el : visited) {
+          // if this node was visited previously in the recursion
+          // (for example when dealing with a recursive complextype)
+          // we just create a sentinel to be used as the leaf node of rule tree
+          if(el.equals(currentNode)) {
+            return createSentinel(currentNode, context, XSDAttribute.NAME);
+          }
+        }
+        
+        final String name = currentNode.getAttribute(XSDAttribute.NAME.toString());
+        if (!BaseUtils.isEmpty(name)) {
+          ret.setName(name);
+
+          newContext.add(name);
+          newVisited.add(currentNode);
+        } else if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
+          return createSentinel(currentNode, context, XSDAttribute.REF);
+        } else {
+          throw new XSDException("Element must have name or ref attribute defined.");
+        }
+
+        // element has defined type
+        if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
+          final String type = currentNode.getAttribute(XSDAttribute.TYPE.toString());
+          if (XSDBuiltInDataTypes.isSimpleDataType(type)) {
+            metadata.put(XSDAttribute.TYPE.getMetadataName(), type);
+          } else if (namedCTypes.containsKey(type)) {
+            final Element subtree = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited);
+            if (!subtree.getName().equals(CONTAINER_CTYPE)) {
+              throw new XSDException("Copying data from complextype failed, unexpected contaner.");
+            }
+            if (ret.getSubnodes().getType() == null && subtree.getSubnodes().getType() != null) {
+              ret.getSubnodes().setType(subtree.getSubnodes().getType());
+            } else {
+              throw new XSDException("Copying data from complextype failed, unexpected regexp type.");
+            }
+            for (Regexp<AbstractStructuralNode> regexp : subtree.getSubnodes().getChildren()) {
+              ret.getSubnodes().addChild(regexp);
+            }
+            ret.getAttributes().addAll(subtree.getAttributes());
+
+            checkForLambda(ret);
+            return ret; // RETURN STATEMENT !
+          } else {
+            LOG.error("Specified type '" + type + "' of element '" + name + "' was not found!");
+          }
+        }
+
+        break;
+      case ALL:
+      case CHOICE:
+      case SEQUENCE:
+        //TODO reseto: create child interval to mark the number of occurences
+        ret.setName(CONTAINER_ORDER);
+        break;
+      case COMPLEXTYPE:
+        ret.setName(CONTAINER_CTYPE);
+        break;
+      default:
+        // do nothing;
+        LOG.warn("Behavior undefined for tag " + currentNode.getTagName());
+    }
+    
+    // inspect children
+    final NodeList children = currentNode.getChildNodes();
+    for (int i = 0; i < children.getLength(); i++) {
+      final org.w3c.dom.Element child = isDOMElement(children.item(i));
+      if (child != null) {
+        final XSDTag childTag = XSDTag.matchName(trimNS(child.getTagName()));
+        switch (childTag) {
+          case ELEMENT:
+            if (XSDTag.ELEMENT.equals(tag)) { // parent is also element
+              throw new XSDException("Invalid schema, two directly nested element tags.");
+            }
+            ret.getSubnodes().addChild(
+              Regexp.<AbstractStructuralNode>getToken(
+              buildRuleSubtree(child, newContext, newVisited)));
+            break;
+          case COMPLEXTYPE:
+            if (XSDTag.COMPLEXTYPE.equals(tag)) { // parent is also complexType
+              throw new XSDException("Invalid schema, two directly nested complexType tags.");
+            }
+            //TODO reseto: extract children and attributes from subcontainer
+            break;
+          case ATTRIBUTE:
+            // first get the attribute name or ref
+            // we don't resolve the ref at all (out of assignment), just register it's there
+            String attrName = child.getAttribute(XSDAttribute.NAME.toString());
+            if (BaseUtils.isEmpty(attrName)) {
+              attrName = child.getAttribute(XSDAttribute.REF.toString());
+              if (BaseUtils.isEmpty(attrName)) {
+                LOG.error("Attribute under " + ret.getName() + " has no name.");
+                continue;
+              }
+            }
+            String attrType = child.getAttribute(XSDAttribute.TYPE.toString());
+            if (BaseUtils.isEmpty(attrType)) {
+              attrType = null;
+            }
+            final HashMap<String, Object> attrMeta = new HashMap<String, Object>();
+            if (child.hasAttribute(XSDAttribute.USE.toString())
+              && child.getAttribute(XSDAttribute.USE.toString()).equalsIgnoreCase("required")) {
+              attrMeta.put("required", Boolean.TRUE);
+            }
+            //TODO reseto: possibly add more metadata
+            ret.getAttributes().add(
+              new Attribute(newContext, attrName, attrMeta, attrType, new ArrayList<String>(0)));
+            break;
+          case ALL:
+            if (XSDTag.COMPLEXTYPE.equals(tag)) {
+              
+            } else {
+              //TODO reseto: group and complexcontent should be supported?
+              LOG.warn("Unsupported tree structure.");
+            }
+            break;
+          case CHOICE:
+          case SEQUENCE:
+            if (XSDTag.isOrderIndicator(tag)) {
+              ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited).getSubnodes());
+            } else if (XSDTag.COMPLEXTYPE.equals(tag)) {
+
+            }
+            
+            break;
+          default:
+            LOG.warn("Behavior undefined for child tag " + child.getTagName());
+        }
+
+      }
+
+    } // end children loop
+
+    checkForLambda(ret);
+    
+    return ret;
   }
 
   /**
@@ -242,17 +433,6 @@ public class DOMHandler {
     ret.getContext().addAll(context);
 
 
-    if (BaseUtils.isEmpty(domElem.getAttribute(XSDAttribute.NAME.toString()))
-        && domElem.hasAttribute(XSDAttribute.REF.toString())) {
-      
-    }
-    //ret.setName(getNameOrRef(domElem));
-    //TODO reseto what if element has ref ...
-    //TODO reseto implement logic! :)
-
-    // firstly inspect self
-
-    // inspect each child by the tag name (type)
     final NodeList children = domElem.getChildNodes();
     for (int i = 0; i < children.getLength(); i++) {
       final org.w3c.dom.Element domEl = isDOMElement(children.item(i));

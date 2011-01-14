@@ -310,39 +310,87 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 \begin{enumerate}
 	\item Initial Grammar (IG) generation: done by the \jmodule{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
 	For example, a trivial XML document
+	\label{example_inference_xml}
 	\begin{verbatim}
-  <a>
-    <b>
-      <c/>
-    </b>
-    <d/>
-  </a>
+  <person name="john" surname="smith">
+    <info>
+      Some text
+      <note/>
+    </info>
+    <more/>
+  </person>
+  <person>
+    <more/>
+    <more/>
+    <more/>
+  </person>
 	\end{verbatim}
-	would translate into the following IG rules
+	will translate into the following IG rules
 	\begin{eqnarray*}
-		a & \to &  b, d \\
-		b & \to & c \\
-		c & \to & \lambda \\
-		d & \to & \lambda 
+		person & \to & \mathit{info}, more, more, more, more \\
+		\mathit{info} & \to & simple\_data, note \\
+		note & \to & empty\_concatenation \\
+		more & \to & empty\_concatenation \\
+		person & \to & more, more, more \\
+		more & \to & empty\_concatenation \\
+		more & \to & empty\_concatenation \\
+		more & \to & empty\_concatenation \\
 	\end{eqnarray*}
 	\item Simplification: done by the \jmodule{Simplifier} module, this is the process of simplifying, compressing or somehow compactly describing the IG by a smaller number of (more complex) rules (exactly one rule for each element). User interaction might be used in this step to help achieve better simplification. At the end of this step, all rules are sent to the export step.\\
-	For example, rules
+	For example, previous rules for element person could be simplified to a single rule
 	\begin{eqnarray*}
-		a & \to & b \\
-		a & \to & c, d, d, d
+		person & \to & \mathit{info}?, more\{1, 3\}
 	\end{eqnarray*}
-	could be simplified to a single rule
+	Rules for elements info, more and note after simplification will be:
 	\begin{eqnarray*}
-		a & \to & b | (c, d\ast)
+		\mathit{info} & \to & simple\_data, note \\
+		note & \to & \lambda \\
+		more & \to & \lambda
 	\end{eqnarray*}
+	Note the lambda regular expressions for note and more. In Initial Grammar, all regexps are concatenations (even empty), but in simplified grammar, if element have to be empty in schema, it has to have lambda regular expresion as subnodes.	
 	\item Schema export: done by the \jmodule{Schema Generator (SchemaGen)} module, this is the process of actually creating the resulting schema file from the simplified rules. Result of this step is a string representation of the schema, which is sent back to the framework (and later displayed, saved, etc).\\
-	% TODO vektor Example
+	For previous simplifier rules, the resulting DTD would be:
+	\begin{verbatim}
+	<!ELEMENT person (info?, more, more?, more?)>
+	<!ELEMENT info (#PCDATA | note)*>
+	<!ELEMENT note EMPTY>
+	<!ELEMENT more EMPTY>
+	+ attributes
+	\end{verbatim}
+	For element person, even when simplified grammar specifies its occurence to at least once, at most 3 times, as DTD has no such construct, export module have to do some magic. Situation is even worse for elements that contain simple data inside simplified rule. Only way to express mixed content in DTD is to use \verb.(#PCDATA | note)*. construct. Even if regular expression is complicated, export module has to do this "flattening".
+	Lets look on XSD output of same rules:
+	% TODO rio review this example!
+	\begin{verbatim}
+	<xs:element name="person">
+	  <xs:complexType>
+	    <xs:sequence>
+	      <xs:element name="info" minOccurs="0" maxOccurs="1" type="xs:string"/>
+	      <xs:element name="more" minOccurs="1" maxOccurs="3" type="xs:string"/>
+	    </xs:sequence>
+	  </xs:complexType>
+	</xs:element>
+	<xs:element name="info">
+	  <xs:complexType mixed="true">
+	    <xs:sequence>
+	      <xs:element name="note" minOccurs="1" maxOccurs="1" type="xs:string"/>
+	    </xs:sequence>
+	  </xs:complexType>
+	</xs:element>
+	<xs:element name="note">
+	  <xs:complexType>
+	  </xs:complexType>
+	</xs:element>
+	<xs:element name="more">
+	  <xs:complexType>
+	  </xs:complexType>
+	</xs:element>
+	+attributes
+	\end{verbatim}
 \end{enumerate}
 Important thing to note here is that all these steps are executed consecutively. That means, \jmodule{Simplifier} is only started \emph{after} the \jmodule{IGG} completely finished its work and returned IG to be simplified. Similarly, \jmodule{SchemaGen} gets all the rules to export at once, in one list.\\
 
 This modular architecture means that it is possible to replace any and/or all of these modules with \emph{something} else that does similar job. In practice, scientists will probably implement new \jmodule{Simplifier} modules, while using our implementation of BasicIGG and export modules. This modular scheme is used inside our modules to divide them into submodules. It is possible to add new file format processing to import/export. One can extend automaton merging state algorithm of our implementation of \cite{ahonen} in TwoStepSimplifier module by replacing submodules.
 
-% anti : should be after IGG explained, to fulfil is.sentinel explanation i will refer back.
 \subsection{Node metadata} \label{section_metadata}
 To allow simple extensibility of rules, class \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
 
@@ -427,7 +475,6 @@ The part of framework responsible for actually gathering user input, running all
 
 A new instance of \code{Runner} is constructed for each inference run. While being created, \code{Runner}  loads the preferences for current project and looks up user-selected inference modules. Also, callback objects pointing back to methods in \code{Runner} are created. The inference process itself is then as follows
 
-% TODO vektor Picture!!!
 \begin{figure}
 \centering\includegraphics[scale=\myscale]{runner}
 \caption{Runner} \label{runner}

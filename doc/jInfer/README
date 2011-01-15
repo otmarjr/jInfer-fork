@@ -1,0 +1,24 @@
+If you want to edit architecture, go to architecture/architecture.tex. Use make to build .pdf, on ubuntu install tex-gyre, cm-super, cm-super-x11, graphviz packages if something doesn't work. (and latex of course).
+
+If you want to start writing new documentation pdf, copy architecture.tex and Makefile into new subdirectory, read makefile to find .eps files line and change it accordingly. Also all: target needs change.
+
+To produce nice images, use graphviz by copy&paste from *.gv files in architecture/. Note the fontname setting!
+To use Computer Modern Typewriter in graphviz, font name is SFTT1000.
+
+For other images, openoffice.org draw can be used succesfuly (see figure 8: Runner in architecture.pdf that the results are NICE).
+In openoffice, you can! (and should) use TeXGyrePagella font for text (package tex-gyre).
+For code (as in fig runner) you should use Computer Modern Typewriter, which you get in cm-super-[x11].
+To hack openoffice to use it, use .fonts.conf committed here (named _fonts.conf), copy it to ~/.fonts.conf and run
+$ fc-cache -f
+reopen OOo, and voila.
+In OOo draw, there is 'connector' arrow type which uses ports on rectangles to connect nicely.
+
+For images, we prefer round boxes in general. For interfaces however, use rectangles, for classes use rounded rectangles.
+For UML-like diagram see figure 4 (XML represetenging interfaces and classes in detail) in architecture.pdf, source file is nodes_full.gv.
+Graphviz "record" shape is used, see:
+http://www.graphviz.org/doc/info/shapes.html#record
+style rounded is also possible (nice).
+Beware of spaces not possible in record mode, so label = "My\ super\ class|method1()" is correct escape of spaces.
+
+For all other stuff, copy paste architecture.tex or simply ask :)
+anti

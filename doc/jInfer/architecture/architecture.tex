@@ -364,24 +364,21 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 	<xs:element name="person">
 	  <xs:complexType>
 	    <xs:sequence>
-	      <xs:element name="info" minOccurs="0" maxOccurs="1" type="xs:string"/>
-	      <xs:element name="more" minOccurs="1" maxOccurs="3" type="xs:string"/>
+	      <xs:element name="info" minOccurs="0" maxOccurs="1">
+	        <xs:complexType mixed="true">
+	          <xs:sequence>
+	            <xs:element name="note" minOccurs="1" maxOccurs="1">
+	              <xs:complexType>
+	              </xs:complexType>
+	            </xs:element>
+	          </xs:sequence>
+	        </xs:complexType>
+	      </xs:element>
+	      <xs:element name="more" minOccurs="1" maxOccurs="3"/>
+	        <xs:complexType>
+	        </xs:complexType>
+	      </xs:element>
 	    </xs:sequence>
-	  </xs:complexType>
-	</xs:element>
-	<xs:element name="info">
-	  <xs:complexType mixed="true">
-	    <xs:sequence>
-	      <xs:element name="note" minOccurs="1" maxOccurs="1" type="xs:string"/>
-	    </xs:sequence>
-	  </xs:complexType>
-	</xs:element>
-	<xs:element name="note">
-	  <xs:complexType>
-	  </xs:complexType>
-	</xs:element>
-	<xs:element name="more">
-	  <xs:complexType>
 	  </xs:complexType>
 	</xs:element>
 	+attributes

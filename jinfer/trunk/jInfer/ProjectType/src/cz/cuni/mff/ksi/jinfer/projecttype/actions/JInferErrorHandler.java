@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.openide.cookies.LineCookie;
@@ -28,6 +29,7 @@ import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.text.Line;
 import org.openide.windows.IOProvider;
+import org.openide.windows.IOSelect;
 import org.openide.windows.InputOutput;
 import org.openide.windows.OutputEvent;
 import org.openide.windows.OutputListener;
@@ -40,6 +42,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author sviro
  */
 public class JInferErrorHandler extends DefaultHandler {
+  public static final String JINFER_VALIDATION_TITLE = "jInfer validation result";
 
   private static final Logger LOG = Logger.getLogger(ValidateAction.class);
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
@@ -93,7 +96,12 @@ public class JInferErrorHandler extends DefaultHandler {
 
   private void printErrorMessage(final SAXParseException e) {
     if (result) {
-      final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer validation result", false);
+      InputOutput ioResult = IOProvider.getDefault().getIO(JINFER_VALIDATION_TITLE, false);
+
+      if (ioResult.isClosed()) {
+        ioResult = IOProvider.getDefault().getIO(JINFER_VALIDATION_TITLE, true);
+      }
+
       ioResult.getOut().print("[" + DATE_FORMAT.format(new Date()) + "] " + e.getMessage());
 
       final int realLineNum = e.getLineNumber();

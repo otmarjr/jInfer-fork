@@ -47,8 +47,9 @@ public final class TypeUtils {
     Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
 
     if (subnodes.isLambda()) {
-      // Type of element without sub nodes is considered a built-in type.
-      return TypeCategory.BUILTIN;
+      // Type of element without sub nodes is considered a built-in type because
+      // we define en empty element type as a complexType without any content.
+      return TypeCategory.COMPLEX;
     }
 
     if (subnodes.isToken()) {

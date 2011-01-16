@@ -80,7 +80,9 @@ public class ExpanderImpl implements Expander {
           final Regexp<AbstractStructuralNode> r) {
     switch (r.getType()) {
       case LAMBDA:
-        return Collections.emptyList();
+        final List<List<AbstractStructuralNode>> empty = new ArrayList<List<AbstractStructuralNode>>(1);
+        empty.add(new ArrayList<AbstractStructuralNode>());
+        return empty;
       case TOKEN:
         final List<List<AbstractStructuralNode>> tokenRet = new ArrayList<List<AbstractStructuralNode>>(1);
         tokenRet.add(Arrays.asList(r.getContent()));

@@ -349,4 +349,80 @@ public class CloneHelperTest {
     assert (e2.getAttributes().get(0) != e2o.getAttributes().get(0));
     assert (e2.getAttributes().get(1) != e2o.getAttributes().get(1));
   }
+
+  @Test
+  public void testGetPrefixedContextEmptySource() {
+    System.out.println("prefixed context empty source context");
+
+    final Element e = new Element(TestUtils.EMPTY_CONTEXT, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
+
+    final String one = "one";
+    final String two = "two";
+    final List<String> prefix = new ArrayList<String>();
+    prefix.add(one);
+    prefix.add(two);
+    final List<String> res = CloneHelper.getPrefixedContext(e, prefix);
+    assertTrue(res.equals(prefix));
+  }
+
+  @Test
+  public void testGetPrefixedContextEmptyPrefix() {
+    System.out.println("prefixed context empty prefix parameter");
+
+    final String one = "one";
+    final String two = "two";
+    final List<String> prefix = new ArrayList<String>();
+    prefix.add(one);
+    prefix.add(two);
+    final Element e = new Element(prefix, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
+
+    final List<String> res = CloneHelper.getPrefixedContext(e, TestUtils.EMPTY_CONTEXT);
+    assertTrue(res.equals(prefix));
+  }
+
+  @Test
+  public void testGetPrefixedContextBothEmpty() {
+    System.out.println("prefixed context empty list");
+
+    final List<String> prefix = TestUtils.EMPTY_CONTEXT;
+    final Element e = new Element(prefix, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
+
+    final List<String> res = CloneHelper.getPrefixedContext(e, prefix);
+    assertTrue(res.equals(prefix));
+  }
+
+  @Test
+  public void testGetPrefixedContextNullPrefix() {
+    System.out.println("prefixed context null prefix parameter");
+
+    final String one = "one";
+    final String two = "two";
+    final List<String> prefix = new ArrayList<String>();
+    prefix.add(one);
+    prefix.add(two);
+    final Element e = new Element(prefix, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
+
+    final List<String> res = CloneHelper.getPrefixedContext(e, null);
+    assertTrue(res.equals(prefix));
+  }
+
+  @Test
+  public void testGetPrefixedContext() {
+    System.out.println("prefixed context normal");
+
+    final String one = "one";
+    final List<String> prefix1 = new ArrayList<String>();
+    prefix1.add(one);
+    final String two = "two";
+    final List<String> prefix2 = new ArrayList<String>();
+    prefix1.add(two);
+
+    final Element e = new Element(prefix2, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
+
+    final List<String> prefix = new ArrayList<String>();
+    prefix.add(one);
+    prefix.add(two);
+    final List<String> res = CloneHelper.getPrefixedContext(e, prefix1);
+    assertTrue(res.equals(prefix));
+  }
 }

@@ -141,6 +141,36 @@ public final class RegexpInterval {
     return min;
   }
 
+  /**
+   * Create an interval that is within both intervals provided as arguments.
+   * Method is symmetrical, so the arguments can be exchanged.
+   * @param first First of the intervals.
+   * @param second Second of the intervals.
+   * @return Intersection of intervals.
+   */
+  public static RegexpInterval intersectIntervals(RegexpInterval first, RegexpInterval second) {
+    int lower, upper;
+    if (first.getMax() == -1) {
+      // unbounded first max -> use max of second, even if it is unbounded too
+      upper = second.getMax();
+    } else if (second.getMax() == -1) {
+      // unbounded second max -> use max of first, even if it is unbounded too
+      upper = first.getMax();
+    } else {
+      // neither is unbounded, use the smaller one, but make sure it is at least zero
+      upper = Math.min(Math.max(0,first.getMax()), Math.max(0, second.getMax()));
+    }
+    if (upper == -1) {
+      // upper is unbounded, lower bound is the greater of the two, but must be at least zero
+      lower = Math.max(0, Math.max(first.getMin(), second.getMin()));
+      return RegexpInterval.getUnbounded(lower);
+    } else {
+      // lower is again greater of the two, but at most equal to the upper bound
+      lower = Math.min(upper, Math.max(first.getMin(), second.getMin()));
+      return RegexpInterval.getBounded(lower, upper);
+    }
+  }
+
   @Override
   public String toString() {
     if (isOnce()) {

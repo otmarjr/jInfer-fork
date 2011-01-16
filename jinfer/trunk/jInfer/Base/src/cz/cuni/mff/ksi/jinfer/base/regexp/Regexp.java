@@ -27,7 +27,7 @@ import java.util.List;
  *
  * <ul>
  * <li>Definition 1:<br/>
- * REGEXP := TOKEN | CONCATENATION OF REGEXPS | ALTERNATION OF REGEXPS | KLEENE STAR OF A REGEXP
+ * REGEXP := TOKEN | CONCATENATION OF REGEXPS | ALTERNATION OF REGEXPS | PERMUTATIONS OF REGEXPS
  * </li>
  * <li>
  * Definition 2:<br/>
@@ -36,7 +36,8 @@ import java.util.List;
  * Kleene star operator.
  * </li>
  * </ul>
- *
+ * Permutation is just syntactic sugar. Each regexp has @link{RegexpInterval}
+ * associated with it.
  *
  * @param <T>
  * @author vektor
@@ -45,10 +46,11 @@ public class Regexp<T> {
 
   // TODO anti Comment public methods, including constructors!
 
-  /** If this is a token, its token. */
+  /** If regexp is a token, its token. */
   private T content;
   /** If this is not a token, list of children. */
   private List<Regexp<T>> children;
+  /** One of RegexpType types */
   private RegexpType type;
   private RegexpInterval interval;
   private boolean mutable;
@@ -112,69 +114,147 @@ public class Regexp<T> {
     checkConstraits();
   }
 
+  /**
+   * Get empty (members not set) regexp which is mutable. This is the only way
+   * to create mutable regexp. Proper use is like this:
+   *
+   *
+   * Regexp<T> r = Regexp.<T>getMutable();
+   * r.setInterval(...);
+   * r.setType(RegexpType.LAMBDA);
+   * r.setImmutable();cz.cuni.mff.ksi.jinfer.base
+   *
+   * or
+   *
+   * Regexp<T> r = Regexp.<T>getMutable();
+   * r.setInterval(...);
+   * r.setType(RegexpType.TOKEN);
+   * r.setContent(...)
+   * r.setImmutable();
+   *
+   * or
+   *
+   * Regexp<T> r = Regexp.<T>getMutable();
+   * r.setInterval(...);
+   * r.setType(RegexpType.CONCATENATION);
+   * r.addChild(...);
+   * r.addChild(...);
+   * r.addChild(...);
+   * r.setImmutable();
+   *
+   * Take care to setup all members correctly and lock regexp.
+   *
+   * @param <T>
+   * @return
+   */
   public static <T> Regexp<T> getMutable() {
     return new Regexp<T>(null, new ArrayList<Regexp<T>>(), null, null, true);
   }
 
+  /**
+   * Get immutable lambda regexp.
+   * 
+   * @param <T>
+   * @return
+   */
   public static <T> Regexp<T> getLambda() {
     return new Regexp<T>(null, new ArrayList<Regexp<T>>(), RegexpType.LAMBDA, null);
   }
 
+  /**
+   * Get immutable token regexp.
+   * 
+   * @param <T>
+   * @param content symbol of regexp
+   * @param interval associated interval, e.g. {3,7}
+   * @return
+   */
   public static <T> Regexp<T> getToken(final T content, final RegexpInterval interval) {
     return new Regexp<T>(content, new ArrayList<Regexp<T>>(), RegexpType.TOKEN, interval);
   }
 
+  /**
+   * Get immutable token regexp with interval set to {1, 1}.
+   * 
+   * @param <T>
+   * @param content symbol of regexp
+   * @return
+   */
   public static <T> Regexp<T> getToken(final T content) {
     return Regexp.<T>getToken(content, RegexpInterval.getOnce());
   }
 
+  /**
+   * Get immutable concatenation regexp.
+   *
+   * @param <T>
+   * @param children of this regexp, that are subregexps.
+   * @param interval associated interval, e.g. {3,7}
+   * @return
+   */
   public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children, final RegexpInterval interval) {
-    if (children == null) {
-      throw new IllegalArgumentException("Children of concatenation cannot be "
-              + "null. Why would you like to create such concatenation?");
-    } else if (children.isEmpty()) {
-      throw new IllegalArgumentException("Children of concatenation shouldn't "
-              + "be set to empty list this way. If you need to add children"
-              + " later, call getConcatenationMutable() to obtain such regexp. This "
-              + "method is for proper use.");
-    }
     return new Regexp<T>(null, children, RegexpType.CONCATENATION, interval);
   }
 
+  /**
+   * Get immutable concatenation regexp with interval set to {1, 1}.
+   * 
+   * @param <T>
+   * @param children of this regexp, that are subregexps.
+   * @return
+   */
   public static <T> Regexp<T> getConcatenation(final List<Regexp<T>> children) {
     return getConcatenation(children, RegexpInterval.getOnce());
   }
 
+  /**
+   * Get immutable alternation regexp.
+   * @param <T>
+   * @param children of this regexp, that are subregexps.
+   * @param interval associated interval, e.g. {3,7}
+   * @return
+   */
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children, final RegexpInterval interval) {
-    if (children == null) {
-      throw new IllegalArgumentException("Children of alternation cannot be "
-              + "null. Why would you like to create such alternation?");
-    } else if (children.isEmpty()) {
-      throw new IllegalArgumentException("Children of alternation can't be"
-              + " empty list.");
-    }
     return new Regexp<T>(null, children, RegexpType.ALTERNATION, interval);
   }
 
+  /**
+   * Get immutable alternation regexp with interval set to {1, 1}.
+   * @param <T>
+   * @param children of this regexp, that are subregexps.
+   * @return
+   */
   public static <T> Regexp<T> getAlternation(final List<Regexp<T>> children) {
     return getAlternation(children, RegexpInterval.getOnce());
   }
 
+  /**
+   * Get immutable permutation regexp.
+   * @param <T>
+   * @param children of this regexp, that are subregexps.
+   * @param interval associated interval, e.g. {3,7}
+   * @return
+   */
   public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children, final RegexpInterval interval) {
-    if (children == null) {
-      throw new IllegalArgumentException("Children of permutation cannot be "
-              + "null. Why would you like to create such permutation?");
-    } else if (children.isEmpty()) {
-      throw new IllegalArgumentException("Children of permutation can't be "
-              + "empty list.");
-    }
     return new Regexp<T>(null, children, RegexpType.PERMUTATION, interval);
   }
 
+  /**
+   * Get immutable permutation regexp with interval set to {1, 1}.
+   * @param <T>
+   * @param children of this regexp, that are subregexps.
+   * @return
+   */
   public static <T> Regexp<T> getPermutation(final List<Regexp<T>> children) {
     return getPermutation(children, RegexpInterval.getOnce());
   }
 
+  /**
+   * Set content of the regexp if it is mutable.
+   * 
+   * Throws exception when regexp is immutable.
+   * @param content
+   */
   public void setContent(final T content) {
     if (this.mutable) {
       this.content = content;
@@ -183,10 +263,16 @@ public class Regexp<T> {
     }
   }
 
+  /**
+   * @return content of token regexp or null if regexp is not token
+   */
   public T getContent() {
     return content;
   }
 
+  /**
+   * @return null - when regexp children are null (regexp is token), immutable (unmodifiable) list, when regexp is immutable and not token, and mutable list when regexp is not token and is mutable.
+   */
   public List<Regexp<T>> getChildren() {
     if (children == null) {
       return null;
@@ -198,6 +284,11 @@ public class Regexp<T> {
     }
   }
 
+  /**
+   * Set type of regexp when it is mutable, throws exception when regexp is immutable.
+   * 
+   * @param type desired type
+   */
   public void setType(final RegexpType type) {
     if (this.mutable) {
       this.type = type;
@@ -206,10 +297,19 @@ public class Regexp<T> {
     }
   }
 
+  /**
+   *
+   * @return type of regexp
+   */
   public RegexpType getType() {
     return type;
   }
 
+  /**
+   * Set interval of regexp when it is mutable, throws exception when regexp is immutable.
+   * 
+   * @param interval desired interval
+   */
   public void setInterval(final RegexpInterval interval) {
     if (this.mutable) {
       this.interval = interval;
@@ -218,10 +318,18 @@ public class Regexp<T> {
     }
   }
 
+  /**
+   *
+   * @return interval associated with regexp.
+   */
   public RegexpInterval getInterval() {
     return interval;
   }
 
+  /**
+   * Lock the regexp to be immutable from now.
+   * Throws exception if you are programming badly and tries to lock it twice.
+   */
   public void setImmutable() {
     if (this.mutable) {
       this.mutable = false;
@@ -243,6 +351,7 @@ public class Regexp<T> {
 
   /**
    * Shorthand for getChildren().add().
+   * Works only when regexp is mutable, throws exception otherwise.
    *
    * @param child Which child to add.
    */
@@ -280,22 +389,42 @@ public class Regexp<T> {
     }
   }
 
+  /**
+   *
+   * @return true iff type of this regexp equals RegexpType.TOKEN
+   */
   public boolean isToken() {
     return RegexpType.TOKEN.equals(type);
   }
 
+  /**
+   *
+   * @return true iff type of this regexp equals RegexpType.CONCATENATION
+   */
   public boolean isConcatenation() {
     return RegexpType.CONCATENATION.equals(type);
   }
 
+  /**
+   *
+   * @return true iff type of this regexp equals RegexpType.ALTERNATION
+   */
   public boolean isAlternation() {
     return RegexpType.ALTERNATION.equals(type);
   }
 
+  /**
+   *
+   * @return true iff type of this regexp equals RegexpType.PERMUTATION
+   */
   public boolean isPermutation() {
     return RegexpType.PERMUTATION.equals(type);
   }
 
+  /**
+   *
+   * @return true iff type of this regexp equals RegexpType.LAMBDA
+   */
   public boolean isLambda() {
     return RegexpType.LAMBDA.equals(type);
   }
@@ -430,3 +559,4 @@ public class Regexp<T> {
   }
 }
 // this code is pure evil
+// see RegexpAutomatonStateRemoval.java for pure evil

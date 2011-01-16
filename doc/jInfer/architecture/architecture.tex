@@ -512,11 +512,34 @@ A new instance of \code{Runner} is constructed for each inference run. While bei
 	\item \code{Runner} receives the resulting schema and based on preferences, saves it to a file, displays it, etc.
 \end{enumerate}
 
-% TODO vektor Talk about Capabilities
+\subsection{Capabilities} \label{section_capabilities}
+From time to time, modules need a flow of certain information in completely opposite way to the usual inference: they need to know what the following module can or cannot do.\\
+
+For this reason, inference modules extend the \code{Capabilities} interface defining a single method: \code{getCapabilities()}. This method returns a list of strings representing the abilities, or "capabilities" of this module.\\
+
+An inference module can query the capabilities of the \textit{next} module in the inference chain by invoking the \code{RunningProject.getNextModuleCaps()} method to obtain the next module encapsulated in the \code{Capabilities} interface.\\
+
+At the moment, only one capability is defined to be communicated across modules, more specifically between \jmodule{IGGenerator} and \jmodule{Simplifier}. This is \code{Capabilities.CAN\_HANDLE\_COMPLEX\_REGEXPS} meaning whether the \code{Simplifier} accepts more complicated regular expressions than simple concatenations of tokens on its input.\\
+% TODO vektor check later - didn't this change?!?
+
+Example of Capabilities usage taken from \jmodule{XSDImporter} module:
+\begin{verbatim}
+  // if the next module cannot handle complex regexps, help it by expanding our result
+  if (!RunningProject.getNextModuleCaps().getCapabilities()
+               .contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) { 
+    // lookup expander
+    final Expander expander = Lookup.getDefault().lookup(Expander.class);
+    // return expanded
+    return expander.expand(parser.getRules());
+  }
+  // return not expanded rules
+  return parser.getRules();
+\end{verbatim}
+
 \section{NetBeans Modules}
 
-TODO vektor capabilities too
-TODO vektor anti thinks, we should talk about properties windows and plugability of autoeditor, or thats part of some other developer doc?
+% TODO vektor anti thinks, we should talk about properties windows and plugability of autoeditor, or thats part of some other developer doc?
+% property windows, autoeditor and ruledisplayer will be handled in dev tutorial -- vektor
 
 
 \nocite{*}

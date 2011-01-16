@@ -357,7 +357,7 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 	<!ELEMENT more EMPTY>
 	+ attributes
 	\end{verbatim}
-	For element person, even when simplified grammar specifies its occurence to at least once, at most 3 times, as DTD has no such construct, export module have to do some magic. Situation is even worse for elements that contain simple data inside simplified rule. Only way to express mixed content in DTD is to use \verb.(#PCDATA | note)*. construct. Even if regular expression is complicated, export module has to do this "flattening".
+	For element person, even when simplified grammar specifies its occurence to at least once, at most 3 times, as DTD has no such construct, export module have to do some magic. Situation is even worse for elements that contain simple data inside simplified rule. Only way to express mixed content in DTD is to use \verb.(#PCDATA | note)*. construct. Even if regular expression is complicated, export module has to do this "flattening".texmaker
 	Lets look on XSD output of same rules:
 	% TODO rio review this example!
 	\begin{verbatim}
@@ -489,7 +489,7 @@ User running the inference might change his mind and try to stop this. For this 
   }
 \end{verbatim}
 
-\subsubsection{Runner}
+\subsubsection{Runner} \label{section_runner}
 
 The part of framework responsible for actually gathering user input, running all modules one after another and presenting the results is the \code{Runner} class  in \code{cz.cuni.mff.ksi.jinfer.runner} package.\\
 
@@ -514,8 +514,11 @@ A new instance of \code{Runner} is constructed for each inference run. While bei
 From time to time, modules need a flow of certain information in completely opposite way to the usual inference: they need to know what the following module can or cannot do.\\
 
 For this reason, inference modules extend the \code{Capabilities} interface defining a single method: \code{getCapabilities()}. This method returns a list of strings representing the abilities, or "capabilities" of this module.\\
-
-An inference module can query the capabilities of the \textit{next} module in the inference chain by invoking the \code{RunningProject.getNextModuleCaps()} method to obtain the next module encapsulated in the \code{Capabilities} interface.\\
+An inference module can query the capabilities of the \emph{next} module in the inference chain by invoking the 
+\begin{verbatim}
+RunningProject.getNextModuleCaps()
+\end{verbatim}
+method to obtain the next module encapsulated in the \code{Capabilities} interface.\\
 
 At the moment, only one capability is defined to be communicated across modules, more specifically between \jmodule{IGGenerator} and \jmodule{Simplifier}. This is \code{Capabilities.CAN\_HANDLE\_COMPLEX\_REGEXPS} meaning whether the \code{Simplifier} accepts more complicated regular expressions than simple concatenations of tokens on its input.\\
 % TODO vektor check later - didn't this change?!?
@@ -536,7 +539,7 @@ Example of Capabilities usage taken from \jmodule{XSDImporter} module:
 
 \section{NetBeans Modules}
 
-jInfer, being a NetBeans Platform application, is divided into multiple \textit{NetBeans Modules}. It is very important to understand that this division is in principle orthogonal to that naturally sketched in the previous chapters - theoretically, the whole jInfer could be contained in a single NB module, because the framework uses Lookups to locate logical modules. However, for the sake of organization, jInfer is split into several modules and most of the time there is a strong correlation between logical units of jInfer and its NB modules.\\
+jInfer, being a NetBeans Platform application, is divided into multiple \emph{NetBeans Modules}. It is very important to understand that this division is in principle orthogonal to that naturally sketched in the previous chapters - theoretically, the whole jInfer could be contained in a single NB module, because the framework uses Lookups to locate logical modules. However, for the sake of organization, jInfer is split into several modules and most of the time there is a strong correlation between logical units of jInfer and its NB modules.\\
 
 A short overview of these modules and their functions follow. To get a deeper understanding of any of them, please refer to its documentation.\\
 
@@ -550,12 +553,12 @@ Base modules:
 Inference modules:
 
 \begin{itemize}
-	\item \jmodule{Runner}: as described in the section TODO anti link, this module encapsulates the inference process (including the fact that inference consists of 3 phases as described before). Most important class: \code{Runner}.
+	\item \jmodule{Runner}: as described in the section \ref{section_runner}, this module encapsulates the inference process (including the fact that inference consists of 3 phases as described before). Most important class: \code{Runner}.
 	\item \jmodule{BasicIGG}: this module contains an extensible implementation of \jmodule{IGGenerator}. Basic version handles all XML-typed input documents, DTD schemas and XPath queries. To find out more about the extensibility to handle other outputs, refer to \jmodule{BasicIGG}'s documentation.
 	\item \jmodule{XSDImport}: demonstrating \jmodule{BasicIGG}'s extensibility, this is a base module for XSD input.
-	\item \jmodule{XSDImportSAX}: XSD input handling using SAX approach.
-	\item \jmodule{XSDImportDOM}: XSD input handling using DOM approach.
-	\item \jmodule{TwoStepSimplifier}: a \jmodule{Simplifier} implementation. TODO anti
+	\item \jmodule{XSDImportSAX}: XSD input handling using SAX parser.
+	\item \jmodule{XSDImportDOM}: XSD input handling using DOM parser.
+	\item \jmodule{TwoStepSimplifier}: a \jmodule{Simplifier} implementation. Implements \cite{ahonen} merging state algorithm with basic handling of attributes. Read the separated documentation of module.
 	\item \jmodule{BasicDTDExporter}: this is a \jmodule{SchemaGenerator} implementation with output to DTD.
 	\item \jmodule{BasicXSDExporter}: this is a \jmodule{SchemaGenerator} implementation with output to XSD.
 \end{itemize}
@@ -566,7 +569,7 @@ Utility modules:
 	\item \jmodule{RuleDisplayer}: module capable of displaying a grammar in a graphical way.
 	\item \jmodule{AdvancedRuleDisplayer}: more advanced version of the former using \jmodule{JUNG}'s graphing capabilities.
 	\item \jmodule{AutoEditor}: encapsulation of an interactive finite state automaton editor.
-	\item \jmodule{JUNG}: wrapper module for the JUNG TODO anti link graphing library.
+	\item \jmodule{JUNG}: wrapper module for the JUNG (see \cite{jung}).
 	\item \jmodule{Options}: NBP specific: this module adds a jInfer category in NetBeans Options window.
 	\item \jmodule{ProjectType}: NBP specific: this module defines a jInfer project type, along with its input and output files, settings etc.
 	\item \jmodule{XPathFileType}: NBP specific: this module teaches NetBeans to recognize a \code{.xpath} file extension.
@@ -577,7 +580,7 @@ TODO vektor Lookups
 % TODO module dependency hierarchy
 % TODO picture showing out inference modules in a humble graph
 
-To get deeper understanding of NBP modules, their versions, dependencies etc, refer to http://bits.netbeans.org/dev/javadoc/org-openide-modules/org/openide/modules/doc-files/api.html . TODO anti Cite
+To get deeper understanding of NBP modules, their versions, dependencies etc, refer to \cite{modules_api}.
 
 \nocite{*}
 \bibliographystyle{alpha}

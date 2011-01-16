@@ -273,11 +273,9 @@ class SAXHandler extends DefaultHandler {
     if (docElement.getName().equalsIgnoreCase("sequence")) {
       return RegexpType.CONCATENATION;
     } else if (docElement.getName().equalsIgnoreCase("choice")) {
-      //TODO reseto allow alternation
-      return RegexpType.CONCATENATION;
+      return RegexpType.ALTERNATION;
     } else if (docElement.getName().equalsIgnoreCase("all")) {
-      //TODO reseto allow permutation
-      return RegexpType.CONCATENATION;
+      return RegexpType.PERMUTATION;
     } else {
       // else it's a regular element, we don't know the type yet
       // this has to stay null,

@@ -16,9 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
@@ -26,6 +29,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -59,6 +63,15 @@ public class XSDProcessor implements Processor {
       if (parser != null) {
         //SAX or DOM parser selected
         parser.process(stream);
+
+        // if the next module cannot handle complex regexps, help it by expanding our result
+        if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
+          // lookup expander
+          final Expander expander = Lookup.getDefault().lookup(Expander.class);
+          // return expanded
+          return expander.expand(parser.getRules());
+        }
+        // return not expanded rules
         return parser.getRules();
       } else {
         //no parser selected

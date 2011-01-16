@@ -47,7 +47,7 @@ Afterwards the interfaces of basic inference modules - \jmodule{Initial Grammar 
 Finally, the process of inference will be described.
 
 \section{Package naming conventions}
-All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, normalized name of the module (e.g. \code{base}) and finally the package structure in this module (e.g. \texttt{objects.utils}). All in all, a package in the \jmodule{Base} module could look like \code{cz.cuni.mff.ksi.jinfer.base.objects.utils}.
+All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, normalized name of the NetBeans module (e.g. \code{base}) and finally the package structure in this module (e.g. \texttt{objects.utils}). All in all, a package in the \jmodule{Base} module could look like \code{cz.cuni.mff.ksi.jinfer.base.objects.utils}.
 
 \section{Data structures}
 \subsection{Regular expressions}
@@ -415,8 +415,6 @@ From developer's point of view, inference modules are just properly annotated cl
 
 A nice way to name such a class is by adding \code{-Impl} to the name of implemented interface, for example \code{SimplifierImpl}.\\
 
-% TODO vektor Connection to NBMs
-
 Annotation required for the framework to recognize such a class as an inference module is the following
 \begin{verbatim}
 	@ServiceProvider(service = <interface>.class)
@@ -538,9 +536,48 @@ Example of Capabilities usage taken from \jmodule{XSDImporter} module:
 
 \section{NetBeans Modules}
 
-% TODO vektor anti thinks, we should talk about properties windows and plugability of autoeditor, or thats part of some other developer doc?
-% property windows, autoeditor and ruledisplayer will be handled in dev tutorial -- vektor
+jInfer, being a NetBeans Platform application, is divided into multiple \textit{NetBeans Modules}. It is very important to understand that this division is in principle orthogonal to that naturally sketched in the previous chapters - theoretically, the whole jInfer could be contained in a single NB module, because the framework uses Lookups to locate logical modules. However, for the sake of organization, jInfer is split into several modules and most of the time there is a strong correlation between logical units of jInfer and its NB modules.\\
 
+A short overview of these modules and their functions follow. To get a deeper understanding of any of them, please refer to its documentation.\\
+
+Base modules:
+
+\begin{itemize}
+	\item \jmodule{jInfer}: not a NBP module in fact, but rather a module suite - the ,,root" NB project for the whole framework.
+	\item \jmodule{Base}: contains common data structures, interfaces and utility logic shared across all other modules.
+\end{itemize}
+
+Inference modules:
+
+\begin{itemize}
+	\item \jmodule{Runner}: as described in the section TODO anti link, this module encapsulates the inference process (including the fact that inference consists of 3 phases as described before). Most important class: \code{Runner}.
+	\item \jmodule{BasicIGG}: this module contains an extensible implementation of \jmodule{IGGenerator}. Basic version handles all XML-typed input documents, DTD schemas and XPath queries. To find out more about the extensibility to handle other outputs, refer to \jmodule{BasicIGG}'s documentation.
+	\item \jmodule{XSDImport}: demonstrating \jmodule{BasicIGG}'s extensibility, this is a base module for XSD input.
+	\item \jmodule{XSDImportSAX}: XSD input handling using SAX approach.
+	\item \jmodule{XSDImportDOM}: XSD input handling using DOM approach.
+	\item \jmodule{TwoStepSimplifier}: a \jmodule{Simplifier} implementation. TODO anti
+	\item \jmodule{BasicDTDExporter}: this is a \jmodule{SchemaGenerator} implementation with output to DTD.
+	\item \jmodule{BasicXSDExporter}: this is a \jmodule{SchemaGenerator} implementation with output to XSD.
+\end{itemize}
+
+Utility modules:
+
+\begin{itemize}
+	\item \jmodule{RuleDisplayer}: module capable of displaying a grammar in a graphical way.
+	\item \jmodule{AdvancedRuleDisplayer}: more advanced version of the former using \jmodule{JUNG}'s graphing capabilities.
+	\item \jmodule{AutoEditor}: encapsulation of an interactive finite state automaton editor.
+	\item \jmodule{JUNG}: wrapper module for the JUNG TODO anti link graphing library.
+	\item \jmodule{Options}: NBP specific: this module adds a jInfer category in NetBeans Options window.
+	\item \jmodule{ProjectType}: NBP specific: this module defines a jInfer project type, along with its input and output files, settings etc.
+	\item \jmodule{XPathFileType}: NBP specific: this module teaches NetBeans to recognize a \code{.xpath} file extension.
+\end{itemize}
+
+TODO vektor Lookups
+
+% TODO module dependency hierarchy
+% TODO picture showing out inference modules in a humble graph
+
+To get deeper understanding of NBP modules, their versions, dependencies etc, refer to http://bits.netbeans.org/dev/javadoc/org-openide-modules/org/openide/modules/doc-files/api.html . TODO anti Cite
 
 \nocite{*}
 \bibliographystyle{alpha}

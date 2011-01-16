@@ -302,13 +302,11 @@ public class DOMHandler {
 
         break;
       case ALL:
-        //ret.getSubnodes().setType(RegexpType.PERMUTATION);
-        ret.getSubnodes().setType(RegexpType.CONCATENATION);
+        ret.getSubnodes().setType(RegexpType.PERMUTATION);
         ret.setName(CONTAINER_ORDER);
         break;
       case CHOICE:
-        //ret.getSubnodes().setType(RegexpType.ALTERNATION);
-        ret.getSubnodes().setType(RegexpType.CONCATENATION);
+        ret.getSubnodes().setType(RegexpType.ALTERNATION);
         ret.setName(CONTAINER_ORDER);
         break;
       case SEQUENCE:

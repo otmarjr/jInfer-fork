@@ -57,8 +57,9 @@ public class Regexp<T> {
 
   /**
    * Creates immutable regexp. This is the default.
-   * @param content
-   * @param children
+   * 
+   * @param content content of token regexp or null for not-tokens
+   * @param children children of concatenations, alternation and permutation regexps
    * @param type
    * @param interval
    */

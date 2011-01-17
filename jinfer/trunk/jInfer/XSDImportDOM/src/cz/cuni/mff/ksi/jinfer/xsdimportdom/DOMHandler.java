@@ -95,12 +95,6 @@ public class DOMHandler {
       getRulesFromElement(root, elementRules);
       rules.addAll(elementRules);
     }
-    if (verbose) {
-      LOG.info("Schema imported with following rules:");
-      for (Element elem : rules) {
-        LOG.info(elem.toString());
-      }
-    }
     return rules;
   }
 

@@ -96,14 +96,6 @@ class SAXHandler extends DefaultHandler {
    * @return List<Element> rules.
    */
   public List<Element> getRules() {
-    if (verbose) {
-      LOG.info("Schema imported with following rules:");
-      for (Element elem : rules) {
-        LOG.info(elem.toString());
-      }
-    } else {
-      LOG.info("Schema imported with " + rules.size() + " rules.");
-    }
     return rules;
   }
 

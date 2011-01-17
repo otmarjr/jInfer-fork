@@ -28,5 +28,6 @@ import java.util.List;
 public interface ModuleParameters {
   List<String> getParameterNames();
   String getParameterDisplayDescription(final String parameterName);
+  String getParameterDefaultValue(final String parameterName);
   void setParameter(final String parameterName, final int newValue);
 }

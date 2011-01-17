@@ -34,6 +34,9 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   private static final Logger LOG = Logger.getLogger(MergeConditionTesterKHContextFactory.class);
   private int parameterK = -1;
   private int parameterH = -1;
+  private static final int K_DEFAULT_VALUE = 2;
+  private static final int H_DEFAULT_VALUE = 1;
+  
 
   public static final String NAME = "MergeConditionTesterKHContext";
   public static final String DISPLAY_NAME = "Merge Condition Tester KH Context";
@@ -48,8 +51,9 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
               + ", h: "
               + String.valueOf(parameterH)
               + ". Parameters have to satisfy: k >= h >= 0."
-              + " Using default values of k = 2, h = 1.");
-      return new MergeConditionTesterKHContext<T>(2, 1);
+              + " Using default values of k = " + K_DEFAULT_VALUE
+              + ", h = " + H_DEFAULT_VALUE + ".");
+      return new MergeConditionTesterKHContext<T>(K_DEFAULT_VALUE, H_DEFAULT_VALUE);
     }
   }
 
@@ -109,5 +113,16 @@ public class MergeConditionTesterKHContextFactory implements MergeConditionTeste
   @Override
   public String getDisplayName() {
     return DISPLAY_NAME;
+  }
+
+  @Override
+  public String getParameterDefaultValue(String parameterName) {
+    if ("k".equals(parameterName)) {
+      return String.valueOf(K_DEFAULT_VALUE);
+    } else if ("h".equals(parameterName)) {
+      return String.valueOf(H_DEFAULT_VALUE);
+    } else {
+      return "";
+    }
   }
 }

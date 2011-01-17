@@ -55,37 +55,6 @@ public class Regexp<T> {
   private RegexpInterval interval;
   private boolean mutable;
 
-  // TODO anti Please move away from the top of the file
-  private void checkConstraits() {
-    if (!mutable) {
-      if (type == null) {
-        throw new IllegalArgumentException("Type of regexp has to be non-null.");
-      }
-      if (children == null) {
-        throw new IllegalArgumentException("When regexp is " + getType() + ", children has to be non-null.");
-      }
-      if (type.equals(RegexpType.LAMBDA)) {
-        if (content != null) {
-          throw new IllegalArgumentException("When regexp is LAMBDA, content has to be null.");
-        }
-        if (interval != null) {
-          throw new IllegalArgumentException("When regexp is LAMBDA, interval has to be null.");
-        }
-      } else if (type.equals(RegexpType.TOKEN)) {
-        if (content == null) {
-          throw new IllegalArgumentException("When regexp is TOKEN, content has to be non-null.");
-        }
-      } else {
-        if (content != null) {
-          throw new IllegalArgumentException("When regexp is " + type.toString() + ", content has to be null");
-        }
-        if (interval == null) {
-          throw new IllegalArgumentException("When regexp is " + type.toString() + ", interval has to be non-null.");
-        }
-      }
-    }
-  }
-
   /**
    * Creates immutable regexp. This is the default.
    * @param content
@@ -111,14 +80,14 @@ public class Regexp<T> {
     this.type = type;
     this.interval = interval;
     this.mutable = mutable;
-    checkConstraits();
+    checkConstraints();
   }
 
   /**
    * Get empty (members not set) regexp which is mutable. This is the only way
    * to create mutable regexp. Proper use is like this:
    *
-   *
+   * <pre>
    * Regexp<T> r = Regexp.<T>getMutable();
    * r.setInterval(...);
    * r.setType(RegexpType.LAMBDA);
@@ -141,7 +110,7 @@ public class Regexp<T> {
    * r.addChild(...);
    * r.addChild(...);
    * r.setImmutable();
-   *
+   * </pre>
    * Take care to setup all members correctly and lock regexp.
    *
    * @param <T>
@@ -336,7 +305,7 @@ public class Regexp<T> {
     } else {
       throw new IllegalStateException("Trying to set inmutable regexp, that is once inmutable.");
     }
-    checkConstraits();
+    checkConstraints();
   }
 
   /**
@@ -557,6 +526,35 @@ public class Regexp<T> {
         throw new IllegalStateException("Invalid regexp type at this point: " + t);
     }
   }
+
+  private void checkConstraints() {
+    if (!mutable) {
+      if (type == null) {
+        throw new IllegalArgumentException("Type of regexp has to be non-null.");
+      }
+      if (children == null) {
+        throw new IllegalArgumentException("When regexp is " + getType() + ", children has to be non-null.");
+      }
+      if (type.equals(RegexpType.LAMBDA)) {
+        if (content != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, content has to be null.");
+        }
+        if (interval != null) {
+          throw new IllegalArgumentException("When regexp is LAMBDA, interval has to be null.");
+        }
+      } else if (type.equals(RegexpType.TOKEN)) {
+        if (content == null) {
+          throw new IllegalArgumentException("When regexp is TOKEN, content has to be non-null.");
+        }
+      } else {
+        if (content != null) {
+          throw new IllegalArgumentException("When regexp is " + type.toString() + ", content has to be null");
+        }
+        if (interval == null) {
+          throw new IllegalArgumentException("When regexp is " + type.toString() + ", interval has to be non-null.");
+        }
+      }
+    }
+  }
+
 }
-// this code is pure evil
-// see RegexpAutomatonStateRemoval.java for pure evil

@@ -78,6 +78,12 @@ public class DOMHandler {
    * The key is the value of attribute <code>name</code> of the particular tag.
    */
   private final Map<String, org.w3c.dom.Element> namedCTypes = new HashMap<String, org.w3c.dom.Element>();
+  /**
+   * Mapping between unique names of element tags and nodes of DOM tree containing the tag.
+   * These elements can be later referenced from within the schema using <i>ref</i> attribute.
+   * The key is the value of attribute <code>name</code> of the particular tag.
+   */
+  private final Map<String, org.w3c.dom.Element> referenced = new HashMap<String, org.w3c.dom.Element>();
 
   public DOMHandler() {
     LOG.setLevel(settings.logLevel());
@@ -140,16 +146,24 @@ public class DOMHandler {
       final org.w3c.dom.Element domElem = isDOMElement(root.getChildNodes().item(i));
       if (domElem != null) {
         // we have a valid child
-        // complexType with name must be added to the map, unnamed complexType is not allowed
-        // every element must be added to roots, but element with ref attribute has no subtree (sentinel)
         final XSDTag tag = XSDTag.matchName(trimNS(domElem.getNodeName())); // safety check by trimNS
         if (XSDTag.ELEMENT.equals(tag)) {
-          addElementToRoots(domElem);
+          // elements with name can be referenced from any subtree, so we create a map
+          addToReferenced(domElem);
         } else if (XSDTag.COMPLEXTYPE.equals(tag)) {
+          // complexType with name must be added to the map, unnamed complexType is not allowed
           addNamedCType(domElem);
         }
       }
       // if domElem == null, it's not interesting for us
+    }
+    // after we know all available complex types can we parse the rule subtrees
+    for (int i = 0; i < root.getChildNodes().getLength(); i++) {
+      final org.w3c.dom.Element domElem = isDOMElement(root.getChildNodes().item(i));
+      if (domElem != null && XSDTag.ELEMENT.equals(XSDTag.matchName(trimNS(domElem.getNodeName())))) {
+        // every element must be added to roots
+        addElementToRoots(domElem);
+      }
     }
   }
 
@@ -193,6 +207,20 @@ public class DOMHandler {
       }
     } else {
       LOG.warn("Trying to add a complexType with no name under: " + domElem.getParentNode().getNodeName());
+    }
+  }
+
+  private void addToReferenced(final org.w3c.dom.Element domElem) {
+    final String name = domElem.getAttribute(XSDAttribute.NAME.toString());
+    if (!BaseUtils.isEmpty(name)) {
+      if (!referenced.containsKey(name)) {
+        if (verbose) {
+          LOG.debug("Adding element to referenced: " + name);
+        }
+        referenced.put(name, domElem);
+      } else {
+        LOG.warn("Trying to add duplicate element to referenced named: " + name);
+      }
     }
   }
 

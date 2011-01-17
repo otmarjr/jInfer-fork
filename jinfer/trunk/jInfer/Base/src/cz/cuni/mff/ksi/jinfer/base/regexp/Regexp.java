@@ -88,28 +88,28 @@ public class Regexp<T> {
    * to create mutable regexp. Proper use is like this:
    *
    * <code>
-   * Regexp<T> r = Regexp.<T>getMutable();
-   * r.setInterval(...);
-   * r.setType(RegexpType.LAMBDA);
-   * r.setImmutable();cz.cuni.mff.ksi.jinfer.base
-   *
-   * or
-   *
-   * Regexp<T> r = Regexp.<T>getMutable();
-   * r.setInterval(...);
-   * r.setType(RegexpType.TOKEN);
-   * r.setContent(...)
-   * r.setImmutable();
-   *
-   * or
-   *
-   * Regexp<T> r = Regexp.<T>getMutable();
-   * r.setInterval(...);
-   * r.setType(RegexpType.CONCATENATION);
-   * r.addChild(...);
-   * r.addChild(...);
-   * r.addChild(...);
-   * r.setImmutable();
+   * Regexp<T> r = Regexp.<T>getMutable();<br/>
+   * r.setInterval(...);<br/>
+   * r.setType(RegexpType.LAMBDA);<br/>
+   * r.setImmutable();cz.cuni.mff.ksi.jinfer.base<br/>
+   *<br/>
+   * or<br/>
+   *<br/>
+   * Regexp<T> r = Regexp.<T>getMutable();<br/>
+   * r.setInterval(...);<br/>
+   * r.setType(RegexpType.TOKEN);<br/>
+   * r.setContent(...)<br/>
+   * r.setImmutable();<br/>
+   *<br/>
+   * or<br/>
+   *<br/>
+   * Regexp<T> r = Regexp.<T>getMutable();<br/>
+   * r.setInterval(...);<br/>
+   * r.setType(RegexpType.CONCATENATION);<br/>
+   * r.addChild(...);<br/>
+   * r.addChild(...);<br/>
+   * r.addChild(...);<br/>
+   * r.setImmutable();<br/>
    * </code>
    * Take care to setup all members correctly and lock regexp.
    *

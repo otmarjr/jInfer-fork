@@ -36,7 +36,7 @@ import java.util.List;
  * Kleene star operator.
  * </li>
  * </ul>
- * Permutation is just syntactic sugar. Each regexp has @link{RegexpInterval}
+ * Permutation is just syntactic sugar. Each regexp has {@link cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval }
  * associated with it.
  *
  * @param <T>
@@ -87,7 +87,7 @@ public class Regexp<T> {
    * Get empty (members not set) regexp which is mutable. This is the only way
    * to create mutable regexp. Proper use is like this:
    *
-   * <pre>
+   * <code>
    * Regexp<T> r = Regexp.<T>getMutable();
    * r.setInterval(...);
    * r.setType(RegexpType.LAMBDA);
@@ -110,7 +110,7 @@ public class Regexp<T> {
    * r.addChild(...);
    * r.addChild(...);
    * r.setImmutable();
-   * </pre>
+   * </code>
    * Take care to setup all members correctly and lock regexp.
    *
    * @param <T>

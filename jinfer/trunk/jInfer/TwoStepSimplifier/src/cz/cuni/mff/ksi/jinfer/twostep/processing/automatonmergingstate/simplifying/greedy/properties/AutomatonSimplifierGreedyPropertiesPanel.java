@@ -148,7 +148,7 @@ public class AutomatonSimplifierGreedyPropertiesPanel extends AbstractProperties
         panelParams.add(l, gridBagConstraints);
 
 
-        JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName));
+        JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName, factParams.getParameterDefaultValue(parameterName)));
         l.setLabelFor(t);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;

@@ -13,9 +13,11 @@
     </folder>
     <folder name="Menu">
         <folder name="Window">
-            <file name="AdvancedRuleDisplayerAction.shadow">
-                <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-advancedruledisplayer-AdvancedRuleDisplayerAction.instance"/>
-            </file>
+            <folder name="jInfer">
+              <file name="AdvancedRuleDisplayerAction.shadow">
+                  <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-advancedruledisplayer-AdvancedRuleDisplayerAction.instance"/>
+              </file>
+            </folder>
         </folder>
     </folder>
     <folder name="Windows2">

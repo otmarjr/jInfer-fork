@@ -27,6 +27,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.SAXException;
 
@@ -50,19 +51,14 @@ public class SAXParser implements XSDParser {
 
     handler = new SAXHandler();
 
-    LOG.info("Parsing schema with SAX");
-
     try {
       PARSER_FACTORY.newSAXParser().parse(stream, handler);
     } catch (SAXException ex) {
-      throw new XSDException("Importing schema with SAX parser caused an exception ", ex);
+      throw new XSDException(NbBundle.getMessage(SAXParser.class, "Error.GenericExceptionMessage"), ex);
     } catch (IOException ex) {
-      throw new XSDException("Importing schema with SAX parser caused an exception ", ex);
+      throw new XSDException(NbBundle.getMessage(SAXParser.class, "Error.GenericExceptionMessage"), ex);
     } catch (ParserConfigurationException ex) {
-      throw new XSDException("Importing schema with SAX parser caused an exception ", ex);
-    }
-    if (settings.isVerbose()) {
-      LOG.info("Schema imported");
+      throw new XSDException(NbBundle.getMessage(SAXParser.class, "Error.GenericExceptionMessage"), ex);
     }
   }
 
@@ -78,7 +74,7 @@ public class SAXParser implements XSDParser {
 
   @Override
   public String getModuleDescription() {
-    return "Module providing SAX parser implementation for XSD Importer";
+    return NbBundle.getMessage(SAXParser.class, "Module.Description");
   }
 
   @Override

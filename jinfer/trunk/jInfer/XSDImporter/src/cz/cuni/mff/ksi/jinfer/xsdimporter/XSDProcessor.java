@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.Lookup;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -62,16 +63,16 @@ public class XSDProcessor implements Processor {
     try {
       if (parser != null) {
         //SAX or DOM parser selected
+        LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.ParsingMethod", parser.getDisplayName()));
         parser.process(stream);
         final List<Element> rules = parser.getRules();
+        printDebugInfo(settings, rules, "AfterParsing");
         // if the next module cannot handle complex regexps, help it by expanding our result
         if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
           // lookup expander
-          LOG.debug("Expanding "+ rules.size() + " rules.");
           final Expander expander = Lookup.getDefault().lookup(Expander.class);
           final List<Element> rulesExpanded = expander.expand(rules);
-          LOG.debug("Returning "+ rulesExpanded.size() + " expanded rules.");
-
+          printDebugInfo(settings, rulesExpanded, "AfterExpanding");
           // return expanded
           return rulesExpanded;
         }
@@ -79,16 +80,36 @@ public class XSDProcessor implements Processor {
         return rules;
       } else {
         //no parser selected
-        LOG.error("NO PARSER selected for importing XSD schemas, all rules are empty!");
+        LOG.error(NbBundle.getMessage(XSDProcessor.class, "Error.NoParser"));
         return Collections.emptyList();
       }
     } catch (final XSDException e) {
       if (settings.stopOnError()) {
-        throw new RuntimeException("Error parsing XSD schema file.", e);
+        throw new RuntimeException(NbBundle.getMessage(XSDProcessor.class, "Exception.Parsing"), e);
       } else {
-        LOG.error("Error parsing XSD schema file, ignoring and going on.", e);
+        LOG.error(NbBundle.getMessage(XSDProcessor.class, "Error.IgnoreParsing"), e);
         return Collections.emptyList();
       }
+    }
+  }
+
+  /**
+   * Prints information about number of rules after a specified stage of execution.
+   * Either only the number of rules is displayed, or if verbose setting is enabled,
+   * full rules are printed to log output.
+   * @param settings Current settings of the module, toggling the verbose option.
+   * @param rules List of rules to be displayed.
+   * @param stateMessageName Part of the name of the message that defines current execution stage
+   * (values "AfterParsing" and "AfterExpanding" are defined in bundle).
+   */
+  private void printDebugInfo(final XSDImportSettings settings, final List<Element> rules, final String stateMessageName) {
+    if (settings.isVerbose()) {
+      LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.Rules." + stateMessageName + ".FullMsg", rules.size()));
+      for (Element elem : rules) {
+        LOG.debug(elem.toString());
+      }
+    } else {
+      LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.Rules." + stateMessageName + ".ShortMsg", rules.size()));
     }
   }
 

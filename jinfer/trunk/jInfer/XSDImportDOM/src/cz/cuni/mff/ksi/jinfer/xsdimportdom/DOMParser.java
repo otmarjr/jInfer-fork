@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
 import java.io.InputStream;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -43,13 +44,8 @@ public class DOMParser implements XSDParser {
     //final DOMParserImpl parser = new DOMParserImpl(new SymbolTable());
     //parser.parse(new XMLInputSource(null, null, null, stream, null));
 
-    LOG.info("Parsing schema with DOM");
-
     handler = new DOMHandler();
     handler.parse(stream);
-    if (settings.isVerbose()) {
-      LOG.info("Schema imported");
-    }
   }
 
   @Override
@@ -64,7 +60,7 @@ public class DOMParser implements XSDParser {
 
   @Override
   public String getModuleDescription() {
-    return "Module providing DOM parser implementation for XSDImporter";
+    return NbBundle.getMessage(DOMParser.class, "Module.Description");
   }
 
   @Override

@@ -518,38 +518,42 @@ public class DOMHandler {
    */
   private RegexpInterval determineOccurence(final org.w3c.dom.Element currentNode) {
     RegexpInterval interval;
-    int min = -2, max = -2; // set to undefined value
     final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
     final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
+    // according to XSD Schema specification, the default values for min and max are 1
+    final int DEFAULT = 1;
+    final int INFINITY = -1;                    // internal representation of no limit for max
+    int min = DEFAULT, max = DEFAULT;           // set to default value
 
     if (!BaseUtils.isEmpty(minOccurence)) {
       try {
         min = Integer.parseInt(minOccurence);
-      } catch (NumberFormatException e) {
-      } // if parsing fails, we set a default value according to specification
+        
+        if (min < 0) {                          // if parsed value is negative, restore the default
+          min = DEFAULT;
+        }
+      } catch (NumberFormatException e) {       // if parsing fails, the default is already set
+      } 
     }
-    // according to XSD Schema specification, the default values for min and max are 1
-    if (min < 0) {
-      min = 1;
-    }
-
+    
     if (!BaseUtils.isEmpty(maxOccurence)) {
       try {
         if (UNBOUNDED.equals(maxOccurence)) {
-          max = -1;
+          max = INFINITY;
         } else {
           max = Integer.parseInt(maxOccurence);
+          if (max < 0) {                        // parsed value is negative
+            max = min;                          // min is either default, or some good value
+          }
+          if (min > max) {                      // limits are mismatched, max has priority
+            min = max;
+          }
         }
       } catch (NumberFormatException e) {
+        max = min;                              // min is either default, or some good value
       }
     }
-    if (max < -1) {
-      max = 1;
-    }
-    if (max != -1 && min > max) {
-      min = max;
-    }
-    if (max == -1) {
+    if (max == INFINITY) {
       interval = RegexpInterval.getUnbounded(min);
     } else {
       interval = RegexpInterval.getBounded(min, max);

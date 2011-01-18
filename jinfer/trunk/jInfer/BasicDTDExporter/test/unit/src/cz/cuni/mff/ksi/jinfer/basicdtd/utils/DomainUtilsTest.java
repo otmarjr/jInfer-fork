@@ -132,6 +132,26 @@ public class DomainUtilsTest {
     assertEquals(expResult, result);
   }
 
+  @Test
+  public void testGetAttributeTypeSpace() {
+    System.out.println("testGetAttributeTypeSpace");
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
+    domain.put("space space", Integer.valueOf(1));
+    domain.put("space_space", Integer.valueOf(1));
+    final String expResult = DomainUtils.ATTRIBUTE_CDATA;
+    final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testGetAttributeTypeSpaceOk() {
+    System.out.println("testGetAttributeTypeSpaceOk");
+    final Map<String, Integer> domain = new HashMap<String, Integer>();
+    domain.put("space_space", Integer.valueOf(1));
+    final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
+    assertEquals(" (space_space) ", result);
+  }
+
   @Test(expected = NullPointerException.class)
   public void testGetDefaultNull() {
     System.out.println("testGetDefaultNull");

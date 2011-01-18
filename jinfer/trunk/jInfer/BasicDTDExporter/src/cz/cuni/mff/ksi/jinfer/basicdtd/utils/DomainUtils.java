@@ -93,6 +93,13 @@ public final class DomainUtils {
   public static String getAttributeType(final Map<String, Integer> domain, final int threshold) {
     if (domain.size() <= threshold) {
       final List<String> domainValues = new ArrayList<String>(domain.keySet());
+      for (final String value : domainValues) {
+        if (value.contains(" ")) {
+          // we cannot enumerate values containing a space
+          return ATTRIBUTE_CDATA;
+        }
+      }
+
       Collections.sort(domainValues);
       return " " + CollectionToString.colToString(
               domainValues,

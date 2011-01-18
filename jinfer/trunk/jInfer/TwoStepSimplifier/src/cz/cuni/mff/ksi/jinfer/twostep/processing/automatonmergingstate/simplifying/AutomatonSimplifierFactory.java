@@ -19,13 +19,13 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplify
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
  * Factory for AutomatonSimplifier.
  *
  * @author anti
  */
-public interface AutomatonSimplifierFactory extends NamedModule, Capabilities, TwoStepUserDescription {
+public interface AutomatonSimplifierFactory extends NamedModule, Capabilities, UserModuleDescription {
   <T> AutomatonSimplifier<T> create();
 }

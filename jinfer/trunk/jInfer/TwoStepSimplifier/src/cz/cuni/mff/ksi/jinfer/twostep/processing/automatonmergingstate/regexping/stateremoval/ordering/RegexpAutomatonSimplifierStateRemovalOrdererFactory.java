@@ -19,13 +19,13 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexpin
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
  * Factory interface for RegexpAutomatonSimplifierStateRemovalOrderer.
  *
  * @author anti
  */
-public interface RegexpAutomatonSimplifierStateRemovalOrdererFactory extends NamedModule, Capabilities, TwoStepUserDescription {
+public interface RegexpAutomatonSimplifierStateRemovalOrdererFactory extends NamedModule, Capabilities, UserModuleDescription {
   <T> RegexpAutomatonSimplifierStateRemovalOrderer<T> create();
 }

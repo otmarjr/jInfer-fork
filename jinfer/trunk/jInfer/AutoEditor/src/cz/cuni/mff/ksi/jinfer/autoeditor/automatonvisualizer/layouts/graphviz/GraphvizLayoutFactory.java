@@ -130,4 +130,13 @@ public class GraphvizLayoutFactory implements LayoutF {
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
+
+  @Override
+  public String getUserModuleDescription() {
+    final StringBuilder sb = new StringBuilder(getDisplayName());
+    sb.append(" lays graph nodes by using graphviz dot layouter.");
+    sb.append(" For each graph, dot binary is executed with dot language translated");
+    sb.append(" automaton. Output is parsed for position of nodes, which are used in JUNG.");
+    return sb.toString();
+  }
 }

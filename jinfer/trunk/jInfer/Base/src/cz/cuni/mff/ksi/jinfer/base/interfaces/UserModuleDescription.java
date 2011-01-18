@@ -24,7 +24,7 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces;
  *
  * @author anti
  */
-public interface TwoStepUserDescription {
+public interface UserModuleDescription {
   /**
    * Text to be displayed to user in properties panel as a moderate description
    * of module. 10-20 lines.

@@ -72,4 +72,9 @@ public class VyhnanovskaLayoutFactory implements LayoutF {
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
+
+  @Override
+  public String getUserModuleDescription() {
+    return "Uses square matrix to position nodes.";
+  }
 }

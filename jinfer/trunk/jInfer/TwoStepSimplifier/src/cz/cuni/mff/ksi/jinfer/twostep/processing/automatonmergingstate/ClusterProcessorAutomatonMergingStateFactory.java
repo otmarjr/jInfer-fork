@@ -91,7 +91,6 @@ public class ClusterProcessorAutomatonMergingStateFactory implements ClusterProc
     sb.append(" class, which has to create regular expression from automaton somehow.");
     sb.append(" This regular expression is returned as grammar for cluster of elements.");
     return sb.toString();
-
   }
 
   @Override

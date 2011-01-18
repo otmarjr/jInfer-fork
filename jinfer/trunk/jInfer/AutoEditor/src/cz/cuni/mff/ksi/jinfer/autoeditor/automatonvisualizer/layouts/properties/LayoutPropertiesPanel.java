@@ -33,10 +33,6 @@ import javax.swing.JTextField;
 public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;
-  // TODO rio What are these two for?? Rio: I don't know, not my code :)
-  // TODO ?anti?    -- || --
-  private static Map<String, JTextField> dynamicComponents;
-  private static Map<String, String> dynamicParameters;
   public static final String NAME = "Automaton visualizer";
 
   /** Creates new form ModuleSelectionJPanel */
@@ -111,7 +107,7 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   private void graphRendererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphRendererActionPerformed
     LayoutF factory = ModuleSelectionHelper.lookupImpl(LayoutF.class,
             ((NamedModule) graphRenderer.getSelectedItem()).getName());
-    desc.setText(factory.getModuleDescription());
+    desc.setText(factory.getUserModuleDescription());
   }//GEN-LAST:event_graphRendererActionPerformed
 
   @Override

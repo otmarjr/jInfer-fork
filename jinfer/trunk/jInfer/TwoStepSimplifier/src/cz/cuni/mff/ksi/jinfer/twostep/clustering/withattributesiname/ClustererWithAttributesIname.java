@@ -103,15 +103,15 @@ public class ClustererWithAttributesIname implements ClustererWithAttributes<Abs
       
       if (node.isElement()) {
         for (AbstractStructuralNode subNode: ((Element) node).getSubnodes().getTokens()) {
-          if (Boolean.TRUE.equals(subNode.getMetadata().get(IGGUtils.IS_SENTINEL))) {
-            this.addNode(subNode);
-          }
           if (subNode.isSimpleData()) {
             if (!this.simpleDataClusterers.containsKey(representant)) {
               this.simpleDataClusterers.put(representant,
                       new SimpleDataClusterer());
             }
             this.simpleDataClusterers.get(representant).add((SimpleData) subNode);
+          }
+          if (Boolean.TRUE.equals(subNode.getMetadata().get(IGGUtils.IS_SENTINEL))) {
+            this.addNode(subNode);
           }
         }
         for (Attribute attribute : ((Element) node).getAttributes()) {

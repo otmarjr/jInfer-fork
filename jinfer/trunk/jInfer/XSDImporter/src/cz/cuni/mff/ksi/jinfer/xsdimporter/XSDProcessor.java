@@ -69,16 +69,12 @@ public class XSDProcessor implements Processor {
         parser.process(stream);
         final List<Element> rules = parser.getRules();
         printDebugInfo(settings, rules, "AfterParsing");
-        // TODO reseto: remove AdvRuleDisplayer and also the module dependency
-        AdvancedRuleDisplayer.showRulesAsync("Parsed", new CloneHelper().cloneGrammar(rules), true);
         // if the next module cannot handle complex regexps, help it by expanding our result
         if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
           // lookup expander
           final Expander expander = Lookup.getDefault().lookup(Expander.class);
           final List<Element> rulesExpanded = expander.expand(rules);
           printDebugInfo(settings, rulesExpanded, "AfterExpanding");
-          //TODO remove
-          AdvancedRuleDisplayer.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(rulesExpanded), true);
           // return expanded
           return rulesExpanded;
         }

@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
@@ -57,11 +56,12 @@ public class ExpanderImpl implements Expander {
   }
 
   private static List<Element> expandElement(final Element e) {
-    //TODO I think this should be disabled when we want to recursively expand tokens,
+    //TODO rethink this: should be disabled? we need to set sentinels
+    // even to the elements in a simple concatenation
     // because a concatenation of two tokens returns true, but we want to expand the rules inside too
-    if (ExpansionHelper.isSimpleConcatenation(e.getSubnodes())) {
-      return Arrays.asList(e);
-    }
+    //if (ExpansionHelper.isSimpleConcatenation(e.getSubnodes())) {
+    //  return Arrays.asList(e);
+    //}
 
     final List<Element> ret = new ArrayList<Element>();
     final List<List<AbstractStructuralNode>> exploded = unpackRE(e.getSubnodes());
@@ -73,7 +73,6 @@ public class ExpanderImpl implements Expander {
       } else {
         final List<Regexp<AbstractStructuralNode>> regexpChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
         for (final AbstractStructuralNode n : line) {
-          //TODO this is an open issue
           if (n.getType().equals(StructuralNodeType.ELEMENT)) {
             Element nElem = (Element) n;
             List<String> context = nElem.getContext();
@@ -86,18 +85,8 @@ public class ExpanderImpl implements Expander {
             regexpChildren.add(Regexp.<AbstractStructuralNode>getToken(
               new Element(context, name, metadata, subnodes1, attributes)));
           } else {
-            SimpleData nData = (SimpleData) n;
-            List<String> context = nData.getContext();
-            String name = nData.getName();
-            Map<String, Object> metadata = new HashMap<String, Object>();
-            metadata.putAll(nData.getMetadata());
-            metadata.putAll(IGGUtils.METADATA_SENTINEL);
-            String contentType = nData.getContentType();
-            List<String> content = nData.getContent();
-            regexpChildren.add(Regexp.<AbstractStructuralNode>getToken(
-              new SimpleData(context, name, metadata, contentType, content)));
+            regexpChildren.add(Regexp.getToken(n)); // original
           }
-            //regexpChildren.add(Regexp.getToken(n)); // original
         }
         subnodes = Regexp.getConcatenation(regexpChildren);
       }
@@ -109,31 +98,16 @@ public class ExpanderImpl implements Expander {
 
   private static List<List<AbstractStructuralNode>> unpackRE(
           final Regexp<AbstractStructuralNode> r) {
-//System.err.println("unpacking re: " + r.toString());
     switch (r.getType()) {
       case LAMBDA:
         final List<List<AbstractStructuralNode>> empty = new ArrayList<List<AbstractStructuralNode>>(1);
         empty.add(new ArrayList<AbstractStructuralNode>());
         return empty;
       case TOKEN:
-//System.err.println("unpacking token");
         final List<List<AbstractStructuralNode>> tokenRet = new ArrayList<List<AbstractStructuralNode>>(1);
-    /*    final AbstractStructuralNode content = r.getContent();
-        if (StructuralNodeType.SIMPLE_DATA.equals(content.getType())) {
-          tokenRet.add(Arrays.asList(r.getContent()));
-        } else {
-          // element
-          List<Element> subexpand = expandElement((Element) r.getContent());
-          for (Element element : subexpand) {
-            List<AbstractStructuralNode> concat = new ArrayList<AbstractStructuralNode>();
-            concat.add(element);
-            tokenRet.add(concat);
-          }
-        }*/
         tokenRet.add(Arrays.asList(r.getContent())); // original implementation
         return ExpansionHelper.applyInterval(tokenRet, r.getInterval());
       case CONCATENATION:
-//System.err.println("unpacking concat");
         return ExpansionHelper.applyInterval(unpackConcat(r.getChildren()), r.getInterval());
       case ALTERNATION:
         return ExpansionHelper.applyInterval(unpackAlternation(r.getChildren()), r.getInterval());

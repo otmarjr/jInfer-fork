@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.clustering;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.twostep.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.TwoStepUserDescription;
 
 /**
  * Factory interface for Clusterer interface. Implementing factories

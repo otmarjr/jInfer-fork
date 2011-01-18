@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import org.apache.commons.collections15.Transformer;
@@ -30,7 +31,7 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author anti
  */
-public interface LayoutF extends NamedModule, Capabilities {
+public interface LayoutF extends NamedModule, Capabilities, UserModuleDescription {
 
   <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer);
 }

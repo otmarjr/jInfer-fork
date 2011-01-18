@@ -20,13 +20,13 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
  * Factory interface for MergeConditionTester.
  *
  * @author anti
  */
-public interface MergeConditionTesterFactory extends NamedModule, Capabilities, TwoStepUserDescription, ModuleParameters {
+public interface MergeConditionTesterFactory extends NamedModule, Capabilities, UserModuleDescription, ModuleParameters {
   <T> MergeConditionTester<T> create();
 }

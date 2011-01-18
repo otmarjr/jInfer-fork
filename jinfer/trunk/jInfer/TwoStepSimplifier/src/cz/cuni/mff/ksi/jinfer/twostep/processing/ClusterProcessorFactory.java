@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
  * Factory interface for 
@@ -33,7 +33,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.TwoStepUserDescription;
  * @author anti
  */
 public interface ClusterProcessorFactory
-        extends NamedModule, Capabilities, TwoStepUserDescription {
+        extends NamedModule, Capabilities, UserModuleDescription {
 
   ClusterProcessor<AbstractStructuralNode> create();
 }

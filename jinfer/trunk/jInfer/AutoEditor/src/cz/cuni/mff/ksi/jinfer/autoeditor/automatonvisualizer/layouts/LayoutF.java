@@ -33,5 +33,5 @@ import org.apache.commons.collections15.Transformer;
  */
 public interface LayoutF extends NamedModule, Capabilities, UserModuleDescription {
 
-  <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer);
+  <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException;
 }

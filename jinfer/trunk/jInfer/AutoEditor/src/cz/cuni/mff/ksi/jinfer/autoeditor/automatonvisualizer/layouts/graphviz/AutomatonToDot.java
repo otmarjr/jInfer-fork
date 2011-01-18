@@ -31,17 +31,20 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author anti
  */
-public class AutomatonToDot<T> {
-  public String convertToDot(Automaton<T> automaton, Transformer<Step<T>, String> edgeLabelTransformer) {
-    StringBuilder sb = new StringBuilder();
+public final class AutomatonToDot {
+
+  private AutomatonToDot() {};
+
+  public static <T> String convertToDot(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
+    final StringBuilder sb = new StringBuilder();
     sb.append("digraph finite_state_machine {\n"
             + "\trankdir=LR;\n"
             + "\tnode [shape = circle];\n");
-    Deque<State<T>> queue = new ArrayDeque<State<T>>();
+    final Deque<State<T>> queue = new ArrayDeque<State<T>>();
     queue.addAll(automaton.getDelta().keySet());
     
     while (!queue.isEmpty()) {
-      State<T> actual = queue.removeFirst();
+      final State<T> actual = queue.removeFirst();
       if (actual.getFinalCount() > 0) {
         sb.append("\tnode [shape = doublecircle]; ");
       } else {

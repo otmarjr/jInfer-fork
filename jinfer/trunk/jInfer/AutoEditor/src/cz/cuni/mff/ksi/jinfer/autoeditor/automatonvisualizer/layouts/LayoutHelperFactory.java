@@ -46,7 +46,7 @@ public final class LayoutHelperFactory {
    * @param edgeLabelTransformer Transformer that can transform edge to string, which is displayed as its label.
    * @return Layout by user selection.
    */
-  public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
+  public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
     Properties p = RunningProject.getActiveProjectProps(LayoutPropertiesPanel.NAME);
 
     LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));

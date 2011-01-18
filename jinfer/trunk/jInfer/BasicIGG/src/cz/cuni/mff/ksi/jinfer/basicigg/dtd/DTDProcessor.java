@@ -92,7 +92,10 @@ public class DTDProcessor implements Processor {
         // return expanded
         return expander.expand(ret);
       }
-
+      LOG.info("Schema imported with following rules:");
+      for (Element elem : ret) {
+        LOG.info(elem.toString());
+      }
       return ret;
     } catch (final Exception e) {
       if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {

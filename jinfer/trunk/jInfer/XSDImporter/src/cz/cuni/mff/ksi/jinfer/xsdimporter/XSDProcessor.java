@@ -16,11 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
+import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.AdvancedRuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
@@ -67,12 +69,16 @@ public class XSDProcessor implements Processor {
         parser.process(stream);
         final List<Element> rules = parser.getRules();
         printDebugInfo(settings, rules, "AfterParsing");
+        // TODO reseto: remove AdvRuleDisplayer and also the module dependency
+        AdvancedRuleDisplayer.showRulesAsync("Parsed", new CloneHelper().cloneGrammar(rules), true);
         // if the next module cannot handle complex regexps, help it by expanding our result
         if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
           // lookup expander
           final Expander expander = Lookup.getDefault().lookup(Expander.class);
           final List<Element> rulesExpanded = expander.expand(rules);
           printDebugInfo(settings, rulesExpanded, "AfterExpanding");
+          //TODO remove
+          AdvancedRuleDisplayer.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(rulesExpanded), true);
           // return expanded
           return rulesExpanded;
         }

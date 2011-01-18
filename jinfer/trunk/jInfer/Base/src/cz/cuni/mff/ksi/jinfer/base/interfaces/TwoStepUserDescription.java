@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.twostep;
+package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
 /**
  * Interface which must be implemented by factory classes of submodules.

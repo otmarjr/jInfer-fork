@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.cleaning;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.twostep.TwoStepUserDescription;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.TwoStepUserDescription;
 
 /**
  * Factory for RegularExpressionCleaner.

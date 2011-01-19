@@ -42,15 +42,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>cz.cuni.mff.ksi.jinfer.ruledisplayer</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <release-version>2</release-version>
-                        <specification-version>2.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>org.openide.util</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>

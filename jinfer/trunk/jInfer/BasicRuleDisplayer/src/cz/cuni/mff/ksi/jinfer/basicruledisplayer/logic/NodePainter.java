@@ -15,14 +15,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
+package cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.RuleDisplayerPanel;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;

@@ -14,13 +14,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
+package cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

@@ -27,12 +27,12 @@ import org.openide.util.NbPreferences;
  *
  * @author sviro
  */
-public final class AdvancedRuleDisplayerPanel extends JPanel {
+public final class TreeRuleDisplayerPanel extends JPanel {
 
-  private final AdvancedRuleDisplayerOptionsPanelController controller;
+  private final TreeRuleDisplayerOptionsPanelController controller;
   private static final String[] SHAPES = new String[] { "Circle", "Square", "Rounded Square", "Polygon", "Star" };
 
-  AdvancedRuleDisplayerPanel(final AdvancedRuleDisplayerOptionsPanelController controller) {
+  TreeRuleDisplayerPanel(final TreeRuleDisplayerOptionsPanelController controller) {
     super();
     this.controller = controller;
     initComponents();
@@ -94,10 +94,10 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
 
     setLayout(new java.awt.GridBagLayout());
 
-    basic.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.basic.border.title"))); // NOI18N
+    basic.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.basic.border.title"))); // NOI18N
     basic.setLayout(new java.awt.GridBagLayout());
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel4.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel4.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -134,7 +134,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     basic.add(backgroundColor, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel5.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel5.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -142,7 +142,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     basic.add(jLabel5, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel6.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel6.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
@@ -167,7 +167,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     basic.add(verticalDistance, gridBagConstraints);
 
     jLabel7.setFont(jLabel7.getFont().deriveFont((jLabel7.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel7.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel7.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 0;
@@ -176,7 +176,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     basic.add(jLabel7, gridBagConstraints);
 
     jLabel8.setFont(jLabel8.getFont().deriveFont((jLabel8.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel8.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel8.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 1;
@@ -185,7 +185,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     basic.add(jLabel8, gridBagConstraints);
 
     jLabel9.setFont(jLabel9.getFont().deriveFont((jLabel9.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel9.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel9.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 2;
@@ -216,10 +216,10 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     add(basic, gridBagConstraints);
 
-    shape.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.shape.border.title"))); // NOI18N
+    shape.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.shape.border.title"))); // NOI18N
     shape.setLayout(new java.awt.GridBagLayout());
 
-    org.openide.awt.Mnemonics.setLocalizedText(tokenLabel, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.tokenLabel.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(tokenLabel, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.tokenLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
@@ -227,7 +227,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(tokenLabel, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(concatLabel, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.concatLabel.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(concatLabel, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.concatLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 3;
@@ -235,7 +235,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(concatLabel, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(alterLabel, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.alterLabel.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(alterLabel, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.alterLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 4;
@@ -243,7 +243,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(alterLabel, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(permutLabel, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.permutLabel.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(permutLabel, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.permutLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 5;
@@ -311,7 +311,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(permutSpinner, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(rootLabel, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.rootLabel.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(rootLabel, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.rootLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -472,19 +472,19 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 15, 2, 15);
     shape.add(permutColor, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel1.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
     shape.add(jLabel1, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel2.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel2.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 0;
     shape.add(jLabel2, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel3.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel3.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 0;
@@ -509,7 +509,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.weightx = 1.0;
     shape.add(jPanel1, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jButton1.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jButton1.text")); // NOI18N
     jButton1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         setDefaultValues(evt);
@@ -520,7 +520,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     gridBagConstraints.gridy = 6;
     shape.add(jButton1, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(AdvancedRuleDisplayerPanel.class, "AdvancedRuleDisplayerPanel.jLabel10.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jLabel10.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 6;
@@ -585,7 +585,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 18, Short.MAX_VALUE)
+      .addGap(0, 17, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -601,7 +601,7 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
     final Object source = evt.getSource();
     if (source instanceof JPanel) {
       final JPanel panel = (JPanel) source;
-      final Color c = JColorChooser.showDialog(AdvancedRuleDisplayerPanel.this, "Choose the color", panel.getBackground());
+      final Color c = JColorChooser.showDialog(TreeRuleDisplayerPanel.this, "Choose the color", panel.getBackground());
       if (c != null) {
         panel.setBackground(c);
       }
@@ -671,30 +671,30 @@ public final class AdvancedRuleDisplayerPanel extends JPanel {
    * Save all values in fields into properties.
    */
   public void store() {
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.BG_COLOR_PROP, String.valueOf(backgroundColor.getBackground().getRGB()));
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.HORIZONTAL_DISTANCE_PROP, (Integer) horizontalDistance.getValue());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.VERTICAL_DISTANCE_PROP, (Integer) verticalDistance.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.BG_COLOR_PROP, String.valueOf(backgroundColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.HORIZONTAL_DISTANCE_PROP, (Integer) horizontalDistance.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.VERTICAL_DISTANCE_PROP, (Integer) verticalDistance.getValue());
 
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.ROOT_SHAPE_PROP, rootCombo.getSelectedIndex());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.TOKEN_SHAPE_PROP, tokenCombo.getSelectedIndex());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.CONCAT_SHAPE_PROP, concatCombo.getSelectedIndex());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.ALTER_SHAPE_PROP, alterCombo.getSelectedIndex());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.PERMUT_SHAPE_PROP, permutCombo.getSelectedIndex());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.LAMBDA_SHAPE_PROP, lambdaCombo.getSelectedIndex());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ROOT_SHAPE_PROP, rootCombo.getSelectedIndex());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.TOKEN_SHAPE_PROP, tokenCombo.getSelectedIndex());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.CONCAT_SHAPE_PROP, concatCombo.getSelectedIndex());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ALTER_SHAPE_PROP, alterCombo.getSelectedIndex());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.PERMUT_SHAPE_PROP, permutCombo.getSelectedIndex());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.LAMBDA_SHAPE_PROP, lambdaCombo.getSelectedIndex());
 
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.ROOT_SIZE_PROP, (Integer) rootSpinner.getValue());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.TOKEN_SIZE_PROP, (Integer) tokenSpinner.getValue());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.CONCAT_SIZE_PROP, (Integer) concatSpinner.getValue());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.ALTER_SIZE_PROP, (Integer) alterSpinner.getValue());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.PERMUT_SIZE_PROP, (Integer) permutSpinner.getValue());
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).putInt(Utils.LAMBDA_SIZE_PROP, (Integer) lambdaSpinner.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ROOT_SIZE_PROP, (Integer) rootSpinner.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.TOKEN_SIZE_PROP, (Integer) tokenSpinner.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.CONCAT_SIZE_PROP, (Integer) concatSpinner.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ALTER_SIZE_PROP, (Integer) alterSpinner.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.PERMUT_SIZE_PROP, (Integer) permutSpinner.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.LAMBDA_SIZE_PROP, (Integer) lambdaSpinner.getValue());
 
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.ROOT_COLOR_PROP, String.valueOf(rootColor.getBackground().getRGB()));
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.TOKEN_COLOR_PROP, String.valueOf(tokenColor.getBackground().getRGB()));
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.CONCAT_COLOR_PROP, String.valueOf(concatColor.getBackground().getRGB()));
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.ALTER_COLOR_PROP, String.valueOf(alterColor.getBackground().getRGB()));
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.PERMUT_COLOR_PROP, String.valueOf(permutColor.getBackground().getRGB()));
-    NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).put(Utils.LAMBDA_COLOR_PROP, String.valueOf(lambdaColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ROOT_COLOR_PROP, String.valueOf(rootColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.TOKEN_COLOR_PROP, String.valueOf(tokenColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.CONCAT_COLOR_PROP, String.valueOf(concatColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ALTER_COLOR_PROP, String.valueOf(alterColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.PERMUT_COLOR_PROP, String.valueOf(permutColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.LAMBDA_COLOR_PROP, String.valueOf(lambdaColor.getBackground().getRGB()));
   }
 
   /**

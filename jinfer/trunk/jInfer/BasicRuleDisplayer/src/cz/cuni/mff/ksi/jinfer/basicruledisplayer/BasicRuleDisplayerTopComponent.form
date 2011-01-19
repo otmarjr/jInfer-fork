@@ -79,7 +79,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -94,7 +94,7 @@
           <Connection code="Utils.getColorElement()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -109,7 +109,7 @@
           <Connection code="Utils.getColorAttribute()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -124,7 +124,7 @@
           <Connection code="Utils.getColorSimpleData()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -139,7 +139,7 @@
           <Connection code="Utils.getColorConcatenation()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -154,27 +154,27 @@
           <Connection code="Utils.getColorAlternation()" type="code"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/arrow.png"/>
+          <Image iconType="3" name="/cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/arrow.png"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png"/>
+          <Image iconType="3" name="/cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/lambda.png"/>
         </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/Bundle.properties" key="RuleDisplayerTopComponent.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties" key="BasicRuleDisplayerTopComponent.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>

@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.RuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.BasicRuleDisplayerPanel;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -49,7 +49,7 @@ public class RulePainter {
    */
   public RulePainter(final Component root) {
     this.root = root;
-    maxRules = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.rules", 50);
+    maxRules = Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("max.rules", 50);
   }
 
   /**

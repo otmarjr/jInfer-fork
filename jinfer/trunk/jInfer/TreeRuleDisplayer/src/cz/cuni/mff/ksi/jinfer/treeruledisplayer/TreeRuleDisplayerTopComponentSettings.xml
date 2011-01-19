@@ -7,6 +7,6 @@ and open the template in the editor.
 <settings version="1.0">
     <module name="cz.cuni.mff.ksi.jinfer.treeruledisplayer" spec="1.0"/>
     <instanceof class="org.openide.windows.TopComponent"/>
-    <instanceof class="cz.cuni.mff.ksi.jinfer.treeruledisplayer.AdvancedRuleDisplayerTopComponent"/>
-    <instance class="cz.cuni.mff.ksi.jinfer.treeruledisplayer.AdvancedRuleDisplayerTopComponent" method="getDefault"/>
+    <instanceof class="cz.cuni.mff.ksi.jinfer.treeruledisplayer.TreeRuleDisplayerTopComponent"/>
+    <instance class="cz.cuni.mff.ksi.jinfer.treeruledisplayer.TreeRuleDisplayerTopComponent" method="getDefault"/>
 </settings>

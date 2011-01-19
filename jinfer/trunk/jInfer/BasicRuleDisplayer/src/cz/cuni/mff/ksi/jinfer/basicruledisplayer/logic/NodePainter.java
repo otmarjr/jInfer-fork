@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.RuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.BasicRuleDisplayerPanel;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -53,8 +53,8 @@ public class NodePainter {
    * @param graphics Graphics object used to get font metrics.
    */
   public NodePainter(final Graphics2D graphics) {
-    this.maxLevel = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("nesting.level", 25);
-    this.margin = Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("margin", 2);
+    this.maxLevel = Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("nesting.level", 25);
+    this.margin = Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("margin", 2);
     this.graphics = graphics;
   }
 

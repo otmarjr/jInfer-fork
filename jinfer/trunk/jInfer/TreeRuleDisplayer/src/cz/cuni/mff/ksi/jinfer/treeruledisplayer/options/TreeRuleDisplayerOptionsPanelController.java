@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 vektor
+ *  Copyright (C) 2011 sviro
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.basicruledisplayer.options;
+package cz.cuni.mff.ksi.jinfer.treeruledisplayer.options;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -24,30 +24,29 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 /**
- * Options controller of the Rule Displayer module.
- * 
- * @author vektor
+ * Options controller of the Advanced Rule Displayer module.
+ * @author sviro
  */
 @OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_RuleDisplayer",
-keywords = "#AdvancedOption_Keywords_RuleDisplayer",
-keywordsCategory = "jInfer/RuleDisplayer")
-public final class RuleDisplayerOptionsPanelController extends OptionsPanelController {
+displayName = "#AdvancedOption_DisplayName_TreeRuleDisplayer",
+keywords = "#AdvancedOption_Keywords_TreeRuleDisplayer",
+keywordsCategory = "jInfer/TreeRuleDisplayer")
+public final class TreeRuleDisplayerOptionsPanelController extends OptionsPanelController {
 
-  private RuleDisplayerPanel panel;
+  private TreeRuleDisplayerPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-  private boolean changed;
+  private boolean optionsChanged;
 
   @Override
   public void update() {
     getPanel().load();
-    changed = false;
+    optionsChanged = false;
   }
 
   @Override
   public void applyChanges() {
     getPanel().store();
-    changed = false;
+    optionsChanged = false;
   }
 
   @Override
@@ -62,7 +61,7 @@ public final class RuleDisplayerOptionsPanelController extends OptionsPanelContr
 
   @Override
   public boolean isChanged() {
-    return changed;
+    return optionsChanged;
   }
 
   @Override
@@ -85,16 +84,19 @@ public final class RuleDisplayerOptionsPanelController extends OptionsPanelContr
     pcs.removePropertyChangeListener(l);
   }
 
-  private RuleDisplayerPanel getPanel() {
+  private TreeRuleDisplayerPanel getPanel() {
     if (panel == null) {
-      panel = new RuleDisplayerPanel(this);
+      panel = new TreeRuleDisplayerPanel(this);
     }
     return panel;
   }
 
-  private void changed() {
-    if (!changed) {
-      changed = true;
+  /**
+   * Call to indicate that some field is changed in options panel.
+   */
+  public void changed() {
+    if (!optionsChanged) {
+      optionsChanged = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
     }
     pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);

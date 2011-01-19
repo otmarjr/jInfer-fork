@@ -27,13 +27,13 @@ import org.openide.util.NbPreferences;
  *
  * @author vektor
  */
-public final class RuleDisplayerPanel extends JPanel {
+public final class BasicRuleDisplayerPanel extends JPanel {
 
   private static final long serialVersionUID = 1211214L;
 
-  private final RuleDisplayerOptionsPanelController controller;
+  private final BasicRuleDisplayerOptionsPanelController controller;
 
-  public RuleDisplayerPanel(final RuleDisplayerOptionsPanelController controller) {
+  public BasicRuleDisplayerPanel(final BasicRuleDisplayerOptionsPanelController controller) {
     this.controller = controller;
     initComponents();
   }
@@ -73,10 +73,10 @@ public final class RuleDisplayerPanel extends JPanel {
 
     setLayout(new java.awt.GridBagLayout());
 
-    panelBehaviour.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.panelBehaviour.border.title"))); // NOI18N
+    panelBehaviour.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.panelBehaviour.border.title"))); // NOI18N
     panelBehaviour.setLayout(new java.awt.GridBagLayout());
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel1.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -94,7 +94,7 @@ public final class RuleDisplayerPanel extends JPanel {
     panelBehaviour.add(nestingLevel, gridBagConstraints);
 
     jLabel2.setFont(jLabel2.getFont().deriveFont((jLabel2.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel2.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel2.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 1;
@@ -102,7 +102,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelBehaviour.add(jLabel2, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel3.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel3.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
@@ -120,7 +120,7 @@ public final class RuleDisplayerPanel extends JPanel {
     panelBehaviour.add(maxRules, gridBagConstraints);
 
     jLabel4.setFont(jLabel4.getFont().deriveFont((jLabel4.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel4.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel4.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 2;
@@ -128,7 +128,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelBehaviour.add(jLabel4, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel11.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel11, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel11.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 3;
@@ -145,7 +145,7 @@ public final class RuleDisplayerPanel extends JPanel {
     panelBehaviour.add(margin, gridBagConstraints);
 
     jLabel12.setFont(jLabel12.getFont().deriveFont((jLabel12.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel12.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel12.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 3;
@@ -153,7 +153,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelBehaviour.add(jLabel12, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel13.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel13.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -171,7 +171,7 @@ public final class RuleDisplayerPanel extends JPanel {
     panelBehaviour.add(maxPanels, gridBagConstraints);
 
     jLabel14.setFont(jLabel14.getFont().deriveFont((jLabel14.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel14.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel14, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel14.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 0;
@@ -184,10 +184,10 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.weightx = 1.0;
     add(panelBehaviour, gridBagConstraints);
 
-    panelColors.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.panelColors.border.title"))); // NOI18N
+    panelColors.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.panelColors.border.title"))); // NOI18N
     panelColors.setLayout(new java.awt.GridBagLayout());
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel5.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel5.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -223,7 +223,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(panelElement, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel6.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel6.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -258,7 +258,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(panelAttribute, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel7.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel7.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
@@ -294,7 +294,7 @@ public final class RuleDisplayerPanel extends JPanel {
     panelColors.add(panelSimpleData, gridBagConstraints);
 
     jLabel8.setFont(jLabel8.getFont().deriveFont((jLabel8.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel8.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel8.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 2;
@@ -304,7 +304,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelColors.add(jLabel8, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(reset, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.reset.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(reset, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.reset.text")); // NOI18N
     reset.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         resetActionPerformed(evt);
@@ -317,7 +317,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(reset, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel9.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel9.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 0;
@@ -325,7 +325,7 @@ public final class RuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelColors.add(jLabel9, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(RuleDisplayerPanel.class, "RuleDisplayerPanel.jLabel10.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel10.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 1;
@@ -416,21 +416,21 @@ public final class RuleDisplayerPanel extends JPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void panelElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelElementMouseClicked
-    final Color c = JColorChooser.showDialog(RuleDisplayerPanel.this, "Choose the element color", panelElement.getBackground());
+    final Color c = JColorChooser.showDialog(BasicRuleDisplayerPanel.this, "Choose the element color", panelElement.getBackground());
     if (c != null) {
       panelElement.setBackground(c);
     }
   }//GEN-LAST:event_panelElementMouseClicked
 
   private void panelAttributeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelAttributeMouseClicked
-    final Color c = JColorChooser.showDialog(RuleDisplayerPanel.this, "Choose the attribute color", panelAttribute.getBackground());
+    final Color c = JColorChooser.showDialog(BasicRuleDisplayerPanel.this, "Choose the attribute color", panelAttribute.getBackground());
     if (c != null) {
       panelAttribute.setBackground(c);
     }
   }//GEN-LAST:event_panelAttributeMouseClicked
 
   private void panelSimpleDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelSimpleDataMouseClicked
-    final Color c = JColorChooser.showDialog(RuleDisplayerPanel.this, "Choose the simple data color", panelSimpleData.getBackground());
+    final Color c = JColorChooser.showDialog(BasicRuleDisplayerPanel.this, "Choose the simple data color", panelSimpleData.getBackground());
     if (c != null) {
       panelSimpleData.setBackground(c);
     }
@@ -445,24 +445,24 @@ public final class RuleDisplayerPanel extends JPanel {
   }//GEN-LAST:event_resetActionPerformed
 
   private void panelConcatenationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelConcatenationMouseClicked
-    final Color c = JColorChooser.showDialog(RuleDisplayerPanel.this, "Choose the concatenation color", panelConcatenation.getBackground());
+    final Color c = JColorChooser.showDialog(BasicRuleDisplayerPanel.this, "Choose the concatenation color", panelConcatenation.getBackground());
     if (c != null) {
       panelConcatenation.setBackground(c);
     }
   }//GEN-LAST:event_panelConcatenationMouseClicked
 
   private void panelAlternationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelAlternationMouseClicked
-    final Color c = JColorChooser.showDialog(RuleDisplayerPanel.this, "Choose the alternation color", panelAlternation.getBackground());
+    final Color c = JColorChooser.showDialog(BasicRuleDisplayerPanel.this, "Choose the alternation color", panelAlternation.getBackground());
     if (c != null) {
       panelAlternation.setBackground(c);
     }
   }//GEN-LAST:event_panelAlternationMouseClicked
 
   public void load() {
-    maxPanels.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("max.panels", 8));
-    nestingLevel.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("nesting.level", 25));
-    maxRules.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("max.rules", 50));
-    margin.setValue(NbPreferences.forModule(RuleDisplayerPanel.class).getInt("margin", 2));
+    maxPanels.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("max.panels", 8));
+    nestingLevel.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("nesting.level", 25));
+    maxRules.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("max.rules", 50));
+    margin.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("margin", 2));
 
     panelElement.setBackground(Utils.getColorElement());
     panelAttribute.setBackground(Utils.getColorAttribute());
@@ -472,16 +472,16 @@ public final class RuleDisplayerPanel extends JPanel {
   }
 
   public void store() {
-    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("max.panels", ((Integer) maxPanels.getValue()).intValue());
-    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("nesting.level", ((Integer) nestingLevel.getValue()).intValue());
-    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("max.rules", ((Integer) maxRules.getValue()).intValue());
-    NbPreferences.forModule(RuleDisplayerPanel.class).putInt("margin", ((Integer) margin.getValue()).intValue());
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("max.panels", ((Integer) maxPanels.getValue()).intValue());
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("nesting.level", ((Integer) nestingLevel.getValue()).intValue());
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("max.rules", ((Integer) maxRules.getValue()).intValue());
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("margin", ((Integer) margin.getValue()).intValue());
 
-    NbPreferences.forModule(RuleDisplayerPanel.class).put("element.color", String.valueOf(panelElement.getBackground().getRGB()));
-    NbPreferences.forModule(RuleDisplayerPanel.class).put("attribute.color", String.valueOf(panelAttribute.getBackground().getRGB()));
-    NbPreferences.forModule(RuleDisplayerPanel.class).put("simple.data.color", String.valueOf(panelSimpleData.getBackground().getRGB()));
-    NbPreferences.forModule(RuleDisplayerPanel.class).put("concatenation.color", String.valueOf(panelConcatenation.getBackground().getRGB()));
-    NbPreferences.forModule(RuleDisplayerPanel.class).put("alternation.color", String.valueOf(panelAlternation.getBackground().getRGB()));
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("element.color", String.valueOf(panelElement.getBackground().getRGB()));
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("attribute.color", String.valueOf(panelAttribute.getBackground().getRGB()));
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("simple.data.color", String.valueOf(panelSimpleData.getBackground().getRGB()));
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("concatenation.color", String.valueOf(panelConcatenation.getBackground().getRGB()));
+    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("alternation.color", String.valueOf(panelAlternation.getBackground().getRGB()));
   }
 
   public boolean valid() {

@@ -21,7 +21,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="&lt;RuleDisplayerPanel.panelBehaviour.border.title&gt;">
-              <ResourceString PropertyName="titleX" bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.panelBehaviour.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString PropertyName="titleX" bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.panelBehaviour.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -37,7 +37,7 @@
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -69,7 +69,7 @@
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel2.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -81,7 +81,7 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel3.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -113,7 +113,7 @@
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel4.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -125,7 +125,7 @@
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel11.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -157,7 +157,7 @@
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel12.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -169,7 +169,7 @@
         <Component class="javax.swing.JLabel" name="jLabel13">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel13.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel13.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -201,7 +201,7 @@
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel14.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel14.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -217,7 +217,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="&lt;RuleDisplayerPanel.panelColors.border.title&gt;">
-              <ResourceString PropertyName="titleX" bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.panelColors.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString PropertyName="titleX" bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.panelColors.border.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </TitledBorder>
           </Border>
         </Property>
@@ -233,7 +233,7 @@
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -287,7 +287,7 @@
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -338,7 +338,7 @@
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -394,7 +394,7 @@
               </FontInfo>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -406,7 +406,7 @@
         <Component class="javax.swing.JButton" name="reset">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.reset.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.reset.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Events>
@@ -421,7 +421,7 @@
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel9.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>
@@ -433,7 +433,7 @@
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="RuleDisplayerPanel.jLabel10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="cz/cuni/mff/ksi/jinfer/ruledisplayer/options/Bundle.properties" key="BasicRuleDisplayerPanel.jLabel10.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
           </Properties>
           <Constraints>

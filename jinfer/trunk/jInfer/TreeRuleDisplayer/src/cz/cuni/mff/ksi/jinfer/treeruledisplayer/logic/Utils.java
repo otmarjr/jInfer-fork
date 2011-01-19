@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.treeruledisplayer.options.AdvancedRuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.treeruledisplayer.options.TreeRuleDisplayerPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
@@ -123,7 +123,7 @@ public class Utils {
    * @return Property value if exists for particular property, otherwise is returned defaultValue.
    */
   public static int getProperty(final String property, final int defaultValue) {
-    return NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).getInt(property, defaultValue);
+    return NbPreferences.forModule(TreeRuleDisplayerPanel.class).getInt(property, defaultValue);
   }
 
   /**
@@ -133,7 +133,7 @@ public class Utils {
    * @return Property value if exists for particular property, otherwise is returned defaultValue.
    */
   public static Color getColorProperty(final String property, final Color defaultValue) {
-    return Color.decode(NbPreferences.forModule(AdvancedRuleDisplayerPanel.class).get(property, String.valueOf(defaultValue.getRGB())));
+    return Color.decode(NbPreferences.forModule(TreeRuleDisplayerPanel.class).get(property, String.valueOf(defaultValue.getRGB())));
   }
 
   /**

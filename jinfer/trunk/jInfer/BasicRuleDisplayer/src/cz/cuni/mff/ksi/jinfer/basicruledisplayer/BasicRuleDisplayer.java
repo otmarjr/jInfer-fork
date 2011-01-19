@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,9 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
+package cz.cuni.mff.ksi.jinfer.basicruledisplayer;
 
-import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.GraphBuilder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
@@ -24,11 +23,12 @@ import org.openide.windows.WindowManager;
 
 /**
  * Helper class for displaying a list of rules.
- * @author sviro
+ * 
+ * @author vektor
  */
-public final class AdvancedRuleDisplayer {
+public final class BasicRuleDisplayer {
 
-  private AdvancedRuleDisplayer() {
+  private BasicRuleDisplayer() {
   }
 
   /**
@@ -44,12 +44,11 @@ public final class AdvancedRuleDisplayer {
     if (!render || BaseUtils.isEmpty(rules)) {
       return;
     }
-
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override
       public void run() {
-        AdvancedRuleDisplayerTopComponent.findInstance().createNewPanel(panelName, GraphBuilder.buildGraphPanel(rules));
+        BasicRuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
       }
     });
   }

@@ -42,7 +42,7 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testCreate() {
     System.out.println("create");
-    CleanerNestedConcatenationFactory instance = new CleanerNestedConcatenationFactory();
+    NestedConcatenationFactory instance = new NestedConcatenationFactory();
     RegularExpressionCleaner<String> result = instance.<String>create();
     assertNotNull(result);
   }
@@ -53,7 +53,7 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    CleanerNestedConcatenationFactory instance = new CleanerNestedConcatenationFactory();
+    NestedConcatenationFactory instance = new NestedConcatenationFactory();
     String expResult = "RegularExpressionCleanerNestedConcatenation";
     String result = instance.getName();
     assertEquals(expResult, result);
@@ -65,7 +65,7 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    CleanerNestedConcatenationFactory instance = new CleanerNestedConcatenationFactory();
+    NestedConcatenationFactory instance = new NestedConcatenationFactory();
     String expResult = "Regular Expression Cleaner Nested Concatenation";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
@@ -77,7 +77,7 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    CleanerNestedConcatenationFactory instance = new CleanerNestedConcatenationFactory();
+    NestedConcatenationFactory instance = new NestedConcatenationFactory();
     List<String> result = instance.getCapabilities();
     assertNotNull(result);
     assertTrue(result.isEmpty());
@@ -89,7 +89,7 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    CleanerNestedConcatenationFactory instance = new CleanerNestedConcatenationFactory();
+    NestedConcatenationFactory instance = new NestedConcatenationFactory();
     String expResult = "RegularExpressionCleanerNestedConcatenation";
     String result = instance.getUserModuleDescription();
     assertNotNull(result);

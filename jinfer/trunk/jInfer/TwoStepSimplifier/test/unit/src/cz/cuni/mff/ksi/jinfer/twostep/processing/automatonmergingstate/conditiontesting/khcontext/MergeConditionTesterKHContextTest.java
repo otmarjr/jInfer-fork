@@ -59,7 +59,7 @@ public class MergeConditionTesterKHContextTest {
     Automaton<String> automaton = new Automaton<String>(true);
     automaton.buildPTAOnSymbol(Arrays.<String>asList(
             ));
-    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>(3, 4);
+    KHContext<String> instance = new KHContext<String>(3, 4);
     List<List<List<State<String>>>> result = instance.getMergableStates(automaton.getInitialState(), automaton.getInitialState(), automaton);
   }
 
@@ -70,7 +70,7 @@ public class MergeConditionTesterKHContextTest {
   public void testGetMergableStatesEmptyAut() {
     System.out.println("getMergableStates empty automaton");
     Automaton<String> automaton = new Automaton<String>(false);
-    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>(2,1);
+    KHContext<String> instance = new KHContext<String>(2,1);
     List<List<List<State<String>>>> result = instance.getMergableStates(null, null, automaton);
     assertTrue(result.isEmpty());
   }
@@ -85,7 +85,7 @@ public class MergeConditionTesterKHContextTest {
       }
       automaton.buildPTAOnSymbol(seq);
     }
-    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>(k, h);
+    KHContext<String> instance = new KHContext<String>(k, h);
     for (State<String> state1 : automaton.getDelta().keySet()) {
       for (State<String> state2 : automaton.getDelta().keySet()) {
         List<List<List<State<String>>>> result = instance.getMergableStates(state1, state2, automaton);
@@ -104,7 +104,7 @@ public class MergeConditionTesterKHContextTest {
       }
       automaton.buildPTAOnSymbol(seq);
     }
-    MergeConditionTesterKHContext<String> instance = new MergeConditionTesterKHContext<String>(k, h);
+    KHContext<String> instance = new KHContext<String>(k, h);
     boolean search= true;
     boolean found= false;
     List<List<List<State<String>>>> result= Collections.emptyList();

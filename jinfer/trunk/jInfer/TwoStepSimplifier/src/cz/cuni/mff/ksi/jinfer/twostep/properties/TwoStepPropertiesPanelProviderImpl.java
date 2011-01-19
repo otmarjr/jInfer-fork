@@ -55,7 +55,7 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
 
   @Override
   public String getDisplayName() {
-    return getName();
+    return TwoStepSimplifierFactory.DISPLAY_NAME;
   }
 
   @Override

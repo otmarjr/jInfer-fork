@@ -42,7 +42,7 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testCreate() {
     System.out.println("create");
-    CleanerChainedFactory instance = new CleanerChainedFactory();
+    ChainedFactory instance = new ChainedFactory();
     RegularExpressionCleaner<String> result = instance.<String>create();
     assertNotNull(result);
   }
@@ -53,7 +53,7 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    CleanerChainedFactory instance = new CleanerChainedFactory();
+    ChainedFactory instance = new ChainedFactory();
     String expResult = "RegularExpressionCleanerChained";
     String result = instance.getName();
     assertEquals(expResult, result);
@@ -65,7 +65,7 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    CleanerChainedFactory instance = new CleanerChainedFactory();
+    ChainedFactory instance = new ChainedFactory();
     String expResult = "RegularExpressionCleanerChained";
     String result = instance.getModuleDescription();
     assertFalse(expResult.equals(result));
@@ -77,7 +77,7 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    CleanerChainedFactory instance = new CleanerChainedFactory();
+    ChainedFactory instance = new ChainedFactory();
     List<String> result = instance.getCapabilities();
     assertNotNull(result);
     assertTrue(result.isEmpty());
@@ -89,7 +89,7 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    CleanerChainedFactory instance = new CleanerChainedFactory();
+    ChainedFactory instance = new ChainedFactory();
     String expResult = "RegularExpressionCleanerChained";
     String result = instance.getUserModuleDescription();
     assertNotNull(result);

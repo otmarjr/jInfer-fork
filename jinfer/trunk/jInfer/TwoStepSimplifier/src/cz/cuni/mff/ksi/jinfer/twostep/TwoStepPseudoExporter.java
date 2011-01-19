@@ -45,7 +45,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
    * Name of this module.
    */
   public static final String NAME = "TwoStepPseudoExporter";
-  public static final String DISPLAY_NAME = "Two Step Pseudo Exporter";
+  public static final String DISPLAY_NAME = "TwoStep PseudoExporter";
 
   private static final Logger LOG = Logger.getLogger(TwoStepPseudoExporter.class);
 

@@ -42,7 +42,7 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testCreate() {
     System.out.println("create");
-    CleanerEmptyChildrenFactory instance = new CleanerEmptyChildrenFactory();
+    EmptyChildrenFactory instance = new EmptyChildrenFactory();
     RegularExpressionCleaner<String> result = instance.create();
     assertNotNull(result);
   }
@@ -53,7 +53,7 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    CleanerEmptyChildrenFactory instance = new CleanerEmptyChildrenFactory();
+    EmptyChildrenFactory instance = new EmptyChildrenFactory();
     String expResult = "RegularExpressionCleanerEmptyChildren";
     String result = instance.getName();
     assertEquals(expResult, result);
@@ -65,7 +65,7 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    CleanerEmptyChildrenFactory instance = new CleanerEmptyChildrenFactory();
+    EmptyChildrenFactory instance = new EmptyChildrenFactory();
     List<String> result = instance.getCapabilities();
     assertTrue(result.isEmpty());
   }
@@ -76,7 +76,7 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    CleanerEmptyChildrenFactory instance = new CleanerEmptyChildrenFactory();
+    EmptyChildrenFactory instance = new EmptyChildrenFactory();
     String expResult = "Regular Expression Cleaner Empty Children";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
@@ -88,7 +88,7 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    CleanerEmptyChildrenFactory instance = new CleanerEmptyChildrenFactory();
+    EmptyChildrenFactory instance = new EmptyChildrenFactory();
     String expResult = "RegularExpressionCleanerEmptyChildren";
     String result = instance.getUserModuleDescription();
     assertFalse(expResult.equals(result));

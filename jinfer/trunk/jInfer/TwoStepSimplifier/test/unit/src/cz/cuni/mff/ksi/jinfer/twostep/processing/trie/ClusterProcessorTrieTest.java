@@ -82,7 +82,7 @@ public class ClusterProcessorTrieTest {
     final List<Regexp<AbstractStructuralNode>> l1 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
     l1.add(TestUtils.getToken(getElement("1")));
     final Regexp<AbstractStructuralNode> a1 = getConcatOf(l1);
-    ClusterProcessorTrie.addBranchToTree(t, a1);
+    Trie.addBranchToTree(t, a1);
     System.out.println(TestUtils.regexpToStr(t));
     assertEquals("(1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))))",
             TestUtils.regexpToStr(t));
@@ -91,7 +91,7 @@ public class ClusterProcessorTrieTest {
     final List<Regexp<AbstractStructuralNode>> l2 = new ArrayList<Regexp<AbstractStructuralNode>>(1);
     l2.add(TestUtils.getToken(getElement("7")));
     final Regexp<AbstractStructuralNode> a2 = getConcatOf(l2);
-    ClusterProcessorTrie.addBranchToTree(t, a2);
+    Trie.addBranchToTree(t, a2);
     System.out.println(TestUtils.regexpToStr(t));
     assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))))|(7{()})))",
             TestUtils.regexpToStr(t));
@@ -101,7 +101,7 @@ public class ClusterProcessorTrieTest {
     l3.add(TestUtils.getToken(getElement("1")));
     l3.add(TestUtils.getToken(getElement("8")));
     final Regexp<AbstractStructuralNode> a3 = getConcatOf(l3);
-    ClusterProcessorTrie.addBranchToTree(t, a3);
+    Trie.addBranchToTree(t, a3);
     System.out.println(TestUtils.regexpToStr(t));
     assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))|(8{()})))|(7{()})))",
             TestUtils.regexpToStr(t));
@@ -112,7 +112,7 @@ public class ClusterProcessorTrieTest {
     l4.add(TestUtils.getToken(getElement("7")));
     l4.add(TestUtils.getToken(getElement("9")));
     final Regexp<AbstractStructuralNode> a4 = getConcatOf(l4);
-    ClusterProcessorTrie.addBranchToTree(t, a4);
+    Trie.addBranchToTree(t, a4);
     System.out.println(TestUtils.regexpToStr(t));
     assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))|(8{()})|(7{()},9{()})))|(7{()})))",
             TestUtils.regexpToStr(t));
@@ -124,7 +124,7 @@ public class ClusterProcessorTrieTest {
     l5.add(TestUtils.getToken(getElement("9")));
     l5.add(TestUtils.getToken(getElement("2")));
     final Regexp<AbstractStructuralNode> a5 = getConcatOf(l5);
-    ClusterProcessorTrie.addBranchToTree(t, a5);
+    Trie.addBranchToTree(t, a5);
     System.out.println(TestUtils.regexpToStr(t));
     assertEquals("(((1{()},(\u03BB|(2{()},((3{()},5{()})|(4{()},((6{()})|(7{()})))))|(8{()})|(7{()},9{()},(\u03BB|(2{()})))))|(7{()})))",
             TestUtils.regexpToStr(t));
@@ -150,7 +150,7 @@ public class ClusterProcessorTrieTest {
             Collections.<String>emptyList(), "text",
             Collections.<String, Object>emptyMap(), null,
             Collections.<String>emptyList())));
-    ClusterProcessorTrie.addBranchToTree(b1.getSubnodes(), b2.getSubnodes());
+    Trie.addBranchToTree(b1.getSubnodes(), b2.getSubnodes());
     assertEquals(1, b1.getSubnodes().getChildren().size());
     assertEquals(StructuralNodeType.SIMPLE_DATA, b1.getSubnodes().getChild(0).getContent().getType());
   }

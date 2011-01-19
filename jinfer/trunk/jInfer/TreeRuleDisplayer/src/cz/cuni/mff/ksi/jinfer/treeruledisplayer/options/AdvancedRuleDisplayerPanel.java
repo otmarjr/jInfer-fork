@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.advancedruledisplayer.options;
+package cz.cuni.mff.ksi.jinfer.treeruledisplayer.options;
 
-import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic.Utils;
+import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.Utils;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
@@ -27,7 +27,7 @@ import org.openide.util.NbPreferences;
  *
  * @author sviro
  */
-public final class AdvancedRuleDisplayerPanel extends javax.swing.JPanel {
+public final class AdvancedRuleDisplayerPanel extends JPanel {
 
   private final AdvancedRuleDisplayerOptionsPanelController controller;
   private static final String[] SHAPES = new String[] { "Circle", "Square", "Rounded Square", "Polygon", "Star" };

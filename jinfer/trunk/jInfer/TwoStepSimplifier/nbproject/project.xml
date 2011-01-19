@@ -7,7 +7,7 @@
             <suite-component/>
             <module-dependencies>
                 <dependency>
-                    <code-name-base>cz.cuni.mff.ksi.jinfer.advancedruledisplayer</code-name-base>
+                    <code-name-base>cz.cuni.mff.ksi.jinfer.treeruledisplayer</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>

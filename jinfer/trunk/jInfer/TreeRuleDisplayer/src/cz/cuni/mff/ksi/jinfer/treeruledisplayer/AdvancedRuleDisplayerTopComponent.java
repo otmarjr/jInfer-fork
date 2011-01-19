@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.advancedruledisplayer;
+package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
@@ -31,13 +31,13 @@ import org.openide.util.ImageUtilities;
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
  * @author sviro
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.advancedruledisplayer//AdvancedRuleDisplayer//EN",
+@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.treeruledisplayer//AdvancedRuleDisplayer//EN",
 autostore = false)
 public final class AdvancedRuleDisplayerTopComponent extends TopComponent {
 
   private static AdvancedRuleDisplayerTopComponent instance;
-  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/advancedruledisplayer/graphics/icon16.png";
-  private static final String PREFERRED_ID = "AdvancedRuleDisplayerTopComponent";
+  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/treeruledisplayer/graphics/icon16.png";
+  private static final String PREFERRED_ID = "TreeRuleDisplayerTopComponent";
   private int panelSequence = 0;
 
   public AdvancedRuleDisplayerTopComponent() {

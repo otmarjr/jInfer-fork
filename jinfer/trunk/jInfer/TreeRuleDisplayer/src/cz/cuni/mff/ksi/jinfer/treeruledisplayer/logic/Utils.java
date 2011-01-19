@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic;
+package cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.options.AdvancedRuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.treeruledisplayer.options.AdvancedRuleDisplayerPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;

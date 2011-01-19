@@ -1,0 +1,25 @@
+digraph twostep_modules {
+	node [shape = rectangle, fontname = "SFTT1000", fontsize = 10];
+	edge [fontname = "SFTT1000", fontsize = 10];
+	rankdir = BT;
+
+	TwoStep;
+	Clusterer -> TwoStep [label = "is submodule"];
+	ClusterProcessor -> TwoStep [label = "is submodule"];
+
+	ClustererWithAttributes -> Clusterer [label = "extends interface"];
+	Iname [style = rounded];
+	Iname -> ClustererWithAttributes [label = "implements"];
+	
+	Alternations [style = rounded];
+	Alternations -> ClusterProcessor [label = "implements"];
+	
+	AutomatonMergingState [style = rounded];
+	AutomatonMergingState -> ClusterProcessor [label = "implements"];
+	
+	PassRepresentant [style = rounded];
+	PassRepresentant -> ClusterProcessor [label = "implements"];
+	
+	Trie [style = rounded];
+	Trie -> ClusterProcessor [label = "implements"];
+}

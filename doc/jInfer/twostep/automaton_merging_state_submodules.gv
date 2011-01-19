@@ -1,0 +1,21 @@
+digraph automaton_merging_states_submodules {
+	node [shape = rectangle, fontname = "SFTT1000", fontsize = 10];
+	edge [fontname = "SFTT1000", fontsize = 10];
+	rankdir = BT;
+
+	AutomatonMergingState;
+	AutomatonSimplifier -> AutomatonMergingState [label = "is submodule"];
+	RegexpAutomatonSimplifier -> AutomatonMergingState [label = "is submodule"];
+	MergeConditionTester -> AutomatonMergingState [label = "is submodule"];
+
+	Greedy [style = rounded];
+	Greedy -> AutomatonSimplifier [label = "implements"];
+	
+	StateRemoval [style = rounded];
+	StateRemoval -> RegexpAutomatonSimplifier [label = "implements"];
+	
+	KHContext [style = rounded];
+	KHContext -> MergeConditionTester [label = "implements"];
+	
+	Greedy -> KHContext [label = "uses"];
+}

@@ -49,7 +49,7 @@ public class JHyperlinkLabel extends JLabel {
     this.uri = uri;
   }
 
-  public class HyperlinkLabelMouseAdapter extends MouseAdapter {
+  private class HyperlinkLabelMouseAdapter extends MouseAdapter {
 
     @Override
     public void mouseClicked(final MouseEvent e) {

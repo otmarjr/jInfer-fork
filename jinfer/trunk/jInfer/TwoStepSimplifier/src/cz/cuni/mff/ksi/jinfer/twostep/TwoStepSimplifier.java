@@ -17,7 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.twostep;
 
-import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.AdvancedRuleDisplayer;
+import cz.cuni.mff.ksi.jinfer.treeruledisplayer.AdvancedRuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;

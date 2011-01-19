@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.apisupport.project</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
-            <code-name-base>cz.cuni.mff.ksi.jinfer.advancedruledisplayer</code-name-base>
+            <code-name-base>cz.cuni.mff.ksi.jinfer.treeruledisplayer</code-name-base>
             <suite-component/>
             <module-dependencies>
                 <dependency>
@@ -85,7 +85,7 @@
                 </test-type>
             </test-dependencies>
             <public-packages>
-                <package>cz.cuni.mff.ksi.jinfer.advancedruledisplayer</package>
+                <package>cz.cuni.mff.ksi.jinfer.treeruledisplayer</package>
             </public-packages>
         </data>
     </configuration>

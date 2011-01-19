@@ -3,10 +3,10 @@
 <filesystem>
     <folder name="Actions">
         <folder name="Window">
-            <file name="cz-cuni-mff-ksi-jinfer-advancedruledisplayer-AdvancedRuleDisplayerAction.instance">
-                <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/advancedruledisplayer/graphics/icon16.png"/>
-                <attr name="component" methodvalue="cz.cuni.mff.ksi.jinfer.advancedruledisplayer.AdvancedRuleDisplayerTopComponent.findInstance"/>
-                <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.advancedruledisplayer.Bundle#CTL_AdvancedRuleDisplayerAction"/>
+            <file name="cz-cuni-mff-ksi-jinfer-treeruledisplayer-AdvancedRuleDisplayerAction.instance">
+                <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/treeruledisplayer/graphics/icon16.png"/>
+                <attr name="component" methodvalue="cz.cuni.mff.ksi.jinfer.treeruledisplayer.AdvancedRuleDisplayerTopComponent.findInstance"/>
+                <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.treeruledisplayer.Bundle#CTL_AdvancedRuleDisplayerAction"/>
                 <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
             </file>
         </folder>
@@ -15,7 +15,7 @@
         <folder name="Window">
             <folder name="jInfer">
               <file name="AdvancedRuleDisplayerAction.shadow">
-                  <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-advancedruledisplayer-AdvancedRuleDisplayerAction.instance"/>
+                  <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-treeruledisplayer-AdvancedRuleDisplayerAction.instance"/>
               </file>
             </folder>
         </folder>

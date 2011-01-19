@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.advancedruledisplayer;
+package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 
-import cz.cuni.mff.ksi.jinfer.advancedruledisplayer.logic.GraphBuilder;
+import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.GraphBuilder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;

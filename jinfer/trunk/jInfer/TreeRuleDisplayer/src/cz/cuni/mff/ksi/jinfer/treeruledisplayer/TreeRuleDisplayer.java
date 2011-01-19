@@ -16,30 +16,26 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.GraphBuilder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
 
 /**
  * Helper class for displaying a list of rules.
  * @author sviro
  */
-public final class TreeRuleDisplayer {
+@ServiceProvider(service = RuleDisplayer.class)
+public final class TreeRuleDisplayer implements RuleDisplayer {
 
-  private TreeRuleDisplayer() {
-  }
+  private static final String NAME = "TreeRuleDisplayer";
+  private static final String DISPLAY_NAME = "Tree Rule Displayer";
 
-  /**
-   * Display a list of rules. The list will be rendered as an image and put into
-   * the Rule Displayer window, in a named panel.
-   *
-   * @param panelName Title of the panel where these rules will be displayed.
-   * @param rules List of rules to display.
-   * @param render Flag whether to actually do anything.
-   */
-  public static void showRulesAsync(final String panelName,
+  @Override
+  public void showRulesAsync(final String panelName,
           final List<Element> rules, final boolean render) {
     if (!render || BaseUtils.isEmpty(rules)) {
       return;
@@ -52,5 +48,20 @@ public final class TreeRuleDisplayer {
         TreeRuleDisplayerTopComponent.findInstance().createNewPanel(panelName, GraphBuilder.buildGraphPanel(rules));
       }
     });
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getDisplayName();
   }
 }

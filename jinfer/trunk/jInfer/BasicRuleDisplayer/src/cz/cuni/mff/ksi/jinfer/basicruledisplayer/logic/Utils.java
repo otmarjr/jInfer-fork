@@ -14,10 +14,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.ruledisplayer.logic;
+package cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -42,9 +42,9 @@ public final class Utils {
   public static final Color COLOR_CONCATENATION = Color.red;
   public static final Color COLOR_ALTERNATION = Color.yellow;
 
-  public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png");
-  public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/dots.png");
-  public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/arrow.png");
+  public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/lambda.png");
+  public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/dots.png");
+  public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/arrow.png");
 
   /**
    * Returns the background color for an element from the options.

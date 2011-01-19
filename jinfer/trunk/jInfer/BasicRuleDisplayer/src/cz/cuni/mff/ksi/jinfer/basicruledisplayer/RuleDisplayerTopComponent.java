@@ -14,11 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.ruledisplayer;
+package cz.cuni.mff.ksi.jinfer.basicruledisplayer;
 
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.RulePainter;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.logic.Utils;
-import cz.cuni.mff.ksi.jinfer.ruledisplayer.options.RuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic.RulePainter;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic.Utils;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.RuleDisplayerPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.InputEvent;
@@ -40,13 +40,13 @@ import org.openide.util.ImageUtilities;
  *
  * @author vektor
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.ruledisplayer.display//RuleDisplayer//EN",
+@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.basicruledisplayer.display//RuleDisplayer//EN",
 autostore = false)
 public final class RuleDisplayerTopComponent extends TopComponent {
 
   private static final long serialVersionUID = 5123131;
   private static RuleDisplayerTopComponent instance;
-  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/icon16.png";
+  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/icon16.png";
   private static final String PREFERRED_ID = "RuleDisplayerTopComponent";
   private static final Logger LOG = Logger.getLogger(RuleDisplayerTopComponent.class);
 
@@ -147,10 +147,10 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     jLabel6.setForeground(Utils.getColorAlternation());
     org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel6.text")); // NOI18N
 
-    jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/arrow.png"))); // NOI18N
+    jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/arrow.png"))); // NOI18N
     org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel7.text")); // NOI18N
 
-    jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/ruledisplayer/graphics/lambda.png"))); // NOI18N
+    jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/lambda.png"))); // NOI18N
     org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel8.text")); // NOI18N
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

@@ -17,13 +17,13 @@
 
 package cz.cuni.mff.ksi.jinfer.twostep;
 
-import cz.cuni.mff.ksi.jinfer.treeruledisplayer.TreeRuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Cluster;
@@ -70,7 +70,10 @@ public class TwoStepSimplifier {
   public List<Element> simplify(final List<Element> initialGrammar) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
-    TreeRuleDisplayer.showRulesAsync("Original", new CloneHelper().cloneGrammar(initialGrammar), true);
+    if (RuleDisplayerHelper.isRuleDisplayerSet()) {
+      RuleDisplayerHelper.getRuleDisplayer().showRulesAsync("Original", new CloneHelper().cloneGrammar(initialGrammar), true);
+    }
+
     final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
     for (final Element e : initialGrammar) {
       abstracts.add(e);
@@ -144,7 +147,9 @@ public class TwoStepSimplifier {
               attList));
     }
 
-    TreeRuleDisplayer.showRulesAsync("Processed", new CloneHelper().cloneGrammar(finalGrammar), true);
+    if (RuleDisplayerHelper.isRuleDisplayerSet()) {
+      RuleDisplayerHelper.getRuleDisplayer().showRulesAsync("Processed", new CloneHelper().cloneGrammar(finalGrammar), true);
+    }
     return finalGrammar;
   }
 }

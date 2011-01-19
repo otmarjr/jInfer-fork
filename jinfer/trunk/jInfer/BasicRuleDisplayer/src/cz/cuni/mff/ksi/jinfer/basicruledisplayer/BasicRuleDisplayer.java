@@ -16,9 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicruledisplayer;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
 
 /**
@@ -26,20 +28,14 @@ import org.openide.windows.WindowManager;
  * 
  * @author vektor
  */
-public final class BasicRuleDisplayer {
+@ServiceProvider(service = RuleDisplayer.class)
+public final class BasicRuleDisplayer implements RuleDisplayer {
 
-  private BasicRuleDisplayer() {
-  }
+  private static final String NAME = "BasicRuleDisplayer";
+  private static final String DISPLAY_NAME = "Basic Rule Displayer";
 
-  /**
-   * Display a list of rules. The list will be rendered as an image and put into
-   * the Rule Displayer window, in a named panel.
-   *
-   * @param panelName Title of the panel where these rules will be displayed.
-   * @param rules List of rules to display.
-   * @param render Flag whether to actually do anything.
-   */
-  public static void showRulesAsync(final String panelName,
+  @Override
+  public void showRulesAsync(final String panelName,
           final List<Element> rules, final boolean render) {
     if (!render || BaseUtils.isEmpty(rules)) {
       return;
@@ -51,5 +47,20 @@ public final class BasicRuleDisplayer {
         BasicRuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
       }
     });
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getDisplayName();
   }
 }

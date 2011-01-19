@@ -99,7 +99,7 @@ public final class WelcomeTopComponent extends TopComponent {
     jLabel14 = new JHyperlinkLabel("http://jinfer.sourceforge.net/");
     jLabel15 = new javax.swing.JLabel();
     L2developingjInfer = new javax.swing.JLabel();
-    jLabel17 = new JHyperlinkLabel("http://jinfer.sourceforge.net/doc_developer.html");
+    jLabel17 = new JHyperlinkLabel("http://jinfer.sourceforge.net/doc_tutorial_dev.html");
     jLabel18 = new JHyperlinkLabel("http://jinfer.sourceforge.net/download.html");
     jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();

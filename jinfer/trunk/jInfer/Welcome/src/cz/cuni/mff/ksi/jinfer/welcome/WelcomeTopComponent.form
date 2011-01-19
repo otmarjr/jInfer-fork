@@ -391,7 +391,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JHyperlinkLabel(&quot;http://jinfer.sourceforge.net/doc_developer.html&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JHyperlinkLabel(&quot;http://jinfer.sourceforge.net/doc_tutorial_dev.html&quot;)"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel18">

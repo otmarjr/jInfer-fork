@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.basicruledisplayer;
 
 import cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic.RulePainter;
 import cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic.Utils;
-import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.RuleDisplayerPanel;
+import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.BasicRuleDisplayerPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.InputEvent;
@@ -40,23 +40,23 @@ import org.openide.util.ImageUtilities;
  *
  * @author vektor
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.basicruledisplayer.display//RuleDisplayer//EN",
+@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.basicruledisplayer.display//BasicRuleDisplayer//EN",
 autostore = false)
-public final class RuleDisplayerTopComponent extends TopComponent {
+public final class BasicRuleDisplayerTopComponent extends TopComponent {
 
   private static final long serialVersionUID = 5123131;
-  private static RuleDisplayerTopComponent instance;
+  private static BasicRuleDisplayerTopComponent instance;
   private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/icon16.png";
-  private static final String PREFERRED_ID = "RuleDisplayerTopComponent";
-  private static final Logger LOG = Logger.getLogger(RuleDisplayerTopComponent.class);
+  private static final String PREFERRED_ID = "BasicRuleDisplayerTopComponent";
+  private static final Logger LOG = Logger.getLogger(BasicRuleDisplayerTopComponent.class);
 
   private int panelSequence = 0;
 
-  public RuleDisplayerTopComponent() {
+  public BasicRuleDisplayerTopComponent() {
     super();
     initComponents();
-    setName(NbBundle.getMessage(RuleDisplayerTopComponent.class, "CTL_RuleDisplayerTopComponent"));
-    setToolTipText(NbBundle.getMessage(RuleDisplayerTopComponent.class, "HINT_RuleDisplayerTopComponent"));
+    setName(NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "CTL_BasicRuleDisplayerTopComponent"));
+    setToolTipText(NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "HINT_BasicRuleDisplayerTopComponent"));
     setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
     panels.addMouseListener(new MouseAdapter() {
@@ -89,7 +89,7 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     panelSequence++;
     panels.add(name + " [" + panelSequence + "]", jsp);
 
-    if (panels.getTabCount() > Preferences.userNodeForPackage(RuleDisplayerPanel.class).getInt("max.panels", 10)) {
+    if (panels.getTabCount() > Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("max.panels", 10)) {
       panels.remove(0);
     }
 
@@ -125,33 +125,33 @@ public final class RuleDisplayerTopComponent extends TopComponent {
     jLabel7 = new javax.swing.JLabel();
     jLabel8 = new javax.swing.JLabel();
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel1.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel1.text")); // NOI18N
 
     jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getStyle() | java.awt.Font.BOLD));
     jLabel2.setForeground(Utils.getColorElement());
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel2.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel2.text")); // NOI18N
 
     jLabel3.setFont(jLabel3.getFont().deriveFont(jLabel3.getFont().getStyle() | java.awt.Font.BOLD));
     jLabel3.setForeground(Utils.getColorAttribute());
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel3.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel3.text")); // NOI18N
 
     jLabel4.setFont(jLabel4.getFont().deriveFont(jLabel4.getFont().getStyle() | java.awt.Font.BOLD));
     jLabel4.setForeground(Utils.getColorSimpleData());
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel4.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel4.text")); // NOI18N
 
     jLabel5.setFont(jLabel5.getFont().deriveFont(jLabel5.getFont().getStyle() | java.awt.Font.BOLD));
     jLabel5.setForeground(Utils.getColorConcatenation());
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel5.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel5.text")); // NOI18N
 
     jLabel6.setFont(jLabel6.getFont().deriveFont(jLabel6.getFont().getStyle() | java.awt.Font.BOLD));
     jLabel6.setForeground(Utils.getColorAlternation());
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel6.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel6.text")); // NOI18N
 
     jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/arrow.png"))); // NOI18N
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel7.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel7.text")); // NOI18N
 
     jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/lambda.png"))); // NOI18N
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(RuleDisplayerTopComponent.class, "RuleDisplayerTopComponent.jLabel8.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "BasicRuleDisplayerTopComponent.jLabel8.text")); // NOI18N
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
@@ -218,9 +218,9 @@ public final class RuleDisplayerTopComponent extends TopComponent {
    * i.e. deserialization routines; otherwise you could get a non-deserialized instance.
    * To obtain the singleton instance, use {@link #findInstance}.
    */
-  public static synchronized RuleDisplayerTopComponent getDefault() {
+  public static synchronized BasicRuleDisplayerTopComponent getDefault() {
     if (instance == null) {
-      instance = new RuleDisplayerTopComponent();
+      instance = new BasicRuleDisplayerTopComponent();
     }
     return instance;
   }
@@ -228,16 +228,16 @@ public final class RuleDisplayerTopComponent extends TopComponent {
   /**
    * Obtain the RuleDisplayerTopComponent instance. Never call {@link #getDefault} directly!
    */
-  public static synchronized RuleDisplayerTopComponent findInstance() {
+  public static synchronized BasicRuleDisplayerTopComponent findInstance() {
     final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
       getDefault().open();
       LOG.warn("Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
       return getDefault();
     }
-    if (win instanceof RuleDisplayerTopComponent) {
+    if (win instanceof BasicRuleDisplayerTopComponent) {
       win.open();
-      return (RuleDisplayerTopComponent) win;
+      return (BasicRuleDisplayerTopComponent) win;
     }
     LOG.warn("There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");

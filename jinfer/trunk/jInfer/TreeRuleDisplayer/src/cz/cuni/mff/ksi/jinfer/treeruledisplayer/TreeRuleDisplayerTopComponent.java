@@ -31,20 +31,20 @@ import org.openide.util.ImageUtilities;
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
  * @author sviro
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.treeruledisplayer//AdvancedRuleDisplayer//EN",
+@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.treeruledisplayer//TreeRuleDisplayer//EN",
 autostore = false)
-public final class AdvancedRuleDisplayerTopComponent extends TopComponent {
+public final class TreeRuleDisplayerTopComponent extends TopComponent {
 
-  private static AdvancedRuleDisplayerTopComponent instance;
+  private static TreeRuleDisplayerTopComponent instance;
   private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/treeruledisplayer/graphics/icon16.png";
   private static final String PREFERRED_ID = "TreeRuleDisplayerTopComponent";
   private int panelSequence = 0;
 
-  public AdvancedRuleDisplayerTopComponent() {
+  public TreeRuleDisplayerTopComponent() {
     super();
     initComponents();
-    setName(NbBundle.getMessage(AdvancedRuleDisplayerTopComponent.class, "CTL_AdvancedRuleDisplayerTopComponent"));
-    setToolTipText(NbBundle.getMessage(AdvancedRuleDisplayerTopComponent.class, "HINT_AdvancedRuleDisplayerTopComponent"));
+    setName(NbBundle.getMessage(TreeRuleDisplayerTopComponent.class, "CTL_TreeRuleDisplayerTopComponent"));
+    setToolTipText(NbBundle.getMessage(TreeRuleDisplayerTopComponent.class, "HINT_TreeRuleDisplayerTopComponent"));
     setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
     panels.addMouseListener(new MouseAdapter() {
@@ -107,27 +107,27 @@ public final class AdvancedRuleDisplayerTopComponent extends TopComponent {
    * i.e. deserialization routines; otherwise you could get a non-deserialized instance.
    * To obtain the singleton instance, use {@link #findInstance}.
    */
-  public static synchronized AdvancedRuleDisplayerTopComponent getDefault() {
+  public static synchronized TreeRuleDisplayerTopComponent getDefault() {
     if (instance == null) {
-      instance = new AdvancedRuleDisplayerTopComponent();
+      instance = new TreeRuleDisplayerTopComponent();
     }
     return instance;
   }
 
   /**
-   * Obtain the AdvancedRuleDisplayerTopComponent instance. Never call {@link #getDefault} directly!
+   * Obtain the TreeRuleDisplayerTopComponent instance. Never call {@link #getDefault} directly!
    */
-  public static synchronized AdvancedRuleDisplayerTopComponent findInstance() {
+  public static synchronized TreeRuleDisplayerTopComponent findInstance() {
     final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
-      Logger.getLogger(AdvancedRuleDisplayerTopComponent.class.getName()).warning(
+      Logger.getLogger(TreeRuleDisplayerTopComponent.class.getName()).warning(
               "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
       return getDefault();
     }
-    if (win instanceof AdvancedRuleDisplayerTopComponent) {
-      return (AdvancedRuleDisplayerTopComponent) win;
+    if (win instanceof TreeRuleDisplayerTopComponent) {
+      return (TreeRuleDisplayerTopComponent) win;
     }
-    Logger.getLogger(AdvancedRuleDisplayerTopComponent.class.getName()).warning(
+    Logger.getLogger(TreeRuleDisplayerTopComponent.class.getName()).warning(
             "There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();

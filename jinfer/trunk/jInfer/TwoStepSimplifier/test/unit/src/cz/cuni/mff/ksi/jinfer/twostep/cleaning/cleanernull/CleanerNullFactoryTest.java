@@ -38,7 +38,7 @@ public class CleanerNullFactoryTest {
   @Test
   public void testCreate() {
     System.out.println("create");
-    CleanerNullFactory instance = new CleanerNullFactory();
+    NullFactory instance = new NullFactory();
     RegularExpressionCleaner<String> result = instance.<String>create();
     assertNotNull(result);
   }
@@ -49,7 +49,7 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    CleanerNullFactory instance = new CleanerNullFactory();
+    NullFactory instance = new NullFactory();
     String result = instance.getUserModuleDescription();
     assertNotNull(result);
     assertFalse(result.isEmpty());
@@ -61,7 +61,7 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    CleanerNullFactory instance = new CleanerNullFactory();
+    NullFactory instance = new NullFactory();
     String expResult = "RegularExpressionCleanerNull";
     String result = instance.getName();
     assertEquals(expResult, result);
@@ -73,7 +73,7 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    CleanerNullFactory instance = new CleanerNullFactory();
+    NullFactory instance = new NullFactory();
     String expResult = "Regular Expression Cleaner Null";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
@@ -86,7 +86,7 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    CleanerNullFactory instance = new CleanerNullFactory();
+    NullFactory instance = new NullFactory();
     List<String> result = instance.getCapabilities();
     assertTrue(result.isEmpty());
   }
@@ -97,7 +97,7 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetDisplayModuleDescription() {
     System.out.println("getDisplayModuleDescription");
-    CleanerNullFactory instance = new CleanerNullFactory();
+    NullFactory instance = new NullFactory();
     String expResult = "RegularExpressionCleanerNull";
     String result = instance.getUserModuleDescription();
     assertFalse(expResult.equals(result));

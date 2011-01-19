@@ -88,7 +88,7 @@ public class CleanerNestedConcatenationTest {
 
     Regexp<String> regexp= r1;
     RegularExpressionCleaner<String> instance =
-            (new CleanerNestedConcatenationFactory()).<String>create();
+            (new NestedConcatenationFactory()).<String>create();
     Regexp<String> expResult = Regexp.<String>getMutable();
     expResult.getChildren().add(r6);
     expResult.getChildren().add(r7);

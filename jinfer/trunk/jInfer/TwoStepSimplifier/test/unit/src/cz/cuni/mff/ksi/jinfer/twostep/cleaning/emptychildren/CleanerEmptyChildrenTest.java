@@ -61,7 +61,7 @@ public class CleanerEmptyChildrenTest {
     r1.setImmutable();
 
     Regexp<String> regexp= r1;
-    CleanerEmptyChildren<String> instance = new CleanerEmptyChildren<String>();
+    EmptyChildren<String> instance = new EmptyChildren<String>();
     Regexp<String> result = instance.cleanRegularExpression(regexp);
     assertEquals("a", result.toString());
   }
@@ -95,7 +95,7 @@ public class CleanerEmptyChildrenTest {
     r1.setImmutable();
 
     Regexp<String> regexp= r1;
-    CleanerEmptyChildren<String> instance = new CleanerEmptyChildren<String>();
+    EmptyChildren<String> instance = new EmptyChildren<String>();
     Regexp<String> result = instance.cleanRegularExpression(regexp);
     assertEquals("(a\n,a\n,a\n,a)", result.toString());
   }
@@ -126,7 +126,7 @@ public class CleanerEmptyChildrenTest {
     r1.setImmutable();
 
     Regexp<String> regexp= r1;
-    CleanerEmptyChildren<String> instance = new CleanerEmptyChildren<String>();
+    EmptyChildren<String> instance = new EmptyChildren<String>();
     Regexp<String> result = instance.cleanRegularExpression(regexp);
     assertEquals("a", result.toString());
   }
@@ -171,7 +171,7 @@ public class CleanerEmptyChildrenTest {
     r1.setImmutable();
 
     Regexp<String> regexp= r1;
-    CleanerEmptyChildren<String> instance = new CleanerEmptyChildren<String>();
+    EmptyChildren<String> instance = new EmptyChildren<String>();
     Regexp<String> result = instance.cleanRegularExpression(regexp);
     assertEquals("(a\n,b)", result.toString());
   }

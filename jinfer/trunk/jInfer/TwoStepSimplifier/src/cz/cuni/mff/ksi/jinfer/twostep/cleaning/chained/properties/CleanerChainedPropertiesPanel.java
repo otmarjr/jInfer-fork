@@ -21,7 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.CleanerChainedFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.ChainedFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +85,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       }
     });
     for (NamedModule name : cleanerNames) {
-      if (!name.getName().equals(CleanerChainedFactory.NAME)) {
+      if (!name.getName().equals(ChainedFactory.NAME)) {
         modelStrings.add(name);
       }
     }
@@ -127,7 +127,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
           }
         }
       });
-      cmb.setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, properties.getProperty(CleanerChainedFactory.PROPERTIES_PREFIX + i, DEFAULT_MENU_TEXT)));
+      cmb.setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + i, DEFAULT_MENU_TEXT)));
       cmb.getActionListeners()[0].actionPerformed(null);
       add(cmb, gridBagConstraints);
       dynamicComponents.put(Integer.valueOf(i), cmb);
@@ -159,12 +159,12 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
     int lastSet = 0;
     for (Integer i : dynamicComponents.keySet()) {
       if (dynamicComponents.get(i).getSelectedIndex() > 0) {
-        properties.setProperty(CleanerChainedFactory.PROPERTIES_PREFIX + lastSet,
+        properties.setProperty(ChainedFactory.PROPERTIES_PREFIX + lastSet,
                 ((NamedModule) dynamicComponents.get(i).getSelectedItem()).getName());
         lastSet++;
       }
     }
-    properties.setProperty(CleanerChainedFactory.PROPERTIES_COUNT, String.valueOf(lastSet));
+    properties.setProperty(ChainedFactory.PROPERTIES_COUNT, String.valueOf(lastSet));
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   // End of variables declaration//GEN-END:variables

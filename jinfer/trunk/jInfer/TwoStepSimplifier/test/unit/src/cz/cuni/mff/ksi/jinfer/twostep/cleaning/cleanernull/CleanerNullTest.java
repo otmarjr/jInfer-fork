@@ -65,7 +65,7 @@ public class CleanerNullTest {
   public void testCleanRegularExpression() {
     System.out.println("cleanRegularExpression");
     Regexp<String> regexp = createRegexp();
-    CleanerNull<String> instance = new CleanerNull<String>();
+    Null<String> instance = new Null<String>();
     Regexp<String> result = instance.cleanRegularExpression(regexp);
     assertEquals(regexp.toString(), result.toString());
   }

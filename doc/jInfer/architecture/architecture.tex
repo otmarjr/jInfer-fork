@@ -38,18 +38,18 @@ Target audience: developers willing to extend jInfer.\\
 
 \emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}\\
 
-The description of jInfer architecture will commence by describing the data
-structures, namely representations of regular expressions and XML elements,
-attributes and simple data.
+The description of jInfer architecture will be divided into 3 main views: the data view, the process view and the plaform view.\\
 
-Afterwards the interfaces of basic inference modules - \jmodule{Initial Grammar Generator}, \jmodule{Simplifier} and \jmodule{Schema Generator} - will be explained.
+The data view will commence by describing the data structures, namely representations of regular expressions and XML elements, attributes and simple data. The notions of a \emph{rule} and a \emph{grammar} will be explained, along with the finite state automata representation we use.\\
 
-Finally, the process of inference will be described.
+Afterwards the process of inference will be described, both from high-level and programmatic point of view.\\
+
+Finally, we will look at jInfer as at an NetBeans Platform application consisting of a number of modules performing their tasks and communicating together through a set of well-defined interfaces.\\
 
 \section{Package naming conventions}
 All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, normalized name of the NetBeans module (e.g. \code{base}) and finally the package structure in this module (e.g. \texttt{objects.utils}). All in all, a package in the \jmodule{Base} module could look like \code{cz.cuni.mff.ksi.jinfer.base.objects.utils}.
 
-\section{Data structures}
+\section{Data view}
 \subsection{Regular expressions}
 For general information on regular expressions, please refer to \cite{wikiregexp}, \cite{automatatheory}.
 All classes pertaining to regular expressions can be found in the package \code{cz.cuni.mff.ksi.jinfer.base.regexp}.
@@ -198,7 +198,7 @@ Let's take an example, the following XML document would be represented as tree o
 Although in example we present whole document tree, input modules produce slightly different format (consisting of rules).
 
 
-\subsection{Rules and grammars}
+\subsection{Rules and grammars} \label{rules_grammar}
 
 jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}.
 % TODO vektor check citation of http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf in literature.bib
@@ -300,7 +300,7 @@ Its purpose is to give mapping from symbol over one domain to new symbols.
 Implementation have to be \code{equals} consistent, if in first automaton are two transitions with symbols \code{a}, \code{b} such that
 \code{a.equals(b) == true}, convertor has to produce new symbols that are equal.
 
-\section{Inference process}
+\section{Process view} \label{section_inference_process}
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{inference_process}
 	\caption{High-level view of the inference process} \label{inference_process}
@@ -388,24 +388,9 @@ Important thing to note here is that all these steps are executed consecutively.
 
 This modular architecture means that it is possible to replace any and/or all of these modules with \emph{something} else that does similar job. In practice, scientists will probably implement new \jmodule{Simplifier} modules, while using our implementation of BasicIGG and export modules. This modular scheme is used inside our modules to divide them into submodules. It is possible to add new file format processing to import/export. One can extend automaton merging state algorithm of our implementation of \cite{ahonen} in TwoStepSimplifier module by replacing submodules.
 
-\subsection{Node metadata} \label{section_metadata}
-To allow simple extensibility of rules, class \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
-
-At the present, jInfer modules use the following metadata, all defined in \code{IGGUtils} class:
-\begin{itemize}
-	\item \code{from.xml}, filled in by BasicIGG module: means that this rule was created (originates from) from a XML document.
-	\item \code{from.schema}, filled in by BasicIGG and XSDImport modules: means that this rule was created (originates from) from a schema.
-	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
-	\item \code{is.sentinel}, filled in by  BasicIGG and XSDImport module: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import), but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling the node as sentinel.
-	\item \code{schema.data}, filled in by XSDImport module: TODO reseto Explain
-\end{itemize}
-All of these metadata are of set/not set character (using \code{Boolean.TRUE} as value, but their presence effectively mean true).
-
-% TODO vektor Describe requirements on what gets passed on between modules
-
 \subsection{Programmatic view}
 
-From developer's point of view, inference modules are just properly annotated classes implementing one of the following interfaces (all found under \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference})
+From developer's point of view, inference modules are just properly annotated classes (see \ref{section_lookups}) implementing one of the following interfaces (all found under \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference})
 
 \begin{itemize}
 	\item \code{IGGenerator}
@@ -429,10 +414,10 @@ The most important method in each module is \code{start}, defined in each of the
 \subsubsection{Module input}
 Each inference module takes the actual input data as the first parameter of its \code{start} method. The type of the argument differs based on the inference module.\\
 
-\jmodule{Simplifier} and \jmodule{Schema Generator} take grammar, % TODO vektor Link to grammar definition
-in other words a list of \code{Element}s as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
+\jmodule{Simplifier} and \jmodule{Schema Generator} take grammar (see \ref{rules_grammar}), in other words a list of \code{Element}s as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
 
 \jmodule{Initial Grammar Generator} takes an object of type \code{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
+
 \paragraph{Initial Grammar} has two formats:
 \begin{itemize}
 	\item Only concatenations. This is default format. All regular expressions coming from IGG have to be concatenations, even empty.
@@ -510,6 +495,20 @@ A new instance of \code{Runner} is constructed for each inference run. While bei
 	\item \code{Runner} receives the resulting schema and based on preferences, saves it to a file, displays it, etc.
 \end{enumerate}
 
+\subsection{Node metadata} \label{section_metadata} % TODO vektor Move after Programmatic view
+To allow simple extensibility of rules, class \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
+
+At the present, jInfer modules use the following metadata, all defined in \code{IGGUtils} class:
+\begin{itemize}
+	\item \code{from.xml}, filled in by BasicIGG module: means that this rule was created (originates from) from a XML document.
+	\item \code{from.schema}, filled in by BasicIGG and XSDImport modules: means that this rule was created (originates from) from a schema.
+	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
+	\item \code{is.sentinel}, filled in by  BasicIGG and XSDImport module: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import), but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling the node as sentinel.
+	\item \code{schema.data}, filled in by XSDImport module: TODO reseto Explain
+\end{itemize}
+All of these metadata are of set/not set character (using \code{Boolean.TRUE} as value, but their presence effectively mean true).
+
+
 \subsection{Capabilities} \label{section_capabilities}
 From time to time, modules need a flow of certain information in completely opposite way to the usual inference: they need to know what the following module can or cannot do.\\
 
@@ -537,16 +536,16 @@ Example of Capabilities usage taken from \jmodule{XSDImporter} module:
   return parser.getRules();
 \end{verbatim}
 
-\section{NetBeans Modules}
+\section{Platform view}
 
 jInfer, being a NetBeans Platform application, is divided into multiple \emph{NetBeans Modules}. It is very important to understand that this division is in principle orthogonal to that naturally sketched in the previous chapters - theoretically, the whole jInfer could be contained in a single NB module, because the framework uses Lookups to locate logical modules. However, for the sake of organization, jInfer is split into several modules and most of the time there is a strong correlation between logical units of jInfer and its NB modules.\\
 
-A short overview of these modules and their functions follow. To get a deeper understanding of any of them, please refer to its documentation.\\
+A short overview of these modules and their functions follows. To get a deeper understanding of any of them, please refer to its documentation. To get deeper understanding of how NBP modules work, their versions, dependencies etc, refer to \cite{modules_api}.\\
 
 Base modules:
 
 \begin{itemize}
-	\item \jmodule{jInfer}: not a NBP module in fact, but rather a module suite - the ,,root" NB project for the whole framework.
+	\item \jmodule{jInfer}: not a NBP module in fact, but rather a module suite - the ``root" NB project for the whole framework.
 	\item \jmodule{Base}: contains common data structures, interfaces and utility logic shared across all other modules.
 \end{itemize}
 
@@ -566,8 +565,8 @@ Inference modules:
 Utility modules:
 
 \begin{itemize}
-	\item \jmodule{RuleDisplayer}: module capable of displaying a grammar in a graphical way.
-	\item \jmodule{AdvancedRuleDisplayer}: more advanced version of the former using \jmodule{JUNG}'s graphing capabilities.
+	\item \jmodule{BasicRuleDisplayer}: module capable of displaying a grammar in a graphical way.
+	\item \jmodule{TreeRuleDisplayer}: more advanced version of the former using \jmodule{JUNG}'s graphing capabilities.
 	\item \jmodule{AutoEditor}: encapsulation of an interactive finite state automaton editor.
 	\item \jmodule{JUNG}: wrapper module for the JUNG (see \cite{jung}).
 	\item \jmodule{Options}: NBP specific: this module adds a jInfer category in NetBeans Options window.
@@ -575,12 +574,45 @@ Utility modules:
 	\item \jmodule{XPathFileType}: NBP specific: this module teaches NetBeans to recognize a \code{.xpath} file extension.
 \end{itemize}
 
-TODO vektor Lookups
+The dependencies between all the modules are summarized in figure \ref{module_deps}. Figure \ref{modules_inference} shows modules implementing the 3 main inference interfaces described in \ref{section_inference_process}.\\
 
-% TODO module dependency hierarchy
-% TODO picture showing out inference modules in a humble graph
+\begin{figure}
+	\centering\includegraphics[scale=0.4]{module_deps}
+	\caption{Module dependencies} \label{module_deps}
+\end{figure}
 
-To get deeper understanding of NBP modules, their versions, dependencies etc, refer to \cite{modules_api}.
+\begin{figure}
+	\centering\includegraphics[scale=0.4]{modules_inference}
+	\caption{Inference modules in default jInfer} \label{modules_inference}
+\end{figure}
+
+\subsection{Lookups} \label{section_lookups}
+
+\emph{Lookups} are a part of NBP API, a way to achieve late-binding between code based on this platform. An important notion is the one of a \emph{service provider}. This is a class implementing an interface, annotated in the following way (shown on an example from \jmodule{BasicDTDExporter}).
+\begin{verbatim}
+  @ServiceProvider(service = SchemaGenerator.class)
+  public class SchemaGeneratorImpl implements SchemaGenerator {
+    ...
+\end{verbatim}
+The \code{@ServiceProvider} annotation tells NBP that \code{SchemaGeneratorImpl} is to be registered among all providers of the \code{SchemaGenerator} service (or interface).\\
+
+To look up a service provider, or all of them, one can use the \jmodule{Lookups} API in the following way.
+\begin{verbatim}
+  Collection<SchemaGenerator> generators = Lookup.getDefault().lookupAll(SchemaGenerator.class);
+  
+  for (SchemaGenerator g : generators) {
+    System.out.println(g.getName());
+  }
+\end{verbatim}
+Call to \code{Lookup.getDefault().lookupAll()} will return a collection of all service providers registered to be providing the \code{SchemaGenerator} interface. This collection can be walked in some way, and on one or more of service providers methods can be called. We didn't have to actually bind providers to logic that uses their services, NB Platform took care of this for us.\\
+
+At this point it is important to understand that when using lookups this way, all service providers are kept as singletons. In case a provider needs to change its state during providing the service (and needs to be ``fresh" each time it is retrieved), it is best to convert this to a factory design pattern: the service provider registered is just a factory returning instances that do the actual work.\\
+
+TODO anti Link to http://bits.netbeans.org/dev/javadoc/org-openide-util-lookup/org/openide/util/Lookup.html as the official documentation to lookup API.
+
+\subsection{Tokens}
+
+TODO vektor
 
 \nocite{*}
 \bibliographystyle{alpha}

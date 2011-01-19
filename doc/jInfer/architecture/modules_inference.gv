@@ -1,0 +1,14 @@
+digraph automaton_merge1 {
+	node [shape = rectangle, fontname = "SFTT1000", fontsize = 10];
+	edge [fontname = "SFTT1000", fontsize = 10];
+	rankdir = LR;
+
+	BasicIGG
+	TwoStepSimplifier
+	BasicDTDExporter
+	BasicXSDExporter
+
+	BasicIGG -> TwoStepSimplifier
+	TwoStepSimplifier -> BasicDTDExporter
+	TwoStepSimplifier -> BasicXSDExporter
+}

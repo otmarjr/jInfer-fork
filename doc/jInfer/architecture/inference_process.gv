@@ -18,8 +18,6 @@ digraph inference_process {
 	2 [label = "Simplifier" style = "filled" fillcolor = "grey"];
 	2 -> 3 [label = "Simplified grammar"];
 	3 [label = "Schema Generator" style = "filled" fillcolor = "grey"];
-	possible_user_input [label = "anti sugests: Possible user input - XSD may need, such things coded by vyhn thesis"];
-	possible_user_input -> 3;
 	output_dtd [label = "DTD"];
 	output_xsd [label = "XSD"];
 	output_misc [label = "..."];

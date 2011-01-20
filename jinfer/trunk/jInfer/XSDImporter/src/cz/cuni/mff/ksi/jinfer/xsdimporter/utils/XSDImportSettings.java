@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.properties.XSDImportPropertiesPanel;
 import java.util.Properties;
 import org.apache.log4j.Level;

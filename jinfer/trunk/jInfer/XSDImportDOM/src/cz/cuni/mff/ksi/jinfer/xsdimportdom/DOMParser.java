@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
 import java.io.InputStream;
 import java.util.List;
 import org.apache.log4j.Logger;

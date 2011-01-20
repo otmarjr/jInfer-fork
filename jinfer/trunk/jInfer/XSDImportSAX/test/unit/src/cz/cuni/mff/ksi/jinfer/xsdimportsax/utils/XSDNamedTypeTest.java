@@ -15,13 +15,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
+package cz.cuni.mff.ksi.jinfer.xsdimportsax.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

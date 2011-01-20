@@ -97,6 +97,14 @@ interface, annotated with a <code>@ServiceProvider</code> annotation.
   </li>
 </ol>
 
+<h2>Run jInfer</h2>
+
+At this moment, run the whole jInfer suite from the NetBeans you imported it into.
+A new, child NetBeans should open with your module correctly installed. You can
+now follow the <a href="doc_tutorial.html">User tutorial</a>, just select your new
+simplifier while creating a new jInfer project.<br/>
+That's it! Start hacking you logic now!
+
 <h2>Implement your logic</h2>
 
 This is the part where you actually have to do some thinking :-) Implementing

@@ -63,9 +63,21 @@
     Rest of the options is uninteresting in most cases.
   </li>
   <li>Click <i>Finish</i>.</li>
+  <li>Right-click the newly created module, select <i>Properties</i>.</li>
+  <li>In <i>Libraries &gt; Module Dependencies</i>, click <i>Add Dependency...</i>.</li>
+  <li>Filter for "base" and select <i>Base</i> as a dependency. Click <i>OK</i>.</li>
+  <li>
+      Still in <i>Properties</i>, switch to <i>Display</i> category. Fill in:
+      <ul>
+        <li><i>Display Name</i>: Fill in a user-friendly name of your module.</li>
+        <li><i>Display Category</i>: type in <i>jInfer</i>.</li>
+        <li><i>Short &amp; Long Description</i>: unleash your inner poet!</li>
+      </ul>
+  </li>
+  <li>Still in <i>Properties</i>, switch to <i>API Versioning</i>.</li>
+  <li>Type <code>cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier</code> in <i>Provided Tokens</i>.</li>
+  <li>Close <i>Properties</i> by clicking <i>OK</i>.</li>
 </ol>
-
-TODO vektor Dependencies, tokens
 
 <h2>Implement jInfer's specifics</h2>
 

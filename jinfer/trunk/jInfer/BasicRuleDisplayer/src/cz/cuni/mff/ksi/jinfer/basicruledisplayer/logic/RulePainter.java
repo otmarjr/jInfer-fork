@@ -28,7 +28,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
+import org.openide.util.NbPreferences;
 
 /**
  * Class responsible for rendering a set of rules to a canvas.
@@ -49,7 +49,7 @@ public class RulePainter {
    */
   public RulePainter(final Component root) {
     this.root = root;
-    maxRules = Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("max.rules", 50);
+    maxRules = NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("max.rules", 50);
   }
 
   /**

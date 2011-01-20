@@ -25,7 +25,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Properties;
-import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
@@ -34,6 +33,7 @@ import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.util.ImageUtilities;
+import org.openide.util.NbPreferences;
 
 /**
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
@@ -89,7 +89,7 @@ public final class BasicRuleDisplayerTopComponent extends TopComponent {
     panelSequence++;
     panels.add(name + " [" + panelSequence + "]", jsp);
 
-    if (panels.getTabCount() > Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("max.panels", 10)) {
+    if (panels.getTabCount() > NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("max.panels", 10)) {
       panels.remove(0);
     }
 

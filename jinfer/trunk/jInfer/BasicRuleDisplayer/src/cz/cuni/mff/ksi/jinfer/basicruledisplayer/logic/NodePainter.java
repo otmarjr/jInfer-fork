@@ -29,7 +29,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
+import org.openide.util.NbPreferences;
 
 /**
  * Class for painting XML nodes.
@@ -53,8 +53,8 @@ public class NodePainter {
    * @param graphics Graphics object used to get font metrics.
    */
   public NodePainter(final Graphics2D graphics) {
-    this.maxLevel = Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("nesting.level", 25);
-    this.margin = Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).getInt("margin", 2);
+    this.maxLevel = NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("nesting.level", 25);
+    this.margin = NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("margin", 2);
     this.graphics = graphics;
   }
 

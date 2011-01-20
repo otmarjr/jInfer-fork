@@ -1,4 +1,4 @@
-CPP=/usr/bin/cpp -P -w -C
+CPP=/usr/bin/cpp -P -w -C -undef
 
 .PHONY: images photos style outputdir
 

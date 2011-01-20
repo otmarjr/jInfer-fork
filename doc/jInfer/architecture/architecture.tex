@@ -194,7 +194,7 @@ Let's take an example, the following XML document would be represented as tree o
     </info>
     <more/>
   </person>
-\end{verbatim}
+\end{verbatim} 
 Although in example we present whole document tree, input modules produce slightly different format (consisting of rules).
 
 
@@ -202,6 +202,7 @@ Although in example we present whole document tree, input modules produce slight
 
 jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}.
 % TODO vektor check citation of http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf in literature.bib
+% TODO anti what do you mean, "check citation"?
 \emph{Rules} in such grammar are in the form
 $$
   \textnormal{Left Hand Side (LHS)} \to \textnormal{Right Hand Side (RHS)}
@@ -212,7 +213,7 @@ $$
 $$
 In jInfer each such rule is represented with an \code{Element} instance. In this representation, the \code{Element} itself is the LHS, its \code{subnodes} are the RHS.\\
 
-Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens (even with no children, see fig. \ref{xml_example} again). Initial Grammar is produced by \jmodule{Initial Grammar Generator}. % TODO vektor Link
+Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens (even with no children, see fig. \ref{xml_example} again). Initial Grammar is produced by \jmodule{Initial Grammar Generator}.
 
 \subsection{Nondeterministic Finite Automaton}
 We recommend skipping this section in first read as it describes advanced features.
@@ -495,7 +496,7 @@ A new instance of \code{Runner} is constructed for each inference run. While bei
 	\item \code{Runner} receives the resulting schema and based on preferences, saves it to a file, displays it, etc.
 \end{enumerate}
 
-\subsection{Node metadata} \label{section_metadata} % TODO vektor Move after Programmatic view
+\subsection{Node metadata} \label{section_metadata}
 To allow simple extensibility of rules, class \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
 
 At the present, jInfer modules use the following metadata, all defined in \code{IGGUtils} class:
@@ -612,7 +613,17 @@ TODO anti Link to http://bits.netbeans.org/dev/javadoc/org-openide-util-lookup/o
 
 \subsection{Tokens}
 
-TODO vektor
+An important topic related to NB modules and their dependencies is a notion of \emph{tokens}. Imagine a situation where module \emph{M} needs \emph{someone} else to provide a certain service \emph{S}, but doesn't care who will that be. It cannot declare a direct dependency on a module containing this service provider, because it might not know such a module. Instead, \emph{M} declares a \emph{required token}. Any module providing \emph{S} will declare a \emph{provided token}, which is a simple string (usually fully qualified Java name of the interface representing \emph{S}). Later, NBP will make sure that \emph{M} can be installed in the platform only if there is at least one module providing that specific token.\\
+
+jInfer uses tokens in the following way: \jmodule{Runner}, as the module encapsulating the inference process, and \jmodule{ProjectType} as an encapsulation of jInfer projects both require the following 3 tokens.
+
+\begin{itemize}
+	\item \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator}
+	\item \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator}
+	\item \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier}
+\end{itemize}
+
+All inference modules declare their respective token as provided. This way it is ensured that jInfer will run only if there is at least one implementation of each of the inference modules, regardless of the implementation itself.
 
 \nocite{*}
 \bibliographystyle{alpha}

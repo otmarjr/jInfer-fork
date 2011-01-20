@@ -63,6 +63,21 @@
     Rest of the options is uninteresting in most cases.
   </li>
   <li>Click <i>Finish</i>.</li>
+</ol>
+
+<h2>Implement jInfer's specifics</h2>
+
+<p>
+This section will show how to deal with a new inference module - a simplifier
+that does no actual simplification, just returns the grammar it got on input.
+Your module will need a "main" class implementing the chosen inference
+interface, annotated with a <code>@ServiceProvider</code> annotation.
+</p>
+
+<p>
+But first, we need to do some setup.
+
+<ol type=1>
   <li>Right-click the newly created module, select <i>Properties</i>.</li>
   <li>In <i>Libraries &gt; Module Dependencies</i>, click <i>Add Dependency...</i>.</li>
   <li>Filter for "base" and select <i>Base</i> as a dependency. Click <i>OK</i>.</li>
@@ -78,13 +93,10 @@
   <li>Type <code>cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier</code> in <i>Provided Tokens</i>.</li>
   <li>Close <i>Properties</i> by clicking <i>OK</i>.</li>
 </ol>
+</p>
 
-<h2>Implement jInfer's specifics</h2>
-
-This section will show how to deal with a new inference module - a simplifier
-that does no actual simplification, just returns the grammar it got on input.
-Your module will need a "main" class implementing the chosen inference
-interface, annotated with a <code>@ServiceProvider</code> annotation.
+<p>
+Now to the class itself.
 
 <ol type=1>
   <li>Add a new Java class: right click <i>Source Packages</i> in your new
@@ -108,6 +120,7 @@ interface, annotated with a <code>@ServiceProvider</code> annotation.
     </ul>
   </li>
 </ol>
+</p>
 
 <h2>Run jInfer</h2>
 

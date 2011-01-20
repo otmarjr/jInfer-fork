@@ -65,9 +65,37 @@
   <li>Click <i>Finish</i>.</li>
 </ol>
 
+TODO vektor Dependencies, tokens
+
 <h2>Implement jInfer's specifics</h2>
 
-TODO
+This section will show how to deal with a new inference module - a simplifier
+that does no actual simplification, just returns the grammar it got on input.
+Your module will need a "main" class implementing the chosen inference
+interface, annotated with a <code>@ServiceProvider</code> annotation.
+
+<ol type=1>
+  <li>Add a new Java class: right click <i>Source Packages</i> in your new
+      module, select <i>New &gt; Java Class...</i>.</li>
+  <li>Fill in class name, for example <i>MySimplifierImpl</i>.</li>
+  <li>Fill in package based on the <i>Code base</i> you selected while creating
+      the module itself.</li>
+  <li>Click <i>Finish</i>.</li>
+  <li>In the heading line of the class, add <code>implements Simplifier</i> and
+      fix the imports (you need <code>Simplifier</code> from Base module).</li>
+  <li>Annotate this class with <code>@ServiceProvider(service = Simplifier.class)</code>.</li>
+  <li>NetBeans will complain about missing method implementations, add them.</li>
+  <li>
+    Now fill in method bodies:
+    <ul>
+      <li><code>getName()</code></li>
+      <li><code>getName()</code></li>
+      <li><code>getName()</code></li>
+      <li><code>getName()</code></li>
+      <li><code>getName()</code></li>
+    </ul>
+  </li>
+</ol>
 
 <h2>Implement your logic</h2>
 
@@ -92,6 +120,10 @@ TODO
 
 TODO
 
+<h3>Interruptions</h3>
+
+TODO
+
 <h3>Dialogs</h3>
 
 TODO message, open, save
@@ -104,7 +136,7 @@ TODO
 
 TODO
 
-<h3>Console output</h3>
+<h3>Console output, logging</h3>
 
 TODO
 

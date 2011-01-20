@@ -17,12 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 /**
- * Folder type for input folder.
+ * Folder type enum for input folder.
  * @author sviro
  */
 public enum FolderType {
-
-  // TODO sviro Comment!
 
   XML("XML"),
   SCHEMA("Schema"),
@@ -34,6 +32,10 @@ public enum FolderType {
     this.name = name;
   }
 
+  /**
+   * Get String representation of particular Folder type.
+   * @return String representation of particular Folder type.
+   */
   public String getName() {
     return name;
   }

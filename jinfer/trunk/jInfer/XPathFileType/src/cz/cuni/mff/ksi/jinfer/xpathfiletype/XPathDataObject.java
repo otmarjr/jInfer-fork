@@ -29,7 +29,7 @@ import org.openide.util.Lookup;
 import org.openide.text.DataEditorSupport;
 
 /**
- * TODO sviro Comment!
+ * DataObject defining XPath file type.
  * 
  * @author sviro
  */

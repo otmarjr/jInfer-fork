@@ -24,7 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleProperties;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
-import cz.cuni.mff.ksi.jinfer.projecttype.properties.AddFilesPropPanelProvider;
+import cz.cuni.mff.ksi.jinfer.projecttype.properties.ProjectPropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.ProjectPropertiesPanel;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -103,7 +103,7 @@ public class FilesAddAction extends AbstractAction {
   }
 
   private void addRemainingFilesToDefault(final List<File> selectedFilesList, final Collection<File> xmlFiles,  final Collection<File> schemaFiles, final Collection<File> queryFiles) {
-    final Properties properties = new ModuleProperties(AddFilesPropPanelProvider.CATEGORY_NAME, project.getLookup().lookup(Properties.class));
+    final Properties properties = new ModuleProperties(ProjectPropertiesPanelProvider.CATEGORY_NAME, project.getLookup().lookup(Properties.class));
     final String defaultFolder = properties.getProperty(ProjectPropertiesPanel.FOLDER_TYPE, ProjectPropertiesPanel.FOLDER_TYPE_DEFAULT);
     if (defaultFolder.equals(FolderType.XML.getName())) {
       xmlFiles.addAll(selectedFilesList);

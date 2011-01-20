@@ -21,7 +21,9 @@ import java.beans.PropertyChangeListener;
 import org.netbeans.api.project.ui.OpenProjects;
 
 /**
- * TODO sviro Comment!
+ * Listener which listens to changes in active Main project. According to
+ * selection of main project, certain buttons in welcome window are activated or
+ * deactivated.
  * 
  * @author sviro
  */

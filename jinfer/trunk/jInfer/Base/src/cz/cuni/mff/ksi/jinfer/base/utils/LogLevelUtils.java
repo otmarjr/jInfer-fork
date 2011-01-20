@@ -18,20 +18,18 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.options.LoggerPanel;
 import java.awt.Color;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.openide.util.NbPreferences;
 
 /**
- *
+ * Utility class for getting Colors of log levels set in options for Logger.
  * @author sviro
  */
 public final class LogLevelUtils {
 
-  // TODO sviro Comment!
-
   private LogLevelUtils() {
-    
   }
-
   public static final Color TRACE_DEFAULT = Color.GRAY;
   public static final Color DEBUG_DEFAULT = new Color(7, 105, 45);
   public static final Color INFO_DEFAULT = Color.BLACK;
@@ -39,33 +37,51 @@ public final class LogLevelUtils {
   public static final Color ERROR_DEFAULT = Color.RED;
   public static final Color FATAL_DEFAULT = Color.MAGENTA;
 
+  /**
+   * Get {@link Color} for {@link Level#TRACE} log level.
+   * @return {@link Color} for {@link Level#TRACE} log level.
+   */
   public static Color getColorTrace() {
-    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.TRACE_COLOR, String.
-            valueOf(TRACE_DEFAULT.getRGB())));
+    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.TRACE_COLOR, String.valueOf(TRACE_DEFAULT.getRGB())));
   }
 
+  /**
+   * Get {@link Color} for {@link Level#DEBUG} log level.
+   * @return {@link Color} for {@link Level#DEBUG} log level.
+   */
   public static Color getColorDebug() {
-    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.DEBUG_COLOR, String.
-            valueOf(DEBUG_DEFAULT.getRGB())));
+    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.DEBUG_COLOR, String.valueOf(DEBUG_DEFAULT.getRGB())));
   }
 
+  /**
+   * Get {@link Color} for {@link Level#INFO} log level.
+   * @return {@link Color} for {@link Level#INFO} log level.
+   */
   public static Color getColorInfo() {
-    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.INFO_COLOR, String.
-            valueOf(INFO_DEFAULT.getRGB())));
+    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.INFO_COLOR, String.valueOf(INFO_DEFAULT.getRGB())));
   }
 
+  /**
+   * Get {@link Color} for {@link Level#WARN} log level.
+   * @return {@link Color} for {@link Level#WARN} log level.
+   */
   public static Color getColorWarn() {
-    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.WARN_COLOR, String.
-            valueOf(WARN_DEFAULT.getRGB())));
+    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.WARN_COLOR, String.valueOf(WARN_DEFAULT.getRGB())));
   }
 
+  /**
+   * Get {@link Color} for {@link Level#FATAL} log level.
+   * @return {@link Color} for {@link Level#FATAL} log level.
+   */
   public static Color getColorError() {
-    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.ERROR_COLOR, String.
-            valueOf(ERROR_DEFAULT.getRGB())));
+    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.ERROR_COLOR, String.valueOf(ERROR_DEFAULT.getRGB())));
   }
 
+  /**
+   * Get {@link Color} for {@link Level#FATAL} log level.
+   * @return {@link Color} for {@link Level#FATAL} log level.
+   */
   public static Color getColorFatal() {
-    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.FATAL_COLOR, String.
-            valueOf(FATAL_DEFAULT.getRGB())));
+    return Color.decode(NbPreferences.forModule(LoggerPanel.class).get(LoggerPanel.FATAL_COLOR, String.valueOf(FATAL_DEFAULT.getRGB())));
   }
 }

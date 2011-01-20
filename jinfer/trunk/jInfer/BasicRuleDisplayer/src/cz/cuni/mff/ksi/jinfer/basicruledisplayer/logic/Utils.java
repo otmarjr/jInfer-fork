@@ -23,9 +23,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.prefs.Preferences;
 import javax.imageio.ImageIO;
 import javax.swing.UIManager;
+import org.openide.util.NbPreferences;
 
 /**
  * Some rule painter utils.
@@ -52,7 +52,7 @@ public final class Utils {
    * @return Background color for an element.
    */
   public static Color getColorElement() {
-    return Color.decode(Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).get("element.color", String.valueOf(COLOR_ELEMENT.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("element.color", String.valueOf(COLOR_ELEMENT.getRGB())));
   }
 
   /**
@@ -61,7 +61,7 @@ public final class Utils {
    * @return Background color for an attribute.
    */
   public static Color getColorAttribute() {
-    return Color.decode(Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).get("attribute.color", String.valueOf(COLOR_ATTRIBUTE.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("attribute.color", String.valueOf(COLOR_ATTRIBUTE.getRGB())));
   }
 
   /**
@@ -70,7 +70,7 @@ public final class Utils {
    * @return Background color for simple data.
    */
   public static Color getColorSimpleData() {
-    return Color.decode(Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).get("simple.data.color", String.valueOf(COLOR_SIMPLE_DATA.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("simple.data.color", String.valueOf(COLOR_SIMPLE_DATA.getRGB())));
   }
 
   /**
@@ -79,7 +79,7 @@ public final class Utils {
    * @return Background color for a concatenation.
    */
   public static Color getColorConcatenation() {
-    return Color.decode(Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).get("concatenation.color", String.valueOf(COLOR_CONCATENATION.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("concatenation.color", String.valueOf(COLOR_CONCATENATION.getRGB())));
   }
 
   /**
@@ -88,7 +88,7 @@ public final class Utils {
    * @return Background color for an alternation.
    */
   public static Color getColorAlternation() {
-    return Color.decode(Preferences.userNodeForPackage(BasicRuleDisplayerPanel.class).get("alternation.color", String.valueOf(COLOR_ALTERNATION.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("alternation.color", String.valueOf(COLOR_ALTERNATION.getRGB())));
   }
   
   /**

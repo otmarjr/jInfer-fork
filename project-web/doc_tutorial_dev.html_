@@ -81,18 +81,18 @@ interface, annotated with a <code>@ServiceProvider</code> annotation.
   <li>Fill in package based on the <i>Code base</i> you selected while creating
       the module itself.</li>
   <li>Click <i>Finish</i>.</li>
-  <li>In the heading line of the class, add <code>implements Simplifier</i> and
+  <li>In the heading line of the class, add <code>implements Simplifier</code> and
       fix the imports (you need <code>Simplifier</code> from Base module).</li>
   <li>Annotate this class with <code>@ServiceProvider(service = Simplifier.class)</code>.</li>
   <li>NetBeans will complain about missing method implementations, add them.</li>
   <li>
     Now fill in method bodies:
     <ul>
-      <li><code>getName()</code></li>
-      <li><code>getName()</code></li>
-      <li><code>getName()</code></li>
-      <li><code>getName()</code></li>
-      <li><code>getName()</code></li>
+      <li><code>getName()</code>: return a string with module unix name, for example <code>"mysimplifier"</code>.</li>
+      <li><code>getDisplayName()</code>: return a user friendly module name, for example <code>"My First Simplifier"</code>.</li>
+      <li><code>getModuleDescription()</code>: return a short module description. You can also return <code>getDisplayName()</code> in this case.</li>
+      <li><code>getCapabilities()</code>: for the moment, it is enough to return <code>Collections.emptyList()</code>.</li>
+      <li><code>start()</code>: here is where your main logic belongs. In the case of a simplifier, you would do something with the rules and return a simplified grammar. For now, just do <code>callback.finished(initialGrammar);</code></li>
     </ul>
   </li>
 </ol>

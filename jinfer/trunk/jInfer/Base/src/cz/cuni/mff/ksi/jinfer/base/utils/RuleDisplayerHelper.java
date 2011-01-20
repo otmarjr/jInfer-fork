@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
-import cz.cuni.mff.ksi.jinfer.base.options.RuleDisplayersPanel;
 import org.openide.util.NbPreferences;
 
 /**
@@ -30,29 +29,12 @@ public final class RuleDisplayerHelper {
   private RuleDisplayerHelper() {
   }
 
-  ;
-
   /**
-   * Get selected Rule Displayer, if no Rule displayer module is installed return null.
-   * @return Selected Rule Displayer, if no Rule displayer is installed, return null.
+   * Get selected Rule Displayer. If no Rule Displayer is selected, return first registered.
+   * @return Selected Rule Displayer.
    */
   public static RuleDisplayer getRuleDisplayer() {
-    String ruleDisplayName = NbPreferences.forModule(RuleDisplayersPanel.class).get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, RuleDisplayersPanel.RULE_DISPLAYER_DEFAULT);
-    try {
-      return ModuleSelectionHelper.lookupImpl(RuleDisplayer.class, ruleDisplayName, ModuleSelectionHelper.Fallback.EXCEPTION);
-    } catch (IllegalArgumentException e) {
-      return null;
-    }
-  }
-
-  /**
-   * Check if some Rule Displayer is set.
-   * @return <tt>true</tt> is some Rule Displayer is set, otherwise return <tt>false</tt>.
-   */
-  public static boolean isRuleDisplayerSet() {
-    if (getRuleDisplayer() != null) {
-      return true;
-    }
-    return false;
+    final String ruleDisplayName = NbPreferences.forModule(RuleDisplayer.class).get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, "TreeRuleDisplayer");
+    return ModuleSelectionHelper.lookupImpl(RuleDisplayer.class, ruleDisplayName);
   }
 }

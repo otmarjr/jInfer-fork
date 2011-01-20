@@ -16,8 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.runner.options;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
+import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -37,9 +42,11 @@ public final class RunnerPanel extends JPanel {
   public static final boolean OUTPUT_SHOW_DEFAULT = false;
   public static final boolean SCHEMA_OPEN_DEFAULT = true;
   public static final String NAME_PATTERN_DEFAULT = "generated-schema{n}";
+  public static final String RULE_DISPLAYER_DEFAULT = "TreeRuleDisplayer";
   private final RunnerOptionsPanelController controller;
 
   public RunnerPanel(final RunnerOptionsPanelController controller) {
+    super();
     this.controller = controller;
     initComponents();
     // TODO listen to changes in form fields and call controller.changed()
@@ -68,6 +75,10 @@ public final class RunnerPanel extends JPanel {
     jLabel2 = new javax.swing.JLabel();
     jPanel4 = new javax.swing.JPanel();
     jPanel3 = new javax.swing.JPanel();
+    jPanel5 = new javax.swing.JPanel();
+    jLabel3 = new javax.swing.JLabel();
+    ruleDisplayerCombo = new javax.swing.JComboBox();
+    jPanel6 = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -193,19 +204,58 @@ public final class RunnerPanel extends JPanel {
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 668, Short.MAX_VALUE)
+      .addGap(0, 803, Short.MAX_VALUE)
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 128, Short.MAX_VALUE)
+      .addGap(0, 70, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
     add(jPanel3, gridBagConstraints);
+
+    jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jPanel5.border.title"))); // NOI18N
+    jPanel5.setLayout(new java.awt.GridBagLayout());
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(RunnerPanel.class, "RunnerPanel.jLabel3.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    jPanel5.add(jLabel3, gridBagConstraints);
+
+    ruleDisplayerCombo.setRenderer(new ProjectPropsComboRenderer());
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    jPanel5.add(ruleDisplayerCombo, gridBagConstraints);
+
+    javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+    jPanel6.setLayout(jPanel6Layout);
+    jPanel6Layout.setHorizontalGroup(
+      jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+    jPanel6Layout.setVerticalGroup(
+      jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.weightx = 1.0;
+    jPanel5.add(jPanel6, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    add(jPanel5, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   /**
@@ -215,6 +265,10 @@ public final class RunnerPanel extends JPanel {
     openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, SCHEMA_OPEN_DEFAULT));
     showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, OUTPUT_SHOW_DEFAULT));
     namePattern.setText(NbPreferences.forModule(RunnerPanel.class).get(NAME_PATTERN, NAME_PATTERN_DEFAULT));
+
+    ruleDisplayerCombo.setModel(new DefaultComboBoxModel(ModuleSelectionHelper.lookupNames(RuleDisplayer.class).toArray()));
+    final String ruleDisplayerName = NbPreferences.forModule(RuleDisplayer.class).get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, RULE_DISPLAYER_DEFAULT);
+    ruleDisplayerCombo.setSelectedItem(ModuleSelectionHelper.lookupName(RuleDisplayer.class, ruleDisplayerName));
   }
 
   /**
@@ -228,6 +282,9 @@ public final class RunnerPanel extends JPanel {
     }
 
     NbPreferences.forModule(RunnerPanel.class).put(NAME_PATTERN, namePattern.getText());
+
+    final String ruleDisplayerName = ((NamedModule) ruleDisplayerCombo.getSelectedItem()).getName();
+    NbPreferences.forModule(RuleDisplayer.class).put(RuleDisplayer.RULE_DISPLAYER_PROPERTY, ruleDisplayerName);
   }
 
   /**
@@ -235,8 +292,8 @@ public final class RunnerPanel extends JPanel {
    * @return <tt>true</tt> if all values entered by user are valid.
    */
   public boolean valid() {
-    Pattern p = Pattern.compile("\\{n\\}");
-    Matcher matcher = p.matcher(namePattern.getText());
+    final Pattern p = Pattern.compile("\\{n\\}");
+    final Matcher matcher = p.matcher(namePattern.getText());
     int matches = 0;
     while (matcher.find()) {
       matches++;
@@ -256,16 +313,20 @@ public final class RunnerPanel extends JPanel {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
+  private javax.swing.JLabel jLabel3;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel3;
   private javax.swing.JPanel jPanel4;
+  private javax.swing.JPanel jPanel5;
+  private javax.swing.JPanel jPanel6;
   private javax.swing.JTextField namePattern;
   private javax.swing.JLabel nameTemplateHelp;
   private javax.swing.JLabel nameTemplateLabel;
   private javax.swing.JCheckBox openSchema;
   private javax.swing.JLabel openSchemaHelp;
   private javax.swing.JLabel openSchemaLabel;
+  private javax.swing.JComboBox ruleDisplayerCombo;
   private javax.swing.JCheckBox showOutputWindow;
   // End of variables declaration//GEN-END:variables
 }

@@ -30,6 +30,7 @@ import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDBuiltInDataTypes;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDOccurences;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDTag;
 import java.io.IOException;
 import java.io.InputStream;
@@ -315,12 +316,15 @@ public class DOMHandler {
     ret.getContext().addAll(context);
     metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
 
+    final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
+    final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
+
     RegexpInterval interval;
     if (outerInterval != null) {
-      final RegexpInterval occurence = determineOccurence(currentNode);
+      final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
       interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
     } else {
-      interval = determineOccurence(currentNode);
+      interval = XSDOccurences.createInterval(minOccurence, maxOccurence);
     }
     
     metadata.put(XSDAttribute.MINOCCURS.getMetadataName(), interval.getMin());
@@ -505,58 +509,6 @@ public class DOMHandler {
       return (org.w3c.dom.Element) node;
     }
     return null;
-  }
-
-  /**
-   * Create interval for current node by extracting the occurrence from DOM node attributes.
-   * Default values of min and max occurrences are 1, as defined by XSD Schema specification.
-   * This method should not throw any exceptions.
-   * @param currentNode Node to be examined.
-   * @return Interval with the proper values.
-   */
-  private RegexpInterval determineOccurence(final org.w3c.dom.Element currentNode) {
-    RegexpInterval interval;
-    final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
-    final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
-    // according to XSD Schema specification, the default values for min and max are 1
-    final int DEFAULT = 1;
-    final int INFINITY = -1;                    // internal representation of no limit for max
-    int min = DEFAULT, max = DEFAULT;           // set to default value
-
-    if (!BaseUtils.isEmpty(minOccurence)) {
-      try {
-        min = Integer.parseInt(minOccurence);
-        
-        if (min < 0) {                          // if parsed value is negative, restore the default
-          min = DEFAULT;
-        }
-      } catch (NumberFormatException e) {       // if parsing fails, the default is already set
-      } 
-    }
-    
-    if (!BaseUtils.isEmpty(maxOccurence)) {
-      try {
-        if (UNBOUNDED.equals(maxOccurence)) {
-          max = INFINITY;
-        } else {
-          max = Integer.parseInt(maxOccurence);
-          if (max < 0) {                        // parsed value is negative
-            max = min;                          // min is either default, or some good value
-          }
-          if (min > max) {                      // limits are mismatched, max has priority
-            min = max;
-          }
-        }
-      } catch (NumberFormatException e) {
-        max = min;                              // min is either default, or some good value
-      }
-    }
-    if (max == INFINITY) {
-      interval = RegexpInterval.getUnbounded(min);
-    } else {
-      interval = RegexpInterval.getBounded(min, max);
-    }
-    return interval;
   }
 
   /**

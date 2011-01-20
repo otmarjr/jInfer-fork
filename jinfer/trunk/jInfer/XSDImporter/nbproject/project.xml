@@ -51,6 +51,7 @@
                 </test-type>
             </test-dependencies>
             <public-packages>
+                <package>cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces</package>
                 <package>cz.cuni.mff.ksi.jinfer.xsdimporter.utils</package>
             </public-packages>
         </data>

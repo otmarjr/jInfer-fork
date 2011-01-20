@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.LogLevels;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;

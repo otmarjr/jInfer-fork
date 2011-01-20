@@ -21,16 +21,15 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDNamedType;
+import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.XSDNamedType;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDBuiltInDataTypes;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDMetadata;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDOccurences;
 import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.SAXAttributeData;
 import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.SAXDocumentElement;
 import java.util.ArrayList;
@@ -447,27 +446,21 @@ if (false) {
     final Map<String, Object> metadata = new HashMap<String, Object>();
 
     String name = "";
-    RegexpInterval interval = RegexpInterval.getOnce();
 
     if (isContainer) {
       metadata.put(CONTAINER_NAME, Boolean.TRUE);
       name = CONTAINER_NAME;
     } else {
-      // this is a normal element, create its metadata in the designated object
-      final XSDMetadata xsdmd = new XSDMetadata();
-
-      determineOccurence(docElement, xsdmd);
+      // this is a normal element
 
       if (docElement.getAttrs().containsKey("name")) {
         name = docElement.attributeNameValue();
       } else if (docElement.getAttrs().containsKey("ref")) {
         name = docElement.getAttrs().get("ref").getValue();
-        xsdmd.setRef(name);
+        metadata.putAll(IGGUtils.METADATA_SENTINEL); // ref don't have any contents, so it's a sentinel
       }
 
-      metadata.put(IGGUtils.FROM_SCHEMA, Boolean.TRUE);
-      metadata.put(IGGUtils.SCHEMA_DATA, xsdmd);
-      interval = xsdmd.getInterval();
+      metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
 
       // when element is the first level child inside a complexType
       // it should be set a sentinel
@@ -479,46 +472,23 @@ if (false) {
       }
     }
 
+    String minOccurrence = null;
+    String maxOccurrence = null;
+    if (docElement.getAttrs().containsKey("minoccurs")) {
+      minOccurrence = docElement.getAttrs().get("minoccurs").getValue();
+    }
+    if (docElement.getAttrs().containsKey("maxoccurs")) {
+      maxOccurrence = docElement.getAttrs().get("maxoccurs").getValue();
+    }
+
     final Element elem = Element.getMutable();
     elem.getContext().addAll(getContext());
     elem.setName(name);
     elem.getMetadata().putAll(metadata);
     elem.getSubnodes().setType(determineRegexpType(docElement));
-    elem.getSubnodes().setInterval(interval);
+    elem.getSubnodes().setInterval(XSDOccurences.createInterval(minOccurrence, maxOccurrence));
 
     contentStack.push(elem);
-  }
-
-  /** Find out minOccurs and maxOccurs for given docElement and save them in metadata xsdmd.
-   * 
-   * @param docElement
-   * @param xsdmd
-   * @throws XSDException
-   */
-  private void determineOccurence(final SAXDocumentElement docElement, final XSDMetadata xsdmd) throws XSDException {
-    int min = 1, max = 1; //default values from XSD specification
-
-    if (docElement.getAttrs().containsKey("minoccurs")) {
-      min = Integer.parseInt(docElement.getAttrs().get("minoccurs").getValue());
-    }
-
-    if (docElement.getAttrs().containsKey("maxoccurs")) {
-      final String s = docElement.getAttrs().get("maxoccurs").getValue();
-      if ("unbounded".equals(s)) {
-        xsdmd.setInterval(RegexpInterval.getUnbounded(min));
-        return;
-      } else {
-        max = Integer.parseInt(s);
-      }
-    }
-
-    if (min > max) {
-      throw new XSDException("minOccurs > maxOccurs!");
-    }
-
-    if (xsdmd.getInterval() == null) {
-      xsdmd.setInterval(RegexpInterval.getBounded(min, max));
-    }
   }
 
   @Override

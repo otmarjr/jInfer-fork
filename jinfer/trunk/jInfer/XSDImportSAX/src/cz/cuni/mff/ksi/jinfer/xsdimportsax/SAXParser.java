@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.xsdimportsax;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDParser;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import java.io.IOException;

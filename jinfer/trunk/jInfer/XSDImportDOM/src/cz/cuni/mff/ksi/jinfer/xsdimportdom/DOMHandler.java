@@ -65,6 +65,7 @@ public class DOMHandler {
   private static final String CONTAINER_CTYPE = "::container::complextype::";
   private static final String CONTAINER_ORDER = "::container::order::";
   private static final String UNBOUNDED = "unbounded";
+  private static final String SIMPLE_DATA_NAME = "_SDnamE__";
 
   /**
    * List of all element tags in current schema that are immediate children of the schema tag itself.
@@ -274,6 +275,18 @@ public class DOMHandler {
     }
   }
 
+  private Map<String, Object> prepareMetadata(final  RegexpInterval interval) {
+    final Map<String, Object> metadata = new HashMap<String, Object>();
+    metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
+    metadata.put(XSDAttribute.MINOCCURS.getMetadataName(), interval.getMin());
+    if (interval.isUnbounded()) {
+      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), UNBOUNDED);
+    } else {
+      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), interval.getMax());
+    }
+    return metadata;
+  }
+
   /**
    * Set the parameter to {@link RegexpType#LAMBDA } element,
    * with all the valid constraints and make it immutable.
@@ -314,25 +327,8 @@ public class DOMHandler {
     final List<String> content = new ArrayList<String>();
 
     ret.getContext().addAll(context);
-    metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
-
-    final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
-    final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
-
-    RegexpInterval interval;
-    if (outerInterval != null) {
-      final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
-      interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
-    } else {
-      interval = XSDOccurences.createInterval(minOccurence, maxOccurence);
-    }
-    
-    metadata.put(XSDAttribute.MINOCCURS.getMetadataName(), interval.getMin());
-    if (interval.isUnbounded()) {
-      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), UNBOUNDED);
-    } else {
-      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), interval.getMax());
-    }
+    RegexpInterval interval = determineInterval(currentNode, outerInterval);
+    metadata.putAll(prepareMetadata(interval));
     
     // inspect self
     final XSDTag tag = XSDTag.matchName(trimNS(currentNode.getNodeName()));
@@ -364,7 +360,8 @@ public class DOMHandler {
           final String type = trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
           if (XSDBuiltInDataTypes.isSimpleDataType(type)) {
             // if element is of some built-in data type, we must first check its children
-            // only then can we add the simple type as a token
+            // only then can we add the simple type as a token (
+            // see [SIMPLE DATA SECTION] after checking the children
             metadata.put(XSDAttribute.TYPE.getMetadataName(), type);
           } else if (namedCTypes.containsKey(type)) {
             final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited, null);
@@ -475,14 +472,20 @@ public class DOMHandler {
         && ret.getSubnodes().getChildren().isEmpty()
         && BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))
         && ret.getSubnodes().getType() == null) {
+      // element with empty children and no specified type has currently only one option
+      // since we don't support restrictions and extensions (nor complexcontent)
+      // -> it has to be LAMBDA
       setLambda(ret);
     } else if (XSDTag.ELEMENT.equals(tag)
         && ret.getSubnodes().getChildren().isEmpty()
         && metadata.containsKey(XSDAttribute.TYPE.getMetadataName())) {
+      // [SIMPLE DATA SECTION]
+      // element has empty children, but its specified type is one of the built-in types
+      // create SimpleData with the defined type of the element
       ret.getSubnodes().setType(RegexpType.TOKEN);
       ret.getSubnodes().setContent(
-        new SimpleData(newContext, 
-                       "text",
+        new SimpleData(newContext,
+                       SIMPLE_DATA_NAME,
                        Collections.<String,Object>emptyMap(),
                        (String) metadata.get(XSDAttribute.TYPE.getMetadataName()),
                        Collections.<String>emptyList()));
@@ -509,6 +512,19 @@ public class DOMHandler {
       return (org.w3c.dom.Element) node;
     }
     return null;
+  }
+
+  private RegexpInterval determineInterval(final org.w3c.dom.Element currentNode, final RegexpInterval outerInterval) {
+    final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
+    final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
+    RegexpInterval interval;
+    if (outerInterval != null) {
+      final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
+      interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
+    } else {
+      interval = XSDOccurences.createInterval(minOccurence, maxOccurence);
+    }
+    return interval;
   }
 
   /**

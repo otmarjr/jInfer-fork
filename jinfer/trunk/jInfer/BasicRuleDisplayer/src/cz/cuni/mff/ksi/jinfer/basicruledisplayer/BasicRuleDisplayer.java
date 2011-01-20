@@ -44,7 +44,11 @@ public final class BasicRuleDisplayer implements RuleDisplayer {
 
       @Override
       public void run() {
-        BasicRuleDisplayerTopComponent.findInstance().createNewPanel(panelName).setRules(rules);
+        BasicRuleDisplayerTopComponent topComponent = BasicRuleDisplayerTopComponent.findInstance();
+        if (!topComponent.isOpened()) {
+          topComponent.open();
+        }
+        topComponent.createNewPanel(panelName).setRules(rules);
       }
     });
   }

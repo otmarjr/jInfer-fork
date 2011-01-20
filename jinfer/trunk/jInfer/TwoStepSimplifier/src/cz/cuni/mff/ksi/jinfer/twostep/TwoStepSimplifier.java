@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -45,6 +44,7 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class TwoStepSimplifier {
+
   private static final Logger LOG = Logger.getLogger(TwoStepSimplifier.class);
   private final ClustererFactory clustererFactory;
   private final ClusterProcessorFactory clusterProcessorFactory;
@@ -70,9 +70,7 @@ public class TwoStepSimplifier {
   public List<Element> simplify(final List<Element> initialGrammar) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
-    if (RuleDisplayerHelper.isRuleDisplayerSet()) {
-      RuleDisplayerHelper.getRuleDisplayer().showRulesAsync("Original", new CloneHelper().cloneGrammar(initialGrammar), true);
-    }
+    RuleDisplayerHelper.getRuleDisplayer().showRulesAsync("Original", new CloneHelper().cloneGrammar(initialGrammar), true);
 
     final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
     for (final Element e : initialGrammar) {
@@ -80,46 +78,46 @@ public class TwoStepSimplifier {
     }
 
     // 1. cluster elements according to name
-    final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
+    final Clusterer<AbstractStructuralNode> clusterer = clustererFactory.create();
     clusterer.addAll(abstracts);
     clusterer.cluster();
 
     // 2. prepare emtpy final grammar
-    final List<Element> finalGrammar= new LinkedList<Element>();
+    final List<Element> finalGrammar = new LinkedList<Element>();
 
     // 3. process rules
-    final ClusterProcessor<AbstractStructuralNode> processor= clusterProcessorFactory.create();
+    final ClusterProcessor<AbstractStructuralNode> processor = clusterProcessorFactory.create();
     for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
 
-      List<AbstractStructuralNode> rules= BaseUtils.<AbstractStructuralNode>filter(
+      List<AbstractStructuralNode> rules = BaseUtils.<AbstractStructuralNode>filter(
               new ArrayList<AbstractStructuralNode>(cluster.getMembers()),
               new BaseUtils.Predicate<AbstractStructuralNode>() {
+
                 @Override
                 public boolean apply(AbstractStructuralNode argument) {
                   return !Boolean.TRUE.equals(
                           argument.getMetadata().get(IGGUtils.IS_SENTINEL));
                 }
               });
-      final AbstractStructuralNode node =  processor.processCluster(clusterer, rules);
+      final AbstractStructuralNode node = processor.processCluster(clusterer, rules);
 
       // 3.1 process attributes if supported
-      final List<Attribute> attList= new ArrayList<Attribute>();
+      final List<Attribute> attList = new ArrayList<Attribute>();
       if (clustererFactory.getCapabilities().contains("attributeClusters")) {
         @SuppressWarnings("unchecked")
-        final List<Cluster<Attribute>> attributeClusters=
-                ((ClustererWithAttributes<AbstractStructuralNode, Attribute>) clusterer).
-                getAttributeClusters(cluster.getRepresentant());
+        final List<Cluster<Attribute>> attributeClusters =
+                ((ClustererWithAttributes<AbstractStructuralNode, Attribute>) clusterer).getAttributeClusters(cluster.getRepresentant());
 
         for (Cluster<Attribute> attCluster : attributeClusters) {
-          final Attribute representant= attCluster.getRepresentant();
-          Attribute output= new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), representant.getContentType(), representant.getContent());
+          final Attribute representant = attCluster.getRepresentant();
+          Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), representant.getContentType(), representant.getContent());
           if (attCluster.size() < cluster.size()) {
-            final Map<String, Object> m= new HashMap<String, Object>(representant.getMetadata());
+            final Map<String, Object> m = new HashMap<String, Object>(representant.getMetadata());
             m.remove("required");
-            output= new Attribute(representant.getContext(), representant.getName(), m, representant.getContentType(), representant.getContent());
+            output = new Attribute(representant.getContext(), representant.getName(), m, representant.getContentType(), representant.getContent());
           }
 
           for (Attribute instance : attCluster.getMembers()) {
@@ -133,12 +131,12 @@ public class TwoStepSimplifier {
         }
       }
       // 4. add to rules
-      final StringBuilder sb= new StringBuilder(">>> Attributes are:");
+      final StringBuilder sb = new StringBuilder(">>> Attributes are:");
       for (Attribute att : attList) {
         sb.append(att);
       }
       LOG.debug(sb);
-      final RegularExpressionCleaner<AbstractStructuralNode> cleaner= regularExpressionCleanerFactory.<AbstractStructuralNode>create();
+      final RegularExpressionCleaner<AbstractStructuralNode> cleaner = regularExpressionCleanerFactory.<AbstractStructuralNode>create();
       finalGrammar.add(
               new Element(node.getContext(),
               node.getName(),
@@ -147,9 +145,7 @@ public class TwoStepSimplifier {
               attList));
     }
 
-    if (RuleDisplayerHelper.isRuleDisplayerSet()) {
-      RuleDisplayerHelper.getRuleDisplayer().showRulesAsync("Processed", new CloneHelper().cloneGrammar(finalGrammar), true);
-    }
+    RuleDisplayerHelper.getRuleDisplayer().showRulesAsync("Processed", new CloneHelper().cloneGrammar(finalGrammar), true);
     return finalGrammar;
   }
 }

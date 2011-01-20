@@ -117,7 +117,7 @@ public final class GraphBuilder {
     final VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<AbstractStructuralNode>, RegexpInterval>(layout, new Dimension(400, 300));
 
     vv.setBackground(utils.getBackgroundColor());
-    vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line());
+    vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Regexp<AbstractStructuralNode>, RegexpInterval>());
     vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<RegexpInterval>());
     vv.getRenderContext().setVertexLabelTransformer(new RegexpTransformer());
     vv.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer(utils));

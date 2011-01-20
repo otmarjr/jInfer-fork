@@ -45,7 +45,11 @@ public final class TreeRuleDisplayer implements RuleDisplayer {
 
       @Override
       public void run() {
-        TreeRuleDisplayerTopComponent.findInstance().createNewPanel(panelName, GraphBuilder.buildGraphPanel(rules));
+        final TreeRuleDisplayerTopComponent topComponent = TreeRuleDisplayerTopComponent.findInstance();
+        if (!topComponent.isOpened()) {
+          topComponent.open();
+        }
+        topComponent.createNewPanel(panelName, GraphBuilder.buildGraphPanel(rules));
       }
     });
   }

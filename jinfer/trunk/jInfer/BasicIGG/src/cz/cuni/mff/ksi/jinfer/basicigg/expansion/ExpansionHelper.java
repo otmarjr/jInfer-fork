@@ -117,6 +117,7 @@ public final class ExpansionHelper {
    */
   public static boolean isSimpleConcatenation(
           final Regexp<AbstractStructuralNode> r) {
+    //TODO vektor: this method is used in tests only - consider removing?
     if (r == null) {
       throw new IllegalArgumentException("Regexp must not be null.");
     }

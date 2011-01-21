@@ -36,10 +36,15 @@ public final class FileHelper {
           final File dir) {
     final List<File> result = new ArrayList<File>();
     final File[] filesAndDirs = dir.listFiles();
+
+    if (filesAndDirs == null) {
+      System.out.println(dir);
+    }
+
     final List<File> filesDirs = Arrays.asList(filesAndDirs);
     for (File file : filesDirs) {
       result.add(file);
-      if (!file.isFile()) {
+      if (!file.isFile() && file.isDirectory()) {
         result.addAll(getFiles(file));
       }
     }

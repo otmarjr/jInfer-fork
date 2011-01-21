@@ -37,8 +37,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = LayoutF.class)
 public class VyhnanovskaLayoutFactory implements LayoutF {
 
-  private static final String NAME = "VyhnanovskaLayout";
-  private static final String DISPLAY_NAME = "Vyhnanovska Layout";
+  public static final String NAME = "VyhnanovskaLayout";
+  public static final String DISPLAY_NAME = "Vyhnanovska Layout";
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {

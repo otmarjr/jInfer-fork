@@ -54,7 +54,7 @@ public class CleanerNestedConcatenationFactoryTest {
   public void testGetName() {
     System.out.println("getName");
     NestedConcatenationFactory instance = new NestedConcatenationFactory();
-    String expResult = "RegularExpressionCleanerNestedConcatenation";
+    String expResult = "TwoStepRegularExpressionCleanerNestedConcatenation";
     String result = instance.getName();
     assertEquals(expResult, result);
   }
@@ -66,7 +66,7 @@ public class CleanerNestedConcatenationFactoryTest {
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
     NestedConcatenationFactory instance = new NestedConcatenationFactory();
-    String expResult = "Regular Expression Cleaner Nested Concatenation";
+    String expResult = "NestedConcatenation";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
   }

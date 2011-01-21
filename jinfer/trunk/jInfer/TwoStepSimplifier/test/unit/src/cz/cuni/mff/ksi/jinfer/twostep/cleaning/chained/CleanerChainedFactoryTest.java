@@ -54,7 +54,7 @@ public class CleanerChainedFactoryTest {
   public void testGetName() {
     System.out.println("getName");
     ChainedFactory instance = new ChainedFactory();
-    String expResult = "RegularExpressionCleanerChained";
+    String expResult = "TwoStepRegularExpressionCleanerChained";
     String result = instance.getName();
     assertEquals(expResult, result);
   }

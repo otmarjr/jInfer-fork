@@ -54,7 +54,7 @@ public class CleanerEmptyChildrenFactoryTest {
   public void testGetName() {
     System.out.println("getName");
     EmptyChildrenFactory instance = new EmptyChildrenFactory();
-    String expResult = "RegularExpressionCleanerEmptyChildren";
+    String expResult = "TwoStepRegularExpressionCleanerEmptyChildren";
     String result = instance.getName();
     assertEquals(expResult, result);
   }
@@ -77,7 +77,7 @@ public class CleanerEmptyChildrenFactoryTest {
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
     EmptyChildrenFactory instance = new EmptyChildrenFactory();
-    String expResult = "Regular Expression Cleaner Empty Children";
+    String expResult = "EmptyChildren";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
   }

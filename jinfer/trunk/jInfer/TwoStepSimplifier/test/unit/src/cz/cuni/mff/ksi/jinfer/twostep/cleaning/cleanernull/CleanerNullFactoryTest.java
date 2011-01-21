@@ -62,7 +62,7 @@ public class CleanerNullFactoryTest {
   public void testGetName() {
     System.out.println("getName");
     NullFactory instance = new NullFactory();
-    String expResult = "RegularExpressionCleanerNull";
+    String expResult = "TwoStepRegularExpressionCleanerNull";
     String result = instance.getName();
     assertEquals(expResult, result);
   }
@@ -74,7 +74,7 @@ public class CleanerNullFactoryTest {
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
     NullFactory instance = new NullFactory();
-    String expResult = "Regular Expression Cleaner Null";
+    String expResult = "Null";
     String result = instance.getModuleDescription();
     assertEquals(expResult, result);
     assertFalse(result.isEmpty());

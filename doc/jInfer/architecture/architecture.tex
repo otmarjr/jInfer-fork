@@ -201,8 +201,6 @@ Although in example we present whole document tree, input modules produce slight
 \subsection{Rules and grammars} \label{rules_grammar}
 
 jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}.
-% TODO vektor check citation of http://www.engr.mun.ca/~theo/Courses/fm/pub/context-free.pdf in literature.bib
-% TODO anti what do you mean, "check citation"?
 \emph{Rules} in such grammar are in the form
 $$
   \textnormal{Left Hand Side (LHS)} \to \textnormal{Right Hand Side (RHS)}
@@ -360,7 +358,6 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 	\end{verbatim}
 	For element person, even when simplified grammar specifies its occurence to at least once, at most 3 times, as DTD has no such construct, export module have to do some magic. Situation is even worse for elements that contain simple data inside simplified rule. Only way to express mixed content in DTD is to use \verb.(#PCDATA | note)*. construct. Even if regular expression is complicated, export module has to do this "flattening".texmaker
 	Lets look on XSD output of same rules:
-	% TODO rio review this example!
 	\begin{verbatim}
 	<xs:element name="person">
 	  <xs:complexType>
@@ -608,7 +605,7 @@ Call to \code{Lookup.getDefault().lookupAll()} will return a collection of all s
 
 At this point it is important to understand that when using lookups this way, all service providers are kept as singletons. In case a provider needs to change its state during providing the service (and needs to be ``fresh" each time it is retrieved), it is best to convert this to a factory design pattern: the service provider registered is just a factory returning instances that do the actual work.\\
 
-TODO anti Link to http://bits.netbeans.org/dev/javadoc/org-openide-util-lookup/org/openide/util/Lookup.html as the official documentation to lookup API.
+See \cite{lookup_api} as the official documentation to lookup API.
 
 \subsection{Tokens}
 

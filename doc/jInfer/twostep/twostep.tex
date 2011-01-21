@@ -302,17 +302,21 @@ We implement greedy strategy in class \code{Greedy}.
 It simply asks given MergeConditionTester if it can merge any of automaton states and merges states until there are no states to be merged (on every pair of states asked, MergeConditionTester answers, they cannot be merged).
 One can implement ACO heuristics or MDL principle heuristics as AutomatonSimplifier submodule using MergeConditionTesters provided.
 
-Whole submodule structure of AutomatonMergingState cluster processor is drawn on fig. \ref{automaton_merging_state_submodules}.
+Whole submodule structure of AutomatonMergingState cluster processor is drawn on fig. \ref{automaton_merging_state_modules}.
 \begin{figure}
-	\centering\includegraphics[scale=\myscale]{automaton_merging_state_submodules}
-	\caption{Submodules of AutomatonMergingState cluster processor} \label{automaton_merging_state_submodules}
+	\centering\includegraphics[scale=\myscale]{automaton_merging_state_modules}
+	\caption{Submodules of AutomatonMergingState cluster processor} \label{automaton_merging_state_modules}
 \end{figure}
 We have implemented \emph{k,h-context} (see \cite{ahonen}) state equivalence in class \code{KHContext}, which is used by \code{Greedy}
 to test mergability of states by default configuration.
 
 \subsubsection{StateRemoval}
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{state_removal_modules}
+	\caption{Modules of StateRemoval.} \label{state_removal_modules}
+\end{figure}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
-This is implemented in \code{StateRemoval} class.
+This is implemented in \code{StateRemoval} class (on fig. \ref{state_removal_modules}).
 We defined one submodule of this class with interface called \code{Orderer}.
 It has only one method to implement: \code{getStateToRemove}.
 Given automaton it has to return reference to one state which should be removed from automaton at first.

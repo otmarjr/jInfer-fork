@@ -1,15 +1,16 @@
-digraph twostep_modules {
+digraph twostep_modules_complete {
 	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	rankdir = BT;
 
+/* TwoStep modules */
 	TwoStepSimplifier [style = rounded];
 	Clusterer -> TwoStepSimplifier [label = "is submodule"];
 	ClusterProcessor -> TwoStepSimplifier [label = "is submodule"];
 	RegularExpressionCleaner -> TwoStepSimplifier [label = "is submodule"];
 
 	ClustererWithAttributes -> Clusterer [label = "extends interface"];
-	Iname [style = rounded];
+	Iname [style = "rounded,filled"];
 	Iname -> ClustererWithAttributes [label = "implements"];
 	
 	Alternations [style = rounded];
@@ -24,7 +25,7 @@ digraph twostep_modules {
 	Trie [style = rounded];
 	Trie -> ClusterProcessor [label = "implements"];
 
-	Null [style = rounded];
+	Null [style = "rounded,filled"];
 	Null -> RegularExpressionCleaner [label = "implements"];
 
 	EmptyChildren [style = rounded];
@@ -35,10 +36,38 @@ digraph twostep_modules {
 
 	Chained [style = rounded];
 	Chained -> RegularExpressionCleaner [label = "implements"];
-	
+
 	ClusterProcessor -> ClustererWithAttributes [style = invis];
 	ClusterProcessor -> Null [style = invis];
 	ClusterProcessor -> EmptyChildren [style = invis];
 	ClusterProcessor -> NestedConcatenation [style = invis];
 	ClusterProcessor -> Chained [style = invis];
+
+/* AutomatonMergingState modules */
+	AutomatonMergingState [style = "rounded,filled"];
+	AutomatonSimplifier -> AutomatonMergingState [label = "is submodule"];
+	RegexpAutomatonSimplifier -> AutomatonMergingState [label = "is submodule"];
+	MergeConditionTester -> AutomatonMergingState [label = "is submodule"];
+
+	Greedy [style = "rounded,filled"];
+	Greedy -> AutomatonSimplifier [label = "implements"];
+	
+	StateRemoval [style = rounded];
+	StateRemoval -> RegexpAutomatonSimplifier [label = "implements"];
+	
+	KHContext [style = "rounded,filled"];
+	KHContext -> MergeConditionTester [label = "implements"];
+	
+	Greedy -> KHContext [label = "uses"];
+
+	UserInteractive [style = rounded];
+	UserInteractive -> AutomatonSimplifier [label = "implements"];
+	
+	
+/* StateRemoval modules */
+	StateRemoval [style = "rounded,filled"];
+	Orderer -> StateRemoval [label = "is submodule"];
+
+	Weighted [style = "rounded,filled"];
+	Weighted -> Orderer [label = "implements"];	
 }

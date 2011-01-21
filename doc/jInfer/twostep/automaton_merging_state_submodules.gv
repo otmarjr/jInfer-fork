@@ -1,9 +1,9 @@
 digraph automaton_merging_states_submodules {
-	node [shape = rectangle, fontname = "SFTT1000", fontsize = 10];
-	edge [fontname = "SFTT1000", fontsize = 10];
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	rankdir = BT;
 
-	AutomatonMergingState;
+	AutomatonMergingState [style = rounded];
 	AutomatonSimplifier -> AutomatonMergingState [label = "is submodule"];
 	RegexpAutomatonSimplifier -> AutomatonMergingState [label = "is submodule"];
 	MergeConditionTester -> AutomatonMergingState [label = "is submodule"];
@@ -18,4 +18,8 @@ digraph automaton_merging_states_submodules {
 	KHContext -> MergeConditionTester [label = "implements"];
 	
 	Greedy -> KHContext [label = "uses"];
+
+	UserInteractive [style = rounded];
+	UserInteractive -> AutomatonSimplifier [label = "implements"];
+	
 }

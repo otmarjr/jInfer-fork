@@ -1,6 +1,6 @@
 default: all
 
-twostep.dvi: twostep_modules.eps automaton_merging_state_submodules.eps
+twostep.dvi: twostep_modules.eps automaton_merging_state_submodules.eps twostep_modules_complete.eps
 
 %.dvi: %.tex *.bib Makefile
 	rm -f *.toc

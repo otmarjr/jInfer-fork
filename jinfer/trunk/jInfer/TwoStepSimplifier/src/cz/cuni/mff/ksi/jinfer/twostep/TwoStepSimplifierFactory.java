@@ -55,19 +55,34 @@ public class TwoStepSimplifierFactory implements Simplifier {
    * Name of the module in constant, for use in classes in this module.
    */
   public static final String NAME = "TwoStepSimplifier";
+  /**
+   * TODO anti comment
+   */
   public static final String DISPLAY_NAME = "TwoStep";
   /**
    * Property name of clusterer submodule.
    */
   public static final String PROPERTIES_CLUSTERER = "clusterer";
+  /** TODO anti comment
+   * 
+   */
+  public static final String PROPERTIES_CLUSTERER_DEFAULT = "TwoStepClustererWithAttributesIname";
   /**
    * Property name of cluster processor submodule.
    */
   public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
+  /** TODO anti comment
+   * 
+   */
+  public static final String PROPERTIES_CLUSTER_PROCESSOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingState";
   /**
    * Property name of regular expression cleaner submodule.
    */
   public static final String PROPERTIES_CLEANER = "cleaner";
+  /** TODO anti comment
+   * 
+   */
+  public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerNull";
 
   private static final Logger LOG = Logger.getLogger(Simplifier.class);
 
@@ -97,19 +112,19 @@ public class TwoStepSimplifierFactory implements Simplifier {
   private ClustererFactory getClustererFactory() {
     final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(PROPERTIES_CLUSTERER));
+    return ModuleSelectionHelper.lookupImpl(ClustererFactory.class, p.getProperty(PROPERTIES_CLUSTERER, PROPERTIES_CLUSTERER_DEFAULT));
   }
 
   private ClusterProcessorFactory getClusterProcessorFactory() {
     final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(PROPERTIES_CLUSTER_PROCESSOR));
+    return ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class, p.getProperty(PROPERTIES_CLUSTER_PROCESSOR, PROPERTIES_CLUSTER_PROCESSOR_DEFAULT));
   }
 
   private RegularExpressionCleanerFactory getRegularExpressionCleanerFactory() {
     final Properties p = RunningProject.getActiveProjectProps(this.getName());
 
-    return ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, p.getProperty(PROPERTIES_CLEANER));
+    return ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, p.getProperty(PROPERTIES_CLEANER, PROPERTIES_CLEANER_DEFAULT));
   }
 
   @Override

@@ -33,7 +33,13 @@ import org.openide.util.lookup.ServiceProvider;
 public class UserInteractiveFactory implements AutomatonSimplifierFactory {
   private static final Logger LOG = Logger.getLogger(UserInteractiveFactory.class);
 
+  /**
+   * TODO anti comment
+   */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierUserInteractive";
+  /**
+   * TODO anti comment
+   */
   public static final String DISPLAY_NAME = "UserInteractive";
 
   @Override

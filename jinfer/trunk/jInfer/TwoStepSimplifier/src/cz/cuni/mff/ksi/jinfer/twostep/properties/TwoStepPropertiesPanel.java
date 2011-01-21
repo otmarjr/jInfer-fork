@@ -208,19 +208,20 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
   public final void load() {
     clusterer.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(ClustererFactory.class).toArray()));
-    clusterer.setSelectedItem(ModuleSelectionHelper.lookupName(ClustererFactory.class, properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTERER, DEFAULT_MENU_TEXT)));
+    clusterer.setSelectedItem(ModuleSelectionHelper.lookupName(ClustererFactory.class,
+            properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTERER, TwoStepSimplifierFactory.PROPERTIES_CLUSTERER_DEFAULT)));
     clustererChanged(null);
 
     clusterProcessor.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()));
-    clusterProcessor.setSelectedItem(ModuleSelectionHelper.lookupName(ClusterProcessorFactory.class, properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR,
-            DEFAULT_MENU_TEXT)));
+    clusterProcessor.setSelectedItem(ModuleSelectionHelper.lookupName(ClusterProcessorFactory.class,
+            properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR, TwoStepSimplifierFactory.PROPERTIES_CLUSTERER_DEFAULT)));
     clusterProcessorChanged(null);
 
     cleaner.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class).toArray()));
-    cleaner.setSelectedItem(ModuleSelectionHelper.lookupName(RegularExpressionCleanerFactory.class, properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER,
-            DEFAULT_MENU_TEXT)));
+    cleaner.setSelectedItem(ModuleSelectionHelper.lookupName(RegularExpressionCleanerFactory.class, 
+            properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER, TwoStepSimplifierFactory.PROPERTIES_CLEANER_DEFAULT)));
     cleanerChanged(null);
   }
 

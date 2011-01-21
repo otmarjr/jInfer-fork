@@ -215,7 +215,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     clusterProcessor.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class).toArray()));
     clusterProcessor.setSelectedItem(ModuleSelectionHelper.lookupName(ClusterProcessorFactory.class,
-            properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR, TwoStepSimplifierFactory.PROPERTIES_CLUSTERER_DEFAULT)));
+            properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR, TwoStepSimplifierFactory.PROPERTIES_CLUSTER_PROCESSOR_DEFAULT)));
     clusterProcessorChanged(null);
 
     cleaner.setModel(new DefaultComboBoxModel(

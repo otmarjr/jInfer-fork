@@ -132,7 +132,7 @@ public class DTDProcessor implements Processor {
         nodeMetadata.put("required", Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
         final cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute at =
                 new cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute(
-                new ArrayList<String>(0), a.name.getLocalName(),
+                IGGUtils.EMPTY_CONTEXT, a.name.getLocalName(),
                 nodeMetadata, null, new ArrayList<String>(0));
         attList.add(at);
       }

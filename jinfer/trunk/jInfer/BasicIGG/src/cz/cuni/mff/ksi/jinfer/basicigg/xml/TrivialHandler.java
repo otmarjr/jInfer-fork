@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public class TrivialHandler extends DefaultHandler {
 
   private List<String> getContext() {
     if (stack.isEmpty()) {
-      return new ArrayList<String>(0);
+      return IGGUtils.EMPTY_CONTEXT;
     }
     final List<String> ret = new ArrayList<String>(stack.peek().getContext());
     ret.add(stack.peek().getName());

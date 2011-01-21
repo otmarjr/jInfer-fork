@@ -40,8 +40,6 @@ import org.jaxen.saxpath.helpers.DefaultXPathHandler;
  */
 public class XPathHandlerImpl extends DefaultXPathHandler {
 
-  private static final List<String> EMPTY_CONTEXT = new ArrayList<String>(0);
-
   private final Properties properties = RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME);
 
   /** Rules that have been inferred so far. */
@@ -91,7 +89,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
       isSimpleData = false;
     } else if (axis == Axis.ATTRIBUTE
             && lastElement != null) {
-      final Attribute newAttr = new Attribute(EMPTY_CONTEXT, localName,
+      final Attribute newAttr = new Attribute(IGGUtils.EMPTY_CONTEXT, localName,
               IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       lastElement.getAttributes().add(newAttr);
       lastAttribute = newAttr;
@@ -128,10 +126,10 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
             && lastElement != null) {
       final SimpleData newSimpleData;
       if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
-        newSimpleData = new SimpleData(EMPTY_CONTEXT, lastLiteral,
+        newSimpleData = new SimpleData(IGGUtils.EMPTY_CONTEXT, lastLiteral,
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       } else {
-        newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
+        newSimpleData = new SimpleData(IGGUtils.EMPTY_CONTEXT, "simple data",
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
       lastElement.getSubnodes().addChild(TestUtils.getToken(newSimpleData));
@@ -152,10 +150,10 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     if (lastElement != null) {
       final SimpleData newSimpleData;
       if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
-        newSimpleData = new SimpleData(EMPTY_CONTEXT, null,
+        newSimpleData = new SimpleData(IGGUtils.EMPTY_CONTEXT, null,
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       } else {
-        newSimpleData = new SimpleData(EMPTY_CONTEXT, "simple data",
+        newSimpleData = new SimpleData(IGGUtils.EMPTY_CONTEXT, "simple data",
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       }
       lastElement.getSubnodes().addChild(TestUtils.getToken(newSimpleData));

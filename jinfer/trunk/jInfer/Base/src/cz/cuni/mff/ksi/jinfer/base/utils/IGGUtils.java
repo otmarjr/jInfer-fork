@@ -59,7 +59,10 @@ public final class IGGUtils {
   static {
     METADATA_SENTINEL.put(IS_SENTINEL, Boolean.TRUE);
   }
-  
+
+  /**
+   * Empty, unmodifiable context.
+   */
   public static final List<String> EMPTY_CONTEXT = Collections.unmodifiableList(new ArrayList<String>(0));
 
 }

@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties.LayoutPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska.VyhnanovskaLayoutFactory;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -49,7 +50,7 @@ public final class LayoutHelperFactory {
   public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
     Properties p = RunningProject.getActiveProjectProps(LayoutPropertiesPanel.NAME);
 
-    LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout"));
+    LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME));
     return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
   }
 

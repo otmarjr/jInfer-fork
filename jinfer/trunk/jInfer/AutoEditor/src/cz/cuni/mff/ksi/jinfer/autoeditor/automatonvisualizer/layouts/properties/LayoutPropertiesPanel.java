@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska.VyhnanovskaLayoutFactory;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
@@ -114,7 +115,7 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   public final void load() {
     graphRenderer.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(LayoutF.class).toArray()));
-    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupName(LayoutF.class, properties.getProperty("user-layout", DEFAULT_MENU_TEXT)));
+    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupName(LayoutF.class, properties.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME)));
   }
 
   @Override

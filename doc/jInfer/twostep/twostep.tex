@@ -255,7 +255,7 @@ That is, it creates one big rule with alternation of every positive example obse
 No generalization is done at all.
 
 \subsubsection{Trie}
-TODO vektor describe trie cluster processor
+This processor takes all rules in a cluster, treats them like strings and builds a prefix tree (a ``trie") of them. More precisely, it takes the first rule and delares it to be a long branch (concatenation of tokens) in a newly created tree. After that, it adds the remaining rules one by one as branches like this: as long as it can follow an existing branch, it follows it. As soon as the newly added branch starts to differ, it ``branches off" (creates an alternation at that point) the existing tree and hangs the rest of the newly added rule there. Repeating this process creates a prefix tree describing all the rules in the cluster.
 
 \subsubsection{AutomatonMergingState}
 AutomatonMergingState is implementation of merging state algorithm on nondeterministic finite automaton.

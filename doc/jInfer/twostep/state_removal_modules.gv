@@ -1,0 +1,12 @@
+digraph state_removal_modules {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	rankdir = BT;
+
+/* StateRemoval modules */
+	StateRemoval [style = "rounded"];
+	Orderer -> StateRemoval [label = "is submodule"];
+
+	Weighted [style = "rounded"];
+	Weighted -> Orderer [label = "implements"];	
+}

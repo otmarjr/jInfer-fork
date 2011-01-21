@@ -12,7 +12,7 @@
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\jmodule}[1]{\emph{#1}}
+\newcommand{\jmodule}[1]{\texttt{\textsl{#1}}}
 
 \setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
 \setlength{\voffset}{-1in} %analogous voffset
@@ -34,44 +34,68 @@
 
 \begin{document}
 \maketitle
-Target audience: developers willing to extend jInfer, scientist willing to implement own inference methods\\
+\noindent Target audience: developers willing to extend jInfer, scientist willing to implement own inference methods
 
-\emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}
+\noindent \emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}
 
 \section{Using of factory pattern}
-TwoStep simplifier is divided into three submodules, which are then divided into submodules and so on.
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{factory_pattern1}
+	\caption{Same instance of class returned by NetBeans in two successive inference runs} \label{factory_pattern1}
+\end{figure}
+\jmodule{TwoStepSimplifier} is divided into three submodules, which are then divided into submodules and so on.
 Each submodule is simply class, properly anotated.
-User selects proper classes - submodules in chain to work on inference.
-Classes are then, in runtime looked up by using NetBeans lookup mechanism.
+User selects proper classes - submodules to work in chain on inference.
+Classes are then, in runtime looked up by using NetBeans lookup mechanism (see \cite[p. 16]{arch}).
 But NetBeans holds one instance of each class, that may be looked upon.
 When user runs inference first time, classes are looked up and used.
 Maybe class members are initialised, instances are in some state after inference completes.
 Then, user clicks run button again, and same instances of classes are returned by lookups.
-Ooops, theese are not freshly created instances, using them as they are may cause harm.
-And problem arises - force each class (submodule) that is being looked up in inference process, to implement
-some sort of cleanup method, that would restart it into fresh state and make it ready to use by another 
-inference run? Or create new instances of theese classes in each inference run and make singleton classes (those which NetBeans return by lookups) their factory classes?
+Oops, theese are not freshly created instances, using them as they are may cause harm.
+The problem is ilustrated on fig. \ref{factory_pattern1}.
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{factory_pattern2}
+	\caption{Factory solution of singleton lookup class problem} \label{factory_pattern2}
+\end{figure}
 
-We decided to use second approach. 
-It enables us not only to produce fresh instance in each inference run, but also factory classes implement obligatory
+There are basically two solutions:
+\begin{itemize}
+	\item force each class (submodule) that is being looked up in inference process, to implement
+some sort of cleanup method, that would restart it into fresh state and make it ready to use by another 
+inference run,
+	\item or create new instances of theese classes in each inference run and make singleton classes (those which NetBeans return by lookups) their factory classes.
+\end{itemize}
+We decided for the latter approach (as ilustrated on fig. \ref{factory_pattern2}
+It enables us not only to produce fresh class instance in each inference run, but also factory classes implement obligatory
 module methods such as \code{getName}, \code{getDescription} and so on, which are really same in each inference run.
 Each submodule is then defined by (at least) two interfaces.
 One is the factory interface, like this one:
 \begin{verbatim}
-public interface AutomatonSimplifierFactory extends NamedModule, Capabilities, UserModuleDescription {
+public interface AutomatonSimplifierFactory extends 
+                     NamedModule, Capabilities, UserModuleDescription {
   <T> AutomatonSimplifier<T> create();
 }
 \end{verbatim}
-It extends \code{NamedModule} with all module methods.
+It extends \code{NamedModule} with its modules describing methods:
+\begin{verbatim}
+String getName();
+String getDisplayName();
+String getModuleDescription();
+\end{verbatim}
 It extends \code{Capabilities}, thus each module have to answer, if it has some capabilities.
-And, in TwoStep we often extend \code{UserModuleDescription}, which defines method for obtaining description of the module, comprehensive to user (it is displayed in properties panels).
-In some circumstances, it is useful to have method \code{create} generic.
-The automaton simplifier works with automaton, which itself is generic too.
-But simplifying does not depend on type of symbol of automaton, so interface \code{AutomatonSimplifier<T>}
-is also generic as simplifier can simplify automaton of any symbol java type.
-Factory interface deals with this by defining create method generic too.
+And, in TwoStep we often extend \code{UserModuleDescription}, which defines method:
+\begin{verbatim}
+String getUserModuleDescription();
+\end{verbatim}
+It returns description of the module, comprehensive to user, which is then displayed in properties panels.
 
-Second interface is the one, which is returned by \code{create} method in factory.
+In some circumstances, it is useful to have method \code{create()} generic.
+The \jmodule{AutomatonSimplifier} works with \code{Automaton}, which itself is generic too.
+But simplifying does not depend on type of symbol of automaton, so interface \code{AutomatonSimplifier<T>}
+is also generic as simplifier can simplify automaton of any java type symbol.
+Factory interface deals with this by defining \code{create()} method generic too.
+
+Second interface is the one, which is returned by \code{create()} method.
 That is the interface, which defines real work cycle with submodule (in example it is \code{AutomatonSimplifier<T>}).
 We call this interface the worker interface of submodule.
 Usage of this factory pattern follows the routine:
@@ -106,7 +130,7 @@ private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
             p.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER));
 }
 \end{verbatim}
-Cluster processor AutomatonMergingState then receives factories for AutomatonSimplifier and RegexpAutomatonSipmlifier submodules in its constructor.
+Cluster processor \code{AutomatonMergingState} then receives factories of \code{AutomatonSimplifier} and \code{RegexpAutomatonSimplifier} submodules in its constructor.
 Cluster processor then may create as many instances of submodule classes as it needs (maybe simplifying more than one automaton).
 Thorough this document, we will mention only worker interface when describing submodules, since all factory interfaces are designed same way just described.
 
@@ -118,26 +142,25 @@ TwoStep simplifier is inspired by \cite{1802522} design. Inference proceeds in t
 \end{enumerate}
 Main routine of TwoStep simplifer does basically this:
 \begin{verbatim}
-    // 1. cluster elements
-    final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
-    clusterer.addAll(initialGrammar);
-    clusterer.cluster();
+// 1. cluster elements
+final Clusterer<AbstractStructuralNode> clusterer= clustererFactory.create();
+clusterer.addAll(initialGrammar);
+clusterer.cluster();
 
-    // 2. prepare emtpy final grammar
-    final List<Element> finalGrammar= new LinkedList<Element>();
+// 2. prepare emtpy final grammar
+final List<Element> finalGrammar= new LinkedList<Element>();
 
-    // 3. process rules
-    final ClusterProcessor<AbstractStructuralNode> processor= clusterProcessorFactory.create();
-    for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
-      final AbstractStructuralNode node =  processor.processCluster(clusterer, cluster.getMembers() - without sentinels);
-      // 4. add to rules
-      finalGrammar.add(
-              new Element(node.getContext(),
-              node.getName(),
-              node.getMetadata(),
-              ((Element) node).getSubnodes(),
-              attList);
-    }
+// 3. process rules
+final ClusterProcessor<AbstractStructuralNode> processor= clusterProcessorFactory.create();
+for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
+  final AbstractStructuralNode node =  processor.processCluster(clusterer, cluster.getMembers() - without sentinels);
+  // 4. add to rules
+  finalGrammar.add(new Element(node.getContext(),
+                   node.getName(),
+                   node.getMetadata(),
+                   ((Element) node).getSubnodes(),
+                   attList);
+}
 \end{verbatim}
 Task of clustering is dedicated to \jmodule{Clusterer} submodule, and task of infering regular expression for each cluster is dedicated to \jmodule{ClusterProcessor} submodule. We will examine both of them.
 There is also third submodule called \jmodule{RegularExpressionCleaner} actually, its purpose is just to beatify output regular expressions, no inference logic is implemented there. 
@@ -154,22 +177,22 @@ TODO sentinel processing
 \subsection{Clusterer submodule}
 Lets start by example, let input document(s) contain XML:
 \begin{verbatim}
-  <person name="john" surname="smith">
-    <info>
+<person name="john" surname="smith">
+  <info>
+   Some text
+   <note/>
+  </info>
+</person>
+<inform>
+  Another text
+  <note/>
+</inform>
+<person>
+    <information>
       Some text
       <note/>
-    </info>
-  </person>
-  <inform>
-    Another text
-    <note/>
-  </inform>
-  <person>
-      <information>
-        Some text
-        <note/>
-      </information>
-  </person>
+    </information>
+</person>
 \end{verbatim}
 We examine info-like named elements.
 If we cluster elements sipmly by their name, we get one cluster with info element, another cluster with inform element and another one with information element.
@@ -182,15 +205,15 @@ One cluster is represented by class \code{Cluster<T>} with \code{T} as type of c
 This class simply holds java set of member of cluster and one of the references is held also in \code{representant} member.
 
 We provide \code{Clusterer} interface for classes to implement.
-Its purpose is to cluster bunch of elements (rules) on input, into  bunch of cluster class instances  (cluters).
+Its purpose is to cluster bunch of elements (rules) on input, into  bunch of cluster class instances (cluters) on output.
 It has methods \code{add()} and \code{addAll()} for adding items for clustering.
 Center is method \code{cluster()}, which does the clustering itself.
-As it may be time-consuming operation, method throws \code{InterruptedException}, implementation should take care 
-of checking whether thread is user interrupted (see \cite{arch}).
+As it may be time-consuming operation, method throws \code{InterruptedException}.
+Implementation should take care of checking whether thread is user interrupted (see \cite[p. 12]{arch}).
 After clustering, implementation should hold clusters in member, as it it will be further asked by calling method \code{T getRepresentantForItem(T item)}.
 Given item to this method, one can ask for representant of cluster, to which the item belongs.
 If no such cluster exists (item was not added for clustering before), we recommend you throwing an exception rather than returning \code{null}.
-Missing will probably  indicate error in algorithm rather than normal workflow.
+Missing item will probably  indicate error in algorithm rather than normal workflow.
 One can pull clusters from clusterer by calling \code{getClusters()} method.
 
 Basic work usage of clusterer is:
@@ -208,10 +231,10 @@ c.getRepresentantForItem(x);
 Maybe you noticed that whole clusterer interface and cluster class are generic.
 They may be used as design pattern not only for clustering elements in inference process.
 To address clustering of elements in more detail, we created \code{ClustererWithAttributes<T, S>} interface, which extends \code{Clusterer<T>} interface.
-It add method \code{List<Cluster<S>> getAttributeClusters(T representant)}, implying that each representant of
+It adds method \code{List<Cluster<S>{}> getAttributeClusters(T representant)}, implying that each representant of
 type \code{T} (that is representant of some main cluster) has some "attribute" clusters associated with it.
-Theese clusters are obtained by calling \code{getAttributeClusters(x)}.
-Attribute clusters are of type \code{S}.
+Attribute clusters are of type \code{S} and can be retrieved by calling \code{getAttributeClusters(x)}.
+
 
 Finally, we use this scheme to implement clusterer \code{Iname<AbstractStructuralNode, Attribute>} class, which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes.
 For each cluster of elements, it creates list of clusters of attributes observed with all elements in main cluster.
@@ -284,12 +307,12 @@ Whole submodule structure of AutomatonMergingState cluster processor is drawn on
 	\centering\includegraphics[scale=\myscale]{automaton_merging_state_submodules}
 	\caption{Submodules of AutomatonMergingState cluster processor} \label{automaton_merging_state_submodules}
 \end{figure}
-We have implemented \emph{k,h-context} (see \cite{ahonen}) state equivalence in class \code{KHContext}, which is used by \class{Greedy}
+We have implemented \emph{k,h-context} (see \cite{ahonen}) state equivalence in class \code{KHContext}, which is used by \code{Greedy}
 to test mergability of states by default configuration.
 
-\subsubsubsection{StateRemoval}
+\subsubsection{StateRemoval}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
-This is implemented in \class{StateRemoval} class.
+This is implemented in \code{StateRemoval} class.
 We defined one submodule of this class with interface called \code{Orderer}.
 It has only one method to implement: \code{getStateToRemove}.
 Given automaton it has to return reference to one state which should be removed from automaton at first.
@@ -302,7 +325,6 @@ It is simple heuristic - weights all states (weight = sum of {in | out | loop}-t
 \subsection{RegularExpressionCleaner module}
 Last we examine \code{RegularExpressionCleaner} interface.
 TODO anti cleaners
-
 
 Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
 \begin{figure}

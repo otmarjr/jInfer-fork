@@ -56,12 +56,14 @@ public class ExpanderImpl implements Expander {
   }
 
   private static List<Element> expandElement(final Element e) {
-    //TODO rethink this: should be disabled? we need to set sentinels
-    // even to the elements in a simple concatenation
+    // we need to set sentinels even to the elements in a simple concatenation
     // because a concatenation of two tokens returns true, but we want to expand the rules inside too
-    //if (ExpansionHelper.isSimpleConcatenation(e.getSubnodes())) {
-    //  return Arrays.asList(e);
-    //}
+    // hence, we can only ignore an EMPTY concatenation
+    if (BaseUtils.isEmpty(e.getSubnodes().getChildren())
+        && e.getSubnodes().isConcatenation() ) {
+      // no need to set a sentinel or anything
+      return Arrays.asList(e);
+    }
 
     final List<Element> ret = new ArrayList<Element>();
     final List<List<AbstractStructuralNode>> exploded = unpackRE(e.getSubnodes());

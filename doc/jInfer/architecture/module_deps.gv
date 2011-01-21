@@ -1,6 +1,7 @@
 digraph automaton_merge1 {
-	node [shape = rectangle, fontname = "SFTT1000", fontsize = 10];
-	edge [fontname = "SFTT1000", fontsize = 10];
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 18];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 18];
+	size = 7.08;
 	rankdir = BT;
 
 	AutoEditor

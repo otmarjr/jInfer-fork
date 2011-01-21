@@ -20,9 +20,11 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +135,22 @@ public final class TestUtils {
             EMPTY_METADATA,
             Regexp.<AbstractStructuralNode>getLambda(),
             Collections.<Attribute>emptyList());
+  }
+
+  /**
+   * Returns a simple data with provided string as its only content. Simple data
+   * is otherwise quite empty: context and metadata are empty, content type is
+   * "string".
+   * 
+   * @param content The only content string this simple data should have.
+   * @return Constructed simple data.
+   */
+  public static SimpleData getSimpleData(final String content) {
+    return new SimpleData(EMPTY_CONTEXT, 
+            "simple data",
+            EMPTY_METADATA,
+            "string",
+            Arrays.asList(content));
   }
 
   /**

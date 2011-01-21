@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.utils.EqualityUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,13 +66,13 @@ public class ExpanderImplTest {
     grammar.add(e1);
 
     final List<Element> ret1 = new ExpanderImpl().expand(grammar);
-    assertEquals(e1, ret1.get(0));
+    assertTrue(EqualityUtils.sameElements(e1, ret1.get(0), EqualityUtils.IGNORE_METADATA));
 
     grammar.add(e2);
 
     final List<Element> ret2 = new ExpanderImpl().expand(grammar);
-    assertEquals(e1, ret2.get(0));
-    assertEquals(e2, ret2.get(1));
+    assertTrue(EqualityUtils.sameElements(e1, ret2.get(0), EqualityUtils.IGNORE_METADATA));
+    assertTrue(EqualityUtils.sameElements(e2, ret2.get(1), EqualityUtils.IGNORE_METADATA));
   }
 
   private static final String[] EXPANDED = {

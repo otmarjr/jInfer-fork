@@ -36,7 +36,6 @@ digraph automaton_merge1 {
 	TwoStepSimplifier -> AutoEditor
 	TwoStepSimplifier -> Base
 	TwoStepSimplifier -> JUNG
-	TwoStepSimplifier -> TreeRuleDisplayer [label = "This won't be necessary after Sviro's changes"]
 	Welcome -> Base
 	Welcome -> ProjectType
 	XSDImportDOM -> Base

@@ -37,9 +37,22 @@ import org.openide.util.lookup.ServiceProvider;
 public class GreedyFactory implements AutomatonSimplifierFactory {
   private static final Logger LOG = Logger.getLogger(GreedyFactory.class);
 
+  /**
+   * TODO anti comment
+   */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierGreedy";
+  /**
+   * TODO anti comment
+   */
   public static final String DISPLAY_NAME = "Greedy";
+  /**
+   * TODO anti comment
+   */
   public static final String PROPERTIES_CONDITION_TESTER = "condition-tester";
+  /**
+   * TODO anti comment
+   */
+  public static final String PROPERTIES_CONDITION_TESTER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterKHContext";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
@@ -80,7 +93,7 @@ public class GreedyFactory implements AutomatonSimplifierFactory {
   private MergeConditionTesterFactory getMergeConditionTesterFactory() {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
-    return ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, p.getProperty(PROPERTIES_CONDITION_TESTER));
+    return ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, p.getProperty(PROPERTIES_CONDITION_TESTER, PROPERTIES_CONDITION_TESTER_DEFAULT));
   }
 
   @Override

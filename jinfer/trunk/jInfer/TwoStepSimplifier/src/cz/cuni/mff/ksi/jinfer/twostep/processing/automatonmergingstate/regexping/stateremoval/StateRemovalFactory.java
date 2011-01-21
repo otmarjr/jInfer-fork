@@ -37,9 +37,22 @@ import org.openide.util.lookup.ServiceProvider;
 public class StateRemovalFactory implements RegexpAutomatonSimplifierFactory {
   private static final Logger LOG = Logger.getLogger(StateRemovalFactory.class);
 
+  /**
+   * TODO anti comment
+   */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemoval";
+  /**
+   * TODO anti comment
+   */
   public static final String DISPLAY_NAME = "StateRemoval";
+  /**
+   * TODO anti comment
+   */
   public static final String PROPERTIES_ORDERER = "orderer";
+  /**
+   * TODO anti comment
+   */
+  public static final String PROPERTIES_ORDERER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdererWeighted";
 
   @Override
   public <T> RegexpAutomatonSimplifier<T> create() {
@@ -87,7 +100,7 @@ public class StateRemovalFactory implements RegexpAutomatonSimplifierFactory {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(OrdererFactory.class,
-            p.getProperty(PROPERTIES_ORDERER));
+            p.getProperty(PROPERTIES_ORDERER, PROPERTIES_ORDERER_DEFAULT));
   }
 
   @Override

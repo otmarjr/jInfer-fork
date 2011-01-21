@@ -39,11 +39,31 @@ import org.openide.util.lookup.ServiceProvider;
 public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
   private static final Logger LOG = Logger.getLogger(AutomatonMergingStateFactory.class);
 
+  /** TODO anti comment
+   * 
+   */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingState";
+  /** TODO anti comment
+   *
+   */
   public static final String DISPLAY_NAME = "AutomatonMergingState";
+  /** TODO anti comment
+   *
+   */
   public static final String PROPERTIES_AUTOMATON_SIMPLIFIER = "automaton-simplifier";
+  /** TODO anti comment
+   *
+   */
+  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierGreedy";
+  /** TODO anti comment
+   *
+   */
   public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER = "regexp-automaton-simplifier";
-
+  /** TODO anti comment
+   *
+  */
+  public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemoval";
+  
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
     LOG.debug("Creating new ClusterProcessorAutomatonMergingState.");
@@ -70,14 +90,14 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
-            p.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER));
+            p.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER, PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT));
   }
 
   private RegexpAutomatonSimplifierFactory getRegexpAutomatonSimplifierFactory() {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierFactory.class,
-            p.getProperty(PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER));
+            p.getProperty(PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER, PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT));
   }
 
   @Override

@@ -157,13 +157,17 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     automatonSimplifier.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(AutomatonSimplifierFactory.class).toArray()));
 
-    automatonSimplifier.setSelectedItem(ModuleSelectionHelper.lookupName(AutomatonSimplifierFactory.class, properties.getProperty(AutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT)));
+    automatonSimplifier.setSelectedItem(ModuleSelectionHelper.lookupName(AutomatonSimplifierFactory.class,
+            properties.getProperty(AutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER,
+            AutomatonMergingStateFactory.PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT)));
     automatonSimplifierChanged(null);
 
     regexpAutomatonSimplifier.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierFactory.class).toArray()));
 
-    regexpAutomatonSimplifier.setSelectedItem(ModuleSelectionHelper.lookupName(RegexpAutomatonSimplifierFactory.class, properties.getProperty(AutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER, DEFAULT_MENU_TEXT)));
+    regexpAutomatonSimplifier.setSelectedItem(ModuleSelectionHelper.lookupName(RegexpAutomatonSimplifierFactory.class,
+            properties.getProperty(AutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER,
+            AutomatonMergingStateFactory.PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT)));
     regexpAutomatonSimplifierChanged(null);
   }
 

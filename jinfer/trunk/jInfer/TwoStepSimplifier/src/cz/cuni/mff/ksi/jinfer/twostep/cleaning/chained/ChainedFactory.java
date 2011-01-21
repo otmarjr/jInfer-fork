@@ -38,9 +38,21 @@ import org.openide.util.lookup.ServiceProvider;
 public class ChainedFactory implements RegularExpressionCleanerFactory {
   private static final Logger LOG = Logger.getLogger(ChainedFactory.class);
   
+  /** 
+   * TODO anti comment
+   */
   public static final String NAME = "TwoStepRegularExpressionCleanerChained";
+  /**
+   * TODO anti comment
+   */
   public static final String DISPLAY_NAME = "Chained";
+  /**
+   * TODO anti comment
+   */
   public static final String PROPERTIES_PREFIX = "chain";
+  /**
+   * TODO anti comment
+   */
   public static final String PROPERTIES_COUNT = "count";
 
   @Override

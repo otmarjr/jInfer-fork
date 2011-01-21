@@ -39,7 +39,7 @@ Target audience: developers willing to extend jInfer, scientist willing to imple
 \emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}
 
 \section{Using of factory pattern}
-TwoStep simplifier is divided into two submodules, which are then divided into submodules and so on.
+TwoStep simplifier is divided into three submodules, which are then divided into submodules and so on.
 Each submodule is simply class, properly anotated.
 User selects proper classes - submodules in chain to work on inference.
 Classes are then, in runtime looked up by using NetBeans lookup mechanism.
@@ -140,6 +140,7 @@ Main routine of TwoStep simplifer does basically this:
     }
 \end{verbatim}
 Task of clustering is dedicated to \jmodule{Clusterer} submodule, and task of infering regular expression for each cluster is dedicated to \jmodule{ClusterProcessor} submodule. We will examine both of them.
+There is also third submodule called \jmodule{RegularExpressionCleaner} actually, its purpose is just to beatify output regular expressions, no inference logic is implemented there. 
 Modules currently in jInfer are drawn on fig. \ref{twostep_modules}.
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{twostep_modules}
@@ -283,12 +284,30 @@ Whole submodule structure of AutomatonMergingState cluster processor is drawn on
 	\centering\includegraphics[scale=\myscale]{automaton_merging_state_submodules}
 	\caption{Submodules of AutomatonMergingState cluster processor} \label{automaton_merging_state_submodules}
 \end{figure}
-We have implemented \emph{k,h-context} (see \cite{ahonen}) state equivalence in class \code{KHContext}.
-We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
+We have implemented \emph{k,h-context} (see \cite{ahonen}) state equivalence in class \code{KHContext}, which is used by \class{Greedy}
+to test mergability of states by default configuration.
 
+\subsubsubsection{StateRemoval}
+We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
+This is implemented in \class{StateRemoval} class.
+We defined one submodule of this class with interface called \code{Orderer}.
+It has only one method to implement: \code{getStateToRemove}.
+Given automaton it has to return reference to one state which should be removed from automaton at first.
+State removal calls this submodule and removes states given until there are only two states in automaton - superInitial and superFinal states,
+with exactly one transition.
+That transition has final regular expression on it as symbol, it is read and returned to AutomatonMergingState.
+We implement one orderer, called \code{Weighted}.
+It is simple heuristic - weights all states (weight = sum of {in | out | loop}-transition regular expression lengths) and returns state with lowest weight.
+
+\subsection{RegularExpressionCleaner module}
+Last we examine \code{RegularExpressionCleaner} interface.
+TODO anti cleaners
+
+
+Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{twostep_modules_complete}
-	\caption{Submodules of TwoStep simplifier} \label{twostep_modules_complete}
+	\caption{Modules of TwoStep simplifier and their submodules. Filled classes are default selection (best of).} \label{twostep_modules_complete}
 \end{figure}
 
 \nocite{*}

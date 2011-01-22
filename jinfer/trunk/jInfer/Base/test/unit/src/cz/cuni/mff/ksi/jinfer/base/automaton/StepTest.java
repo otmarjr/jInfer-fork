@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
 import org.junit.Test;
@@ -25,15 +24,13 @@ import static org.junit.Assert.*;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class StepTest {
 
-    public StepTest() {
-    }
-
   private Step<String> createInstance() {
-    State<String> f = new State<String>(10, 1);
-    State<String> t = new State<String>(20, 2);
-    Step<String> r = new Step<String>("testSymbol", f, t, 0);
+    final State<String> f = new State<String>(10, 1);
+    final State<String> t = new State<String>(20, 2);
+    final Step<String> r = new Step<String>("testSymbol", f, t, 0);
     return r;
   }
 
@@ -43,9 +40,9 @@ public class StepTest {
   @Test
   public void testGetAcceptSymbol() {
     System.out.println("getAcceptSymbol");
-    Step<String> instance = createInstance();
-    String expResult = "testSymbol";
-    String result = instance.getAcceptSymbol();
+    final Step<String> instance = createInstance();
+    final String expResult = "testSymbol";
+    final String result = instance.getAcceptSymbol();
     assertEquals(expResult, result);
   }
 
@@ -55,11 +52,11 @@ public class StepTest {
   @Test
   public void testSetAcceptSymbol() {
     System.out.println("setAcceptSymbol");
-    String acceptSymbol = "secondSymbol";
-    Step<String> instance = createInstance();
+    final String acceptSymbol = "secondSymbol";
+    final Step<String> instance = createInstance();
     instance.setAcceptSymbol(acceptSymbol);
-    String expResult = "secondSymbol";
-    String result = instance.getAcceptSymbol();
+    final String expResult = "secondSymbol";
+    final String result = instance.getAcceptSymbol();
     assertEquals(expResult, result);
   }
 
@@ -69,9 +66,9 @@ public class StepTest {
   @Test
   public void testGetUseCount() {
     System.out.println("getUseCount");
-    Step<String> instance = createInstance();
-    int expResult = 0;
-    int result = instance.getUseCount();
+    final Step<String> instance = createInstance();
+    final int expResult = 0;
+    final int result = instance.getUseCount();
     assertEquals(expResult, result);
   }
 
@@ -81,11 +78,11 @@ public class StepTest {
   @Test
   public void testSetUseCount() {
     System.out.println("setUseCount");
-    int useCount = 5;
-    Step<String> instance = createInstance();
+    final int useCount = 5;
+    final Step<String> instance = createInstance();
     instance.setUseCount(useCount);
-    int expResult = 5;
-    int result = instance.getUseCount();
+    final int expResult = 5;
+    final int result = instance.getUseCount();
     assertEquals(expResult, result);
   }
 
@@ -95,7 +92,7 @@ public class StepTest {
   @Test
   public void testIncUseCount_0args() {
     System.out.println("incUseCount");
-    Step<String> instance = createInstance();
+    final Step<String> instance = createInstance();
     instance.incUseCount();
     instance.incUseCount();
     instance.incUseCount();
@@ -106,8 +103,8 @@ public class StepTest {
     instance.incUseCount();
     instance.incUseCount();
     instance.incUseCount();
-    int expResult = 10;
-    int result = instance.getUseCount();
+    final int expResult = 10;
+    final int result = instance.getUseCount();
     assertEquals(expResult, result);
   }
 
@@ -117,11 +114,11 @@ public class StepTest {
   @Test
   public void testIncUseCount_Integer() {
     System.out.println("incUseCount");
-    Integer i = 7;
-    Step<String> instance = createInstance();
+    final Integer i = 7;
+    final Step<String> instance = createInstance();
     instance.incUseCount(i);
-    int expResult = 7;
-    int result = instance.getUseCount();
+    final int expResult = 7;
+    final int result = instance.getUseCount();
     assertEquals(expResult, result);
   }
 
@@ -131,10 +128,10 @@ public class StepTest {
   @Test
   public void testSetSource() {
     System.out.println("setSource");
-    State<String> expResult = new State<String>(1, 3);
-    Step<String> instance = createInstance();
+    final State<String> expResult = new State<String>(1, 3);
+    final Step<String> instance = createInstance();
     instance.setSource(expResult);
-    State<String> result = instance.getSource();
+    final State<String> result = instance.getSource();
     assertEquals(expResult, result);
   }
 
@@ -144,10 +141,10 @@ public class StepTest {
   @Test
   public void testSetDestination() {
     System.out.println("setDestination");
-    State<String> expResult = new State<String>(1, 4);
-    Step<String> instance = createInstance();
+    final State<String> expResult = new State<String>(1, 4);
+    final Step<String> instance = createInstance();
     instance.setDestination(expResult);
-    State<String> result = instance.getDestination();
+    final State<String> result = instance.getDestination();
     assertEquals(expResult, result);
   }
 
@@ -157,9 +154,9 @@ public class StepTest {
   @Test
   public void testToString() {
     System.out.println("toString");
-    Step<String> instance = createInstance();
-    String expResult = "from 1 on {testSymbol|0} to 2";
-    String result = instance.toString();
+    final Step<String> instance = createInstance();
+    final String expResult = "from 1 on {testSymbol|0} to 2";
+    final String result = instance.toString();
     assertEquals(expResult, result);
   }
 
@@ -169,10 +166,9 @@ public class StepTest {
   @Test
   public void testToTestString() {
     System.out.println("toTestString");
-    Step<String> instance = createInstance();
-    String expResult = "1--testSymbol|0--2";
-    String result = instance.toTestString();
+    final Step<String> instance = createInstance();
+    final String expResult = "1--testSymbol|0--2";
+    final String result = instance.toTestString();
     assertEquals(expResult, result);
   }
-
 }

@@ -22,10 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,34 +31,16 @@ import static org.junit.Assert.*;
  * @author anti
  */
 // TODO anti when autoamton using of frequencies is defined - write tests on it
+@SuppressWarnings("PMD.SystemPrintln")
 public class AutomatonTest {
 
-    public AutomatonTest() {
-    }
-
-  @BeforeClass
-  public static void setUpClass() throws Exception {
-  }
-
-  @AfterClass
-  public static void tearDownClass() throws Exception {
-  }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
   private Automaton<String> createInstance() {
-    Automaton<String> r = new Automaton<String>(true);
+    final Automaton<String> r = new Automaton<String>(true);
     return r;
   }
 
   private void buildPTA(final Automaton<String> instance) {
-    List<String> inputs = Arrays.asList(
+    final List<String> inputs = Arrays.asList(
             "xa", "xb", "xc", "x", "" );
     for (List<String> symbolString : tearInputs(inputs)) {
       instance.buildPTAOnSymbol(symbolString);
@@ -75,8 +53,8 @@ public class AutomatonTest {
   @Test
   public void testCreateNewState() {
     System.out.println("createNewState");
-    Automaton<String> instance = createInstance();
-    State<String> result = instance.createNewState();
+    final Automaton<String> instance = createInstance();
+    final State<String> result = instance.createNewState();
     assertEquals(0, result.getFinalCount());
     assertEquals(2, result.getName());
     assertEquals("[2|0]", result.toTestString());
@@ -88,11 +66,11 @@ public class AutomatonTest {
   @Test
   public void testGetOutStepOnSymbol() {
     System.out.println("getOutStepOnSymbol");
-    Automaton<String> instance = createInstance();
-    State<String> state = instance.getInitialState();
-    String symbol = null;
-    Step<String> expResult = null;
-    Step<String> result = instance.getOutStepOnSymbol(state, symbol);
+    final Automaton<String> instance = createInstance();
+    final State<String> state = instance.getInitialState();
+    final String symbol = null;
+    final Step<String> expResult = null;
+    final Step<String> result = instance.getOutStepOnSymbol(state, symbol);
     assertEquals(expResult, result);
   }
 
@@ -102,11 +80,11 @@ public class AutomatonTest {
   @Test
   public void testGetOutStepOnSymbol2() {
     System.out.println("getOutStepOnSymbol");
-    Automaton<String> instance = createInstance();
+    final Automaton<String> instance = createInstance();
     instance.buildPTAOnSymbol(Arrays.asList("a"));
-    State<String> state = instance.getInitialState();
-    String symbol = "a";
-    Step<String> result = instance.getOutStepOnSymbol(state, symbol);
+    final State<String> state = instance.getInitialState();
+    final String symbol = "a";
+    final Step<String> result = instance.getOutStepOnSymbol(state, symbol);
     assertNotNull(result);
   }
 
@@ -128,12 +106,12 @@ public class AutomatonTest {
   @Test
   public void testBuildPTAOnSymbol() {
     System.out.println("buildPTAOnSymbol");
-    Automaton<String> instance = createInstance();
+    final Automaton<String> instance = createInstance();
     buildPTA(instance);
-    String expResult = "[1|1]>>1--x|4--2   [2|1]>>2--a|1--3   2--b|1--4   " +
+    final String expResult = "[1|1]>>1--x|4--2   [2|1]>>2--a|1--3   2--b|1--4   " +
             "2--c|1--5   [3|1]   [4|1]   [5|1]   @@@[1|1]   [2|1]<<1--x|4--2   " +
             "[3|1]<<2--a|1--3   [4|1]<<2--b|1--4   [5|1]<<2--c|1--5   ";
-    String result = instance.toTestString();
+    final String result = instance.toTestString();
     assertEquals(expResult, result);
   }
 
@@ -143,9 +121,9 @@ public class AutomatonTest {
   @Test
   public void testToString() {
     System.out.println("toString");
-    Automaton<String> instance = createInstance();
+    final Automaton<String> instance = createInstance();
     buildPTA(instance);
-    String expResult = "Automaton\n" +
+    final String expResult = "Automaton\n" +
             "[1|1] outSteps:\n" +
             "from 1 on {x|4} to 2\n" +
             "[2|1] outSteps:\n" +
@@ -165,7 +143,7 @@ public class AutomatonTest {
             "from 2 on {b|1} to 4\n" +
             "[5|1] inSteps:\n" +
             "from 2 on {c|1} to 5\n";
-    String result = instance.toString();
+    final String result = instance.toString();
     assertEquals(expResult, result);
   }
 
@@ -175,9 +153,9 @@ public class AutomatonTest {
   @Test
   public void testToTestString() {
     System.out.println("toTestString");
-    Automaton<String> instance = createInstance();
-    String expResult = "[1|0]   @@@[1|0]   ";
-    String result = instance.toTestString();
+    final Automaton<String> instance = createInstance();
+    final String expResult = "[1|0]   @@@[1|0]   ";
+    final String result = instance.toTestString();
     assertEquals(expResult, result);
   }
 
@@ -187,8 +165,8 @@ public class AutomatonTest {
   @Test
   public void testGetInitialState() {
     System.out.println("getInitialState");
-    Automaton<String> instance = createInstance();
-    State<String> result = instance.getInitialState();
+    final Automaton<String> instance = createInstance();
+    final State<String> result = instance.getInitialState();
     assertNotNull(result);
   }
 
@@ -198,8 +176,8 @@ public class AutomatonTest {
   @Test
   public void testGetInitialState2() {
     System.out.println("getInitialState");
-    Automaton<String> instance = new Automaton<String>(false);
-    State<String> result = instance.getInitialState();
+    final Automaton<String> instance = new Automaton<String>(false);
+    final State<String> result = instance.getInitialState();
     assertNull(result);
   }
 
@@ -209,8 +187,8 @@ public class AutomatonTest {
   @Test
   public void testGetDelta() {
     System.out.println("getDelta");
-    Automaton<String> instance = createInstance();
-    Map<State<String>, Set<Step<String>>> result = instance.getDelta();
+    final Automaton<String> instance = createInstance();
+    final Map<State<String>, Set<Step<String>>> result = instance.getDelta();
     assertNotNull(result);
     assertFalse(result.isEmpty());
   }
@@ -221,8 +199,8 @@ public class AutomatonTest {
   @Test
   public void testGetReverseDelta() {
     System.out.println("getReverseDelta");
-    Automaton<String> instance = createInstance();
-    Map<State<String>, Set<Step<String>>> result = instance.getReverseDelta();
+    final Automaton<String> instance = createInstance();
+    final Map<State<String>, Set<Step<String>>> result = instance.getReverseDelta();
     assertNotNull(result);
     assertFalse(result.isEmpty());
   }
@@ -233,9 +211,9 @@ public class AutomatonTest {
   @Test
   public void testGetNewStateName() {
     System.out.println("getNewStateName");
-    Automaton<String> instance = createInstance();
-    Integer expResult = 2;
-    Integer result = instance.getNewStateName();
+    final Automaton<String> instance = createInstance();
+    final Integer expResult = 2;
+    final Integer result = instance.getNewStateName();
     assertEquals(expResult, result);
   }
 
@@ -245,10 +223,10 @@ public class AutomatonTest {
   @Test
   public void testGetNewStateName2() {
     System.out.println("getNewStateName");
-    Automaton<String> instance = createInstance();
+    final Automaton<String> instance = createInstance();
     instance.createNewState();
-    Integer expResult = 3;
-    Integer result = instance.getNewStateName();
+    final Integer expResult = 3;
+    final Integer result = instance.getNewStateName();
     assertEquals(expResult, result);
   }
 }

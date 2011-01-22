@@ -17,7 +17,6 @@
 
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;

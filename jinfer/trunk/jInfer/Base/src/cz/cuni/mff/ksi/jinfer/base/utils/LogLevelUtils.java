@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 import cz.cuni.mff.ksi.jinfer.base.options.LoggerPanel;
 import java.awt.Color;
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.openide.util.NbPreferences;
 
 /**

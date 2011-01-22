@@ -3,7 +3,7 @@ default: all
 architecture.dvi: nodes.eps nodes_full.eps interfaces_nodes.eps inference_process.eps reg_tree.eps xml_example.eps automaton_merge1.eps automaton_merge2.eps \
 automaton_merge3.eps
 
-%.dvi: %.tex *.eps *.bib Makefile
+%.dvi: %.tex literature.bib Makefile
 	rm -f *.toc
 	latex $< 
 	bibtex $(<:.tex=.aux)
@@ -13,7 +13,7 @@ automaton_merge3.eps
 %.pdf: %.dvi
 	dvipdfmx $<
 
-%.html: %.tex *.bib Makefile
+%.html: %.tex literature.bib Makefile
 	rm -f *.toc
 	hevea -O -pedantic $<
 	bibtex $(<:.tex=.aux)
@@ -22,7 +22,6 @@ automaton_merge3.eps
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
-	epstopdf $@
 
 all: architecture.pdf
 

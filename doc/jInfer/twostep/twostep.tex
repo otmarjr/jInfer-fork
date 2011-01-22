@@ -46,7 +46,7 @@
 \jmodule{TwoStepSimplifier} is divided into three submodules, which are then divided into submodules and so on.
 Each submodule is simply class, properly anotated.
 User selects proper classes - submodules to work in chain on inference.
-Classes are then, in runtime looked up by using NetBeans lookup mechanism (see \cite[p. 16]{arch}).
+Classes are then, in runtime looked up by using NetBeans lookup mechanism (see \cite[p. 16]{archdoc}).
 But NetBeans holds one instance of each class, that may be looked upon.
 When user runs inference first time, classes are looked up and used.
 Maybe class members are initialised, instances are in some state after inference completes.
@@ -209,7 +209,7 @@ Its purpose is to cluster bunch of elements (rules) on input, into  bunch of clu
 It has methods \code{add()} and \code{addAll()} for adding items for clustering.
 Center is method \code{cluster()}, which does the clustering itself.
 As it may be time-consuming operation, method throws \code{InterruptedException}.
-Implementation should take care of checking whether thread is user interrupted (see \cite[p. 12]{arch}).
+Implementation should take care of checking whether thread is user interrupted (see \cite[p. 12]{archdoc}).
 After clustering, implementation should hold clusters in member, as it it will be further asked by calling method \code{T getRepresentantForItem(T item)}.
 Given item to this method, one can ask for representant of cluster, to which the item belongs.
 If no such cluster exists (item was not added for clustering before), we recommend you throwing an exception rather than returning \code{null}.
@@ -336,7 +336,7 @@ Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
 	\caption{Modules of TwoStep simplifier and their submodules. Filled classes are default selection (best of).} \label{twostep_modules_complete}
 \end{figure}
 
-\nocite{*}
+%\nocite{*}
 \bibliographystyle{alpha}
 \bibliography{literature}
 

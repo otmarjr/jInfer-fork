@@ -2,7 +2,7 @@ default: all
 
 twostep.dvi: twostep_modules.eps automaton_merging_state_modules.eps twostep_modules_complete.eps factory_pattern1.eps factory_pattern2.eps state_removal_modules.eps
 
-%.dvi: %.tex *.bib Makefile
+%.dvi: %.tex literature.bib Makefile
 	rm -f *.toc
 	latex $< 
 	bibtex $(<:.tex=.aux)
@@ -12,7 +12,7 @@ twostep.dvi: twostep_modules.eps automaton_merging_state_modules.eps twostep_mod
 %.pdf: %.dvi
 	dvipdfmx $<
 
-%.html: %.tex *.bib Makefile
+%.html: %.tex literature.bib Makefile
 	rm -f *.toc
 	hevea -O -pedantic $<
 	bibtex $(<:.tex=.aux)
@@ -21,7 +21,6 @@ twostep.dvi: twostep_modules.eps automaton_merging_state_modules.eps twostep_mod
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
-	epstopdf $@
 
 all: twostep.pdf
 

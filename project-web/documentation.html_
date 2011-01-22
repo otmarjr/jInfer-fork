@@ -9,6 +9,8 @@
 	
 	<h3>User's documentation</h3>
 
+        <!-- TODO vektor Small screenshot images --!>
+
         <div class="right-box-outer">
           <div class="right-box box bg-orange">
             <div class="box-inner">
@@ -46,41 +48,39 @@
           <a href="doc_user.html">user documentation</a> is also available.
 	</p>
 	
-	<h3>Documents related to jInfer</h3>
-
-	<p>
-	  <ul>
-            <li>Using jInfer to infer schemas</li>
-	    <li>Full documentation to default modules</li>
-	  </ul>
-	</p>
+	<h3>Developer's documentation</h3>
 	
-	<h2>Developer's documentation</h2>
-	
-	<h3>JavaDoc</h3>
+	<h4>JavaDoc</h4>
 	
 	<p>
 	  jInfer features an extensive <a href="/javadoc">JavaDoc documentation</a>.
 	</p>
+
+        <h4>Building jInfer</h4>
+
+        <p>
+          A short <a href="building_jinfer.html">tutorial</a> describing how to build jInfer from sources.
+        </p>
+
+        <h4>Architecture</h4>
+
+        <p>
+          PDF dealing with <a href="architecture.pdf">jInfer's architecture</a>
+          - important reading for all willing to hack the framework.
+        </p>
 	
-	<h3>Module developer's tutorial</h3>
+	<h4>Module developer's tutorial</h4>
 	
 	<p>
-	  Want to try out the algorithm you read about? Follow <a href="doc_tutorial_dev.html">these</a> steps to write your own inference module!
+	  Want to try out the algorithm you read about? Follow
+          <a href="doc_tutorial_dev.html">these</a> steps to write your own inference module!
 	</p>
-	
-	<h3>Developing jInfer</h3>
-	
-	<p>
-	  <ul>
-	    <li><a href="building_jinfer.html">Compiling jInfer from sources</a></li>
-	    <li>Architecture</li>
-	    <li>Data structures</li>
-	    <li>Inference modules</li>
-	    <li>Support modules</li>
-	    <li>Contributing to jInfer</li>
-	  </ul>
-	</p>
+
+        <h4>Module documentation</h4>
+
+        <p>
+          TODO - this section will contain links to PDFs with documentation for each and every jInfer module.
+        </p>
 
 	<div class="clear"></div>
 </div>

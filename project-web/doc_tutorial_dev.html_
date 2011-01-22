@@ -165,7 +165,34 @@ TODO
 
 <h3>Dialogs</h3>
 
-TODO message, open, save
+<p>Creation of open/save dialog or message window is done by standard NBP API.
+For dialogs you can also use standard Java JFileChooser,
+but NBP <a href="http://bits.netbeans.org/dev/javadoc/org-openide-filesystems/org/openide/filesystems/FileChooserBuilder.html">FileChooserBuilder</a>
+is more convenient. This class creates dialog which remembers last-used directory according to key passed into its contructor.</p>
+<span>Example:</span><br/>
+<pre class="code">
+//The default dir to use if no value is stored
+File home = new File (System.getProperty("user.home"));
+//Now build a file chooser and invoke the dialog in one line of code
+File toAdd = new FileChooserBuilder (CallingClass.class)
+    .setTitle("Some dialog title")
+    .setDefaultWorkingDirectory(home).showOpenDialog();
+//Result will be null if the user clicked cancel or closed the dialog w/o OK
+if (toAdd != null) {
+    //do something
+    }
+</pre>
+<p>For messages creation is used <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/DialogDisplayer.html">DialogDisplayer</a> NBP API class. To determine which type of message will be shown(Confirmantion dialog, message dialog...),
+<a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/NotifyDescriptor.html">NotifyDescriptor</a> is used.
+Below is small example, which creates standard message notification. For more information please look at <a href="http://wiki.netbeans.org/NetBeansDeveloperFAQ#Dialogs_API">NBP Dialogs API FAQ</a>.</p>
+<span>Example:</span><br/>
+<pre class="code">
+//Creates standard information message with text "Hello world"
+NotifyDescriptor nd = new NotifyDescriptor
+                            .Message("Hello world",
+                               NotifyDescriptor.INFORMATION_MESSAGE);
+DialogDisplayer.getDefault().notify(nd);
+</pre>
 
 <h3>Configuration - options, preferences</h3>
 

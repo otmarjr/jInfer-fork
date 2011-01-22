@@ -18,7 +18,7 @@ body {
 
 #header-content {
 	margin: 0 auto;
-	width: 36em;
+	width: 40em;
 	height: 128px;
 }
 
@@ -27,7 +27,7 @@ body {
 	height: 128px;
 	margin-left: -67px;
 }
-	
+
 div#menu
 {
 	color: white;
@@ -36,7 +36,7 @@ div#menu
 
 div#menu-content {
 	margin: 0 auto;
-	width: 36em;
+	width: 40em;
 	text-align: right;
 	line-height: 2em;
 }
@@ -65,7 +65,7 @@ div#footer
 
 div#footer-content {
 	margin: 0 auto;
-	width: 36em;
+	width: 40em;
 	text-align: right;
 	line-height: 2em;
 }
@@ -81,7 +81,7 @@ div#footer-content a:hover {
 
 #content {
 	margin: 1em auto 1em auto;
-	width: 36em;
+	width: 40em;
 }
 
 .right-box-outer {
@@ -93,21 +93,21 @@ div#footer-content a:hover {
 .right-box {
 	margin: 0 0 0 0.5em;
 	position: absolute;
-	left: 36em;
+	left: 40em;
 	top: 0;
 }
 
 .index-box-left {
 	margin: 0.5em 0.5em 0.5em 0;
 	float: left;
-	width: 17.5em;
+	width: 19.5em;
 	height: 10em;
 }
 
 .index-box-right {
 	margin: 0.5em 0 0.5em 0.5em;
 	float: left;
-	width: 17.5em;
+	width: 19.5em;
 	height: 10em;
 }
 
@@ -123,7 +123,7 @@ div#footer-content a:hover {
 }
 
 .index-box-inner {
-	width: 16.5em;
+	width: 18.5em;
 	height: 9em;
 }
 
@@ -235,11 +235,11 @@ a:hover {
 	color: #3f3f3f;
 	text-decoration: underline;
 }
-	
+
 img, a img {
 	border: 0px;
 }
-	
+
 p {
 	line-height: 1.7em;
 	text-align: justify;

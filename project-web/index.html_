@@ -22,7 +22,7 @@
 			<tr><td class="box-content">
 				<ul>
 					<li>read the <a href="doc_tutorial.html">tutorial</a></li>
-					<li>find the <a href="doc_user.html">documentation</a></li>
+					<li>find the <a href="documentation.html">documentation</a></li>
 				</ul>
 			</td></tr>
 		</table>
@@ -35,7 +35,7 @@
 			<tr><td class="box-content">
 				<ul>
 					<li><a href="building_jinfer.html">build</a> jInfer on your own</li>
-					<li>read <a href="doc_developer.html">developer's doc</a></li>
+					<li>read <a href="doc_tutorial_dev.html">developer's tutorial</a></li>
 					<li>see the <a href="https://sourceforge.net/tracker/?limit=25&func=&group_id=302779&atid=1276495&assignee=2805929&status=&category=&artgroup=&keyword=&submitter=&artifact_id=&assignee=2805929&status=&category=&artgroup=&submitter=&keyword=&artifact_id=&reset=Reset&mass_category=&mass_priority=&mass_resolution=&mass_assignee=&mass_artgroup=&mass_status=&mass_cannedresponse=">issue tracker</a></li>
 				</ul>
 			</td></tr>

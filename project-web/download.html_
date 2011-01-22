@@ -43,6 +43,7 @@
 	  To get the latest &amp; fresh jInfer, grab it directly from
 		<a href="http://subversion.tigris.org/">Subversion</a> repository:<br/>
 	  <div class="code">$ svn co https://jinfer.svn.sourceforge.net/svnroot/jinfer jinfer</div>
+          To build it, refer to the official <a href="building_jinfer.html">documentation</a>.
 	</p>
 
 	<div class="clear"></div>

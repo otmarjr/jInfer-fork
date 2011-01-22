@@ -200,8 +200,8 @@ public class ExpanderImplTest {
   };
 
   /**
-   * Tests a real beauty of a regexp:
-   * <code>(A+, B, C, (D, E)*, (F | G | (H, I)){3, 5})</code>.
+   * Tests a real beauty of a regexp for expansion of permutation:
+   * <code>(A+& B& C& (D, E)*& (F | G | (H, I)){3, 5})?</code>.
    * The surrounding element is not interesting and the whole grammar consist of
    * only one element.
    *
@@ -216,16 +216,21 @@ public class ExpanderImplTest {
    * </p>
    *
    * <p>
-   * A total of 6 words (elements) should be generated
-   * (the last child consists of 6 words).
-   * These words should be:
+   * A total of 13 words (elements) should be generated:
    * <ol>
+   *   <li><code>(empty)</code></li>
    *   <li><code>ABCFFF</code></li>
    *   <li><code>AAABCDEFFFFF</code></li>
    *   <li><code>ABCDEDEDEGGG</code></li>
    *   <li><code>AAABCGGGGG</code></li>
    *   <li><code>ABCDEHIHIHI</code></li>
    *   <li><code>AAABCDEDEDEHIHIHIHIHI</code></li>
+   *   <li><code>FFFCBA</code></li>
+   *   <li><code>FFFFFDECBAAA</code></li>
+   *   <li><code>GGGDEDEDECBA</code></li>
+   *   <li><code>GGGGGCBAAA</code></li>
+   *   <li><code>HIHIHIDECBA</code></li>
+   *   <li><code>HIHIHIHIHIDEDEDECBAAA</code></li>
    * </or>
    * </p>
    */

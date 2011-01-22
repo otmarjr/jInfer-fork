@@ -17,12 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.basicigg.expansion;
 
 import java.util.Arrays;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -113,77 +110,6 @@ public class ExpansionHelperTest {
     return Arrays.asList(
              Arrays.<String>asList("a", "b"),
              Arrays.<String>asList("c", "d", "e"));
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testIsSimpleConcatenationNull() {
-    System.out.println("isSimpleConcatenationNull");
-    ExpansionHelper.isSimpleConcatenation(null);
-  }
-
-  @Test
-  public void testIsSimpleConcatenation() {
-    System.out.println("isSimpleConcatenation");
-
-    // lambda is not OK
-    assertEquals(false, ExpansionHelper.isSimpleConcatenation(
-            Regexp.<AbstractStructuralNode>getLambda()));
-
-    final List<Regexp<AbstractStructuralNode>> abusiveChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
-    abusiveChildren.add(Regexp.<AbstractStructuralNode>getToken(
-            TestUtils.getElement("e", Regexp.<AbstractStructuralNode>getLambda())));
-
-    // alternation is not OK
-    assertEquals(false, ExpansionHelper.isSimpleConcatenation(
-            Regexp.getAlternation(abusiveChildren)));
-    // permutation is not OK
-    assertEquals(false, ExpansionHelper.isSimpleConcatenation(
-            Regexp.getPermutation(abusiveChildren)));
-
-    // empty concatenation is OK
-    assertEquals(true, ExpansionHelper.isSimpleConcatenation(
-            ExpansionHelper.<AbstractStructuralNode>getEmptyConcat()));
-
-    // repeated concatenation is not OK
-    final Regexp<AbstractStructuralNode> concatRepeated = Regexp.getMutable();
-    concatRepeated.setType(RegexpType.CONCATENATION);
-    concatRepeated.setInterval(RegexpInterval.getBounded(5, 10));
-    assertEquals(false, ExpansionHelper.isSimpleConcatenation(concatRepeated));
-
-    final List<Regexp<AbstractStructuralNode>> okChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
-    okChildren.add(Regexp.<AbstractStructuralNode>getToken(
-            TestUtils.getElement("e1", Regexp.<AbstractStructuralNode>getLambda())));
-    okChildren.add(Regexp.<AbstractStructuralNode>getToken(
-            TestUtils.getElement("e2", Regexp.<AbstractStructuralNode>getLambda())));
-    okChildren.add(Regexp.<AbstractStructuralNode>getToken(
-            TestUtils.getElement("e3", Regexp.<AbstractStructuralNode>getLambda())));
-
-    // concatenation with some token children is OK
-    assertEquals(true, ExpansionHelper.isSimpleConcatenation(
-            Regexp.getConcatenation(okChildren)));
-
-    final Regexp<AbstractStructuralNode> repeatedToken = Regexp.getMutable();
-    repeatedToken.setType(RegexpType.TOKEN);
-    repeatedToken.setInterval(RegexpInterval.getKleeneStar());
-    repeatedToken.setContent(TestUtils.getElement("e", Regexp.<AbstractStructuralNode>getLambda()));
-
-    okChildren.add(repeatedToken);
-
-    // concatenation with a repeated token child is not OK
-    assertEquals(false, ExpansionHelper.isSimpleConcatenation(
-            Regexp.getConcatenation(okChildren)));
-
-    // let's drop it for a second...
-    okChildren.remove(repeatedToken);
-    assertEquals(true, ExpansionHelper.isSimpleConcatenation(
-            Regexp.getConcatenation(okChildren)));
-
-    // now something horrible... concatenation containing itself!
-    okChildren.add(Regexp.getConcatenation(okChildren));
-
-    // this is not OK
-    assertEquals(false, ExpansionHelper.isSimpleConcatenation(
-            Regexp.getConcatenation(okChildren)));
   }
 
   @Test

@@ -167,7 +167,6 @@ public class ExpanderImplTest {
 
     for (int i = 0; i < 6; i++) {
       final Element element = result.get(i);
-      assertTrue(ExpansionHelper.isSimpleConcatenation(element.getSubnodes()));
       final String expected = EXPANDED[i];
       System.out.println("Iteration " + i + ", expecting " + expected);
       assertEquals(expected, subnodesToString(element));

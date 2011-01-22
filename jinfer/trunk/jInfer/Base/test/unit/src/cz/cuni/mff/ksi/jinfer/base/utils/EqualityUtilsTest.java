@@ -29,6 +29,9 @@ import java.util.HashMap;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * @author vektor
+ */
 public class EqualityUtilsTest {
 
   @Test(expected = IllegalArgumentException.class)

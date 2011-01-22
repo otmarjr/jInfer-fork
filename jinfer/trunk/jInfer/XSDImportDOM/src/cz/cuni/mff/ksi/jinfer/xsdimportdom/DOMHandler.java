@@ -288,6 +288,16 @@ public class DOMHandler {
   }
 
   /**
+   * Set the interval of given element to the default (1,1) if it was not set.
+   * @param ret Element to check for unset interval.
+   */
+  private void repairConcatInterval(final Element ret) {
+    if (RegexpType.CONCATENATION.equals(ret.getSubnodes().getType()) && ret.getSubnodes().getInterval() == null) {
+      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
+    }
+  }
+
+  /**
    * Set the parameter to {@link RegexpType#LAMBDA } element,
    * with all the valid constraints and make it immutable.
    * @param ret Element to set as LAMBDA.
@@ -366,7 +376,7 @@ public class DOMHandler {
           } else if (namedCTypes.containsKey(type)) {
             final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited, null);
             extractSubnodesFromContainer(container, ret, CONTAINER_CTYPE);
-            finalizeElement(ret);
+            finalizeElement(currentNode, newContext, ret);
             return ret; // RETURN STATEMENT 
           } else {
             LOG.error("Specified type '" + type + "' of element '" + name + "' was not found!");
@@ -467,30 +477,11 @@ public class DOMHandler {
         }
       }
     } // end children loop
-
-    if (XSDTag.ELEMENT.equals(tag) 
-        && ret.getSubnodes().getChildren().isEmpty()
-        && BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))
-        && ret.getSubnodes().getType() == null) {
-      // element with empty children and no specified type has currently only one option
-      // since we don't support restrictions and extensions (nor complexcontent)
-      // -> it has to be LAMBDA
-      setLambda(ret);
-    } else if (XSDTag.ELEMENT.equals(tag)
-        && ret.getSubnodes().getChildren().isEmpty()
-        && metadata.containsKey(XSDAttribute.TYPE.getMetadataName())) {
-      // [SIMPLE DATA SECTION]
-      // element has empty children, but its specified type is one of the built-in types
-      // create SimpleData with the defined type of the element
-      ret.getSubnodes().setType(RegexpType.TOKEN);
-      ret.getSubnodes().setContent(
-        new SimpleData(newContext,
-                       SIMPLE_DATA_NAME,
-                       Collections.<String,Object>emptyMap(),
-                       (String) metadata.get(XSDAttribute.TYPE.getMetadataName()),
-                       Collections.<String>emptyList()));
+    
+    if (XSDTag.ELEMENT.equals(tag)) {
+      finalizeElement(currentNode, newContext, ret);
     }
-    finalizeElement(ret);
+    repairConcatInterval(ret);
     return ret;
   }
 
@@ -540,8 +531,13 @@ public class DOMHandler {
       throw new XSDException("Extracting subnodes failed, unexpected contaner.");
     }
     if (destination.getSubnodes().getType() == null && subtree.getSubnodes().getType() != null) {
+      //TODO reseto: empty complextype as a container? it should not produce an error
       destination.getSubnodes().setType(subtree.getSubnodes().getType());
-    } else {
+    } else if (destination.getSubnodes().getType() != null 
+               && subtree.getSubnodes().getType() != null
+               && destination.getSubnodes().getType() != subtree.getSubnodes().getType()) {
+      //                                              ^^ comparing enums
+      // if the two types are not null and not equal, the schema is invalid (mixing wrong types)
       LOG.error("subtree name: " + subtree.getName() + " and destination name: " + destination.getName());
       throw new XSDException("Extracting subnodes failed, incompatible regexp types "
         + destination.getSubnodes().getType()
@@ -554,19 +550,42 @@ public class DOMHandler {
   }
 
   /**
-   * Check if element is properly defined, or set it to a default empty concatenation.
+   * Check if element is properly defined; redefine it to lambda when it was empty,
+   * or redefine it to token if it only contained a simple data type.
+   * This method should be used only when the tag of a node was ELEMENT!
    * @param ret Element to be finalized.
    */
-  private void finalizeElement(Element ret) {
-    //if (ret.getSubnodes().getType() == null) {
-    //  ret.getSubnodes().setType(RegexpType.CONCATENATION);
-    //  ret.getSubnodes().setInterval(RegexpInterval.getOnce());
-    //  ret.getSubnodes().setContent(null);
-    //} else
-    if (RegexpType.CONCATENATION.equals(ret.getSubnodes().getType())
-               && ret.getSubnodes().getInterval() == null) {
-      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
+  private void finalizeElement(final org.w3c.dom.Element currentNode,
+                               final List<String> newContext,
+                               final Element ret) {
+ 
+    if (ret.getSubnodes().getChildren().isEmpty()
+        && BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))
+        && ret.getSubnodes().getType() == null) {
+      // element with empty children and no specified type has currently only one option
+      // since we don't support restrictions and extensions (nor complexcontent)
+      // -> it has to be LAMBDA
+      setLambda(ret);
+    } else if (ret.getSubnodes().getChildren().isEmpty()
+               && ret.getMetadata().containsKey(XSDAttribute.TYPE.getMetadataName())) {
+      // [SIMPLE DATA SECTION]
+      // element has empty children, but its specified type is one of the built-in types
+      // create SimpleData with the defined type of the element
+      ret.getSubnodes().setType(RegexpType.TOKEN);
+      ret.getSubnodes().setContent(
+        new SimpleData(newContext,
+                       SIMPLE_DATA_NAME,
+                       Collections.<String,Object>emptyMap(),
+                       (String) ret.getMetadata().get(XSDAttribute.TYPE.getMetadataName()),
+                       Collections.<String>emptyList()));
+    } else if (ret.getSubnodes().getType() == null) {
+      // type of element must be non-null, but apparently it has some children
+      LOG.warn("Element " + ret.getName() + " had no defined regexp type, but contained subnodes - setting to concatenation.");
+      ret.getSubnodes().setType(RegexpType.CONCATENATION);
+      ret.getSubnodes().setContent(null);
     }
-    //ret.setImmutable();
+    if (ret.isMutable()) {
+      ret.setImmutable();
+    }
   }
 }

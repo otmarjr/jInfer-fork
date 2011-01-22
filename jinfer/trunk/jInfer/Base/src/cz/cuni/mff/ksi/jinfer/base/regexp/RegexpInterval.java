@@ -150,16 +150,20 @@ public final class RegexpInterval {
    */
   public static RegexpInterval intersectIntervals(RegexpInterval first, RegexpInterval second) {
     int lower, upper;
-    if (first.getMax() == -1) {
-      // unbounded first max -> use max of second, even if it is unbounded too
+    if (first.isUnbounded() && second.isUnbounded()) {
+      // both unbounded
+      upper = -1;
+    } else if(first.isUnbounded()) {
+      // unbounded first max -> use max of second, it cannot be unbounded now
       upper = second.getMax();
-    } else if (second.getMax() == -1) {
-      // unbounded second max -> use max of first, even if it is unbounded too
+    } else if (second.isUnbounded()) {
+      // unbounded second max -> use max of first, it cannot be unbounded now
       upper = first.getMax();
     } else {
       // neither is unbounded, use the smaller one, but make sure it is at least zero
       upper = Math.min(Math.max(0,first.getMax()), Math.max(0, second.getMax()));
     }
+    
     if (upper == -1) {
       // upper is unbounded, lower bound is the greater of the two, but must be at least zero
       lower = Math.max(0, Math.max(first.getMin(), second.getMin()));

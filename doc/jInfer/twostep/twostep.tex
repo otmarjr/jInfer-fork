@@ -289,14 +289,20 @@ type \code{T} (that is representant of some main cluster) has some "attribute" c
 Attribute clusters are of type \code{S} and can be retrieved by calling \code{getAttributeClusters(x)}.
 
 Finally, we use this scheme to implement clusterer \code{Iname<AbstractStructuralNode, Attribute>} class, which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes.
-For each cluster of elements, it creates list of clusters of attributes observed with all elements in main cluster.
-
-All simple data are considered equal and given one dedicated cluster.
-But in future implementations, extensibility is ensured to cluster simple data to obtain content models of elements.
-
-All sentinel elements are clustered too.
-TODO sentinels
-TODO attributes clustering
+Clustering is done based on elements \code{getName} equality test (ignore case).
+For each rule (element), it is first clustered by finding cluster where representant has same name - or create new cluster with this element as representant.
+Then we process right side of this element rule (that are nodes from \code{getSubnodes}).
+Since right side of rule is always concatenation, we simply take \code{.getSubnodes().getTokens()} list and iterate through it.
+Each node on right side, is examined:
+\begin{itemize}
+  \item if it is simple data throw it to \code{SimpleDataClusterer} class, which does nothing more, than holds all of simple data in one cluster. But in future it may be replaced to cluster simple data somehow, to obtain meaningful content models in schemas.
+  \item if it is element and it is tagged as sentinel by metada - search main clusters to find cluster with representant of same \code{getName()}, or create new cluster with this sentinel as representant. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it.
+  \item do nothing otherwise, since it is element, that has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in main initial grammar list, thus it is already processed or will be on schedule in clustering.
+\end{itemize}
+Attributes of element are processed through helper attribute clusterer, which is created for each element cluster.
+We have bunch of elements of same name in cluster and one attribute clusterer associated with this bunch.
+This attribute clusterer is given all attributes instances encountered in all elements that are in bunch.
+It clusters them by name (case insensitive).
 
 \subsection{ClusterProcessor submodule}
 Cluster processor takes rules of one cluster of element and somehow obtains regular expression for that set of elements. It returns rule - element with name set to desired name of element in schema (not all elements in cluster have to have same name, if advanced clustering scheme is used, then processor has to choose right name for  resulting element) and with subnodes set to regular expression infered.

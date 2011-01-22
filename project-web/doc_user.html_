@@ -1,9 +1,0 @@
-#include "header.html_"
-
-<div id="content">
-	<h1>User documentation</h1>
-	<p>
-	</p>
-</div>
-
-#include "footer.html_"

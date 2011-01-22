@@ -124,26 +124,32 @@ Now to the class itself.
 
 <h2>Run jInfer</h2>
 
-At this moment, run the whole jInfer suite from the NetBeans you imported it into.
-A new, child NetBeans should open with your module correctly installed. You can
-now follow the <a href="doc_tutorial.html">User tutorial</a>, just select your new
-simplifier while creating a new jInfer project.<br/>
-That's it! Start hacking you logic now!
+<p>
+  At this moment, run the whole jInfer suite from the NetBeans you imported it into.
+  A new, child NetBeans should open with your module correctly installed. You can
+  now follow the <a href="doc_tutorial.html">User tutorial</a>, just select your new
+  simplifier while creating a new jInfer project.<br/>
+  That's it! Start hacking you logic now!
+</p>
 
 <h2 id="5-implement-logic">Implement your logic</h2>
 
-This is the part where you actually have to do some thinking :-) Implementing
-an importer? Take that <code>InputStream</code> and create some rules of it! Simplifier?
-Take the rules you got and compact them somehow! Exporter? Take those rules and
-write them out as a <code>String</code>! It only depends on which module you are
-in and algorithm you're implementing.
+<p>
+  This is the part where you actually have to do some thinking :-) Implementing
+  an importer? Take that <code>InputStream</code> and create some rules of it! Simplifier?
+  Take the rules you got and compact them somehow! Exporter? Take those rules and
+  write them out as a <code>String</code>! It only depends on which module you are
+  in and algorithm you're implementing.
+</p>
 
 <h2>Dealing with jInfer and NetBeans Platform</h2>
 
-This section deals with a few important but pretty specific parts of interface
-between your module (or any logic you implement) and either jInfer or NetBeans
-Platform. Not nearly everything regarding interaction with NBP is mentioned here,
-please refer to the relevant FAQ.
+<p>
+  This section deals with a few important but pretty specific parts of interface
+  between your module (or any logic you implement) and either jInfer or NetBeans
+  Platform. Not nearly everything regarding interaction with NBP is mentioned here,
+  please refer to the relevant FAQ.
+</p>
 
 <h3>Module visibility</h3>
 

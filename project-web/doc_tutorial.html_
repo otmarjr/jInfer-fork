@@ -116,10 +116,10 @@ To try this out, do the following with your jInfer project:
 
 <ol type=1>
   <li>Open </i>Project Preferences</i>.</li>
-  <li>Navigate to <i>TwoStepSimplifier</i> &gt;
-      <i>ClusterProcessorAutomatonMergingState</i>.</li>
+  <li>Navigate to <i>Simplifiers</i> &gt; <i>TwoStep</i> &gt;
+      <i>AutomatonMergingState</i>.</li>
   <li>In the <i>AutomatonSimplifier</i> combobox select
-      <i>AutomatonSimplifierUserInteractive</i>.</li>
+      <i>UserInteractive</i>.</li>
   <li>Save the preferences by clicking <i>OK</i>.</li>
   <li>Run the inference again.</li>
   <li>A new window will appear, which will require you

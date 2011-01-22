@@ -29,7 +29,7 @@
   <p>
     Refer to the <a href="building_jinfer.html">official instructions</a>.
   </p>
-  
+
 <h2 id="2-module-type">What type of module?</h2>
   <p>
     First thing you need to realize is what kind of module you will be
@@ -153,8 +153,40 @@ Now to the class itself.
 
 <h3>Module visibility</h3>
 
-TODO
+<p>
+Each NBP module allows to set packages as public, which means their content will be visible for another modules. That means, if some module A sets
+a dependency for module B, module A will be able to use only classes from packages, which were set as public in module B.
+There are two ways to set visible packages, first is to set it manually in module's project.xml file located in <i>ModulePath/nbproject/</i> folder.
+</p>
+<span>Example:</span><br/>
+<pre class="code">
+// This is a portion of example project.xml file.
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://www.netbeans.org/ns/project/1"&gt;
+    &lt;type&gt;org.netbeans.modules.apisupport.project&lt;/type&gt;
+    &lt;configuration&gt;
+        &lt;data xmlns="http://www.netbeans.org/ns/nb-module-project/3"&gt;
 
+            ....
+
+            &lt;public-packages&gt;
+                &lt;package&gt;some.example.package.name&lt;/package&gt;
+            &lt;/public-packages&gt;
+        &lt;/data&gt;
+    &lt;/configuration&gt;
+&lt;/project&gt;
+</pre>
+
+<p>
+Another way is to set public packages through GUI:
+
+<ol type=1>
+	<li>Right-click the module, select <i>Properties</i>.</li>
+	<li>In <i>API Versioning</i>, there is <i>Public Packages</i> section.</li>
+	<li>Check which package will be public.</li>
+</ol>
+
+</p>
 <h3>Error handling</h3>
 
 TODO
@@ -165,29 +197,34 @@ TODO
 
 <h3>Dialogs</h3>
 
-<p>Creation of open/save dialog or message window is done by standard NBP API.
-For dialogs you can also use standard Java JFileChooser,
-but NBP <a href="http://bits.netbeans.org/dev/javadoc/org-openide-filesystems/org/openide/filesystems/FileChooserBuilder.html">FileChooserBuilder</a>
-is more convenient. This class creates dialog which remembers last-used directory according to key passed into its contructor.</p>
+<p>
+  Creation of open/save dialog or message window is done by standard NBP API.
+  For dialogs you can also use standard Java JFileChooser,
+  but NBP <a href="http://bits.netbeans.org/dev/javadoc/org-openide-filesystems/org/openide/filesystems/FileChooserBuilder.html">FileChooserBuilder</a>
+  is more convenient. This class creates dialog which remembers last-used directory according to key passed into its contructor.
+</p>
 <span>Example:</span><br/>
 <pre class="code">
-//The default dir to use if no value is stored
+// The default dir to use if no value is stored
 File home = new File (System.getProperty("user.home"));
-//Now build a file chooser and invoke the dialog in one line of code
+// Now build a file chooser and invoke the dialog in one line of code
 File toAdd = new FileChooserBuilder (CallingClass.class)
-    .setTitle("Some dialog title")
-    .setDefaultWorkingDirectory(home).showOpenDialog();
-//Result will be null if the user clicked cancel or closed the dialog w/o OK
+                   .setTitle("Some dialog title")
+                   .setDefaultWorkingDirectory(home).showOpenDialog();
+// Result will be null if the user clicked cancel or closed the dialog w/o OK
 if (toAdd != null) {
     //do something
-    }
+}
 </pre>
-<p>For messages creation is used <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/DialogDisplayer.html">DialogDisplayer</a> NBP API class. To determine which type of message will be shown(Confirmantion dialog, message dialog...),
-<a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/NotifyDescriptor.html">NotifyDescriptor</a> is used.
-Below is small example, which creates standard message notification. For more information please look at <a href="http://wiki.netbeans.org/NetBeansDeveloperFAQ#Dialogs_API">NBP Dialogs API FAQ</a>.</p>
+<p>
+  For messages creation is used <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/DialogDisplayer.html">DialogDisplayer</a> NBP API
+  class. To determine which type of message will be shown (Confirmation dialog, message dialog...),
+  <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/NotifyDescriptor.html">NotifyDescriptor</a> is used.
+  Below is small example, which creates standard message notification. For more information please look at <a href="http://wiki.netbeans.org/NetBeansDeveloperFAQ#Dialogs_API">NBP Dialogs API FAQ</a>.
+</p>
 <span>Example:</span><br/>
 <pre class="code">
-//Creates standard information message with text "Hello world"
+// Creates standard information message with text "Hello world"
 NotifyDescriptor nd = new NotifyDescriptor
                             .Message("Hello world",
                                NotifyDescriptor.INFORMATION_MESSAGE);

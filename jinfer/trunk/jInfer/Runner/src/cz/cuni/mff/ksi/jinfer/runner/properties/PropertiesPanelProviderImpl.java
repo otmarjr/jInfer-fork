@@ -55,7 +55,7 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
 
   @Override
   public String getDisplayName() {
-    return "Module Selection";
+    return ModuleSelectionPropertiesPanel.DISPLAY_NAME;
   }
 
   @Override

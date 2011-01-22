@@ -46,7 +46,7 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
   /** TODO anti comment
    *
    */
-  public static final String DISPLAY_NAME = "AutomatonMergingState";
+  public static final String DISPLAY_NAME = "Automaton merging state";
   /** TODO anti comment
    *
    */

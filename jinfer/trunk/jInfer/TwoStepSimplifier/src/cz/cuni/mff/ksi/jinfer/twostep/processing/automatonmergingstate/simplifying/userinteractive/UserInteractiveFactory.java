@@ -40,7 +40,7 @@ public class UserInteractiveFactory implements AutomatonSimplifierFactory {
   /**
    * TODO anti comment
    */
-  public static final String DISPLAY_NAME = "UserInteractive";
+  public static final String DISPLAY_NAME = "User interactive";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {

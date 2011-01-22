@@ -50,7 +50,7 @@ public class IGGeneratorImpl implements IGGenerator {
 
   private static final Logger LOG = Logger.getLogger(IGGeneratorImpl.class);
   private static final String NAME = "Basic_IG_Generator";
-  private static final String DISPLAY_NAME = "Basic IG Generator";
+  private static final String DISPLAY_NAME = "Basic IG generator";
 
 
   @Override

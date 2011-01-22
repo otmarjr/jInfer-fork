@@ -35,6 +35,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463434L;
   public static final String NAME = "moduleselector";
+  public static final String DISPLAY_NAME = "Module selection";
   public static final String INITIAL_GRAMMAR = "initialgrammar";
   public static final String SIMPLIFIER = "simplifier";
   public static final String SCHEMA_GENERATOR = "schemagenerator";

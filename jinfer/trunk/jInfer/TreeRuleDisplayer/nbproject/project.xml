@@ -84,9 +84,7 @@
                     </test-dependency>
                 </test-type>
             </test-dependencies>
-            <public-packages>
-                <package>cz.cuni.mff.ksi.jinfer.treeruledisplayer</package>
-            </public-packages>
+            <public-packages/>
         </data>
     </configuration>
 </project>

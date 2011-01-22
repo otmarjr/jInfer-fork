@@ -156,6 +156,9 @@ Now to the class itself.
 <p>
 Each NBP module allows to set packages as public, which means their content will be visible for another modules. That means, if some module A sets
 a dependency for module B, module A will be able to use only classes from packages, which were set as public in module B.
+</p>
+<span><i><strong>Important notice:</strong> Public packages do not affect <a href="http://wiki.netbeans.org/DevFaqLookup">Lookup</a> mechanism i.e. class annotated with serviceProvider may not be in the public package.</i></span>
+<p>
 There are two ways to set visible packages, first is to set it manually in module's project.xml file located in <i>ModulePath/nbproject/</i> folder.
 </p>
 <span>Example:</span><br/>

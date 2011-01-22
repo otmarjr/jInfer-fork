@@ -33,6 +33,7 @@ public class MainWnd extends JFrame {
   // TODO vektor Column widths
   private static final long serialVersionUID = 7542612L;
   private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
+  private static final String ANT_LINUX = "/usr/share/java/apache-ant/bin/ant";
   private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
   private final List<Remark> model = new ArrayList<Remark>();
 
@@ -189,7 +190,11 @@ public class MainWnd extends JFrame {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(locateRoot, gridBagConstraints);
 
-    antLocation.setText(ANT);
+    if ("Linux".equals(System.getProperty("os.name"))) {
+      antLocation.setText(ANT_LINUX);
+    } else {
+      antLocation.setText(ANT);
+    }
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
@@ -273,7 +278,7 @@ public class MainWnd extends JFrame {
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
+      .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
       .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
     );
     layout.setVerticalGroup(

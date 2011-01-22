@@ -100,9 +100,9 @@ public final class Logic {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,
               null, Severity.ERROR, "Module license file not specified"));
     }
-    if (!project.contains("nbm.homepage=")) {
+    if (!project.contains("nbm.homepage=http://jinfer.sourceforge.net/")) {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,
-              null, Severity.ERROR, "Project homepage not specified"));
+              null, Severity.ERROR, "Project homepage not specified correctly"));
     }
     if (!project.contains("nbm.module.author=")) {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,

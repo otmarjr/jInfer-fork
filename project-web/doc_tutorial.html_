@@ -17,7 +17,7 @@
   <li><a href="#3-infer">Infer schema.</a></li>
 </ol>
 
-<h2><a name="1-netbeans">NetBeans</a></h2>
+<h2 id="1-netbeans">NetBeans</h2>
 
 <p>
   <span class="prerequisities">Do this if you don't have any NetBeans installed. If you have an older version than 6.9, jInfer will not run - please update it first.</span>
@@ -29,7 +29,7 @@
   </li>
 </ol>
 
-<h2><a name="2-jinfer">jInfer</a></h2>
+<h2 id="2-jinfer">jInfer</h2>
 
 <p>
   <span class="prerequisities">Do this if you have the correct version of NetBeans installed. Note that jInfer features automatic update - you don't need to follow these steps each time new version comes out.</span>
@@ -46,7 +46,7 @@
   </li><li>Restart NetBeans.
   </li></ol>
 
-<h2><a name="3-infer">Basic Inference</a></h2>
+<h2 id="3-infer">Basic Inference</h2>
 <p>
   <span class="prerequisities">This section assumes you have NetBeans and jInfer installed. After the first run, a jInfer Welcome window will appear, guiding you through basically the same steps that will be covered here. You might want to follow them instead.</span>
 </p>

@@ -96,7 +96,7 @@ public class DomainUtilsTest {
     System.out.println("testGetAttributeTypeEmpty");
     final Map<String, Integer> domain = new HashMap<String, Integer>();
     final String result = DomainUtils.getAttributeType(domain, THRESHOLD);
-    assertEquals(" () ", result);
+    assertEquals(DomainUtils.ATTRIBUTE_CDATA, result);
   }
 
   @Test

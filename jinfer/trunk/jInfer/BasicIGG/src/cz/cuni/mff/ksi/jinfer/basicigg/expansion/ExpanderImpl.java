@@ -74,12 +74,8 @@ public class ExpanderImpl implements Expander {
       } else {
         final List<Regexp<AbstractStructuralNode>> regexpChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
         for (final AbstractStructuralNode n : line) {
-          if (n.getType().equals(StructuralNodeType.ELEMENT)) {
-            final Element elemN = (Element) n;
-            final Map<String, Object> metadata = new HashMap<String, Object>(IGGUtils.METADATA_SENTINEL);
-            metadata.putAll(elemN.getMetadata());
-            regexpChildren.add(Regexp.<AbstractStructuralNode>getToken(
-              new Element(elemN.getContext(), elemN.getName(), metadata, elemN.getSubnodes(), elemN.getAttributes())));
+          if (StructuralNodeType.ELEMENT.equals(n.getType())) {
+            regexpChildren.add(createSentinelFromASN(n));
           } else {
             regexpChildren.add(Regexp.getToken(n)); // original
           }
@@ -170,5 +166,19 @@ public class ExpanderImpl implements Expander {
 
     ret.addAll(unpackConcat(reverseChildren));
     return ret;
+  }
+
+  /**
+   * Create a TOKEN regexp containing a sentinel element with the original content of ASNode n.
+   * This method should be invoked only if the parameter is of {@link StructuralNodeType#ELEMENT } type!
+   * @param n Node containing an Element to be converted to sentinel.
+   * @return Token regexp containing the sentinel.
+   */
+  private static Regexp<AbstractStructuralNode> createSentinelFromASN(final AbstractStructuralNode n) {
+    final Element elemN = (Element) n;
+    final Map<String, Object> metadata = new HashMap<String, Object>(IGGUtils.METADATA_SENTINEL);
+            metadata.putAll(elemN.getMetadata());
+    return Regexp.<AbstractStructuralNode>getToken(
+              new Element(elemN.getContext(), elemN.getName(), metadata, elemN.getSubnodes(), elemN.getAttributes()));
   }
 }

@@ -98,48 +98,6 @@ public final class ExpansionHelper {
   }
 
   /**
-   * Returns flag if the provided regexp is a simple concatenation.
-   * Regexp is a simple concatenation if all these conditions hold:
-   * <ul>
-   *  <li>Its type is {@link RegexpType#CONCATENATION}.</li>
-   *  <li>Its interval is "once" ({@link RegexpInterval#isOnce()}).</li>
-   *  <li>
-   *   For each of its children holds:
-   *    <ul>
-   *      <li>The child is {@link RegexpType#TOKEN}</li>
-   *      <li>The child's interval is "once" ({@link RegexpInterval#isOnce()}).</li>
-   *    </ul>
-   *  </li>
-   * </ul>
-   *
-   * @param r Regexp to be examined.
-   * @return True if the regexp is a simple concatenation, false otherwise.
-   */
-  public static boolean isSimpleConcatenation(
-          final Regexp<AbstractStructuralNode> r) {
-    //TODO vektor: this method is used in tests only - consider removing?
-    if (r == null) {
-      throw new IllegalArgumentException("Regexp must not be null.");
-    }
-
-    if (!r.isConcatenation()) {
-      return false;
-    }
-    if (!r.getInterval().isOnce()) {
-      return false;
-    }
-    for (final Regexp<AbstractStructuralNode> child : r.getChildren()) {
-      if (!child.isToken()) {
-        return false;
-      }
-      if (!child.getInterval().isOnce()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /**
    * Returns an empty, immutable concatenation with interval "once".
    */
   public static <T> Regexp<T> getEmptyConcat() {

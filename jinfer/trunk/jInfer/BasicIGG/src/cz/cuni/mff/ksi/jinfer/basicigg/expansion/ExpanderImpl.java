@@ -76,16 +76,11 @@ public class ExpanderImpl implements Expander {
         final List<Regexp<AbstractStructuralNode>> regexpChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
         for (final AbstractStructuralNode n : line) {
           if (n.getType().equals(StructuralNodeType.ELEMENT)) {
-            Element nElem = (Element) n;
-            List<String> context = nElem.getContext();
-            String name = nElem.getName();
-            Map<String, Object> metadata = new HashMap<String, Object>();
-            metadata.putAll(nElem.getMetadata());
-            metadata.putAll(IGGUtils.METADATA_SENTINEL);
-            Regexp<AbstractStructuralNode> subnodes1 = nElem.getSubnodes();
-            List<Attribute> attributes = nElem.getAttributes();
+            Element elemN = (Element) n;
+            Map<String, Object> metadata = new HashMap<String, Object>(IGGUtils.METADATA_SENTINEL);
+            metadata.putAll(elemN.getMetadata());
             regexpChildren.add(Regexp.<AbstractStructuralNode>getToken(
-              new Element(context, name, metadata, subnodes1, attributes)));
+              new Element(elemN.getContext(), elemN.getName(), metadata, elemN.getSubnodes(), elemN.getAttributes())));
           } else {
             regexpChildren.add(Regexp.getToken(n)); // original
           }
@@ -114,7 +109,7 @@ public class ExpanderImpl implements Expander {
       case ALTERNATION:
         return ExpansionHelper.applyInterval(unpackAlternation(r.getChildren()), r.getInterval());
       case PERMUTATION:
-        throw new IllegalArgumentException("Sorry, there is not enough time till the end of the universe");
+        return ExpansionHelper.applyInterval(unpackPermutation(r.getChildren()), r.getInterval());
       default:
         throw new IllegalArgumentException("Unknown regexp type: " + r.getType());
     }
@@ -151,6 +146,22 @@ public class ExpanderImpl implements Expander {
     for (final Regexp<AbstractStructuralNode> child : children) {
       ret.addAll(unpackRE(child));
     }
+    return ret;
+  }
+
+  private static List<List<AbstractStructuralNode>> unpackPermutation(
+          final List<Regexp<AbstractStructuralNode>> children) {
+    final List<List<AbstractStructuralNode>> ret = new ArrayList<List<AbstractStructuralNode>>();
+
+    ret.addAll(unpackConcat(children));
+
+    List<Regexp<AbstractStructuralNode>> reverseChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
+    for (int i = children.size() - 1; i >= 0; i--) {
+      Regexp<AbstractStructuralNode> regexp = children.get(i);
+      reverseChildren.add(regexp);
+    }
+
+    ret.addAll(unpackConcat(reverseChildren));
     return ret;
   }
 }

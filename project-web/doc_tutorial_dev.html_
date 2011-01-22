@@ -11,26 +11,26 @@
         <p>
           <span class="prerequisities">
             This tutorial assumes that you are a seasoned Java developer. Having experience with programming in some kind of framework (NetBeans Platform above all) will help you a lot.<br/>
-            Make sure you have read the articles on architecture, data structures and inference process to understand what you will be implementing.<br/>
+            Make sure you have read the <a href="architecture.pdf">article</a> on architecture, data structures and inference process to understand what you will be implementing.<br/>
             Also, before starting this tutorial, make sure you can <a href="building_jinfer.html">build jInfer from sources</a>.
           </span>
         </p>
 
 <h2>Overview</h2>
   <ol type=1>
-    <li>Get NetBeans, jInfer sources, try a build.</li>
-    <li>Decide on the type of module you want to create.</li>
-    <li>Create new NetBeans module.</li>
-    <li>Implement jInfer-specific interfaces.</li>
-    <li>Implement your logic.</li>
+    <li><a href="#1-get-jinfer">Get NetBeans, jInfer sources, try a build.</a></li>
+    <li><a href="#2-module-type">Decide on the type of module you want to create.</a></li>
+    <li><a href="#3-new-module">Create new NetBeans module.</a></li>
+    <li><a href="#4-implement-jinfer">Implement jInfer-specific interfaces.</a></li>
+    <li><a href="#5-implement-logic">Implement your logic.</a></li>
   </ol>
 
-<h2>Building jInfer from sources</h2>
+<h2 id="1-get-jinfer">Building jInfer from sources</h2>
   <p>
     Refer to the <a href="building_jinfer.html">official instructions</a>.
   </p>
   
-<h2>What type of module?</h2>
+<h2 id="2-module-type">What type of module?</h2>
   <p>
     First thing you need to realize is what kind of module you will be
     implementing. Is it going to be a part of the inference? If yes, what stage?
@@ -42,7 +42,7 @@
     one of the existing modules. Try looking for the code you would like to change.
   </p>
 
-<h2>New NetBeans module</h2>
+<h2 id="3-new-module">New NetBeans module</h2>
 <p>
   <span class="prerequisities">This section assumes you have successfully imported jInfer in NetBeans.</span>
 </p>
@@ -65,7 +65,7 @@
   <li>Click <i>Finish</i>.</li>
 </ol>
 
-<h2>Implement jInfer's specifics</h2>
+<h2 id="4-implement-jinfer">Implement jInfer's specifics</h2>
 
 <p>
 This section will show how to deal with a new inference module - a simplifier
@@ -130,7 +130,7 @@ now follow the <a href="doc_tutorial.html">User tutorial</a>, just select your n
 simplifier while creating a new jInfer project.<br/>
 That's it! Start hacking you logic now!
 
-<h2>Implement your logic</h2>
+<h2 id="5-implement-logic">Implement your logic</h2>
 
 This is the part where you actually have to do some thinking :-) Implementing
 an importer? Take that <code>InputStream</code> and create some rules of it! Simplifier?

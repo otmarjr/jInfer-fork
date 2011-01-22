@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.basicigg.expansion;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -68,16 +67,16 @@ public class ExpanderImpl implements Expander {
     final List<Element> ret = new ArrayList<Element>();
     final List<List<AbstractStructuralNode>> exploded = unpackRE(e.getSubnodes());
 
-    for (final List<AbstractStructuralNode> line : exploded) {
-      final Regexp<AbstractStructuralNode> subnodes;
+    for (List<AbstractStructuralNode> line : exploded) {
+      Regexp<AbstractStructuralNode> subnodes;
       if (BaseUtils.isEmpty(line)) {
         subnodes = ExpansionHelper.getEmptyConcat();
       } else {
         final List<Regexp<AbstractStructuralNode>> regexpChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
         for (final AbstractStructuralNode n : line) {
           if (n.getType().equals(StructuralNodeType.ELEMENT)) {
-            Element elemN = (Element) n;
-            Map<String, Object> metadata = new HashMap<String, Object>(IGGUtils.METADATA_SENTINEL);
+            final Element elemN = (Element) n;
+            final Map<String, Object> metadata = new HashMap<String, Object>(IGGUtils.METADATA_SENTINEL);
             metadata.putAll(elemN.getMetadata());
             regexpChildren.add(Regexp.<AbstractStructuralNode>getToken(
               new Element(elemN.getContext(), elemN.getName(), metadata, elemN.getSubnodes(), elemN.getAttributes())));
@@ -149,15 +148,23 @@ public class ExpanderImpl implements Expander {
     return ret;
   }
 
+  /**
+   * Expand children of a permutation regexp for simplifier that can't handle complex regexps.
+   * Children are passed to {@link #unpackConcat(java.util.List) } and the resulting list is copied.
+   * Then, the list of original children is reversed and again passed to unpackConcat.
+   * The resulting list is also copied and then these two lists are appended and returned.
+   * @param children Permutation to be expanded.
+   * @return List of children and reversed children expanded as a concatenation, appended together.
+   */
   private static List<List<AbstractStructuralNode>> unpackPermutation(
           final List<Regexp<AbstractStructuralNode>> children) {
     final List<List<AbstractStructuralNode>> ret = new ArrayList<List<AbstractStructuralNode>>();
 
     ret.addAll(unpackConcat(children));
 
-    List<Regexp<AbstractStructuralNode>> reverseChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
+    final List<Regexp<AbstractStructuralNode>> reverseChildren = new ArrayList<Regexp<AbstractStructuralNode>>();
     for (int i = children.size() - 1; i >= 0; i--) {
-      Regexp<AbstractStructuralNode> regexp = children.get(i);
+      final Regexp<AbstractStructuralNode> regexp = children.get(i);
       reverseChildren.add(regexp);
     }
 

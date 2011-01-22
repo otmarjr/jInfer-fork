@@ -273,7 +273,7 @@ public class Automaton<T> {
       throw new IllegalArgumentException("List with states to merge has to have"
               + " at least 2 items.");
     }
-    State<T> state= lst.get(0);
+    final State<T> state= lst.get(0);
     for (State<T> anotherState : lst.subList(1, lst.size())) {
       this.mergeStates(state, anotherState);
     }

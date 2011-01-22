@@ -148,7 +148,8 @@ public final class RegexpInterval {
    * @param second Second of the intervals.
    * @return Intersection of intervals.
    */
-  public static RegexpInterval intersectIntervals(RegexpInterval first, RegexpInterval second) {
+  public static RegexpInterval intersectIntervals(
+          final RegexpInterval first, final RegexpInterval second) {
     int lower, upper;
     if (first.isUnbounded() && second.isUnbounded()) {
       // both unbounded

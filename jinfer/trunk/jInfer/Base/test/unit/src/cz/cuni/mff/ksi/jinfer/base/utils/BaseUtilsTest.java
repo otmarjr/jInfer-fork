@@ -28,13 +28,14 @@ import static org.junit.Assert.*;
 /**
  * @author vektor
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class BaseUtilsTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testFilterNull1() {
     System.out.println("filterNull1");
     final List<String> target = null;
-    Predicate<String> predicate = new Predicate<String>() {
+    final Predicate<String> predicate = new Predicate<String>() {
 
       @Override
       public boolean apply(final String argument) {
@@ -48,7 +49,7 @@ public class BaseUtilsTest {
   public void testFilterNull2() {
     System.out.println("filterNull2");
     final List<String> target = Collections.emptyList();
-    Predicate<String> predicate = null;
+    final Predicate<String> predicate = null;
     BaseUtils.filter(target, predicate);
   }
 
@@ -56,7 +57,7 @@ public class BaseUtilsTest {
   public void testFilterEmpty() {
     System.out.println("filterEmpty");
     final List<String> target = Collections.emptyList();
-    Predicate<String> predicate = new Predicate<String>() {
+    final Predicate<String> predicate = new Predicate<String>() {
 
       @Override
       public boolean apply(final String argument) {

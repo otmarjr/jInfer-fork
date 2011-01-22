@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
 import org.junit.Test;
@@ -25,10 +24,8 @@ import static org.junit.Assert.*;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class StateTest {
-
-    public StateTest() {
-    }
 
   private State<String> createInstance() {
     return new State<String>(10, 5);
@@ -40,9 +37,9 @@ public class StateTest {
   @Test
   public void testGetFinalCount() {
     System.out.println("getFinalCount");
-    State<String> instance = createInstance();
-    Integer expResult = 10;
-    Integer result = instance.getFinalCount();
+    final State<String> instance = createInstance();
+    final Integer expResult = 10;
+    final Integer result = instance.getFinalCount();
     assertEquals(expResult, result);
   }
 
@@ -52,10 +49,10 @@ public class StateTest {
   @Test
   public void testSetFinalCount() {
     System.out.println("setFinalCount");
-    State<String> instance = createInstance();
-    Integer expResult = 20;
+    final State<String> instance = createInstance();
+    final Integer expResult = 20;
     instance.setFinalCount(expResult);
-    Integer result = instance.getFinalCount();
+    final Integer result = instance.getFinalCount();
     assertEquals(expResult, result);
   }
 
@@ -65,11 +62,11 @@ public class StateTest {
   @Test
   public void testIncFinalCount_0args() {
     System.out.println("incFinalCount");
-    State<String> instance = createInstance();
+    final State<String> instance = createInstance();
     instance.incFinalCount();
     instance.incFinalCount();
-    Integer expResult = 12;
-    Integer result = instance.getFinalCount();
+    final Integer expResult = 12;
+    final Integer result = instance.getFinalCount();
     assertEquals(expResult, result);
   }
 
@@ -80,10 +77,10 @@ public class StateTest {
   public void testIncFinalCount_int() {
     System.out.println("incFinalCount");
     int i = 10;
-    State<String> instance = createInstance();
+    final State<String> instance = createInstance();
     instance.incFinalCount(i);
-    Integer expResult = 20;
-    Integer result = instance.getFinalCount();
+    final Integer expResult = 20;
+    final Integer result = instance.getFinalCount();
     assertEquals(expResult, result);
   }
 
@@ -93,9 +90,9 @@ public class StateTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    State<String> instance = createInstance();
-    int expResult = 5;
-    int result = instance.getName();
+    final State<String> instance = createInstance();
+    final int expResult = 5;
+    final int result = instance.getName();
     assertEquals(expResult, result);
   }
 
@@ -105,11 +102,11 @@ public class StateTest {
   @Test
   public void testSetName() {
     System.out.println("setName");
-    int name = 1;
-    State<String> instance = createInstance();
+    final int name = 1;
+    final State<String> instance = createInstance();
     instance.setName(name);
-    int expResult = 1;
-    int result = instance.getName();
+    final int expResult = 1;
+    final int result = instance.getName();
     assertEquals(expResult, result);
   }
 
@@ -119,9 +116,9 @@ public class StateTest {
   @Test
   public void testToString() {
     System.out.println("toString");
-    State<String> instance = createInstance();
-    String expResult = "[5|10]";
-    String result = instance.toString();
+    final State<String> instance = createInstance();
+    final String expResult = "[5|10]";
+    final String result = instance.toString();
     assertEquals(expResult, result);
   }
 
@@ -131,10 +128,9 @@ public class StateTest {
   @Test
   public void testToTestString() {
     System.out.println("toTestString");
-    State<String> instance = createInstance();
-    String expResult = "[5|10]";
-    String result = instance.toTestString();
+    final State<String> instance = createInstance();
+    final String expResult = "[5|10]";
+    final String result = instance.toTestString();
     assertEquals(expResult, result);
   }
-
 }

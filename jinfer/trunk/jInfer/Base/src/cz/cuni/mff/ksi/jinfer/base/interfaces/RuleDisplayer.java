@@ -25,7 +25,7 @@ import java.util.List;
  */
 public interface RuleDisplayer extends NamedModule {
 
-  public static final String RULE_DISPLAYER_PROPERTY = "rule.displayer";
+  String RULE_DISPLAYER_PROPERTY = "rule.displayer";
 
   /**
    * Display a list of rules. The list will be rendered into
@@ -35,6 +35,6 @@ public interface RuleDisplayer extends NamedModule {
    * @param rules List of rules to display.
    * @param render Flag whether to actually do anything.
    */
-  public void showRulesAsync(final String panelName,
+  void showRulesAsync(final String panelName,
           final List<Element> rules, final boolean render);
 }

@@ -44,7 +44,7 @@ public class StateRemovalFactory implements RegexpAutomatonSimplifierFactory {
   /**
    * TODO anti comment
    */
-  public static final String DISPLAY_NAME = "StateRemoval";
+  public static final String DISPLAY_NAME = "State removal";
   /**
    * TODO anti comment
    */

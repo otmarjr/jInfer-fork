@@ -34,7 +34,7 @@ public class NestedConcatenationFactory implements RegularExpressionCleanerFacto
   private static final Logger LOG = Logger.getLogger(NestedConcatenationFactory.class);
 
   public static final String NAME = "TwoStepRegularExpressionCleanerNestedConcatenation";
-  public static final String DISPLAY_NAME = "NestedConcatenation";
+  public static final String DISPLAY_NAME = "Nested concatenation";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {

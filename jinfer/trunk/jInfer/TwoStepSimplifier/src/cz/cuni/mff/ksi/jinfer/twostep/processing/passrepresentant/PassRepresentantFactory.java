@@ -34,7 +34,7 @@ public class PassRepresentantFactory implements ClusterProcessorFactory {
 
   private static final Logger LOG = Logger.getLogger(PassRepresentantFactory.class);
   public static final String NAME = "TwoStepClusterProcessorPassRepresentant";
-  public static final String DISPLAY_NAME = "PassRepresentant";
+  public static final String DISPLAY_NAME = "Pass representant";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {

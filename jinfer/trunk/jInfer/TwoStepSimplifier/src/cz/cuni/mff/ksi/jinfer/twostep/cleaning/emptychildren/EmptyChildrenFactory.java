@@ -35,7 +35,7 @@ public class EmptyChildrenFactory implements RegularExpressionCleanerFactory {
   private static final Logger LOG = Logger.getLogger(EmptyChildrenFactory.class);
 
   public static final String NAME = "TwoStepRegularExpressionCleanerEmptyChildren";
-  public static final String DISPLAY_NAME = "EmptyChildren";
+  public static final String DISPLAY_NAME = "Empty children";
   
   @Override
   public <T> RegularExpressionCleaner<T> create() {

@@ -38,8 +38,9 @@ import org.openide.util.lookup.ServiceProvider;
 public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvider {
   public static final String TWOSTEP_SIMPIFIER_CLUSTERER = "Clusterers";
   public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
+  public static final String TWOSTEP_SIMPLIFIER_CLEANER_DISPLAY = "Regular expression cleaners";
   public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR = "ClustererProcessor";
-  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY = "Cluster Processors";
+  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY = "Cluster processors";
   private static final int PANEL_PRIORITY = 400000;
   public static final String SIMPLIFIER_CATEGORY = "Simplifier";
 
@@ -73,7 +74,7 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
     List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
     result.add(new VirtualCategoryPanel(TWOSTEP_SIMPIFIER_CLUSTERER, TWOSTEP_SIMPIFIER_CLUSTERER, ModuleSelectionHelper.lookupNames(ClustererFactory.class)));
     result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR, TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY, ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class)));
-    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER, ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class)));
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER_DISPLAY, ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class)));
 
     return result;
   }

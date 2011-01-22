@@ -44,7 +44,7 @@ public final class BasicRuleDisplayer implements RuleDisplayer {
 
       @Override
       public void run() {
-        BasicRuleDisplayerTopComponent topComponent = BasicRuleDisplayerTopComponent.findInstance();
+        final BasicRuleDisplayerTopComponent topComponent = BasicRuleDisplayerTopComponent.findInstance();
         if (!topComponent.isOpened()) {
           topComponent.open();
         }

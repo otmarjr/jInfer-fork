@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.expansion;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;

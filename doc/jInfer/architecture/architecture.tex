@@ -34,17 +34,15 @@
 
 \begin{document}
 \maketitle
-Target audience: developers willing to extend jInfer.\\
+\noindent Target audience: developers willing to extend jInfer.
 
-\emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}\\
+\noindent \emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}\\
 
-The description of jInfer architecture will be divided into 3 main views: the data view, the process view and the plaform view.\\
+The description of jInfer architecture will be divided into 3 main views: the data view, the process view and the plaform view.
+The data view will commence by describing the data structures, namely representations of regular expressions and XML elements, attributes and simple data. The notions of a \emph{rule} and a \emph{grammar} will be explained, along with the finite state automata representation we use.
 
-The data view will commence by describing the data structures, namely representations of regular expressions and XML elements, attributes and simple data. The notions of a \emph{rule} and a \emph{grammar} will be explained, along with the finite state automata representation we use.\\
-
-Afterwards the process of inference will be described, both from high-level and programmatic point of view.\\
-
-Finally, we will look at jInfer as at an NetBeans Platform application consisting of a number of modules performing their tasks and communicating together through a set of well-defined interfaces.\\
+Afterwards the process of inference will be described, both from high-level and programmatic point of view.
+Finally, we will look at jInfer as at an NetBeans Platform application consisting of a number of modules performing their tasks and communicating together through a set of well-defined interfaces.
 
 \section{Package naming conventions}
 All packages start with \code{cz.cuni.mff.ksi.jinfer}. Afterwards is the short, normalized name of the NetBeans module (e.g. \code{base}) and finally the package structure in this module (e.g. \texttt{objects.utils}). All in all, a package in the \jmodule{Base} module could look like \code{cz.cuni.mff.ksi.jinfer.base.objects.utils}.
@@ -64,7 +62,6 @@ Each \code{Regexp<T>} instance has one of the enum \code{RegexpType} type:
 	\item Alternation - a choice between one or more regular expressions. Eg. $(a | b | c | d)$,
 	\item Permutation - shortcut for all possible permutations of regular expressions. Our syntax to write down permutation is $(a\& b\& c\& d)$.
 \end{itemize}
-
 Type of regexp is held in \code{type} member in class \code{Regexp<T>} and can be tested by calling methods \code{isLambda()}, \code{isToken()} etc.
 
 Each \code{Regexp<T>} instance has one instance of \code{RegexpInterval} as member.
@@ -107,8 +104,8 @@ Regexp has to obey constraits:
 These constraits are checked by constructors, so the best way to construct new regexps is by using 
 methods \code{getToken(), getConcatenation()} etc.
 
-Regexp instance is by default created as immutable, that is, once instantiated, you cannot add more children to list of children, cannot change type, content etc. It is to prevent missuse. In special circumstances, one does not know future children of regexp in time of creation. This occurs mainly in input modules, where by parsing XML data sequentially, one does not know contents of element in time of handling start element event.
 For these cases, special \code{getMutable()} method is implemented to obtain regexp with none of members set. One has to fill in all properties carefully and call \code{setImmutable()} aftewards. Proper usage should be one of following:
+Regexp instance is by default created as immutable, that is, once instantiated, you cannot add more children to list of children, cannot change type, content etc. It is to prevent missuse. In special circumstances, one does not know future children of regexp in time of creation. This occurs mainly in input modules, where by parsing XML data sequentially, one does not know contents of element in time of handling start element event.
 \begin{verbatim}
 	Regexp<T> r = Regexp.<T>getMutable();
 	r.setInterval(...);
@@ -167,7 +164,6 @@ As practice showed, for methods handling and infering structural properties, it 
 However methods for content devising don't need to know, if they are working on infering model for content of attribute or text node.
 
 Finally, our interface/class model for representing XML nodes is drafted on fig. \ref{nodes}. Those, who are brave enough, can look on fig. \ref{nodes_full}.
-
 In result, \code{Element} and \code{SimpleData} have method \code{getType()} to devise type of \code{AbstractStructuralNode} variables. And \code{SimpleData} and \code{Attribute} have methods \code{getContentType()} and \code{getContent()} to work with content model.
 
 Class \code{Element} has two important members of course:
@@ -197,9 +193,7 @@ Let's take an example, the following XML document would be represented as tree o
 \end{verbatim} 
 Although in example we present whole document tree, input modules produce slightly different format (consisting of rules).
 
-
 \subsection{Rules and grammars} \label{rules_grammar}
-
 jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}.
 \emph{Rules} in such grammar are in the form
 $$
@@ -209,16 +203,24 @@ where LHS is a letter of the alphabet (token), RHS is a regular expression over 
 $$
   a \to b, (c | d)\ast
 $$
-In jInfer each such rule is represented with an \code{Element} instance. In this representation, the \code{Element} itself is the LHS, its \code{subnodes} are the RHS.\\
+In jInfer each such rule is represented with an \code{Element} instance. In this representation, the \code{Element} itself is the LHS, its \code{subnodes} are the RHS.
 
 Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens (even with no children, see fig. \ref{xml_example} again). Initial Grammar is produced by \jmodule{Initial Grammar Generator}.
 
 \subsection{Nondeterministic Finite Automaton}
 We recommend skipping this section in first read as it describes advanced features.
+
 For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
-Implementation consists of 4 classes: \code{Automaton<T>}, \code{Step<T>}, \code{State<T>} and \code{AutomatonCloner<A, B>} (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
+Implementation consists of 4 classes (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}): 
+\begin{itemize}
+  \item \code{Automaton<T>},
+  \item \code{Step<T>},
+  \item \code{State<T>},
+  \item \code{AutomatonCloner<A, B>}.
+\end{itemize}
 Whole implementation uses java generics for representation of symbol of alphabet.
 We denote \code{T} the java type of symbol.
+
 Take care of symbol class and its \code{equals()} implementation.
 Automaton uses \code{equals()} to compare symbols on transitions (when building prefix-tree automaton and when merging states).
 If you are using strings, you're just fine, but with complicated objects, either take care, that equivalent objects are properly tested in \code{equals()}.
@@ -253,7 +255,6 @@ Automaton supports creating of automaton as a copy of another one (not reference
 We implemented building of prefix-tree automaton (PTA) in \code{buildPTAOnSymbol()} method.
 Create empty automaton and then call this method for every input string of language.
 You will get PTA with useCounts and finalCounts set properly on steps/states.
-
 \begin{figure}
 	\centering
 	\subfigure[Before merge.]
@@ -276,7 +277,8 @@ You will get PTA with useCounts and finalCounts set properly on steps/states.
 The biggest thing we offer to scientists is state merging by simply calling \code{mergeStates(state1, state2)} method.
 Method merges second state given into first one (or an overloaded version - all states in list into first one in list).
 All \{in|out\}-transitions are redirected properly (or discarted as needed).
-Variables useCount and finalCount are updated to sums of values from merged transitions/states.
+Variables \code{useCount} and \code{finalCount} are updated to sums of values from merged transitions/states.
+
 One can ask for merging states, that are merged out from automaton already.
 Lets take example automaton of fig. \ref{automaton_merge1} (states are labeled [name|finalCount], steps by \{symbol|useCount\}).
 One asks to merge states 3 and 4.
@@ -304,26 +306,25 @@ Implementation have to be \code{equals} consistent, if in first automaton are tw
 	\centering\includegraphics[scale=\myscale]{inference_process}
 	\caption{High-level view of the inference process} \label{inference_process}
 \end{figure}
-
 The process by which jInfer infers the resulting schema from various inputs (inference process) is summarized by fig. \ref{inference_process}. From the high-level viewpoint, it consists of three consecutive steps carried out by three different modules:
 \begin{enumerate}
 	\item Initial Grammar (IG) generation: done by the \jmodule{Initial Grammar Generator (IGG)} module, this is the process of converting all of the inputs to IG representation. All documents, schemas and queries selected as input are evaluated, simple rules are extracted and in the end sent to the next step.\\
 	For example, a trivial XML document
 	\label{example_inference_xml}
 	\begin{verbatim}
-  <person name="john" surname="smith">
-    <info>
-      Some text
-      <note/>
-    </info>
-    <more/>
-  </person>
-  <person>
-    <more/>
-    <more/>
-    <more/>
-  </person>
-	\end{verbatim}
+<person name="john" surname="smith">
+  <info>
+    Some text
+    <note/>
+  </info>
+</person>
+<more/>
+<person>
+  <more/>
+  <more/>
+  <more/>
+</person>
+  \end{verbatim}
 	will translate into the following IG rules
 	\begin{eqnarray*}
 		person & \to & \mathit{info}, more, more, more, more \\
@@ -382,22 +383,18 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 	+attributes
 	\end{verbatim}
 \end{enumerate}
-Important thing to note here is that all these steps are executed consecutively. That means, \jmodule{Simplifier} is only started \emph{after} the \jmodule{IGG} completely finished its work and returned IG to be simplified. Similarly, \jmodule{SchemaGen} gets all the rules to export at once, in one list.\\
+Important thing to note here is that all these steps are executed consecutively. That means, \jmodule{Simplifier} is only started \emph{after} the \jmodule{IGG} completely finished its work and returned IG to be simplified. Similarly, \jmodule{SchemaGen} gets all the rules to export at once, in one list.
 
 This modular architecture means that it is possible to replace any and/or all of these modules with \emph{something} else that does similar job. In practice, scientists will probably implement new \jmodule{Simplifier} modules, while using our implementation of BasicIGG and export modules. This modular scheme is used inside our modules to divide them into submodules. It is possible to add new file format processing to import/export. One can extend automaton merging state algorithm of our implementation of \cite{ahonen} in TwoStepSimplifier module by replacing submodules.
 
 \subsection{Programmatic view}
-
 From developer's point of view, inference modules are just properly annotated classes (see \ref{section_lookups}) implementing one of the following interfaces (all found under \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference})
-
 \begin{itemize}
 	\item \code{IGGenerator}
 	\item \code{Simplifier}
 	\item \code{SchemaGenerator}
 \end{itemize}
-
-A nice way to name such a class is by adding \code{-Impl} to the name of implemented interface, for example \code{SimplifierImpl}.\\
-
+A nice way to name such a class is by adding \code{-Impl} to the name of implemented interface, for example \code{SimplifierImpl}.
 Annotation required for the framework to recognize such a class as an inference module is the following
 \begin{verbatim}
 	@ServiceProvider(service = <interface>.class)
@@ -406,15 +403,14 @@ for example
 \begin{verbatim}
 	@ServiceProvider(service = Simplifier.class)
 \end{verbatim}
-
 The most important method in each module is \code{start}, defined in each of the interfaces. This method is called by the framework when the respective step of inference is to be executed. It has always two parameters: the actual input data for the module, and a callback object to report to when this step is finished. We will look at both parameters now in more detail. 
 
 \subsubsection{Module input}
-Each inference module takes the actual input data as the first parameter of its \code{start} method. The type of the argument differs based on the inference module.\\
+Each inference module takes the actual input data as the first parameter of its \code{start} method. The type of the argument differs based on the inference module.
 
 \jmodule{Simplifier} and \jmodule{Schema Generator} take grammar (see \ref{rules_grammar}), in other words a list of \code{Element}s as input. In the first case, this grammar is the Initial Grammar, in the second case it is the simplified grammar.
 
-\jmodule{Initial Grammar Generator} takes an object of type \code{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.\\
+\jmodule{Initial Grammar Generator} takes an object of type \code{Input}. This class encapsulates all the input files in 3 collections of \code{File}: \code{documents}, \code{schemas} and \code{queries}. Enumerating these files provides IGG with access to all data it needs to create Initial Grammar.
 
 \paragraph{Initial Grammar} has two formats:
 \begin{itemize}
@@ -429,11 +425,14 @@ Each inference module takes the actual input data as the first parameter of its 
 	<!ELEMENT more EMPTY>
 	\end{verbatim}
 	Elements note and more are empty, but we cannot use lambda regexp. Import will use empty concatenation instead.
-	For element person, import module have to generate some positive examples of language generated by regular expression \verb+(info?, more, more?, more?)+. This generating is basicly done by calling \code{cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface method \code{expand()}. One can implement own intelligent expander, or use our provided \code{cz.cuni.mff.ksi.jinfer.basicigg.expansion.ExpanderImpl}.
+	For element person, import module have to generate some positive examples of language generated by regular expression \verb+(info?, more, more?, more?)+.
+	
+	This generating is basicaly done by calling \code{cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface method \code{expand()}. One can implement own intelligent expander, or use our provided\\ \code{cz.cuni.mff.ksi.jinfer.basicigg.expansion.ExpanderImpl}.
 	
 	\item Complex regular expressions. Simplifier module running in current inference can indicate support for this format by having capability called \code{can.handle.complex.regexps}.
 	Even then, import module is not obliged to use it of course. But it is reasonable to do so, if imported file type gives more information than simple concatenations (when importing schemas).
-	Initial Grammar can contain all regular expressions. If schema defines empty element, make its subnodes lambda regexp. If schema defines element content as \verb.(a, b){2,7}(c | d)., just construct that regexp. Empty concatenations are also allowed - as they are positive examples in XML document input. Its simplifier business to divide rules by import file formats (by using metadata described in \ref{section_metada}) and to handle empty concatenations from XML file import with complex regular expressions from other formats.
+	
+	Initial Grammar can contain all regular expressions. If schema defines empty element, make its subnodes lambda regexp. If schema defines element content as \verb.(a, b){2,7}(c | d)., just construct that regexp. Empty concatenations are also allowed - as they are positive examples in XML document input. Its simplifier business to divide rules by import file formats (by using metadata described in \ref{section_metadata}) and to handle empty concatenations from XML file import with complex regular expressions from other formats.
 \end{itemize}
 If you are writing import module, check if you can provide more information to simplifier from input file type by using complex format.
 This interface division allows us to plug in old methods (accepting only XML input) to the chain of inference, even with schema input files.
@@ -443,46 +442,39 @@ It may be useful for method benchmarking too.
 
 \subsubsection{Module output}
 Second parameter of each inference module's \code{start} method is a callback object. There are 3 callback interfaces defined in the \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package
-
 \begin{itemize}
 	\item \code{IGGeneratorCallback}
 	\item \code{SimplifierCallback}
 	\item \code{SchemaGeneratorCallback}
 \end{itemize}
+Each callback interface naturally belongs to the similarly named module interface. As their respective interfaces, also callbacks define one crucial method: \emph{finished}. Each inference module is responsible for invoking this method on the callback it got as a parameter, after it has finished its work and has results to be passed on. Again, these 3 finished methods have different arguments based on the inference module.
 
-Each callback interface naturally belongs to the similarly named module interface. As their respective interfaces, also callbacks define one crucial method: \emph{finished}. Each inference module is responsible for invoking this method on the callback it got as a parameter, after it has finished its work and has results to be passed on. Again, these 3 finished methods have different arguments based on the inference module.\\
-
-\code{IGGeneratorCallback.finished()} and \code{SimplifierCallback.finished()} have a grammar (Initial Grammar in case of IGG) as their only argument.\\
+\code{IGGeneratorCallback.finished()} and \code{SimplifierCallback.finished()} have a grammar (Initial Grammar in case of IGG) as their only argument.
 
 \code{SchemaGeneratorCallback.finished()} has two \code{String}s as arguments: \code{schema} is the actual string representation of the resulting schema, \code{extension} is a file extension of the result (such as "dtd" or "xsd") which the framework will use when saving the result in a file.
 
 \subsubsection{Error handling}
-
 Because the run of each inference module is encapsulated in a \code{try-catch} block by the framework, it is safe to throw any exception out of the \code{start} method: it will get logged, presented to the user and inference will stop. However, if the module uses threads that could throw an exception, it is responsible for catching these exceptions and possibly re-throwing them in the thread where \code{start} runs.
 
 \subsubsection{Interruptions}
-
 User running the inference might change his mind and try to stop this. For this reason, modules have to check for this case in every time-consuming place such as long loops with the following code:
 \begin{verbatim}
-  for (forever) {
-    if (Thread.interrupted()) {
-      throw new InterruptedException();
-    }
-    doStuff();
+for (forever) {
+  if (Thread.interrupted()) {
+    throw new InterruptedException();
   }
+  doStuff();
+}
 \end{verbatim}
 
 \subsubsection{Runner} \label{section_runner}
-
-The part of framework responsible for actually gathering user input, running all modules one after another and presenting the results is the \code{Runner} class  in \code{cz.cuni.mff.ksi.jinfer.runner} package.\\
+The part of framework responsible for actually gathering user input, running all modules one after another and presenting the results is the \code{Runner} class  in \code{cz.cuni.mff.ksi.jinfer.runner} package.
 
 A new instance of \code{Runner} is constructed for each inference run. While being created, \code{Runner}  loads the preferences for current project and looks up user-selected inference modules. Also, callback objects pointing back to methods in \code{Runner} are created. The inference process itself is then as follows
-
 \begin{figure}
 \centering\includegraphics[scale=\myscale]{runner}
 \caption{Runner} \label{runner}
 \end{figure}
-
 \begin{enumerate}
 	\item Selected IGG's \code{start} is encapsulated with error/interruption handling and executed, passing \code{Input} and first callback as parameters.
 	\item When IGG finishes, it invokes callback's \code{finish} method, passing the IG as parameter.
@@ -494,7 +486,7 @@ A new instance of \code{Runner} is constructed for each inference run. While bei
 \end{enumerate}
 
 \subsection{Node metadata} \label{section_metadata}
-To allow simple extensibility of rules, class \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.\\
+To allow simple extensibility of rules, class \code{AbstractNamedNode} contains a string-addressed map called \code{metadata} that can contain arbitrary object values.
 
 At the present, jInfer modules use the following metadata, all defined in \code{IGGUtils} class:
 \begin{itemize}
@@ -505,49 +497,45 @@ At the present, jInfer modules use the following metadata, all defined in \code{
 \end{itemize}
 All of these metadata are of set/not set character (using \code{Boolean.TRUE} as value, but their presence effectively mean true).
 
-
 \subsection{Capabilities} \label{section_capabilities}
-From time to time, modules need a flow of certain information in completely opposite way to the usual inference: they need to know what the following module can or cannot do.\\
+From time to time, modules need a flow of certain information in completely opposite way to the usual inference: they need to know what the following module can or cannot do.
 
-For this reason, inference modules extend the \code{Capabilities} interface defining a single method: \code{getCapabilities()}. This method returns a list of strings representing the abilities, or "capabilities" of this module.\\
+For this reason, inference modules extend the \code{Capabilities} interface defining a single method: \code{getCapabilities()}. This method returns a list of strings representing the abilities, or "capabilities" of this module.
 An inference module can query the capabilities of the \emph{next} module in the inference chain by invoking the 
 \begin{verbatim}
 RunningProject.getNextModuleCaps()
 \end{verbatim}
-method to obtain the next module encapsulated in the \code{Capabilities} interface.\\
+method to obtain the next module encapsulated in the \code{Capabilities} interface.
 
-At the moment, only one capability is defined to be communicated across modules, more specifically between \jmodule{IGGenerator} and \jmodule{Simplifier}. This is \code{Capabilities.CAN\_HANDLE\_COMPLEX\_REGEXPS} meaning whether the \code{Simplifier} accepts more complicated regular expressions than simple concatenations of tokens on its input.\\
+At the moment, only one capability is defined to be communicated across modules, more specifically between \jmodule{IGGenerator} and \jmodule{Simplifier}. This is \code{Capabilities.CAN\_HANDLE\_COMPLEX\_REGEXPS} meaning whether the \code{Simplifier} accepts more complicated regular expressions than simple concatenations of tokens on its input.
 % TODO vektor check later - didn't this change?!?
 
 Example of Capabilities usage taken from \jmodule{XSDImporter} module:
 \begin{verbatim}
-  // if the next module cannot handle complex regexps, help it by expanding our result
-  if (!RunningProject.getNextModuleCaps().getCapabilities()
-               .contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) { 
-    // lookup expander
-    final Expander expander = Lookup.getDefault().lookup(Expander.class);
-    // return expanded
-    return expander.expand(parser.getRules());
-  }
-  // return not expanded rules
-  return parser.getRules();
+// if the next module cannot handle complex regexps, help it by expanding our result
+if (!RunningProject.getNextModuleCaps().getCapabilities()
+             .contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) { 
+  // lookup expander
+  final Expander expander = Lookup.getDefault().lookup(Expander.class);
+  // return expanded
+  return expander.expand(parser.getRules());
+}
+// return not expanded rules
+return parser.getRules();
 \end{verbatim}
 
 \section{Platform view}
+jInfer, being a NetBeans Platform application, is divided into multiple \emph{NetBeans Modules}. It is very important to understand that this division is in principle orthogonal to that naturally sketched in the previous chapters - theoretically, the whole jInfer could be contained in a single NB module, because the framework uses Lookups to locate logical modules. However, for the sake of organization, jInfer is split into several modules and most of the time there is a strong correlation between logical units of jInfer and its NB modules.
 
-jInfer, being a NetBeans Platform application, is divided into multiple \emph{NetBeans Modules}. It is very important to understand that this division is in principle orthogonal to that naturally sketched in the previous chapters - theoretically, the whole jInfer could be contained in a single NB module, because the framework uses Lookups to locate logical modules. However, for the sake of organization, jInfer is split into several modules and most of the time there is a strong correlation between logical units of jInfer and its NB modules.\\
+A short overview of these modules and their functions follows. To get a deeper understanding of any of them, please refer to its documentation. To get deeper understanding of how NBP modules work, their versions, dependencies etc, refer to \cite{modules_api}.
 
-A short overview of these modules and their functions follows. To get a deeper understanding of any of them, please refer to its documentation. To get deeper understanding of how NBP modules work, their versions, dependencies etc, refer to \cite{modules_api}.\\
-
-Base modules:
-
+\noindent Base modules:
 \begin{itemize}
 	\item \jmodule{jInfer}: not a NBP module in fact, but rather a module suite - the ``root" NB project for the whole framework.
 	\item \jmodule{Base}: contains common data structures, interfaces and utility logic shared across all other modules.
 \end{itemize}
 
-Inference modules:
-
+\noindent Inference modules:
 \begin{itemize}
 	\item \jmodule{Runner}: as described in the section \ref{section_runner}, this module encapsulates the inference process (including the fact that inference consists of 3 phases as described before). Most important class: \code{Runner}.
 	\item \jmodule{BasicIGG}: this module contains an extensible implementation of \jmodule{IGGenerator}. Basic version handles all XML-typed input documents, DTD schemas and XPath queries. To find out more about the extensibility to handle other outputs, refer to \jmodule{BasicIGG}'s documentation.
@@ -559,8 +547,7 @@ Inference modules:
 	\item \jmodule{BasicXSDExporter}: this is a \jmodule{SchemaGenerator} implementation with output to XSD.
 \end{itemize}
 
-Utility modules:
-
+\noindent Utility modules:
 \begin{itemize}
 	\item \jmodule{BasicRuleDisplayer}: module capable of displaying a grammar in a graphical way.
 	\item \jmodule{TreeRuleDisplayer}: more advanced version of the former using \jmodule{JUNG}'s graphing capabilities.
@@ -570,8 +557,7 @@ Utility modules:
 	\item \jmodule{ProjectType}: NBP specific: this module defines a jInfer project type, along with its input and output files, settings etc.
 	\item \jmodule{XPathFileType}: NBP specific: this module teaches NetBeans to recognize a \code{.xpath} file extension.
 \end{itemize}
-
-The dependencies between all the modules are summarized in figure \ref{module_deps}. Figure \ref{modules_inference} shows modules implementing the 3 main inference interfaces described in \ref{section_inference_process}.\\
+The dependencies between all the modules are summarized in figure \ref{module_deps}. Figure \ref{modules_inference} shows modules implementing the 3 main inference interfaces described in \ref{section_inference_process}.
 
 \begin{figure}
 	\centering\includegraphics[scale=1]{module_deps}
@@ -584,44 +570,41 @@ The dependencies between all the modules are summarized in figure \ref{module_de
 \end{figure}
 
 \subsection{Lookups} \label{section_lookups}
-
 \emph{Lookups} are a part of NBP API, a way to achieve late-binding between code based on this platform. An important notion is the one of a \emph{service provider}. This is a class implementing an interface, annotated in the following way (shown on an example from \jmodule{BasicDTDExporter}).
 \begin{verbatim}
-  @ServiceProvider(service = SchemaGenerator.class)
-  public class SchemaGeneratorImpl implements SchemaGenerator {
-    ...
+@ServiceProvider(service = SchemaGenerator.class)
+public class SchemaGeneratorImpl implements SchemaGenerator {
+  ...
 \end{verbatim}
-The \code{@ServiceProvider} annotation tells NBP that \code{SchemaGeneratorImpl} is to be registered among all providers of the \code{SchemaGenerator} service (or interface).\\
+The \code{@ServiceProvider} annotation tells NBP that \code{SchemaGeneratorImpl} is to be registered among all providers of the \code{SchemaGenerator} service (or interface).
 
 To look up a service provider, or all of them, one can use the \jmodule{Lookups} API in the following way.
 \begin{verbatim}
-  Collection<SchemaGenerator> generators = Lookup.getDefault().lookupAll(SchemaGenerator.class);
-  
-  for (SchemaGenerator g : generators) {
-    System.out.println(g.getName());
-  }
-\end{verbatim}
-Call to \code{Lookup.getDefault().lookupAll()} will return a collection of all service providers registered to be providing the \code{SchemaGenerator} interface. This collection can be walked in some way, and on one or more of service providers methods can be called. We didn't have to actually bind providers to logic that uses their services, NB Platform took care of this for us.\\
+Collection<SchemaGenerator> generators = Lookup.getDefault().lookupAll(SchemaGenerator.class);
 
-At this point it is important to understand that when using lookups this way, all service providers are kept as singletons. In case a provider needs to change its state during providing the service (and needs to be ``fresh" each time it is retrieved), it is best to convert this to a factory design pattern: the service provider registered is just a factory returning instances that do the actual work.\\
+for (SchemaGenerator g : generators) {
+  System.out.println(g.getName());
+}
+\end{verbatim}
+Call to \code{Lookup.getDefault().lookupAll()} will return a collection of all service providers registered to be providing the \code{SchemaGenerator} interface. This collection can be walked in some way, and on one or more of service providers methods can be called. We didn't have to actually bind providers to logic that uses their services, NB Platform took care of this for us.
+
+At this point it is important to understand that when using lookups this way, all service providers are kept as singletons. In case a provider needs to change its state during providing the service (and needs to be ``fresh" each time it is retrieved), it is best to convert this to a factory design pattern: the service provider registered is just a factory returning instances that do the actual work.
 
 See \cite{lookup_api} as the official documentation to lookup API.
 
 \subsection{Tokens}
-
-An important topic related to NB modules and their dependencies is a notion of \emph{tokens}. Imagine a situation where module \emph{M} needs \emph{someone} else to provide a certain service \emph{S}, but doesn't care who will that be. It cannot declare a direct dependency on a module containing this service provider, because it might not know such a module. Instead, \emph{M} declares a \emph{required token}. Any module providing \emph{S} will declare a \emph{provided token}, which is a simple string (usually fully qualified Java name of the interface representing \emph{S}). Later, NBP will make sure that \emph{M} can be installed in the platform only if there is at least one module providing that specific token.\\
+An important topic related to NB modules and their dependencies is a notion of \emph{tokens}. Imagine a situation where module \emph{M} needs \emph{someone} else to provide a certain service \emph{S}, but doesn't care who will that be. It cannot declare a direct dependency on a module containing this service provider, because it might not know such a module. Instead, \emph{M} declares a \emph{required token}. Any module providing \emph{S} will declare a \emph{provided token}, which is a simple string (usually fully qualified Java name of the interface representing \emph{S}). Later, NBP will make sure that \emph{M} can be installed in the platform only if there is at least one module providing that specific token.
 
 jInfer uses tokens in the following way: \jmodule{Runner}, as the module encapsulating the inference process, and \jmodule{ProjectType} as an encapsulation of jInfer projects both require the following 3 tokens.
-
 \begin{itemize}
 	\item \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator}
 	\item \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator}
 	\item \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier}
 \end{itemize}
-
 All inference modules declare their respective token as provided. This way it is ensured that jInfer will run only if there is at least one implementation of each of the inference modules, regardless of the implementation itself.
 
 %\nocite{*}
+\newpage
 \bibliographystyle{alpha}
 \bibliography{literature}
 

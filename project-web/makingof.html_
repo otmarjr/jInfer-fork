@@ -94,12 +94,6 @@ We are using mainly 4 of the facilities SF.net provides: <a href="https://source
 		We use a mix of instant messaging and e-mails to communicate, VoIP calls didn't prove useful.
 	</p>
 
-	<h2>Documentation</h2>
-
-	<p>
-		TODO
-	</p>
-
 </div>
 
 #include "footer.html_"

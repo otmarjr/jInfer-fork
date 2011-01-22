@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -143,9 +144,15 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.append("\"");
 
     // If its type is one of built-in types we don't have much work to do
-    // We should support also other built-in types.
     if (TypeUtils.isOfBuiltinType(element)) {
-      indentator.append(" type=\"xs:string\"");
+      // Element subnodes is TOKEN SIMPLE_DATA and it may have set its type.
+      // If type is not set, element will be defined as xs:string.
+      String type = ((SimpleData)element.getSubnodes().getContent()).getContentType();
+      if (BaseUtils.isEmpty(type)) {
+        type = "string";
+      }
+
+      indentator.append(" type=\"xs:" + type + '"');
       processOccurrences(interval);
       indentator.append("/>\n");
       return;

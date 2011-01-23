@@ -14,9 +14,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
+import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -24,14 +28,27 @@ import static org.junit.Assert.*;
  *
  * @author reseto
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class DOMHandlerTest {
 
-  @Test
-  public void testGetRules() {
+  @Test(expected = RuntimeException.class)
+  public void testProcessNull() {
+    System.out.println("processNull");
+    final List<Element> expResult = new ArrayList<Element>(0);
+    final DOMHandler handler = new DOMHandler();
+    handler.parse(null);
+    final List<Element> result = handler.getRules();
+    assertEquals(expResult, result);
   }
-
-  @Test
-  public void testParse() {
+  
+  @Test(expected = RuntimeException.class)
+  public void testProcessEmpty() {
+    System.out.println("processEmpty");
+    final List<Element> expResult = new ArrayList<Element>(0);
+    final DOMHandler handler = new DOMHandler();
+    final InputStream s = new ByteArrayInputStream("".getBytes());
+    handler.parse(s);
+    final List<Element> result = handler.getRules();
+    assertEquals(expResult, result);
   }
-
 }

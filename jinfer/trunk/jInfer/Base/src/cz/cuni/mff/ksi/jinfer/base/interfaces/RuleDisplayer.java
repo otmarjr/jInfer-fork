@@ -28,13 +28,9 @@ public interface RuleDisplayer extends NamedModule {
   String RULE_DISPLAYER_PROPERTY = "rule.displayer";
 
   /**
-   * Display a list of rules. The list will be rendered into
-   * the Rule Displayer window, in a named panel.
-   *
-   * @param panelName Title of the panel where these rules will be displayed.
-   * @param rules List of rules to display.
-   * @param render Flag whether to actually do anything.
+   * Creates rule displayer window in which rules are displayed.
+   * @param panelName Name of the rule displayer window.
+   * @param rules Rules to be displayed in rule displayer.
    */
-  void showRulesAsync(final String panelName,
-          final List<Element> rules, final boolean render);
+  public void createDisplayer(final String panelName, final List<Element> rules);
 }

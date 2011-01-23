@@ -18,10 +18,8 @@ package cz.cuni.mff.ksi.jinfer.basicruledisplayer;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
-import org.openide.windows.WindowManager;
 
 /**
  * Helper class for displaying a list of rules.
@@ -35,22 +33,12 @@ public final class BasicRuleDisplayer implements RuleDisplayer {
   private static final String DISPLAY_NAME = "Basic Rule Displayer";
 
   @Override
-  public void showRulesAsync(final String panelName,
-          final List<Element> rules, final boolean render) {
-    if (!render || BaseUtils.isEmpty(rules)) {
-      return;
+  public void createDisplayer(final String panelName, final List<Element> rules) {
+    BasicRuleDisplayerTopComponent topComponent = BasicRuleDisplayerTopComponent.findInstance();
+    if (!topComponent.isOpened()) {
+      topComponent.open();
     }
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
-      @Override
-      public void run() {
-        final BasicRuleDisplayerTopComponent topComponent = BasicRuleDisplayerTopComponent.findInstance();
-        if (!topComponent.isOpened()) {
-          topComponent.open();
-        }
-        topComponent.createNewPanel(panelName).setRules(rules);
-      }
-    });
+    topComponent.createNewPanel(panelName).setRules(rules);
   }
 
   @Override

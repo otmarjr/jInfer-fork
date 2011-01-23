@@ -17,7 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
 import org.openide.util.NbPreferences;
+import org.openide.windows.WindowManager;
 
 /**
  * Logic for getting selected Rule Displayer.
@@ -33,8 +36,30 @@ public final class RuleDisplayerHelper {
    * Get selected Rule Displayer. If no Rule Displayer is selected, return first registered.
    * @return Selected Rule Displayer.
    */
-  public static RuleDisplayer getRuleDisplayer() {
+  private static RuleDisplayer getRuleDisplayer() {
     final String ruleDisplayName = NbPreferences.forModule(RuleDisplayer.class).get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, "TreeRuleDisplayer");
     return ModuleSelectionHelper.lookupImpl(RuleDisplayer.class, ruleDisplayName);
+  }
+
+
+  /**
+   * Display a list of rules. The list will be rendered into
+   * the Rule Displayer window, in a named panel.
+   *
+   * @param panelName Title of the panel where these rules will be displayed.
+   * @param rules List of rules to display.
+   * @param render Flag whether to actually do anything.
+   */
+  public static void showRulesAsync(final String panelName, final List<Element> rules, final boolean render) {
+    if (!render || BaseUtils.isEmpty(rules)) {
+      return;
+    }
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        getRuleDisplayer().createDisplayer(panelName, rules);
+      }
+    });
   }
 }

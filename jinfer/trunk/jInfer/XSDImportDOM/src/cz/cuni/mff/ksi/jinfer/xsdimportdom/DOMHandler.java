@@ -26,12 +26,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDBuiltInDataTypes;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDOccurences;
-import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDTag;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -41,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -49,10 +45,11 @@ import org.xml.sax.SAXException;
 
 /**
  * Class responsible for creating Initial Grammar rules from XSD Schema.
- * It uses DOM parser to build the DOM tree from a stream, which is then
+ * It uses a proprietary Xerces DOM (from SUN) parser to build the DOM tree from a stream, which is then
  * recursively traversed and a parallel tree with nodes of type {@link Element } is created.
- * This new rule tree
- * 
+ * This new rule tree contains the whole IG rules that are returned by {@link #getRules() } method.
+ * These rules may contain complex regexps (depending on parsed schema) and should be expanded
+ * before simplifying.
  * @author reseto
  */
 public class DOMHandler {
@@ -61,11 +58,32 @@ public class DOMHandler {
   private static final Logger LOG = Logger.getLogger(DOMHandler.class);
   private final boolean verbose = settings.isVerbose();
 
-  private static final String STAR = "*";
+  /**
+   * Name of an element, which is only a container for a complex type. 
+   * To distinguish containers, it should be different from any real element name, hence the colons.
+   */
   private static final String CONTAINER_CTYPE = "::container::complextype::";
+  /**
+   * Name of an element, which is only a container for an order indicator.
+   * To distinguish containers, it should be different from any real element name, hence the colons.
+   */
   private static final String CONTAINER_ORDER = "::container::order::";
+  /**
+   * String for attribute value of <i>maxOccurs</i> attribute, indicating unlimited occurrence.
+   */
   private static final String UNBOUNDED = "unbounded";
-  private static final String SIMPLE_DATA_NAME = "_SDnamE__";
+  /**
+   * String for attribute value of <i>use</i> attribute, indicating compulsory usage.
+   */
+  private static final String REQUIRED = "required";
+  /**
+   * String for attribute value of <i>use</i> attribute, indicating optional usage.
+   */
+  private static final String OPTIONAL = "optional";
+  /**
+   * Name of {@link SimpleData } children of TOKEN Elements, holding the simple data type information for XSD exporter.
+   */
+  private static final String SIMPLE_DATA_NAME = "__SD";
 
   /**
    * List of all element tags in current schema that are immediate children of the schema tag itself.
@@ -90,21 +108,6 @@ public class DOMHandler {
   }
 
   /**
-   * Get the list of all rules extracted from the schema.
-   * @return List of rules.
-   */
-  public List<Element> getRules() {
-    final List<Element> rules = new ArrayList<Element>();
-    for (Element root : roots) {
-      final List<Element> elementRules = new ArrayList<Element>();
-      rules.add(root);
-      getRulesFromElement(root, elementRules);
-      rules.addAll(elementRules);
-    }
-    return rules;
-  }
-
-  /**
    * Parse the schema from stream.
    * Must be called before {@link #getRules() },
    * because it creates the tree of {@link Element }s from which the rules are extracted.
@@ -125,7 +128,24 @@ public class DOMHandler {
       Exceptions.printStackTrace(ex);
     }
   }
+  
+  /**
+   * Get the list of all rules extracted from the schema.
+   * @return List of rules.
+   */
+  public List<Element> getRules() {
+    final List<Element> rules = new ArrayList<Element>();
+    for (Element root : roots) {
+      final List<Element> elementRules = new ArrayList<Element>();
+      rules.add(root);
+      getRulesFromElement(root, elementRules);
+      rules.addAll(elementRules);
+    }
+    return rules;
+  }
 
+  // #########################################################################       PRIVATE METHODS
+  
   /**
    * Extract all rules from a subtree of <code>Element</code>, not including the root itself.
    * @param root Root of the subtree from which we extract the rules.
@@ -140,6 +160,14 @@ public class DOMHandler {
     }
   }
 
+  /**
+   * Examine direct children of the root node of DOM element tree.
+   * This should be invoked only once, on the schema node itself.
+   * All complexTypes with name are added to the <code>namedCTypes</code> map.
+   * All elements with name are added to the <code>referenced</code> map.
+   * Then the whole rule tree is built using the DOM tree and the two maps.
+   * @param root Root (schema) node.
+   */
   private void examineRootChildren(final org.w3c.dom.Element root) {
     for (int i = 0; i < root.getChildNodes().getLength(); i++) {
       // check if child is of type ELEMENT_NODE as defined by DOM spec
@@ -168,23 +196,23 @@ public class DOMHandler {
   }
 
   /**
-   * Transform domElem to <code>Element</code>, which will be either a sentinel with no subtree
-   * (if it has defined <i>ref</i> attribute), or a regular element with full subtree that is
-   * recursively parsed from the schema.
-   * @param domElem Node in the DOM tree to process.
+   * Add element to the <code>referenced</code> map.
+   * This means that the element can be pointed at, by another element from within the schema,
+   * using <i>ref</i> attribute.
+   * XSD Schema allows this only for elements directly under schema tag.
+   * @param domElem Element Element tag directly under schema tag.
    */
-  private void addElementToRoots(final org.w3c.dom.Element domElem) {
+  private void addToReferenced(final org.w3c.dom.Element domElem) {
     final String name = domElem.getAttribute(XSDAttribute.NAME.toString());
-    if (BaseUtils.isEmpty(name) && domElem.hasAttribute(XSDAttribute.REF.toString())) {
-      roots.add(createSentinel(domElem, new ArrayList<String>(), XSDAttribute.REF));
-    } else {
-      // XSD Schema specification states that use of minOccurs and maxOccurs attributes
-      // cannot be used for element directly under schema tag
-      // that's why we use RegexpInterval.getOnce()
-      roots.add(buildRuleSubtree(domElem,
-                                 new ArrayList<String>(),
-                                 new ArrayList<org.w3c.dom.Element>(),
-                                 RegexpInterval.getOnce()));
+    if (!BaseUtils.isEmpty(name)) {
+      if (!referenced.containsKey(name)) {
+        if (verbose) {
+          LOG.debug("Adding element to referenced: " + name);
+        }
+        referenced.put(name, domElem);
+      } else {
+        LOG.warn("Trying to add duplicate element to referenced named: " + name);
+      }
     }
   }
 
@@ -210,17 +238,24 @@ public class DOMHandler {
     }
   }
 
-  private void addToReferenced(final org.w3c.dom.Element domElem) {
+  /**
+   * Transform domElem to <code>Element</code>, which will be either a sentinel with no subtree
+   * (if it has defined <i>ref</i> attribute), or a regular element with full subtree that is
+   * recursively parsed from the schema.
+   * @param domElem Node in the DOM tree to process.
+   */
+  private void addElementToRoots(final org.w3c.dom.Element domElem) {
     final String name = domElem.getAttribute(XSDAttribute.NAME.toString());
-    if (!BaseUtils.isEmpty(name)) {
-      if (!referenced.containsKey(name)) {
-        if (verbose) {
-          LOG.debug("Adding element to referenced: " + name);
-        }
-        referenced.put(name, domElem);
-      } else {
-        LOG.warn("Trying to add duplicate element to referenced named: " + name);
-      }
+    if (BaseUtils.isEmpty(name) && domElem.hasAttribute(XSDAttribute.REF.toString())) {
+      roots.add(createSentinel(domElem, new ArrayList<String>(), XSDAttribute.REF));
+    } else {
+      // XSD Schema specification states that use of minOccurs and maxOccurs attributes
+      // cannot be used for element directly under schema tag
+      // that's why we use RegexpInterval.getOnce()
+      roots.add(buildRuleSubtree(domElem,
+                                 new ArrayList<String>(),
+                                 new ArrayList<org.w3c.dom.Element>(),
+                                 RegexpInterval.getOnce()));
     }
   }
 
@@ -257,57 +292,7 @@ public class DOMHandler {
     return sentinel;
   }
 
-  /**
-   * Dumps all element tags in the subtree under a specified root.
-   * @param root Root of the subtree.
-   */
-  private void debugDumpOfElements(final org.w3c.dom.Element root) {
-    final NodeList elements = root.getElementsByTagNameNS(STAR, XSDTag.ELEMENT.getName());
-    for (int i = 0; i < elements.getLength(); i++) {
-      final org.w3c.dom.Element domEl = isDOMElement(elements.item(i)); //always in this case
-      if (domEl != null) {
-        if (!BaseUtils.isEmpty(domEl.getAttribute(XSDAttribute.NAME.toString()))) {
-          LOG.debug("Found element with name:" + domEl.getAttribute(XSDAttribute.NAME.toString()));
-        } else if (!BaseUtils.isEmpty(domEl.getAttribute(XSDAttribute.REF.toString()))) {
-          LOG.debug("Found element with ref:" + domEl.getAttribute(XSDAttribute.NAME.toString()));
-        }
-      }
-    }
-  }
-
-  private Map<String, Object> prepareMetadata(final  RegexpInterval interval) {
-    final Map<String, Object> metadata = new HashMap<String, Object>();
-    metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
-    metadata.put(XSDAttribute.MINOCCURS.getMetadataName(), interval.getMin());
-    if (interval.isUnbounded()) {
-      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), UNBOUNDED);
-    } else {
-      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), interval.getMax());
-    }
-    return metadata;
-  }
-
-  /**
-   * Set the interval of given element to the default (1,1) if it was not set.
-   * @param ret Element to check for unset interval.
-   */
-  private void repairConcatInterval(final Element ret) {
-    if (RegexpType.CONCATENATION.equals(ret.getSubnodes().getType()) && ret.getSubnodes().getInterval() == null) {
-      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
-    }
-  }
-
-  /**
-   * Set the parameter to {@link RegexpType#LAMBDA } element,
-   * with all the valid constraints and make it immutable.
-   * @param ret Element to set as LAMBDA.
-   */
-  private void setLambda(final Element ret) {
-      ret.getSubnodes().setInterval(null);
-      ret.getSubnodes().setContent(null);
-      ret.getSubnodes().setType(RegexpType.LAMBDA);
-      ret.setImmutable();
-  }
+  // ####################################################################           SUBTREE BUILDING
 
   /**
    * Build a tree of {@link Element}s that represent the rules in Initial Grammar,
@@ -342,17 +327,41 @@ public class DOMHandler {
     
     // inspect self
     final XSDTag tag = XSDTag.matchName(trimNS(currentNode.getNodeName()));
+    final Element returned = inspectSelf(currentNode, ret, context, visited, newContext, newVisited, interval);
+    if (returned != null) {
+      return returned;
+    }
+
+    // inspect children
+    final NodeList children = currentNode.getChildNodes();
+    inspectChildren(children, tag, ret, newContext, newVisited, interval);
+
+    if (XSDTag.ELEMENT.equals(tag)) {
+      finalizeElement(currentNode, newContext, ret);
+    }
+    repairConcatInterval(ret);
+    return ret;
+  }
+
+  private Element inspectSelf(final org.w3c.dom.Element currentNode,
+                              final Element ret,
+                              final List<String> context,
+                              final List<org.w3c.dom.Element> visited,
+                              final List<String> newContext,
+                              final List<org.w3c.dom.Element> newVisited,
+                              final RegexpInterval interval) throws XSDException {
+    final XSDTag tag = XSDTag.matchName(trimNS(currentNode.getNodeName()));
     switch (tag) {
       case ELEMENT:
         for (org.w3c.dom.Element el : visited) {
           // if this node was visited previously in the recursion
           // (for example when dealing with a recursive complextype)
           // we just create a sentinel to be used as the leaf node of rule tree
-          if(el == currentNode) { // has to be the same instance
+          if (el == currentNode) {
+            // has to be the same instance
             return createSentinel(currentNode, context, XSDAttribute.NAME);
           }
         }
-        
         final String name = currentNode.getAttribute(XSDAttribute.NAME.toString());
         if (!BaseUtils.isEmpty(name)) {
           ret.setName(name);
@@ -364,7 +373,6 @@ public class DOMHandler {
         newContext.add(name);
         newVisited.add(currentNode);
         ret.getSubnodes().setInterval(interval);
-
         // element has defined type
         if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
           final String type = trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
@@ -372,16 +380,16 @@ public class DOMHandler {
             // if element is of some built-in data type, we must first check its children
             // only then can we add the simple type as a token (
             // see [SIMPLE DATA SECTION] after checking the children
-            metadata.put(XSDAttribute.TYPE.getMetadataName(), type);
+            ret.getMetadata().put(XSDAttribute.TYPE.getMetadataName(), type);
           } else if (namedCTypes.containsKey(type)) {
             final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited, null);
             extractSubnodesFromContainer(container, ret, CONTAINER_CTYPE);
             finalizeElement(currentNode, newContext, ret);
-            return ret; // RETURN STATEMENT 
+            return ret; // RETURN STATEMENT
           } else {
             LOG.error("Specified type '" + type + "' of element '" + name + "' was not found!");
           }
-        } 
+        }
         break;
       case ALL:
         ret.getSubnodes().setType(RegexpType.PERMUTATION);
@@ -392,7 +400,6 @@ public class DOMHandler {
         ret.setName(CONTAINER_ORDER);
         break;
       case SEQUENCE:
-        //TODO reseto: create child interval to mark the number of occurences
         ret.getSubnodes().setType(RegexpType.CONCATENATION);
         ret.setName(CONTAINER_ORDER);
         break;
@@ -400,27 +407,27 @@ public class DOMHandler {
         ret.setName(CONTAINER_CTYPE);
         break;
       default:
-        // do nothing;
         LOG.warn("Behavior undefined for tag " + currentNode.getTagName());
     }
-    
-    // inspect children
-    final NodeList children = currentNode.getChildNodes();
+    return null;
+  }
+
+  private void inspectChildren(final NodeList children, final XSDTag tag, final Element ret, final List<String> newContext, final List<org.w3c.dom.Element> newVisited, RegexpInterval interval) throws XSDException {
     for (int i = 0; i < children.getLength(); i++) {
       final org.w3c.dom.Element child = isDOMElement(children.item(i));
       if (child != null) {
         final XSDTag childTag = XSDTag.matchName(trimNS(child.getTagName()));
         switch (childTag) {
           case ELEMENT:
-            if (XSDTag.ELEMENT.equals(tag)) { // parent is also element
+            if (XSDTag.ELEMENT.equals(tag)) {
+              // parent is also element
               throw new XSDException("Invalid schema, two directly nested element tags.");
             }
-            ret.getSubnodes().addChild(
-              Regexp.<AbstractStructuralNode>getToken(
-              buildRuleSubtree(child, newContext, newVisited, interval)));
+            ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(buildRuleSubtree(child, newContext, newVisited, interval)));
             break;
           case COMPLEXTYPE:
-            if (XSDTag.ELEMENT.equals(tag)) { // parent is also complexType
+            if (XSDTag.ELEMENT.equals(tag)) {
+              // parent is also complexType
               extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited, null), ret, CONTAINER_CTYPE);
             } else {
               throw new XSDException("Invalid schema, two directly nested complexType tags.");
@@ -438,17 +445,17 @@ public class DOMHandler {
               }
             }
             String attrType = child.getAttribute(XSDAttribute.TYPE.toString());
-            if (BaseUtils.isEmpty(attrType)) {
-              attrType = null;
+            if (!BaseUtils.isEmpty(attrType)) {
+              attrType = trimNS(attrType);
+              if (!XSDBuiltInDataTypes.isSimpleDataType(attrType)) {
+                attrType = "";
+              }
             }
             final HashMap<String, Object> attrMeta = new HashMap<String, Object>();
-            if (child.hasAttribute(XSDAttribute.USE.toString())
-              && child.getAttribute(XSDAttribute.USE.toString()).equalsIgnoreCase("required")) {
-              attrMeta.put("required", Boolean.TRUE);
+            if (child.hasAttribute(XSDAttribute.USE.toString()) && child.getAttribute(XSDAttribute.USE.toString()).equalsIgnoreCase("required")) {
+              attrMeta.put(REQUIRED, Boolean.TRUE);
             }
-            //TODO reseto: possibly add more metadata
-            ret.getAttributes().add(
-              new Attribute(newContext, attrName, attrMeta, attrType, new ArrayList<String>(0)));
+            ret.getAttributes().add(new Attribute(newContext, attrName, attrMeta, attrType, new ArrayList<String>(0)));
             break;
           case ALL:
             if (XSDTag.COMPLEXTYPE.equals(tag)) {
@@ -456,7 +463,8 @@ public class DOMHandler {
             } else if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
               throw new XSDException("Invalid schema, element '" + childTag.toString() + "' directly under '" + tag.toString() + "'.");
             } else {
-              //TODO reseto: group and complexcontent should be supported?
+              //TODO reseto optional: extend functionality to support complexContent
+              //TODO reseto optional: extend functionality to support group
               LOG.warn("Unsupported tree structure: element 'all' under " + tag.toString());
             }
             break;
@@ -475,47 +483,9 @@ public class DOMHandler {
           default:
             LOG.warn("Behavior undefined for child tag " + child.getTagName());
         }
-      }
-    } // end children loop
-    
-    if (XSDTag.ELEMENT.equals(tag)) {
-      finalizeElement(currentNode, newContext, ret);
+      } // end child != null
+      // if child is null (it's a different DOM node), we are not interested
     }
-    repairConcatInterval(ret);
-    return ret;
-  }
-
-  /**
-   * Trims (cuts) namespace prefix from the beginning of element qName and returns it in original case.
-   */
-  private String trimNS(final String qName) {
-    return qName.substring(qName.lastIndexOf(':') + 1);
-  }
-
-  /**
-   * Determine if given <code>Node</code> is in fact <i>org.w3c.dom.Element</i> and return a type cast if so.
-   * @param node Entity to be checked.
-   * @return Parameter cast to <code>org.w3c.dom.Element</code>, or <code>null</code>.
-   * @see org.w3c.dom.Element
-   */
-  private org.w3c.dom.Element isDOMElement(final Node node) {
-    if (node.getNodeType() == Node.ELEMENT_NODE) {
-      return (org.w3c.dom.Element) node;
-    }
-    return null;
-  }
-
-  private RegexpInterval determineInterval(final org.w3c.dom.Element currentNode, final RegexpInterval outerInterval) {
-    final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
-    final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
-    RegexpInterval interval;
-    if (outerInterval != null) {
-      final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
-      interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
-    } else {
-      interval = XSDOccurences.createInterval(minOccurence, maxOccurence);
-    }
-    return interval;
   }
 
   /**
@@ -530,18 +500,20 @@ public class DOMHandler {
     if (!subtree.getName().equals(containerType)) {
       throw new XSDException("Extracting subnodes failed, unexpected contaner.");
     }
+    // compare types of subnodes, set correct type if destination is null
+    // throw exception if types don't match, or do nothing if they match
     if (destination.getSubnodes().getType() == null && subtree.getSubnodes().getType() != null) {
-      //TODO reseto: empty complextype as a container? it should not produce an error
       destination.getSubnodes().setType(subtree.getSubnodes().getType());
     } else if (destination.getSubnodes().getType() != null 
                && subtree.getSubnodes().getType() != null
                && destination.getSubnodes().getType() != subtree.getSubnodes().getType()) {
       //                                              ^^ comparing enums
       // if the two types are not null and not equal, the schema is invalid (mixing wrong types)
-      LOG.error("subtree name: " + subtree.getName() + " and destination name: " + destination.getName());
-      throw new XSDException("Extracting subnodes failed, incompatible regexp types "
-        + destination.getSubnodes().getType()
-        + " and " + subtree.getSubnodes().getType());
+      final String msg = NbBundle.getMessage(DOMHandler.class, "Error.MismatchedTypes",
+        subtree.getSubnodes().getType(), subtree.getName(),
+        destination.getSubnodes().getType(), destination.getName());
+      LOG.error(msg);
+      throw new XSDException(msg);
     }
     for (Regexp<AbstractStructuralNode> regexp : subtree.getSubnodes().getChildren()) {
       destination.getSubnodes().addChild(regexp);
@@ -580,12 +552,87 @@ public class DOMHandler {
                        Collections.<String>emptyList()));
     } else if (ret.getSubnodes().getType() == null) {
       // type of element must be non-null, but apparently it has some children
-      LOG.warn("Element " + ret.getName() + " had no defined regexp type, but contained subnodes - setting to concatenation.");
+      LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.SetDefaultType", ret.getName()));
       ret.getSubnodes().setType(RegexpType.CONCATENATION);
       ret.getSubnodes().setContent(null);
     }
     if (ret.isMutable()) {
       ret.setImmutable();
     }
+  }
+
+  // ############################################################################     HELPER METHODS
+
+  /**
+   * Trims (cuts) namespace prefix from the beginning of element qName and returns it in original case.
+   */
+  private String trimNS(final String qName) {
+    return qName.substring(qName.lastIndexOf(':') + 1);
+  }
+
+  /**
+   * Determine if given <code>Node</code> is in fact <i>org.w3c.dom.Element</i> and return a type cast if so.
+   * @param node Entity to be checked.
+   * @return Parameter cast to <code>org.w3c.dom.Element</code>, or <code>null</code>.
+   * @see org.w3c.dom.Element
+   */
+  private org.w3c.dom.Element isDOMElement(final Node node) {
+    if (node.getNodeType() == Node.ELEMENT_NODE) {
+      return (org.w3c.dom.Element) node;
+    }
+    return null;
+  }
+
+  private RegexpInterval determineInterval(final org.w3c.dom.Element currentNode, final RegexpInterval outerInterval) {
+    final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
+    final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
+    RegexpInterval interval;
+    if (outerInterval != null) {
+      final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
+      interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
+    } else {
+      interval = XSDOccurences.createInterval(minOccurence, maxOccurence);
+    }
+    return interval;
+  }
+
+  /**
+   * Create metadata for an element. This should contain information about element interval
+   * and information that the element was parsed from schema.
+   * @param interval Valid interval specifying element occurrence limits.
+   * @return New metadata.
+   */
+  private Map<String, Object> prepareMetadata(final  RegexpInterval interval) {
+    final Map<String, Object> metadata = new HashMap<String, Object>();
+    metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
+    metadata.put(XSDAttribute.MINOCCURS.getMetadataName(), interval.getMin());
+    if (interval.isUnbounded()) {
+      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), UNBOUNDED);
+    } else {
+      metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), interval.getMax());
+    }
+    return metadata;
+  }
+
+  /**
+   * Set the interval of given element to the default (1,1) if it was not set.
+   * @param ret Element to check for unset interval.
+   */
+  private void repairConcatInterval(final Element ret) {
+    if (RegexpType.CONCATENATION.equals(ret.getSubnodes().getType()) && ret.getSubnodes().getInterval() == null) {
+      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
+    }
+  }
+
+  /**
+   * Set the parameter to {@link RegexpType#LAMBDA } element,
+   * with all the valid constraints and make it immutable.
+   * @param ret Element to set as LAMBDA.
+   */
+  private void setLambda(final Element ret) {
+      ret.getSubnodes().setInterval(null);
+      ret.getSubnodes().setContent(null);
+      ret.getSubnodes().setType(RegexpType.LAMBDA);
+      ret.setImmutable();
   }
 }

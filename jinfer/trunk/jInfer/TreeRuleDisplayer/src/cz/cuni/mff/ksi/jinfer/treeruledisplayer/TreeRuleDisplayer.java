@@ -35,23 +35,12 @@ public final class TreeRuleDisplayer implements RuleDisplayer {
   private static final String DISPLAY_NAME = "Tree Rule Displayer";
 
   @Override
-  public void showRulesAsync(final String panelName,
-          final List<Element> rules, final boolean render) {
-    if (!render || BaseUtils.isEmpty(rules)) {
-      return;
+  public void createDisplayer(final String panelName, final List<Element> rules) {
+    final TreeRuleDisplayerTopComponent topComponent = TreeRuleDisplayerTopComponent.findInstance();
+    if (!topComponent.isOpened()) {
+      topComponent.open();
     }
-
-    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
-      @Override
-      public void run() {
-        final TreeRuleDisplayerTopComponent topComponent = TreeRuleDisplayerTopComponent.findInstance();
-        if (!topComponent.isOpened()) {
-          topComponent.open();
-        }
-        topComponent.createNewPanel(panelName, GraphBuilder.buildGraphPanel(rules));
-      }
-    });
+    topComponent.createNewPanel(panelName, GraphBuilder.buildGraphPanel(rules));
   }
 
   @Override

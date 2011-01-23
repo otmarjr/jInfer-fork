@@ -59,7 +59,7 @@ public class StateRemovalPropertiesPanel extends AbstractPropertiesPanel {
     setPreferredSize(new java.awt.Dimension(500, 300));
     setLayout(new java.awt.GridBagLayout());
 
-    labelOrderer.setText(org.openide.util.NbBundle.getMessage(StateRemovalPropertiesPanel.class, "StateRemovalPropertiesPanel.labelOrderer.text")); // NOI18N
+    labelOrderer.setText("State removal orderer");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;

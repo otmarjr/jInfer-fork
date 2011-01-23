@@ -290,8 +290,37 @@ public final class ExampleRuleDisplayer implements RuleDisplayer {
 <h3>Console output, logging</h3>
 
 <p>
-
+For printing data to console output, NBP provides <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/IOProvider.html">IOProvider</a> and <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/InputOutput.html">InputOutput</a> classes.
+IOProvider's method <code>getIO(String, boolean)</code> returns InputOutput instance, which can be used to obtain Reader/OutputWriter to read/write into output window.
 </p>
+<span>Example:</span><br/>
+<pre class="code">
+// Creates new output window, where first parameter is a name and second
+// is flag determinig if new window will be created if there is already
+// a window with the same name.
+final InputOutput ioResult = IOProvider.getDefault().getIO("Example", true);
+ioResult.getOut().println("Hello world");
+
+// After writing everything into output window close the output.
+ioResult.getOut().close();
+</pre>
+
+<p>
+Logging is done in jInfer by using <a href="http://logging.apache.org/log4j/1.2/">Log4j tool</a>. If you are not familiar with
+Log4j, example below show you some simple usage. All logged messages are saved in a standard log file placed
+in <i>UserHome/.jinfer/</i> folder and printed into "jInfer" output window in jInfer application. For each of these two places can be set
+in jInfer options, for which LOG level will be messages saved/printed.
+</p>
+<span>Example:<span><br/>
+<pre class="code">
+// Creates Logger instance for particular class
+private static final Logger LOG = Logger.getLogger(Example.class);
+
+    ...
+
+// Log a message with info level
+LOG.info("Some message with info log level");
+</pre>
 
 </div>
 

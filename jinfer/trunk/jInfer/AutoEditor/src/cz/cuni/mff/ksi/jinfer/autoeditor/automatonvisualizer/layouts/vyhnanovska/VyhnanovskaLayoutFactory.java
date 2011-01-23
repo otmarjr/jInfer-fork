@@ -75,6 +75,6 @@ public class VyhnanovskaLayoutFactory implements LayoutF {
 
   @Override
   public String getUserModuleDescription() {
-    return "Uses square matrix to position nodes.";
+    return "This layout lays graph nodes in a grid of same sized squares. Each node is placed in a separate square.";
   }
 }

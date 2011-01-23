@@ -14,6 +14,7 @@
   <folder name="Menu">
     <folder name="Window">
       <folder name="jInfer">
+        <attr name="position" intvalue="0"/>
         <file name="BasicRuleDisplayerAction.shadow">
           <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-basicruledisplayer-BasicRuleDisplayerAction.instance"/>
         </file>

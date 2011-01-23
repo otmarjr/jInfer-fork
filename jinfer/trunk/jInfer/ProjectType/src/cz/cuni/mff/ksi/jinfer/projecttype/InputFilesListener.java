@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -64,7 +63,7 @@ public class InputFilesListener implements FileChangeListener {
         ((FileChildren) fileChildren).refreshNodes();
       }
       DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(
-              org.openide.util.NbBundle.getMessage(Input.class, "Input.deletedInputFiles.message"),
+              org.openide.util.NbBundle.getMessage(InputFilesListener.class, "Input.deletedInputFiles.message"),
               NotifyDescriptor.INFORMATION_MESSAGE));
     }
   }

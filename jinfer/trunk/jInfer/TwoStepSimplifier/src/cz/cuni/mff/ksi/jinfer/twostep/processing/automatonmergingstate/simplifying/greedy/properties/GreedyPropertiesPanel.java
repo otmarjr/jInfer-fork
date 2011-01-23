@@ -67,7 +67,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     setPreferredSize(new java.awt.Dimension(500, 50));
     setLayout(new java.awt.GridBagLayout());
 
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(GreedyPropertiesPanel.class, "GreedyPropertiesPanel.jLabel1.text")); // NOI18N
+    jLabel1.setText("Merge condition tester");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;

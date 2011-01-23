@@ -63,7 +63,7 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     setPreferredSize(new java.awt.Dimension(500, 300));
     setLayout(new java.awt.GridBagLayout());
 
-    labelAutomatonSimplifier.setText(org.openide.util.NbBundle.getMessage(AutomatonMergingStatePropertiesPanel.class, "AutomatonMergingStatePropertiesPanel.labelAutomatonSimplifier.text")); // NOI18N
+    labelAutomatonSimplifier.setText("Automaton simplifier");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -101,7 +101,7 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane3, gridBagConstraints);
 
-    labelRegexpAutomatonSimplifier.setText(org.openide.util.NbBundle.getMessage(AutomatonMergingStatePropertiesPanel.class, "AutomatonMergingStatePropertiesPanel.labelRegexpAutomatonSimplifier.text")); // NOI18N
+    labelRegexpAutomatonSimplifier.setText("Regexp automaton simplifier");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;

@@ -106,7 +106,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane3, gridBagConstraints);
 
-    labelClusterProcessor.setText(org.openide.util.NbBundle.getMessage(TwoStepPropertiesPanel.class, "TwoStepPropertiesPanel.labelClusterProcessor.text")); // NOI18N
+    labelClusterProcessor.setText("Cluster processor");
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;

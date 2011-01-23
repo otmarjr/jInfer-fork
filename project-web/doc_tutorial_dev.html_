@@ -192,11 +192,28 @@ Another way is to set public packages through GUI:
 </p>
 <h3>Error handling</h3>
 
-TODO
+<p>
+Each run of inference is encapsulated in a <code>try-catch</code> block, so it is safe to throw any exception in inference process.
+Each thrown exception will be catched, get logged, presented to the user and inference will stop. However if module uses threads which
+throw exception, it is catched by NBP, instead of our code. Because of this is reasonable to catch this exception in your module and re-throw it in the right thread.
+</p>
 
 <h3>Interruptions</h3>
 
-TODO
+<p>
+In our application, we gave user an ability to stop inference in any moment of its run. For this reason, modules have to check in every time-consuming place
+such as long loops, if this case happens. Example below shows, how to check the interruption from user and what to do to correctly stop inference.
+</p>
+<span>Example:</span>
+<pre class="code">
+for (forever) {
+    if (Thread.interrupted()) {
+        throw new InterruptedException();
+    }
+    doStuff();
+}
+
+</pre>
 
 <h3>Dialogs</h3>
 

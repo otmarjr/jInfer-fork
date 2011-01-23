@@ -114,6 +114,9 @@ public class DOMHandler {
    * @param stream Schema to be parsed.
    */
   public void parse(final InputStream stream) {
+    if (stream == null) {
+      return;
+    }
     try {
       final DOMParser parser = new DOMParser();
       parser.parse(new InputSource(stream));

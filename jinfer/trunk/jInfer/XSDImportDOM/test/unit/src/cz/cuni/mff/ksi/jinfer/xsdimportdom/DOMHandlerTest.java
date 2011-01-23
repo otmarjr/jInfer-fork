@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 @SuppressWarnings("PMD.SystemPrintln")
 public class DOMHandlerTest {
 
-  @Test(expected = RuntimeException.class)
+  @Test
   public void testProcessNull() {
     System.out.println("processNull");
     final List<Element> expResult = new ArrayList<Element>(0);
@@ -41,7 +41,7 @@ public class DOMHandlerTest {
     assertEquals(expResult, result);
   }
   
-  @Test(expected = RuntimeException.class)
+  @Test
   public void testProcessEmpty() {
     System.out.println("processEmpty");
     final List<Element> expResult = new ArrayList<Element>(0);

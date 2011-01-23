@@ -240,11 +240,58 @@ TODO
 
 <h3>Rule display</h3>
 
-TODO
+<p>
+Rule displayer is component used for visualisation of rules in any part of inference process, but mainly in simplification part.
+If provided rule displayers are not good enough or something is missing, you can implement rule displayer for your own.
+You just need to follow these few easy steps:
+</p>
+<ol type=1>
+	<li>Implement <code>cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer</code>
+		<ul>
+			<li><code>RuleDisplayer</code> interface extends <code>NamedModule</code>, so you need to override its methods.</li>
+			<li>Override <code>createDisplayer(name, rules)</code> method which creates displayer window responsible for displaying rules.</li>
+		</ul>
+	</li>
+	<li>Annotate this class with <code>@ServiceProvider(service = RuleDisplayer.class)</code></li>
+</ol>
+
+<span>Example:</span><br/>
+<pre class="code">
+@ServiceProvider(service = RuleDisplayer.class)
+public final class ExampleRuleDisplayer implements RuleDisplayer {
+
+  @Override
+  public void createDisplayer(final String panelName, final List<Element> rules) {
+    // Creates standard NBP TopComponent in which are rules displayed.
+    ExampleRDTopComp topComponent = ExampleRDTopComp.findInstance();
+    if (!topComponent.isOpened()) {
+      topComponent.open();
+    }
+    topComponent.createRuleDisplayer(panelName, rules);
+  }
+
+  @Override
+  public String getName() {
+    return "displayerID";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Example rule displayer";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getDisplayName();
+  }
+}
+</pre>
 
 <h3>Console output, logging</h3>
 
-TODO
+<p>
+
+</p>
 
 </div>
 

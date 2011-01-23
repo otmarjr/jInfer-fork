@@ -26,7 +26,7 @@ import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Class providing XSD Schema parsing support using DOM parser.
  * @author reseto
  */
 @ServiceProvider(service = XSDParser.class)
@@ -41,9 +41,6 @@ public class DOMParser implements XSDParser {
   public void process(final InputStream stream) {
     final XSDImportSettings settings = new XSDImportSettings();
     LOG.setLevel(settings.logLevel());
-    //final DOMParserImpl parser = new DOMParserImpl(new SymbolTable());
-    //parser.parse(new XMLInputSource(null, null, null, stream, null));
-
     handler = new DOMHandler();
     handler.parse(stream);
   }

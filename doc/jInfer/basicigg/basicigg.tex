@@ -1,0 +1,111 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
+
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{18cm}
+
+\def\mftitle{jInfer BasicIGG Module Description}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+\maketitle
+\noindent Target audience: developers willing to extend jInfer, specifically modify the way \jmodule{BasicIGG} creates initial grammar from input files, for example by adding support for a new schema language.
+
+\noindent \begin{tabular}{|l|l|} \hline
+Responsible developer: & Matej Vitásek \\ \hline
+Required tokens:       & none \\ \hline
+Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator \\ \hline
+Module dependencies:   & Base \\ \hline
+Public packages:       & cz.cuni.mff.ksi.jinfer.basicigg.properties \\ \hline
+\end{tabular}
+
+\section{Introduction}
+
+This is an extensible implementation of the \jmodule{IGGenerator} inference interface. It is the only IG generator officialy shipped with jInfer.\\
+Make sure you understand the difference between the two types of initial grammar as described in \ref{archdoc}.
+
+\section{Structure}
+
+The main class implementing \code{IGGenerator} inference interface and simultaneously registered as its service provider is \code{IGGeneratorImpl}. In its \code{start} method it enumerates all files in the input parameter (of type \code{Input}). For each file, based on its extension the correct \emph{processor} is selected, executed and returned rules are aggregated. After each file has been processed, the resulting grammar is returned by invoking the \code{finished} method of the callback argument. 
+
+\section{Processors}
+
+A \emph{processor} is a class capable of extracting IG from an arbitrary \code{InputStream} (usually encapsulating a file). Various processors may handle generic XML, schemas like DTD, XSD or Schematron, query languages such as XPath, and so on.\\
+A processor has to be registered as a service provider of the \code{Processor} interface from \jmodule{Base} module. Due to the nature of NBP lookups, each processor is internally kept as a singleton, and should not use its inner state (refer to the chapter Lookups in \ref{archdoc}). Note that the factory pattern is not used here.\\ % TODO anti reference to a chapter?
+Each processor declares the class of inputs (documents, schemas, queries) and file extensions it is able to handle by implementing methods \code{getFolder()}, \code{getExtension()} and \code{processUndefined()}. Refer to JavaDoc of these methods for further details.\\
+
+\jmodule{BasicIGG} comes bundled with 3 processors: for generic XML documents, DTD schemas and XPath queries. Support for XSD queries is implemented in \jmodule{XSDImporter} to demonstrate \jmodule{BasicIGG}'s extension capabilities.
+
+\subsection{XML processor}
+
+XML processor registers itself into \emph{document} input folder, \emph{xml} file extension and declares that it can process other arbitrary file extensions.\\
+SAX traversal is used to collect the rules; the relevant \code{ContentHandler} is the class \code{TrivialHandler}. The way it works is following: every time a start of an element is encountered, a new \code{Element} is created along with its attributes. This new element representation is then placed on the top of a stack. Every other element or simple data found until its ending tag is created and attached to its subnodes. When an end of an element is encountered, the element currently on the top of the stack is closed and declared to be a rule of the IG.\\
+After reaching the end of the document, all IG rules are returned. Note that this approach creates "simple" initial grammar.
+
+\subsection{DTD processor}
+
+DTD processor registers itself into \emph{schema} input folder, \emph{dtd} file extension and declares it cannot handle other file extensions.\\
+To parse DTD files a 3rd party library is used: \jmodule{dtdparser}. % TODO anti Reference http://www.rpbourret.com/dtdparser/index.htm
+Translation from the object model in this library to our own is handled mostly by \code{DTD2RETranslator} class.\\
+Note that the initial grammar generated in this way is complex. Therefore, this processor checks for the \code{CAN\_HANDLE\_COMPLEX\_REGEXPS} capability of the simplifier following this IG generator: in positive case it simply returns the grammar, if the following module cannot handle complex regular expressions, DTD processor first invokes an \emph{Expander} (see \ref{section-expansion}).
+
+\subsection{XPath processor}
+
+This is a rather na\"{i}ve implementation of an XPath processor. It registers itself into \emph{query} input folder, \emph{xpath} file extension (text file containing one XPath query per line) and declares it cannot handle other file extensions.\\
+To parse XPath queries, standard support present in JDK is used. The relevant \code{XPathHandler} is the \code{XPathHandler} class.\\
+TODO vektor Explain what it does...
+
+\section{Expansion} \label{section-expansion}
+
+Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection. % TODO vektor Is this documented somewhere?
+
+\subsection{ExpanderImpl internals}
+
+TODO vektor
+
+\section{Data flow}
+
+Flow of data in this module is following.
+\begin{enumerate}
+	\item IGGeneratorImpl walks over input files in a loop.
+	\item Each file gets processed by a processor based on its folder and extension.
+	\item Rules from all files are gathered in a single list (IG) and returned via a callback.
+\end{enumerate}
+
+\section{Extensibility}
+
+\jmodule{BasicIGG} can be easily extended to support a new input type: just create a class implementing \code{Processor}, annotate it as a service provider and implement any logic needed. \jmodule{XSDImporter} is an example of this.\\
+
+It is possible to replace the default \code{Expander} implementation: but as mentioned in \ref{section-expansion}, either the old implementation must be removed or module selection must be introduced.
+
+%\nocite{*}
+\newpage
+\bibliographystyle{alpha}
+\bibliography{literature}
+
+\end{document}

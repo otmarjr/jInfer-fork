@@ -44,33 +44,51 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
 
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {
-    List<State<T>> mergeLst;
-      Transformer<Step<T>, String> t = new Transformer<Step<T>, String>() {
-        @Override
-        public String transform(Step<T> step) {
-          return symbolToString.toString(step.getAcceptSymbol());
-        }
-      };
+    return simplify(inputAutomaton, symbolToString, "");
+  }
 
+  @Override
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException {
+    List<State<T>> mergeLst;
+    Transformer<Step<T>, String> t = new Transformer<Step<T>, String>() {
+
+      @Override
+      public String transform(Step<T> step) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append(symbolToString.toString(step.getAcceptSymbol()));
+        sb.append("|");
+        sb.append(String.valueOf(step.getUseCount()));
+        sb.append("}");
+        return sb.toString();
+      }
+    };
+
+    Boolean selectTwo = false;
     do {
       final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutHelperFactory.createUserLayout(inputAutomaton, t), t);
 
       // custom plugins
       /*final PluggableVisualizer<T> visualizer = new PluggableVisualizer<T>(new GridLayout<T>(inputAutomaton));
       visualizer.setEdgeLabelTransformer(new Transformer<Step<T>, String>() {
-        @Override
-        public String transform(Step<T> step) {
-          return symbolToString.toString(step.getAcceptSymbol());
-        }
+      @Override
+      public String transform(Step<T> step) {
+      return symbolToString.toString(step.getAcceptSymbol());
+      }
       });
       for (final GraphMousePlugin mousePlugin : AutoEditor.getDefaultGraphMousePlugins()) {
-        visualizer.addGraphMousePlugin(mousePlugin);
+      visualizer.addGraphMousePlugin(mousePlugin);
       }
       visualizer.addGraphMousePlugin(new VerticesPickingGraphMousePlugin());
-      */
+       */
 
       final StatesPickingComponent<T> panel = new StatesPickingComponent<T>();
       panel.setVisualizer(visualizer);
+      if (selectTwo) {
+        panel.setLabel("Automaton for element <" + elementName + ">. Please select states to be merged and click continue. Select at least 2 states.");
+      } else {
+        panel.setLabel("Automaton for element <" + elementName + ">. Please select states to be merged and click continue.");
+      }
       AutoEditor.drawComponentAndWaitForGUI(panel);
       mergeLst = panel.getPickedStates();
 
@@ -79,6 +97,9 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
         inputAutomaton.mergeStates(mergeLst);
         LOG.debug("After merge:");
         LOG.debug(inputAutomaton);
+        selectTwo = false;
+      } else if (mergeLst.size() < 2) {
+        selectTwo = true;
       }
 
       if (panel.shallAskUser() == false) {

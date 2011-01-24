@@ -47,7 +47,13 @@ public class UserInteractive<T> implements Orderer<T> {
 
       @Override
       public String transform(Step<Regexp<T>> step) {
-        return symbolToString.toString(step.getAcceptSymbol());
+          StringBuilder sb = new StringBuilder();
+          sb.append("{");
+          sb.append(symbolToString.toString(step.getAcceptSymbol()));
+          sb.append("|");
+          sb.append(String.valueOf(step.getUseCount()));
+          sb.append("}");
+          return sb.toString();
       }
     };
 

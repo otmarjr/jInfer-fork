@@ -19,14 +19,13 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexpin
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHelperFactory;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatePickingComponent;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
-import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatesPickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.StateRemovalRegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.Orderer;
-import java.util.List;
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 
@@ -57,25 +56,21 @@ public class UserInteractive<T> implements Orderer<T> {
       }
     };
 
-    List<State<Regexp<T>>> removeLst;
+    State<Regexp<T>> removeState;
+    final StatePickingComponent<Regexp<T>> component = new StatePickingComponent<Regexp<T>>();
     do {
-      final StatesPickingComponent<Regexp<T>> component = new StatesPickingComponent<Regexp<T>>();
       final StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t, component);
       component.setVisualizer(visualizer);
       AutoEditor.drawComponentAndWaitForGUI(component);
-      removeLst = component.getPickedStates();
+      removeState = component.getPickedState();
 
-      if (removeLst == null) {
+      if ((removeState.equals(automaton.getSuperFinalState())) || (removeState.equals(automaton.getSuperInitialState()))) {
+        // TODO anti this text
+        component.setLabel("Do not select initial and final states.");
         continue;
       }
-      if (removeLst.size() == 1) {
-        State<Regexp<T>> sel = removeLst.get(0);
-        if ((sel.equals(automaton.getSuperFinalState())) || (sel.equals(automaton.getSuperInitialState()))) {
-          continue;
-        }
-        LOG.debug("AUTO EDITOR selected: " + removeLst.toString());
-        return removeLst.get(0);
-      }
+      LOG.debug("AUTO EDITOR selected: " + removeState.toString());
+      return removeState;
     } while (true);
   }
 }

@@ -20,6 +20,7 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.Visualizer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import javax.swing.JPanel;
 
@@ -33,6 +34,7 @@ public abstract class AbstractComponent<T> extends JPanel {
   private final Object monitor;
   private Visualizer<T> visualizer = null;
   private boolean interrupted = false;
+  private Dimension visualizerPanelSize = null;
 
   protected AbstractComponent() {
     monitor = new Object();
@@ -53,9 +55,13 @@ public abstract class AbstractComponent<T> extends JPanel {
     constraints.weighty = 1.0;
     constraints.fill = GridBagConstraints.BOTH;
     final JPanel panel = getAutomatonDrawPanel();
-    visualizer.setPreferredSize(panel.getSize());
+    if (visualizerPanelSize == null) {
+      visualizerPanelSize = panel.getSize();
+    }
+    visualizer.setPreferredSize(visualizerPanelSize);
     panel.removeAll();
     panel.add(new GraphZoomScrollPane(visualizer), constraints);
+    panel.validate();
   }
 
   /**

@@ -303,8 +303,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         checkInterrupt();
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
-        // In the future it would be nice to support types of attributes.
-        indentator.append("\" type=\"xs:string\"");
+
+        // Attribute may have set its type. If it hasn't, use "string".
+        String type = attribute.getContentType();
+        if (BaseUtils.isEmpty(type)) {
+          type = "string";
+        }
+        indentator.append("\" type=\"xs:" + type + '"');
 
         if (attribute.getMetadata().containsKey("required")) {
           indentator.append(" use=\"required\"");

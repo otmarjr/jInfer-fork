@@ -18,8 +18,11 @@
 package cz.cuni.mff.ksi.jinfer.basicxsd.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 
 /**
  * Utility functions for element type handling.
@@ -129,5 +132,48 @@ public final class TypeUtils {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Gets a type of a built-in element. Element passed to this method must
+   * be of a built-in type otherwise an exception is raised.
+   *
+   * @param element Element of a built-in type.
+   * @return Particular type of the element.
+   */
+  public static String getBuiltinType(final Element element) {
+    if (!isOfBuiltinType(element)) {
+      throw new IllegalArgumentException("Passed element has to be of a built-in type.");
+    }
+
+    // Element may have set its type. If type is not set,
+    // element will be defined as "xs:string".
+    String type = ((SimpleData)element.getSubnodes().getContent()).getContentType();
+    if (!BaseUtils.isEmpty(type)) {
+      type = "xs:" + type;
+    } else {
+      type = "xs:string";
+    }
+
+    return type;
+  }
+
+  /**
+   * Gets a type of an attribute.
+   *
+   * @param attribute Attribute to get a type.
+   * @return Particular type of the attribute.
+   */
+  public static String getBuiltinAttributeType(final Attribute attribute) {
+    // attribute may have set its type. If type is not set,
+    // attribute will be defined as "xs:string".
+    String type = attribute.getContentType();
+    if (!BaseUtils.isEmpty(type)) {
+      type = "xs:" + type;
+    } else {
+      type = "xs:string";
+    }
+
+    return type;
   }
 }

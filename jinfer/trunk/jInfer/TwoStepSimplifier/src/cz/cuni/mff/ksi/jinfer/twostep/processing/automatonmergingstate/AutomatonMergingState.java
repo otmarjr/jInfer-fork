@@ -139,7 +139,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, elementSymbolToString);
+    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get((0))).getName());
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
 

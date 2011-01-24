@@ -135,4 +135,9 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
     }
     return inputAutomaton;
   }
+
+  @Override
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException {
+    return simplify(inputAutomaton, symbolToString);
+  }
 }

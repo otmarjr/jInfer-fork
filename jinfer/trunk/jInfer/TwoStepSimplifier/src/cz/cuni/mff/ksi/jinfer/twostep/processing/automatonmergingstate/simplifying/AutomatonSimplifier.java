@@ -28,4 +28,5 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
  */
 public interface AutomatonSimplifier<T> {
   Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException;
+  Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException;
 }

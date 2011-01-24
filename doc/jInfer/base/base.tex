@@ -1,0 +1,115 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
+
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{18cm}
+
+\def\mftitle{jInfer Base Module Description}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+\maketitle
+\noindent Target audience: developers willing to extend jInfer.
+
+\noindent \begin{tabular}{|l|l|} \hline
+Responsible developer: & vektor \\ \hline
+Required tokens:       & none \\ \hline
+Provided tokens:       & none \\ \hline
+Module dependencies:   & none \\ \hline
+Public packages:       & cz.cuni.mff.ksi.jinfer.base.automaton \newline
+cz.cuni.mff.ksi.jinfer.base.interfaces \newline
+cz.cuni.mff.ksi.jinfer.base.interfaces.inference \newline
+cz.cuni.mff.ksi.jinfer.base.interfaces.nodes \newline
+cz.cuni.mff.ksi.jinfer.base.objects \newline
+cz.cuni.mff.ksi.jinfer.base.objects.nodes \newline
+cz.cuni.mff.ksi.jinfer.base.regexp \newline
+cz.cuni.mff.ksi.jinfer.base.utils \newline
+org.apache.log4j.* \\ \hline
+\end{tabular}
+
+\section{Introduction}
+
+This is the module containing data structures, interfaces and logic shared across the whole jInfer framework. Virtually every other module containing logic should in theory depend on \jmodule{Base}.
+
+\section{Structure}
+
+Description of \jmodule{Base} structure will partially mirror its JavaDoc documentation. For more detailed information, refer to it directly.\\
+
+\jmodule{Base} contains logic for Log4j initialization in \code{Installer} class. Configuration of the overall logging granularity level (NetBeans options integration) is contained in \code{cz.cuni.mff.ksi.jinfer.base.options} package. Shared jInfer graphics is contained in the \code{cz.cuni.mff.ksi.jinfer.base.graphics} and \code{cz.cuni.mff.ksi.jinfer.base.graphics.icons} packages.
+
+\subsection{Data structures}
+
+Regular expression representation is contained in \code{cz.cuni.mff.ksi.jinfer.base.regexp} package. Most important class is of course \code{Regexp}, assisted by an enum of its type \code{RegexpType} and representation of its interval \code{RegexpInterval}.\\
+XML node representation is described by interfaces in \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes} package and more-less concrete implementations in \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes} package.\\
+Finite state automata representation is contained in the \cite{cz.cuni.mff.ksi.jinfer.base.automaton} package.\\
+Refer to \ref{archdoc} to get an accurate description of all these representations.\\
+
+Miscellaneous shared classes are contained in \code{cz.cuni.mff.ksi.jinfer.base.objects}. For example, \code{Input} is used to provide the \jmodule{Initial Grammar Generator} with input data. \code{Pair} is a generic class binding two object together in a \emph{pair}.
+
+\subsection{Interfaces}
+
+Apart from interfaces contained in already discussed \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes} package, there is an important group of interfaces contained in \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package: the \emph{inference} interfaces. They come in two flavours: the actual inference interface, and its callback. For a comprehensive description of them and their interaction refer again to \ref{archdoc}.\\
+
+There is one more package containing interfaces: \code{cz.cuni.mff.ksi.jinfer.base.interfaces}. There are a few groups of them.
+\begin{itemize}
+	\item Module lookup support: \code{NamedModule} and \code{UserModuleDescription}.
+	\item Inference support: \code{Capabilities}.
+	\item Service provider definitions: \code{Expander}, \code{Processor} and \code{RuleDisplayer}.
+\end{itemize}
+
+\subsection{Utility logic}
+
+Useful logic for the whole framework is focused in the \code{cz.cuni.mff.ksi.jinfer.base.utils} package. A few highlights from here follow.
+\begin{itemize}
+	\item Testing whether a collection is empty: \code{BaseUtils.isEmpty()} - handles \code{null} and zero elements.
+	\item Filtering a list based on a predicate: \code{BaseUtils.filter()}.
+	\item Cloning a list N times in a row: \code{baseUtils.cloneList()} - e.g. from \emph{abc, 3 times} creates \emph{abcabcabc}.
+	\item Deep cloning a grammar: \code{CloneHelper.cloneGrammar()}.
+	\item Writing out a list separated by specified separator: \code{CollectionToString.colToString()} - accepts the list, operation to perform on each element and separator character. Separator is placed smartly, i.e. only between elements.
+	\item XML element comparison while ignoring specified members: \code{EqualityUtils}.
+	\item Module lookup/selection: \code{ModuleSelectionHelper}.
+	\item Singleton class reporting on the currently running inference: \code{RunningProject}.
+	\item Various utilities for JUnit tests: \code{TestUtils}.
+	\item Topological sorting of grammar: \code{TopologicalSort}. 
+\end{itemize}
+
+\section{Data flow}
+
+This is not an inference module and there is no real data flow in it. Refer to \ref{archdoc} to understand the inference process described by interfaces from \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package.
+
+\section{Extensibility}
+
+From one point of view, extensibility of \jmodule{Base} means creating service providers implementing inference or other interfaces. This is described in the documentation for respective modules that use these interfaces.\\
+On the other hand, if there is a need to share data structures, interfaces or logic across multiple developed modules (for example between custom schema generator and simplifier), it is advised to create a module similar to \jmodule{Base} instead of changing it directly.
+
+%\nocite{*}
+\newpage
+\bibliographystyle{alpha}
+\bibliography{literature}
+
+\end{document}

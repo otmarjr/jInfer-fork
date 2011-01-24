@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.AutoEditor;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatePickingVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHelperFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatesPickingComponent;
@@ -53,8 +53,8 @@ public class UserInteractive<T> implements Orderer<T> {
 
     List<State<Regexp<T>>> removeLst;
     do {
-      final StatesPickingVisualizer<Regexp<T>> visualizer = new StatesPickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t);
       final StatesPickingComponent<Regexp<T>> component = new StatesPickingComponent<Regexp<T>>();
+      final StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t, component);
       component.setVisualizer(visualizer);
       AutoEditor.drawComponentAndWaitForGUI(component);
       removeLst = component.getPickedStates();

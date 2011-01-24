@@ -29,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author anti
  */
-//@ServiceProvider(service = RegexpAutomatonSimplifierStateRemovalOrdererFactory.class)
+@ServiceProvider(service = OrdererFactory.class)
 public class UserInteractiveFactory implements OrdererFactory {
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdererUserInteractive";
   public static final String DISPLAY_NAME = "UserInteractive";

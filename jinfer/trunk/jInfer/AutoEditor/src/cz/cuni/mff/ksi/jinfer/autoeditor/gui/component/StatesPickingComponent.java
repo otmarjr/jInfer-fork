@@ -149,4 +149,8 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
     final Visualizer<T> visualizer = getVisualizer();
     return new ArrayList<State<T>>(visualizer.getPickedVertexState().getPicked());
   }
+
+  public void setLabel(final String text) {
+    jLabel1.setText(text);
+  }
 }

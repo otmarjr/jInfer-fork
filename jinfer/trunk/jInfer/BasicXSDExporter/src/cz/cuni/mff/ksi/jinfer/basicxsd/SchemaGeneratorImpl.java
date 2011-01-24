@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -145,14 +144,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     // If its type is one of built-in types we don't have much work to do
     if (TypeUtils.isOfBuiltinType(element)) {
-      // Element subnodes is TOKEN SIMPLE_DATA and it may have set its type.
-      // If type is not set, element will be defined as xs:string.
-      String type = ((SimpleData)element.getSubnodes().getContent()).getContentType();
-      if (BaseUtils.isEmpty(type)) {
-        type = "string";
-      }
+      final String type = TypeUtils.getBuiltinType(element);
 
-      indentator.append(" type=\"xs:" + type + '"');
+      indentator.append(" type=\"" + type + '"');
       processOccurrences(interval);
       indentator.append("/>\n");
       return;
@@ -304,12 +298,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
 
-        // Attribute may have set its type. If it hasn't, use "string".
-        String type = attribute.getContentType();
-        if (BaseUtils.isEmpty(type)) {
-          type = "string";
-        }
-        indentator.append("\" type=\"xs:" + type + '"');
+        String type = TypeUtils.getBuiltinAttributeType(attribute);
+        indentator.append("\" type=\"" + type + '"');
 
         if (attribute.getMetadata().containsKey("required")) {
           indentator.append(" use=\"required\"");

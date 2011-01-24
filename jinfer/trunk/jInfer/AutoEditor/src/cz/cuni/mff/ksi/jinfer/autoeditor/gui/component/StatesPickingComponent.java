@@ -30,7 +30,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /**
- *
+ * TODO rio comment
  * @author rio
  */
 public class StatesPickingComponent<T> extends AbstractComponent<T> {

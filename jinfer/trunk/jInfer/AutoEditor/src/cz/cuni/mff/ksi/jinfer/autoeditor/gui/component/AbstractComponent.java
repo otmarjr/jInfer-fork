@@ -81,7 +81,7 @@ public abstract class AbstractComponent<T> extends JPanel {
    * Call to wake up all threads that are suspended in call of method
    * <code>waitForGUIDone()</code> on this instance.
    */
-  protected void GUIDone() {
+  public void GUIDone() {
     synchronized (monitor) {
       monitor.notifyAll();
     }

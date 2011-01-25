@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.basicxsd.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
+import java.awt.event.ItemEvent;
 import java.util.Properties;
 
 /**
@@ -76,9 +77,9 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     setLayout(new java.awt.GridBagLayout());
 
     generateGlobalTypes.setText(org.openide.util.NbBundle.getMessage(XSDExportPropertiesPanel.class, "XSDExportPropertiesPanel.generateGlobalTypes.text_1")); // NOI18N
-    generateGlobalTypes.addChangeListener(new javax.swing.event.ChangeListener() {
-      public void stateChanged(javax.swing.event.ChangeEvent evt) {
-        generateGlobalTypesStateChanged(evt);
+    generateGlobalTypes.addItemListener(new java.awt.event.ItemListener() {
+      public void itemStateChanged(java.awt.event.ItemEvent evt) {
+        generateGlobalTypesItemStateChanged(evt);
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -192,7 +193,7 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 88, Short.MAX_VALUE)
+      .addGap(0, 85, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,11 +214,11 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 500, Short.MAX_VALUE)
+      .addGap(0, 499, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 178, Short.MAX_VALUE)
+      .addGap(0, 179, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -238,12 +239,12 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     add(jLabel5, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
-  private void generateGlobalTypesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_generateGlobalTypesStateChanged
+  private void generateGlobalTypesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_generateGlobalTypesItemStateChanged
     final boolean enabled = generateGlobalTypes.isSelected();
     countToGlobal.setEnabled(enabled);
     typenamePrefix.setEnabled(enabled);
     typenamePostfix.setEnabled(enabled);
-  }//GEN-LAST:event_generateGlobalTypesStateChanged
+  }//GEN-LAST:event_generateGlobalTypesItemStateChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JSpinner countToGlobal;
@@ -272,6 +273,7 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
             .getProperty(TYPENAME_PREFIX,TYPENAME_PREFIX_DEFAULT));
     typenamePostfix.setText(properties
             .getProperty(TYPENAME_POSTFIX, TYPENAME_POSTFIX_DEFAULT));
+    generateGlobalTypesItemStateChanged(null);
   }
 
   @Override

@@ -495,12 +495,13 @@ To allow simple extensibility of rules, class \code{AbstractNamedNode} contains 
 
 At the present, jInfer modules use the following metadata, all defined in \code{IGGUtils} class:
 \begin{itemize}
-	\item \code{from.xml}, filled in by BasicIGG module: means that this rule was created (originates from) from a XML document.
-	\item \code{from.schema}, filled in by BasicIGG and XSDImport modules: means that this rule was created (originates from) from a schema.
-	\item \code{from.query}, filled in by BasicIGG and XSDImport modules: means that this rule was created from a query.
-	\item \code{is.sentinel}, filled in by  BasicIGG and XSDImport module: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import), but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling the node as sentinel.
+	\item \code{from.xml}, filled in by \jmodule{BasicIGG} module: means that this rule was created (originates from) from a XML document.
+	\item \code{from.schema}, filled in by \jmodule{BasicIGG} and \jmodule{XSDImporter} modules: means that this rule was created (originates from) from a schema.
+	\item \code{from.query}, filled in by \jmodule{BasicIGG} and \jmodule{XSDImporter} modules: means that this rule was created from a query.
+	\item \code{is.sentinel}, filled in by \jmodule{BasicIGG} and \jmodule{XSDImporter} modules: when importing XML document, one can build whole tree in memory (as in fig. \ref{xml_example}) and then construct list of rules from it (thus saving memory). With schema import however, one not only doesn't know right side of rule in advance (solved by stack in XML import), but right side can be defined anywhere in source file. To save complicated loading of whole schema, searching and pairing elements thorough rules, nodes on right side of rule are created empty - holding only name of node. Fact, that this node has no more information than it's name and position on right side of rule is denominated by labeling the node as sentinel.
+	\item \code{required}, filled in by \jmodule{BasicIGG} and \jmodule{XSDImporter} modules: indicates that the attribute is required.
 \end{itemize}
-All of these metadata are of set/not set character (using \code{Boolean.TRUE} as value, but their presence effectively mean true).
+All of these metadata are of set/not set character (using \code{Boolean.TRUE} as value, but their presence effectively means "true").
 
 \subsection{Capabilities} \label{section_capabilities}
 From time to time, modules need a flow of certain information in completely opposite way to the usual inference: they need to know what the following module can or cannot do.

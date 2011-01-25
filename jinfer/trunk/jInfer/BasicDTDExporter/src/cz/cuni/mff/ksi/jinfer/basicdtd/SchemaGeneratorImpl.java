@@ -28,6 +28,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils.Predicate;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicdtd.properties.DTDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.basicdtd.utils.DomainUtils;
 import java.util.Collections;
 import java.util.Comparator;
@@ -138,8 +139,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case LAMBDA:
         return "EMPTY";
       case TOKEN:
-        final String intervalString= regexp.getInterval().toString();
-        final String contentString= regexp.getContent().isSimpleData() ? "#PCDATA" : regexp.getContent().getName();
+        final String intervalString = regexp.getInterval().toString();
+        final String contentString = regexp.getContent().isSimpleData() ? "#PCDATA" : regexp.getContent().getName();
         if (regexp.getContent().isSimpleData()) {
           return contentString;
         }
@@ -191,16 +192,16 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         }
     );
 
-    final List<AbstractStructuralNode> distinctContent= BaseUtils.filter(content, new Predicate<AbstractStructuralNode>() {
-      private Set<String> encountered= new HashSet<String>();
-      private boolean encounteredSimpleData= false;
+    final List<AbstractStructuralNode> distinctContent = BaseUtils.filter(content, new Predicate<AbstractStructuralNode>() {
+      private Set<String> encountered = new HashSet<String>();
+      private boolean encounteredSimpleData = false;
       @Override
       public boolean apply(final AbstractStructuralNode argument) {
         if (argument.isSimpleData()) {
           if (encounteredSimpleData) {
             return false;
           }
-          encounteredSimpleData= true;
+          encounteredSimpleData = true;
           return true;
         }
         if (encountered.contains(argument.getName())) {
@@ -257,7 +258,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         .append(DomainUtils.getAttributeType(domain, maxEnumSize));
 
     // requiredness/default value
-    if (a.getMetadata().containsKey("required")) {
+    if (a.getMetadata().containsKey(IGGUtils.REQUIRED)) {
       ret.append("#REQUIRED");
     } else {
       ret.append(DomainUtils.getDefault(domain, minDefaultRatio));

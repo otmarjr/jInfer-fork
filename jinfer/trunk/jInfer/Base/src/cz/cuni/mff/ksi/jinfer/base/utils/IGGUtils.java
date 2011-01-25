@@ -38,6 +38,8 @@ public final class IGGUtils {
   public static final String FROM_QUERY = "from.query";
   /** Metadata string meaning "Node is a sentinel". */
   public static final String IS_SENTINEL = "is.sentinel";
+  /** Metadata string meaning "Attribute is required". */
+  public static final String REQUIRED = "required";
 
   /** Metadata map containing a single piece of metadata: "Node comes from a schema". */
   public static final Map<String, Object> ATTR_FROM_SCHEMA = new HashMap<String, Object>(1);

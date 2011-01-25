@@ -116,7 +116,7 @@ public class TwoStepSimplifier {
           Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), representant.getContentType(), representant.getContent());
           if (attCluster.size() < cluster.size()) {
             final Map<String, Object> m = new HashMap<String, Object>(representant.getMetadata());
-            m.remove("required");
+            m.remove(IGGUtils.REQUIRED);
             output = new Attribute(representant.getContext(), representant.getName(), m, representant.getContentType(), representant.getContent());
           }
 

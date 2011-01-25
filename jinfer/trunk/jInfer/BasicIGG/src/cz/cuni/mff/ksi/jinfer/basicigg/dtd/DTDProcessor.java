@@ -125,7 +125,7 @@ public class DTDProcessor implements Processor {
       for (final Object oa : e.attributes.values()) {
         final Attribute a = (Attribute) oa;
         final Map<String, Object> nodeMetadata = new HashMap<String, Object>(1);
-        nodeMetadata.put("required", Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
+        nodeMetadata.put(IGGUtils.REQUIRED, Boolean.valueOf(a.required == Attribute.REQUIRED_REQUIRED));
         final cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute at =
                 new cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute(
                 IGGUtils.EMPTY_CONTEXT, a.name.getLocalName(),

@@ -73,10 +73,6 @@ public class DOMHandler {
    */
   private static final String UNBOUNDED = "unbounded";
   /**
-   * String for attribute value of <i>use</i> attribute, indicating compulsory usage.
-   */
-  private static final String REQUIRED = "required";
-  /**
    * String for attribute value of <i>use</i> attribute, indicating optional usage.
    */
   private static final String OPTIONAL = "optional";
@@ -456,7 +452,7 @@ public class DOMHandler {
             }
             final HashMap<String, Object> attrMeta = new HashMap<String, Object>();
             if (child.hasAttribute(XSDAttribute.USE.toString()) && child.getAttribute(XSDAttribute.USE.toString()).equalsIgnoreCase("required")) {
-              attrMeta.put(REQUIRED, Boolean.TRUE);
+              attrMeta.put(IGGUtils.REQUIRED, Boolean.TRUE);
             }
             ret.getAttributes().add(new Attribute(newContext, attrName, attrMeta, attrType, new ArrayList<String>(0)));
             break;

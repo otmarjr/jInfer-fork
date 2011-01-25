@@ -1,6 +1,6 @@
 default: all
 
-basicigg.dvi: 
+basicigg.dvi: process-view.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

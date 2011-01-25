@@ -1,0 +1,27 @@
+digraph interfaces_nodes {
+	rankdir = BT;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+{
+	rank = same;
+	Input;
+	BasicIGG;
+	InitialGrammar;
+}
+
+{
+	rank = same;
+	XMLProcessor [style = rounded];
+	DTDProcessor [style = rounded];
+	XPathProcessor [style = rounded];
+	OtherProcessor [style = rounded, label = "..."]; 
+}
+
+	Input -> BasicIGG;
+	BasicIGG -> InitialGrammar;
+	XMLProcessor -> BasicIGG;
+	DTDProcessor -> BasicIGG;
+	XPathProcessor -> BasicIGG;
+	OtherProcessor -> BasicIGG;
+}

@@ -1,6 +1,6 @@
 digraph twostep_modules {
 	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
-	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10, arrowhead = empty];
 	rankdir = BT;
 
 	TwoStepSimplifier [style = rounded];

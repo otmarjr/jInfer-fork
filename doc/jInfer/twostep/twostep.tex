@@ -22,7 +22,7 @@
 \setlength{\textheight}{24cm}
 \setlength{\textwidth}{18cm}
 
-\def\mftitle{jInfer TwoStep simplifier design and implementation}
+\def\mftitle{jInfer TwoStepSimplifier design and implementation}
 \def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
 \def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
 \def\mfplacedate{Praha, 2011}
@@ -39,7 +39,7 @@
 \noindent \emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & anti \\ \hline
+Responsible developer: & Michal Klempa \\ \hline
 Required tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer \\ \hline
 Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier \\ \hline
 Module dependencies:   & AutoEditor, Base, JUNG, Lookup \\ \hline
@@ -454,7 +454,16 @@ To make reader more happy, we include one screenshot of automaton visualization 
 TODO anti screenshot for happy reader
 
 \subsubsection{RegexpAutomatonSimplifier submodule}
-TODO anti interface and flow of regexpautomatonsimplifier
+Purpose of \jmodule{RegexpAutomatonSimplifier} is to obtain regular expression from given automaton.
+Interface for doing this is thus simple:
+\begin{verbatim}
+public interface RegexpAutomatonSimplifier<T> {
+  Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton, 
+                     final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException;
+}
+\end{verbatim}
+Once again we are encountering \code{symbolToString} with same purpose as before, if submodule would need to present automaton to user
+it has to be able to convert symbols of (at runtime) unknown type to strings.
 
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{state_removal_modules}
@@ -463,18 +472,55 @@ TODO anti interface and flow of regexpautomatonsimplifier
 \paragraph{StateRemoval regexp automaton simplifier}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
 This is implemented in \code{StateRemoval} class (on fig. \ref{state_removal_modules}) which implements \code{RegexpAutomatonSimplifier} interface.
-We defined one submodule of this class with interface called \code{Orderer}.
+State removal works by removing states of automaton (and redirecting transitions properly) until there are last to two states - superInitial and superFinal.
+Both are added before algorithm starts. Former one with $\lambda$-transition to initial state, and from all final states $\lambda$ transition to superFinal state is added.
+After removing all states, there is only one transition from superInitial to superFinal state.
+That transition has final regular expression on it as symbol, it is read and returned to \jmodule{AutomatonMergingState}.
+
+We defined one submodule of this class with \jmodule{Orderer}.
 It has only one method to implement: \code{getStateToRemove}.
-Given automaton it has to return reference to one state which should be removed from automaton at first.
-State removal calls this submodule and removes states given until there are only two states in automaton - superInitial and superFinal states,
-with exactly one transition.
-That transition has final regular expression on it as symbol, it is read and returned to AutomatonMergingState.
-We implement one orderer, called \code{Weighted}.
+Given automaton, it has to return reference to one state which should be removed from automaton at first.
+State removal calls this submodule and removes state returned.
+
+\paragraph{Weighted} We implement one orderer, called \code{Weighted}.
 It is simple heuristic - weights all states (weight = sum of {in | out | loop}-transition regular expression lengths) and returns state with lowest weight.
 
 \subsection{RegularExpressionCleaner module}
 Last we examine \code{RegularExpressionCleaner} interface.
-TODO anti cleaners
+Purpose of this submodule is only to make output regular expression corrections, to make them nicer.
+For example it is common that converting automaton to regular expression by state elimination produces nested concatenations such like $(name, (person, id))$.
+To convert such expression into $(name, person, id)$, one can implement this interface and connect it to work in chain.
+Interface is definition is straightforward:
+\begin{verbatim}
+public interface RegularExpressionCleaner<T> {
+  Regexp<T> cleanRegularExpression(final Regexp<T> regexp);
+}
+\end{verbatim}
+Given regular expression, return regular expression.
+Converting of regular expression is commonly a recursive task and all our implementations work this way.
+Lets look at them.
+
+\paragraph{NestedConcatention}
+This cleaner does exactly what we have just described.
+It converts nested concatenations into flat ones.
+
+\paragraph{Null}
+This cleaner just returns regexp it receives and does nothing.
+Plug this one into chain, if you want to omit this step of inference.
+
+\paragraph{EmptyChildren}
+Wipes out regular expressions of type: concatenation, alternation, permutation, which have empty \code{children} member.
+For example some pitty inferring method produces unnecessary empty regexps in regexp tree as:
+$$
+(name, (), (person, id))
+$$
+There is one empty concatenation/alternation/permutation with no sense.
+This is wiped out by this cleaner.
+
+\paragraph{Chained}
+Enables user to chain more cleaners with output from first one plugged as input into second one and so one.
+Thus regular expression from inference can pass through \jmodule{EmptyChildren} and them through \jmodule{NestedConcatenation} cleaners and then it is returned.
+
 
 Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
 \begin{figure}

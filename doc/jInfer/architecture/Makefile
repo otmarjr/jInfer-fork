@@ -1,7 +1,7 @@
 default: all
 
 architecture.dvi: nodes.eps nodes_full.eps interfaces_nodes.eps inference_process.eps reg_tree.eps xml_example.eps automaton_merge1.eps automaton_merge2.eps \
-automaton_merge3.eps
+automaton_merge3.eps nodes_full2.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

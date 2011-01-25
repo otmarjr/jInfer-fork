@@ -21,7 +21,11 @@ import java.util.List;
 import javax.swing.JPanel;
 
 /**
- *
+ * Panel defining virtual category in Project properties.
+ * Each panel contains List of {@link NamedModule} instances,
+ * defining for what kind of modules categories is virtual category
+ * defined by this panel parent for. This informations are displayed in this panel.
+ * 
  * @author sviro
  */
 public class VirtualCategoryPanel extends JPanel {
@@ -32,7 +36,13 @@ public class VirtualCategoryPanel extends JPanel {
   private final String categoryId;
   private final String categoryName;
 
-  /** Creates new form VirtualCategoryPanel */
+  /**
+   * Default Constructor for Virtual category panel.
+   *
+   * @param categoryId Id of this panel category.
+   * @param categoryName Name displayed in category tree for this panel.
+   * @param modules List of NamedModule instances which categories are children of this category.
+   */
   public VirtualCategoryPanel(final String categoryId, final String categoryName, final List<NamedModule> modules) {
     super();
     this.categoryId = categoryId;
@@ -71,10 +81,18 @@ public class VirtualCategoryPanel extends JPanel {
     return builder.toString();
   }
 
+  /**
+   * Get Id of the category for this panel.
+   * @return Id of the category.
+   */
   public String getCategoryId() {
     return categoryId;
   }
 
+  /**
+   * Get display name of the category for this panel.
+   * @return Display name of the category.
+   */
   public String getCategoryName() {
     return categoryName;
   }

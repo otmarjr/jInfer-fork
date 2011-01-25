@@ -52,6 +52,13 @@ public class FileNode extends FilterNode {
   }
 
   @Override
+  public boolean canRename() {
+    return false;
+  }
+
+
+
+  @Override
   public void destroy() throws IOException {
     final FolderNode folderNode = (FolderNode) this.getParentNode();
     @SuppressWarnings("unchecked")

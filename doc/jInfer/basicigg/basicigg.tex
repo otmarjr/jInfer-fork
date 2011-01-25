@@ -82,11 +82,31 @@ TODO vektor Explain what it does...
 
 \section{Expansion} \label{section-expansion}
 
-Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection. % TODO vektor Is this documented somewhere?
+Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection. % TODO vektor Is this documented somewhere?
 
 \subsection{ExpanderImpl internals}
 
-TODO vektor
+\code{ExpanderImpl} works recursively, and it will probably be the best to explain it from bottom to up.\\
+
+At this point, let's denote a \emph{word} over an \emph{alphabet} typed (in Java generics sense) \emph{T} as a \code{List<T>}. Following the same logic, let's denote a set of such words as \code{List<List<T>{}>}. Our aim while expanding will be to convert a regular expression representing some node's subnodes to a list of words that are described by this regexp. In this case, \emph{T} will be \code{AbstractStructuralNode}.\\
+
+The first interesting function is \code{ExpansionHelper.applyInterval()}. It takes a list of words extracted from a regexp (thus in the List<List<AbstractStructuralNode>{}> form) and a \code{RegexpInterval} and creates a new list of words: applying the interval on each of the words in a heuristic sense. The behaviour depends on the type of the interval.
+\begin{itemize}
+	\item \emph{Once}: the resulting set of words is exactly the original set of words.
+	\item \emph{Optional}: same as above, but an empty word is added to the resulting set (each word from input \emph{may} or \emph{may not} occur - but one empty word is enough).
+	\item \emph{General interval}: has a minimum and a maximum number of occurences. Theoretically, all counts in interval $ [min, max] $ should be considered, but for practical reasons the following heuristic is employed: each word from the input is duplicated\footnote{Duplicating a word $abc$ $N$ times results in a word $\underbrace{abcabc\ldots abc}_{N\times}$.} first $min$, then $max$ times and added to the result.
+	\item \emph{Kleene star}: similar to the general interval and \emph{optional}, the result contains an empty word. Then for each word on input: this word and its 3$\times$ duplication is added to the result. Obviously, this is a heuristic approach again - theoretically each word should be duplicated between 0 and $\infty$ times in the result.
+	\item \emph{Kleene cross}: except for not including empty word, this is the same case as \emph{Kleene star}: each input word is duplicated 1 and 3 times in the result.
+\end{itemize}
+
+Understanding how intervals affect the expansion, it is time to move a level up: how a regular expression is expanded. This is done in \code{ExpanderImpl.unpackRE()} performing a recursive descent into the regexp tree and returning a set of words. Based on the regexp type, one of the following is performed.
+\begin{itemize}
+	\item \emph{LAMBDA}: resulting word set contains one empty word.
+	\item \emph{TOKEN}: resulting set contains a word with one letter: the content (an \code{AbstractStructuralNode}) of this token; the interval of the regexp is applied on this word before returning it.
+	\item \emph{ALTERNATION}: first, all children of this alternation are recursively evaluated. Their respective words are appended in a list, this list has the regexp interval applied and is returned. Reasoning is the following: we are trying to get all the words a regexp can produce. If the regexp is an alternation, any word that can be produced by one of its children can be a word produced by the regexp itself.
+	\item \emph{PERMUTATION}: a heuristic is applied again: because there are $n!$ ways to order children of a permutation, only two are actually picked: the original order in which they appear, and reversal of this order. In both cases the children are treated as if they we concatenation (and thus the following case is invoked) and appended in a list. On this list the regexp interval is applied and the list is returned.
+	\item \emph{CONCATENATION}: TODO vektor
+\end{itemize}
 
 \section{Data flow}
 

@@ -36,12 +36,11 @@ public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
   /**
    * Constructs instance with specified {@link Layout} and edge label {@link Transformer}.
 
-   * @param layout
-   * @param edgeLabelTransformer
+   * @param layout Layout of automaton.
+   * @param edgeLabelTransformer Transformer of edge labels.
    */
   public StatesPickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer) {
     super(layout);
-    //setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
     replaceEdgeLabelTransformer(edgeLabelTransformer);
     getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<State<T>, Step<T>>());

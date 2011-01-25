@@ -25,20 +25,20 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * Visualizer with support of vertex picking and straight line edges with custom
- * label.
- *
- * TODO rio comment
+ * Visualizer with support of picking of one vertex and straight line edges
+ * with custom label.
  *
  * @author rio
  */
 public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
 
   /**
-   * Constructs instance with specified {@link Layout} and edge label {@link Transformer}.
-
-   * @param layout
-   * @param edgeLabelTransformer
+   * Constructs instance with specified {@link Layout}, edge label {@link Transformer}
+   * and {@link AbstractComponent} which will be this visualizer displayed at.
+   *
+   * @param layout Layout of automaton.
+   * @param edgeLabelTransformer Transformer of edge labels.
+   * @param component Component which will be this visualizer displayed at.
    */
   public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component) {
     super(layout);

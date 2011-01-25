@@ -79,9 +79,9 @@ public class GreedyFactory implements AutomatonSimplifierFactory {
   @Override
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getDisplayName());
-    sb.append(" takes one MergeConditionTester and merges all states"
-            + " that can be merged. E.g. with k,h-context condition tester"
-            + " it defacto creates k,h-context automaton.");
+    sb.append(" takes one <tt><i>MergeConditionTester</i></tt> and merges all states"
+            + " that can be merged. E.g. with <i>k,h</i>-context condition tester"
+            + " it defacto creates <i>k,h</i>-context automaton.");
     return sb.toString();
   }
 

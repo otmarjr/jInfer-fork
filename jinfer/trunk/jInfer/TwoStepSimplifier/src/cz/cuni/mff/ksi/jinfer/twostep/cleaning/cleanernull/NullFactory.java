@@ -60,10 +60,7 @@ public class NullFactory implements RegularExpressionCleanerFactory {
   @Override
   public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getModuleDescription());
-    sb.append(" is not editing regular expressions. It just passes input unchanged.");
-    sb.append(" This is useful for seeing the real output from cluster processing algorithm");
-    sb.append(" to perfrom comparison of algorithm performance. And is it useful");
-    sb.append(" for debugging purposes of course.");
+    sb.append(" does nothing. Select this if you don't want any regular rexpression cleaning.");
     return sb.toString();
   }
 

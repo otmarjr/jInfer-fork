@@ -61,7 +61,8 @@ public class NestedConcatenationFactory implements RegularExpressionCleanerFacto
   public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getModuleDescription());
     sb.append(" replaces nested concatenations is resulting regular expressions.");
-    sb.append(" For example expression: (a, (b, c)) will be transformed to nicer expression: (a, b, c)");
+    sb.append(" For example expression: <p align=\"center\"><i>(a, (b, c))</i></p> will");
+    sb.append(" be transformed to nicer expression: <p align=\"center\"><i>(a, b, c)</i></p>");
     return sb.toString();
   }
 

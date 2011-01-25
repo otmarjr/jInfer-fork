@@ -61,6 +61,10 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
     setLayout(new java.awt.GridBagLayout());
   }// </editor-fold>//GEN-END:initComponents
 
+  private String htmlize(String text) {
+    return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
+  }
+
   @Override
   public final void load() {
     java.awt.GridBagConstraints gridBagConstraints;
@@ -71,12 +75,12 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
 
       @Override
       public String getName() {
-        return "No cleaner";
+        return "NoCleaner";
       }
 
       @Override
       public String getDisplayName() {
-        return getName();
+        return "No cleaner";
       }
 
       @Override
@@ -96,7 +100,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       cmb.setRenderer(new ProjectPropsComboRenderer());
       final JScrollPane scr = new javax.swing.JScrollPane();
       final JTextPane desc = new javax.swing.JTextPane();
-
+      
       lbl.setText("#" + (i + 1) + ":");
       gridBagConstraints = new java.awt.GridBagConstraints();
       gridBagConstraints.gridx = 0;
@@ -121,14 +125,13 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
           if (cmb.getSelectedIndex() == 0) {
             desc.setText("");
           } else {
-            desc.setText(
+            desc.setText(htmlize(
                     ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-                    ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription());
+                    ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
           }
         }
       });
-      cmb.setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + i, DEFAULT_MENU_TEXT)));
-      cmb.getActionListeners()[0].actionPerformed(null);
+      cmb.setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + i, "NoCleaner")));
       add(cmb, gridBagConstraints);
       dynamicComponents.put(Integer.valueOf(i), cmb);
 
@@ -150,6 +153,15 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       scr.setViewportView(desc);
 
       add(scr, gridBagConstraints);
+
+      if (cmb.getSelectedIndex() == 0) {
+        desc.setText("");
+      } else {
+        desc.setText(htmlize(
+                ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
+                ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
+      }
+
     }
     if (i == 0) {
       final JTextPane noImplInfo = new JTextPane();

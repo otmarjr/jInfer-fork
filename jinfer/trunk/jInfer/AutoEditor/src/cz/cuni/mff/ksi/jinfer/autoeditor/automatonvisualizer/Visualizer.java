@@ -17,11 +17,14 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers.NodeColorTransformer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.options.ColorUtils;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -57,6 +60,9 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
     for (final String imageFormatName : ImageIO.getWriterFormatNames()) {
       supportedImageFormatNames.add(imageFormatName);
     }
+
+    setBackground(ColorUtils.getBackgroundColor());
+    getRenderContext().setVertexFillPaintTransformer(new NodeColorTransformer<T>());
   }
 
   /**

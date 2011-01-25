@@ -61,10 +61,10 @@ public class EmptyChildrenFactory implements RegularExpressionCleanerFactory {
   @Override
   public String getUserModuleDescription() {
     StringBuilder sb = new StringBuilder(getModuleDescription());
-    sb.append(" cleans empty children and children with one child. For example");
-    sb.append(" regular expression: ((), a, (b)), gets cleaned to (a, b).");
-    sb.append(" First empty concatenation () is removed, and concatenation (b)");
-    sb.append(" with only one child is replaced by token b.");
+    sb.append(" cleans empty children and one child regexps. For example");
+    sb.append(" regular expression: <p align=\"center\"><i>((), a, (b))</i></p> gets cleaned to <p align=\"center\"><i>(a, b)</i></p>");
+    sb.append(" Empty concatenation <i>()</i> is removed, and concatenation <i>(b)</i>");
+    sb.append(" is replaced by token <i>b<i>.");
     return sb.toString();
   }
 

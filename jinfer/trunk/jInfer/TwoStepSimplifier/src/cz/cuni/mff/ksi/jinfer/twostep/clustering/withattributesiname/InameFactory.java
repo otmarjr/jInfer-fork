@@ -66,10 +66,8 @@ public class InameFactory implements ClustererFactory {
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" clusters Elements in initial grammar. It considers two elements"
-            + " equivalent exactly when their names equals (with ignoring case)."
-            + " Attributes are handled same way. Only attributes on same element"
-            + " cluster are clusterer once again, to obtain attributes for"
-            + " element. It does not provide any heuristic to find out, whether"
+            + " equivalent exactly when their names equals (ignoring case)."
+            + " Attributes are handled same way. It does not provide any heuristic to find out, whether"
             + " some attributes are same across different elements.");
      return sb.toString();
   }

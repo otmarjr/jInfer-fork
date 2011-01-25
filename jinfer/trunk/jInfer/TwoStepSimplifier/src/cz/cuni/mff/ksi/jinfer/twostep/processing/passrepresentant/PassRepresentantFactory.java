@@ -55,10 +55,8 @@ public class PassRepresentantFactory implements ClusterProcessorFactory {
   @Override
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getDisplayName());
-    sb.append(" is really dummy processor of element cluster. The grammar"
-            + " inferred for whole cluster of elements it returns"
-            + " is just the representant of cluster. That is, no inferring"
-            + " occurs at all. Just return representant as the grammar"
+    sb.append(" No inferring"
+            + " occurs at all. Returns representant as the grammar"
             + " for cluster being processed.");
     return sb.toString();
   }

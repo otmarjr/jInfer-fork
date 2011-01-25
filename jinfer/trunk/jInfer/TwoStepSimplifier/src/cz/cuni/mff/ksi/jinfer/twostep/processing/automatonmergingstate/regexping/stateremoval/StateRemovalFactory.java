@@ -84,15 +84,7 @@ public class StateRemovalFactory implements RegexpAutomatonSimplifierFactory {
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" generates regular expression from automaton by sequentially"
-            + " removing states from it. When a state is removed, all transitions"
-            + " to and from it are collapsed. All loops are collapsed to one"
-            + " with alternation of old loops. Then, for each pair of in-transition"
-            + " and out-transition, new transition from in-transition source, to"
-            + " out-transition destination is created. The regular expression on"
-            + " this new transition is concatenation of in, loop, out regular"
-            + " expressions. This module needs RegexpAutomatonSimplifierStateRemovalOrderer"
-            + " to obtain sequence of states to remove (different ordeing results"
-            + " in different regular expressions.");
+            + " removing states from it.");
     return sb.toString();
   }
 

@@ -23,35 +23,31 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.Layer;
-import edu.uci.ics.jung.visualization.VisualizationServer.Paintable;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
 import edu.uci.ics.jung.visualization.picking.PickedState;
-import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Collection;
 import javax.swing.JComponent;
 
 /**
- * TODO rio comment
- * Graph mouse plugin providing picking of vertices.
+ * Graph mouse plugin providing picking of one vertex and notifying
+ * {@link AbstractComponent} to end user interaction.
  *
- * @author sviro
+ * @author sviro, rio
  */
 public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
         implements MouseListener, MouseMotionListener {
 
+  /**
+   * component that has to be notified that a vertex was picked by calling
+   * its GUIDone method.
+   */
   protected AbstractComponent<V> component;
-
   /**
    * the picked Vertex, if any
    */
@@ -72,18 +68,6 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
    * controls whether the Vertices may be moved with the mouse
    */
   protected boolean locked;
-  /**
-   * used to draw a rectangle to contain picked vertices
-   */
-  //protected Rectangle2D rect = new Rectangle2D.Float();
-  /**
-   * the Paintable for the lens picking rectangle
-   */
-  //protected Paintable lensPaintable;
-  /**
-   * color for the picking rectangle
-   */
-  //protected Color lensColor = Color.cyan;
   private boolean firstPick = true;
 
   /**
@@ -91,46 +75,9 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
    */
   public VertexPickingGraphMousePlugin(final AbstractComponent<V> component) {
     super(InputEvent.BUTTON1_MASK);
-    //this.lensPaintable = new LensPaintable();
     this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
     this.component = component;
   }
-
-  /**
-   * @return Returns the lensColor.
-   */
-  /*public Color getLensColor() {
-    return lensColor;
-  }*/
-
-  /**
-   * @param lensColor The lensColor to set.
-   */
-  /*public void setLensColor(final Color lensColor) {
-    this.lensColor = lensColor;
-  }*/
-
-  /**
-   * a Paintable to draw the rectangle used to pick multiple
-   * Vertices
-   * @author Tom Nelson, sviro
-   *
-   */
-  /*class LensPaintable implements Paintable {
-
-    @Override
-    public void paint(final Graphics g) {
-      final Color oldColor = g.getColor();
-      g.setColor(lensColor);
-      ((Graphics2D) g).draw(rect);
-      g.setColor(oldColor);
-    }
-
-    @Override
-    public boolean useTransform() {
-      return false;
-    }
-  }*/
 
   /**
    * For primary modifiers (default, MouseButton1):
@@ -156,14 +103,9 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
     final Visualizer<V> vv = (Visualizer<V>) e.getSource();
     final GraphElementAccessor<State<V>, Step<V>> pickSupport = vv.getPickSupport();
     final PickedState<State<V>> pickedVertexState = vv.getPickedVertexState();
-//    PickedState<E> pickedEdgeState = vv.getPickedEdgeState();
     if (pickSupport != null && pickedVertexState != null) {
       Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
       if (e.getModifiers() == modifiers) {
-        if (!firstPick) {
-          //vv.addPostRenderPaintable(lensPaintable);
-        }
-        //rect.setFrameFromDiagonal(down, down);
         // p is the screen point for the mouse event
         final Point2D ip = e.getPoint();
 
@@ -209,8 +151,6 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
 //          pickedEdgeState.clear();
 //          pickedEdgeState.pick(edge, true);
         } else {
-          //vv.addPostRenderPaintable(lensPaintable);
-//          pickedEdgeState.clear();
           pickedVertexState.clear();
           firstPick = true;
         }
@@ -223,73 +163,22 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
   }
 
   /**
-   * If the mouse is dragging a rectangle, pick the
-   * Vertices contained in that rectangle
-   *
    * clean up settings from mousePressed
    */
   @SuppressWarnings("unchecked")
   @Override
   public void mouseReleased(final MouseEvent e) {
     final VisualizationViewer<State<V>, Step<V>> vv = (VisualizationViewer<State<V>, Step<V>>) e.getSource();
-    if (e.getModifiers() == modifiers && down != null) {
-      final Point2D out = e.getPoint();
-
-      if (vertex == null && !heyThatsTooClose(down, out, 5)) {
-        //pickContainedVertices(vv, down, out, false);
-      }
-    }
     down = null;
     vertex = null;
     edge = null;
-    //rect.setFrame(0, 0, 0, 0);
-    //vv.removePostRenderPaintable(lensPaintable);
     vv.repaint();
   }
 
-  /**
-   * If the mouse is over a picked vertex, drag all picked
-   * vertices with the mouse.
-   * If the mouse is not over a Vertex, draw the rectangle
-   * to select multiple Vertices
-   *
-   */
   @SuppressWarnings("unchecked")
   @Override
   public void mouseDragged(MouseEvent e) {
-    if (!locked && false) {
-      final VisualizationViewer<State<V>, Step<V>> vv = (VisualizationViewer<State<V>, Step<V>>) e.getSource();
-      if (vertex != null) {
-        final Point p = e.getPoint();
-        final Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
-                p);
-        final Point2D graphDown = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
-                down);
-        Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
-
-        final double dx = graphPoint.getX() - graphDown.getX();
-        final double dy = graphPoint.getY() - graphDown.getY();
-
-        final PickedState<State<V>> ps = vv.getPickedVertexState();
-
-        for (State<V> v : ps.getPicked()) {
-          final Point2D vp = layout.transform(v);
-          vp.setLocation(vp.getX() + dx, vp.getY() + dy);
-          layout.setLocation(v, vp);
-        }
-        down = p;
-
-      } else {
-        Point2D out = e.getPoint();
-        if (e.getModifiers() == modifiers) {
-          //rect.setFrameFromDiagonal(down, out);
-        }
-      }
-      if (vertex != null) {
-        e.consume();
-      }
-      vv.repaint();
-    }
+    //
   }
 
   /**
@@ -304,34 +193,6 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
   private boolean heyThatsTooClose(final Point2D p, final Point2D q, final double min) {
     return Math.abs(p.getX() - q.getX()) < min
             && Math.abs(p.getY() - q.getY()) < min;
-  }
-
-  /**
-   * pick the vertices inside the rectangle created from points
-   * 'down' and 'out'
-   *
-   */
-  protected void pickContainedVertices(final VisualizationViewer<State<V>, Step<V>> vv, final Point2D down,
-          final Point2D out,
-          final boolean clear) {
-
-    Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
-    final PickedState<State<V>> pickedVertexState = vv.getPickedVertexState();
-
-    final Rectangle2D pickRectangle = new Rectangle2D.Double();
-    pickRectangle.setFrameFromDiagonal(down, out);
-
-    if (pickedVertexState != null) {
-      if (clear) {
-        pickedVertexState.clear();
-      }
-      final GraphElementAccessor<State<V>, Step<V>> pickSupport = vv.getPickSupport();
-
-      final Collection<State<V>> picked = pickSupport.getVertices(layout, pickRectangle);
-      for (State<V> v : picked) {
-        pickedVertexState.pick(v, true);
-      }
-    }
   }
 
   @Override
@@ -354,19 +215,5 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
   @Override
   public void mouseMoved(final MouseEvent e) {
     //
-  }
-
-  /**
-   * @return Returns the locked.
-   */
-  public boolean isLocked() {
-    return locked;
-  }
-
-  /**
-   * @param locked The locked to set.
-   */
-  public void setLocked(final boolean locked) {
-    this.locked = locked;
   }
 }

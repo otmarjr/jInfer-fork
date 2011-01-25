@@ -1,0 +1,80 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
+
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{18cm}
+
+\def\mftitle{jInfer BasicDTDExporter Module Description}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+\maketitle
+\noindent Target audience: developers willing to extend jInfer, specifically hack the DTD export.
+
+\noindent \begin{tabular}{|l|l|} \hline
+Responsible developer: & Matej Vitásek \\ \hline
+Required tokens:       & none \\ \hline
+Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator \\ \hline
+Module dependencies:   & Base \\ \hline
+Public packages:       & none \\ \hline
+\end{tabular}
+
+\section{Introduction}
+
+This is a relatively simple implementation of a \jmodule{SchemaGenerator} exporting the inferred schema to DTD.
+
+\section{Structure}
+
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl}. Its \code{start} method first topologically sorts all rules (elements) it got in the simplified grammar on input. This toposorting is necessary to avoid using anything not yet defined in the resulting schema. Afterwards, it creates their DTD string represenation.\\
+
+Export of a single element is handled in the \code{elementToString()} method. First the actual \code{<!ELEMENT \ldots>} tag is exported, after that its attributes in a \code{<!ATTLIST \ldots>} tag (if there are any).
+
+\subsection{Element content export}
+
+TODO anti
+
+\subsection{Attribute export}
+
+Code exporting attributes is in \code{attributeToString()}. First thing this method does is to assess the domain of a particular atribute: this is a map indexed by attribute values containing number of occurences for each such attribute. Type definition of an attribute is generated in the \code{DomainUtils.getAttributeType()} method. Based on a user setting, this might decide to enumerate all possible values of this attribute using the \code{(a|b|c)} notation, otherwise it just returns \code{\#CDATA}.\\
+Attribute requiredness is assessed based on \code{required} metadata presence. If an attribute is not deemed required, it might have a default value: if a certain value is prominent in the attribute domain (based on user setting again), it is declared default.
+
+\section{Data flow}
+
+Flow of data in this module is following.
+\begin{enumerate}
+	\item \code{SchemaGeneratorImpl} topologically sorts elements (rules) it got on input.
+	\item For each element, relevant portion of DTD schema is generated.
+	\item String representation of the schema is returned along with the information that file extension should be "dtd".
+\end{enumerate}
+
+%\nocite{*}
+\newpage
+\bibliographystyle{alpha}
+\bibliography{literature}
+
+\end{document}

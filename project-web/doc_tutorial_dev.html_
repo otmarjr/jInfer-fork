@@ -253,7 +253,126 @@ DialogDisplayer.getDefault().notify(nd);
 
 <h3>Configuration - options, preferences</h3>
 
-TODO
+<p>
+Option panels located in <i>Tools > Options</i> menu are standard part of NBP API. We created for our purpose jInfer option subCategory
+where are located Preferences applied for each jInfer Project. Below are described few step to create
+your own option panel. For more information, please visit <a href="http://platform.netbeans.org/tutorials/60/nbm-options.html">NetBeans Options tutorial</a>.
+</p>
+<ol>
+	<li>Create options window:
+		<ul>
+			<li>Right click <i>Source Packages</i> in your module, select <i>New &gt; Other</i>.</li>
+			<li>Under Categories, select Module Development. Under File Types, select Options Panel. Click <i>Next</i>.</li>
+			<li>Keep checked <i>Create Secondary Panel</i> and choose jInfer as a <i>Primary Panel</i>. Fill in remaining fields. Click <i>Next</i>.
+			</li>
+			<li>Fill in <i>Class Name Prefix</i> and <i>Package</i> and click <i>Finish</i>.</li>
+		</ul>
+	</li>
+	<li>Design newly created <i>ClassNamePrexix</i>Panel.java.</li>
+	<li>Implement <code>store()</code> and <code>load()</code> methods according to comments inside.</li>
+</ol>
+<p>
+Both <code>store()</code> and <code>load()</code> methods uses <a href="http://bits.netbeans.org/dev/javadoc/org-openide-util/org/openide/util/NbPreferences.html">NbPreferences</a> class. Example below shows how to store and load Preferences.
+</p>
+<span>Example:</span><br/>
+<pre class="code">
+public void store() {
+    // Saves state of checkBox into Preferences for ExampleClass
+    //Class in Property with name "PropertyName".
+    NbPreferences.forModule(ExampleClass.class)
+        .putBoolean("PropertyName", someCheckBox.isSelected());
+}
+
+public void load() {
+    // Get from ExampleClass Class Preferences Property with name
+    // "PropertyName". Second parameter of method getBoolean is used
+    // as default if no Property with defined name is saved in Preferences.
+    someCheckBox.setSelected(NbPreferences.forModule(ExampleClass.class)
+                                 .getBoolean("PropertyName", true));
+}
+</pre>
+
+<p>
+Second type of preferences used in jInfer is Project properties. Each jInfer Project has its properties panel accessible
+in its content menu and preferences set in this properties are applied for each project separately. To implement this kind of
+preferences, it is necessary to implement <a href="http://jinfer.sourceforge.net/javadoc/cz/cuni/mff/ksi/jinfer/base/interfaces/PropertiesPanelProvider.html">PropertiesPanelProvider</a> interface and extend <a href="http://jinfer.sourceforge.net/javadoc/cz/cuni/mff/ksi/jinfer/base/objects/AbstractPropertiesPanel.html">AbstractPropertiesPanel</a> class. Each Project properties window has category tree, where each category represents separate panel with properties. This category is definded by provider interface, and properties panel by class extended AbstractPropertiesPanel.
+</p>
+<h4>PropertiesPanelProvider</h4>
+<p>As was written above, PropertiesPanelProvider defines category in Project properties windows. In the example below, we'll try to explain how to create a simple provider and what each method is responsible for.</p>
+<span>Example:</span><br/>
+<pre class="code">
+public class ExampleProvider implemenets PropertiesPanelProvider {
+
+  // Get Providers programmatic name or Id.
+  public String getName() {
+    return "ExampleProvider";
+  }
+
+  // This name will be displayed in category tree.
+  public String getDisplayName() {
+    return "Example Category";
+  }
+
+  // Priority of category. Higher the number, higher
+  // will be category in tree. If two categories have
+  // same priorities, they are sorted according
+  // to their names.
+  public int getPriority() {
+    return 0;
+  }
+
+  // Returns properties panel defined for this category.
+  public AbstractPropertiesPanel getPanel(final Properties properties) {
+    return new ExamplePropertiesPanel(properties);
+  }
+
+  // Defines parent category of this category. If return null, this is top
+  // level category. In other cases id of parent category must be returned.
+  public String getParent() {
+    return null;
+  }
+
+  // Optional. For each category can be defined list of virtual categories
+  // which shows instead of properties panel only panel with information,
+  // how many and for what kind of modules categories contains
+  // this virtual category.
+  public List<VirtualCategoryPanel> getSubCategories() {
+    return null;
+  }
+}
+</pre>
+<h4>AbstractPropertiesPanel</h4>
+<p>
+This class represents visual component of properties category. You can design it in whatever way you like. For proper functionality must be fullfiled these few steps:
+</p>
+<ol>
+	<li>Call <code>super(Properties)</code> in constructor: By this step is Properties instance saved into <code>properties</code> protected
+		field and you can use it in <code>load()</code> and <code>store()</code> methods.</li>
+	<li>Implement <code>load()</code> method: In this method are values, previously saved into Properties instance provided to this panel, loaded into
+		components to be founded in this panel.</li>
+	<li>Implement <code>store()</code> method: Here are values gathered from components of this panel saved into Properties.</li>
+</ol>
+
+<span>Example:</span><br/>
+<pre class="code">
+// This is only a part of
+public abstract class ExamplePanel extends AbstractPropertiesPanel {
+
+  public ExamplePanel(final Properties properties) {
+    super(properties);
+  }
+
+  public abstract void store() {
+    properties.setProperty("exampleKey", someTextField.getText());
+  }
+
+  public abstract void load() {
+    String propValue = properties.getProperty("exampleKey", "");
+    someTextField.setText(propValue);
+  }
+
+}
+</pre>
 
 <h3>Rule display</h3>
 
@@ -338,6 +457,14 @@ private static final Logger LOG = Logger.getLogger(Example.class);
 // Log a message with info level
 LOG.info("Some message with info log level");
 </pre>
+
+<h3>RunningProject class</h3>
+
+TODO
+
+<h3>Properties ComboBox</h3>
+
+TODO
 
 </div>
 

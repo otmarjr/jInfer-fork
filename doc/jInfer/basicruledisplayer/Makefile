@@ -1,6 +1,6 @@
 default: all
 
-basicruledisplayer.dvi:
+basicruledisplayer.dvi: class-diagram.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

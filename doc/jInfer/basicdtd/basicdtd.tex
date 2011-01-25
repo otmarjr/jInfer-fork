@@ -63,6 +63,14 @@ TODO anti
 Code exporting attributes is in \code{attributeToString()}. First thing this method does is to assess the domain of a particular atribute: this is a map indexed by attribute values containing number of occurences for each such attribute. Type definition of an attribute is generated in the \code{DomainUtils.getAttributeType()} method. Based on a user setting, this might decide to enumerate all possible values of this attribute using the \code{(a|b|c)} notation, otherwise it just returns \code{\#CDATA}.\\
 Attribute requiredness is assessed based on \code{required} metadata presence. If an attribute is not deemed required, it might have a default value: if a certain value is prominent in the attribute domain (based on user setting again), it is declared default.
 
+\subsection{Preferences}
+
+All settings provided by \jmodule{BasicDTDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicdtd.properties} package. As mentioned before, it is possible to set the following. 
+\begin{itemize}
+	\item Maximum attribute domain size which is exported as a list of all values (\code{(a|b|c)} notation).
+	\item Minimal ratio an attribute value in the domain needs to have in order to be declared default.
+\end{itemize}
+
 \section{Data flow}
 
 Flow of data in this module is following.

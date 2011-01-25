@@ -118,6 +118,15 @@ Now for the next part, description of \code{Element} expansion. This is the cont
 
 Finally, expanding a grammar means expanding each of its rules (elements) and returning the gathered rules (elements).
 
+\section{Preferences}
+
+All settings provided by \jmodule{BasicIGG} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicigg.properties} package. It is possible to set the following flags. 
+\begin{itemize}
+	\item Flag to keep values of attributes found in XML documents - unchecking this saves memory during the inference process, but loses all information about the attribute domain, which can lead to less expressive schema.
+	\item Flag to keep simple data values from XML documents - again, unchecking saves memory (potentially a lot, with input files containing a lot of text). Drawback might again be losing information that could be useful in schema generation.
+	\item Flag to stop on errors: if this flag is set, \jmodule{BasicIGG} will interrupt the inference if it comes across an error while extracting IG. Unsetting this flag allows \jmodule{BasicIGG} to ignore these errors and retrieve as much IG as possible.
+\end{itemize}
+
 \section{Data flow}
 
 Flow of data in this module is following.

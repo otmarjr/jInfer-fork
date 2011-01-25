@@ -1,0 +1,20 @@
+digraph interfaces_nodes {
+	rankdir = BT;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	BasicRuleDisplayerTopComponent;
+	RulePanel;
+	RulePainter;
+	NodePainter;
+	Graphics2D;
+	Image;
+
+	Image -> RulePainter [label = "1" arrowhead = diamond];
+	Graphics2D -> RulePanel [label = "1" arrowhead = diamond];
+	Graphics2D -> RulePainter [arrowhead = odiamond];
+	RulePainter -> RulePanel [label = "1" arrowhead = diamond];
+	RulePanel -> BasicRuleDisplayerTopComponent [label = "0..n" arrowhead = diamond];
+	RulePainter -> NodePainter [label = "<< uses >>" style = dashed];
+
+}

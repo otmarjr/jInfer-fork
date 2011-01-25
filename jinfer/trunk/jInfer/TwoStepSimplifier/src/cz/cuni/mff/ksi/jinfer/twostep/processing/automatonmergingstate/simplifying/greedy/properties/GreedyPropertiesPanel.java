@@ -30,6 +30,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 /**
  * Properties panel for AutomatonSimplifierGreedy.
@@ -61,6 +62,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     comboConditionTester = new javax.swing.JComboBox();
     jScrollPane3 = new javax.swing.JScrollPane();
     descContitionTester = new javax.swing.JTextPane();
+    jLabel2 = new javax.swing.JLabel();
     panelParams = new javax.swing.JPanel();
 
     setMinimumSize(new java.awt.Dimension(500, 300));
@@ -114,17 +116,25 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 1, 2, 1);
     add(jScrollPane3, gridBagConstraints);
 
+    jLabel2.setText("Parameters of submodule");
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel2, gridBagConstraints);
+
     panelParams.setMinimumSize(new java.awt.Dimension(200, 22));
     panelParams.setPreferredSize(new java.awt.Dimension(200, 22));
     panelParams.setLayout(new java.awt.GridBagLayout());
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 1, 2, 1);
     add(panelParams, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
@@ -145,7 +155,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
       ModuleParameters factParams = (ModuleParameters) factory;
       int i = 0;
       for (String parameterName : factParams.getParameterNames()) {
-        JLabel l = new JLabel(parameterName);
+        JLabel l = new JLabel("Parameter " + parameterName);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2 * i;
@@ -168,7 +178,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         t.setColumns(10);
         panelParams.add(t, gridBagConstraints);
 
-        JTextArea ar = new JTextArea(factParams.getParameterDisplayDescription(parameterName));
+        JTextPane ar = new JTextPane();
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2 * i + 1;
@@ -178,13 +188,11 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        ar.setColumns(30);
-        ar.setRows(10);
-        ar.setWrapStyleWord(true);
-        ar.setLineWrap(true);
+        ar.setContentType("text/html");
         ar.setEditable(false);
         ar.setFocusable(false);
         ar.setOpaque(false);
+        ar.setText(htmlize(factParams.getParameterDisplayDescription(parameterName)));
 
         panelParams.add(ar, gridBagConstraints);
 
@@ -192,6 +200,16 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         dynamicParameters.put(parameterName, factory.getName() + parameterName);
         ++i;
       }
+    } else {
+        JLabel l = new JLabel("Submodule has no parameters to set.");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 0.0;
+        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+        panelParams.add(l, gridBagConstraints);
     }
   }//GEN-LAST:event_comboConditionTesterChanged
 
@@ -220,6 +238,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
   private javax.swing.JComboBox comboConditionTester;
   private javax.swing.JTextPane descContitionTester;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
   private javax.swing.JScrollPane jScrollPane3;
   private javax.swing.JPanel panelParams;
   // End of variables declaration//GEN-END:variables

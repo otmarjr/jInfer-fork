@@ -86,12 +86,14 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(graphRenderer, gridBagConstraints);
 
+    jScrollPane3.setBorder(null);
     jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 22));
     jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 22));
 
+    desc.setContentType("text/html");
     desc.setEditable(false);
-    desc.setMinimumSize(new java.awt.Dimension(200, 22));
-    desc.setPreferredSize(new java.awt.Dimension(200, 22));
+    desc.setFocusable(false);
+    desc.setOpaque(false);
     jScrollPane3.setViewportView(desc);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -105,10 +107,14 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
     add(jScrollPane3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  private String htmlize(String text) {
+    return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
+  }
+
   private void graphRendererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphRendererActionPerformed
     LayoutF factory = ModuleSelectionHelper.lookupImpl(LayoutF.class,
             ((NamedModule) graphRenderer.getSelectedItem()).getName());
-    desc.setText(factory.getUserModuleDescription());
+    desc.setText(htmlize(factory.getUserModuleDescription()));
   }//GEN-LAST:event_graphRendererActionPerformed
 
   @Override

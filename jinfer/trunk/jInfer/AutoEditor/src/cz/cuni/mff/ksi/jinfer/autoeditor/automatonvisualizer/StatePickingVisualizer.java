@@ -42,7 +42,6 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
    */
   public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component) {
     super(layout);
-    //setPreferredSize(new Dimension(350,350)); //Sets the viewing area size
 
     replaceEdgeLabelTransformer(edgeLabelTransformer);
     getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<State<T>, Step<T>>());

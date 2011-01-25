@@ -56,7 +56,7 @@ public class XMLProcessor implements Processor {
 
   @Override
   public FolderType getFolder() {
-    return FolderType.XML;
+    return FolderType.DOCUMENT;
   }
 
   @Override

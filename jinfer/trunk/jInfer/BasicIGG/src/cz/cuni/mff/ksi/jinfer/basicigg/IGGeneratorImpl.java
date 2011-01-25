@@ -77,7 +77,7 @@ public class IGGeneratorImpl implements IGGenerator {
     final Map<FolderType, Map<String, Processor>> registeredProcessors = getRegisteredProcessors();
 
     // run processors on input, gather IG rules
-    ret.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.XML)));
+    ret.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));
     ret.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
     ret.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
 

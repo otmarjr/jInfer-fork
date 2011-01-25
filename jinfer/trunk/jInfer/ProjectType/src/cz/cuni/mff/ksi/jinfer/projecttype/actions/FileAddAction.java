@@ -97,7 +97,7 @@ public class FileAddAction extends AbstractAction {
 
   private void buildFilterName(final StringBuilder builder,
           final Collection<? extends Processor> processors) {
-    if (FolderType.XML.equals(type)) {
+    if (FolderType.DOCUMENT.equals(type)) {
       builder.append("XML files (");
     } else if (FolderType.SCHEMA.equals(type)) {
       builder.append("Schema files (");

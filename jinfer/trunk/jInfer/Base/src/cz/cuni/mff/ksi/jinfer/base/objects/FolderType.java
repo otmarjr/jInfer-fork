@@ -22,7 +22,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
  */
 public enum FolderType {
 
-  XML("XML"),
+  DOCUMENT("Document"),
   SCHEMA("Schema"),
   QUERY("Query");
   

@@ -224,7 +224,7 @@ public final class ValidateAction extends NodeAction {
         continue;
       }
 
-      final boolean isXMLNode = FolderType.XML.getName().equals(
+      final boolean isXMLNode = FolderType.DOCUMENT.getName().equals(
               node.getParentNode().getDisplayName());
 
       if (isXMLNode) {

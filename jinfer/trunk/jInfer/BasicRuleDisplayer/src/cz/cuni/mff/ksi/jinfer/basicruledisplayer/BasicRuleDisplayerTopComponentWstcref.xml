@@ -3,5 +3,5 @@
 <tc-ref version="2.0" >
   <module name="cz.cuni.mff.ksi.jinfer.basicruledisplayer" spec="1.0"/>
   <tc-id id="BasicRuleDisplayerTopComponent"/>
-  <state opened="true"/>
+  <state opened="false"/>
 </tc-ref>

@@ -141,7 +141,12 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       gridBagConstraints.weightx = 1.0;
       gridBagConstraints.weighty = 1.0;
       gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+      desc.setContentType("text/html");
       desc.setEditable(false);
+      desc.setFocusable(false);
+      desc.setOpaque(false);
+
+      scr.setBorder(null);
       scr.setViewportView(desc);
 
       add(scr, gridBagConstraints);
@@ -149,6 +154,9 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
     if (i == 0) {
       final JTextPane noImplInfo = new JTextPane();
       noImplInfo.setEditable(false);
+      noImplInfo.setFocusable(false);
+      noImplInfo.setOpaque(false);
+
       noImplInfo.setText("No implementation, other than myself, of RegularExpressionCleanerFactory found.");
       add(noImplInfo);
     }

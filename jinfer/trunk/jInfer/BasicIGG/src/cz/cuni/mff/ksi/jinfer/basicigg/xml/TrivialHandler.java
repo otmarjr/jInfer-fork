@@ -75,7 +75,7 @@ public class TrivialHandler extends DefaultHandler {
       // for each attribute, add a subnode representing it
       for (int i = 0; i < attributes.getLength(); i++) {
         final Map<String, Object> metadata = new HashMap<String, Object>(1);
-        metadata.put("required", Boolean.TRUE);
+        metadata.put(IGGUtils.REQUIRED, Boolean.TRUE);
         final List<String> content = new ArrayList<String>(1);
         if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES, "true"))) {
           content.add(attributes.getValue(i));

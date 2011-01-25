@@ -50,7 +50,6 @@
                 </test-type>
             </test-dependencies>
             <public-packages>
-                <package>cz.cuni.mff.ksi.jinfer.basicigg.interfaces</package>
                 <package>cz.cuni.mff.ksi.jinfer.basicigg.properties</package>
             </public-packages>
             <class-path-extension>

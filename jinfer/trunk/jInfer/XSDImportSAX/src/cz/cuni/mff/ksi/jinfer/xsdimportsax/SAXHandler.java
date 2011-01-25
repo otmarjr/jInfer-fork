@@ -209,7 +209,7 @@ class SAXHandler extends DefaultHandler {
       //TODO reseto take care of arguments
       final HashMap<String, Object> metadata = new HashMap<String, Object>();
       if (docElement.getAttrs().containsKey("use") && docElement.getAttrs().get("use").getValue().equalsIgnoreCase("required")) {
-        metadata.put("required", Boolean.TRUE);
+        metadata.put(IGGUtils.REQUIRED, Boolean.TRUE);
       }
       contentStack.peek().getAttributes().add(
               new Attribute(getContext(), docElement.attributeNameValue(), metadata, null, new ArrayList<String>(0)));

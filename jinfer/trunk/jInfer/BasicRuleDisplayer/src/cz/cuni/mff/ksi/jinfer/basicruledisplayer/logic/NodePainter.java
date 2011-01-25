@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.basicruledisplayer.options.BasicRuleDisplayerPanel;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -189,7 +190,7 @@ public class NodePainter {
   private Image drawAttribute(final Attribute a) {
     final FontMetrics fm = graphics.getFontMetrics();
 
-    final boolean required = a.getMetadata().containsKey("required");
+    final boolean required = a.getMetadata().containsKey(IGGUtils.REQUIRED);
 
     final String label = a.getName() + (required ? " (REQUIRED)" : "");
 

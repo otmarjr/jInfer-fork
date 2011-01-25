@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
@@ -301,7 +302,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         String type = TypeUtils.getBuiltinAttributeType(attribute);
         indentator.append("\" type=\"" + type + '"');
 
-        if (attribute.getMetadata().containsKey("required")) {
+        if (attribute.getMetadata().containsKey(IGGUtils.REQUIRED)) {
           indentator.append(" use=\"required\"");
           // By default attribute is not required.
         }

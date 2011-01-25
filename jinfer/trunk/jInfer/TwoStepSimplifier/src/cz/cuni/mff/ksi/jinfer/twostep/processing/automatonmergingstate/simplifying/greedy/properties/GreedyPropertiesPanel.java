@@ -92,11 +92,15 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(comboConditionTester, gridBagConstraints);
 
+    jScrollPane3.setBorder(null);
     jScrollPane3.setMinimumSize(new java.awt.Dimension(200, 22));
     jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 22));
 
+    descContitionTester.setContentType("text/html");
     descContitionTester.setEditable(false);
+    descContitionTester.setFocusable(false);
     descContitionTester.setMinimumSize(new java.awt.Dimension(200, 22));
+    descContitionTester.setOpaque(false);
     descContitionTester.setPreferredSize(new java.awt.Dimension(200, 22));
     jScrollPane3.setViewportView(descContitionTester);
 
@@ -124,10 +128,14 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     add(panelParams, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  private String htmlize(String text) {
+    return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
+  }
+
   private void comboConditionTesterChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboConditionTesterChanged
     MergeConditionTesterFactory factory = ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
             ((NamedModule) comboConditionTester.getSelectedItem()).getName());
-    descContitionTester.setText(factory.getUserModuleDescription());
+    descContitionTester.setText(htmlize(factory.getUserModuleDescription()));
 
     panelParams.removeAll();
     dynamicComponents = new HashMap<String, JTextField>();
@@ -175,6 +183,9 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         ar.setWrapStyleWord(true);
         ar.setLineWrap(true);
         ar.setEditable(false);
+        ar.setFocusable(false);
+        ar.setOpaque(false);
+
         panelParams.add(ar, gridBagConstraints);
 
         dynamicComponents.put(parameterName, t);

@@ -88,7 +88,12 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(automatonSimplifier, gridBagConstraints);
 
+    jScrollPane3.setBorder(null);
+
+    descAutomatonSimplifier.setContentType("text/html");
     descAutomatonSimplifier.setEditable(false);
+    descAutomatonSimplifier.setFocusable(false);
+    descAutomatonSimplifier.setOpaque(false);
     jScrollPane3.setViewportView(descAutomatonSimplifier);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -109,7 +114,12 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelRegexpAutomatonSimplifier, gridBagConstraints);
 
+    jScrollPane4.setBorder(null);
+
+    descRegexpAutomatonSimplifier.setContentType("text/html");
     descRegexpAutomatonSimplifier.setEditable(false);
+    descRegexpAutomatonSimplifier.setFocusable(false);
+    descRegexpAutomatonSimplifier.setOpaque(false);
     jScrollPane4.setViewportView(descRegexpAutomatonSimplifier);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -140,16 +150,20 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     add(regexpAutomatonSimplifier, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  private String htmlize(String text) {
+    return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
+  }
+
   private void automatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automatonSimplifierChanged
-    descAutomatonSimplifier.setText(
+    descAutomatonSimplifier.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
-            ((NamedModule) automatonSimplifier.getSelectedItem()).getName()).getUserModuleDescription());
+            ((NamedModule) automatonSimplifier.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_automatonSimplifierChanged
 
   private void regexpAutomatonSimplifierChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regexpAutomatonSimplifierChanged
-    descRegexpAutomatonSimplifier.setText(
+    descRegexpAutomatonSimplifier.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(RegexpAutomatonSimplifierFactory.class,
-            ((NamedModule) regexpAutomatonSimplifier.getSelectedItem()).getName()).getUserModuleDescription());
+            ((NamedModule) regexpAutomatonSimplifier.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_regexpAutomatonSimplifierChanged
 
   @Override

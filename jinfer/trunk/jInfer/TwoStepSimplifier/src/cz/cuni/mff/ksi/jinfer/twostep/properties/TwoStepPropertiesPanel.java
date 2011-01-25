@@ -93,7 +93,13 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(clusterer, gridBagConstraints);
 
+    jScrollPane3.setBorder(null);
+
+    descClusterer.setContentType("text/html");
     descClusterer.setEditable(false);
+    descClusterer.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+    descClusterer.setFocusable(false);
+    descClusterer.setOpaque(false);
     jScrollPane3.setViewportView(descClusterer);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -131,10 +137,12 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(clusterProcessor, gridBagConstraints);
 
-    jScrollPane1.setMinimumSize(null);
+    jScrollPane1.setBorder(null);
 
+    descClusterProcessor.setContentType("text/html");
     descClusterProcessor.setEditable(false);
-    descClusterProcessor.setPreferredSize(null);
+    descClusterProcessor.setFocusable(false);
+    descClusterProcessor.setOpaque(false);
     jScrollPane1.setViewportView(descClusterProcessor);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -172,7 +180,12 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(cleaner, gridBagConstraints);
 
+    jScrollPane2.setBorder(null);
+
+    descCleaner.setContentType("text/html");
     descCleaner.setEditable(false);
+    descCleaner.setFocusable(false);
+    descCleaner.setOpaque(false);
     jScrollPane2.setViewportView(descCleaner);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -186,22 +199,26 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     add(jScrollPane2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  private String htmlize(String text) {
+    return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
+  }
+
   private void clustererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clustererChanged
-    descClusterer.setText(
+    descClusterer.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(ClustererFactory.class,
-            ((NamedModule) clusterer.getSelectedItem()).getName()).getUserModuleDescription());
+            ((NamedModule) clusterer.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_clustererChanged
 
   private void clusterProcessorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterProcessorChanged
-    descClusterProcessor.setText(
+    descClusterProcessor.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(ClusterProcessorFactory.class,
-            ((NamedModule) clusterProcessor.getSelectedItem()).getName()).getUserModuleDescription());
+            ((NamedModule) clusterProcessor.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_clusterProcessorChanged
 
   private void cleanerChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanerChanged
-    descCleaner.setText(
+    descCleaner.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-            ((NamedModule) cleaner.getSelectedItem()).getName()).getUserModuleDescription());
+            ((NamedModule) cleaner.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_cleanerChanged
 
   @Override

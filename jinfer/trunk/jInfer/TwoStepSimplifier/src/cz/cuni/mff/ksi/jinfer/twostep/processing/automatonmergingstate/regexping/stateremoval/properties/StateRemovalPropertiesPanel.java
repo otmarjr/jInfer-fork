@@ -84,7 +84,12 @@ public class StateRemovalPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(comboOrderer, gridBagConstraints);
 
+    jScrollPane3.setBorder(null);
+
+    descOrderer.setContentType("text/html");
     descOrderer.setEditable(false);
+    descOrderer.setFocusable(false);
+    descOrderer.setOpaque(false);
     jScrollPane3.setViewportView(descOrderer);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -98,10 +103,14 @@ public class StateRemovalPropertiesPanel extends AbstractPropertiesPanel {
     add(jScrollPane3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  private String htmlize(String text) {
+    return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
+  }
+
   private void comboOrdererChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboOrdererChanged
-    descOrderer.setText(
+    descOrderer.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(OrdererFactory.class,
-            ((NamedModule) comboOrderer.getSelectedItem()).getName()).getUserModuleDescription());
+            ((NamedModule) comboOrderer.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_comboOrdererChanged
 
   @Override

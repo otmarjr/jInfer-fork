@@ -46,11 +46,26 @@ Public packages:       & none \\ \hline
 
 \section{Introduction}
 
-This is fairly basic rule displayer draws rules as series of nested coloured rectangles.
+This is fairly basic rule displayer draws rules as series of nested coloured rectangles. It does so by recursively descending down the regexp tree to draw the innermost nodes first, composing the outer nodes from them. User interface-wise, it creates a component with multiple panels: each one for a new grammar to display.
 
 \section{Structure}
 
-The main class implementing \code{RuleDisplayer} inference interface and simultaneously registered as its service provider is \code{BasicRuleDisplayer}.
+The main class implementing \code{RuleDisplayer} inference interface and simultaneously registered as its service provider is \code{BasicRuleDisplayer}. Main method of this class is \code{createDisplayer()}, which looks up the component, adds a new panel to it and renders the specified grammar in it.\\
+
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{class-diagram}
+	\caption{BasicRuleDisplayer class diagram} \label{figure-class-diagram}
+\end{figure}
+
+The diagram of classes involved in rule display is in figure \ref{figure-class-diagram}. The top component of the rule displayer has a few panels in it: each contains its own \code{RuleDisplayer} responsible for rendering specified grammar once into an internal \code{Image}, then keeping it and drawing it onto panel's \code{Canvas} each time repainting is needed.\\
+
+Grammar is rendered in the \code{drawRules()} method by recursively rendering its rules and stacking their image representations into the image. Rule painting is handled in the \code{NodePainter} class, with most important method \code{drawNode()}. While the code itself is a nice recursion programming exercise, there is nothing of a special interest in it.\\
+
+All graphics used by \jmodule{BasicRuleDisplayer} is contained in the \code{cz.cuni.mff.ksi.jinfer.basicruledisplayer.graphics} package.
+
+\subsection{Settings}
+
+All settings provided by \jmodule{BasicRuleDisplayer} are NetBeans-wide. The options panel along with all the logic is in the \code{cz.cuni.mff.ksi.jinfer.basicruledisplayer.options} package. Available options include setting the maximum number of panels concurrently displayed, rules drawn, as well as maximum nesting level. Everything beyond these limits will be rendered as an icon suggesting omitted information. Furthermore, colours of various nodes can be set here.
 
 %\nocite{*}
 \newpage

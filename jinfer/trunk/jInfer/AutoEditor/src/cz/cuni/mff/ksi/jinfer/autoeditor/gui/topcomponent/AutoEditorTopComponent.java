@@ -40,7 +40,7 @@ import org.openide.windows.WindowManager;
  *
  * @author vektor
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.autoeditor.gui//AutoEditor//EN",
+@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent//AutoEditor//EN",
 autostore = false)
 public final class AutoEditorTopComponent extends TopComponent {
 

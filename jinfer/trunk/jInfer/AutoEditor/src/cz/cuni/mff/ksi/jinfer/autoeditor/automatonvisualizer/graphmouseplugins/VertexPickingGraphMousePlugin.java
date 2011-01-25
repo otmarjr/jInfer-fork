@@ -50,7 +50,7 @@ import javax.swing.JComponent;
 public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
         implements MouseListener, MouseMotionListener {
 
-  private AbstractComponent<V> component;
+  protected AbstractComponent<V> component;
 
   /**
    * the picked Vertex, if any
@@ -75,15 +75,15 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
   /**
    * used to draw a rectangle to contain picked vertices
    */
-  protected Rectangle2D rect = new Rectangle2D.Float();
+  //protected Rectangle2D rect = new Rectangle2D.Float();
   /**
    * the Paintable for the lens picking rectangle
    */
-  protected Paintable lensPaintable;
+  //protected Paintable lensPaintable;
   /**
    * color for the picking rectangle
    */
-  protected Color lensColor = Color.cyan;
+  //protected Color lensColor = Color.cyan;
   private boolean firstPick = true;
 
   /**
@@ -91,7 +91,7 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
    */
   public VertexPickingGraphMousePlugin(final AbstractComponent<V> component) {
     super(InputEvent.BUTTON1_MASK);
-    this.lensPaintable = new LensPaintable();
+    //this.lensPaintable = new LensPaintable();
     this.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
     this.component = component;
   }
@@ -99,16 +99,16 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
   /**
    * @return Returns the lensColor.
    */
-  public Color getLensColor() {
+  /*public Color getLensColor() {
     return lensColor;
-  }
+  }*/
 
   /**
    * @param lensColor The lensColor to set.
    */
-  public void setLensColor(final Color lensColor) {
+  /*public void setLensColor(final Color lensColor) {
     this.lensColor = lensColor;
-  }
+  }*/
 
   /**
    * a Paintable to draw the rectangle used to pick multiple
@@ -116,7 +116,7 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
    * @author Tom Nelson, sviro
    *
    */
-  class LensPaintable implements Paintable {
+  /*class LensPaintable implements Paintable {
 
     @Override
     public void paint(final Graphics g) {
@@ -130,7 +130,7 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
     public boolean useTransform() {
       return false;
     }
-  }
+  }*/
 
   /**
    * For primary modifiers (default, MouseButton1):
@@ -161,9 +161,9 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
       Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
       if (e.getModifiers() == modifiers) {
         if (!firstPick) {
-          vv.addPostRenderPaintable(lensPaintable);
+          //vv.addPostRenderPaintable(lensPaintable);
         }
-        rect.setFrameFromDiagonal(down, down);
+        //rect.setFrameFromDiagonal(down, down);
         // p is the screen point for the mouse event
         final Point2D ip = e.getPoint();
 
@@ -202,13 +202,14 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
 
               offsetx = (float) (gp.getX() - q.getX());
               offsety = (float) (gp.getY() - q.getY());
+              component.GUIDone();
             }
           }
         } else if ((edge = pickSupport.getEdge(layout, ip.getX(), ip.getY())) != null) {
 //          pickedEdgeState.clear();
 //          pickedEdgeState.pick(edge, true);
         } else {
-          vv.addPostRenderPaintable(lensPaintable);
+          //vv.addPostRenderPaintable(lensPaintable);
 //          pickedEdgeState.clear();
           pickedVertexState.clear();
           firstPick = true;
@@ -235,14 +236,14 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
       final Point2D out = e.getPoint();
 
       if (vertex == null && !heyThatsTooClose(down, out, 5)) {
-        pickContainedVertices(vv, down, out, false);
+        //pickContainedVertices(vv, down, out, false);
       }
     }
     down = null;
     vertex = null;
     edge = null;
-    rect.setFrame(0, 0, 0, 0);
-    vv.removePostRenderPaintable(lensPaintable);
+    //rect.setFrame(0, 0, 0, 0);
+    //vv.removePostRenderPaintable(lensPaintable);
     vv.repaint();
   }
 
@@ -256,7 +257,7 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
   @SuppressWarnings("unchecked")
   @Override
   public void mouseDragged(MouseEvent e) {
-    if (!locked) {
+    if (!locked && false) {
       final VisualizationViewer<State<V>, Step<V>> vv = (VisualizationViewer<State<V>, Step<V>>) e.getSource();
       if (vertex != null) {
         final Point p = e.getPoint();
@@ -281,7 +282,7 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
       } else {
         Point2D out = e.getPoint();
         if (e.getModifiers() == modifiers) {
-          rect.setFrameFromDiagonal(down, out);
+          //rect.setFrameFromDiagonal(down, out);
         }
       }
       if (vertex != null) {

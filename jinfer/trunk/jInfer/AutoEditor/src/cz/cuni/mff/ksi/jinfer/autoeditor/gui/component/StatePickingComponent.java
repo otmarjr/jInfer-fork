@@ -98,7 +98,13 @@ public class StatePickingComponent<T> extends AbstractComponent<T> {
 
   public State<T> getPickedState() {
     final Visualizer<T> visualizer = getVisualizer();
-    return new ArrayList<State<T>>(visualizer.getPickedVertexState().getPicked()).get(0);
+    final ArrayList<State<T>> pickedList = new ArrayList<State<T>>(visualizer.getPickedVertexState().getPicked());
+    //if (pickedList.isEmpty()) {
+    //  return null;
+    //} else {
+    visualizer.getPickedVertexState().clear();
+      return pickedList.get(0);
+    //}
   }
 
   public void setLabel(final String text) {

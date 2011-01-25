@@ -78,7 +78,7 @@ Note that the initial grammar generated in this way is complex. Therefore, this 
 
 This is a rather na\"{i}ve implementation of an XPath processor. It registers itself into \emph{query} input folder, \emph{xpath} file extension (text file containing one XPath query per line) and declares it cannot handle other file extensions.\\
 To parse XPath queries, standard support present in JDK is used. The relevant \code{XPathHandler} is the \code{XPathHandler} class.\\
-TODO vektor Explain what it does...
+% TODO vektor Explain how it works...
 
 \section{Expansion} \label{section-expansion}
 
@@ -105,8 +105,13 @@ Understanding how intervals affect the expansion, it is time to move a level up:
 	\item \emph{TOKEN}: resulting set contains a word with one letter: the content (an \code{AbstractStructuralNode}) of this token; the interval of the regexp is applied on this word before returning it.
 	\item \emph{ALTERNATION}: first, all children of this alternation are recursively evaluated. Their respective words are appended in a list, this list has the regexp interval applied and is returned. Reasoning is the following: we are trying to get all the words a regexp can produce. If the regexp is an alternation, any word that can be produced by one of its children can be a word produced by the regexp itself.
 	\item \emph{PERMUTATION}: a heuristic is applied again: because there are $n!$ ways to order children of a permutation, only two are actually picked: the original order in which they appear, and reversal of this order. In both cases the children are treated as if they we concatenation (and thus the following case is invoked) and appended in a list. On this list the regexp interval is applied and the list is returned.
-	\item \emph{CONCATENATION}: TODO vektor
+	\item \emph{CONCATENATION}: this is by far the most complicated case. Let's denote word sets produced by the $N$ children of the concatenation $ w_1 \ldots w_N $. Now, all words that could be produced by this concatenations correspond to concatenations of form $w_{a_1} w_{a_2} \ldots w_{a_N}$ for all possible combinations of indices $a_i, i  \in \{1 \ldots N\}$. Number of such words grows exponentially with $N$, therefore a heuristic approach has to be employed again.\newline
+In this case, consider $ m = \max_{i \in 1 \ldots N}{|w_i|} $. Now, $ m $ words will be constructed in the following way: in a for-loop enumerating $ i \in \{1 \ldots m\}$ the $j$-th part of this $i$-th word will be $w_{i mod |w_j|}$. The method \code{ExpanderImp.unpackConcat()} illustrates this.
 \end{itemize}
+
+Now for the next part, description of \code{Element} expansion. This is the content of \code{ExpanderImpl.expandElement()} method. First, element's subnodes are expanded as a regexp. For each word from this expansion a new \code{Element} is created: letters of this word are encapsulated in tokens, these tokens are put in a concatenation that constitutes subnodes of this new element. If the letter is an element itself, it is not recursively expanded - it is just declared to be a sentinel.\\ % TODO anti Link to architecture
+
+Finally, expanding a grammar means expanding each of its rules (elements) and returning the gathered rules (elements).
 
 \section{Data flow}
 

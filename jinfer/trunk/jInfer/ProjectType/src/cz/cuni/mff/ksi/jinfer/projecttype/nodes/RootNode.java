@@ -50,7 +50,7 @@ public class RootNode extends AbstractNode {
       @Override
       protected void addNotify() {
         final Input input = project.getLookup().lookup(Input.class);
-        setKeys(new Node[]{new FolderNode(project, FolderType.XML,
+        setKeys(new Node[]{new FolderNode(project, FolderType.DOCUMENT,
                   input.getDocuments()), new FolderNode(project, FolderType.SCHEMA,
                   input.getSchemas()), new FolderNode(project, FolderType.QUERY,
                   input.getQueries()),

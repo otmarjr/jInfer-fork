@@ -71,7 +71,7 @@ public class FilesAddAction extends AbstractAction {
       final List<File> selectedFilesList = new ArrayList<File>(Arrays.asList(selectedFiles));
 
       final Collection<File> xmlFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
-              FolderType.XML));
+              FolderType.DOCUMENT));
       final Collection<File> schemaFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
               FolderType.SCHEMA));
       final Collection<File> queryFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
@@ -105,7 +105,7 @@ public class FilesAddAction extends AbstractAction {
   private void addRemainingFilesToDefault(final List<File> selectedFilesList, final Collection<File> xmlFiles,  final Collection<File> schemaFiles, final Collection<File> queryFiles) {
     final Properties properties = new ModuleProperties(ProjectPropertiesPanelProvider.CATEGORY_NAME, project.getLookup().lookup(Properties.class));
     final String defaultFolder = properties.getProperty(ProjectPropertiesPanel.FOLDER_TYPE, ProjectPropertiesPanel.FOLDER_TYPE_DEFAULT);
-    if (defaultFolder.equals(FolderType.XML.getName())) {
+    if (defaultFolder.equals(FolderType.DOCUMENT.getName())) {
       xmlFiles.addAll(selectedFilesList);
     }
     if (defaultFolder.equals(FolderType.SCHEMA.getName())) {

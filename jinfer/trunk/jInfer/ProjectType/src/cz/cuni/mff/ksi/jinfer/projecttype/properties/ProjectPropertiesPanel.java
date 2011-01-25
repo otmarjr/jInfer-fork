@@ -64,8 +64,8 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
     setLayout(new java.awt.GridBagLayout());
 
     defaultFolder.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-    defaultFolder.setMinimumSize(new java.awt.Dimension(80, 20));
-    defaultFolder.setPreferredSize(new java.awt.Dimension(80, 22));
+    defaultFolder.setMinimumSize(new java.awt.Dimension(90, 20));
+    defaultFolder.setPreferredSize(new java.awt.Dimension(90, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
@@ -144,7 +144,7 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
     fill2.setLayout(fill2Layout);
     fill2Layout.setHorizontalGroup(
       fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 41, Short.MAX_VALUE)
+      .addGap(0, 39, Short.MAX_VALUE)
     );
     fill2Layout.setVerticalGroup(
       fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

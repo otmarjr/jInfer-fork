@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-AutoUpdate-Show-In-Client: false
+AutoUpdate-Show-In-Client: true
 OpenIDE-Module: cz.cuni.mff.ksi.jinfer.base/4
 OpenIDE-Module-Implementation-Version: 4
 OpenIDE-Module-Install: cz/cuni/mff/ksi/jinfer/base/Installer.class

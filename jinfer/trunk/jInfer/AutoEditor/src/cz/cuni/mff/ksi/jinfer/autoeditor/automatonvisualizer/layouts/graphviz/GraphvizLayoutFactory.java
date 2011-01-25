@@ -58,6 +58,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = LayoutF.class)
 public class GraphvizLayoutFactory implements LayoutF {
 
+  //TODO sviro comment and refactor
+
   public static final String NAME = "GraphvizLayout";
   public static final String DISPLAY_NAME = "Graphviz Layout";
   public static final String PROPERTIES_DOTBIN = "dotbin";

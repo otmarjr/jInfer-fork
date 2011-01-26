@@ -23,6 +23,10 @@ import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
+/**
+ * Options controller of the AutoEditor module.
+ * @author sviro
+ */
 @OptionsPanelController.SubRegistration(location = "jInfer",
 displayName = "#AdvancedOption_DisplayName_AutoEditor",
 keywords = "#AdvancedOption_Keywords_AutoEditor",
@@ -31,18 +35,18 @@ public final class AutoEditorOptionsPanelController extends OptionsPanelControll
 
   private AutoEditorPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-  private boolean changed;
+  private boolean valuesChanged;
 
   @Override
   public void update() {
     getPanel().load();
-    changed = false;
+    valuesChanged = false;
   }
 
   @Override
   public void applyChanges() {
     getPanel().store();
-    changed = false;
+    valuesChanged = false;
   }
 
   @Override
@@ -57,7 +61,7 @@ public final class AutoEditorOptionsPanelController extends OptionsPanelControll
 
   @Override
   public boolean isChanged() {
-    return changed;
+    return valuesChanged;
   }
 
   @Override
@@ -66,30 +70,33 @@ public final class AutoEditorOptionsPanelController extends OptionsPanelControll
   }
 
   @Override
-  public JComponent getComponent(Lookup masterLookup) {
+  public JComponent getComponent(final Lookup masterLookup) {
     return getPanel();
   }
 
   @Override
-  public void addPropertyChangeListener(PropertyChangeListener l) {
+  public void addPropertyChangeListener(final PropertyChangeListener l) {
     pcs.addPropertyChangeListener(l);
   }
 
   @Override
-  public void removePropertyChangeListener(PropertyChangeListener l) {
+  public void removePropertyChangeListener(final PropertyChangeListener l) {
     pcs.removePropertyChangeListener(l);
   }
 
   private AutoEditorPanel getPanel() {
     if (panel == null) {
-      panel = new AutoEditorPanel(this);
+      panel = new AutoEditorPanel();
     }
     return panel;
   }
 
-  void changed() {
-    if (!changed) {
-      changed = true;
+  /**
+   * Call to indicate that some field is changed in options panel.
+   */
+  public void changed() {
+    if (!valuesChanged) {
+      valuesChanged = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
     }
     pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);

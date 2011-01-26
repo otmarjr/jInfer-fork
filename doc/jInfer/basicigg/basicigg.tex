@@ -8,10 +8,13 @@
 \usepackage{tgpagella}
 %\usepackage[scale=0.9]{tgcursor}
 %\usepackage[scale=0.9]{tgheros}
+\usepackage{xstring}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
-\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\punts}[1]{\StrSubstitute{#1}{.}{.\.}}
+\newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
+\def\.{\discretionary{}{}{}}
 \newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
 
 \setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
@@ -77,7 +80,7 @@ After reaching the end of the document, all IG rules are returned. Note that thi
 DTD processor registers itself into \emph{schema} input folder, \emph{dtd} file extension and declares it cannot handle other file extensions.\\
 To parse DTD files a 3rd party library is used: \jmodule{dtdparser} (\cite{dtdparser}).
 Translation from the object model in this library to our own is handled mostly by \code{DTD2RETranslator} class.\\
-Note that the initial grammar generated in this way is complex. Therefore, this processor checks for the \code{CAN\_HANDLE\_COMPLEX\_REGEXPS} capability of the simplifier following this IG generator: in positive case it simply returns the grammar, if the following module cannot handle complex regular expressions, DTD processor first invokes an \emph{Expander} (see \ref{section-expansion}).
+Note that the initial grammar generated in this way is complex. Therefore, this processor checks for the \code{CAN\_\.HANDLE\_\.COMPLEX\_\.REGEXPS} capability of the simplifier following this IG generator: in positive case it simply returns the grammar, if the following module cannot handle complex regular expressions, DTD processor first invokes an \emph{Expander} (see \ref{section-expansion}).
 
 \subsection{XPath processor}
 

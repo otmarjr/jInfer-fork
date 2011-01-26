@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import sun.font.CreatedFontTracker;
 
 /**
  *
@@ -124,7 +123,6 @@ public final class XSDOccurences {
           if (max < 0) {                        // parsed value is negative
             max = min;                          // min is either default, or some good value
           }
- 
         }
       } catch (NumberFormatException e) {
         max = min;                              // min is either default, or some good value

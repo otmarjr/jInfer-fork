@@ -146,15 +146,23 @@ public final class RegexpInterval {
    * Method is symmetrical, so the arguments can be exchanged.
    * @param first First of the intervals.
    * @param second Second of the intervals.
-   * @return Intersection of intervals.
+   * @return Intersection of intervals or null.
+   * @throws IllegalArgumentException When either of the arguments is null, or intervals have no intersection.
    */
   public static RegexpInterval intersectIntervals(
-          final RegexpInterval first, final RegexpInterval second) {
+          final RegexpInterval first, final RegexpInterval second) throws IllegalArgumentException {
     int lower, upper;
+    if (first == null || second == null) {
+      throw new IllegalArgumentException("Both intervals must not be null");
+    }
     if (first.isUnbounded() && second.isUnbounded()) {
-      // both unbounded
-      upper = -1;
-    } else if(first.isUnbounded()) {
+      // both unbounded, lower bound is the larger of the two mins, and at least 0
+      lower = Math.max(0, Math.max(first.getMin(), second.getMin()));
+      return RegexpInterval.getUnbounded(lower);
+    }
+    checkBounds(first);
+    checkBounds(second);
+    if(first.isUnbounded()) {
       // unbounded first max -> use max of second, it cannot be unbounded now
       upper = second.getMax();
     } else if (second.isUnbounded()) {
@@ -162,17 +170,20 @@ public final class RegexpInterval {
       upper = first.getMax();
     } else {
       // neither is unbounded, use the smaller one, but make sure it is at least zero
-      upper = Math.min(Math.max(0,first.getMax()), Math.max(0, second.getMax()));
+      upper = Math.min(Math.max(0, first.getMax()), Math.max(0, second.getMax()));
     }
-    
-    if (upper == -1) {
-      // upper is unbounded, lower bound is the greater of the two, but must be at least zero
-      lower = Math.max(0, Math.max(first.getMin(), second.getMin()));
-      return RegexpInterval.getUnbounded(lower);
-    } else {
-      // lower is again greater of the two, but at most equal to the upper bound
-      lower = Math.min(upper, Math.max(first.getMin(), second.getMin()));
-      return RegexpInterval.getBounded(lower, upper);
+
+    if (upper < first.getMin() || upper < second.getMin()) {
+      throw new IllegalArgumentException("Intervals have no intersection.");
+    }
+    // lower limit is the larger of the two, but at most equal to the upper bound
+    lower = Math.min(upper, Math.max(first.getMin(), second.getMin()));
+    return RegexpInterval.getBounded(lower, upper);
+  }
+
+  private static void checkBounds(final RegexpInterval interval) throws IllegalArgumentException {
+    if (!interval.isUnbounded() && (interval.getMin() > interval.getMax()) ) {
+      throw new IllegalArgumentException("Upper limit of interval must be greater or equal to the lower limit.");
     }
   }
 

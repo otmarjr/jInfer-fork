@@ -7,7 +7,7 @@
           <i>Confused by technobabble or mysterious shortcuts? Try <a href="glossary.html">glossary</a>.</i>
         </p>
 	
-	<h3>User's documentation</h3>
+	<h2>User's documentation</h2>
 
         <!-- TODO vektor Small screenshot images --!>
 
@@ -47,28 +47,28 @@
           you'll have jInfer running and productive in no time!
 	</p>
 	
-	<h3>Developer's documentation</h3>
+	<h2>Developer's documentation</h2>
 	
-	<h4>JavaDoc</h4>
+	<h3>JavaDoc</h3>
 	
 	<p>
 	  jInfer features an extensive <a href="/javadoc">JavaDoc documentation</a>.
 	</p>
 
-        <h4>Building jInfer</h4>
+        <h3>Building jInfer</h3>
 
         <p>
           A short <a href="building_jinfer.html">tutorial</a> describing how to build jInfer from sources.
         </p>
 
-        <h4>Architecture</h4>
+        <h3>Architecture</h3>
 
         <p>
           PDF dealing with <a href="architecture.pdf">jInfer's architecture</a>
           - important reading for all willing to hack the framework.
         </p>
 	
-	<h4>Module developer's tutorial</h4>
+	<h3>Module developer's tutorial</h3>
 	
 	<p>
 	  Want to try out the algorithm you read about? Follow
@@ -77,10 +77,35 @@
           this <a href="doc_tutorial_platform.html">document</a> will come in handy.
 	</p>
 
-        <h4>Module documentation</h4>
+        <h3>Module documentation</h3>
 
         <p>
-          TODO - this section will contain links to PDFs with documentation for each and every jInfer module.
+          Here is the full documentation of relevant jInfer modules.<br/>
+
+          Base module
+          <ul>
+            <li>Base</li>
+          <ul>
+
+          Inference modules
+          <ul>
+            <li>BasicDTDExporter</li>
+            <li>BasicIGG</li>
+            <li>BasicXSDExporter</li>
+            <li>Runner</li>
+            <li>TwoStepSimplifier</li>
+            <li>XSDImportDOM</li>
+            <li>XSDImporter</li>
+            <li>XSDImportSAX</li>
+          <ul>
+
+          Utility modules
+          <ul>
+            <li>AutoEditor</li>
+            <li>BasicRuleDisplayer</li>
+            <li>ProjectType</li>
+            <li>TreeRuleDisplayer</li>
+          </ul>
         </p>
 
 	<div class="clear"></div>

@@ -34,6 +34,7 @@ public enum XSDTag {
   ATTGROUP("attributeGroup"),
   SIMPLECON("simpleContent"),
   COMPLEXCON("complexContent"),
+  REDEFINE("redefine"),
   INVALID("INValid");
 
   private final String name;

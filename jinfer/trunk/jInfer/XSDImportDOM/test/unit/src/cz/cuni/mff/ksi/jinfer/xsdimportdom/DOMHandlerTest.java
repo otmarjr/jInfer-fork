@@ -31,13 +31,19 @@ import static org.junit.Assert.*;
 @SuppressWarnings("PMD.SystemPrintln")
 public class DOMHandlerTest {
 
+  private static final char NL = '\n';
+
+  private List<Element> make(final InputStream stream) {
+    final DOMHandler handler = new DOMHandler();
+    handler.parse(stream);
+    return handler.getRules();
+  }
+
   @Test
   public void testProcessNull() {
     System.out.println("processNull");
     final List<Element> expResult = new ArrayList<Element>(0);
-    final DOMHandler handler = new DOMHandler();
-    handler.parse(null);
-    final List<Element> result = handler.getRules();
+    final List<Element> result = make(null);
     assertEquals(expResult, result);
   }
   
@@ -45,10 +51,21 @@ public class DOMHandlerTest {
   public void testProcessEmpty() {
     System.out.println("processEmpty");
     final List<Element> expResult = new ArrayList<Element>(0);
-    final DOMHandler handler = new DOMHandler();
-    final InputStream s = new ByteArrayInputStream("".getBytes());
-    handler.parse(s);
-    final List<Element> result = handler.getRules();
+    final List<Element> result = make(new ByteArrayInputStream("".getBytes()));
     assertEquals(expResult, result);
   }
+
+  @Test
+  public void testProcessEmpty2() {
+    System.out.println("processEmpty2");
+    final InputStream s = new ByteArrayInputStream("<!-- Inferred on Sat Jul 24 17:53:09 CEST 2010 by Trivial IG Generator, Modular Simplifier, Trivial DTD exporter -->\n\n\n".getBytes());
+    final List<Element> expResult = new ArrayList<Element>(0);
+    final List<Element> result = make(s);
+    assertEquals(expResult, result);
+  }
+
+  private static final String ZOO =
+          "<!ELEMENT zoos EMPTY>" + NL
+          + "<!ELEMENT animal EMPTY>" + NL
+          + "<!ELEMENT zoo (animal*) >" + NL;
 }

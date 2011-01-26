@@ -19,10 +19,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation;
 
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -31,19 +27,17 @@ import static org.junit.Assert.*;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class CleanerNestedConcatenationFactoryTest {
-
-  public CleanerNestedConcatenationFactoryTest() {
-  }
-
+  
   /**
    * Test of create method, of class CleanerNestedConcatenationFactory.
    */
   @Test
   public void testCreate() {
     System.out.println("create");
-    NestedConcatenationFactory instance = new NestedConcatenationFactory();
-    RegularExpressionCleaner<String> result = instance.<String>create();
+    final NestedConcatenationFactory instance = new NestedConcatenationFactory();
+    final RegularExpressionCleaner<String> result = instance.<String>create();
     assertNotNull(result);
   }
 
@@ -53,9 +47,9 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    NestedConcatenationFactory instance = new NestedConcatenationFactory();
-    String expResult = "TwoStepRegularExpressionCleanerNestedConcatenation";
-    String result = instance.getName();
+    final NestedConcatenationFactory instance = new NestedConcatenationFactory();
+    final String expResult = "TwoStepRegularExpressionCleanerNestedConcatenation";
+    final String result = instance.getName();
     assertEquals(expResult, result);
   }
 
@@ -65,9 +59,9 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    NestedConcatenationFactory instance = new NestedConcatenationFactory();
-    String expResult = "Nested concatenation";
-    String result = instance.getModuleDescription();
+    final NestedConcatenationFactory instance = new NestedConcatenationFactory();
+    final String expResult = "Nested concatenation";
+    final String result = instance.getModuleDescription();
     assertEquals(expResult, result);
   }
 
@@ -77,8 +71,8 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    NestedConcatenationFactory instance = new NestedConcatenationFactory();
-    List<String> result = instance.getCapabilities();
+    final NestedConcatenationFactory instance = new NestedConcatenationFactory();
+    final List<String> result = instance.getCapabilities();
     assertNotNull(result);
     assertTrue(result.isEmpty());
   }
@@ -89,9 +83,9 @@ public class CleanerNestedConcatenationFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    NestedConcatenationFactory instance = new NestedConcatenationFactory();
-    String expResult = "RegularExpressionCleanerNestedConcatenation";
-    String result = instance.getUserModuleDescription();
+    final NestedConcatenationFactory instance = new NestedConcatenationFactory();
+    final String expResult = "RegularExpressionCleanerNestedConcatenation";
+    final String result = instance.getUserModuleDescription();
     assertNotNull(result);
     assertFalse(expResult.equals(result));
     assertFalse(result.isEmpty());

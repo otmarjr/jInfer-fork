@@ -14,14 +14,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.cleanernull;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Does nothing, just returns input given.
@@ -29,8 +25,9 @@ import java.util.List;
  * @author anti
  */
 public class Null<T> implements RegularExpressionCleaner<T> {
+
   @Override
-  public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
+  public Regexp<T> cleanRegularExpression(final Regexp<T> regexp) {
     return regexp;
   }
 }

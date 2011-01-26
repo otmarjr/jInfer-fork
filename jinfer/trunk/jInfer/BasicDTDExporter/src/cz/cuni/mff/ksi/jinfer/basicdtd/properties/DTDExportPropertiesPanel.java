@@ -24,6 +24,7 @@ import java.util.Properties;
  * 
  * @author vektor
  */
+@SuppressWarnings("PMD.SingularField")
 public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 5421231l;

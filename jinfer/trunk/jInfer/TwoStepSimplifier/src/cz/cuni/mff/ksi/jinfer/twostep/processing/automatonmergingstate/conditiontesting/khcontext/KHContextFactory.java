@@ -48,9 +48,9 @@ public class KHContextFactory implements MergeConditionTesterFactory {
       return new KHContext<T>(parameterK, parameterH);
     } else {
       LOG.warn("Wrong parameters set k: "
-              + String.valueOf(parameterK)
+              + parameterK
               + ", h: "
-              + String.valueOf(parameterH)
+              + parameterH
               + ". Parameters have to satisfy: k >= h >= 0."
               + " Using default values of k = " + K_DEFAULT_VALUE
               + ", h = " + H_DEFAULT_VALUE + ".");
@@ -75,7 +75,7 @@ public class KHContextFactory implements MergeConditionTesterFactory {
 
   @Override
   public String getUserModuleDescription() {
-    StringBuilder sb = new StringBuilder(getDisplayName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" finds all <i>k,h</i>-context of states being tested. If there are two"
             + " contexts that are equivalent (same symbol string), the states"
             + " are considered mergable (<i>k,h</i>-equivalent). Also <i>h</i> preceeding states in contexts are merged.");
@@ -88,7 +88,7 @@ public class KHContextFactory implements MergeConditionTesterFactory {
   }
 
   @Override
-  public String getParameterDisplayDescription(String parameterName) {
+  public String getParameterDisplayDescription(final String parameterName) {
     if ("k".equals(parameterName)) {
       return "k in <i>k,h</i>-context. That is the number of transitions that have to"
               + "be same (by means of symbols) before state. Default value: 2.";
@@ -101,7 +101,7 @@ public class KHContextFactory implements MergeConditionTesterFactory {
   }
 
   @Override
-  public void setParameter(String parameterName, int newValue) {
+  public void setParameter(final String parameterName, final int newValue) {
     if ("k".equals(parameterName)) {
       this.parameterK= newValue;
     }
@@ -116,7 +116,7 @@ public class KHContextFactory implements MergeConditionTesterFactory {
   }
 
   @Override
-  public String getParameterDefaultValue(String parameterName) {
+  public String getParameterDefaultValue(final String parameterName) {
     if ("k".equals(parameterName)) {
       return String.valueOf(K_DEFAULT_VALUE);
     } else if ("h".equals(parameterName)) {

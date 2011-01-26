@@ -40,8 +40,10 @@ import org.openide.util.NbPreferences;
  *
  * @author vektor
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.basicruledisplayer.display//BasicRuleDisplayer//EN",
-autostore = false)
+@ConvertAsProperties(
+  dtd = "-//cz.cuni.mff.ksi.jinfer.basicruledisplayer.display//BasicRuleDisplayer//EN",
+  autostore = false)
+@SuppressWarnings("PMD.SingularField")
 public final class BasicRuleDisplayerTopComponent extends TopComponent {
 
   private static final long serialVersionUID = 5123131;

@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Properties;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
 import org.openide.util.NbBundle;
@@ -31,9 +32,12 @@ import org.openide.util.ImageUtilities;
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
  * @author sviro
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.treeruledisplayer//TreeRuleDisplayer//EN",
-autostore = false)
+@ConvertAsProperties(
+  dtd = "-//cz.cuni.mff.ksi.jinfer.treeruledisplayer//TreeRuleDisplayer//EN",
+  autostore = false)
 public final class TreeRuleDisplayerTopComponent extends TopComponent {
+
+  private static final long serialVersionUID = 435252345l;
 
   private static TreeRuleDisplayerTopComponent instance;
   private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/treeruledisplayer/graphics/icon16.png";
@@ -148,11 +152,11 @@ public final class TreeRuleDisplayerTopComponent extends TopComponent {
     //do nothing
   }
 
-  public void writeProperties(final java.util.Properties p) {
+  public void writeProperties(final Properties p) {
     //do nothing
   }
 
-  public Object readProperties(final java.util.Properties p) {
+  public Object readProperties(final Properties p) {
     if (instance == null) {
       instance = this;
     }
@@ -160,7 +164,7 @@ public final class TreeRuleDisplayerTopComponent extends TopComponent {
     return instance;
   }
 
-  private void readPropertiesImpl(final java.util.Properties p) {
+  private void readPropertiesImpl(final Properties p) {
     //do nothing
   }
 

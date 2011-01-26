@@ -24,6 +24,7 @@ import java.util.Properties;
  * 
  * @author vektor
  */
+@SuppressWarnings("PMD.SingularField")
 public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 18746542132L;

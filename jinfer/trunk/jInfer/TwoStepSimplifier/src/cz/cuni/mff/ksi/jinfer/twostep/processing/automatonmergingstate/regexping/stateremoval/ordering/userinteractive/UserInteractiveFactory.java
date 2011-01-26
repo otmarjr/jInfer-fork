@@ -59,7 +59,7 @@ public class UserInteractiveFactory implements OrdererFactory {
   // TODO anti elaborate more
   @Override
   public String getUserModuleDescription() {
-    StringBuilder sb = new StringBuilder(getDisplayName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" orders states in automaton by prompting user which state remove first.");
     return sb.toString();
   }

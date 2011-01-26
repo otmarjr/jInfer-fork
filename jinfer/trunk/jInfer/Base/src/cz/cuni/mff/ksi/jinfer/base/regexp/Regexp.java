@@ -339,7 +339,7 @@ public class Regexp<T> {
    * 
    * @return All tokens of this regexp.
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "PMD.MissingBreakInSwitch"})
   public List<T> getTokens() {
     switch (type) {
       case TOKEN:
@@ -488,6 +488,7 @@ public class Regexp<T> {
   }
 
   @Override
+  @SuppressWarnings("PMD.MissingBreakInSwitch")
   public String toString() {
     if (type != null) {
       switch (type) {

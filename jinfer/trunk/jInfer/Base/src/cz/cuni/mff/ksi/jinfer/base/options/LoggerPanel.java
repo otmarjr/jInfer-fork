@@ -29,6 +29,7 @@ import org.openide.util.NbPreferences;
  *
  * @author reseto
  */
+@SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.SingularField", "PMD.UnusedFormalParameter"})
 public final class LoggerPanel extends JPanel {
 
   private static final long serialVersionUID = 35345345456l;

@@ -27,10 +27,8 @@ import static org.junit.Assert.*;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class CleanerNullFactoryTest {
-
-  public CleanerNullFactoryTest() {
-  }
 
   /**
    * Test of create method, of class CleanerNullFactory.
@@ -38,8 +36,8 @@ public class CleanerNullFactoryTest {
   @Test
   public void testCreate() {
     System.out.println("create");
-    NullFactory instance = new NullFactory();
-    RegularExpressionCleaner<String> result = instance.<String>create();
+    final NullFactory instance = new NullFactory();
+    final RegularExpressionCleaner<String> result = instance.<String>create();
     assertNotNull(result);
   }
 
@@ -49,8 +47,8 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    NullFactory instance = new NullFactory();
-    String result = instance.getUserModuleDescription();
+    final NullFactory instance = new NullFactory();
+    final String result = instance.getUserModuleDescription();
     assertNotNull(result);
     assertFalse(result.isEmpty());
   }
@@ -61,9 +59,9 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    NullFactory instance = new NullFactory();
-    String expResult = "TwoStepRegularExpressionCleanerNull";
-    String result = instance.getName();
+    final NullFactory instance = new NullFactory();
+    final String expResult = "TwoStepRegularExpressionCleanerNull";
+    final String result = instance.getName();
     assertEquals(expResult, result);
   }
 
@@ -73,9 +71,9 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    NullFactory instance = new NullFactory();
-    String expResult = "Null";
-    String result = instance.getModuleDescription();
+    final NullFactory instance = new NullFactory();
+    final String expResult = "Null";
+    final String result = instance.getModuleDescription();
     assertEquals(expResult, result);
     assertFalse(result.isEmpty());
   }
@@ -86,8 +84,8 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    NullFactory instance = new NullFactory();
-    List<String> result = instance.getCapabilities();
+    final NullFactory instance = new NullFactory();
+    final List<String> result = instance.getCapabilities();
     assertTrue(result.isEmpty());
   }
 
@@ -97,9 +95,9 @@ public class CleanerNullFactoryTest {
   @Test
   public void testGetDisplayModuleDescription() {
     System.out.println("getDisplayModuleDescription");
-    NullFactory instance = new NullFactory();
-    String expResult = "RegularExpressionCleanerNull";
-    String result = instance.getUserModuleDescription();
+    final NullFactory instance = new NullFactory();
+    final String expResult = "RegularExpressionCleanerNull";
+    final String result = instance.getUserModuleDescription();
     assertFalse(expResult.equals(result));
     assertNotNull(result);
     assertFalse(result.isEmpty());

@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -30,17 +29,18 @@ import java.util.List;
  * @author anti
  */
 public class Chained<T> implements RegularExpressionCleaner<T> {
-  final List<RegularExpressionCleanerFactory> cleanerFactories;
 
-  public Chained(List<RegularExpressionCleanerFactory> cleanerFactories) {
-    this.cleanerFactories= cleanerFactories;
+  private final List<RegularExpressionCleanerFactory> cleanerFactories;
+
+  public Chained(final List<RegularExpressionCleanerFactory> cleanerFactories) {
+    this.cleanerFactories = cleanerFactories;
   }
 
   @Override
-  public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
-    Regexp<T> newRegexp= regexp;
+  public Regexp<T> cleanRegularExpression(final Regexp<T> regexp) {
+    Regexp<T> newRegexp = regexp;
     for (RegularExpressionCleanerFactory f : cleanerFactories) {
-      newRegexp= f.<T>create().cleanRegularExpression(newRegexp);
+      newRegexp = f.<T>create().cleanRegularExpression(newRegexp);
     }
     return newRegexp;
   }

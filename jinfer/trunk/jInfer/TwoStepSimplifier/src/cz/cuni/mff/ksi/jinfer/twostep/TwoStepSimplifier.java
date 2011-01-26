@@ -50,7 +50,9 @@ public class TwoStepSimplifier {
   private final ClusterProcessorFactory clusterProcessorFactory;
   private final RegularExpressionCleanerFactory regularExpressionCleanerFactory;
 
-  public TwoStepSimplifier(ClustererFactory clustererFactory, ClusterProcessorFactory clusterProcessorFactory, RegularExpressionCleanerFactory regularExpressionCleanerFactory) {
+  public TwoStepSimplifier(final ClustererFactory clustererFactory,
+          final ClusterProcessorFactory clusterProcessorFactory,
+          final RegularExpressionCleanerFactory regularExpressionCleanerFactory) {
     this.clustererFactory = clustererFactory;
     this.clusterProcessorFactory = clusterProcessorFactory;
     this.regularExpressionCleanerFactory = regularExpressionCleanerFactory;
@@ -92,12 +94,12 @@ public class TwoStepSimplifier {
         throw new InterruptedException();
       }
 
-      List<AbstractStructuralNode> rules = BaseUtils.<AbstractStructuralNode>filter(
+      final List<AbstractStructuralNode> rules = BaseUtils.<AbstractStructuralNode>filter(
               new ArrayList<AbstractStructuralNode>(cluster.getMembers()),
               new BaseUtils.Predicate<AbstractStructuralNode>() {
 
                 @Override
-                public boolean apply(AbstractStructuralNode argument) {
+                public boolean apply(final AbstractStructuralNode argument) {
                   return !Boolean.TRUE.equals(
                           argument.getMetadata().get(IGGUtils.IS_SENTINEL));
                 }

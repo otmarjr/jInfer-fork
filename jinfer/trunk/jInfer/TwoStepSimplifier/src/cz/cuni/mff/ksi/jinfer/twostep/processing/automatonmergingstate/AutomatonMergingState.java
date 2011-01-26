@@ -47,22 +47,23 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class AutomatonMergingState implements ClusterProcessor<AbstractStructuralNode> {
+
   private static final Logger LOG = Logger.getLogger(AutomatonMergingState.class);
   private final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier;
   private final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier;
 
   private class AbstractStructuralNodeSymbolToString implements SymbolToString<AbstractStructuralNode> {
     @Override
-    public String toString(AbstractStructuralNode symbol) {
+    public String toString(final AbstractStructuralNode symbol) {
       return symbol.isElement() ? symbol.getName() : "#CDATA";
     }
   };
 
   private class RegexpAbstractSymbolToString implements SymbolToString<Regexp<AbstractStructuralNode>> {
-    private AbstractStructuralNodeSymbolToString g= new AbstractStructuralNodeSymbolToString();
+    private final AbstractStructuralNodeSymbolToString g= new AbstractStructuralNodeSymbolToString();
 
     @Override
-    public String toString(Regexp<AbstractStructuralNode> symbol) {
+    public String toString(final Regexp<AbstractStructuralNode> symbol) {
       switch (symbol.getType()) {
         case LAMBDA:
           return symbol.toString();
@@ -72,7 +73,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
           return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), ",",
             new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
               @Override
-              public String toString(Regexp<AbstractStructuralNode> t) {
+              public String toString(final Regexp<AbstractStructuralNode> t) {
                 return RegexpAbstractSymbolToString.this.toString(t);
               }
           });
@@ -80,7 +81,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
           return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), "|",
             new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
               @Override
-              public String toString(Regexp<AbstractStructuralNode> t) {
+              public String toString(final Regexp<AbstractStructuralNode> t) {
                 return RegexpAbstractSymbolToString.this.toString(t);
               }
           });
@@ -88,7 +89,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
           return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), "&",
             new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
               @Override
-              public String toString(Regexp<AbstractStructuralNode> t) {
+              public String toString(final Regexp<AbstractStructuralNode> t) {
                 return RegexpAbstractSymbolToString.this.toString(t);
               }
           });
@@ -110,14 +111,16 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
   }
 
   @Override
-  public AbstractStructuralNode processCluster(final Clusterer<AbstractStructuralNode> clusterer, final List<AbstractStructuralNode> rules) throws InterruptedException {
+  public AbstractStructuralNode processCluster(
+          final Clusterer<AbstractStructuralNode> clusterer,
+          final List<AbstractStructuralNode> rules) throws InterruptedException {
     if (rules.isEmpty()) {
       throw new IllegalArgumentException("Rules has to be non-empty.");
     }
     // 3.1 construct PTA
     final Automaton<AbstractStructuralNode> automaton = new Automaton<AbstractStructuralNode>(true);
 
-    for (AbstractStructuralNode instance : rules) {
+    for (final AbstractStructuralNode instance : rules) {
       final Element element = (Element) instance;
       final Regexp<AbstractStructuralNode> rightSide= element.getSubnodes();
 
@@ -139,7 +142,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get((0))).getName());
+    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName());
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
 

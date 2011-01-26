@@ -46,7 +46,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = SchemaGenerator.class)
 public class SchemaGeneratorImpl implements SchemaGenerator {
 
-  private static Logger LOG = Logger.getLogger(SchemaGenerator.class);
+  private static final Logger LOG = Logger.getLogger(SchemaGenerator.class);
   private Preprocessor preprocessor = null;
   private Indentator indentator = null;
   private String typenamePrefix = null;
@@ -83,7 +83,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return;
     }
 
-    assert(verifyInput(grammar));
+    assert verifyInput(grammar);
 
     final Properties properties = RunningProject.getActiveProjectProps(XSDExportPropertiesPanel.NAME);
 
@@ -170,7 +170,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.append(">\n");
     indentator.increaseIndentation();
 
-    TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
+    final TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
     switch (typeCategory) {
       case SIMPLE:
         indentator.indent("<xs:simpleType>\n");
@@ -206,7 +206,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.decreaseIndentation();
 
     indentator.indent("</xs:element>\n");
-    return;
   }
 
   /**
@@ -223,7 +222,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return;
     }
 
-    TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
+    final TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
     switch (typeCategory) {
       case SIMPLE:
         indentator.indent("<xs:simpleType name=\"");
@@ -263,8 +262,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
 
     indentator.append("\n");
-
-    return;
   }
 
   private void processElementContent(final Element element) throws InterruptedException {
@@ -293,13 +290,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final List<Attribute> attributes = element.getAttributes();
 
     if (!attributes.isEmpty()) {
-      assert(TypeUtils.isOfComplexType(element));
+      assert TypeUtils.isOfComplexType(element);
       for (Attribute attribute : attributes) {
         checkInterrupt();
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
 
-        String type = TypeUtils.getBuiltinAttributeType(attribute);
+        final String type = TypeUtils.getBuiltinAttributeType(attribute);
         indentator.append("\" type=\"" + type + '"');
 
         if (attribute.getMetadata().containsKey(IGGUtils.REQUIRED)) {
@@ -342,26 +339,15 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       case TOKEN:
         processToken(regexp.getContent(), regexp.getInterval());
         return;
-      /*case KLEENE:
-      {
-        indentator.indent("<xs:sequence>\n");
-        indentator.increaseIndentation();
-        processSubElements(regexp.getChild(0), 0, Integer.MAX_VALUE);
-        indentator.decreaseIndentation();
-        indentator.indent("</xs:sequence>\n");
-        return;
-      }*/
       case CONCATENATION:
       {
         // special case: CONCATENATION of ALTENATION (A|lambda)
-        List<Regexp<AbstractStructuralNode>> simpleAlternations = new LinkedList<Regexp<AbstractStructuralNode>>();
+        final List<Regexp<AbstractStructuralNode>> simpleAlternations = new LinkedList<Regexp<AbstractStructuralNode>>();
         for (final Regexp<AbstractStructuralNode> child : regexp.getChildren()) {
-          if (child.isAlternation()) {
-            if (child.getChildren().size() == 2) {
-              if (child.getChild(0).isLambda()) {
-                simpleAlternations.add(child);
-              }
-            }
+          if (child.isAlternation()
+                  && (child.getChildren().size() == 2)
+                  && child.getChild(0).isLambda()) {
+            simpleAlternations.add(child);
           }
         }
 
@@ -404,30 +390,27 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       {
         // SPECIAL CASE
         // simple alternation (lambda | Element)
-        if (regexp.getChildren().size() == 2) {
-          if (regexp.getChild(0).isLambda()) {
-            if (regexp.getChild(1).isToken()) {
-              // The second child has to an element because the filtering above.
-              processToken(regexp.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
-              return;
-            }
-          }
+        if ((regexp.getChildren().size() == 2)
+                && regexp.getChild(0).isLambda()
+                && regexp.getChild(1).isToken()) {
+          // The second child has to an element because the filtering above.
+          processToken(regexp.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
+          return;
         }
 
         // SPECIAL CASE
         // alternation (simpleData | Element)
-        if (regexp.getChildren().size() == 2) {
-          if (regexp.getChild(0).isToken() && regexp.getChild(0).getContent().isSimpleData()) {
-            if (regexp.getChild(1).isToken()) {
-              // The second child has to an element because the filtering above.
-              indentator.indent("<xs:sequence>\n");
-              indentator.increaseIndentation();
-              processToken(regexp.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
-              indentator.decreaseIndentation();
-              indentator.indent("</xs:sequence>\n");
-              return;
-            }
-          }
+        if ((regexp.getChildren().size() == 2)
+                && regexp.getChild(0).isToken()
+                && regexp.getChild(0).getContent().isSimpleData()
+                && regexp.getChild(1).isToken()) {
+          // The second child has to an element because the filtering above.
+          indentator.indent("<xs:sequence>\n");
+          indentator.increaseIndentation();
+          processToken(regexp.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
+          indentator.decreaseIndentation();
+          indentator.indent("</xs:sequence>\n");
+          return;
         }
 
         // simple alternation (notToken | lambda) is handled in CONCATENATION
@@ -452,8 +435,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private void processToken(final AbstractStructuralNode node, final RegexpInterval interval) throws InterruptedException {
-    assert(node.isSimpleData() == false);
-    assert(node.isElement());
+    assert !node.isSimpleData();
+    assert node.isElement();
 
     final Element element = preprocessor.getElementByName(node.getName());
 
@@ -466,7 +449,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private void processOccurrences(final RegexpInterval interval) {
-    int minOccurs = interval.getMin();
+    final int minOccurs = interval.getMin();
     if (minOccurs != MINOCCURS_DEFAULT) {
       indentator.append(" minOccurs=\"");
       indentator.append(Integer.toString(minOccurs));
@@ -476,7 +459,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     if (interval.isUnbounded()) {
       indentator.append(" maxOccurs=\"unbounded\"");
     } else {
-      int maxOccurs = interval.getMax();
+      final int maxOccurs = interval.getMax();
       if (maxOccurs != MAXOCCURS_DEFAULT) {
         indentator.append(" maxOccurs=\"");
         indentator.append(Integer.toString(maxOccurs));

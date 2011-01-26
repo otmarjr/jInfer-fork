@@ -144,7 +144,8 @@ public class Utils {
    */
   public Shape getVertexShape(final VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
-      case LAMBDA: return getShape(lambdaShape, shapeFactory, regexp);
+      case LAMBDA:
+        return getShape(lambdaShape, shapeFactory, regexp);
       case TOKEN:
         if (roots.contains(regexp)) {
           return getShape(rootShape, shapeFactory, regexp);

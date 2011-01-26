@@ -48,7 +48,6 @@ public class AutomatonCloner<A, B> {
   public void convertAutomaton(final Automaton<A> anotherAutomaton, final Automaton<B> newAutomaton, final AutomatonClonerSymbolConverter<A, B> symbolConverter) {
     /* other states */
     final Map<State<A>, Set<Step<A>>> anotherDelta= anotherAutomaton.getDelta();
-    final Map<State<A>, Set<Step<A>>> anotherReverseDelta= anotherAutomaton.getReverseDelta();
 
     final Map<State<A>, State<B>> stateConversionMap= new LinkedHashMap<State<A>, State<B>>();
     for (State<A> anotherState : anotherDelta.keySet()) {

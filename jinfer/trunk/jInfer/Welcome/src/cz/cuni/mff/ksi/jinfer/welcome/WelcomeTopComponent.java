@@ -53,8 +53,10 @@ import org.openide.util.lookup.Lookups;
  *
  * @author vektor
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.welcome//Welcome//EN",
-autostore = false)
+@ConvertAsProperties(
+  dtd = "-//cz.cuni.mff.ksi.jinfer.welcome//Welcome//EN",
+  autostore = false)
+@SuppressWarnings({"PMD.SingularField", "PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
 public final class WelcomeTopComponent extends TopComponent {
 
   public static final String SHOW_ON_STARTUP = "show.startup";

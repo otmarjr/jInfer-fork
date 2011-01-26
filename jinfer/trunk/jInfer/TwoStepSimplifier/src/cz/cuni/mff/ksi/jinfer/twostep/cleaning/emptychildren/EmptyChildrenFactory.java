@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import java.util.Collections;
 import java.util.List;
-import java.util.jar.Attributes.Name;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -60,7 +59,7 @@ public class EmptyChildrenFactory implements RegularExpressionCleanerFactory {
 
   @Override
   public String getUserModuleDescription() {
-    StringBuilder sb = new StringBuilder(getModuleDescription());
+    final StringBuilder sb = new StringBuilder(getModuleDescription());
     sb.append(" cleans empty children and one child regexps. For example");
     sb.append(" regular expression: <p align=\"center\"><i>((), a, (b))</i></p> gets cleaned to <p align=\"center\"><i>(a, b)</i></p>");
     sb.append(" Empty concatenation <i>()</i> is removed, and concatenation <i>(b)</i>");

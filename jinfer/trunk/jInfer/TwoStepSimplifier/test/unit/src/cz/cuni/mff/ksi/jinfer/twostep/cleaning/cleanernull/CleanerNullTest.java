@@ -28,24 +28,22 @@ import static org.junit.Assert.*;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class CleanerNullTest {
 
-    public CleanerNullTest() {
-    }
-
   private Regexp<String> createRegexp() {
-    Regexp<String> r1= Regexp.<String>getMutable();
+    final Regexp<String> r1= Regexp.<String>getMutable();
     r1.setInterval(RegexpInterval.getOnce());
     r1.setType(RegexpType.CONCATENATION);
     r1.setImmutable();
 
-    Regexp<String> r3= Regexp.<String>getMutable();
+    final Regexp<String> r3= Regexp.<String>getMutable();
     r3.setInterval(RegexpInterval.getOnce());
     r3.setType(RegexpType.TOKEN);
     r3.setContent("a");
     r3.setImmutable();
 
-    Regexp<String> r2= Regexp.<String>getMutable();
+    final Regexp<String> r2= Regexp.<String>getMutable();
     r2.setInterval(RegexpInterval.getOnce());
     r2.setType(RegexpType.CONCATENATION);
     r2.addChild(r1);
@@ -64,9 +62,9 @@ public class CleanerNullTest {
   @Test
   public void testCleanRegularExpression() {
     System.out.println("cleanRegularExpression");
-    Regexp<String> regexp = createRegexp();
-    Null<String> instance = new Null<String>();
-    Regexp<String> result = instance.cleanRegularExpression(regexp);
+    final Regexp<String> regexp = createRegexp();
+    final Null<String> instance = new Null<String>();
+    final Regexp<String> result = instance.cleanRegularExpression(regexp);
     assertEquals(regexp.toString(), result.toString());
   }
 }

@@ -19,10 +19,8 @@ package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.GraphBuilder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
-import org.openide.windows.WindowManager;
 
 /**
  * Helper class for displaying a list of rules.

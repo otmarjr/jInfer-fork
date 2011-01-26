@@ -36,6 +36,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegularExpressionCleanerFactory.class)
 public class ChainedFactory implements RegularExpressionCleanerFactory {
+
   private static final Logger LOG = Logger.getLogger(ChainedFactory.class);
   
   /** 
@@ -68,13 +69,13 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
 
   @Override
   public String getModuleDescription() {
-    StringBuilder sb = new StringBuilder(getDisplayName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(CollectionToString.colToString(
             getRegularexpressionCleanerFactories(),
             ", ",
             new CollectionToString.ToString<RegularExpressionCleanerFactory>() {
               @Override
-              public String toString(RegularExpressionCleanerFactory t) {
+              public String toString(final RegularExpressionCleanerFactory t) {
                 return t.getModuleDescription();
               }
             }));
@@ -88,17 +89,17 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
 
   @Override
   public String getUserModuleDescription() {
-    StringBuilder sb = new StringBuilder(getModuleDescription());
+    final StringBuilder sb = new StringBuilder(getModuleDescription());
     sb.append(" chains another existing cleaners in a sequence pipelining output of");
     sb.append(" first cleaner to input of second cleaner and so on.");
     return sb.toString();
   }
 
   public List<RegularExpressionCleanerFactory> getRegularexpressionCleanerFactories() {
-    Properties p = RunningProject.getActiveProjectProps(NAME);
-    List<RegularExpressionCleanerFactory> result= new ArrayList<RegularExpressionCleanerFactory>();
+    final Properties p = RunningProject.getActiveProjectProps(NAME);
+    final List<RegularExpressionCleanerFactory> result= new ArrayList<RegularExpressionCleanerFactory>();
 
-    String _count = p.getProperty(PROPERTIES_COUNT);
+    final String _count = p.getProperty(PROPERTIES_COUNT);
     int count;
     try {
       count = Integer.valueOf(_count);
@@ -106,7 +107,7 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
       count = 0;
     }
     for (int c = 0; c < count; c++) {
-      String name = p.getProperty(PROPERTIES_PREFIX + String.valueOf(c));
+      final String name = p.getProperty(PROPERTIES_PREFIX + c);
       result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, name));
     }
     return result;

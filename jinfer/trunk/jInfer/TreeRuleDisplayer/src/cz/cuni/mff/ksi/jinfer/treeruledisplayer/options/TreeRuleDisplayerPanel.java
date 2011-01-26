@@ -27,7 +27,10 @@ import org.openide.util.NbPreferences;
  *
  * @author sviro
  */
+@SuppressWarnings("PMD.SingularField")
 public final class TreeRuleDisplayerPanel extends JPanel {
+
+  private static final long serialVersionUID = 43522352345l;
 
   private final TreeRuleDisplayerOptionsPanelController controller;
   private static final String[] SHAPES = new String[] { "Circle", "Square", "Rounded Square", "Polygon", "Star" };

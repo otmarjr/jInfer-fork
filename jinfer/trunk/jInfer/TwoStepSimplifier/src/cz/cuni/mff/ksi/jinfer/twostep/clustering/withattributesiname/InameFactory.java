@@ -20,7 +20,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.clustering.withattributesiname;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.clustering.withattributesiname.InameFactory;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;

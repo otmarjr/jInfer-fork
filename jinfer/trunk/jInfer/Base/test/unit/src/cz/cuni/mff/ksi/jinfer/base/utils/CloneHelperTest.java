@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
 /**
  * @author vektor
  */
-@SuppressWarnings("PMD.SystemPrintln")
+@SuppressWarnings({"PMD.SystemPrintln", "PMD.CompareObjectsWithEquals", "PMD.DataflowAnomalyAnalysis"})
 public class CloneHelperTest {
 
   @Test(expected = NullPointerException.class)
@@ -147,11 +147,11 @@ public class CloneHelperTest {
     assertEquals("ce0/same equals ce1/same", ce0s, ce1s);
 
     // test prefix (there is no real context, but prefix should be there)
-    assertTrue(prefix.equals(cloned.getContext()));
-    assertTrue(prefix.equals(ce0.getContext()));
-    assertTrue(prefix.equals(ce1.getContext()));
-    assertTrue(prefix.equals(ce0s.getContext()));
-    assertTrue(prefix.equals(ce1s.getContext()));
+    assertEquals(prefix, cloned.getContext());
+    assertEquals(prefix, ce0.getContext());
+    assertEquals(prefix, ce1.getContext());
+    assertEquals(prefix, ce0s.getContext());
+    assertEquals(prefix, ce1s.getContext());
   }
 
   @Test
@@ -211,11 +211,11 @@ public class CloneHelperTest {
     assertNotSame("ce0/same != ce1/same", ce0s, ce1s);
 
     // test prefix (there is no real context, but prefix should be there)
-    assertTrue(prefix.equals(cloned.getContext()));
-    assertTrue(prefix.equals(ce0.getContext()));
-    assertTrue(prefix.equals(ce1.getContext()));
-    assertTrue(prefix.equals(ce0s.getContext()));
-    assertTrue(prefix.equals(ce1s.getContext()));
+    assertEquals(prefix, cloned.getContext());
+    assertEquals(prefix, ce0.getContext());
+    assertEquals(prefix, ce1.getContext());
+    assertEquals(prefix, ce0s.getContext());
+    assertEquals(prefix, ce1s.getContext());
   }
 
   @Test
@@ -362,7 +362,7 @@ public class CloneHelperTest {
     prefix.add(one);
     prefix.add(two);
     final List<String> res = CloneHelper.getPrefixedContext(e, prefix);
-    assertTrue(res.equals(prefix));
+    assertEquals(prefix, res);
   }
 
   @Test
@@ -377,7 +377,7 @@ public class CloneHelperTest {
     final Element e = new Element(prefix, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
 
     final List<String> res = CloneHelper.getPrefixedContext(e, TestUtils.EMPTY_CONTEXT);
-    assertTrue(res.equals(prefix));
+    assertEquals(prefix, res);
   }
 
   @Test
@@ -388,7 +388,7 @@ public class CloneHelperTest {
     final Element e = new Element(prefix, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
 
     final List<String> res = CloneHelper.getPrefixedContext(e, prefix);
-    assertTrue(res.equals(prefix));
+    assertEquals(prefix, res);
   }
 
   @Test
@@ -403,7 +403,7 @@ public class CloneHelperTest {
     final Element e = new Element(prefix, "e", TestUtils.EMPTY_METADATA, Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList());
 
     final List<String> res = CloneHelper.getPrefixedContext(e, null);
-    assertTrue(res.equals(prefix));
+    assertEquals(prefix, res);
   }
 
   @Test
@@ -423,6 +423,6 @@ public class CloneHelperTest {
     prefix.add(one);
     prefix.add(two);
     final List<String> res = CloneHelper.getPrefixedContext(e, prefix1);
-    assertTrue(res.equals(prefix));
+    assertEquals(prefix, res);
   }
 }

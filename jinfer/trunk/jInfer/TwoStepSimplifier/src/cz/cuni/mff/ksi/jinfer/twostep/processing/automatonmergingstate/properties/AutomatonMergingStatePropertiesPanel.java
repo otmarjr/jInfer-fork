@@ -30,6 +30,7 @@ import javax.swing.DefaultComboBoxModel;
  * Properties panel for ClusterProcessorAutomatonMergingState.
  * @author anti
  */
+@SuppressWarnings({"PMD.SingularField", "PMD.UnusedFormalParameter", "PMD.MethodArgumentCouldBeFinal"})
 public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;

@@ -23,12 +23,12 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.GreedyFactory;
+import java.awt.GridBagConstraints;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
@@ -36,6 +36,7 @@ import javax.swing.JTextPane;
  * Properties panel for AutomatonSimplifierGreedy.
  * @author anti
  */
+@SuppressWarnings({"PMD.SingularField", "PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
 public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;
@@ -143,19 +144,19 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
   }
 
   private void comboConditionTesterChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboConditionTesterChanged
-    MergeConditionTesterFactory factory = ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
+    final MergeConditionTesterFactory factory = ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
             ((NamedModule) comboConditionTester.getSelectedItem()).getName());
     descContitionTester.setText(htmlize(factory.getUserModuleDescription()));
 
     panelParams.removeAll();
     dynamicComponents = new HashMap<String, JTextField>();
     dynamicParameters = new HashMap<String, String>();
-    java.awt.GridBagConstraints gridBagConstraints;
+    GridBagConstraints gridBagConstraints;
     if (factory.getCapabilities().contains("parameters")) {
-      ModuleParameters factParams = (ModuleParameters) factory;
+      final ModuleParameters factParams = (ModuleParameters) factory;
       int i = 0;
       for (String parameterName : factParams.getParameterNames()) {
-        JLabel l = new JLabel("Parameter " + parameterName);
+        final JLabel l = new JLabel("Parameter " + parameterName);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2 * i;
@@ -166,7 +167,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         panelParams.add(l, gridBagConstraints);
 
 
-        JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName, factParams.getParameterDefaultValue(parameterName)));
+        final JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName, factParams.getParameterDefaultValue(parameterName)));
         l.setLabelFor(t);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -178,7 +179,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         t.setColumns(10);
         panelParams.add(t, gridBagConstraints);
 
-        JTextPane ar = new JTextPane();
+        final JTextPane ar = new JTextPane();
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2 * i + 1;
@@ -201,7 +202,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         ++i;
       }
     } else {
-        JLabel l = new JLabel("Submodule has no parameters to set.");
+        final JLabel l = new JLabel("Submodule has no parameters to set.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;

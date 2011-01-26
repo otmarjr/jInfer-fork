@@ -35,8 +35,7 @@ import static org.junit.Assert.*;
 public class AutomatonTest {
 
   private Automaton<String> createInstance() {
-    final Automaton<String> r = new Automaton<String>(true);
-    return r;
+    return new Automaton<String>(true);
   }
 
   private void buildPTA(final Automaton<String> instance) {
@@ -88,7 +87,7 @@ public class AutomatonTest {
     assertNotNull(result);
   }
 
-  private List<List<String>> tearInputs(List<String> pta) {
+  private List<List<String>> tearInputs(final List<String> pta) {
     final List<List<String>> result= new ArrayList<List<String>>();
     for (String in : pta) {
       final List<String> seq= new ArrayList<String>(in.length());

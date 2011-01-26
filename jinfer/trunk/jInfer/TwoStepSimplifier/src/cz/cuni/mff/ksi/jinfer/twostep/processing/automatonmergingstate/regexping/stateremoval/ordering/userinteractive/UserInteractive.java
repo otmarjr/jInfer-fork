@@ -40,12 +40,13 @@ public class UserInteractive<T> implements Orderer<T> {
   private static final Logger LOG = Logger.getLogger(UserInteractive.class);
 
   @Override
-  public State<Regexp<T>> getStateToRemove(StateRemovalRegexpAutomaton<T> automaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
-    //final AutoEditor<Regexp<T>> gui= new AutoEditor<Regexp<T>>(symbolToString);
-    Transformer<Step<Regexp<T>>, String> t = new Transformer<Step<Regexp<T>>, String>() {
+  public State<Regexp<T>> getStateToRemove(
+          final StateRemovalRegexpAutomaton<T> automaton,
+          final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
+    final Transformer<Step<Regexp<T>>, String> t = new Transformer<Step<Regexp<T>>, String>() {
 
       @Override
-      public String transform(Step<Regexp<T>> step) {
+      public String transform(final Step<Regexp<T>> step) {
           StringBuilder sb = new StringBuilder();
           sb.append("{");
           sb.append(symbolToString.toString(step.getAcceptSymbol()));
@@ -58,7 +59,7 @@ public class UserInteractive<T> implements Orderer<T> {
 
     State<Regexp<T>> removeState;
     final StatePickingComponent<Regexp<T>> component = new StatePickingComponent<Regexp<T>>();
-    StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t, component);
+    final StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t, component);
     component.setVisualizer(visualizer);
     do {
       AutoEditor.drawComponentAndWaitForGUI(component);

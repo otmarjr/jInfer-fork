@@ -33,6 +33,7 @@ import org.openide.util.NbPreferences;
  *
  * @author sviro
  */
+@SuppressWarnings("PMD.SingularField")
 public final class RunnerPanel extends JPanel {
 
   private static final long serialVersionUID = 3534679876l;

@@ -27,7 +27,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -84,8 +83,6 @@ public class TwoStepSimplifierFactory implements Simplifier {
    */
   public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerNull";
 
-  private static final Logger LOG = Logger.getLogger(Simplifier.class);
-
   @Override
   public String getName() {
     return NAME;
@@ -93,7 +90,7 @@ public class TwoStepSimplifierFactory implements Simplifier {
 
   @Override
   public String getModuleDescription() {
-    StringBuilder sb = new StringBuilder(getDisplayName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append("(");
     sb.append(getClustererFactory().getModuleDescription());
     sb.append(", ");
@@ -128,8 +125,8 @@ public class TwoStepSimplifierFactory implements Simplifier {
   }
 
   @Override
-  public void start(List<Element> initialGrammar, SimplifierCallback callback) throws InterruptedException {
-    TwoStepSimplifier simplifier= new TwoStepSimplifier(
+  public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+    final TwoStepSimplifier simplifier= new TwoStepSimplifier(
             getClustererFactory(), getClusterProcessorFactory(), getRegularExpressionCleanerFactory()
             );
     callback.finished(

@@ -47,7 +47,7 @@ public final class TypeUtils {
       return TypeCategory.COMPLEX;
     }
     
-    Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
+    final Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
 
     if (subnodes.isLambda()) {
       // Type of element without sub nodes is considered a built-in type because
@@ -56,7 +56,7 @@ public final class TypeUtils {
     }
 
     if (subnodes.isToken()) {
-      AbstractStructuralNode node = subnodes.getContent();
+      final AbstractStructuralNode node = subnodes.getContent();
       switch (node.getType()) {
         case ELEMENT:
           return TypeCategory.COMPLEX;
@@ -91,7 +91,7 @@ public final class TypeUtils {
    * @param element Element instance.
    */
   public static boolean isOfBuiltinType(final Element element) {
-    TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
+    final TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
     return typeCategory.equals(TypeCategory.BUILTIN) ? true : false;
   }
 
@@ -102,7 +102,7 @@ public final class TypeUtils {
    * @param element Element instance.
    */
   public static boolean isOfComplexType(final Element element) {
-    TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
+    final TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
     return typeCategory.equals(TypeCategory.COMPLEX) ? true : false;
   }
 
@@ -117,7 +117,7 @@ public final class TypeUtils {
 
     boolean hasSimpleData = false;
     boolean hasElements = false;
-    boolean hasAttributes = !element.getAttributes().isEmpty();
+    final boolean hasAttributes = !element.getAttributes().isEmpty();
 
     for (final AbstractStructuralNode token : regexp.getTokens()) {
       if (token.isSimpleData()) {
@@ -127,11 +127,7 @@ public final class TypeUtils {
       }
     }
 
-    if (hasSimpleData && (hasElements || hasAttributes)) {
-      return true;
-    } else {
-      return false;
-    }
+    return hasSimpleData && (hasElements || hasAttributes);
   }
 
   /**

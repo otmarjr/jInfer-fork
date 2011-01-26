@@ -28,10 +28,11 @@ import org.openide.util.Lookup;
  * 
  * @author vektor
  */
-@OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_BasicRuleDisplayer",
-keywords = "#AdvancedOption_Keywords_BasicRuleDisplayer",
-keywordsCategory = "jInfer/BasicRuleDisplayer")
+@OptionsPanelController.SubRegistration(
+  location = "jInfer",
+  displayName = "#AdvancedOption_DisplayName_BasicRuleDisplayer",
+  keywords = "#AdvancedOption_Keywords_BasicRuleDisplayer",
+  keywordsCategory = "jInfer/BasicRuleDisplayer")
 public final class BasicRuleDisplayerOptionsPanelController extends OptionsPanelController {
 
   private BasicRuleDisplayerPanel panel;

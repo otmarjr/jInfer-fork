@@ -19,10 +19,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren;
 
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -31,10 +27,8 @@ import static org.junit.Assert.*;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class CleanerEmptyChildrenFactoryTest {
-
-  public CleanerEmptyChildrenFactoryTest() {
-  }
 
   /**
    * Test of create method, of class CleanerEmptyChildrenFactory.
@@ -42,8 +36,8 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testCreate() {
     System.out.println("create");
-    EmptyChildrenFactory instance = new EmptyChildrenFactory();
-    RegularExpressionCleaner<String> result = instance.create();
+    final EmptyChildrenFactory instance = new EmptyChildrenFactory();
+    final RegularExpressionCleaner<String> result = instance.create();
     assertNotNull(result);
   }
 
@@ -53,9 +47,9 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    EmptyChildrenFactory instance = new EmptyChildrenFactory();
-    String expResult = "TwoStepRegularExpressionCleanerEmptyChildren";
-    String result = instance.getName();
+    final EmptyChildrenFactory instance = new EmptyChildrenFactory();
+    final String expResult = "TwoStepRegularExpressionCleanerEmptyChildren";
+    final String result = instance.getName();
     assertEquals(expResult, result);
   }
 
@@ -65,8 +59,8 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    EmptyChildrenFactory instance = new EmptyChildrenFactory();
-    List<String> result = instance.getCapabilities();
+    final EmptyChildrenFactory instance = new EmptyChildrenFactory();
+    final List<String> result = instance.getCapabilities();
     assertTrue(result.isEmpty());
   }
 
@@ -76,9 +70,9 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    EmptyChildrenFactory instance = new EmptyChildrenFactory();
-    String expResult = "Empty children";
-    String result = instance.getModuleDescription();
+    final EmptyChildrenFactory instance = new EmptyChildrenFactory();
+    final String expResult = "Empty children";
+    final String result = instance.getModuleDescription();
     assertEquals(expResult, result);
   }
 
@@ -88,9 +82,9 @@ public class CleanerEmptyChildrenFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    EmptyChildrenFactory instance = new EmptyChildrenFactory();
-    String expResult = "RegularExpressionCleanerEmptyChildren";
-    String result = instance.getUserModuleDescription();
+    final EmptyChildrenFactory instance = new EmptyChildrenFactory();
+    final String expResult = "RegularExpressionCleanerEmptyChildren";
+    final String result = instance.getUserModuleDescription();
     assertFalse(expResult.equals(result));
     assertNotNull(result);
     assertFalse(result.isEmpty());

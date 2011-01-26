@@ -59,7 +59,7 @@ public class NullFactory implements RegularExpressionCleanerFactory {
 
   @Override
   public String getUserModuleDescription() {
-    StringBuilder sb = new StringBuilder(getModuleDescription());
+    final StringBuilder sb = new StringBuilder(getModuleDescription());
     sb.append(" does nothing. Select this if you don't want any regular rexpression cleaning.");
     return sb.toString();
   }

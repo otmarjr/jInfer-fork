@@ -81,13 +81,14 @@
 
         <p>
           Here is the full documentation of relevant jInfer modules.<br/>
-
-          Base module
+        </p>
+          
+        <h4>Base module</h4>
           <ul>
             <li>Base</li>
           </ul>
 
-          Inference modules
+        <h4>Inference modules</h4>
           <ul>
             <li>BasicDTDExporter</li>
             <li>BasicIGG</li>
@@ -99,7 +100,7 @@
             <li>XSDImportSAX</li>
           </ul>
 
-          Utility modules
+        <h4>Utility modules</h4>
           <ul>
             <li>AutoEditor</li>
             <li>BasicRuleDisplayer</li>

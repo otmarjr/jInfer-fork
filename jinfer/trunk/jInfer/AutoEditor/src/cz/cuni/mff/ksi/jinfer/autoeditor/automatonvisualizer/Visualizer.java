@@ -24,7 +24,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -77,12 +76,12 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
       throw new IllegalArgumentException("Image format '" + formatName + "' is not suported");
     }
 
-    boolean isDoubleBuffered = isDoubleBuffered();
+    final boolean isDoubleBuffered = isDoubleBuffered();
     setDoubleBuffered(false);
 
     final Dimension size = getSize();
-    BufferedImage bi = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_BGR);
-    Graphics2D graphics = bi.createGraphics();
+    final BufferedImage bi = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_BGR);
+    final Graphics2D graphics = bi.createGraphics();
     paintComponent(graphics);
 
     setDoubleBuffered(isDoubleBuffered);

@@ -8,10 +8,12 @@
 \usepackage{tgpagella}
 %\usepackage[scale=0.9]{tgcursor}
 %\usepackage[scale=0.9]{tgheros}
+\usepackage{xstring}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
-\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
+\def\.{\discretionary{}{}{}}
 \newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
 
 \setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
@@ -76,7 +78,7 @@ Finally, the generated schema is annotated in the end with a comment stating the
 
 For certain inference algorithms it might be necessary to completely change the number or order of inference modules. For example, it might be necessary to have a dynamic inference with arbitrary number of iterations over the same module (modules). In this case, \jmodule{Runner} can serve as a template: adding e.g. a cleaner between \jmodule{Simplifier} and \jmodule{SchemaGenerator} would mean just copy-pasting members and methods currently associated to \jmodule{Simplifier}.\\
 
-%\nocite{*}
+\nocite{*}
 \newpage
 \bibliographystyle{alpha}
 \bibliography{literature}

@@ -20,22 +20,22 @@
 			</tr>
 			<tr><td class="box-content">
 				<a href="screenshots.html#screenshot-1">
-                                  <img src="images/screen-1-overall.png" class="screenshot-small"/>
+                                  <img src="images/screenshots/thumbs/screen-1-overall.png" class="screenshot-small"/>
                                 </a>
                                 <a href="screenshots.html#screenshot-2">
-                                  <img src="images/screen-2-advacedruledisplayer.png" class="screenshot-small"/>
+                                  <img src="images/screenshots/thumbs/screen-2-advacedruledisplayer.png" class="screenshot-small"/>
                                 </a>
                                 <a href="screenshots.html#screenshot-3">
-                                  <img src="images/screen-3-autoeditor.png" class="screenshot-small"/>
+                                  <img src="images/screenshots/thumbs/screen-3-autoeditor.png" class="screenshot-small"/>
                                 </a>
                                 <a href="screenshots.html#screenshot-4">
-                                  <img src="images/screen-4-autoeditor-complex.png" class="screenshot-small"/>
+                                  <img src="images/screenshots/thumbs/screen-4-autoeditor-complex.png" class="screenshot-small"/>
                                 </a>
                                 <a href="screenshots.html#screenshot-5">
-                                  <img src="images/screen-5-properties.png" class="screenshot-small"/>
+                                  <img src="images/screenshots/thumbs/screen-5-properties.png" class="screenshot-small"/>
                                 </a>
                                 <a href="screenshots.html#screenshot-6">
-                                  <img src="images/screen-6-result.png" class="screenshot-small"/>
+                                  <img src="images/screenshots/thumbs/screen-6-result.png" class="screenshot-small"/>
                                 </a>
 			</td></tr>
 		</table>

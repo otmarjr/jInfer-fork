@@ -25,7 +25,7 @@ import sun.font.CreatedFontTracker;
  *
  * @author reseto
  */
-public class XSDOccurences {
+public final class XSDOccurences {
   private XSDOccurences() {}
 
   /**
@@ -80,8 +80,25 @@ public class XSDOccurences {
    */
   private static RegexpInterval makeInterval(final String minOccurence, final String maxOccurence, final boolean minHasPriority) {
     RegexpInterval interval;
-    int min = DEFAULT, max = DEFAULT;           // set to default value
+    int min = getMin(minOccurence);
+    int max = getMax(maxOccurence, min);
+    if (min > max) {                            // limits are mismatched
+      if (minHasPriority) {
+        max = min;                              // lower limit has priority
+      } else {
+        min = max;                              // upper limit has priority
+      }
+    }
+    if (max == INFINITY) {
+      interval = RegexpInterval.getUnbounded(min);
+    } else {
+      interval = RegexpInterval.getBounded(min, max);
+    }
+    return interval;
+  }
 
+  private static int getMin(final String minOccurence) {
+    int min = DEFAULT;
     if (!BaseUtils.isEmpty(minOccurence)) {
       try {
         min = Integer.parseInt(minOccurence);
@@ -90,9 +107,14 @@ public class XSDOccurences {
           min = DEFAULT;
         }
       } catch (NumberFormatException e) {       // if parsing fails, the default is already set
+        min = DEFAULT;
       }
     }
+    return min;
+  }
 
+  private static int getMax(final String maxOccurence, final int min) {
+    int max = DEFAULT;
     if (!BaseUtils.isEmpty(maxOccurence)) {
       try {
         if (UNBOUNDED.equals(maxOccurence)) {
@@ -102,23 +124,12 @@ public class XSDOccurences {
           if (max < 0) {                        // parsed value is negative
             max = min;                          // min is either default, or some good value
           }
-          if (min > max) {                      // limits are mismatched
-            if (minHasPriority) {
-              max = min;                        // lower limit has priority
-            } else {
-              min = max;                        // upper limit has priority
-            }
-          }
+ 
         }
       } catch (NumberFormatException e) {
         max = min;                              // min is either default, or some good value
       }
     }
-    if (max == INFINITY) {
-      interval = RegexpInterval.getUnbounded(min);
-    } else {
-      interval = RegexpInterval.getBounded(min, max);
-    }
-    return interval;
+    return max;
   }
 }

@@ -29,6 +29,7 @@ public enum XSDAttribute {
   USE("use"),
   MINOCCURS("minOccurs"),
   MAXOCCURS("maxOccurs"),
+  SUBSTITUT("substitutionGroup"),
   INVALID("InVAlid");
 
   private final String name;

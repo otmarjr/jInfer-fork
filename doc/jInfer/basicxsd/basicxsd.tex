@@ -8,10 +8,12 @@
 \usepackage{tgpagella}
 %\usepackage[scale=0.9]{tgcursor}
 %\usepackage[scale=0.9]{tgheros}
+\usepackage{xstring}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
-\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
+\def\.{\discretionary{}{}{}}
 \newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
 
 \setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch

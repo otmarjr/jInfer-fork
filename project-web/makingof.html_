@@ -83,6 +83,7 @@ We are using mainly 4 of the facilities SF.net provides: <a href="https://source
                 <h3>Validator</h3>
                 <p>
                         To facilitate various checks of the source code (correctly filled project properties, metadata etc), a validator was created. It can be found in the jInfer <a href="http://jinfer.svn.sourceforge.net/viewvc/jinfer/jInfer%20Validator/">repository</a>.
+                        <img src="images/screen-validator.png" alt="jInfer Validator" class="screenshot"/>
                 </p>
 
 	<h2>Practices</h2>

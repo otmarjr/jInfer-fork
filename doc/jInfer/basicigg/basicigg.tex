@@ -47,7 +47,7 @@ Public packages:       & cz.cuni.mff.ksi.jinfer.basicigg.properties \\ \hline
 \section{Introduction}
 
 This is an extensible implementation of the \jmodule{IGGenerator} inference interface. It is the only IG generator officialy shipped with jInfer.\\
-Make sure you understand the difference between the two types of initial grammar as described in \ref{archdoc}.
+Make sure you understand the difference between the two types of initial grammar as described in \cite{archdoc}.
 
 \section{Structure}
 
@@ -61,7 +61,7 @@ The main class implementing \code{IGGenerator} inference interface and simultane
 \section{Processors}
 
 A \emph{processor} is a class capable of extracting IG from an arbitrary \code{InputStream} (usually encapsulating a file). Various processors may handle generic XML, schemas like DTD, XSD or Schematron, query languages such as XPath, and so on.\\
-A processor has to be registered as a service provider of the \code{Processor} interface from \jmodule{Base} module. Due to the nature of NBP lookups, each processor is internally kept as a singleton, and should not use its inner state (refer to the chapter Lookups in \ref{archdoc}). Note that the factory pattern is not used here.\\ % TODO anti reference to a chapter?
+A processor has to be registered as a service provider of the \code{Processor} interface from \jmodule{Base} module. Due to the nature of NBP lookups, each processor is internally kept as a singleton, and should not use its inner state (refer to the chapter Lookups in \cite{archdoc}). Note that the factory pattern is not used here (see \cite[Factory]{archdoc}).\\ % TODO anti reference to a chapter number when factory pattern is moved to arch
 Each processor declares the class of inputs (documents, schemas, queries) and file extensions it is able to handle by implementing methods \code{getFolder()}, \code{getExtension()} and \code{processUndefined()}. Refer to JavaDoc of these methods for further details.\\
 
 \jmodule{BasicIGG} comes bundled with 3 processors: for generic XML documents, DTD schemas and XPath queries. Support for XSD queries is implemented in \jmodule{XSDImporter} to demonstrate \jmodule{BasicIGG}'s extension capabilities.
@@ -75,7 +75,7 @@ After reaching the end of the document, all IG rules are returned. Note that thi
 \subsection{DTD processor}
 
 DTD processor registers itself into \emph{schema} input folder, \emph{dtd} file extension and declares it cannot handle other file extensions.\\
-To parse DTD files a 3rd party library is used: \jmodule{dtdparser}. % TODO anti Reference http://www.rpbourret.com/dtdparser/index.htm
+To parse DTD files a 3rd party library is used: \jmodule{dtdparser} (\cite{dtdparser}).
 Translation from the object model in this library to our own is handled mostly by \code{DTD2RETranslator} class.\\
 Note that the initial grammar generated in this way is complex. Therefore, this processor checks for the \code{CAN\_HANDLE\_COMPLEX\_REGEXPS} capability of the simplifier following this IG generator: in positive case it simply returns the grammar, if the following module cannot handle complex regular expressions, DTD processor first invokes an \emph{Expander} (see \ref{section-expansion}).
 
@@ -87,7 +87,7 @@ To parse XPath queries, standard support present in JDK is used. The relevant \c
 
 \section{Expansion} \label{section-expansion}
 
-Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection. % TODO vektor Is this documented somewhere?
+Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection. % TODO vektor Is this documented somewhere? anti: NO, should be in developer doc with preferences panel and so on!!!
 
 \subsection{ExpanderImpl internals}
 
@@ -114,7 +114,7 @@ Understanding how intervals affect the expansion, it is time to move a level up:
 In this case, consider $ m = \max_{i \in 1 \ldots N}{|w_i|} $. Now, $ m $ words will be constructed in the following way: in a for-loop enumerating $ i \in \{1 \ldots m\}$ the $j$-th part of this $i$-th word will be $w_{i mod |w_j|}$. The method \code{ExpanderImp.unpackConcat()} illustrates this.
 \end{itemize}
 
-Now for the next part, description of \code{Element} expansion. This is the content of \code{ExpanderImpl.expandElement()} method. First, element's subnodes are expanded as a regexp. For each word from this expansion a new \code{Element} is created: letters of this word are encapsulated in tokens, these tokens are put in a concatenation that constitutes subnodes of this new element. If the letter is an element itself, it is not recursively expanded - it is just declared to be a sentinel.\\ % TODO anti Link to architecture
+Now for the next part, description of \code{Element} expansion. This is the content of \code{ExpanderImpl.expandElement()} method. First, element's subnodes are expanded as a regexp. For each word from this expansion a new \code{Element} is created: letters of this word are encapsulated in tokens, these tokens are put in a concatenation that constitutes subnodes of this new element. If the letter is an element itself, it is not recursively expanded - it is just declared to be a sentinel (see \cite[section 3.3]{archdoc}).\\
 
 Finally, expanding a grammar means expanding each of its rules (elements) and returning the gathered rules (elements).
 
@@ -142,8 +142,7 @@ Flow of data in this module is following.
 
 It is possible to replace the default \code{Expander} implementation: but as mentioned in \ref{section-expansion}, either the old implementation must be removed or module selection must be introduced.
 
-\cite{ahonen}
-%\nocite{*}
+\nocite{*}
 \newpage
 \bibliographystyle{alpha}
 \bibliography{literature}

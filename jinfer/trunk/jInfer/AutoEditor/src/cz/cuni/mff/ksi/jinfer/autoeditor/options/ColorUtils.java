@@ -14,22 +14,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor.options;
 
 import java.awt.Color;
 import org.openide.util.NbPreferences;
 
 /**
- *
+ * Utility class for Automaton Editor node colors.
  * @author sviro
  */
-public class ColorUtils {
+public final class ColorUtils {
 
   public static final String BG_COLOR_PROP = "background.color";
   public static final Color BG_COLOR_DEFAULT = Color.decode("-1");
   public static final String NODE_COLOR_PROP = "node.color";
   public static final Color NODE_COLOR_DEFAULT = Color.decode("-13861729");
+
+  private ColorUtils() {
+  }
 
   /**
    * Get {@link Color} property value for particular property.
@@ -41,8 +43,11 @@ public class ColorUtils {
     return Color.decode(NbPreferences.forModule(AutoEditorPanel.class).get(property, String.valueOf(defaultValue.getRGB())));
   }
 
+  /**
+   * Get background color of canvas where automaton is displayed.
+   * @return Background color of canvas.
+   */
   public static Color getBackgroundColor() {
     return getColorProperty(BG_COLOR_PROP, BG_COLOR_DEFAULT);
   }
-
 }

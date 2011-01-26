@@ -181,8 +181,8 @@ public class Utils {
   }
 
   /**
-   * Get background color of canvas.
-   * @return
+   * Get background color of canvas where rules are displayed.
+   * @return Background color of canvas.
    */
   public Color getBackgroundColor() {
     return bgColor;
@@ -190,7 +190,7 @@ public class Utils {
 
   /**
    * Get horizontal distance between vertices in rule trees.
-   * @return
+   * @return Horizontal distance between vertices in rule trees.
    */
   public int getHorizontalDistance() {
     return horizontalDistance;
@@ -198,7 +198,7 @@ public class Utils {
 
   /**
    * Get vertical distance between vertices in rule trees.
-   * @return
+   * @return Vertical distance between vertices in rule trees.
    */
   public int getVerticalDistance() {
     return verticalDistance;

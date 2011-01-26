@@ -5,10 +5,10 @@ automaton_merge3.eps nodes_full2.eps module_deps.eps nodes.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc
-	latex $< 
+	latex -interaction=nonstopmode $< 
 	bibtex $(<:.tex=.aux)
-	latex $<
-	latex $< 
+	latex -interaction=nonstopmode $<
+	latex -interaction=nonstopmode $< 
 
 %.pdf: %.dvi
 	dvipdfmx $<

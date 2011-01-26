@@ -20,11 +20,13 @@ package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDOccurences;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 
 /**
@@ -39,11 +41,16 @@ public final class DOMHelper {
    * String for attribute value of <i>maxOccurs</i> attribute, indicating unlimited occurrence.
    */
   private static final String UNBOUNDED = "unbounded";
+  private static final Logger LOG = Logger.getLogger(DOMHandler.class);
+
 
   /**
    * Trims (cuts) namespace prefix from the beginning of element qName and returns it in original case.
    */
   protected static String trimNS(final String qName) {
+    if (BaseUtils.isEmpty(qName)) {
+      return qName;
+    }
     return qName.substring(qName.lastIndexOf(':') + 1);
   }
 
@@ -54,7 +61,7 @@ public final class DOMHelper {
    * @see org.w3c.dom.Element
    */
   protected static org.w3c.dom.Element isDOMElement(final Node node) {
-    if (node.getNodeType() == Node.ELEMENT_NODE) {
+    if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
       return (org.w3c.dom.Element) node;
     }
     return null;
@@ -64,11 +71,16 @@ public final class DOMHelper {
     final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
     final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
     RegexpInterval interval;
+    final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
     if (outerInterval != null) {
-      final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
-      interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
+      try {
+        interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
+      } catch (IllegalArgumentException e) {
+        LOG.warn("Occurence of element " + currentNode.getNodeName() + " has no intersection with constraints defined by its parent, ignoring constraints.");
+        interval = occurence;
+      }
     } else {
-      interval = XSDOccurences.createInterval(minOccurence, maxOccurence);
+      interval = occurence;
     }
     return interval;
   }
@@ -96,7 +108,10 @@ public final class DOMHelper {
    * @param ret Element to check for unset interval.
    */
   protected static void repairConcatInterval(final Element ret) {
-    if (RegexpType.CONCATENATION.equals(ret.getSubnodes().getType()) && ret.getSubnodes().getInterval() == null) {
+    if (ret != null
+        && ret.getSubnodes() != null
+        && RegexpType.CONCATENATION.equals(ret.getSubnodes().getType())
+        && ret.getSubnodes().getInterval() == null) {
       ret.getSubnodes().setInterval(RegexpInterval.getOnce());
     }
   }

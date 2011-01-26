@@ -64,7 +64,7 @@
         <h3>Architecture</h3>
 
         <p>
-          PDF dealing with <a href="architecture.pdf">jInfer's architecture</a>
+          PDF dealing with <a href="modules/architecture.pdf">jInfer's architecture</a>
           - important reading for all willing to hack the framework.
         </p>
 	
@@ -85,13 +85,13 @@
           
         <h4>Base module</h4>
           <ul>
-            <li>Base</li>
+            <li><a href="modules/base.pdf">Base</a></li>
           </ul>
 
         <h4>Inference modules</h4>
           <ul>
-            <li>BasicDTDExporter</li>
-            <li>BasicIGG</li>
+            <li><a href="modules/basicdtd.pdf">BasicDTDExporter</a></li>
+            <li><a href="modules/basicigg.pdf">BasicIGG</a></li>
             <li>BasicXSDExporter</li>
             <li>Runner</li>
             <li>TwoStepSimplifier</li>
@@ -103,7 +103,7 @@
         <h4>Utility modules</h4>
           <ul>
             <li>AutoEditor</li>
-            <li>BasicRuleDisplayer</li>
+            <li><a href="modules/basicruledisplayer.pdf">BasicRuleDisplayer</a></li>
             <li>ProjectType</li>
             <li>TreeRuleDisplayer</li>
           </ul>

@@ -30,7 +30,21 @@
   </span>
 </p>
 
-<h2>Module visibility</h2>
+<h2>Overview</h2>
+
+<ol type=1>
+  <li><a href="#1-module-visibility">Module visibility</a></li>
+  <li><a href="#2-error-handling">Error handling</a></li>
+  <li><a href="#3-interruptions">Interruptions</a></li>
+  <li><a href="#4-dialogs">Dialogs</a></li>
+  <li><a href="#5-configuration">Configuration - options, preferences</a></li>
+  <li><a href="#6-rule-display">Rule display</a></li>
+  <li><a href="#7-output-logging">Console output, logging</a></li>
+  <li><a href="#8-runningproject">RunningProject class</a></li>
+  <li><a href="#9-module-selection">Module selection</a></li>
+</ol>
+
+<h2 id="1-module-visibility">Module visibility</h2>
 
 <p>
 Each NBP module allows to set packages as public, which means their content will be visible for another modules. That means, if some module A sets
@@ -69,7 +83,8 @@ Another way is to set public packages through GUI:
 </ol>
 
 </p>
-<h2>Error handling</h2>
+
+<h2 id="2-error-handling">Error handling</h2>
 
 <p>
 Each run of inference is encapsulated in a <code>try-catch</code> block, so it is safe to throw any exception in inference process.
@@ -77,7 +92,7 @@ Each thrown exception will be catched, get logged, presented to the user and inf
 throw exception, it is catched by NBP, instead of our code. Because of this is reasonable to catch this exception in your module and re-throw it in the right thread.
 </p>
 
-<h2>Interruptions</h2>
+<h2 id="3-interruptions">Interruptions</h2>
 
 <p>
 In our application, we gave user an ability to stop inference in any moment of its run. For this reason, modules have to check in every time-consuming place
@@ -94,7 +109,7 @@ for (forever) {
 
 </pre>
 
-<h2>Dialogs</h2>
+<h2 id="4-dialogs">Dialogs</h2>
 
 <p>
   Creation of open/save dialog or message window is done by standard NBP API.
@@ -130,7 +145,7 @@ NotifyDescriptor nd = new NotifyDescriptor
 DialogDisplayer.getDefault().notify(nd);
 </pre>
 
-<h2>Configuration - options, preferences</h2>
+<h2 id="5-configuration">Configuration - options, preferences</h2>
 
 <p>
 Option panels located in <i>Tools > Options</i> menu are standard part of NBP API. We created for our purpose jInfer option subCategory
@@ -253,7 +268,7 @@ public abstract class ExamplePanel extends AbstractPropertiesPanel {
 }
 </pre>
 
-<h2>Rule display</h2>
+<h2 id="6-rule-display">Rule display</h2>
 
 <p>
 Rule displayer is component used for visualisation of rules in any part of inference process, but mainly in simplification part.
@@ -302,7 +317,7 @@ public final class ExampleRuleDisplayer implements RuleDisplayer {
 }
 </pre>
 
-<h2>Console output, logging</h2>
+<h2 id="7-output-logging">Console output, logging</h2>
 
 <p>
 For printing data to console output, NBP provides <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/IOProvider.html">IOProvider</a> and <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/InputOutput.html">InputOutput</a> classes.
@@ -337,11 +352,11 @@ private static final Logger LOG = Logger.getLogger(Example.class);
 LOG.info("Some message with info log level");
 </pre>
 
-<h2>RunningProject class</h2>
+<h2 id="8-runningproject"><code>RunningProject</code> class</h2>
 
 TODO
 
-<h2>Properties ComboBox</h2>
+<h2 id="9-module-selection">Module selection</h2>
 
 TODO
 

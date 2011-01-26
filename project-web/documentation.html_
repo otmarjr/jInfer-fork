@@ -85,7 +85,7 @@
           Base module
           <ul>
             <li>Base</li>
-          <ul>
+          </ul>
 
           Inference modules
           <ul>
@@ -97,7 +97,7 @@
             <li>XSDImportDOM</li>
             <li>XSDImporter</li>
             <li>XSDImportSAX</li>
-          <ul>
+          </ul>
 
           Utility modules
           <ul>

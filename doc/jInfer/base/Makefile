@@ -4,10 +4,10 @@ base.dvi:
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc
-	latex $< 
+	latex -interaction=nonstopmode $< 
 	bibtex $(<:.tex=.aux)
-	latex $<
-	latex $< 
+	latex -interaction=nonstopmode $<
+	latex -interaction=nonstopmode $< 
 
 %.pdf: %.dvi
 	dvipdfmx $<

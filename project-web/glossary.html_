@@ -11,20 +11,27 @@
         <p>
           <ul>
             <li class="glossary">
-              <span class="gloss-term">Exporter</span>
-              <span class="gloss-definition">Module creating output schema
-                from simplified grammar.</span>
+              <span class="gloss-term">Capabilities</span>
+              <span class="gloss-definition">Set of strings returned by a module,
+                declaring certain capabilities of this module.</span>
             </li>
 
             <li class="glossary">
               <span class="gloss-term">Grammar</span>
-              <span class="gloss-definition">A list of rules, most commonly
+              <span class="gloss-definition">A list of rules,
                 represented by a list of elements. See also: Initial Grammar</span>
             </li>
 
             <li class="glossary">
+              <span class="gloss-term">Inference Interface</span>
+              <span class="gloss-definition">Interface describing one of
+                inference modules: <i>Initial Grammar Generator</i>, <i>Simplifier</i>
+                or <i>Schema Generator</i>.</span>
+            </li>
+
+            <li class="glossary">
               <span class="gloss-term">Inference</span>
-              <span class="gloss-definition">Process of extracting schema from
+              <span class="gloss-definition">Process of creating schema from
                 input documents, schemas and queries.</span>
             </li>
 
@@ -46,6 +53,11 @@
                 "project". Similar to NetBeans' Java project, jInfer Project
                 contains links to input documents, schemas and queries;
                 all settings associated with them and also inferred schemas.</span>
+            </li>
+
+            <li class="glossary">
+              <span class="gloss-term">Lambda</span>
+              <span class="gloss-definition">Lambda, ?, empty word.</span>
             </li>
 
             <li class="glossary">
@@ -101,6 +113,12 @@
                 side), representing a production rule (for example, A -> B,
                 C, D). In jInfer most commonly represented as an
                 element - element itself is the LHS, its subnodes are the RHS.</span>
+            </li>
+
+            <li class="glossary">
+              <span class="gloss-term">Schema Generator</span>
+              <span class="gloss-definition">Module creating output schema
+                from simplified grammar.</span>
             </li>
 
             <li class="glossary">

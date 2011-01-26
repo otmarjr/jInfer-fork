@@ -23,7 +23,8 @@ style:
 	cp style.css output/style.css
 
 htaccess:
-	cp .htaccess /output/.htaccess
+	mkdir -p output
+	cp .htaccess output/.htaccess
 
 pdfs:
 	mkdir -p output/modules

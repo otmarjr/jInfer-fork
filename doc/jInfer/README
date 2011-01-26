@@ -20,11 +20,9 @@ reopen OOo, and voila.
 In OOo draw, there is 'connector' arrow type which uses ports on rectangles to connect nicely.
 
 For images, we prefer round boxes in general. For interfaces however, use rectangles, for classes use rounded rectangles.
-For UML-like diagram see figure 4 (XML represetenging interfaces and classes in detail) in architecture.pdf, source file is nodes_full.gv.
-Graphviz "record" shape is used, see:
-http://www.graphviz.org/doc/info/shapes.html#record
-style rounded is also possible (nice).
-Beware of spaces not possible in record mode, so label = "My\ super\ class|method1()" is correct escape of spaces.
+For UML-like diagram see figure 4 (XML represetenging interfaces and classes in detail) in architecture.pdf, source file is nodes_full2.gv.
+GFraphiv html-like labels are used, see:
+http://www.graphviz.org/doc/info/shapes.html
 
 For all other stuff, copy paste architecture.tex or simply ask :)
 anti

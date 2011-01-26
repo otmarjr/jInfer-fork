@@ -17,15 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutHelperFactory;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.properties.GraphvizUtils;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties.LayoutPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska.VyhnanovskaLayoutFactory;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.Graph;
@@ -33,15 +28,14 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Scanner;
+import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.TransformerUtils;
 import org.apache.log4j.Logger;
@@ -52,77 +46,88 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  * Can create instance of {@link Layout} using external Graphviz dot executable.
  *
- * TODO anti Comment!
  * @author anti, rio
  */
 @ServiceProvider(service = LayoutF.class)
 public class GraphvizLayoutFactory implements LayoutF {
 
-  //TODO sviro comment and refactor
-
   public static final String NAME = "GraphvizLayout";
   public static final String DISPLAY_NAME = "Graphviz Layout";
   public static final String PROPERTIES_DOTBIN = "dotbin";
-  private static Logger LOG = Logger.getLogger(GraphvizLayoutFactory.class);
+  private static final Logger LOG = Logger.getLogger(GraphvizLayoutFactory.class);
+  private static final int WINDOW_WIDTH = 700;
+  private static final int WINDOW_HEIGHT = 700;
 
   @Override
-  public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException{
-    final Map<State<T>, Point2D> positions = new HashMap<State<T>, Point2D>();
+  public <T> Layout<State<T>, Step<T>> createLayout(final Automaton<T> automaton, final Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
+    Map<State<T>, Point2D> positions = new HashMap<State<T>, Point2D>();
 
     if (GraphvizUtils.isBinaryValid()) {
-      ProcessBuilder p = new ProcessBuilder(Arrays.asList(
-              GraphvizUtils.getPath(),
-              "-Tplain"));
-
       try {
-        Process k = p.start();
-        k.getOutputStream().write(
-                AutomatonToDot.<T>convertToDot(automaton, edgeLabelTransformer).getBytes());
-        k.getOutputStream().flush();
-        BufferedReader b = new BufferedReader(new InputStreamReader(k.getInputStream()));
-        k.getOutputStream().close();
-
-        Scanner s = new Scanner(b);
-        s.next();
-        s.next();
-        double width = Double.parseDouble(s.next());
-        double height = Double.parseDouble(s.next());
-        double windowW = 700;
-        double windowH = 300;
-
-        while (s.hasNext()) {
-          if (s.next().equals("node")) {
-            int nodeName = Integer.parseInt(s.next());
-            double x = Double.parseDouble(s.next());
-            double y = Double.parseDouble(s.next());
-            boolean found = false;
-            for (State<T> state : automaton.getDelta().keySet()) {
-              if (state.getName() == nodeName) {
-                positions.put(state, new Point(
-                        (int) (windowW * x / width),
-                        (int) (windowH * y / height)));
-                found = true;
-                break;
-              }
-            }
-            if (!found) {
-              throw new Exception("Node with name " + nodeName + " was not found in automaton.");
-            }
-          }
-        }
+        final byte[] graphInDotFormat = AutomatonToDot.<T>convertToDot(automaton, edgeLabelTransformer).getBytes();
+        positions = getGraphvizPositions(graphInDotFormat, automaton.getDelta().keySet());
       } catch (Exception ex) {
         LOG.error("Error occured in Graphviz", ex);
         DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "error.dialog.message"), NotifyDescriptor.ERROR_MESSAGE));
-        throw new InterruptedException();
+        throw new InterruptedException(); //NOPMD
       }
-      Transformer<State<T>, Point2D> trans = TransformerUtils.mapTransformer(positions);
+      
+      final Transformer<State<T>, Point2D> trans = TransformerUtils.mapTransformer(positions);
 
-      return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(700, 300));
+      return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
     }
 
     DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "binary.invalid.message"), NotifyDescriptor.ERROR_MESSAGE));
     throw new InterruptedException();
 
+  }
+
+  @SuppressWarnings("PMD")
+  private <T> Map<State<T>, Point2D> getGraphvizPositions(final byte[] graphInDotFormat, final Set<State<T>> automatonStates) throws Exception {
+    final Map<State<T>, Point2D> result = new HashMap<State<T>, Point2D>();
+
+    // creates new dot process.
+    final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList(GraphvizUtils.getPath(), "-Tplain"));
+    final Process process = processBuilder.start();
+
+    // write our graph into dot binary standart input
+    process.getOutputStream().write(graphInDotFormat);
+    process.getOutputStream().flush();
+
+    // read from dot binary standard output
+    final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    process.getOutputStream().close();
+
+    final Scanner scanner = new Scanner(reader);
+    // jumps some unnecessary information from output
+    scanner.next();
+    scanner.next();
+
+    // get width and height of graph
+    final double width = Double.parseDouble(scanner.next());
+    final double height = Double.parseDouble(scanner.next());
+
+    // parse output for graph vertex positions
+    while (scanner.hasNext()) {
+      if (scanner.next().equals("node")) {
+        final int nodeName = Integer.parseInt(scanner.next());
+        final double x = Double.parseDouble(scanner.next());
+        final double y = Double.parseDouble(scanner.next());
+        boolean found = false;
+        for (State<T> state : automatonStates) {
+          if (state.getName() == nodeName) {
+            result.put(state, new Point((int) (WINDOW_WIDTH * x / width), (int) (WINDOW_HEIGHT * y / height)));
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          throw new Exception("Node with name " + nodeName + " was not found in automaton.");
+        }
+      }
+    }
+
+    return result;
   }
 
   @Override

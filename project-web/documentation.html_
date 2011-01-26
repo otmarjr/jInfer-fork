@@ -72,7 +72,9 @@
 	
 	<p>
 	  Want to try out the algorithm you read about? Follow
-          <a href="doc_tutorial_dev.html">these</a> steps to write your own inference module!
+          <a href="doc_tutorial_dev.html">these</a> steps to write your own 
+          inference module! As soon as you need something from NetBeans or jInfer,
+          this <a href="doc_tutorial_platform.html">document</a> will come in handy.
 	</p>
 
         <h4>Module documentation</h4>

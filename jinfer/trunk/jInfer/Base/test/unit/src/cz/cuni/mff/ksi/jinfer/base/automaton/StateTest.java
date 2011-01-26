@@ -76,7 +76,7 @@ public class StateTest {
   @Test
   public void testIncFinalCount_int() {
     System.out.println("incFinalCount");
-    int i = 10;
+    final int i = 10;
     final State<String> instance = createInstance();
     instance.incFinalCount(i);
     final Integer expResult = 20;

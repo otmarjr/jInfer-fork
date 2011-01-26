@@ -52,13 +52,14 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
   private static final Logger LOG = Logger.getLogger(Greedy.class);
   private final MergeConditionTester<T> mergeConditionTester;
 
-  public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory, final Properties properties) {
+  public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory,
+          final Properties properties) {
     if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
-      ModuleParameters factoryParam = ((ModuleParameters) mergeConditionTesterFactory);
-      List<String> parameterNames = factoryParam.getParameterNames();
+      final ModuleParameters factoryParam = ((ModuleParameters) mergeConditionTesterFactory);
+      final List<String> parameterNames = factoryParam.getParameterNames();
 
       for (String parameterName : parameterNames) {
-        String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
+        final String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
         int intValue;
         try {
           intValue = Integer.parseInt(value);
@@ -89,9 +90,9 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
    * @throws InterruptedException
    */
   @Override
-  public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {
+  public Automaton<T> simplify(final Automaton<T> inputAutomaton,
+          final SymbolToString<T> symbolToString) throws InterruptedException {
     final Map<State<T>, Set<Step<T>>> delta = inputAutomaton.getDelta();
-//    final Map<State<T>, Set<Step<T>>> reverseDelta= inputAutomaton.getReverseDelta();
 
     boolean search = true;
     while (search) {
@@ -99,7 +100,7 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
         throw new InterruptedException();
       }
       search = false;
-      List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
+      final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
       boolean found = false;
       for (State<T> mainState : delta.keySet()) {
         for (State<T> mergedState : delta.keySet()) {
@@ -117,11 +118,11 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
         LOG.debug("Found states to merge\n");
         for (List<List<State<T>>> mergableAlternative : mergableStates) {
           for (List<State<T>> mergeSeq : mergableAlternative) {
-            String st = CollectionToString.<State<T>>colToString(mergeSeq, " + ",
+            final String st = CollectionToString.<State<T>>colToString(mergeSeq, " + ",
                     new CollectionToString.ToString<State<T>>() {
 
                       @Override
-                      public String toString(State<T> t) {
+                      public String toString(final State<T> t) {
                         return t.toString();
                       }
                     });
@@ -137,7 +138,10 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
   }
 
   @Override
-  public Automaton<T> simplify(Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException {
+  public Automaton<T> simplify(
+          final Automaton<T> inputAutomaton,
+          final SymbolToString<T> symbolToString,
+          final String elementName) throws InterruptedException {
     return simplify(inputAutomaton, symbolToString);
   }
 }

@@ -32,7 +32,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 
 /**
  * Cluster nodes by name - ignoring case.
@@ -46,7 +45,6 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class Iname implements ClustererWithAttributes<AbstractStructuralNode, Attribute> {
-  private static final Logger LOG = Logger.getLogger(Iname.class);
   
   private final List<Cluster<AbstractStructuralNode>> nodeClusters;
   private final List<AbstractStructuralNode> items;
@@ -134,7 +132,7 @@ public class Iname implements ClustererWithAttributes<AbstractStructuralNode, At
   @Override
   public AbstractStructuralNode getRepresentantForItem(final AbstractStructuralNode item) {
     if (item.isSimpleData()) {
-      Iterator<Clusterer<SimpleData>> it = simpleDataClusterers.values().iterator();
+      final Iterator<Clusterer<SimpleData>> it = simpleDataClusterers.values().iterator();
       while (it.hasNext()) {
         try {
           return it.next().getRepresentantForItem((SimpleData) item);

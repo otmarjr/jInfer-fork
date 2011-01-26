@@ -18,7 +18,6 @@
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +32,11 @@ import java.util.List;
  */
 public class EmptyChildren<T> implements RegularExpressionCleaner<T> {
   @Override
-  public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
+  public Regexp<T> cleanRegularExpression(final Regexp<T> regexp) {
     return cleanRecursive(regexp, true);
   }
 
-  private Regexp<T> cleanRecursive(Regexp<T> regexp, boolean root) {
+  private Regexp<T> cleanRecursive(final Regexp<T> regexp, final boolean root) {
     switch (regexp.getType()) {
       case TOKEN:
       case LAMBDA:
@@ -45,9 +44,9 @@ public class EmptyChildren<T> implements RegularExpressionCleaner<T> {
       case ALTERNATION:
       case PERMUTATION:
       case CONCATENATION:
-        List<Regexp<T>> newChildren= new ArrayList<Regexp<T>>();
+        final List<Regexp<T>> newChildren= new ArrayList<Regexp<T>>();
         for (Regexp<T> child : regexp.getChildren()) {
-          Regexp<T> cleanChild= cleanRecursive(child, false);
+          final Regexp<T> cleanChild= cleanRecursive(child, false);
           if (cleanChild != null) {
             newChildren.add(cleanChild);
           }
@@ -61,7 +60,7 @@ public class EmptyChildren<T> implements RegularExpressionCleaner<T> {
         if (newChildren.size() == 1) {
           return newChildren.get(0);
         }
-        Regexp<T> newRegexp= Regexp.<T>getMutable();
+        final Regexp<T> newRegexp= Regexp.<T>getMutable();
         newRegexp.setInterval(regexp.getInterval());
         newRegexp.setType(regexp.getType());
         newRegexp.getChildren().addAll(newChildren);

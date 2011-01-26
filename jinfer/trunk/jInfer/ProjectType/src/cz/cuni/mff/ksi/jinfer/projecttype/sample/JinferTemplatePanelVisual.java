@@ -31,6 +31,7 @@ import org.openide.filesystems.FileUtil;
  * JPanel which defines first step in new jInfer project wizard.
  * @author sviro
  */
+@SuppressWarnings("PMD.SingularField")
 public class JinferTemplatePanelVisual extends JPanel implements DocumentListener {
 
   public static final String PROP_PROJECT_NAME = "projectName";

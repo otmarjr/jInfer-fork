@@ -18,10 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * replaces nested concatenations is resulting regular expressions.
@@ -31,14 +28,14 @@ import java.util.List;
  */
 public class NestedConcatenation<T> implements RegularExpressionCleaner<T> {
   @Override
-  public Regexp<T> cleanRegularExpression(Regexp<T> regexp) {
+  public Regexp<T> cleanRegularExpression(final Regexp<T> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
       case LAMBDA:
         return regexp;
       case ALTERNATION:
       case PERMUTATION:
-        Regexp<T> newRegexp= Regexp.<T>getMutable();
+        final Regexp<T> newRegexp= Regexp.<T>getMutable();
         newRegexp.setInterval(regexp.getInterval());
         newRegexp.setType(regexp.getType());
         for (Regexp<T> child : regexp.getChildren()) {
@@ -47,7 +44,7 @@ public class NestedConcatenation<T> implements RegularExpressionCleaner<T> {
         newRegexp.setImmutable();
         return newRegexp;
       case CONCATENATION:
-        Regexp<T> newRegexp2= Regexp.<T>getMutable();
+        final Regexp<T> newRegexp2= Regexp.<T>getMutable();
         newRegexp2.setInterval(regexp.getInterval());
         newRegexp2.setType(regexp.getType());
         for (Regexp<T> child : regexp.getChildren()) {

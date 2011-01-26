@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.MethodArgumentCouldBeFinal")
 public class UserInteractive<T> implements AutomatonSimplifier<T> {
 
   private static final Logger LOG = Logger.getLogger(UserInteractive.class);
@@ -50,7 +51,7 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
   @Override
   public Automaton<T> simplify(Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException {
     List<State<T>> mergeLst;
-    Transformer<Step<T>, String> t = new Transformer<Step<T>, String>() {
+    final Transformer<Step<T>, String> t = new Transformer<Step<T>, String>() {
 
       @Override
       public String transform(Step<T> step) {
@@ -102,7 +103,7 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
         selectTwo = true;
       }
 
-      if (panel.shallAskUser() == false) {
+      if (!panel.shallAskUser()) {
         break;
       }
     } while (!BaseUtils.isEmpty(mergeLst));

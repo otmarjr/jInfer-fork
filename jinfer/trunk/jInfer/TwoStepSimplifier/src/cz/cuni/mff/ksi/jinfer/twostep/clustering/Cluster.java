@@ -14,10 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.clustering;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,17 +27,18 @@ import java.util.Set;
  * @author anti
  */
 public class Cluster<T> {
+
   private T representant;
   private final Set<T> members;
 
   public Cluster() {
-    this.members= new LinkedHashSet<T>();
-    this.representant= null;
+    this.members = new LinkedHashSet<T>();
+    this.representant = null;
   }
 
   public Cluster(final T representant) {
     this();
-    this.representant= representant;
+    this.representant = representant;
     this.members.add(representant);
   }
 
@@ -85,7 +84,7 @@ public class Cluster<T> {
     sb.append("representant: ");
     sb.append(this.representant);
     sb.append("\nmembers: ");
-    for (T member: this.members) {
+    for (T member : this.members) {
       sb.append(member);
     }
     return sb.toString();

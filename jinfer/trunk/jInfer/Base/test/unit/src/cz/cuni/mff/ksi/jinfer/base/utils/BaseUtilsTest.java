@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 /**
  * @author vektor
  */
-@SuppressWarnings("PMD.SystemPrintln")
+@SuppressWarnings({"PMD.SystemPrintln", "PMD.DataflowAnomalyAnalysis"})
 public class BaseUtilsTest {
 
   @Test(expected = IllegalArgumentException.class)

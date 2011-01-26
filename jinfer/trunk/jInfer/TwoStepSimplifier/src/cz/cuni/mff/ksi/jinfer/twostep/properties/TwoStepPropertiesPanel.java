@@ -31,6 +31,7 @@ import javax.swing.DefaultComboBoxModel;
  * Properties panel for TwoStepSimplifierFactory.
  * @author anti
  */
+@SuppressWarnings({"PMD.SingularField", "PMD.UnusedFormalParameter", "PMD.MethodArgumentCouldBeFinal"})
 public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;

@@ -19,10 +19,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained;
 
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -31,10 +27,8 @@ import static org.junit.Assert.*;
  *
  * @author anti
  */
+@SuppressWarnings("PMD.SystemPrintln")
 public class CleanerChainedFactoryTest {
-
-  public CleanerChainedFactoryTest() {
-  }
 
   /**
    * Test of create method, of class CleanerChainedFactory.
@@ -42,8 +36,8 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testCreate() {
     System.out.println("create");
-    ChainedFactory instance = new ChainedFactory();
-    RegularExpressionCleaner<String> result = instance.<String>create();
+    final ChainedFactory instance = new ChainedFactory();
+    final RegularExpressionCleaner<String> result = instance.<String>create();
     assertNotNull(result);
   }
 
@@ -53,9 +47,9 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    ChainedFactory instance = new ChainedFactory();
-    String expResult = "TwoStepRegularExpressionCleanerChained";
-    String result = instance.getName();
+    final ChainedFactory instance = new ChainedFactory();
+    final String expResult = "TwoStepRegularExpressionCleanerChained";
+    final String result = instance.getName();
     assertEquals(expResult, result);
   }
 
@@ -65,9 +59,9 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetModuleDescription() {
     System.out.println("getModuleDescription");
-    ChainedFactory instance = new ChainedFactory();
-    String expResult = "RegularExpressionCleanerChained";
-    String result = instance.getModuleDescription();
+    final ChainedFactory instance = new ChainedFactory();
+    final String expResult = "RegularExpressionCleanerChained";
+    final String result = instance.getModuleDescription();
     assertFalse(expResult.equals(result));
   }
 
@@ -77,8 +71,8 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetCapabilities() {
     System.out.println("getCapabilities");
-    ChainedFactory instance = new ChainedFactory();
-    List<String> result = instance.getCapabilities();
+    final ChainedFactory instance = new ChainedFactory();
+    final List<String> result = instance.getCapabilities();
     assertNotNull(result);
     assertTrue(result.isEmpty());
   }
@@ -89,9 +83,9 @@ public class CleanerChainedFactoryTest {
   @Test
   public void testGetUserModuleDescription() {
     System.out.println("getUserModuleDescription");
-    ChainedFactory instance = new ChainedFactory();
-    String expResult = "RegularExpressionCleanerChained";
-    String result = instance.getUserModuleDescription();
+    final ChainedFactory instance = new ChainedFactory();
+    final String expResult = "RegularExpressionCleanerChained";
+    final String result = instance.getUserModuleDescription();
     assertNotNull(result);
     assertFalse(expResult.equals(result));
     assertFalse(result.isEmpty());

@@ -75,6 +75,7 @@ public final class TestUtils {
    * Returns a simple textual representation of specified regexp, fit for using
    * in unit tests.
    */
+  @SuppressWarnings("PMD.MissingBreakInSwitch")
   public static String regexpToStr(final Regexp<AbstractStructuralNode> r) {
     switch (r.getType()) {
       case TOKEN:

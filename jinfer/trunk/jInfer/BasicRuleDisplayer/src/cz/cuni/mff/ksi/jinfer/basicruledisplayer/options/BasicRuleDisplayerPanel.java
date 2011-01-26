@@ -27,6 +27,7 @@ import org.openide.util.NbPreferences;
  *
  * @author vektor
  */
+@SuppressWarnings({"PMD.SingularField", "PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
 public final class BasicRuleDisplayerPanel extends JPanel {
 
   private static final long serialVersionUID = 1211214L;

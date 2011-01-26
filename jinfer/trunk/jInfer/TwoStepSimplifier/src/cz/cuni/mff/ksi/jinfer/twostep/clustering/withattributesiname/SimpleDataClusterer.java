@@ -38,7 +38,7 @@ public class SimpleDataClusterer implements Clusterer<SimpleData> {
   }
   
   @Override
-  public void add(SimpleData item) {
+  public void add(final SimpleData item) {
     if (clusters.isEmpty()) {
       clusters.add(
               new Cluster<SimpleData>(item)
@@ -49,7 +49,7 @@ public class SimpleDataClusterer implements Clusterer<SimpleData> {
   }
 
   @Override
-  public void addAll(Collection<SimpleData> items) {
+  public void addAll(final Collection<SimpleData> items) {
     for (SimpleData item : items) {
       this.add(item);
     }
@@ -60,7 +60,7 @@ public class SimpleDataClusterer implements Clusterer<SimpleData> {
   }
 
   @Override
-  public SimpleData getRepresentantForItem(SimpleData item) {
+  public SimpleData getRepresentantForItem(final SimpleData item) {
     if (clusters.get(0).isMember(item)) {
       return clusters.get(0).getRepresentant();
     }

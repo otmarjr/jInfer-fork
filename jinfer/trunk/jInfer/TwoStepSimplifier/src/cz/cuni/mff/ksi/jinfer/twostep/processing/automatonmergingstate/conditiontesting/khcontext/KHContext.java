@@ -57,22 +57,23 @@ public class KHContext<T> implements MergeConditionTester<T> {
    * @param k
    * @param h
    */
-  public KHContext(int k, int h) {
+  public KHContext(final int k, final int h) {
     this.k= k;
     this.h= h;
     checkConstraits();
   }
 
-  public void setKH(int k, int h) {
+  public void setKH(final int k, final int h) {
     this.k= k;
     this.h= h;
     checkConstraits();
   }
   
-  private List<List<Step<T>>> findKHContexts(int _k, final Step<T> step, final Map<State<T>, Set<Step<T>>> reverseDelta) {
+  private List<List<Step<T>>> findKHContexts(final int _k,
+          final Step<T> step, final Map<State<T>, Set<Step<T>>> reverseDelta) {
     final List<List<Step<T>>> result= new LinkedList<List<Step<T>>>();
     if (_k == 1) {
-      List<Step<T>> d= new LinkedList<Step<T>>();
+      final List<Step<T>> d= new LinkedList<Step<T>>();
       d.add(step);
       result.add(d);
       return result;
@@ -95,7 +96,7 @@ public class KHContext<T> implements MergeConditionTester<T> {
     }
     return BaseUtils.<List<Step<T>>>filter(result, new BaseUtils.Predicate<List<Step<T>>>() {
       @Override
-      public boolean apply(List<Step<T>> argument) {
+      public boolean apply(final List<Step<T>> argument) {
         return argument.size() == _k;
       }
     });
@@ -104,7 +105,6 @@ public class KHContext<T> implements MergeConditionTester<T> {
   @Override
   public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) {
     checkConstraits();
-    final Map<State<T>, Set<Step<T>>> delta= automaton.getDelta();
     final Map<State<T>, Set<Step<T>>> reverseDelta= automaton.getReverseDelta();
     final List<List<List<State<T>>>> alternatives= new ArrayList<List<List<State<T>>>>();
 
@@ -122,7 +122,7 @@ public class KHContext<T> implements MergeConditionTester<T> {
     if ((context1.size() != k)||(context2.size() != k)) {
       return Collections.<List<List<State<T>>>>emptyList();
     }
-    List<List<State<T>>> result= new ArrayList<List<State<T>>>();
+    final List<List<State<T>>> result= new ArrayList<List<State<T>>>();
 
     boolean totalSame= true;
     for (int i = 0; i < k; i++) {
@@ -149,7 +149,7 @@ public class KHContext<T> implements MergeConditionTester<T> {
     if (totalSame) {
       return Collections.<List<List<State<T>>>>emptyList();
     }
-    List<List<List<State<T>>>> r= new ArrayList<List<List<State<T>>>>();
+    final List<List<List<State<T>>>> r= new ArrayList<List<List<State<T>>>>();
     r.add(result);
     return r;
   }

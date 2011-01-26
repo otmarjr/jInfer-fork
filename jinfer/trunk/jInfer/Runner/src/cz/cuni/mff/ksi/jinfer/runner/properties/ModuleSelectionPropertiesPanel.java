@@ -31,6 +31,7 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author sviro
  */
+@SuppressWarnings("PMD.SingularField")
 public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463434L;

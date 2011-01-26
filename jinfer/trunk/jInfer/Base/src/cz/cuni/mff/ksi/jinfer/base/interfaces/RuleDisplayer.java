@@ -32,5 +32,5 @@ public interface RuleDisplayer extends NamedModule {
    * @param panelName Name of the rule displayer window.
    * @param rules Rules to be displayed in rule displayer.
    */
-  public void createDisplayer(final String panelName, final List<Element> rules);
+  void createDisplayer(final String panelName, final List<Element> rules);
 }

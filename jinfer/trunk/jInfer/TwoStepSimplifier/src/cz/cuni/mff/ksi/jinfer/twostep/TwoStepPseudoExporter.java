@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import java.util.Collections;
@@ -65,7 +64,8 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
   }
 
   @Override
-  public void start(List<Element> grammar, SchemaGeneratorCallback callback) throws InterruptedException {
+  public void start(final List<Element> grammar,
+          final SchemaGeneratorCallback callback) throws InterruptedException {
 
     LOG.info("got " + grammar.size() + " rules.");
 
@@ -104,8 +104,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
     return sb.toString();
   }
 
-  private String regexpToString(Regexp<AbstractStructuralNode> regexp) {
-    StringBuilder sb = new StringBuilder();
+  private String regexpToString(final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
           return structuralToString(regexp.getContent()) + regexp.getInterval().toString();
@@ -123,17 +122,20 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
 
   }
 
-  private String structuralToString(AbstractStructuralNode node) {
+  private String structuralToString(final AbstractStructuralNode node) {
     if (node.isSimpleData()) {
       return "#CDATA";
     }
     return node.getName();
   }
 
-  private String childrenListToString(final List<Regexp<AbstractStructuralNode>> children, final String delimiter) {
+  // TODO anti Can this be converted to CollectionToString.colToString() ?
+  private String childrenListToString(
+          final List<Regexp<AbstractStructuralNode>> children,
+          final String delimiter) {
     final StringBuilder sb = new StringBuilder();
     sb.append('(');
-    Iterator<Regexp<AbstractStructuralNode>> it= children.iterator();
+    final Iterator<Regexp<AbstractStructuralNode>> it= children.iterator();
     while (it.hasNext()) {
       final Regexp<AbstractStructuralNode> child= it.next();
       sb.append(regexpToString(child));
@@ -145,9 +147,9 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
     return sb.toString();
   }
 
-  private String attributesToString(List<Attribute> attributes) {
-    StringBuilder sb = new StringBuilder();
-    Iterator<Attribute> it = attributes.iterator();
+  private String attributesToString(final List<Attribute> attributes) {
+    final StringBuilder sb = new StringBuilder();
+    final Iterator<Attribute> it = attributes.iterator();
     while (it.hasNext()) {
       final Attribute att= it.next();
       sb.append("\t");
@@ -161,10 +163,10 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
     return sb.toString();
   }
 
-  private String contentToString(List<String> content) {
-    StringBuilder sb = new StringBuilder();
+  private String contentToString(final List<String> content) {
+    final StringBuilder sb = new StringBuilder();
     sb.append("{");
-    Iterator<String> it = content.iterator();
+    final Iterator<String> it = content.iterator();
     while (it.hasNext()) {
       final String ct = it.next();
       sb.append(ct);

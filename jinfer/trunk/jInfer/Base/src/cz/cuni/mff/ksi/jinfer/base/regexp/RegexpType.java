@@ -36,7 +36,7 @@ public enum RegexpType {
    */
   PERMUTATION,
   /**
-   * Lambda, λ, empty string
+   * Lambda, λ, empty string.
    */
   LAMBDA;
 }

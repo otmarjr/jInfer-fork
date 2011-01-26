@@ -57,17 +57,34 @@ The main class implementing \code{SchemaGenerator} inference interface and simul
 	\item Preprocessing
 	\item Own export to string representation of XSD
 \end{enumerate}
-Method \code{start} first creates instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such which elements should be globally defined and which element is the top level element (TODO rio how is this element called in XML??).\\
+Method \code{start} first creates instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such which elements should be globally defined and which element is the top level element (TODO rio how is this element called in XML??). This instance is kept as a member variable of module to be used during the whole export process.\\
 
-Afterwards, it recursively traverses global elements followed by other elements starting at the top level element and for each it creates element's XSD string representation.\\
+Afterwards, \code{start} method recursively traverses global elements followed by other elements starting at the top level element and for each it creates element's XSD string representation.\\
 
 \subsection{Preprocessing}
 
-TODO rio
+As mentioned before, preprocessing is implemented in \code{Preprocessor} class and its functions are following.
+\begin{itemize}
+	\item Decide which elements should be defined globally.
+	\item Remove unused elements.
+	\item Find the top level element.
+	\item Find an instance of element by its name.
+\end{itemize}
+
+Constructor of \code{Preprocessor} class gets elements and a number, defining minimal number of occurrences of an element to be defined. It first topologically sorts input elements to decide which one is the top level element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occurred). Finally, for each element it decides whether mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal number of occurrences supplied on input.\\
+
+Results of preprocessing are provided by public methods of \code{Preprocessor} class. For details see their JavaDoc.\\
+
 
 \subsection{Own export}
 
-TODO rio\\
+Own XSD export is performed in module's \code{start} function right after the preprocessing.\\
+
+Useful helper class to handle indentation of text in a resulting XSD is named \code{Indentator}. Instance of this class is a member variable of the module (alike instance of \code{Preprocessor}), it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append}) or indented (method \code{indent}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation} and \code{decreaseIndentation}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString} will return string representation of resulting XSD.\\
+
+First, global elements are exported. For each element, its type is defined as a global type. TODO rio example
+
+After global elements, others are exported. 
 
 Code exporting attributes is in \code{attributeToString()}. First thing this method does is to assess the domain of a particular atribute: this is a map indexed by attribute values containing number of occurences for each such attribute. Type definition of an attribute is generated in the \code{DomainUtils.getAttributeType()} method. Based on a user setting, this might decide to enumerate all possible values of this attribute using the \code{(a|b|c)} notation, otherwise it just returns \code{\#CDATA}.\\
 Attribute requiredness is assessed based on \code{required} metadata presence. If an attribute is not deemed required, it might have a default value: if a certain value is prominent in the attribute domain (based on user setting again), it is declared default.

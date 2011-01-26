@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 
 /**
@@ -167,6 +168,33 @@ public final class EqualityUtils {
       }
     }
 
+    return true;
+  }
+
+  /**
+   * Compare two intervals if they have equal minimum and maximum.
+   * Intervals must not be null. If both intervals are unbounded and they have the same minimum,
+   * they are considered equal.
+   * @param i1 First interval to be compared.
+   * @param i2 Second interval to be compared.
+   * @return True if minimums and maximums of both intervals match, false otherwise.
+   */
+  public static boolean sameIntervals(final RegexpInterval i1, final RegexpInterval i2) {
+    if (i1 == null || i2 == null) {
+      throw new IllegalArgumentException("Both intervals must not be null");
+    } else if (i1.isUnbounded() && !i2.isUnbounded()) {
+      return false;
+    } else if (!i1.isUnbounded() && i2.isUnbounded()) {
+      return false;
+    } else if (!i1.isUnbounded() && !i2.isUnbounded()) {
+      if (i1.getMax() != i2.getMax()) {
+        return false;
+      }
+    }
+    
+    if (i1.getMin() != i2.getMin()) {
+      return false;
+    }
     return true;
   }
 }

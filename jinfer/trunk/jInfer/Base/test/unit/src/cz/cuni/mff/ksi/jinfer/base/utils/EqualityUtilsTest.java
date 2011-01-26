@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import java.util.HashMap;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -266,6 +267,101 @@ public class EqualityUtilsTest {
             | EqualityUtils.IGNORE_CONTENT_TYPE;
     final boolean expResult = true;
     final boolean result = EqualityUtils.sameSimpleData(e1, e2, ignore);
+    assertEquals(expResult, result);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testSameIntervalsNull() {
+    System.out.println("same intevals null");
+    final RegexpInterval i1 = null;
+    final RegexpInterval i2 = null;
+    final boolean expResult = true;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testSameIntervalsUnbounded() {
+    System.out.println("same intevals unbounded");
+    int min = 5;
+    final RegexpInterval i1 = RegexpInterval.getUnbounded(min);
+    final RegexpInterval i2 = RegexpInterval.getUnbounded(min);
+    final boolean expResult = true;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testSameIntervalsUnbounded2() {
+    System.out.println("same intevals unbounded 2");
+    final RegexpInterval i1 = RegexpInterval.getUnbounded(2);
+    final RegexpInterval i2 = RegexpInterval.getUnbounded(333);
+    final boolean expResult = false;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testSameIntervalsUnbounded3() {
+    System.out.println("same intevals unbounded 3");
+    final int min = 5;
+    final RegexpInterval i1 = RegexpInterval.getBounded(min, 100);
+    final RegexpInterval i2 = RegexpInterval.getUnbounded(min);
+    final boolean expResult = false;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testSameIntervalsUnbounded4() {
+    System.out.println("same intevals unbounded 4");
+    final RegexpInterval i1 = RegexpInterval.getKleeneCross();
+    final RegexpInterval i2 = RegexpInterval.getUnbounded(1);
+    final boolean expResult = true;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
+    assertEquals(expResult, result);
+  }
+  
+  @Test
+  public void testSameIntervalsOnce() {
+    System.out.println("same intevals once");
+    final RegexpInterval i1 = RegexpInterval.getOnce();
+    final RegexpInterval i2 = RegexpInterval.getOnce();
+    final boolean expResult = true;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testSameIntervalsInstance() {
+    System.out.println("same intevals same instance");
+    final RegexpInterval i1 = RegexpInterval.getOnce();
+    final boolean expResult = true;
+    final boolean result = EqualityUtils.sameIntervals(i1, i1);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testSameIntervalsBounded() {
+    System.out.println("same intevals bounded");
+    final int min = 42;
+    final int max = 42;
+    final RegexpInterval i1 = RegexpInterval.getBounded(min, max);
+    final RegexpInterval i2 = RegexpInterval.getBounded(min, max);
+    final boolean expResult = true;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testSameIntervalsBounded2() {
+    System.out.println("same intevals bounded 2");
+    final int min = 42;
+    final int max = 42;
+    final RegexpInterval i1 = RegexpInterval.getBounded(min, max);
+    final RegexpInterval i2 = RegexpInterval.getBounded(min, max+max);
+    final boolean expResult = false;
+    final boolean result = EqualityUtils.sameIntervals(i1, i2);
     assertEquals(expResult, result);
   }
 }

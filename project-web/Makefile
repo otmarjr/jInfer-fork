@@ -28,7 +28,7 @@ htaccess:
 
 pdfs:
 	mkdir -p output/modules
-	for i in `ls modules/*.pdf`; do cp modules/$$i output/modules/$$i; done
+	for i in `ls modules/*.pdf`; do cp $$i output/$$i; done
 
 %.html: %.html_
 	$(CPP) $< > output/$@

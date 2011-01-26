@@ -23,7 +23,8 @@ style:
 	cp style.css output/style.css
 
 pdfs:
-	cp *.pdf output
+	mkdir -p output/modules
+	cp modules/*.pdf output/modules/
 
 %.html: %.html_
 	$(CPP) $< > output/$@

@@ -58,22 +58,22 @@ This is the module containing data structures, interfaces and logic shared acros
 
 \section{Structure}
 
-Description of \jmodule{Base} structure will partially mirror its JavaDoc documentation. For more detailed information, refer to it directly.\\
+Description of \jmodule{Base} structure will partially mirror its JavaDoc documentation (\cite{javadoc}). For more detailed information, refer to it directly.\\
 
-\jmodule{Base} contains logic for Log4j initialization in \code{Installer} class. Configuration of the overall logging granularity level (NetBeans options integration) is contained in \code{cz.cuni.mff.ksi.jinfer.base.options} package. Shared jInfer graphics is contained in the \code{cz.cuni.mff.ksi.jinfer.base.graphics} and \code{cz.cuni.mff.ksi.jinfer.base.graphics.icons} packages.
+\jmodule{Base} contains logic for Log4j (\cite{log4j}) initialization in \code{Installer} class. Configuration of the overall logging granularity level (NetBeans options integration) is contained in \code{cz.cuni.mff.ksi.jinfer.base.options} package. Shared jInfer graphics is contained in the \code{cz.cuni.mff.ksi.jinfer.base.graphics} and \code{cz.cuni.mff.ksi.jinfer.base.graphics.icons} packages.
 
 \subsection{Data structures}
 
 Regular expression representation is contained in \code{cz.cuni.mff.ksi.jinfer.base.regexp} package. Most important class is of course \code{Regexp}, assisted by an enum of its type \code{RegexpType} and representation of its interval \code{RegexpInterval}.\\
 XML node representation is described by interfaces in \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes} package and more-less concrete implementations in \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes} package.\\
-Finite state automata representation is contained in the \cite{cz.cuni.mff.ksi.jinfer.base.automaton} package.\\
-Refer to \ref{archdoc} to get an accurate description of all these representations.\\
+Finite state automata representation is contained in the \code{cz.cuni.mff.ksi.jinfer.base.automaton} package.\\
+Refer to \cite{archdoc} to get an accurate description of all these representations.\\
 
 Miscellaneous shared classes are contained in \code{cz.cuni.mff.ksi.jinfer.base.objects}. For example, \code{Input} is used to provide the \jmodule{Initial Grammar Generator} with input data. \code{Pair} is a generic class binding two object together in a \emph{pair}.
 
 \subsection{Interfaces}
 
-Apart from interfaces contained in already discussed \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes} package, there is an important group of interfaces contained in \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package: the \emph{inference} interfaces. They come in two flavours: the actual inference interface, and its callback. For a comprehensive description of them and their interaction refer again to \ref{archdoc}.\\
+Apart from interfaces contained in already discussed \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes} package, there is an important group of interfaces contained in \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package: the \emph{inference} interfaces. They come in two flavours: the actual inference interface, and its callback. For a comprehensive description of them and their interaction refer again to \cite{archdoc}.\\
 
 There is one more package containing interfaces: \code{cz.cuni.mff.ksi.jinfer.base.interfaces}. There are a few groups of them.
 \begin{itemize}
@@ -100,14 +100,14 @@ Useful logic for the whole framework is focused in the \code{cz.cuni.mff.ksi.jin
 
 \section{Data flow}
 
-This is not an inference module and there is no real data flow in it. Refer to \ref{archdoc} to understand the inference process described by interfaces from \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package.
+This is not an inference module and there is no real data flow in it. Refer to \cite{archdoc} to understand the inference process described by interfaces from \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package.
 
 \section{Extensibility}
 
 From one point of view, extensibility of \jmodule{Base} means creating service providers implementing inference or other interfaces. This is described in the documentation for respective modules that use these interfaces.\\
 On the other hand, if there is a need to share data structures, interfaces or logic across multiple developed modules (for example between custom schema generator and simplifier), it is advised to create a module similar to \jmodule{Base} instead of changing it directly.
 
-%\nocite{*}
+\nocite{*}
 \newpage
 \bibliographystyle{alpha}
 \bibliography{literature}

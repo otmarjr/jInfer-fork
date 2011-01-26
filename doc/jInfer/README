@@ -3,6 +3,10 @@ If you want to edit architecture, go to architecture/architecture.tex. Use make 
 If you want to start writing new documentation pdf, copy architecture.tex and Makefile into new subdirectory, read makefile to find .eps files line and change it accordingly. Also all: target needs change.
 
 Open doc/jInfer/Makefile and add yout subfolder to the targets!
+You must name your xxx.tex with same name as directory:
+bubu/bubu.tex CORRECT
+bubu/mydoc.tex WRONG
+thanx
 
 To produce nice images, use graphviz by copy&paste from *.gv files in architecture/. Note the fontname setting!
 To use Computer Modern Typewriter in graphviz, font name is SFTT1000.

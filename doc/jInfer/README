@@ -8,6 +8,14 @@ bubu/bubu.tex CORRECT
 bubu/mydoc.tex WRONG
 thanx
 
+Package names like \code{cz.cuni.mff.ksi.jinfer.base.interfaces.objects} are hyphenated automatically on . positions.
+If you need to help latex in hypenation either, use \. on place, where he can hypenate:
+\code{cz.cu\.ni.mff.ksi.j\.in\.fer.ba\.se.in\.ter\.fa\.ces.ob\.ject}
+constant names are not done automatically:
+\code{CAN\_HANDLE\_COMPLEX\_REGEXPS} will probably fail. Give latex hint by
+\code{CAN\_\.HANDE\_\.COMPLEX\_\.REGEXPS}. You may use \. in text too. But for text use, there is latex's default \-, it hy-
+phens words by inserting - sign. (\. inserts nothing).
+
 To produce nice images, use graphviz by copy&paste from *.gv files in architecture/. Note the fontname setting!
 To use Computer Modern Typewriter in graphviz, font name is SFTT1000.
 

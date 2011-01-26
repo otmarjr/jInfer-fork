@@ -23,19 +23,25 @@ import java.awt.Paint;
 import org.apache.commons.collections15.Transformer;
 
 /**
- *
+ * Transformer for automaton vertex color.
  * @author sviro
  */
 public class NodeColorTransformer<T> implements Transformer<State<T>, Paint> {
 
   private final Color color;
+  private final Color finalColor;
 
   public NodeColorTransformer() {
     this.color = ColorUtils.getColorProperty(ColorUtils.NODE_COLOR_PROP, ColorUtils.NODE_COLOR_DEFAULT);
+    this.finalColor = ColorUtils.getColorProperty(ColorUtils.FINAL_COLOR_PROP, ColorUtils.FINAL_COLOR_DEFAULT);
   }
 
   @Override
-  public Paint transform(State<T> state) {
+  public Paint transform(final State<T> state) {
+    if (state.getFinalCount() > 0) {
+      return finalColor;
+    }
+    
     return color;
   }
 }

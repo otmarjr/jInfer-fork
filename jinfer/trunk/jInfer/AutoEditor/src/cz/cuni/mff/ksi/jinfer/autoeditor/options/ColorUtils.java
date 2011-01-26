@@ -29,6 +29,8 @@ public final class ColorUtils {
   public static final Color BG_COLOR_DEFAULT = Color.decode("-1");
   public static final String NODE_COLOR_PROP = "node.color";
   public static final Color NODE_COLOR_DEFAULT = Color.decode("-13861729");
+  public static final String FINAL_COLOR_PROP = "final.color";
+  public static final Color FINAL_COLOR_DEFAULT = Color.decode("-1936099");
 
   private ColorUtils() {
   }

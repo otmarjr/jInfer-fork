@@ -1,0 +1,20 @@
+digraph twostep_flow {
+	rankdir = LR;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10, style = filled, fillcolor = white];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	InitialGrammar [style = invis, label = "", width = 0 ];
+	SimplifiedGrammar [style = invis, label = "", width = 0];
+	
+subgraph cluster_0 {
+	label ="TwoStepSimplifier";
+	style = "filled,rounded";
+	Clusterer;
+	ClusterProcessor;
+	RegularExpressionCleaner;
+	Clusterer -> ClusterProcessor;
+	ClusterProcessor -> RegularExpressionCleaner;
+}
+	InitialGrammar -> Clusterer [label = "Initial\nGrammar"];
+	RegularExpressionCleaner -> SimplifiedGrammar [label = "Simplified\ngrammar"];
+}

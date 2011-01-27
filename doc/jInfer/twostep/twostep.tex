@@ -122,6 +122,8 @@ Cluster processor \code{AutomatonMergingState} then receives factories of \code{
 Cluster processor then may create as many instances of submodule classes as it needs (maybe simplifying more than one automaton).
 Thorough this document, we will mention only worker interface when describing submodules, since all factory interfaces are designed same way just described.
 
+
+
 \section{Structure}
 \jmodule{TwoStepSimplfier} is implemented in package \code{cz.cuni.mff.ksi.jinfer.twostep}.
 Module is implemented in two classes: \code{TwoStepSimplifier} (main logic), \code{TwoStepSimplifierFactory} (lookups, interface to other modules).
@@ -203,7 +205,38 @@ Now we will examine submodules for clustering, processing and cleaning.
 TODO anti sentinel cant be on left side
 TODO anti sentinel processing
 
-\subsection{Clusterer module}
+\section{Preferences}
+All settings provided by \jmodule{TwoStepSimplifier} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.twostep.properties} package.
+It is possible to:
+\begin{itemize}
+	\item select \jmodule{Clusterer} submodule implementation from those installed
+	\item select \jmodule{ClusterProcessor} submodule implementation from those installed
+	\item select \jmodule{RegularExpressionCleaner} submodule implementation from those installed
+\end{itemize}
+
+\section{Data flow}
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{twostep_flow}
+	\caption{TwoStep data flow} \label{twostep_flow}
+\end{figure}
+\begin{enumerate}
+	\item On input there is Initial Grammar, which is ruled into \jmodule{Clusterer}.
+	\item Then, each cluster is sent to submodule \jmodule{ClusterProcessor}, which returns regular expression for that cluster.
+	\item Regular expression is sent to \jmodule{RegularExpressionCleaner} submodule for cleaning.
+	\item From each cluster processing, regular expression is added to the list of simplified grammar rules.
+	\item List of simplifier rules is returned (simplified grammar).
+\end{enumerate}
+Process is illustrated on fig. \ref{twostep_flow}
+
+\section{Extensibility}
+If you are willing to, you can replaced each of three submodules of \jmodule{TwoStepSimplifier}.
+It may be useful to replace default \jmodule{ClustererWithAttributes} implementation to clever one.
+And regular expression cleaning will be probably target of adding new implementations, too.
+We recommend replacing other parts at lower levels, however.
+You will need to replace \jmodule{ClusterProcessor} only if you want to write infering method that is not based on merging state algorithm (or NFA's at all).
+If this is not your case, read the rest of this document and find proper place where to place your logic.
+
+\section{Clusterer module}
 Lets start by example, let input document(s) contain XML:
 \begin{verbatim}
 <person name="john" surname="smith">

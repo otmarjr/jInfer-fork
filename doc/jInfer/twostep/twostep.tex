@@ -48,58 +48,33 @@ Module dependencies:   & AutoEditor, Base, JUNG, Lookup \\ \hline
 Public packages:       & \\ \hline
 \end{tabular}
 
-\section{Using of factory pattern}
-TODO anti/vektor move to architecture as described in twostepTODO.pdf
-\begin{figure}
-  \centering
-	\subfigure[Same instance of class returned by NetBeans in two successive inference runs]
-	{
-	  \centering\includegraphics[scale=\myscale]{factory_pattern1}
-    \label{factory_pattern1}
-  }
-	\subfigure[Factory solution of singleton lookup class problem]
-	{
-	  \centering\includegraphics[scale=\myscale]{factory_pattern2}
-    \label{factory_pattern2}
-  }
-\end{figure}
-\jmodule{TwoStepSimplifier} is divided into three submodules, which are then divided into submodules and so on.
-Each submodule is simply class, properly anotated.
-User selects proper classes - submodules to work in chain on inference.
-Classes are then, in runtime looked up by using NetBeans lookup mechanism (see \cite[p. 16]{archdoc}).
-But NetBeans holds one instance of each class, that may be looked upon.
-When user runs inference first time, classes are looked up and used.
-Maybe class members are initialised, instances are in some state after inference completes.
-Then, user clicks run button again, and same instances of classes are returned by lookups.
-Oops, theese are not freshly created instances, using them as they are may cause harm.
-The problem is ilustrated on fig. \ref{factory_pattern1}.
+\section{Introduction}
+With \jmodule{TwoStepSimplifier} we provide user complex solution of infering problem.
+This is the only one simplifier shipped with jInfer, but it has many replaceable submodules of which we implement more alternatives in basic bundle.
+The best we implement is \cite{ahonen} $k,h$-context method od infering grammar rules.
+This process is split into submodules with generic automaton implementation, so it is easy to plug-in any other automaton merging state algorithm.
+In this document, we will walk over all modules and submodules in simplifier and describe them briefly.
 
-There are basically two solutions:
-\begin{itemize}
-	\item force each class (submodule) that is being looked up in inference process, to implement
-some sort of cleanup method, that would restart it into fresh state and make it ready to use by another 
-inference run,
-	\item or create new instances of theese classes in each inference run and make singleton classes (those which NetBeans return by lookups) their factory classes.
-\end{itemize}
-We decided for the latter approach (as ilustrated on fig. \ref{factory_pattern2}
-It enables us not only to produce fresh class instance in each inference run, but also factory classes implement obligatory
-module methods such as \code{getName}, \code{getDescription} and so on, which are really same in each inference run.
-Each submodule is then defined by (at least) two interfaces.
-One is the factory interface, like this one:
+\section{Using of factory pattern}
+But in first, we will stay a while at factory pattern usage.
+In \jmodule{TwoStepSimplifier} we use factory pattern (as described in \cite{archdoc}) to divide module into submodules.
+As service providing classes are kept singleton, we make them factories:
 \begin{verbatim}
 public interface AutomatonSimplifierFactory extends 
                      NamedModule, Capabilities, UserModuleDescription {
   <T> AutomatonSimplifier<T> create();
 }
 \end{verbatim}
-It extends \code{NamedModule} with its modules describing methods:
+The real submodule interface (called familiarly worker interface) is the \code{AutomatonSimplifier<T>} interface (of wich instance is returned by factory). It is now not important how worker interface looks like, lets examine the factory.
+
+In \code{TwoStepSimplifier} we design service providing factory interfaces so that they extends extends \code{NamedModule} with module describing methods:
 \begin{verbatim}
 String getName();
 String getDisplayName();
 String getModuleDescription();
 \end{verbatim}
-It extends \code{Capabilities}, thus each module have to answer, if it has some capabilities.
-And, in TwoStep we often extend \code{UserModuleDescription}, which defines method:
+And to extend \code{Capabilities}, thus each module have to answer, if it has some capabilities.
+And to extend \code{UserModuleDescription} interface, which defines method:
 \begin{verbatim}
 String getUserModuleDescription();
 \end{verbatim}
@@ -111,10 +86,7 @@ But simplifying does not depend on type of symbol of automaton, so interface \co
 is also generic as simplifier can simplify automaton of any java type symbol.
 Factory interface deals with this by defining \code{create()} method generic too.
 
-Second interface is the one, which is returned by \code{create()} method.
-That is the interface, which defines real work cycle with submodule (in example it is \code{AutomatonSimplifier<T>}).
-We call this interface the worker interface of submodule.
-Usage of this factory pattern follows the routine:
+Our usage of this factory pattern follows the routine:
 \begin{verbatim}
 final Properties p = RunningProject.getActiveProjectProps(getName());
 
@@ -123,12 +95,12 @@ AutomatonSimplifierFactory f = ModuleSelectionHelper.lookupImpl(AutomatonSimplif
 
 AutomatonSimplifier<AbstractStructuralNode> autSmp = f.<AbstractStructuralNode>create();
 ...
-give some work to autSmp
+result= autSmp.work(something_to_process);
 \end{verbatim}
-If our module has some submodules, we often implement lookups for submodules implementations in our own factory create method.
-Worker class receives factories of all submodules it needs as a constructor parameters.
+If one module has some submodules, we implement lookups for submodule implementations in our own factory \code{create} method.
+Worker class receives factories of all of its submodules as a constructor parameters.
 
-Lets look on \code{AutomatonMergingStateFactory}, that is factory of module, which has AutomatonSimplifier as submodule.
+Lets look on \code{AutomatonMergingStateFactory}, that is factory of module, which has \jmodule{AutomatonSimplifier} as submodule.
 Its create method looks like this (shortened): 
 \begin{verbatim}
 @Override
@@ -150,26 +122,12 @@ Cluster processor \code{AutomatonMergingState} then receives factories of \code{
 Cluster processor then may create as many instances of submodule classes as it needs (maybe simplifying more than one automaton).
 Thorough this document, we will mention only worker interface when describing submodules, since all factory interfaces are designed same way just described.
 
-\section{TwoStepSimplifier module}
-\jmodule{TwoStepSimplifier} is inspired by \cite{1802522} design. Inference proceeds in two steps:
-\begin{enumerate}
-	\item clustering of element instances into clusters of (probably) same elements
-	\item infering regular expression for each element from examples of element contents taken from all elements in cluster
-\end{enumerate}
-Task of clustering is dedicated to \jmodule{Clusterer} submodule, and task of infering regular expression for each cluster is dedicated to \jmodule{ClusterProcessor} submodule. We will examine both of them.
-There is also third submodule called \jmodule{RegularExpressionCleaner} actually, its purpose is just to beatify output regular expressions, no inference logic is implemented there. 
-Modules are drawn on fig. \ref{twostep_modules}.
-\begin{figure}
-	\centering\includegraphics[scale=\myscale]{twostep_modules}
-	\caption{Submodules of TwoStep simplifier} \label{twostep_modules}
-\end{figure}
-We provide one \jmodule{Clusterer} and 4 \jmodule{ClusterProcessor} implementations.
-Each of those will be explained further in this document.
-
+\section{Structure}
 \jmodule{TwoStepSimplfier} is implemented in package \code{cz.cuni.mff.ksi.jinfer.twostep}.
 Module is implemented in two classes: \code{TwoStepSimplifier} (main logic), \code{TwoStepSimplifierFactory} (lookups, interface to other modules).
-Factory class implements \code{Simplifier} interface (defined in package \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference}).
-Thus has main method called \code{start} which receives Initial Grammar in form of
+Latter one is registered as service provider (and implements) of \code{Simplifier} interface (defined in package \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference}).
+
+It has main method called \code{start} which receives Initial Grammar in form of
 \begin{verbatim}
 final List<Element> grammar
 \end{verbatim}
@@ -186,9 +144,24 @@ void finished(final List<Element> grammar);
 \end{verbatim}
 Thus simplifier receives initial grammar and returns simplified grammar, both represented same way - as elements.
 
-\code{TwoStepSimplifierFactory} in method \code{start()} created new \code{TwoStepSimplifier} class instance, providing three factories of submodules to its constructor.
+\code{TwoStepSimplifierFactory} in method \code{start()} creates new \code{TwoStepSimplifier} class instance, providing three factories of submodules to its constructor.
 Then it calls \code{simplify(initialGrammar)} method on this instance and its result passes as parameter to callback function.
 Thats all, the magic comes in \code{TwoStepSimplifier} class.
+
+\jmodule{TwoStepSimplifier} is inspired by \cite{1802522} design. Inference proceeds in two steps:
+\begin{enumerate}
+	\item clustering of element instances into clusters of (probably) same elements
+	\item infering regular expression for each element from examples of element contents taken from all elements in cluster
+\end{enumerate}
+Task of clustering is dedicated to \jmodule{Clusterer} submodule, and task of infering regular expression for each cluster is dedicated to \jmodule{ClusterProcessor} submodule. We will examine both of them.
+There is also third submodule called \jmodule{RegularExpressionCleaner} actually, its purpose is just to beatify output regular expressions, no inference logic is implemented there. 
+Modules are drawn on fig. \ref{twostep_modules}.
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{twostep_modules}
+	\caption{Submodules of TwoStep simplifier with their implementations} \label{twostep_modules}
+\end{figure}
+We provide one \jmodule{Clusterer} and 4 \jmodule{ClusterProcessor} implementations.
+Each of those will be explained further in this document.
 
 Method \code{TwoStepSimplifier.simplify()} does basically this:
 \begin{verbatim}
@@ -227,8 +200,8 @@ Finally, regular expression cleaning is done in submodule and new \code{Element}
 
 Now we will examine submodules for clustering, processing and cleaning.
 
-TODO sentinel cant be on left side
-TODO sentinel processing
+TODO anti sentinel cant be on left side
+TODO anti sentinel processing
 
 \subsection{Clusterer module}
 Lets start by example, let input document(s) contain XML:
@@ -309,7 +282,7 @@ It clusters them by name (case insensitive).
 
 To rehearse, there are main clusters for elements, for each main cluster there are two helper clusterer - one for attribute clusters and one for simple data clusters.
 
-\subsection{ClusterProcessor submodule}
+\subsection{ClusterProcessor module}
 Cluster processor takes rules of one cluster of element and somehow obtains regular expression for that set of elements. It returns one rule - element with name set to desired name of element in schema (not all elements in cluster have to have same name, if advanced clustering scheme is used, then processor has to choose right name for the resulting element) and with subnodes set to regular expression infered.
 It process attributes of all elements in cluster to obtain meaningful schema attribute specification and theese attributes has to attach to resulting element.
 

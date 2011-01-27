@@ -24,7 +24,7 @@
 \setlength{\textheight}{24cm}
 \setlength{\textwidth}{18cm}
 
-\def\mftitle{jInfer TwoStepSimplifier design and implementation}
+\def\mftitle{jInfer TwoStepSimplifier Module Description}
 \def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
 \def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
 \def\mfplacedate{Praha, 2011}
@@ -48,6 +48,7 @@ Module dependencies:   & AutoEditor, Base, JUNG, Lookup \\ \hline
 Public packages:       & \\ \hline
 \end{tabular}
 
+%#### INTRO ############################################
 \section{Introduction}
 With \jmodule{TwoStepSimplifier} we provide user complex solution of infering problem.
 This is the only one simplifier shipped with jInfer, but it has many replaceable submodules of which we implement more alternatives in basic bundle.
@@ -55,7 +56,8 @@ The best we implement is \cite{ahonen} $k,h$-context method od infering grammar 
 This process is split into submodules with generic automaton implementation, so it is easy to plug-in any other automaton merging state algorithm.
 In this document, we will walk over all modules and submodules in simplifier and describe them briefly.
 
-\section{Using of factory pattern}
+%#### FACTORY ############################################
+\section{Using of factory pattern} \label{section_factory}
 But in first, we will stay a while at factory pattern usage.
 In \jmodule{TwoStepSimplifier} we use factory pattern (as described in \cite{archdoc}) to divide module into submodules.
 As service providing classes are kept singleton, we make them factories:
@@ -123,7 +125,7 @@ Cluster processor then may create as many instances of submodule classes as it n
 Thorough this document, we will mention only worker interface when describing submodules, since all factory interfaces are designed same way just described.
 
 
-
+%#### STRUCTURE ############################################
 \section{Structure}
 \jmodule{TwoStepSimplfier} is implemented in package \code{cz.cuni.mff.ksi.jinfer.twostep}.
 Module is implemented in two classes: \code{TwoStepSimplifier} (main logic), \code{TwoStepSimplifierFactory} (lookups, interface to other modules).
@@ -205,63 +207,8 @@ Now we will examine submodules for clustering, processing and cleaning.
 TODO anti sentinel cant be on left side
 TODO anti sentinel processing
 
-\section{Preferences}
-All settings provided by \jmodule{TwoStepSimplifier} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.twostep.properties} package.
-It is possible to:
-\begin{itemize}
-	\item select \jmodule{Clusterer} submodule implementation from those installed
-	\item select \jmodule{ClusterProcessor} submodule implementation from those installed
-	\item select \jmodule{RegularExpressionCleaner} submodule implementation from those installed
-\end{itemize}
-
-\section{Data flow}
-\begin{figure}
-	\centering\includegraphics[scale=\myscale]{twostep_flow}
-	\caption{TwoStep data flow} \label{twostep_flow}
-\end{figure}
-\begin{enumerate}
-	\item On input there is Initial Grammar, which is ruled into \jmodule{Clusterer}.
-	\item Then, each cluster is sent to submodule \jmodule{ClusterProcessor}, which returns regular expression for that cluster.
-	\item Regular expression is sent to \jmodule{RegularExpressionCleaner} submodule for cleaning.
-	\item From each cluster processing, regular expression is added to the list of simplified grammar rules.
-	\item List of simplifier rules is returned (simplified grammar).
-\end{enumerate}
-Process is illustrated on fig. \ref{twostep_flow}
-
-\section{Extensibility}
-If you are willing to, you can replaced each of three submodules of \jmodule{TwoStepSimplifier}.
-It may be useful to replace default \jmodule{ClustererWithAttributes} implementation to clever one.
-And regular expression cleaning will be probably target of adding new implementations, too.
-We recommend replacing other parts at lower levels, however.
-You will need to replace \jmodule{ClusterProcessor} only if you want to write infering method that is not based on merging state algorithm (or NFA's at all).
-If this is not your case, read the rest of this document and find proper place where to place your logic.
-
-\section{Clusterer module}
-Lets start by example, let input document(s) contain XML:
-\begin{verbatim}
-<person name="john" surname="smith">
-  <info>
-    Some text
-    <note/>
-  </info>
-</person>
-<inform>
-  Another text
-  <note/>
-</inform>
-<person>
-    <information>
-      Some text
-      <note/>
-    </information>
-</person>
-\end{verbatim}
-We examine info-like named elements.
-If we cluster elements sipmly by their name, we get one cluster with info element, another cluster with inform element and another one with information element.
-As \cite{1802522} suggests, we should consider element content in clustering process.
-If we take care of element content, elements info, inform and information would look same (in means of node tree inside them - text node and element note).
-Elements information and info have even same context (inside person element).
-
+%#### STRUCTURE->Clusterer ############################################
+\subsection{Clusterer module}
 We implement clustering in \code{cz.cuni.mff.ksi.jinfer.twostep.clustering} package.
 One cluster is represented by class \code{Cluster<T>} with \code{T} as type of clustered items.
 This class simply holds java set of member of cluster and one of the references is held also in \code{representant} member.
@@ -278,7 +225,7 @@ If no such cluster exists (item was not added for clustering before), we recomme
 Missing item will probably  indicate error in algorithm rather than normal workflow.
 One can pull clusters (\code{List<Cluster<T>{}>}) from clusterer by calling \code{getClusters()} method.
 
-Basic work usage of clusterer is:
+Basic work usage with clusterer is:
 \begin{verbatim}
 Clusterer <T> c = new MyContextClusterer<T>();
 c.addAll(initialGrammar);
@@ -289,6 +236,7 @@ or
 c.getRepresentantForItem(x);
 \end{verbatim}
 
+%#### STRUCTURE->Clusterer->WithAttributes ############################################
 \subsubsection{ClustererWithAttributes extended interface}
 Maybe you noticed that whole clusterer interface and cluster class are generic.
 They may be used as design pattern not only for clustering elements in inference process.
@@ -297,24 +245,10 @@ It adds method \code{List<Cluster<S>{}> getAttributeClusters(T representant)}, i
 type \code{T} (that is representant of some main cluster) has some "attribute" clusters associated with it.
 Attribute clusters are of type \code{S} and can be retrieved by calling \code{getAttributeClusters(x)}.
 
-Finally, we use this scheme to implement clusterer \code{Iname<AbstractStructuralNode, Attribute>} class, which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes.
-Clustering is done based on elements \code{getName} equality test (ignore case).
-For each rule (element), it is first clustered by finding cluster where representant has same name - or create new cluster with this element as representant.
-Then we process right side of this element rule (that are nodes from \code{getSubnodes}).
-Since right side of rule is always concatenation, we simply take \code{.getSubnodes().getTokens()} list and iterate through it.
-Each node on right side, is examined:
-\begin{itemize}
-  \item if it is simple data throw it to \code{SimpleDataClusterer} class which is associated with main element (of which this is right side), which does nothing more, than holds all of simple data in one cluster. But in future it may be replaced to cluster simple data somehow, to obtain meaningful content models in schemas.
-  \item if it is element and it is tagged as sentinel by metada - search main clusters to find cluster with representant of same \code{getName()}, or create new cluster with this sentinel as representant. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it.
-  \item do nothing otherwise, since it is element, that has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in main initial grammar list, thus it is already processed or will be on schedule in clustering.
-\end{itemize}
-Attributes of element are processed through helper attribute clusterer, which is created for each element cluster.
-We have bunch of elements of same name in cluster and one attribute clusterer associated with this bunch.
-This attribute clusterer is given all attributes instances encountered in all elements that are in bunch.
-It clusters them by name (case insensitive).
+We provide one implementation of this interface.
+It is described in \ref{section_Iname}.
 
-To rehearse, there are main clusters for elements, for each main cluster there are two helper clusterer - one for attribute clusters and one for simple data clusters.
-
+%#### STRUCTURE->ClusterProcessor ############################################
 \subsection{ClusterProcessor module}
 Cluster processor takes rules of one cluster of element and somehow obtains regular expression for that set of elements. It returns one rule - element with name set to desired name of element in schema (not all elements in cluster have to have same name, if advanced clustering scheme is used, then processor has to choose right name for the resulting element) and with subnodes set to regular expression infered.
 It process attributes of all elements in cluster to obtain meaningful schema attribute specification and theese attributes has to attach to resulting element.
@@ -333,27 +267,106 @@ Rules themself contain information about which elements to process, but clustere
 about the topic.
 Clusterer can tell you representant for any element in whole input (not only those elements in rules, but also those that may be on right side of rules), clusterer (if it is with attributes) has information about attributes <of each cluster.
 
-We will now shortly describe each cluster processor implementation we've got.
+We describe each cluster processor implementation we've got in sections \ref{section_PassRepresentant} through \ref{section_AutomatonMergingState}.
 
-\subsubsection{PassRepresentant cluster processor}
+%#### STRUCTURE->RegularExpressionCleaner ############################################
+\subsection{RegularExpressionCleaner module}
+Last we examine \code{RegularExpressionCleaner} interface.
+Purpose of this submodule is only to make output regular expression corrections, to make them nicer.
+For example it is common that converting automaton to regular expression by state elimination produces nested concatenations such like $(name, (person, id))$.
+To convert such expression into $(name, person, id)$, one can implement this interface and connect it to work in chain.
+Interface is definition is straightforward:
+\begin{verbatim}
+public interface RegularExpressionCleaner<T> {
+  Regexp<T> cleanRegularExpression(final Regexp<T> regexp);
+}
+\end{verbatim}
+Given regular expression, return regular expression.
+Converting of regular expression is commonly a recursive task and all our implementations work this way.
+
+%#### PREFERENCES ############################################
+\section{Preferences}
+All settings provided by \jmodule{TwoStepSimplifier} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.twostep.properties} package.
+It is possible to:
+\begin{itemize}
+	\item select \jmodule{Clusterer} submodule implementation from those installed
+	\item select \jmodule{ClusterProcessor} submodule implementation from those installed
+	\item select \jmodule{RegularExpressionCleaner} submodule implementation from those installed
+\end{itemize}
+
+%#### DATA FLOW ############################################
+\section{Data flow}
+\begin{figure}
+	\centering\includegraphics[scale=1]{twostep_flow}
+	\caption{TwoStep data flow} \label{twostep_flow}
+\end{figure}
+\begin{enumerate}
+	\item On input there is Initial Grammar, which is ruled into \jmodule{Clusterer}.
+	\item Then, each cluster is sent to submodule \jmodule{ClusterProcessor}, which returns regular expression for that cluster.
+	\item Regular expression is sent to \jmodule{RegularExpressionCleaner} submodule for cleaning.
+	\item From each cluster processing, regular expression is added to the list of simplified grammar rules.
+	\item List of simplifier rules is returned (simplified grammar).
+\end{enumerate}
+Process is illustrated on fig. \ref{twostep_flow}
+
+%#### EXTENSIBILITY ############################################
+\section{Extensibility}
+If you are willing to, you can replaced each of three submodules of \jmodule{TwoStepSimplifier}.
+It may be useful to replace default \jmodule{ClustererWithAttributes} implementation to clever one.
+And regular expression cleaning will be probably target of adding new implementations, too.
+We recommend replacing other parts at lower levels, however.
+You will need to replace \jmodule{ClusterProcessor} only if you want to write infering method that is not based on merging state algorithm (or NFA's at all).
+If this is not your case, read the rest of this document and find proper place where to place your logic.
+
+%#### SUBMODULES ############################################
+\section{Submodules implementations}
+%#### SUBMODULES->Iname ############################################
+\subsection{Iname (ClusteterWithAttributes)} \label{section_Iname}
+We cluster elements in \code{Iname<AbstractStructuralNode, Attribute>} class, which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes.
+Clustering is done based on elements \code{getName} equality test (ignore case).
+For each rule (element), it is first clustered by finding cluster where representant has same name - or create new cluster with this element as representant.
+Then we process right side of this element rule (that are nodes from \code{getSubnodes}).
+Since right side of rule is always concatenation, we simply take \code{.getSubnodes().getTokens()} list and iterate through it.
+Each node on right side, is examined:
+\begin{itemize}
+  \item if it is simple data throw it to \code{SimpleDataClusterer} class which is associated with main element (of which this is right side), which does nothing more, than holds all of simple data in one cluster. But in future it may be replaced to cluster simple data somehow, to obtain meaningful content models in schemas.
+  \item if it is element and it is tagged as sentinel by metada - search main clusters to find cluster with representant of same \code{getName()}, or create new cluster with this sentinel as representant. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it.
+  \item do nothing otherwise, since it is element, that has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in main initial grammar list, thus it is already processed or will be on schedule in clustering.
+\end{itemize}
+Attributes of element are processed through helper attribute clusterer, which is created for each element cluster.
+We have bunch of elements of same name in cluster and one attribute clusterer associated with this bunch.
+This attribute clusterer is given all attributes instances encountered in all elements that are in bunch.
+It clusters them by name (case insensitive).
+
+To rehearse, there are main clusters for elements, for each main cluster there are two helper clusterer - one for attribute clusters and one for simple data clusters.
+
+%#### SUBMODULES->PassRepresentant ############################################
+\subsection{PassRepresentant (ClusterProcessor)} \label{section_PassRepresentant}
 Simple example to read. For each cluster return its representant as a rule to be in schema.
 This has nothing to do with infering grammar, it is just proof of submodules concept.
 Input documents are not valid against this odd grammar.
 Do not use this in practice, just read the code to understand the bare minimum needed to implement submodule.
 
-\subsubsection{Alternations cluster processor}
+%#### SUBMODULES->Alternations ############################################
+\subsection{Alternations (ClusterProcessor)} \label{section_Alternations}
 This processor simply gets all right sides from elements in cluster, puts them in one big list and creates alternation regular expression with this list as children.
 That is, it creates one big rule with alternation of every positive example observed.
 No generalization is done at all.
 
-\subsubsection{Trie cluster processor}
+%#### SUBMODULES->Trie ############################################
+\subsection{Trie (ClusterProcessor)} \label{section_Trie}
 This processor takes all rules in a cluster, treats them like strings and builds a prefix tree (a ``trie") of them. More precisely, it takes the first rule and delares it to be a long branch (concatenation of tokens) in a newly created tree. After that, it adds the remaining rules one by one as branches like this: as long as it can follow an existing branch, it follows it. As soon as the newly added branch starts to differ, it ``branches off" (creates an alternation at that point) the existing tree and hangs the rest of the newly added rule there. Repeating this process creates a prefix tree describing all the rules in the cluster.
 TODO vektor and then what? how do you get regexp from that.
 
-\subsubsection{AutomatonMergingState cluster processor}
+%#### SUBMODULES->AutomatonMergingState ############################################
+\subsection{AutomatonMergingState (ClusterProcessor)} \label{section_AutomatonMergingState}
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{automaton_merging_state_modules}
 	\caption{Submodules of AutomatonMergingState cluster processor} \label{automaton_merging_state_modules}
+\end{figure}
+\begin{figure}
+	\centering\includegraphics[scale=1]{automaton_merging_state_flow}
+	\caption{Data flow of AutomatonMergingState cluster processor} \label{automaton_merging_state_flow}
 \end{figure}
 \jmodule{AutomatonMergingState} is implementation of merging state algorithm on nondeterministic finite automaton (see package \code{cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate}).
 It creates prefix-tree automaton (PTA) from positive examples - right sides of rules given.
@@ -367,6 +380,46 @@ Clone constructing is done by converting each symbol in source automaton to rege
 
 Regexp automaton is then passed into second submodule called \jmodule{RegexpAutomatonSimplifier}.
 Its job is to derive regular expression from automaton, such that automaton and regular expression represents same language.
+The data flow is on fig. \ref{automaton_merging_state_flow}.
+
+\subsubsection{AutomatonSimplifier module}
+\jmodule{AutomatonSimplifier} module has its worker interface defined as:
+\begin{verbatim}
+public interface AutomatonSimplifier<T> {
+  Automaton<T> simplify(final Automaton<T> inputAutomaton, 
+                        final SymbolToString<T> symbolToString) throws InterruptedException;
+}
+\end{verbatim}
+Given input automaton it returns automaton, there is nothing magical on it.
+Interface is defined as generic, implementation don't have to be, but there is no reason to not make them generic.
+When implementation needs to present automaton to user, however, it needs some string representation of symbols to display on automaton transitions.
+For this reason, the second parameter, \code{symbolToString} (implementation of \code{SymbolToString} interaface) is given.
+It is responsible for converting symbol to string.
+To \jmodule{AutomatonSimplifier} it is passed from \jmodule{AutomatonMergingState} cluster processor, where we know that symbols are of type \code{AbstractStructuralNode}, so we implement \code{SymbolToString} by using \code{getName()} method on nodes and pass it down to generic \code{AutomatonSimplfifier} submodule.
+
+By this genericity, simplifier can be used to perfom same algorithms for simplifying not only to infer rules for elements, but maybe also to infer patterns strings for content model of attributes.
+The actual implementation of this still waits for its developer to come.
+
+TODO how automaton works?
+
+Lets go on to implementations of \jmodule{AutomatonSimplifier}.
+
+\subsubsection{RegexpAutomatonSimplifier submodule}
+Purpose of \jmodule{RegexpAutomatonSimplifier} is to obtain regular expression from given automaton.
+Interface for doing this is thus simple:
+\begin{verbatim}
+public interface RegexpAutomatonSimplifier<T> {
+  Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton, 
+                     final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException;
+}
+\end{verbatim}
+Once again we are encountering \code{symbolToString} with same purpose as before, if submodule would need to present automaton to user
+it has to be able to convert symbols of (at runtime) unknown type to strings.
+
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{state_removal_modules}
+	\caption{Modules of StateRemoval.} \label{state_removal_modules}
+\end{figure}
 
 \jmodule{AutomatonMergingState} has one more submodule, the \jmodule{MergeConditionTester}, which is not called directly by \jmodule{AutomatonMergingState}.
 It is at disposal for implementations of \code{AutomatonSimplifier} interface for testing, whether two states in automaton are equivalent and should be merged into one state.
@@ -415,27 +468,33 @@ return new Element(
 \end{verbatim}
 Whole submodule structure of \jmodule{AutomatonMergingState} cluster processor is drawn on fig. \ref{automaton_merging_state_modules}.
 
-\subsubsection{AutomatonSimplifier submodule}
-\jmodule{AutomatonSimplifier} module has its worker interface defined as:
-\begin{verbatim}
-public interface AutomatonSimplifier<T> {
-  Automaton<T> simplify(final Automaton<T> inputAutomaton, 
-                        final SymbolToString<T> symbolToString) throws InterruptedException;
-}
-\end{verbatim}
-Given input automaton it returns automaton, there is nothing magical on it.
-Interface is defined as generic, implementation don't have to be, but there is no reason to not make them generic.
-When implementation needs to present automaton to user, however, it needs some string representation of symbols to display on automaton transitions.
-For this reason, the second parameter, \code{symbolToString} (implementation of \code{SymbolToString} interaface) is given.
-It is responsible for converting symbol to string.
-To \jmodule{AutomatonSimplifier} it is passed from \jmodule{AutomatonMergingState} cluster processor, where we know that symbols are of type \code{AbstractStructuralNode}, so we implement \code{SymbolToString} by using \code{getName()} method on nodes and pass it down to generic \code{AutomatonSimplfifier} submodule.
+\subsection{NestedConcatention (RegularExpressionCleaner)}
+This cleaner does exactly what we have just described.
+It converts nested concatenations into flat ones.
 
-By this genericity, simplifier can be used to perfom same algorithms for simplifying not only to infer rules for elements, but maybe also to infer patterns strings for content model of attributes.
-The actual implementation of this still waits for its developer to come.
+\subsection{Null (RegularExpressionCleaner)}
+This cleaner just returns regexp it receives and does nothing.
+Plug this one into chain, if you want to omit this step of inference.
 
-TODO how automaton works?
+\subsection{EmptyChildren (RegularExpressionCleaner)}
+Wipes out regular expressions of type: concatenation, alternation, permutation, which have empty \code{children} member.
+For example some pitty inferring method produces unnecessary empty regexps in regexp tree as:
+$$
+(name, (), (person, id))
+$$
+There is one empty concatenation/alternation/permutation with no sense.
+This is wiped out by this cleaner.
 
-Lets go on to implementations of \jmodule{AutomatonSimplifier}.
+\subsection{Chained (RegularExpressionCleaner)}
+Enables user to chain more cleaners with output from first one plugged as input into second one and so one.
+Thus regular expression from inference can pass through \jmodule{EmptyChildren} and them through \jmodule{NestedConcatenation} cleaners and then it is returned.
+
+
+
+
+
+
+
 
 \paragraph{Greedy automaton simplifier} We implement greedy strategy of automaton simplifying in class \code{Greedy}.
 It simply asks given \code{MergeConditionTester} if it can merge any of automaton states and merges states until there are no states to be merged:
@@ -461,22 +520,7 @@ We user \jmodule{AutoEditor} module described in \cite{autoeditordoc}.
 To make reader more happy, we include one screenshot of automaton visualization on picture \ref{screenshot_viz}.
 TODO anti screenshot for happy reader
 
-\subsubsection{RegexpAutomatonSimplifier submodule}
-Purpose of \jmodule{RegexpAutomatonSimplifier} is to obtain regular expression from given automaton.
-Interface for doing this is thus simple:
-\begin{verbatim}
-public interface RegexpAutomatonSimplifier<T> {
-  Regexp<T> simplify(final RegexpAutomaton<T> inputAutomaton, 
-                     final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException;
-}
-\end{verbatim}
-Once again we are encountering \code{symbolToString} with same purpose as before, if submodule would need to present automaton to user
-it has to be able to convert symbols of (at runtime) unknown type to strings.
 
-\begin{figure}
-	\centering\includegraphics[scale=\myscale]{state_removal_modules}
-	\caption{Modules of StateRemoval.} \label{state_removal_modules}
-\end{figure}
 \paragraph{StateRemoval regexp automaton simplifier}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
 This is implemented in \code{StateRemoval} class (on fig. \ref{state_removal_modules}) which implements \code{RegexpAutomatonSimplifier} interface.
@@ -493,41 +537,8 @@ State removal calls this submodule and removes state returned.
 \paragraph{Weighted} We implement one orderer, called \code{Weighted}.
 It is simple heuristic - weights all states (weight = sum of {in | out | loop}-transition regular expression lengths) and returns state with lowest weight.
 
-\subsection{RegularExpressionCleaner module}
-Last we examine \code{RegularExpressionCleaner} interface.
-Purpose of this submodule is only to make output regular expression corrections, to make them nicer.
-For example it is common that converting automaton to regular expression by state elimination produces nested concatenations such like $(name, (person, id))$.
-To convert such expression into $(name, person, id)$, one can implement this interface and connect it to work in chain.
-Interface is definition is straightforward:
-\begin{verbatim}
-public interface RegularExpressionCleaner<T> {
-  Regexp<T> cleanRegularExpression(final Regexp<T> regexp);
-}
-\end{verbatim}
-Given regular expression, return regular expression.
-Converting of regular expression is commonly a recursive task and all our implementations work this way.
-Lets look at them.
 
-\paragraph{NestedConcatention}
-This cleaner does exactly what we have just described.
-It converts nested concatenations into flat ones.
 
-\paragraph{Null}
-This cleaner just returns regexp it receives and does nothing.
-Plug this one into chain, if you want to omit this step of inference.
-
-\paragraph{EmptyChildren}
-Wipes out regular expressions of type: concatenation, alternation, permutation, which have empty \code{children} member.
-For example some pitty inferring method produces unnecessary empty regexps in regexp tree as:
-$$
-(name, (), (person, id))
-$$
-There is one empty concatenation/alternation/permutation with no sense.
-This is wiped out by this cleaner.
-
-\paragraph{Chained}
-Enables user to chain more cleaners with output from first one plugged as input into second one and so one.
-Thus regular expression from inference can pass through \jmodule{EmptyChildren} and them through \jmodule{NestedConcatenation} cleaners and then it is returned.
 
 
 Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.

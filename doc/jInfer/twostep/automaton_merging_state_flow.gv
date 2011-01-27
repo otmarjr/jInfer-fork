@@ -1,0 +1,25 @@
+digraph automatonmergingstate_flow {
+	rankdir = LR;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 17.6, style = filled, fillcolor = white];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 17.6];
+	size = "7.08, 7.08";
+
+	Cluster [style = invis, label = "", width = 0 ];
+	RegularExpression [style = invis, label = "", width = 0];
+	
+subgraph cluster_0 {
+	fontsize = 17.6;
+	label ="AutomatonMergingState";
+	style = "filled,rounded";
+	createPTA [label = "Construct PTA", style = "filled,rounded"];
+	AutomatonSimplifier;
+	createRAut [label = "Convert to\nRegexpAutomaton", style ="filled,rounded"];
+	RegexpAutomatonSimplifier;
+
+	createPTA -> AutomatonSimplifier [label = "automaton"];
+	AutomatonSimplifier -> createRAut [label = "simplified\nautomaton"];
+	createRAut -> RegexpAutomatonSimplifier [label = "regexp\nautomaton"];
+}
+	Cluster -> createPTA [label = "Cluster"];
+	RegexpAutomatonSimplifier -> RegularExpression [label = "Regular\nexpression"];
+}

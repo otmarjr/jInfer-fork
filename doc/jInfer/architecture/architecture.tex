@@ -38,7 +38,7 @@
 \maketitle
 \noindent Target audience: developers willing to extend jInfer.
 
-\noindent \emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}\\
+\noindent\emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}\\
 
 The description of jInfer architecture will be divided into 3 main views: the data view, the process view and the plaform view.
 The data view will commence by describing the data structures, namely representations of regular expressions and XML elements, attributes and simple data. The notions of a \emph{rule} and a \emph{grammar} will be explained, along with the finite state automata representation we use.
@@ -55,7 +55,7 @@ For general information on regular expressions, please refer to \cite{wikiregexp
 All classes pertaining to regular expressions can be found in the package \code{cz.cuni.mff.ksi.jinfer.base.regexp}.
 In jInfer, we use extended regular expressions as they give us nicer syntax (and easier programming).
 
-Regular expression is implemented as class \code{Regexp<T>} with supplementing classes \code{RegexpInterval} and \code{RegexpType}.
+Regular expression is implemented as class \code{Regexp<T>} with supplementing classes \code{RegexpInterval} and \code{Reg\.exp\.Type}.
 Each \code{Regexp<T>} instance has one of the enum \code{RegexpType} type:
 \begin{itemize}
 	\item Lambda ($\lambda$) - empty string (also called $\epsilon$ in literature),
@@ -64,7 +64,7 @@ Each \code{Regexp<T>} instance has one of the enum \code{RegexpType} type:
 	\item Alternation - a choice between one or more regular expressions. Eg. $(a | b | c | d)$,
 	\item Permutation - shortcut for all possible permutations of regular expressions. Our syntax to write down permutation is $(a\& b\& c\& d)$.
 \end{itemize}
-Type of regexp is held in \code{type} member in class \code{Regexp<T>} and can be tested by calling methods \code{isLambda()}, \code{isToken()} etc.
+Type of regexp is in \code{type} member in class \code{Regexp<T>} and can be tested by calling methods \code{isLa\.mb\.da()}, \code{isTo\.ken()}, \code{isCon\.ca\.te\.na\.tion()}, \code{isAlt\.er\.na\.tion()}, \code{isPer\.mu\.ta\.tion()}.
 
 Each \code{Regexp<T>} instance has one instance of \code{RegexpInterval} as member.
 Class \code{RegexpInterval} represents POSIX-like intervals for expression:
@@ -104,7 +104,7 @@ Regexp has to obey constraits:
 	\item when type concatenation, alternation or permutation, content has to be null.
 \end{itemize}
 These constraits are checked by constructors, so the best way to construct new regexps is by using 
-methods \code{getToken(), getConcatenation()} etc.
+methods \code{get\.To\.ken(), get\.Con\.ca\.te\.na\.tion()} etc.
 
 For these cases, special \code{getMutable()} method is implemented to obtain regexp with none of members set. One has to fill in all properties carefully and call \code{setImmutable()} aftewards. Proper usage should be one of following:
 Regexp instance is by default created as immutable, that is, once instantiated, you cannot add more children to list of children, cannot change type, content etc. It is to prevent missuse. In special circumstances, one does not know future children of regexp in time of creation. This occurs mainly in input modules, where by parsing XML data sequentially, one does not know contents of element in time of handling start element event.
@@ -170,8 +170,8 @@ For even more generality in design, we decided to implement abstract classes in 
 As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node.
 However methods for content devising don't need to know, if they are working on infering model for content of attribute or text node.
 
-Finally, our interface/class model for representing XML nodes is drafted on fig. \ref{nodes}. Those, who are brave enough, can look on fig. \ref{nodes_full}.
-In result, \code{Element} and \code{SimpleData} have method \code{getType()} to devise type of \code{AbstractStructuralNode} variables. And \code{SimpleData} and \code{Attribute} have methods \code{getContentType()} and \code{getContent()} to work with content model.
+Finally, our interface/class model for representing XML nodes is drafted on fig. \ref{nodes}. Those, who are brave enough, can look on fig. \ref{nodes_full2}.
+In result, \code{Element} and \code{SimpleData} have method \code{getType()} to devise type of \code{Abstr\.act\.Stru\.ctu\.ral\.Node} variables. And \code{SimpleData} and \code{Attribute} have methods \code{getContentType()} and \code{getContent()} to work with content model.
 
 Class \code{Element} has two important members of course:
 \begin{itemize}
@@ -401,7 +401,7 @@ From developer's point of view, inference modules are just properly annotated cl
 	\item \code{Simplifier}
 	\item \code{SchemaGenerator}
 \end{itemize}
-A nice way to name such a class is by adding \code{-Impl} to the name of implemented interface, for example \code{SimplifierImpl}.
+A nice way to name such a class is by adding \code{-Impl} to the name of implemented interface, for example \code{Sim\.pli\.fier\.Impl}.
 Annotation required for the framework to recognize such a class as an inference module is the following
 \begin{verbatim}
 	@ServiceProvider(service = <interface>.class)
@@ -508,7 +508,7 @@ All of these metadata are of set/not set character (using \code{Boolean.TRUE} as
 \subsection{Capabilities} \label{section_capabilities}
 From time to time, modules need a flow of certain information in completely opposite way to the usual inference: they need to know what the following module can or cannot do.
 
-For this reason, inference modules extend the \code{Capabilities} interface defining a single method: \code{getCapabilities()}. This method returns a list of strings representing the abilities, or "capabilities" of this module.
+For this reason, inference modules extend the \code{Capabilities} interface defining a single method: \code{getCa\.pa\.bi\.li\.ties()}. This method returns a list of strings representing the abilities, or "capabilities" of this module.
 An inference module can query the capabilities of the \emph{next} module in the inference chain by invoking the 
 \begin{verbatim}
 RunningProject.getNextModuleCaps()
@@ -596,9 +596,47 @@ for (SchemaGenerator g : generators) {
 \end{verbatim}
 Call to \code{Lookup.getDefault().lookupAll()} will return a collection of all service providers registered to be providing the \code{SchemaGenerator} interface. This collection can be walked in some way, and on one or more of service providers methods can be called. We didn't have to actually bind providers to logic that uses their services, NB Platform took care of this for us.
 
-At this point it is important to understand that when using lookups this way, all service providers are kept as singletons. In case a provider needs to change its state during providing the service (and needs to be ``fresh" each time it is retrieved), it is best to convert this to a factory design pattern: the service provider registered is just a factory returning instances that do the actual work.
-
 See \cite{lookup_api} as the official documentation to lookup API.
+
+\subsection{Factory pattern}
+\begin{figure}
+  \centering
+	\subfigure[Same instance of class returned by NetBeans in two successive inference runs]
+	{
+	  \centering\includegraphics[scale=\myscale]{factory_pattern1}
+    \label{factory_pattern1}
+  }
+	\subfigure[Factory solution of singleton lookup class problem]
+	{
+	  \centering\includegraphics[scale=\myscale]{factory_pattern2}
+    \label{factory_pattern2}
+  }
+\end{figure}
+At this point it is important to understand that when using lookups this way, all service providers are kept as singletons. 
+We ilustrate this behaviour on \ref{factory_pattern1}, user runs inference first time, classes are looked up and used.
+When user clicks run button again, and same instances of classes are returned by lookups.
+
+In case a provider needs to change its state during providing the service (and needs to be ``fresh'' each time it is retrieved), there are two solutions:
+\begin{itemize}
+	\item force each service providing class (submodule), to implement
+some sort of cleanup method, that would restart it into fresh state and make it ready to use by another 
+inference run,
+	\item or create new instances of stateful classes in each inference run and make service providing classes (those which NetBeans return by lookups) factories.
+\end{itemize}
+We decided for the latter approach (as ilustrated on fig. \ref{factory_pattern2}
+It enables us not only to produce fresh class instance in each inference run, but also factory classes implement obligatory
+module methods such as \code{getName}, \code{getDescription} and so on, which are really same in each inference run.
+Each submodule is then defined by (at least) two interfaces.
+One is the factory interface, like this one (example from \jmodule{TwoStepSimplifier}:
+\begin{verbatim}
+public interface AutomatonSimplifierFactory extends 
+                     NamedModule, Capabilities, UserModuleDescription {
+  <T> AutomatonSimplifier<T> create();
+}
+\end{verbatim}
+Second is worker interface, in the example it is \code{AutomatonSimplifier<T>} interface.
+
+This pattern is used thorough jInfer modules to divide module into submodules.
 
 \subsection{Tokens}
 An important topic related to NB modules and their dependencies is a notion of \emph{tokens}. Imagine a situation where module \emph{M} needs \emph{someone} else to provide a certain service \emph{S}, but doesn't care who will that be. It cannot declare a direct dependency on a module containing this service provider, because it might not know such a module. Instead, \emph{M} declares a \emph{required token}. Any module providing \emph{S} will declare a \emph{provided token}, which is a simple string (usually fully qualified Java name of the interface representing \emph{S}). Later, NBP will make sure that \emph{M} can be installed in the platform only if there is at least one module providing that specific token.

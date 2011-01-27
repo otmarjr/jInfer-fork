@@ -1,20 +1,50 @@
 digraph twostep_flow {
 	rankdir = LR;
-	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10, style = filled, fillcolor = white];
-	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 14, style = filled, fillcolor = white];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 14];
+	size = "7.08, 7.08";
 
 	InitialGrammar [style = invis, label = "", width = 0 ];
 	SimplifiedGrammar [style = invis, label = "", width = 0];
 	
 subgraph cluster_0 {
+	fontsize = 14;
 	label ="TwoStepSimplifier";
 	style = "filled,rounded";
 	Clusterer;
-	ClusterProcessor;
-	RegularExpressionCleaner;
-	Clusterer -> ClusterProcessor;
-	ClusterProcessor -> RegularExpressionCleaner;
+	ClusterProcessor1 [label = "..."];
+	ClusterProcessor2 [label = "ClusterProcessor"];
+	ClusterProcessor3 [label = "ClusterProcessor"];
+	ClusterProcessor4 [label = "ClusterProcessor"];
+	ClusterProcessor5 [label = "ClusterProcessor"];
+	ClusterProcessor7 [label = "ClusterProcessor"];
+	RegularExpressionCleaner1 [label = "..."];
+	RegularExpressionCleaner2 [label = "RegularExpressionCleaner"];
+	RegularExpressionCleaner3 [label = "RegularExpressionCleaner"];
+	RegularExpressionCleaner4 [label = "RegularExpressionCleaner"];
+	RegularExpressionCleaner5 [label = "RegularExpressionCleaner"];
+	RegularExpressionCleaner7 [label = "RegularExpressionCleaner"];
+	Assembled [style = "filled,rounded", label = "assemble\nList<Element>"];
+
+	Clusterer -> ClusterProcessor1 [label = "cluster"];
+	Clusterer -> ClusterProcessor2 [label = "cluster"];
+	Clusterer -> ClusterProcessor3 [label = "cluster"];
+	Clusterer -> ClusterProcessor4 [label = "cluster"];
+	Clusterer -> ClusterProcessor5 [label = "cluster"];
+	Clusterer -> ClusterProcessor7 [label = "cluster"];
+	ClusterProcessor1 -> RegularExpressionCleaner1 [label = "regexp"];
+	ClusterProcessor2 -> RegularExpressionCleaner2 [label = "regexp"];
+	ClusterProcessor3 -> RegularExpressionCleaner3 [label = "regexp"];
+	ClusterProcessor4 -> RegularExpressionCleaner4 [label = "regexp"];
+	ClusterProcessor5 -> RegularExpressionCleaner5 [label = "regexp"];
+	ClusterProcessor7 -> RegularExpressionCleaner7 [label = "regexp"];
+	RegularExpressionCleaner1 -> Assembled [label = "regexp"];
+	RegularExpressionCleaner2 -> Assembled [label = "regexp"];
+	RegularExpressionCleaner3 -> Assembled [label = "regexp"];
+	RegularExpressionCleaner4 -> Assembled [label = "regexp"];
+	RegularExpressionCleaner5 -> Assembled [label = "regexp"];
+	RegularExpressionCleaner7 -> Assembled [label = "regexp"];
 }
 	InitialGrammar -> Clusterer [label = "Initial\nGrammar"];
-	RegularExpressionCleaner -> SimplifiedGrammar [label = "Simplified\ngrammar"];
+	Assembled -> SimplifiedGrammar [label = "Simplified\ngrammar"];
 }

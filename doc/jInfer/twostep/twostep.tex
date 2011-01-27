@@ -402,7 +402,7 @@ The actual implementation of this still waits for its developer to come.
 
 TODO how automaton works?
 
-Lets go on to implementations of \jmodule{AutomatonSimplifier}.
+Implementations of \jmodule{AutomatonSimplifier} are discussed in \ref{section_Greedy} and \ref{section_UserInteractive}.
 
 \subsubsection{RegexpAutomatonSimplifier submodule}
 Purpose of \jmodule{RegexpAutomatonSimplifier} is to obtain regular expression from given automaton.
@@ -415,17 +415,15 @@ public interface RegexpAutomatonSimplifier<T> {
 \end{verbatim}
 Once again we are encountering \code{symbolToString} with same purpose as before, if submodule would need to present automaton to user
 it has to be able to convert symbols of (at runtime) unknown type to strings.
+Our implementation of \jmodule{RegexpAutomatonSimplifier} is discussed in \ref{section_StateRemoval}
 
-\begin{figure}
-	\centering\includegraphics[scale=\myscale]{state_removal_modules}
-	\caption{Modules of StateRemoval.} \label{state_removal_modules}
-\end{figure}
-
-\jmodule{AutomatonMergingState} has one more submodule, the \jmodule{MergeConditionTester}, which is not called directly by \jmodule{AutomatonMergingState}.
+\subsubsection{MergeConditionTester submodule}
+\jmodule{AutomatonMergingState} has one more submodule, the \jmodule{MergeConditionTester}, which is not called directly by \jmodule{Au\.to\.ma\.ton\.Merg\.ing\.Sta\.te}.
 It is at disposal for implementations of \code{AutomatonSimplifier} interface for testing, whether two states in automaton are equivalent and should be merged into one state.
 
 Module \jmodule{AutomatonSimplifier} implements solution searching logic in simplifying automaton by merging states.
-One can implement ACO heuristics or MDL principle heuristics as \jmodule{AutomatonSimplifier} submodule, and can use any of \jmodule{MergeConditionTesters} provided.
+One can implement ACO heuristics or MDL principle heuristics as \jmodule{AutomatonSimplifier} submodule, and can use any of \jmodule{MergeConditionTesters} provided.\\
+
 
 Shortened code of cluster processor operation:
 \begin{verbatim}
@@ -468,15 +466,15 @@ return new Element(
 \end{verbatim}
 Whole submodule structure of \jmodule{AutomatonMergingState} cluster processor is drawn on fig. \ref{automaton_merging_state_modules}.
 
-\subsection{NestedConcatention (RegularExpressionCleaner)}
+\subsection{NestedConcatention (RegularExpressionCleaner)} \label{section_NestedConcatention}
 This cleaner does exactly what we have just described.
 It converts nested concatenations into flat ones.
 
-\subsection{Null (RegularExpressionCleaner)}
+\subsection{Null (RegularExpressionCleaner)} \label{section_Null}
 This cleaner just returns regexp it receives and does nothing.
 Plug this one into chain, if you want to omit this step of inference.
 
-\subsection{EmptyChildren (RegularExpressionCleaner)}
+\subsection{EmptyChildren (RegularExpressionCleaner)} \label{section_EmptyChildren}
 Wipes out regular expressions of type: concatenation, alternation, permutation, which have empty \code{children} member.
 For example some pitty inferring method produces unnecessary empty regexps in regexp tree as:
 $$
@@ -485,18 +483,12 @@ $$
 There is one empty concatenation/alternation/permutation with no sense.
 This is wiped out by this cleaner.
 
-\subsection{Chained (RegularExpressionCleaner)}
+\subsection{Chained (RegularExpressionCleaner)} \label{section_Chained}
 Enables user to chain more cleaners with output from first one plugged as input into second one and so one.
 Thus regular expression from inference can pass through \jmodule{EmptyChildren} and them through \jmodule{NestedConcatenation} cleaners and then it is returned.
 
-
-
-
-
-
-
-
-\paragraph{Greedy automaton simplifier} We implement greedy strategy of automaton simplifying in class \code{Greedy}.
+\subsection{Greedy (AutomatonSimplifier)} \label{section_Greedy}
+We implement greedy strategy of automaton simplifying in class \code{Greedy}.
 It simply asks given \code{MergeConditionTester} if it can merge any of automaton states and merges states until there are no states to be merged:
 \begin{verbatim}
 while (there exist pair of states that are equivalent) {
@@ -505,7 +497,7 @@ while (there exist pair of states that are equivalent) {
 \end{verbatim}
 We have implemented \emph{k,h-context} (see \cite{ahonen}) state equivalence in class \code{KHContext} (implements \code{MergeConditionTester} interface), which is used by \code{Greedy} to test mergability of states by default configuration.
 
-\paragraph{UserInteractive automaton simplifier}
+\subsection{UserInteractive (AutomatonSimplifier)} \label{section_UserInteractive}
 We have created automaton simplifier which displays user input automaton asking him to select some states to merge.
 Then it merges them and asks user again:
 \begin{verbatim}
@@ -521,7 +513,11 @@ To make reader more happy, we include one screenshot of automaton visualization 
 TODO anti screenshot for happy reader
 
 
-\paragraph{StateRemoval regexp automaton simplifier}
+\subsection{StateRemoval (RegexpAutomatonSimplifier)} \label{section_StateRemoval}
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{state_removal_modules}
+	\caption{Modules of StateRemoval.} \label{state_removal_modules}
+\end{figure}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
 This is implemented in \code{StateRemoval} class (on fig. \ref{state_removal_modules}) which implements \code{RegexpAutomatonSimplifier} interface.
 State removal works by removing states of automaton (and redirecting transitions properly) until there are last to two states - superInitial and superFinal.
@@ -534,12 +530,9 @@ It has only one method to implement: \code{getStateToRemove}.
 Given automaton, it has to return reference to one state which should be removed from automaton at first.
 State removal calls this submodule and removes state returned.
 
-\paragraph{Weighted} We implement one orderer, called \code{Weighted}.
+\subsection{Weighted (Orderer)} \label{section_Weighted}
+We implement one orderer, called \code{Weighted}.
 It is simple heuristic - weights all states (weight = sum of {in | out | loop}-transition regular expression lengths) and returns state with lowest weight.
-
-
-
-
 
 Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
 \begin{figure}
@@ -547,7 +540,7 @@ Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
 	\caption{Modules of TwoStep simplifier and their submodules. Filled classes are default selection (best of).} \label{twostep_modules_complete}
 \end{figure}
 
-%\nocite{*}
+\nocite{*}
 \newpage
 \bibliographystyle{alpha}
 \bibliography{literature}

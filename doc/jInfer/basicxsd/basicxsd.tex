@@ -82,9 +82,29 @@ Own XSD export is performed in module's \code{start} function right after the pr
 
 Useful helper class to handle indentation of text in a resulting XSD is named \code{Indentator}. Instance of this class is a member variable of the module (alike instance of \code{Preprocessor}), it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append}) or indented (method \code{indent}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation} and \code{decreaseIndentation}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString} will return string representation of resulting XSD.\\
 
-First, global elements are exported. For each element, its type is defined as a global type. TODO rio example
+First, global elements are exported. For each element, its type is defined as a global type. TODO rio example. This is done by passing global elements to \code{processGlobalElement} method.
 
-After global elements, others are exported. 
+After global elements, others are exported. To sa deje rekurzivnym priechodom so startom v korenovom elemente. Elementy, ktorych typy su definovane globalne a elementy so vstavanymi typmi, su exportovane jednoducho, uvedenim ich mena a typu. Ostatne elementy su definovane na mieste. TODO rio priklady. Na toto je potrebne zavolat metodu \code{processElement} s korenovym elementov, ako argumentom.
+
+\subsubsection{Content of elements}
+
+Spracovava sa vo funkcii \code{processElementContent}. Obsah elementu je definovany pomocou elementu element a bud pomocou jedneho zo vstavanych typov ako napriklad string, integer, positiveInteger, etc alebo je definovany vlastny.
+
+Vlastny obsah elementu je definovany bud ako simpleType alebo complexType. TODO rio priklady. Actually exporter nepodporuje konstrukcie XSD, ktore sa definuje cez simpleType, takze tento typ sa vo vysledku neobjavi. complexType moze obsahovat konstrukcie sequence a choice, v ktorych sa mozu vyskytovat dalsie elementy alebo zas tieto konstrukcie. complexType moze na konci obsahovat definicie atributov (popisane nizsie). Prazdny element je vyjadreny prazdnym complexType.
+
+Konstrukcie element, sequence a choice moze obsahovat atributy minOccurs a maxOccurs, ktore udavaju interval poctu instancii danej konstruckie v mieste definovania. TODO priklad. Moze byt zadane aj jednotlivo. Pri nezadani plati podla pravidiel XSD default hodnota 1. Tieto hodnoty sa ziskavaju z metadat pomocou funkcie getInterval definovaj na triede regexp (TODO odkaz niekam).
+
+Exporter podporuje zmiesany obsah elementov definovany atributom mixed="true". TODO priklad.
+
+\subsection{Attributes}
+
+Atributy elementu sa definuju pomocou elementu attribute and takes place at the end of complexType element. Spracovavaju sa vo funkcii \code{processElementAttributes}.
+\begin{itemize}
+	\item Built-in types like \code{string}, \code{integer}, \code{positiveInteger}, etc.
+	\item Attribute requiredness defined by attribute \code{use="required"}.
+\end{itemize}
+
+
 
 Code exporting attributes is in \code{attributeToString()}. First thing this method does is to assess the domain of a particular atribute: this is a map indexed by attribute values containing number of occurences for each such attribute. Type definition of an attribute is generated in the \code{DomainUtils.getAttributeType()} method. Based on a user setting, this might decide to enumerate all possible values of this attribute using the \code{(a|b|c)} notation, otherwise it just returns \code{\#CDATA}.\\
 Attribute requiredness is assessed based on \code{required} metadata presence. If an attribute is not deemed required, it might have a default value: if a certain value is prominent in the attribute domain (based on user setting again), it is declared default.

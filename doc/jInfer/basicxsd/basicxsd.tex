@@ -157,6 +157,51 @@ Default values for \code{minOccurs} and \code{maxOccurs} attributes are "1", if 
 <xs:element name="Person" type="PersonType" maxOccurs="3"/>
 \end{verbatim}
 
+Exporter supports types of mixed elements. Mixed element is an element that contains other elements as well as some text.
+
+\begin{verbatim}
+<mixedElement>
+  some text
+  <anotherElement/>
+  another text
+</mixedElement>
+\end{verbatim}
+
+Mixed element type is defined as \code{complexType} with attribute \code{mixed="true"}. Definition of the element from the last example may be as following.
+
+\begin{verbatim}
+<xs:element name="mixedElement">
+  <xs:complexType mixed="true">
+    <xs:sequence>
+      <xs:element name="anotherElement" type="..."/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+\end{verbatim}
+
+
+\subsection{Definition of attributes}
+
+Attributes are defined by XSD element \code{xs:attribute} with attributes \code{name}, \code{type} and optional \code{use}. Elements \code{xs:attributes} have to be placed at the end of a \code{complexType} definition.
+
+\begin{verbatim}
+<xs:element name="Person">
+  <xs:complexType>
+  ...
+  </xs:complexType>
+  <xs:attribute name="age" type="xs:positiveInteger"/>
+  <xs:attribute name="id" type="xs:string" use="required"/>
+</xs:element>
+\end{verbatim}
+
+Attribute \code{type} is one of a built-in types. If an attribute is obligatory, this is defined by specifying \code{use="required"}. 
+
+--------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 First, global elements are exported. For each element, its type is defined as a global type. TODO rio example. This is done by passing global elements to \code{processGlobalElement} method.
@@ -171,23 +216,6 @@ After global elements, others are exported by calling of method \code{processEle
 
 To sa deje rekurzivnym priechodom so startom v korenovom elemente. Elementy, ktorych typy su definovane globalne a elementy so vstavanymi typmi, su exportovane jednoducho, uvedenim ich mena a typu. Ostatne elementy su definovane na mieste. TODO rio priklady. Na toto je potrebne zavolat metodu \code{processElement} s korenovym elementov, ako argumentom.
 
-\subsubsection{Definition of elements}
-
-Spracovava sa vo funkcii \code{processElementContent}. Obsah elementu je definovany pomocou elementu element a bud pomocou jedneho zo vstavanych typov ako napriklad string, integer, positiveInteger, etc alebo je definovany vlastny.
-
-Vlastny obsah elementu je definovany bud ako simpleType alebo complexType. TODO rio priklady. Actually exporter nepodporuje konstrukcie XSD, ktore sa definuje cez simpleType, takze tento typ sa vo vysledku neobjavi. complexType moze obsahovat konstrukcie sequence a choice, v ktorych sa mozu vyskytovat dalsie elementy alebo zas tieto konstrukcie. complexType moze na konci obsahovat definicie atributov (popisane nizsie). Prazdny element je vyjadreny prazdnym complexType.
-
-Konstrukcie element, sequence a choice moze obsahovat atributy minOccurs a maxOccurs, ktore udavaju interval poctu instancii danej konstruckie v mieste definovania. TODO priklad. Moze byt zadane aj jednotlivo. Pri nezadani plati podla pravidiel XSD default hodnota 1. Tieto hodnoty sa ziskavaju z metadat pomocou funkcie getInterval definovaj na triede regexp (TODO odkaz niekam).
-
-Exporter podporuje zmiesany obsah elementov definovany atributom mixed="true". TODO priklad.
-
-\subsection{Attributes}
-
-Atributy elementu sa definuju pomocou elementu attribute and takes place at the end of complexType element. Spracovavaju sa vo funkcii \code{processElementAttributes}.
-\begin{itemize}
-	\item Built-in types like \code{string}, \code{integer}, \code{positiveInteger}, etc.
-	\item Attribute requiredness defined by attribute \code{use="required"}.
-\end{itemize}
 
 
 

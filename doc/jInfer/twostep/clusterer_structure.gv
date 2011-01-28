@@ -1,0 +1,60 @@
+digraph clusterer_structure {
+	rankdir = TB;
+	graph [fontsize = 17.6];
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 17.6, style = filled, fillcolor = white];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 17.6];
+	size = "7.08, 7.08";
+
+	Cluster [style = invis, label = "", width = 0 ];
+	RegularExpression [style = invis, label = "", width = 0];
+	
+subgraph cluster_0 {
+	label ="Main clusters\n\List<Cluster<Element>>";
+	style = "filled,rounded";
+	rank = same;
+	Element0 [label = "<name>"];
+	Element1 [label = "<data>"];
+}
+
+subgraph cluster_1 {
+	label = "SimpleData clusters\nfor <name>";
+	style = "filled,rounded";
+	SimpleData0 [label = "Lorem ipsum"];
+	SimpleData4 [label = "Text node"];
+	SimpleData5 [label = "Some name"];
+}
+subgraph cluster_2 {
+	label = "SimpleData clusters\nfor <data>";
+	style = "filled,rounded";
+	SimpleData1 [label = "Lorem ipsum"];
+}
+
+
+subgraph cluster_5 {
+	label = "Attribute clusters\nfor <name>";
+	style = "filled,rounded";
+	none [style = invis];
+}
+subgraph cluster_6 {
+	label = "Attribute clusters\n for <data>";
+	style = "filled,rounded";
+	Attribute0 [label = "first"];
+	Attribute4 [label = "last"];
+	Attribute5 [label = "mid"];
+	Attribute1 [label = "length"];
+}
+
+Element0 -> SimpleData0;
+Element0 -> SimpleData4;
+Element0 -> SimpleData5;
+Element0 -> none;
+
+
+Element1 -> SimpleData1;
+Element1 -> Attribute0;
+Element1 -> Attribute4;
+Element1 -> Attribute5;
+Element1 -> Attribute1;
+
+}
+

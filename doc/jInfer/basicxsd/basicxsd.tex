@@ -55,11 +55,11 @@ This is an implementation of a \jmodule{SchemaGenerator} exporting the inferred 
 The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl}. Process of export consists of two phases described in detail in later sections:
 \begin{enumerate}
 	\item Preprocessing
-	\item Own export to string representation of XSD
+	\item Own export to a string representation of XSD
 \end{enumerate}
-Method \code{start} first creates instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such which elements should be globally defined and which element is the top level element (TODO rio how is this element called in XML??). This instance is kept as a member variable of module to be used during the whole export process.\\
+Method \code{start} first creates instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such which elements should be globally defined and which element is the root element. This instance is kept as a member variable of module to be used during the whole export process.\\
 
-Afterwards, \code{start} method recursively traverses global elements followed by other elements starting at the top level element and for each it creates element's XSD string representation.\\
+Afterwards, \code{start} method recursively traverses global elements followed by other elements starting at the root element and for each it creates element's XSD string representation.\\
 
 \subsection{Preprocessing}
 
@@ -71,10 +71,9 @@ As mentioned before, preprocessing is implemented in \code{Preprocessor} class a
 	\item Find an instance of element by its name.
 \end{itemize}
 
-Constructor of \code{Preprocessor} class gets elements and a number, defining minimal number of occurrences of an element to be defined. It first topologically sorts input elements to decide which one is the top level element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occurred). Finally, for each element it decides whether mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal number of occurrences supplied on input.\\
+Constructor of \code{Preprocessor} class gets elements and a number, defining minimal number of occurrences of an element to be defined. It first topologically sorts input elements to decide which one is the root element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occurred). Finally, for each element it decides whether mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal number of occurrences supplied on input.\\
 
 Results of preprocessing are provided by public methods of \code{Preprocessor} class. For details see their JavaDoc.\\
-
 
 \subsection{Own export}
 
@@ -82,11 +81,97 @@ Own XSD export is performed in module's \code{start} function right after the pr
 
 Useful helper class to handle indentation of text in a resulting XSD is named \code{Indentator}. Instance of this class is a member variable of the module (alike instance of \code{Preprocessor}), it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append}) or indented (method \code{indent}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation} and \code{decreaseIndentation}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString} will return string representation of resulting XSD.\\
 
+Before describing export of elements, let's take a look on how we define elements and their attributes using XSD language.
+
+\subsubsection{Definition of elements}
+
+Element is defined by XSD element \code{element}, specifying its name and type. Let \code{xs} be XMLSchema namespace.
+
+\begin{verbatim}
+<xs:element name="Person" type="...
+\end{verbatim}
+
+Type of an element is one of following.
+
+\begin{itemize}
+	\item XSD built-in type. One of types like \code{xs:string}, \code{xs:integer}, \code{xs:positiveInteger}, etc.
+	\begin{verbatim}
+	<xs:element name="Person" type="xs:string"/>
+	\end{verbatim}
+	
+	\item \code{simpleType}. Actually, exporter does not support any XSD features, which are defined in \code{simpleType}. That means, this types will not occur in result XSDs.
+	\begin{verbatim}
+	<xs:element name="Person">
+	  <xs:simpleType>
+	    ...
+	  </xs:simpleType>
+	</xs:element>
+	\end{verbatim}
+	
+	\item \code{complexType}. This type can contain XSD element \code{xs:sequence} or \code{xs:choice}. Each of these elements can contain definitions of elements, \code{xs:sequence}s and \code{xs:choice}s again.
+	\begin{verbatim}
+	<xs:element name="Person">
+	  <xs:complexType>
+	    <xs:sequence>
+	      <xs:element name="Name" type="xs:string"/>
+	      <xs:element name="Surname" type="xs:string"/>
+	      <xs:choice>
+	      ...
+	      </xs:choice>
+	    </xs:sequence>
+	  </xs:complexType>
+	</xs:element>
+	\end{verbatim}
+	An empty element is defined as empty \code{complexType}
+	\begin{verbatim}
+	<xs:element name="EmptyElement">
+	  <xs:complexType>
+	  </xs:complexType>
+	</xs:element>
+	\end{verbatim}
+\end{itemize}
+
+Named type of an element is defined by XSD element \code{simpleType}(lack of features mentioned above) or \code{complexType} with specified attribute \code{name}. Its content is exactly the same as described above. There is, of course, no need to define built-in types.
+
+\begin{verbatim}
+<xs:complexType name="PersonType">
+...
+</xs:complexType>
+\end{verbatim}
+
+Element of this type can be then defined by specifying name of the type.
+
+\begin{verbatim}
+<xs:element name="Person" type="PersonType"/>
+\end{verbatim}
+
+XSD elements \code{xs:element}, \code{xs:sequence} and \code{xs:choice} can has attributes \code{minOccurs} and \code{maxOccurs}. These attributes defines interval of number of instances of a particular element. Legal values of these attributes are non-negative integers.
+
+\begin{verbatim}
+<xs:element name="Person" type="PersonType" minOccurs="1" maxOccurs="3"/>
+\end{verbatim}
+
+Default values for \code{minOccurs} and \code{maxOccurs} attributes are "1", if they are not specified. So the example above has the same meaning as following.
+
+\begin{verbatim}
+<xs:element name="Person" type="PersonType" maxOccurs="3"/>
+\end{verbatim}
+
+
+
 First, global elements are exported. For each element, its type is defined as a global type. TODO rio example. This is done by passing global elements to \code{processGlobalElement} method.
 
-After global elements, others are exported. To sa deje rekurzivnym priechodom so startom v korenovom elemente. Elementy, ktorych typy su definovane globalne a elementy so vstavanymi typmi, su exportovane jednoducho, uvedenim ich mena a typu. Ostatne elementy su definovane na mieste. TODO rio priklady. Na toto je potrebne zavolat metodu \code{processElement} s korenovym elementov, ako argumentom.
+After global elements, others are exported by calling of method \code{processElement}, supplied by the top level element as its argument. Reference to a global element type is done simply by declaring element's name and type.
 
-\subsubsection{Content of elements}
+\begin{verbatim}
+<xs:element name="Person" type="PersonType"/>
+\end{verbatim}
+
+
+
+To sa deje rekurzivnym priechodom so startom v korenovom elemente. Elementy, ktorych typy su definovane globalne a elementy so vstavanymi typmi, su exportovane jednoducho, uvedenim ich mena a typu. Ostatne elementy su definovane na mieste. TODO rio priklady. Na toto je potrebne zavolat metodu \code{processElement} s korenovym elementov, ako argumentom.
+
+\subsubsection{Definition of elements}
 
 Spracovava sa vo funkcii \code{processElementContent}. Obsah elementu je definovany pomocou elementu element a bud pomocou jedneho zo vstavanych typov ako napriklad string, integer, positiveInteger, etc alebo je definovany vlastny.
 

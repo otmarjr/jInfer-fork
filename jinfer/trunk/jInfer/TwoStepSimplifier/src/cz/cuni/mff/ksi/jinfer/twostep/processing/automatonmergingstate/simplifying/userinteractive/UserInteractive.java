@@ -43,6 +43,8 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
 
   private static final Logger LOG = Logger.getLogger(UserInteractive.class);
 
+  private static boolean askUser = true;
+
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {
     return simplify(inputAutomaton, symbolToString, "");
@@ -50,6 +52,10 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
 
   @Override
   public Automaton<T> simplify(Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException {
+    if (!askUser) {
+      return inputAutomaton;
+    }
+    
     List<State<T>> mergeLst;
     final Transformer<Step<T>, String> t = new Transformer<Step<T>, String>() {
 
@@ -104,6 +110,7 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
       }
 
       if (!panel.shallAskUser()) {
+        askUser = false;
         break;
       }
     } while (!BaseUtils.isEmpty(mergeLst));

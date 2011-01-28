@@ -1,6 +1,7 @@
 default: all
 
-twostep.dvi: twostep_modules.eps automaton_merging_state_modules.eps twostep_modules_complete.eps state_removal_modules.eps twostep_flow.eps automaton_merging_state_flow.eps
+twostep.dvi: twostep_modules.eps automaton_merging_state_modules.eps twostep_modules_complete.eps state_removal_modules.eps twostep_flow.eps\
+ automaton_merging_state_flow.eps clusterer_structure.eps pta.eps regaut1.eps regaut2.eps regaut3.eps regaut4.eps regaut5.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

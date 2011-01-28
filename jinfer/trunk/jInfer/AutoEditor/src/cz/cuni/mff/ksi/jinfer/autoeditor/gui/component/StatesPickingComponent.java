@@ -57,6 +57,7 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
     jCheckBox1 = new javax.swing.JCheckBox();
     jButton1 = new javax.swing.JButton();
     jLabel2 = new javax.swing.JLabel();
+    jLabel3 = new javax.swing.JLabel();
 
     jLabel1.setText(org.openide.util.NbBundle.getMessage(StatesPickingComponent.class, "StatesPickingComponent.jLabel1.text")); // NOI18N
 
@@ -79,6 +80,8 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
 
     jLabel2.setText(org.openide.util.NbBundle.getMessage(StatesPickingComponent.class, "StatesPickingComponent.jLabel2.text")); // NOI18N
 
+    jLabel3.setText(org.openide.util.NbBundle.getMessage(StatesPickingComponent.class, "StatesPickingComponent.jLabel3.text")); // NOI18N
+
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
@@ -86,20 +89,15 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+          .addComponent(jLabel1)
           .addGroup(layout.createSequentialGroup()
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
-            .addContainerGap())
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(jLabel1)
-            .addContainerGap(464, Short.MAX_VALUE))
-          .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addComponent(jButton1)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 321, Short.MAX_VALUE)
-            .addComponent(jCheckBox1)
-            .addGap(132, 132, 132))
-          .addGroup(layout.createSequentialGroup()
-            .addComponent(jLabel2)
-            .addContainerGap(233, Short.MAX_VALUE))))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 245, Short.MAX_VALUE)
+            .addComponent(jCheckBox1))
+          .addComponent(jLabel2)
+          .addComponent(jLabel3))
+        .addContainerGap())
     );
     layout.setVerticalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,12 +106,14 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
         .addComponent(jLabel1)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jLabel2)
+        .addGap(5, 5, 5)
+        .addComponent(jLabel3)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jCheckBox1)
-          .addComponent(jButton1))
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+          .addComponent(jButton1)
+          .addComponent(jCheckBox1))
         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
   }// </editor-fold>//GEN-END:initComponents
@@ -130,6 +130,7 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
   private javax.swing.JCheckBox jCheckBox1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
+  private javax.swing.JLabel jLabel3;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JScrollPane jScrollPane1;
   // End of variables declaration//GEN-END:variables

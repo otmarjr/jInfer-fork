@@ -9,6 +9,7 @@
 %\usepackage[scale=0.9]{tgcursor}
 %\usepackage[scale=0.9]{tgheros}
 \usepackage{xstring}
+\usepackage{wrapfig}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -72,7 +73,7 @@ public interface AutomatonSimplifierFactory extends
 The real submodule interface (called familiarly \emph{worker} interface) is the \code{AutomatonSimplifier<T>} interface (of which instance is returned by factory).
 It is now not important how worker interface looks like, lets examine the factory.
 
-In \jmodule{TwoStepSimplifier} we design service providing factory interfaces so that they extend \code{NamedModule}, \code{Capabilities} and \code{UserModuleDescription}.
+In \jmodule{Two\.Step\.Sim\.pli\.fier} we design service providing factory interfaces so that they extend \code{Na\.med\.Mo\.du\.le}, \code{Ca\.pa\.bi\.li\.ties} and \code{UserModuleDescription}.
 That means, modules must implement methods:
 \begin{verbatim}
 String getName();
@@ -120,7 +121,8 @@ private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
   final Properties p = RunningProject.getActiveProjectProps(getName());
 
   return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
-            p.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER, PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT));
+            p.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER,
+                          PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT));
 }
 \end{verbatim}
 Cluster processor \code{AutomatonMergingState} then receives factories of \jmodule{AutomatonSimplifier} and \jmodule{Reg\.exp\.Au\.to\.ma\.ton\.Simplifier} submodules in its constructor.
@@ -165,7 +167,7 @@ Task of clustering is dedicated to \jmodule{Clusterer} submodule, and task of in
 There is also third submodule called \jmodule{RegularExpressionCleaner} actually, its purpose is just to beautify
  output regular expressions, no inference logic is implemented there. 
 Modules are drawn on fig. \ref{twostep_modules}.
-\begin{figure}
+\begin{figure}[tpb]
 	\centering\includegraphics[scale=\myscale]{twostep_modules}
 	\caption{Submodules of TwoStep simplifier with their implementations} \label{twostep_modules}
 \end{figure}
@@ -248,8 +250,8 @@ c.getRepresentantForItem(x);
 \subsubsection{ClustererWithAttributes extended interface}
 You noticed that whole \jmodule{Clusterer} interface and \code{Cluster} class are generic.
 They may be used as design pattern not only for clustering elements in inference process.
-To address clustering of elements in more detail, we created \code{ClustererWithAttributes<T, S>} interface, which extends \code{Clusterer<T>} interface.
-It adds method \code{List<Cluster<S>{}> getAttributeClusters(T representant)}, implying that each representant of
+To address clustering of elements in more detail, we created \code{Cluster\.er\.With\.At\.tri\.bu\.tes<T, S>} interface, which extends \code{Clusterer<T>} interface.
+It adds method \code{List\.<Cluster<S>{}> get\.At\.tri\.bu\.teClusters(T representant)}, implying that each representant of
 type \code{T} (that is representant of some main cluster) has some "attribute" clusters associated with it.
 Attribute clusters are of type \code{S} and can be retrieved by calling \code{getAttributeClusters(x)}.
 
@@ -303,7 +305,7 @@ It is possible to:
 
 %#### DATA FLOW ############################################
 \section{Data flow}
-\begin{figure}
+\begin{figure}[tpb]
 	\centering\includegraphics[scale=1]{twostep_flow}
 	\caption{TwoStep data flow} \label{twostep_flow}
 \end{figure}
@@ -337,7 +339,7 @@ This attribute clusterer is given all attributes instances encountered in all el
 It clusters them by name (case insensitive).
 Each main cluster also has \code{SimpleData} clusterer associated with it.
 Whole scheme is on fig. \ref{clusterer_structure}.
-\begin{figure}
+\begin{figure}[tpb]
 	\centering\includegraphics[scale=1]{clusterer_structure}
 	\caption{Iname clusterer structure} \label{clusterer_structure}
 \end{figure}
@@ -365,11 +367,11 @@ The tree is the final regular expression.
 
 %#### SUBMODULES->AutomatonMergingState ############################################
 \subsection{AutomatonMergingState (ClusterProcessor)} \label{section_AutomatonMergingState}
-\begin{figure}
+\begin{figure}[tpb]
 	\centering\includegraphics[scale=\myscale]{automaton_merging_state_modules}
 	\caption{Submodules of AutomatonMergingState cluster processor} \label{automaton_merging_state_modules}
 \end{figure}
-\begin{figure}
+\begin{figure}[tpb]
 	\centering\includegraphics[scale=1]{automaton_merging_state_flow}
 	\caption{Data flow of AutomatonMergingState cluster processor} \label{automaton_merging_state_flow}
 \end{figure}
@@ -432,12 +434,12 @@ Its job is to derive regular expression from automaton, such that automaton and 
 The data flow is on fig. \ref{automaton_merging_state_flow}.
 
 \subsubsection{Data structures - Automaton} \label{section_Automaton}
-\begin{figure}
+\begin{figure}[tpb]
 	\centering\includegraphics[scale=\myscale]{pta}
 	\caption{PTA created from input strings: $aa, aaaaa, abaa, bab, baa$} \label{pta}
 \end{figure}
 Class \code{Automaton} is shortly described in \cite{archdoc}.
-In this place, it is interestesting to look on method \code{buildPTAOnSymbol}.
+In this place, it is interestesting to look on method \code{build\.PTA\.On\.Sym\.bol}.
 Given \code{List<T> symbolString} it traverses automaton - comparing transition symbols with symbols in string.
 It follows transitions in automaton until first difference with string symbol is found (like in prefix trees).
 On different symbol, it creates new branch and all states and transitions on that branch.
@@ -570,21 +572,22 @@ repeat {
 \end{verbatim}
 We use \jmodule{AutoEditor} module described in \cite{autoeditordoc}.
 To make reader more happy, we include one screenshot of automaton visualization on picture \ref{screenshot}.
-\begin{figure}
+\begin{figure}[tpb]
 	\centering\includegraphics[scale=0.5]{screenshot}
 	\caption{Screenshot of UserInteractive (AutomatonSimplifier).} \label{screenshot}
 \end{figure}
 
 \subsection{KHContext (MergeConditionTester)} \label{section_KHContext}
-We have implemented \emph{k,h-context} state equivalence (see \cite{ahonen}) in class \code{KHContext} (implements \code{MergeConditionTester} interface), which is used by \code{Greedy} to test mergability of states by default configuration.
+We have implemented \emph{k,h-context} state equivalence (see \cite{ahonen}) in class \code{KHContext} (implements \code{Mer\.ge\.Con\.di\.tion\.Tes\.ter} interface), which is used by \code{Greedy} to test mergability of states by default configuration.
 TODO vektor : mention this? (we have stupid algorithm:)
 We don't use $k-grams$ algorithm from \cite{ahonen}, but a simple DFS.
 
 \subsection{StateRemoval (RegexpAutomatonSimplifier)} \label{section_StateRemoval}
-\begin{figure}
+\begin{wrapfigure}{R}{40mm}
 	\centering\includegraphics[scale=\myscale]{state_removal_modules}
 	\caption{Modules of StateRemoval.} \label{state_removal_modules}
-\end{figure}
+	\vspace{10mm}
+\end{wrapfigure}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
 This is implemented in \code{StateRemoval} class (on fig. \ref{state_removal_modules}) which implements \code{RegexpAutomatonSimplifier} interface.
 before algorithm starts, states superInitial and superFinal are added to automaton, former one with $\lambda$-transition to initial state.
@@ -600,7 +603,7 @@ State removal calls this submodule and removes state returned.
 
 \subsubsection{Data Structures - StateRemovalRegexpAutomaton}
 We extend \code{RegexpAutomaton} to obtain automaton that fits state removing procedure.
-This implementation has methods \code{createSuperInitialState} and \code{createSuperInitialState}.
+This implementation has methods \code{crea\.te\.Su\.per\.In\.it\.ial\.Sta\.te} and \code{crea\.te\.Su\.per\.In\.it\.ial\.Sta\.te}.
 They does exactly what their names stands for.
 SuperInitial state has only one $\lambda$-out-transition pointing to original initial state.
 SuperFinal state has as many $\lambda$-in-transitions, as there are original final states - from each one, it gets one.
@@ -608,12 +611,12 @@ Without going further to many technical details, we just mention method \code{re
 Transitions are handled this way:
 \begin{enumerate}
 	\item Collapse all loop transition of removed state to one loop transition with new \code{Regex.ALTERNATION} of all regexps on original loops (with Kleene interval set).
-	\item Collapse all {in | out}-transitions, which same {source | destination} state to one transition with \code{Regexp.ALTERNATION} of original regexps.
-	\item For each in-transition, loop, and out-transition, add transition from in-transition.getSource to out-transition.getDestination with symbol of \code{Regexp.CONCATENATION} of in-transition regexp, loop regexp and out-transition regexp. Thus by-passing the state completely.
+	\item Collapse all {in | out}-transitions, which same {source | destination} state to one transition with \code{Reg\.exp.AL\.TER\.NA\.TION} of original regexps.
+	\item For each in-transition, loop, and out-transition, add transition from in-transition source to out-transition destination with symbol of \code{Regexp.CONCATENATION} of in-transition regexp, loop regexp and out-transition regexp. Thus by-passing the state completely.
 	\item Remove the state and transitions associated with it.
 \end{enumerate}
 Whole process is step-by-step illustrated on fig. \ref{regaut}.
-\begin{figure}
+\begin{figure}[pb]
 	\centering
 	\subfigure[RegexpAutomaton after conversion from ordinary automaton.]
 	{
@@ -630,16 +633,17 @@ Whole process is step-by-step illustrated on fig. \ref{regaut}.
 		\includegraphics[scale=\myscale]{regaut3}
 		\label{regaut3}
 	}
-	\subfigure[Bypass state 3 by adding concatenation transitions from states 1 and 2 to state 4.]
+	\subfigure[Bypass state 3 by adding concatenation transitions from states 1 and 2 to state 4. Remove state 3 and associated transitions.]
 	{
 		\includegraphics[scale=\myscale]{regaut4}
 		\label{regaut4}
 	}
-	\subfigure[Finally remove state 3 and associated transitions.]
-	{
-		\includegraphics[scale=\myscale]{regaut5}
-		\label{regaut5}
-	}
+%	
+%	\subfigure[Finally remove state 3 and associated transitions.]
+%	{
+%		\includegraphics[scale=\myscale]{regaut5}
+%		\label{regaut5}
+%	}
 	\caption{RegexpAutomaton and removing state 3 from it.} \label{regaut}
 \end{figure}
 
@@ -662,8 +666,8 @@ Of course, merge criterion is propably the point to add implementation, implemen
 Changing ordering of states to remove in \jmodule{StateRemoval} module is easy by replacing \jmodule{Orderer} implementation, for example to one of suggested in \cite{1224321} may lead to shorter resulting regular expressions.
 
 Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
-\begin{figure}
-	\centering\includegraphics[scale=\myscale]{twostep_modules_complete}
+\begin{figure}[tpb]
+	\centering\includegraphics[scale=0.37]{twostep_modules_complete}
 	\caption{Modules of TwoStep simplifier and their submodules. Filled classes are default selection (best of).} \label{twostep_modules_complete}
 \end{figure}
 

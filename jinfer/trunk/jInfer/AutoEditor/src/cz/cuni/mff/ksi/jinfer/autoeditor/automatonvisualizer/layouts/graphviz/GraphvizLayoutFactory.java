@@ -55,8 +55,8 @@ public class GraphvizLayoutFactory implements LayoutF {
   public static final String DISPLAY_NAME = "Graphviz Layout";
   public static final String PROPERTIES_DOTBIN = "dotbin";
   private static final Logger LOG = Logger.getLogger(GraphvizLayoutFactory.class);
-  private static final int WINDOW_WIDTH = 700;
-  private static final int WINDOW_HEIGHT = 300;
+  private static int window_width = 100;
+  private static int window_height = 100;
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(final Automaton<T> automaton, final Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
@@ -74,7 +74,7 @@ public class GraphvizLayoutFactory implements LayoutF {
       
       final Transformer<State<T>, Point2D> trans = TransformerUtils.mapTransformer(positions);
 
-      return new StaticLayout<State<T>, Step<T>>(graph, trans);
+      return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(window_width, window_height));
     }
 
     DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "binary.invalid.message"), NotifyDescriptor.ERROR_MESSAGE));
@@ -104,8 +104,8 @@ public class GraphvizLayoutFactory implements LayoutF {
     scanner.next();
 
     // get width and height of graph
-    final double width = Double.parseDouble(scanner.next());
-    final double height = Double.parseDouble(scanner.next());
+    window_width = 100 + (int) Double.parseDouble(scanner.next());
+    window_height = 100 + (int) Double.parseDouble(scanner.next());
 
     // parse output for graph vertex positions
     while (scanner.hasNext()) {

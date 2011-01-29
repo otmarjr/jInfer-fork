@@ -125,10 +125,6 @@ public class GraphvizLayoutFactory implements LayoutF {
         if (!found) {
           throw new Exception("Node with name " + nodeName + " was not found in automaton.");
         }
-      } else if (n.equals("edge")) {
-        final int tail = Integer.parseInt(scanner.next());
-        final int head = Integer.parseInt(scanner.next());
-
       }
     }
 

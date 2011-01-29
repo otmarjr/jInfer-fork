@@ -1,4 +1,4 @@
-obj= architecture base basicdtd basicigg basicruledisplayer runner twostep
+obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twostep
 
 all: deploy
 

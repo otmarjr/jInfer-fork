@@ -40,7 +40,7 @@ public final class AutomatonToDot {
     sb.append("digraph finite_state_machine {\n");
     sb.append("\trankdir=LR;\n");
     sb.append("\tnodesep=\"50\";");
-    sb.append("\tsplines=\"polyline\";");
+    sb.append("\tsplines=\"line\";");
     sb.append("\tranksep=\"100\";");
     sb.append("\tedge [label = \"\", dir = none, arrowhead=none, arrowtail=none];");
     sb.append("\tnode [shape = none, label = \"\", width = 0, height = 0];\n");
@@ -49,11 +49,6 @@ public final class AutomatonToDot {
     
     while (!queue.isEmpty()) {
       final State<T> actual = queue.removeFirst();
-/*      if (actual.getFinalCount() > 0) {
-        sb.append("\tnode; ");
-      } else {
-        sb.append("\tnode; ");
-      }*/
       sb.append(actual.getName());
       sb.append(";\n");
       for (Step<T> step : automaton.getDelta().get(actual)) {
@@ -61,10 +56,6 @@ public final class AutomatonToDot {
         sb.append(step.getSource().getName());
         sb.append(" -> ");
         sb.append(step.getDestination().getName());
-/*        sb.append(" [ label = \"\");
-        sb.append(edgeLabelTransformer.transform(step));
-        sb.append("|");
-        sb.append(step.getUseCount());*/
         sb.append("];\n");
       }
     }

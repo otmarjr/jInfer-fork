@@ -37,19 +37,23 @@ public final class AutomatonToDot {
 
   public static <T> String convertToDot(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) {
     final StringBuilder sb = new StringBuilder();
-    sb.append("digraph finite_state_machine {\n"
-            + "\trankdir=LR;\n"
-            + "\tnode [shape = circle];\n");
+    sb.append("digraph finite_state_machine {\n");
+    sb.append("\trankdir=LR;\n");
+    sb.append("\tnodesep=\"50\";");
+    sb.append("\tsplines=\"polyline\";");
+    sb.append("\tranksep=\"100\";");
+    sb.append("\tedge [label = \"\", dir = none, arrowhead=none, arrowtail=none];");
+    sb.append("\tnode [shape = none, label = \"\", width = 0, height = 0];\n");
     final Deque<State<T>> queue = new ArrayDeque<State<T>>();
     queue.addAll(automaton.getDelta().keySet());
     
     while (!queue.isEmpty()) {
       final State<T> actual = queue.removeFirst();
-      if (actual.getFinalCount() > 0) {
-        sb.append("\tnode [shape = doublecircle]; ");
+/*      if (actual.getFinalCount() > 0) {
+        sb.append("\tnode; ");
       } else {
-        sb.append("\tnode [shape = circle]; ");
-      }
+        sb.append("\tnode; ");
+      }*/
       sb.append(actual.getName());
       sb.append(";\n");
       for (Step<T> step : automaton.getDelta().get(actual)) {
@@ -57,11 +61,11 @@ public final class AutomatonToDot {
         sb.append(step.getSource().getName());
         sb.append(" -> ");
         sb.append(step.getDestination().getName());
-        sb.append(" [ label = \"");
+/*        sb.append(" [ label = \"\");
         sb.append(edgeLabelTransformer.transform(step));
         sb.append("|");
-        sb.append(step.getUseCount());
-        sb.append("\" ];\n");
+        sb.append(step.getUseCount());*/
+        sb.append("];\n");
       }
     }
     sb.append("\n}");

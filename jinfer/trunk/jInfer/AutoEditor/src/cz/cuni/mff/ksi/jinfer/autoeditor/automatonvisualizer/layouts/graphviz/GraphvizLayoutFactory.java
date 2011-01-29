@@ -56,7 +56,7 @@ public class GraphvizLayoutFactory implements LayoutF {
   public static final String PROPERTIES_DOTBIN = "dotbin";
   private static final Logger LOG = Logger.getLogger(GraphvizLayoutFactory.class);
   private static final int WINDOW_WIDTH = 700;
-  private static final int WINDOW_HEIGHT = 700;
+  private static final int WINDOW_HEIGHT = 300;
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(final Automaton<T> automaton, final Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
@@ -74,7 +74,7 @@ public class GraphvizLayoutFactory implements LayoutF {
       
       final Transformer<State<T>, Point2D> trans = TransformerUtils.mapTransformer(positions);
 
-      return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+      return new StaticLayout<State<T>, Step<T>>(graph, trans);
     }
 
     DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "binary.invalid.message"), NotifyDescriptor.ERROR_MESSAGE));
@@ -109,14 +109,15 @@ public class GraphvizLayoutFactory implements LayoutF {
 
     // parse output for graph vertex positions
     while (scanner.hasNext()) {
-      if (scanner.next().equals("node")) {
+      String n = scanner.next();
+      if (n.equals("node")) {
         final int nodeName = Integer.parseInt(scanner.next());
         final double x = Double.parseDouble(scanner.next());
         final double y = Double.parseDouble(scanner.next());
         boolean found = false;
         for (State<T> state : automatonStates) {
           if (state.getName() == nodeName) {
-            result.put(state, new Point((int) (WINDOW_WIDTH * x / width), (int) (WINDOW_HEIGHT * y / height)));
+            result.put(state, new Point(50 + (int) (x), 50 + (int) (y)));
             found = true;
             break;
           }
@@ -124,6 +125,10 @@ public class GraphvizLayoutFactory implements LayoutF {
         if (!found) {
           throw new Exception("Node with name " + nodeName + " was not found in automaton.");
         }
+      } else if (n.equals("edge")) {
+        final int tail = Integer.parseInt(scanner.next());
+        final int head = Integer.parseInt(scanner.next());
+
       }
     }
 

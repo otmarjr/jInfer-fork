@@ -61,7 +61,7 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
     }
 
     setBackground(ColorUtils.getBackgroundColor());
-    getRenderContext().setVertexFillPaintTransformer(new NodeColorTransformer<T>());
+    getRenderContext().setVertexFillPaintTransformer(new NodeColorTransformer<T>(getPickedVertexState()));
   }
 
   /**

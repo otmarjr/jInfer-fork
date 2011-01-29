@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transforme
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.options.ColorUtils;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 import java.awt.Color;
 import java.awt.Paint;
 import org.apache.commons.collections15.Transformer;
@@ -30,14 +31,23 @@ public class NodeColorTransformer<T> implements Transformer<State<T>, Paint> {
 
   private final Color color;
   private final Color finalColor;
+  private final Color pickedColor;
+  private final PickedState<State<T>> pickedState;
 
-  public NodeColorTransformer() {
+  public NodeColorTransformer(final PickedState<State<T>> pickedState) {
     this.color = ColorUtils.getColorProperty(ColorUtils.NODE_COLOR_PROP, ColorUtils.NODE_COLOR_DEFAULT);
     this.finalColor = ColorUtils.getColorProperty(ColorUtils.FINAL_COLOR_PROP, ColorUtils.FINAL_COLOR_DEFAULT);
+    this.pickedColor = ColorUtils.getColorProperty(ColorUtils.PICKED_COLOR_PROP, ColorUtils.PICKED_COLOR_DEFAULT);
+    this.pickedState = pickedState;
   }
 
   @Override
   public Paint transform(final State<T> state) {
+    if (pickedState != null && pickedState.isPicked(state)) {
+      return pickedColor;
+    }
+
+
     if (state.getFinalCount() > 0) {
       return finalColor;
     }

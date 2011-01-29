@@ -31,6 +31,8 @@ public final class ColorUtils {
   public static final Color NODE_COLOR_DEFAULT = Color.decode("-13861729");
   public static final String FINAL_COLOR_PROP = "final.color";
   public static final Color FINAL_COLOR_DEFAULT = Color.decode("-1936099");
+  public static final String PICKED_COLOR_PROP = "picked.color";
+  public static final Color PICKED_COLOR_DEFAULT = Color.yellow;
 
   private ColorUtils() {
   }

@@ -54,6 +54,9 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     jLabel5 = new javax.swing.JLabel();
     finalColor = new javax.swing.JPanel();
     jLabel6 = new javax.swing.JLabel();
+    jLabel7 = new javax.swing.JLabel();
+    pickedColor = new javax.swing.JPanel();
+    jLabel8 = new javax.swing.JLabel();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -154,7 +157,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 4;
+    gridBagConstraints.gridy = 5;
     gridBagConstraints.gridwidth = 4;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
@@ -164,15 +167,15 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 200, Short.MAX_VALUE)
+      .addGap(0, 401, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 100, Short.MAX_VALUE)
+      .addGap(0, 127, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridheight = 4;
+    gridBagConstraints.gridheight = 5;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     add(jPanel2, gridBagConstraints);
@@ -185,7 +188,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 3;
+    gridBagConstraints.gridy = 4;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jButton1, gridBagConstraints);
@@ -202,6 +205,11 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     finalColor.setMaximumSize(new java.awt.Dimension(20, 20));
     finalColor.setMinimumSize(new java.awt.Dimension(20, 20));
     finalColor.setPreferredSize(new java.awt.Dimension(20, 20));
+    finalColor.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        colorMouseClicked(evt);
+      }
+    });
 
     javax.swing.GroupLayout finalColorLayout = new javax.swing.GroupLayout(finalColor);
     finalColor.setLayout(finalColorLayout);
@@ -217,6 +225,8 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(finalColor, gridBagConstraints);
 
     jLabel6.setFont(jLabel6.getFont().deriveFont((jLabel6.getFont().getStyle() | java.awt.Font.ITALIC), 10));
@@ -227,6 +237,51 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel6, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.jLabel7.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel7, gridBagConstraints);
+
+    pickedColor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+    pickedColor.setMaximumSize(new java.awt.Dimension(20, 20));
+    pickedColor.setMinimumSize(new java.awt.Dimension(20, 20));
+    pickedColor.setPreferredSize(new java.awt.Dimension(20, 20));
+    pickedColor.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        colorMouseClicked(evt);
+      }
+    });
+
+    javax.swing.GroupLayout pickedColorLayout = new javax.swing.GroupLayout(pickedColor);
+    pickedColor.setLayout(pickedColorLayout);
+    pickedColorLayout.setHorizontalGroup(
+      pickedColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+    pickedColorLayout.setVerticalGroup(
+      pickedColorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(pickedColor, gridBagConstraints);
+
+    jLabel8.setFont(jLabel8.getFont().deriveFont((jLabel8.getFont().getStyle() | java.awt.Font.ITALIC), 10));
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.jLabel8.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    add(jLabel8, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   @SuppressWarnings("PMD")
@@ -245,6 +300,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     backgroundColor.setBackground(ColorUtils.BG_COLOR_DEFAULT);
     nodeColor.setBackground(ColorUtils.NODE_COLOR_DEFAULT);
     finalColor.setBackground(ColorUtils.FINAL_COLOR_DEFAULT);
+    pickedColor.setBackground(ColorUtils.PICKED_COLOR_DEFAULT);
   }//GEN-LAST:event_jButton1ActionPerformed
 
   /**
@@ -255,6 +311,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     backgroundColor.setBackground(ColorUtils.getColorProperty(ColorUtils.BG_COLOR_PROP, ColorUtils.BG_COLOR_DEFAULT));
     nodeColor.setBackground(ColorUtils.getColorProperty(ColorUtils.NODE_COLOR_PROP, ColorUtils.NODE_COLOR_DEFAULT));
     finalColor.setBackground(ColorUtils.getColorProperty(ColorUtils.FINAL_COLOR_PROP, ColorUtils.FINAL_COLOR_DEFAULT));
+    pickedColor.setBackground(ColorUtils.getColorProperty(ColorUtils.PICKED_COLOR_PROP, ColorUtils.PICKED_COLOR_DEFAULT));
   }
 
   /**
@@ -264,6 +321,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     NbPreferences.forModule(AutoEditorPanel.class).put(ColorUtils.BG_COLOR_PROP, String.valueOf(backgroundColor.getBackground().getRGB()));
     NbPreferences.forModule(AutoEditorPanel.class).put(ColorUtils.NODE_COLOR_PROP, String.valueOf(nodeColor.getBackground().getRGB()));
     NbPreferences.forModule(AutoEditorPanel.class).put(ColorUtils.FINAL_COLOR_PROP, String.valueOf(finalColor.getBackground().getRGB()));
+    NbPreferences.forModule(AutoEditorPanel.class).put(ColorUtils.PICKED_COLOR_PROP, String.valueOf(pickedColor.getBackground().getRGB()));
   }
 
   /**
@@ -283,8 +341,11 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
   private javax.swing.JLabel jLabel4;
   private javax.swing.JLabel jLabel5;
   private javax.swing.JLabel jLabel6;
+  private javax.swing.JLabel jLabel7;
+  private javax.swing.JLabel jLabel8;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel nodeColor;
+  private javax.swing.JPanel pickedColor;
   // End of variables declaration//GEN-END:variables
 }

@@ -215,31 +215,31 @@ In jInfer each such rule is represented with an \code{Element} instance. In this
 Another important notion is a \emph{grammar}. A grammar consists of its rules, so in jInfer a grammar is just a collection of \code{Element}s. Closely related term is \emph{Initial Grammar}, which for us is a grammar consisting of rules with \emph{simple} right hand sides, i.e. just concatenations of tokens (even with no children, see fig. \ref{xml_example} again). Initial Grammar is produced by \jmodule{Initial Grammar Generator}.
 
 \subsection{Nondeterministic Finite Automaton}
-We recommend skipping this section in first read as it describes advanced features.
+We recommend skipping this section during the first reading as it describes advanced features.
 
 For all inference algorithms based on merging states of NFA's, our implementation of nondeterministic finite automaton might be interesting.
-Implementation consists of 4 classes (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}): 
+Implementation consists of 4 classes (see package \code{cz.cuni.mff.ksi.jinfer.base.automaton}).
 \begin{itemize}
-  \item \code{Automaton<T>},
-  \item \code{Step<T>},
-  \item \code{State<T>},
-  \item \code{AutomatonCloner<A, B>}.
+  \item \code{Automaton<T>}
+  \item \code{Step<T>}
+  \item \code{State<T>}
+  \item \code{AutomatonCloner<A, B>}
 \end{itemize}
-Whole implementation uses java generics for representation of symbol of alphabet.
-We denote \code{T} the java type of symbol.
+The implementation uses Java generics to represent symbol of alphabet.
+We denote \code{T} the Java type of that symbol.
 
-Take care of symbol class and its \code{equals()} implementation.
+Take care of symbol class and its \code{equals()} implementation. % TODO anti What does it mean, to take care?
 Automaton uses \code{equals()} to compare symbols on transitions (when building prefix-tree automaton and when merging states).
-If you are using strings, you're just fine, but with complicated objects, either take care, that equivalent objects are properly tested in \code{equals()}.
-Or (maybe faster) solution is to cluster objects into classes of equivalence before inserting them into automaton.
+If you are using strings, you're just fine. With complicated objects, the first option is to make sure that equivalent objects are properly tested in \code{equals()}.
+Second, maybe faster solution is to cluster objects into classes of equivalence before inserting them into automaton.
 Then give automaton only cluster representant object (which will use java \code{Object.equals()} with reference comparison) for each object encountered.
 
 \paragraph{State}
-Let's begin by smallest of the classes, the \code{State<T>}.
+Let's begin with the smallest of classes, the \code{State<T>}.
 It represents automaton state, it has two integer members: \code{name} and \code{finalCount}.
-Name clearly serves as name of state in visualization and to string conversion.
+Name clearly serves as name of state in visualization and to-string conversion.
 Final count is for representing whether the state is final in automaton.
-The field is not true/false but integral to help algorithms use stastistics over automatons (how many times in XML input is this state final?).
+The field is not true/false but integral to help algorithms use statistics over automatons (how many times in XML input is this state final?).
 
 \paragraph{Step}
 Next we have \code{Step<T>} which stands for automaton transition.
@@ -249,16 +249,16 @@ And finally member \code{useCount}, which is integer stating how many times the 
 Simplifying algorithm can use this number for statistic purposes.
 
 \paragraph{Automaton}
-\code{Automaton<T>} class puts theese together into nondeterministic finite automaton.
+\code{Automaton<T>} class puts these together to form a nondeterministic finite automaton.
 It has reference to \code{initialState}, it has \code{newStateName} integer value to assure unique state names inside one automaton (incrementing every time new state is created).
 We use two maps to implement transition function ($\delta$-function).
 One map of type \code{Map<State<T>, Set<Step<T>{}>{}>} called \code{delta} represents mapping from state into set of all outgoing transitions from state.
-Second is just reversed map, called \code{reverseDelta}, which holds all incoming transitions into state (for better perfomance).
-There exist only one instance of each step from one state to another.
-That instance is referenced in delta map (on place of source state), and in reverse delta map (on place of destination state).
-Loops are no speciality, just source = destination.
+Second is just reversed map, called \code{reverseDelta}, which holds all incoming transitions into state (for better performance).
+There is only one instance of each step from one state to another.
+That instance is referenced in delta map (on place of source state) and in reverse delta map (on place of destination state).
+Loops are no speciality, only source = destination.
 
-Automaton supports creating of automaton as a copy of another one (not reference copy, but deep copy expect of symbols), this can be used when searching solution space to create more versions of automaton to edit.
+Automaton supports creation as a copy of another one (not reference copy, but deep copy expect of symbols), this can be used when searching solution space to create more versions of automaton to edit.
 We implemented building of prefix-tree automaton (PTA) in \code{buildPTAOnSymbol()} method.
 Create empty automaton and then call this method for every input string of language.
 You will get PTA with useCounts and finalCounts set properly on steps/states.
@@ -281,32 +281,32 @@ You will get PTA with useCounts and finalCounts set properly on steps/states.
 	}
 	\caption{Sample automaton.} \label{automaton_merge}
 \end{figure}
-The biggest thing we offer to scientists is state merging by simply calling \code{mergeStates(state1, state2)} method.
+The biggest thing we offer to researchers is state merging by simply calling \code{mergeStates(state1, state2)} method.
 Method merges second state given into first one (or an overloaded version - all states in list into first one in list).
 All \{in|out\}-transitions are redirected properly (or discarted as needed).
 Variables \code{useCount} and \code{finalCount} are updated to sums of values from merged transitions/states.
 
-One can ask for merging states, that are merged out from automaton already.
+One can ask for merging states, that are merged out from automaton already. % TODO anti What does it mean?
 Lets take example automaton of fig. \ref{automaton_merge1} (states are labeled [name|finalCount], steps by \{symbol|useCount\}).
 One asks to merge states 3 and 4.
 State 3 then becomes final state with loop and state 4 disappears (fig. \ref{automaton_merge2}).
-If then one ask to merge states 2 and 4, automaton properly handles situation by knowing, that old state 4, was merged into state 3, and merges states 2 and 3 (see fig. \ref{automaton_merge3}).
+If then one asks to merge states 2 and 4, automaton properly handles situation by knowing, that old state 4, was merged into state 3, and merges states 2 and 3 (see fig. \ref{automaton_merge3}).
 This can be useful in $k,h-context$ and $s,k-strings$ implementations (find all context/strings, then supply list of states to merge and don't bother with state names updates).
 
 \paragraph{AutomatonCloner}
 Class \code{AutomatonCloner<A, B>} has one overloaded method \code{convertAutomaton()}.
-First version accepts automaton and class implementing \code{AutomatonClonerSymbolConverter<A, B>} interface, and returns new automaton with same structure, but with symbols on transitions from alphabet of java type \code{B}.
+First version accepts automaton and class implementing \code{AutomatonClonerSymbolConverter<A, B>} interface, and returns new automaton with same structure, but with symbols on transitions from alphabet of Java type \code{B}.
 Second version takes two automatons, second one has to be empty (without initial state created), and symbol converter.
 It fills in second automaton to have same structure as first one, but with symbols of type \code{B}.
 
-To fulfill symbol conversion, one have to provide imlementation of \code{AutomatonClonerSymbolConverter<A, B>} interface.
-Interface has one method:
+To fulfil symbol conversion, one have to provide implementation of \code{AutomatonClonerSymbolConverter<A, B>} interface.
+Interface has one method.
 \begin{verbatim}
 	B convertSymbol(final A symbol);
 \end{verbatim}
-Its purpose is to give mapping from symbol over one domain to new symbols.
-Implementation have to be \code{equals} consistent, if in first automaton are two transitions with symbols \code{a}, \code{b} such that
-\code{a.equals(b) == true}, convertor has to produce new symbols that are equal.
+Its purpose is to provide mapping from symbol over one domain to new symbols.
+Implementation has to be \code{equals()} consistent, if in first automaton are two transitions with symbols \code{a}, \code{b} such that
+\code{a.equals(b) == true}, converter has to produce new symbols that are equal.
 
 \section{Process view} \label{section_inference_process}
 \begin{figure}
@@ -392,7 +392,7 @@ The process by which jInfer infers the resulting schema from various inputs (inf
 \end{enumerate}
 Important thing to note here is that all these steps are executed consecutively. That means, \jmodule{Simplifier} is only started \emph{after} the \jmodule{IGG} completely finished its work and returned IG to be simplified. Similarly, \jmodule{SchemaGen} gets all the rules to export at once, in one list.
 
-This modular architecture means that it is possible to replace any and/or all of these modules with \emph{something} else that does similar job. In practice, scientists will probably implement new \jmodule{Simplifier} modules, while using our implementation of BasicIGG and export modules. This modular scheme is used inside our modules to divide them into submodules. It is possible to add new file format processing to import/export. One can extend automaton merging state algorithm of our implementation of \cite{ahonen} in TwoStepSimplifier module by replacing submodules.
+This modular architecture means that it is possible to replace any and/or all of these modules with \emph{something} else that does similar job. In practice, researchers will probably implement new \jmodule{Simplifier} modules, while using our implementation of BasicIGG and export modules. This modular scheme is also used inside our modules to divide them into submodules. It is possible to add new file format processing to import/export. One can extend automaton merging state algorithm of our implementation of \cite{ahonen} in TwoStepSimplifier module by replacing submodules. % TODO anti This is a terrible paragraph with no clear path to follow, please reorganize (sentences on their own are OK)
 
 \subsection{Programmatic view}
 From developer's point of view, inference modules are just properly annotated classes (see \ref{section_lookups}) implementing one of the following interfaces (all found under \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference})
@@ -421,9 +421,9 @@ Each inference module takes the actual input data as the first parameter of its 
 
 \paragraph{Initial Grammar} has two formats:
 \begin{itemize}
-	\item Only concatenations. This is default format. All regular expressions coming from IGG have to be concatenations, even empty.
-	When importing XML documents, this is just fine, as document is positive example from language we are trying to identify.
-	But even when importing schemas, queries or other stuff that can contain more information, one has to convert it somehow to concatenations.
+	\item \textbf{Only concatenations.} This is the default format. All regular expressions coming from IGG have to be concatenations, even if they are empty.
+	When importing XML documents this is just fine, because a document is a positive example of language we are trying to identify.
+	But while importing schemas, queries or other stuff that can contain more information, it might be necessary to convert it somehow to concatenations.
 	For example, when importing DTD:
 	\begin{verbatim}
 	<!ELEMENT person (info?, more, more?, more?)>
@@ -431,21 +431,22 @@ Each inference module takes the actual input data as the first parameter of its 
 	<!ELEMENT note EMPTY>
 	<!ELEMENT more EMPTY>
 	\end{verbatim}
+	% TODO anti Emphasise elements in the following paragraph
 	Elements note and more are empty, but we cannot use lambda regexp. Import will use empty concatenation instead.
-	For element person, import module have to generate some positive examples of language generated by regular expression \verb+(info?, more, more?, more?)+.
+	For element person, import module has to generate some positive examples of language generated by regular expression \verb+(info?, more, more?, more?)+.
 	
-	This generating is basicaly done by calling \code{cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface method \code{expand()}. One can implement own intelligent expander, or use our provided\\ \code{cz.cuni.mff.ksi.jinfer.basicigg.expansion.ExpanderImpl}.
+	This is basically done by calling \code{cz.cuni.mff.ksi.jinfer.base.interfaces.Expander} interface method \code{expand()}. One can implement own intelligent expander, or use our provided\\ \code{cz.cuni.mff.ksi.jinfer.basicigg.expansion.ExpanderImpl}.
 	
-	\item Complex regular expressions. Simplifier module running in current inference can indicate support for this format by having capability called \code{can.handle.complex.regexps}.
+	\item \textbf{Complex regular expressions.} Simplifier module running in current inference can indicate support for this format by declaring capability \code{Capabilities.CAN\_HANDLE\_COMPLEX\_REGEXPS}.
 	Even then, import module is not obliged to use it of course. But it is reasonable to do so, if imported file type gives more information than simple concatenations (when importing schemas).
 	
-	Initial Grammar can contain all regular expressions. If schema defines empty element, make its subnodes lambda regexp. If schema defines element content as \verb.(a, b){2,7}(c | d)., just construct that regexp. Empty concatenations are also allowed - as they are positive examples in XML document input. Its simplifier business to divide rules by import file formats (by using metadata described in \ref{section_metadata}) and to handle empty concatenations from XML file import with complex regular expressions from other formats.
+	Initial Grammar can contain all regular expressions. If schema defines empty element, make its subnodes lambda regexp. If schema defines element content as \verb.(a, b){2,7}(c | d)., just construct that regexp. Empty concatenations are also allowed - as they are positive examples in XML document input. It is simplifier's responsibility to divide rules by import file formats (by using metadata described in \ref{section_metadata}) and to handle empty concatenations from XML file import with complex regular expressions from other formats.
 \end{itemize}
 If you are writing import module, check if you can provide more information to simplifier from input file type by using complex format.
 This interface division allows us to plug in old methods (accepting only XML input) to the chain of inference, even with schema input files.
 It may be useful for method benchmarking too.
 
-\paragraph{Simplified grammar} has only one format and that is strict regular expression format. Empty concatenations, alternations or permutations are not allowed. If element should be exported as empty, use lambda regexp as its subnodes.
+\paragraph{Simplified grammar} has only one format and that is \textbf{strict regular expression format}. Empty concatenations, alternations or permutations are not allowed. If element should be exported as empty, use lambda regexp as its subnodes.
 
 \subsubsection{Module output}
 Second parameter of each inference module's \code{start} method is a callback object. There are 3 callback interfaces defined in the \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} package

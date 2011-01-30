@@ -55,25 +55,25 @@ For general information on regular expressions, please refer to \cite{wikiregexp
 All classes pertaining to regular expressions can be found in the package \code{cz.cuni.mff.ksi.jinfer.base.regexp}.
 In jInfer, we use extended regular expressions as they give us nicer syntax (and easier programming).
 
-Regular expression is implemented as class \code{Regexp<T>} with supplementing classes \code{RegexpInterval} and \code{Reg\.exp\.Type}.
-Each \code{Regexp<T>} instance has one of the enum \code{RegexpType} type:
+Regular expression is implemented as class \code{Regexp<T>} with supporting classes \code{RegexpInterval} and \code{Reg\.exp\.Type}.
+Each \code{Regexp<T>} instance has a type of \code{RegexpType} enum.
 \begin{itemize}
-	\item Lambda ($\lambda$) - empty string (also called $\epsilon$ in literature),
-	\item Token - a letter of the alphabet,
-	\item Concatenation - one or more regular expression in an ordered sequence. Eg. $(a, b, c, d)$,
-	\item Alternation - a choice between one or more regular expressions. Eg. $(a | b | c | d)$,
-	\item Permutation - shortcut for all possible permutations of regular expressions. Our syntax to write down permutation is $(a\& b\& c\& d)$.
+	\item Lambda ($\lambda$) - empty string (also called $\epsilon$ in literature).
+	\item Token - a letter of the alphabet.
+	\item Concatenation - one or more regular expression in an ordered sequence. Eg. $(a, b, c, d)$.
+	\item Alternation - a choice between one or more regular expressions. Eg. $(a | b | c | d)$.
+	\item Permutation - shortcut for all possible permutations of regular expressions. Our notation is $(a\& b\& c\& d)$.
 \end{itemize}
 Type of regexp is in \code{type} member in class \code{Regexp<T>} and can be tested by calling methods \code{isLa\.mb\.da()}, \code{isTo\.ken()}, \code{isCon\.ca\.te\.na\.tion()}, \code{isAlt\.er\.na\.tion()}, \code{isPer\.mu\.ta\.tion()}.
 
 Each \code{Regexp<T>} instance has one instance of \code{RegexpInterval} as member.
-Class \code{RegexpInterval} represents POSIX-like intervals for expression:
+Class \code{RegexpInterval} represents POSIX-like intervals for expression.
 \begin{itemize}
-	\item $a\{m,n\}$ means $a$ at least $m$-times, at most $n$-times,
+	\item $a\{m,n\}$ means $a$ at least $m$-times, at most $n$-times.
 	\item $a\{m,\}$ means at least $m$-times (unbounded).
 \end{itemize}
 Interval can be either bounded (you have to set both lower and upper bound integers), or unbounded (you have to set only lower bound).
-Testing interval value commonly follows routine:
+Testing interval value commonly follows this routine.
 \begin{verbatim}
 RegexpInterval i = r.getInterval();
 if (i.isUnbounded()) {
@@ -84,30 +84,28 @@ if (i.isUnbounded()) {
 \end{verbatim}
 That is, first check interval for being unbounded, only if it is bounded, you can ask for maximum.
 
-Class \code{Regexp<T>} can represent regular expression over any alphabet.
-This is done by using java generics.
-Only token regexps hold instance of type \code{T} in member \code{content}.
+Using Java generics, \code{Regexp<T>} can represent regular expression over any alphabet.
+Only token regexps actually hold instance of type \code{T} in member \code{content}.
 
 Regular expression is in fact $n$-ary tree, for example expression $(a, b, ((c | d), e), f)$ can be viewed as in fig. \ref{reg_tree}.
 \begin{figure}
 \centering\includegraphics[scale=\myscale]{reg_tree}
 \caption{Example tree for regular expression $(a, b, ((c | d), e), f)$} \label{reg_tree}
 \end{figure}
-We implement this tree by member of \code{Regexp<T>} class called \code{children}, which is of type \code{List<Regexp<T>{}>}.
-List contains children of regexp in means of regexp tree.
+We implement this tree in a member of \code{Regexp<T>} class called \code{children}, which is of type \code{List<Regexp<T>{}>}.
+List contains children of regexp: a node contains a list of child nodes in the tree view.
 
-Regexp has to obey constraits:
+Regexp has to obey the following constraits.
 \begin{itemize}
-	\item type, children and interval have to be non-null references,
-	\item when type is lamba, content and interval has to be null,
-	\item when type is token, content has to be non-null,
-	\item when type concatenation, alternation or permutation, content has to be null.
+	\item Type, children and interval have to be non-\code{null} references.
+	\item When type is lamba, content and interval has to be \code{null}.
+	\item When type is token, content has to be non-\code{null}.
+	\item When type concatenation, alternation or permutation, content has to be \code{null}.
 \end{itemize}
-These constraits are checked by constructors, so the best way to construct new regexps is by using 
-methods \code{get\.To\.ken(), get\.Con\.ca\.te\.na\.tion()} etc.
+These constraits are checked by constructors, therefore the best way to construct new regexps is by using methods \code{get\.To\.ken(), get\.Con\.ca\.te\.na\.tion()} etc.
 
-For these cases, special \code{getMutable()} method is implemented to obtain regexp with none of members set. One has to fill in all properties carefully and call \code{setImmutable()} aftewards. Proper usage should be one of following:
-Regexp instance is by default created as immutable, that is, once instantiated, you cannot add more children to list of children, cannot change type, content etc. It is to prevent missuse. In special circumstances, one does not know future children of regexp in time of creation. This occurs mainly in input modules, where by parsing XML data sequentially, one does not know contents of element in time of handling start element event.
+For these cases, special \code{getMutable()} method is implemented to obtain regexp with none of the members set. One has to fill in all properties carefully and call \code{setImmutable()} aftewards. Proper usage should be one of following: % TODO anti WTF?
+Regexp instance is by default created as immutable, that is, once instantiated, you cannot add more children to list of children, cannot change type, content etc. In special circumstances, one does not know future children of regexp at the time of creation. This occurs mainly in input modules: while parsing XML data sequentially, one does not know contents of element in time of handling start element event.
 \begin{verbatim}
 	Regexp<T> r = Regexp.<T>getMutable();
 	r.setInterval(...);
@@ -131,19 +129,19 @@ Regexp instance is by default created as immutable, that is, once instantiated, 
 	r.setImmutable();
 \end{verbatim}
 	
-Finally, regexp contain one useful method for obtaining all leaves in the regexp tree, it is called \code{getTokens()} and it recursively traverses tree returning list of leaves (token type regexps).
+Finally, regexp contains a useful method to obtain all leaves in the regexp tree. It is called \code{getTokens()} and it recursively traverses tree returning list of leaves (token type regexps).
 
 \subsection{XML representation}
-XML data basically contains elements, text nodes (characters inside elements) and attributes.
-For maximum generality, we decided to break apart theese objects.
+XML data basically encompasses elements, text nodes (characters inside elements) and attributes.
+For maximum generality, we decided to break apart these objects.
 We define three basic interfaces: \code{NamedNode}, \code{StructuralNode} and \code{ContentNode} (see package \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes}). 
 
-The first stands for bare node in XML document tree, it has its name and context withing the tree (path from root).
-The latter two extends \code{NamedNode} interface.
-\code{StructuralNode} is for nodes, which form structure of XML document tree: elements and text nodes.
-\code{ContentNode} is for nodes, that have content in XML documents: text nodes and attributes.
+The first stands for a bare node in XML document tree, it has its name and context within the tree (path from root).
+The latter two extend \code{NamedNode} interface.
+\code{StructuralNode} is for nodes which form structure of XML document tree: elements and text nodes.
+\code{ContentNode} is for nodes that have content in XML documents: text nodes and attributes.
 We have three classes: \code{Element} for elements, \code{SimpleData} for text nodes, \code{Attribute} for attributes (see package \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes}).
-In theory, the classes and interfaces would be layed out as on fig. \ref{interfaces_nodes}
+In theory, the classes and interfaces would be layed out as in fig. \ref{interfaces_nodes}
 \begin{figure}
 \centering\includegraphics[scale=\myscale]{interfaces_nodes}
 \caption{How should interfaces and classes for XML representation look like in theory} \label{interfaces_nodes}
@@ -164,31 +162,33 @@ In theory, the classes and interfaces would be layed out as on fig. \ref{interfa
 
 For even more generality in design, we decided to implement abstract classes in midlevel:
 \begin{itemize}
-	\item \code{AbstractNamedNode}, which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later in section \ref{section_metadata}),
-	\item \code{AbstractStructuralNode}, which implements only task of deciding if instance is \code{Element} or \code{SimpleData} actually.
+	\item \code{AbstractNamedNode} which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later in section \ref{section_metadata}),
+	\item \code{AbstractStructuralNode} which implements only the task of deciding if instance is \code{Element} or \code{SimpleData}.
 \end{itemize}
-As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node.
-However methods for content devising don't need to know, if they are working on infering model for content of attribute or text node.
+As practice showed, for methods handling and infering structural properties, it is important to recognize whether structural node on input is element or text node. % TODO anti Unclear, rewrite
+However methods for content devising don't need to know if they are working on infering model for content of attribute or text node. % TODO anti Unclear, rewrite
 
-Finally, our interface/class model for representing XML nodes is drafted on fig. \ref{nodes}. Those, who are brave enough, can look on fig. \ref{nodes_full2}.
-In result, \code{Element} and \code{SimpleData} have method \code{getType()} to devise type of \code{Abstr\.act\.Stru\.ctu\.ral\.Node} variables. And \code{SimpleData} and \code{Attribute} have methods \code{getContentType()} and \code{getContent()} to work with content model.
+Finally, our interface/class model for representing XML nodes is drafted in fig. \ref{nodes}. Those who are brave enough can look at fig. \ref{nodes_full2}.
+In result, \code{Element} and \code{SimpleData} have method \code{getType()} to devise type of \code{Abstr\.act\.Stru\.ctu\.ral\.Node} variables. % TODO anti What is "devise"?
+And \code{SimpleData} and \code{Attribute} have methods \code{getContentType()} and \code{getContent()} to work with content model.
+% TODO anti Last 2 sentences make no sense to me...
 
-Class \code{Element} has two important members of course:
+Class \code{Element} has two important members.
 \begin{itemize}
-	\item \code{Regexp<AbstractStructuralNode> subnodes} - for representing right side of grammar rule in resulting infered schema,
-	\item \code{List<Attribute> attributes} - for representing all attributes in resulting infered schema.
+	\item \code{Regexp<AbstractStructuralNode> subnodes} - representing the right side of a grammar rule,
+	\item \code{List<Attribute> attributes} - representing all attributes in this element.
 \end{itemize}
-Theese two are filled by import modules, processed further by infering (simplifying) modules and finally exported by exporter modules.
+These two are filled in by import modules, processed further by inference (simplification) modules and finally exported by schema generator modules.
 
-As in regular expressions, classes pertaining XML nodes are by default immutable.
+As in regular expressions, classes pertaining to XML nodes are by default immutable.
 For elements, it means no adding of attributes and changing regexp reference (regexp instance itself is immutable as well).
-Same \code{getMutable()} principles and good usage practises as for regexps, hold for theese classes.
+The same \code{getMutable()} principles and good usage practises hold for these classes.
 
 \begin{figure}
 \centering\includegraphics[scale=\myscale]{xml_example}
 \caption{XML document representation} \label{xml_example}
 \end{figure}
-Let's take an example, the following XML document would be represented as tree on fig. \ref{xml_example}.
+Let's have an example: the following XML document would be represented as tree in fig. \ref{xml_example}.
 \begin{verbatim}
   <person name="john" surname="smith">
     <info>
@@ -198,10 +198,10 @@ Let's take an example, the following XML document would be represented as tree o
     <more/>
   </person>
 \end{verbatim} 
-Although in example we present whole document tree, input modules produce slightly different format (consisting of rules).
+Although in example we present the whole document tree, input modules produce slightly different format (consisting of rules).
 
 \subsection{Rules and grammars} \label{rules_grammar}
-jInfer and its documentation uses extended context-free grammars\cite{extendedcfg}.
+jInfer and its documentation use extended context-free grammars\cite{extendedcfg}.
 \emph{Rules} in such grammar are in the form
 $$
   \textnormal{Left Hand Side (LHS)} \to \textnormal{Right Hand Side (RHS)}

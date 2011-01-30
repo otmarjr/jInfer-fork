@@ -288,27 +288,27 @@ We describe each \jmodule{ClusterProcessor} implementation shipped in jInfer in 
 
 %#### STRUCTURE->RegularExpressionCleaner ############################################
 \subsection{RegularExpressionCleaner module}
-Last we examine \jmodule{RegularExpressionCleaner} interface.
+Finally we examine the \jmodule{RegularExpressionCleaner} interface.
 Purpose of this submodule is only to make output regular expression corrections, to make them nicer.
-For example it is common that converting automaton to regular expression by state elimination produces nested concatenations such like $(name, (person, id))$.
+For example it is common that converting automaton to regular expression by state elimination produces nested concatenations such as $(name, (person, id))$.
 To convert such expression into $(name, person, id)$, one can implement this interface and connect it to work in chain.
-Interface is definition is straightforward:
+Interface definition is straightforward here.
 \begin{verbatim}
 public interface RegularExpressionCleaner<T> {
   Regexp<T> cleanRegularExpression(Regexp<T> regexp);
 }
 \end{verbatim}
 Given regular expression, return regular expression.
-Converting of regular expression is commonly a recursive task and all our implementations work this way.
+Conversion of regular expression is commonly a recursive task and all our implementations work this way.
 
 %#### PREFERENCES ############################################
 \section{Preferences}
 All settings provided by \jmodule{TwoStepSimplifier} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.twostep.properties} package.
-It is possible to:
+It is possible to set the following.
 \begin{itemize}
-	\item select \jmodule{Clusterer} submodule implementation from those installed
-	\item select \jmodule{ClusterProcessor} submodule implementation from those installed
-	\item select \jmodule{RegularExpressionCleaner} submodule implementation from those installed
+	\item Select \jmodule{Clusterer} submodule implementation from those installed.
+	\item Select \jmodule{ClusterProcessor} submodule implementation from those installed.
+	\item Select \jmodule{RegularExpressionCleaner} submodule implementation from those installed.
 \end{itemize}
 
 %#### DATA FLOW ############################################
@@ -317,34 +317,34 @@ It is possible to:
 	\centering\includegraphics[scale=1]{twostep_flow}
 	\caption{TwoStep data flow} \label{twostep_flow}
 \end{figure}
-Process illustrated on fig. \ref{twostep_flow}:
+Process illustrated in fig. \ref{twostep_flow} is as follows.
 \begin{enumerate}
-	\item On input there is Initial Grammar, which is ruled into \jmodule{Clusterer}.
-	\item Then, each cluster is sent to submodule \jmodule{ClusterProcessor}, which returns regular expression for that cluster.
+	\item Initial Grammar on input, which is ruled into \jmodule{Clusterer}. % TODO anti WTF is "ruled into"?
+	\item Each cluster is sent to submodule \jmodule{ClusterProcessor}, which returns regular expression for that cluster.
 	\item Regular expression is sent to \jmodule{RegularExpressionCleaner} submodule for cleaning.
-	\item From each cluster processing, regular expression is added to the list of simplified grammar rules.
+	\item Regular expressions representing all the processed clusters are added to the list of simplified grammar rules.
 	\item List of simplified rules is returned (Simplified grammar).
 \end{enumerate}
 
 %#### SUBMODULES ############################################
-\section{Submodules implementations}
+\section{Submodule implementations}
 %#### SUBMODULES->Iname ############################################
 \subsection{Iname (ClusteterWithAttributes)} \label{section_Iname}
-We cluster elements in \code{Iname<AbstractStructuralNode, Attribute>} class, which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes.
-Clustering is done based on elements \code{getName} equality test (ignore case).
-For each rule (element), it is first clustered by finding cluster where representant has same name - or create new cluster with this element as representant.
-Then we process right side of this element rule (that are nodes from \code{getSubnodes}).
-Since right side of rule is always concatenation, we simply take \code{.getSubnodes().getTokens()} list and iterate through it.
-Each node on right side, is examined:
+We cluster elements in \code{Iname<AbstractStructuralNode, Attribute>} class, which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes. % TODO anti I don't understand the sentence, rewrite.
+Clustering is done based on element's \code{getName()} equality (ignoring case).
+For each rule (element), it is first clustered by finding the cluster which representant has the same name - or create new cluster with this element as representant.
+Then we process right side of this element rule (that are nodes from \code{getSubnodes()}).
+Since right side of rule is always concatenation (\jmodule{TwoStep} accepts only simple grammar representation), we simply take \code{.getSubnodes().getTokens()} list and iterate through it.
+Each node on right side, is examined in the following way.
 \begin{itemize}
-  \item if it is simple data throw it to \code{SimpleDataClusterer} class which is associated with main element cluster. It does nothing more, than holds all \code{SimpleData} instances in one cluster. But in future it may be replaced to cluster simple data somehow, to obtain meaningful content models in schemas.
-  \item if it is element and it is tagged as sentinel by metada - search main clusters to find cluster with representant of same \code{getName()}, or create new cluster with this sentinel as representant. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it.
-  \item do nothing otherwise, since it is element, it has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in Initial Grammr, thus it is already processed or is on schedule.
+  \item If it is \textbf{simple data}, throw it to \code{SimpleDataClusterer} class which is associated with main element cluster. It does nothing more, than holds all \code{SimpleData} instances in one cluster. But in future it may be replaced to cluster simple data somehow, to obtain meaningful content models in schemas.
+  \item If it is \textbf{element} and it is tagged as sentinel - search main clusters to find cluster with representant of same \code{getName()}, or create new cluster with this sentinel as representant. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it. % TODO anti Please rewrite the really long sentence.
+  \item Do nothing otherwise, since it is element, it has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in Initial Grammar, thus it is already processed or is on schedule. % TODO anti Totally unclear, rewrite
 \end{itemize}
-Attributes of element are processed through helper attribute clusterer, which is created for each element cluster.
-We have bunch of elements of same name in cluster and one attribute clusterer associated with this bunch.
+Attributes of element are processed through a helper attribute clusterer, which is created for each element cluster.
+We have bunch of elements of same name in a cluster and one attribute clusterer associated with this bunch.
 This attribute clusterer is given all attributes instances encountered in all elements that are in bunch.
-It clusters them by name (case insensitive).
+It clusters them by name, case insensitive.
 Each main cluster also has \code{SimpleData} clusterer associated with it.
 Whole scheme is on fig. \ref{clusterer_structure}.
 \begin{figure}[tpb]
@@ -352,7 +352,7 @@ Whole scheme is on fig. \ref{clusterer_structure}.
 	\caption{Iname clusterer structure} \label{clusterer_structure}
 \end{figure}
 
-To rehearse, there are main clusters for elements, for each main cluster there are two helper clusterer - one for attribute clusters and one for simple data clusters.
+Once again, there are main clusters for elements, for each main cluster there are two helper clusterers - one for attribute clusters and one for simple data clusters.
 
 %#### SUBMODULES->PassRepresentant ############################################
 \subsection{PassRepresentant (ClusterProcessor)} \label{section_PassRepresentant}

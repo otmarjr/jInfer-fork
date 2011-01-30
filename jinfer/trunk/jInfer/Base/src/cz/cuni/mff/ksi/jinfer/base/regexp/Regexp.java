@@ -506,7 +506,7 @@ public class Regexp<T> {
                   })
                   + interval.toString();
         case LAMBDA:
-          return "lambda\u03BB";
+          return "\u03BB";
         default:
           throw new IllegalArgumentException("Unknown enum member " + type);
       }

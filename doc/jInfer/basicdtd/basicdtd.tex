@@ -57,36 +57,35 @@ The main class implementing \code{SchemaGenerator} inference interface and simul
 Export of a single element is handled in the \code{elementToString()} method. First the actual \code{<!ELEMENT \ldots>} tag is exported, after that its attributes in a \code{<!ATTLIST \ldots>} tag (if there are any).
 
 \subsection{Element content export}
-Elements are processed in method \code{elementToString()}.
+Elements are processed \code{elementToString()} method.
 Whole element regexp is sent to method \code{expandIn\.ter\.vals\.Reg\.exp} of class \code{IntervalExpander}.
-Its purpose is to convert intervals on regexp and its children to those, that are representable in DTD.
+Its purpose is to convert intervals on regexp and its children to those representable in DTD.
 For example regular expression $(a\{2,5\}, b\{0,2\})$ would be transformed to $(a,a,a?,a?,a?,b?,b?)$.
 Class \code{IntervalExpander} works recursively.
 Regexp is passed to method \code{expandIntervalsRegexp} to handle regexp in that element.
-This method makes big switch according to regexp type.
+This method contains a big\code{switch} based on the regexp type.
 For $\lambda$, it returns $\lambda$.
 Otherwise, it examines interval of regexp in method \code{is\.Sa\.fe\.In\.ter\.val}.
 In DTD one can represent $+, ?, \ast$, so safe intervals are $\{1, \infty\}, \{0, 1\}, \{0, \infty\}$ respectively.
-If interval is not safe, it has to be expanded.
+If an interval is not safe, it has to be expanded.
 It is easy to do so, first output $min$-times the regexp itself - that is the minimum occurences, with interval set to $\{1, 1\}$.
 Then, if interval is bounded, output $max - min$-times the regexp itself with interval $\{0, 1\}$ - that is optional part.
 If it is unbounded and $min$ is zero, attach the regexp once, with interval $\{0, \infty\}$.
-If $min$ is nonzero, last regexp in required string gets interval $\{1, \infty\}$.
+If $min$ is non-zero, last regexp in required string gets interval $\{1, \infty\}$.
 
-After intervals are expanded, returned regexp is passed to \code{regexpToString()}, which is divided by big \code{switch} statement of type of regexp.
+After intervals are expanded, resulting regexp is passed to \code{regexpToString()}, which contains a big \code{switch} statement based on the type of regexp.
 For $\lambda$, it simply returns \code{EMPY} as string.
 Tokens are first examined if they are \code{SimpleData}, if so, string \code{\#PCDATA} is returned.
 If not, element name is returned.
 If interval of this regexp is different from $\{1, 1\}$, the interval \code{toString()} representation is appended.
 
-Little complication is with complex regexps, that contain \code{SimpleData} somewhere inside tree.
-They are processed in \code{comboToString} method, it first checks, if there are no simple data in whole tree.
+Situation is a bit complicated with complex regexps that contain \code{SimpleData} somewhere inside the tree.
+They are processed in \code{comboToString} method which first checks if there are no simple data in whole tree.
 If not, regexp can be outputted just as list, e.g. $(a, b, c)$ or $(a | b | c)$ or $(a \& b \& c)$.
 If there is at least one simple data, flattening is applied.
 That means, all elements from regexp are collected into one flat list.
 All simple datas are trashed away.
 On output is string \code{(\#PCDATA, a, b, c, d)*}, as this is the only way to represent mixed content in DTDs.
-
 
 \subsection{Attribute export}
 

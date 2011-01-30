@@ -52,13 +52,51 @@ This is a relatively simple implementation of a \jmodule{SchemaGenerator} export
 
 \section{Structure}
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl}. Its \code{start} method first topologically sorts all rules (elements) it got in the simplified grammar on input. This toposorting is necessary to avoid using anything not yet defined in the resulting schema. Afterwards, it creates their DTD string represenation.\\
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provi\-der is \code{Sche\.ma\.Ge\.ne\.ra\.tor\.Impl}. Its \code{start} method first topologically sorts all rules (elements) it got in the simplified grammar on input. This toposorting is necessary to avoid using anything not yet defined in the resulting schema. Afterwards, it creates their DTD string represenation.\\
 
 Export of a single element is handled in the \code{elementToString()} method. First the actual \code{<!ELEMENT \ldots>} tag is exported, after that its attributes in a \code{<!ATTLIST \ldots>} tag (if there are any).
 
 \subsection{Element content export}
+Elements are processed in method \code{elementToString()}, but the real work is done in method \code{regexpToString()}, which takes regexp and recursively converts it to string representation.
+But before, whole element is sent to method \code{expandIntervalsElement} of class \code{IntervalExpander}.
+Its purpose is to convert intervals on regexp and its children to those, that are representable in DTD.
+For example regular expression $(a\{2,5\}, b\{0,2\})$ would be transformed to $(a,a,a?,a?,a?,b?,b?)$.
+Class \code{IntervalExpander} works recursively.
+First, element is passed to \code{expand\.In\.ter\.vals\.E\.le\.me\.nt}, which does (shortened):
+\begin{verbatim}
+public Element expandIntervalsElement(final Element treeBase) {
+  return new Element(
+    treeBase.getContext(),
+    treeBase.getName(),
+    treeBase.getMetadata(),
+    expandIntervalsRegexp(treeBase.getSubnodes()),
+    treeBase.getAttributes());
+}
+\end{verbatim}
+It calls private method \code{expandIntervalsRegexp} to handle regexp in that element.
+This private method makes big switch according to regexp type.
+For $\lambda$, it returns $\lambda$.
+Otherwise, it examines interval of regexp in method \code{is\.Sa\.fe\.In\.ter\.val}.
+In DTD one can represent $+, ?, \ast$, so safe intervals are $\{1, \infty\}, \{0, 1\}, \{0, \infty\}$ respectively.
+If interval is not safe, it has to be expanded.
+It is easy to do so, first output $min$-times the regexp itself - that is the minimum occurences, with interval set to $\{1, 1\}$.
+Then, if interval is bounded, output $max - min$-times the regexp itself with interval $\{0, 1\}$ - that is optional part.
+If it is unbounded, attach the regexp once, with interval $\{0, \infty\}$.
 
-TODO anti
+After intervals are expanded, further processing in \code{regexpToString} is divided by big \code{switch} statement of type of regexp.
+For $\lambda$, it simply returns \code{EMPY} as string.
+Tokens are first examined if they are \code{SimpleData}, if so, string \code{\#PCDATA} is returned.
+If not, element name is returned.
+If interval of this regexp is different from $\{1, 1\}$, the interval \code{toString()} representation is appended.
+
+Little complication is with complex regexps, that contain \code{SimpleData} somewhere inside tree.
+They are processed in \code{comboToString} method, it first checks, if there are no simple data in whole tree.
+If not, regexp can be outputted just as list, e.g. $(a, b, c)$ or $(a | b | c)$ or $(a \& b \& c)$.
+If there is at least one simple data, flattening is applied.
+That means, all elements from regexp are collected into one flat list.
+All simple datas are trashed away.
+On output is string \code{(\#PCDATA, a, b, c, d)*}, as this is the only way to represent mixed content in DTDs.
+
 
 \subsection{Attribute export}
 

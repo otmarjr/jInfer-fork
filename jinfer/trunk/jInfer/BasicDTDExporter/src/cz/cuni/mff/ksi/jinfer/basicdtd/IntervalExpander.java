@@ -42,27 +42,6 @@ import java.util.Set;
  */
 public class IntervalExpander {
 
-  private final Set<Element> visited = new HashSet<Element>();
-
-  /**
-   * Given a tree base element, expands whole regepx tree underneath.
-   * Returns base of tree element, with expanded regexps.
-   * @param treeBase
-   * @return
-   */
-  public Element expandIntervalsElement(final Element treeBase) {
-    if (visited.contains(treeBase)) {
-      return treeBase;
-    }
-    visited.add(treeBase);
-    return new Element(
-            treeBase.getContext(),
-            treeBase.getName(),
-            treeBase.getMetadata(),
-            expandIntervalsRegexp(treeBase.getSubnodes()),
-            treeBase.getAttributes());
-  }
-
   private boolean isSafeInterval(final RegexpInterval interval) {
     if (interval.isOnce()
             || interval.isOptional()
@@ -73,14 +52,14 @@ public class IntervalExpander {
     return false;
   }
 
-  private Regexp<AbstractStructuralNode> expandIntervalsRegexp(
+  public Regexp<AbstractStructuralNode> expandIntervalsRegexp(
           final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
         return regexp;
       case TOKEN:
         if (StructuralNodeType.ELEMENT.equals(regexp.getContent().getType())) {
-          final AbstractStructuralNode expandedContent = expandIntervalsElement((Element) regexp.getContent());
+          final AbstractStructuralNode expandedContent = ((Element) regexp.getContent());
 
           if (isSafeInterval(regexp.getInterval())) {
             return Regexp.<AbstractStructuralNode>getToken(expandedContent, regexp.getInterval());
@@ -90,7 +69,14 @@ public class IntervalExpander {
           for (int i = 0; i < regexp.getInterval().getMin() - 1; i++) {
             l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent));
           }
-          l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent, RegexpInterval.getKleeneCross()));
+          if (regexp.getInterval().isUnbounded()) {
+            l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent, RegexpInterval.getKleeneCross()));
+          } else {
+            l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent));
+            for (int i = regexp.getInterval().getMin(); i < regexp.getInterval().getMax(); i++) {
+              l.add(Regexp.<AbstractStructuralNode>getToken(expandedContent, RegexpInterval.getOptional()));
+            }
+          }
           return Regexp.<AbstractStructuralNode>getConcatenation(l);
         }
         return Regexp.<AbstractStructuralNode>getToken(regexp.getContent()); // nullying any intervals in simple data and attributes!
@@ -110,7 +96,14 @@ public class IntervalExpander {
         for (int i = 0; i < regexp.getInterval().getMin() - 1; i++) {
           m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getOnce()));
         }
-        m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getKleeneCross()));
+        if (regexp.getInterval().isUnbounded()) {
+          m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getKleeneCross()));
+        } else {
+          m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getOnce()));
+          for (int i = regexp.getInterval().getMin(); i < regexp.getInterval().getMax(); i++) {
+            m.add(new Regexp<AbstractStructuralNode>(null, children, regexp.getType(), RegexpInterval.getOptional()));
+          }
+        }
         return Regexp.<AbstractStructuralNode>getConcatenation(m);
       default:
         throw new IllegalArgumentException("Unknown regexp type" + regexp.getType());

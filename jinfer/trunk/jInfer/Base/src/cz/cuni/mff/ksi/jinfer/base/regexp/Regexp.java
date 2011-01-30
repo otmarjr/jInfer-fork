@@ -90,7 +90,6 @@ public class Regexp<T> {
    *
    * <code>
    * Regexp<T> r = Regexp.<T>getMutable();<br/>
-   * r.setInterval(...);<br/>
    * r.setType(RegexpType.LAMBDA);<br/>
    * r.setImmutable();cz.cuni.mff.ksi.jinfer.base<br/>
    *<br/>
@@ -507,7 +506,7 @@ public class Regexp<T> {
                   })
                   + interval.toString();
         case LAMBDA:
-          return "\u03BB";
+          return "lambda\u03BB";
         default:
           throw new IllegalArgumentException("Unknown enum member " + type);
       }

@@ -356,10 +356,10 @@ Once again, there are main clusters for elements, for each main cluster there ar
 
 %#### SUBMODULES->PassRepresentant ############################################
 \subsection{PassRepresentant (ClusterProcessor)} \label{section_PassRepresentant}
-Simple example to read. For each cluster return its representant as a rule to be in schema.
-This has nothing to do with infering grammar, it is just proof of submodules concept.
+Trivial ClusterProcessor implementation. For each cluster return its representant as the rule to be in resulting schema.
+This has nothing to do with grammar simplification, it is just a proof-of-concept submodule.
 Input documents are not valid against this odd grammar.
-Do not use this in practice, just read the code to understand the bare minimum needed to implement submodule.
+Do not use this in practice, just read the code to understand the bare minimum needed to implement a submodule.
 
 %#### SUBMODULES->Alternations ############################################
 \subsection{Alternations (ClusterProcessor)} \label{section_Alternations}
@@ -372,7 +372,6 @@ No generalization is done at all.
 This processor takes all rules in a cluster, treats them like strings and builds a prefix tree (a ``trie") of them. More precisely, it takes the first rule and declares it to be a long branch (concatenation of tokens) in a newly created tree. After that, it adds the remaining rules one by one as branches like this: as long as it can follow an existing branch, it follows it. As soon as the newly added branch starts to differ, it ``branches off" (creates an alternation at that point) the existing tree and hangs the rest of the newly added rule there. Repeating this process creates a prefix tree describing all the rules in the cluster.
 The tree is the final regular expression.
 
-
 %#### SUBMODULES->AutomatonMergingState ############################################
 \subsection{AutomatonMergingState (ClusterProcessor)} \label{section_AutomatonMergingState}
 \begin{figure}[tpb]
@@ -383,9 +382,9 @@ The tree is the final regular expression.
 	\centering\includegraphics[scale=1]{automaton_merging_state_flow}
 	\caption{Data flow of AutomatonMergingState cluster processor} \label{automaton_merging_state_flow}
 \end{figure}
-\jmodule{AutomatonMergingState} is implementation of merging state algorithm on nondeterministic finite automaton (see package \code{cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate}).
+\jmodule{AutomatonMergingState} is an implementation of merging state algorithm on nondeterministic finite automaton (see package \code{cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate}).
 \subsubsection{Structure} \label{section_AutomatonMergingState_structure}
-Shortened code of cluster processor operation:
+Abridged code of cluster processor operation follows.
 \begin{verbatim}
 // 1. Construct PTA
 Automaton<AbstractStructuralNode> automaton = new Automaton<AbstractStructuralNode>(true);
@@ -411,6 +410,7 @@ Automaton<AbstractStructuralNode> simplifiedAutomaton =
 // 3. Convert Automaton<AbstractStructuralNode> to RegexpAutomaton<AbstractStructuralNode>
 RegexpAutomaton<AbstractStructuralNode> regexpAutomaton =
     new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);
+    
 // 4. Call regexpAutomatonSimplifier to obtain regular expression from regexpAutomaton
 Regexp<AbstractStructuralNode> regexp =
     regexpAutomatonSimplifier.simplify(regexpAutomaton, regexpAbstractToString);
@@ -424,22 +424,21 @@ return new Element(
       new ArrayList<Attribute>()
       );
 \end{verbatim}
-The whole submodule structure is drawn on fig. \ref{automaton_merging_state_modules}.
+The whole submodule structure is in fig. \ref{automaton_merging_state_modules}.
 
 \subsubsection{Data flow}
-It works in steps:
+\jmodule{AutomatonMergingState} works in following steps.
 \begin{enumerate}
-	\item It creates prefix-tree automaton (PTA) from positive examples - right sides of rules given.
-Then it calls its submodule called \jmodule{AutomatonSimplifier} to  modify PTA to some generalized 
-automaton by merging states.
+	\item Create prefix-tree automaton (PTA) from positive examples - right sides of rules.
+Call its submodule \jmodule{AutomatonSimplifier} to modify PTA to some generalized automaton by merging states.
 	\item Simplified automaton is then converted to an instance of \code{RegexpAutomaton} (see \ref{section_RegexpAutomaton}) by using clone constructor.
 Regexp automaton is automaton with regular expression as symbol on transitions.
 In automata theory, such automaton is called extended NFA.
 Clone constructing is done by converting each symbol in source automaton to regexp token with that symbol as \code{content}.
 	\item \code{RegexpAutomaton} is then passed into second submodule called \jmodule{RegexpAutomatonSimplifier}.
-Its job is to derive regular expression from automaton, such that automaton and regular expression represents same language.
+Its job is to derive regular expression from automaton, such that automaton and regular expression represent the same language.
 \end{enumerate}
-The data flow is on fig. \ref{automaton_merging_state_flow}.
+The data flow is in fig. \ref{automaton_merging_state_flow}.
 
 \subsubsection{Data structures - Automaton} \label{section_Automaton}
 \begin{figure}[tpb]

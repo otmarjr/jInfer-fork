@@ -111,7 +111,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     if (regexp.isToken()) {
       ret.append("(");
     }
-    ret.append(regexpToString(regexp));
+    IntervalExpander ie = new IntervalExpander();
+    ret.append(regexpToString(ie.expandIntervalsRegexp(regexp)));
     if (regexp.isToken()) {
       ret.append(")");
     }

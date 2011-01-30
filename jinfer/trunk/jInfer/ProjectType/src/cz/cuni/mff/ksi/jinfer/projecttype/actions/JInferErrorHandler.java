@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.openide.cookies.LineCookie;
@@ -28,6 +29,7 @@ import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.text.Line;
 import org.openide.windows.IOProvider;
+import org.openide.windows.IOSelect;
 import org.openide.windows.InputOutput;
 import org.openide.windows.OutputEvent;
 import org.openide.windows.OutputListener;
@@ -115,6 +117,8 @@ public class JInferErrorHandler extends DefaultHandler {
       } else {
         ioResult.getOut().println();
       }
+
+      IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
       ioResult.getOut().close();
       result = false;
     }

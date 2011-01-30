@@ -79,7 +79,7 @@ public class XMLProcessor implements Processor {
               getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {
         throw new RuntimeException("Error parsing XML file.", e);
       } else {
-        LOG.warn("Error parsing XML file, ignoring and going on.", e);
+        LOG.error("Error parsing XML file, ignoring and going on.", e);
         return Collections.emptyList();
       }
     }

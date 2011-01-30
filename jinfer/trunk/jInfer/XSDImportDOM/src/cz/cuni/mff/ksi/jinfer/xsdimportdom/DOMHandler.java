@@ -186,10 +186,17 @@ public class DOMHandler {
     // after we know all available complex types can we parse the rule subtrees
     for (int i = 0; i < root.getChildNodes().getLength(); i++) {
       final org.w3c.dom.Element domElem = DOMHelper.isDOMElement(root.getChildNodes().item(i));
+      // every element must be added to roots
       if (domElem != null && XSDTag.ELEMENT.equals(XSDTag.matchName(DOMHelper.trimNS(domElem.getNodeName())))) {
-        // every element must be added to roots
-        addElementToRoots(domElem);
+        // XSD Schema specification states that use of minOccurs and maxOccurs attributes
+        // cannot be used for element directly under schema tag
+        // that's why we use RegexpInterval.getOnce()
+        roots.add(buildRuleSubtree(domElem,
+                               new ArrayList<String>(),
+                               new ArrayList<org.w3c.dom.Element>(),
+                               RegexpInterval.getOnce()));
       }
+      // else .. we are not interested in the node
     }
   }
 
@@ -233,27 +240,6 @@ public class DOMHandler {
       }
     } else {
       LOG.warn("Trying to add a complexType with no name under: " + domElem.getParentNode().getNodeName());
-    }
-  }
-
-  /**
-   * Transform domElem to <code>Element</code>, which will be either a sentinel with no subtree
-   * (if it has defined <i>ref</i> attribute), or a regular element with full subtree that is
-   * recursively parsed from the schema.
-   * @param domElem Node in the DOM tree to process.
-   */
-  private void addElementToRoots(final org.w3c.dom.Element domElem) {
-    final String name = domElem.getAttribute(XSDAttribute.NAME.toString());
-    if (BaseUtils.isEmpty(name) && domElem.hasAttribute(XSDAttribute.REF.toString())) {
-      roots.add(createSentinel(domElem, new ArrayList<String>(), XSDAttribute.REF));
-    } else {
-      // XSD Schema specification states that use of minOccurs and maxOccurs attributes
-      // cannot be used for element directly under schema tag
-      // that's why we use RegexpInterval.getOnce()
-      roots.add(buildRuleSubtree(domElem,
-                                 new ArrayList<String>(),
-                                 new ArrayList<org.w3c.dom.Element>(),
-                                 RegexpInterval.getOnce()));
     }
   }
 
@@ -351,11 +337,13 @@ public class DOMHandler {
     switch (tag) {
       case ELEMENT:
         for (org.w3c.dom.Element el : visited) {
-          // if this node was visited previously in the recursion
+          // if this node was visited previously in the recursion, it is the same instance,
           // (for example when dealing with a recursive complextype)
           // we just create a sentinel to be used as the leaf node of rule tree
           if (el == currentNode) {
-            // has to be the same instance
+            if (verbose) {
+              LOG.debug("Element visited previously, creating sentinel.");
+            }
             return createSentinel(currentNode, context, XSDAttribute.NAME);
           }
         }
@@ -363,7 +351,13 @@ public class DOMHandler {
         if (!BaseUtils.isEmpty(name)) {
           ret.setName(name);
         } else if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
-          return createSentinel(currentNode, context, XSDAttribute.REF);
+          if (XSDTag.SCHEMA.toString().equals(DOMHelper.trimNS(currentNode.getParentNode().getNodeName()))) {
+            throw new XSDException("Invalid schema. Element attribute 'ref' is not allowed for elements directly under the schema tag.");
+          } else if (!referenced.containsKey(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
+            throw new XSDException("Invalid schema. Attribute 'ref' is referring to an element that is not in schema. Note: only top level elements can be referred to.");
+          } else {
+            return createSentinel(currentNode, context, XSDAttribute.REF);
+          }
         } else {
           throw new XSDException("Element must have name or ref attribute defined.");
         }

@@ -64,7 +64,7 @@ The main class implementing \code{IGGenerator} inference interface and simultane
 \section{Processors}
 
 A \emph{processor} is a class capable of extracting IG from an arbitrary \code{InputStream} (usually encapsulating a file). Various processors may handle generic XML, schemas like DTD, XSD or Schematron, query languages such as XPath, and so on.\\
-A processor has to be registered as a service provider of the \code{Processor} interface from \jmodule{Base} module. Due to the nature of NBP lookups, each processor is internally kept as a singleton, and should not use its inner state (refer to the chapter Lookups in \cite{archdoc}). Note that the factory pattern is not used here (see \cite[Factory]{archdoc}).\\ % TODO anti reference to a chapter number when factory pattern is moved to arch
+A processor has to be registered as a service provider of the \code{Processor} interface from \jmodule{Base} module. Due to the nature of NBP lookups, each processor is internally kept as a singleton, and should not use its inner state (refer to the chapter Lookups in \cite{archdoc}). Note that the factory pattern is not used here (see \cite[section 4.2]{archdoc}).\\
 Each processor declares the class of inputs (documents, schemas, queries) and file extensions it is able to handle by implementing methods \code{getFolder()}, \code{getExtension()} and \code{processUndefined()}. Refer to JavaDoc of these methods for further details.\\
 
 \jmodule{BasicIGG} comes bundled with 3 processors: for generic XML documents, DTD schemas and XPath queries. Support for XSD queries is implemented in \jmodule{XSDImporter} to demonstrate \jmodule{BasicIGG}'s extension capabilities.

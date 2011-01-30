@@ -446,12 +446,12 @@ The data flow is in fig. \ref{automaton_merging_state_flow}.
 	\caption{PTA created from input strings: $aa, aaaaa, abaa, bab, baa$} \label{pta}
 \end{figure}
 Class \code{Automaton} is shortly described in \cite{archdoc}.
-In this place, it is interestesting to look on method \code{build\.PTA\.On\.Sym\.bol}.
+Let's take a look at method \code{build\.PTA\.On\.Sym\.bol} here.
 Given \code{List<T> symbolString} it traverses automaton - comparing transition symbols with symbols in string.
 It follows transitions in automaton until first difference with string symbol is found (like in prefix trees).
 On different symbol, it creates new branch and all states and transitions on that branch.
-Last state visited got's incremented its \code{finalCount} value, as one more input string ended in this state.
-Lets see code:
+Last state visited gets its \code{finalCount} value incremented, as one more input string ended in this state.
+The code is as follows.
 \begin{verbatim}
 public void buildPTAOnSymbol(List<T> symbolString) {
   State<T> xState= this.getInitialState();
@@ -470,25 +470,25 @@ public void buildPTAOnSymbol(List<T> symbolString) {
   xState.incFinalCount();
 }
 \end{verbatim}
-Start from initial state traverse automaton by asking for \code{getOutStepOnSymbol}.
+Starting from initial state, traverse the automaton by asking for \code{getOutStepOnSymbol()}.
 If there is such step (transition), follow it to its destination state and move the position in \code{symbolString}.
 If there is no such step, create one and create also the destination state, then follow this newly created step to new state.
 
 As you can see, it is important that class \code{T} has proper implementation of \code{.equals()} method, as symbols are tested for equality by calling this method on them.
-By the way, that is why we cluster all simple data and all sentinels on right sides of rules.
-To automaton, instead of instances on right side of rules, their cluster representants are inserted as one can see in section \ref{section_AutomatonMergingState_structure}.
-This assures, that comparisons in automaton are made by using java \code{Object.equals()} reference comparison, but for each cluster member, its representant is only present in automaton.
+By the way, this is why we cluster all simple data and all sentinels on right sides of rules.
+To automaton, instead of instances on right side of rules, their cluster representants are inserted as one can see in section \ref{section_AutomatonMergingState_structure}. % TODO anti Don't understand the sentence
+This assures that comparisons in automaton are done using Java \code{Object.equals()} reference comparison, but for each cluster member, its representant is only present in automaton.
 That results in cluster-equal behaviour.
-Example of prefix-tree automaton is on fig. \ref{pta}.
+Example of prefix-tree automaton is in fig. \ref{pta}.
 
 \subsubsection{Data structures - RegexpAutomaton} \label{section_RegexpAutomaton}
-Class \code{RegexpAutomaton} is extending class \code{Automaton} with generic type \code{T} set to \code{Regexp<T>}.
+Class \code{RegexpAutomaton} extends class \code{Automaton} with generic type \code{T} set to \code{Regexp<T>}.
 That is, you have to instantiate it with same symbol type (e.g. \code{AbstractStructuralNode}) as automaton.
-Implementation can be found in package \code{cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping}, that is same, as where \jmodule{RegexpAutomatonSimplifier} interface is defined.
-Implementation is nothing special, it has only copy constructor which creates regular expression automaton from ordinary automaton by enclosing each symbol on transition of original automaton by \code{Regexp.TOKEN}.
+Implementation is in package \code{cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping}. This is the same package where \jmodule{RegexpAutomatonSimplifier} interface is defined.
+Implementation is nothing special - there is a copy constructor which creates regular expression automaton from ordinary automaton by enclosing each symbol on transition of original automaton in a \code{Regexp.TOKEN}.
 
 \subsubsection{AutomatonSimplifier module}
-\jmodule{AutomatonSimplifier} module has its worker interface defined as:
+\jmodule{AutomatonSimplifier} module has its worker interface defined as following.
 \begin{verbatim}
 public interface AutomatonSimplifier<T> {
   Automaton<T> simplify(Automaton<T> inputAutomaton, 
@@ -498,41 +498,40 @@ public interface AutomatonSimplifier<T> {
                         String elementName) throws InterruptedException;
 }
 \end{verbatim}
-Given input automaton it returns automaton, there is nothing magical on it.
-Interface is defined as generic, implementation don't have to be, but there is no reason to not make them generic.
-When implementation needs to present automaton to user, however, it needs some string representation of symbols to display on automaton transitions.
+Given input automaton it returns automaton, there is nothing magical to it.
+Interface is defined as generic, implementations don't have to be. However, there is no reason not to make them generic.
+When implementation needs to present an automaton to user, it needs string representation of symbols to display on automaton transitions.
 For this reason, the second parameter, \code{symbolToString} (implementation of \code{SymbolToString} interaface) is given.
 It is responsible for converting symbol to string.
-To \jmodule{AutomatonSimplifier} it is passed from \jmodule{AutomatonMergingState} cluster processor, where we know that symbols are of type \code{AbstractStructuralNode}, so we implement \code{SymbolToString} by using \code{getName()} method on nodes and pass it down to generic \code{AutomatonSimplififier} submodule.
-Overloaded version is to inform user about name of processed element when presenting automaton by \jmodule{AutoEditor}.
+To \jmodule{AutomatonSimplifier} it is passed from \jmodule{AutomatonMergingState} cluster processor, where we know that symbols are of type \code{AbstractStructuralNode}, so we implement \code{SymbolToString} by using \code{getName()} method on nodes and pass it down to generic \code{AutomatonSimplififier} submodule. % TODO anti Unreadable....
+Overloaded version is to inform the user about name of processed element when presenting automaton in \jmodule{AutoEditor}.
 This version of interface will probably change in future.
 
-By this genericity, simplifier can be used to perfom same algorithms for simplifying not only to infer rules for elements, but maybe also to infer patterns strings for content model of attributes.
+This generality means that simplifier can not only be used to infer rules for elements, but possibly also to infer patterns strings for content model of attributes using the same algorithms.
 The actual implementation of this still waits for its developer to come.
 Implementations of \jmodule{AutomatonSimplifier} are discussed in \ref{section_Greedy} and \ref{section_UserInteractive}.
 
 \subsubsection{RegexpAutomatonSimplifier submodule}
-Purpose of \jmodule{RegexpAutomatonSimplifier} is to obtain regular expression from given automaton.
-Interface for doing this is thus simple:
+Purpose of \jmodule{RegexpAutomatonSimplifier} is to obtain a regular expression from a given automaton.
+Interface for doing is is thus simple.
 \begin{verbatim}
 public interface RegexpAutomatonSimplifier<T> {
   Regexp<T> simplify(RegexpAutomaton<T> inputAutomaton, 
                      SymbolToString<Regexp<T>> symbolToString) throws InterruptedException;
 }
 \end{verbatim}
-Once again we are encountering \code{symbolToString} with same purpose as before, if submodule would need to present automaton to user
-it has to be able to convert symbols of (at runtime) unknown type to strings.
+Once again we encounter \code{symbolToString} with the same purpose as before, if submodule would need to present the automaton to user, it has to be able to convert symbols of (at runtime) unknown type to strings.
 Our implementation of \jmodule{RegexpAutomatonSimplifier} is discussed in \ref{section_StateRemoval}
 
 \subsubsection{MergeConditionTester submodule}
 \jmodule{AutomatonMergingState} has one more submodule, the \jmodule{MergeConditionTester}, which is not called directly by \jmodule{Au\.to\.ma\.ton\.Merg\.ing\.Sta\.te}.
-It is at disposal for implementations of \code{AutomatonSimplifier} interface for testing, whether two states in automaton are equivalent and should be merged into one state.
+It is at disposal of implementations of \code{AutomatonSimplifier} interface for testing, whether two states in automaton are equivalent and should be merged into one state.
 
-Module \jmodule{AutomatonSimplifier} implements solution searching logic in simplifying automaton by merging states.
+Module \jmodule{AutomatonSimplifier} implements solution searching logic in simplifying automaton by merging states. % TODO anti Don't understand
 One can implement ACO heuristics or MDL principle heuristics as \jmodule{AutomatonSimplifier} submodule, and can use any of \jmodule{MergeConditionTesters} provided.
 
 \subsection{NestedConcatention (RegularExpressionCleaner)} \label{section_NestedConcatention}
-This cleaner does exactly what we have just described.
+This cleaner does exactly what we have just described. % TODO anti Doesn't make sense
 It converts nested concatenations into flat ones.
 Example: $(name, (person, id))$ is converted to $(name, person, id)$.
 
@@ -542,7 +541,7 @@ Plug this one into chain, if you want to omit this step in inference.
 
 \subsection{EmptyChildren (RegularExpressionCleaner)} \label{section_EmptyChildren}
 Wipes out regular expressions of type: concatenation, alternation, permutation, which have empty \code{children} member.
-For example some pitty inferring method produces unnecessary empty regexps in regexp tree as:
+If for example an inference method produces unnecessary empty regexps in regexp tree such as
 $$
 (name, (), (person, id))
 $$
@@ -553,12 +552,12 @@ $$
 $$
 
 \subsection{Chained (RegularExpressionCleaner)} \label{section_Chained}
-Enables user to chain more cleaners with output from first one plugged as input into second one and so one.
-Thus regular expression from inference can pass through \jmodule{EmptyChildren} and them through \jmodule{NestedConcatenation} cleaners and then it is returned.
+Allows the user to chain more cleaners with output from first one plugged as input into second one and so one.
+Thus regular expression from inference can pass through \jmodule{EmptyChildren} and then through \jmodule{NestedConcatenation} cleaners and then it is returned.
 
 \subsection{Greedy (AutomatonSimplifier)} \label{section_Greedy}
 We implement greedy strategy of automaton simplifying in class \code{Greedy}.
-It simply asks given \code{MergeConditionTester} if it can merge any of automaton states and merges states until there are no states to be merged:
+It simply asks given \code{MergeConditionTester} if it can merge any of automaton states and merges states until there are no states to be merged.
 \begin{verbatim}
 while (there exist pair of states that are equivalent) {
   merge them
@@ -567,27 +566,27 @@ while (there exist pair of states that are equivalent) {
 We provide one \jmodule{MergeConditionTester} implementation, see \ref{section_KHContext}.
 
 \subsection{UserInteractive (AutomatonSimplifier)} \label{section_UserInteractive}
-We have created automaton simplifier which displays user input automaton asking him to select some states to merge.
-Then it merges them and asks user again:
+We have created automaton simplifier which shows the user the input automaton, asking him to select states to merge.
+Then it merges them and asks user again.
 \begin{verbatim}
 repeat {
   draw automaton
   if (user selects more than one state to merge) {
     merge them
   }
-} until (user selected at least one state in last trial)
-\end{verbatim}
+} until (user selected at least one state in last trial) TODO anti Trial -> Attempt?
+\end{verbatim} 
 We use \jmodule{AutoEditor} module described in \cite{autoeditordoc}.
-To make reader more happy, we include one screenshot of automaton visualization on picture \ref{screenshot}.
+A screenshot of automaton visualization is in picture \ref{screenshot}.
 \begin{figure}[tpb]
 	\centering\includegraphics[scale=0.5]{screenshot}
 	\caption{Screenshot of UserInteractive (AutomatonSimplifier).} \label{screenshot}
 \end{figure}
 
 \subsection{KHContext (MergeConditionTester)} \label{section_KHContext}
-We have implemented \emph{k,h-context} state equivalence (see \cite{ahonen}) in class \code{KHContext} (implements \code{Mer\.ge\.Con\.di\.tion\.Tes\.ter} interface), which is used by \code{Greedy} to test mergability of states by default configuration.
-TODO vektor : mention this? (we have stupid algorithm:)
-We don't use $k-grams$ algorithm from \cite{ahonen}, but a simple DFS.
+We have implemented \emph{k,h-context} state equivalence (see \cite{ahonen}) in class \code{KHContext} (implements \code{Mer\.ge\.Con\.di\.tion\.Tes\.ter} interface), which is used by \code{Greedy} to test mergeability of states by default configuration. % TODO anti Sentence unclear
+% TODO vektor : mention this? (we have stupid algorithm:) TODO anti Of course;)
+We don't use $k-grams$ algorithm from \cite{ahonen}, just a simple DFS.
 
 \subsection{StateRemoval (RegexpAutomatonSimplifier)} \label{section_StateRemoval}
 \begin{wrapfigure}{R}{40mm}
@@ -597,11 +596,12 @@ We don't use $k-grams$ algorithm from \cite{ahonen}, but a simple DFS.
 \end{wrapfigure}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
 This is implemented in \code{StateRemoval} class (on fig. \ref{state_removal_modules}) which implements \code{RegexpAutomatonSimplifier} interface.
-before algorithm starts, states superInitial and superFinal are added to automaton, former one with $\lambda$-transition to initial state.
-From all final states $\lambda$ transition to superFinal state is added.
+% TODO anti Emphasise the states in following sentences
+Before the algorithm starts, states superInitial and superFinal are added to automaton, former with $\lambda$-transition to initial state.
+From all final states a $\lambda$ transition to superFinal state is added.
 State removal works by removing states of automaton (and redirecting transitions properly) until there are last to two states - superInitial and superFinal.
 After removing all states, there is only one transition from superInitial to superFinal state.
-That transition has final regular expression on it as symbol, it is read and returned.
+That transition has the final regular expression as symbol on it. This one is returned.
 
 We defined one submodule of this class with \jmodule{Orderer}.
 It has only one method to implement: \code{getStateToRemove}.
@@ -609,20 +609,21 @@ Given automaton, it has to return reference to one state which should be removed
 State removal calls this submodule and removes state returned.
 
 \subsubsection{Data Structures - StateRemovalRegexpAutomaton}
-We extend \code{RegexpAutomaton} to obtain automaton that fits state removing procedure.
+We extend \code{RegexpAutomaton} to obtain automaton that fits the state removal procedure.
 This implementation has methods \code{crea\.te\.Su\.per\.In\.it\.ial\.Sta\.te} and \code{crea\.te\.Su\.per\.In\.it\.ial\.Sta\.te}.
 They does exactly what their names stands for.
+% TODO anti Emphasise the states again
 SuperInitial state has only one $\lambda$-out-transition pointing to original initial state.
-SuperFinal state has as many $\lambda$-in-transitions, as there are original final states - from each one, it gets one.
-Without going further to many technical details, we just mention method \code{removeState}, which removes given state from automaton.
-Transitions are handled this way:
+SuperFinal state has as many $\lambda$-in-transitions, as there are original final states - from each one it gets one.
+Without going further into many technical details, we just mention method \code{removeState}, which removes given state from automaton.
+Transitions are handled in the following way.
 \begin{enumerate}
-	\item Collapse all loop transition of removed state to one loop transition with new \code{Regex.ALTERNATION} of all regexps on original loops (with Kleene interval set).
+	\item Collapse all loop transitions of removed state to one loop transition with new \code{Regex.ALTERNATION} of all regexps on original loops (with Kleene interval set).
 	\item Collapse all {in | out}-transitions, which same {source | destination} state to one transition with \code{Reg\.exp.AL\.TER\.NA\.TION} of original regexps.
 	\item For each in-transition, loop, and out-transition, add transition from in-transition source to out-transition destination with symbol of \code{Regexp.CONCATENATION} of in-transition regexp, loop regexp and out-transition regexp. Thus by-passing the state completely.
 	\item Remove the state and transitions associated with it.
 \end{enumerate}
-Whole process is step-by-step illustrated on fig. \ref{regaut}.
+The whole process is step-by-step illustrated in fig. \ref{regaut}.
 \begin{figure}[pb]
 	\centering
 	\subfigure[RegexpAutomaton after conversion from ordinary automaton.]
@@ -661,18 +662,18 @@ It is simple heuristic - weights all states (weight = sum of {in | out | loop}-t
 %#### EXTENSIBILITY ############################################
 \section{Extensibility}
 If you are willing to, you can replace each of three submodules of \jmodule{TwoStepSimplifier}.
-It may be useful to replace default \jmodule{ClustererWithAttributes} implementation to a clever one.
-And regular expression cleaning will be probably target of adding new implementations, too.
+It may be useful to replace the default \jmodule{ClustererWithAttributes} implementation with a clever one.
+And regular expression cleaning will be probably the aim of new implementations, too.
 We recommend replacing other parts at lower levels, however.
-You will need to replace \jmodule{ClusterProcessor} only if you want to write infering method that is not based on merging state algorithm (or NFA's at all).
+You will need to replace \jmodule{ClusterProcessor} only if you want to write inference method that is not based on merging state algorithm (or NFA's at all).
 
 If this is not your case, you can replace module \jmodule{AutomatonSimplifier} to implement ACO heuristics or MDL principle in searching solutions of merging states.
 
-Of course, merge criterion is propably the point to add implementation, implement \jmodule{MergeConditionTester} interface to obtain for example $s,k$-string merge criterion.
+Of course, merge criterion is probably the point to add implementation, implement \jmodule{MergeConditionTester} interface to obtain for example $s,k$-string merge criterion.
 
-Changing ordering of states to remove in \jmodule{StateRemoval} module is easy by replacing \jmodule{Orderer} implementation, for example to one of suggested in \cite{1224321} may lead to shorter resulting regular expressions.
+Changing ordering of states to remove in \jmodule{StateRemoval} module is easy by replacing \jmodule{Orderer} implementation, for example to one suggested in \cite{1224321} may lead to shorter resulting regular expressions.
 
-Whole TwoStep submodules structure is on fig. \ref{twostep_modules_complete}.
+Whole TwoStep submodules structure is in fig. \ref{twostep_modules_complete}.
 \begin{figure}[tpb]
 	\centering\includegraphics[scale=0.37]{twostep_modules_complete}
 	\caption{Modules of TwoStep simplifier and their submodules. Filled classes are default selection (best of).} \label{twostep_modules_complete}

@@ -46,19 +46,30 @@ public class DOMHandlerTest {
     final List<Element> result = make(null);
     assertEquals(expResult, result);
   }
-  
+
+  private static final String EMPTY1 =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
+    + "</xs:schema>";
+
   @Test
   public void testProcessEmpty() {
     System.out.println("processEmpty");
     final List<Element> expResult = new ArrayList<Element>(0);
-    final List<Element> result = make(new ByteArrayInputStream("".getBytes()));
+    final List<Element> result = make(new ByteArrayInputStream(EMPTY1.getBytes()));
     assertEquals(expResult, result);
   }
+
+  private static final String EMPTY2 =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+    + "<!-- Inferred on ... -->" + NL
+    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
+    + "</xs:schema>";
 
   @Test
   public void testProcessEmpty2() {
     System.out.println("processEmpty2");
-    final InputStream s = new ByteArrayInputStream("<!-- Inferred on Sat Jul 24 17:53:09 CEST 2010 by Trivial IG Generator, Modular Simplifier, Trivial DTD exporter -->\n\n\n".getBytes());
+    final InputStream s = new ByteArrayInputStream(EMPTY2.getBytes());
     final List<Element> expResult = new ArrayList<Element>(0);
     final List<Element> result = make(s);
     assertEquals(expResult, result);

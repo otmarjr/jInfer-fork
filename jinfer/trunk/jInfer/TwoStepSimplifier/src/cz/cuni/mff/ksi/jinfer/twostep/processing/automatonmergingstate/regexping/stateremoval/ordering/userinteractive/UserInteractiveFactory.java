@@ -32,7 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = OrdererFactory.class)
 public class UserInteractiveFactory implements OrdererFactory {
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdererUserInteractive";
-  public static final String DISPLAY_NAME = "UserInteractive";
+  public static final String DISPLAY_NAME = "User Interactive";
   private static final Logger LOG = Logger.getLogger(UserInteractiveFactory.class);
   
   @Override

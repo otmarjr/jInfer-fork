@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import java.util.List;
 import java.util.ArrayList;
 import org.junit.Test;
@@ -40,8 +41,8 @@ public class DOMHandlerTest {
   }
 
   @Test
-  public void testProcessNull() {
-    System.out.println("processNull");
+  public void testDOMNull() {
+    System.out.println("DOM null");
     final List<Element> expResult = new ArrayList<Element>(0);
     final List<Element> result = make(null);
     assertEquals(expResult, result);
@@ -53,8 +54,8 @@ public class DOMHandlerTest {
     + "</xs:schema>";
 
   @Test
-  public void testProcessEmpty() {
-    System.out.println("processEmpty");
+  public void testDOMEmpty() {
+    System.out.println("DOM empty schema");
     final List<Element> expResult = new ArrayList<Element>(0);
     final List<Element> result = make(new ByteArrayInputStream(EMPTY1.getBytes()));
     assertEquals(expResult, result);
@@ -67,16 +68,48 @@ public class DOMHandlerTest {
     + "</xs:schema>";
 
   @Test
-  public void testProcessEmpty2() {
-    System.out.println("processEmpty2");
+  public void testDOMEmpty2() {
+    System.out.println("DOM empty comment");
     final InputStream s = new ByteArrayInputStream(EMPTY2.getBytes());
     final List<Element> expResult = new ArrayList<Element>(0);
     final List<Element> result = make(s);
     assertEquals(expResult, result);
   }
 
-  private static final String ZOO =
-          "<!ELEMENT zoos EMPTY>" + NL
-          + "<!ELEMENT animal EMPTY>" + NL
-          + "<!ELEMENT zoo (animal*) >" + NL;
+  private static final String TOP_REF =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
+    + "<xs:element ref=\"one\"/>" + NL
+    + "</xs:schema>";
+
+  @Test(expected = XSDException.class)
+  public void testDOMRefTop() {
+    System.out.println("DOM top element with ref");
+    final InputStream s = new ByteArrayInputStream(TOP_REF.getBytes());
+    final List<Element> expResult = new ArrayList<Element>(0);
+    final List<Element> result = make(s);
+    assertEquals(expResult, result);
+  }
+
+  private static final String TEST1 =
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
+    + "<xs:element name=\"one\"/>" + NL
+    + "</xs:schema>";
+
+  private static final String[] TEST1_RES = {
+    "one: ELEMENT\nλ"
+  };
+
+  @Test
+  public void testDOM1() {
+    System.out.println("DOM normal element");
+    final InputStream s = new ByteArrayInputStream(TEST1.getBytes());
+    final List<Element> result = make(s);
+    assertEquals(TEST1_RES.length, result.size());
+    for (int i = 0; i < result.size(); i++) {
+      System.out.println(i + " " + result.get(i).toString());
+      assertEquals("Iteration " + i, TEST1_RES[i], result.get(i).toString());
+    }
+  }
 }

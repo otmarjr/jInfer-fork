@@ -40,6 +40,7 @@ import org.openide.windows.WindowManager;
  *
  * @author vektor
  */
+// TODO rio Clean this class - too many NB warnings, dead code...
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent//AutoEditor//EN",
 autostore = false)
 public final class AutoEditorTopComponent extends TopComponent {

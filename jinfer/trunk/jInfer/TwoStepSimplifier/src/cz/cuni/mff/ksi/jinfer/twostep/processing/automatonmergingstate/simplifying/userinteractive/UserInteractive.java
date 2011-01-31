@@ -43,7 +43,7 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
 
   private static final Logger LOG = Logger.getLogger(UserInteractive.class);
 
-  private static boolean askUser = true;
+  private boolean askUser = true;
 
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException {

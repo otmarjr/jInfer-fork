@@ -56,7 +56,7 @@ Public packages:       & none \\ \hline
 %#### INTRO ############################################
 \section{Introduction}
 In \jmodule{TwoStepSimplifier} we provide user a complex solution to grammar simplification problem.
-% TODO anti Sorry, I don't understand the following 3 sentences, so I cannot correct them
+% TODO vito Sorry, I don't understand the following 3 sentences, so I cannot correct them
 This is the only one simplifier shipped with jInfer, but it has many features and exchangeable submodules of which we implement alternatives in basic bundle.
 We implement is $k,h$-context method of infering grammar rules (see \cite{ahonen}).
 This process is split into submodules with generic automaton implementation, so it is easy to plug-in any other automaton merging state algorithm.
@@ -237,9 +237,10 @@ Main part is the method \code{cluster()}, which does the clustering itself.
 
 As this may be a time-consuming operation, method throws \code{InterruptedException}.
 Implementation should take care of checking whether thread is user interrupted (see \cite[p. 12]{archdoc}).
-% TODO anti Don't understand the following two sentences, please rephrase
-After clustering, implementation should hold clusters in member, as it will be later requested by calling method \code{T getRepresentantForItem(T item)}.
+% TODO vito Don't understand the following two sentences, please rephrase
+After clustering, implementation should keep the clusters in member, as it will be later requested by calling method \code{T getRepresentantForItem(T item)}.
 Given item to this method, one can ask for representant of cluster, to which the item belongs.
+
 If no such cluster exists (item was not added for clustering before), we recommend throwing an exception rather than returning \code{null}.
 Missing an item probably indicates error in algorithm rather than normal workflow.
 One can get all the clusters (\code{List<Cluster<T>{}>}) from clusterer by calling \code{getClusters()} method.
@@ -330,7 +331,7 @@ Process illustrated in fig. \ref{twostep_flow} is as follows.
 \section{Submodule implementations}
 %#### SUBMODULES->Iname ############################################
 \subsection{Iname (ClusteterWithAttributes)} \label{section_Iname}
-We cluster elements in \code{Iname<AbstractStructuralNode, Attribute>} class, which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes. % TODO anti I don't understand the sentence, rewrite.
+We cluster elements in \code{Iname<AbstractStructuralNode, Attribute>} class (Iname je clusterer!), which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes. % TODO anti I don't understand the sentence, rewrite.
 Clustering is done based on element's \code{getName()} equality (ignoring case).
 For each rule (element), it is first clustered by finding the cluster which representant has the same name - or create new cluster with this element as representant.
 Then we process right side of this element rule (that are nodes from \code{getSubnodes()}).
@@ -476,7 +477,8 @@ If there is no such step, create one and create also the destination state, then
 
 As you can see, it is important that class \code{T} has proper implementation of \code{.equals()} method, as symbols are tested for equality by calling this method on them.
 By the way, this is why we cluster all simple data and all sentinels on right sides of rules.
-To automaton, instead of instances on right side of rules, their cluster representants are inserted as one can see in section \ref{section_AutomatonMergingState_structure}. % TODO anti Don't understand the sentence
+To automaton, instead of instances on right side of rules, their cluster representants are inserted as one can see in section \ref{section_AutomatonMergingState_structure}. % TODO vito Don't understand the sentence
+% Do automatu sypeme concat, ale nie jeho prvky, ale ich reprezentantov
 This assures that comparisons in automaton are done using Java \code{Object.equals()} reference comparison, but for each cluster member, its representant is only present in automaton.
 That results in cluster-equal behaviour.
 Example of prefix-tree automaton is in fig. \ref{pta}.
@@ -503,7 +505,7 @@ Interface is defined as generic, implementations don't have to be. However, ther
 When implementation needs to present an automaton to user, it needs string representation of symbols to display on automaton transitions.
 For this reason, the second parameter, \code{symbolToString} (implementation of \code{SymbolToString} interaface) is given.
 It is responsible for converting symbol to string.
-To \jmodule{AutomatonSimplifier} it is passed from \jmodule{AutomatonMergingState} cluster processor, where we know that symbols are of type \code{AbstractStructuralNode}, so we implement \code{SymbolToString} by using \code{getName()} method on nodes and pass it down to generic \code{AutomatonSimplififier} submodule. % TODO anti Unreadable....
+% To \jmodule{AutomatonSimplifier} it is passed from \jmodule{AutomatonMergingState} cluster processor, where we know that symbols are of type \code{AbstractStructuralNode}, so we implement \code{SymbolToString} by using \code{getName()} method on nodes and pass it down to generic \code{AutomatonSimplififier} submodule. % TODO anti Unreadable....
 Overloaded version is to inform the user about name of processed element when presenting automaton in \jmodule{AutoEditor}.
 This version of interface will probably change in future.
 
@@ -527,11 +529,9 @@ Our implementation of \jmodule{RegexpAutomatonSimplifier} is discussed in \ref{s
 \jmodule{AutomatonMergingState} has one more submodule, the \jmodule{MergeConditionTester}, which is not called directly by \jmodule{Au\.to\.ma\.ton\.Merg\.ing\.Sta\.te}.
 It is at disposal of implementations of \code{AutomatonSimplifier} interface for testing, whether two states in automaton are equivalent and should be merged into one state.
 
-Module \jmodule{AutomatonSimplifier} implements solution searching logic in simplifying automaton by merging states. % TODO anti Don't understand
 One can implement ACO heuristics or MDL principle heuristics as \jmodule{AutomatonSimplifier} submodule, and can use any of \jmodule{MergeConditionTesters} provided.
 
 \subsection{NestedConcatention (RegularExpressionCleaner)} \label{section_NestedConcatention}
-This cleaner does exactly what we have just described. % TODO anti Doesn't make sense
 It converts nested concatenations into flat ones.
 Example: $(name, (person, id))$ is converted to $(name, person, id)$.
 
@@ -574,7 +574,7 @@ repeat {
   if (user selects more than one state to merge) {
     merge them
   }
-} until (user selected at least one state in last trial) TODO anti Trial -> Attempt?
+} until (user selected at least one state in last attempt)
 \end{verbatim} 
 We use \jmodule{AutoEditor} module described in \cite{autoeditordoc}.
 A screenshot of automaton visualization is in picture \ref{screenshot}.
@@ -584,8 +584,7 @@ A screenshot of automaton visualization is in picture \ref{screenshot}.
 \end{figure}
 
 \subsection{KHContext (MergeConditionTester)} \label{section_KHContext}
-We have implemented \emph{k,h-context} state equivalence (see \cite{ahonen}) in class \code{KHContext} (implements \code{Mer\.ge\.Con\.di\.tion\.Tes\.ter} interface), which is used by \code{Greedy} to test mergeability of states by default configuration. % TODO anti Sentence unclear
-% TODO vektor : mention this? (we have stupid algorithm:) TODO anti Of course;)
+We have implemented \emph{k,h-context} state equivalence (see \cite{ahonen}) in class \code{KHContext} (implements \code{Mer\.ge\.Con\.di\.tion\.Tes\.ter} interface), which is used by \code{Greedy} to test mergeability of states.
 We don't use $k-grams$ algorithm from \cite{ahonen}, just a simple DFS.
 
 \subsection{StateRemoval (RegexpAutomatonSimplifier)} \label{section_StateRemoval}

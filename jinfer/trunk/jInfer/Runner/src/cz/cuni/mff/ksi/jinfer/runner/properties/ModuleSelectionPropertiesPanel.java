@@ -62,7 +62,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
 
     setLayout(new java.awt.GridBagLayout());
 
-    initialGrammar.setRenderer(new ProjectPropsComboRenderer());
+    initialGrammar.setRenderer(new ProjectPropsComboRenderer(initialGrammar.getRenderer()));
     initialGrammar.setMinimumSize(new java.awt.Dimension(150, 22));
     initialGrammar.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -74,7 +74,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(initialGrammar, gridBagConstraints);
 
-    simplifier.setRenderer(new ProjectPropsComboRenderer());
+    simplifier.setRenderer(new ProjectPropsComboRenderer(simplifier.getRenderer()));
     simplifier.setMinimumSize(new java.awt.Dimension(150, 22));
     simplifier.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -86,7 +86,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(simplifier, gridBagConstraints);
 
-    schemaGenerator.setRenderer(new ProjectPropsComboRenderer());
+    schemaGenerator.setRenderer(new ProjectPropsComboRenderer(schemaGenerator.getRenderer()));
     schemaGenerator.setMinimumSize(new java.awt.Dimension(150, 22));
     schemaGenerator.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();

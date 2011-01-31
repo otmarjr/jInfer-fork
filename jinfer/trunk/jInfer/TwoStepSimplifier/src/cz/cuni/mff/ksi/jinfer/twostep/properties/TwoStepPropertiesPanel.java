@@ -77,7 +77,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelClusterer, gridBagConstraints);
 
-    clusterer.setRenderer(new ProjectPropsComboRenderer());
+    clusterer.setRenderer(new ProjectPropsComboRenderer(clusterer.getRenderer()));
     clusterer.setMinimumSize(new java.awt.Dimension(200, 22));
     clusterer.setPreferredSize(new java.awt.Dimension(200, 22));
     clusterer.addActionListener(new java.awt.event.ActionListener() {
@@ -121,7 +121,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelClusterProcessor, gridBagConstraints);
 
-    clusterProcessor.setRenderer(new ProjectPropsComboRenderer());
+    clusterProcessor.setRenderer(new ProjectPropsComboRenderer(clusterProcessor.getRenderer()));
     clusterProcessor.setMinimumSize(new java.awt.Dimension(200, 22));
     clusterProcessor.setPreferredSize(new java.awt.Dimension(200, 22));
     clusterProcessor.addActionListener(new java.awt.event.ActionListener() {
@@ -164,7 +164,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelCleaner, gridBagConstraints);
 
-    cleaner.setRenderer(new ProjectPropsComboRenderer());
+    cleaner.setRenderer(new ProjectPropsComboRenderer(cleaner.getRenderer()));
     cleaner.setMinimumSize(new java.awt.Dimension(200, 22));
     cleaner.setPreferredSize(new java.awt.Dimension(200, 22));
     cleaner.addActionListener(new java.awt.event.ActionListener() {

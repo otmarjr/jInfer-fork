@@ -81,7 +81,8 @@ public final class XSDOccurences {
     RegexpInterval interval;
     int min = getMin(minOccurence);
     int max = getMax(maxOccurence, min);
-    if (min > max) {                            // limits are mismatched
+
+    if (max != INFINITY && min > max) {         // limits are mismatched
       if (minHasPriority) {
         max = min;                              // lower limit has priority
       } else {

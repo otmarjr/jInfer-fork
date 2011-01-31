@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -193,8 +194,7 @@ public class DOMHandler {
         // that's why we use RegexpInterval.getOnce()
         roots.add(buildRuleSubtree(domElem,
                                new ArrayList<String>(),
-                               new ArrayList<org.w3c.dom.Element>(),
-                               RegexpInterval.getOnce()));
+                               new ArrayList<org.w3c.dom.Element>()).getFirst());
       }
       // else .. we are not interested in the node
     }
@@ -295,23 +295,21 @@ public class DOMHandler {
    * @return Element Returns element with complete subtree of rules.
    * @throws XSDException When schema is invalid.
    */
-  private Element buildRuleSubtree(final org.w3c.dom.Element currentNode,
+  private Pair<Element, RegexpInterval> buildRuleSubtree(final org.w3c.dom.Element currentNode,
                                    final List<String> context,
-                                   final List<org.w3c.dom.Element> visited,
-                                   final RegexpInterval outerInterval) throws XSDException {
+                                   final List<org.w3c.dom.Element> visited) throws XSDException {
     final Element ret = Element.getMutable();
     final List<org.w3c.dom.Element> newVisited = new ArrayList<org.w3c.dom.Element>(visited);
     final List<String> newContext = new ArrayList<String>(context);
-    final Map<String, Object> metadata = ret.getMetadata();
 
     ret.getContext().addAll(context);
-    final RegexpInterval interval = DOMHelper.determineInterval(currentNode, outerInterval);
-    metadata.putAll(DOMHelper.prepareMetadata(interval));
+    final RegexpInterval interval = DOMHelper.determineInterval(currentNode, null);
+    ret.getMetadata().putAll(DOMHelper.prepareMetadata(interval));
     
     // inspect self
     final Element returned = inspectSelf(currentNode, ret, context, visited, newContext, newVisited, interval);
     if (returned != null) {
-      return returned;
+      return new Pair<Element, RegexpInterval>(returned, interval);
     } // else the ret element has all the changes needed
 
     // inspect children
@@ -323,7 +321,7 @@ public class DOMHandler {
       finalizeElement(currentNode, newContext, ret);
     }
     DOMHelper.repairConcatInterval(ret);
-    return ret;
+    return new Pair<Element, RegexpInterval>(ret, interval);
   }
 
   private Element inspectSelf(final org.w3c.dom.Element currentNode,
@@ -363,7 +361,8 @@ public class DOMHandler {
         }
         newContext.add(name);
         newVisited.add(currentNode);
-        ret.getSubnodes().setInterval(interval);
+//ret.getSubnodes().setInterval(interval);
+//LOG.error("and the interval for " + ret.getName() + " is: " + ret.getSubnodes().getInterval().toString());
         // element has defined type
         if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
           final String type = DOMHelper.trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
@@ -373,7 +372,7 @@ public class DOMHandler {
             // see [SIMPLE DATA SECTION] in finalizeElement()
             ret.getMetadata().put(XSDAttribute.TYPE.getMetadataName(), type);
           } else if (namedCTypes.containsKey(type)) {
-            final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited, null);
+            final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited).getFirst();
             extractSubnodesFromContainer(container, ret, CONTAINER_CTYPE);
             finalizeElement(currentNode, newContext, ret);
             return ret; // RETURN STATEMENT
@@ -384,14 +383,17 @@ public class DOMHandler {
         break;
       case ALL:
         ret.getSubnodes().setType(RegexpType.PERMUTATION);
+        ret.getSubnodes().setInterval(interval);
         ret.setName(CONTAINER_ORDER);
         break;
       case CHOICE:
         ret.getSubnodes().setType(RegexpType.ALTERNATION);
+        ret.getSubnodes().setInterval(interval);
         ret.setName(CONTAINER_ORDER);
         break;
       case SEQUENCE:
         ret.getSubnodes().setType(RegexpType.CONCATENATION);
+        ret.getSubnodes().setInterval(interval);
         ret.setName(CONTAINER_ORDER);
         break;
       case COMPLEXTYPE:
@@ -419,11 +421,22 @@ public class DOMHandler {
               // parent is also element
               throw new XSDException(errorWrongNested(childTag, tag));
             }
-            ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(buildRuleSubtree(child, newContext, newVisited, interval)));
+            Pair<Element, RegexpInterval> subtree = buildRuleSubtree(child, newContext, newVisited);
+            RegexpInterval tokenOccurence = subtree.getSecond();
+            if (XSDTag.ALL.equals(tag)) {
+              // parent is ALL tag - special treatment for intervals
+              // token occurence can be only {0,1} or {1,1} because element ALL restricts this property
+              if (!tokenOccurence.isOnce() || !tokenOccurence.isOptional()) {
+                tokenOccurence = interval; // set it to the default interval of parent (ALL)
+              }
+            }
+            Regexp<AbstractStructuralNode> token = Regexp.<AbstractStructuralNode>getToken(subtree.getFirst(), tokenOccurence);
+            ret.getSubnodes().addChild(token);
+            //ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(buildRuleSubtree(child, newContext, newVisited, interval)));
             break;
           case COMPLEXTYPE:
             if (XSDTag.ELEMENT.equals(tag)) {
-              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited, null), ret, CONTAINER_CTYPE);
+              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_CTYPE);
             } else if (XSDTag.REDEFINE.equals(tag)) {
               LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.UnsupportedStructure", childTag.toString(), tag.toString()));
             } else {
@@ -462,7 +475,7 @@ public class DOMHandler {
             break;
           case ALL:
             if (XSDTag.COMPLEXTYPE.equals(tag)) {
-              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited, interval), ret, CONTAINER_ORDER);
+              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
             } else if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
               throw new XSDException(errorWrongNested(childTag, tag));
             } else {
@@ -474,9 +487,9 @@ public class DOMHandler {
           case CHOICE:
           case SEQUENCE:
             if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
-              ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited, null).getSubnodes());
+              ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited).getFirst().getSubnodes());
             } else if (XSDTag.COMPLEXTYPE.equals(tag)) {
-              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited, null), ret, CONTAINER_ORDER);
+              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
             } else if (XSDTag.ELEMENT.equals(tag) || XSDTag.ALL.equals(tag)) {
               throw new XSDException(errorWrongNested(childTag, tag));
             } else {
@@ -522,6 +535,7 @@ public class DOMHandler {
     for (Regexp<AbstractStructuralNode> regexp : subtree.getSubnodes().getChildren()) {
       destination.getSubnodes().addChild(regexp);
     }
+    destination.getSubnodes().setInterval(subtree.getSubnodes().getInterval());
     destination.getAttributes().addAll(subtree.getAttributes());
   }
 
@@ -534,7 +548,10 @@ public class DOMHandler {
   private void finalizeElement(final org.w3c.dom.Element currentNode,
                                final List<String> newContext,
                                final Element ret) {
- 
+    
+    if (ret.getSubnodes().getInterval() == null) {
+      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
+    }
     if (ret.getSubnodes().getChildren().isEmpty()
         && BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))
         && ret.getSubnodes().getType() == null) {

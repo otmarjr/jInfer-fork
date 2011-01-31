@@ -41,7 +41,7 @@
 
 \noindent \begin{tabular}{|l|l|} \hline
 Responsible developer: & Matej Vitásek \\ \hline
-Required tokens:       & none \\ \hline
+Required tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer \\ \hline
 Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator \\ \hline
 Module dependencies:   & Base \\ \hline
 Public packages:       & cz.cuni.mff.ksi.jinfer.basicigg.properties \\ \hline
@@ -90,7 +90,10 @@ To parse XPath queries, standard support present in JDK is used. The relevant \c
 
 \section{Expansion} \label{section-expansion}
 
-Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection. % TODO vektor Is this documented somewhere? anti: NO, should be in developer doc with preferences panel and so on!!!
+Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection.
+\\
+
+One interesting use case for expansion is simple adaptation of legacy inference methods. "Old" methods working only with simple grammar can be used unchanged with "new" inputs - schemas.
 
 \subsection{ExpanderImpl internals}
 
@@ -114,7 +117,7 @@ Understanding how intervals affect the expansion, it is time to move a level up:
 	\item \emph{ALTERNATION}: first, all children of this alternation are recursively evaluated. Their respective words are appended in a list, this list has the regexp interval applied and is returned. Reasoning is the following: we are trying to get all the words a regexp can produce. If the regexp is an alternation, any word that can be produced by one of its children can be a word produced by the regexp itself.
 	\item \emph{PERMUTATION}: a heuristic is applied again: because there are $n!$ ways to order children of a permutation, only two are actually picked: the original order in which they appear, and reversal of this order. In both cases the children are treated as if they we concatenation (and thus the following case is invoked) and appended in a list. On this list the regexp interval is applied and the list is returned.
 	\item \emph{CONCATENATION}: this is by far the most complicated case. Let's denote word sets produced by the $N$ children of the concatenation $ w_1 \ldots w_N $. Now, all words that could be produced by this concatenations correspond to concatenations of form $w_{a_1} w_{a_2} \ldots w_{a_N}$ for all possible combinations of indices $a_i, i  \in \{1 \ldots N\}$. Number of such words grows exponentially with $N$, therefore a heuristic approach has to be employed again.\newline
-In this case, consider $ m = \max_{i \in 1 \ldots N}{|w_i|} $. Now, $ m $ words will be constructed in the following way: in a for-loop enumerating $ i \in \{1 \ldots m\}$ the $j$-th part of this $i$-th word will be $w_{i mod |w_j|}$. The method \code{ExpanderImp.unpackConcat()} illustrates this.
+In this case, consider $ m = \max_{i \in 1 \ldots N}{|w_i|} $. Now, $ m $ words will be constructed in the following way: in a for-loop enumerating $ i \in \{1 \ldots m\}$ the $j$-th part of this $i$-th word will be $w_{i mod |w_j|}$. The method \code{ExpanderImpl.unpackConcat()} illustrates this.
 \end{itemize}
 
 Now for the next part, description of \code{Element} expansion. This is the content of \code{ExpanderImpl.expandElement()} method. First, element's subnodes are expanded as a regexp. For each word from this expansion a new \code{Element} is created: letters of this word are encapsulated in tokens, these tokens are put in a concatenation that constitutes subnodes of this new element. If the letter is an element itself, it is not recursively expanded - it is just declared to be a sentinel (see \cite[section 3.3]{archdoc}).\\

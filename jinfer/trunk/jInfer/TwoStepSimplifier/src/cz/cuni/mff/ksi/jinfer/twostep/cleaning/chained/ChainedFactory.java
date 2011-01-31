@@ -22,6 +22,8 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren.EmptyChildrenFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation.NestedConcatenationFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +53,10 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
    * TODO anti comment
    */
   public static final String PROPERTIES_PREFIX = "chain";
+  /**
+   * TODO anti Comment
+   */
+  public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerNull";
   /**
    * TODO anti comment
    */
@@ -99,16 +105,21 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
     final Properties p = RunningProject.getActiveProjectProps(NAME);
     final List<RegularExpressionCleanerFactory> result= new ArrayList<RegularExpressionCleanerFactory>();
 
-    final String _count = p.getProperty(PROPERTIES_COUNT);
-    int count;
-    try {
-      count = Integer.valueOf(_count);
-    } catch (NumberFormatException e) {
-      count = 0;
-    }
-    for (int c = 0; c < count; c++) {
-      final String name = p.getProperty(PROPERTIES_PREFIX + c);
-      result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, name));
+    final String _count = p.getProperty(PROPERTIES_COUNT, "notJebHojid4");
+    if (_count.equals("notJebHojid4")) {
+      result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, EmptyChildrenFactory.NAME));
+      result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, NestedConcatenationFactory.NAME));
+    } else {
+      int count;
+      try {
+        count = Integer.valueOf(_count);
+      } catch (NumberFormatException e) {
+        count = 0;
+      }
+      for (int c = 0; c < count; c++) {
+        final String name = p.getProperty(PROPERTIES_PREFIX + String.valueOf(c));
+        result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, name));
+      }
     }
     return result;
   }

@@ -48,22 +48,22 @@ Public packages:       & none \\ \hline
 
 \section{Introduction}
 
-This is an implementation of a \jmodule{SchemaGenerator} exporting the inferred schema to XSD, providing basic features of the language.
+This is an implementation of a \jmodule{SchemaGenerator} exporting the inferred schema to XSD, supporting basic features of the language.
 
 \section{Structure}
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl}. Process of export consists of two phases described in detail in later sections:
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl}. Process of export consists of two phases described in detail in later sections.
 \begin{enumerate}
-	\item Preprocessing
-	\item Own export to a string representation of XSD
+	\item Preprocessing.
+	\item The export to a string representation itself.
 \end{enumerate}
-Method \code{start} first creates instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such which elements should be globally defined and which element is the root element. This instance is kept as a member variable of module to be used during the whole export process.\\
+Method \code{start()} first creates an instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such as which elements should be globally defined and which element is the root element. This instance is kept as a member variable of module to be used during the whole export process.\\
 
-Afterwards, \code{start} method recursively traverses global elements followed by other elements starting at the root element and for each it creates element's XSD string representation.\\
+Afterwards, \code{start()} method recursively traverses global elements followed by other elements starting at the root element and for each it creates element's XSD string representation.\\
 
 \subsection{Preprocessing}
 
-As mentioned before, preprocessing is implemented in \code{Preprocessor} class and its functions are following.
+As mentioned above, preprocessing is implemented in \code{Preprocessor} class and its functions are following.
 \begin{itemize}
 	\item Decide which elements should be defined globally.
 	\item Remove unused elements.
@@ -71,17 +71,17 @@ As mentioned before, preprocessing is implemented in \code{Preprocessor} class a
 	\item Find an instance of element by its name.
 \end{itemize}
 
-Constructor of \code{Preprocessor} class gets elements and a number, defining minimal number of occurrences of an element to be defined. It first topologically sorts input elements to decide which one is the root element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occurred). Finally, for each element it decides whether mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal number of occurrences supplied on input.\\
+Constructor of \code{Preprocessor} class gets a list of elements and a number, defining minimal number of occurrences of an element to be defined globally. It first topologically sorts input elements to decide which of the elements is the root element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occur). Finally, for each element it decides whether to mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal to the number of occurrences provided on input.\\
 
 Results of preprocessing are provided by public methods of \code{Preprocessor} class. For details see their JavaDoc.\\
 
-\subsection{Own export}
+\subsection{Export}
 
-Own XSD export is performed in module's \code{start} function right after the preprocessing.\\
+XSD export itself is performed in module's \code{start()} function right after the preprocessing.\\
 
-Useful helper class to handle indentation of text in a resulting XSD is named \code{Indentator}. Instance of this class is a member variable of the module (alike instance of \code{Preprocessor}), it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append}) or indented (method \code{indent}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation} and \code{decreaseIndentation}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString} will return string representation of resulting XSD.\\
+Useful helper class to handle indentation of text in a resulting XSD is called \code{Indentator}. Instance of this class is a member variable of the module (alike instance of \code{Preprocessor}), it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
 
-Before describing export of elements, let's take a look on how we define elements and their attributes using XSD language.
+Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language.
 
 \subsubsection{Definition of elements}
 
@@ -99,7 +99,7 @@ Type of an element is one of following.
 	<xs:element name="Person" type="xs:string"/>
 	\end{verbatim}
 	
-	\item \code{simpleType}. Actually, exporter does not support any XSD features, which are defined in \code{simpleType}. That means, this types will not occur in result XSDs.
+	\item \code{simpleType}. Actually, exporter does not support any XSD features which are defined in \code{simpleType}. This means, that these types will not occur in result XSDs.
 	\begin{verbatim}
 	<xs:element name="Person">
 	  <xs:simpleType>
@@ -122,7 +122,7 @@ Type of an element is one of following.
 	  </xs:complexType>
 	</xs:element>
 	\end{verbatim}
-	An empty element is defined as empty \code{complexType}
+	An empty element is defined as empty \code{complexType}.
 	\begin{verbatim}
 	<xs:element name="EmptyElement">
 	  <xs:complexType>
@@ -131,7 +131,7 @@ Type of an element is one of following.
 	\end{verbatim}
 \end{itemize}
 
-Named type of an element is defined by XSD element \code{simpleType}(lack of features mentioned above) or \code{complexType} with specified attribute \code{name}. Its content is exactly the same as described above. There is, of course, no need to define built-in types.
+Named type of an element is defined by XSD element \code{simpleType} (lack of features mentioned above) or \code{complexType} with specified attribute \code{name}. Its content is exactly the same as described above. There is of course no need to define built-in types.
 
 \begin{verbatim}
 <xs:complexType name="PersonType">
@@ -145,13 +145,13 @@ Element of this type can be then defined by specifying name of the type.
 <xs:element name="Person" type="PersonType"/>
 \end{verbatim}
 
-XSD elements \code{xs:element}, \code{xs:sequence} and \code{xs:choice} can has attributes \code{minOccurs} and \code{maxOccurs}. These attributes defines interval of number of instances of a particular element. Legal values of these attributes are non-negative integers.
+XSD elements \code{xs:element}, \code{xs:sequence} and \code{xs:choice} can have attributes \code{minOccurs} and \code{maxOccurs}. These attributes defines interval of number of instances of a particular element. Legal values of these attributes are non-negative integers.
 
 \begin{verbatim}
 <xs:element name="Person" type="PersonType" minOccurs="1" maxOccurs="3"/>
 \end{verbatim}
 
-Default values for \code{minOccurs} and \code{maxOccurs} attributes are "1", if they are not specified. So the example above has the same meaning as following.
+Default values for \code{minOccurs} and \code{maxOccurs} attributes are "1", if they are not specified. So the example above has the same meaning as the following one.
 
 \begin{verbatim}
 <xs:element name="Person" type="PersonType" maxOccurs="3"/>

@@ -48,7 +48,7 @@ public class NestedConcatenation<T> implements RegularExpressionCleaner<T> {
         newRegexp2.setInterval(regexp.getInterval());
         newRegexp2.setType(regexp.getType());
         for (Regexp<T> child : regexp.getChildren()) {
-          if (child.isConcatenation()) {
+          if (child.isConcatenation()&&child.getInterval().isOnce()) {
             newRegexp2.getChildren().addAll(
                     cleanRegularExpression(child).getChildren()
                     );

@@ -22,6 +22,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.ChainedFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren.EmptyChildrenFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation.NestedConcatenationFactory;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -74,33 +76,15 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
     setLayout(new GridBagLayout());
     final List<NamedModule> cleanerNames = ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class);
     final List<NamedModule> modelStrings = new ArrayList<NamedModule>();
-    modelStrings.add(new NamedModule() {
-
-      @Override
-      public String getName() {
-        return "NoCleaner";
-      }
-
-      @Override
-      public String getDisplayName() {
-        return "No cleaner";
-      }
-
-      @Override
-      public String getModuleDescription() {
-        return getDisplayName();
-      }
-    });
     for (NamedModule name : cleanerNames) {
       if (!name.getName().equals(ChainedFactory.NAME)) {
         modelStrings.add(name);
       }
     }
     int i;
-    for (i = 0; i < modelStrings.size() - 1; i++) {
+    for (i = 0; i < modelStrings.size(); i++) {
       final JLabel lbl = new javax.swing.JLabel();
       final JComboBox cmb = new JComboBox();
-      cmb.setRenderer(new ProjectPropsComboRenderer(cmb.getRenderer()));
       final JScrollPane scr = new javax.swing.JScrollPane();
       final JTextPane desc = new javax.swing.JTextPane();
       
@@ -121,20 +105,16 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       gridBagConstraints.weightx = 1.0;
       gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
       cmb.setModel(new DefaultComboBoxModel(modelStrings.toArray()));
+      cmb.setRenderer(new ProjectPropsComboRenderer(cmb.getRenderer()));
       cmb.addActionListener(new java.awt.event.ActionListener() {
 
         @Override
         public void actionPerformed(final ActionEvent evt) {
-          if (cmb.getSelectedIndex() == 0) {
-            desc.setText("");
-          } else {
-            desc.setText(htmlize(
-                    ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-                    ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
-          }
+          desc.setText(htmlize(
+                  ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
+                  ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
         }
       });
-      cmb.setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + i, "NoCleaner")));
       add(cmb, gridBagConstraints);
       dynamicComponents.put(Integer.valueOf(i), cmb);
 
@@ -157,14 +137,9 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
 
       add(scr, gridBagConstraints);
 
-      if (cmb.getSelectedIndex() == 0) {
-        desc.setText("");
-      } else {
-        desc.setText(htmlize(
-                ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
-                ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
-      }
-
+      desc.setText(htmlize(
+              ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
+              ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
     }
     if (i == 0) {
       final JTextPane noImplInfo = new JTextPane();
@@ -175,19 +150,36 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       noImplInfo.setText("No implementation, other than myself, of RegularExpressionCleanerFactory found.");
       add(noImplInfo);
     }
+    for (i = 0; i < dynamicComponents.keySet().size(); ++i) {
+      dynamicComponents.get(i).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, ChainedFactory.PROPERTIES_CLEANER_DEFAULT));
+    }
+    final String _count = properties.getProperty(ChainedFactory.PROPERTIES_COUNT, "notJebHojid4");
+    if (_count.equals("notJebHojid4")) {
+      dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, EmptyChildrenFactory.NAME));
+      dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, NestedConcatenationFactory.NAME));
+    } else {
+      int count;
+      try {
+        count = Integer.valueOf(_count);
+      } catch (NumberFormatException e) {
+        count = 0;
+      }
+      for (i = 0; i < count; i++) {
+        dynamicComponents.get(i).setSelectedItem(
+                ModuleSelectionHelper.lookupImpl(
+                  RegularExpressionCleanerFactory.class,
+                  properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i), ChainedFactory.PROPERTIES_CLEANER_DEFAULT)));
+      }
+    }
   }
 
   @Override
   public void store() {
-    int lastSet = 0;
     for (Integer i : dynamicComponents.keySet()) {
-      if (dynamicComponents.get(i).getSelectedIndex() > 0) {
-        properties.setProperty(ChainedFactory.PROPERTIES_PREFIX + lastSet,
+        properties.setProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i),
                 ((NamedModule) dynamicComponents.get(i).getSelectedItem()).getName());
-        lastSet++;
-      }
     }
-    properties.setProperty(ChainedFactory.PROPERTIES_COUNT, String.valueOf(lastSet));
+    properties.setProperty(ChainedFactory.PROPERTIES_COUNT, String.valueOf(dynamicComponents.keySet().size()));
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   // End of variables declaration//GEN-END:variables

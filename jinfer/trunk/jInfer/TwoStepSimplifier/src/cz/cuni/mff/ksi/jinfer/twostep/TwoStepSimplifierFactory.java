@@ -81,7 +81,7 @@ public class TwoStepSimplifierFactory implements Simplifier {
   /** TODO anti comment
    * 
    */
-  public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerNull";
+  public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerChained";
 
   @Override
   public String getName() {

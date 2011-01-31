@@ -57,6 +57,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static final String NAME = "Basic_XSD_exporter";
   private static final String DISPLAY_NAME = "Basic XSD exporter";
 
+  private static final String generatedSubsitutionString = "<!-- %generated% -->\n";
+
   @Override
   public String getName() {
     return NAME;
@@ -79,7 +81,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     if (grammar.isEmpty()) {
       LOG.warn("XSD Exporter: nothing to export.");
-      callback.finished("", "xsd");
+      callback.finished(generatedSubsitutionString, "xsd");
       return;
     }
 
@@ -93,7 +95,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // Generate head of a new XSD.
     indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
-    indentator.indent("<!-- %generated% -->\n");
+    indentator.indent(generatedSubsitutionString);
 
     final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(XSDExportPropertiesPanel.GENERATE_GLOBAL, String.valueOf(XSDExportPropertiesPanel.GENERATE_GLOBAL_DEFAULT)));
     final int numberToGlobal = generateGlobal ? Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL, String.valueOf(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_DEFAULT))) : 0;

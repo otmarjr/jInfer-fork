@@ -56,10 +56,7 @@ Public packages:       & none \\ \hline
 %#### INTRO ############################################
 \section{Introduction}
 In \jmodule{TwoStepSimplifier} we provide user a complex solution to grammar simplification problem.
-% TODO vito Sorry, I don't understand the following 3 sentences, so I cannot correct them
-This is the only one simplifier shipped with jInfer, but it has many features and exchangeable submodules of which we implement alternatives in basic bundle.
-We implement is $k,h$-context method of infering grammar rules (see \cite{ahonen}).
-This process is split into submodules with generic automaton implementation, so it is easy to plug-in any other automaton merging state algorithm.
+While this is the only simplifier bundled with jInfer, its strong modularity ensures that it can be extended easily. For most of the points of extension we indeed provide multiple implementations. These vary from trivial proof-of-concept to for example $k,h$-context method for grammar rules inference (see \cite{ahonen}). Strong emphasis is put on generic automata, therefore it is easy to plug-in any automaton merging state algorithm.
 In this document, we will walk over all modules and submodules in simplifier and describe them briefly.
 
 %#### FACTORY ############################################
@@ -237,9 +234,7 @@ Main part is the method \code{cluster()}, which does the clustering itself.
 
 As this may be a time-consuming operation, method throws \code{InterruptedException}.
 Implementation should take care of checking whether thread is user interrupted (see \cite[p. 12]{archdoc}).
-% TODO vito Don't understand the following two sentences, please rephrase
-After clustering, implementation should keep the clusters in member, as it will be later requested by calling method \code{T getRepresentantForItem(T item)}.
-Given item to this method, one can ask for representant of cluster, to which the item belongs.
+To be able to respond to calls to \code{T getRepresentantForItem(T item)} method, every clusterer implementation has to keep all its clusters even after the clustering is finished. Using this method, given an item the correct cluster representative for this item has to be returned.
 
 If no such cluster exists (item was not added for clustering before), we recommend throwing an exception rather than returning \code{null}.
 Missing an item probably indicates error in algorithm rather than normal workflow.
@@ -476,9 +471,8 @@ If there is such step (transition), follow it to its destination state and move 
 If there is no such step, create one and create also the destination state, then follow this newly created step to new state.
 
 As you can see, it is important that class \code{T} has proper implementation of \code{.equals()} method, as symbols are tested for equality by calling this method on them.
-By the way, this is why we cluster all simple data and all sentinels on right sides of rules.
-To automaton, instead of instances on right side of rules, their cluster representants are inserted as one can see in section \ref{section_AutomatonMergingState_structure}. % TODO vito Don't understand the sentence
-% Do automatu sypeme concat, ale nie jeho prvky, ale ich reprezentantov
+By the way, this is why we cluster all simple data and all sentinels on right sides of rules.	
+While adding a concatenation to the automaton, instead of the instances themselves their \emph{representatives} are used. See \ref{section_AutomatonMergingState_structure} for further reference.
 This assures that comparisons in automaton are done using Java \code{Object.equals()} reference comparison, but for each cluster member, its representant is only present in automaton.
 That results in cluster-equal behaviour.
 Example of prefix-tree automaton is in fig. \ref{pta}.

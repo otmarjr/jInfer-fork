@@ -95,7 +95,7 @@ public final class DTDExportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel3, gridBagConstraints);
 
-    minDefaultRatio.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+    minDefaultRatio.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
     minDefaultRatio.setText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.minDefaultRatio.text")); // NOI18N
     minDefaultRatio.setToolTipText(org.openide.util.NbBundle.getMessage(DTDExportPropertiesPanel.class, "DTDExportPropertiesPanel.minDefaultRatio.toolTipText")); // NOI18N
     minDefaultRatio.setMaximumSize(new java.awt.Dimension(32767, 32767));

@@ -100,7 +100,7 @@
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="minDefaultRatio">
       <Properties>
-        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="horizontalAlignment" type="int" value="4"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="cz/cuni/mff/ksi/jinfer/basicdtd/properties/Bundle.properties" key="DTDExportPropertiesPanel.minDefaultRatio.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>

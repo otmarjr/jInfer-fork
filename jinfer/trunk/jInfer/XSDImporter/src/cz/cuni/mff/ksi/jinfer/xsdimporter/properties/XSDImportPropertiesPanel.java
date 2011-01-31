@@ -84,9 +84,9 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(parserLabel, gridBagConstraints);
 
-    parserComboBox.setRenderer(new ProjectPropsComboRenderer());
+    parserComboBox.setRenderer(new ProjectPropsComboRenderer(parserComboBox.getRenderer()));
     parserComboBox.setMinimumSize(new java.awt.Dimension(100, 22));
-    parserComboBox.setPreferredSize(new java.awt.Dimension(100, 22));
+    parserComboBox.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -107,7 +107,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     logLevelCombo.setMaximumRowCount(12);
     logLevelCombo.setModel(LogLevels.getDefaultModel());
     logLevelCombo.setMinimumSize(new java.awt.Dimension(100, 22));
-    logLevelCombo.setPreferredSize(new java.awt.Dimension(100, 22));
+    logLevelCombo.setPreferredSize(new java.awt.Dimension(150, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
@@ -159,7 +159,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 234, Short.MAX_VALUE)
+      .addGap(0, 230, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -174,11 +174,11 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 178, Short.MAX_VALUE)
+      .addGap(0, 127, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 102, Short.MAX_VALUE)
+      .addGap(0, 106, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

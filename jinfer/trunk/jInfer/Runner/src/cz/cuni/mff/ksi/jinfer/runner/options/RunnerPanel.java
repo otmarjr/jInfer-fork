@@ -229,7 +229,7 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel5.add(jLabel3, gridBagConstraints);
 
-    ruleDisplayerCombo.setRenderer(new ProjectPropsComboRenderer());
+    ruleDisplayerCombo.setRenderer(new ProjectPropsComboRenderer(ruleDisplayerCombo.getRenderer()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);

@@ -69,9 +69,9 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
-    graphRenderer.setRenderer(new ProjectPropsComboRenderer());
     graphRenderer.setMinimumSize(new java.awt.Dimension(200, 22));
     graphRenderer.setPreferredSize(new java.awt.Dimension(200, 22));
+    graphRenderer.setRenderer(new ProjectPropsComboRenderer(graphRenderer.getRenderer()));
     graphRenderer.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         graphRendererActionPerformed(evt);

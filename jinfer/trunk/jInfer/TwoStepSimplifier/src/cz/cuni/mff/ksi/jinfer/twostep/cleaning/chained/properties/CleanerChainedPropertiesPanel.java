@@ -100,7 +100,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
     for (i = 0; i < modelStrings.size() - 1; i++) {
       final JLabel lbl = new javax.swing.JLabel();
       final JComboBox cmb = new JComboBox();
-      cmb.setRenderer(new ProjectPropsComboRenderer());
+      cmb.setRenderer(new ProjectPropsComboRenderer(cmb.getRenderer()));
       final JScrollPane scr = new javax.swing.JScrollPane();
       final JTextPane desc = new javax.swing.JTextPane();
       

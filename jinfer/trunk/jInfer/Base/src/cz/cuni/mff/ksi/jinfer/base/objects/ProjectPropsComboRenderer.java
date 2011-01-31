@@ -18,36 +18,40 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import java.awt.Component;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 /**
- *
+ * TODO sviro Comment!
+ * 
  * @author sviro
  */
-public class ProjectPropsComboRenderer extends JLabel implements ListCellRenderer {
+public class ProjectPropsComboRenderer extends DefaultListCellRenderer {
+
+  private static final long serialVersionUID = 5376457567l;
+  private final ListCellRenderer backend;
+
+  public ProjectPropsComboRenderer(final ListCellRenderer backend) {
+    this.backend = backend;
+  }
 
   @Override
   public Component getListCellRendererComponent(final JList list,
           final Object value, final int index, final boolean isSelected,
           final boolean cellHasFocus) {
+
+    Component component = backend.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+    if (!(component instanceof JLabel)) {
+      component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+    }
+    final JLabel label = (JLabel) component;
     if (value instanceof NamedModule) {
-      setText(((NamedModule) value).getDisplayName());
+      label.setText(((NamedModule) value).getDisplayName());
     } else {
       throw new IllegalArgumentException("This renderer can render only NamedModule values.");
     }
-
-    if (isSelected) {
-      setBackground(list.getSelectionBackground());
-      setForeground(list.getSelectionForeground());
-    } else {
-      setBackground(list.getBackground());
-      setForeground(list.getForeground());
-    }
-    setEnabled(list.isEnabled());
-    setFont(list.getFont());
-    setOpaque(true);
-    return this;
+    return label;
   }
 }

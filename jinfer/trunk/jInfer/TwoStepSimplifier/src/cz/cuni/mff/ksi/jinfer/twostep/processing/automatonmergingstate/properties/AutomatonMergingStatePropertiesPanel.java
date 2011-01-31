@@ -72,7 +72,7 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelAutomatonSimplifier, gridBagConstraints);
 
-    automatonSimplifier.setRenderer(new ProjectPropsComboRenderer());
+    automatonSimplifier.setRenderer(new ProjectPropsComboRenderer(automatonSimplifier.getRenderer()));
     automatonSimplifier.setMinimumSize(new java.awt.Dimension(400, 22));
     automatonSimplifier.setPreferredSize(new java.awt.Dimension(400, 22));
     automatonSimplifier.addActionListener(new java.awt.event.ActionListener() {
@@ -133,7 +133,7 @@ public class AutomatonMergingStatePropertiesPanel extends AbstractPropertiesPane
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(jScrollPane4, gridBagConstraints);
 
-    regexpAutomatonSimplifier.setRenderer(new ProjectPropsComboRenderer());
+    regexpAutomatonSimplifier.setRenderer(new ProjectPropsComboRenderer(regexpAutomatonSimplifier.getRenderer()));
     regexpAutomatonSimplifier.setMinimumSize(new java.awt.Dimension(400, 22));
     regexpAutomatonSimplifier.setPreferredSize(new java.awt.Dimension(400, 22));
     regexpAutomatonSimplifier.addActionListener(new java.awt.event.ActionListener() {

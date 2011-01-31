@@ -68,7 +68,7 @@ public class StateRemovalPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelOrderer, gridBagConstraints);
 
-    comboOrderer.setRenderer(new ProjectPropsComboRenderer());
+    comboOrderer.setRenderer(new ProjectPropsComboRenderer(comboOrderer.getRenderer()));
     comboOrderer.setMinimumSize(new java.awt.Dimension(200, 22));
     comboOrderer.setPreferredSize(new java.awt.Dimension(200, 22));
     comboOrderer.addActionListener(new java.awt.event.ActionListener() {

@@ -78,7 +78,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
-    comboConditionTester.setRenderer(new ProjectPropsComboRenderer());
+    comboConditionTester.setRenderer(new ProjectPropsComboRenderer(comboConditionTester.getRenderer()));
     comboConditionTester.setMinimumSize(new java.awt.Dimension(200, 22));
     comboConditionTester.setPreferredSize(new java.awt.Dimension(200, 22));
     comboConditionTester.addActionListener(new java.awt.event.ActionListener() {

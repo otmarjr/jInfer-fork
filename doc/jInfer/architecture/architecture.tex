@@ -165,7 +165,7 @@ For even more generality in design, we decided to implement abstract classes in 
 	\item \code{AbstractNamedNode} which implements methods from \code{NamedNode} interface to handle context, name and metadata (will discuss later in section \ref{section_metadata}),
 	\item \code{AbstractStructuralNode} which implements only the task of deciding if instance is \code{Element} or \code{SimpleData}.
 \end{itemize}
-% TODO vektor Na jednej strane nas zaujima struktura, na to tam mame isElement() isSimpleData(), na druhej strane nas zaujimaju textove data, na to tam mame getContent() v SD aj atribute.
+On the one hand, we are interested in the XML structure - for this reason we use \code{isElement()} and \code{isSimpleData()} of \code{AbstractStructuralNode}. On the other hand, we want to access textual content and its type, for this reason we use \code{getContent()} and \code{getContentType()} of \code{ContentNode}.
 
 Finally, our interface/class model for representing XML nodes is drafted in fig. \ref{nodes}. Those who are brave enough can look at fig. \ref{nodes_full2}.
 
@@ -281,7 +281,7 @@ Method merges second state given into first one (or an overloaded version - all 
 All \{in|out\}-transitions are redirected properly (or discarted as needed).
 Variables \code{useCount} and \code{finalCount} are updated to sums of values from merged transitions/states.
 
-% TODO vito Aby bolo mozne odkazovat sa na uz zmergovane stavy, ktore sa uz volaju inak, pouzivame mapu premenovani.
+To be able to refer to states that have already been merged (and thus have a different name), we use a map of renamings.
 Lets take example automaton of fig. \ref{automaton_merge1} (states are labeled [name|finalCount], steps by \{symbol|useCount\}).
 One asks to merge states 3 and 4.
 State 3 then becomes final state with loop and state 4 disappears (fig. \ref{automaton_merge2}).
@@ -512,7 +512,6 @@ RunningProject.getNextModuleCaps()
 method to obtain the next module encapsulated in the \code{Capabilities} interface.
 
 At the moment, only one capability is defined to be communicated across modules, more specifically between \jmodule{IGGenerator} and \jmodule{Simplifier}. This is \code{Capabilities.CAN\_HANDLE\_COMPLEX\_REGEXPS} meaning whether the \code{Simplifier} accepts more complicated regular expressions than simple concatenations of tokens on its input.
-% TODO vektor check later - didn't this change?!?
 
 Example of Capabilities usage taken from \jmodule{XSDImporter} module:
 \begin{verbatim}

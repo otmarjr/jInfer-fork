@@ -26,16 +26,16 @@ digraph twostep_modules_complete {
 	Trie [style = rounded];
 	Trie -> ClusterProcessor [label = "implements"];
 
-	Null [style = "rounded,filled"];
+	Null [style = rounded];
 	Null -> RegularExpressionCleaner [label = "implements"];
 
-	EmptyChildren [style = rounded];
+	EmptyChildren [style = "rounded,filled"];
 	EmptyChildren -> RegularExpressionCleaner [label = "implements"];
 
-	NestedConcatenation [style = rounded];
+	NestedConcatenation [style = "rounded,filled"];
 	NestedConcatenation -> RegularExpressionCleaner [label = "implements"];
 
-	Chained [style = rounded];
+	Chained [style = "rounded,filled"];
 	Chained -> RegularExpressionCleaner [label = "implements"];
 
 	ClusterProcessor -> ClustererWithAttributes [style = invis];

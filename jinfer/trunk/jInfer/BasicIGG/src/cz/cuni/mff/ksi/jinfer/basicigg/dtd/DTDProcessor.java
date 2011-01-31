@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,6 +85,9 @@ public class DTDProcessor implements Processor {
       for (final Object o : result.elementTypes.values()) {
         ret.add(processElement((ElementType) o));
       }
+
+      // show the rules before expansion
+      RuleDisplayerHelper.showRulesAsync("Raw", ret, true);
 
       // if the next module cannot handle complex regexps, help it by expanding our result
       if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {

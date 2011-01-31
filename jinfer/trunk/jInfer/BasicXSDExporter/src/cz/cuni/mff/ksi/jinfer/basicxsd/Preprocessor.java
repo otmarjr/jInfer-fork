@@ -183,7 +183,14 @@ public final class Preprocessor {
     }
     recursionStack.push(root);
 
-    occurrenceCounts.put(root.getName(), occurrenceCounts.get(root.getName()) + 1);
+    // Increase occurence count of root element. In case, it equals MAX_VALUE (recursive element),
+    // do not increase because of overflow.
+    final String rootName = root.getName();
+    final int rootCount = occurrenceCounts.get(rootName);
+    if (rootCount < Integer.MAX_VALUE) {
+      occurrenceCounts.put(root.getName(), occurrenceCounts.get(root.getName()) + 1);
+    }
+    
     for (AbstractStructuralNode node : root.getSubnodes().getTokens()) {
       if (node.getType().equals(StructuralNodeType.ELEMENT)) {
         countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()), recursionStack);

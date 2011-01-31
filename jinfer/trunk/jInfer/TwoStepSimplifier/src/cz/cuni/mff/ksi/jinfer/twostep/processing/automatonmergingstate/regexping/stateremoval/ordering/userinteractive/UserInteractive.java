@@ -59,7 +59,7 @@ public class UserInteractive<T> implements Orderer<T> {
 
     State<Regexp<T>> removeState;
     final StatePickingComponent<Regexp<T>> component = new StatePickingComponent<Regexp<T>>();
-    final StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t, component);
+    final StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, t), t, component, automaton.getSuperInitialState(), automaton.getSuperFinalState());
     component.setVisualizer(visualizer);
     do {
       AutoEditor.drawComponentAndWaitForGUI(component);

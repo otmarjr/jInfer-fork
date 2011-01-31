@@ -17,11 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VertexPickingGraphMousePlugin;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers.SuperStateShapeTransformer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
+import java.awt.Shape;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -47,6 +49,21 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
     getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<State<T>, Step<T>>());
 
     addGraphMousePlugin(new VertexPickingGraphMousePlugin<T>(component));
+  }
+
+  /**
+   * Constructs instance with specified {@link Layout}, edge label {@link Transformer}
+   * and {@link AbstractComponent} which will be this visualizer displayed at.
+   *
+   * @param layout Layout of automaton.
+   * @param edgeLabelTransformer Transformer of edge labels.
+   * @param component Component which will be this visualizer displayed at.
+   */
+  public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component, final State<T> initialState, final State<T> finalState) {
+    this(layout, edgeLabelTransformer, component);
+    final Transformer<State<T>, Shape> defaultVertexShapeTransformer = getRenderContext().getVertexShapeTransformer();
+
+    getRenderContext().setVertexShapeTransformer(new SuperStateShapeTransformer<T>(initialState, finalState, defaultVertexShapeTransformer));
   }
   
 }

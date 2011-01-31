@@ -88,6 +88,11 @@ public final class AutoEditorTopComponent extends TopComponent {
       fileChooser.setFileFilter(supportedFormatNameSet.get("png"));
     }
 
+    if (component == null) {
+      jButton1.setEnabled(false);
+    } else {
+      jButton1.setEnabled(true);
+    }
   }
 
   /** This method is called from within the constructor to
@@ -105,6 +110,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     jPanel1 = new javax.swing.JPanel();
 
     org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(AutoEditorTopComponent.class, "AutoEditorTopComponent.jButton1.text")); // NOI18N
+    jButton1.setEnabled(false);
     jButton1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton1ActionPerformed(evt);
@@ -206,6 +212,8 @@ public final class AutoEditorTopComponent extends TopComponent {
     jPanel1.removeAll();
     jPanel1.add(component, constraints);
     jPanel1.validate();
+
+    jButton1.setEnabled(true);
 
     this.open();
     this.requestActive();

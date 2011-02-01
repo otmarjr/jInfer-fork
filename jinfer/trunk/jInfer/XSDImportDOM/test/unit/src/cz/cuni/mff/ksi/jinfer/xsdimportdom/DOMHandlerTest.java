@@ -32,6 +32,9 @@ import static org.junit.Assert.*;
 @SuppressWarnings("PMD.SystemPrintln")
 public class DOMHandlerTest {
 
+  private static final String XML_HEAD = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+  private static final String SCHEMA_B = "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">";
+  private static final String SCHEMA_E = "</xs:schema>";
   private static final char NL = '\n';
 
   private List<Element> make(final InputStream stream) {
@@ -49,9 +52,9 @@ public class DOMHandlerTest {
   }
 
   private static final String EMPTY1 =
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
-    + "</xs:schema>";
+    XML_HEAD + NL
+    + SCHEMA_B + NL
+    + SCHEMA_E;
 
   @Test
   public void testDOMEmpty() {
@@ -62,10 +65,10 @@ public class DOMHandlerTest {
   }
 
   private static final String EMPTY2 =
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
+    XML_HEAD + NL
     + "<!-- Inferred on ... -->" + NL
-    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
-    + "</xs:schema>";
+    + SCHEMA_B + NL
+    + SCHEMA_E;
 
   @Test
   public void testDOMEmpty2() {
@@ -77,10 +80,10 @@ public class DOMHandlerTest {
   }
 
   private static final String TOP_REF =
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
+    XML_HEAD + NL
+    + SCHEMA_B + NL
     + "<xs:element ref=\"one\"/>" + NL
-    + "</xs:schema>";
+    + SCHEMA_E;
 
   @Test(expected = XSDException.class)
   public void testDOMRefTop() {
@@ -92,10 +95,10 @@ public class DOMHandlerTest {
   }
 
   private static final String TEST1 =
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + NL
-    + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" + NL
+    XML_HEAD + NL
+    + SCHEMA_B + NL
     + "<xs:element name=\"one\"/>" + NL
-    + "</xs:schema>";
+    + SCHEMA_E;
 
   private static final String[] TEST1_RES = {
     "one: ELEMENT\nλ"

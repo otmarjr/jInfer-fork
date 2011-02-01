@@ -93,7 +93,7 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
           .addComponent(jLabel1)
           .addGroup(layout.createSequentialGroup()
             .addComponent(jButton1)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 245, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 282, Short.MAX_VALUE)
             .addComponent(jCheckBox1))
           .addComponent(jLabel2)
           .addComponent(jLabel3))

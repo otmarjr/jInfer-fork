@@ -103,7 +103,7 @@ public class PluggableVisualizer<T> extends Visualizer<T> {
   private static List<GraphMousePlugin> getDefaultGraphMousePlugins() {
     final LinkedList<GraphMousePlugin> list = new LinkedList<GraphMousePlugin>();
     list.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, 1 / 1.1f, 1.1f));
-    list.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON1_MASK | MouseEvent.CTRL_MASK));
+    list.add(new TranslatingGraphMousePlugin(MouseEvent.BUTTON3_MASK));
     return list;
   }
 }

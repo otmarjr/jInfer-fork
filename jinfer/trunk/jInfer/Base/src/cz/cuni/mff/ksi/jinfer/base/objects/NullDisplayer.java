@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2011 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,32 +14,27 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
-import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.GraphBuilder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Helper class for displaying a list of rules.
+ * Null Rule Displayer - does nothing, thus effectively disabling rule display.
  * 
- * @author sviro
+ * @author vektor
  */
 @ServiceProvider(service = RuleDisplayer.class)
-public final class TreeRuleDisplayer implements RuleDisplayer {
+public class NullDisplayer implements RuleDisplayer {
 
-  private static final String NAME = "TreeRuleDisplayer";
-  private static final String DISPLAY_NAME = "Tree Rule Displayer";
+  private static final String NAME = "NullRuleDisplayer";
+  private static final String DISPLAY_NAME = "No rule displayer";
 
   @Override
   public void createDisplayer(final String panelName, final List<Element> rules) {
-    final TreeRuleDisplayerTopComponent topComponent = TreeRuleDisplayerTopComponent.findInstance();
-    if (!topComponent.isOpened()) {
-      topComponent.open();
-    }
-    topComponent.createNewPanel(panelName, GraphBuilder.buildGraphPanel(rules));
+    // do nothing
   }
 
   @Override

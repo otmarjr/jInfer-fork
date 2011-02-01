@@ -72,24 +72,16 @@ public final class DOMHelper {
     final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
     RegexpInterval interval;
     final RegexpInterval occurence = XSDOccurences.createInterval(minOccurence, maxOccurence);
-    System.out.println("INTERVAL occurence is: " + occurence.toString());
     if (outerInterval != null) {
       try {
-        if (outerInterval.isOnce()) {
-          System.out.println("OUTer is once");
-        } else {
-          System.out.println("OUTer is: " + outerInterval.toString());
-        }
         interval = RegexpInterval.intersectIntervals(outerInterval, occurence);
       } catch (IllegalArgumentException e) {
         LOG.warn("Occurence of element " + currentNode.getNodeName() + " has no intersection with constraints defined by its parent, ignoring constraints.");
         interval = occurence;
       }
     } else {
-      System.out.println("OUTER WAS NULL");
       interval = occurence;
     }
-    System.out.println("INTERVAL returning is: " + interval.toString());
     return interval;
   }
 
@@ -109,32 +101,6 @@ public final class DOMHelper {
       metadata.put(XSDAttribute.MAXOCCURS.getMetadataName(), interval.getMax());
     }
     return metadata;
-  }
-
-  /**
-   * Set the interval of given element to the default (1,1) if it was not set.
-   * @param ret Element to check for unset interval.
-   */
-  protected static void repairConcatInterval(final Element ret) {
-    if (ret != null
-        && ret.getSubnodes() != null
-        && isOrderType(ret.getSubnodes().getType())
-        && ret.getSubnodes().getInterval() == null) {
-      ret.getSubnodes().setInterval(RegexpInterval.getOnce());
-    }
-  }
-
-  /**
-   * Determine whether the parameter is a {@link RegexpType#CONCATENATION }
-   * or {@link RegexpType#ALTERNATION } or {@link RegexpType#PERMUTATION }.
-   * In other words, if it indicates a type of order.
-   * @param type Type to check.
-   * @return True if type indicates an order.
-   */
-  protected static boolean isOrderType(final RegexpType type) {
-    return RegexpType.CONCATENATION.equals(type)
-      || RegexpType.ALTERNATION.equals(type)
-      || RegexpType.PERMUTATION.equals(type);
   }
 
   /**

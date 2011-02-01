@@ -320,7 +320,6 @@ public class DOMHandler {
     if (XSDTag.ELEMENT.equals(tag)) {
       finalizeElement(currentNode, newContext, ret);
     }
-    DOMHelper.repairConcatInterval(ret);
     return new Pair<Element, RegexpInterval>(ret, interval);
   }
 
@@ -361,8 +360,6 @@ public class DOMHandler {
         }
         newContext.add(name);
         newVisited.add(currentNode);
-//ret.getSubnodes().setInterval(interval);
-//LOG.error("and the interval for " + ret.getName() + " is: " + ret.getSubnodes().getInterval().toString());
         // element has defined type
         if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
           final String type = DOMHelper.trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
@@ -432,7 +429,6 @@ public class DOMHandler {
             }
             Regexp<AbstractStructuralNode> token = Regexp.<AbstractStructuralNode>getToken(subtree.getFirst(), tokenOccurence);
             ret.getSubnodes().addChild(token);
-            //ret.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(buildRuleSubtree(child, newContext, newVisited, interval)));
             break;
           case COMPLEXTYPE:
             if (XSDTag.ELEMENT.equals(tag)) {

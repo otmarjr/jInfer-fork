@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
@@ -32,20 +31,24 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Exporter to DTD-like format but without employing any DTD restrictions.
- * It simply exports ELEMENT sth (regexp) and ATTLIST sth (each attribute)
+ * It simply exports ELEMENT sth (regexp) and ATTLIST sth (each attribute).
  *
  * The format of export may be changed for debugging purposes of inferring method.
+ * It is here only for debugging purposes.
  *
  * @author anti
  */
 @ServiceProvider(service = SchemaGenerator.class)
 public class TwoStepPseudoExporter implements SchemaGenerator {
+
   /**
    * Name of this module.
    */
-  public static final String NAME = "TwoStepPseudoExporter";
-  public static final String DISPLAY_NAME = "TwoStep PseudoExporter";
-
+  public static final String NAME = "TwoStepSimplifierPseudoExporter";
+  /**
+   * Name presented to user in dialogs.
+   */
+  public static final String DISPLAY_NAME = "TwoStep Pseudo Exporter";
   private static final Logger LOG = Logger.getLogger(TwoStepPseudoExporter.class);
 
   @Override
@@ -82,7 +85,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
       ret.append(elementToString(element));
     }
 
-    LOG.info("schema generated at "+ ret.toString().length() + " characters.");
+    LOG.info("schema generated at " + ret.toString().length() + " characters.");
     callback.finished(ret.toString(), "dtd");
   }
 
@@ -107,7 +110,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
   private String regexpToString(final Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
-          return structuralToString(regexp.getContent()) + regexp.getInterval().toString();
+        return structuralToString(regexp.getContent()) + regexp.getInterval().toString();
       case CONCATENATION:
         return childrenListToString(regexp.getChildren(), ",") + regexp.getInterval().toString();
       case ALTERNATION:
@@ -135,9 +138,9 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
           final String delimiter) {
     final StringBuilder sb = new StringBuilder();
     sb.append('(');
-    final Iterator<Regexp<AbstractStructuralNode>> it= children.iterator();
+    final Iterator<Regexp<AbstractStructuralNode>> it = children.iterator();
     while (it.hasNext()) {
-      final Regexp<AbstractStructuralNode> child= it.next();
+      final Regexp<AbstractStructuralNode> child = it.next();
       sb.append(regexpToString(child));
       if (it.hasNext()) {
         sb.append(delimiter);
@@ -151,7 +154,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
     final StringBuilder sb = new StringBuilder();
     final Iterator<Attribute> it = attributes.iterator();
     while (it.hasNext()) {
-      final Attribute att= it.next();
+      final Attribute att = it.next();
       sb.append("\t");
       sb.append(att.getName());
       sb.append(" ");

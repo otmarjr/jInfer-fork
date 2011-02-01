@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -23,14 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * cleans empty children and children with one child. For example
- * regular expression: ((), a, (b)), gets cleaned to (a, b).
+ * Cleans empty children and children with one child.
+ * 
+ * For example regular expression: ((), a, (b)), gets cleaned to (a, b).
  * First empty concatenation () is removed, and concatenation (b)
  * with only one child is replaced by token b.
  *
  * @author anti
  */
 public class EmptyChildren<T> implements RegularExpressionCleaner<T> {
+
   @Override
   public Regexp<T> cleanRegularExpression(final Regexp<T> regexp) {
     return cleanRecursive(regexp, true);
@@ -44,9 +45,9 @@ public class EmptyChildren<T> implements RegularExpressionCleaner<T> {
       case ALTERNATION:
       case PERMUTATION:
       case CONCATENATION:
-        final List<Regexp<T>> newChildren= new ArrayList<Regexp<T>>();
+        final List<Regexp<T>> newChildren = new ArrayList<Regexp<T>>();
         for (Regexp<T> child : regexp.getChildren()) {
-          final Regexp<T> cleanChild= cleanRecursive(child, false);
+          final Regexp<T> cleanChild = cleanRecursive(child, false);
           if (cleanChild != null) {
             newChildren.add(cleanChild);
           }
@@ -60,7 +61,7 @@ public class EmptyChildren<T> implements RegularExpressionCleaner<T> {
         if (newChildren.size() == 1) {
           return newChildren.get(0);
         }
-        final Regexp<T> newRegexp= Regexp.<T>getMutable();
+        final Regexp<T> newRegexp = Regexp.<T>getMutable();
         newRegexp.setInterval(regexp.getInterval());
         newRegexp.setType(regexp.getType());
         newRegexp.getChildren().addAll(newChildren);

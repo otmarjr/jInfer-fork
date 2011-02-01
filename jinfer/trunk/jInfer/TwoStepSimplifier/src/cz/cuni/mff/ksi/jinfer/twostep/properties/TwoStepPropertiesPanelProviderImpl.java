@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
@@ -32,17 +31,20 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Properties panel provider for module selection category.
+ * 
  * @author anti
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvider {
-  public static final String TWOSTEP_SIMPIFIER_CLUSTERER = "Clusterers";
-  public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
-  public static final String TWOSTEP_SIMPLIFIER_CLEANER_DISPLAY = "Regular expression cleaners";
-  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR = "ClustererProcessor";
-  public static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY = "Cluster processors";
+
+  private static final String TWOSTEP_SIMPLIFIER_CLUSTERER = "Clusterers";
+  private static final String TWOSTEP_SIMPLIFIER_CLUSTERER_DISPLAY = "Clusterers";
+  private static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR = "ClustererProcessor";
+  private static final String TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY = "Cluster processors";
+  private static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
+  private static final String TWOSTEP_SIMPLIFIER_CLEANER_DISPLAY = "Regular expression cleaners";
   private static final int PANEL_PRIORITY = 400000;
-  public static final String SIMPLIFIER_CATEGORY = "Simplifier";
+  private static final String SIMPLIFIER_CATEGORY = "Simplifier";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -72,7 +74,7 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
   @Override
   public List<VirtualCategoryPanel> getSubCategories() {
     final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
-    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPIFIER_CLUSTERER, TWOSTEP_SIMPIFIER_CLUSTERER, ModuleSelectionHelper.lookupNames(ClustererFactory.class)));
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER, TWOSTEP_SIMPLIFIER_CLUSTERER_DISPLAY, ModuleSelectionHelper.lookupNames(ClustererFactory.class)));
     result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR, TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY, ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class)));
     result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER_DISPLAY, ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class)));
 

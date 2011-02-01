@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
@@ -22,10 +21,18 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
- * Factory for AutomatonSimplifier.
+ * Factory for {@link AutomatonSimplifier}.
  *
  * @author anti
  */
 public interface AutomatonSimplifierFactory extends NamedModule, Capabilities, UserModuleDescription {
+
+  /**
+   * Create generic {@link AutomatonSimplifier} instance. Simplifying automaton
+   * does not depend on symbol type T.
+   * 
+   * @param <T> type of symbol in automaton (alphabet domain)
+   * @return instance of {@link AutomatonSimplifier} implementation
+   */
   <T> AutomatonSimplifier<T> create();
 }

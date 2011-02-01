@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.weighted;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
@@ -26,18 +25,19 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 
 /**
- * Most simple ordering of states to remove from RegexpAutomaton is implemented
- * here.
- *
+ * Simple heuristic for ordering states in automaton. Weight = sum of {in | out | loop}-transitions
+ * regular expressions lengths. Minimal weight = best to remove.
+ * <p>
  * Each state get a number assigned to it - called weight. Weight of a state
  * is calculated as sum of length (=count of tokens) of regular expression
- * on each {in-step, loop, out-step}
- *
+ * on each {in-step, loop, out-step}.
+ * <p>
  * The state with minimum weight is returned as a state to be removed first.
  * 
  * @author anti
  */
 public class Weighted<T> implements Orderer<T> {
+
   private int getRegexpWeight(final Regexp<T> regexp) {
     return regexp.getTokens().size();
   }
@@ -58,24 +58,24 @@ public class Weighted<T> implements Orderer<T> {
 
   @Override
   public State<Regexp<T>> getStateToRemove(final StateRemovalRegexpAutomaton<T> automaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
-    int minWeight= Integer.MAX_VALUE;
-    State<Regexp<T>> minState= null;
+    int minWeight = Integer.MAX_VALUE;
+    State<Regexp<T>> minState = null;
     for (State<Regexp<T>> state : automaton.getDelta().keySet()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      if (state.equals(automaton.getSuperInitialState())||state.equals(automaton.getSuperFinalState())) {
+      if (state.equals(automaton.getSuperInitialState()) || state.equals(automaton.getSuperFinalState())) {
         continue;//remove except superinitial state and superfinal state
       }
       if (minState == null) {
-        minState= state;
-        minWeight= this.getStateWeight(automaton, state);
+        minState = state;
+        minWeight = this.getStateWeight(automaton, state);
       } else {
-        final int stateWeight= this.getStateWeight(automaton, state);
-        if ((stateWeight <= minWeight)&&
-          (state.getName() < minState.getName())) {
-          minWeight= stateWeight;
-          minState= state;
+        final int stateWeight = this.getStateWeight(automaton, state);
+        if ((stateWeight <= minWeight)
+                && (state.getName() < minState.getName())) {
+          minWeight = stateWeight;
+          minState = state;
         }
       }
     }

@@ -14,33 +14,41 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererWithAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory class for ClustererWithAttributesIname class.
+ * Factory class for {@link Iname}.
  *
- * Has capability "attributeClusters" and informs about it in getCapabilities().
+ * Has capability "attributeClusters" and informs about it in {@link getCapabilities}().
+ *
+ * {@see ClustererWithAttributes}
  * @author anti
  */
 @ServiceProvider(service = ClustererFactory.class)
 public class InameFactory implements ClustererFactory {
-  private static final Logger LOG = Logger.getLogger(InameFactory.class);
 
-  public static final String NAME ="TwoStepClustererWithAttributesIname";
-  public static final String DISPLAY_NAME ="Iname (with attributes)";
+  private static final Logger LOG = Logger.getLogger(InameFactory.class);
+  /**
+   * Canonical name.
+   */
+  public static final String NAME = "TwoStepClustererWithAttributesIname";
+  /**
+   * Name presented to user.
+   */
+  public static final String DISPLAY_NAME = "Iname (with attributes)";
 
   @Override
   public Clusterer<AbstractStructuralNode> create() {
-    LOG.debug("Creating new ClustererWithAttributesIname.");
+    LOG.debug("Creating new " + NAME);
     return new Iname();
   }
 
@@ -56,7 +64,7 @@ public class InameFactory implements ClustererFactory {
 
   @Override
   public List<String> getCapabilities() {
-    final List<String> l= new ArrayList<String>();
+    final List<String> l = new ArrayList<String>();
     l.add("attributeClusters");
     return l;
   }
@@ -68,7 +76,7 @@ public class InameFactory implements ClustererFactory {
             + " equivalent exactly when their names equals (ignoring case)."
             + " Attributes are handled same way. It does not provide any heuristic to find out, whether"
             + " some attributes are same across different elements.");
-     return sb.toString();
+    return sb.toString();
   }
 
   @Override

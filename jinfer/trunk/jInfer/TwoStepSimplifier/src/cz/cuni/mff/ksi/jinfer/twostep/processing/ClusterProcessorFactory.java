@@ -24,10 +24,11 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 /**
  * Factory interface for 
  * {@link cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor}.
+ *
  * Implementations should be annotated
- *
+ *<code>
  * \@ServiceProvider(service = ClusterProcessorFactory.class)
- *
+ *</code>
  * to enable simplifier to find implementation by lookups.
  * 
  * @author anti
@@ -35,5 +36,10 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 public interface ClusterProcessorFactory
         extends NamedModule, Capabilities, UserModuleDescription {
 
+  /**
+   * Creates new worker instance.
+   *
+   * @return cluster processor worker instance
+   */
   ClusterProcessor<AbstractStructuralNode> create();
 }

@@ -14,18 +14,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.StateRemovalRegexpAutomaton;
 
 /**
- * Factory interface for RegexpAutomatonSimplifierStateRemovalOrderer.
+ * Factory interface for {@link Orderer}.
  *
  * @author anti
  */
 public interface OrdererFactory extends NamedModule, Capabilities, UserModuleDescription {
+
+  /**
+   * Create new orderer, which works on {@link StateRemovalRegexpAutomaton}.
+   * @param <T> type of symbol of automaton (alphabet)
+   * @return orderer instance
+   */
   <T> Orderer<T> create();
 }

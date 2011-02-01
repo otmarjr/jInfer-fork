@@ -56,7 +56,7 @@ public class StateRemovalFactory implements RegexpAutomatonSimplifierFactory {
 
   @Override
   public <T> RegexpAutomatonSimplifier<T> create() {
-    LOG.debug("Creating new RegexpAutomatonSimplifierStateRemoval.");
+    LOG.debug("Creating new " + NAME);
     return new StateRemoval<T>(
             this.getRegexpAutomatonSimplifierStateRemovalOrdererFactory());
   }

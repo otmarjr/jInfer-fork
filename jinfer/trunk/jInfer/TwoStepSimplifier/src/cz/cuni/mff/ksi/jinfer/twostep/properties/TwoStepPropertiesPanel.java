@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.twostep.TwoStepSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.TwoStepSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
@@ -28,7 +29,10 @@ import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * Properties panel for TwoStepSimplifierFactory.
+ * Properties panel for {@link TwoStepSimplifier}.
+ *
+ * Selects clusterer, cluster processor and cleaner submodules.
+ * 
  * @author anti
  */
 @SuppressWarnings({"PMD.SingularField", "PMD.UnusedFormalParameter", "PMD.MethodArgumentCouldBeFinal"})
@@ -36,7 +40,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;
 
-  /** Creates new form ModuleSelectionJPanel */
+  /** Creates new form  */
   public TwoStepPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
@@ -238,7 +242,7 @@ public class TwoStepPropertiesPanel extends AbstractPropertiesPanel {
 
     cleaner.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class).toArray()));
-    cleaner.setSelectedItem(ModuleSelectionHelper.lookupName(RegularExpressionCleanerFactory.class, 
+    cleaner.setSelectedItem(ModuleSelectionHelper.lookupName(RegularExpressionCleanerFactory.class,
             properties.getProperty(TwoStepSimplifierFactory.PROPERTIES_CLEANER, TwoStepSimplifierFactory.PROPERTIES_CLEANER_DEFAULT)));
     cleanerChanged(null);
   }

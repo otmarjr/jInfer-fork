@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.clustering;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
@@ -23,16 +22,24 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
- * Factory interface for Clusterer interface. Implementing factories
+ * Factory interface for {@link Clusterer} module.
+ *
+ * Implementing factories
  * should be annotated as
+ * <code>
  * \@ServiceProvider(service = ClustererFactory.class)
- * 
+ * </code>
  * Simplifier will lookup installed implementations and choose one 
  * according to user settings. Then calls create to obtain instance of
- * Clusterer class.
+ * {@link Clusterer} class.
  *
  * @author anti
  */
 public interface ClustererFactory extends NamedModule, Capabilities, UserModuleDescription {
+
+  /**
+   * Create {@link Clusterer}.
+   * @return clusterer instance
+   */
   Clusterer<AbstractStructuralNode> create();
 }

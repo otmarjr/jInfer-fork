@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
@@ -25,26 +24,26 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory for AutomatonSimplifierUserInteractive.
+ * Factory for {@link UserInteractive}.
  *
  * @author anti
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class UserInteractiveFactory implements AutomatonSimplifierFactory {
-  private static final Logger LOG = Logger.getLogger(UserInteractiveFactory.class);
 
+  private static final Logger LOG = Logger.getLogger(UserInteractiveFactory.class);
   /**
-   * TODO anti comment
+   * Canonical name.
    */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierUserInteractive";
   /**
-   * TODO anti comment
+   * Name presented to user.
    */
   public static final String DISPLAY_NAME = "User interactive";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
-    LOG.debug("Creating new AutomatonSimplifierUserInteractive.");
+    LOG.debug("Creating new " + NAME);
     return new UserInteractive<T>();
   }
 

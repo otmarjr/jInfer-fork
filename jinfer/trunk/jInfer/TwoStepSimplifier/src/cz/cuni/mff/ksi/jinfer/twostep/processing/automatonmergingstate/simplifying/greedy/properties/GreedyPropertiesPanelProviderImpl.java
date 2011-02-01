@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
@@ -31,8 +30,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class GreedyPropertiesPanelProviderImpl implements PropertiesPanelProvider {
+
   private static final int PANEL_PRIORITY = 400000;
-  public static final String MERGING_STATE_AUTOMATON_SIMPLIFIER = "AutomatonSimplifier";
+  private static final String MERGING_STATE_AUTOMATON_SIMPLIFIER = "AutomatonSimplifier";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
@@ -63,5 +63,4 @@ public class GreedyPropertiesPanelProviderImpl implements PropertiesPanelProvide
   public List<VirtualCategoryPanel> getSubCategories() {
     return null;
   }
-
 }

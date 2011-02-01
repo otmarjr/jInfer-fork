@@ -20,14 +20,20 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.AutomatonMergingState;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.AutomatonMergingStateFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * Properties panel for ClusterProcessorAutomatonMergingState.
+ * Properties panel for {@link AutomatonMergingState}.
+ *
+ * Lets user select {@link AutomatonSimplifier} module and {@link RegexpAutomatonSimplifier} module.
+ * 
  * @author anti
  */
 @SuppressWarnings({"PMD.SingularField", "PMD.UnusedFormalParameter", "PMD.MethodArgumentCouldBeFinal"})

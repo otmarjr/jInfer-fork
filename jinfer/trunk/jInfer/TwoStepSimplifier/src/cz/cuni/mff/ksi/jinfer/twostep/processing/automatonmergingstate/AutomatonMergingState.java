@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -37,13 +36,17 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * Class providing method for inferring DTD for single element. In this implementation
- * deterministic finite automaton is used.
- * First Prefix-Tree automaton is constructed using cluster.members() as positive
- * examples. Then, given MergeConditionTesterKHContext, merging of states occurs
- * until there are no more states to merge. Currently k=2, h=1, so
- * producing 2,1-context automaton by merging.
+ * Extensible implementation of merging state algorithm.
  *
+ * Class providing method for inferring DTD for single element. In this implementation
+ * nondeterministic finite automaton is used.
+ * <p>
+ * First prefix-tree automaton is constructed using cluster members as positive
+ * examples. Then, given {@link AutomatonSimplifier}, merging of states occurs.
+ * <p>
+ * After that, automaton is passed to {@link RegexpAutomatonSimplifier} to obtain
+ * regular expression from it.
+ * 
  * @author anti
  */
 public class AutomatonMergingState implements ClusterProcessor<AbstractStructuralNode> {
@@ -53,6 +56,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
   private final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier;
 
   private class AbstractStructuralNodeSymbolToString implements SymbolToString<AbstractStructuralNode> {
+
     @Override
     public String toString(final AbstractStructuralNode symbol) {
       return symbol.isElement() ? symbol.getName() : "#CDATA";
@@ -60,7 +64,8 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
   };
 
   private class RegexpAbstractSymbolToString implements SymbolToString<Regexp<AbstractStructuralNode>> {
-    private final AbstractStructuralNodeSymbolToString g= new AbstractStructuralNodeSymbolToString();
+
+    private final AbstractStructuralNodeSymbolToString g = new AbstractStructuralNodeSymbolToString();
 
     @Override
     public String toString(final Regexp<AbstractStructuralNode> symbol) {
@@ -71,43 +76,51 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
           return g.toString(symbol.getContent());
         case CONCATENATION:
           return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), ",",
-            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
-              @Override
-              public String toString(final Regexp<AbstractStructuralNode> t) {
-                return RegexpAbstractSymbolToString.this.toString(t);
-              }
-          });
+                  new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+
+                    @Override
+                    public String toString(final Regexp<AbstractStructuralNode> t) {
+                      return RegexpAbstractSymbolToString.this.toString(t);
+                    }
+                  });
         case ALTERNATION:
           return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), "|",
-            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
-              @Override
-              public String toString(final Regexp<AbstractStructuralNode> t) {
-                return RegexpAbstractSymbolToString.this.toString(t);
-              }
-          });
+                  new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+
+                    @Override
+                    public String toString(final Regexp<AbstractStructuralNode> t) {
+                      return RegexpAbstractSymbolToString.this.toString(t);
+                    }
+                  });
         case PERMUTATION:
           return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(symbol.getChildren(), "&",
-            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
-              @Override
-              public String toString(final Regexp<AbstractStructuralNode> t) {
-                return RegexpAbstractSymbolToString.this.toString(t);
-              }
-          });
+                  new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+
+                    @Override
+                    public String toString(final Regexp<AbstractStructuralNode> t) {
+                      return RegexpAbstractSymbolToString.this.toString(t);
+                    }
+                  });
       }
       return symbol.toString();
     }
   };
-
   private final AbstractStructuralNodeSymbolToString elementSymbolToString;
   private final RegexpAbstractSymbolToString regexpAbstractToString;
 
+  /**
+   * Construct and set all submodule factories.
+   *
+   * @param automatonSimplifierFactory factory of {@link AutomatonSimplifier} submodule.
+   * @param regexpAutomatonSimplifierFactory factory of {@link RegexpAutomatonSimplifier} submodule.
+   */
   public AutomatonMergingState(
           final AutomatonSimplifierFactory automatonSimplifierFactory,
           final RegexpAutomatonSimplifierFactory regexpAutomatonSimplifierFactory) {
-    this.automatonSimplifier= automatonSimplifierFactory.<AbstractStructuralNode>create();
-    this.regexpAutomatonSimplifier= regexpAutomatonSimplifierFactory.<AbstractStructuralNode>create();
-    this.elementSymbolToString= new AbstractStructuralNodeSymbolToString();
-    this.regexpAbstractToString= new RegexpAbstractSymbolToString();
+    this.automatonSimplifier = automatonSimplifierFactory.<AbstractStructuralNode>create();
+    this.regexpAutomatonSimplifier = regexpAutomatonSimplifierFactory.<AbstractStructuralNode>create();
+    this.elementSymbolToString = new AbstractStructuralNodeSymbolToString();
+    this.regexpAbstractToString = new RegexpAbstractSymbolToString();
   }
 
   @Override
@@ -122,18 +135,18 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
 
     for (final AbstractStructuralNode instance : rules) {
       final Element element = (Element) instance;
-      final Regexp<AbstractStructuralNode> rightSide= element.getSubnodes();
+      final Regexp<AbstractStructuralNode> rightSide = element.getSubnodes();
 
       if (!rightSide.isConcatenation()) {
         throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp. It is " + element.toString());
       }
 
-      final List<AbstractStructuralNode> rightSideTokens= rightSide.getTokens();
+      final List<AbstractStructuralNode> rightSideTokens = rightSide.getTokens();
 
-      final List<AbstractStructuralNode> symbolString= new LinkedList<AbstractStructuralNode>();
+      final List<AbstractStructuralNode> symbolString = new LinkedList<AbstractStructuralNode>();
       for (AbstractStructuralNode token : rightSideTokens) {
         symbolString.add(clusterer.getRepresentantForItem(token));
-     }
+      }
       automaton.buildPTAOnSymbol(symbolString);
     }
     LOG.debug("--- AutomatonMergingStateProcessor on element:");
@@ -142,26 +155,25 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton= automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName());
+    final Automaton<AbstractStructuralNode> simplifiedAutomaton = automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName());
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
-    final RegexpAutomaton<AbstractStructuralNode> regexpAutomaton= new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);
+    final RegexpAutomaton<AbstractStructuralNode> regexpAutomaton = new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);
     LOG.debug(">>> After regexpautomaton created:");
     LOG.debug(regexpAutomaton);
-    final Regexp<AbstractStructuralNode> regexp= regexpAutomatonSimplifier.simplify(regexpAutomaton, regexpAbstractToString);
+    final Regexp<AbstractStructuralNode> regexp = regexpAutomatonSimplifier.simplify(regexpAutomaton, regexpAbstractToString);
     LOG.debug(">>> And the regexp is:");
     LOG.debug(regexp);
     LOG.debug("--- End");
 
     // 3.4 return element with regexp
     return new Element(
-          new ArrayList<String>(),
-          rules.get(0).getName(),
-          new HashMap<String, Object>(),
-          regexp,
-          new ArrayList<Attribute>()
-          );
+            new ArrayList<String>(),
+            rules.get(0).getName(),
+            new HashMap<String, Object>(),
+            regexp,
+            new ArrayList<Attribute>());
   }
 }

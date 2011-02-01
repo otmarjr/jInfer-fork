@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -40,45 +39,45 @@ import java.util.Map;
  * each item, iterate clusters. If any representant is of same type (SimpleData,
  * Element,Attribute) add item to cluster. If cluster is not found, create new
  * with item as representant.
- * For SimpleData, check for same name is omitted, all simpledata ends up in one cluster.
+ * For SimpleData, check for same name is omitted, all simpledata ends up in one cluster for each element.
  *
  * @author anti
  */
 public class Iname implements ClustererWithAttributes<AbstractStructuralNode, Attribute> {
-  
+
   private final List<Cluster<AbstractStructuralNode>> nodeClusters;
   private final List<AbstractStructuralNode> items;
   private final Map<AbstractStructuralNode, Clusterer<Attribute>> attributeClusterers;
   private final Map<AbstractStructuralNode, Clusterer<SimpleData>> simpleDataClusterers;
 
+  /**
+   * Default constructor.
+   */
   public Iname() {
-    this.nodeClusters= new LinkedList<Cluster<AbstractStructuralNode>>();
-    this.items= new LinkedList<AbstractStructuralNode>();
-    this.attributeClusterers= new LinkedHashMap<AbstractStructuralNode, Clusterer<Attribute>>();
-    this.simpleDataClusterers= new LinkedHashMap<AbstractStructuralNode, Clusterer<SimpleData>>();
+    this.nodeClusters = new LinkedList<Cluster<AbstractStructuralNode>>();
+    this.items = new LinkedList<AbstractStructuralNode>();
+    this.attributeClusterers = new LinkedHashMap<AbstractStructuralNode, Clusterer<Attribute>>();
+    this.simpleDataClusterers = new LinkedHashMap<AbstractStructuralNode, Clusterer<SimpleData>>();
   }
 
   private AbstractStructuralNode addNode(final AbstractStructuralNode item) throws InterruptedException {
-    final Iterator<Cluster<AbstractStructuralNode>> iterator= this.nodeClusters.iterator();
+    final Iterator<Cluster<AbstractStructuralNode>> iterator = this.nodeClusters.iterator();
 
     while (iterator.hasNext()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      final Cluster<AbstractStructuralNode> cluster= iterator.next();
-      final AbstractStructuralNode representant= cluster.getRepresentant();
-      if (
-              item.isElement() &&
-              representant.isElement() &&
-              representant.getName().equalsIgnoreCase(item.getName())
-      ) {
+      final Cluster<AbstractStructuralNode> cluster = iterator.next();
+      final AbstractStructuralNode representant = cluster.getRepresentant();
+      if (item.isElement()
+              && representant.isElement()
+              && representant.getName().equalsIgnoreCase(item.getName())) {
         cluster.add(item);
         return representant;
       }
     }
     this.nodeClusters.add(
-            new Cluster<AbstractStructuralNode>(item)
-            );
+            new Cluster<AbstractStructuralNode>(item));
     return item;
   }
 
@@ -88,19 +87,17 @@ public class Iname implements ClustererWithAttributes<AbstractStructuralNode, At
   }
 
   @Override
-  public void addAll(final Collection<AbstractStructuralNode> items){
+  public void addAll(final Collection<AbstractStructuralNode> items) {
     this.items.addAll(items);
   }
 
   @Override
-
-  // TODO anti Consistency check, was there a node on right side not clustered because of inproper use?
   public void cluster() throws InterruptedException {
     for (AbstractStructuralNode node : items) {
-      final AbstractStructuralNode representant= this.addNode(node);
-      
+      final AbstractStructuralNode representant = this.addNode(node);
+
       if (node.isElement()) {
-        for (AbstractStructuralNode subNode: ((Element) node).getSubnodes().getTokens()) {
+        for (AbstractStructuralNode subNode : ((Element) node).getSubnodes().getTokens()) {
           if (Boolean.TRUE.equals(subNode.getMetadata().get(IGGUtils.IS_SENTINEL))) {
             this.addNode(subNode);
           }
@@ -137,7 +134,6 @@ public class Iname implements ClustererWithAttributes<AbstractStructuralNode, At
         try {
           return it.next().getRepresentantForItem((SimpleData) item);
         } catch (IllegalArgumentException e) {
-          
         }
       }
     } else {

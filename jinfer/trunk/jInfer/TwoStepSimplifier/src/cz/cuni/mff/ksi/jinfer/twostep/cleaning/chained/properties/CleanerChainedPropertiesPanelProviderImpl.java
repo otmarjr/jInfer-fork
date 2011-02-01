@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
@@ -31,8 +30,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class CleanerChainedPropertiesPanelProviderImpl implements PropertiesPanelProvider {
+
   private static final int PANEL_PRIORITY = 400000;
-  public static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
+  private static final String TWOSTEP_SIMPLIFIER_CLEANER = "Cleaners";
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {

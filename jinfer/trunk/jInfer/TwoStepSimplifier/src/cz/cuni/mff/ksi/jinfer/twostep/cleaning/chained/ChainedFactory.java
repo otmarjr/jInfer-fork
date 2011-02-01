@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
@@ -32,7 +31,7 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory for CleanerChained.
+ * Factory for {@link Chained}.
  *
  * @author anti
  */
@@ -40,31 +39,30 @@ import org.openide.util.lookup.ServiceProvider;
 public class ChainedFactory implements RegularExpressionCleanerFactory {
 
   private static final Logger LOG = Logger.getLogger(ChainedFactory.class);
-  
   /** 
-   * TODO anti comment
+   * Canonical name.
    */
   public static final String NAME = "TwoStepRegularExpressionCleanerChained";
   /**
-   * TODO anti comment
+   * Name presented to user.
    */
   public static final String DISPLAY_NAME = "Chained";
   /**
-   * TODO anti comment
+   * Property name prefix for cleaners selected.
    */
   public static final String PROPERTIES_PREFIX = "chain";
   /**
-   * TODO anti Comment
+   * Default cleaner to use in chain when none are selected.
    */
   public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerNull";
   /**
-   * TODO anti comment
+   * Property name for count of cleaners user selected in a chain.
    */
   public static final String PROPERTIES_COUNT = "count";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {
-    LOG.debug("Creating new CleanerChained.");
+    LOG.debug("Creating new " + NAME);
     return new Chained<T>(getRegularexpressionCleanerFactories());
   }
 
@@ -80,6 +78,7 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
             getRegularexpressionCleanerFactories(),
             ", ",
             new CollectionToString.ToString<RegularExpressionCleanerFactory>() {
+
               @Override
               public String toString(final RegularExpressionCleanerFactory t) {
                 return t.getModuleDescription();
@@ -101,9 +100,9 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
     return sb.toString();
   }
 
-  public List<RegularExpressionCleanerFactory> getRegularexpressionCleanerFactories() {
+  private List<RegularExpressionCleanerFactory> getRegularexpressionCleanerFactories() {
     final Properties p = RunningProject.getActiveProjectProps(NAME);
-    final List<RegularExpressionCleanerFactory> result= new ArrayList<RegularExpressionCleanerFactory>();
+    final List<RegularExpressionCleanerFactory> result = new ArrayList<RegularExpressionCleanerFactory>();
 
     final String _count = p.getProperty(PROPERTIES_COUNT, "notJebHojid4");
     if (_count.equals("notJebHojid4")) {

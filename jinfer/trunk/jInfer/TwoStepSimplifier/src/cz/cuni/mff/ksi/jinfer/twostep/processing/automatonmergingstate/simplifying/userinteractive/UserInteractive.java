@@ -31,8 +31,10 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 
 /**
- * Works simply - renders automaton to user. When returned list of states user
- * had selected, merges them. And cycle goes on. If user select no states,
+ * Renders automaton to user and merges returned list of states user
+ * had selected.
+ *
+ * And cycle goes on. If user select no states,
  * it is considered that user is satisfied with automaton, so automaton is returned
  * in current form.
  *
@@ -42,7 +44,6 @@ import org.apache.log4j.Logger;
 public class UserInteractive<T> implements AutomatonSimplifier<T> {
 
   private static final Logger LOG = Logger.getLogger(UserInteractive.class);
-
   private boolean askUser = true;
 
   @Override
@@ -55,7 +56,7 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
     if (!askUser) {
       return inputAutomaton;
     }
-    
+
     List<State<T>> mergeLst;
     final Transformer<Step<T>, String> t = new Transformer<Step<T>, String>() {
 

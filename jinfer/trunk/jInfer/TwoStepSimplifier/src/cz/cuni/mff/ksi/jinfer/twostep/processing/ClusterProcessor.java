@@ -29,13 +29,13 @@ import java.util.List;
  * <p>
  * Implementors have to take care about thread interruptions. Check for it, and
  * throw InterruptedException in some inner main loop. Example:
- * <code>
+ * <pre>
  * for (...) {
  *   if (Thread.interrupted()) {
  *     throw new InterruptedException();
  *   }
  * }
- * </code>
+ * </pre>
  * 
  * @author anti
  */

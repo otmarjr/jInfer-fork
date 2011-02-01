@@ -27,7 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
  *
  * Implementations should be annotated
  *<code>
- * \@ServiceProvider(service = ClusterProcessorFactory.class)
+ * @ServiceProvider(service = ClusterProcessorFactory.class)
  *</code>
  * to enable simplifier to find implementation by lookups.
  * 

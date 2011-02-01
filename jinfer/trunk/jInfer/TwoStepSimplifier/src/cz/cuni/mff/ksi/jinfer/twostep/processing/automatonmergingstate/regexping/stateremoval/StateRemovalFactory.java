@@ -38,19 +38,19 @@ public class StateRemovalFactory implements RegexpAutomatonSimplifierFactory {
   private static final Logger LOG = Logger.getLogger(StateRemovalFactory.class);
 
   /**
-   * TODO anti comment
+   * Canonical name.
    */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemoval";
   /**
-   * TODO anti comment
+   * Name presented to user.
    */
   public static final String DISPLAY_NAME = "State removal";
   /**
-   * TODO anti comment
+   * Property name of orderer submodule.
    */
   public static final String PROPERTIES_ORDERER = "orderer";
   /**
-   * TODO anti comment
+   * Default orderer when none selected.
    */
   public static final String PROPERTIES_ORDERER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdererWeighted";
 

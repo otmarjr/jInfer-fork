@@ -104,7 +104,7 @@ public class CloneHelper {
    * respectively. This is done for all children recursively.
    *
    * @param e Element to be cloned.
-   * @param contextPrefix Context
+   * @param contextPrefix Context to be used as prefix.
    * @return Cloned element that is equal to the original in everything except the new context, but different instance.
    */
   public Element cloneElement(final Element e, final List<String> contextPrefix) {
@@ -166,9 +166,9 @@ public class CloneHelper {
 
   /**
    * Clones a regular expression.
-   *
+   * Elements are prefixed with the <code>contextPrefix</code> as in {@link CloneHelper#cloneElement(cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element, java.util.List) }.
    * @param r Regexp to be cloned.
-   * @param contextPrefix TODO reseto What is this???
+   * @param contextPrefix Context to be used as prefix.
    * @return Cloned regexp: equal, but different instance.
    */
   public Regexp<AbstractStructuralNode> cloneRegexp(

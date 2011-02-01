@@ -31,9 +31,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -136,7 +136,7 @@ public class DOMHandler {
    * Then the whole rule tree is built using the DOM tree and the two maps.
    * @param root Root (schema) node.
    */
-  private void examineRootChildren(final org.w3c.dom.Element root) {
+  private void examineRootChildren(final org.w3c.dom.Element root) throws XSDException {
     for (int i = 0; i < root.getChildNodes().getLength(); i++) {
       // check if child is of type ELEMENT_NODE as defined by DOM spec
       final org.w3c.dom.Element domElem = DOMHelper.getDOMElement(root.getChildNodes().item(i));
@@ -341,7 +341,7 @@ public class DOMHandler {
             ret.getMetadata().put(XSDAttribute.TYPE.getMetadataName(), type);
           } else if (namedCTypes.containsKey(type)) {
             final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited).getFirst();
-            extractSubnodesFromContainer(container, ret, CONTAINER_CTYPE);
+            DOMHelper.extractSubnodesFromContainer(container, ret, CONTAINER_CTYPE);
             DOMHelper.finalizeElement(ret, newContext);
             return ret; // RETURN STATEMENT
           } else {
@@ -378,39 +378,20 @@ public class DOMHandler {
                                final Element ret,
                                final List<String> newContext,
                                final List<org.w3c.dom.Element> newVisited,
-                               final RegexpInterval interval) throws XSDException {
+                               final RegexpInterval interval) throws XSDException, MissingResourceException {
     for (int i = 0; i < children.getLength(); i++) {
       final org.w3c.dom.Element child = DOMHelper.getDOMElement(children.item(i));
       if (child != null) {
         final XSDTag childTag = XSDTag.matchName(XSDUtility.trimNS(child.getTagName()));
         switch (childTag) {
           case ELEMENT:
-            if (XSDTag.ELEMENT.equals(tag)) {
-              // parent is also element
-              throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
-            }
-            final Pair<Element, RegexpInterval> subtree = buildRuleSubtree(child, newContext, newVisited);
-            RegexpInterval tokenOccurence = subtree.getSecond();
-            if (XSDTag.ALL.equals(tag) && !tokenOccurence.isOnce() && !tokenOccurence.isOptional()) {
-              // parent is ALL tag - special treatment for intervals
-              // token occurence can be only {0,1} or {1,1} because element ALL restricts this property
-              tokenOccurence = interval; // set it to the default interval of parent (ALL)
-            }
-            final Regexp<AbstractStructuralNode> token = Regexp.<AbstractStructuralNode>getToken(subtree.getFirst(), tokenOccurence);
-            ret.getSubnodes().addChild(token);
+            handleChildElement(ret, child, tag, childTag, newContext, newVisited, interval);
             break;
           case COMPLEXTYPE:
-            if (XSDTag.ELEMENT.equals(tag)) {
-              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_CTYPE);
-            } else if (XSDTag.REDEFINE.equals(tag)) {
-              LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.UnsupportedStructure", childTag.toString(), tag.toString()));
-            } else {
-              // parent is also complexType or other unsuitable tag
-              // complexType directly under schema tag is handled in examineChildren()
-              throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
-            }
+            handleChildComplexType(ret, child, tag, childTag, newContext, newVisited);
             break;
           case ATTRIBUTE:
+          {
             // first get the attribute name or ref
             // we don't resolve the ref at all (out of assignment), just register it's there
             String attrName = child.getAttribute(XSDAttribute.NAME.toString());
@@ -437,27 +418,15 @@ public class DOMHandler {
               }
             }
             ret.getAttributes().add(new Attribute(newContext, attrName, attrMeta, attrType, new ArrayList<String>(0)));
+          }
+
             break;
           case ALL:
-            if (XSDTag.COMPLEXTYPE.equals(tag)) {
-              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
-            } else if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
-              throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
-            } else {
-              LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.UnsupportedStructure", childTag.toString(), tag.toString()));
-            }
+            handleChildAll(ret, child, tag, childTag, newContext, newVisited);
             break;
           case CHOICE:
           case SEQUENCE:
-            if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
-              ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited).getFirst().getSubnodes());
-            } else if (XSDTag.COMPLEXTYPE.equals(tag)) {
-              extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
-            } else if (XSDTag.ELEMENT.equals(tag) || XSDTag.ALL.equals(tag)) {
-              throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
-            } else {
-              LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.UnsupportedStructure", childTag.toString(), tag.toString()));
-            }
+            handleChildChoiceSequence(ret, child, tag, childTag, newContext, newVisited);
             break;
           default:
             LOG.warn("Behavior undefined for child tag " + child.getTagName());
@@ -467,36 +436,74 @@ public class DOMHandler {
     }
   }
 
-  /**
-   * Extract subnodes and attributes from subtree stored in container and put them directly under
-   * the destination element. This is a helper method for omitting containers.
-   * @param subtree Container element, from which the subnodes will be extracted.
-   * @param destination Destination element, where the subnodes are copied to.
-   * @param containerType Expected name of the subtree element, this is just a consistency check.
-   * @throws XSDException
-   */
-  private void extractSubnodesFromContainer(final Element subtree, final Element destination, final String containerType) throws XSDException {
-    if (!subtree.getName().equals(containerType)) {
-      throw new XSDException(NbBundle.getMessage(DOMHandler.class, "Error.WrongContainer", containerType, subtree.getName()));
+  private void handleChildElement(final Element ret,
+                                  final org.w3c.dom.Element child,
+                                  final XSDTag tag,
+                                  final XSDTag childTag,
+                                  final List<String> newContext,
+                                  final List<org.w3c.dom.Element> newVisited,
+                                  final RegexpInterval interval) throws XSDException {
+    if (XSDTag.ELEMENT.equals(tag)) {
+      // parent is also element
+      throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
     }
-    // compare types of subnodes, set correct type if destination is null
-    // throw exception if types don't match, or do nothing if they match
-    if (destination.getSubnodes().getType() == null && subtree.getSubnodes().getType() != null) {
-      destination.getSubnodes().setType(subtree.getSubnodes().getType());
-    } else if (destination.getSubnodes().getType() != null 
-               && subtree.getSubnodes().getType() != null
-               && destination.getSubnodes().getType() != subtree.getSubnodes().getType()) {
-      //                                              ^^ comparing enums
-      // if the two types are not null and not equal, the schema is invalid (mixing wrong types)
-      final String msg = NbBundle.getMessage(DOMHandler.class, "Error.MismatchedTypes",
-        subtree.getSubnodes().getType(), subtree.getName(),
-        destination.getSubnodes().getType(), destination.getName());
-      throw new XSDException(msg);
+    final Pair<Element, RegexpInterval> subtree = buildRuleSubtree(child, newContext, newVisited);
+    RegexpInterval tokenOccurence = subtree.getSecond();
+    if (XSDTag.ALL.equals(tag) && !tokenOccurence.isOnce() && !tokenOccurence.isOptional()) {
+      // parent is ALL tag - special treatment for intervals
+      // token occurence can be only {0,1} or {1,1} because element ALL restricts this property
+      tokenOccurence = interval; // set it to the default interval of parent (ALL)
     }
-    for (Regexp<AbstractStructuralNode> regexp : subtree.getSubnodes().getChildren()) {
-      destination.getSubnodes().addChild(regexp);
+    final Regexp<AbstractStructuralNode> token = Regexp.<AbstractStructuralNode>getToken(subtree.getFirst(), tokenOccurence);
+    ret.getSubnodes().addChild(token);
+  }
+
+  private void handleChildComplexType(final Element ret,
+                                      final org.w3c.dom.Element child,
+                                      final XSDTag tag,
+                                      final XSDTag childTag,
+                                      final List<String> newContext,
+                                      final List<org.w3c.dom.Element> newVisited) throws XSDException, MissingResourceException {
+    if (XSDTag.ELEMENT.equals(tag)) {
+      DOMHelper.extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_CTYPE);
+    } else if (XSDTag.REDEFINE.equals(tag)) {
+      LOG.warn(DOMHelper.warnUnsupported(childTag, tag));
+    } else {
+      // parent is also complexType or other unsuitable tag
+      throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
     }
-    destination.getSubnodes().setInterval(subtree.getSubnodes().getInterval());
-    destination.getAttributes().addAll(subtree.getAttributes());
+    // complexType directly under schema tag is handled in examineRootChildren()
+  }
+
+  private void handleChildAll(final Element ret,
+                              final org.w3c.dom.Element child,
+                              final XSDTag tag,
+                              final XSDTag childTag,
+                              final List<String> newContext,
+                              final List<org.w3c.dom.Element> newVisited) throws XSDException, MissingResourceException {
+    if (XSDTag.COMPLEXTYPE.equals(tag)) {
+      DOMHelper.extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
+    } else if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
+      throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
+    } else {
+      LOG.warn(DOMHelper.warnUnsupported(childTag, tag));
+    }
+  }
+
+  private void handleChildChoiceSequence(final Element ret, 
+                                         final org.w3c.dom.Element child,
+                                         final XSDTag tag,
+                                         final XSDTag childTag,
+                                         final List<String> newContext, 
+                                         final List<org.w3c.dom.Element> newVisited) throws XSDException, MissingResourceException {
+    if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
+      ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited).getFirst().getSubnodes());
+    } else if (XSDTag.COMPLEXTYPE.equals(tag)) {
+      DOMHelper.extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
+    } else if (XSDTag.ELEMENT.equals(tag) || XSDTag.ALL.equals(tag)) {
+      throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
+    } else {
+      LOG.warn(DOMHelper.warnUnsupported(childTag, tag));
+    }
   }
 }

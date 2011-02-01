@@ -43,6 +43,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
   public static final String NAME = "XSDImport";
   public static final String PARSER = "parser";
+  public static final String PARSER_NAME_DEFAULT = "DOMParser";
   public static final String STOP_ON_ERROR = "stop.on.error";
   public static final String VERBOSE_INFO = "verbose.info";
   public static final String LOG_LEVEL = "log.level";
@@ -205,12 +206,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     final List<NamedModule> names = ModuleSelectionHelper.lookupNames(XSDParser.class);
     parserComboBox.setModel(new DefaultComboBoxModel(names.toArray()));
 
-    //TODO changed implementation of names what to do?
-//    if (names.contains("SAX Parser")) {
-//      parserComboBox.setSelectedItem(properties.getProperty(PARSER, "SAX Parser"));
-//    } else {
-      parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupName(XSDParser.class, properties.getProperty(PARSER, DEFAULT_MENU_TEXT)));
-//    }
+    parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupName(XSDParser.class, properties.getProperty(PARSER, PARSER_NAME_DEFAULT)));
 
     logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
 

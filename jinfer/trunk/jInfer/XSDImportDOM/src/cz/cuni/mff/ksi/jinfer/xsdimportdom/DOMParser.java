@@ -31,7 +31,14 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = XSDParser.class)
 public class DOMParser implements XSDParser {
-  public static final String NAME = "DOMParser";
+
+  /**
+   * Internal name of the service provider.
+   * This is the default parser for importing XSD Schemas.
+   * Its name is used verbatim in XSDImportPropertiesPanel.
+   * It's best not to change this name!
+   */
+  public static final String NAME = "DOMParser"; 
   public static final String DISPLAY_NAME = "DOM Parser";
 
   private DOMHandler handler;

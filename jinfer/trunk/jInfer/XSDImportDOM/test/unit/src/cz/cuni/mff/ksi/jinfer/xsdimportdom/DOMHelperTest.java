@@ -17,9 +17,9 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDTag;
 import org.junit.Test;
+import org.openide.util.NbBundle;
 import static org.junit.Assert.*;
 
 /**
@@ -30,40 +30,12 @@ import static org.junit.Assert.*;
 public class DOMHelperTest {
 
   @Test
-  public void testTrimNull() {
-    System.out.println("trim null");
-    assertEquals(null, DOMHelper.trimNS(null));
-  }
-
-  @Test
-  public void testTrimEmpty() {
-    System.out.println("trim empty");
-    assertEquals("", DOMHelper.trimNS(""));
-  }
-
-  @Test
-  public void testTrimNormal() {
-    System.out.println("trim normal");
-    assertEquals("element", DOMHelper.trimNS("xs:element"));
-  }
-
-  @Test
-  public void testTrimContainer() {
-    System.out.println("trim container");
-    assertEquals("", DOMHelper.trimNS("::container::order::"));
-  }
-
-  @Test
-  public void testTrimBad() {
-    System.out.println("trim bad");
-    assertEquals("x", DOMHelper.trimNS("xsd:element:x"));
-  }
-
-  @Test
-  public void testSetLambda() {
-    final Element el = Element.getMutable();
-    el.getSubnodes().setType(RegexpType.ALTERNATION);
-    DOMHelper.setLambda(el);
-    assertEquals(RegexpType.LAMBDA, el.getSubnodes().getType());
+  @SuppressWarnings("PMD.ForeignClassBundleCode")
+  public void testErrorNested() {
+    System.out.println("test error nested");
+    final String result = DOMHelper.errorWrongNested(XSDTag.ELEMENT, XSDTag.ELEMENT);
+    final String expected = NbBundle.getMessage(DOMHelper.class, "Error.WrongTagsNested", XSDTag.ELEMENT.toString(), XSDTag.ELEMENT.toString());
+    assertEquals(expected, result);
+    System.out.println("result: " + result);
   }
 }

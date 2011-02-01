@@ -74,9 +74,9 @@ public class TwoStepPropertiesPanelProviderImpl implements PropertiesPanelProvid
   @Override
   public List<VirtualCategoryPanel> getSubCategories() {
     final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
-    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER, TWOSTEP_SIMPLIFIER_CLUSTERER_DISPLAY, ModuleSelectionHelper.lookupNames(ClustererFactory.class)));
-    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR, TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY, ModuleSelectionHelper.lookupNames(ClusterProcessorFactory.class)));
-    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER_DISPLAY, ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class)));
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER, TWOSTEP_SIMPLIFIER_CLUSTERER_DISPLAY, ModuleSelectionHelper.lookupImpls(ClustererFactory.class)));
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR, TWOSTEP_SIMPLIFIER_CLUSTERER_PROCESSOR_DISPLAY, ModuleSelectionHelper.lookupImpls(ClusterProcessorFactory.class)));
+    result.add(new VirtualCategoryPanel(TWOSTEP_SIMPLIFIER_CLEANER, TWOSTEP_SIMPLIFIER_CLEANER_DISPLAY, ModuleSelectionHelper.lookupImpls(RegularExpressionCleanerFactory.class)));
 
     return result;
   }

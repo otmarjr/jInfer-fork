@@ -118,9 +118,9 @@ public class StateRemovalPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public final void load() {
     comboOrderer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(OrdererFactory.class).toArray()));
+            ModuleSelectionHelper.lookupImpls(OrdererFactory.class).toArray()));
 
-    comboOrderer.setSelectedItem(ModuleSelectionHelper.lookupName(OrdererFactory.class,
+    comboOrderer.setSelectedItem(ModuleSelectionHelper.lookupImpl(OrdererFactory.class,
             properties.getProperty(StateRemovalFactory.PROPERTIES_ORDERER,
             StateRemovalFactory.PROPERTIES_ORDERER_DEFAULT)));
     comboOrdererChanged(null);

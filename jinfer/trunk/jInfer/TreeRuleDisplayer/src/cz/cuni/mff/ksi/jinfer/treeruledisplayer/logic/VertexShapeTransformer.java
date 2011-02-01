@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractNamedNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
 import java.awt.Shape;
@@ -26,8 +26,8 @@ import org.apache.commons.collections15.Transformer;
  * Transformer for Rule Tree Vertex which transform {@link Regexp} into Vertex shape.
  * @author sviro
  */
-public class VertexShapeTransformer implements Transformer<Regexp<AbstractStructuralNode>, Shape> {
-  private final VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory;
+public class VertexShapeTransformer implements Transformer<Regexp<? extends AbstractNamedNode>, Shape> {
+  private final VertexShapeFactory<Regexp<? extends AbstractNamedNode>> shapeFactory;
   private final Utils utils;
 
   /**
@@ -36,10 +36,10 @@ public class VertexShapeTransformer implements Transformer<Regexp<AbstractStruct
    * @param utils Utils used for vertex shape resolving.
    */
   public VertexShapeTransformer(final Utils utils) {
-    shapeFactory = new VertexShapeFactory<Regexp<AbstractStructuralNode>>(new VertexSizeTransformer(utils.getRoots()), new Transformer<Regexp<AbstractStructuralNode>, Float>() {
+    shapeFactory = new VertexShapeFactory<Regexp<? extends AbstractNamedNode>>(new VertexSizeTransformer(utils.getRoots()), new Transformer<Regexp<? extends AbstractNamedNode>, Float>() {
 
       @Override
-      public Float transform(final Regexp<AbstractStructuralNode> i) {
+      public Float transform(final Regexp<? extends AbstractNamedNode> i) {
         return 1f;
       }
     });
@@ -47,7 +47,7 @@ public class VertexShapeTransformer implements Transformer<Regexp<AbstractStruct
   }
 
   @Override
-  public Shape transform(final Regexp<AbstractStructuralNode> regexp) {
+  public Shape transform(final Regexp<? extends AbstractNamedNode> regexp) {
     return utils.getVertexShape(shapeFactory, regexp);
   }
 }

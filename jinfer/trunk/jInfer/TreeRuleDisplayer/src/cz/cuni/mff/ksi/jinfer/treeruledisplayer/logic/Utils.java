@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractNamedNode;
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.options.TreeRuleDisplayerPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -31,17 +32,10 @@ import org.openide.util.NbPreferences;
  */
 public class Utils {
 
-  /**
-   * All the vertex types which occur in rules.
-   */
-  public enum VERTEX_TYPE {
-
-    ROOT, TOKEN, CONCAT, ALTER, PERMUT, LAMBDA
-  };
   public static final String BG_COLOR_PROP = "background.color";
   public static final Color BG_COLOR_DEFAULT = Color.decode("-1");
   public static final String HORIZONTAL_DISTANCE_PROP = "horizontal.distance";
-  public static final int HORIZONTAL_DISTANCE_DEFAULT = 100;
+  public static final int HORIZONTAL_DISTANCE_DEFAULT = 150;
   public static final String VERTICAL_DISTANCE_PROP = "vertical.distance";
   public static final int VERTICAL_DISTANCE_DEFAULT = 100;
 
@@ -64,6 +58,10 @@ public class Utils {
   public static final int PERMUT_SHAPE_DEFAULT = 4;
   public static final String LAMBDA_SHAPE_PROP = "lambda.shape";
   public static final int LAMBDA_SHAPE_DEFAULT = 0;
+  public static final String SIMPLE_DATA_SHAPE_PROP = "simpleData.shape";
+  public static final int SIMPLE_DATA_SHAPE_DEFAULT = 1;
+  public static final String ATTRIBUTE_SHAPE_PROP = "attribute.shape";
+  public static final int ATTRIBUTE_SHAPE_DEFAULT = 4;
   public static final String ROOT_SIZE_PROP = "root.size";
   public static final int ROOT_SIZE_DEFAULT = 30;
   public static final String TOKEN_SIZE_PROP = "token.size";
@@ -76,6 +74,10 @@ public class Utils {
   public static final int PERMUT_SIZE_DEFAULT = 25;
   public static final String LAMBDA_SIZE_PROP = "lambda.size";
   public static final int LAMBDA_SIZE_DEFAULT = 20;
+  public static final String SIMPLE_DATA_SIZE_PROP = "simpleData.size";
+  public static final int SIMPLE_DATA_SIZE_DEFAULT = 20;
+  public static final String ATTRIBUTE_SIZE_PROP = "attribute.size";
+  public static final int ATTRIBUTE_SIZE_DEFAULT = 15;
   public static final String ROOT_COLOR_PROP = "root.color";
   public static final Color ROOT_COLOR_DEFAULT = Color.decode("-13861729");
   public static final String TOKEN_COLOR_PROP = "token.color";
@@ -88,12 +90,18 @@ public class Utils {
   public static final Color PERMUT_COLOR_DEFAULT = Color.decode("-8473082");
   public static final String LAMBDA_COLOR_PROP = "lambda.color";
   public static final Color LAMBDA_COLOR_DEFAULT = Color.gray;
+  public static final String SIMPLE_DATA_COLOR_PROP = "simpleData.color";
+  public static final Color SIMPLE_DATA_COLOR_DEFAULT = Color.GREEN;
+  public static final String ATTRIBUTE_COLOR_PROP = "attribute.color";
+  public static final Color ATTRIBUTE_COLOR_DEFAULT = Color.PINK;
   private final int rootShape;
   private final int tokenShape;
   private final int concatShape;
   private final int alterShape;
   private final int permutShape;
   private final int lambdaShape;
+  private final int simpleDataShape;
+  private final int attributeShape;
   private final Color bgColor;
   private final int horizontalDistance;
   private final int verticalDistance;
@@ -114,6 +122,8 @@ public class Utils {
     this.alterShape = getProperty(ALTER_SHAPE_PROP, ALTER_SHAPE_DEFAULT);
     this.permutShape = getProperty(PERMUT_SHAPE_PROP, PERMUT_SHAPE_DEFAULT);
     this.lambdaShape = getProperty(LAMBDA_SHAPE_PROP, LAMBDA_SHAPE_DEFAULT);
+    this.simpleDataShape = getProperty(SIMPLE_DATA_SHAPE_PROP, SIMPLE_DATA_SHAPE_DEFAULT);
+    this.attributeShape = getProperty(ATTRIBUTE_SHAPE_PROP, ATTRIBUTE_SHAPE_DEFAULT);
   }
 
   /**
@@ -142,15 +152,21 @@ public class Utils {
    * @param regexp Regexp for which is shape returned.
    * @return Shape of Vertex for particular regexp.
    */
-  public Shape getVertexShape(final VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, final Regexp<AbstractStructuralNode> regexp) {
+  public Shape getVertexShape(final VertexShapeFactory<Regexp<? extends AbstractNamedNode>> shapeFactory, final Regexp<? extends AbstractNamedNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
         return getShape(lambdaShape, shapeFactory, regexp);
       case TOKEN:
         if (roots.contains(regexp)) {
           return getShape(rootShape, shapeFactory, regexp);
+        } else if (regexp.getContent() instanceof AbstractStructuralNode) {
+          if (((AbstractStructuralNode) regexp.getContent()).isSimpleData()) {
+            return getShape(simpleDataShape, shapeFactory, regexp);
+          } else {
+            return getShape(tokenShape, shapeFactory, regexp);
+          }
         } else {
-          return getShape(tokenShape, shapeFactory, regexp);
+          return getShape(attributeShape, shapeFactory, regexp);
         }
       case ALTERNATION:
         return getShape(alterShape, shapeFactory, regexp);
@@ -163,7 +179,7 @@ public class Utils {
     }
   }
 
-  private Shape getShape(final int shape, final VertexShapeFactory<Regexp<AbstractStructuralNode>> shapeFactory, final Regexp<AbstractStructuralNode> regexp) {
+  private Shape getShape(final int shape, final VertexShapeFactory<Regexp<? extends AbstractNamedNode>> shapeFactory, final Regexp<? extends AbstractNamedNode> regexp) {
     switch (shape) {
       case 0:
         return shapeFactory.getEllipse(regexp);
@@ -211,5 +227,4 @@ public class Utils {
   public List<Regexp<AbstractStructuralNode>> getRoots() {
     return roots;
   }
-
 }

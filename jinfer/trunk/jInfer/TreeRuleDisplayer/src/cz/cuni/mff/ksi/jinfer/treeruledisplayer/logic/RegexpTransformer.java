@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractNamedNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import org.apache.commons.collections15.Transformer;
@@ -26,18 +26,24 @@ import org.apache.commons.collections15.Transformer;
  *
  * @author sviro
  */
-public class RegexpTransformer implements Transformer<Regexp<AbstractStructuralNode>, String>{
+public class RegexpTransformer implements Transformer<Regexp<? extends AbstractNamedNode>, String> {
 
   @Override
-  public String transform(final Regexp<AbstractStructuralNode> regexp) {
+  public String transform(final Regexp<? extends AbstractNamedNode> regexp) {
     switch (regexp.getType()) {
-      case LAMBDA: return "\u03BB";
-      case TOKEN: return regexp.getContent().getName();
+      case LAMBDA:
+        return "\u03BB";
+      case TOKEN:
+        if (regexp.getContent() instanceof AbstractStructuralNode && ((AbstractStructuralNode) regexp.getContent()).isSimpleData()) {
+          return "\"" + regexp.getContent().getName() + "\"";
+        }
+        return regexp.getContent().getName();
       case ALTERNATION:
       case CONCATENATION:
-      case PERMUTATION: return regexp.getType().toString();
-      default: return null;
+      case PERMUTATION:
+        return regexp.getType().toString();
+      default:
+        return null;
     }
   }
-
 }

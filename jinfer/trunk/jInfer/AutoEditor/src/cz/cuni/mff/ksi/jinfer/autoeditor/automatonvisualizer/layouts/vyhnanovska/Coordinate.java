@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovsk
 /**
  * Representation of 2D coordinate.
  *
- * @author Julie Vyhnanovska
+ * @author Julie Vyhnanovska, rio
  */
 public class Coordinate {
   private int x;

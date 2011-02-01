@@ -34,16 +34,14 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
- * Greedy simplifier, given MergeContitionTester by a factory, will merge all states
- * (in all alternatives) that tester returns.
+ * Greedy simplifier, given {@link MergeContitionTester}, will merge all states
+ * that tester returns as equivalent.
  *
- * It will ask the tester for capability - by which he can identify the tester.
+ * It will ask the tester for capability "parameters".
  * When the tester is one from known, it will set parameters to it according
  * to user preference. If it is not known, it is created with factory,
  * so tester have to have some reasonable default parameter setting or own
  * properties panel for user to enter defaults.
- * 
- * TODO anti rewrite when parametrization complete
  *
  * @author anti
  */
@@ -52,6 +50,12 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
   private static final Logger LOG = Logger.getLogger(Greedy.class);
   private final MergeConditionTester<T> mergeConditionTester;
 
+  /**
+   * Create with factory of {@link MergeConditionTester} selected.
+   *
+   * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
+   * @param properties project properties (from which it takes parameter values).
+   */
   public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory,
           final Properties properties) {
     if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
@@ -79,14 +83,12 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
   }
 
   /**
-   * Simplify by merging states greedily. Condition to merge states is tested in provided
-   * mergedConditionTesters.
+   * Simplify by merging states greedily.
    *
-   * Loops until there are no more states to merge by each tester (until each pair of states tested
-   * by mergeCondidionTester is returned empty list of states to merge.
+   * Loops until there are no more states to merge by tester.
    *
-   * @param mergeCondidionTesters
-   * @param inputAutomaton
+   * @param inputAutomaton automaton to modify
+   * @param symbolToString edge label to string converter
    * @throws InterruptedException
    */
   @Override
@@ -137,6 +139,15 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
     return inputAutomaton;
   }
 
+  /**
+   * Same as above.
+   *
+   * @param inputAutomaton automaton to modify
+   * @param symbolToString edge label to string converter
+   * @param elementName name of element (cluster) we process right now, to be presented to user
+   * @return
+   * @throws InterruptedException
+   */
   @Override
   public Automaton<T> simplify(
           final Automaton<T> inputAutomaton,

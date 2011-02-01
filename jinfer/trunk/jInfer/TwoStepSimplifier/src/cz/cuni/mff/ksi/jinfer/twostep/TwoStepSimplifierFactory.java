@@ -30,59 +30,53 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TwoStepSimplifier works in two step for simplification.
- * First it searches for a suitable clusterer submodule, to which it passes whole initialGrammar.
- * Clusterer is responsible to cluster elements properly. Cluster of elements
- * is then considered to be one, and the same element, with various instances
- * in input files.
- *
- * For every cluster of elements, the clusterProcessor submodule is called.
- * Given the clusterer and list of observed positive examples (grammar = list
- * of elements), cluster processor is expected to produce one Element instance,
- * on which proper definition of regular expression representing content model
- * of the element children will be held.
- *
- * The attributes of elements in the cluster are processed separately afterwards.
- * Currently, only simple processing is done - required/optional. This will be
- * extended in future to separated attribute processor submodule.
- * TODO anti Comment when submodule attributeProcessor done
+ * TwoStepSimplifier is modular, extensible implementation.
+ * 
+ * Factory class for the worker {@link TwoStepSimplifier}.
+ * 
  * @author anti
  */
 @ServiceProvider(service = Simplifier.class)
 public class TwoStepSimplifierFactory implements Simplifier {
+
   /**
    * Name of the module in constant, for use in classes in this module.
    */
   public static final String NAME = "TwoStepSimplifier";
   /**
-   * TODO anti comment
+   * Name displayed to user in properties panels.
    */
   public static final String DISPLAY_NAME = "TwoStep";
   /**
    * Property name of clusterer submodule.
    */
   public static final String PROPERTIES_CLUSTERER = "clusterer";
-  /** TODO anti comment
-   * 
+  /** 
+   * Default clusterer to be used if none selected.
    */
   public static final String PROPERTIES_CLUSTERER_DEFAULT = "TwoStepClustererWithAttributesIname";
   /**
    * Property name of cluster processor submodule.
    */
   public static final String PROPERTIES_CLUSTER_PROCESSOR = "cluster-processor";
-  /** TODO anti comment
-   * 
+  /** 
+   * Default cluster processor to be used if none selected.
    */
   public static final String PROPERTIES_CLUSTER_PROCESSOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingState";
   /**
    * Property name of regular expression cleaner submodule.
    */
   public static final String PROPERTIES_CLEANER = "cleaner";
-  /** TODO anti comment
-   * 
+  /** 
+   * Default cleaner to be used if none selected.
    */
   public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerChained";
 
+  /**
+   * Canonical name
+   *
+   * @return name
+   */
   @Override
   public String getName() {
     return NAME;
@@ -100,6 +94,7 @@ public class TwoStepSimplifierFactory implements Simplifier {
     sb.append(")");
     return sb.toString();
   }
+
 
   @Override
   public List<String> getCapabilities() {
@@ -126,12 +121,10 @@ public class TwoStepSimplifierFactory implements Simplifier {
 
   @Override
   public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
-    final TwoStepSimplifier simplifier= new TwoStepSimplifier(
-            getClustererFactory(), getClusterProcessorFactory(), getRegularExpressionCleanerFactory()
-            );
+    final TwoStepSimplifier simplifier = new TwoStepSimplifier(
+            getClustererFactory(), getClusterProcessorFactory(), getRegularExpressionCleanerFactory());
     callback.finished(
-            simplifier.simplify(initialGrammar)
-            );
+            simplifier.simplify(initialGrammar));
   }
 
   @Override

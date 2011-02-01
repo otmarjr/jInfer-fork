@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.Chained;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.ChainedFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren.EmptyChildrenFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation.NestedConcatenationFactory;
@@ -39,7 +40,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 /**
- * Properties panel for ClusterProcessorAutomatonMergingState.
+ * Properties panel for {@link Chained} module.
+ *
+ * Lets user select regular expression cleaner that are to be used in chain.
+ * 
  * @author anti
  */
 public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
@@ -87,7 +91,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       final JComboBox cmb = new JComboBox();
       final JScrollPane scr = new javax.swing.JScrollPane();
       final JTextPane desc = new javax.swing.JTextPane();
-      
+
       lbl.setText("#" + (i + 1) + ":");
       gridBagConstraints = new java.awt.GridBagConstraints();
       gridBagConstraints.gridx = 0;
@@ -167,8 +171,8 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       for (i = 0; i < count; i++) {
         dynamicComponents.get(i).setSelectedItem(
                 ModuleSelectionHelper.lookupImpl(
-                  RegularExpressionCleanerFactory.class,
-                  properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i), ChainedFactory.PROPERTIES_CLEANER_DEFAULT)));
+                RegularExpressionCleanerFactory.class,
+                properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i), ChainedFactory.PROPERTIES_CLEANER_DEFAULT)));
       }
     }
   }
@@ -176,8 +180,8 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public void store() {
     for (Integer i : dynamicComponents.keySet()) {
-        properties.setProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i),
-                ((NamedModule) dynamicComponents.get(i).getSelectedItem()).getName());
+      properties.setProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i),
+              ((NamedModule) dynamicComponents.get(i).getSelectedItem()).getName());
     }
     properties.setProperty(ChainedFactory.PROPERTIES_COUNT, String.valueOf(dynamicComponents.keySet().size()));
   }

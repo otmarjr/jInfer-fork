@@ -39,7 +39,24 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * Look at TwoStepSimplifierFactory for description.
+ * TwoStepSimplifier works in two step for simplification.
+ * First it searches for a suitable clusterer submodule, to which it passes whole initialGrammar.
+ * Clusterer is responsible to cluster elements properly. Cluster of elements
+ * is then considered to be one, and the same element, with various instances
+ * in input files.
+ * <p>
+ * For every cluster of elements, the clusterProcessor submodule is called.
+ * Given the clusterer and list of observed positive examples (grammar = list
+ * of elements), cluster processor is expected to produce one Element instance,
+ * on which proper definition of regular expression representing content model
+ * of the element children will be held.
+ * <p>
+ * The attributes of elements in the cluster are processed separately afterwards.
+ * Currently, only simple processing is done - required/optional. This will be
+ * extended in future to separated attribute processor submodule.
+ * <p>
+ * Produced regular expressions are further refined in {@link RegularExpressionCleaner}
+ * submodule.
  *
  * @author anti
  */
@@ -50,6 +67,13 @@ public class TwoStepSimplifier {
   private final ClusterProcessorFactory clusterProcessorFactory;
   private final RegularExpressionCleanerFactory regularExpressionCleanerFactory;
 
+  /**
+   * Create new simplifier and give all submodule factories to it.
+   *
+   * @param clustererFactory factory of clusterer submodule
+   * @param clusterProcessorFactory factory of ClusterProcessor submodule
+   * @param regularExpressionCleanerFactory factory of cleaner submodule
+   */
   public TwoStepSimplifier(final ClustererFactory clustererFactory,
           final ClusterProcessorFactory clusterProcessorFactory,
           final RegularExpressionCleanerFactory regularExpressionCleanerFactory) {
@@ -69,6 +93,13 @@ public class TwoStepSimplifier {
     }
   }
 
+  /**
+   * Do the main job of simplifier - simplify given grammar.
+   *
+   * @param initialGrammar grammar obtained from source files. In simple form - only concatenations.
+   * @return Simplified Grammar
+   * @throws InterruptedException
+   */
   public List<Element> simplify(final List<Element> initialGrammar) throws InterruptedException {
     this.verifyInput(initialGrammar);
 

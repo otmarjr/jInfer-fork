@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Class representing one cluster. Holds all members and representant.
+ * Class representing one cluster. Holds all members and representative.
  *
  *
  * @author anti
@@ -31,11 +31,18 @@ public class Cluster<T> {
   private T representant;
   private final Set<T> members;
 
+  /**
+   * Initialize with no representative and no members.
+   */
   public Cluster() {
     this.members = new LinkedHashSet<T>();
     this.representant = null;
   }
 
+  /**
+   * Initialize with one member.
+   * @param representant to be first member and representative as well
+   */
   public Cluster(final T representant) {
     this();
     this.representant = representant;
@@ -43,14 +50,18 @@ public class Cluster<T> {
   }
 
   /**
-   * @return the representant
+   * Get representative.
+   * 
+   * @return the representative
    */
   public T getRepresentant() {
     return representant;
   }
 
   /**
-   * @param representant the representant to set
+   * Set representative.
+   * 
+   * @param representant the representative to set
    */
   public void setRepresentant(final T representant) {
     if (!this.members.contains(representant)) {
@@ -60,20 +71,35 @@ public class Cluster<T> {
   }
 
   /**
+   * Get members.
+   * 
    * @return the members
    */
   public Set<T> getMembers() {
     return Collections.unmodifiableSet(this.members);
   }
 
+  /**
+   * True if item is member of this cluster.
+   * @param item item to test
+   * @return true if item is member of this cluster.
+   */
   public Boolean isMember(final T item) {
     return this.members.contains(item);
   }
 
+  /**
+   * Add item to cluster.
+   * @param item item to add.
+   */
   public void add(final T item) {
     this.members.add(item);
   }
 
+  /**
+   * Get cluster size.
+   * @return count of members.
+   */
   public int size() {
     return this.members.size();
   }

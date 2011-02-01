@@ -33,12 +33,18 @@ import org.openide.util.lookup.ServiceProvider;
 public class PassRepresentantFactory implements ClusterProcessorFactory {
 
   private static final Logger LOG = Logger.getLogger(PassRepresentantFactory.class);
+  /**
+   * Canonical name.
+   */
   public static final String NAME = "TwoStepClusterProcessorPassRepresentant";
+  /**
+   * Name presented to user.
+   */
   public static final String DISPLAY_NAME = "Pass representant";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
-    LOG.debug("Creating new ClusterProcessorPassRepresentant.");
+    LOG.debug("Creating new " + NAME);
     return new PassRepresentant();
   }
 

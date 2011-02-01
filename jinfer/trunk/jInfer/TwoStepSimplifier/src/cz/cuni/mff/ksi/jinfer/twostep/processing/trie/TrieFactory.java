@@ -32,14 +32,20 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class TrieFactory implements ClusterProcessorFactory {
-  private static final Logger LOG = Logger.getLogger(TrieFactory.class);
 
+  private static final Logger LOG = Logger.getLogger(TrieFactory.class);
+  /**
+   * Canonical name.
+   */
   public static final String NAME = "TwoStepClusterProcessorTrie";
+  /**
+   * Name presented to user.
+   */
   public static final String DISPLAY_NAME = "Trie";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
-    LOG.debug("Creating new ClusterProcessorTrie.");
+    LOG.debug("Creating new " + NAME);
     return new Trie();
   }
 

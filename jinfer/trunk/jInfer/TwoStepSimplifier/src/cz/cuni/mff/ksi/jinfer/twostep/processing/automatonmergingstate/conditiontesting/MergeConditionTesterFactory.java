@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
@@ -23,10 +22,16 @@ import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
- * Factory interface for MergeConditionTester.
+ * Factory interface for {@link MergeConditionTester}.
  *
  * @author anti
  */
 public interface MergeConditionTesterFactory extends NamedModule, Capabilities, UserModuleDescription, ModuleParameters {
+
+  /**
+   * Create {@link MergeConditionTester}
+   * @param <T> type of symbol of automaton to work with (alphabet)
+   * @return instance
+   */
   <T> MergeConditionTester<T> create();
 }

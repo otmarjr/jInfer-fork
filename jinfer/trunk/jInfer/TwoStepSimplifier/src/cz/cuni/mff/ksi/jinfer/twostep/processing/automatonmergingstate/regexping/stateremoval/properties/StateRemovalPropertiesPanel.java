@@ -20,13 +20,14 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.StateRemoval;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.StateRemovalFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.OrdererFactory;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * Properties panel for RegexpAutomatonSimplifierStateRemoval.
+ * Properties panel for {@link StateRemoval}.
  * 
  * @author anti
  */
@@ -119,7 +120,7 @@ public class StateRemovalPropertiesPanel extends AbstractPropertiesPanel {
     comboOrderer.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupNames(OrdererFactory.class).toArray()));
 
-    comboOrderer.setSelectedItem(ModuleSelectionHelper.lookupName(OrdererFactory.class, 
+    comboOrderer.setSelectedItem(ModuleSelectionHelper.lookupName(OrdererFactory.class,
             properties.getProperty(StateRemovalFactory.PROPERTIES_ORDERER,
             StateRemovalFactory.PROPERTIES_ORDERER_DEFAULT)));
     comboOrdererChanged(null);

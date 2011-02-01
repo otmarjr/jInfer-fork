@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
@@ -31,18 +30,21 @@ import java.util.List;
  * @author anti
  */
 public class SimpleDataClusterer implements Clusterer<SimpleData> {
+
   private final List<Cluster<SimpleData>> clusters;
 
+  /**
+   * Default constructor.
+   */
   public SimpleDataClusterer() {
-    this.clusters= new LinkedList<Cluster<SimpleData>>();
+    this.clusters = new LinkedList<Cluster<SimpleData>>();
   }
-  
+
   @Override
   public void add(final SimpleData item) {
     if (clusters.isEmpty()) {
       clusters.add(
-              new Cluster<SimpleData>(item)
-              );
+              new Cluster<SimpleData>(item));
     } else {
       clusters.get(0).add(item);
     }
@@ -71,5 +73,4 @@ public class SimpleDataClusterer implements Clusterer<SimpleData> {
   public List<Cluster<SimpleData>> getClusters() {
     return Collections.unmodifiableList(clusters);
   }
-
 }

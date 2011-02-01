@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -22,7 +21,9 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
 import java.util.List;
@@ -31,42 +32,42 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory class for ClusterProcessorAutomatonMergingState.
+ * Factory class for {@link AutomatonMergingState}.
  *
  * @author anti
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
-  private static final Logger LOG = Logger.getLogger(AutomatonMergingStateFactory.class);
 
-  /** TODO anti comment
-   * 
+  private static final Logger LOG = Logger.getLogger(AutomatonMergingStateFactory.class);
+  /** 
+   * Canonical name.
    */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingState";
-  /** TODO anti comment
-   *
+  /**
+   * Name presented to user.
    */
   public static final String DISPLAY_NAME = "Automaton merging state";
-  /** TODO anti comment
-   *
+  /**
+   * Property name (in configuration file) of first submodule - {@link AutomatonSimplifier}
    */
   public static final String PROPERTIES_AUTOMATON_SIMPLIFIER = "automaton-simplifier";
-  /** TODO anti comment
-   *
+  /**
+   * Default {@link AutomatonSimplifier} implementation if none is set.
    */
   public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierGreedy";
-  /** TODO anti comment
-   *
+  /**
+   * Property name (in configuration file) of second submodule - {@link RegexpAutomatonSimplifier}
    */
   public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER = "regexp-automaton-simplifier";
-  /** TODO anti comment
-   *
-  */
+  /**
+   * Default {@link RegexpAutomatonSimplifier} implementation if none is set.
+   */
   public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemoval";
-  
+
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
-    LOG.debug("Creating new ClusterProcessorAutomatonMergingState.");
+    LOG.debug("Creating new " + NAME);
     return new AutomatonMergingState(getAutomatonSimplifierFactory(), getRegexpAutomatonSimplifierFactory());
   }
 
@@ -77,7 +78,7 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
 
   @Override
   public String getModuleDescription() {
-    final StringBuilder sb= new StringBuilder(getDisplayName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append("(");
     sb.append(getAutomatonSimplifierFactory().getModuleDescription());
     sb.append(", ");

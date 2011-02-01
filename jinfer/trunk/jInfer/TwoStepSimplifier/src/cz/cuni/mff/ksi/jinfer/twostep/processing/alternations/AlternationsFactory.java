@@ -40,7 +40,7 @@ public class AlternationsFactory implements ClusterProcessorFactory {
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {
-    LOG.debug("Creating new ClusterProcessorAlternations.");
+    LOG.debug("Creating new " + NAME);
     return new Alternations();
   }
 

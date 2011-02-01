@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren;
 
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
@@ -25,20 +24,26 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory for CleanerEmptyChildren.
+ * Factory for {@link EmptyChildren}.
  *
  * @author anti
  */
 @ServiceProvider(service = RegularExpressionCleanerFactory.class)
 public class EmptyChildrenFactory implements RegularExpressionCleanerFactory {
-  private static final Logger LOG = Logger.getLogger(EmptyChildrenFactory.class);
 
+  private static final Logger LOG = Logger.getLogger(EmptyChildrenFactory.class);
+  /**
+   * Canonical name.
+   */
   public static final String NAME = "TwoStepRegularExpressionCleanerEmptyChildren";
+  /**
+   * Name presented to user.
+   */
   public static final String DISPLAY_NAME = "Empty children";
-  
+
   @Override
   public <T> RegularExpressionCleaner<T> create() {
-    LOG.debug("Creating new CleanerEmptyChildren.");
+    LOG.debug("Creating new " + NAME);
     return new EmptyChildren<T>();
   }
 
@@ -71,5 +76,4 @@ public class EmptyChildrenFactory implements RegularExpressionCleanerFactory {
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
-
 }

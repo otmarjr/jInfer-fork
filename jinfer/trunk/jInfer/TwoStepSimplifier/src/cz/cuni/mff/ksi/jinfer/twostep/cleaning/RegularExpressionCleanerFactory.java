@@ -20,12 +20,19 @@ package cz.cuni.mff.ksi.jinfer.twostep.cleaning;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 /**
- * Factory for RegularExpressionCleaner.
+ * Factory for {@link RegularExpressionCleaner}.
  *
  * @author anti
  */
 public interface RegularExpressionCleanerFactory extends NamedModule, Capabilities, UserModuleDescription {
+  /**
+   * Create cleaner of {@link Regexp}<T>.
+   *
+   * @param <T> type of symbol around which are regexpes build.
+   * @return cleaner instance
+   */
   <T> RegularExpressionCleaner<T> create();
 }

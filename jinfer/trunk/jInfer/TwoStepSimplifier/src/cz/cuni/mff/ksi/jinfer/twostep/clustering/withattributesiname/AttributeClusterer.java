@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
@@ -27,18 +26,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Helper class for ClustererWithAttributesIname. Clusters attributes for one
- * element by name.
+ * Helper class for {@link Iname}. Clusters attributes for one
+ * element, by name (case insensitive).
  *
  * @author anti
  */
 public class AttributeClusterer implements Clusterer<Attribute> {
+
   private final List<Cluster<Attribute>> nodeClusters;
   private final List<Attribute> items;
 
+  /**
+   * Default constructor.
+   */
   public AttributeClusterer() {
-    this.nodeClusters= new LinkedList<Cluster<Attribute>>();
-    this.items= new LinkedList<Attribute>();
+    this.nodeClusters = new LinkedList<Cluster<Attribute>>();
+    this.items = new LinkedList<Attribute>();
   }
 
   @Override
@@ -52,24 +55,21 @@ public class AttributeClusterer implements Clusterer<Attribute> {
   }
 
   private Attribute addNode(final Attribute item) throws InterruptedException {
-    final Iterator<Cluster<Attribute>> iterator= this.nodeClusters.iterator();
+    final Iterator<Cluster<Attribute>> iterator = this.nodeClusters.iterator();
 
     while (iterator.hasNext()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      final Cluster<Attribute> cluster= iterator.next();
-      final Attribute representant= cluster.getRepresentant();
-      if (
-              representant.getName().equalsIgnoreCase(item.getName())
-      ) {
+      final Cluster<Attribute> cluster = iterator.next();
+      final Attribute representant = cluster.getRepresentant();
+      if (representant.getName().equalsIgnoreCase(item.getName())) {
         cluster.add(item);
         return representant;
       }
     }
     this.nodeClusters.add(
-            new Cluster<Attribute>(item)
-            );
+            new Cluster<Attribute>(item));
     return item;
   }
 
@@ -95,5 +95,4 @@ public class AttributeClusterer implements Clusterer<Attribute> {
   public List<Cluster<Attribute>> getClusters() {
     return Collections.unmodifiableList(this.nodeClusters);
   }
-
 }

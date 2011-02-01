@@ -32,6 +32,11 @@ public class Chained<T> implements RegularExpressionCleaner<T> {
 
   private final List<RegularExpressionCleanerFactory> cleanerFactories;
 
+  /**
+   * Create with list of factories of cleaner to use in a chain.
+   *
+   * @param cleanerFactories list of factories of other cleaners to call.
+   */
   public Chained(final List<RegularExpressionCleanerFactory> cleanerFactories) {
     this.cleanerFactories = cleanerFactories;
   }

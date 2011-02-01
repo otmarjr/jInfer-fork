@@ -14,9 +14,9 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext;
 
+import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Arrays;
@@ -25,26 +25,33 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory for MergeConditionTesterKHContext.
+ * Factory for {@link KHContext}.
  *
+ * Implements "parameters" capability {@see ModuleParameters}.
+ * 
  * @author anti
  */
 @ServiceProvider(service = MergeConditionTesterFactory.class)
 public class KHContextFactory implements MergeConditionTesterFactory {
+
   private static final Logger LOG = Logger.getLogger(KHContextFactory.class);
   private int parameterK = -1;
   private int parameterH = -1;
   private static final int K_DEFAULT_VALUE = 2;
   private static final int H_DEFAULT_VALUE = 1;
-  
-
+  /**
+   * Canonical name.
+   */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterKHContext";
+  /**
+   * Name presented to user.
+   */
   public static final String DISPLAY_NAME = "k,h-context";
 
   @Override
   public <T> MergeConditionTester<T> create() {
-    LOG.debug("Creating new MergeConditionTesterKHContext.");
-    if ((parameterH >= 0)&&(parameterK >= parameterH)) {
+    LOG.debug("Creating new " + NAME);
+    if ((parameterH >= 0) && (parameterK >= parameterH)) {
       return new KHContext<T>(parameterK, parameterH);
     } else {
       LOG.warn("Wrong parameters set k: "
@@ -103,10 +110,10 @@ public class KHContextFactory implements MergeConditionTesterFactory {
   @Override
   public void setParameter(final String parameterName, final int newValue) {
     if ("k".equals(parameterName)) {
-      this.parameterK= newValue;
+      this.parameterK = newValue;
     }
     if ("h".equals(parameterName)) {
-      this.parameterH= newValue;
+      this.parameterH = newValue;
     }
   }
 

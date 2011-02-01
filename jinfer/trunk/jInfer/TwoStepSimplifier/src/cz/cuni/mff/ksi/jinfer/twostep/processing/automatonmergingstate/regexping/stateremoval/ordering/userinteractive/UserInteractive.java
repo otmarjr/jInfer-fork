@@ -30,8 +30,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
 
 /**
- * TODO anti Comment!
- * Not using it, we don't have proper GUI - one click removing states.
+ * Presents automaton to user and lets him select state to be remove first.
  *
  * @author anti
  */
@@ -47,13 +46,13 @@ public class UserInteractive<T> implements Orderer<T> {
 
       @Override
       public String transform(final Step<Regexp<T>> step) {
-          StringBuilder sb = new StringBuilder();
-          sb.append("{");
-          sb.append(symbolToString.toString(step.getAcceptSymbol()));
-          sb.append("|");
-          sb.append(String.valueOf(step.getUseCount()));
-          sb.append("}");
-          return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append(symbolToString.toString(step.getAcceptSymbol()));
+        sb.append("|");
+        sb.append(String.valueOf(step.getUseCount()));
+        sb.append("}");
+        return sb.toString();
       }
     };
 

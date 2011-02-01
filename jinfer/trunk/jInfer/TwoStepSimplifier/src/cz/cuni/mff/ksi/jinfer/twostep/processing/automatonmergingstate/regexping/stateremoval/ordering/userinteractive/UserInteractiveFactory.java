@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.userinteractive;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.Orderer;
@@ -25,19 +24,26 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO anti Comment!
+ * Factory for {@link UserInteractive}.
  *
  * @author anti
  */
 @ServiceProvider(service = OrdererFactory.class)
 public class UserInteractiveFactory implements OrdererFactory {
+
+  /**
+   * Canonical name.
+   */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdererUserInteractive";
+  /**
+   * Name presented to user.
+   */
   public static final String DISPLAY_NAME = "User Interactive";
   private static final Logger LOG = Logger.getLogger(UserInteractiveFactory.class);
-  
+
   @Override
   public <T> Orderer<T> create() {
-    LOG.debug("Creating new RegexpAutomatonSimplifierStateRemovalOrdererWeighted.");
+    LOG.debug("Creating new " + NAME);
     return new UserInteractive<T>();
   }
 
@@ -56,7 +62,6 @@ public class UserInteractiveFactory implements OrdererFactory {
     return Collections.<String>emptyList();
   }
 
-  // TODO anti elaborate more
   @Override
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getDisplayName());
@@ -68,5 +73,4 @@ public class UserInteractiveFactory implements OrdererFactory {
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
-
 }

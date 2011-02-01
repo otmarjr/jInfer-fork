@@ -14,19 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 
 /**
- * replaces nested concatenations is resulting regular expressions.
+ * Replaces nested concatenations is resulting regular expressions.
  * For example expression: (a, (b, c)) will be transformed to nicer expression: (a, b, c).
  *
  * @author anti
  */
 public class NestedConcatenation<T> implements RegularExpressionCleaner<T> {
+
   @Override
   public Regexp<T> cleanRegularExpression(final Regexp<T> regexp) {
     switch (regexp.getType()) {
@@ -35,7 +35,7 @@ public class NestedConcatenation<T> implements RegularExpressionCleaner<T> {
         return regexp;
       case ALTERNATION:
       case PERMUTATION:
-        final Regexp<T> newRegexp= Regexp.<T>getMutable();
+        final Regexp<T> newRegexp = Regexp.<T>getMutable();
         newRegexp.setInterval(regexp.getInterval());
         newRegexp.setType(regexp.getType());
         for (Regexp<T> child : regexp.getChildren()) {
@@ -44,14 +44,13 @@ public class NestedConcatenation<T> implements RegularExpressionCleaner<T> {
         newRegexp.setImmutable();
         return newRegexp;
       case CONCATENATION:
-        final Regexp<T> newRegexp2= Regexp.<T>getMutable();
+        final Regexp<T> newRegexp2 = Regexp.<T>getMutable();
         newRegexp2.setInterval(regexp.getInterval());
         newRegexp2.setType(regexp.getType());
         for (Regexp<T> child : regexp.getChildren()) {
-          if (child.isConcatenation()&&child.getInterval().isOnce()) {
+          if (child.isConcatenation() && child.getInterval().isOnce()) {
             newRegexp2.getChildren().addAll(
-                    cleanRegularExpression(child).getChildren()
-                    );
+                    cleanRegularExpression(child).getChildren());
           } else {
             newRegexp2.getChildren().add(cleanRegularExpression(child));
           }

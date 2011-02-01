@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.weighted;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.Orderer;
@@ -25,19 +24,26 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory for RegexpAutomatonSimplifierStateRemovalOrdererWeighted.
+ * Factory for {@link Weighted}.
  *
  * @author anti
  */
 @ServiceProvider(service = OrdererFactory.class)
 public class WeightedFactory implements OrdererFactory {
+
+  /**
+   * Canonical name
+   */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdererWeighted";
+  /**
+   * Name presented to user.
+   */
   public static final String DISPLAY_NAME = "Weighted";
   private static final Logger LOG = Logger.getLogger(WeightedFactory.class);
 
   @Override
   public <T> Orderer<T> create() {
-    LOG.debug("Creating new RegexpAutomatonSimplifierStateRemovalOrdererWeighted.");
+    LOG.debug("Creating new " + NAME);
     return new Weighted<T>();
   }
 
@@ -58,7 +64,7 @@ public class WeightedFactory implements OrdererFactory {
 
   @Override
   public String getUserModuleDescription() {
-    final StringBuilder sb= new StringBuilder(getDisplayName());
+    final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" weights states and returns state with minimum weight to be removed."
             + " Weight of the state is the sum of length of all regular expressions"
             + " on in-transitions, out-transitions and loops.");

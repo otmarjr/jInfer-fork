@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
@@ -27,6 +26,25 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
  * @author anti
  */
 public interface AutomatonSimplifier<T> {
+
+  /**
+   * Simplify an automaton.
+   *
+   * @param inputAutomaton automaton to process
+   * @param symbolToString converter of symbols (of type T) to string - for rendering automaton to user
+   * @return new automaton, which accepts more general language and is simple in design
+   * @throws InterruptedException
+   */
   Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException;
+
+  /**
+   * Simplify an automaton.
+   *
+   * @param inputAutomaton automaton to process
+   * @param symbolToString converter of symbols (of type T) to string - for rendering automaton to user
+   * @elementName name of element we process right now
+   * @return new automaton, which accepts more general language and is simple in design
+   * @throws InterruptedException
+   */
   Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException;
 }

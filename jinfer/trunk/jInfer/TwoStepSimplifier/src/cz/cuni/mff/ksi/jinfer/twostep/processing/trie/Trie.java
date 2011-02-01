@@ -68,6 +68,12 @@ public class Trie implements ClusterProcessor<AbstractStructuralNode> {
     return ret;
   }
 
+  /**
+   * TODO vektor comment
+   * 
+   * @param tree
+   * @param branch
+   */
   public static void addBranchToTree(final Regexp<AbstractStructuralNode> tree,
           final Regexp<AbstractStructuralNode> branch) {
     if (!tree.isConcatenation()) {
@@ -216,5 +222,4 @@ public class Trie implements ClusterProcessor<AbstractStructuralNode> {
     }
     return false;
   }
-
 }

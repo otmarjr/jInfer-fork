@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.Greedy;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.GreedyFactory;
 import java.awt.GridBagConstraints;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
 /**
- * Properties panel for AutomatonSimplifierGreedy.
+ * Properties panel for {@link Greedy}.
  * @author anti
  */
 @SuppressWarnings({"PMD.SingularField", "PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
@@ -202,15 +203,15 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
         ++i;
       }
     } else {
-        final JLabel l = new JLabel("Submodule has no parameters to set.");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-        panelParams.add(l, gridBagConstraints);
+      final JLabel l = new JLabel("Submodule has no parameters to set.");
+      gridBagConstraints = new java.awt.GridBagConstraints();
+      gridBagConstraints.gridx = 0;
+      gridBagConstraints.gridy = 0;
+      gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
+      gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+      gridBagConstraints.weightx = 0.0;
+      gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+      panelParams.add(l, gridBagConstraints);
     }
   }//GEN-LAST:event_comboConditionTesterChanged
 

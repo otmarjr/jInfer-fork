@@ -14,11 +14,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
@@ -29,34 +29,34 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Facotry for AutomatonSimplifierGreedy.
+ * Factory for {@link Greedy}.
  *
  * @author anti
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class GreedyFactory implements AutomatonSimplifierFactory {
-  private static final Logger LOG = Logger.getLogger(GreedyFactory.class);
 
+  private static final Logger LOG = Logger.getLogger(GreedyFactory.class);
   /**
-   * TODO anti comment
+   * Canonical name.
    */
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierGreedy";
   /**
-   * TODO anti comment
+   * Name presented to user.
    */
   public static final String DISPLAY_NAME = "Greedy";
   /**
-   * TODO anti comment
+   * Property name for one {@link MergeConditionTester}.
    */
   public static final String PROPERTIES_CONDITION_TESTER = "condition-tester";
   /**
-   * TODO anti comment
+   * Default tester used when none is selected.
    */
   public static final String PROPERTIES_CONDITION_TESTER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterKHContext";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
-    LOG.debug("Creating new AutomatonSimplifierGreedy.");
+    LOG.debug("Creating new " + NAME);
     return new Greedy<T>(
             getMergeConditionTesterFactory(),
             RunningProject.getActiveProjectProps(getName()));

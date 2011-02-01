@@ -218,8 +218,8 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public final void load() {
     comboConditionTester.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(MergeConditionTesterFactory.class).toArray()));
-    comboConditionTester.setSelectedItem(ModuleSelectionHelper.lookupName(MergeConditionTesterFactory.class,
+            ModuleSelectionHelper.lookupImpls(MergeConditionTesterFactory.class).toArray()));
+    comboConditionTester.setSelectedItem(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
             properties.getProperty(GreedyFactory.PROPERTIES_CONDITION_TESTER,
             GreedyFactory.PROPERTIES_CONDITION_TESTER_DEFAULT)));
     comboConditionTesterChanged(null);

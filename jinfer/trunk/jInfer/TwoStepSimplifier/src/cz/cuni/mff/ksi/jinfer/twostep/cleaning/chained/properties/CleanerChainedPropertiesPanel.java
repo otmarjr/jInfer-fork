@@ -78,7 +78,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
   public final void load() {
     GridBagConstraints gridBagConstraints;
     setLayout(new GridBagLayout());
-    final List<NamedModule> cleanerNames = ModuleSelectionHelper.lookupNames(RegularExpressionCleanerFactory.class);
+    final List<? extends NamedModule> cleanerNames = ModuleSelectionHelper.lookupImpls(RegularExpressionCleanerFactory.class);
     final List<NamedModule> modelStrings = new ArrayList<NamedModule>();
     for (NamedModule name : cleanerNames) {
       if (!name.getName().equals(ChainedFactory.NAME)) {

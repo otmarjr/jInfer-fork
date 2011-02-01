@@ -72,8 +72,8 @@ public class AutomatonMergingStatePropertiesPanelProviderImpl implements Propert
   @Override
   public List<VirtualCategoryPanel> getSubCategories() {
     final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
-    result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_SIMPLIFIER, MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupNames(AutomatonSimplifierFactory.class)));
-    result.add(new VirtualCategoryPanel(MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER, MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupNames(RegexpAutomatonSimplifierFactory.class)));
+    result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_SIMPLIFIER, MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupImpls(AutomatonSimplifierFactory.class)));
+    result.add(new VirtualCategoryPanel(MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER, MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupImpls(RegexpAutomatonSimplifierFactory.class)));
     result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_RENDERER, MERGING_STATE_AUTOMATON_RENDERER_DISPLAY, null));
 
     return result;

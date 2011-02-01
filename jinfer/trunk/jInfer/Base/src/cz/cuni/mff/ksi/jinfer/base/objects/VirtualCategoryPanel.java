@@ -43,7 +43,7 @@ public class VirtualCategoryPanel extends JPanel {
    * @param categoryName Name displayed in category tree for this panel.
    * @param modules List of NamedModule instances which categories are children of this category.
    */
-  public VirtualCategoryPanel(final String categoryId, final String categoryName, final List<NamedModule> modules) {
+  public VirtualCategoryPanel(final String categoryId, final String categoryName, final List<? extends NamedModule> modules) {
     super();
     this.categoryId = categoryId;
     this.categoryName = categoryName;
@@ -51,7 +51,7 @@ public class VirtualCategoryPanel extends JPanel {
     initComponents();
   }
 
-  private String getOverallLabel(final List<NamedModule> modules) {
+  private String getOverallLabel(final List<? extends NamedModule> modules) {
     final StringBuilder builder = new StringBuilder();
     if (modules != null) {
       final boolean isOne = modules.size() == 1;

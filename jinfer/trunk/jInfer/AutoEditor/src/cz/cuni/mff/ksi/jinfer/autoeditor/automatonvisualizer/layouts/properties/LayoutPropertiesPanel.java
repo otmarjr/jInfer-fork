@@ -120,8 +120,8 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public final void load() {
     graphRenderer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(LayoutF.class).toArray()));
-    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupName(LayoutF.class, properties.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME)));
+            ModuleSelectionHelper.lookupImpls(LayoutF.class).toArray()));
+    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupImpl(LayoutF.class, properties.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME)));
   }
 
   @Override

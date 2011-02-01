@@ -58,44 +58,31 @@ public final class ModuleSelectionHelper {
   }
 
   /**
-   * Returns a list of names
-   * ({@link cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule#getName()})
-   * of all the implementations of requested interface registered via
+   * Returns a list of all the implementations of requested interface registered via
    * {@link org.openide.util.lookup.ServiceProvider}.
    *
-   * @param <T> Interface for which the names are to be found.
+   * @param <T> Interface for which the implementations to be found.
    * Must extend NamedModule.
-   * @param clazz Interface for which the names are to be found.
+   * @param clazz Interface for which the implementations to be found.
    * Must extend NamedModule.
    *
-   * @return Alphabetically sorted list of all names of modules registered as
+   * @return List alphabetically sorted by {@link NamedModule#getDisplayName()} of all implementations of modules registered as
    * {@link org.openide.util.lookup.ServiceProvider} implementing the requested
    * interface.
    */
-  public static <T extends NamedModule> List<NamedModule> lookupNames(
+  public static <T extends NamedModule> List<T> lookupImpls(
           final Class<T> clazz) {
-    final List<NamedModule> ret = new ArrayList<NamedModule>(Lookup.getDefault().lookupAll(clazz));
-    Collections.sort(ret, MODULE_NAME_CMP);
-    return ret;
-  }
+    @SuppressWarnings("unchecked")
+    final List<T> implementations = new ArrayList<T>(
+            (Collection<T>) Lookup.getDefault().lookupAll(clazz));
 
-  public static <T extends NamedModule> NamedModule lookupName(
-          final Class<T> clazz, final String name) {
-    final List<NamedModule> ret = lookupNames(clazz);
-
-    if (BaseUtils.isEmpty(ret)) {
+    if (BaseUtils.isEmpty(implementations)) {
       throw new IllegalArgumentException("No implementations of "
               + clazz.getCanonicalName() + " found.");
     }
 
-    Collections.sort(ret, MODULE_NAME_CMP);
-    for (NamedModule namedModule : ret) {
-      if (namedModule.getName().equals(name)) {
-        return namedModule;
-      }
-    }
-
-    return ret.get(0);
+    Collections.sort(implementations, MODULE_NAME_CMP);
+    return implementations;
   }
 
   /**
@@ -136,16 +123,8 @@ public final class ModuleSelectionHelper {
   public static <T extends NamedModule> T lookupImpl(final Class<T> clazz,
           final String name, final Fallback fallback) {
     @SuppressWarnings("unchecked")
-    final List<T> implementations = new ArrayList<T>(
-            (Collection<T>) Lookup.getDefault().lookupAll(clazz));
-
-    if (BaseUtils.isEmpty(implementations)) {
-      throw new IllegalArgumentException("No implementations of "
-              + clazz.getCanonicalName() + " found.");
-    }
-
-    Collections.sort(implementations, MODULE_NAME_CMP);
-
+    final List<T> implementations = lookupImpls(clazz);
+    
     for (final T implementation : implementations) {
       if (implementation.getName().equals(name)) {
         return implementation;

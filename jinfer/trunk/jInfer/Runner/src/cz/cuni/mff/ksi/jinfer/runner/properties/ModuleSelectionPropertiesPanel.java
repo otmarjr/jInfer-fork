@@ -141,15 +141,15 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public final void load() {
     initialGrammar.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(IGGenerator.class).toArray()));
+            ModuleSelectionHelper.lookupImpls(IGGenerator.class).toArray()));
     simplifier.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(Simplifier.class).toArray()));
+            ModuleSelectionHelper.lookupImpls(Simplifier.class).toArray()));
     schemaGenerator.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupNames(SchemaGenerator.class).toArray()));
+            ModuleSelectionHelper.lookupImpls(SchemaGenerator.class).toArray()));
 
-    initialGrammar.setSelectedItem(ModuleSelectionHelper.lookupName(IGGenerator.class, properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT)));
-    simplifier.setSelectedItem(ModuleSelectionHelper.lookupName(Simplifier.class, properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT)));
-    schemaGenerator.setSelectedItem(ModuleSelectionHelper.lookupName(SchemaGenerator.class, properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT)));
+    initialGrammar.setSelectedItem(ModuleSelectionHelper.lookupImpl(IGGenerator.class, properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT)));
+    simplifier.setSelectedItem(ModuleSelectionHelper.lookupImpl(Simplifier.class, properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT)));
+    schemaGenerator.setSelectedItem(ModuleSelectionHelper.lookupImpl(SchemaGenerator.class, properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT)));
   }
 
   @Override

@@ -266,9 +266,9 @@ public final class RunnerPanel extends JPanel {
     showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, OUTPUT_SHOW_DEFAULT));
     namePattern.setText(NbPreferences.forModule(RunnerPanel.class).get(NAME_PATTERN, NAME_PATTERN_DEFAULT));
 
-    ruleDisplayerCombo.setModel(new DefaultComboBoxModel(ModuleSelectionHelper.lookupNames(RuleDisplayer.class).toArray()));
+    ruleDisplayerCombo.setModel(new DefaultComboBoxModel(ModuleSelectionHelper.lookupImpls(RuleDisplayer.class).toArray()));
     final String ruleDisplayerName = NbPreferences.forModule(RuleDisplayer.class).get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, RULE_DISPLAYER_DEFAULT);
-    ruleDisplayerCombo.setSelectedItem(ModuleSelectionHelper.lookupName(RuleDisplayer.class, ruleDisplayerName));
+    ruleDisplayerCombo.setSelectedItem(ModuleSelectionHelper.lookupImpl(RuleDisplayer.class, ruleDisplayerName));
   }
 
   /**

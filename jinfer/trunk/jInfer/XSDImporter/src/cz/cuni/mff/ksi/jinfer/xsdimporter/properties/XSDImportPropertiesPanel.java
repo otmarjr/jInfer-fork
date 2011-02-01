@@ -203,10 +203,10 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void load() {
-    final List<NamedModule> names = ModuleSelectionHelper.lookupNames(XSDParser.class);
+    final List<? extends NamedModule> names = ModuleSelectionHelper.lookupImpls(XSDParser.class);
     parserComboBox.setModel(new DefaultComboBoxModel(names.toArray()));
 
-    parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupName(XSDParser.class, properties.getProperty(PARSER, PARSER_NAME_DEFAULT)));
+    parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupImpl(XSDParser.class, properties.getProperty(PARSER, PARSER_NAME_DEFAULT)));
 
     logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
 

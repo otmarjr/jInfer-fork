@@ -71,9 +71,9 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
   @Override
   public List<VirtualCategoryPanel> getSubCategories() {
     final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
-    result.add(new VirtualCategoryPanel(IGG_CATEGORY, IGG_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupNames(IGGenerator.class)));
-    result.add(new VirtualCategoryPanel(SIMPLIFIER_CATEGORY, SIMPLIFIER_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupNames(Simplifier.class)));
-    result.add(new VirtualCategoryPanel(EXPORTER_CATEGORY, EXPORTER_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupNames(SchemaGenerator.class)));
+    result.add(new VirtualCategoryPanel(IGG_CATEGORY, IGG_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupImpls(IGGenerator.class)));
+    result.add(new VirtualCategoryPanel(SIMPLIFIER_CATEGORY, SIMPLIFIER_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupImpls(Simplifier.class)));
+    result.add(new VirtualCategoryPanel(EXPORTER_CATEGORY, EXPORTER_CATEGORY_DISPLAY, ModuleSelectionHelper.lookupImpls(SchemaGenerator.class)));
 
     return result;
   }

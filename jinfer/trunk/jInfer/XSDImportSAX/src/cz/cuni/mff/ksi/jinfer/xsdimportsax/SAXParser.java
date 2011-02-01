@@ -46,8 +46,7 @@ public class SAXParser implements XSDParser {
 
   @Override
   public void process(final InputStream stream) {
-    final XSDImportSettings settings = new XSDImportSettings();
-    LOG.setLevel(settings.logLevel());
+    LOG.setLevel(XSDImportSettings.logLevel());
 
     handler = new SAXHandler();
 

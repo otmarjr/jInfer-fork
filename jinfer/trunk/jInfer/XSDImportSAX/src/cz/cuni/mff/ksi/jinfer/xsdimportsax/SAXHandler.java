@@ -53,9 +53,8 @@ class SAXHandler extends DefaultHandler {
   //TODO reseto MASSIVE REFACTOR exception throwing by nbBundle!!
   //TODO reseto incorporate Expander
 
-  private final XSDImportSettings settings = new XSDImportSettings();
   private static final Logger LOG = Logger.getLogger(SAXHandler.class);
-  private final boolean verbose = settings.isVerbose();
+  private final boolean verbose = XSDImportSettings.isVerbose();
 
   /** Stack of XSDDocumentElements to be used only internally for storing data and correct nesting */
   private final Stack<SAXDocumentElement> docElementStack = new Stack<SAXDocumentElement>();
@@ -87,7 +86,7 @@ class SAXHandler extends DefaultHandler {
 
   public SAXHandler() {
     super();
-    LOG.setLevel(settings.logLevel());
+    LOG.setLevel(XSDImportSettings.logLevel());
   }
 
   /**

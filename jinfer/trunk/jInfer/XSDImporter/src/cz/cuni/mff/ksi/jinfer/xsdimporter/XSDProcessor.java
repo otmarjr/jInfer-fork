@@ -56,10 +56,8 @@ public class XSDProcessor implements Processor {
 
   @Override
   public List<Element> process(final InputStream stream) {
-    final XSDImportSettings settings = new XSDImportSettings();
-
-    LOG.setLevel(settings.logLevel());
-    final XSDParser parser = settings.getParser();
+    LOG.setLevel(XSDImportSettings.logLevel());
+    final XSDParser parser = XSDImportSettings.getParser();
 
     try {
       if (parser != null) {
@@ -67,7 +65,7 @@ public class XSDProcessor implements Processor {
         LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.ParsingMethod", parser.getDisplayName()));
         parser.process(stream);
         final List<Element> rules = parser.getRules();
-        printDebugInfo(settings, rules, "AfterParsing");
+        printDebugInfo(rules, "AfterParsing");
         // show the rules before expansion
         RuleDisplayerHelper.showRulesAsync("Raw", rules, true);
         // if the next module cannot handle complex regexps, help it by expanding our result
@@ -75,7 +73,7 @@ public class XSDProcessor implements Processor {
           // lookup expander
           final Expander expander = Lookup.getDefault().lookup(Expander.class);
           final List<Element> rulesExpanded = expander.expand(rules);
-          printDebugInfo(settings, rulesExpanded, "AfterExpanding");
+          printDebugInfo(rulesExpanded, "AfterExpanding");
           // return expanded
           return rulesExpanded;
         }
@@ -87,7 +85,7 @@ public class XSDProcessor implements Processor {
         return Collections.emptyList();
       }
     } catch (final XSDException e) {
-      if (settings.stopOnError()) {
+      if (XSDImportSettings.stopOnError()) {
         throw new RuntimeException(NbBundle.getMessage(XSDProcessor.class, "Exception.Parsing"), e);
       } else {
         LOG.error(NbBundle.getMessage(XSDProcessor.class, "Error.IgnoreParsing"), e);
@@ -105,8 +103,8 @@ public class XSDProcessor implements Processor {
    * @param stateMessageName Part of the name of the message that defines current execution stage
    * (values "AfterParsing" and "AfterExpanding" are defined in bundle).
    */
-  private void printDebugInfo(final XSDImportSettings settings, final List<Element> rules, final String stateMessageName) {
-    if (settings.isVerbose()) {
+  private void printDebugInfo(final List<Element> rules, final String stateMessageName) {
+    if (XSDImportSettings.isVerbose()) {
       LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.Rules." + stateMessageName + ".FullMsg", rules.size()));
       for (Element elem : rules) {
         LOG.debug(elem.toString());

@@ -3,7 +3,8 @@ obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twos
 all: deploy
 
 deploy: subdirs
-	for i in $(obj); do cp $$i/$$i.pdf ../../project-web/modules/; done
+	mkdir -p ../../project-web/output/modules/;
+	for i in $(obj); do cp $$i/$$i.pdf ../../project-web/output/modules/; done
 
 subdirs:
 	for i in $(obj); do cd $$i && $(MAKE) && cd ..; done

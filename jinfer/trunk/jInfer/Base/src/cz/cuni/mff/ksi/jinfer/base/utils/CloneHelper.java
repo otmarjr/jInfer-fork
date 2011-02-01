@@ -51,7 +51,7 @@ public class CloneHelper {
   public List<Element> cloneGrammar(final List<Element> grammar) {
     final List<Element> ret = new ArrayList<Element>(grammar.size());
     for (final Element e : grammar) {
-      ret.add(cloneElement(e, null));
+      ret.add(cloneElement(e));
     }
     return ret;
   }
@@ -78,10 +78,34 @@ public class CloneHelper {
 
   /**
    * Clones a single element.
+   * This is done for all its children recursively.
+   * @param e Element to be cloned.
+   * @return Cloned element that is equal to the original, but different instance.
+   * @see CloneHelper#cloneElement(cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element, java.util.List) 
+   */
+  public Element cloneElement(final Element e) {
+    return cloneElement(e, null);
+  }
+
+  /**
+   * Clones a single element. Context of every element is prefixed with the <code>contextPrefix</code>.
+   * For example: if element A has children B,C and <code>contextPrefix</code> is <code>null</code> or empty, the contexts are
+   * <ul>
+   * <li>A</li>
+   * <li>A/B</li>
+   * <li>A/C</li>
+   * </ul>
+   * When the <code>contentPrefix</code> contains strings "X","Y","Z", the final contexts of the elements are
+   * <ul>
+   * <li>X/Y/X/A</li>
+   * <li>X/Y/X/A/B</li>
+   * <li>X/Y/X/A/C</li>
+   * </ul>
+   * respectively. This is done for all children recursively.
    *
    * @param e Element to be cloned.
-   * @param contextPrefix TODO reseto What is this???
-   * @return Cloned element: equal, but different instance.
+   * @param contextPrefix Context
+   * @return Cloned element that is equal to the original in everything except the new context, but different instance.
    */
   public Element cloneElement(final Element e, final List<String> contextPrefix) {
     if (cloned.containsKey(e)) {
@@ -182,11 +206,15 @@ public class CloneHelper {
   }
 
   /**
-   * TODO reseto Comment!
-   * 
-   * @param node
-   * @param contextPrefix
-   * @return
+   * Concatenate context from <code>contextPrefix</code> and the context of <code>node</code>
+   * When <code>contextPrefix</code> is {"X","Y"} and the context of <code>node</code> is {"A", "B"},
+   * method returns {"X","Y","A","B"}.
+   * @param node Node from which the context is retrieved.
+   * @param contextPrefix Context that should be appended before the <code>node</code> context.
+   * @return New concatenated list. Otherwise,
+   * the result will be equal to the context of <code>node</code> when <code>contextPrefix</code> is empty or <code>null</code>.
+   * Result will be equal to <code>contextPrefix</code> if the context of <code>node</code> is empty or <code>null</code>.
+   * Result will be <code>null</code> if both arguments are <code>null</code>.
    */
   public static List<String> getPrefixedContext(final NamedNode node, final List<String> contextPrefix) {
     if (BaseUtils.isEmpty(contextPrefix)) {

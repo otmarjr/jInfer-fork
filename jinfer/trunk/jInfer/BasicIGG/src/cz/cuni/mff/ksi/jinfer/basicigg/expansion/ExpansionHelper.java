@@ -92,8 +92,14 @@ public final class ExpansionHelper {
         ret.add(BaseUtils.cloneList(l, INFINITY));
       }
     } else {
+      // if the lower bound is 0, add the empty list - but only once
+      if (ri.getMin() == 0) {
+        ret.add(Collections.<T>emptyList());
+      }
       for (final List<T> l : input) {
-        ret.add(BaseUtils.cloneList(l, ri.getMin()));
+        if (ri.getMin() > 0) {
+          ret.add(BaseUtils.cloneList(l, ri.getMin()));
+        }
         // if the interval is {0, N} N > 1, simulate Kleene star behavior
         if ((ri.getMin() == 0) && (ri.getMax() > 1)) {
           ret.add(l);

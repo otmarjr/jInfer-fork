@@ -93,12 +93,11 @@ public final class ExpansionHelper {
       }
     } else {
       for (final List<T> l : input) {
-        if ( (ri.getMin() == 0) && (1 < ri.getMax()) ) {
-          // this partially fixes the bug when regexp token has interval {0, anything more than 1}
-          // so it is clear that it can appear zero,one, or many times - similar to kleene star
+        ret.add(BaseUtils.cloneList(l, ri.getMin()));
+        // if the interval is {0, N} N > 1, simulate Kleene star behavior
+        if ((ri.getMin() == 0) && (ri.getMax() > 1)) {
           ret.add(l);
         }
-        ret.add(BaseUtils.cloneList(l, ri.getMin())); // if min = 0, it produces empty list
         ret.add(BaseUtils.cloneList(l, ri.getMax()));
       }
     }

@@ -80,6 +80,9 @@ public class DOMHandler {
    */
   private final Map<String, org.w3c.dom.Element> referenced = new HashMap<String, org.w3c.dom.Element>();
 
+  /**
+   * Default constructor, set loglevel as defined in XSD Import properties.
+   */
   public DOMHandler() {
     LOG.setLevel(XSDImportSettings.logLevel());
   }

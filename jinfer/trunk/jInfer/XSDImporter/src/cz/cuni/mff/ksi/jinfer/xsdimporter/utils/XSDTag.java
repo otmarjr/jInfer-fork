@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
  * All possible tags (i.e. element names) defined in XSD Schema used by XSD parsers of jInfer.
- * With one additional "invalid" tag, to distinguish errors.
+ * With one additional <code>INVALID</code> tag, to distinguish errors.
  * @author reseto
  */
 public enum XSDTag {
@@ -48,10 +48,20 @@ public enum XSDTag {
     return name;
   }
 
+  /**
+   * Get the case sensitive name of current tag.
+   * @return Case sensitive name of tag.
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Determine if the parameter can match any of the enum values.
+   * Operation is case sensitive.
+   * @param name String to match up with a tag.
+   * @return Corresponding tag or <code>INVALID</code> when such tag is not known.
+   */
   public static XSDTag matchName(final String name) {
     for (XSDTag tag : XSDTag.values()) {
       if (name.equals(tag.getName())) {
@@ -61,6 +71,11 @@ public enum XSDTag {
     return INVALID;
   }
 
+  /**
+   * Check if tag is one of <code>SEQUENCE</code>, <code>CHOICE</code> or <code>ALL</code>.
+   * @param tag Tag to be checked.
+   * @return <code>true</true> if tag indicated and order.
+   */
   public static boolean isOrderIndicator(final XSDTag tag) {
     if (tag == SEQUENCE || tag == CHOICE || tag == ALL) {
       return true;
@@ -68,6 +83,10 @@ public enum XSDTag {
     return false;
   }
 
+  /**
+   * Check if tag is one of <code>SEQUENCE</code>, <code>CHOICE</code> or <code>ALL</code>.
+   * @return <code>true</code> if tag indicated and order.
+   */
   public boolean isOrderIndicator() {
     if (this == SEQUENCE || this == CHOICE || this == ALL) {
       return true;

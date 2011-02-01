@@ -67,7 +67,9 @@ public final class XSDUtility {
   }
 
   /**
-   * Trims (cuts) namespace prefix from the beginning of element qName and returns it in original case.
+   * Trims (cuts) namespace prefix from the beginning of element tag and returns it in original case.
+   * @param qName String to be trimmed of its prefix.
+   * @return QName without namespace prefix.
    */
   public static String trimNS(final String qName) {
     if (BaseUtils.isEmpty(qName)) {

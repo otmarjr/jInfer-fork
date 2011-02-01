@@ -21,7 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 
 /**
- *
+ * Helper class for creating intervals from string representation of occurrences.
  * @author reseto
  */
 public final class XSDOccurences {

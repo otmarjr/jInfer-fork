@@ -59,6 +59,7 @@ public class SimpleDataClusterer implements Clusterer<SimpleData> {
 
   @Override
   public void cluster() throws InterruptedException {
+    // it is not empty by mistake!
   }
 
   @Override

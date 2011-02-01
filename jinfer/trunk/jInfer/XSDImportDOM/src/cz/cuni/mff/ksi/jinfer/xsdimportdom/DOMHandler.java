@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.MissingResourceException;
 import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 import org.w3c.dom.Document;
@@ -50,9 +49,8 @@ import org.xml.sax.SAXException;
  */
 public class DOMHandler {
 
-  private final XSDImportSettings settings = new XSDImportSettings();
   private static final Logger LOG = Logger.getLogger(DOMHandler.class);
-  private final boolean verbose = settings.isVerbose();
+  private final boolean verbose = XSDImportSettings.isVerbose();
 
   /**
    * Name of an element, which is only a container for a complex type. 
@@ -83,7 +81,7 @@ public class DOMHandler {
   private final Map<String, org.w3c.dom.Element> referenced = new HashMap<String, org.w3c.dom.Element>();
 
   public DOMHandler() {
-    LOG.setLevel(settings.logLevel());
+    LOG.setLevel(XSDImportSettings.logLevel());
   }
 
   /**
@@ -212,39 +210,6 @@ public class DOMHandler {
     }
   }
 
-  /**
-   * Create an {@link Element } with type {@link RegexpType#LAMBDA } with proper constraints
-   * and metadata containing sentinel info.
-   * This kind of element is used when it was defined previously and it is unnecessary to
-   * build a rule subtree for it again (it is either a reference, or a leaf in recursion).
-   * @param domElem Node in the DOM tree from which the sentinel is made.
-   * @param context Context of the node in the rule tree.
-   * @param useAsName Name of the attribute to be used as a name of the new <code>Element</code>.
-   * @return Sentinel element.
-   * @see IGGUtils#METADATA_SENTINEL
-   */
-  private Element createSentinel(final org.w3c.dom.Element domElem, final List<String> context, final XSDAttribute useAsName) {
-    final Element sentinel = Element.getMutable();
-    if (XSDAttribute.NAME.equals(useAsName) || XSDAttribute.REF.equals(useAsName)) {
-      sentinel.setName(domElem.getAttribute(useAsName.toString()));
-    } else {
-      throw new XSDException("Cannot use attribute " + useAsName.toString() + " as a name for " + domElem.getTagName());
-    }
-
-    if (BaseUtils.isEmpty(sentinel.getName())) {
-      throw new XSDException("Trying to create sentinel with no name.");
-    }
-    if (verbose) {
-      LOG.debug("Creating sentinel using " + useAsName.toString() + " with name " + sentinel.getName());
-    }
-    sentinel.getContext().addAll(context);
-    sentinel.getMetadata().putAll(IGGUtils.METADATA_SENTINEL);
-    sentinel.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
-    sentinel.getSubnodes().setType(RegexpType.LAMBDA);
-    sentinel.setImmutable();
-    return sentinel;
-  }
-
   // ####################################################################           SUBTREE BUILDING
 
   /**
@@ -274,14 +239,16 @@ public class DOMHandler {
     final RegexpInterval interval = DOMHelper.determineInterval(currentNode);
     final XSDTag tag = XSDTag.matchName(XSDUtility.trimNS(currentNode.getNodeName()));
 
+    // RET is the element that is returned from this recursive method
+    // most methods below use this instance of RET to store data in it, 
     final Element ret = Element.getMutable();
     ret.getContext().addAll(context);
     ret.getMetadata().putAll(XSDUtility.prepareMetadata(interval));
     
     // inspect self
-    final Element returned = inspectSelf(currentNode, tag, ret, context, visited, newContext, newVisited, interval);
-    if (returned != null) {
-      return new Pair<Element, RegexpInterval>(returned, interval);
+    final Element self = inspectSelf(currentNode, tag, ret, context, visited, newContext, newVisited, interval);
+    if (self != null) {
+      return new Pair<Element, RegexpInterval>(self, interval);
     } // else the ret element has all the changes needed
 
     // inspect children
@@ -304,49 +271,9 @@ public class DOMHandler {
                               final RegexpInterval interval) throws XSDException {
     switch (tag) {
       case ELEMENT:
-        for (org.w3c.dom.Element el : visited) {
-          // if this node was visited previously in the recursion, it is the same instance,
-          // (for example when dealing with a recursive complextype)
-          // we just create a sentinel to be used as the leaf node of rule tree
-          if (el == currentNode) {
-            if (verbose) {
-              LOG.debug("Element visited previously, creating sentinel.");
-            }
-            return createSentinel(currentNode, context, XSDAttribute.NAME);
-          }
-        }
-        final String name = currentNode.getAttribute(XSDAttribute.NAME.toString());
-        if (!BaseUtils.isEmpty(name)) {
-          ret.setName(name);
-        } else if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
-          if (XSDTag.SCHEMA.toString().equals(XSDUtility.trimNS(currentNode.getParentNode().getNodeName()))) {
-            throw new XSDException("Invalid schema. Element attribute 'ref' is not allowed for elements directly under the schema tag.");
-          } else if (!referenced.containsKey(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
-            throw new XSDException("Invalid schema. Attribute 'ref' is referring to an element that is not in schema. Note: only top level elements can be referred to.");
-          } else {
-            return createSentinel(currentNode, context, XSDAttribute.REF);
-          }
-        } else {
-          throw new XSDException("Element must have name or ref attribute defined.");
-        }
-        newContext.add(name);
-        newVisited.add(currentNode);
-        // element has defined type
-        if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
-          final String type = XSDUtility.trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
-          if (XSDBuiltInDataTypes.isSimpleDataType(type)) {
-            // if element is of some built-in data type, we must first check its children
-            // only then can we add the simple type as a token 
-            // see [SIMPLE DATA SECTION] in finalizeElement()
-            ret.getMetadata().put(XSDAttribute.TYPE.getMetadataName(), type);
-          } else if (namedCTypes.containsKey(type)) {
-            final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited).getFirst();
-            DOMHelper.extractSubnodesFromContainer(container, ret, CONTAINER_CTYPE);
-            DOMHelper.finalizeElement(ret, newContext);
-            return ret; // RETURN STATEMENT
-          } else {
-            LOG.error("Specified type '" + type + "' of element '" + name + "' was not found!");
-          }
+        final Element selfElement = inspectElement(currentNode, ret, context, visited, newContext, newVisited);
+        if (selfElement != null) {
+          return selfElement;
         }
         break;
       case ALL:
@@ -373,12 +300,13 @@ public class DOMHandler {
     return null;
   }
 
-  private void inspectChildren(final NodeList children, 
+  private void inspectChildren(final NodeList children,
                                final XSDTag tag,
                                final Element ret,
                                final List<String> newContext,
                                final List<org.w3c.dom.Element> newVisited,
-                               final RegexpInterval interval) throws XSDException, MissingResourceException {
+                               final RegexpInterval interval) throws XSDException {
+
     for (int i = 0; i < children.getLength(); i++) {
       final org.w3c.dom.Element child = DOMHelper.getDOMElement(children.item(i));
       if (child != null) {
@@ -390,37 +318,6 @@ public class DOMHandler {
           case COMPLEXTYPE:
             handleChildComplexType(ret, child, tag, childTag, newContext, newVisited);
             break;
-          case ATTRIBUTE:
-          {
-            // first get the attribute name or ref
-            // we don't resolve the ref at all (out of assignment), just register it's there
-            String attrName = child.getAttribute(XSDAttribute.NAME.toString());
-            if (BaseUtils.isEmpty(attrName)) {
-              attrName = child.getAttribute(XSDAttribute.REF.toString());
-              if (BaseUtils.isEmpty(attrName)) {
-                LOG.error("Attribute under " + ret.getName() + " has no name.");
-                continue;
-              }
-            }
-            String attrType = child.getAttribute(XSDAttribute.TYPE.toString());
-            if (!BaseUtils.isEmpty(attrType)) {
-              attrType = XSDUtility.trimNS(attrType);
-              if (!XSDBuiltInDataTypes.isSimpleDataType(attrType)) {
-                attrType = "";
-              }
-            }
-            final HashMap<String, Object> attrMeta = new HashMap<String, Object>();
-            if (child.hasAttribute(XSDAttribute.USE.toString())) {
-              if (XSDUtility.REQUIRED.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
-                attrMeta.put(IGGUtils.REQUIRED, Boolean.TRUE);
-              } else if (XSDUtility.OPTIONAL.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
-                attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
-              }
-            }
-            ret.getAttributes().add(new Attribute(newContext, attrName, attrMeta, attrType, new ArrayList<String>(0)));
-          }
-
-            break;
           case ALL:
             handleChildAll(ret, child, tag, childTag, newContext, newVisited);
             break;
@@ -428,12 +325,101 @@ public class DOMHandler {
           case SEQUENCE:
             handleChildChoiceSequence(ret, child, tag, childTag, newContext, newVisited);
             break;
+          case ATTRIBUTE:
+            handleChildAttribute(ret, child, newContext);
+            break;
           default:
             LOG.warn("Behavior undefined for child tag " + child.getTagName());
         }
       } // end child != null
       // if child is null (it's a different DOM node), we are not interested
     }
+  }
+
+  private Element inspectElement(final org.w3c.dom.Element currentNode,
+                                 final Element ret,
+                                 final List<String> context,
+                                 final List<org.w3c.dom.Element> visited,
+                                 final List<String> newContext,
+                                 final List<org.w3c.dom.Element> newVisited) {
+
+    final Element sentinelOfVisited = checkElementVisited(currentNode, context, visited);
+    if (sentinelOfVisited != null) {
+      return sentinelOfVisited;
+    }
+
+    final String name = currentNode.getAttribute(XSDAttribute.NAME.toString());
+    if (!BaseUtils.isEmpty(name)) {
+      ret.setName(name);
+    } else if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
+      return checkElementRefAttribute(currentNode, context);
+    } else {
+      throw new XSDException("Element must have name or ref attribute defined.");
+    }
+    newContext.add(name);
+    newVisited.add(currentNode);
+
+    final Element elementWithNamedCType = checkElementComplexType(currentNode, ret, newContext, newVisited, name);
+    if (elementWithNamedCType != null) {
+      return elementWithNamedCType;
+    }
+    return null;
+  }
+
+  private Element checkElementVisited(final org.w3c.dom.Element currentNode,
+                               final List<String> context,
+                               final List<org.w3c.dom.Element> visited) {
+
+    for (org.w3c.dom.Element el : visited) {
+      // if this node was visited previously in the recursion, it is the same instance,
+      // (for example when dealing with a recursive complextype)
+      // we just create a sentinel to be used as the leaf node of rule tree
+      if (el == currentNode) {
+        if (verbose) {
+          LOG.debug("Element visited previously, creating sentinel.");
+        }
+        return DOMHelper.createSentinel(currentNode, context, XSDAttribute.NAME);
+      }
+    }
+    return null;
+  }
+
+  private Element checkElementRefAttribute(final org.w3c.dom.Element currentNode,
+                           final List<String> context) {
+
+    if (XSDTag.SCHEMA.toString().equals(XSDUtility.trimNS(currentNode.getParentNode().getNodeName()))) {
+      throw new XSDException("Invalid schema. Element attribute 'ref' is not allowed for elements directly under the schema tag.");
+    } else if (!referenced.containsKey(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
+      throw new XSDException("Invalid schema. Attribute 'ref' is referring to an element that is not in schema. Note: only top level elements can be referred to.");
+    } else {
+      return DOMHelper.createSentinel(currentNode, context, XSDAttribute.REF);
+    }
+  }
+
+  private Element checkElementComplexType(final org.w3c.dom.Element currentNode,
+                                          final Element ret,
+                                          final List<String> newContext,
+                                          final List<org.w3c.dom.Element> newVisited,
+                                          final String name) {
+
+    if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
+      // element has defined type
+      final String type = XSDUtility.trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
+      if (XSDBuiltInDataTypes.isSimpleDataType(type)) {
+        // if element is of some built-in data type, we must first check its children
+        // only then can we add the simple type as a token
+        // see [SIMPLE DATA SECTION] in finalizeElement()
+        ret.getMetadata().put(XSDAttribute.TYPE.getMetadataName(), type);
+      } else if (namedCTypes.containsKey(type)) {
+        final Element container = buildRuleSubtree(namedCTypes.get(type), newContext, newVisited).getFirst();
+        DOMHelper.extractSubnodesFromContainer(container, ret, CONTAINER_CTYPE);
+        DOMHelper.finalizeElement(ret, newContext);
+        return ret; // RETURN STATEMENT
+      } else {
+        LOG.error("Specified type '" + type + "' of element '" + name + "' was not found!");
+      }
+    }
+    return null;
   }
 
   private void handleChildElement(final Element ret,
@@ -463,7 +449,7 @@ public class DOMHandler {
                                       final XSDTag tag,
                                       final XSDTag childTag,
                                       final List<String> newContext,
-                                      final List<org.w3c.dom.Element> newVisited) throws XSDException, MissingResourceException {
+                                      final List<org.w3c.dom.Element> newVisited) throws XSDException {
     if (XSDTag.ELEMENT.equals(tag)) {
       DOMHelper.extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_CTYPE);
     } else if (XSDTag.REDEFINE.equals(tag)) {
@@ -480,7 +466,7 @@ public class DOMHandler {
                               final XSDTag tag,
                               final XSDTag childTag,
                               final List<String> newContext,
-                              final List<org.w3c.dom.Element> newVisited) throws XSDException, MissingResourceException {
+                              final List<org.w3c.dom.Element> newVisited) throws XSDException {
     if (XSDTag.COMPLEXTYPE.equals(tag)) {
       DOMHelper.extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
     } else if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
@@ -495,7 +481,7 @@ public class DOMHandler {
                                          final XSDTag tag,
                                          final XSDTag childTag,
                                          final List<String> newContext, 
-                                         final List<org.w3c.dom.Element> newVisited) throws XSDException, MissingResourceException {
+                                         final List<org.w3c.dom.Element> newVisited) throws XSDException {
     if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
       ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited).getFirst().getSubnodes());
     } else if (XSDTag.COMPLEXTYPE.equals(tag)) {
@@ -506,4 +492,27 @@ public class DOMHandler {
       LOG.warn(DOMHelper.warnUnsupported(childTag, tag));
     }
   }
+
+  private void handleChildAttribute(final Element ret,
+                                    final org.w3c.dom.Element child,
+                                    final List<String> newContext) {
+
+    // first get the attribute name or ref
+    // we don't resolve the ref at all (out of assignment), just register it's there
+    final String attrName = DOMHelper.getAttributeName(child);
+    if (BaseUtils.isEmpty(attrName)) {
+      LOG.error("Attribute under " + ret.getName() + " has no name.");
+      return;
+    }
+    // if we have the name or ref, add the contents of the attribute to parent element (ret)
+    String attrType = child.getAttribute(XSDAttribute.TYPE.toString());
+    if (!BaseUtils.isEmpty(attrType)) {
+      attrType = XSDUtility.trimNS(attrType);
+      if (!XSDBuiltInDataTypes.isSimpleDataType(attrType)) {
+        attrType = "";
+      }
+    }
+    ret.getAttributes().add(new Attribute(newContext, attrName, DOMHelper.getAttributeMeta(child), attrType, new ArrayList<String>(0)));
+  }
+
 }

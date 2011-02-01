@@ -23,14 +23,18 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDOccurences;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDTag;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDUtility;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.MissingResourceException;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
 import org.w3c.dom.Node;
@@ -40,10 +44,12 @@ import org.w3c.dom.Node;
  * @author reseto
  */
 public final class DOMHelper {
+  private DOMHelper() {}
 
   private static final Logger LOG = Logger.getLogger(DOMHandler.class);
-
-  private DOMHelper() {}
+  static {
+    LOG.setLevel(XSDImportSettings.logLevel());
+  }
 
   /**
    * Determine if given <code>Node</code> is in fact <i>org.w3c.dom.Element</i> and return a type cast if so.
@@ -78,7 +84,7 @@ public final class DOMHelper {
    * @param parent Tag of the parent node.
    * @return Error message.
    */
-  protected static String errorWrongNested(final XSDTag child, final XSDTag parent) throws MissingResourceException {
+  protected static String errorWrongNested(final XSDTag child, final XSDTag parent) {
     return NbBundle.getMessage(DOMHelper.class, "Error.WrongTagsNested", child.toString(), parent.toString());
   }
 
@@ -88,8 +94,41 @@ public final class DOMHelper {
    * @param parent Tag of the parent node.
    * @return Warning message.
    */
-  protected static String warnUnsupported(final XSDTag child, final XSDTag parent) throws MissingResourceException {
+  protected static String warnUnsupported(final XSDTag child, final XSDTag parent) {
     return NbBundle.getMessage(DOMHelper.class, "Warn.UnsupportedStructure", child.toString(), parent.toString());
+  }
+
+  /**
+   * Create an {@link Element } with type {@link RegexpType#LAMBDA } with proper constraints
+   * and metadata containing sentinel info.
+   * This kind of element is used when it was defined previously and it is unnecessary to
+   * build a rule subtree for it again (it is either a reference, or a leaf in recursion).
+   * @param domElem Node in the DOM tree from which the sentinel is made.
+   * @param context Context of the node in the rule tree.
+   * @param useAsName Name of the attribute to be used as a name of the new <code>Element</code>.
+   * @return Sentinel element.
+   * @see IGGUtils#METADATA_SENTINEL
+   */
+  protected static Element createSentinel(final org.w3c.dom.Element domElem, final List<String> context, final XSDAttribute useAsName) {
+    final Element sentinel = Element.getMutable();
+    if (XSDAttribute.NAME.equals(useAsName) || XSDAttribute.REF.equals(useAsName)) {
+      sentinel.setName(domElem.getAttribute(useAsName.toString()));
+    } else {
+      throw new XSDException("Cannot use attribute " + useAsName.toString() + " as a name for " + domElem.getTagName());
+    }
+
+    if (BaseUtils.isEmpty(sentinel.getName())) {
+      throw new XSDException("Trying to create sentinel with no name.");
+    }
+    if (XSDImportSettings.isVerbose()) {
+      LOG.debug("Creating sentinel using " + useAsName.toString() + " with name " + sentinel.getName());
+    }
+    sentinel.getContext().addAll(context);
+    sentinel.getMetadata().putAll(IGGUtils.METADATA_SENTINEL);
+    sentinel.getMetadata().putAll(IGGUtils.ATTR_FROM_SCHEMA);
+    sentinel.getSubnodes().setType(RegexpType.LAMBDA);
+    sentinel.setImmutable();
+    return sentinel;
   }
 
   /**
@@ -102,7 +141,7 @@ public final class DOMHelper {
    */
   protected static void extractSubnodesFromContainer(final Element subtree, final Element destination, final String containerType) throws XSDException {
     if (!subtree.getName().equals(containerType)) {
-      throw new XSDException(NbBundle.getMessage(DOMHandler.class, "Error.WrongContainer", containerType, subtree.getName()));
+      throw new XSDException(NbBundle.getMessage(DOMHelper.class, "Error.WrongContainer", containerType, subtree.getName()));
     }
     // compare types of subnodes, set correct type if destination is null
     // throw exception if types don't match, or do nothing if they match
@@ -113,7 +152,7 @@ public final class DOMHelper {
                && destination.getSubnodes().getType() != subtree.getSubnodes().getType()) {
       //                                              ^^ comparing enums
       // if the two types are not null and not equal, the schema is invalid (mixing wrong types)
-      final String msg = NbBundle.getMessage(DOMHandler.class, "Error.MismatchedTypes",
+      final String msg = NbBundle.getMessage(DOMHelper.class, "Error.MismatchedTypes",
         subtree.getSubnodes().getType(), subtree.getName(),
         destination.getSubnodes().getType(), destination.getName());
       throw new XSDException(msg);
@@ -163,5 +202,43 @@ public final class DOMHelper {
     if (ret.isMutable()) {
       ret.setImmutable();
     }
+  }
+
+  /**
+   * Extract value of name or ref from an attribute tag.
+   * @param child
+   * @return Value of attribute <i>name</i> or <i>ref</i> or empty string.
+   */
+  protected static String getAttributeName(final org.w3c.dom.Element child) {
+    final String name = child.getAttribute(XSDAttribute.NAME.toString());
+    final String ref = child.getAttribute(XSDAttribute.REF.toString());
+    if (!BaseUtils.isEmpty(name)) {
+      if (!BaseUtils.isEmpty(ref)) {
+        LOG.error("Attribute tag with name '" + name + "' has also defined ref '" + ref + "' which is not allowed.");
+      }
+      return name;
+    } else if (!BaseUtils.isEmpty(ref)) {
+      return ref;
+    } else {
+      return "";
+    }
+  }
+
+  /**
+   * Prepare metadata of attribute tag from the child node.
+   * If the child has defined attribute <i>use</i>, add this information to metadata.
+   * @param child DOM node of the attribute tag.
+   * @return New metadata.
+   */
+  protected static Map<String, Object> getAttributeMeta(final org.w3c.dom.Element child) {
+    final Map<String, Object> attrMeta = new HashMap<String, Object>();
+    if (child.hasAttribute(XSDAttribute.USE.toString())) {
+      if (XSDUtility.REQUIRED.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
+        attrMeta.put(IGGUtils.REQUIRED, Boolean.TRUE);
+      } else if (XSDUtility.OPTIONAL.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
+        attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
+      }
+    }
+    return attrMeta;
   }
 }

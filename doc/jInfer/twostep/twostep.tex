@@ -37,9 +37,6 @@
 
 \begin{document}
 
-% TODO anti Representant -> Representative!
-
-
 \maketitle
 \noindent Target audience: developers willing to extend jInfer, researchers willing to implement own inference methods.
 
@@ -87,9 +84,8 @@ String getUserModuleDescription();
 Nothing non-standard apart from \code{getUserModuleDescription}.
 It returns user-friendly description of the module which is then displayed in properties panels.
 
-% TODO anti Rewrite so that these sentences don't end with "too" all the time
 Under certain circumstances it is useful to declare method \code{create()} generic.
-The \jmodule{AutomatonSimplifier} works with \code{Automaton} instances, which are generic too.
+The \jmodule{AutomatonSimplifier} works with \code{Automaton} instances, which are generic.
 But automaton simplification does not depend on type of symbol of automaton transitions, so interface \code{AutomatonSimplifier<T>}
 generic too.
 Factory interface deals with this by defining the \code{create()} method generic.
@@ -178,15 +174,14 @@ We provide one \jmodule{Clusterer}, 4 \jmodule{ClusterProcessor} and 4 \jmodule{
 Each of those will be explained further in this document.
 
 Method \code{TwoStepSimplifier.simplify()} basically does the following.
-% TODO anti Rename finalGrammar to resultGrammar or something like that
 \begin{verbatim}
 // 1. cluster elements
 Clusterer<AbstractStructuralNode> clusterer = clustererFactory.create();
 clusterer.addAll(initialGrammar);
 clusterer.cluster();
 
-// 2. prepare emtpy final grammar
-List<Element> finalGrammar= new LinkedList<Element>();
+// 2. prepare emtpy simplified grammar
+List<Element> simplifiedGrammar= new LinkedList<Element>();
 
 // 3. process rules
 ClusterProcessor<AbstractStructuralNode> processor =
@@ -198,7 +193,7 @@ for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
   RegularExpressionCleaner<AbstractStructuralNode> cleaner = 
                           regularExpressionCleanerFactory.<AbstractStructuralNode>create();
   // 4. add to rules
-  finalGrammar.add(
+  simplifiedGrammar.add(
               new Element(node.getContext(),
               node.getName(),
               node.getMetadata(),
@@ -206,10 +201,10 @@ for (Cluster<AbstractStructuralNode> cluster : clusterer.getClusters()) {
               attList));
 }
 
-return finalGrammar;
+return simplifiedGrammar;
 \end{verbatim}
 First, it creates a clusterer, gives it all the rules and performs the clustering.
-Then, empty list of elements is created as the final (simplified) grammar.
+Then, empty list of elements is created as the simplified grammar.
 For each input rule in \code{initialGrammar}, submodule \jmodule{ClusterProcessor} is invoked to infer the regular expression of that element.
 Finally, regular expression cleaning is done in a submodule and new \code{Element} instance is created as a copy of processed node, but with inferred and cleaned regexp.
 
@@ -255,8 +250,8 @@ c.getRepresentantForItem(x);
 You might have noticed that the \jmodule{Clusterer} interface and \code{Cluster} class are generic.
 They may be used as design pattern not only for clustering elements in inference process.
 To address clustering of elements in more detail, we created \code{Cluster\.er\.With\.At\.tri\.bu\.tes<T, S>} interface, which extends \code{Clusterer<T>} interface.
-It adds method \code{List\.<Cluster<S>{}> get\.At\.tri\.bu\.teClusters(T representant)}, implying that each representant of
-type \code{T} (that is representant of some main cluster) has some "attribute" clusters associated with it.
+It adds method \code{List\.<Cluster<S>{}> get\.At\.tri\.bu\.teClusters(T representant)}, implying that each representative of
+type \code{T} (that is representative of some main cluster) has some "attribute" clusters associated with it.
 Attribute clusters are of type \code{S} and can be retrieved by calling \code{getAttributeClusters(x)}.
 
 We provide one implementation of this interface described in \ref{section_Iname}.
@@ -266,8 +261,7 @@ We provide one implementation of this interface described in \ref{section_Iname}
 \jmodule{ClusterProcessor} takes rules of one cluster of element and somehow obtains regular expression representing that set of elements. It returns one rule - element with name set to desired name of element in schema (not all elements in cluster have to have same name, if advanced clustering scheme is used, then processor has to choose the right name for the resulting element) and with subnodes set to regular expression inferred.
 It processes attributes of all elements in cluster to obtain meaningful schema attribute specification and these attributes have to be attached to the resulting element.
 
-% TODO anti Not clear what "worker" is
-Worker interface itself is defined as follows.
+Interface of submodule is defined as follows.
 \begin{verbatim}
 public interface ClusterProcessor<T> {
   T processCluster(
@@ -278,7 +272,7 @@ public interface ClusterProcessor<T> {
 \end{verbatim}
 Why is the cluster processor given a clusterer instance?
 Rules themselves contain information about which elements to process, but clusterer has more information about the topic.
-Clusterer can tell you the representant for any element in the whole input (not only those elements in rules, but also those that may be on right side of rules). Also, clusterer (if it is with attributes) has information about attributes in each cluster.
+Clusterer can tell you the representative for any element in the whole input (not only those elements in rules, but also those that may be on right side of rules). Also, clusterer (if it is with attributes) has information about attributes in each cluster.
 
 We describe each \jmodule{ClusterProcessor} implementation shipped in jInfer in sections \ref{section_PassRepresentant} through \ref{section_AutomatonMergingState}.
 
@@ -315,7 +309,7 @@ It is possible to set the following.
 \end{figure}
 Process illustrated in fig. \ref{twostep_flow} is as follows.
 \begin{enumerate}
-	\item Initial Grammar on input, which is ruled into \jmodule{Clusterer}. % TODO anti WTF is "ruled into"?
+	\item Initial Grammar on input, which is sent into \jmodule{Clusterer}.
 	\item Each cluster is sent to submodule \jmodule{ClusterProcessor}, which returns regular expression for that cluster.
 	\item Regular expression is sent to \jmodule{RegularExpressionCleaner} submodule for cleaning.
 	\item Regular expressions representing all the processed clusters are added to the list of simplified grammar rules.
@@ -328,13 +322,13 @@ Process illustrated in fig. \ref{twostep_flow} is as follows.
 \subsection{Iname (ClusteterWithAttributes)} \label{section_Iname}
 We cluster elements in \code{Iname<AbstractStructuralNode, Attribute>} class (Iname je clusterer!), which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes. % TODO anti I don't understand the sentence, rewrite.
 Clustering is done based on element's \code{getName()} equality (ignoring case).
-For each rule (element), it is first clustered by finding the cluster which representant has the same name - or create new cluster with this element as representant.
+For each rule (element), it is first clustered by finding the cluster which representative has the same name - or create new cluster with this element as representative.
 Then we process right side of this element rule (that are nodes from \code{getSubnodes()}).
 Since right side of rule is always concatenation (\jmodule{TwoStep} accepts only simple grammar representation), we simply take \code{.getSubnodes().getTokens()} list and iterate through it.
 Each node on right side, is examined in the following way.
 \begin{itemize}
   \item If it is \textbf{simple data}, throw it to \code{SimpleDataClusterer} class which is associated with main element cluster. It does nothing more, than holds all \code{SimpleData} instances in one cluster. But in future it may be replaced to cluster simple data somehow, to obtain meaningful content models in schemas.
-  \item If it is \textbf{element} and it is tagged as sentinel - search main clusters to find cluster with representant of same \code{getName()}, or create new cluster with this sentinel as representant. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it. % TODO anti Please rewrite the really long sentence.
+  \item If it is \textbf{element} and it is tagged as sentinel - search main clusters to find cluster with representative of same \code{getName()}, or create new cluster with this sentinel as representative. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it. % TODO anti Please rewrite the really long sentence.
   \item Do nothing otherwise, since it is element, it has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in Initial Grammar, thus it is already processed or is on schedule. % TODO anti Totally unclear, rewrite
 \end{itemize}
 Attributes of element are processed through a helper attribute clusterer, which is created for each element cluster.
@@ -352,7 +346,7 @@ Once again, there are main clusters for elements, for each main cluster there ar
 
 %#### SUBMODULES->PassRepresentant ############################################
 \subsection{PassRepresentant (ClusterProcessor)} \label{section_PassRepresentant}
-Trivial ClusterProcessor implementation. For each cluster return its representant as the rule to be in resulting schema.
+Trivial ClusterProcessor implementation. For each cluster return its representative as the rule to be in resulting schema.
 This has nothing to do with grammar simplification, it is just a proof-of-concept submodule.
 Input documents are not valid against this odd grammar.
 Do not use this in practice, just read the code to understand the bare minimum needed to implement a submodule.
@@ -473,7 +467,7 @@ If there is no such step, create one and create also the destination state, then
 As you can see, it is important that class \code{T} has proper implementation of \code{.equals()} method, as symbols are tested for equality by calling this method on them.
 By the way, this is why we cluster all simple data and all sentinels on right sides of rules.	
 While adding a concatenation to the automaton, instead of the instances themselves their \emph{representatives} are used. See \ref{section_AutomatonMergingState_structure} for further reference.
-This assures that comparisons in automaton are done using Java \code{Object.equals()} reference comparison, but for each cluster member, its representant is only present in automaton.
+This assures that comparisons in automaton are done using Java \code{Object.equals()} reference comparison, but for each cluster member, its representative is only present in automaton.
 That results in cluster-equal behaviour.
 Example of prefix-tree automaton is in fig. \ref{pta}.
 
@@ -499,7 +493,6 @@ Interface is defined as generic, implementations don't have to be. However, ther
 When implementation needs to present an automaton to user, it needs string representation of symbols to display on automaton transitions.
 For this reason, the second parameter, \code{symbolToString} (implementation of \code{SymbolToString} interaface) is given.
 It is responsible for converting symbol to string.
-% To \jmodule{AutomatonSimplifier} it is passed from \jmodule{AutomatonMergingState} cluster processor, where we know that symbols are of type \code{AbstractStructuralNode}, so we implement \code{SymbolToString} by using \code{getName()} method on nodes and pass it down to generic \code{AutomatonSimplififier} submodule. % TODO anti Unreadable....
 Overloaded version is to inform the user about name of processed element when presenting automaton in \jmodule{AutoEditor}.
 This version of interface will probably change in future.
 
@@ -589,11 +582,10 @@ We don't use $k-grams$ algorithm from \cite{ahonen}, just a simple DFS.
 \end{wrapfigure}
 We are using state removal method (see \cite{1224321}) to convert regexp automaton into equivalent regular expression.
 This is implemented in \code{StateRemoval} class (on fig. \ref{state_removal_modules}) which implements \code{RegexpAutomatonSimplifier} interface.
-% TODO anti Emphasise the states in following sentences
-Before the algorithm starts, states superInitial and superFinal are added to automaton, former with $\lambda$-transition to initial state.
-From all final states a $\lambda$ transition to superFinal state is added.
-State removal works by removing states of automaton (and redirecting transitions properly) until there are last to two states - superInitial and superFinal.
-After removing all states, there is only one transition from superInitial to superFinal state.
+Before the algorithm starts, states \emph{superInitial} and \emph{superFinal} are added to automaton, former with $\lambda$-transition to initial state.
+From all final states a $\lambda$ transition to \emph{superFinal} state is added.
+State removal works by removing states of automaton (and redirecting transitions properly) until there are last to two states - \emph{superInitial} and \emph{superFinal}.
+After removing all states, there is only one transition from \emph{superInitial} to \emph{superFinal} state.
 That transition has the final regular expression as symbol on it. This one is returned.
 
 We defined one submodule of this class with \jmodule{Orderer}.
@@ -605,9 +597,8 @@ State removal calls this submodule and removes state returned.
 We extend \code{RegexpAutomaton} to obtain automaton that fits the state removal procedure.
 This implementation has methods \code{crea\.te\.Su\.per\.In\.it\.ial\.Sta\.te} and \code{crea\.te\.Su\.per\.In\.it\.ial\.Sta\.te}.
 They does exactly what their names stands for.
-% TODO anti Emphasise the states again
-SuperInitial state has only one $\lambda$-out-transition pointing to original initial state.
-SuperFinal state has as many $\lambda$-in-transitions, as there are original final states - from each one it gets one.
+\emph{SuperInitial} state has only one $\lambda$-out-transition pointing to original initial state.
+\emph{SuperFinal} state has as many $\lambda$-in-transitions, as there are original final states - from each one it gets one.
 Without going further into many technical details, we just mention method \code{removeState}, which removes given state from automaton.
 Transitions are handled in the following way.
 \begin{enumerate}

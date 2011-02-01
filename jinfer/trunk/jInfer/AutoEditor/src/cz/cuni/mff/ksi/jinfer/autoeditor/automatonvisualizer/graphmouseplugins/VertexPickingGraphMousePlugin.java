@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2010 rio
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,9 @@ import javax.swing.JComponent;
  * Graph mouse plugin providing picking of one vertex and notifying
  * {@link AbstractComponent} to end user interaction.
  *
- * @author sviro, rio
+ * Modified {@link VerticesPickingGraphMousePlugin} originally by sviro.
+ *
+ * @author rio
  */
 public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
         implements MouseListener, MouseMotionListener {

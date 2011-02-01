@@ -354,11 +354,174 @@ LOG.info("Some message with info log level");
 
 <h2 id="8-runningproject"><code>RunningProject</code> class</h2>
 
-TODO
+<p>
+  This class provides access to information regarding currently running inference.
+  It is a singleton, corresponding with the fact that at a given time, at most
+  one inference (project) can be running in the whole NB. Consequently, all relevant methods
+  are synchronized.<br/>
+  NB project corresponding to the running inference can be retrieved by
+  calling <code>getActiveProject()</code>. Its properties can be retrieved by
+  calling <code>getActiveProjectProps()</code>. This
+  method will work also if there is no running project - it just retrieves an
+  empty instance of <code>Preferences</code>, which is useful for example in JUnit
+  tests.
+</p>
+<span>Example code retrieving properties for DTD export:</span>
+<pre class="code">
+Properties properties = RunningProject.getActiveProjectProps(
+                            DTDExportPropertiesPanel.NAME);
+</pre>
+
+<p>
+  Aside from keeping information about the currently running project, this class
+  keeps information about the capabilities of the following module in the inference
+  chain. This can be retrieved by calling the <code>getNextModuleCaps()</code> method.
+  Again, if this information is not available, empty <code>Capabilities</code>
+  instance will be returned.
+</p>
+<span>Example code retrieving <i>Simplifier</i> capabilities
+in <i>BasicIGG</i>:<span/>
+<pre class="code">
+if (!RunningProject.getNextModuleCaps().getCapabilities().contains(
+            Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
+  ... expand rules ...
+}
+</pre>
 
 <h2 id="9-module-selection">Module selection</h2>
 
-TODO
+<p>
+  This part of the tutorial will show the full process of implementing a choice
+  between two submodules in an inference module, for example simplifier. Similar
+  principles apply one level higher, when dealing with inference modules themselves.
+</p>
+
+<h3>Interface</h3>
+
+<p>
+  First of all, we need an interface encapsulating the new submodule. It needs to
+  extend <code>NamedModule</code>.
+</p>
+
+<pre class="code">
+public interface Foo extends NamedModule {
+
+  String bar();
+}
+</pre>
+
+<h3>Implementations</h3>
+
+<p>
+  Second, we need some implementations of this interface. At least two, otherwise
+  it's boring.<br/>
+  They will have to implement all required methods and register themselves as
+  service providers for <code>Foo</code>.
+</p>
+
+<span>Example of the first implementation. The second will be the same (1-&gt;2).</span>
+<pre class="code">
+@ServiceProvider(service = Foo.class)
+public class Impl1 implements Foo {
+
+  // NamedModule stuff
+
+  @Override
+  public String getName() {
+    return "Impl1"; // unix-style name
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Foo implementation number 1"; // user-friendly name
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getDisplayName(); // irrelevant now
+  }
+
+  // logic from Foo
+
+  @Override
+  public String bar() {
+    return "Hello world from Impl1!";
+  }
+}
+</pre>
+
+<h3>Properties panel</h3>
+
+<p>
+  Now we have to create a properties panel. Refer to an
+  <a href="#5-configuration">earlier part</a> of this document for general
+  reference. Here we assume a combo box already present on the properties panel,
+  with the correct renderer set (<code>ProjectPropsComboRenderer</code>).
+  We need to do 2 things: while loading, fill it with names of all implementations
+  and select the currently chosen one. While saving, we have to get the name of
+  the selected implementation and save it.
+</p>
+
+TODO vektor Repair after this is repaired in code (lookupNames)
+
+<span>Example of panel load code:</span>
+<pre class="code">
+@Override
+public final void load() {
+  combo.setModel(new DefaultComboBoxModel(
+          ModuleSelectionHelper.lookupNames(Foo.class).toArray()));
+
+  combo.setSelectedItem(ModuleSelectionHelper.lookupName(Foo.class,
+                   properties.getProperty(
+                      "selected.foo.implementation", // property name
+                      "Impl1")));            // default property value
+                                             // - same as Impl1.getName()!
+}
+</pre>
+<br/>
+<span>Example of panel save code:</span>
+<pre class="code">
+@Override
+public void store() {
+  properties.setProperty("selected.foo.implementation",
+          ((NamedModule) combo.getSelectedItem()).getName());
+}
+</pre>
+<br/>
+<span>Example of combo box renderer setting:</span>
+<pre class="code">
+combo.setRenderer(new ProjectPropsComboRenderer(combo.getRenderer()));
+</pre>
+
+<h3>Invocation</h3>
+
+<p>
+  Finally, there will be a place (in our example simplifier) where we actually
+  want to load the properties of the running project and lookup the selected
+  implementation of <code>Foo</code>.
+</p>
+
+<span>Example lookup and usage:</span>
+<pre class="code">
+Properties p = RunningProject.
+    getActiveProjectProps("ExampleProvider"); // the name provided in
+                                              // properties panel provider
+
+Foo foo = ModuleSelectionHelper.lookupImpl(Foo.class,
+    p.getProperty("selected.foo.implementation", "Impl1"));
+
+println(foo.bar());
+</pre>
+
+<p>
+  A few things should be noted:
+  <ul>
+    <li>Module names (<code>getName()</code>) have to be unique.</li>
+    <li>It is a good practice to store property names and default values as
+      constants somewhere - do a reference search in our code to find out how
+      we do it.</li>
+  </ul>
+</p>
 
 </div>
 

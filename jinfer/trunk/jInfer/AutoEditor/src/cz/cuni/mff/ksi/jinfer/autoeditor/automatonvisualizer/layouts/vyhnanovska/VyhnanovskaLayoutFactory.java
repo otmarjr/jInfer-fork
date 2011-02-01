@@ -42,8 +42,8 @@ public class VyhnanovskaLayoutFactory implements LayoutF {
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {
-    final int MIN_X_SIZE = 7;
-    final int MIN_Y_SIZE = 3;
+    final int MIN_X_SIZE = 1;
+    final int MIN_Y_SIZE = 1;
     final int SQUARE_SIZE = 100;
     final AutomatonLayoutTransformer<T> automatonLayoutTransformer = new AutomatonLayoutTransformer<T>(
             MIN_X_SIZE, MIN_Y_SIZE, SQUARE_SIZE, graph, automaton);

@@ -37,13 +37,13 @@ import java.util.List;
  * element/simpledata/attribute when adding steps into automaton (which have to
  * be A.equals(B) when node A and B are in same cluster), clusterer have to
  * parse elements right sides. Maybe by just doing:
- * <code>
+ * <pre>
  * for (Node x : queue) {
  *   if (x.isElement) {
  *     this.addAll(((Element) x).getSubnodes().getTokens());
  *   }
  * }
- * </code>
+ * </pre>
  * When automaton is created, getRepresentantForItem() is called for everything on
  * elements right side of rule. So Clusterer have to deal with SimpleData (one cluster
  * for all simpledata nodes), attributes are omitted in automaton creation,

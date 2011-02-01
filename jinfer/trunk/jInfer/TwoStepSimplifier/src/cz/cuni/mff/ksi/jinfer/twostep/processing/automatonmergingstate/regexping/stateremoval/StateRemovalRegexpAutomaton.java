@@ -232,7 +232,6 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
         interval = RegexpInterval.getOnce();
       }
       final Regexp<T> newOutRegexp;
-      // TODO anti loosing interval of token inside!
       if (outStepRegexps.size() == 1) {
         final Regexp<T> oldOutRegexp = outStepRegexps.get(0);
         newOutRegexp = new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),

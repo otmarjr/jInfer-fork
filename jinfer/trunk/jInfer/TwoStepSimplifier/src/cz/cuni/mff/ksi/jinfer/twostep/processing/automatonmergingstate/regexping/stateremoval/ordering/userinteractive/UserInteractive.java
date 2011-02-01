@@ -65,8 +65,7 @@ public class UserInteractive<T> implements Orderer<T> {
       removeState = component.getPickedState();
 
       if ((removeState.equals(automaton.getSuperFinalState())) || (removeState.equals(automaton.getSuperInitialState()))) {
-        // TODO anti this text
-        component.setLabel("Do not select initial and final states.");
+        component.setLabel("Do not select superInitial and superFinal states.");
         continue;
       }
       LOG.debug("AUTO EDITOR selected: " + removeState.toString());

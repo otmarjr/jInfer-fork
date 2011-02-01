@@ -85,8 +85,8 @@ Note that the initial grammar generated in this way is complex. Therefore, this 
 \subsection{XPath processor}
 
 This is a rather na\"{i}ve implementation of an XPath processor. It registers itself into \emph{query} input folder, \emph{xpath} file extension (text file containing one XPath query per line) and declares it cannot handle other file extensions.\\
-To parse XPath queries, standard support present in JDK is used. The relevant \code{XPathHandler} is the \code{XPathHandler} class.\\
-% TODO vektor Explain how it works...
+To parse XPath queries, standard support present in JDK is used. The relevant \code{XPathHandler} is the \code{XPathHandlerImpl} class.\\
+While the exact process by which \code{XPathHandlerImpl} creates the IG from a series of XPath events is an interesting coding exercise, its description is beyond the scope and requirements of this document.
 
 \section{Expansion} \label{section-expansion}
 

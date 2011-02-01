@@ -31,8 +31,13 @@ import java.util.List;
  */
 public final class ExpansionHelper {
 
-  private ExpansionHelper() {
-  }
+  private ExpansionHelper() {}
+
+  /**
+   * This many occurrences are considered enough to result in unbounded max limit.
+   * Should be consistent with simplifier setting.
+   */
+  private static final int INFINITY = 3;
 
   /**
    * Applies the regexp interval on the set of words. For this function,
@@ -78,17 +83,22 @@ public final class ExpansionHelper {
     } else if (ri.isKleeneCross()) {
       for (final List<T> l : input) {
         ret.add(l);
-        ret.add(BaseUtils.cloneList(l, 3));
+        ret.add(BaseUtils.cloneList(l, INFINITY));
       }
     } else if (ri.isKleeneStar()) {
       ret.add(Collections.<T>emptyList());
       for (final List<T> l : input) {
         ret.add(l);
-        ret.add(BaseUtils.cloneList(l, 3));
+        ret.add(BaseUtils.cloneList(l, INFINITY));
       }
     } else {
       for (final List<T> l : input) {
-        ret.add(BaseUtils.cloneList(l, ri.getMin()));
+        if ( (ri.getMin() == 0) && (1 < ri.getMax()) ) {
+          // this partially fixes the bug when regexp token has interval {0, anything more than 1}
+          // so it is clear that it can appear zero,one, or many times - similar to kleene star
+          ret.add(l);
+        }
+        ret.add(BaseUtils.cloneList(l, ri.getMin())); // if min = 0, it produces empty list
         ret.add(BaseUtils.cloneList(l, ri.getMax()));
       }
     }

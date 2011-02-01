@@ -46,7 +46,7 @@ public class LayoutPropertiesPanelProviderImpl implements PropertiesPanelProvide
 
   @Override
   public String getDisplayName() {
-    return getName();
+    return LayoutPropertiesPanel.DISPLAY_NAME;
   }
 
   @Override

@@ -34,7 +34,8 @@ import javax.swing.JTextField;
 public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;
-  public static final String NAME = "Automaton visualizer";
+  public static final String NAME = "AutomatonVisualizer";
+  public static final String DISPLAY_NAME = "Automaton visualizer";
 
   /** Creates new form ModuleSelectionJPanel */
   public LayoutPropertiesPanel(final Properties properties) {

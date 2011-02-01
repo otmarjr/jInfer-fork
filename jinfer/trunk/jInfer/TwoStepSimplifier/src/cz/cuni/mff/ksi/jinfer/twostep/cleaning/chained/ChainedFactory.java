@@ -105,7 +105,7 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
     final List<RegularExpressionCleanerFactory> result = new ArrayList<RegularExpressionCleanerFactory>();
 
     final String _count = p.getProperty(PROPERTIES_COUNT, "notJebHojid4");
-    if (_count.equals("notJebHojid4")) {
+    if ("notJebHojid4".equals(_count)) {
       result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, EmptyChildrenFactory.NAME));
       result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, NestedConcatenationFactory.NAME));
     } else {
@@ -116,7 +116,7 @@ public class ChainedFactory implements RegularExpressionCleanerFactory {
         count = 0;
       }
       for (int c = 0; c < count; c++) {
-        final String name = p.getProperty(PROPERTIES_PREFIX + String.valueOf(c));
+        final String name = p.getProperty(PROPERTIES_PREFIX + c);
         result.add(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, name));
       }
     }

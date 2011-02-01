@@ -134,6 +134,7 @@ public class Iname implements ClustererWithAttributes<AbstractStructuralNode, At
         try {
           return it.next().getRepresentantForItem((SimpleData) item);
         } catch (IllegalArgumentException e) {
+          // the exception is normal to occur here!
         }
       }
     } else {

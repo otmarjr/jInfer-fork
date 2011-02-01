@@ -158,7 +158,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       dynamicComponents.get(i).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, ChainedFactory.PROPERTIES_CLEANER_DEFAULT));
     }
     final String _count = properties.getProperty(ChainedFactory.PROPERTIES_COUNT, "notJebHojid4");
-    if (_count.equals("notJebHojid4")) {
+    if ("notJebHojid4".equals(_count)) {
       dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, EmptyChildrenFactory.NAME));
       dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, NestedConcatenationFactory.NAME));
     } else {
@@ -172,7 +172,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
         dynamicComponents.get(i).setSelectedItem(
                 ModuleSelectionHelper.lookupImpl(
                 RegularExpressionCleanerFactory.class,
-                properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i), ChainedFactory.PROPERTIES_CLEANER_DEFAULT)));
+                properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + i, ChainedFactory.PROPERTIES_CLEANER_DEFAULT)));
       }
     }
   }
@@ -180,7 +180,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public void store() {
     for (Integer i : dynamicComponents.keySet()) {
-      properties.setProperty(ChainedFactory.PROPERTIES_PREFIX + String.valueOf(i),
+      properties.setProperty(ChainedFactory.PROPERTIES_PREFIX + i,
               ((NamedModule) dynamicComponents.get(i).getSelectedItem()).getName());
     }
     properties.setProperty(ChainedFactory.PROPERTIES_COUNT, String.valueOf(dynamicComponents.keySet().size()));

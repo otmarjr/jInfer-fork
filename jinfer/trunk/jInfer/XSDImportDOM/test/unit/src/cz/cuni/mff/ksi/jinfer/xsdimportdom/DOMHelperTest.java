@@ -17,9 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
-import cz.cuni.mff.ksi.jinfer.base.utils.EqualityUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -59,63 +57,6 @@ public class DOMHelperTest {
   public void testTrimBad() {
     System.out.println("trim bad");
     assertEquals("x", DOMHelper.trimNS("xsd:element:x"));
-  }
-
-  @Test
-  public void testRepairNull() {
-    System.out.println("repair concat null");
-    final Element res = null;
-    DOMHelper.repairConcatInterval(res);
-    assertEquals(null, res);
-  }
-
-  @Test
-  public void testRepairNormal() {
-    System.out.println("repair normal case");
-    final Element res = Element.getMutable();
-    res.getSubnodes().setType(RegexpType.CONCATENATION);
-    res.getSubnodes().setInterval(null);
-    DOMHelper.repairConcatInterval(res);
-    final RegexpInterval i1 = RegexpInterval.getOnce();
-    final RegexpInterval i2 = res.getSubnodes().getInterval();
-    final boolean expResult = true;
-    final boolean result = EqualityUtils.sameIntervals(i1, i2);
-    assertEquals(expResult, result);
-  }
-
-  @Test
-  public void testRepairNothing() {
-    System.out.println("nothing to repair");
-    final Element res = Element.getMutable();
-    res.getSubnodes().setType(RegexpType.CONCATENATION);
-    res.getSubnodes().setInterval(RegexpInterval.getOptional());
-    DOMHelper.repairConcatInterval(res);
-    final RegexpInterval i1 = RegexpInterval.getOptional();
-    final RegexpInterval i2 = res.getSubnodes().getInterval();
-    final boolean expResult = true;
-    final boolean result = EqualityUtils.sameIntervals(i1, i2);
-    assertEquals(expResult, result);
-  }
-
-  @Test
-  public void testRepairArbitraty() {
-    System.out.println("repair arbitraty");
-    final int min = 5;
-    final int max = 6;
-    final Element res = Element.getMutable();
-    res.getSubnodes().setType(RegexpType.CONCATENATION);
-    res.getSubnodes().setInterval(RegexpInterval.getBounded(min, max));
-    DOMHelper.repairConcatInterval(res);
-    RegexpInterval i1 = RegexpInterval.getOptional();
-    final RegexpInterval i2 = res.getSubnodes().getInterval();
-    boolean expResult = false;
-    boolean result = EqualityUtils.sameIntervals(i1, i2);
-    assertEquals(expResult, result);
-
-    i1 = RegexpInterval.getBounded(min, max);
-    expResult = true;
-    result = EqualityUtils.sameIntervals(i1, i2);
-    assertEquals(expResult, result);
   }
 
   @Test

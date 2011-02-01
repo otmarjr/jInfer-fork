@@ -106,6 +106,20 @@ public class ExpansionHelperTest {
     assertEquals(BaseUtils.cloneList(getWords().get(1), 5), result.get(3));
   }
 
+  @Test
+  public void testApplyIntervalBoundedZero() {
+    System.out.println("applyIntervalBoundedZero");
+    final List<List<String>> input = getWords();
+    final RegexpInterval ri = RegexpInterval.getBounded(0, 5);
+    final List<List<String>> result = ExpansionHelper.applyInterval(input, ri);
+    assertEquals(5, result.size());
+    assertEquals(Collections.emptyList(), result.get(0));
+    assertEquals(getWords().get(0), result.get(1));
+    assertEquals(getWords().get(1), result.get(3));
+    assertEquals(BaseUtils.cloneList(getWords().get(0), 5), result.get(2));
+    assertEquals(BaseUtils.cloneList(getWords().get(1), 5), result.get(4));
+  }
+
   @SuppressWarnings("unchecked")
   private static List<List<String>> getWords() {
     return Arrays.asList(

@@ -17,12 +17,18 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
- *
+ * Class holding all known built-in data types supported by XSD Schema.
+ * Every type in Schema is case sensitive, but some of them conflict with Java internal types.
+ * Therefore, the conflicting types are named "tricky" and are defined in uppercase here,
+ * although they always occur in lowercase in the Schema.
  * @author reseto
  */
 public class XSDBuiltInDataTypes {
 
   // ALL TYPES ARE CASE SENSITIVE!!!
+  /**
+   * Non-conflicting types for names, references and other strings.
+   */
   public enum StringType {
 
     ENTITIES,
@@ -41,6 +47,9 @@ public class XSDBuiltInDataTypes {
     token;
   }
 
+  /**
+   * Non-conflicting types for date or time.
+   */
   public enum DateType {
 
     date,
@@ -54,15 +63,21 @@ public class XSDBuiltInDataTypes {
     time;
   }
 
-  // these types should be lowercase, but it conflicts with Java
+  /**
+   * Conflicting types of numeric nature.
+   * These types should be lowercase in Schema, but it conflicts with Java.
+   */ 
   public enum TrickyNumericType {
-
+    
     BYTE,
     INT,
     LONG,
     SHORT,
   }
 
+  /**
+   * Non-conflicting types of numeric nature.
+   */
   public enum NumericType {
 
     decimal,
@@ -77,20 +92,25 @@ public class XSDBuiltInDataTypes {
     unsignedByte;
   }
 
+  /**
+   * Other conflicting types.
+   * These types should be lowercase in Schema, but it conflicts with Java.
+   */
   public enum TrickyMiscType {
-
     BOOLEAN,
     DOUBLE,
     FLOAT;
   }
 
+  /**
+   * Other non-conflicting types.
+   */
   public enum MiscType {
 
     anyURI,
     base64Binary,
     hexBinary,
-    NOTATION,
-    QName;
+    NOTATION;
   }
 
   /**

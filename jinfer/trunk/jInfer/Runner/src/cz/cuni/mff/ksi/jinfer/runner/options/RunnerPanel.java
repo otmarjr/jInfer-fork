@@ -44,9 +44,9 @@ public final class RunnerPanel extends JPanel {
   public static final boolean SCHEMA_OPEN_DEFAULT = true;
   public static final String NAME_PATTERN_DEFAULT = "generated-schema{n}";
   public static final String RULE_DISPLAYER_DEFAULT = "TreeRuleDisplayer";
-  private final RunnerOptionsPanelController controller;
+  private final RunnerController controller;
 
-  public RunnerPanel(final RunnerOptionsPanelController controller) {
+  public RunnerPanel(final RunnerController controller) {
     super();
     this.controller = controller;
     initComponents();
@@ -69,6 +69,7 @@ public final class RunnerPanel extends JPanel {
     openSchemaHelp = new javax.swing.JLabel();
     openSchemaLabel = new javax.swing.JLabel();
     nameTemplateLabel = new javax.swing.JLabel();
+    panelFill = new javax.swing.JPanel();
     jPanel2 = new javax.swing.JPanel();
     showOutputWindow = new javax.swing.JCheckBox();
     jLabel1 = new javax.swing.JLabel();
@@ -91,7 +92,6 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(openSchema, gridBagConstraints);
 
@@ -103,7 +103,6 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel1.add(namePattern, gridBagConstraints);
 
@@ -131,7 +130,7 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel1.add(openSchemaLabel, gridBagConstraints);
 
@@ -139,9 +138,30 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel1.add(nameTemplateLabel, gridBagConstraints);
+
+    panelFill.setPreferredSize(new java.awt.Dimension(0, 0));
+
+    javax.swing.GroupLayout panelFillLayout = new javax.swing.GroupLayout(panelFill);
+    panelFill.setLayout(panelFillLayout);
+    panelFillLayout.setHorizontalGroup(
+      panelFillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 7, Short.MAX_VALUE)
+    );
+    panelFillLayout.setVerticalGroup(
+      panelFillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 73, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    jPanel1.add(panelFill, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -155,7 +175,6 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel2.add(showOutputWindow, gridBagConstraints);
 
@@ -175,21 +194,23 @@ public final class RunnerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     jPanel2.add(jLabel2, gridBagConstraints);
 
+    jPanel4.setPreferredSize(new java.awt.Dimension(0, 0));
+
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
       jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 1, Short.MAX_VALUE)
     );
     jPanel4Layout.setVerticalGroup(
       jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 27, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     jPanel2.add(jPanel4, gridBagConstraints);
 
@@ -204,11 +225,11 @@ public final class RunnerPanel extends JPanel {
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 803, Short.MAX_VALUE)
+      .addGap(0, 562, Short.MAX_VALUE)
     );
     jPanel3Layout.setVerticalGroup(
       jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 70, Short.MAX_VALUE)
+      .addGap(0, 65, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -231,22 +252,24 @@ public final class RunnerPanel extends JPanel {
 
     ruleDisplayerCombo.setRenderer(new ProjectPropsComboRenderer(ruleDisplayerCombo.getRenderer()));
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     jPanel5.add(ruleDisplayerCombo, gridBagConstraints);
+
+    jPanel6.setPreferredSize(new java.awt.Dimension(0, 0));
 
     javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
     jPanel6.setLayout(jPanel6Layout);
     jPanel6Layout.setHorizontalGroup(
       jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 380, Short.MAX_VALUE)
     );
     jPanel6Layout.setVerticalGroup(
       jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 31, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     jPanel5.add(jPanel6, gridBagConstraints);
 
@@ -326,6 +349,7 @@ public final class RunnerPanel extends JPanel {
   private javax.swing.JCheckBox openSchema;
   private javax.swing.JLabel openSchemaHelp;
   private javax.swing.JLabel openSchemaLabel;
+  private javax.swing.JPanel panelFill;
   private javax.swing.JComboBox ruleDisplayerCombo;
   private javax.swing.JCheckBox showOutputWindow;
   // End of variables declaration//GEN-END:variables

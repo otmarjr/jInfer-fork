@@ -34,7 +34,7 @@ public final class LoggerPanel extends JPanel {
 
   private static final long serialVersionUID = 35345345456l;
 
-  private final LoggerOptionsPanelController controller;
+  private final LoggerController controller;
   private final Preferences preferences = NbPreferences.forModule(LoggerPanel.class);
   public static final String INTERNAL_LOG_LEVEL = "log.level.console";
   public static final String EXTERNAL_LOG_LEVEL = "log.level.file";
@@ -46,7 +46,7 @@ public final class LoggerPanel extends JPanel {
   public static final String ERROR_COLOR = "error.color";
   public static final String FATAL_COLOR = "fatal.color";
 
-  public LoggerPanel(final LoggerOptionsPanelController controller) {
+  public LoggerPanel(final LoggerController controller) {
     this.controller = controller;
     initComponents();
   }
@@ -81,6 +81,7 @@ public final class LoggerPanel extends JPanel {
     panelError = new javax.swing.JPanel();
     panelFatal = new javax.swing.JPanel();
     jButton1 = new javax.swing.JButton();
+    jPanel5 = new javax.swing.JPanel();
     jPanel4 = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
@@ -128,16 +129,16 @@ public final class LoggerPanel extends JPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 215, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 52, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridheight = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     jPanel1.add(jPanel2, gridBagConstraints);
 
@@ -370,6 +371,25 @@ public final class LoggerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 20, 2, 2);
     jPanel3.add(jButton1, gridBagConstraints);
 
+    javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+    jPanel5.setLayout(jPanel5Layout);
+    jPanel5Layout.setHorizontalGroup(
+      jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 191, Short.MAX_VALUE)
+    );
+    jPanel5Layout.setVerticalGroup(
+      jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 81, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 5;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    jPanel3.add(jPanel5, gridBagConstraints);
+
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -381,11 +401,11 @@ public final class LoggerPanel extends JPanel {
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
       jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 383, Short.MAX_VALUE)
+      .addGap(0, 543, Short.MAX_VALUE)
     );
     jPanel4Layout.setVerticalGroup(
       jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 71, Short.MAX_VALUE)
+      .addGap(0, 63, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -508,6 +528,7 @@ public final class LoggerPanel extends JPanel {
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel3;
   private javax.swing.JPanel jPanel4;
+  private javax.swing.JPanel jPanel5;
   private javax.swing.JPanel panelDebug;
   private javax.swing.JPanel panelError;
   private javax.swing.JPanel panelFatal;

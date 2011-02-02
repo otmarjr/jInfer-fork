@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2011 sviro
+ *  Copyright (C) 2010 vektor
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.autoeditor.options;
+package cz.cuni.mff.ksi.jinfer.basicruledisplayer.options;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -24,29 +24,31 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 /**
- * Options controller of the AutoEditor module.
- * @author sviro
+ * Options controller of the Rule Displayer module.
+ * 
+ * @author vektor
  */
-@OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_AutoEditor",
-keywords = "#AdvancedOption_Keywords_AutoEditor",
-keywordsCategory = "jInfer/AutoEditor")
-public final class AutoEditorOptionsPanelController extends OptionsPanelController {
+@OptionsPanelController.SubRegistration(
+  location = "jInfer",
+  displayName = "#AdvancedOption_DisplayName_BasicRuleDisplayer",
+  keywords = "#AdvancedOption_Keywords_BasicRuleDisplayer",
+  keywordsCategory = "jInfer/BasicRuleDisplayer")
+public final class BasicRuleDisplayerController extends OptionsPanelController {
 
-  private AutoEditorPanel panel;
+  private BasicRuleDisplayerPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-  private boolean valuesChanged;
+  private boolean changed;
 
   @Override
   public void update() {
     getPanel().load();
-    valuesChanged = false;
+    changed = false;
   }
 
   @Override
   public void applyChanges() {
     getPanel().store();
-    valuesChanged = false;
+    changed = false;
   }
 
   @Override
@@ -61,7 +63,7 @@ public final class AutoEditorOptionsPanelController extends OptionsPanelControll
 
   @Override
   public boolean isChanged() {
-    return valuesChanged;
+    return changed;
   }
 
   @Override
@@ -84,19 +86,16 @@ public final class AutoEditorOptionsPanelController extends OptionsPanelControll
     pcs.removePropertyChangeListener(l);
   }
 
-  private AutoEditorPanel getPanel() {
+  private BasicRuleDisplayerPanel getPanel() {
     if (panel == null) {
-      panel = new AutoEditorPanel();
+      panel = new BasicRuleDisplayerPanel(this);
     }
     return panel;
   }
 
-  /**
-   * Call to indicate that some field is changed in options panel.
-   */
-  public void changed() {
-    if (!valuesChanged) {
-      valuesChanged = true;
+  private void changed() {
+    if (!changed) {
+      changed = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
     }
     pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);

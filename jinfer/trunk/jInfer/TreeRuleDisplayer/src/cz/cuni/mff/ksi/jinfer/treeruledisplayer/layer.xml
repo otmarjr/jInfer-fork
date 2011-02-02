@@ -23,7 +23,7 @@
     </folder>
     <folder name="OptionsDialog">
         <folder name="jInfer">
-            <file name="cz-cuni-mff-ksi-jinfer-treeruledisplayer-options-TreeRuleDisplayerOptionsPanelController.instance" url="cz-cuni-mff-ksi-jinfer-treeruledisplayer-options-TreeRuleDisplayerOptionsPanelController.instance">
+            <file name="cz-cuni-mff-ksi-jinfer-treeruledisplayer-options-TreeRuleDisplayerController.instance" url="cz-cuni-mff-ksi-jinfer-treeruledisplayer-options-TreeRuleDisplayerOptionsPanelController.instance">
                 <attr name="keywordsCategory" stringvalue="jInfer/TreeRuleDisplayer"/>
             </file>
         </folder>

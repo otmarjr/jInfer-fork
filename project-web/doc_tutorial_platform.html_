@@ -20,7 +20,7 @@
 
 <p>
   <span class="prerequisities">
-    This tutorial assumes that you are a seasoned Java developer. 
+    This tutorial assumes that you are a seasoned Java developer.
     Having experience with programming in some kind of framework
     (NetBeans Platform above all) will help you a lot.<br/>
     Make sure you have read the <a href="architecture.pdf">article</a> on architecture,
@@ -469,9 +469,9 @@ TODO vektor Repair after this is repaired in code (lookupNames)
 @Override
 public final void load() {
   combo.setModel(new DefaultComboBoxModel(
-          ModuleSelectionHelper.lookupNames(Foo.class).toArray()));
+          ModuleSelectionHelper.lookupImpls(Foo.class).toArray()));
 
-  combo.setSelectedItem(ModuleSelectionHelper.lookupName(Foo.class,
+  combo.setSelectedItem(ModuleSelectionHelper.lookupImpl(Foo.class,
                    properties.getProperty(
                       "selected.foo.implementation", // property name
                       "Impl1")));            // default property value

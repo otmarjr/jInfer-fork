@@ -47,7 +47,7 @@ public final class XSDOccurences {
    * Create interval from arguments.
    * If any of the arguments is empty, or invalid, a default value is used.
    * Default values of min and max occurrences are 1, as defined by XSD Schema specification.
-   * This method should not throw any exceptions.
+   * Hence, default interval is ({@link RegexpInterval#getOnce() }).
    * In case the parsed value of lower limit exceeds the upper, both bounds of the interval
    * are set to the upper limit value (that is the smaller of those two).
    * @param minOccurence String containing the value of lower limit of occurrences, which will be parsed.

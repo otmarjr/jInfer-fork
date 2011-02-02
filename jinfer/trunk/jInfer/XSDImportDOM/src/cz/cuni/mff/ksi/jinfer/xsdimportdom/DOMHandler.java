@@ -17,13 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.*;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,11 +40,14 @@ import org.xml.sax.SAXException;
 
 /**
  * Class responsible for creating Initial Grammar rules from XSD Schema.
- * It uses a proprietary Xerces DOM parser (from SUN) to build the DOM tree from a stream, which is then
- * recursively traversed and a parallel tree with nodes of type {@link Element } is created.
- * This new rule tree contains the whole IG rules that are returned by {@link #getRules() } method.
- * These rules may contain complex regexps (depending on parsed schema) and should be expanded
- * before simplifying.
+ * <p>
+ * It uses a Xerces DOM parser (from SUN) to build the DOM tree from a stream, 
+ * which is then recursively traversed and a parallel rule-tree is created.
+ * This new rule-tree contains the whole IG rules that are returned by <code>getRules</code> method.
+ * These rules may contain complex regular expressions (depending on a particular schema)
+ * and may need to be expanded using {@link Expander } before they can be simplified.
+ * </p>
+ * Please read package info.
  * @author reseto
  */
 public class DOMHandler {
@@ -53,19 +56,17 @@ public class DOMHandler {
   private final boolean verbose = XSDImportSettings.isVerbose();
 
   /**
-   * Name of an element, which is only a container for a complex type. 
-   * To distinguish containers, it should be different from any real element name, hence the colons.
+   * Name for an <code>Element</code>, which is only a container for the contents parsed from a <i>complexType</i> tag.
+   * To distinguish containers, it should be different from any real <code>Element</code> name, hence the colons.
    */
   private static final String CONTAINER_CTYPE = "::container::complextype::";
   /**
-   * Name of an element, which is only a container for an order indicator.
+   * Name for an <code>Element</code>, which is only a container for an order indicator.
    * To distinguish containers, it should be different from any real element name, hence the colons.
    */
   private static final String CONTAINER_ORDER = "::container::order::";
   /**
-   * List of all element tags in current schema that are immediate children of the schema tag itself.
-   * This list includes all element tags that can be referenced by the <i>ref</i> attribute from
-   * within this schema (according to XML Schema specification).
+   * List of all <i>element</i> tags in current schema that are immediate children of the <i>schema</i> tag itself.
    */
   private final List<Element> roots = new ArrayList<Element>();
   /**
@@ -74,23 +75,23 @@ public class DOMHandler {
    */
   private final Map<String, org.w3c.dom.Element> namedCTypes = new HashMap<String, org.w3c.dom.Element>();
   /**
-   * Mapping between unique names of element tags and nodes of DOM tree containing the tag.
-   * These elements can be later referenced from within the schema using <i>ref</i> attribute.
-   * The key is the value of attribute <code>name</code> of the particular tag.
+   * Mapping between unique names of <i>element</i> tags and <code>DOM.Element</code> nodes containing the tag.
+   * These tags can be later referenced from within the schema using <i>ref</i> attribute.
+   * The key is the value of tag attribute <i>name</i> of the corresponding tag.
    */
   private final Map<String, org.w3c.dom.Element> referenced = new HashMap<String, org.w3c.dom.Element>();
 
   /**
-   * Default constructor, set loglevel as defined in XSD Import properties.
+   * Construct this parser, set loglevel as defined in XSD Import properties.
    */
   public DOMHandler() {
     LOG.setLevel(XSDImportSettings.logLevel());
   }
 
   /**
-   * Parse the schema from stream.
-   * Must be called before {@link #getRules() },
-   * because it creates the tree of {@link Element }s from which the rules are extracted.
+   * Parse the schema contained in a stream.
+   * Must be called before <code>getRules</code> method,
+   * because it creates the rule-tree, from which the rules are extracted.
    * @param stream Schema to be parsed.
    */
   public void parse(final InputStream stream) {
@@ -103,7 +104,7 @@ public class DOMHandler {
       final Document doc = parser.getDocument();
       final org.w3c.dom.Element root = doc.getDocumentElement();
 
-      examineRootChildren(root); // this recursively builds rule trees for subelements
+      examineRootChildren(root); // this recursively builds rule-trees for subelements
 
     } catch (SAXException ex) {
       Exceptions.printStackTrace(ex);
@@ -130,16 +131,16 @@ public class DOMHandler {
   // #########################################################################       PRIVATE METHODS
   
   /**
-   * Examine direct children of the root node of DOM element tree.
+   * Examine direct children of the root node of DOM tree.
    * This should be invoked only once, on the schema node itself.
-   * All complexTypes with name are added to the <code>namedCTypes</code> map.
-   * All elements with name are added to the <code>referenced</code> map.
-   * Then the whole rule tree is built using the DOM tree and the two maps.
+   * All <i>complexType</i> tags with <i>name</i> tag attribute are added to the <code>namedCTypes</code> map.
+   * All <i>element</i> tags with <i>name</i> tag attribute are added to the <code>referenced</code> map.
+   * Then, the whole rule-tree is built using the DOM tree and the two maps.
    * @param root Root (schema) node.
    */
   private void examineRootChildren(final org.w3c.dom.Element root) throws XSDException {
     for (int i = 0; i < root.getChildNodes().getLength(); i++) {
-      // check if child is of type ELEMENT_NODE as defined by DOM spec
+      // check if child is of type ELEMENT_NODE as defined by DOM spec.
       final org.w3c.dom.Element domElem = DOMHelper.getDOMElement(root.getChildNodes().item(i));
       if (domElem != null) {
         // we have a valid child
@@ -159,8 +160,8 @@ public class DOMHandler {
       final org.w3c.dom.Element domElem = DOMHelper.getDOMElement(root.getChildNodes().item(i));
       // every element must be added to roots
       if (domElem != null && XSDTag.ELEMENT.equals(XSDTag.matchName(XSDUtility.trimNS(domElem.getNodeName())))) {
-        // XSD Schema specification states that use of minOccurs and maxOccurs attributes
-        // cannot be used for element directly under schema tag
+        // XSD Schema specification states that use of minOccurs and maxOccurs tag attributes
+        // cannot be used for element tag directly under schema tag
         // that's why we throw away the second value of returned pair
         roots.add(buildRuleSubtree(domElem,
                                new ArrayList<String>(),
@@ -171,10 +172,10 @@ public class DOMHandler {
   }
 
   /**
-   * Add element to the <code>referenced</code> map.
-   * This means that the element can be pointed at, by another element from within the schema,
-   * using <i>ref</i> attribute.
-   * XSD Schema allows this only for elements directly under schema tag.
+   * Add <code>DOM.Element</code> to the <code>referenced</code> map.
+   * This means that the <i>element</i> tag can be pointed at, by another <i>element</i> tag from within the schema,
+   * using <i>ref</i> tag attribute.
+   * XSD Schema only allows referencing of <i>element</i> tags that are directly under <i>schema</i> tag.
    * @param domElem Element Element tag directly under schema tag.
    */
   private void addToReferenced(final org.w3c.dom.Element domElem) {
@@ -192,10 +193,9 @@ public class DOMHandler {
   }
 
   /**
-   * Create a mapping of <i>name</i> to the instance of <code>org.w3c.dom.Element</code>
-   * and store it in {@link DOMHandler#namedCTypes } map. The map key is created from the
-   * value of <i>name</i> attribute of the instance.
-   * @param domElem Node of the DOM tree containing the complexType tag.
+   * Add <code>DOM.Element</code> to the <code>namedCTypes</code> map.
+   * The map key is created from the value of <i>name</i> tag attribute of the tag.
+   * @param domElem Node of the DOM tree containing the <i>complexType</i> tag.
    */
   private void addNamedCType(final org.w3c.dom.Element domElem) {
     final String name = domElem.getAttribute(XSDAttribute.NAME.toString());
@@ -219,7 +219,7 @@ public class DOMHandler {
    * Build a tree of {@link Element}s that represent the rules in Initial Grammar,
    * starting with current node.
    * This method examines the relationship between a given node and its children to create
-   * a rule, then recursively builds the rule tree for each of the children.
+   * a rule, then recursively builds the rule-tree for each of the children.
    * It depends on an existing DOM tree for examining the relationships.
    * @param currentNode Root of the subtree for which we want to build the rules.
    * @param context Context of the current node in the whole rule tree. Every direct child of
@@ -242,7 +242,7 @@ public class DOMHandler {
     final RegexpInterval interval = DOMHelper.determineInterval(currentNode);
     final XSDTag tag = XSDTag.matchName(XSDUtility.trimNS(currentNode.getNodeName()));
 
-    // RET is the element that is returned from this recursive method
+    // RET is the Element that is returned from this recursive method
     // most methods below use this instance of RET to store data in it, 
     final Element ret = Element.getMutable();
     ret.getContext().addAll(context);
@@ -458,10 +458,10 @@ public class DOMHandler {
     } else if (XSDTag.REDEFINE.equals(tag)) {
       LOG.warn(DOMHelper.warnUnsupported(childTag, tag));
     } else {
-      // parent is also complexType or other unsuitable tag
+      // parent is also complexType tag, or other unsuitable tag
       throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
     }
-    // complexType directly under schema tag is handled in examineRootChildren()
+    // complexType tag directly under schema tag is handled in examineRootChildren()
   }
 
   private void handleChildAll(final Element ret,
@@ -500,8 +500,8 @@ public class DOMHandler {
                                     final org.w3c.dom.Element child,
                                     final List<String> newContext) {
 
-    // first get the attribute name or ref
-    // we don't resolve the ref at all (out of assignment), just register it's there
+    // first get the tag attribute 'name' or 'ref'
+    // we don't resolve the 'ref' at all (out of assignment), just register it's there
     final String attrName = DOMHelper.getAttributeName(child);
     if (BaseUtils.isEmpty(attrName)) {
       LOG.error("Attribute under " + ret.getName() + " has no name.");

@@ -40,7 +40,9 @@ import org.openide.util.NbBundle;
 import org.w3c.dom.Node;
 
 /**
- *
+ * Helper class for {@link DOMHandler }.
+ * Provides convenience methods used during parsing.
+ * Please read package info.
  * @author reseto
  */
 public final class DOMHelper {
@@ -66,15 +68,15 @@ public final class DOMHelper {
 
   /**
    * Create valid interval from current node.
-   * If node has attributes <i>minOccurs</i> or <i>maxOccurs</i>, their values are used.
-   * Otherwise a default interval is returned (once).
-   * @param currentNode Node from which the information is extracted.
+   * If <code>node</code> has attributes <i>minOccurs</i> or <i>maxOccurs</i>, their values are used.
+   * Otherwise a default interval is returned ({@link RegexpInterval#getOnce() }).
+   * @param node Node from which the information is extracted.
    * @return Valid interval.
    * @see XSDOccurences#createInterval(java.lang.String, java.lang.String)
    */
-  protected static RegexpInterval determineInterval(final org.w3c.dom.Element currentNode) {
-    final String minOccurence = currentNode.getAttribute(XSDAttribute.MINOCCURS.toString());
-    final String maxOccurence = currentNode.getAttribute(XSDAttribute.MAXOCCURS.toString());
+  protected static RegexpInterval determineInterval(final org.w3c.dom.Element node) {
+    final String minOccurence = node.getAttribute(XSDAttribute.MINOCCURS.toString());
+    final String maxOccurence = node.getAttribute(XSDAttribute.MAXOCCURS.toString());
     return XSDOccurences.createInterval(minOccurence, maxOccurence);
   }
 
@@ -107,9 +109,10 @@ public final class DOMHelper {
    * @param context Context of the node in the rule tree.
    * @param useAsName Name of the attribute to be used as a name of the new <code>Element</code>.
    * @return Sentinel element.
+   * @throws XSDException Raise exception when schema contains errors.
    * @see IGGUtils#METADATA_SENTINEL
    */
-  protected static Element createSentinel(final org.w3c.dom.Element domElem, final List<String> context, final XSDAttribute useAsName) {
+  protected static Element createSentinel(final org.w3c.dom.Element domElem, final List<String> context, final XSDAttribute useAsName) throws XSDException {
     final Element sentinel = Element.getMutable();
     if (XSDAttribute.NAME.equals(useAsName) || XSDAttribute.REF.equals(useAsName)) {
       sentinel.setName(domElem.getAttribute(useAsName.toString()));
@@ -137,7 +140,7 @@ public final class DOMHelper {
    * @param subtree Container element, from which the subnodes will be extracted.
    * @param destination Destination element, where the subnodes are copied to.
    * @param containerType Expected name of the subtree element, this is just a consistency check.
-   * @throws XSDException
+   * @throws XSDException Raise exception when schema contains errors.
    */
   protected static void extractSubnodesFromContainer(final Element subtree, final Element destination, final String containerType) throws XSDException {
     if (!subtree.getName().equals(containerType)) {
@@ -165,7 +168,7 @@ public final class DOMHelper {
   }
 
   /**
-   * Check if element is properly defined; redefine it to lambda when it was empty,
+   * Check if <code>Element</code> is properly defined; redefine it to lambda when it was empty,
    * or redefine it to token if it only contained a simple data type.
    * This method should be used only when the tag of a node was ELEMENT!
    * @param ret Element to be finalized.
@@ -205,16 +208,16 @@ public final class DOMHelper {
   }
 
   /**
-   * Extract value of name or ref from an attribute tag.
-   * @param child
-   * @return Value of attribute <i>name</i> or <i>ref</i> or empty string.
+   * Extract value of <i>name</i> or <i>ref</i> from an <i>attribute</i> tag.
+   * @param child Node containing the <i>attribute</i> tag.
+   * @return Value of tag attribute <i>name</i> or <i>ref</i> or empty string.
    */
   protected static String getAttributeName(final org.w3c.dom.Element child) {
     final String name = child.getAttribute(XSDAttribute.NAME.toString());
     final String ref = child.getAttribute(XSDAttribute.REF.toString());
     if (!BaseUtils.isEmpty(name)) {
       if (!BaseUtils.isEmpty(ref)) {
-        LOG.error("Attribute tag with name '" + name + "' has also defined ref '" + ref + "' which is not allowed.");
+        LOG.error(NbBundle.getMessage(DOMHelper.class, "Error.NameAndRef", name, ref));
       }
       return name;
     } else if (!BaseUtils.isEmpty(ref)) {
@@ -225,9 +228,9 @@ public final class DOMHelper {
   }
 
   /**
-   * Prepare metadata of attribute tag from the child node.
-   * If the child has defined attribute <i>use</i>, add this information to metadata.
-   * @param child DOM node of the attribute tag.
+   * Prepare metadata of <i>attribute</i> tag from the child node.
+   * If the child has defined tag attribute <i>use</i>, add this information to metadata.
+   * @param child DOM node of the <i>attribute</i> tag.
    * @return New metadata.
    */
   protected static Map<String, Object> getAttributeMeta(final org.w3c.dom.Element child) {

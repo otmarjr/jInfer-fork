@@ -18,40 +18,48 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
- * Class holding known attributes from XSD Schema specification, that are used by import parsers.
- * Special value <code>INVALID</code> is reserved for possible unknown attributes.
- * Every value has its case sensitive name which should be used for comparison with nodes from schema.
+ * Enumeration of known tag attributes for the purpose of parsing XSD Schemas.
+ * <p>
+ * XSD Schema specifies several tag attributes that can occur within a schema document.
+ * Every value has its case sensitive name which should be used for comparison with tag attributes from schema.
+ * Special value <code>INVALID</code> is reserved for possible unknown tag attributes.
  * @author reseto
  */
 public enum XSDAttribute {
 
   /**
-   * Most common attribute <code>name</code>.
-   * For example, every <i>complexType</i> directly under <i>schema</i> tag must have this attribute defined.
+   * Attribute <i>name</i> of a tag.
+   * For example, every <i>complexType</i> tag directly under <i>schema</i> tag must have this attribute defined.
    */
   NAME("name"),
   /**
-   * Attribute <code>ref</code>, used to reference another element.
+   * Attribute <i>ref</i> of a tag.
+   * Used to reference another <i>element</i> tag.
    */
   REF("ref"),
   /**
-   * Attribute <code>type</code>, can be used to define that element is of a built-in type, or that it references a <i>complexType</i>.
+   * Attribute <i>type</i> of a tag.
+   * Used to define that element is of a built-in type, or that it references a <i>complexType</i> tag.
    */
   TYPE("type"),
   /**
-   * Attribute <code>use</code>, specifies if the usage of a schema attribute is compulsory or optional.
+   * Attribute <i>use</i> of a tag.
+   * Specifies if the usage of the corresponding <i>attribute</i> tag is compulsory or optional.
    */
   USE("use"),
   /**
-   * Attribute <code>minOccurs</code>, sets the minimum number of occurrences for element.
+   * Attribute <i>minOccurs</i> of a tag.
+   * Sets the minimum number of occurrences for the corresponding <i>element</i> tag.
    */
   MINOCCURS("minOccurs"),
   /**
-   * Attribute <code>maxOccurs</code>, sets the maximum number of occurrences for element.
+   * Attribute <i>maxOccurs</i> of a tag.
+   * Sets the maximum number of occurrences for the corresponding <i>element</i> tag.
    */
   MAXOCCURS("maxOccurs"),
   /**
-   * Attribute <code>substitutionGroup</code>, specifies the name of an element that can be substituted with the element that has this attribute.
+   * Attribute <i>substitutionGroup</i> of a tag.
+   * Specifies the name of an <i>element</i> tag that can be substituted with the corresponding <i>element</i> tag.
    */
   SUBSTITUTION("substitutionGroup"),
   /**
@@ -89,9 +97,9 @@ public enum XSDAttribute {
   }
 
   /**
-   * Determine if the parameter can match any of the enum values.
+   * Determine if the parameter can match any of the attributes.
    * Operation is case sensitive.
-   * @param name String to match up with an attribute.
+   * @param name A name to match up with an attribute.
    * @return Corresponding attribute or <code>INVALID</code> when such attribute is not known.
    */
   public static XSDAttribute matchName(final String name) {

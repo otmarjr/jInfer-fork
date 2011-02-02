@@ -18,22 +18,50 @@
 package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 /**
- * All possible tags (i.e. element names) defined in XSD Schema used by XSD parsers of jInfer.
- * With one additional <code>INVALID</code> tag, to distinguish errors.
+ * Enumeration of all known tags for the purpose of parsing XSD Schemas.
+ * <p>
+ * XSD Schema specifies several names for entities that can occur within a schema document.
+ * We refer to these entities as "tags" to avoid confusion with different types of elements used in jInfer.
+ * Tags have case sensitive names and do NOT contain any namespace prefix.
+ * Additional <code>INVALID</code> tag is provided to distinguish an unknown tag name.
+ * </p>
+ * For basic information on XSD Schema tags 
+ * visit {@link http://www.w3schools.com/schema/schema_elements_ref.asp }.
  * @author reseto
  */
 public enum XSDTag {
 
+  /**
+   * Tag <i>schema</i>, root tag of every XSD Schema document.
+   */
   SCHEMA("schema"),
+  /**
+   * Tag <i>element</i>, most common entity in XSD Schema document.
+   */
   ELEMENT("element"),
+  /**
+   * Tag <i>complexType</i>, wrapping contents of <i>element</i> tag.
+   */
   COMPLEXTYPE("complexType"),
+  /**
+   * Tag <i>sequence</i>, indicates that contents must appear in precise order.
+   */
   SEQUENCE("sequence"),
+  /**
+   * Tag <i>choice</i>, indicates that contents may vary.
+   */
   CHOICE("choice"),
+  /**
+   * Tag <i>all</i>, indicates that contents may appear in any order.
+   */
   ALL("all"),
+  /**
+   * Tag <i>attribute</i>, indicates that contents may vary.
+   */
   ATTRIBUTE("attribute"),
-  ATTGROUP("attributeGroup"),
-  SIMPLECON("simpleContent"),
-  COMPLEXCON("complexContent"),
+  //ATTGROUP("attributeGroup"),
+  //SIMPLECON("simpleContent"),
+  //COMPLEXCON("complexContent"),
   REDEFINE("redefine"),
   INVALID("INValid");
 
@@ -57,18 +85,29 @@ public enum XSDTag {
   }
 
   /**
-   * Determine if the parameter can match any of the enum values.
+   * Determine if the parameter can match any of the tags.
    * Operation is case sensitive.
-   * @param name String to match up with a tag.
+   * @param name A name to match up with a tag.
    * @return Corresponding tag or <code>INVALID</code> when such tag is not known.
    */
   public static XSDTag matchName(final String name) {
     for (XSDTag tag : XSDTag.values()) {
-      if (name.equals(tag.getName())) {
+      if (tag.getName().equals(name)) {
         return tag;
       }
     }
     return INVALID;
+  }
+
+  /**
+   * Convenience method, trims the namespace prefix beforehand.
+   * Determine if the parameter can match any of the tags.
+   * @param name A name to match up with a tag.
+   * @return Corresponding tag or <code>INVALID</code> when such tag is not known.
+   * @see XSDUtility#trimNS(java.lang.String)
+   */
+  public static XSDTag matchNameTrimNS(final String name) {
+    return matchName(XSDUtility.trimNS(name));
   }
 
   /**

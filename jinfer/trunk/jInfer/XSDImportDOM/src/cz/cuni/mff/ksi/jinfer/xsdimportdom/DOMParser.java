@@ -26,7 +26,8 @@ import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Class providing XSD Schema parsing support using DOM parser.
+ * Class providing XSD Schema parsing support using Xerces DOM parser from SUN.
+ * Please read package info.
  * @author reseto
  */
 @ServiceProvider(service = XSDParser.class)
@@ -38,7 +39,10 @@ public class DOMParser implements XSDParser {
    * Its name is used verbatim in XSDImportPropertiesPanel.
    * It's best not to change this name!
    */
-  public static final String NAME = "DOMParser"; 
+  public static final String NAME = "DOMParser";
+  /**
+   * Visible name for this parser.
+   */
   public static final String DISPLAY_NAME = "DOM Parser";
 
   private DOMHandler handler;

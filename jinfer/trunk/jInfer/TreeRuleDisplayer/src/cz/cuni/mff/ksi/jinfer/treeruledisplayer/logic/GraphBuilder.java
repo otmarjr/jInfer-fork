@@ -133,6 +133,7 @@ public final class GraphBuilder {
     vv.setBackground(utils.getBackgroundColor());
     vv.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<Regexp<? extends AbstractNamedNode>, RegexpInterval>());
     vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<RegexpInterval>());
+    vv.getRenderContext().setEdgeFontTransformer(new EdgeFontTransformer());
     vv.getRenderContext().setVertexLabelTransformer(new RegexpTransformer());
     vv.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer(utils));
     vv.getRenderContext().setVertexFillPaintTransformer(new VertexColorTransformer(roots));

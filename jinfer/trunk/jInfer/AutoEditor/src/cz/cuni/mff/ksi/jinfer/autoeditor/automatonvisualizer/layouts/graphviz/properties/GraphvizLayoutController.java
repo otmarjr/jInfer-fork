@@ -27,10 +27,12 @@ import org.openide.util.Lookup;
  * Options controller of the Graphiz layout binary selection.
  * @author sviro
  */
-@OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_GraphvizLayout",
-keywords = "#AdvancedOption_Keywords_GraphvizLayout",
-keywordsCategory = "jInfer/GraphvizLayout")
+@OptionsPanelController.SubRegistration(
+  location = "jInfer",
+  displayName = "#AdvancedOption_DisplayName_GraphvizLayout",
+  keywords = "#AdvancedOption_Keywords_GraphvizLayout",
+  keywordsCategory = "jInfer/GraphvizLayout",
+  position = 100)
 public final class GraphvizLayoutController extends OptionsPanelController {
 
   private GraphvizLayoutPanel panel;

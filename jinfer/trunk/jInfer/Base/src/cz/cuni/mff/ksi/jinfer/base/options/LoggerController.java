@@ -28,10 +28,12 @@ import org.openide.util.Lookup;
  * 
  * @author reseto
  */
-@OptionsPanelController.SubRegistration(location = "jInfer",
-                                        displayName = "#AdvancedOption_DisplayName_Logger",
-                                        keywords = "#AdvancedOption_Keywords_Logger",
-                                        keywordsCategory = "jInfer/Logger")
+@OptionsPanelController.SubRegistration(
+  location = "jInfer",
+  displayName = "#AdvancedOption_DisplayName_Logger",
+  keywords = "#AdvancedOption_Keywords_Logger",
+  keywordsCategory = "jInfer/Logger",
+  position = 1)
 public final class LoggerController extends OptionsPanelController {
 
   private LoggerPanel panel;

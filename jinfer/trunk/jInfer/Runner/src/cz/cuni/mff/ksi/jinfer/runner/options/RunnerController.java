@@ -32,7 +32,8 @@ import org.openide.util.Lookup;
   location = "jInfer",
   displayName = "#AdvancedOption_DisplayName_Runner",
   keywords = "#AdvancedOption_Keywords_Runner",
-  keywordsCategory = "jInfer/Runner")
+  keywordsCategory = "jInfer/Runner",
+  position = 0)
 public final class RunnerController extends OptionsPanelController {
 
   private RunnerPanel panel;

@@ -32,7 +32,8 @@ import org.openide.util.Lookup;
   location = "jInfer",
   displayName = "#AdvancedOption_DisplayName_TreeRuleDisplayer",
   keywords = "#AdvancedOption_Keywords_TreeRuleDisplayer",
-  keywordsCategory = "jInfer/TreeRuleDisplayer")
+  keywordsCategory = "jInfer/TreeRuleDisplayer",
+  position = 5)
 public final class TreeRuleDisplayerController extends OptionsPanelController {
 
   private TreeRuleDisplayerPanel panel;

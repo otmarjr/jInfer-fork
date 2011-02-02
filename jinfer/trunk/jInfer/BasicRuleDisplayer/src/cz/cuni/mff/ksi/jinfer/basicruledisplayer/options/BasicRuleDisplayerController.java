@@ -32,7 +32,8 @@ import org.openide.util.Lookup;
   location = "jInfer",
   displayName = "#AdvancedOption_DisplayName_BasicRuleDisplayer",
   keywords = "#AdvancedOption_Keywords_BasicRuleDisplayer",
-  keywordsCategory = "jInfer/BasicRuleDisplayer")
+  keywordsCategory = "jInfer/BasicRuleDisplayer",
+  position = 6)
 public final class BasicRuleDisplayerController extends OptionsPanelController {
 
   private BasicRuleDisplayerPanel panel;

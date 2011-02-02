@@ -21,14 +21,7 @@
       </folder>
     </folder>
   </folder>
-  <folder name="OptionsDialog">
-        <folder name="jInfer">
-            <file name="cz-cuni-mff-ksi-jinfer-basicruledisplayer-options-BasicRuleDisplayerController.instance" url="cz-cuni-mff-ksi-jinfer-basicruledisplayer-options-BasicRuleDisplayerController.instance">
-                <attr name="keywordsCategory" stringvalue="jInfer/BasicRuleDisplayer"/>
-            </file>
-        </folder>
-    </folder>
-    <folder name="Windows2">
+  <folder name="Windows2">
     <folder name="Components">
       <file name="BasicRuleDisplayerTopComponent.settings" url="BasicRuleDisplayerTopComponentSettings.xml"/>
     </folder>

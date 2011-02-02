@@ -27,10 +27,12 @@ import org.openide.util.Lookup;
  * Options controller of the AutoEditor module.
  * @author sviro
  */
-@OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_AutoEditor",
-keywords = "#AdvancedOption_Keywords_AutoEditor",
-keywordsCategory = "jInfer/AutoEditor")
+@OptionsPanelController.SubRegistration(
+  location = "jInfer",
+  displayName = "#AdvancedOption_DisplayName_AutoEditor",
+  keywords = "#AdvancedOption_Keywords_AutoEditor",
+  keywordsCategory = "jInfer/AutoEditor",
+  position = 10)
 public final class AutoEditorController extends OptionsPanelController {
 
   private AutoEditorPanel panel;

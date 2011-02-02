@@ -287,8 +287,8 @@ public class XSDBuiltInDataTypesTest {
 
   @Test
   public void testIsMiscType1() {
-    System.out.println("isMiscType1(xs:QName)");
-    String type = "xs:QName";
+    System.out.println("isMiscType1(xs:NOTATION)");
+    String type = "xs:NOTATION";
     boolean expResult = true;
     boolean result = XSDBuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);

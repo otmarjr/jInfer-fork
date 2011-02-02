@@ -32,7 +32,7 @@ import org.openide.util.Lookup;
                                         displayName = "#AdvancedOption_DisplayName_Logger",
                                         keywords = "#AdvancedOption_Keywords_Logger",
                                         keywordsCategory = "jInfer/Logger")
-public final class LoggerOptionsPanelController extends OptionsPanelController {
+public final class LoggerController extends OptionsPanelController {
 
   private LoggerPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);

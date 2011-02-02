@@ -10,6 +10,16 @@
             </file>
         </folder>
     </folder>
+    <folder name="OptionsDialog">
+        <folder name="jInfer">
+            <file name="cz-cuni-mff-ksi-jinfer-autoeditor-automatonvisualizer-layouts-graphviz-properties-GraphvizLayoutController.instance" url="cz-cuni-mff-ksi-jinfer-autoeditor-automatonvisualizer-layouts-graphviz-properties-GraphvizLayoutController.instance">
+                <attr name="keywordsCategory" stringvalue="jInfer/GraphvizLayout"/>
+            </file>
+            <file name="cz-cuni-mff-ksi-jinfer-autoeditor-options-AutoEditorController.instance" url="cz-cuni-mff-ksi-jinfer-autoeditor-options-AutoEditorController.instance">
+                <attr name="keywordsCategory" stringvalue="jInfer/AutoEditor"/>
+            </file>
+        </folder>
+    </folder>
     <folder name="Windows2">
         <folder name="Components">
             <file name="AutoEditorTopComponent.settings" url="AutoEditorTopComponentSettings.xml"/>

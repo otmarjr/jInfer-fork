@@ -32,9 +32,9 @@ public final class BasicRuleDisplayerPanel extends JPanel {
 
   private static final long serialVersionUID = 1211214L;
 
-  private final BasicRuleDisplayerOptionsPanelController controller;
+  private final BasicRuleDisplayerController controller;
 
-  public BasicRuleDisplayerPanel(final BasicRuleDisplayerOptionsPanelController controller) {
+  public BasicRuleDisplayerPanel(final BasicRuleDisplayerController controller) {
     this.controller = controller;
     initComponents();
   }
@@ -57,6 +57,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     jLabel13 = new javax.swing.JLabel();
     maxPanels = new javax.swing.JSpinner();
     jLabel14 = new javax.swing.JLabel();
+    panelFill1 = new javax.swing.JPanel();
     panelColors = new javax.swing.JPanel();
     jLabel5 = new javax.swing.JLabel();
     panelElement = new javax.swing.JPanel();
@@ -64,12 +65,12 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     panelAttribute = new javax.swing.JPanel();
     jLabel7 = new javax.swing.JLabel();
     panelSimpleData = new javax.swing.JPanel();
-    jLabel8 = new javax.swing.JLabel();
     reset = new javax.swing.JButton();
     jLabel9 = new javax.swing.JLabel();
     jLabel10 = new javax.swing.JLabel();
     panelConcatenation = new javax.swing.JPanel();
     panelAlternation = new javax.swing.JPanel();
+    panelFill2 = new javax.swing.JPanel();
     fill = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
@@ -86,7 +87,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     panelBehaviour.add(jLabel1, gridBagConstraints);
 
     nestingLevel.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-    nestingLevel.setPreferredSize(new java.awt.Dimension(60, 18));
+    nestingLevel.setPreferredSize(new java.awt.Dimension(60, 20));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
@@ -112,7 +113,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     panelBehaviour.add(jLabel3, gridBagConstraints);
 
     maxRules.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-    maxRules.setPreferredSize(new java.awt.Dimension(60, 18));
+    maxRules.setPreferredSize(new java.awt.Dimension(60, 20));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
@@ -138,7 +139,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     panelBehaviour.add(jLabel11, gridBagConstraints);
 
     margin.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(2), Integer.valueOf(1), null, Integer.valueOf(1)));
-    margin.setPreferredSize(new java.awt.Dimension(60, 18));
+    margin.setPreferredSize(new java.awt.Dimension(60, 20));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 3;
@@ -163,7 +164,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     panelBehaviour.add(jLabel13, gridBagConstraints);
 
     maxPanels.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
-    maxPanels.setPreferredSize(new java.awt.Dimension(60, 18));
+    maxPanels.setPreferredSize(new java.awt.Dimension(60, 20));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
@@ -180,15 +181,32 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelBehaviour.add(jLabel14, gridBagConstraints);
 
+    javax.swing.GroupLayout panelFill1Layout = new javax.swing.GroupLayout(panelFill1);
+    panelFill1.setLayout(panelFill1Layout);
+    panelFill1Layout.setHorizontalGroup(
+      panelFill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 67, Short.MAX_VALUE)
+    );
+    panelFill1Layout.setVerticalGroup(
+      panelFill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 96, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridheight = 4;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    panelBehaviour.add(panelFill1, gridBagConstraints);
+
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.weightx = 1.0;
     add(panelBehaviour, gridBagConstraints);
 
-    panelColors.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.panelColors.border.title"))); // NOI18N
+    panelColors.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.panelColors.border.title_1"))); // NOI18N
     panelColors.setLayout(new java.awt.GridBagLayout());
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel5.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel5.text_1")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
@@ -224,7 +242,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(panelElement, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel6.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel6.text_1")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -259,7 +277,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(panelAttribute, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel7.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel7.text_1")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 2;
@@ -294,18 +312,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(panelSimpleData, gridBagConstraints);
 
-    jLabel8.setFont(jLabel8.getFont().deriveFont((jLabel8.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel8.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    panelColors.add(jLabel8, gridBagConstraints);
-
-    org.openide.awt.Mnemonics.setLocalizedText(reset, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.reset.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(reset, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.reset.text_1")); // NOI18N
     reset.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         resetActionPerformed(evt);
@@ -318,7 +325,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(reset, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel9.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel9.text_1")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 0;
@@ -326,7 +333,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelColors.add(jLabel9, gridBagConstraints);
 
-    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel10.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(BasicRuleDisplayerPanel.class, "BasicRuleDisplayerPanel.jLabel10.text_1")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 1;
@@ -338,6 +345,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     panelConcatenation.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     panelConcatenation.setMaximumSize(new java.awt.Dimension(20, 20));
     panelConcatenation.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelConcatenation.setPreferredSize(new java.awt.Dimension(20, 20));
     panelConcatenation.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseClicked(java.awt.event.MouseEvent evt) {
         panelConcatenationMouseClicked(evt);
@@ -366,6 +374,7 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     panelAlternation.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     panelAlternation.setMaximumSize(new java.awt.Dimension(20, 20));
     panelAlternation.setMinimumSize(new java.awt.Dimension(20, 20));
+    panelAlternation.setPreferredSize(new java.awt.Dimension(20, 20));
     panelAlternation.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseClicked(java.awt.event.MouseEvent evt) {
         panelAlternationMouseClicked(evt);
@@ -390,6 +399,25 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelColors.add(panelAlternation, gridBagConstraints);
 
+    javax.swing.GroupLayout panelFill2Layout = new javax.swing.GroupLayout(panelFill2);
+    panelFill2.setLayout(panelFill2Layout);
+    panelFill2Layout.setHorizontalGroup(
+      panelFill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 178, Short.MAX_VALUE)
+    );
+    panelFill2Layout.setVerticalGroup(
+      panelFill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 81, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 5;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    panelColors.add(panelFill2, gridBagConstraints);
+
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -401,11 +429,11 @@ public final class BasicRuleDisplayerPanel extends JPanel {
     fill.setLayout(fillLayout);
     fillLayout.setHorizontalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 531, Short.MAX_VALUE)
+      .addGap(0, 608, Short.MAX_VALUE)
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 12, Short.MAX_VALUE)
+      .addGap(0, 33, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -502,7 +530,6 @@ public final class BasicRuleDisplayerPanel extends JPanel {
   private javax.swing.JLabel jLabel5;
   private javax.swing.JLabel jLabel6;
   private javax.swing.JLabel jLabel7;
-  private javax.swing.JLabel jLabel8;
   private javax.swing.JLabel jLabel9;
   private javax.swing.JSpinner margin;
   private javax.swing.JSpinner maxPanels;
@@ -514,6 +541,8 @@ public final class BasicRuleDisplayerPanel extends JPanel {
   private javax.swing.JPanel panelColors;
   private javax.swing.JPanel panelConcatenation;
   private javax.swing.JPanel panelElement;
+  private javax.swing.JPanel panelFill1;
+  private javax.swing.JPanel panelFill2;
   private javax.swing.JPanel panelSimpleData;
   private javax.swing.JButton reset;
   // End of variables declaration//GEN-END:variables

@@ -32,10 +32,10 @@ public final class TreeRuleDisplayerPanel extends JPanel {
 
   private static final long serialVersionUID = 43522352345l;
 
-  private final TreeRuleDisplayerOptionsPanelController controller;
+  private final TreeRuleDisplayerController controller;
   private static final String[] SHAPES = new String[] { "Circle", "Square", "Rounded Square", "Polygon", "Star" };
 
-  TreeRuleDisplayerPanel(final TreeRuleDisplayerOptionsPanelController controller) {
+  TreeRuleDisplayerPanel(final TreeRuleDisplayerController controller) {
     super();
     this.controller = controller;
     initComponents();
@@ -504,11 +504,11 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 232, Short.MAX_VALUE)
+      .addGap(0, 47, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 273, Short.MAX_VALUE)
+      .addGap(0, 272, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -691,11 +691,11 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     fill.setLayout(fillLayout);
     fillLayout.setHorizontalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 677, Short.MAX_VALUE)
+      .addGap(0, 533, Short.MAX_VALUE)
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 6, Short.MAX_VALUE)
+      .addGap(0, 5, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

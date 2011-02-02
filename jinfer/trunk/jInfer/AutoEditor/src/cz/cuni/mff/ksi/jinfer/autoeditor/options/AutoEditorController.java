@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.properties;
+package cz.cuni.mff.ksi.jinfer.autoeditor.options;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -24,29 +24,29 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 /**
- * Options controller of the Graphiz layout binary selection.
+ * Options controller of the AutoEditor module.
  * @author sviro
  */
 @OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_GraphvizLayout",
-keywords = "#AdvancedOption_Keywords_GraphvizLayout",
-keywordsCategory = "jInfer/GraphvizLayout")
-public final class GraphvizLayoutOptionsPanelController extends OptionsPanelController {
+displayName = "#AdvancedOption_DisplayName_AutoEditor",
+keywords = "#AdvancedOption_Keywords_AutoEditor",
+keywordsCategory = "jInfer/AutoEditor")
+public final class AutoEditorController extends OptionsPanelController {
 
-  private GraphvizLayoutPanel panel;
+  private AutoEditorPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-  private boolean fieldsChanged;
+  private boolean valuesChanged;
 
   @Override
   public void update() {
     getPanel().load();
-    fieldsChanged = false;
+    valuesChanged = false;
   }
 
   @Override
   public void applyChanges() {
     getPanel().store();
-    fieldsChanged = false;
+    valuesChanged = false;
   }
 
   @Override
@@ -61,7 +61,7 @@ public final class GraphvizLayoutOptionsPanelController extends OptionsPanelCont
 
   @Override
   public boolean isChanged() {
-    return fieldsChanged;
+    return valuesChanged;
   }
 
   @Override
@@ -84,9 +84,9 @@ public final class GraphvizLayoutOptionsPanelController extends OptionsPanelCont
     pcs.removePropertyChangeListener(l);
   }
 
-  private GraphvizLayoutPanel getPanel() {
+  private AutoEditorPanel getPanel() {
     if (panel == null) {
-      panel = new GraphvizLayoutPanel(this);
+      panel = new AutoEditorPanel();
     }
     return panel;
   }
@@ -95,8 +95,8 @@ public final class GraphvizLayoutOptionsPanelController extends OptionsPanelCont
    * Call to indicate that some field is changed in options panel.
    */
   public void changed() {
-    if (!fieldsChanged) {
-      fieldsChanged = true;
+    if (!valuesChanged) {
+      valuesChanged = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
     }
     pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);

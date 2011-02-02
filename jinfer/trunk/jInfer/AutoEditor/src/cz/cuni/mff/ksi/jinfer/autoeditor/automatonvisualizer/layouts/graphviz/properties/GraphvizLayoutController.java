@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.treeruledisplayer.options;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.properties;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -24,29 +24,29 @@ import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
 /**
- * Options controller of the Advanced Rule Displayer module.
+ * Options controller of the Graphiz layout binary selection.
  * @author sviro
  */
 @OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_TreeRuleDisplayer",
-keywords = "#AdvancedOption_Keywords_TreeRuleDisplayer",
-keywordsCategory = "jInfer/TreeRuleDisplayer")
-public final class TreeRuleDisplayerOptionsPanelController extends OptionsPanelController {
+displayName = "#AdvancedOption_DisplayName_GraphvizLayout",
+keywords = "#AdvancedOption_Keywords_GraphvizLayout",
+keywordsCategory = "jInfer/GraphvizLayout")
+public final class GraphvizLayoutController extends OptionsPanelController {
 
-  private TreeRuleDisplayerPanel panel;
+  private GraphvizLayoutPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-  private boolean optionsChanged;
+  private boolean fieldsChanged;
 
   @Override
   public void update() {
     getPanel().load();
-    optionsChanged = false;
+    fieldsChanged = false;
   }
 
   @Override
   public void applyChanges() {
     getPanel().store();
-    optionsChanged = false;
+    fieldsChanged = false;
   }
 
   @Override
@@ -61,7 +61,7 @@ public final class TreeRuleDisplayerOptionsPanelController extends OptionsPanelC
 
   @Override
   public boolean isChanged() {
-    return optionsChanged;
+    return fieldsChanged;
   }
 
   @Override
@@ -84,9 +84,9 @@ public final class TreeRuleDisplayerOptionsPanelController extends OptionsPanelC
     pcs.removePropertyChangeListener(l);
   }
 
-  private TreeRuleDisplayerPanel getPanel() {
+  private GraphvizLayoutPanel getPanel() {
     if (panel == null) {
-      panel = new TreeRuleDisplayerPanel(this);
+      panel = new GraphvizLayoutPanel(this);
     }
     return panel;
   }
@@ -95,8 +95,8 @@ public final class TreeRuleDisplayerOptionsPanelController extends OptionsPanelC
    * Call to indicate that some field is changed in options panel.
    */
   public void changed() {
-    if (!optionsChanged) {
-      optionsChanged = true;
+    if (!fieldsChanged) {
+      fieldsChanged = true;
       pcs.firePropertyChange(OptionsPanelController.PROP_CHANGED, false, true);
     }
     pcs.firePropertyChange(OptionsPanelController.PROP_VALID, null, null);

@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.p
 
 import java.io.File;
 import java.io.IOException;
+import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -29,12 +30,14 @@ import org.openide.util.NbPreferences;
  * 
  * @author sviro
  */
-final class GraphvizLayoutPanel extends javax.swing.JPanel {
+final class GraphvizLayoutPanel extends JPanel {
 
-  private final GraphvizLayoutOptionsPanelController controller;
+  private static final long serialVersionUID = 4535346356l;
+
+  private final GraphvizLayoutController controller;
   private static final Logger LOG = Logger.getLogger(GraphvizLayoutPanel.class);
 
-  GraphvizLayoutPanel(final GraphvizLayoutOptionsPanelController controller) {
+  public GraphvizLayoutPanel(final GraphvizLayoutController controller) {
     super();
     this.controller = controller;
     initComponents();
@@ -86,17 +89,17 @@ final class GraphvizLayoutPanel extends javax.swing.JPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 7, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 33, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     add(jPanel1, gridBagConstraints);
 
@@ -104,18 +107,18 @@ final class GraphvizLayoutPanel extends javax.swing.JPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 497, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+      .addGap(0, 35, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.gridwidth = 4;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
     add(jPanel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents

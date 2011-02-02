@@ -28,11 +28,12 @@ import org.openide.util.Lookup;
  *
  * @author sviro
  */
-@OptionsPanelController.SubRegistration(location = "jInfer",
-displayName = "#AdvancedOption_DisplayName_Runner",
-keywords = "#AdvancedOption_Keywords_Runner",
-keywordsCategory = "jInfer/Runner")
-public final class RunnerOptionsPanelController extends OptionsPanelController {
+@OptionsPanelController.SubRegistration(
+  location = "jInfer",
+  displayName = "#AdvancedOption_DisplayName_Runner",
+  keywords = "#AdvancedOption_Keywords_Runner",
+  keywordsCategory = "jInfer/Runner")
+public final class RunnerController extends OptionsPanelController {
 
   private RunnerPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);

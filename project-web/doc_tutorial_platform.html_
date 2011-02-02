@@ -462,8 +462,6 @@ public class Impl1 implements Foo {
   the selected implementation and save it.
 </p>
 
-TODO vektor Repair after this is repaired in code (lookupNames)
-
 <span>Example of panel load code:</span>
 <pre class="code">
 @Override

@@ -1,7 +1,5 @@
 #include "header.html_"
 
-<!-- TODO link to architecture, inference etc. articles --!>
-
 <div id="content">
 
 <h1>Dealing with jInfer and NetBeans Platform</h1>
@@ -47,14 +45,26 @@
 <h2 id="1-module-visibility">Module visibility</h2>
 
 <p>
-Each NBP module allows to set packages as public, which means their content will be visible for another modules. That means, if some module A sets
-a dependency for module B, module A will be able to use only classes from packages, which were set as public in module B.
+  Each NBP module allows to set some spackages as public, which means their content
+  will be available to other modules. That means, if module <i>A</i> declares a
+  dependency on module <i>B</i>, it will be able to use only classes from
+  those packages that were set as public in module <i>B</i>.
 </p>
-<span><i><strong>Important notice:</strong> Public packages do not affect <a href="http://wiki.netbeans.org/DevFaqLookup">Lookup</a> mechanism i.e. class annotated with serviceProvider may not be in the public package.</i></span>
+
+<span><i>
+  <strong>Important notice:</strong> Public packages do not affect
+  <a href="http://wiki.netbeans.org/DevFaqLookup">Lookup</a> mechanism, i.e.
+  class annotated with <code>@ServiceProvider</code>
+  does not need to be in a public package in order to be looked up.
+</i></span>
+
 <p>
-There are two ways to set visible packages, first is to set it manually in module's project.xml file located in <i>ModulePath/nbproject/</i> folder.
+  There are two ways to set packages visible, first is to set it manually in
+  module's <code>project.xml</code> file located in
+  <i>ModulePath/nbproject/</i> folder.
 </p>
-<span>Example:</span><br/>
+
+<span>Example:</span>
 <pre class="code">
 // This is a portion of example project.xml file.
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -74,30 +84,35 @@ There are two ways to set visible packages, first is to set it manually in modul
 </pre>
 
 <p>
-Another way is to set public packages through GUI:
+  Another way to set public packages is through GUI:
 
-<ol type=1>
-	<li>Right-click the module, select <i>Properties</i>.</li>
-	<li>In <i>API Versioning</i>, there is <i>Public Packages</i> section.</li>
-	<li>Check which package will be public.</li>
-</ol>
-
+  <ol type=1>
+    <li>Right-click the module, select <i>Properties</i>.</li>
+    <li>In <i>API Versioning</i>, there is a <i>Public Packages</i> section.</li>
+    <li>Check all packages that should be public.</li>
+  </ol>
 </p>
 
 <h2 id="2-error-handling">Error handling</h2>
 
 <p>
-Each run of inference is encapsulated in a <code>try-catch</code> block, so it is safe to throw any exception in inference process.
-Each thrown exception will be catched, get logged, presented to the user and inference will stop. However if module uses threads which
-throw exception, it is catched by NBP, instead of our code. Because of this is reasonable to catch this exception in your module and re-throw it in the right thread.
+  Each run of inference is encapsulated in a <code>try-catch</code> block,
+  so it is safe to throw any exception in the inference process.
+  Each thrown exception will be caught, get logged, presented to the user and
+  inference will stop. However if module uses threads which throw exceptions,
+  it is caught by NBP, instead of our code. Because of this its reasonable to
+  catch this exception in your module and re-throw it in the right thread.
 </p>
 
 <h2 id="3-interruptions">Interruptions</h2>
 
 <p>
-In our application, we gave user an ability to stop inference in any moment of its run. For this reason, modules have to check in every time-consuming place
-such as long loops, if this case happens. Example below shows, how to check the interruption from user and what to do to correctly stop inference.
+  In jInfer user can stop the inference at any moment of its run. For this
+  reason, modules have to check in every time-consuming place (such as long loops)
+  whether this is the case. Example below shows how to check the interruption
+  from user and what to do to correctly stop the inference.
 </p>
+
 <span>Example:</span>
 <pre class="code">
 for (forever) {
@@ -112,17 +127,19 @@ for (forever) {
 <h2 id="4-dialogs">Dialogs</h2>
 
 <p>
-  Creation of open/save dialog or message window is done by standard NBP API.
-  For dialogs you can also use standard Java JFileChooser,
-  but NBP <a href="http://bits.netbeans.org/dev/javadoc/org-openide-filesystems/org/openide/filesystems/FileChooserBuilder.html">FileChooserBuilder</a>
-  is more convenient. This class creates dialog which remembers last-used directory according to key passed into its contructor.
+  Creation of open/save dialogs or message windows is done using standard NBP API.
+  For dialogs you can use the standard Java <code>JFileChooser</code>,
+  but NBP <a href="http://bits.netbeans.org/dev/javadoc/org-openide-filesystems/org/openide/filesystems/FileChooserBuilder.html"><code>FileChooserBuilder</code></a>
+  is more convenient. This class creates dialog which remembers last-used
+  directory according to a key passed into its constructor.
 </p>
-<span>Example:</span><br/>
+
+<span>Example:</span>
 <pre class="code">
 // The default dir to use if no value is stored
-File home = new File (System.getProperty("user.home"));
+File home = new File(System.getProperty("user.home"));
 // Now build a file chooser and invoke the dialog in one line of code
-File toAdd = new FileChooserBuilder (CallingClass.class)
+File toAdd = new FileChooserBuilder(CallingClass.class)
                    .setTitle("Some dialog title")
                    .setDefaultWorkingDirectory(home).showOpenDialog();
 // Result will be null if the user clicked cancel or closed the dialog w/o OK
@@ -130,12 +147,17 @@ if (toAdd != null) {
     //do something
 }
 </pre>
+
 <p>
-  For messages creation is used <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/DialogDisplayer.html">DialogDisplayer</a> NBP API
-  class. To determine which type of message will be shown (Confirmation dialog, message dialog...),
-  <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/NotifyDescriptor.html">NotifyDescriptor</a> is used.
-  Below is small example, which creates standard message notification. For more information please look at <a href="http://wiki.netbeans.org/NetBeansDeveloperFAQ#Dialogs_API">NBP Dialogs API FAQ</a>.
+  For message windows the <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/DialogDisplayer.html"><code>DialogDisplayer</code></a> NBP API
+  class is used. To determine which type of message will be shown
+  (Confirmation dialog, message dialog...),
+  <a href="http://bits.netbeans.org/dev/javadoc/org-openide-dialogs/org/openide/NotifyDescriptor.html"><code>NotifyDescriptor</code></a>
+  is used. Following is a small example, which creates standard message
+  notification. For more information please look at
+  <a href="http://wiki.netbeans.org/NetBeansDeveloperFAQ#Dialogs_API">NBP Dialogs API FAQ</a>.
 </p>
+
 <span>Example:</span><br/>
 <pre class="code">
 // Creates standard information message with text "Hello world"
@@ -148,67 +170,93 @@ DialogDisplayer.getDefault().notify(nd);
 <h2 id="5-configuration">Configuration - options, preferences</h2>
 
 <p>
-Option panels located in <i>Tools > Options</i> menu are standard part of NBP API. We created for our purpose jInfer option subCategory
-where are located Preferences applied for each jInfer Project. Below are described few step to create
-your own option panel. For more information, please visit <a href="http://platform.netbeans.org/tutorials/60/nbm-options.html">NetBeans Options tutorial</a>.
+  Option panels located in <i>Tools > Options</i> menu are a standard part of
+  NBP API. We created a <i>jInfer</i> option sub-category to place panels with
+  configuration valid across all jInfer projects. Description of the few step
+  to create your own option panel follows. For more information, please visit
+  <a href="http://platform.netbeans.org/tutorials/60/nbm-options.html">NetBeans Options tutorial</a>.
 </p>
+
 <ol>
 	<li>Create options window:
 		<ul>
-			<li>Right click <i>Source Packages</i> in your module, select <i>New &gt; Other</i>.</li>
-			<li>Under Categories, select Module Development. Under File Types, select Options Panel. Click <i>Next</i>.</li>
-			<li>Keep checked <i>Create Secondary Panel</i> and choose jInfer as a <i>Primary Panel</i>. Fill in remaining fields. Click <i>Next</i>.
+			<li>Right click <i>Source Packages</i> in your module,
+                            select <i>New &gt; Other</i>.</li>
+			<li>Under Categories, select Module Development. Under
+                            File Types, select Options Panel. Click <i>Next</i>.</li>
+			<li>Keep checked <i>Create Secondary Panel</i> and choose 
+                            jInfer as the <i>Primary Panel</i>. Fill in remaining
+                            fields. Click <i>Next</i>.
 			</li>
-			<li>Fill in <i>Class Name Prefix</i> and <i>Package</i> and click <i>Finish</i>.</li>
+			<li>Fill in <i>Class Name Prefix</i> and <i>Package</i>
+                            and click <i>Finish</i>.</li>
 		</ul>
 	</li>
-	<li>Design newly created <i>ClassNamePrexix</i>Panel.java.</li>
+	<li>Design newly created <i>ClassNamePrefix</i>Panel.java.</li>
 	<li>Implement <code>store()</code> and <code>load()</code> methods according to comments inside.</li>
 </ol>
+
 <p>
-Both <code>store()</code> and <code>load()</code> methods uses <a href="http://bits.netbeans.org/dev/javadoc/org-openide-util/org/openide/util/NbPreferences.html">NbPreferences</a> class. Example below shows how to store and load Preferences.
+  Both <code>store()</code> and <code>load()</code> methods use 
+  <a href="http://bits.netbeans.org/dev/javadoc/org-openide-util/org/openide/util/NbPreferences.html"><code>NbPreferences</code></a>
+  class. Example below shows how to store and load Preferences.
 </p>
-<span>Example:</span><br/>
+
+<span>Example:</span>
 <pre class="code">
 public void store() {
-    // Saves state of checkBox into Preferences for ExampleClass
-    //Class in Property with name "PropertyName".
-    NbPreferences.forModule(ExampleClass.class)
-        .putBoolean("PropertyName", someCheckBox.isSelected());
+  // Saves the state of checkBox into Preferences for ExampleClass
+  // class in property with name "PropertyName"
+  NbPreferences.forModule(ExampleClass.class)
+      .putBoolean("PropertyName", someCheckBox.isSelected());
 }
 
 public void load() {
-    // Get from ExampleClass Class Preferences Property with name
-    // "PropertyName". Second parameter of method getBoolean is used
-    // as default if no Property with defined name is saved in Preferences.
-    someCheckBox.setSelected(NbPreferences.forModule(ExampleClass.class)
-                                 .getBoolean("PropertyName", true));
+  // Get from ExampleClass class preferences the property with name
+  // "PropertyName". Second parameter of method getBoolean is used
+  // as default if no property with defined name is saved in preferences.
+  someCheckBox.setSelected(NbPreferences.forModule(ExampleClass.class)
+                               .getBoolean("PropertyName", true));
 }
 </pre>
 
 <p>
-Second type of preferences used in jInfer is Project properties. Each jInfer Project has its properties panel accessible
-in its content menu and preferences set in this properties are applied for each project separately. To implement this kind of
-preferences, it is necessary to implement <a href="http://jinfer.sourceforge.net/javadoc/cz/cuni/mff/ksi/jinfer/base/interfaces/PropertiesPanelProvider.html">PropertiesPanelProvider</a> interface and extend <a href="http://jinfer.sourceforge.net/javadoc/cz/cuni/mff/ksi/jinfer/base/objects/AbstractPropertiesPanel.html">AbstractPropertiesPanel</a> class. Each Project properties window has category tree, where each category represents separate panel with properties. This category is definded by provider interface, and properties panel by class extended AbstractPropertiesPanel.
+  Second type of preferences used in jInfer is Project properties. Each jInfer
+  project has its properties panel accessible in its content menu and
+  these properties are applied for each project separately. To implement this
+  kind of preferences, it is necessary to implement
+  <a href="http://jinfer.sourceforge.net/javadoc/cz/cuni/mff/ksi/jinfer/base/interfaces/PropertiesPanelProvider.html"><code>PropertiesPanelProvider</code></a>
+  interface and extend the
+  <a href="http://jinfer.sourceforge.net/javadoc/cz/cuni/mff/ksi/jinfer/base/objects/AbstractPropertiesPanel.html"><code>AbstractPropertiesPanel</code></a>
+  class. Each Project properties window has category tree, where each category 
+  represents a separate panel with properties. This category is declared in the
+  provider interface, properties panel itself is defined in class extending
+  <code>AbstractPropertiesPanel</code>.
 </p>
-<h4>PropertiesPanelProvider</h4>
-<p>As was written above, PropertiesPanelProvider defines category in Project properties windows. In the example below, we'll try to explain how to create a simple provider and what each method is responsible for.</p>
-<span>Example:</span><br/>
+
+<h4><code>PropertiesPanelProvider</code></h4>
+<p>
+  As was mentioned above, <code>PropertiesPanelProvider</code> defines
+  category in Project properties windows. In the example below, we'll try to
+  explain how to create a simple provider and what each method is responsible for.
+</p>
+
+<span>Example:</span>
 <pre class="code">
 public class ExampleProvider implemenets PropertiesPanelProvider {
 
-  // Get Providers programmatic name or Id.
+  // Programmatic name of this provider.
   public String getName() {
     return "ExampleProvider";
   }
 
-  // This name will be displayed in category tree.
+  // User-friendly name - this name will be displayed in category tree.
   public String getDisplayName() {
     return "Example Category";
   }
 
   // Priority of category. Higher the number, higher
-  // will be category in tree. If two categories have
+  // will the category be in the tree. If two categories have
   // same priorities, they are sorted according
   // to their names.
   public int getPriority() {
@@ -220,37 +268,50 @@ public class ExampleProvider implemenets PropertiesPanelProvider {
     return new ExamplePropertiesPanel(properties);
   }
 
-  // Defines parent category of this category. If return null, this is top
-  // level category. In other cases id of parent category must be returned.
+  // Defines parent category of this category. If null is returned, this is top
+  // level category. In other cases id (programmatic name) of parent category
+  // must be returned.
   public String getParent() {
     return null;
   }
 
-  // Optional. For each category can be defined list of virtual categories
-  // which shows instead of properties panel only panel with information,
-  // how many and for what kind of modules categories contains
-  // this virtual category.
+  // Optional. For each category, list of virtual categories can be defined.
+  // Instead of properties panel, VirtualCategoryPanel only informs of type and
+  // installed number of modules of a certain type.
   public List<VirtualCategoryPanel> getSubCategories() {
     return null;
   }
 }
 </pre>
-<h4>AbstractPropertiesPanel</h4>
+
+<h4><code>AbstractPropertiesPanel</code></h4>
 <p>
-This class represents visual component of properties category. You can design it in whatever way you like. For proper functionality must be fullfiled these few steps:
+  This class represents the visual component of properties category. You can 
+  design it in whatever way you like. For proper functionality, a few steps must
+  be followed.
 </p>
 <ol>
-	<li>Call <code>super(Properties)</code> in constructor: By this step is Properties instance saved into <code>properties</code> protected
-		field and you can use it in <code>load()</code> and <code>store()</code> methods.</li>
-	<li>Implement <code>load()</code> method: In this method are values, previously saved into Properties instance provided to this panel, loaded into
-		components to be founded in this panel.</li>
-	<li>Implement <code>store()</code> method: Here are values gathered from components of this panel saved into Properties.</li>
+  <li>
+    Call <code>super(Properties)</code> in constructor: this causes
+    <code>Properties</code> instance to be saved into
+    <code>properties</code> protected field and you can use it in
+    <code>load()</code> and <code>store()</code> methods.
+  </li>
+  <li>
+    Implement <code>load()</code> method: In this method values previously saved 
+    into <code>Properties</code> instance provided to this panel are loaded into
+    components in this panel.
+  </li>
+  <li>
+    Implement <code>store()</code> method: Here the values gathered from
+    components in this panel are saved into <code>Properties</code>.
+  </li>
 </ol>
 
-<span>Example:</span><br/>
+<span>Example:</span>
 <pre class="code">
-// This is only a part of
-public abstract class ExamplePanel extends AbstractPropertiesPanel {
+// This is only a part of the actual class...
+public class ExamplePanel extends AbstractPropertiesPanel {
 
   public ExamplePanel(final Properties properties) {
     super(properties);
@@ -261,37 +322,54 @@ public abstract class ExamplePanel extends AbstractPropertiesPanel {
   }
 
   public abstract void load() {
-    String propValue = properties.getProperty("exampleKey", "");
+    String propValue = properties.getProperty("exampleKey", "default value");
     someTextField.setText(propValue);
   }
-
 }
 </pre>
 
 <h2 id="6-rule-display">Rule display</h2>
 
 <p>
-Rule displayer is component used for visualisation of rules in any part of inference process, but mainly in simplification part.
-If provided rule displayers are not good enough or something is missing, you can implement rule displayer for your own.
-You just need to follow these few easy steps:
+  <i>Rule displayer</i> is a component used for visualization of rules in any
+  step of inference process. If rule displayers bundled with jInfer are
+  insufficient, you can implement a rule displayer on your own.
+  You just need to follow these few easy steps.
 </p>
 <ol type=1>
-	<li>Implement <code>cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer</code>
-		<ul>
-			<li><code>RuleDisplayer</code> interface extends <code>NamedModule</code>, so you need to override its methods.</li>
-			<li>Override <code>createDisplayer(name, rules)</code> method which creates displayer window responsible for displaying rules.</li>
-		</ul>
-	</li>
-	<li>Annotate this class with <code>@ServiceProvider(service = RuleDisplayer.class)</code></li>
+  <li>
+    Implement <code>cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer</code>
+    <ul>
+      <li>
+        <code>RuleDisplayer</code> interface extends <code>NamedModule</code>,
+        so you need to override its methods too.
+      </li>
+      <li>
+        Implement <code>createDisplayer(name, rules)</code> method which creates
+        displayer window responsible for displaying rules.
+      </li>
+    </ul>
+  </li>
+  <li>
+    Annotate this class with
+    <code>@ServiceProvider(service = RuleDisplayer.class)</code>.
+  </li>
 </ol>
 
-<span>Example:</span><br/>
+<p>
+  <strong>Important notice:</strong> never forget to clone the rules you want
+  to display. Rule displayer usually runs in its own thread, and accessing the
+  rules that are being simplified at the same time might lead to weird results.
+  You can use <code>CloneHelper</code> to clone the rules.
+</p>
+
+<span>Example:</span>
 <pre class="code">
 @ServiceProvider(service = RuleDisplayer.class)
 public final class ExampleRuleDisplayer implements RuleDisplayer {
 
   @Override
-  public void createDisplayer(final String panelName, final List<Element> rules) {
+  public void createDisplayer(String panelName, List<Element> rules) {
     // Creates standard NBP TopComponent in which are rules displayed.
     ExampleRDTopComp topComponent = ExampleRDTopComp.findInstance();
     if (!topComponent.isOpened()) {
@@ -302,7 +380,7 @@ public final class ExampleRuleDisplayer implements RuleDisplayer {
 
   @Override
   public String getName() {
-    return "displayerID";
+    return "ExampleDisplayer";
   }
 
   @Override
@@ -317,39 +395,57 @@ public final class ExampleRuleDisplayer implements RuleDisplayer {
 }
 </pre>
 
+<br/>
+
+<span>Example of invocation with cloning:</span>
+<pre class="code">
+RuleDisplayerHelper.showRulesAsync("Panel name",
+    new CloneHelper().cloneGrammar(grammar), true);
+</pre>
+
 <h2 id="7-output-logging">Console output, logging</h2>
 
 <p>
-For printing data to console output, NBP provides <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/IOProvider.html">IOProvider</a> and <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/InputOutput.html">InputOutput</a> classes.
-IOProvider's method <code>getIO(String, boolean)</code> returns InputOutput instance, which can be used to obtain Reader/OutputWriter to read/write into output window.
+  To print to console output, NBP provides
+  <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/IOProvider.html"><code>IOProvider</code></a>
+  and <a href="http://bits.netbeans.org/dev/javadoc/org-openide-io/org/openide/windows/InputOutput.html"><code>InputOutput</code></a>
+  classes. <code>IOProvider</code>'s method <code>getIO(String, boolean)</code>
+  returns <code>InputOutput</code> instance, which can be used to obtain
+  <code>Reader</code>/<code>OutputWriter</code> to read/write into output window.
 </p>
+
 <span>Example:</span><br/>
 <pre class="code">
 // Creates new output window, where first parameter is a name and second
-// is flag determinig if new window will be created if there is already
-// a window with the same name.
-final InputOutput ioResult = IOProvider.getDefault().getIO("Example", true);
+// is flag determining whether a new window should be created even if there is
+//  already a window with the same name.
+InputOutput ioResult = IOProvider.getDefault().getIO("Example", true);
 ioResult.getOut().println("Hello world");
 
-// After writing everything into output window close the output.
+// After writing everything into output window, close the output.
 ioResult.getOut().close();
 </pre>
 
 <p>
-Logging is done in jInfer by using <a href="http://logging.apache.org/log4j/1.2/">Log4j tool</a>. If you are not familiar with
-Log4j, example below show you some simple usage. All logged messages are saved in a standard log file placed
-in <i>UserHome/.jinfer/</i> folder and printed into "jInfer" output window in jInfer application. For each of these two places can be set
-in jInfer options, for which LOG level will be messages saved/printed.
+  Logging is done in jInfer using
+  <a href="http://logging.apache.org/log4j/1.2/">Log4j tool</a>.
+  If you are not familiar with Log4j, example below shows simple usage. All 
+  logged messages are saved in a standard log file placed in <i>UserHome/.jinfer/</i>
+  folder and printed into "jInfer" output window in the application. For each
+  of these two places a log level can be set in jInfer options.
 </p>
+
 <span>Example:<span><br/>
 <pre class="code">
-// Creates Logger instance for particular class
+// Creates Logger instance for this particular class
 private static final Logger LOG = Logger.getLogger(Example.class);
 
     ...
 
 // Log a message with info level
 LOG.info("Some message with info log level");
+// Log an error message
+LOG.error("OMG, error occurred!");
 </pre>
 
 <h2 id="8-runningproject"><code>RunningProject</code> class</h2>

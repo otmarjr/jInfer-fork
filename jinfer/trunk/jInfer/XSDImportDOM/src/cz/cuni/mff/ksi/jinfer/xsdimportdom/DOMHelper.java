@@ -40,8 +40,8 @@ import org.openide.util.NbBundle;
 import org.w3c.dom.Node;
 
 /**
- * Helper class for {@link DOMHandler }.
- * Provides convenience methods used during parsing.
+ * Helper class for {@link DOMHandler }, provides convenience methods used during parsing.
+ * It is best NOT to use these methods outside this package.
  * Please read package info.
  * @author reseto
  */
@@ -59,7 +59,7 @@ public final class DOMHelper {
    * @return Parameter cast to <code>org.w3c.dom.Element</code>, or <code>null</code>.
    * @see org.w3c.dom.Element
    */
-  protected static org.w3c.dom.Element getDOMElement(final Node node) {
+  public static org.w3c.dom.Element getDOMElement(final Node node) {
     if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
       return (org.w3c.dom.Element) node;
     }
@@ -74,7 +74,7 @@ public final class DOMHelper {
    * @return Valid interval.
    * @see XSDOccurences#createInterval(java.lang.String, java.lang.String)
    */
-  protected static RegexpInterval determineInterval(final org.w3c.dom.Element node) {
+  public static RegexpInterval determineInterval(final org.w3c.dom.Element node) {
     final String minOccurence = node.getAttribute(XSDAttribute.MINOCCURS.toString());
     final String maxOccurence = node.getAttribute(XSDAttribute.MAXOCCURS.toString());
     return XSDOccurences.createInterval(minOccurence, maxOccurence);
@@ -86,7 +86,7 @@ public final class DOMHelper {
    * @param parent Tag of the parent node.
    * @return Error message.
    */
-  protected static String errorWrongNested(final XSDTag child, final XSDTag parent) {
+  public static String errorWrongNested(final XSDTag child, final XSDTag parent) {
     return NbBundle.getMessage(DOMHelper.class, "Error.WrongTagsNested", child.toString(), parent.toString());
   }
 
@@ -96,7 +96,7 @@ public final class DOMHelper {
    * @param parent Tag of the parent node.
    * @return Warning message.
    */
-  protected static String warnUnsupported(final XSDTag child, final XSDTag parent) {
+  public static String warnUnsupported(final XSDTag child, final XSDTag parent) {
     return NbBundle.getMessage(DOMHelper.class, "Warn.UnsupportedStructure", child.toString(), parent.toString());
   }
 
@@ -112,7 +112,7 @@ public final class DOMHelper {
    * @throws XSDException Raise exception when schema contains errors.
    * @see IGGUtils#METADATA_SENTINEL
    */
-  protected static Element createSentinel(final org.w3c.dom.Element domElem, final List<String> context, final XSDAttribute useAsName) throws XSDException {
+  public static Element createSentinel(final org.w3c.dom.Element domElem, final List<String> context, final XSDAttribute useAsName) throws XSDException {
     final Element sentinel = Element.getMutable();
     if (XSDAttribute.NAME.equals(useAsName) || XSDAttribute.REF.equals(useAsName)) {
       sentinel.setName(domElem.getAttribute(useAsName.toString()));
@@ -142,7 +142,7 @@ public final class DOMHelper {
    * @param containerType Expected name of the subtree element, this is just a consistency check.
    * @throws XSDException Raise exception when schema contains errors.
    */
-  protected static void extractSubnodesFromContainer(final Element subtree, final Element destination, final String containerType) throws XSDException {
+  public static void extractSubnodesFromContainer(final Element subtree, final Element destination, final String containerType) throws XSDException {
     if (!subtree.getName().equals(containerType)) {
       throw new XSDException(NbBundle.getMessage(DOMHelper.class, "Error.WrongContainer", containerType, subtree.getName()));
     }
@@ -173,7 +173,7 @@ public final class DOMHelper {
    * This method should be used only when the tag of a node was ELEMENT!
    * @param ret Element to be finalized.
    */
-  protected static void finalizeElement(final Element ret, final List<String> newContext) {
+  public static void finalizeElement(final Element ret, final List<String> newContext) {
 
     if (ret.getSubnodes().getInterval() == null) {
       ret.getSubnodes().setInterval(RegexpInterval.getOnce());
@@ -212,7 +212,7 @@ public final class DOMHelper {
    * @param child Node containing the <i>attribute</i> tag.
    * @return Value of tag attribute <i>name</i> or <i>ref</i> or empty string.
    */
-  protected static String getAttributeName(final org.w3c.dom.Element child) {
+  public static String getAttributeName(final org.w3c.dom.Element child) {
     final String name = child.getAttribute(XSDAttribute.NAME.toString());
     final String ref = child.getAttribute(XSDAttribute.REF.toString());
     if (!BaseUtils.isEmpty(name)) {
@@ -233,7 +233,7 @@ public final class DOMHelper {
    * @param child DOM node of the <i>attribute</i> tag.
    * @return New metadata.
    */
-  protected static Map<String, Object> getAttributeMeta(final org.w3c.dom.Element child) {
+  public static Map<String, Object> getAttributeMetadata(final org.w3c.dom.Element child) {
     final Map<String, Object> attrMeta = new HashMap<String, Object>();
     if (child.hasAttribute(XSDAttribute.USE.toString())) {
       if (XSDUtility.REQUIRED.equals(child.getAttribute(XSDAttribute.USE.toString()))) {

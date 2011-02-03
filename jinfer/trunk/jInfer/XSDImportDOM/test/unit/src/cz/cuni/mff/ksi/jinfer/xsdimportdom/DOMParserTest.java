@@ -14,14 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
-import java.util.List;
 import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -29,8 +32,7 @@ import static org.junit.Assert.*;
  *
  * @author reseto
  */
-@SuppressWarnings("PMD.SystemPrintln")
-public class DOMHandlerTest {
+public class DOMParserTest {
 
   private static final String XML_HEAD = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   private static final String SCHEMA_B = "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">";
@@ -38,9 +40,13 @@ public class DOMHandlerTest {
   private static final char NL = '\n';
 
   private List<Element> make(final InputStream stream) {
-    final DOMHandler handler = new DOMHandler();
-    handler.parse(stream);
-    return handler.getRules();
+    final DOMParser parser = new DOMParser();
+    return parser.parse(stream);
+  }
+
+  @Test
+  public void testGetName() {
+    assertEquals("DOMParser", new DOMParser().getName());
   }
 
   @Test

@@ -64,8 +64,7 @@ public class XSDProcessor implements Processor {
       if (parser != null) {
         //SAX or DOM parser selected
         LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.ParsingMethod", parser.getDisplayName()));
-        parser.process(stream);
-        final List<Element> rules = parser.getRules();
+        final List<Element> rules = parser.parse(stream);
         printDebugInfo(rules, "AfterParsing");
         // show the rules before expansion
         RuleDisplayerHelper.showRulesAsync("Raw", new CloneHelper().cloneGrammar(rules), true);

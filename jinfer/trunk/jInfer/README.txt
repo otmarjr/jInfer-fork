@@ -1,7 +1,7 @@
 
                                jInfer
                 Java framework for XML schema inference
-                             version 0.3
+                           version 0.4/1.0
 
 
   What is it?
@@ -10,6 +10,7 @@
   jInfer is a framework, or a collection of NetBeans modules if you will, for
 inferring XML schemas from existing documents, schemas and queries. It is
 developed at Charles University in Prague in a Software Project course.
+  You can find the project web at http://jinfer.sourceforge.net/.
 
 
   The Latest Version
@@ -39,18 +40,17 @@ NetBeans, jInfer is ready to be used.
   Documentation
   -------------
 
-	jInfer documentation can be found at the project web:
+  jInfer documentation root can be found at the project web site:
 http://jinfer.sourceforge.net/documentation.html
 
 
   Development
   -----------
 
-	jInfer developer's documentation can be found at the project web:
+  jInfer developer's documentation can be found at the project web:
 http://jinfer.sourceforge.net/documentation.html
-
-  To build jInfer, download the source codes, open the jInfer module suite in
-NetBeans, build & start hacking.
+  Instructions on how to build jInfer from sources or create own modules and
+documentation for all modules bundled with jInfer are available there.
 
 
   License
@@ -77,6 +77,7 @@ Master's Thesis (http://www.ksi.mff.cuni.cz/~mlynkova/dp/Vyhnanovska.pdf).
 
   To report a bug or request a new feature, please visit jInfer tracker:
 https://sourceforge.net/tracker/?group_id=302779
+  For other contact option, visit http://jinfer.sourceforge.net/help.html
 
 
   Authors

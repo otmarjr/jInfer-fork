@@ -1,5 +1,5 @@
 /**
- * Package containing entire logic
+ * Package containing entire logic for parsing XSD Schemas with Document Object Model parser.
  * <p>
  * Note that there are several types of entities called "element" within this package.
  * To avoid ambiguity, we shall use notation

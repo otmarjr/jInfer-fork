@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import java.io.InputStream;
 import java.util.List;
 import org.xml.sax.SAXException;
@@ -29,7 +30,6 @@ import org.xml.sax.SAXException;
  */
 public interface XSDParser extends NamedModule {
 
-  void process(final InputStream stream);
-  List<Element> getRules();
+  List<Element> parse(final InputStream stream) throws XSDException;
   
 }

@@ -45,7 +45,7 @@ public class SAXParser implements XSDParser {
   private static final Logger LOG = Logger.getLogger(SAXParser.class);
 
   @Override
-  public void process(final InputStream stream) {
+  public List<Element> parse(final InputStream stream) throws XSDException {
     LOG.setLevel(XSDImportSettings.logLevel());
 
     handler = new SAXHandler();
@@ -59,10 +59,7 @@ public class SAXParser implements XSDParser {
     } catch (ParserConfigurationException ex) {
       throw new XSDException(NbBundle.getMessage(SAXParser.class, "Error.GenericExceptionMessage"), ex);
     }
-  }
 
-  @Override
-  public List<Element> getRules() {
     return handler.getRules();
   }
 

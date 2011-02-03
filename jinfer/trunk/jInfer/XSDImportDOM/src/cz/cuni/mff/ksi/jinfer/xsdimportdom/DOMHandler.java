@@ -16,8 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
@@ -25,32 +23,26 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.*;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.*;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import org.openide.util.Exceptions;
-import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
- * Class responsible for creating Initial Grammar rules from XSD Schema.
+ * Class responsible for building rule-trees from DOM tree.
  * <p>
- * It uses a Xerces DOM parser (from SUN) to build the DOM tree from a stream, 
- * which is then recursively traversed and a parallel rule-tree is created.
- * This new rule-tree contains the whole IG rules that are returned by <code>getRules</code> method.
- * These rules may contain complex regular expressions (depending on a particular schema)
- * and may need to be expanded using {@link Expander } before they can be simplified.
+ * Extracts information from existing DOM tree to create rule-trees.
+ * Rule-trees are tree data structures, where vertices are instances of {@link Element }
+ * and edges are the relations between them stored in {@link Regexp } instances within vertices.
+ * Every vertex is a rule by itself, so in order to obtain IG rules, 
+ * one must extract all <code>Element</code>s from a rule-tree.
  * </p>
  * Please read package info.
  * @author reseto
  */
-public class DOMHandler {
+class DOMHandler {
 
   private static final Logger LOG = Logger.getLogger(DOMHandler.class);
   private final boolean verbose = XSDImportSettings.isVerbose();
@@ -84,61 +76,24 @@ public class DOMHandler {
   /**
    * Construct this parser, set loglevel as defined in XSD Import properties.
    */
-  public DOMHandler() {
+  DOMHandler() {
     LOG.setLevel(XSDImportSettings.logLevel());
   }
 
   /**
-   * Parse the schema contained in a stream.
-   * Must be called before <code>getRules</code> method,
-   * because it creates the rule-tree, from which the rules are extracted.
-   * @param stream Schema to be parsed.
-   */
-  public void parse(final InputStream stream) {
-    if (stream == null) {
-      return;
-    }
-    try {
-      final DOMParser parser = new DOMParser();
-      parser.parse(new InputSource(stream));
-      final Document doc = parser.getDocument();
-      final org.w3c.dom.Element root = doc.getDocumentElement();
-
-      examineRootChildren(root); // this recursively builds rule-trees for subelements
-
-    } catch (SAXException ex) {
-      Exceptions.printStackTrace(ex);
-    } catch (IOException ex) {
-      Exceptions.printStackTrace(ex);
-    }
-  }
-  
-  /**
-   * Get the list of all rules extracted from the schema.
-   * @return List of rules.
-   */
-  public List<Element> getRules() {
-    final List<Element> rules = new ArrayList<Element>();
-    for (Element root : roots) {
-      final List<Element> elementRules = new ArrayList<Element>();
-      rules.add(root);
-      XSDUtility.getRulesFromElement(root, elementRules);
-      rules.addAll(elementRules);
-    }
-    return rules;
-  }
-
-  // #########################################################################       PRIVATE METHODS
-  
-  /**
-   * Examine direct children of the root node of DOM tree.
-   * This should be invoked only once, on the schema node itself.
+   * Create rule-trees from direct children of the <code>root</code> node of DOM tree.
+   * <p>
+   * Returns list of <code>Element</code>s containing complete rule-trees of the top level tags.
+   * This method recursively builds rule-trees for all its sub-nodes,
+   * thus should be invoked only once, on the <i>schema</i> tag node itself.
+   * </p>
    * All <i>complexType</i> tags with <i>name</i> tag attribute are added to the <code>namedCTypes</code> map.
    * All <i>element</i> tags with <i>name</i> tag attribute are added to the <code>referenced</code> map.
    * Then, the whole rule-tree is built using the DOM tree and the two maps.
-   * @param root Root (schema) node.
+   * @param root Root of the DOM tree, (<i>schema</i> tag) node.
+   * @return Rule-trees of all top level <i>element</i> tags, or empty list if schema was empty.
    */
-  private void examineRootChildren(final org.w3c.dom.Element root) throws XSDException {
+  public List<Element> createRuleTrees(final org.w3c.dom.Element root) throws XSDException {
     for (int i = 0; i < root.getChildNodes().getLength(); i++) {
       // check if child is of type ELEMENT_NODE as defined by DOM spec.
       final org.w3c.dom.Element domElem = DOMHelper.getDOMElement(root.getChildNodes().item(i));
@@ -169,7 +124,10 @@ public class DOMHandler {
       }
       // else .. we are not interested in the node
     }
+    return roots;
   }
+
+  // #########################################################################       PRIVATE METHODS
 
   /**
    * Add <code>DOM.Element</code> to the <code>referenced</code> map.
@@ -309,7 +267,6 @@ public class DOMHandler {
                                final List<String> newContext,
                                final List<org.w3c.dom.Element> newVisited,
                                final RegexpInterval interval) throws XSDException {
-
     for (int i = 0; i < children.getLength(); i++) {
       final org.w3c.dom.Element child = DOMHelper.getDOMElement(children.item(i));
       if (child != null) {
@@ -345,7 +302,7 @@ public class DOMHandler {
                                  final List<org.w3c.dom.Element> visited,
                                  final List<String> newContext,
                                  final List<org.w3c.dom.Element> newVisited) {
-
+    // check if node was visited previously
     final Element sentinelOfVisited = checkElementVisited(currentNode, context, visited);
     if (sentinelOfVisited != null) {
       return sentinelOfVisited;
@@ -370,9 +327,8 @@ public class DOMHandler {
   }
 
   private Element checkElementVisited(final org.w3c.dom.Element currentNode,
-                               final List<String> context,
-                               final List<org.w3c.dom.Element> visited) {
-
+                                      final List<String> context,
+                                      final List<org.w3c.dom.Element> visited) {
     for (org.w3c.dom.Element el : visited) {
       // if this node was visited previously in the recursion, it is the same instance,
       // (for example when dealing with a recursive complextype)
@@ -388,8 +344,7 @@ public class DOMHandler {
   }
 
   private Element checkElementRefAttribute(final org.w3c.dom.Element currentNode,
-                           final List<String> context) {
-
+                                           final List<String> context) {
     if (XSDTag.SCHEMA.toString().equals(XSDUtility.trimNS(currentNode.getParentNode().getNodeName()))) {
       throw new XSDException("Invalid schema. Element attribute 'ref' is not allowed for elements directly under the schema tag.");
     } else if (!referenced.containsKey(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
@@ -404,7 +359,6 @@ public class DOMHandler {
                                           final List<String> newContext,
                                           final List<org.w3c.dom.Element> newVisited,
                                           final String name) {
-
     if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
       // element has defined type
       final String type = XSDUtility.trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
@@ -424,6 +378,8 @@ public class DOMHandler {
     }
     return null;
   }
+
+  // ####################################################################       HANDLING OF CHILDREN
 
   private void handleChildElement(final Element ret,
                                   final org.w3c.dom.Element child,
@@ -461,7 +417,7 @@ public class DOMHandler {
       // parent is also complexType tag, or other unsuitable tag
       throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
     }
-    // complexType tag directly under schema tag is handled in examineRootChildren()
+    // complexType tag directly under schema tag is handled in createRuleTrees()
   }
 
   private void handleChildAll(final Element ret,
@@ -499,8 +455,7 @@ public class DOMHandler {
   private void handleChildAttribute(final Element ret,
                                     final org.w3c.dom.Element child,
                                     final List<String> newContext) {
-
-    // first get the tag attribute 'name' or 'ref'
+    // firstly, get the tag attribute 'name' or 'ref'
     // we don't resolve the 'ref' at all (out of assignment), just register it's there
     final String attrName = DOMHelper.getAttributeName(child);
     if (BaseUtils.isEmpty(attrName)) {
@@ -515,7 +470,12 @@ public class DOMHandler {
         attrType = "";
       }
     }
-    ret.getAttributes().add(new Attribute(newContext, attrName, DOMHelper.getAttributeMeta(child), attrType, new ArrayList<String>(0)));
+    ret.getAttributes().add(
+      new Attribute(newContext,
+                    attrName,
+                    DOMHelper.getAttributeMetadata(child),
+                    attrType,
+                    new ArrayList<String>(0)));
   }
 
 }

@@ -24,371 +24,552 @@ import static org.junit.Assert.*;
  *
  * @author reseto
  */
+@SuppressWarnings("PMD")
 public class XSDBuiltInDataTypesTest {
 
   // ------------------------------------------------------------------ STRINGS
-  @Test(expected=NullPointerException.class)
+  @Test
   public void testIsStringType0() {
     System.out.println("isStringType0(null)");
-    String type = null;
-    XSDBuiltInDataTypes.isStringType(type);
+    final String type = null;
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
+    assertEquals(expResult, result);
   }
 
   @Test
   public void testIsStringType1() {
-    System.out.println("isStringType1(xs:string)");
-    String type = "xs:string";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isStringType(type);
+    System.out.println("isStringType1(string)");
+    final String type = "string";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsStringType2() {
-    System.out.println("isStringType2(XS:QName)");
-    String type = "XS:QName";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isStringType(type);
+    System.out.println("isStringType2(QName)");
+    final String type = "QName";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsStringType3() {
     System.out.println("isStringType3(empty)");
-    String type = "";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isStringType(type);
+    final String type = "";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsStringType4() {
     System.out.println("isStringType4(xs:xs:)");
-    String type = "xs:xs:";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isStringType(type);
+    final String type = "xs:xs:";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsStringType5() {
     System.out.println("isStringType5(definedType)");
-    String type = "definedType";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isStringType(type);
+    final String type = "definedType";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsStringType6() {
     System.out.println("isStringType6(double)");
-    String type = "double";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isStringType(type);
+    final String type = "double";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsStringType7() {
+    System.out.println("isStringType7(xs:string)");
+    final String type = "xs:string";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsStringType8() {
+    System.out.println("isStringType8(XS:QName)");
+    final String type = "XS:QName";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isStringType(type);
     assertEquals(expResult, result);
   }
   // --------------------------------------------------------------- DATE TYPES
 
-  @Test(expected=NullPointerException.class)
+  @Test
   public void testIsDateType0() {
     System.out.println("isDateType0(null)");
-    String type = null;
-    XSDBuiltInDataTypes.isDateType(type);
+    final String type = null;
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isDateType(type);
+    assertEquals(expResult, result);
   }
 
   @Test
   public void testIsDateType1() {
-    System.out.println("isDateType1(xs:date)");
-    String type = "xs:date";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isDateType(type);
+    System.out.println("isDateType1(date)");
+    final String type = "date";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsDateType2() {
-    System.out.println("isDateType2(XS:gYearMonth)");
-    String type = "XS:gYearMonth";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isDateType(type);
+    System.out.println("isDateType2(gYearMonth)");
+    final String type = "gYearMonth";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsDateType3() {
     System.out.println("isDateType3(empty)");
-    String type = "";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isDateType(type);
+    final String type = "";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
   
   @Test
   public void testIsDateType4() {
     System.out.println("isDateType4(xs:string)");
-    String type = "xs:string";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isDateType(type);
+    final String type = "xs:string";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isDateType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsDateType5() {
+    System.out.println("isDateType5(xs:date)");
+    final String type = "xs:date";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isDateType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsDateType6() {
+    System.out.println("isDateType6(XS:gYearMonth)");
+    final String type = "XS:gYearMonth";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isDateType(type);
     assertEquals(expResult, result);
   }
 
   // ------------------------------------------------------------ NUMERIC TYPES
 
-  @Test(expected=NullPointerException.class)
+  @Test
   public void testIsNumericType0() {
     System.out.println("isNumericType0(null)");
-    String type = null;
-    XSDBuiltInDataTypes.isNumericType(type);
+    final String type = null;
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isNumericType(type);
+    assertEquals(expResult, result);
   }
 
   @Test
   public void testIsNumericType1() {
-    System.out.println("isNumericType1(xs:integer)");
-    String type = "xs:integer";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isNumericType(type);
+    System.out.println("isNumericType1(integer)");
+    final String type = "integer";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsNumericType2() {
-    System.out.println("isNumericType2(XS:unsignedInt)");
-    String type = "XS:unsignedInt";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isNumericType(type);
+    System.out.println("isNumericType2(unsignedInt)");
+    final String type = "unsignedInt";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsNumericType3() {
     System.out.println("isNumericType3(empty)");
-    String type = "";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isNumericType(type);
+    final String type = "";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsNumericType4() {
     System.out.println("isNumericType4(XS:gYearMonth)");
-    String type = "XS:gYearMonth";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isNumericType(type);
+    final String type = "XS:gYearMonth";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isNumericType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsNumericType5() {
+    System.out.println("isNumericType5(xs:integer)");
+    final String type = "xs:integer";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isNumericType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsNumericType6() {
+    System.out.println("isNumericType6(xs:unsignedInt)");
+    final String type = "xs:unsignedInt";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isNumericType(type);
     assertEquals(expResult, result);
   }
 
   // ----------------------------------------------------- TRICKY NUMERIC TYPES
 
-  @Test(expected=NullPointerException.class)
+  @Test
   public void testIsTrickyNumericType0() {
     System.out.println("isTrickyNumericType0(null)");
-    String type = null;
-    XSDBuiltInDataTypes.isTrickyNumericType(type);
+    final String type = null;
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyNumericType1() {
-    System.out.println("isTrickyNumericType1(xs:byte)");
-    String type = "xs:byte";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    System.out.println("isTrickyNumericType1(byte)");
+    final String type = "byte";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyNumericType2() {
-    System.out.println("isTrickyNumericType2(XS:int)");
-    String type = "XS:int";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    System.out.println("isTrickyNumericType2(int)");
+    final String type = "int";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyNumericType3() {
     System.out.println("isTrickyNumericType3(empty)");
-    String type = "";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    final String type = "";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyNumericType4() {
     System.out.println("isTrickyNumericType4(XS:)");
-    String type = "XS:";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    final String type = "XS:";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyNumericType5() {
     System.out.println("isTrickyNumericType5(XS:boolean)");
-    String type = "XS:";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    final String type = "XS:";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsTrickyNumericType6() {
+    System.out.println("isTrickyNumericType6(xs:byte)");
+    final String type = "xs:byte";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsTrickyNumericType7() {
+    System.out.println("isTrickyNumericType7(XS:int)");
+    final String type = "XS:int";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyNumericType(type);
     assertEquals(expResult, result);
   }
 
   // -------------------------------------------------------- TRICKY MISC TYPES
   
-  @Test(expected=NullPointerException.class)
+  @Test
   public void testIsTrickyMiscType0() {
     System.out.println("isTrickyMiscType0(null)");
-    String type = null;
-    XSDBuiltInDataTypes.isTrickyNumericType(type);
+    final String type = null;
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
+    assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyMiscType1() {
-    System.out.println("isTrickyMiscType1(xs:boolean)");
-    String type = "xs:boolean";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
+    System.out.println("isTrickyMiscType1(boolean)");
+    final String type = "boolean";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyMiscType2() {
-    System.out.println("isTrickyMiscType2(XS:float)");
-    String type = "XS:float";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
+    System.out.println("isTrickyMiscType2(float)");
+    final String type = "float";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyMiscType3() {
     System.out.println("isTrickyMiscType3(empty)");
-    String type = "";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
+    final String type = "";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsTrickyMiscType4() {
     System.out.println("isTrickyMiscType4(XS:BOOLEAN)");
-    String type = "XS:BOOLEAN";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
+    final String type = "XS:BOOLEAN";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsTrickyMiscType5() {
+    System.out.println("isTrickyMiscType5(xs:boolean)");
+    final String type = "xs:boolean";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsTrickyMiscType6() {
+    System.out.println("isTrickyMiscType6(XS:float)");
+    final String type = "XS:float";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isTrickyMiscType(type);
     assertEquals(expResult, result);
   }
 
   // --------------------------------------------------------------- MISC TYPES
 
-  @Test(expected=NullPointerException.class)
+  @Test
   public void testIsMiscType0() {
     System.out.println("isMiscType0(null)");
-    String type = null;
-    XSDBuiltInDataTypes.isMiscType(type);
+    final String type = null;
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isMiscType(type);
+    assertEquals(expResult, result);
   }
 
   @Test
   public void testIsMiscType1() {
-    System.out.println("isMiscType1(xs:NOTATION)");
-    String type = "xs:NOTATION";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isMiscType(type);
+    System.out.println("isMiscType1(NOTATION)");
+    final String type = "NOTATION";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsMiscType2() {
-    System.out.println("isMiscType2(XS:base64Binary)");
-    String type = "XS:base64Binary";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isMiscType(type);
+    System.out.println("isMiscType2(base64Binary)");
+    final String type = "base64Binary";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsMiscType3() {
     System.out.println("isMiscType3(empty)");
-    String type = "";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isMiscType(type);
+    final String type = "";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsMiscType4() {
     System.out.println("isMiscType4(xs:gYearMonth)");
-    String type = "xs:gYearMonth";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isMiscType(type);
+    final String type = "xs:gYearMonth";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isMiscType(type);
     assertEquals(expResult, result);
   }
 
-  // -------------------------------------------------------------- everything
+  @Test
+  public void testIsMiscType5() {
+    System.out.println("isMiscType5(xs:NOTATION)");
+    final String type = "xs:NOTATION";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isMiscType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsMiscType6() {
+    System.out.println("isMiscType6(XS:base64Binary)");
+    final String type = "XS:base64Binary";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isMiscType(type);
+    assertEquals(expResult, result);
+  }
+
+  // -------------------------------------------------------------- everything else FALSE
     
-  @Test(expected=NullPointerException.class)
-  public void testIsSimpleDataType0() {
-    System.out.println("isSimpleDataType0(null)");
-    String type = null;
-    XSDBuiltInDataTypes.isSimpleDataType(type);
-  }
-
   @Test
-  public void testIsSimpleDataType1() {
-    System.out.println("isSimpleDataType1(xs:token)");
-    String type = "xs:token";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isSimpleDataType(type);
+  public void testIsBuiltInType0() {
+    System.out.println("IsBuiltInType0(null)");
+    final String type = null;
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testIsSimpleDataType2() {
-    System.out.println("isSimpleDataType2(XS:base64Binary)");
-    String type = "XS:base64Binary";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isSimpleDataType(type);
+  public void testIsBuiltInType1() {
+    System.out.println("IsBuiltInType1(xs:token)");
+    final String type = "xs:token";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testIsSimpleDataType3() {
+  public void testIsBuiltInType2() {
+    System.out.println("IsBuiltInType2(XS:base64Binary)");
+    final String type = "XS:base64Binary";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsBuiltInType3() {
     System.out.println("isMiscType3(empty)");
-    String type = "";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isSimpleDataType(type);
+    final String type = "";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testIsSimpleDataType4() {
-    System.out.println("isSimpleDataType4(xs:myType)");
-    String type = "xs:myType";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isSimpleDataType(type);
-    assertEquals(expResult, result);
-  }
-
-  public void testIsSimpleDataType5() {
-    System.out.println("isSimpleDataType5(xs:BOOLEAN)");
-    String type = "xs:BOOLEAN";
-    boolean expResult = false;
-    boolean result = XSDBuiltInDataTypes.isSimpleDataType(type);
+  public void testIsBuiltInType4() {
+    System.out.println("IsBuiltInType4(xs:myType)");
+    final String type = "xs:myType";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testIsSimpleDataType6() {
-    System.out.println("isSimpleDataType6(xs:string)");
-    String type = "xs:string";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isSimpleDataType(type);
+  public void testIsBuiltInType5() {
+    System.out.println("IsBuiltInType5(xs:BOOLEAN)");
+    final String type = "xs:BOOLEAN";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
     assertEquals(expResult, result);
   }
 
   @Test
-  public void testIsSimpleDataType7() {
-    System.out.println("isSimpleDataType7(xs:int)");
-    String type = "xs:int";
-    boolean expResult = true;
-    boolean result = XSDBuiltInDataTypes.isSimpleDataType(type);
+  public void testIsBuiltInType6() {
+    System.out.println("IsBuiltInType6(xs:string)");
+    final String type = "xs:string";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
     assertEquals(expResult, result);
   }
+
+  @Test
+  public void testIsBuiltInType7() {
+    System.out.println("IsBuiltInType7(xs:int)");
+    final String type = "xs:int";
+    final boolean expResult = false;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
+  // ------------------------------------------------------------- everything else TRUE
+
+  @Test
+  public void testIsBuiltInType11() {
+    System.out.println("IsBuiltInType1(token)");
+    final String type = "token";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsBuiltInType12() {
+    System.out.println("IsBuiltInType2(base64Binary)");
+    final String type = "base64Binary";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsBuiltInType14() {
+    System.out.println("IsBuiltInType4(unsignedInt)");
+    final String type = "unsignedInt";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsBuiltInType15() {
+    System.out.println("IsBuiltInType5(boolean)");
+    final String type = "boolean";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsBuiltInType16() {
+    System.out.println("IsBuiltInType6(string)");
+    final String type = "string";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsBuiltInType17() {
+    System.out.println("IsBuiltInType7(int)");
+    final String type = "int";
+    final boolean expResult = true;
+    final boolean result = XSDBuiltInDataTypes.isBuiltInType(type);
+    assertEquals(expResult, result);
+  }
+
 }

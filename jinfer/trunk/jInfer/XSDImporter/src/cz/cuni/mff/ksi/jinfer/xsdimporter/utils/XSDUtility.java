@@ -80,6 +80,18 @@ public final class XSDUtility {
   }
 
   /**
+   * Check if {@code name } is unqualified (does not contain a colon).
+   * @param name Name to be checked.
+   * @return {@code true } if {@code name } has no colon (':').
+   */
+  public static boolean isNCName(String name) {
+    if (BaseUtils.isEmpty(name)) {
+      return false;
+    }
+    return (name.lastIndexOf(':') == -1);
+  }
+
+  /**
    * Create metadata for an element. This should contain information about element interval
    * and information that the element was parsed from schema.
    * @param interval Valid interval specifying element occurrence limits.

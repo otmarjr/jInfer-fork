@@ -362,7 +362,7 @@ class DOMHandler {
     if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
       // element has defined type
       final String type = XSDUtility.trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
-      if (XSDBuiltInDataTypes.isSimpleDataType(type)) {
+      if (XSDBuiltInDataTypes.isBuiltInType(type)) {
         // if element is of some built-in data type, we must first check its children
         // only then can we add the simple type as a token
         // see [SIMPLE DATA SECTION] in finalizeElement()
@@ -463,19 +463,12 @@ class DOMHandler {
       return;
     }
     // if we have the name or ref, add the contents of the attribute to parent element (ret)
-    String attrType = child.getAttribute(XSDAttribute.TYPE.toString());
-    if (!BaseUtils.isEmpty(attrType)) {
-      attrType = XSDUtility.trimNS(attrType);
-      if (!XSDBuiltInDataTypes.isSimpleDataType(attrType)) {
-        attrType = "";
-      }
+    String attrType = XSDUtility.trimNS(child.getAttribute(XSDAttribute.TYPE.toString()));
+    if (!XSDBuiltInDataTypes.isBuiltInType(attrType)) {
+      attrType = "";
     }
     ret.getAttributes().add(
-      new Attribute(newContext,
-                    attrName,
-                    DOMHelper.getAttributeMetadata(child),
-                    attrType,
-                    new ArrayList<String>(0)));
+      new Attribute(newContext, attrName, DOMHelper.getAttributeMetadata(child), attrType, new ArrayList<String>(0)));
   }
 
 }

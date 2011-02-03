@@ -43,10 +43,11 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
   public static final String NAME = "XSDImport";
   public static final String PARSER = "parser";
-  public static final String PARSER_NAME_DEFAULT = "DOMParser";
   public static final String STOP_ON_ERROR = "stop.on.error";
   public static final String VERBOSE_INFO = "verbose.info";
   public static final String LOG_LEVEL = "log.level";
+
+  public static final String DEFAULT_PARSER_NAME = "DOMParser";
 
   /** Creates new form XSDImportPropertiesPanel */
   public XSDImportPropertiesPanel(final Properties properties) {
@@ -206,7 +207,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     final List<? extends NamedModule> names = ModuleSelectionHelper.lookupImpls(XSDParser.class);
     parserComboBox.setModel(new DefaultComboBoxModel(names.toArray()));
 
-    parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupImpl(XSDParser.class, properties.getProperty(PARSER, PARSER_NAME_DEFAULT)));
+    parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupImpl(XSDParser.class, properties.getProperty(PARSER, DEFAULT_PARSER_NAME)));
 
     logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
 

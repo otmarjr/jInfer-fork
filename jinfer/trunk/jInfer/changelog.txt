@@ -4,6 +4,22 @@
 
                               CHANGELOG
 
+  Version 0.4/1.0
+  ---------------
+
+  New features:
+  - Brand new Tree Rule Displayer based on JUNG's graphing capabilities.
+  - Rule Displayer now selectable.
+  - Optional GraphViz Dot integration used in automaton editor.
+  - Complex -> simple grammar translation using Expander.
+  - User interactive regexper.
+  - Log level settings are now per-project.
+  Improvements:
+  - Major overhaul of Project Properties window.
+  - Major overhaul of NB Options windows.
+  - Improved automaton editor GUI.
+  Major bugfixes.
+
   Version 0.3
   -----------
 

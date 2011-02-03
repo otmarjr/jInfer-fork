@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimportsax.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDTag;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDUtility;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +33,7 @@ public class SAXDocumentElement {
    * For example <code><xs:element name="Car" /></code>
    * the name <code>trimmedQName</code> will be 'element'.
    */
-  private final String trimmedQName;
+  private final String name;
   /**
    * All attributes of the element.
    */
@@ -43,13 +46,14 @@ public class SAXDocumentElement {
 
   /**
    * Constructs an instance with given name and empty attribute list.
-   * @param trimmedQName Name of the schema element, should be set in lowercase.
+   * @param nameWithNS Name of the schema element, should be set in lowercase.
    */
-  public SAXDocumentElement(final String trimmedQName) {
-    if (trimmedQName == null || trimmedQName.equals("")) {
-      throw new IllegalArgumentException("XDS Document Element: can't have empty or null element name!");
+  public SAXDocumentElement(final String nameWithNS) {
+    final String trimmedName = XSDUtility.trimNS(nameWithNS);
+    if (BaseUtils.isEmpty(trimmedName)) {
+      throw new IllegalArgumentException("XSD Document Element can't have empty or null name.");
     } else {
-      this.trimmedQName = trimmedQName;
+      this.name = trimmedName;
     }
     attrs = new HashMap<String, SAXAttributeData>();
     associated = false;
@@ -60,7 +64,7 @@ public class SAXDocumentElement {
   }
 
   public String getName() {
-    return trimmedQName;
+    return name;
   }
 
   public String attributeNameValue() {
@@ -79,7 +83,7 @@ public class SAXDocumentElement {
   }
 
   public boolean isComplexType() {
-    return (trimmedQName.equalsIgnoreCase("complextype")) ? true : false;
+    return XSDTag.COMPLEXTYPE.getName().equals(name);
   }
 
   /**
@@ -87,9 +91,7 @@ public class SAXDocumentElement {
    * @return true if it is, false otherwise.
    */
   public boolean isOrderIndicator() {
-    return (trimmedQName.equalsIgnoreCase("choice")
-            || trimmedQName.equalsIgnoreCase("all")
-            || trimmedQName.equalsIgnoreCase("sequence")) ? true : false;
+    return XSDTag.matchName(name).isOrderIndicator();
   }
 
   public void associate() {
@@ -101,6 +103,6 @@ public class SAXDocumentElement {
   }
 
   public boolean isSchema() {
-    return (trimmedQName.equalsIgnoreCase("schema")) ? true : false;
+    return (name.equalsIgnoreCase("schema")) ? true : false;
   }
 }

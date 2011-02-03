@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.xsdimportsax.utils;
 
 /**
- *
+ * Wrapper class for tag attributes read by SAX parser.
  * @author reseto
  */
 public class SAXAttributeData {

@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import java.io.InputStream;
 import java.util.List;
-import org.xml.sax.SAXException;
 
 /**
  * Interface providing common API for XSD importers.
@@ -30,6 +29,12 @@ import org.xml.sax.SAXException;
  */
 public interface XSDParser extends NamedModule {
 
+  /**
+   * Parses input Schema and returns the rules extracted from it.
+   * @param stream Stream containing XSDSchema document.
+   * @return Rules contained within. Empty list if there are no rules or an error occurs.
+   * @throws XSDException When parsing error occurs.
+   */
   List<Element> parse(final InputStream stream) throws XSDException;
   
 }

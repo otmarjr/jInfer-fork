@@ -23,30 +23,31 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * Test {@link SAXDocumentElement } class.
  * @author reseto
  */
+@SuppressWarnings("PMD")
 public class SAXDocumentElementTest {
 
   @Test
   public void testGetAttrs0() {
     System.out.println("getAttrs0");
-    SAXDocumentElement instance = new SAXDocumentElement("testElement");
-    int expResult = 0;
-    Map result = instance.getAttrs();
+    final SAXDocumentElement instance = new SAXDocumentElement("testElement");
+    final int expResult = 0;
+    final Map<String, SAXAttributeData> result = instance.getAttrs();
     assertEquals(expResult, result.size());
   }
 
   @Test
   public void testGetAttrs1() {
     System.out.println("getAttrs1");
-    SAXDocumentElement instance = new SAXDocumentElement("testElement");
-    String name = "myqname";
-    String value = "!IMPORTANT!_VaLuE";
-    SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", "myQName", "someTyPe", value);
+    final SAXDocumentElement instance = new SAXDocumentElement("testElement");
+    final String name = "myqname";
+    final String value = "!IMPORTANT!_VaLuE";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", "myQName", "someTyPe", value);
     instance.getAttrs().put(name, data);
-    Map result = instance.getAttrs();
-    String storedValue = ((SAXAttributeData) result.get(name)).getValue();
+    final Map<String, SAXAttributeData> result = instance.getAttrs();
+    final String storedValue = result.get(name).getValue();
     assertEquals(value, storedValue);
   }
 
@@ -56,90 +57,151 @@ public class SAXDocumentElementTest {
   @Test(expected=IllegalArgumentException.class)
   public void testGetName0() {
     System.out.println("getName");
-    SAXDocumentElement instance = new SAXDocumentElement(null);
+    final SAXDocumentElement instance = new SAXDocumentElement(null);
     instance.getName();
   }
 
   @Test(expected=IllegalArgumentException.class)
   public void testGetName1() {
     System.out.println("getName");
-    SAXDocumentElement instance = new SAXDocumentElement("");
+    final SAXDocumentElement instance = new SAXDocumentElement("");
     instance.getName();
   }
 
   @Test
   public void testGetName2() {
     System.out.println("getName");
-    String expResult = "xs:OMG__what+A&^$%NAME--";
-    SAXDocumentElement instance = new SAXDocumentElement("xs:OMG__what+A&^$%NAME--");
-    String result = instance.getName();
+    final String expResult = "xs:OMG__what+A&^$%NAME--";
+    final SAXDocumentElement instance = new SAXDocumentElement("xs:OMG__what+A&^$%NAME--");
+    final String result = instance.getName();
+    assertFalse(expResult.equals(result));
+  }
+
+  @Test
+  public void testGetName3() {
+    System.out.println("getName");
+    final String expResult = "OMG__what+A&^$%NAME--";
+    final SAXDocumentElement instance = new SAXDocumentElement("xs:OMG__what+A&^$%NAME--");
+    final String result = instance.getName();
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsNamedComplexType0() {
     System.out.println("isNamedComplexType0");
-    SAXDocumentElement instance = new SAXDocumentElement("xs:complexType");
-    String name = "name";
-    SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
+    final SAXDocumentElement instance = new SAXDocumentElement("xs:complexType");
+    final String name = "name";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
     instance.getAttrs().put(name, data);
-    boolean expResult = false;
-    boolean result = instance.isNamedComplexType();
+    final boolean expResult = true;
+    final boolean result = instance.isNamedComplexType();
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsNamedComplexType1() {
     System.out.println("isNamedComplexType1");
-    SAXDocumentElement instance = new SAXDocumentElement("complexType");
-    String name = "name";
-    SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
+    final SAXDocumentElement instance = new SAXDocumentElement("complexType");
+    final String name = "name";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
     instance.getAttrs().put(name, data);
-    boolean expResult = true;
-    boolean result = instance.isNamedComplexType();
+    final boolean expResult = true;
+    final boolean result = instance.isNamedComplexType();
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsNamedComplexType2() {
+    System.out.println("isNamedComplexType2");
+    final SAXDocumentElement instance = new SAXDocumentElement("xs:complextype");
+    final String name = "name";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
+    instance.getAttrs().put(name, data);
+    final boolean expResult = false;
+    final boolean result = instance.isNamedComplexType();
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsNamedComplexType3() {
+    System.out.println("isNamedComplexType3");
+    final SAXDocumentElement instance = new SAXDocumentElement("complextype");
+    final String name = "name";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
+    instance.getAttrs().put(name, data);
+    final boolean expResult = false;
+    final boolean result = instance.isNamedComplexType();
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsComplexType0() {
     System.out.println("isNamedComplexType0");
-    SAXDocumentElement instance = new SAXDocumentElement("xs:complexType");
-    String name = "notNamed";
-    SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
+    // check is case sensitive
+    final SAXDocumentElement instance = new SAXDocumentElement("xs:complexType");
+    final String name = "notNamed";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
     instance.getAttrs().put(name, data);
-    boolean expResult = false;
-    boolean result = instance.isComplexType();
+    final boolean expResult = true;
+    final boolean result = instance.isComplexType();
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsComplexType1() {
     System.out.println("isNamedComplexType1");
-    SAXDocumentElement instance = new SAXDocumentElement("complexType");
-    String name = "notNamed";
-    SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
+    // check is case sensitive
+    final SAXDocumentElement instance = new SAXDocumentElement("complexType");
+    final String name = "notNamed";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
     instance.getAttrs().put(name, data);
-    boolean expResult = true;
-    boolean result = instance.isComplexType();
+    final boolean expResult = true;
+    final boolean result = instance.isComplexType();
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsComplexType2() {
+    System.out.println("isNamedComplexType2");
+    // check is case sensitive
+    final SAXDocumentElement instance = new SAXDocumentElement("xs:complextype");
+    final String name = "notNamed";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
+    instance.getAttrs().put(name, data);
+    final boolean expResult = false;
+    final boolean result = instance.isComplexType();
+    assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testIsComplexType3() {
+    System.out.println("isNamedComplexType3");
+    // check is case sensitive
+    final SAXDocumentElement instance = new SAXDocumentElement("complextype");
+    final String name = "notNamed";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
+    instance.getAttrs().put(name, data);
+    final boolean expResult = false;
+    final boolean result = instance.isComplexType();
     assertEquals(expResult, result);
   }
 
   @Test
   public void testIsCTypeButNotNamed() {
-    System.out.println("isNamedComplexType1");
-    SAXDocumentElement instance = new SAXDocumentElement("complexType");
-    String name = "notNamed";
-    SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
+    System.out.println("isNamedComplexType but not named");
+    final SAXDocumentElement instance = new SAXDocumentElement("complexType");
+    final String name = "notNamed";
+    final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
     instance.getAttrs().put(name, data);
-    boolean expResult = true;
-    boolean result = instance.isComplexType();
+    final boolean expResult = true;
+    final boolean result = instance.isComplexType();
     assertEquals(expResult, result);
   }
 
   @Test
   public void testAssociateWithUnnamedCType() {
     System.out.println("associateWithUnnamedCType");
-    SAXDocumentElement instance = new SAXDocumentElement("complexType");
+    final SAXDocumentElement instance = new SAXDocumentElement("complexType");
     boolean expResult = false;
     boolean result = instance.isAssociated();
     assertEquals(expResult, result);

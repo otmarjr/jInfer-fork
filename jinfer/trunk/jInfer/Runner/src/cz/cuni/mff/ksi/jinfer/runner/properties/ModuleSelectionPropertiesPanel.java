@@ -41,6 +41,10 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   public static final String SIMPLIFIER = "simplifier";
   public static final String SCHEMA_GENERATOR = "schemagenerator";
 
+  private static final String DEFAULT_I_G_G = "Basic_IG_Generator";
+  private static final String DEFAULT_SIMPL = "TwoStepSimplifier";
+  private static final String DEFAULT_SCHEMA_G = "Basic_XSD_exporter";
+
   public ModuleSelectionPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
@@ -147,9 +151,9 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     schemaGenerator.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupImpls(SchemaGenerator.class).toArray()));
 
-    initialGrammar.setSelectedItem(ModuleSelectionHelper.lookupImpl(IGGenerator.class, properties.getProperty(INITIAL_GRAMMAR, DEFAULT_MENU_TEXT)));
-    simplifier.setSelectedItem(ModuleSelectionHelper.lookupImpl(Simplifier.class, properties.getProperty(SIMPLIFIER, DEFAULT_MENU_TEXT)));
-    schemaGenerator.setSelectedItem(ModuleSelectionHelper.lookupImpl(SchemaGenerator.class, properties.getProperty(SCHEMA_GENERATOR, DEFAULT_MENU_TEXT)));
+    initialGrammar.setSelectedItem(ModuleSelectionHelper.lookupImpl(IGGenerator.class, properties.getProperty(INITIAL_GRAMMAR, DEFAULT_I_G_G)));
+    simplifier.setSelectedItem(ModuleSelectionHelper.lookupImpl(Simplifier.class, properties.getProperty(SIMPLIFIER, DEFAULT_SIMPL)));
+    schemaGenerator.setSelectedItem(ModuleSelectionHelper.lookupImpl(SchemaGenerator.class, properties.getProperty(SCHEMA_GENERATOR, DEFAULT_SCHEMA_G)));
   }
 
   @Override

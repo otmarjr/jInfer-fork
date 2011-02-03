@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Utility class providing convenience methods for importing XSD Schema documents.
  * @author reseto
  */
 public final class XSDUtility {

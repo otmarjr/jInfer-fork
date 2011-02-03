@@ -76,7 +76,7 @@ class DOMHandler {
   /**
    * Construct this parser, set loglevel as defined in XSD Import properties.
    */
-  DOMHandler() {
+  public DOMHandler() {
     LOG.setLevel(XSDImportSettings.logLevel());
   }
 
@@ -87,13 +87,13 @@ class DOMHandler {
    * This method recursively builds rule-trees for all its sub-nodes,
    * thus should be invoked only once, on the <i>schema</i> tag node itself.
    * </p>
-   * All <i>complexType</i> tags with <i>name</i> tag attribute are added to the <code>namedCTypes</code> map.
-   * All <i>element</i> tags with <i>name</i> tag attribute are added to the <code>referenced</code> map.
-   * Then, the whole rule-tree is built using the DOM tree and the two maps.
    * @param root Root of the DOM tree, (<i>schema</i> tag) node.
    * @return Rule-trees of all top level <i>element</i> tags, or empty list if schema was empty.
    */
   public List<Element> createRuleTrees(final org.w3c.dom.Element root) throws XSDException {
+    // All <i>complexType</i> tags with <i>name</i> tag attribute are added to the <code>namedCTypes</code> map.
+    // All <i>element</i> tags with <i>name</i> tag attribute are added to the <code>referenced</code> map.
+    // Then, the whole rule-tree is built using the DOM tree and the two maps.
     for (int i = 0; i < root.getChildNodes().getLength(); i++) {
       // check if child is of type ELEMENT_NODE as defined by DOM spec.
       final org.w3c.dom.Element domElem = DOMHelper.getDOMElement(root.getChildNodes().item(i));
@@ -435,11 +435,11 @@ class DOMHandler {
     }
   }
 
-  private void handleChildChoiceSequence(final Element ret, 
+  private void handleChildChoiceSequence(final Element ret,
                                          final org.w3c.dom.Element child,
                                          final XSDTag tag,
                                          final XSDTag childTag,
-                                         final List<String> newContext, 
+                                         final List<String> newContext,
                                          final List<org.w3c.dom.Element> newVisited) throws XSDException {
     if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
       ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited).getFirst().getSubnodes());

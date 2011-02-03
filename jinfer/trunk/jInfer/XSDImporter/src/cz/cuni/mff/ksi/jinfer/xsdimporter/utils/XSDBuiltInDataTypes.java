@@ -23,7 +23,9 @@ package cz.cuni.mff.ksi.jinfer.xsdimporter.utils;
  * although they always occur in lowercase in the Schema.
  * @author reseto
  */
-public class XSDBuiltInDataTypes {
+public final class XSDBuiltInDataTypes {
+
+  private XSDBuiltInDataTypes() {}
 
   // ALL TYPES ARE CASE SENSITIVE!!!
   /**

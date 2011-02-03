@@ -54,9 +54,9 @@ public final class DOMHelper {
   }
 
   /**
-   * Determine if given <code>Node</code> is in fact <i>org.w3c.dom.Element</i> and return a type cast if so.
+   * Determine if given <code>node</code> is in fact a <code>DOM.Element</code> and return a type cast if so.
    * @param node Entity to be checked.
-   * @return Parameter cast to <code>org.w3c.dom.Element</code>, or <code>null</code>.
+   * @return Parameter cast to <code>DOM.Element</code>, or <code>null</code>.
    * @see org.w3c.dom.Element
    */
   public static org.w3c.dom.Element getDOMElement(final Node node) {

@@ -92,12 +92,10 @@
           <ul>
             <li><a href="modules/basicdtd.pdf">BasicDTDExporter</a></li>
             <li><a href="modules/basicigg.pdf">BasicIGG</a></li>
-            <li>BasicXSDExporter</li>
-            <li>Runner</li>
+            <li><a href="modules/basicxsd.pdf">BasicXSDExporter</a></li>
+            <li><a href="modules/runner.pdf">Runner</a></li>
             <li>TwoStepSimplifier</li>
-            <li>XSDImportDOM</li>
             <li>XSDImporter</li>
-            <li>XSDImportSAX</li>
           </ul>
 
         <h4>Utility modules</h4>

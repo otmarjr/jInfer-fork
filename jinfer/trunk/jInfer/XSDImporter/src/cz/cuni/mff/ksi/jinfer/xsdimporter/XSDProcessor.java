@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
@@ -67,7 +68,7 @@ public class XSDProcessor implements Processor {
         final List<Element> rules = parser.getRules();
         printDebugInfo(rules, "AfterParsing");
         // show the rules before expansion
-        RuleDisplayerHelper.showRulesAsync("Raw", rules, true);
+        RuleDisplayerHelper.showRulesAsync("Raw", new CloneHelper().cloneGrammar(rules), true);
         // if the next module cannot handle complex regexps, help it by expanding our result
         if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
           // lookup expander

@@ -17,11 +17,16 @@ digraph interfaces_nodes {
 	XPathProcessor [style = rounded];
 	OtherProcessor [style = rounded, label = "..."]; 
 }
+	
+	Verification [label = "Simple grammar?"]
+	Expansion [label = "Expansion (?)"];
 
 	Input -> BasicIGG;
 	BasicIGG -> InitialGrammar;
-	XMLProcessor -> BasicIGG;
-	DTDProcessor -> BasicIGG;
-	XPathProcessor -> BasicIGG;
-	OtherProcessor -> BasicIGG;
+	XMLProcessor -> Verification;
+	Verification -> BasicIGG;
+	DTDProcessor -> Expansion;
+	XPathProcessor -> Expansion;
+	OtherProcessor -> Expansion;
+	Expansion -> BasicIGG;
 }

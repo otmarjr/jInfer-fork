@@ -54,7 +54,7 @@ Make sure you understand the difference between the two types of initial grammar
 
 \section{Structure}
 
-The main class implementing \code{IGGenerator} inference interface and simultaneously registered as its service provider is \code{IGGeneratorImpl}. In its \code{start} method it enumerates all files in the input parameter (of type \code{Input}). For each file, based on its extension the correct \emph{processor} is selected, executed and returned rules are aggregated. After each file has been processed, the resulting grammar is returned by invoking the \code{finished} method of the callback argument. This process is illustrated in fig. \ref{figure-process}.
+The main class implementing \code{IGGenerator} inference interface and simultaneously registered as its service provider is \code{IGGeneratorImpl}. In its \code{start} method it enumerates all files in the input parameter (of type \code{Input}). For each file, based on its extension the correct \emph{processor} is selected, executed and returned rules are aggregated. Rules coming from XML documents are verified to be \emph{simple} grammar representation. After each file has been processed, the resulting grammar is expanded if necessary and returned by invoking the \code{finished} method of the callback argument. This process is illustrated in fig. \ref{figure-process}.
 
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{process-view}
@@ -73,14 +73,14 @@ Each processor declares the class of inputs (documents, schemas, queries) and fi
 
 XML processor registers itself into \emph{document} input folder, \emph{xml} file extension and declares that it can process other arbitrary file extensions.\\
 SAX traversal is used to collect the rules; the relevant \code{ContentHandler} is the class \code{TrivialHandler}. The way it works is following: every time a start of an element is encountered, a new \code{Element} is created along with its attributes. This new element representation is then placed on the top of a stack. Every other element or simple data found until its ending tag is created and attached to its subnodes. When an end of an element is encountered, the element currently on the top of the stack is closed and declared to be a rule of the IG.\\
-After reaching the end of the document, all IG rules are returned. Note that this approach creates "simple" initial grammar.
+After reaching the end of the document, all IG rules are returned. Note that this approach creates \emph{simple} initial grammar.
 
 \subsection{DTD processor}
 
 DTD processor registers itself into \emph{schema} input folder, \emph{dtd} file extension and declares it cannot handle other file extensions.\\
 To parse DTD files a 3rd party library is used: \jmodule{dtdparser} (\cite{dtdparser}).
 Translation from the object model in this library to our own is handled mostly by \code{DTD2RETranslator} class.\\
-Note that the initial grammar generated in this way is complex. Therefore, this processor checks for the \code{CAN\_\.HANDLE\_\.COMPLEX\_\.REGEXPS} capability of the simplifier following this IG generator: in positive case it simply returns the grammar, if the following module cannot handle complex regular expressions, DTD processor first invokes an \emph{Expander} (see \ref{section-expansion}).
+Note that the initial grammar generated in this way is \emph{complex}.
 
 \subsection{XPath processor}
 
@@ -90,10 +90,11 @@ While the exact process by which \code{XPathHandlerImpl} creates the IG from a s
 
 \section{Expansion} \label{section-expansion}
 
-Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection.
-\\
+Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection.\\
 
-One interesting use case for expansion is simple adaptation of legacy inference methods. "Old" methods working only with simple grammar can be used unchanged with "new" inputs - schemas.
+One interesting use case for expansion is simple adaptation of legacy inference methods. "Old" methods working only with \emph{simple} grammar can be used unchanged with "new" inputs - schemas.\\
+
+In \jmodule{BasicIGG}, only grammar coming from input schemas and queries is expanded, and this happens only if the following module lacks the \code{CAN\_HANDLE\_COMPLEX\_REGEXPS}.
 
 \subsection{ExpanderImpl internals}
 
@@ -139,7 +140,9 @@ Flow of data in this module is following.
 \begin{enumerate}
 	\item IGGeneratorImpl walks over input files in a loop.
 	\item Each file gets processed by a processor based on its folder and extension.
-	\item Rules from all files are gathered in a single list (IG) and returned via a callback.
+	\item Grammar coming from XML documents is checked to be \emph{simple}.
+	\item If needed, grammar coming from schemas and queries is expanded.
+	\item Grammar (from now on called IG) is returned via a callback.
 \end{enumerate}
 
 \section{Extensibility}

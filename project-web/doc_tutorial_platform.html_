@@ -495,8 +495,8 @@ if (!RunningProject.getNextModuleCaps().getCapabilities().contains(
 <h3>Interface</h3>
 
 <p>
-  First of all, we need an interface encapsulating the new submodule. It needs to
-  extend <code>NamedModule</code>.
+  First of all, we need an interface encapsulating the new submodule. It has to
+  extend <code>NamedModule</code> interface.
 </p>
 
 <pre class="code">
@@ -515,7 +515,7 @@ public interface Foo extends NamedModule {
   service providers for <code>Foo</code>.
 </p>
 
-<span>Example of the first implementation. The second will be the same (1-&gt;2).</span>
+<span>Example of the first implementation. The second will be the same (just change "ones" to "twos").</span>
 <pre class="code">
 @ServiceProvider(service = Foo.class)
 public class Impl1 implements Foo {
@@ -553,8 +553,9 @@ public class Impl1 implements Foo {
   <a href="#5-configuration">earlier part</a> of this document for general
   reference. Here we assume a combo box already present on the properties panel,
   with the correct renderer set (<code>ProjectPropsComboRenderer</code>).
-  We need to do 2 things: while loading, fill it with names of all implementations
-  and select the currently chosen one. While saving, we have to get the name of
+  We need to do 2 things: while loading the properties panel, fill it with
+  names of all implementations and select the currently chosen one (or default).
+  While saving, we have to get the name of
   the selected implementation and save it.
 </p>
 
@@ -612,8 +613,13 @@ println(foo.bar());
   <ul>
     <li>Module names (<code>getName()</code>) have to be unique.</li>
     <li>It is a good practice to store property names and default values as
-      constants somewhere - do a reference search in our code to find out how
-      we do it.</li>
+      constants, for example in super module - do a reference search in our
+      code to find out how we do it.</li>
+    <li><code>getUserDescription()</code> should work in modules that have
+      submodules as follows: it should somehow return the name of the module
+      and names of all selected submodules to indicate inner workings of this
+      module. For example
+      <i>My Simplifier (Clustering Logic A, Regexper #3)</i>.</li>
   </ul>
 </p>
 

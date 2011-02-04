@@ -17,11 +17,15 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.Visualizer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -59,8 +63,18 @@ public abstract class AbstractComponent<T> extends JPanel {
       visualizerPanelSize = panel.getSize();
     }
     visualizer.setPreferredSize(visualizerPanelSize);
+
+    final JPanel rulePanel = new JPanel(new BorderLayout(0, 0));
+    rulePanel.add(new GraphZoomScrollPane(visualizer), BorderLayout.CENTER);
+    final JPanel bottom = new JPanel(new BorderLayout(0, 0));
+    rulePanel.add(bottom, BorderLayout.PAGE_END);
+    final JLabel label = new JLabel("Legend:");
+    label.setFont(label.getFont().deriveFont(Font.BOLD));
+    bottom.add(label, BorderLayout.LINE_START);
+    bottom.add(((StatesPickingVisualizer)visualizer).createLegend(), BorderLayout.CENTER);
+
     panel.removeAll();
-    panel.add(new GraphZoomScrollPane(visualizer), constraints);
+    panel.add(rulePanel, constraints);
     panel.validate();
   }
 

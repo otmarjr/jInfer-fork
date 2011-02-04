@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 
 import java.awt.BorderLayout;
@@ -26,7 +25,9 @@ import javax.swing.JPanel;
  *
  * @author sviro
  */
-public class RulePanel extends JPanel{
+public class RulePanel extends JPanel {
+
+  private static final long serialVersionUID = 34535l;
 
   public RulePanel(final JPanel graph, final JPanel legend) {
     super(new BorderLayout(0, 0));
@@ -38,5 +39,4 @@ public class RulePanel extends JPanel{
     bottom.add(label, BorderLayout.LINE_START);
     bottom.add(legend, BorderLayout.CENTER);
   }
-
 }

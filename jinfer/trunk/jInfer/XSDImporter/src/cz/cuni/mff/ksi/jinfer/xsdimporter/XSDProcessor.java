@@ -16,14 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimporter;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
@@ -31,7 +26,6 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -66,18 +60,7 @@ public class XSDProcessor implements Processor {
         LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.ParsingMethod", parser.getDisplayName()));
         final List<Element> rules = parser.parse(stream);
         printDebugInfo(rules, "AfterParsing");
-        // show the rules before expansion
-        RuleDisplayerHelper.showRulesAsync("Raw", new CloneHelper().cloneGrammar(rules), true);
-        // if the next module cannot handle complex regexps, help it by expanding our result
-        if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
-          // lookup expander
-          final Expander expander = Lookup.getDefault().lookup(Expander.class);
-          final List<Element> rulesExpanded = expander.expand(rules);
-          printDebugInfo(rulesExpanded, "AfterExpanding");
-          // return expanded
-          return rulesExpanded;
-        }
-        // return not expanded rules
+        
         return rules;
       } else {
         //no parser selected

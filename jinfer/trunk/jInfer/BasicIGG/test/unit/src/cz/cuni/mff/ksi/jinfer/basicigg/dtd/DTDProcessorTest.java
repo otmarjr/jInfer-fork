@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
+import cz.cuni.mff.ksi.jinfer.basicigg.expansion.ExpanderImpl;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -64,15 +65,15 @@ public class DTDProcessorTest {
   private static final String[] ZOO_RESULTS = {
     "zoos: ELEMENT\n()",
     "zoo: ELEMENT\n()",
-    "zoo: ELEMENT\n(animal: ELEMENT\n())",
-    "zoo: ELEMENT\n(animal: ELEMENT\n()\n,animal: ELEMENT\n()\n,animal: ELEMENT\n())",
+    "zoo: ELEMENT\n(animal: ELEMENT\nλ)",
+    "zoo: ELEMENT\n(animal: ELEMENT\nλ\n,animal: ELEMENT\nλ\n,animal: ELEMENT\nλ)",
     "animal: ELEMENT\n()"};
 
   @Test
   public void testProcess() {
     System.out.println("process");
     final InputStream s = new ByteArrayInputStream(ZOO.getBytes());
-    final List<Element> result = new DTDProcessor().process(s);
+    final List<Element> result = new ExpanderImpl().expand(new DTDProcessor().process(s));
     assertEquals(ZOO_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       assertEquals("Iteration " + i, ZOO_RESULTS[i], result.get(i).toString());
@@ -88,14 +89,14 @@ public class DTDProcessorTest {
   private static final String[] ATTR_RESULTS = {
     "elem: ELEMENT <name: ATTRIBUTE#null: ; clas: ATTRIBUTE#null: ; id: ATTRIBUTE#null: >\n()",
     "elements: ELEMENT\n()",
-    "elements: ELEMENT\n(elem: ELEMENT\n())",
-    "elements: ELEMENT\n(elem: ELEMENT\n()\n,elem: ELEMENT\n()\n,elem: ELEMENT\n())"};
+    "elements: ELEMENT\n(elem: ELEMENT\nλ)",
+    "elements: ELEMENT\n(elem: ELEMENT\nλ\n,elem: ELEMENT\nλ\n,elem: ELEMENT\nλ)"};
 
   @Test
   public void testProcessAttrs() {
     System.out.println("processAttrs");
     final InputStream s = new ByteArrayInputStream(ATTRIBUTES.getBytes());
-    final List<Element> result = new DTDProcessor().process(s);
+    final List<Element> result = new ExpanderImpl().expand(new DTDProcessor().process(s));
     assertEquals(ATTR_RESULTS.length, result.size());
     for (int i = 0; i < result.size(); i++) {
       System.out.println(i + " " + result.get(i).toString());

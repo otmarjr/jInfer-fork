@@ -16,18 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.dtd;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
-import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
-import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.InputSource;
 import org.xmlmiddleware.schemas.dtds.Attribute;
@@ -86,17 +81,7 @@ public class DTDProcessor implements Processor {
       for (final Object o : result.elementTypes.values()) {
         ret.add(processElement((ElementType) o));
       }
-
-      // show the rules before expansion
-      RuleDisplayerHelper.showRulesAsync("Raw", new CloneHelper().cloneGrammar(ret), true);
-
-      // if the next module cannot handle complex regexps, help it by expanding our result
-      if (!RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
-        // lookup expander
-        final Expander expander = Lookup.getDefault().lookup(Expander.class);
-        // return expanded
-        return expander.expand(ret);
-      }
+      
       return ret;
     } catch (final Exception e) {
       if (Boolean.parseBoolean(RunningProject.getActiveProjectProps(BasicIGGPropertiesPanel.NAME).getProperty(BasicIGGPropertiesPanel.STOP_ON_ERROR, "true"))) {

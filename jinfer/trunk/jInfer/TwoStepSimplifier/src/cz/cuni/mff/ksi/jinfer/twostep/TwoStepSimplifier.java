@@ -103,8 +103,6 @@ public class TwoStepSimplifier {
   public List<Element> simplify(final List<Element> initialGrammar) throws InterruptedException {
     this.verifyInput(initialGrammar);
 
-    RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(initialGrammar), true);
-
     final List<AbstractStructuralNode> abstracts = new ArrayList<AbstractStructuralNode>(initialGrammar.size());
     for (final Element e : initialGrammar) {
       abstracts.add(e);

@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -24,6 +26,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -71,17 +76,49 @@ public class IGGeneratorImpl implements IGGenerator {
   @Override
   public void start(final Input input, final IGGeneratorCallback callback)
           throws InterruptedException {
-    final List<Element> ret = new ArrayList<Element>();
-
     // find processor mappings for all folders
     final Map<FolderType, Map<String, Processor>> registeredProcessors = getRegisteredProcessors();
 
+    final List<Element> documentRules = new ArrayList<Element>();
+    final List<Element> schemaQueryRules = new ArrayList<Element>();
+    
     // run processors on input, gather IG rules
-    ret.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));
-    ret.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
-    ret.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
+    documentRules.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));
+    schemaQueryRules.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
+    schemaQueryRules.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
 
-    // return collected rules
+    // if there are no schema/query rules, or the next module can handle simple
+    // grammar, just output all of it without expansion
+    if (BaseUtils.isEmpty(schemaQueryRules)
+            || RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
+      documentRules.addAll(schemaQueryRules);
+
+      // show the rules
+      RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(documentRules), true);
+
+      callback.finished(documentRules);
+      return;
+    }
+
+    // otherwise, we have to expand
+    // show the rules before expansion
+    final List<Element> before = new ArrayList<Element>();
+    before.addAll(documentRules);
+    before.addAll(schemaQueryRules);
+    RuleDisplayerHelper.showRulesAsync("Raw", new CloneHelper().cloneGrammar(before), true);
+
+    // lookup expander
+    final Expander expander = Lookup.getDefault().lookup(Expander.class);
+    final List<Element> expanded = expander.expand(schemaQueryRules);
+
+    final List<Element> ret = new ArrayList<Element>();
+    ret.addAll(documentRules);
+    ret.addAll(expanded);
+    
+    // show the rules after expansion
+    RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(ret), true);
+
+    // return expanded
     callback.finished(ret);
   }
 

@@ -48,6 +48,8 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
 
   private final Set<String> supportedImageFormatNames;
 
+  protected Dimension legendDimension = new Dimension(400, 50);
+
   /**
    * Constructs instance with specified {@link Layout}.
    *
@@ -96,4 +98,15 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
     return supportedImageFormatNames;
   }
 
+  /**
+   * Creates legend of state types used in this Visualizer. Each subclass of
+   * Visualizer class should override this method to define its own legend.
+   *
+   * If returns null that means that Visualizer does not define any legend.
+   *
+   * @return Legend of state types.
+   */
+  public Visualizer<T> createLegend() {
+    return null;
+  }
 }

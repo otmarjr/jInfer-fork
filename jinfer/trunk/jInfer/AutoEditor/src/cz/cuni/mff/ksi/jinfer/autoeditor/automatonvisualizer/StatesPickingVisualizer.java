@@ -20,13 +20,10 @@ import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.V
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.algorithms.layout.TreeLayout;
-import edu.uci.ics.jung.graph.DelegateForest;
-import edu.uci.ics.jung.graph.DelegateTree;
-import edu.uci.ics.jung.graph.Tree;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
-import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.UIManager;
 import org.apache.commons.collections15.Transformer;
@@ -40,6 +37,10 @@ import org.apache.commons.collections15.Transformer;
 public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
 
   private static final long serialVersionUID = 3523135;
+
+  private static int legendFirstStateXCoordinate = 120;
+  private static int legendStateYCoordinate = 25;
+  private static int legendStateXCoordinateStep = 130;
 
   /**
    * Constructs instance with specified {@link Layout} and edge label {@link Transformer}.
@@ -55,33 +56,29 @@ public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
 
     addGraphMousePlugin(new VerticesPickingGraphMousePlugin<State<T>, Step<T>>());
   }
-
-  public static <T> Visualizer<T> createLegend() {
-    // regular state
+  
+  @Override
+  public Visualizer<T> createLegend() {
     final State<T> regularState = new State<T>(0, 1);
-    // picked state
     final State<T> pickedState = new State<T>(0, 2);
-    // final state
     final State<T> finalState = new State<T>(1, 3);
     
-    final DelegateForest<State<T>, Step<T>> forest = new DelegateForest<State<T>, Step<T>>();
-    forest.addTree(getLegendTree(regularState));
-    forest.addTree(getLegendTree(pickedState));
-    forest.addTree(getLegendTree(finalState));
+    final SparseGraph<State<T>, Step<T>> legendGraph = new SparseGraph<State<T>, Step<T>>();
+    legendGraph.addVertex(regularState);
+    legendGraph.addVertex(pickedState);
+    legendGraph.addVertex(finalState);
 
-    final Layout<State<T>, Step<T>> layout = new TreeLayout<State<T>, Step<T>>(forest);
+    final Layout<State<T>, Step<T>> layout = new StaticLayout<State<T>, Step<T>>(legendGraph);
 
-    layout.setLocation(regularState, new Point(120, 25));
-    layout.setLocation(pickedState, new Point(250, 25));
-    layout.setLocation(finalState, new Point(380, 25));
-    /*layout.setLocation(permutation, new Point(490, 25));
-    layout.setLocation(element, new Point(570, 25));
-    layout.setLocation(simpleData, new Point(690, 25));
-    layout.setLocation(attribute, new Point(770, 25));*/
+    layout.setLocation(regularState, new Point(legendFirstStateXCoordinate, legendStateYCoordinate));
+    layout.setLocation(pickedState, new Point(legendFirstStateXCoordinate + 1 * legendStateXCoordinateStep, legendStateYCoordinate));
+    layout.setLocation(finalState, new Point(legendFirstStateXCoordinate + 2 * legendStateXCoordinateStep, legendStateYCoordinate));
 
     final Visualizer<T> visualizer = new Visualizer<T>(layout);
-    visualizer.setPreferredSize(new Dimension(400,50));
-
+    visualizer.setPreferredSize(legendDimension);
+    visualizer.getRenderer().getVertexLabelRenderer().setPosition(Position.W);
+    visualizer.getPickedVertexState().pick(pickedState, true);
+    visualizer.setBackground(UIManager.getLookAndFeelDefaults().getColor("Panel.background"));
     visualizer.getRenderContext().setVertexLabelTransformer(new Transformer<State<T>, String>() {
 
       @Override
@@ -100,18 +97,6 @@ public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
 
     });
 
-    visualizer.getPickedVertexState().pick(pickedState, true);
-
-    visualizer.getRenderer().getVertexLabelRenderer().setPosition(Position.W);
-
-    visualizer.setBackground(UIManager.getLookAndFeelDefaults().getColor("Panel.background"));
-
     return visualizer;
-  }
-  
-  private static <T> Tree<State<T>, Step<T>> getLegendTree(State<T> state) {
-    final DelegateTree<State<T>, Step<T>> result = new DelegateTree<State<T>, Step<T>>();
-    result.addVertex(state);
-    return result;
   }
 }

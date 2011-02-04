@@ -16,14 +16,17 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicigg.expansion;
 
+import java.util.Arrays;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.EqualityUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -291,5 +294,63 @@ public class ExpanderImplTest {
       System.out.println("Iteration " + i + ", expecting " + expected);
       assertEquals(expected, subnodesToString(element));
     }
+  }
+   
+  @Test
+  public void testXMLLikeData0() {
+    System.out.println("testXMLLikeData0");
+
+    // we want something trivial, just a->nothing
+    final Element a = TestUtils.getElement("a",
+            Regexp.getConcatenation(Collections.<Regexp<AbstractStructuralNode>>emptyList()));
+    final List<Element> grammar = Arrays.asList(a);
+
+    final List<Element> result = new ExpanderImpl().expand(grammar);
+
+    assertEquals(1, result.size());
+
+    assertEquals(a, result.get(0));
+  }
+
+  @Test
+  public void testXMLLikeData1() {
+    System.out.println("testXMLLikeData1");
+    
+    // we want to create situation like this a->b->c
+    final Element c = TestUtils.getElement("c");
+    final Regexp<AbstractStructuralNode> bSubs = Regexp.getConcatenation(
+            Arrays.<Regexp<AbstractStructuralNode>>asList(Regexp.<AbstractStructuralNode>getToken(c)));
+    final Element b = TestUtils.getElement("b", bSubs);
+    final Regexp<AbstractStructuralNode> aSubs = Regexp.getConcatenation(
+            Arrays.<Regexp<AbstractStructuralNode>>asList(Regexp.<AbstractStructuralNode>getToken(b)));
+    final Element a = TestUtils.getElement("a", aSubs);
+
+    final List<Element> grammar = Arrays.asList(a, b);
+
+    final List<Element> result = new ExpanderImpl().expand(grammar);
+
+    assertEquals(2, result.size());
+
+    // now we expect to have 2 rules like this:
+    // a->b (b sentinel)
+    // b->c (c sentinel)
+
+    final Element rule1 = result.get(0);
+    assertTrue(EqualityUtils.sameElements(rule1, a, EqualityUtils.IGNORE_SUBNODES));
+    assertTrue(EqualityUtils.sameElements(
+            (Element)rule1.getSubnodes().getChild(0).getContent(),
+            b, EqualityUtils.IGNORE_SUBNODES | EqualityUtils.IGNORE_METADATA));
+    assertTrue(((Element)rule1.getSubnodes().getChild(0).getContent()).getSubnodes().isLambda());
+
+    assertEquals(Boolean.TRUE, rule1.getSubnodes().getChild(0).getContent().getMetadata().get(IGGUtils.IS_SENTINEL));
+
+    final Element rule2 = result.get(1);
+    assertTrue(EqualityUtils.sameElements(rule2, b, EqualityUtils.IGNORE_SUBNODES));
+    assertTrue(EqualityUtils.sameElements(
+            (Element)rule2.getSubnodes().getChild(0).getContent(),
+            c, EqualityUtils.IGNORE_SUBNODES | EqualityUtils.IGNORE_METADATA));
+    assertTrue(((Element)rule2.getSubnodes().getChild(0).getContent()).getSubnodes().isLambda());
+
+    assertEquals(Boolean.TRUE, rule2.getSubnodes().getChild(0).getContent().getMetadata().get(IGGUtils.IS_SENTINEL));
   }
 }

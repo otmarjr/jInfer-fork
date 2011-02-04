@@ -169,16 +169,21 @@ public class ExpanderImpl implements Expander {
   }
 
   /**
-   * Create a TOKEN regexp containing a sentinel element with the original content of ASNode n.
-   * This method should be invoked only if the parameter is of {@link StructuralNodeType#ELEMENT } type!
+   * Create a TOKEN regexp containing a sentinel element with the original 
+   * content of ASNode n with subnodes replaced with Lambda.
+   * 
+   * This method should be invoked only if the parameter is of
+   * {@link StructuralNodeType#ELEMENT } type!
+   *
    * @param n Node containing an Element to be converted to sentinel.
    * @return Token regexp containing the sentinel.
    */
   private static Regexp<AbstractStructuralNode> createSentinelFromASN(final AbstractStructuralNode n) {
-    final Element elemN = (Element) n;
+    final Element e = (Element) n;
     final Map<String, Object> metadata = new HashMap<String, Object>(IGGUtils.METADATA_SENTINEL);
-            metadata.putAll(elemN.getMetadata());
+    metadata.putAll(e.getMetadata());
     return Regexp.<AbstractStructuralNode>getToken(
-              new Element(elemN.getContext(), elemN.getName(), metadata, elemN.getSubnodes(), elemN.getAttributes()));
+              new Element(e.getContext(), e.getName(), metadata,
+              Regexp.<AbstractStructuralNode>getLambda(), e.getAttributes()));
   }
 }

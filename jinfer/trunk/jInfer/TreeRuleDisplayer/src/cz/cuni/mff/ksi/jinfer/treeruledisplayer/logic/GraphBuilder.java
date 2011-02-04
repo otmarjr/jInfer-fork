@@ -58,13 +58,14 @@ public final class GraphBuilder {
   private GraphBuilder() {
   }
 
+  @SuppressWarnings("unchecked")
   private static List<Regexp<AbstractStructuralNode>> getRootVertices(final Forest<Regexp<? extends AbstractNamedNode>, RegexpInterval> graph) {
     final List<Regexp<AbstractStructuralNode>> result = new ArrayList<Regexp<AbstractStructuralNode>>();
     final Collection<Tree<Regexp<? extends AbstractNamedNode>, RegexpInterval>> trees = graph.getTrees();
     for (Tree<Regexp<? extends AbstractNamedNode>, RegexpInterval> tree : trees) {
       final Regexp<? extends AbstractNamedNode> root = tree.getRoot();
       if (root.getContent() instanceof AbstractStructuralNode) {
-        result.add((Regexp<AbstractStructuralNode>) tree.getRoot());
+        result.add((Regexp<AbstractStructuralNode>) root);
       }
     }
 

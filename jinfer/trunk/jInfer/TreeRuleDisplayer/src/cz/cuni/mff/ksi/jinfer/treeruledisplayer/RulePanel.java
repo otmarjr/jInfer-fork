@@ -43,41 +43,43 @@ public class RulePanel extends JPanel {
   }
 
   private void initComponents() {
-    GridBagConstraints gridBagConstraints = new GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = GridBagConstraints.BOTH;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.weighty = 1.0;
-    this.add(graph, gridBagConstraints);
+    GridBagConstraints graphConstraints = new GridBagConstraints();
+    graphConstraints.gridx = 0;
+    graphConstraints.gridy = 0;
+    graphConstraints.fill = GridBagConstraints.BOTH;
+    graphConstraints.gridwidth = 2;
+    graphConstraints.weightx = 1.0;
+    graphConstraints.weighty = 1.0;
+    this.add(graph, graphConstraints);
 
 
     final JPanel legendPanel = new JPanel(new GridBagLayout());
     legendPanel.setPreferredSize(legend.getSize());
+
     final JLabel label = new JLabel("Legend");
     label.setFont(label.getFont().deriveFont(Font.BOLD));
-    gridBagConstraints = new GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.insets = new Insets(2, 12, 2, 12);
-    legendPanel.add(label,gridBagConstraints);
+    GridBagConstraints labelConstraints = new GridBagConstraints();
+    labelConstraints = new GridBagConstraints();
+    labelConstraints.gridx = 0;
+    labelConstraints.gridy = 0;
+    labelConstraints.insets = new Insets(2, 12, 2, 12);
+    legendPanel.add(label,labelConstraints);
 
-    gridBagConstraints = new GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.weighty = 1.0;
-    legendPanel.add(legend, gridBagConstraints);
+    GridBagConstraints legendGraphConstraints = new GridBagConstraints();
+    legendGraphConstraints.gridx = 1;
+    legendGraphConstraints.gridy = 0;
+    legendGraphConstraints.fill = GridBagConstraints.BOTH;
+    legendGraphConstraints.weightx = 1.0;
+    legendGraphConstraints.weighty = 1.0;
+    legendPanel.add(legend, legendGraphConstraints);
 
 
-    gridBagConstraints = new GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.fill = GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
+    GridBagConstraints scrollPaneConstraints = new GridBagConstraints();
+    scrollPaneConstraints.gridx = 0;
+    scrollPaneConstraints.gridy = 1;
+    scrollPaneConstraints.fill = GridBagConstraints.BOTH;
+    scrollPaneConstraints.weightx = 1.0;
     final JScrollPane jScrollPane = new JScrollPane(legendPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    this.add(jScrollPane, gridBagConstraints);
+    this.add(jScrollPane, scrollPaneConstraints);
   }
 }

@@ -16,10 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -28,15 +31,53 @@ import javax.swing.JPanel;
 public class RulePanel extends JPanel {
 
   private static final long serialVersionUID = 34535l;
+  private final JPanel graph;
+  private final JPanel legend;
 
   public RulePanel(final JPanel graph, final JPanel legend) {
-    super(new BorderLayout(0, 0));
-    this.add(graph, BorderLayout.CENTER);
-    final JPanel bottom = new JPanel(new BorderLayout(0, 0));
-    this.add(bottom, BorderLayout.PAGE_END);
-    final JLabel label = new JLabel("Legend:");
+    super(new GridBagLayout());
+    this.graph = graph;
+    this.legend = legend;
+
+    initComponents();
+  }
+
+  private void initComponents() {
+    GridBagConstraints gridBagConstraints = new GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = GridBagConstraints.BOTH;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    this.add(graph, gridBagConstraints);
+
+
+    final JPanel legendPanel = new JPanel(new GridBagLayout());
+    legendPanel.setPreferredSize(legend.getSize());
+    final JLabel label = new JLabel("Legend");
     label.setFont(label.getFont().deriveFont(Font.BOLD));
-    bottom.add(label, BorderLayout.LINE_START);
-    bottom.add(legend, BorderLayout.CENTER);
+    gridBagConstraints = new GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new Insets(2, 12, 2, 12);
+    legendPanel.add(label,gridBagConstraints);
+
+    gridBagConstraints = new GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    legendPanel.add(legend, gridBagConstraints);
+
+
+    gridBagConstraints = new GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    final JScrollPane jScrollPane = new JScrollPane(legendPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    this.add(jScrollPane, gridBagConstraints);
   }
 }

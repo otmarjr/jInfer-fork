@@ -293,28 +293,28 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(permutCombo, gridBagConstraints);
 
-    tokenSpinner.setModel(new javax.swing.SpinnerNumberModel(50, 10, 200, 1));
+    tokenSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 2;
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(tokenSpinner, gridBagConstraints);
 
-    concatSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    concatSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 3;
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(concatSpinner, gridBagConstraints);
 
-    alterSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    alterSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 4;
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(alterSpinner, gridBagConstraints);
 
-    permutSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    permutSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 5;
@@ -336,7 +336,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(rootCombo, gridBagConstraints);
 
-    rootSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    rootSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridy = 1;
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
@@ -504,11 +504,11 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 47, Short.MAX_VALUE)
+      .addGap(0, 88, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 272, Short.MAX_VALUE)
+      .addGap(0, 273, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -573,7 +573,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 15, 2, 15);
     shape.add(lambdaColor, gridBagConstraints);
 
-    lambdaSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    lambdaSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 6;
@@ -596,7 +596,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(simpleDataCombo, gridBagConstraints);
 
-    simpleDataSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    simpleDataSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 7;
@@ -646,7 +646,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(attributeCombo, gridBagConstraints);
 
-    attributeSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 200, 1));
+    attributeSpinner.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 8;
@@ -695,7 +695,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 5, Short.MAX_VALUE)
+      .addGap(0, 6, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

@@ -23,7 +23,10 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
 import java.awt.Color;
 import java.awt.Shape;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import org.openide.util.NbPreferences;
 
 /**
@@ -79,21 +82,22 @@ public class Utils {
   public static final String ATTRIBUTE_SIZE_PROP = "attribute.size";
   public static final int ATTRIBUTE_SIZE_DEFAULT = 15;
   public static final String ROOT_COLOR_PROP = "root.color";
-  public static final Color ROOT_COLOR_DEFAULT = Color.decode("-13861729");
+  public static final Color ROOT_COLOR_DEFAULT = Color.decode("-8362846");
   public static final String TOKEN_COLOR_PROP = "token.color";
   public static final Color TOKEN_COLOR_DEFAULT = Color.decode("-10837573");
   public static final String CONCAT_COLOR_PROP = "concat.color";
   public static final Color CONCAT_COLOR_DEFAULT = Color.decode("-1936099");
   public static final String ALTER_COLOR_PROP = "alter.color";
-  public static final Color ALTER_COLOR_DEFAULT = Color.decode("-1985536");
+  public static final Color ALTER_COLOR_DEFAULT = Color.decode("-4173747");
   public static final String PERMUT_COLOR_PROP = "permut.color";
   public static final Color PERMUT_COLOR_DEFAULT = Color.decode("-8473082");
   public static final String LAMBDA_COLOR_PROP = "lambda.color";
-  public static final Color LAMBDA_COLOR_DEFAULT = Color.gray;
+  public static final Color LAMBDA_COLOR_DEFAULT = Color.decode("-8355712");
   public static final String SIMPLE_DATA_COLOR_PROP = "simpleData.color";
-  public static final Color SIMPLE_DATA_COLOR_DEFAULT = Color.GREEN;
+  public static final Color SIMPLE_DATA_COLOR_DEFAULT = Color.decode("-14726787");
   public static final String ATTRIBUTE_COLOR_PROP = "attribute.color";
-  public static final Color ATTRIBUTE_COLOR_DEFAULT = Color.PINK;
+  public static final Color ATTRIBUTE_COLOR_DEFAULT = Color.decode("-16744448");
+  private static final int SPACE_SIZE = 3;
   private final int rootShape;
   private final int tokenShape;
   private final int concatShape;
@@ -106,6 +110,7 @@ public class Utils {
   private final int horizontalDistance;
   private final int verticalDistance;
   private final List<Regexp<AbstractStructuralNode>> roots;
+  private Map<Vertices, Integer> sizes = null;
 
   /**
    * Default contructor.
@@ -179,6 +184,20 @@ public class Utils {
     }
   }
 
+  private void createSizes() {
+    if (sizes == null) {
+      sizes = new EnumMap<Vertices, Integer>(Vertices.class);
+      sizes.put(Vertices.ROOT, getProperty(ROOT_SIZE_PROP, ROOT_SIZE_DEFAULT));
+      sizes.put(Vertices.ELEMENT, getProperty(TOKEN_SIZE_PROP, TOKEN_SIZE_DEFAULT));
+      sizes.put(Vertices.SIMPLE_DATA, getProperty(SIMPLE_DATA_SIZE_PROP, SIMPLE_DATA_SIZE_DEFAULT));
+      sizes.put(Vertices.ATTRIBUTE, getProperty(ATTRIBUTE_SIZE_PROP, ATTRIBUTE_SIZE_DEFAULT));
+      sizes.put(Vertices.LAMBDA, getProperty(LAMBDA_SIZE_PROP, LAMBDA_SIZE_DEFAULT));
+      sizes.put(Vertices.CONCATENATION, getProperty(CONCAT_SIZE_PROP, CONCAT_SIZE_DEFAULT));
+      sizes.put(Vertices.ALTERNATION, getProperty(ALTER_SIZE_PROP, ALTER_SIZE_DEFAULT));
+      sizes.put(Vertices.PERMUTATION, getProperty(PERMUT_SIZE_PROP, PERMUT_SIZE_DEFAULT));
+    }
+  }
+
   private Shape getShape(final int shape, final VertexShapeFactory<Regexp<? extends AbstractNamedNode>> shapeFactory, final Regexp<? extends AbstractNamedNode> regexp) {
     switch (shape) {
       case 0:
@@ -226,5 +245,22 @@ public class Utils {
    */
   public List<Regexp<AbstractStructuralNode>> getRoots() {
     return roots;
+  }
+
+  public int getLegendHeight() {
+    createSizes();
+
+    return (!sizes.isEmpty()) ? Collections.max(sizes.values()) : 0;
+  }
+
+  public int getVertexLegendWidth(final Vertices vertex) {
+    createSizes();
+
+    return (vertex.equals(Vertices.ROOT) ? sizes.get(vertex)/2 : sizes.get(vertex)) + vertex.nameSize() + SPACE_SIZE;
+  }
+
+  public Map<Vertices, Integer> getVerticesSize() {
+    createSizes();
+    return sizes;
   }
 }

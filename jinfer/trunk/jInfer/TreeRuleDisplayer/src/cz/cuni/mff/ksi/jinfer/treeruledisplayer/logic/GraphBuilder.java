@@ -27,10 +27,13 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.RulePanel;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Forest;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -54,6 +57,7 @@ import javax.swing.UIManager;
  * @author sviro
  */
 public final class GraphBuilder {
+
 
   private GraphBuilder() {
   }
@@ -122,62 +126,71 @@ public final class GraphBuilder {
       parseRegexp(tree, child);
     }
   }
+  
+  private static Point getVertexPosition(final Vertices prevVertex, final Vertices vertex, final Point previousPosition, final Utils utils, final int posY) {
+    return new Point((int) previousPosition.getX() + utils.getVerticesSize().get(prevVertex) / 2 + utils.getVertexLegendWidth(vertex), posY);
+  }
 
   private static JPanel createLegend() {
     final ArrayList<Regexp<AbstractStructuralNode>> roots = new ArrayList<Regexp<AbstractStructuralNode>>();
+    final Graph<Regexp<? extends AbstractNamedNode>, RegexpInterval> graph = new SparseGraph<Regexp<? extends AbstractNamedNode>, RegexpInterval>();
     //root
     final Regexp<AbstractStructuralNode> root = Regexp.getToken((AbstractStructuralNode) new Element(Collections.<String>emptyList(), "Root", Collections.<String, Object>emptyMap(), Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList()));
     roots.add(root);
+    graph.addVertex(root);
     //element
     final Regexp<Element> element = Regexp.getToken(new Element(Collections.<String>emptyList(), "Element", Collections.<String, Object>emptyMap(), Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList()));
+    graph.addVertex(element);
     //Simple Data
     final Regexp<SimpleData> simpleData = Regexp.getToken(new SimpleData(Collections.<String>emptyList(), "Simple data", Collections.<String, Object>emptyMap(), null, Collections.<String>emptyList()));
+    graph.addVertex(simpleData);
     //Attribute
     final Regexp<Attribute> attribute = Regexp.getToken(new Attribute(Collections.<String>emptyList(), "Attribute", Collections.<String, Object>emptyMap(), null, Collections.<String>emptyList()));
+    graph.addVertex(attribute);
     //Concat
     final Regexp<Element> concatenation = Regexp.getConcatenation(Collections.<Regexp<Element>>emptyList());
+    graph.addVertex(concatenation);
     //Alter
     final Regexp<Element> alternation = Regexp.getAlternation(Collections.<Regexp<Element>>emptyList());
+    graph.addVertex(alternation);
     //Permut
     final Regexp<Element> permutation = Regexp.getPermutation(Collections.<Regexp<Element>>emptyList());
+    graph.addVertex(permutation);
     //Lambda
     final Regexp<Element> lambda = Regexp.getLambda();
-    final DelegateForest<Regexp<? extends AbstractNamedNode>, RegexpInterval> forest = new DelegateForest<Regexp<? extends AbstractNamedNode>, RegexpInterval>();
-    forest.addTree(getLegendTree(root));
-    forest.addTree(getLegendTree(element));
-    forest.addTree(getLegendTree(simpleData));
-    forest.addTree(getLegendTree(attribute));
-    forest.addTree(getLegendTree(concatenation));
-    forest.addTree(getLegendTree(alternation));
-    forest.addTree(getLegendTree(permutation));
-    forest.addTree(getLegendTree(lambda));
+    graph.addVertex(lambda);
 
     final Utils utils = new Utils(roots);
+    final int legendHeight = utils.getLegendHeight();
+    final int posY = legendHeight / 2 + 5;
 
-    final Layout<Regexp<? extends AbstractNamedNode>, RegexpInterval> layout = new TreeLayout<Regexp<? extends AbstractNamedNode>, RegexpInterval>(forest);
+    final Layout<Regexp<? extends AbstractNamedNode>, RegexpInterval> layout = new StaticLayout<Regexp<? extends AbstractNamedNode>, RegexpInterval>(graph);
 
-    layout.setLocation(root, new Point(70, 25));
-    layout.setLocation(concatenation, new Point(220, 25));
-    layout.setLocation(alternation, new Point(350, 25));
-    layout.setLocation(permutation, new Point(490, 25));
-    layout.setLocation(element, new Point(570, 25));
-    layout.setLocation(simpleData, new Point(690, 25));
-    layout.setLocation(attribute, new Point(770, 25));
+    final Point rootPosition = new Point(utils.getVertexLegendWidth(Vertices.ROOT), posY);
+    final Point concatPosition = getVertexPosition(Vertices.ROOT, Vertices.CONCATENATION, rootPosition, utils, posY);
+    final Point alterPosition = getVertexPosition(Vertices.CONCATENATION, Vertices.ALTERNATION, concatPosition, utils, posY);
+    final Point permutPosition = getVertexPosition(Vertices.ALTERNATION, Vertices.PERMUTATION, alterPosition, utils, posY);
+    final Point elementPosition = getVertexPosition(Vertices.PERMUTATION, Vertices.ELEMENT, permutPosition, utils, posY);
+    final Point simpDataPosition = getVertexPosition(Vertices.ELEMENT, Vertices.SIMPLE_DATA, elementPosition, utils, posY);
+    final Point attributePosition = getVertexPosition(Vertices.SIMPLE_DATA, Vertices.ATTRIBUTE, simpDataPosition, utils, posY);
+    final Point lambdaPosition = getVertexPosition(Vertices.ATTRIBUTE, Vertices.LAMBDA, attributePosition, utils, posY);
 
-    final VisualizationViewer<Regexp<? extends AbstractNamedNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<? extends AbstractNamedNode>, RegexpInterval>(layout, new Dimension(400, 50));
+    layout.setLocation(root, rootPosition);
+    layout.setLocation(concatenation, concatPosition);
+    layout.setLocation(alternation, alterPosition);
+    layout.setLocation(permutation, permutPosition);
+    layout.setLocation(element, elementPosition);
+    layout.setLocation(simpleData, simpDataPosition);
+    layout.setLocation(attribute, attributePosition);
+    layout.setLocation(lambda, lambdaPosition);
 
+    final VisualizationViewer<Regexp<? extends AbstractNamedNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<? extends AbstractNamedNode>, RegexpInterval>(layout, new Dimension(400, legendHeight + 10));
 
 
     vv.setBackground(UIManager.getLookAndFeelDefaults().getColor("Panel.background"));
     setTransformers(vv, utils);
 
     return vv;
-  }
-
-  private static Tree<Regexp<? extends AbstractNamedNode>, RegexpInterval> getLegendTree(final Regexp<? extends AbstractNamedNode> regexp) {
-    final DelegateTree<Regexp<? extends AbstractNamedNode>, RegexpInterval> result = new DelegateTree<Regexp<? extends AbstractNamedNode>, RegexpInterval>();
-    result.addVertex(regexp);
-    return result;
   }
 
   /**

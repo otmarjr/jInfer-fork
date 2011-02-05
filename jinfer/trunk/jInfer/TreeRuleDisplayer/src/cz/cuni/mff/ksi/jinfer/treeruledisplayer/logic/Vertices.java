@@ -18,7 +18,8 @@
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic;
 
 /**
- *
+ * Enum of all types of Vertices occured in Tree rule displayer legend. Each vertex has
+ * size of its name.
  * @author sviro
  */
 public enum Vertices {
@@ -37,6 +38,10 @@ public enum Vertices {
     this.nameSize = nameSize;
   }
 
+  /**
+   * get size of the vertex name.
+   * @return Size of the vertex name.
+   */
   int nameSize() {
     return nameSize;
   }

@@ -212,7 +212,7 @@ public final class GraphBuilder {
     final DefaultModalGraphMouse<Regexp<? extends AbstractNamedNode>, RegexpInterval> gm = new DefaultModalGraphMouse<Regexp<? extends AbstractNamedNode>, RegexpInterval>(1 / 1.1f, 1.1f);
     gm.setMode(Mode.TRANSFORMING);
     vv.setGraphMouse(gm);
-
+    
     return new RulePanel(new GraphZoomScrollPane(vv), createLegend());
   }
 

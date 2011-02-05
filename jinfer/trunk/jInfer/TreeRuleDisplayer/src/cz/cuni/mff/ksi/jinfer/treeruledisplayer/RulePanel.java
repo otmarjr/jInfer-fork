@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -53,14 +54,11 @@ public class RulePanel extends JPanel {
     graphConstraints.gridx = 0;
     graphConstraints.gridy = 0;
     graphConstraints.fill = GridBagConstraints.BOTH;
-    graphConstraints.gridwidth = 2;
     graphConstraints.weightx = 1.0;
     graphConstraints.weighty = 1.0;
     this.add(graph, graphConstraints);
 
-
     final JPanel legendPanel = new JPanel(new GridBagLayout());
-    legendPanel.setPreferredSize(legend.getSize());
 
     final JLabel label = new JLabel("Legend");
     label.setFont(label.getFont().deriveFont(Font.BOLD));
@@ -74,18 +72,21 @@ public class RulePanel extends JPanel {
     GridBagConstraints legendGraphConstraints = new GridBagConstraints();
     legendGraphConstraints.gridx = 1;
     legendGraphConstraints.gridy = 0;
-    legendGraphConstraints.fill = GridBagConstraints.BOTH;
+    legendGraphConstraints.fill = GridBagConstraints.HORIZONTAL;
     legendGraphConstraints.weightx = 1.0;
     legendGraphConstraints.weighty = 1.0;
     legendPanel.add(legend, legendGraphConstraints);
-
+    Dimension dimension = new Dimension(label.getPreferredSize().width + legend.getPreferredSize().width, legend.getPreferredSize().height);
+    legendPanel.setPreferredSize(dimension);
+    legendPanel.setMinimumSize(dimension);
 
     GridBagConstraints scrollPaneConstraints = new GridBagConstraints();
     scrollPaneConstraints.gridx = 0;
     scrollPaneConstraints.gridy = 1;
-    scrollPaneConstraints.fill = GridBagConstraints.BOTH;
+    scrollPaneConstraints.fill = GridBagConstraints.HORIZONTAL;
     scrollPaneConstraints.weightx = 1.0;
-    final JScrollPane jScrollPane = new JScrollPane(legendPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    final JScrollPane jScrollPane = new JScrollPane(legendPanel);
+    jScrollPane.setMinimumSize(dimension);
     this.add(jScrollPane, scrollPaneConstraints);
   }
 }

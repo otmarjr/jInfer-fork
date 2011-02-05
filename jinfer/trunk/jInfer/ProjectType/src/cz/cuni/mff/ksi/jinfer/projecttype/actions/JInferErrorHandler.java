@@ -42,6 +42,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author sviro
  */
 public class JInferErrorHandler extends DefaultHandler {
+  /**
+   * Title of Validation output window.
+   */
   public static final String JINFER_VALIDATION_TITLE = "jInfer validation result";
 
   private static final Logger LOG = Logger.getLogger(ValidateAction.class);
@@ -88,6 +91,12 @@ public class JInferErrorHandler extends DefaultHandler {
     }
   }
 
+  /**
+   * Default constructor. If {@link FileObject} provided as parameter is not null,
+   * error handler tries to print line and columnt number where the error occurs in provided file.
+   * This information is printed in validation output window as a link to this file.
+   * @param file FileObject for which some error occured.
+   */
   public JInferErrorHandler(final FileObject file) {
     super();
     this.file = file;

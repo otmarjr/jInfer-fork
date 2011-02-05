@@ -31,12 +31,26 @@ import javax.swing.DefaultComboBoxModel;
 public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 35345345345l;
-  
+
+  /**
+   * Name of the property for folder type.
+   */
   public static final String FOLDER_TYPE = "folderType";
-  public static final String FOLDER_TYPE_DEFAULT = "XML";
+  /**
+   * Default value of the folder type property.
+   */
+  public static final String FOLDER_TYPE_DEFAULT = FolderType.DOCUMENT.getName();
+  /**
+   * Name of Log level property for project.
+   */
   public static final String LOG_LEVEL = "logLevel";
 
-  /** Creates new form ProjectPropertiesPanel */
+
+
+  /**
+   * Creates Miscellaneous properties panel for jInfer Project.
+   * @param properties Properties used to store and load data to panel.
+   */
   public ProjectPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();

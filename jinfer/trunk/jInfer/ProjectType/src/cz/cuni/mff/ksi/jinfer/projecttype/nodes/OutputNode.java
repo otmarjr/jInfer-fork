@@ -33,6 +33,11 @@ import org.openide.util.lookup.ProxyLookup;
  */
 public final class OutputNode extends FilterNode {
 
+  /**
+   * Default constructor.
+   * @param node {@link Node} defining output folder in jInfer project.
+   * @param project jInfer project for which is this node registered.
+   */
   public OutputNode(final Node node, final JInferProject project) {
     super(node, new OutputChildren(node),
             new ProxyLookup(new Lookup[]{Lookups.singleton(project), node.getLookup()}));

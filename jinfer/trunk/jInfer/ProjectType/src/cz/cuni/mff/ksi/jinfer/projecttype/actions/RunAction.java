@@ -37,6 +37,10 @@ public class RunAction extends AbstractAction {
   private static final long serialVersionUID = 135854187L;
   private final JInferProject project;
 
+    /**
+   * Default constructor.
+   * @param project jInfer project for which is this action registered.
+   */
   public RunAction(final JInferProject project) {
     super("Run");
     this.project = project;

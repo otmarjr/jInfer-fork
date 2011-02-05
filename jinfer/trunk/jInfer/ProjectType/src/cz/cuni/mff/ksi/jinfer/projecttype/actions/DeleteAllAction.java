@@ -16,20 +16,18 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
-import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.Collection;
 import javax.swing.AbstractAction;
+import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
-import org.openide.nodes.Node;
 
 /**
- * Action for folder node which deletes all input files in particular folder.
+ * Action for {@link FolderNode} which deletes all input files in particular folder.
  *
  * @author sviro
  * @see FolderNode
@@ -37,29 +35,29 @@ import org.openide.nodes.Node;
 public class DeleteAllAction extends AbstractAction {
 
   private static final long serialVersionUID = 8956231L;
-  private final JInferProject project;
-  private final Node node;
-  private final Collection<File> files;
+  private final FolderNode node;
 
-  public DeleteAllAction(final JInferProject project, final Node node, final Collection<File> files) {
+  /**
+   * Default constructor.
+   * @param node Node for which is this action registered.
+   */
+  public DeleteAllAction(final FolderNode node) {
     super("Remove all files");
-    this.project = project;
     this.node = node;
-    this.files = files;
   }
 
   @Override
   public void actionPerformed(final ActionEvent e) {
-    final String folderName = ((FolderNode) node).getDisplayName();
+    final String folderName = node.getDisplayName();
     final NotifyDescriptor.Confirmation descriptor = new NotifyDescriptor.Confirmation(
             "Are you sure you want to remove all files in " + folderName + " folder?");
 
     DialogDisplayer.getDefault().notify(descriptor);
 
     if (descriptor.getValue().equals(NotifyDescriptor.YES_OPTION)) {
-      files.clear();
+      node.getLookup().lookup(Collection.class).clear();
       ((FileChildren) node.getChildren()).refreshNodes();
-
+      final Project project = node.getLookup().lookup(Project.class);
       project.getLookup().lookup(ProjectState.class).markModified();
     }
   }

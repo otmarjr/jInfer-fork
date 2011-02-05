@@ -55,6 +55,10 @@ public class FilesAddAction extends AbstractAction {
   private final JInferProject project;
   public static final String COMMAND_FILES_ADD = "FilesAddAction";
 
+  /**
+   * Default constructor.
+   * @param project jInfer project for which is this action registered.
+   */
   public FilesAddAction(final JInferProject project) {
     super("Add files");
     this.project = project;

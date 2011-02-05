@@ -30,7 +30,10 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class ProjectPropertiesPanelProvider implements PropertiesPanelProvider{
-  public static final String CATEGORY_DISPLAY_NAME = "Miscellaneous";
+  private static final String CATEGORY_DISPLAY_NAME = "Miscellaneous";
+  /**
+   * Programmatic name of this category.
+   */
   public static final String CATEGORY_NAME = "ProjectProps";
 
   @Override

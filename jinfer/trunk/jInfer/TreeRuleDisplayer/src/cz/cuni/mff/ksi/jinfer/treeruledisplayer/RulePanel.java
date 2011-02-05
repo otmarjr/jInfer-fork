@@ -16,35 +16,31 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.JLabel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import org.netbeans.api.options.OptionsDisplayer;
 
 /**
- * Panel for Tree rule displayer width its legend panel.
+ * Panel for Tree rule displayer with show setting button.
  * @author sviro
  */
 public class RulePanel extends JPanel {
 
   private static final long serialVersionUID = 34535l;
   private final JPanel graph;
-  private final JPanel legend;
 
   /**
-   * Default constructor, the first parameter is panel with rule displayer graph, the second
-   * parameter is panel with legend.
+   * Default constructor, the parameter is panel with rule displayer graph.
    * @param graph Panel with rule displayer graph.
-   * @param legend Panel with legend.
    */
-  public RulePanel(final JPanel graph, final JPanel legend) {
+  public RulePanel(final JPanel graph) {
     super(new GridBagLayout());
     this.graph = graph;
-    this.legend = legend;
 
     initComponents();
   }
@@ -58,35 +54,25 @@ public class RulePanel extends JPanel {
     graphConstraints.weighty = 1.0;
     this.add(graph, graphConstraints);
 
-    final JPanel legendPanel = new JPanel(new GridBagLayout());
+    final JButton settings = new JButton("Show settings");
+    settings.addActionListener(new ActionListener() {
 
-    final JLabel label = new JLabel("Legend");
-    label.setFont(label.getFont().deriveFont(Font.BOLD));
-    GridBagConstraints labelConstraints = new GridBagConstraints();
-    labelConstraints = new GridBagConstraints();
-    labelConstraints.gridx = 0;
-    labelConstraints.gridy = 0;
-    labelConstraints.insets = new Insets(2, 12, 2, 12);
-    legendPanel.add(label,labelConstraints);
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        showSettings();
+      }
+    });
 
-    GridBagConstraints legendGraphConstraints = new GridBagConstraints();
-    legendGraphConstraints.gridx = 1;
-    legendGraphConstraints.gridy = 0;
-    legendGraphConstraints.fill = GridBagConstraints.HORIZONTAL;
-    legendGraphConstraints.weightx = 1.0;
-    legendGraphConstraints.weighty = 1.0;
-    legendPanel.add(legend, legendGraphConstraints);
-    Dimension dimension = new Dimension(label.getPreferredSize().width + legend.getPreferredSize().width, legend.getPreferredSize().height);
-    legendPanel.setPreferredSize(dimension);
-    legendPanel.setMinimumSize(dimension);
+    GridBagConstraints settingsConstraints = new GridBagConstraints();
+    settingsConstraints = new GridBagConstraints();
+    settingsConstraints.gridx = 0;
+    settingsConstraints.gridy = 1;
+    settingsConstraints.insets = new Insets(2, 12, 2, 2);
+    settingsConstraints.anchor = GridBagConstraints.WEST;
+    this.add(settings, settingsConstraints);
+  }
 
-    GridBagConstraints scrollPaneConstraints = new GridBagConstraints();
-    scrollPaneConstraints.gridx = 0;
-    scrollPaneConstraints.gridy = 1;
-    scrollPaneConstraints.fill = GridBagConstraints.HORIZONTAL;
-    scrollPaneConstraints.weightx = 1.0;
-    final JScrollPane jScrollPane = new JScrollPane(legendPanel);
-    jScrollPane.setMinimumSize(dimension);
-    this.add(jScrollPane, scrollPaneConstraints);
+  private void showSettings() {
+    OptionsDisplayer.getDefault().open("jInfer/treeRuleDisplayer");
   }
 }

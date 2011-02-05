@@ -23,10 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
 import java.awt.Color;
 import java.awt.Shape;
-import java.util.Collections;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import org.openide.util.NbPreferences;
 
 /**
@@ -110,7 +107,6 @@ public class Utils {
   private final int horizontalDistance;
   private final int verticalDistance;
   private final List<Regexp<AbstractStructuralNode>> roots;
-  private Map<Vertices, Integer> sizes = null;
 
   /**
    * Default contructor.
@@ -184,20 +180,6 @@ public class Utils {
     }
   }
 
-  private void createSizes() {
-    if (sizes == null) {
-      sizes = new EnumMap<Vertices, Integer>(Vertices.class);
-      sizes.put(Vertices.ROOT, getProperty(ROOT_SIZE_PROP, ROOT_SIZE_DEFAULT));
-      sizes.put(Vertices.ELEMENT, getProperty(TOKEN_SIZE_PROP, TOKEN_SIZE_DEFAULT));
-      sizes.put(Vertices.SIMPLE_DATA, getProperty(SIMPLE_DATA_SIZE_PROP, SIMPLE_DATA_SIZE_DEFAULT));
-      sizes.put(Vertices.ATTRIBUTE, getProperty(ATTRIBUTE_SIZE_PROP, ATTRIBUTE_SIZE_DEFAULT));
-      sizes.put(Vertices.LAMBDA, getProperty(LAMBDA_SIZE_PROP, LAMBDA_SIZE_DEFAULT));
-      sizes.put(Vertices.CONCATENATION, getProperty(CONCAT_SIZE_PROP, CONCAT_SIZE_DEFAULT));
-      sizes.put(Vertices.ALTERNATION, getProperty(ALTER_SIZE_PROP, ALTER_SIZE_DEFAULT));
-      sizes.put(Vertices.PERMUTATION, getProperty(PERMUT_SIZE_PROP, PERMUT_SIZE_DEFAULT));
-    }
-  }
-
   private Shape getShape(final int shape, final VertexShapeFactory<Regexp<? extends AbstractNamedNode>> shapeFactory, final Regexp<? extends AbstractNamedNode> regexp) {
     switch (shape) {
       case 0:
@@ -245,36 +227,5 @@ public class Utils {
    */
   public List<Regexp<AbstractStructuralNode>> getRoots() {
     return roots;
-  }
-
-  /**
-   * Get height of legend panel for Tree rule displayer.
-   * @return Height of legend panel for Tree rule displayer.
-   */
-  public int getLegendHeight() {
-    createSizes();
-
-    return (!sizes.isEmpty()) ? Collections.max(sizes.values()) : 0;
-  }
-
-  /**
-   * Get width of the vertex in legend including its name and default space between vertices in legend.
-   * @param vertex Vertex for which to get width.
-   * @return Width of the vertex in legend.
-   */
-  public int getVertexLegendWidth(final Vertices vertex) {
-    createSizes();
-
-    return (vertex.equals(Vertices.ROOT) ? sizes.get(vertex)/2 : sizes.get(vertex)) + vertex.nameSize() + SPACE_SIZE;
-  }
-
-  /**
-   * Get {@link Map} of sizes of each vertex occured in legend panel. Key of the map is {@link Vertices} and
-   * value is its size including name of the vertex and default space between vertices in legend.
-   * @return Map of sizes of each vertex occured in legend panel.
-   */
-  public Map<Vertices, Integer> getVerticesSize() {
-    createSizes();
-    return sizes;
   }
 }

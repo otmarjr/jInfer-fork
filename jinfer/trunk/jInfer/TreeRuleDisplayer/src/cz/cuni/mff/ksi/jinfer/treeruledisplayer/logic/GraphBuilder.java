@@ -20,20 +20,16 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractNamedNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.RulePanel;
 import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.algorithms.layout.TreeLayout;
 import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.DelegateTree;
 import edu.uci.ics.jung.graph.Forest;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.Tree;
 import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
@@ -43,13 +39,10 @@ import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 /**
  * Class responsible for rendering a set of rules as a rule trees.
@@ -126,72 +119,6 @@ public final class GraphBuilder {
       parseRegexp(tree, child);
     }
   }
-  
-  private static Point getVertexPosition(final Vertices prevVertex, final Vertices vertex, final Point previousPosition, final Utils utils, final int posY) {
-    return new Point((int) previousPosition.getX() + utils.getVerticesSize().get(prevVertex) / 2 + utils.getVertexLegendWidth(vertex), posY);
-  }
-
-  private static JPanel createLegend() {
-    final ArrayList<Regexp<AbstractStructuralNode>> roots = new ArrayList<Regexp<AbstractStructuralNode>>();
-    final Graph<Regexp<? extends AbstractNamedNode>, RegexpInterval> graph = new SparseGraph<Regexp<? extends AbstractNamedNode>, RegexpInterval>();
-    //root
-    final Regexp<AbstractStructuralNode> root = Regexp.getToken((AbstractStructuralNode) new Element(Collections.<String>emptyList(), "Root", Collections.<String, Object>emptyMap(), Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList()));
-    roots.add(root);
-    graph.addVertex(root);
-    //element
-    final Regexp<Element> element = Regexp.getToken(new Element(Collections.<String>emptyList(), "Element", Collections.<String, Object>emptyMap(), Regexp.<AbstractStructuralNode>getLambda(), Collections.<Attribute>emptyList()));
-    graph.addVertex(element);
-    //Simple Data
-    final Regexp<SimpleData> simpleData = Regexp.getToken(new SimpleData(Collections.<String>emptyList(), "Simple data", Collections.<String, Object>emptyMap(), null, Collections.<String>emptyList()));
-    graph.addVertex(simpleData);
-    //Attribute
-    final Regexp<Attribute> attribute = Regexp.getToken(new Attribute(Collections.<String>emptyList(), "Attribute", Collections.<String, Object>emptyMap(), null, Collections.<String>emptyList()));
-    graph.addVertex(attribute);
-    //Concat
-    final Regexp<Element> concatenation = Regexp.getConcatenation(Collections.<Regexp<Element>>emptyList());
-    graph.addVertex(concatenation);
-    //Alter
-    final Regexp<Element> alternation = Regexp.getAlternation(Collections.<Regexp<Element>>emptyList());
-    graph.addVertex(alternation);
-    //Permut
-    final Regexp<Element> permutation = Regexp.getPermutation(Collections.<Regexp<Element>>emptyList());
-    graph.addVertex(permutation);
-    //Lambda
-    final Regexp<Element> lambda = Regexp.getLambda();
-    graph.addVertex(lambda);
-
-    final Utils utils = new Utils(roots);
-    final int legendHeight = utils.getLegendHeight();
-    final int posY = legendHeight / 2 + 5;
-
-    final Layout<Regexp<? extends AbstractNamedNode>, RegexpInterval> layout = new StaticLayout<Regexp<? extends AbstractNamedNode>, RegexpInterval>(graph);
-
-    final Point rootPosition = new Point(utils.getVertexLegendWidth(Vertices.ROOT), posY);
-    final Point concatPosition = getVertexPosition(Vertices.ROOT, Vertices.CONCATENATION, rootPosition, utils, posY);
-    final Point alterPosition = getVertexPosition(Vertices.CONCATENATION, Vertices.ALTERNATION, concatPosition, utils, posY);
-    final Point permutPosition = getVertexPosition(Vertices.ALTERNATION, Vertices.PERMUTATION, alterPosition, utils, posY);
-    final Point elementPosition = getVertexPosition(Vertices.PERMUTATION, Vertices.ELEMENT, permutPosition, utils, posY);
-    final Point simpDataPosition = getVertexPosition(Vertices.ELEMENT, Vertices.SIMPLE_DATA, elementPosition, utils, posY);
-    final Point attributePosition = getVertexPosition(Vertices.SIMPLE_DATA, Vertices.ATTRIBUTE, simpDataPosition, utils, posY);
-    final Point lambdaPosition = getVertexPosition(Vertices.ATTRIBUTE, Vertices.LAMBDA, attributePosition, utils, posY);
-
-    layout.setLocation(root, rootPosition);
-    layout.setLocation(concatenation, concatPosition);
-    layout.setLocation(alternation, alterPosition);
-    layout.setLocation(permutation, permutPosition);
-    layout.setLocation(element, elementPosition);
-    layout.setLocation(simpleData, simpDataPosition);
-    layout.setLocation(attribute, attributePosition);
-    layout.setLocation(lambda, lambdaPosition);
-
-    final VisualizationViewer<Regexp<? extends AbstractNamedNode>, RegexpInterval> vv = new VisualizationViewer<Regexp<? extends AbstractNamedNode>, RegexpInterval>(layout, new Dimension(400, legendHeight + 10));
-
-
-    vv.setBackground(UIManager.getLookAndFeelDefaults().getColor("Panel.background"));
-    setTransformers(vv, utils);
-
-    return vv;
-  }
 
   /**
    * Get panel with rendered rule trees.
@@ -213,7 +140,7 @@ public final class GraphBuilder {
     gm.setMode(Mode.TRANSFORMING);
     vv.setGraphMouse(gm);
     
-    return new RulePanel(new GraphZoomScrollPane(vv), createLegend());
+    return new RulePanel(new GraphZoomScrollPane(vv));
   }
 
   private static void setTransformers(final VisualizationViewer<Regexp<? extends AbstractNamedNode>, RegexpInterval> vv, final Utils utils) {

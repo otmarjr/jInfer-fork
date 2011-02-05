@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
- *
+ * Panel for Tree rule displayer width its legend panel.
  * @author sviro
  */
 public class RulePanel extends JPanel {
@@ -34,6 +34,12 @@ public class RulePanel extends JPanel {
   private final JPanel graph;
   private final JPanel legend;
 
+  /**
+   * Default constructor, the first parameter is panel with rule displayer graph, the second
+   * parameter is panel with legend.
+   * @param graph Panel with rule displayer graph.
+   * @param legend Panel with legend.
+   */
   public RulePanel(final JPanel graph, final JPanel legend) {
     super(new GridBagLayout());
     this.graph = graph;

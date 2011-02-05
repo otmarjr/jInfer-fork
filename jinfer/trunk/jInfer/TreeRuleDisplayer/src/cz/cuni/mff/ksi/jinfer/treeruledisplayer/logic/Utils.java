@@ -247,18 +247,32 @@ public class Utils {
     return roots;
   }
 
+  /**
+   * Get height of legend panel for Tree rule displayer.
+   * @return Height of legend panel for Tree rule displayer.
+   */
   public int getLegendHeight() {
     createSizes();
 
     return (!sizes.isEmpty()) ? Collections.max(sizes.values()) : 0;
   }
 
+  /**
+   * Get width of the vertex in legend including its name and default space between vertices in legend.
+   * @param vertex Vertex for which to get width.
+   * @return Width of the vertex in legend.
+   */
   public int getVertexLegendWidth(final Vertices vertex) {
     createSizes();
 
     return (vertex.equals(Vertices.ROOT) ? sizes.get(vertex)/2 : sizes.get(vertex)) + vertex.nameSize() + SPACE_SIZE;
   }
 
+  /**
+   * Get {@link Map} of sizes of each vertex occured in legend panel. Key of the map is {@link Vertices} and
+   * value is its size including name of the vertex and default space between vertices in legend.
+   * @return Map of sizes of each vertex occured in legend panel.
+   */
   public Map<Vertices, Integer> getVerticesSize() {
     createSizes();
     return sizes;

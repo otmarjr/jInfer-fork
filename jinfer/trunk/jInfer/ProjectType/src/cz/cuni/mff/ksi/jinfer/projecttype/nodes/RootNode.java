@@ -44,6 +44,10 @@ public class RootNode extends AbstractNode {
 
   private final JInferProject project;
 
+  /**
+   * Default constructor.
+   * @param project jInfer project for which is this node registered.
+   */
   public RootNode(final JInferProject project) {
     super(new Children.Keys<Node>() {
 

@@ -60,6 +60,10 @@ public class JinferTemplateWizardIterator implements WizardDescriptor./*Progress
   private WizardDescriptor.Panel[] panels;
   private WizardDescriptor wiz;
 
+  /**
+   * Create new instance of this class.
+   * @return New instance of this class.
+   */
   public static JinferTemplateWizardIterator createIterator() {
     return new JinferTemplateWizardIterator();
   }

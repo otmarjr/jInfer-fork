@@ -50,6 +50,10 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   private ProjectCustomizer.CategoryComponentProvider componentProvider;
   private Map<Category, JPanel> panels;
 
+  /**
+   * Default constructor.
+   * @param project jInfer project for which is this dialog created for.
+   */
   public JInferCustomizerProvider(final JInferProject project) {
     this.project = project;
   }
@@ -183,8 +187,8 @@ public class JInferCustomizerProvider implements CustomizerProvider {
   }
 
   /**
-   * Get List of categories is this Project properties dialog.
-   * @return List of categories is this Project properties dialog.
+   * Get List of categories of this Project properties dialog.
+   * @return List of categories of this Project properties dialog.
    */
   public List<Category> getCategories() {
     return new ArrayList<Category>(panels.keySet());

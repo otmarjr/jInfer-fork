@@ -48,6 +48,14 @@ public class JInferProject implements Project {
   private Input input;
   private Properties properties;
 
+  /**
+   * Default jInfer Project contructor. Creates new jInfer project located in
+   * path definted by projectDir parameter.
+   * @param projectDir Path to the project directory on disk.
+   * @param state {@link ProjectState State} of the project.
+   *
+   * @see ProjectState
+   */
   public JInferProject(final FileObject projectDir, final ProjectState state) {
     this.projectDir = projectDir;
     this.state = state;

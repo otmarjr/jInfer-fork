@@ -27,6 +27,10 @@ import org.openide.nodes.Node;
  */
 public class OutputChildren extends FilterNode.Children{
 
+  /**
+   * Default constructor.
+   * @param node {@link Node} defining output folder in jInfer project.
+   */
   public OutputChildren(final Node node) {
     super(node);
   }

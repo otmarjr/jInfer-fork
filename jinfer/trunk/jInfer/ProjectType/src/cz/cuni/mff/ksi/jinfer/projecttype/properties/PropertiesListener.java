@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComponent;
+import org.netbeans.spi.project.ui.CustomizerProvider;
 import org.netbeans.spi.project.ui.support.ProjectCustomizer.Category;
 
 /**
@@ -31,6 +32,10 @@ public class PropertiesListener implements ActionListener {
 
   private final JInferCustomizerProvider customizerProvider;
 
+  /**
+   * Default constructor.
+   * @param customizerProvider {@link CustomizerProvider} which creates project properties.
+   */
   public PropertiesListener(final JInferCustomizerProvider customizerProvider) {
     this.customizerProvider = customizerProvider;
   }

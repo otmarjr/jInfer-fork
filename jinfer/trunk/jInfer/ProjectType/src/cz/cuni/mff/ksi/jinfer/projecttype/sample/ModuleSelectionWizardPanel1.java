@@ -29,6 +29,9 @@ import org.openide.util.NbBundle;
  * @author sviro
  */
 public class ModuleSelectionWizardPanel1 implements WizardDescriptor.Panel {
+  /**
+   * Name of the property in WizardDescriptor to save selected modules to be set in new project.
+   */
   public static final String MODULE_SELECTION_PROPS = "moduleSelectionProps";
 
   /**

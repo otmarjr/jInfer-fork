@@ -31,6 +31,10 @@ public class JInferComponentProvider implements ProjectCustomizer.CategoryCompon
 
   private final Map<Category, JPanel> panels;
 
+  /**
+   * Default constructor.
+   * @param panels Map of {@link Category categories} and its {@link JPanel panels}.
+   */
   public JInferComponentProvider(final Map<Category, JPanel> panels) {
     this.panels = panels;
   }

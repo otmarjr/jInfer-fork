@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
-import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FileChildren;
 import cz.cuni.mff.ksi.jinfer.projecttype.nodes.FolderNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
@@ -28,33 +27,34 @@ import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.AbstractAction;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileChooserBuilder;
-import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 
 /**
- * Action for folder node which adds specific file into input folder.
+ * Action for {@link FolderNode} which adds specific file into input folder.
  * @author sviro
  * @see FolderNode
  */
 public class FileAddAction extends AbstractAction {
 
   private static final long serialVersionUID = 12121452l;
-  private final Collection<File> files;
-  private final Node node;
-  private final JInferProject project;
+  private final FolderNode node;
   private final FolderType type;
 
-  public FileAddAction(final JInferProject project, final Node node, final Collection<File> files) {
+  /**
+   * Default constructor.
+   * @param node Node for which is this action registered.
+   */
+  public FileAddAction(final FolderNode node) {
     super();
-    type = ((FolderNode) node).getFolderType();
+    type = node.getFolderType();
     putValue(NAME, "Add " + type.getName() + " files");
-    this.project = project;
-    this.files = files;
     this.node = node;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void actionPerformed(final ActionEvent e) {
     final Collection<? extends Processor> processors = Lookup.getDefault().
@@ -63,8 +63,7 @@ public class FileAddAction extends AbstractAction {
     final StringBuilder builder = new StringBuilder();
     buildFilterName(builder, processors);
 
-    FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).
-            setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
+    FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(FileAddAction.class).setDefaultWorkingDirectory(new File(System.getProperty("user.home"))).
             setTitle("Add " + type.getName() + " files").setFilesOnly(true);
 
     if (FolderType.QUERY.equals(type)) {
@@ -87,10 +86,11 @@ public class FileAddAction extends AbstractAction {
     final File[] selectedFiles = fileChooserBuilder.showMultiOpenDialog();
 
     if (selectedFiles != null) {
-      files.addAll(Arrays.asList(selectedFiles));
+      ((Collection<File>) node.getLookup().lookup(Collection.class)).addAll(Arrays.asList(selectedFiles));
 
       ((FileChildren) node.getChildren()).refreshNodes();
 
+      final Project project = node.getLookup().lookup(Project.class);
       project.getLookup().lookup(ProjectState.class).markModified();
     }
   }

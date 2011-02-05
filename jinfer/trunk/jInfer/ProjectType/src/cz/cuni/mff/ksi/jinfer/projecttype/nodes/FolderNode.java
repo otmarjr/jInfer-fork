@@ -42,7 +42,7 @@ public class FolderNode extends AbstractNode {
   private final JInferProject project;
 
   /**
-   * Default FolderNode contructor. For each FolderNode is determined for which 
+   * Default FolderNode constructor. For each FolderNode is determined for which
    * type of input files is used for.
    * @param project Project to be associated with.
    * @param folderType Type of input files for which is FolderNode created.
@@ -89,7 +89,7 @@ public class FolderNode extends AbstractNode {
   @Override
   public Action[] getActions(final boolean context) {
     return new Action[]{
-              new FileAddAction(project, this, files),
-              new DeleteAllAction(project, this, files)};
+              new FileAddAction(this),
+              new DeleteAllAction(this)};
   }
 }

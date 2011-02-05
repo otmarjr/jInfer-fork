@@ -71,6 +71,9 @@ public class JinferTemplateWizardPanel implements WizardDescriptor.Panel,
     }
   }
 
+  /**
+   * Fire change event for all listeners registered for this wizard panel.
+   */
   protected final void fireChangeEvent() {
     Set<ChangeListener> ls;
     synchronized (listeners) {

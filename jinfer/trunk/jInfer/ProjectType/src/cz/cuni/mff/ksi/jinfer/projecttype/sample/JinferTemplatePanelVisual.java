@@ -34,7 +34,7 @@ import org.openide.filesystems.FileUtil;
 @SuppressWarnings("PMD.SingularField")
 public class JinferTemplatePanelVisual extends JPanel implements DocumentListener {
 
-  public static final String PROP_PROJECT_NAME = "projectName";
+  private static final String PROP_PROJECT_NAME = "projectName";
   private static final long serialVersionUID = 785187562L;
   private final JinferTemplateWizardPanel panel;
 
@@ -47,6 +47,10 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     projectLocationTextField.getDocument().addDocumentListener(this);
   }
 
+  /**
+   * Get name of the project to be created.
+   * @return
+   */
   public String getProjectName() {
     return this.projectNameTextField.getText();
   }
@@ -166,6 +170,12 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     projectNameTextField.requestFocus();
   }
 
+  /**
+   * Check the content of the first step of new jInfer project creation.
+   * @param wizardDescriptor {@link WizardDescriptor} to be describing this wizard.
+   * @return <tt>True</tt> if all fields in first step are valid to continue to second step,
+   * otherwise return <tt>false</tt>.
+   */
   public boolean valid(final WizardDescriptor wizardDescriptor) {
 
     if (projectNameTextField.getText().length() == 0) {
@@ -210,6 +220,10 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     return true;
   }
 
+  /**
+   * Store data from first step into {@link WizardDescriptor}.
+   * @param d WizardDescriptor to be data saved in.
+   */
   public void store(final WizardDescriptor d) {
     final String name = projectNameTextField.getText().trim();
     final String folder = createdFolderTextField.getText().trim();
@@ -218,6 +232,10 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     d.putProperty("name", name);
   }
 
+  /**
+   * Load previously saved data to the {@link WizardDescriptor}.
+   * @param settings WizardDescriptor from which are data loaded.
+   */
   public void read(final WizardDescriptor settings) {
     File projectLocation = (File) settings.getProperty("projdir");
     if (projectLocation == null || projectLocation.getParentFile() == null || !projectLocation.
@@ -236,6 +254,11 @@ public class JinferTemplatePanelVisual extends JPanel implements DocumentListene
     this.projectNameTextField.selectAll();
   }
 
+  /**
+   * This method do nothing for the first step.
+   * @param d
+   * @throws WizardValidationException
+   */
   public void validate(final WizardDescriptor d) throws WizardValidationException {
     // nothing to validate
   }

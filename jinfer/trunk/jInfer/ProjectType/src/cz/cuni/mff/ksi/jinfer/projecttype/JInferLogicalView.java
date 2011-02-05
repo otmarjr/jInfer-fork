@@ -22,8 +22,8 @@ import org.openide.nodes.Node;
 
 /**
  * Creates logical view of the jInfer Project, which means that it returns root node of the
- * project tree. This root node contains three input folders: XML, schema, query
- * and one output folder.
+ * project tree. This root node contains three input folders: Document, Schema, Query
+ * and Output folder.
  * @author sviro
  */
 public class JInferLogicalView implements LogicalViewProvider {

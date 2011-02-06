@@ -34,6 +34,7 @@ public class SAXDocumentElement {
    * the name <code>trimmedQName</code> will be 'element'.
    */
   private final String name;
+  private final XSDTag tag;
   /**
    * All attributes of the element.
    */
@@ -42,28 +43,50 @@ public class SAXDocumentElement {
   private boolean associated;
 
   /**
-   * Constructs an instance with given name and empty attribute list.
-   * @param nameWithNS Name of the schema element, should be set in lowercase.
+   * Constructs a new instance with empty attribute list.
+   * {@code QName} is trimmed of its namespace prefix.
+   * @param QName Name of the schema element, should be set in lowercase.
    */
-  public SAXDocumentElement(final String nameWithNS) {
-    final String trimmedName = XSDUtility.trimNS(nameWithNS);
+  public SAXDocumentElement(final String QName) {
+    final String trimmedName = XSDUtility.trimNS(QName);
     if (BaseUtils.isEmpty(trimmedName)) {
       throw new IllegalArgumentException("XSD Document Element can't have empty or null name.");
     } else {
       this.name = trimmedName;
+      this.tag = XSDTag.matchName(name);
     }
     attrs = new HashMap<String, SAXAttributeData>();
     associated = false;
   }
 
+  /**
+   * Returns the whole attribute list for this tag.
+   * @return Attribute list of this tag.
+   */
   public Map<String, SAXAttributeData> getAttrs() {
     return attrs;
   }
 
+  /**
+   * Returns case sensitive name without namespace prefix.
+   * @return Name of this instance.
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Returns tag matching the name.
+   * @return Valid tag or {@code INVALID }
+   */
+  public XSDTag getTag() {
+    return tag;
+  }
+
+  /**
+   * Returns the value of attribute <i>name</i> if such an attribute is in the list.
+   * @return Value of attribute <i>name</i>.
+   */
   public String attributeNameValue() {
     if (attrs.containsKey("name")) {
       return attrs.get("name").getValue();
@@ -79,16 +102,12 @@ public class SAXDocumentElement {
     return (nameAttr != null && !nameAttr.getQName().equals("") && !nameAttr.getValue().equals("") && isComplexType()) ? true : false;
   }
 
-  public boolean isComplexType() {
-    return XSDTag.COMPLEXTYPE.getName().equals(name);
-  }
-
   /**
    * Check if element is one of xs:choice, xs:sequence, xs:all.
    * @return true if it is, false otherwise.
    */
   public boolean isOrderIndicator() {
-    return XSDTag.matchName(name).isOrderIndicator();
+    return tag.isOrderIndicator();
   }
 
   /**
@@ -100,11 +119,27 @@ public class SAXDocumentElement {
     this.associated = true;
   }
 
+  /**
+   * Checks if current instance was paired with its parent's container.
+   * @return {@code true } if {@code associate } method was called previously, {@code false } otherwise.
+   */
   public boolean isAssociated() {
     return associated;
   }
 
+  /**
+   * Checks if instance is wrapping a <i>complexType</i> tag.
+   * @return {@code true } if current tag is <i>complexType</i>.
+   */
+  public boolean isComplexType() {
+    return XSDTag.COMPLEXTYPE.equals(tag);
+  }
+
+  /**
+   * Checks if instance is wrapping a <i>schema</i> tag.
+   * @return {@code true } if current tag is <i>schema</i>.
+   */
   public boolean isSchema() {
-    return (name.equalsIgnoreCase("schema")) ? true : false;
+    return XSDTag.SCHEMA.equals(tag);
   }
 }

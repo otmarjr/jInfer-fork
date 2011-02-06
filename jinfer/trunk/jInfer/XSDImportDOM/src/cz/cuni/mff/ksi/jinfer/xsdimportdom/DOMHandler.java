@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.openide.util.NbBundle;
 import org.w3c.dom.NodeList;
 
 /**
@@ -141,11 +142,11 @@ public class DOMHandler {
     if (!BaseUtils.isEmpty(name)) {
       if (!referenced.containsKey(name)) {
         if (verbose) {
-          LOG.debug("Adding element to referenced: " + name);
+          LOG.debug(NbBundle.getMessage(DOMHandler.class, "Debug.AddingToRefd", name));
         }
         referenced.put(name, domElem);
       } else {
-        LOG.warn("Trying to add duplicate element to referenced named: " + name);
+        LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.DuplicateElement", name));
       }
     }
   }
@@ -160,14 +161,14 @@ public class DOMHandler {
     if (!BaseUtils.isEmpty(name)) {
       if (!namedCTypes.containsKey(name)) {
         if (verbose) {
-          LOG.debug("Adding complextype: " + name);
+          LOG.debug(NbBundle.getMessage(DOMHandler.class, "Debug.AddingCType", name));
         }
         namedCTypes.put(name, domElem);
       } else {
-        LOG.warn("Trying to add duplicate complexType named: " + name);
+        LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.DuplicateCType", name));
       }
     } else {
-      LOG.warn("Trying to add a complexType with no name under: " + domElem.getParentNode().getNodeName());
+      LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.NoCTypeName", domElem.getParentNode().getNodeName()));
     }
   }
 
@@ -256,7 +257,7 @@ public class DOMHandler {
         ret.setName(CONTAINER_CTYPE);
         break;
       default:
-        LOG.warn("Behavior undefined for tag " + currentNode.getTagName());
+        LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.UnsupportedTag", currentNode.getTagName()));
     }
     return null;
   }
@@ -289,7 +290,7 @@ public class DOMHandler {
             handleChildAttribute(ret, child, newContext);
             break;
           default:
-            LOG.warn("Behavior undefined for child tag " + child.getTagName());
+            LOG.warn(NbBundle.getMessage(DOMHandler.class, "Warn.UnsupportedTag", child.getTagName()));
         }
       } // end child != null
       // if child is null (it's a different DOM node), we are not interested
@@ -314,7 +315,7 @@ public class DOMHandler {
     } else if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
       return checkElementRefAttribute(currentNode, context);
     } else {
-      throw new XSDException("Element must have name or ref attribute defined.");
+      throw new XSDException(NbBundle.getMessage(DOMHandler.class, "Error.NameNORRef"));
     }
     newContext.add(name);
     newVisited.add(currentNode);
@@ -335,7 +336,7 @@ public class DOMHandler {
       // we just create a sentinel to be used as the leaf node of rule tree
       if (el == currentNode) {
         if (verbose) {
-          LOG.debug("Element visited previously, creating sentinel.");
+          LOG.debug(NbBundle.getMessage(DOMHandler.class, "Debug.VisitedBefore"));
         }
         return DOMHelper.createSentinel(currentNode, context, XSDAttribute.NAME);
       }
@@ -346,9 +347,9 @@ public class DOMHandler {
   private Element checkElementRefAttribute(final org.w3c.dom.Element currentNode,
                                            final List<String> context) {
     if (XSDTag.SCHEMA.toString().equals(XSDUtility.trimNS(currentNode.getParentNode().getNodeName()))) {
-      throw new XSDException("Invalid schema. Element attribute 'ref' is not allowed for elements directly under the schema tag.");
+      throw new XSDException(NbBundle.getMessage(DOMHandler.class, "Error.RefNotAllowed"));
     } else if (!referenced.containsKey(currentNode.getAttribute(XSDAttribute.REF.toString()))) {
-      throw new XSDException("Invalid schema. Attribute 'ref' is referring to an element that is not in schema. Note: only top level elements can be referred to.");
+      throw new XSDException(NbBundle.getMessage(DOMHandler.class, "Error.RefNotResolved", currentNode.getAttribute(XSDAttribute.REF.toString())));
     } else {
       return DOMHelper.createSentinel(currentNode, context, XSDAttribute.REF);
     }
@@ -373,7 +374,7 @@ public class DOMHandler {
         DOMHelper.finalizeElement(ret, newContext);
         return ret; // RETURN STATEMENT
       } else {
-        LOG.error("Specified type '" + type + "' of element '" + name + "' was not found!");
+        LOG.error(NbBundle.getMessage(DOMHandler.class, "Error.TypeNotFound", type, name));
       }
     }
     return null;
@@ -459,7 +460,8 @@ public class DOMHandler {
     // we don't resolve the 'ref' at all (out of assignment), just register it's there
     final String attrName = DOMHelper.getAttributeName(child);
     if (BaseUtils.isEmpty(attrName)) {
-      LOG.error("Attribute under " + ret.getName() + " has no name.");
+      // this should never happen
+      LOG.error(NbBundle.getMessage(DOMHandler.class, "Error.AttributeNoName", ret.getName()));
       return;
     }
     // if we have the name or ref, add the contents of the attribute to parent element (ret)

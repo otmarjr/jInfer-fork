@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.options;
 
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.Utils;
+import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.VertexShape;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
@@ -33,7 +34,6 @@ public final class TreeRuleDisplayerPanel extends JPanel {
   private static final long serialVersionUID = 43522352345l;
 
   private final TreeRuleDisplayerController controller;
-  private static final String[] SHAPES = new String[] { "Circle", "Square", "Rounded Square", "Polygon", "Star" };
 
   TreeRuleDisplayerPanel(final TreeRuleDisplayerController controller) {
     super();
@@ -261,7 +261,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(permutLabel, gridBagConstraints);
 
-    tokenCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    tokenCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 2;
@@ -269,7 +269,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(tokenCombo, gridBagConstraints);
 
-    concatCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    concatCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 3;
@@ -277,7 +277,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(concatCombo, gridBagConstraints);
 
-    alterCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    alterCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 4;
@@ -285,7 +285,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
     shape.add(alterCombo, gridBagConstraints);
 
-    permutCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    permutCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 5;
@@ -329,7 +329,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(rootLabel, gridBagConstraints);
 
-    rootCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    rootCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -538,7 +538,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(jLabel10, gridBagConstraints);
 
-    lambdaCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    lambdaCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 6;
@@ -588,7 +588,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(jLabel11, gridBagConstraints);
 
-    simpleDataCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    simpleDataCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 7;
@@ -638,7 +638,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     shape.add(jLabel12, gridBagConstraints);
 
-    attributeCombo.setModel(new javax.swing.DefaultComboBoxModel(SHAPES));
+    attributeCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 8;
@@ -724,17 +724,17 @@ public final class TreeRuleDisplayerPanel extends JPanel {
    */
   @SuppressWarnings("PMD")
   private void setDefaultValues(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setDefaultValues
-    rootCombo.setSelectedIndex(Utils.ROOT_SHAPE_DEFAULT);
-    tokenCombo.setSelectedIndex(Utils.TOKEN_SHAPE_DEFAULT);
-    concatCombo.setSelectedIndex(Utils.CONCAT_SHAPE_DEFAULT);
-    alterCombo.setSelectedIndex(Utils.ALTER_SHAPE_DEFAULT);
-    permutCombo.setSelectedIndex(Utils.PERMUT_SHAPE_DEFAULT);
-    lambdaCombo.setSelectedIndex(Utils.LAMBDA_SHAPE_DEFAULT);
-    simpleDataCombo.setSelectedIndex(Utils.SIMPLE_DATA_SHAPE_DEFAULT);
-    attributeCombo.setSelectedIndex(Utils.ATTRIBUTE_SHAPE_DEFAULT);
+    rootCombo.setSelectedItem(Utils.ROOT_SHAPE_DEFAULT);
+    tokenCombo.setSelectedItem(Utils.ELEMENT_SHAPE_DEFAULT);
+    concatCombo.setSelectedItem(Utils.CONCAT_SHAPE_DEFAULT);
+    alterCombo.setSelectedItem(Utils.ALTER_SHAPE_DEFAULT);
+    permutCombo.setSelectedItem(Utils.PERMUT_SHAPE_DEFAULT);
+    lambdaCombo.setSelectedItem(Utils.LAMBDA_SHAPE_DEFAULT);
+    simpleDataCombo.setSelectedItem(Utils.SIMPLE_DATA_SHAPE_DEFAULT);
+    attributeCombo.setSelectedItem(Utils.ATTRIBUTE_SHAPE_DEFAULT);
 
     rootSpinner.setValue(Utils.ROOT_SIZE_DEFAULT);
-    tokenSpinner.setValue(Utils.TOKEN_SIZE_DEFAULT);
+    tokenSpinner.setValue(Utils.ELEMENT_SIZE_DEFAULT);
     concatSpinner.setValue(Utils.CONCAT_SIZE_DEFAULT);
     alterSpinner.setValue(Utils.ALTER_SIZE_DEFAULT);
     permutSpinner.setValue(Utils.PERMUT_SIZE_DEFAULT);
@@ -743,7 +743,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     attributeSpinner.setValue(Utils.ATTRIBUTE_SIZE_DEFAULT);
 
     rootColor.setBackground(Utils.ROOT_COLOR_DEFAULT);
-    tokenColor.setBackground(Utils.TOKEN_COLOR_DEFAULT);
+    tokenColor.setBackground(Utils.ELEMENT_COLOR_DEFAULT);
     concatColor.setBackground(Utils.CONCAT_COLOR_DEFAULT);
     alterColor.setBackground(Utils.ALTER_COLOR_DEFAULT);
     permutColor.setBackground(Utils.PERMUT_COLOR_DEFAULT);
@@ -761,17 +761,17 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     horizontalDistance.setValue(Utils.getProperty(Utils.HORIZONTAL_DISTANCE_PROP, Utils.HORIZONTAL_DISTANCE_DEFAULT));
     verticalDistance.setValue(Utils.getProperty(Utils.VERTICAL_DISTANCE_PROP, Utils.VERTICAL_DISTANCE_DEFAULT));
 
-    rootCombo.setSelectedIndex(Utils.getProperty(Utils.ROOT_SHAPE_PROP, Utils.ROOT_SHAPE_DEFAULT));
-    tokenCombo.setSelectedIndex(Utils.getProperty(Utils.TOKEN_SHAPE_PROP, Utils.TOKEN_SHAPE_DEFAULT));
-    concatCombo.setSelectedIndex(Utils.getProperty(Utils.CONCAT_SHAPE_PROP, Utils.CONCAT_SHAPE_DEFAULT));
-    alterCombo.setSelectedIndex(Utils.getProperty(Utils.ALTER_SHAPE_PROP, Utils.ALTER_SHAPE_DEFAULT));
-    permutCombo.setSelectedIndex(Utils.getProperty(Utils.PERMUT_SHAPE_PROP, Utils.PERMUT_SHAPE_DEFAULT));
-    lambdaCombo.setSelectedIndex(Utils.getProperty(Utils.LAMBDA_SHAPE_PROP, Utils.LAMBDA_SHAPE_DEFAULT));
-    simpleDataCombo.setSelectedIndex(Utils.getProperty(Utils.SIMPLE_DATA_SHAPE_PROP, Utils.SIMPLE_DATA_SHAPE_DEFAULT));
-    attributeCombo.setSelectedIndex(Utils.getProperty(Utils.ATTRIBUTE_SHAPE_PROP, Utils.ATTRIBUTE_SHAPE_DEFAULT));
+    rootCombo.setSelectedItem(Utils.getShapeProperty(Utils.ROOT_SHAPE_PROP, Utils.ROOT_SHAPE_DEFAULT));
+    tokenCombo.setSelectedItem(Utils.getShapeProperty(Utils.ELEMENT_SHAPE_PROP, Utils.ELEMENT_SHAPE_DEFAULT));
+    concatCombo.setSelectedItem(Utils.getShapeProperty(Utils.CONCAT_SHAPE_PROP, Utils.CONCAT_SHAPE_DEFAULT));
+    alterCombo.setSelectedItem(Utils.getShapeProperty(Utils.ALTER_SHAPE_PROP, Utils.ALTER_SHAPE_DEFAULT));
+    permutCombo.setSelectedItem(Utils.getShapeProperty(Utils.PERMUT_SHAPE_PROP, Utils.PERMUT_SHAPE_DEFAULT));
+    lambdaCombo.setSelectedItem(Utils.getShapeProperty(Utils.LAMBDA_SHAPE_PROP, Utils.LAMBDA_SHAPE_DEFAULT));
+    simpleDataCombo.setSelectedItem(Utils.getShapeProperty(Utils.SIMPLE_DATA_SHAPE_PROP, Utils.SIMPLE_DATA_SHAPE_DEFAULT));
+    attributeCombo.setSelectedItem(Utils.getShapeProperty(Utils.ATTRIBUTE_SHAPE_PROP, Utils.ATTRIBUTE_SHAPE_DEFAULT));
 
     rootSpinner.setValue(Utils.getProperty(Utils.ROOT_SIZE_PROP, Utils.ROOT_SIZE_DEFAULT));
-    tokenSpinner.setValue(Utils.getProperty(Utils.TOKEN_SIZE_PROP, Utils.TOKEN_SIZE_DEFAULT));
+    tokenSpinner.setValue(Utils.getProperty(Utils.ELEMENT_SIZE_PROP, Utils.ELEMENT_SIZE_DEFAULT));
     concatSpinner.setValue(Utils.getProperty(Utils.CONCAT_SIZE_PROP, Utils.CONCAT_SIZE_DEFAULT));
     alterSpinner.setValue(Utils.getProperty(Utils.ALTER_SIZE_PROP, Utils.ALTER_SIZE_DEFAULT));
     permutSpinner.setValue(Utils.getProperty(Utils.PERMUT_SIZE_PROP, Utils.PERMUT_SIZE_DEFAULT));
@@ -780,7 +780,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     attributeSpinner.setValue(Utils.getProperty(Utils.ATTRIBUTE_SIZE_PROP, Utils.ATTRIBUTE_SIZE_DEFAULT));
 
     rootColor.setBackground(Utils.getColorProperty(Utils.ROOT_COLOR_PROP, Utils.ROOT_COLOR_DEFAULT));
-    tokenColor.setBackground(Utils.getColorProperty(Utils.TOKEN_COLOR_PROP, Utils.TOKEN_COLOR_DEFAULT));
+    tokenColor.setBackground(Utils.getColorProperty(Utils.ELEMENT_COLOR_PROP, Utils.ELEMENT_COLOR_DEFAULT));
     concatColor.setBackground(Utils.getColorProperty(Utils.CONCAT_COLOR_PROP, Utils.CONCAT_COLOR_DEFAULT));
     alterColor.setBackground(Utils.getColorProperty(Utils.ALTER_COLOR_PROP, Utils.ALTER_COLOR_DEFAULT));
     permutColor.setBackground(Utils.getColorProperty(Utils.PERMUT_COLOR_PROP, Utils.PERMUT_COLOR_DEFAULT));
@@ -797,18 +797,18 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.HORIZONTAL_DISTANCE_PROP, (Integer) horizontalDistance.getValue());
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.VERTICAL_DISTANCE_PROP, (Integer) verticalDistance.getValue());
 
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ROOT_SHAPE_PROP, rootCombo.getSelectedIndex());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.TOKEN_SHAPE_PROP, tokenCombo.getSelectedIndex());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.CONCAT_SHAPE_PROP, concatCombo.getSelectedIndex());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ALTER_SHAPE_PROP, alterCombo.getSelectedIndex());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.PERMUT_SHAPE_PROP, permutCombo.getSelectedIndex());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.LAMBDA_SHAPE_PROP, lambdaCombo.getSelectedIndex());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.SIMPLE_DATA_SHAPE_PROP, simpleDataCombo.getSelectedIndex());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ATTRIBUTE_SHAPE_PROP, attributeCombo.getSelectedIndex());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ROOT_SHAPE_PROP, rootCombo.getSelectedItem().toString());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ELEMENT_SHAPE_PROP, tokenCombo.getSelectedItem().toString());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.CONCAT_SHAPE_PROP, concatCombo.getSelectedItem().toString());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ALTER_SHAPE_PROP, alterCombo.getSelectedItem().toString());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.PERMUT_SHAPE_PROP, permutCombo.getSelectedItem().toString());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.LAMBDA_SHAPE_PROP, lambdaCombo.getSelectedItem().toString());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.SIMPLE_DATA_SHAPE_PROP, simpleDataCombo.getSelectedItem().toString());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ATTRIBUTE_SHAPE_PROP, attributeCombo.getSelectedItem().toString());
 
 
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ROOT_SIZE_PROP, (Integer) rootSpinner.getValue());
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.TOKEN_SIZE_PROP, (Integer) tokenSpinner.getValue());
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ELEMENT_SIZE_PROP, (Integer) tokenSpinner.getValue());
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.CONCAT_SIZE_PROP, (Integer) concatSpinner.getValue());
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ALTER_SIZE_PROP, (Integer) alterSpinner.getValue());
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.PERMUT_SIZE_PROP, (Integer) permutSpinner.getValue());
@@ -817,7 +817,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).putInt(Utils.ATTRIBUTE_SIZE_PROP, (Integer) attributeSpinner.getValue());
 
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ROOT_COLOR_PROP, String.valueOf(rootColor.getBackground().getRGB()));
-    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.TOKEN_COLOR_PROP, String.valueOf(tokenColor.getBackground().getRGB()));
+    NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ELEMENT_COLOR_PROP, String.valueOf(tokenColor.getBackground().getRGB()));
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.CONCAT_COLOR_PROP, String.valueOf(concatColor.getBackground().getRGB()));
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.ALTER_COLOR_PROP, String.valueOf(alterColor.getBackground().getRGB()));
     NbPreferences.forModule(TreeRuleDisplayerPanel.class).put(Utils.PERMUT_COLOR_PROP, String.valueOf(permutColor.getBackground().getRGB()));

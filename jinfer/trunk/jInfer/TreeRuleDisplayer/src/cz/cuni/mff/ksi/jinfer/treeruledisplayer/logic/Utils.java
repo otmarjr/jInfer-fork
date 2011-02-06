@@ -32,77 +32,231 @@ import org.openide.util.NbPreferences;
  */
 public class Utils {
 
+  /**
+   * Background color property name.
+   */
   public static final String BG_COLOR_PROP = "background.color";
+  /**
+   * Background color default value.
+   */
   public static final Color BG_COLOR_DEFAULT = Color.decode("-1");
+  /**
+   * Horizontal distance of vertices property name.
+   */
   public static final String HORIZONTAL_DISTANCE_PROP = "horizontal.distance";
+  /**
+   * Horizontal distance of vertices default value.
+   */
   public static final int HORIZONTAL_DISTANCE_DEFAULT = 150;
+  /**
+   * Vertical distance of vertices property name.
+   */
   public static final String VERTICAL_DISTANCE_PROP = "vertical.distance";
+  /**
+   * Vertical distance of vertices default value.
+   */
   public static final int VERTICAL_DISTANCE_DEFAULT = 100;
 
-  /*
-   * Circle - 0
-   * Square - 1
-   * Rounded Square - 2
-   * Polygon - 3
-   * Star - 4
+  /**
+   * Shape of root vertex property name.
    */
   public static final String ROOT_SHAPE_PROP = "root.shape";
-  public static final int ROOT_SHAPE_DEFAULT = 0;
-  public static final String TOKEN_SHAPE_PROP = "token.shape";
-  public static final int TOKEN_SHAPE_DEFAULT = 2;
+  /**
+   * Shape of root vertex default value.
+   */
+  public static final VertexShape ROOT_SHAPE_DEFAULT = VertexShape.CIRCLE;
+  /**
+   * Shape of element vertex property name.
+   */
+  public static final String ELEMENT_SHAPE_PROP = "token.shape";
+  /**
+   * Shape of element vertex default value.
+   */
+  public static final VertexShape ELEMENT_SHAPE_DEFAULT = VertexShape.ROUNDED_SQUARE;
+  /**
+   * Shape of concatenation vertex property name.
+   */
   public static final String CONCAT_SHAPE_PROP = "concat.shape";
-  public static final int CONCAT_SHAPE_DEFAULT = 3;
+  /**
+   * Shape of concatenation vertex default value.
+   */
+  public static final VertexShape CONCAT_SHAPE_DEFAULT = VertexShape.POLYGON;
+  /**
+   * Shape of alternation vertex property name.
+   */
   public static final String ALTER_SHAPE_PROP = "alter.shape";
-  public static final int ALTER_SHAPE_DEFAULT = 1;
+  /**
+   * Shape of alternation vertex default value.
+   */
+  public static final VertexShape ALTER_SHAPE_DEFAULT = VertexShape.SQUARE;
+  /**
+   * Shape of permutation vertex property name.
+   */
   public static final String PERMUT_SHAPE_PROP = "permut.shape";
-  public static final int PERMUT_SHAPE_DEFAULT = 4;
+  /**
+   * Shape of permutation vertex default value.
+   */
+  public static final VertexShape PERMUT_SHAPE_DEFAULT = VertexShape.STAR;
+  /**
+   * Shape of lambda vertex property name.
+   */
   public static final String LAMBDA_SHAPE_PROP = "lambda.shape";
-  public static final int LAMBDA_SHAPE_DEFAULT = 0;
+  /**
+   * Shape of lambda vertex default value.
+   */
+  public static final VertexShape LAMBDA_SHAPE_DEFAULT = VertexShape.CIRCLE;
+  /**
+   * Shape of simple data vertex property name.
+   */
   public static final String SIMPLE_DATA_SHAPE_PROP = "simpleData.shape";
-  public static final int SIMPLE_DATA_SHAPE_DEFAULT = 1;
+  /**
+   * Shape of simple data vertex default value.
+   */
+  public static final VertexShape SIMPLE_DATA_SHAPE_DEFAULT = VertexShape.SQUARE;
+  /**
+   * Shape of attribute vertex property name.
+   */
   public static final String ATTRIBUTE_SHAPE_PROP = "attribute.shape";
-  public static final int ATTRIBUTE_SHAPE_DEFAULT = 4;
+  /**
+   * Shape of attribute vertex default value.
+   */
+  public static final VertexShape ATTRIBUTE_SHAPE_DEFAULT = VertexShape.STAR;
+  /**
+   * Size of root vertex property name.
+   */
   public static final String ROOT_SIZE_PROP = "root.size";
+  /**
+   * Size of root vertex default value.
+   */
   public static final int ROOT_SIZE_DEFAULT = 30;
-  public static final String TOKEN_SIZE_PROP = "token.size";
-  public static final int TOKEN_SIZE_DEFAULT = 20;
+  /**
+   * Size of element vertex property name.
+   */
+  public static final String ELEMENT_SIZE_PROP = "token.size";
+  /**
+   * Size of element vertex default value.
+   */
+  public static final int ELEMENT_SIZE_DEFAULT = 20;
+  /**
+   * Size of concatenation vertex property name.
+   */
   public static final String CONCAT_SIZE_PROP = "concat.size";
+  /**
+   * Size of concatenation vertex default value.
+   */
   public static final int CONCAT_SIZE_DEFAULT = 25;
+  /**
+   * Size of alternation vertex property name.
+   */
   public static final String ALTER_SIZE_PROP = "alter.size";
+  /**
+   * Size of alternation vertex default value.
+   */
   public static final int ALTER_SIZE_DEFAULT = 25;
+  /**
+   * Size of permutation vertex property name.
+   */
   public static final String PERMUT_SIZE_PROP = "permut.size";
+  /**
+   * Size of permutation vertex default value.
+   */
   public static final int PERMUT_SIZE_DEFAULT = 25;
+  /**
+   * Size of lambda vertex property name.
+   */
   public static final String LAMBDA_SIZE_PROP = "lambda.size";
+  /**
+   * Size of lambda vertex default value.
+   */
   public static final int LAMBDA_SIZE_DEFAULT = 20;
+  /**
+   * Size of simple data vertex property name.
+   */
   public static final String SIMPLE_DATA_SIZE_PROP = "simpleData.size";
+  /**
+   * Size of simple data vertex default value.
+   */
   public static final int SIMPLE_DATA_SIZE_DEFAULT = 20;
+  /**
+   * Size of attribute vertex property name.
+   */
   public static final String ATTRIBUTE_SIZE_PROP = "attribute.size";
+  /**
+   * Size of attribute vertex default value.
+   */
   public static final int ATTRIBUTE_SIZE_DEFAULT = 15;
+  /**
+   * Color of root vertex property name.
+   */
   public static final String ROOT_COLOR_PROP = "root.color";
+  /**
+   * Color of root vertex default value.
+   */
   public static final Color ROOT_COLOR_DEFAULT = Color.decode("-8362846");
-  public static final String TOKEN_COLOR_PROP = "token.color";
-  public static final Color TOKEN_COLOR_DEFAULT = Color.decode("-10837573");
+  /**
+   * Color of element vertex property name.
+   */
+  public static final String ELEMENT_COLOR_PROP = "token.color";
+  /**
+   * Color of element vertex default value.
+   */
+  public static final Color ELEMENT_COLOR_DEFAULT = Color.decode("-10837573");
+  /**
+   * Color of concatenation vertex property name.
+   */
   public static final String CONCAT_COLOR_PROP = "concat.color";
+  /**
+   * Color of concatenation vertex default value.
+   */
   public static final Color CONCAT_COLOR_DEFAULT = Color.decode("-1936099");
+  /**
+   * Color of alternation vertex property name.
+   */
   public static final String ALTER_COLOR_PROP = "alter.color";
+  /**
+   * Color of alternation vertex default value.
+   */
   public static final Color ALTER_COLOR_DEFAULT = Color.decode("-4173747");
+  /**
+   * Color of permutation vertex property name.
+   */
   public static final String PERMUT_COLOR_PROP = "permut.color";
+  /**
+   * Color of permutation vertex default value.
+   */
   public static final Color PERMUT_COLOR_DEFAULT = Color.decode("-8473082");
+  /**
+   * Color of lambda vertex property name.
+   */
   public static final String LAMBDA_COLOR_PROP = "lambda.color";
+  /**
+   * Color of lambda vertex default value.
+   */
   public static final Color LAMBDA_COLOR_DEFAULT = Color.decode("-8355712");
+  /**
+   * Color of simple data vertex property name.
+   */
   public static final String SIMPLE_DATA_COLOR_PROP = "simpleData.color";
+  /**
+   * Color of simple data vertex default value.
+   */
   public static final Color SIMPLE_DATA_COLOR_DEFAULT = Color.decode("-14726787");
+  /**
+   * Color of attribute vertex property name.
+   */
   public static final String ATTRIBUTE_COLOR_PROP = "attribute.color";
+  /**
+   * Color of attribute vertex default value.
+   */
   public static final Color ATTRIBUTE_COLOR_DEFAULT = Color.decode("-16744448");
-  private static final int SPACE_SIZE = 3;
-  private final int rootShape;
-  private final int tokenShape;
-  private final int concatShape;
-  private final int alterShape;
-  private final int permutShape;
-  private final int lambdaShape;
-  private final int simpleDataShape;
-  private final int attributeShape;
+  private final VertexShape rootShape;
+  private final VertexShape elementShape;
+  private final VertexShape concatShape;
+  private final VertexShape alterShape;
+  private final VertexShape permutShape;
+  private final VertexShape lambdaShape;
+  private final VertexShape simpleDataShape;
+  private final VertexShape attributeShape;
   private final Color bgColor;
   private final int horizontalDistance;
   private final int verticalDistance;
@@ -117,19 +271,19 @@ public class Utils {
     this.bgColor = getColorProperty(BG_COLOR_PROP, BG_COLOR_DEFAULT);
     this.horizontalDistance = getProperty(HORIZONTAL_DISTANCE_PROP, HORIZONTAL_DISTANCE_DEFAULT);
     this.verticalDistance = getProperty(VERTICAL_DISTANCE_PROP, VERTICAL_DISTANCE_DEFAULT);
-    this.rootShape = getProperty(ROOT_SHAPE_PROP, ROOT_SHAPE_DEFAULT);
-    this.tokenShape = getProperty(TOKEN_SHAPE_PROP, TOKEN_SHAPE_DEFAULT);
-    this.concatShape = getProperty(CONCAT_SHAPE_PROP, CONCAT_SHAPE_DEFAULT);
-    this.alterShape = getProperty(ALTER_SHAPE_PROP, ALTER_SHAPE_DEFAULT);
-    this.permutShape = getProperty(PERMUT_SHAPE_PROP, PERMUT_SHAPE_DEFAULT);
-    this.lambdaShape = getProperty(LAMBDA_SHAPE_PROP, LAMBDA_SHAPE_DEFAULT);
-    this.simpleDataShape = getProperty(SIMPLE_DATA_SHAPE_PROP, SIMPLE_DATA_SHAPE_DEFAULT);
-    this.attributeShape = getProperty(ATTRIBUTE_SHAPE_PROP, ATTRIBUTE_SHAPE_DEFAULT);
+    this.rootShape = getShapeProperty(ROOT_SHAPE_PROP, ROOT_SHAPE_DEFAULT);
+    this.elementShape = getShapeProperty(ELEMENT_SHAPE_PROP, ELEMENT_SHAPE_DEFAULT);
+    this.concatShape = getShapeProperty(CONCAT_SHAPE_PROP, CONCAT_SHAPE_DEFAULT);
+    this.alterShape = getShapeProperty(ALTER_SHAPE_PROP, ALTER_SHAPE_DEFAULT);
+    this.permutShape = getShapeProperty(PERMUT_SHAPE_PROP, PERMUT_SHAPE_DEFAULT);
+    this.lambdaShape = getShapeProperty(LAMBDA_SHAPE_PROP, LAMBDA_SHAPE_DEFAULT);
+    this.simpleDataShape = getShapeProperty(SIMPLE_DATA_SHAPE_PROP, SIMPLE_DATA_SHAPE_DEFAULT);
+    this.attributeShape = getShapeProperty(ATTRIBUTE_SHAPE_PROP, ATTRIBUTE_SHAPE_DEFAULT);
   }
 
   /**
    * Get property value for particular property.
-   * @param property Property for which to get value.
+   * @param property Name of property for which to get value.
    * @param defaultValue Default value to be returned, if no value is saved for particular property.
    * @return Property value if exists for particular property, otherwise is returned defaultValue.
    */
@@ -138,8 +292,18 @@ public class Utils {
   }
 
   /**
+   * Get {@link VertexShape} property value for particular property.
+   * @param property Name of property for which to get value.
+   * @param defaultValue Default value to be returned, if no value is saved for particular property.
+   * @return Property value if exists for particular property, otherwise is returned defaultValue.
+   */
+  public static VertexShape getShapeProperty(final String property, final VertexShape defaultValue) {
+    return VertexShape.valueOf(NbPreferences.forModule(TreeRuleDisplayerPanel.class).get(property, defaultValue.name()));
+  }
+
+  /**
    * Get {@link Color} property value for particular property.
-   * @param property Property for which to get value.
+   * @param property Name of property for which to get value.
    * @param defaultValue Default value to be returned, if no value is saved for particular property.
    * @return Property value if exists for particular property, otherwise is returned defaultValue.
    */
@@ -164,7 +328,7 @@ public class Utils {
           if (((AbstractStructuralNode) regexp.getContent()).isSimpleData()) {
             return getShape(simpleDataShape, shapeFactory, regexp);
           } else {
-            return getShape(tokenShape, shapeFactory, regexp);
+            return getShape(elementShape, shapeFactory, regexp);
           }
         } else {
           return getShape(attributeShape, shapeFactory, regexp);
@@ -180,17 +344,17 @@ public class Utils {
     }
   }
 
-  private Shape getShape(final int shape, final VertexShapeFactory<Regexp<? extends AbstractNamedNode>> shapeFactory, final Regexp<? extends AbstractNamedNode> regexp) {
+  private Shape getShape(final VertexShape shape, final VertexShapeFactory<Regexp<? extends AbstractNamedNode>> shapeFactory, final Regexp<? extends AbstractNamedNode> regexp) {
     switch (shape) {
-      case 0:
+      case CIRCLE:
         return shapeFactory.getEllipse(regexp);
-      case 1:
+      case SQUARE:
         return shapeFactory.getRectangle(regexp);
-      case 2:
+      case ROUNDED_SQUARE:
         return shapeFactory.getRoundRectangle(regexp);
-      case 3:
+      case POLYGON:
         return shapeFactory.getRegularPolygon(regexp, 5);
-      case 4:
+      case STAR:
         return shapeFactory.getRegularStar(regexp, 5);
       default:
         return null;

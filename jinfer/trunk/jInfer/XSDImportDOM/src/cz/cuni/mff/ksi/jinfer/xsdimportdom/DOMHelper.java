@@ -117,14 +117,14 @@ public final class DOMHelper {
     if (XSDAttribute.NAME.equals(useAsName) || XSDAttribute.REF.equals(useAsName)) {
       sentinel.setName(domElem.getAttribute(useAsName.toString()));
     } else {
-      throw new XSDException("Cannot use attribute " + useAsName.toString() + " as a name for " + domElem.getTagName());
+      throw new XSDException(NbBundle.getMessage(DOMHelper.class, "Error.SentinelWrongAttribute", useAsName.toString(), domElem.getTagName()));
     }
 
     if (BaseUtils.isEmpty(sentinel.getName())) {
-      throw new XSDException("Trying to create sentinel with no name.");
+      throw new XSDException(NbBundle.getMessage(DOMHelper.class, "Error.SentinelNoName"));
     }
     if (XSDImportSettings.isVerbose()) {
-      LOG.debug("Creating sentinel using " + useAsName.toString() + " with name " + sentinel.getName());
+      LOG.debug(NbBundle.getMessage(DOMHelper.class, "Debug.CreatingSentinel", useAsName.toString(), sentinel.getName()));
     }
     sentinel.getContext().addAll(context);
     sentinel.getMetadata().putAll(IGGUtils.METADATA_SENTINEL);

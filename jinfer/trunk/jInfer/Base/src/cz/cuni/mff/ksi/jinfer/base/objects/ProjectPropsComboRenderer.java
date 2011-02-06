@@ -19,12 +19,15 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 /**
- * TODO sviro Comment!
+ * Renderer for {@link JComboBox combobox} used to pick the module implementation
+ * for using in inference. This renderer must be used only with combobox's model containing
+ * {@link NamedModule} instances, otherwise {@link IllegalArgumentException} is thrown.
  * 
  * @author sviro
  */
@@ -33,6 +36,11 @@ public class ProjectPropsComboRenderer extends DefaultListCellRenderer {
   private static final long serialVersionUID = 5376457567l;
   private final ListCellRenderer backend;
 
+  /**
+   * Default constructor of the renderer. Parameter is used to retrieve used LookAndFeel of
+   * standard combobox.
+   * @param backend Renderer of standard combobox to retrieve LookAndFeel.
+   */
   public ProjectPropsComboRenderer(final ListCellRenderer backend) {
     this.backend = backend;
   }

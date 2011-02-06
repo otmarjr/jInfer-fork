@@ -84,7 +84,7 @@ public final class XSDUtility {
    * @param name Name to be checked.
    * @return {@code true } if {@code name } has no colon (':').
    */
-  public static boolean isNCName(String name) {
+  public static boolean isNCName(final String name) {
     if (BaseUtils.isEmpty(name)) {
       return false;
     }

@@ -37,6 +37,7 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author reseto
  */
+@SuppressWarnings("PMD.SingularField")
 public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 35344234;

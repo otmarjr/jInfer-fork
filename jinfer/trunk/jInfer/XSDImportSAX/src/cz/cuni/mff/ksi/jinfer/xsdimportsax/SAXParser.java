@@ -40,8 +40,6 @@ import org.xml.sax.SAXException;
 public class SAXParser implements XSDParser {
   private static final String NAME = "SAXParser";
   private static final String DISPLAY_NAME = "SAX Parser";
-
-  private SAXHandler handler;
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
   private static final Logger LOG = Logger.getLogger(SAXParser.class);
 
@@ -49,7 +47,7 @@ public class SAXParser implements XSDParser {
   public List<Element> parse(final InputStream stream) throws XSDException {
     LOG.setLevel(XSDImportSettings.logLevel());
 
-    handler = new SAXHandler();
+    final SAXHandler handler = new SAXHandler();
 
     try {
       PARSER_FACTORY.newSAXParser().parse(stream, handler);

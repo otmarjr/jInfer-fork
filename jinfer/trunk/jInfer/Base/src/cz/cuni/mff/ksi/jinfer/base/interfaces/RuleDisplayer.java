@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
 /**
- *
+ * Interface of the Rule displayer used to show rule sets in some graphical way.
  * @author sviro
  */
 public interface RuleDisplayer extends NamedModule {

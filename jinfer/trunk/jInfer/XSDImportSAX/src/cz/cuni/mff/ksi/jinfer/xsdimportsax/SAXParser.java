@@ -32,13 +32,14 @@ import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Class responsible for creating Initial Grammar rules from XSD Schema.
+ * Provides XSD Schema parsing support using {@link javax.xml.parsers.SAXParserFactory }.
  * @author reseto
  */
 @ServiceProvider(service = XSDParser.class)
 public class SAXParser implements XSDParser {
-  public static final String NAME = "SAXParser";
-  public static final String DISPLAY_NAME = "SAX Parser";
+  private static final String NAME = "SAXParser";
+  private static final String DISPLAY_NAME = "SAX Parser";
 
   private SAXHandler handler;
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();

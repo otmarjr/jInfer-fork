@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  * Please read package info.
  * @author reseto
  */
-class DOMHandler {
+public class DOMHandler {
 
   private static final Logger LOG = Logger.getLogger(DOMHandler.class);
   private final boolean verbose = XSDImportSettings.isVerbose();

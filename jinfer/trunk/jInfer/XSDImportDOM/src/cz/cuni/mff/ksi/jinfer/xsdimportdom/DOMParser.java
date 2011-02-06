@@ -58,11 +58,11 @@ public class DOMParser implements XSDParser {
    * Its name is used verbatim in XSDImportPropertiesPanel.
    * It's best not to change this name!
    */
-  public static final String NAME = "DOMParser";
+  private static final String NAME = "DOMParser";
   /**
    * Visible name for this parser.
    */
-  public static final String DISPLAY_NAME = "DOM Parser";
+  private static final String DISPLAY_NAME = "DOM Parser";
 
   private static final Logger LOG = Logger.getLogger(DOMParser.class);
 

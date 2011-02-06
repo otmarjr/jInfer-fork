@@ -32,8 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
-  private static final int PANEL_PRIORITY = 20000;
-
+  
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
     return new XSDImportPropertiesPanel(properties);
@@ -41,17 +40,17 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   @Override
   public String getName() {
-    return XSDImportPropertiesPanel.NAME;
+    return XSDImportPropertiesPanel.PANEL_NAME;
   }
 
   @Override
   public String getDisplayName() {
-    return "XSD Import";
+    return XSDImportPropertiesPanel.PANEL_DISPLAY_NAME;
   }
 
   @Override
   public int getPriority() {
-    return PANEL_PRIORITY;
+    return XSDImportPropertiesPanel.PANEL_PRIORITY;
   }
 
   @Override

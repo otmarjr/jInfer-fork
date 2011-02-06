@@ -33,7 +33,7 @@ public final class XSDImportSettings {
 
   private XSDImportSettings() {}
 
-  private static final Properties PROPERTIES = RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.NAME);
+  private static final Properties PROPERTIES = RunningProject.getActiveProjectProps(XSDImportPropertiesPanel.PANEL_NAME);
 
   /**
    * Get the selected parser from XSD Import project properties.

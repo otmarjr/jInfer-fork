@@ -74,6 +74,10 @@ public enum XSDAttribute {
     this.name = name;
   }
 
+  /**
+   * Get the case sensitive name of current attribute.
+   * @return Case sensitive name of attribute.
+   */
   @Override
   public String toString() {
     return name;

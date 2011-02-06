@@ -48,7 +48,7 @@ public enum XSDTag {
    */
   SEQUENCE("sequence"),
   /**
-   * Tag <i>choice</i>, indicates that contents may vary.
+   * Tag <i>choice</i>, allows only one of the elements contained in the declaration to be present.
    */
   CHOICE("choice"),
   /**
@@ -56,13 +56,19 @@ public enum XSDTag {
    */
   ALL("all"),
   /**
-   * Tag <i>attribute</i>, indicates that contents may vary.
+   * Tag <i>attribute</i>, defines an attribute.
    */
   ATTRIBUTE("attribute"),
   //ATTGROUP("attributeGroup"),
   //SIMPLECON("simpleContent"),
   //COMPLEXCON("complexContent"),
+  /**
+   * The redefine element redefines simple and complex types, groups, and attribute groups from an external schema.
+   */
   REDEFINE("redefine"),
+  /**
+   * Special value meaning that the parsed tag is not known.
+   */
   INVALID("INValid");
 
   private final String name;
@@ -71,6 +77,10 @@ public enum XSDTag {
     this.name = name;
   }
 
+  /**
+   * Get the case sensitive name of current tag.
+   * @return Case sensitive name of tag.
+   */
   @Override
   public String toString() {
     return name;

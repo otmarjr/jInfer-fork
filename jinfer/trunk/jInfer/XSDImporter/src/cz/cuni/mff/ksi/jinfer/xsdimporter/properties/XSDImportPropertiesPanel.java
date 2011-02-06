@@ -41,13 +41,36 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 35344234;
 
-  public static final String NAME = "XSDImport";
+  /**
+   * Internal name of the panel.
+   */
+  public static final String PANEL_NAME = "XSDImport";
+  /**
+   * Name of the panel as displayed in project properties.
+   */
+  public static final String PANEL_DISPLAY_NAME = "XSD Import";
+  /**
+   * Sorting priority of the panel.
+   */
+  public static final int    PANEL_PRIORITY = 20000;
+  /**
+   * Property name of the selected parser.
+   */
   public static final String PARSER = "parser";
+  /**
+   * Property name of the stop on error setting.
+   */
   public static final String STOP_ON_ERROR = "stop.on.error";
+  /**
+   * Property name of the verbose info setting.
+   */
   public static final String VERBOSE_INFO = "verbose.info";
+  /**
+   * Property name of the selected logging level setting.
+   */
   public static final String LOG_LEVEL = "log.level";
 
-  public static final String DEFAULT_PARSER_NAME = "DOMParser";
+  private static final String DEFAULT_PARSER_NAME = "DOMParser";
 
   /** Creates new form XSDImportPropertiesPanel */
   public XSDImportPropertiesPanel(final Properties properties) {

@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ *  Wrapper class for tag entity read by SAX parser.
  * @author reseto
  */
 public class SAXDocumentElement {
@@ -39,9 +39,6 @@ public class SAXDocumentElement {
    */
   private final Map<String, SAXAttributeData> attrs;
 
-  /* determines if the current XSDDocElem is a direct successor
-  of named complex type (so it's a sequence/all/choice or complexContent/ext)
-   */
   private boolean associated;
 
   /**
@@ -94,6 +91,11 @@ public class SAXDocumentElement {
     return XSDTag.matchName(name).isOrderIndicator();
   }
 
+  /**
+   * Couples the current instance with a "named complex type".
+   * This means that current instance is a direct successor of the <i>complexType</i> tag
+   * and it should not create its own container for sub-nodes, but pass all sub-nodes to its parent.
+   */
   public void associate() {
     this.associated = true;
   }

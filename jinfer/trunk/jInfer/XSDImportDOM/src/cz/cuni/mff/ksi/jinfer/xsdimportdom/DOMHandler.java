@@ -43,6 +43,7 @@ import org.w3c.dom.NodeList;
  * Please read package info.
  * @author reseto
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public class DOMHandler {
 
   private static final Logger LOG = Logger.getLogger(DOMHandler.class);

@@ -45,7 +45,7 @@ public class VertexSizeTransformer implements Transformer<Regexp<? extends Abstr
   public VertexSizeTransformer(final List<Regexp<AbstractStructuralNode>> roots) {
     this.roots = roots;
     this.root = Utils.getProperty(Utils.ROOT_SIZE_PROP, Utils.ROOT_SIZE_DEFAULT);
-    this.token = Utils.getProperty(Utils.TOKEN_SIZE_PROP, Utils.TOKEN_SIZE_DEFAULT);
+    this.token = Utils.getProperty(Utils.ELEMENT_SIZE_PROP, Utils.ELEMENT_SIZE_DEFAULT);
     this.concat = Utils.getProperty(Utils.CONCAT_SIZE_PROP, Utils.CONCAT_SIZE_DEFAULT);
     this.alter = Utils.getProperty(Utils.ALTER_SIZE_PROP, Utils.ALTER_SIZE_DEFAULT);
     this.permut = Utils.getProperty(Utils.PERMUT_SIZE_PROP, Utils.PERMUT_SIZE_DEFAULT);

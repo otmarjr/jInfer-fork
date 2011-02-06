@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import org.netbeans.api.options.OptionsDisplayer;
 
 /**
- * Panel for Tree rule displayer with show setting button.
+ * Panel for Tree rule displayer with <i>show settings</i> button.
  * @author sviro
  */
 public class RulePanel extends JPanel {
@@ -46,7 +46,7 @@ public class RulePanel extends JPanel {
   }
 
   private void initComponents() {
-    GridBagConstraints graphConstraints = new GridBagConstraints();
+    final GridBagConstraints graphConstraints = new GridBagConstraints();
     graphConstraints.gridx = 0;
     graphConstraints.gridy = 0;
     graphConstraints.fill = GridBagConstraints.BOTH;
@@ -58,7 +58,7 @@ public class RulePanel extends JPanel {
     settings.addActionListener(new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent e) {
+      public void actionPerformed(final ActionEvent e) {
         showSettings();
       }
     });

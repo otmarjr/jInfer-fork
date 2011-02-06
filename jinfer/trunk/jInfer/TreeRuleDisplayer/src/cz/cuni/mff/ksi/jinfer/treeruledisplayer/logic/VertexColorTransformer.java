@@ -46,7 +46,7 @@ public class VertexColorTransformer implements Transformer<Regexp<? extends Abst
    */
   public VertexColorTransformer(final List<Regexp<AbstractStructuralNode>> roots) {
     this.rootColor = Utils.getColorProperty(Utils.ROOT_COLOR_PROP, Utils.ROOT_COLOR_DEFAULT);
-    this.tokenColor = Utils.getColorProperty(Utils.TOKEN_COLOR_PROP, Utils.TOKEN_COLOR_DEFAULT);
+    this.tokenColor = Utils.getColorProperty(Utils.ELEMENT_COLOR_PROP, Utils.ELEMENT_COLOR_DEFAULT);
     this.concatColor = Utils.getColorProperty(Utils.CONCAT_COLOR_PROP, Utils.CONCAT_COLOR_DEFAULT);
     this.alterColor = Utils.getColorProperty(Utils.ALTER_COLOR_PROP, Utils.ALTER_COLOR_DEFAULT);
     this.permutColor = Utils.getColorProperty(Utils.PERMUT_COLOR_PROP, Utils.PERMUT_COLOR_DEFAULT);

@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2011 rio
+ *  Copyright (C) 2011 sviro
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,12 +15,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.autoeditor.options;
+package cz.cuni.mff.ksi.jinfer.base.objects;
 
 /**
- * Enum class for all possible shapes of vertices in AutoEditor.
- * @author rio
+ * Enum class for all possible shapes of vertices in Tree rule displayer.
+ * @author sviro
  */
 public enum VertexShape {
   CIRCLE, SQUARE, ROUNDED_SQUARE, POLYGON, STAR;
+
 }

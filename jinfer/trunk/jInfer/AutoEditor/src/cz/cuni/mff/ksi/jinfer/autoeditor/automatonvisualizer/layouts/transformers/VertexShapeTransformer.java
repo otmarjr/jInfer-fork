@@ -17,8 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.options.ShapeUtils;
-import cz.cuni.mff.ksi.jinfer.autoeditor.options.VertexShape;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.objects.VertexShape;
 import edu.uci.ics.jung.visualization.util.VertexShapeFactory;
 import java.awt.Shape;
 import org.apache.commons.collections15.Transformer;

@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.options;
 
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.Utils;
-import cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic.VertexShape;
+import cz.cuni.mff.ksi.jinfer.base.objects.VertexShape;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;

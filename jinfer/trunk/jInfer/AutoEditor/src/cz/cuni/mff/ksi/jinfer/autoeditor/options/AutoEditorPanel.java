@@ -152,7 +152,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 41, Short.MAX_VALUE)
+      .addGap(0, 43, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();

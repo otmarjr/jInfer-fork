@@ -63,7 +63,7 @@ public abstract class AbstractComponent<T> extends JPanel {
     }
     visualizer.setPreferredSize(visualizerPanelSize);
 
-    final JPanel rulePanel = new JPanel(new BorderLayout(0, 0));
+    /*final JPanel rulePanel = new JPanel(new BorderLayout(0, 0));
     rulePanel.add(new GraphZoomScrollPane(visualizer), BorderLayout.CENTER);
 
     final Visualizer<T> legend = visualizer.createLegend();
@@ -74,10 +74,10 @@ public abstract class AbstractComponent<T> extends JPanel {
       label.setFont(label.getFont().deriveFont(Font.BOLD));
       bottom.add(label, BorderLayout.LINE_START);
       bottom.add(visualizer.createLegend(), BorderLayout.CENTER);
-    }
+    }*/
 
     panel.removeAll();
-    panel.add(rulePanel, constraints);
+    panel.add(visualizer, constraints);
     panel.validate();
   }
 

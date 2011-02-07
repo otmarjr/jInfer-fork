@@ -16,6 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,4 +71,44 @@ public final class IGGUtils {
    */
   public static final List<String> EMPTY_CONTEXT = Collections.unmodifiableList(new ArrayList<String>(0));
 
+  /**
+   * Returns flag if the provided regexp is a simple concatenation.
+   * Regexp is a simple concatenation if all these conditions hold:
+   * <ul>
+   *  <li>Its type is {@link RegexpType#CONCATENATION}.</li>
+   *  <li>Its interval is "once" ({@link RegexpInterval#isOnce()}).</li>
+   *  <li>
+   *   For each of its children holds:
+   *    <ul>
+   *      <li>The child is {@link RegexpType#TOKEN}</li>
+   *      <li>The child's interval is "once" ({@link RegexpInterval#isOnce()}).</li>
+   *    </ul>
+   *  </li>
+   * </ul>
+   *
+   * @param r Regexp to be examined.
+   * @return True if the regexp is a simple concatenation, false otherwise.
+   */
+  public static boolean isSimpleConcatenation(
+          final Regexp<AbstractStructuralNode> r) {
+    if (r == null) {
+      throw new IllegalArgumentException("Regexp must not be null.");
+    }
+
+    if (!r.isConcatenation()) {
+      return false;
+    }
+    if (!r.getInterval().isOnce()) {
+      return false;
+    }
+    for (final Regexp<AbstractStructuralNode> child : r.getChildren()) {
+      if (!child.isToken()) {
+        return false;
+      }
+      if (!child.getInterval().isOnce()) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

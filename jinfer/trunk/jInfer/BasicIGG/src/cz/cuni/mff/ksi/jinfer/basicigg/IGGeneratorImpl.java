@@ -27,6 +27,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import java.io.File;
@@ -84,7 +85,7 @@ public class IGGeneratorImpl implements IGGenerator {
     
     // run processors on input, gather IG rules
     documentRules.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));
-    // TODO vektor Verify that grammar is simple
+    verifySimpleGrammar(documentRules);
     schemaQueryRules.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
     schemaQueryRules.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
 
@@ -189,5 +190,13 @@ public class IGGeneratorImpl implements IGGenerator {
   @Override
   public String getDisplayName() {
     return DISPLAY_NAME;
+  }
+
+  private void verifySimpleGrammar(final List<Element> documentRules) {
+    for (final Element e : documentRules) {
+      if (!IGGUtils.isSimpleConcatenation(e.getSubnodes())) {
+        throw new RuntimeException("Rule does not comply with simple grammar specification. " + e.toString());
+      }
+    }
   }
 }

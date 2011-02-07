@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.treeruledisplayer.logic;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.VertexShape;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractNamedNode;
 import cz.cuni.mff.ksi.jinfer.treeruledisplayer.options.TreeRuleDisplayerPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;

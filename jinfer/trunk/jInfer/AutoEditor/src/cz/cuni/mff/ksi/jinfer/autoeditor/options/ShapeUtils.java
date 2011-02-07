@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.autoeditor.options;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.VertexShape;
 import org.openide.util.NbPreferences;
 
 /**

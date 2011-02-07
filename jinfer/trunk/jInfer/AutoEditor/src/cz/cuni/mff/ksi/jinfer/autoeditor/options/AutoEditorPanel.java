@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.options;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.VertexShape;
 import java.awt.Color;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;

@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VertexPickingGraphMousePlugin;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers.SuperStateShapeTransformer;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers.VertexShapeTransformer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -72,7 +72,7 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
     this(layout, edgeLabelTransformer, component);
     final Transformer<State<T>, Shape> defaultVertexShapeTransformer = getRenderContext().getVertexShapeTransformer();
 
-    getRenderContext().setVertexShapeTransformer(new SuperStateShapeTransformer<T>(initialState, finalState, defaultVertexShapeTransformer));
+    getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer<T>(initialState, finalState));
   }
 
   @Override
@@ -126,7 +126,7 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
     });
 
     final Transformer<State<T>, Shape> defaultVertexShapeTransformer = visualizer.getRenderContext().getVertexShapeTransformer();
-    visualizer.getRenderContext().setVertexShapeTransformer(new SuperStateShapeTransformer<T>(superInitialState, superFinalState, defaultVertexShapeTransformer));
+    visualizer.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer<T>(superInitialState, superFinalState));
 
     return visualizer;
   }

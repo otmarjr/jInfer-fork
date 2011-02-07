@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VerticesPickingGraphMousePlugin;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers.VertexShapeTransformer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -53,6 +54,7 @@ public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
 
     replaceEdgeLabelTransformer(edgeLabelTransformer);
     getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<State<T>, Step<T>>());
+    getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer<T>());
 
     addGraphMousePlugin(new VerticesPickingGraphMousePlugin<State<T>, Step<T>>());
   }

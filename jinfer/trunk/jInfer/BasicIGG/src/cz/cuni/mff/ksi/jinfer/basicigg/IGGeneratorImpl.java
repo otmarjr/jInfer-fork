@@ -84,6 +84,7 @@ public class IGGeneratorImpl implements IGGenerator {
     
     // run processors on input, gather IG rules
     documentRules.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));
+    // TODO vektor Verify that grammar is simple
     schemaQueryRules.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
     schemaQueryRules.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
 

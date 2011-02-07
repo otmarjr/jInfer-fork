@@ -44,33 +44,29 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
 
     backgroundColorLabel = new javax.swing.JLabel();
     backgroundColor = new javax.swing.JPanel();
-    backgroundColorDesc = new javax.swing.JLabel();
     regularStateColorLabel = new javax.swing.JLabel();
     regularStateColor = new javax.swing.JPanel();
-    regularStateColorDesc = new javax.swing.JLabel();
-    jPanel1 = new javax.swing.JPanel();
-    jPanel2 = new javax.swing.JPanel();
+    fill2 = new javax.swing.JPanel();
+    fill1 = new javax.swing.JPanel();
     resetToDefaults = new javax.swing.JButton();
     finalStateLabel = new javax.swing.JLabel();
     finalStateColor = new javax.swing.JPanel();
-    finalStateNodeColorDesc = new javax.swing.JLabel();
     pickedStateColorLabel = new javax.swing.JLabel();
     pickedStateColor = new javax.swing.JPanel();
-    pickedStateColorDesc = new javax.swing.JLabel();
     superinitialStateShape = new javax.swing.JComboBox();
     superfinalStateShape = new javax.swing.JComboBox();
     regularStateShape = new javax.swing.JComboBox();
-    regularStateShapeLabel = new javax.swing.JLabel();
     superInitialStateShapeLabel = new javax.swing.JLabel();
     superfinalStateShapeLabel = new javax.swing.JLabel();
-    superinitialStateShapeDesc = new javax.swing.JLabel();
-    regularStateShapeDesc = new javax.swing.JLabel();
-    superfinalStateShapeDesc = new javax.swing.JLabel();
+    jLabel1 = new javax.swing.JLabel();
+    jLabel2 = new javax.swing.JLabel();
 
     setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(backgroundColorLabel, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.backgroundColorLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(backgroundColorLabel, gridBagConstraints);
@@ -97,21 +93,15 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(backgroundColor, gridBagConstraints);
-
-    backgroundColorDesc.setFont(backgroundColorDesc.getFont().deriveFont((backgroundColorDesc.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(backgroundColorDesc, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.backgroundColorDesc.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    add(backgroundColorDesc, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(regularStateColorLabel, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.regularStateColorLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(regularStateColorLabel, gridBagConstraints);
@@ -138,59 +128,48 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(regularStateColor, gridBagConstraints);
 
-    regularStateColorDesc.setFont(regularStateColorDesc.getFont().deriveFont((regularStateColorDesc.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(regularStateColorDesc, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.regularStateColorDesc.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    add(regularStateColorDesc, gridBagConstraints);
-
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 588, Short.MAX_VALUE)
+    javax.swing.GroupLayout fill2Layout = new javax.swing.GroupLayout(fill2);
+    fill2.setLayout(fill2Layout);
+    fill2Layout.setHorizontalGroup(
+      fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 407, Short.MAX_VALUE)
     );
-    jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 5, Short.MAX_VALUE)
+    fill2Layout.setVerticalGroup(
+      fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 18, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 7;
-    gridBagConstraints.gridwidth = 4;
+    gridBagConstraints.gridwidth = 5;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
-    add(jPanel1, gridBagConstraints);
+    add(fill2, gridBagConstraints);
 
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+    javax.swing.GroupLayout fill1Layout = new javax.swing.GroupLayout(fill1);
+    fill1.setLayout(fill1Layout);
+    fill1Layout.setHorizontalGroup(
+      fill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 7, Short.MAX_VALUE)
     );
-    jPanel2Layout.setVerticalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 0, Short.MAX_VALUE)
+    fill1Layout.setVerticalGroup(
+      fill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 187, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 4;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
     gridBagConstraints.gridheight = 7;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
-    add(jPanel2, gridBagConstraints);
+    add(fill1, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(resetToDefaults, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.resetToDefaults.text")); // NOI18N
     resetToDefaults.addActionListener(new java.awt.event.ActionListener() {
@@ -208,7 +187,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     org.openide.awt.Mnemonics.setLocalizedText(finalStateLabel, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.finalStateLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(finalStateLabel, gridBagConstraints);
@@ -235,25 +214,15 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(finalStateColor, gridBagConstraints);
-
-    finalStateNodeColorDesc.setFont(finalStateNodeColorDesc.getFont().deriveFont((finalStateNodeColorDesc.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(finalStateNodeColorDesc, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.finalStateNodeColorDesc.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(finalStateNodeColorDesc, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(pickedStateColorLabel, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.pickedStateColorLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 3;
+    gridBagConstraints.gridy = 4;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(pickedStateColorLabel, gridBagConstraints);
@@ -280,20 +249,10 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 3;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 4;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(pickedStateColor, gridBagConstraints);
-
-    pickedStateColorDesc.setFont(pickedStateColorDesc.getFont().deriveFont((pickedStateColorDesc.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(pickedStateColorDesc, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.pickedStateColorDesc.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 3;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    add(pickedStateColorDesc, gridBagConstraints);
 
     superinitialStateShape.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -314,18 +273,10 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     regularStateShape.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 4;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(regularStateShape, gridBagConstraints);
-
-    org.openide.awt.Mnemonics.setLocalizedText(regularStateShapeLabel, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.regularStateShapeLabel.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 4;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(regularStateShapeLabel, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(superInitialStateShapeLabel, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.superInitialStateShapeLabel.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -343,32 +294,19 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(superfinalStateShapeLabel, gridBagConstraints);
 
-    superinitialStateShapeDesc.setFont(superinitialStateShapeDesc.getFont().deriveFont((superinitialStateShapeDesc.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(superinitialStateShapeDesc, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.superinitialStateShapeDesc.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.jLabel1.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 5;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    add(superinitialStateShapeDesc, gridBagConstraints);
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(jLabel1, gridBagConstraints);
 
-    regularStateShapeDesc.setFont(regularStateShapeDesc.getFont().deriveFont((regularStateShapeDesc.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(regularStateShapeDesc, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.regularStateShapeDesc.text")); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.jLabel2.text")); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 4;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    add(regularStateShapeDesc, gridBagConstraints);
-
-    superfinalStateShapeDesc.setFont(superfinalStateShapeDesc.getFont().deriveFont((superfinalStateShapeDesc.getFont().getStyle() | java.awt.Font.ITALIC), 10));
-    org.openide.awt.Mnemonics.setLocalizedText(superfinalStateShapeDesc, org.openide.util.NbBundle.getMessage(AutoEditorPanel.class, "AutoEditorPanel.superfinalStateShapeDesc.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 6;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
-    add(superfinalStateShapeDesc, gridBagConstraints);
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(jLabel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   @SuppressWarnings("PMD")
@@ -426,28 +364,22 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel backgroundColor;
-  private javax.swing.JLabel backgroundColorDesc;
   private javax.swing.JLabel backgroundColorLabel;
+  private javax.swing.JPanel fill1;
+  private javax.swing.JPanel fill2;
   private javax.swing.JPanel finalStateColor;
   private javax.swing.JLabel finalStateLabel;
-  private javax.swing.JLabel finalStateNodeColorDesc;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JPanel jPanel2;
+  private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel pickedStateColor;
-  private javax.swing.JLabel pickedStateColorDesc;
   private javax.swing.JLabel pickedStateColorLabel;
   private javax.swing.JPanel regularStateColor;
-  private javax.swing.JLabel regularStateColorDesc;
   private javax.swing.JLabel regularStateColorLabel;
   private javax.swing.JComboBox regularStateShape;
-  private javax.swing.JLabel regularStateShapeDesc;
-  private javax.swing.JLabel regularStateShapeLabel;
   private javax.swing.JButton resetToDefaults;
   private javax.swing.JLabel superInitialStateShapeLabel;
   private javax.swing.JComboBox superfinalStateShape;
-  private javax.swing.JLabel superfinalStateShapeDesc;
   private javax.swing.JLabel superfinalStateShapeLabel;
   private javax.swing.JComboBox superinitialStateShape;
-  private javax.swing.JLabel superinitialStateShapeDesc;
   // End of variables declaration//GEN-END:variables
 }

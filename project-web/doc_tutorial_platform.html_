@@ -18,11 +18,13 @@
 
 <p>
   <span class="prerequisities">
-    This tutorial assumes that you are a seasoned Java developer.
-    Having experience with programming in some kind of framework
-    (NetBeans Platform above all) will help you a lot.<br/>
-    Make sure you have read the <a href="architecture.pdf">article</a> on architecture,
-    data structures and inference process to understand what you will be implementing.<br/>
+    This tutorial assumes that you are a seasoned Java developer. Having
+    experience with programming in some kind of framework (NetBeans Platform
+    above all) will help you a lot.<br/>
+    Make sure you have read the <a href="modules/architecture.pdf">article</a> on
+    architecture, data structures and inference process to understand what you
+    will be implementing. Having read the documentation for
+    <a href="documentation.html#modules">remaining modules</a> will help you too.<br/>
     Also, before starting this tutorial, make sure you can
     <a href="building_jinfer.html">build jInfer from sources</a>.
   </span>

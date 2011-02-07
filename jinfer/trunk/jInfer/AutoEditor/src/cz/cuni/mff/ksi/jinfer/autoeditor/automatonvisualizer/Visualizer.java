@@ -99,6 +99,7 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
   }
 
   /**
+   * @deprecated 
    * Creates legend of state types used in this Visualizer. Each subclass of
    * Visualizer class should override this method to define its own legend.
    *

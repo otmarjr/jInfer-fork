@@ -57,6 +57,9 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     jLabel7 = new javax.swing.JLabel();
     pickedColor = new javax.swing.JPanel();
     jLabel8 = new javax.swing.JLabel();
+    superinitialNodeShapeCombo = new javax.swing.JComboBox();
+    superfinalNodeShapeCombo = new javax.swing.JComboBox();
+    regularNodeShapeCombo = new javax.swing.JComboBox();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -148,11 +151,11 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 599, Short.MAX_VALUE)
+      .addGap(0, 557, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 43, Short.MAX_VALUE)
+      .addGap(0, 40, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -167,7 +170,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 25, Short.MAX_VALUE)
+      .addGap(0, 98, Short.MAX_VALUE)
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -284,6 +287,21 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     add(jLabel8, gridBagConstraints);
+
+    superinitialNodeShapeCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
+    add(superinitialNodeShapeCombo, new java.awt.GridBagConstraints());
+
+    superfinalNodeShapeCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 5;
+    gridBagConstraints.gridy = 1;
+    add(superfinalNodeShapeCombo, gridBagConstraints);
+
+    regularNodeShapeCombo.setModel(new javax.swing.DefaultComboBoxModel(VertexShape.values()));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 5;
+    gridBagConstraints.gridy = 2;
+    add(regularNodeShapeCombo, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   @SuppressWarnings("PMD")
@@ -314,6 +332,9 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     nodeColor.setBackground(ColorUtils.getColorProperty(ColorUtils.NODE_COLOR_PROP, ColorUtils.NODE_COLOR_DEFAULT));
     finalColor.setBackground(ColorUtils.getColorProperty(ColorUtils.FINAL_COLOR_PROP, ColorUtils.FINAL_COLOR_DEFAULT));
     pickedColor.setBackground(ColorUtils.getColorProperty(ColorUtils.PICKED_COLOR_PROP, ColorUtils.PICKED_COLOR_DEFAULT));
+    superinitialNodeShapeCombo.setSelectedItem(ShapeUtils.getShapeProperty(ShapeUtils.SUPERINITIAL_NODE_SHAPE_PROP, ShapeUtils.SUPERINITIAL_NODE_SHAPE_DEFAULT));
+    superfinalNodeShapeCombo.setSelectedItem(ShapeUtils.getShapeProperty(ShapeUtils.SUPERFINAL_NODE_SHAPE_PROP, ShapeUtils.SUPERFINAL_NODE_SHAPE_DEFAULT));
+    regularNodeShapeCombo.setSelectedItem(ShapeUtils.getShapeProperty(ShapeUtils.REGULAR_NODE_SHAPE_PROP, ShapeUtils.REGULAR_NODE_SHAPE_DEFAULT));
   }
 
   /**
@@ -324,6 +345,9 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     NbPreferences.forModule(AutoEditorPanel.class).put(ColorUtils.NODE_COLOR_PROP, String.valueOf(nodeColor.getBackground().getRGB()));
     NbPreferences.forModule(AutoEditorPanel.class).put(ColorUtils.FINAL_COLOR_PROP, String.valueOf(finalColor.getBackground().getRGB()));
     NbPreferences.forModule(AutoEditorPanel.class).put(ColorUtils.PICKED_COLOR_PROP, String.valueOf(pickedColor.getBackground().getRGB()));
+    NbPreferences.forModule(AutoEditorPanel.class).put(ShapeUtils.SUPERINITIAL_NODE_SHAPE_PROP, superinitialNodeShapeCombo.getSelectedItem().toString());
+    NbPreferences.forModule(AutoEditorPanel.class).put(ShapeUtils.SUPERFINAL_NODE_SHAPE_PROP, superfinalNodeShapeCombo.getSelectedItem().toString());
+    NbPreferences.forModule(AutoEditorPanel.class).put(ShapeUtils.REGULAR_NODE_SHAPE_PROP, regularNodeShapeCombo.getSelectedItem().toString());
   }
 
   /**
@@ -349,5 +373,8 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel nodeColor;
   private javax.swing.JPanel pickedColor;
+  private javax.swing.JComboBox regularNodeShapeCombo;
+  private javax.swing.JComboBox superfinalNodeShapeCombo;
+  private javax.swing.JComboBox superinitialNodeShapeCombo;
   // End of variables declaration//GEN-END:variables
 }

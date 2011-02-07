@@ -32,7 +32,7 @@ import org.openide.util.Lookup;
   displayName = "#AdvancedOption_DisplayName_AutoEditor",
   keywords = "#AdvancedOption_Keywords_AutoEditor",
   keywordsCategory = "jInfer/AutoEditor",
-  position = 10)
+  position = 10, id = "autoEditor")
 public final class AutoEditorController extends OptionsPanelController {
 
   private AutoEditorPanel panel;

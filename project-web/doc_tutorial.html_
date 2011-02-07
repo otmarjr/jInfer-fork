@@ -110,23 +110,27 @@ inferred a few schemas and would like to play with the process, interfere with i
   Default simplifier that jInfer uses is non-interactive: after it is run, it will
 work for a while and then display the generated schema. However, jInfer bundles also
 a way to guide the inference process interactively, by selecting states in an
-automaton that should be merged together (see the documentation for TwoStep simplifier). <!-- TODO vektor Link! --!>
-To try this out, do the following with your jInfer project:
+automaton that should be merged together and selecting which state should be
+removed while converting an automaton to a regular expression. For more
+information on this, see the documentation of <a href="modules/twostep.pdf">TwoStep</a> simplifier.
+To try out interactive inference, do the following with your jInfer project:
 </p>
 
 <ol type=1>
   <li>Open </i>Project Preferences</i>.</li>
   <li>Navigate to <i>Simplifiers</i> &gt; <i>TwoStep</i> &gt;
-      <i>AutomatonMergingState</i>.</li>
-  <li>In the <i>AutomatonSimplifier</i> combobox select
-      <i>UserInteractive</i>.</li>
+      <i>Automaton merging state</i>.</li>
+  <li>In the <i>Automaton simplifier</i> combobox select
+      <i>User Interactive</i>.</li>
+  <li>Navigate to <i>State removal</i>.</li>
+  <li>In the <i>State removal orderer</i> combobox select
+      <i>User Interactive</i>.</li>
   <li>Save the preferences by clicking <i>OK</i>.</li>
   <li>Run the inference again.</li>
   <li>A new window will appear, which will require you
       to select states to be merged in each step of simplification. 
       After selecting these states, proceed by clicking <i>Continue</i>.</li>
 </ol>
-<!-- TODO vektor Rename after completing issue with Project Properties cleanup. And this seriously needs screenshots. --!>
 
 </div>
 

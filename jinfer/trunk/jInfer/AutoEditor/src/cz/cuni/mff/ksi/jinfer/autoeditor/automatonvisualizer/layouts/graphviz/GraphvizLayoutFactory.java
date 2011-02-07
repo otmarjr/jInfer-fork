@@ -74,7 +74,7 @@ public class GraphvizLayoutFactory implements LayoutF {
       
       final Transformer<State<T>, Point2D> trans = TransformerUtils.mapTransformer(positions);
 
-      return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(10000, 10000));
+      return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(window_width, window_height));
     }
 
     DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "binary.invalid.message"), NotifyDescriptor.ERROR_MESSAGE));

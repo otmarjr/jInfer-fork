@@ -1,4 +1,4 @@
-obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twostep
+obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twostep treeruledisplayer
 
 all: deploy
 
@@ -11,6 +11,3 @@ subdirs:
 
 clean:
 	for i in $(obj); do cd $$i && $(MAKE) clean && cd ..; done
-
-
-

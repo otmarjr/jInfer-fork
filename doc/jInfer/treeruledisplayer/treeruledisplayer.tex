@@ -1,0 +1,73 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
+\usepackage{xstring}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
+\def\.{\discretionary{}{}{}}
+\newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
+
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{18cm}
+
+\def\mftitle{jInfer BasicRuleDisplayer Module Description}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+\maketitle
+\noindent Target audience: developers willing to extend jInfer, looking for ways to visualize grammars.
+
+\noindent \begin{tabular}{|l|l|} \hline
+Responsible developer: & Michal Švirec \\ \hline
+Required tokens:       & none \\ \hline
+Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer \\ \hline
+Module dependencies:   & Base \\
+	& JUNG \\ \hline
+Public packages:       & none \\ \hline
+\end{tabular}
+
+\section{Introduction}
+
+This rule displayer uses JUNG graph implementation to draw rules as forest of trees, where each tree represents one rule of whole set. In each tree, root vertex represents left side of the rule, inner vertices represents concatenation, alternation or permutation and leafs are elements, attributes or simple data. As in basic rule displayer it creates a component with multiple tabs: each one for a new grammar to display.
+
+\section{Structure}
+
+The main class implementing \code{RuleDisplayer} inference interface and simultaneously registered as its service provider is \code{TreeRuleDisplayer}. Main method of this class is \code{createDisplayer()}, which looks up the component, adds a new panel to it and renders the specified grammar in it.\\
+
+Main window of rule displayer may have multiple tabs in it: each contains its own \code{RuleDisplayer} responsible for rendering specified grammar using \jmodule{JUNG} library.\\
+
+All the trees representing rules are created in the \code{GraphBuilder} class with method \code{buildGraphPanel()}. While the code itself is a nice recursion programming exercise, there is nothing of a special interest in it.\\
+
+All graphics used by \jmodule{TreeRuleDisplayer} is contained in the \code{cz.cuni.mff.ksi.jinfer.treeruledisplayer.graphics} package.
+
+\subsection{Settings}
+
+All settings provided by \jmodule{TreeRuleDisplayer} are NetBeans-wide. The options panel along with all the logic is in the \code{cz.cuni.mff.ksi.jinfer.treeruledisplayer.options} package. Available options include setting the color of the background, horizontal and vertical distance between vertices. Also for each type of vertex is possible to set the size, the shape and the color.
+
+\nocite{*}
+\newpage
+\bibliographystyle{alpha}
+\bibliography{literature}
+
+\end{document}

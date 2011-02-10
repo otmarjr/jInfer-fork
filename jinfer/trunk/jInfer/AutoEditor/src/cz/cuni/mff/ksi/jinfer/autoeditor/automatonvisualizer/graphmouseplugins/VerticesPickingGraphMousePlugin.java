@@ -150,7 +150,6 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
     final PickedState<V> pickedVertexState = vv.getPickedVertexState();
 //    PickedState<E> pickedEdgeState = vv.getPickedEdgeState();
     if (pickSupport != null && pickedVertexState != null) {
-      Layout<V, E> layout = vv.getGraphLayout();
       if (e.getModifiers() == modifiers) {
         if (!firstPick) {
           vv.addPostRenderPaintable(lensPaintable);
@@ -159,6 +158,7 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
         // p is the screen point for the mouse event
         final Point2D ip = e.getPoint();
 
+        final Layout<V, E> layout = vv.getGraphLayout();
         vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
         if (vertex != null) {
           if (firstPick) {
@@ -246,23 +246,23 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(final MouseEvent e) {
     if (!locked) {
       final VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e.getSource();
       if (vertex != null) {
         final Point p = e.getPoint();
-        final Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
-                p);
-        final Point2D graphDown = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
-                down);
-        Layout<V, E> layout = vv.getGraphLayout();
-
-        final double dx = graphPoint.getX() - graphDown.getX();
-        final double dy = graphPoint.getY() - graphDown.getY();
 
         final PickedState<V> ps = vv.getPickedVertexState();
 
         for (V v : ps.getPicked()) {
+          final Point2D graphPoint = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
+                p);
+          final Point2D graphDown = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
+                down);
+          final Layout<V, E> layout = vv.getGraphLayout();
+          final double dx = graphPoint.getX() - graphDown.getX();
+          final double dy = graphPoint.getY() - graphDown.getY();
+
           final Point2D vp = layout.transform(v);
           vp.setLocation(vp.getX() + dx, vp.getY() + dy);
           layout.setLocation(v, vp);
@@ -270,8 +270,8 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
         down = p;
 
       } else {
-        Point2D out = e.getPoint();
         if (e.getModifiers() == modifiers) {
+          final Point2D out = e.getPoint();
           rect.setFrameFromDiagonal(down, out);
         }
       }

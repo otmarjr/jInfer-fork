@@ -60,7 +60,7 @@ public final class GraphvizUtils {
    * @param isEmptyValid flag to indicate if empty String is valid path.
    * @return <tt>true</tt> if provided path is valid, otherwise return <tt>false</tt>.
    */
-  public static boolean isBinaryValid(final String pathToBinary, boolean isEmptyValid) {
+  public static boolean isBinaryValid(final String pathToBinary, final boolean isEmptyValid) {
     if (isEmptyValid && "".equals(pathToBinary)) {
       return true;
     }

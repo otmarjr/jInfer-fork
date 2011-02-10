@@ -22,10 +22,8 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import java.util.Map;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextField;
 
 /**
  * Properties panel for AutomatonSimplifierGreedy.

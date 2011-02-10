@@ -183,20 +183,6 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
     //
   }
 
-  /**
-   * rejects picking if the rectangle is too small, like
-   * if the user meant to select one vertex but moved the
-   * mouse slightly
-   * @param p
-   * @param q
-   * @param min
-   * @return
-   */
-  private boolean heyThatsTooClose(final Point2D p, final Point2D q, final double min) {
-    return Math.abs(p.getX() - q.getX()) < min
-            && Math.abs(p.getY() - q.getY()) < min;
-  }
-
   @Override
   public void mouseClicked(final MouseEvent e) {
     //

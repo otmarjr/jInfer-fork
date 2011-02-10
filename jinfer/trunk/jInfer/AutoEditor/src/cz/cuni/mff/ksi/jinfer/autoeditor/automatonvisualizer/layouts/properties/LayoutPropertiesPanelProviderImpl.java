@@ -29,8 +29,6 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class LayoutPropertiesPanelProviderImpl implements PropertiesPanelProvider {
-  private static final String LAYOUT = "Layout";
-  private static final String LAYOUT_DISPLAY = "Layout";
 
   private static final int PANEL_PRIORITY = 300000;
 

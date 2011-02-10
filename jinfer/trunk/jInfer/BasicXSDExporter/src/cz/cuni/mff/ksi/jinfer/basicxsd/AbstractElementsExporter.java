@@ -37,9 +37,9 @@ import org.apache.log4j.Logger;
  * TODO rio comment
  * @author rio
  */
-public class BasicElementsExporter {
+public abstract class AbstractElementsExporter {
 
-  protected static final Logger LOG = Logger.getLogger(BasicElementsExporter.class);
+  protected static final Logger LOG = Logger.getLogger(AbstractElementsExporter.class);
   protected final Preprocessor preprocessor;
   protected final Indentator indentator;
   protected final String typenamePrefix;
@@ -48,7 +48,9 @@ public class BasicElementsExporter {
   private static final int MINOCCURS_DEFAULT = 1;
   private static final int MAXOCCURS_DEFAULT = 1;
 
-  public BasicElementsExporter(final Preprocessor preprocessor, final Indentator indentator) {
+  public abstract void run() throws InterruptedException;
+
+  public AbstractElementsExporter(final Preprocessor preprocessor, final Indentator indentator) {
     this.preprocessor = preprocessor;
     this.indentator = indentator;
 

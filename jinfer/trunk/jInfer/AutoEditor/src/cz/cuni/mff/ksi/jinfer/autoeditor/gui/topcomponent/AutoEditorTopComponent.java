@@ -203,7 +203,7 @@ public final class AutoEditorTopComponent extends TopComponent {
       try {
         component.getVisualizer().saveImage(new File(fileName), extension);
       } catch (IOException e) {
-        NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message("Saving of image '" + fileName + "' failed:\n" + e.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
+        final NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Message("Saving of image '" + fileName + "' failed:\n" + e.getMessage(), NotifyDescriptor.ERROR_MESSAGE);
         DialogDisplayer.getDefault().notify(notifyDescriptor);
       }
     }
@@ -223,7 +223,7 @@ public final class AutoEditorTopComponent extends TopComponent {
   public void drawComponent(final AbstractComponent component) {
     this.component = component;
 
-    GridBagConstraints constraints = new GridBagConstraints();
+    final GridBagConstraints constraints = new GridBagConstraints();
     constraints.weightx = 1.0;
     constraints.weighty = 1.0;
     constraints.fill = GridBagConstraints.BOTH;
@@ -262,7 +262,7 @@ public final class AutoEditorTopComponent extends TopComponent {
    * Obtain the AutoEditorTopComponent instance. Never call {@link #getDefault} directly!
    */
   public static synchronized AutoEditorTopComponent findInstance() {
-    TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
+    final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
       Logger.getLogger(AutoEditorTopComponent.class.getName()).warn(
               "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
@@ -293,7 +293,7 @@ public final class AutoEditorTopComponent extends TopComponent {
   @Override
   public boolean canClose() {
     if (RunningProject.isActiveProject()) {
-      NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Closing this window will stop the inference. Proceed?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
+      final NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Closing this window will stop the inference. Proceed?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
       if (DialogDisplayer.getDefault().notify(notifyDescriptor) == NotifyDescriptor.OK_OPTION) {
         component.GUIInterrupt();
         return true;
@@ -304,10 +304,10 @@ public final class AutoEditorTopComponent extends TopComponent {
     return true;
   }
 
-  private void writeProperties(java.util.Properties p) {
+  private void writeProperties(final java.util.Properties p) {
   }
 
-  private Object readProperties(java.util.Properties p) {
+  private Object readProperties(final java.util.Properties p) {
     if (instance == null) {
       instance = this;
     }
@@ -315,7 +315,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     return instance;
   }
 
-  private void readPropertiesImpl(java.util.Properties p) {
+  private void readPropertiesImpl(final java.util.Properties p) {
   }
 
   @Override

@@ -28,7 +28,10 @@ import org.openide.windows.WindowManager;
  *
  * @author rio
  */
-public class AutoEditor {
+public final class AutoEditor {
+
+  private AutoEditor() {
+  }
 
   /**
    * Asynchronously draws component in the AutoEditor tab.

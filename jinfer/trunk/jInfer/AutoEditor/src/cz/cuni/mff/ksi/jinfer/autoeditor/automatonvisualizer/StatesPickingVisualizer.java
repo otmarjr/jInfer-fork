@@ -84,7 +84,7 @@ public class StatesPickingVisualizer<T> extends PluggableVisualizer<T> {
     visualizer.getRenderContext().setVertexLabelTransformer(new Transformer<State<T>, String>() {
 
       @Override
-      public String transform(State<T> state) {
+      public String transform(final State<T> state) {
         switch (state.getName()) {
           case 1:
             return "Regular state";

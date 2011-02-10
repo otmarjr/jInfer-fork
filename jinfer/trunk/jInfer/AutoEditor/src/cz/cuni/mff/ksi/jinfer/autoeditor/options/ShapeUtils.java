@@ -24,7 +24,7 @@ import org.openide.util.NbPreferences;
  * Utility class for AutoEditor node shapes.
  * @author rio
  */
-public class ShapeUtils {
+public final class ShapeUtils {
 
   public static final String REGULAR_NODE_SHAPE_PROP = "regularnode.shape";
   public static final VertexShape REGULAR_NODE_SHAPE_DEFAULT = VertexShape.CIRCLE;
@@ -32,6 +32,9 @@ public class ShapeUtils {
   public static final VertexShape SUPERINITIAL_NODE_SHAPE_DEFAULT = VertexShape.ROUNDED_SQUARE;
   public static final String SUPERFINAL_NODE_SHAPE_PROP = "superfinalnode.shape";
   public static final VertexShape SUPERFINAL_NODE_SHAPE_DEFAULT = VertexShape.ROUNDED_SQUARE;
+
+  private ShapeUtils() {
+  }
 
   /**
    * Get {@link VertexShape} property value for a particular property.

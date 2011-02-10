@@ -106,7 +106,7 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
     add(jScrollPane3, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
-  private String htmlize(String text) {
+  private String htmlize(final String text) {
     return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
   }
 

@@ -27,7 +27,6 @@ import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.renderers.Renderer.VertexLabel.Position;
 import java.awt.Point;
-import java.awt.Shape;
 import javax.swing.UIManager;
 import org.apache.commons.collections15.Transformer;
 
@@ -104,7 +103,7 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
     visualizer.getRenderContext().setVertexLabelTransformer(new Transformer<State<T>, String>() {
 
       @Override
-      public String transform(State<T> state) {
+      public String transform(final State<T> state) {
         switch (state.getName()) {
           case 1:
             return "Regular state";

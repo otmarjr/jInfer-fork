@@ -106,11 +106,11 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
     final GraphElementAccessor<State<V>, Step<V>> pickSupport = vv.getPickSupport();
     final PickedState<State<V>> pickedVertexState = vv.getPickedVertexState();
     if (pickSupport != null && pickedVertexState != null) {
-      Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
       if (e.getModifiers() == modifiers) {
         // p is the screen point for the mouse event
         final Point2D ip = e.getPoint();
 
+        final Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
         vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
         if (vertex != null) {
           if (firstPick) {
@@ -179,7 +179,7 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
 
   @SuppressWarnings("unchecked")
   @Override
-  public void mouseDragged(MouseEvent e) {
+  public void mouseDragged(final MouseEvent e) {
     //
   }
 

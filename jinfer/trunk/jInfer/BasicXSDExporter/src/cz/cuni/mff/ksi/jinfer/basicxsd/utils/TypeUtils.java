@@ -82,19 +82,20 @@ public final class TypeUtils {
   public static boolean hasMixedContent(final Element element) {
     final Regexp<AbstractStructuralNode> regexp = element.getSubnodes();
 
-    boolean hasSimpleData = false;
-    boolean hasElements = false;
-    final boolean hasAttributes = !element.getAttributes().isEmpty();
+    int simpleDataCount = 0;
+    int elementsCount = 0;
 
     for (final AbstractStructuralNode token : regexp.getTokens()) {
       if (token.isSimpleData()) {
-        hasSimpleData = true;
+        ++simpleDataCount;
       } else if (token.isElement()) {
-        hasElements = true;
+        ++elementsCount;
       }
     }
 
-    return hasSimpleData && (hasElements || hasAttributes);
+    final boolean hasAttributes = !element.getAttributes().isEmpty();
+
+    return (simpleDataCount > 0) && ((elementsCount > 0) || hasAttributes);
   }
 
   /**

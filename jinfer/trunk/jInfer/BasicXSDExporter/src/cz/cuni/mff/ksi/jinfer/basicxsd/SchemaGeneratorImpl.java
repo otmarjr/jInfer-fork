@@ -110,7 +110,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       indentator.indent("<!-- global types -->\n");
 
       for (Element globalElement : globalElements) {
-        checkInterrupt();
+        InterruptChecker.checkInterrupt();
         processGlobalElement(globalElement);
       }
     }
@@ -137,7 +137,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @throws InterruptedException
    */
   private void processElement(final Element element, final RegexpInterval interval) throws InterruptedException {
-    checkInterrupt();
+    InterruptChecker.checkInterrupt();
 
     // Begin definition of element and write its name.
     indentator.indent("<xs:element name=\"");
@@ -216,7 +216,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @throws InterruptedException
    */
   private void processGlobalElement(final Element element) throws InterruptedException {
-    checkInterrupt();
+    InterruptChecker.checkInterrupt();
 
     // If element is of a built-in type don't define it.
     if (TypeUtils.isOfBuiltinType(element)) {
@@ -287,7 +287,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     if (!attributes.isEmpty()) {
       assert TypeUtils.isOfComplexType(element);
       for (Attribute attribute : attributes) {
-        checkInterrupt();
+        InterruptChecker.checkInterrupt();
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
 
@@ -387,7 +387,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
    * @throws InterruptedException When inference was interrupted.
    */
   private void processSubElements(final Regexp<AbstractStructuralNode> regexp) throws InterruptedException {
-    checkInterrupt();
+    InterruptChecker.checkInterrupt();
 
     if (regexp.isLambda()) {
       return;
@@ -448,12 +448,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
         indentator.append(Integer.toString(maxOccurs));
         indentator.append("\"");
       }
-    }
-  }
-
-  private void checkInterrupt() throws InterruptedException {
-    if (Thread.interrupted()) {
-      throw new InterruptedException();
     }
   }
 

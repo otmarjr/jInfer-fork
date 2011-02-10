@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
+import cz.cuni.mff.ksi.jinfer.basicxsd.utils.RegexpTypeUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;

@@ -30,11 +30,8 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -85,7 +82,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
       return;
     }
 
-    assert verifyInput(grammar);
+    if (!InputGrammarVerifier.verifyUniqueElementNames(grammar)) {
+      throw new IllegalStateException("Input grammar contains elements with not unique names.");
+    }
 
     final Properties properties = RunningProject.getActiveProjectProps(XSDExportPropertiesPanel.NAME);
 
@@ -305,6 +304,109 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
+  private boolean isLambdaNodeAlternation(final Regexp<AbstractStructuralNode> regexp) {
+    // Alternation lambda|A for some node A.
+    if (regexp.isAlternation()
+            && (regexp.getChildren().size() == 2)
+            && regexp.getChild(0).isLambda()) {
+      return true;
+    }
+    return false;
+  }
+
+  private void processLambdaNodeAlternation(final Regexp<AbstractStructuralNode> simpleAlternation) throws InterruptedException {
+    if (simpleAlternation.getChild(1).isToken()) {
+      processSubElements(simpleAlternation);
+    } else if (simpleAlternation.getChild(1).isConcatenation()) {
+      indentator.indent("<xs:sequence minOccurs=\"0\">\n");
+      indentator.increaseIndentation();
+      for (final Regexp<AbstractStructuralNode> subReg : simpleAlternation.getChild(1).getChildren()) {
+        processSubElements(subReg);
+      }
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:sequence>\n");
+
+    } else {
+      indentator.indent("<xs:sequence minOccurs=\"0\">\n");
+      indentator.increaseIndentation();
+      processSubElements(simpleAlternation.getChild(1));
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:sequence>\n");
+    }
+  }
+
+  private boolean isLambdaTokenAlternation(final Regexp<AbstractStructuralNode> regexp) {
+    if (regexp.isAlternation()
+            && (regexp.getChildren().size() == 2)
+            && regexp.getChild(0).isLambda()
+            && regexp.getChild(1).isToken()) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean isSimpleDataTokenAlternation(final Regexp<AbstractStructuralNode> regexp) {
+    if (regexp.isAlternation()
+            && (regexp.getChildren().size() == 2)
+            && regexp.getChild(0).isToken()
+            && regexp.getChild(0).getContent().isSimpleData()
+            && regexp.getChild(1).isToken()) {
+      return true;
+    }
+    return false;
+  }
+
+  private void processConcatenation(final Regexp<AbstractStructuralNode> concatenation) throws InterruptedException {
+    indentator.indent("<xs:sequence");
+    processOccurrences(concatenation.getInterval());
+    indentator.append(">\n");
+    indentator.increaseIndentation();
+
+    for (final Regexp<AbstractStructuralNode> subRegexp : concatenation.getChildren()) {
+      if (isLambdaNodeAlternation(subRegexp)) {
+        processLambdaNodeAlternation(subRegexp);
+      } else {
+        processSubElements(subRegexp);
+      }
+    }
+
+    indentator.decreaseIndentation();
+    indentator.indent("</xs:sequence>\n");
+  }
+
+  private void processAlternation(final Regexp<AbstractStructuralNode> alternation) throws InterruptedException {
+    if (isLambdaTokenAlternation(alternation)) {
+      // SPECIAL CASE
+      // Alternation (lambda | Element)
+      // The second child has to be an element because of the filtering above.
+      processToken(alternation.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
+    } else if (isSimpleDataTokenAlternation(alternation)) {
+      // SPECIAL CASE
+      // Alternation (simpleData | Element)
+      // The second child has to br an element because of the filtering above.
+      indentator.indent("<xs:sequence>\n");
+      indentator.increaseIndentation();
+      processToken(alternation.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:sequence>\n");
+    } else {
+      // Alternation (lambda | notToken) is handled in CONCATENATION branch.
+
+      // Other alternation (A | B ...)
+      indentator.indent("<xs:choice");
+      processOccurrences(alternation.getInterval());
+      indentator.append(">\n");
+      indentator.increaseIndentation();
+      for (Regexp<AbstractStructuralNode> subRegexp : alternation.getChildren()) {
+        if ((subRegexp != null) && (!subRegexp.isLambda())) {
+          processSubElements(subRegexp);
+        }
+      }
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:choice>\n");
+    }
+  }
+
   /**
    * Given one node from result of getSubnodes method call. We are interested
    * only in elements, so if the node does not contain any elements, function
@@ -334,97 +436,13 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     switch (regexp.getType()) {
       case TOKEN:
         processToken(regexp.getContent(), regexp.getInterval());
-        return;
+        break;
       case CONCATENATION:
-      {
-        // special case: CONCATENATION of ALTENATION (A|lambda)
-        final List<Regexp<AbstractStructuralNode>> simpleAlternations = new LinkedList<Regexp<AbstractStructuralNode>>();
-        for (final Regexp<AbstractStructuralNode> child : regexp.getChildren()) {
-          if (child.isAlternation()
-                  && (child.getChildren().size() == 2)
-                  && child.getChild(0).isLambda()) {
-            simpleAlternations.add(child);
-          }
-        }
-
-        indentator.indent("<xs:sequence");
-        processOccurrences(regexp.getInterval());
-        indentator.append(">\n");
-        indentator.increaseIndentation();
-
-        for (final Regexp<AbstractStructuralNode> subRegexp : regexp.getChildren()) {
-          if (simpleAlternations.contains(subRegexp)) {
-            final Regexp<AbstractStructuralNode> alternation = subRegexp;
-            if (alternation.getChild(1).isToken()) {
-              processSubElements(alternation);
-            } else if (alternation.getChild(1).isConcatenation()) {
-              indentator.indent("<xs:sequence minOccurs=\"0\">\n");
-              indentator.increaseIndentation();
-              for (final Regexp<AbstractStructuralNode> subReg : alternation.getChild(1).getChildren()) {
-                processSubElements(subReg);
-              }
-              indentator.decreaseIndentation();
-              indentator.indent("</xs:sequence>\n");
-
-            } else {
-              indentator.indent("<xs:sequence minOccurs=\"0\">\n");
-              indentator.increaseIndentation();
-              processSubElements(alternation.getChild(1));
-              indentator.decreaseIndentation();
-              indentator.indent("</xs:sequence>\n");
-            }
-          } else {
-            processSubElements(subRegexp);
-          }
-        }
-        
-        indentator.decreaseIndentation();
-        indentator.indent("</xs:sequence>\n");
-        return;
-      }
+        processConcatenation(regexp);
+        break;
       case ALTERNATION:
-      {
-        // SPECIAL CASE
-        // simple alternation (lambda | Element)
-        if ((regexp.getChildren().size() == 2)
-                && regexp.getChild(0).isLambda()
-                && regexp.getChild(1).isToken()) {
-          // The second child has to an element because the filtering above.
-          processToken(regexp.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
-          return;
-        }
-
-        // SPECIAL CASE
-        // alternation (simpleData | Element)
-        if ((regexp.getChildren().size() == 2)
-                && regexp.getChild(0).isToken()
-                && regexp.getChild(0).getContent().isSimpleData()
-                && regexp.getChild(1).isToken()) {
-          // The second child has to an element because the filtering above.
-          indentator.indent("<xs:sequence>\n");
-          indentator.increaseIndentation();
-          processToken(regexp.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
-          indentator.decreaseIndentation();
-          indentator.indent("</xs:sequence>\n");
-          return;
-        }
-
-        // simple alternation (notToken | lambda) is handled in CONCATENATION
-
-        // other alternation (A | B ...)
-        indentator.indent("<xs:choice");
-        processOccurrences(regexp.getInterval());
-        indentator.append(">\n");
-        indentator.increaseIndentation();
-        for (Regexp<AbstractStructuralNode> subRegexp : regexp.getChildren()) {
-          if ((subRegexp != null) && (!subRegexp.isLambda())) {
-            processSubElements(subRegexp);
-          }
-        }
-        indentator.decreaseIndentation();
-        indentator.indent("</xs:choice>\n");
-        return;
-      }
+        processAlternation(regexp);
+        break;
       default:
         throw new IllegalArgumentException("Unknown enum member.");
     }
@@ -468,19 +486,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     if (Thread.interrupted()) {
       throw new InterruptedException();
     }
-  }
-
-  private boolean verifyInput(final List<Element> input) {
-    final Set<String> set = new HashSet<String>();
-
-    for (Element element : input) {
-      if (set.contains(element.getName().toLowerCase())) {
-        return false;
-      }
-      set.add(element.getName().toLowerCase());
-    }
-
-    return true;
   }
 
   @Override

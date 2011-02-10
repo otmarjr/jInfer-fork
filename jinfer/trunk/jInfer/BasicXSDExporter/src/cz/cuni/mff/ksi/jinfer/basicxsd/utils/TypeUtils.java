@@ -48,36 +48,7 @@ public final class TypeUtils {
       return TypeCategory.COMPLEX;
     }
     
-    final Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
-
-    if (subnodes.isLambda()) {
-      // Type of element without sub nodes is considered a built-in type because
-      // we define en empty element type as a complexType without any content.
-      return TypeCategory.COMPLEX;
-    }
-
-    if (subnodes.isToken()) {
-      final AbstractStructuralNode node = subnodes.getContent();
-      switch (node.getType()) {
-        case ELEMENT:
-          return TypeCategory.COMPLEX;
-        case SIMPLE_DATA:
-          return TypeCategory.BUILTIN;
-        default:
-          throw new IllegalArgumentException("Unknown enum member.");
-      }
-    } else {
-      /* Case: <A>aa</A><A>bb</A>
-       * A is CONCATENATION of 2 TOKENS which are SIMPLE_DATA
-       */
-      for (final Regexp<AbstractStructuralNode> node : subnodes.getChildren()) {
-        if (!node.isToken() || !node.getContent().isSimpleData()) {
-          return TypeCategory.COMPLEX;
-        }
-      }
-
-      return TypeCategory.BUILTIN;
-    }
+    return getTypeCategoryBySubnodes(element);
   }
 
   /**
@@ -162,6 +133,39 @@ public final class TypeUtils {
       return "xs:" + type;
     } else {
       return "xs:string";
+    }
+  }
+
+  private static TypeCategory getTypeCategoryBySubnodes(final Element element) {
+    final Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
+
+    if (subnodes.isLambda()) {
+      // Type of element without sub nodes is considered a built-in type because
+      // we define en empty element type as a complexType without any content.
+      return TypeCategory.COMPLEX;
+    }
+
+    if (subnodes.isToken()) {
+      final AbstractStructuralNode node = subnodes.getContent();
+      switch (node.getType()) {
+        case ELEMENT:
+          return TypeCategory.COMPLEX;
+        case SIMPLE_DATA:
+          return TypeCategory.BUILTIN;
+        default:
+          throw new IllegalArgumentException("Unknown enum member.");
+      }
+    } else {
+      /* Case: <A>aa</A><A>bb</A>
+       * A is CONCATENATION of SIMPLE_DATA TOKENS
+       */
+      for (final Regexp<AbstractStructuralNode> node : subnodes.getChildren()) {
+        if (!node.isToken() || !node.getContent().isSimpleData()) {
+          return TypeCategory.COMPLEX;
+        }
+      }
+
+      return TypeCategory.BUILTIN;
     }
   }
 }

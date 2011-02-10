@@ -30,6 +30,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
  * @author rio
  */
 public final class TypeUtils {
+  
   private TypeUtils() {
   }
 

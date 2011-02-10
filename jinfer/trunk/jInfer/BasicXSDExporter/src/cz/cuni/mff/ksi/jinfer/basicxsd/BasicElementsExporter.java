@@ -37,28 +37,24 @@ import org.apache.log4j.Logger;
  * TODO rio comment
  * @author rio
  */
-public final class ElementsExporter {
+public class BasicElementsExporter {
 
-  private static final Logger LOG = Logger.getLogger(ElementsExporter.class);
-  private final Preprocessor preprocessor;
-  private final Indentator indentator;
-  private final String typenamePrefix;
-  private final String typenamePostfix;
+  protected static final Logger LOG = Logger.getLogger(BasicElementsExporter.class);
+  protected final Preprocessor preprocessor;
+  protected final Indentator indentator;
+  protected final String typenamePrefix;
+  protected final String typenamePostfix;
 
   private static final int MINOCCURS_DEFAULT = 1;
   private static final int MAXOCCURS_DEFAULT = 1;
 
-  public ElementsExporter(final Preprocessor preprocessor, final Indentator indentator) {
+  public BasicElementsExporter(final Preprocessor preprocessor, final Indentator indentator) {
     this.preprocessor = preprocessor;
     this.indentator = indentator;
 
     final Properties properties = RunningProject.getActiveProjectProps(XSDExportPropertiesPanel.NAME);
     typenamePrefix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_PREFIX, XSDExportPropertiesPanel.TYPENAME_PREFIX_DEFAULT);
     typenamePostfix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_POSTFIX, XSDExportPropertiesPanel.TYPENAME_POSTFIX_DEFAULT);
-  }
-
-  public void processRootElement(final Element rootElement) throws InterruptedException {
-    processElement(rootElement, RegexpInterval.getBounded(MINOCCURS_DEFAULT, MAXOCCURS_DEFAULT));
   }
 
   /**
@@ -69,7 +65,7 @@ public final class ElementsExporter {
    * @param interval
    * @throws InterruptedException
    */
-  private void processElement(final Element element, final RegexpInterval interval) throws InterruptedException {
+  protected void processElement(final Element element, final RegexpInterval interval) throws InterruptedException {
     InterruptChecker.checkInterrupt();
 
     // Begin definition of element and write its name.
@@ -142,63 +138,7 @@ public final class ElementsExporter {
     indentator.indent("</xs:element>\n");
   }
 
-  /**
-   * Defines element's type globally.
-   *
-   * @param element
-   * @throws InterruptedException
-   */
-  public void processGlobalElement(final Element element) throws InterruptedException {
-    InterruptChecker.checkInterrupt();
-
-    // If element is of a built-in type don't define it.
-    if (TypeUtils.isOfBuiltinType(element)) {
-      return;
-    }
-
-    final TypeCategory typeCategory = TypeUtils.getTypeCategory(element);
-    switch (typeCategory) {
-      case SIMPLE:
-        indentator.indent("<xs:simpleType name=\"");
-        break;
-      case COMPLEX:
-        indentator.indent("<xs:complexType name=\"");
-        break;
-      default:
-        throw new IllegalStateException("Unknown or illegal enum member.");
-    }
-    indentator.append(typenamePrefix);
-    indentator.append(element.getName());
-    indentator.append(typenamePostfix);
-    indentator.append("\"");
-
-    if (TypeUtils.hasMixedContent(element)) {
-      indentator.append(" mixed=\"true\"");
-    }
-
-    indentator.append(">\n");
-
-    indentator.increaseIndentation();
-
-    processElementContent(element);
-
-    indentator.decreaseIndentation();
-
-    switch (typeCategory) {
-      case SIMPLE:
-        indentator.indent("</xs:simpleType>\n");
-        break;
-      case COMPLEX:
-        indentator.indent("</xs:complexType>\n");
-        break;
-      default:
-        throw new IllegalStateException("Unknown of illegal enum member.");
-    }
-
-    indentator.append("\n");
-  }
-
-  private void processElementContent(final Element element) throws InterruptedException {
+  protected void processElementContent(final Element element) throws InterruptedException {
     // SPECIAL CASE
     // if element subnodes is token and it is element, wrap it in <xs:sequence></xs:sequence>
     if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {

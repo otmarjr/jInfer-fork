@@ -92,7 +92,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final Preprocessor preprocessor = new Preprocessor(grammar, numberToGlobal);
 
     // Handle global elements.
-    final ElementsExporter elementsExporter = new ElementsExporter(preprocessor, indentator);
+    final GlobalElementsExporter globalElementsExporter = new GlobalElementsExporter(preprocessor, indentator);
     final List<Element> globalElements = preprocessor.getGlobalElements();
     if (!globalElements.isEmpty()) {
       indentator.append("\n");
@@ -100,13 +100,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
       for (Element globalElement : globalElements) {
         InterruptChecker.checkInterrupt();
-        elementsExporter.processGlobalElement(globalElement);
+        globalElementsExporter.processGlobalElement(globalElement);
       }
     }
 
     // Run recursion starting at the top element.
     indentator.indent("<!-- top level element -->\n");
-    elementsExporter.processRootElement(preprocessor.getTopElement());
+    final RootElementExporter rootElementExporter = new RootElementExporter(preprocessor, indentator);
+    rootElementExporter.processRootElement(preprocessor.getTopElement());
 
     // Close XSD.
     indentator.indent("</xs:schema>");

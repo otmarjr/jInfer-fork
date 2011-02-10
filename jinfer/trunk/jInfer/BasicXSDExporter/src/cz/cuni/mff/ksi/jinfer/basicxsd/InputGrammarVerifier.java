@@ -35,12 +35,13 @@ public final class InputGrammarVerifier {
     final Set<String> set = new HashSet<String>();
 
     for (Element element : input) {
-      if (set.contains(element.getName().toLowerCase())) {
+      final boolean isUnique = set.add(element.getName().toLowerCase());
+      if (!isUnique) {
         return false;
       }
-      set.add(element.getName().toLowerCase());
     }
 
+    set.clear();
     return true;
   }
 }

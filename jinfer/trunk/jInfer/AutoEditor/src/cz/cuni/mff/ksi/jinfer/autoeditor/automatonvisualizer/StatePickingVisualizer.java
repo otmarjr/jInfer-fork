@@ -70,8 +70,6 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
    */
   public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component, final State<T> initialState, final State<T> finalState) {
     this(layout, edgeLabelTransformer, component);
-    final Transformer<State<T>, Shape> defaultVertexShapeTransformer = getRenderContext().getVertexShapeTransformer();
-
     getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer<T>(initialState, finalState));
   }
 
@@ -125,7 +123,6 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
 
     });
 
-    final Transformer<State<T>, Shape> defaultVertexShapeTransformer = visualizer.getRenderContext().getVertexShapeTransformer();
     visualizer.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer<T>(superInitialState, superFinalState));
 
     return visualizer;

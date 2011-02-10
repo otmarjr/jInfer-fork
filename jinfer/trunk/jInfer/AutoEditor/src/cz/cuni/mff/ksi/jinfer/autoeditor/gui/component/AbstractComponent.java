@@ -19,12 +19,8 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.Visualizer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import edu.uci.ics.jung.visualization.GraphZoomScrollPane;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**

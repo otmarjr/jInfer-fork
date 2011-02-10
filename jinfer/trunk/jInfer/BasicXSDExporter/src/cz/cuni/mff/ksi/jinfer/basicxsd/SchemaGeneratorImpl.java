@@ -92,22 +92,19 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final Preprocessor preprocessor = new Preprocessor(grammar, numberToGlobal);
 
     // Handle global elements.
-    final GlobalElementsExporter globalElementsExporter = new GlobalElementsExporter(preprocessor, indentator);
     final List<Element> globalElements = preprocessor.getGlobalElements();
     if (!globalElements.isEmpty()) {
       indentator.append("\n");
       indentator.indent("<!-- global types -->\n");
 
-      for (Element globalElement : globalElements) {
-        InterruptChecker.checkInterrupt();
-        globalElementsExporter.processGlobalElement(globalElement);
-      }
+      final GlobalElementsExporter globalElementsExporter = new GlobalElementsExporter(preprocessor, indentator);
+      globalElementsExporter.run();
     }
 
     // Run recursion starting at the top element.
     indentator.indent("<!-- top level element -->\n");
     final RootElementExporter rootElementExporter = new RootElementExporter(preprocessor, indentator);
-    rootElementExporter.processRootElement(preprocessor.getTopElement());
+    rootElementExporter.run();
 
     // Close XSD.
     indentator.indent("</xs:schema>");

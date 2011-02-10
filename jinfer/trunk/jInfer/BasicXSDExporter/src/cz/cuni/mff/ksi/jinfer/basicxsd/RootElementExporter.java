@@ -17,14 +17,13 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 
 /**
  * TODO rio comment
  * @author rio
  */
-public final class RootElementExporter extends BasicElementsExporter {
+public final class RootElementExporter extends AbstractElementsExporter {
 
   private static final int ROOT_ELEMENT_MINOCCURS = 1;
   private static final int ROOT_ELEMENT_MAXOCCURS = 1;
@@ -33,8 +32,8 @@ public final class RootElementExporter extends BasicElementsExporter {
     super(preprocessor, indentator);
   }
 
-  public void processRootElement(final Element rootElement) throws InterruptedException {
-    processElement(rootElement, RegexpInterval.getBounded(ROOT_ELEMENT_MINOCCURS, ROOT_ELEMENT_MAXOCCURS));
+  @Override
+  public void run() throws InterruptedException {
+    processElement(preprocessor.getTopElement(), RegexpInterval.getBounded(ROOT_ELEMENT_MINOCCURS, ROOT_ELEMENT_MAXOCCURS));
   }
-
 }

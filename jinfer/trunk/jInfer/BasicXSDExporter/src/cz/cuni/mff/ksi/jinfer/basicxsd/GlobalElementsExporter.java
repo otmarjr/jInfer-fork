@@ -20,15 +20,25 @@ package cz.cuni.mff.ksi.jinfer.basicxsd;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
+import java.util.List;
 
 /**
  * TODO rio comment
  * @author rio
  */
-public final class GlobalElementsExporter extends BasicElementsExporter {
+public final class GlobalElementsExporter extends AbstractElementsExporter {
 
   public GlobalElementsExporter(final Preprocessor preprocessor, final Indentator indentator) {
     super(preprocessor, indentator);
+  }
+
+  @Override
+  public void run() throws InterruptedException {
+    final List<Element> globalElements = preprocessor.getGlobalElements();
+    for (Element globalElement : globalElements) {
+      InterruptChecker.checkInterrupt();
+      processGlobalElement(globalElement);
+    }
   }
 
   /**

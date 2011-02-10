@@ -57,7 +57,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private static final String NAME = "Basic_XSD_exporter";
   private static final String DISPLAY_NAME = "Basic XSD exporter";
 
-  private static final String generatedSubsitutionString = "<!-- %generated% -->\n";
+  private static final String GENERATED_SUBSTITUTION_STRING = "<!-- %generated% -->\n";
 
   @Override
   public String getName() {
@@ -81,7 +81,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     if (grammar.isEmpty()) {
       LOG.warn("XSD Exporter: nothing to export.");
-      callback.finished(generatedSubsitutionString, "xsd");
+      callback.finished(GENERATED_SUBSTITUTION_STRING, "xsd");
       return;
     }
 
@@ -95,7 +95,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     // Generate head of a new XSD.
     indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
-    indentator.indent(generatedSubsitutionString);
+    indentator.indent(GENERATED_SUBSTITUTION_STRING);
 
     final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(XSDExportPropertiesPanel.GENERATE_GLOBAL, String.valueOf(XSDExportPropertiesPanel.GENERATE_GLOBAL_DEFAULT)));
     final int numberToGlobal = generateGlobal ? Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL, String.valueOf(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_DEFAULT))) : 0;
@@ -269,20 +269,14 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   private void processElementContent(final Element element) throws InterruptedException {
     // SPECIAL CASE
     // if element subnodes is token and it is element, wrap it in <xs:sequence></xs:sequence>
-    boolean makeSequence = false;
     if (element.getSubnodes().isToken() && element.getSubnodes().getContent().isElement()) {
-      makeSequence = true;
-    }
-    if (makeSequence) {
       indentator.indent("<xs:sequence>\n");
       indentator.increaseIndentation();
-    }
-
-    processSubElements(element.getSubnodes());
-
-    if (makeSequence) {
+      processSubElements(element.getSubnodes());
       indentator.decreaseIndentation();
       indentator.indent("</xs:sequence>\n");
+    } else {
+      processSubElements(element.getSubnodes());
     }
 
     processElementAttributes(element);

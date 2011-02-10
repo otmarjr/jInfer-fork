@@ -69,19 +69,14 @@ public final class TypeUtils {
       /* Case: <A>aa</A><A>bb</A>
        * A is CONCATENATION of 2 TOKENS which are SIMPLE_DATA
        */
-      boolean allNodesSimpleData = true;
       for (final Regexp<AbstractStructuralNode> node : subnodes.getChildren()) {
         if (!node.isToken() || !node.getContent().isSimpleData()) {
-          allNodesSimpleData = false;
-          break;
+          return TypeCategory.COMPLEX;
         }
       }
-      if (allNodesSimpleData) {
-        return TypeCategory.BUILTIN;
-      }
-    }
 
-    return TypeCategory.COMPLEX;
+      return TypeCategory.BUILTIN;
+    }
   }
 
   /**
@@ -144,14 +139,12 @@ public final class TypeUtils {
 
     // Element may have set its type. If type is not set,
     // element will be defined as "xs:string".
-    String type = ((SimpleData)element.getSubnodes().getContent()).getContentType();
+    final String type = ((SimpleData)element.getSubnodes().getContent()).getContentType();
     if (!BaseUtils.isEmpty(type)) {
-      type = "xs:" + type;
+      return "xs:" + type;
     } else {
-      type = "xs:string";
+      return "xs:string";
     }
-
-    return type;
   }
 
   /**
@@ -163,13 +156,11 @@ public final class TypeUtils {
   public static String getBuiltinAttributeType(final Attribute attribute) {
     // attribute may have set its type. If type is not set,
     // attribute will be defined as "xs:string".
-    String type = attribute.getContentType();
+    final String type = attribute.getContentType();
     if (!BaseUtils.isEmpty(type)) {
-      type = "xs:" + type;
+      return "xs:" + type;
     } else {
-      type = "xs:string";
+      return "xs:string";
     }
-
-    return type;
   }
 }

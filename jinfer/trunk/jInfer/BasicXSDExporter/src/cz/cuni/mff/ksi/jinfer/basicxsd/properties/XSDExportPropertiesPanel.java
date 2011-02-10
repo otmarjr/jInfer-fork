@@ -239,6 +239,7 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
     add(jLabel5, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  @SuppressWarnings("PMD")
   private void generateGlobalTypesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_generateGlobalTypesItemStateChanged
     final boolean enabled = generateGlobalTypes.isSelected();
     countToGlobal.setEnabled(enabled);

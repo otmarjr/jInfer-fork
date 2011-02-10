@@ -304,16 +304,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private boolean isLambdaNodeAlternation(final Regexp<AbstractStructuralNode> regexp) {
-    // Alternation lambda|A for some node A.
-    if (regexp.isAlternation()
-            && (regexp.getChildren().size() == 2)
-            && regexp.getChild(0).isLambda()) {
-      return true;
-    }
-    return false;
-  }
-
   private void processLambdaNodeAlternation(final Regexp<AbstractStructuralNode> simpleAlternation) throws InterruptedException {
     if (simpleAlternation.getChild(1).isToken()) {
       processSubElements(simpleAlternation);
@@ -335,27 +325,6 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     }
   }
 
-  private boolean isLambdaTokenAlternation(final Regexp<AbstractStructuralNode> regexp) {
-    if (regexp.isAlternation()
-            && (regexp.getChildren().size() == 2)
-            && regexp.getChild(0).isLambda()
-            && regexp.getChild(1).isToken()) {
-      return true;
-    }
-    return false;
-  }
-
-  private boolean isSimpleDataTokenAlternation(final Regexp<AbstractStructuralNode> regexp) {
-    if (regexp.isAlternation()
-            && (regexp.getChildren().size() == 2)
-            && regexp.getChild(0).isToken()
-            && regexp.getChild(0).getContent().isSimpleData()
-            && regexp.getChild(1).isToken()) {
-      return true;
-    }
-    return false;
-  }
-
   private void processConcatenation(final Regexp<AbstractStructuralNode> concatenation) throws InterruptedException {
     indentator.indent("<xs:sequence");
     processOccurrences(concatenation.getInterval());
@@ -363,7 +332,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.increaseIndentation();
 
     for (final Regexp<AbstractStructuralNode> subRegexp : concatenation.getChildren()) {
-      if (isLambdaNodeAlternation(subRegexp)) {
+      if (RegexpTypeUtils.isLambdaNodeAlternation(subRegexp)) {
         processLambdaNodeAlternation(subRegexp);
       } else {
         processSubElements(subRegexp);
@@ -375,12 +344,12 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   private void processAlternation(final Regexp<AbstractStructuralNode> alternation) throws InterruptedException {
-    if (isLambdaTokenAlternation(alternation)) {
+    if (RegexpTypeUtils.isLambdaTokenAlternation(alternation)) {
       // SPECIAL CASE
       // Alternation (lambda | Element)
       // The second child has to be an element because of the filtering above.
       processToken(alternation.getChild(1).getContent(), RegexpInterval.getBounded(0, 1));
-    } else if (isSimpleDataTokenAlternation(alternation)) {
+    } else if (RegexpTypeUtils.isSimpleDataTokenAlternation(alternation)) {
       // SPECIAL CASE
       // Alternation (simpleData | Element)
       // The second child has to br an element because of the filtering above.

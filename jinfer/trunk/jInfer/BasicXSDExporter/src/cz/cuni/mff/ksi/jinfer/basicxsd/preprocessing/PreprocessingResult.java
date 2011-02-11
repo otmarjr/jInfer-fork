@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.basicxsd;
+package cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.LinkedList;
@@ -32,7 +32,7 @@ public final class PreprocessingResult {
   private final List<Element> toposortedElements;
   private final Map<String, Boolean> globalElementFlags;
 
-  public PreprocessingResult(final List<Element> originalElements, final List<Element> toposortedElements, final Map<String, Boolean> globalElementFlags) {
+  PreprocessingResult(final List<Element> originalElements, final List<Element> toposortedElements, final Map<String, Boolean> globalElementFlags) {
     this.originalElements = originalElements;
     this.toposortedElements = toposortedElements;
     this.globalElementFlags = globalElementFlags;

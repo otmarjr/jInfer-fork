@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
+import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -44,9 +45,6 @@ public abstract class AbstractElementsExporter {
   protected final Indentator indentator;
   protected final String typenamePrefix;
   protected final String typenamePostfix;
-
-  private static final int MINOCCURS_DEFAULT = 1;
-  private static final int MAXOCCURS_DEFAULT = 1;
 
   public abstract void run() throws InterruptedException;
 
@@ -80,7 +78,7 @@ public abstract class AbstractElementsExporter {
       final String type = TypeUtils.getBuiltinType(element);
 
       indentator.append(" type=\"" + type + '"');
-      processOccurrences(interval);
+      indentator.append(OccurencesProcessor.processOccurrences(interval));
       indentator.append("/>\n");
       return;
     }
@@ -92,12 +90,12 @@ public abstract class AbstractElementsExporter {
       indentator.append(element.getName());
       indentator.append(typenamePostfix);
       indentator.append("\"");
-      processOccurrences(interval);
+      indentator.append(OccurencesProcessor.processOccurrences(interval));
       indentator.append("/>\n");
       return;
     }
 
-    processOccurrences(interval);
+    indentator.append(OccurencesProcessor.processOccurrences(interval));
 
     indentator.append(">\n");
     indentator.increaseIndentation();
@@ -202,7 +200,7 @@ public abstract class AbstractElementsExporter {
 
   private void processConcatenation(final Regexp<AbstractStructuralNode> concatenation) throws InterruptedException {
     indentator.indent("<xs:sequence");
-    processOccurrences(concatenation.getInterval());
+    indentator.append(OccurencesProcessor.processOccurrences(concatenation.getInterval()));
     indentator.append(">\n");
     indentator.increaseIndentation();
 
@@ -238,7 +236,7 @@ public abstract class AbstractElementsExporter {
 
       // Other alternation (A | B ...)
       indentator.indent("<xs:choice");
-      processOccurrences(alternation.getInterval());
+      indentator.append(OccurencesProcessor.processOccurrences(alternation.getInterval()));
       indentator.append(">\n");
       indentator.increaseIndentation();
       for (Regexp<AbstractStructuralNode> subRegexp : alternation.getChildren()) {
@@ -304,25 +302,5 @@ public abstract class AbstractElementsExporter {
     }
 
     processElement(element, interval);
-  }
-
-  private void processOccurrences(final RegexpInterval interval) {
-    final int minOccurs = interval.getMin();
-    if (minOccurs != MINOCCURS_DEFAULT) {
-      indentator.append(" minOccurs=\"");
-      indentator.append(Integer.toString(minOccurs));
-      indentator.append("\"");
-    }
-
-    if (interval.isUnbounded()) {
-      indentator.append(" maxOccurs=\"unbounded\"");
-    } else {
-      final int maxOccurs = interval.getMax();
-      if (maxOccurs != MAXOCCURS_DEFAULT) {
-        indentator.append(" maxOccurs=\"");
-        indentator.append(Integer.toString(maxOccurs));
-        indentator.append("\"");
-      }
-    }
   }
 }

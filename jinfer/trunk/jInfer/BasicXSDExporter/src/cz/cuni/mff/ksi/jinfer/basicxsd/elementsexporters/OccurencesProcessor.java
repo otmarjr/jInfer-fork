@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.basicxsd;
+package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 
@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
  * TODO rio comment
  * @author rio
  */
-public final class OccurencesProcessor {
+final class OccurencesProcessor {
   
   private static final int MINOCCURS_DEFAULT = 1;
   private static final int MAXOCCURS_DEFAULT = 1;

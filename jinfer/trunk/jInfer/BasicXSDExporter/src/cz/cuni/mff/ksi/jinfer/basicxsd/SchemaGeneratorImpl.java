@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
+import cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters.RootElementExporter;
+import cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters.GlobalElementsExporter;
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.Preprocessor;
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;

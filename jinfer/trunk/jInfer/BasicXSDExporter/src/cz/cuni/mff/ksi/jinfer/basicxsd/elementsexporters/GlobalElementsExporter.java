@@ -26,11 +26,17 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
 import java.util.List;
 
 /**
- * TODO rio comment
+ * Exporter which retrieves global elements from a preprocessing result and performs
+ * their exportation. Global elements are exported as global types definitions.
  * @author rio
  */
 public final class GlobalElementsExporter extends AbstractElementsExporter {
 
+  /**
+   * Constructor.
+   * @param preprocessingResult Result of preprocessing to retrieve global elements.
+   * @param indentator Instance of {@see Indentator} to be used to indent output.
+   */
   public GlobalElementsExporter(final PreprocessingResult preprocessingResult, final Indentator indentator) {
     super(preprocessingResult, indentator);
   }
@@ -50,7 +56,7 @@ public final class GlobalElementsExporter extends AbstractElementsExporter {
    * @param element
    * @throws InterruptedException
    */
-  public void processGlobalElement(final Element element) throws InterruptedException {
+  private void processGlobalElement(final Element element) throws InterruptedException {
     InterruptChecker.checkInterrupt();
 
     // If element is of a built-in type don't define it.

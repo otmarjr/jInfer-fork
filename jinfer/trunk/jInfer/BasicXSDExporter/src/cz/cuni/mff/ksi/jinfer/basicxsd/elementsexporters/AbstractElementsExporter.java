@@ -37,7 +37,8 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 /**
- * TODO rio comment
+ * Basic implementation of elements exporter. Specific exporters should be derived
+ * from this class and can use already implemented logic or implement it on their own.
  * @author rio
  */
 public abstract class AbstractElementsExporter {
@@ -48,8 +49,11 @@ public abstract class AbstractElementsExporter {
   protected final String typenamePrefix;
   protected final String typenamePostfix;
 
-  public abstract void run() throws InterruptedException;
-
+  /**
+   * Constructor.
+   * @param preprocessingResult Result of preprocessing of input grammar.
+   * @param indentator Instance of {@see Indentator} to be used to indent output.
+   */
   public AbstractElementsExporter(final PreprocessingResult preprocessingResult, final Indentator indentator) {
     this.preprocessingResult = preprocessingResult;
     this.indentator = indentator;
@@ -58,6 +62,12 @@ public abstract class AbstractElementsExporter {
     typenamePrefix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_PREFIX, XSDExportPropertiesPanel.TYPENAME_PREFIX_DEFAULT);
     typenamePostfix = properties.getProperty(XSDExportPropertiesPanel.TYPENAME_POSTFIX, XSDExportPropertiesPanel.TYPENAME_POSTFIX_DEFAULT);
   }
+
+  /**
+   * Performs export. Has to be implemented in derived exporters.
+   * @throws InterruptedException
+   */
+  public abstract void run() throws InterruptedException;
 
   /**
    * Processes element. If its type is defined globally simply uses it. Otherwise

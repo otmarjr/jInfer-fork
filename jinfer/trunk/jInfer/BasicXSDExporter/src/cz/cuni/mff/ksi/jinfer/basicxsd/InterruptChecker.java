@@ -18,7 +18,7 @@
 package cz.cuni.mff.ksi.jinfer.basicxsd;
 
 /**
- * TODO rio comment
+ * Helper class to provide checking for thread interrupt.
  * @author rio
  */
 public final class InterruptChecker {
@@ -26,6 +26,11 @@ public final class InterruptChecker {
   private InterruptChecker() {
   }
 
+  /**
+   * Checks if this thread has been interrupted and throws an InterruptedException
+   * accordingly or does nothing.
+   * @throws InterruptedException
+   */
   public static void checkInterrupt() throws InterruptedException {
     if (Thread.interrupted()) {
       throw new InterruptedException();

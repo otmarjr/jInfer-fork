@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * TODO rio comment
+ * Helper class to perform some checks on input grammar.
  * @author rio
  */
 public final class InputGrammarVerifier {
@@ -31,6 +31,12 @@ public final class InputGrammarVerifier {
   private InputGrammarVerifier() {
   }
 
+  /**
+   * Input grammar must not contain more elements with the same names. This is
+   * verified by this method.
+   * @param input Input grammar.
+   * @return On success, true is returned.
+   */
   public static boolean verifyUniqueElementNames(final List<Element> input) {
     final Set<String> set = new HashSet<String>();
 

@@ -20,7 +20,8 @@ package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 
 /**
- * TODO rio comment
+ * Helper class to process <code>minOccurs</code> and <code>maxOccurs</code>
+ * attributes using a given {@see RegexpInterval}.
  * @author rio
  */
 final class OccurencesProcessor {
@@ -31,6 +32,12 @@ final class OccurencesProcessor {
   private OccurencesProcessor() {
   }
 
+  /**
+   * Creates a string representing {@see RegexpInterval} which can be directly
+   * inserted into an XSD element definition.
+   * @param interval Interval to create XSD representation for.
+   * @return String representing {@see RegexpInterval} in XSD.
+   */
   public static String processOccurrences(final RegexpInterval interval) {
     final StringBuilder resultBuilder = new StringBuilder();
     final int minOccurs = interval.getMin();

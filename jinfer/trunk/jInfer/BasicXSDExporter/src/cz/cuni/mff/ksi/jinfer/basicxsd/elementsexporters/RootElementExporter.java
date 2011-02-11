@@ -22,7 +22,11 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
 
 /**
- * TODO rio comment
+ * Exporter which retrieves the root element from a preprocessing result and
+ * performs recursive exportation. The whole element subtree is exported
+ * either by defining elements "inline" or by using globally defined types.
+ * Elements which will reference global types are also retrieved from the
+ * result of preprocessing.
  * @author rio
  */
 public final class RootElementExporter extends AbstractElementsExporter {
@@ -30,6 +34,12 @@ public final class RootElementExporter extends AbstractElementsExporter {
   private static final int ROOT_ELEMENT_MINOCCURS = 1;
   private static final int ROOT_ELEMENT_MAXOCCURS = 1;
 
+  /**
+   * Constructor.
+   * @param preprocessingResult Result of preprocessing to retrieve the root elements
+   *                            and global elements.
+   * @param indentator Instance of {@see Indentator} to be used to indent output.
+   */
   public RootElementExporter(final PreprocessingResult preprocessingResult, final Indentator indentator) {
     super(preprocessingResult, indentator);
   }

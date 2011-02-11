@@ -61,7 +61,7 @@ public final class Preprocessor {
 
   /**
    * Constructs an instance and performs preprocessing with determination
-   * of global element types. Results can be retrieved by public methods.
+   * of global element types. Result can be retrieved by a public method.
    *
    * @param elements Input grammar - a non empty list of elements.
    * @param numberToGlobal Number of occurrences of an element to consider its type
@@ -100,7 +100,10 @@ public final class Preprocessor {
     globalElementFlags = makeGlobalFlags(toposortedElements, elementOccurrenceCounts);
   }
 
-  // TODO rio comment
+  /**
+   * Retrieves result of performed preprocessing.
+   * @return Result of preprocessing.
+   */
   public PreprocessingResult getResult() {
     return new PreprocessingResult(originalElements, toposortedElements, globalElementFlags);
   }

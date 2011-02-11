@@ -100,49 +100,24 @@ public final class Preprocessor {
     globalElementFlags = makeGlobalFlags(toposortedElements, elementOccurrenceCounts);
   }
 
+  // TODO rio comment
+  public PreprocessingResult getResult() {
+    return new PreprocessingResult(originalElements, toposortedElements, globalElementFlags);
+  }
+
   /**
    * Returns an element reference by its name.
    *
    * @param elementName Name of a desired element.
    * @return Valid reference or <code>null</code> if the element is not present in the grammar.
    */
-  public Element getElementByName(final String elementName) {
+  private Element getElementByName(final String elementName) {
     for (Element element : originalElements) {
       if (element.getName().equalsIgnoreCase(elementName)) {
         return element;
       }
     }
     return null;
-  }
-
-  /**
-   * Decides whether a given element's type can be considered a global type.
-   *
-   * @param elementName Name of an element.
-   */
-  public boolean isElementGlobal(final String elementName) {
-    return globalElementFlags.get(elementName).booleanValue();
-  }
-
-  /** 
-   * Returns a top level (root) element.
-   */
-  public Element getTopElement() {
-    return toposortedElements.get(toposortedElements.size() - 1);
-  }
-
-  /** 
-   * Returns a list of global elements. Global elements are those which types
-   * have been considered global types.
-   */
-  public List<Element> getGlobalElements() {
-    final List<Element> globalElements = new LinkedList<Element>();
-    for (Element element : toposortedElements) {
-      if (isElementGlobal(element.getName())) {
-        globalElements.add(element);
-      }
-    }
-    return globalElements;
   }
 
   /** Counts numbers of occurrences of given elements in IG.

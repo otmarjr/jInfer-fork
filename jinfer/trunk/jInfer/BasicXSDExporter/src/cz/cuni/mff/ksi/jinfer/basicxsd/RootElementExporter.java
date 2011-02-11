@@ -28,12 +28,12 @@ public final class RootElementExporter extends AbstractElementsExporter {
   private static final int ROOT_ELEMENT_MINOCCURS = 1;
   private static final int ROOT_ELEMENT_MAXOCCURS = 1;
 
-  public RootElementExporter(final Preprocessor preprocessor, final Indentator indentator) {
-    super(preprocessor, indentator);
+  public RootElementExporter(final PreprocessingResult preprocessingResult, final Indentator indentator) {
+    super(preprocessingResult, indentator);
   }
 
   @Override
   public void run() throws InterruptedException {
-    processElement(preprocessor.getTopElement(), RegexpInterval.getBounded(ROOT_ELEMENT_MINOCCURS, ROOT_ELEMENT_MAXOCCURS));
+    processElement(preprocessingResult.getRootElement(), RegexpInterval.getBounded(ROOT_ELEMENT_MINOCCURS, ROOT_ELEMENT_MAXOCCURS));
   }
 }

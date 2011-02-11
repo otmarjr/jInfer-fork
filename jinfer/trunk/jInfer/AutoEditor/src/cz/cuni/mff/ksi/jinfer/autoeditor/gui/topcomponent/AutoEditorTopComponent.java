@@ -56,6 +56,7 @@ public final class AutoEditorTopComponent extends TopComponent {
   private final JFileChooser fileChooser;
 
   public AutoEditorTopComponent() {
+    super();
     initComponents();
     setName(NbBundle.getMessage(AutoEditorTopComponent.class, "CTL_AutoEditorTopComponent"));
     setToolTipText(NbBundle.getMessage(AutoEditorTopComponent.class, "HINT_AutoEditorTopComponent"));
@@ -63,20 +64,20 @@ public final class AutoEditorTopComponent extends TopComponent {
     
     // Initialize FileChooser.
     // Get all supported image format names.
-    String[] supportedFormatNames = ImageIO.getWriterFormatNames();
+    final String[] supportedFormatNames = ImageIO.getWriterFormatNames();
     /* Format names can contain duplicites like "jpg", "JPG", "JPEG".
      * Remove them and for each unique format name create an appropriate
      * FileNameExtensionFilter.
      */
     fileChooser = new JFileChooser();
-    Map<String, FileNameExtensionFilter> supportedFormatNameSet = new HashMap<String, FileNameExtensionFilter>();
+    final Map<String, FileNameExtensionFilter> supportedFormatNameSet = new HashMap<String, FileNameExtensionFilter>();
     for (String format : supportedFormatNames) {
       format = format.toLowerCase();
       if (format.equals("jpg")) {
         format = "jpeg";
       }
       if (!supportedFormatNameSet.containsKey(format)) {
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(format.toUpperCase() + " Image", format);
+        final FileNameExtensionFilter filter = new FileNameExtensionFilter(format.toUpperCase() + " Image", format);
         supportedFormatNameSet.put(format, filter);
         fileChooser.addChoosableFileFilter(filter);
       }
@@ -97,6 +98,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     }
   }
 
+  @SuppressWarnings("PMD")
   /** This method is called from within the constructor to
    * initialize the form.
    * WARNING: Do NOT modify this code. The content of this method is

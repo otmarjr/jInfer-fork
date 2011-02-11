@@ -32,7 +32,7 @@ import org.apache.commons.collections15.Transformer;
 public class AbstractStructuralNodeToStringTransformer implements Transformer<AbstractStructuralNode, String> {
 
   @Override
-  public String transform(AbstractStructuralNode node) {
+  public String transform(final AbstractStructuralNode node) {
     return node.isElement() ? node.getName() : "#CDATA";
   }
 

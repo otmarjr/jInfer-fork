@@ -39,6 +39,9 @@ import org.apache.commons.collections15.Transformer;
  */
 public final class LayoutHelperFactory {
 
+  private LayoutHelperFactory() {
+  }
+
   /**
    * Creates {@link Layout} which user selected in preferences.
    *
@@ -48,9 +51,9 @@ public final class LayoutHelperFactory {
    * @return Layout by user selection.
    */
   public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
-    Properties p = RunningProject.getActiveProjectProps(LayoutPropertiesPanel.NAME);
+    final Properties p = RunningProject.getActiveProjectProps(LayoutPropertiesPanel.NAME);
 
-    LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME));
+    final LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME));
     return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
   }
 

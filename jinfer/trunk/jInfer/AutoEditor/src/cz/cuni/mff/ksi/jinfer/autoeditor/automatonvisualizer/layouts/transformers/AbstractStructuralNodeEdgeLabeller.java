@@ -29,8 +29,8 @@ import org.apache.commons.collections15.Transformer;
 public class AbstractStructuralNodeEdgeLabeller implements Transformer<Step<AbstractStructuralNode>, String> {
 
   @Override
-  public String transform(Step<AbstractStructuralNode> step) {
-    AbstractStructuralNode node = step.getAcceptSymbol();
+  public String transform(final Step<AbstractStructuralNode> step) {
+    final AbstractStructuralNode node = step.getAcceptSymbol();
     return new AbstractStructuralNodeToStringTransformer().transform(node);
   }
 }

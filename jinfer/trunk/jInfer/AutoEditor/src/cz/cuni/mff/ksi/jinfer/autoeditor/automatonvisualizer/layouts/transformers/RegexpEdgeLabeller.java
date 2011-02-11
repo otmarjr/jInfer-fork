@@ -30,8 +30,8 @@ import org.apache.commons.collections15.Transformer;
 public class RegexpEdgeLabeller implements Transformer<Step<Regexp<AbstractStructuralNode>>, String> {
 
   @Override
-  public String transform(Step<Regexp<AbstractStructuralNode>> step) {
-    Regexp<AbstractStructuralNode> regexp = step.getAcceptSymbol();
+  public String transform(final Step<Regexp<AbstractStructuralNode>> step) {
+    final Regexp<AbstractStructuralNode> regexp = step.getAcceptSymbol();
     return new RegexpToStringTransformer().transform(regexp);
   }
 }

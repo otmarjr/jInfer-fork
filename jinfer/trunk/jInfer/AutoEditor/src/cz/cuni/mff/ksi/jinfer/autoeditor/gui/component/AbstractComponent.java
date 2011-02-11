@@ -36,6 +36,7 @@ public abstract class AbstractComponent<T> extends JPanel {
   private Dimension visualizerPanelSize = null;
 
   protected AbstractComponent() {
+    super();
     monitor = new Object();
   }
 
@@ -49,7 +50,7 @@ public abstract class AbstractComponent<T> extends JPanel {
   public void setVisualizer(final Visualizer<T> visualizer) {
     this.visualizer = visualizer;
 
-    GridBagConstraints constraints = new GridBagConstraints();
+    final GridBagConstraints constraints = new GridBagConstraints();
     constraints.weightx = 1.0;
     constraints.weighty = 1.0;
     constraints.fill = GridBagConstraints.BOTH;

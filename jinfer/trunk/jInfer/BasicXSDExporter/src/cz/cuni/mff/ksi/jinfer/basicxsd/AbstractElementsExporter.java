@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
 public abstract class AbstractElementsExporter {
 
   protected static final Logger LOG = Logger.getLogger(AbstractElementsExporter.class);
-  protected final Preprocessor preprocessor;
+  protected final PreprocessingResult preprocessingResult;
   protected final Indentator indentator;
   protected final String typenamePrefix;
   protected final String typenamePostfix;
@@ -50,8 +50,8 @@ public abstract class AbstractElementsExporter {
 
   public abstract void run() throws InterruptedException;
 
-  public AbstractElementsExporter(final Preprocessor preprocessor, final Indentator indentator) {
-    this.preprocessor = preprocessor;
+  public AbstractElementsExporter(final PreprocessingResult preprocessingResult, final Indentator indentator) {
+    this.preprocessingResult = preprocessingResult;
     this.indentator = indentator;
 
     final Properties properties = RunningProject.getActiveProjectProps(XSDExportPropertiesPanel.NAME);
@@ -86,7 +86,7 @@ public abstract class AbstractElementsExporter {
     }
 
     // If element's type is global set it and finish.
-    if (preprocessor.isElementGlobal(element.getName())) {
+    if (preprocessingResult.isElementGlobal(element.getName())) {
       indentator.append(" type=\"");
       indentator.append(typenamePrefix);
       indentator.append(element.getName());
@@ -296,7 +296,7 @@ public abstract class AbstractElementsExporter {
     assert !node.isSimpleData();
     assert node.isElement();
 
-    final Element element = preprocessor.getElementByName(node.getName());
+    final Element element = preprocessingResult.getElementByName(node.getName());
 
     if (element == null) {
       LOG.warn("XSD Exporter: Referenced element(" + node.getName() + ") not found in IG element list, probably error in code");

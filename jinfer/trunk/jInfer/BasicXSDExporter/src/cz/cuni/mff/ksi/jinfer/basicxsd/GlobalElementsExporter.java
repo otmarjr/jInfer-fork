@@ -28,13 +28,13 @@ import java.util.List;
  */
 public final class GlobalElementsExporter extends AbstractElementsExporter {
 
-  public GlobalElementsExporter(final Preprocessor preprocessor, final Indentator indentator) {
-    super(preprocessor, indentator);
+  public GlobalElementsExporter(final PreprocessingResult preprocessingResult, final Indentator indentator) {
+    super(preprocessingResult, indentator);
   }
 
   @Override
   public void run() throws InterruptedException {
-    final List<Element> globalElements = preprocessor.getGlobalElements();
+    final List<Element> globalElements = preprocessingResult.getGlobalElements();
     for (Element globalElement : globalElements) {
       InterruptChecker.checkInterrupt();
       processGlobalElement(globalElement);

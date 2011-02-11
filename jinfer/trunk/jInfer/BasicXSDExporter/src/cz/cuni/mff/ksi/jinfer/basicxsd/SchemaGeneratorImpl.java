@@ -90,20 +90,21 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(XSDExportPropertiesPanel.GENERATE_GLOBAL, String.valueOf(XSDExportPropertiesPanel.GENERATE_GLOBAL_DEFAULT)));
     final int numberToGlobal = generateGlobal ? Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL, String.valueOf(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_DEFAULT))) : 0;
     final Preprocessor preprocessor = new Preprocessor(grammar, numberToGlobal);
+    final PreprocessingResult preprocessingResult = preprocessor.getResult();
 
     // Handle global elements.
-    final List<Element> globalElements = preprocessor.getGlobalElements();
+    final List<Element> globalElements = preprocessingResult.getGlobalElements();
     if (!globalElements.isEmpty()) {
       indentator.append("\n");
       indentator.indent("<!-- global types -->\n");
 
-      final GlobalElementsExporter globalElementsExporter = new GlobalElementsExporter(preprocessor, indentator);
+      final GlobalElementsExporter globalElementsExporter = new GlobalElementsExporter(preprocessingResult, indentator);
       globalElementsExporter.run();
     }
 
     // Run recursion starting at the top element.
     indentator.indent("<!-- top level element -->\n");
-    final RootElementExporter rootElementExporter = new RootElementExporter(preprocessor, indentator);
+    final RootElementExporter rootElementExporter = new RootElementExporter(preprocessingResult, indentator);
     rootElementExporter.run();
 
     // Close XSD.

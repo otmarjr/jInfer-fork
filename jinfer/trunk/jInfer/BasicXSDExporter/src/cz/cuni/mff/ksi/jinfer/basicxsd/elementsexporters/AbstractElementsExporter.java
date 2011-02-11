@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.basicxsd;
+package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -26,6 +26,8 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
+import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.RegexpTypeUtils;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;

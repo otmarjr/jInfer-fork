@@ -15,10 +15,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.basicxsd;
+package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
+import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
 import java.util.List;

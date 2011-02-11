@@ -30,8 +30,8 @@ import org.apache.commons.collections15.Transformer;
  */
 public class VertexShapeTransformer<T> implements Transformer<State<T>, Shape> {
 
-  private static final int polygonSides = 5;
-  private static final int starPoints = 5;
+  private static final int POLYGON_SIDES_NUMBER = 5;
+  private static final int STAR_POINTS_NUMBER = 5;
 
   private final State<T> finalState;
   private final State<T> initialState;
@@ -84,13 +84,13 @@ public class VertexShapeTransformer<T> implements Transformer<State<T>, Shape> {
       case CIRCLE:
         return vertexShapeFactory.getEllipse(state);
       case POLYGON:
-        return vertexShapeFactory.getRegularPolygon(state, polygonSides);
+        return vertexShapeFactory.getRegularPolygon(state, POLYGON_SIDES_NUMBER);
       case ROUNDED_SQUARE:
         return vertexShapeFactory.getRoundRectangle(state);
       case SQUARE:
         return vertexShapeFactory.getRectangle(state);
       case STAR:
-        return vertexShapeFactory.getRegularStar(state, starPoints);
+        return vertexShapeFactory.getRegularStar(state, STAR_POINTS_NUMBER);
       default:
         throw new IllegalStateException("Unknown enum member.");
     }

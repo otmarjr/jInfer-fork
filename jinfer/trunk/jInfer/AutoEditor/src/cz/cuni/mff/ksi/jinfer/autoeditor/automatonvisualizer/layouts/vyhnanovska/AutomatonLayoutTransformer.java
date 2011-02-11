@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
  */
 public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Point2D> {
 
-  private static Logger LOG = Logger.getLogger(AutomatonLayoutTransformer.class);
+  private static final Logger LOG = Logger.getLogger(AutomatonLayoutTransformer.class);
 
   // minimal dimensions of a grid (in squares)
   private final int minXsize;
@@ -52,7 +52,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
 
   private final StateMapping<T> stateGridMapping;
   private static final double FILL_FACTOR = 3;
-  private Automaton<T> automaton;
+  private final Automaton<T> automaton;
 
   /**
    * Constructs transformer according to specified values.

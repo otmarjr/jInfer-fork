@@ -40,11 +40,12 @@ public class VyhnanovskaLayoutFactory implements LayoutF {
   public static final String NAME = "VyhnanovskaLayout";
   public static final String DISPLAY_NAME = "Vyhnanovska Layout";
 
+  private final static int MIN_X_SIZE = 1;
+  private final static int MIN_Y_SIZE = 1;
+  private final static int SQUARE_SIZE = 100;
+
   @Override
-  public <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, Transformer<Step<T>, String> edgeLabelTransformer) {
-    final int MIN_X_SIZE = 1;
-    final int MIN_Y_SIZE = 1;
-    final int SQUARE_SIZE = 100;
+  public <T> Layout<State<T>, Step<T>> createLayout(final Automaton<T> automaton, final Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) {
     final AutomatonLayoutTransformer<T> automatonLayoutTransformer = new AutomatonLayoutTransformer<T>(
             MIN_X_SIZE, MIN_Y_SIZE, SQUARE_SIZE, graph, automaton);
     final Dimension dimension = automatonLayoutTransformer.getDimension();

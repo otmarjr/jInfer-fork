@@ -29,7 +29,7 @@ import org.apache.commons.collections15.Transformer;
 public class RegexpToStringTransformer implements Transformer<Regexp<AbstractStructuralNode>, String> {
 
   @Override
-  public String transform(Regexp<AbstractStructuralNode> regexp) {
+  public String transform(final Regexp<AbstractStructuralNode> regexp) {
 
     switch (regexp.getType()) {
       case LAMBDA:
@@ -40,7 +40,7 @@ public class RegexpToStringTransformer implements Transformer<Regexp<AbstractStr
         return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), ",",
           new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
             @Override
-            public String toString(Regexp<AbstractStructuralNode> t) {
+            public String toString(final Regexp<AbstractStructuralNode> t) {
               return RegexpToStringTransformer.this.transform(t);
             }
         });
@@ -48,7 +48,7 @@ public class RegexpToStringTransformer implements Transformer<Regexp<AbstractStr
         return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), "|",
           new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
             @Override
-            public String toString(Regexp<AbstractStructuralNode> t) {
+            public String toString(final Regexp<AbstractStructuralNode> t) {
               return RegexpToStringTransformer.this.transform(t);
             }
         });
@@ -56,7 +56,7 @@ public class RegexpToStringTransformer implements Transformer<Regexp<AbstractStr
         return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), "&",
           new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
             @Override
-            public String toString(Regexp<AbstractStructuralNode> t) {
+            public String toString(final Regexp<AbstractStructuralNode> t) {
               return RegexpToStringTransformer.this.transform(t);
             }
         });

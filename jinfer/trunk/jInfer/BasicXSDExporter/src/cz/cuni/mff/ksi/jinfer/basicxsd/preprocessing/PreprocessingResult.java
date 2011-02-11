@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO comment
+ * Represents a result of preprocessing.
  * @author rio
  */
 public final class PreprocessingResult {
@@ -40,7 +40,6 @@ public final class PreprocessingResult {
 
   /**
    * Returns an element reference by its name.
-   *
    * @param elementName Name of a desired element.
    * @return Valid reference or <code>null</code> if the element is not present in the grammar.
    */
@@ -55,7 +54,6 @@ public final class PreprocessingResult {
 
   /**
    * Decides whether a given element's type can be considered a global type.
-   *
    * @param elementName Name of an element.
    */
   public boolean isElementGlobal(final String elementName) {
@@ -65,6 +63,7 @@ public final class PreprocessingResult {
   /**
    * Returns a list of global elements. Global elements are those which types
    * have been considered global types.
+   * @return Global elements.
    */
   public List<Element> getGlobalElements() {
     final List<Element> globalElements = new LinkedList<Element>();
@@ -78,6 +77,7 @@ public final class PreprocessingResult {
 
   /**
    * Returns the root element.
+   * @return Root element.
    */
   public Element getRootElement() {
     return toposortedElements.get(toposortedElements.size() - 1);

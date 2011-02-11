@@ -21,7 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 /**
- * TODO rio comment
+ * Utility class to recognize some specific types of regexp.
  * @author rio
  */
 public final class RegexpTypeUtils {
@@ -29,6 +29,11 @@ public final class RegexpTypeUtils {
   private RegexpTypeUtils() {
   }
 
+  /**
+   * Determines whether a given regexp is alternation of lambda and a node.
+   * @param regexp Input regexp.
+   * @return If regexp is of the described type, returns true. Else, returns false.
+   */
   public static boolean isLambdaNodeAlternation(final Regexp<AbstractStructuralNode> regexp) {
     // Alternation lambda|A for some node A.
     if (regexp.isAlternation()
@@ -39,6 +44,11 @@ public final class RegexpTypeUtils {
     return false;
   }
 
+  /**
+   * Determines whether a given regexp is alternation of lambda and a token.
+   * @param regexp Input regexp.
+   * @return If regexp is of the described type, returns true. Else, returns false.
+   */
   public static boolean isLambdaTokenAlternation(final Regexp<AbstractStructuralNode> regexp) {
     if (regexp.isAlternation()
             && (regexp.getChildren().size() == 2)
@@ -49,6 +59,11 @@ public final class RegexpTypeUtils {
     return false;
   }
 
+  /**
+   * Determines whether a given regexp is alternation of a SIMPLE_DATA token and any token.
+   * @param regexp Input regexp.
+   * @return If regexp is of the described type, returns true. Else, returns false.
+   */
   public static boolean isSimpleDataTokenAlternation(final Regexp<AbstractStructuralNode> regexp) {
     if (regexp.isAlternation()
             && (regexp.getChildren().size() == 2)

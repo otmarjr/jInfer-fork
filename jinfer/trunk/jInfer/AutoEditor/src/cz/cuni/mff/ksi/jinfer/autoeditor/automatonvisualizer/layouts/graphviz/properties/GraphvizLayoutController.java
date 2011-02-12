@@ -88,7 +88,7 @@ public final class GraphvizLayoutController extends OptionsPanelController {
 
   private GraphvizLayoutPanel getPanel() {
     if (panel == null) {
-      panel = new GraphvizLayoutPanel(this);
+      panel = new GraphvizLayoutPanel();
     }
     return panel;
   }

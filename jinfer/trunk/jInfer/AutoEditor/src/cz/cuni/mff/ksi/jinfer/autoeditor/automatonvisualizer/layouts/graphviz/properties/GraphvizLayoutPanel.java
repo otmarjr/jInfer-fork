@@ -35,12 +35,10 @@ final class GraphvizLayoutPanel extends JPanel {
 
   private static final long serialVersionUID = 4535346356l;
 
-  private final GraphvizLayoutController controller;
   private static final Logger LOG = Logger.getLogger(GraphvizLayoutPanel.class);
 
-  public GraphvizLayoutPanel(final GraphvizLayoutController controller) {
+  public GraphvizLayoutPanel() {
     super();
-    this.controller = controller;
     initComponents();
   }
 

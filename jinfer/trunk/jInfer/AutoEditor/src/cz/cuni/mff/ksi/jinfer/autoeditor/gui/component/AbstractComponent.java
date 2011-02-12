@@ -101,7 +101,7 @@ public abstract class AbstractComponent<T> extends JPanel {
    * Call to wake up all threads that are suspended in call of method
    * <code>waitForGUIDone()</code> on this instance.
    */
-  public void GUIDone() {
+  public void guiDone() {
     synchronized (monitor) {
       monitor.notifyAll();
     }
@@ -111,15 +111,15 @@ public abstract class AbstractComponent<T> extends JPanel {
    * Signals AutoEditor that waiting for any user interaction (on this instance)
    * has to be interrupted and inference has to interrupted as well.
    */
-  public void GUIInterrupt() {
+  public void guiInterrupt() {
     interrupted = true;
-    GUIDone();
+    guiDone();
   }
 
   /**
    * Checks if <code>GUIInterrupt()</code> was called on this instance.
    */
-  public boolean GUIInterrupted() {
+  public boolean guiInterrupted() {
     return interrupted;
   }
 }

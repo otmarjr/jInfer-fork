@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -37,31 +36,23 @@ public class RegexpToStringTransformer implements Transformer<Regexp<AbstractStr
       case TOKEN:
         return new AbstractStructuralNodeToStringTransformer().transform(regexp.getContent());
       case CONCATENATION:
-        return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), ",",
-          new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
-            @Override
-            public String toString(final Regexp<AbstractStructuralNode> t) {
-              return RegexpToStringTransformer.this.transform(t);
-            }
-        });
+        return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), ",", createCollectionToString());
       case ALTERNATION:
-        return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), "|",
-          new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
-            @Override
-            public String toString(final Regexp<AbstractStructuralNode> t) {
-              return RegexpToStringTransformer.this.transform(t);
-            }
-        });
+        return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), "|", createCollectionToString());
       case PERMUTATION:
-        return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), "&",
-          new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
-            @Override
-            public String toString(final Regexp<AbstractStructuralNode> t) {
-              return RegexpToStringTransformer.this.transform(t);
-            }
-        });
+        return CollectionToString.<Regexp<AbstractStructuralNode>>colToString(regexp.getChildren(), "&", createCollectionToString());
+      default:
+        return regexp.toString();
     }
-    return regexp.toString();
   }
 
+  private CollectionToString.ToString<Regexp<AbstractStructuralNode>> createCollectionToString() {
+    return new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+
+      @Override
+      public String toString(final Regexp<AbstractStructuralNode> t) {
+        return RegexpToStringTransformer.this.transform(t);
+      }
+    };
+  }
 }

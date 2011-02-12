@@ -60,9 +60,9 @@ public class GraphvizLayoutFactory implements LayoutF {
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(final Automaton<T> automaton, final Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
-    Map<State<T>, Point2D> positions = new HashMap<State<T>, Point2D>();
-
     if (GraphvizUtils.isBinaryValid()) {
+      Map<State<T>, Point2D> positions;
+      
       try {
         final byte[] graphInDotFormat = AutomatonToDot.<T>convertToDot(automaton, edgeLabelTransformer).getBytes();
         positions = getGraphvizPositions(graphInDotFormat, automaton.getDelta().keySet());

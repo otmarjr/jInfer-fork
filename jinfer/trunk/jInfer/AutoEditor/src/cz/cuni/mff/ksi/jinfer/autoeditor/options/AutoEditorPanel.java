@@ -26,6 +26,7 @@ import org.openide.util.NbPreferences;
  * Options panel of the AutoEditor module.
  * @author sviro
  */
+@SuppressWarnings("PMD.SingularField")
 public final class AutoEditorPanel extends javax.swing.JPanel {
 
   AutoEditorPanel() {

@@ -29,6 +29,7 @@ import javax.swing.DefaultComboBoxModel;
  * Properties panel for AutomatonSimplifierGreedy.
  * @author anti
  */
+@SuppressWarnings("PMD.SingularField")
 public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;
@@ -111,7 +112,7 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   }
 
   private void graphRendererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphRendererActionPerformed
-    LayoutF factory = ModuleSelectionHelper.lookupImpl(LayoutF.class,
+    final LayoutF factory = ModuleSelectionHelper.lookupImpl(LayoutF.class,
             ((NamedModule) graphRenderer.getSelectedItem()).getName());
     desc.setText(htmlize(factory.getUserModuleDescription()));
   }//GEN-LAST:event_graphRendererActionPerformed

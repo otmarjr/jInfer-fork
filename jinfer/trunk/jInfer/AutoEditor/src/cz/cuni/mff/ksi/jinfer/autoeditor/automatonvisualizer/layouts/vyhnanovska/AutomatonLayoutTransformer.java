@@ -85,7 +85,7 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
   @Override
   public Point2D transform(final State<T> state) {
     LOG.info("transform location of " + state);
-    // Starting state position at [1,1].
+    // Initial state position is [1,1].
     if (state.equals(automaton.getInitialState())) {
       final Coordinate statePosition = new Coordinate(1, 1);
       stateGridMapping.addStateCoordinate(state, statePosition);
@@ -96,15 +96,13 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
      * state to a current state.
      * If there is not such state, take [1,1].
      */
-    Coordinate prev = null;
+    Coordinate prev = new Coordinate(1, 1);
     for (final Step<T> backEdge : automaton.getReverseDelta().get(state)) {
-      prev = stateGridMapping.getStateCoordinate(backEdge.getSource());
-      if (prev != null) {
+      final Coordinate drawnStateCoordinate = stateGridMapping.getStateCoordinate(backEdge.getSource());
+      if (drawnStateCoordinate != null) {
+        prev = drawnStateCoordinate;
         break;
       }
-    }
-    if (prev == null) {
-      prev = new Coordinate(1, 1);
     }
 
     Coordinate nextI = prev;

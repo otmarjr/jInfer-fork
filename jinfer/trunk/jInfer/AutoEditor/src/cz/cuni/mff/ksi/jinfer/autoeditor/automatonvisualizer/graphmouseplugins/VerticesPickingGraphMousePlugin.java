@@ -304,7 +304,6 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
           final Point2D out,
           final boolean clear) {
 
-    Layout<V, E> layout = vv.getGraphLayout();
     final PickedState<V> pickedVertexState = vv.getPickedVertexState();
 
     final Rectangle2D pickRectangle = new Rectangle2D.Double();
@@ -316,6 +315,7 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
       }
       final GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
 
+      final Layout<V, E> layout = vv.getGraphLayout();
       final Collection<V> picked = pickSupport.getVertices(layout, pickRectangle);
       for (V v : picked) {
         pickedVertexState.pick(v, true);

@@ -311,7 +311,7 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     add(jLabel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
-  @SuppressWarnings("PMD")
+  @SuppressWarnings("PMD.MethodArgumentCouldBeFinal")
   private void colorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_colorMouseClicked
     final Object source = evt.getSource();
     if (source instanceof JPanel) {
@@ -322,7 +322,8 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
       }
     }
   }//GEN-LAST:event_colorMouseClicked
-  @SuppressWarnings("PMD")
+  
+  @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
   private void resetToDefaultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetToDefaultsActionPerformed
     backgroundColor.setBackground(ColorUtils.BG_COLOR_DEFAULT);
     regularStateColor.setBackground(ColorUtils.NODE_COLOR_DEFAULT);

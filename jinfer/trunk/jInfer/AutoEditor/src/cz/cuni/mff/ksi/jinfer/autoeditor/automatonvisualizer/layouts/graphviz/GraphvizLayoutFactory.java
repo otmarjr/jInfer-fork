@@ -28,6 +28,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,30 +61,25 @@ public class GraphvizLayoutFactory implements LayoutF {
 
   @Override
   public <T> Layout<State<T>, Step<T>> createLayout(final Automaton<T> automaton, final Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
-    if (GraphvizUtils.isBinaryValid()) {
-      Map<State<T>, Point2D> positions;
-      
-      try {
-        final byte[] graphInDotFormat = AutomatonToDot.<T>convertToDot(automaton, edgeLabelTransformer).getBytes();
-        positions = getGraphvizPositions(graphInDotFormat, automaton.getDelta().keySet());
-      } catch (Exception ex) {
-        LOG.error("Error occured in Graphviz", ex);
-        DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "error.dialog.message"), NotifyDescriptor.ERROR_MESSAGE));
-        throw new InterruptedException(); //NOPMD
-      }
-      
-      final Transformer<State<T>, Point2D> trans = TransformerUtils.mapTransformer(positions);
-
-      return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(windowWidth, windowHeight));
+    if (!GraphvizUtils.isBinaryValid()) {
+      DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "binary.invalid.message"), NotifyDescriptor.ERROR_MESSAGE));
+      throw new InterruptedException();
     }
 
-    DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "binary.invalid.message"), NotifyDescriptor.ERROR_MESSAGE));
-    throw new InterruptedException();
-
+    try {
+      final byte[] graphInDotFormat = AutomatonToDot.<T>convertToDot(automaton, edgeLabelTransformer).getBytes();
+      final Map<State<T>, Point2D> positions = getGraphvizPositions(graphInDotFormat, automaton.getDelta().keySet());
+       final Transformer<State<T>, Point2D> trans = TransformerUtils.mapTransformer(positions);
+       return new StaticLayout<State<T>, Step<T>>(graph, trans, new Dimension(windowWidth, windowHeight));
+    } catch (Exception ex) {
+      LOG.error("Error occured in Graphviz", ex);
+      DialogDisplayer.getDefault().notify(new NotifyDescriptor.Message(org.openide.util.NbBundle.getMessage(GraphvizLayoutFactory.class, "error.dialog.message"), NotifyDescriptor.ERROR_MESSAGE));
+      throw new InterruptedException(); //NOPMD
+    }
   }
 
   @SuppressWarnings("PMD")
-  private <T> Map<State<T>, Point2D> getGraphvizPositions(final byte[] graphInDotFormat, final Set<State<T>> automatonStates) throws Exception {
+  private <T> Map<State<T>, Point2D> getGraphvizPositions(final byte[] graphInDotFormat, final Set<State<T>> automatonStates) throws GraphvizException, IOException {
     final Map<State<T>, Point2D> result = new HashMap<State<T>, Point2D>();
 
     // creates new dot process.
@@ -109,7 +105,7 @@ public class GraphvizLayoutFactory implements LayoutF {
 
     // parse output for graph vertex positions
     while (scanner.hasNext()) {
-      String n = scanner.next();
+      final String n = scanner.next();
       if (n.equals("node")) {
         final int nodeName = Integer.parseInt(scanner.next());
         final double x = Double.parseDouble(scanner.next());
@@ -123,7 +119,7 @@ public class GraphvizLayoutFactory implements LayoutF {
           }
         }
         if (!found) {
-          throw new Exception("Node with name " + nodeName + " was not found in automaton.");
+          throw new GraphvizException("Node with name " + nodeName + " was not found in automaton.");
         }
       }
     }

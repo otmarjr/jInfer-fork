@@ -22,6 +22,7 @@ import java.awt.GridBagConstraints;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -73,12 +74,12 @@ public final class AutoEditorTopComponent extends TopComponent {
     fileChooser = new JFileChooser();
     final Map<String, FileNameExtensionFilter> supportedFormatNameSet = new HashMap<String, FileNameExtensionFilter>();
     for (String format : supportedFormatNames) {
-      format = format.toLowerCase();
-      if (format.equals("jpg")) {
+      format = format.toLowerCase(Locale.ENGLISH);
+      if ("jpg".equals(format)) {
         format = "jpeg";
       }
       if (!supportedFormatNameSet.containsKey(format)) {
-        final FileNameExtensionFilter filter = new FileNameExtensionFilter(format.toUpperCase() + " Image", format);
+        final FileNameExtensionFilter filter = new FileNameExtensionFilter(format.toUpperCase(Locale.ENGLISH) + " Image", format);
         supportedFormatNameSet.put(format, filter);
         fileChooser.addChoosableFileFilter(filter);
       }
@@ -176,6 +177,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     );
   }// </editor-fold>//GEN-END:initComponents
 
+  @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     /* Show the save dialog and get a selected file if user approved it.
      * Get selected extension filter, append appropriate extension to the
@@ -183,25 +185,29 @@ public final class AutoEditorTopComponent extends TopComponent {
      */
     if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
       final File file = fileChooser.getSelectedFile();
-      String fileName = file.getPath();
+      final String selectedFileName = file.getPath();
+      final StringBuilder fileNameBuilder = new StringBuilder(selectedFileName);
       final FileNameExtensionFilter fileFilter = (FileNameExtensionFilter)fileChooser.getFileFilter();
       final String extension = fileFilter.getExtensions()[0];
 
-      final int fileNameLastDotIndex = fileName.lastIndexOf('.');
+      final int fileNameLastDotIndex = selectedFileName.lastIndexOf('.');
       if (fileNameLastDotIndex == -1) {
         // Extension is not present, append it.
-        fileName = fileName + '.' + extension;
-      } else if (fileNameLastDotIndex == fileName.length() - 1) {
+        fileNameBuilder.append('.');
+        fileNameBuilder.append(extension);
+      } else if (fileNameLastDotIndex == selectedFileName.length() - 1) {
         // File name ends with '.', append extension.
-        fileName += extension;
-      } else if (!fileName.substring(fileNameLastDotIndex + 1).equals(extension)) {
+        fileNameBuilder.append(extension);
+      } else if (!selectedFileName.substring(fileNameLastDotIndex + 1).equals(extension)) {
         // File has another extenstion, keep it and append the appropriate one.
-        fileName += extension;
+        fileNameBuilder.append(extension);
       }
       // If file name is just the extension, prefix it with default name.
       if (fileNameLastDotIndex == 0) {
-        fileName = "unnamed" + fileName;
+        fileNameBuilder.insert(0, "unnamed");
       }
+
+      final String fileName = fileNameBuilder.toString();
 
       try {
         component.getVisualizer().saveImage(new File(fileName), extension);
@@ -212,6 +218,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     }
   }//GEN-LAST:event_jButton1ActionPerformed
 
+  @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     OptionsDisplayer.getDefault().open("jInfer/autoEditor");
   }//GEN-LAST:event_jButton2ActionPerformed

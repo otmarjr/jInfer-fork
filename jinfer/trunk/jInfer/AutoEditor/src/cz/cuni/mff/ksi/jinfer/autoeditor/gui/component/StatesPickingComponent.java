@@ -32,8 +32,7 @@ import javax.swing.JPanel;
 public class StatesPickingComponent<T> extends AbstractComponent<T> {
 
   private static final long serialVersionUID = 3531235;
-
-  private boolean shallAskUser = true;
+  private boolean askUser = true;
 
   public StatesPickingComponent() {
     super();
@@ -41,7 +40,7 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
   }
 
   public boolean shallAskUser() {
-    return shallAskUser;
+    return askUser;
   }
 
   /** This method is called from within the constructor to
@@ -120,13 +119,14 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
     );
   }// </editor-fold>//GEN-END:initComponents
 
+  @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-      shallAskUser = !(jCheckBox1.isSelected());
+    askUser = true ^ jCheckBox1.isSelected(); // PMD
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
-    @SuppressWarnings("PMD")
+  @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      guiDone();
+    guiDone();
     }//GEN-LAST:event_jButton1ActionPerformed
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;

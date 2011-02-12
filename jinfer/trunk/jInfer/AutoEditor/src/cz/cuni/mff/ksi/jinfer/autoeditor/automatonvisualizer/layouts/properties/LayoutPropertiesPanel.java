@@ -111,6 +111,7 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
     return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
   }
 
+  @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
   private void graphRendererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphRendererActionPerformed
     final LayoutF factory = ModuleSelectionHelper.lookupImpl(LayoutF.class,
             ((NamedModule) graphRenderer.getSelectedItem()).getName());

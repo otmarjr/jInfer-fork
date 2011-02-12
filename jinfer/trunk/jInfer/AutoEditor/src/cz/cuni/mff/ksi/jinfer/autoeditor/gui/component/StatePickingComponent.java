@@ -27,6 +27,7 @@ import javax.swing.JPanel;
  *
  * @author rio
  */
+@SuppressWarnings({"PMD.SingularField"})
 public class StatePickingComponent<T> extends AbstractComponent<T> {
 
   public StatePickingComponent() {

@@ -124,6 +124,7 @@ final class GraphvizLayoutPanel extends JPanel {
     add(jPanel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
+  @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
   private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
     final FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(GraphvizLayoutPanel.class).setTitle("Select Dot binary").setFilesOnly(true);
     final File selectedFile = fileChooserBuilder.showOpenDialog();

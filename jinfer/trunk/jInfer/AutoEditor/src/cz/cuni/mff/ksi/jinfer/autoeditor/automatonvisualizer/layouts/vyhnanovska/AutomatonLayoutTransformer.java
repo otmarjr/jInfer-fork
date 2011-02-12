@@ -276,32 +276,34 @@ public class AutomatonLayoutTransformer<T> implements Transformer<State<T>, Poin
       return null;
     }
 
-    int actualX = i.getX() + index;
-    int actualY = i.getY() - index;
-    if (actualX > gridDimension.width) {
+    int actualX;
+    int actualY;
+    if (i.getX() + index > gridDimension.width) {
       // connot move at the right side, move to the down side
-      actualY = i.getY() + index;
-      actualX = gridDimension.width + 1;
-      if (actualY > gridDimension.height) {
+      if (i.getY() + index > gridDimension.height) {
         // cannot move at the down side too, move to the left side
-        actualY = gridDimension.height + 1;
-        actualX = i.getX() - index;
-        if (actualX < 1) {
+        if (i.getX() - index < 1) {
           // left one is not possible as well, move to the up side
-          actualX = 0;
           actualY = i.getY() - index;
           if (actualY < 1) {
             // and the up one is not possible too
             return null;
           }
-
+          actualX = 0;
+        } else {
+          actualX = i.getX() - index;
+          actualY = gridDimension.height + 1;
         }
+      } else {
+        actualX = gridDimension.width + 1;
+        actualY = i.getY() + index;
       }
+    } else {
+      actualX = i.getX() + index;
+      actualY = i.getY() - index;
     }
-    if (actualY < 0) {
-      actualY = 0;
-    }
-    final Coordinate actual = new Coordinate(actualX, actualY);
+
+    final Coordinate actual = new Coordinate(actualX, (actualY < 0) ? 0 : actualY);
     return goNextI(i, actual, gridDimension);
   }
 }

@@ -261,30 +261,34 @@ public final class AutoEditorTopComponent extends TopComponent {
    * i.e. deserialization routines; otherwise you could get a non-deserialized instance.
    * To obtain the singleton instance, use {@link #findInstance}.
    */
-  public static synchronized AutoEditorTopComponent getDefault() {
-    if (instance == null) {
-      instance = new AutoEditorTopComponent();
+  public static AutoEditorTopComponent getDefault() {
+    synchronized(AutoEditorTopComponent.class) {
+      if (instance == null) {
+        instance = new AutoEditorTopComponent();
+      }
+      return instance;
     }
-    return instance;
   }
 
   /**
    * Obtain the AutoEditorTopComponent instance. Never call {@link #getDefault} directly!
    */
-  public static synchronized AutoEditorTopComponent findInstance() {
-    final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
-    if (win == null) {
+  public static AutoEditorTopComponent findInstance() {
+    synchronized(AutoEditorTopComponent.class) {
+      final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
+      if (win == null) {
+        Logger.getLogger(AutoEditorTopComponent.class.getName()).warn(
+                "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+        return getDefault();
+      }
+      if (win instanceof AutoEditorTopComponent) {
+        return (AutoEditorTopComponent) win;
+      }
       Logger.getLogger(AutoEditorTopComponent.class.getName()).warn(
-              "Cannot find " + PREFERRED_ID + " component. It will not be located properly in the window system.");
+              "There seem to be multiple components with the '" + PREFERRED_ID
+              + "' ID. That is a potential source of errors and unexpected behavior.");
       return getDefault();
     }
-    if (win instanceof AutoEditorTopComponent) {
-      return (AutoEditorTopComponent) win;
-    }
-    Logger.getLogger(AutoEditorTopComponent.class.getName()).warn(
-            "There seem to be multiple components with the '" + PREFERRED_ID
-            + "' ID. That is a potential source of errors and unexpected behavior.");
-    return getDefault();
   }
 
   @Override

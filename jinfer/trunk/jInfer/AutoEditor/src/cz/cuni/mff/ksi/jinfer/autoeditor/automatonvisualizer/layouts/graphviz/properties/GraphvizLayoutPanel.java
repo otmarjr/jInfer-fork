@@ -30,6 +30,7 @@ import org.openide.util.NbPreferences;
  * 
  * @author sviro
  */
+@SuppressWarnings("PMD.SingularField")
 final class GraphvizLayoutPanel extends JPanel {
 
   private static final long serialVersionUID = 4535346356l;

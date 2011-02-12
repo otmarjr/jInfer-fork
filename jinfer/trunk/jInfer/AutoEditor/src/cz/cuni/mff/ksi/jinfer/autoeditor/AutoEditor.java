@@ -63,7 +63,7 @@ public final class AutoEditor {
     drawComponentAsync(component);
     component.waitForGUIDone();
 
-    if (component.GUIInterrupted()) {
+    if (component.guiInterrupted()) {
       throw new InterruptedException();
     }
 

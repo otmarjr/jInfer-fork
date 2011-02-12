@@ -105,60 +105,61 @@ public class VertexPickingGraphMousePlugin<V> extends AbstractGraphMousePlugin
     final Visualizer<V> vv = (Visualizer<V>) e.getSource();
     final GraphElementAccessor<State<V>, Step<V>> pickSupport = vv.getPickSupport();
     final PickedState<State<V>> pickedVertexState = vv.getPickedVertexState();
-    if (pickSupport != null && pickedVertexState != null) {
-      if (e.getModifiers() == modifiers) {
-        // p is the screen point for the mouse event
-        final Point2D ip = e.getPoint();
 
-        final Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
-        vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
-        if (vertex != null) {
-          if (firstPick) {
-            firstPick = false;
+    if (pickSupport == null || pickedVertexState == null) {
+      return;
+    }
 
-            if (!pickedVertexState.isPicked(vertex)) {
-              pickedVertexState.clear();
-              pickedVertexState.pick(vertex, true);
-            }
+    if (e.getModifiers() == modifiers) {
+      // p is the screen point for the mouse event
+      final Point2D ip = e.getPoint();
+
+      final Layout<State<V>, Step<V>> layout = vv.getGraphLayout();
+      vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
+      if (vertex != null) {
+        if (firstPick) {
+          firstPick = false;
+
+          if (!pickedVertexState.isPicked(vertex)) {
+            pickedVertexState.clear();
+            pickedVertexState.pick(vertex, true);
+          }
+          // layout.getLocation applies the layout transformer so
+          // q is transformed by the layout transformer only
+          final Point2D q = layout.transform(vertex);
+          // transform the mouse point to graph coordinate system
+          final Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
+                  Layer.LAYOUT, ip);
+
+          offsetx = (float) (gp.getX() - q.getX());
+          offsety = (float) (gp.getY() - q.getY());
+          component.guiDone();
+        } else {
+          final boolean wasThere = pickedVertexState.pick(vertex, !pickedVertexState.isPicked(
+                  vertex));
+          if (wasThere) {
+            vertex = null;
+          } else {
+
             // layout.getLocation applies the layout transformer so
             // q is transformed by the layout transformer only
             final Point2D q = layout.transform(vertex);
-            // transform the mouse point to graph coordinate system
+            // translate mouse point to graph coord system
             final Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
                     Layer.LAYOUT, ip);
 
             offsetx = (float) (gp.getX() - q.getX());
             offsety = (float) (gp.getY() - q.getY());
-            component.GUIDone();
-          } else {
-            final boolean wasThere = pickedVertexState.pick(vertex, !pickedVertexState.isPicked(
-                    vertex));
-            if (wasThere) {
-              vertex = null;
-            } else {
-
-              // layout.getLocation applies the layout transformer so
-              // q is transformed by the layout transformer only
-              final Point2D q = layout.transform(vertex);
-              // translate mouse point to graph coord system
-              final Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
-                      Layer.LAYOUT, ip);
-
-              offsetx = (float) (gp.getX() - q.getX());
-              offsety = (float) (gp.getY() - q.getY());
-              component.GUIDone();
-            }
+            component.guiDone();
           }
-        } else if ((edge = pickSupport.getEdge(layout, ip.getX(), ip.getY())) != null) {
-//          pickedEdgeState.clear();
-//          pickedEdgeState.pick(edge, true);
-        } else {
-          pickedVertexState.clear();
-          firstPick = true;
         }
-
+      } else {
+        pickedVertexState.clear();
+        firstPick = true;
       }
+
     }
+
     if (vertex != null) {
       e.consume();
     }

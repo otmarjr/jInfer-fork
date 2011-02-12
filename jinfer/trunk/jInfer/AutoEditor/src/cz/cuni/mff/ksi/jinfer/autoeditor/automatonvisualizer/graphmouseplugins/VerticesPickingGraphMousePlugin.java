@@ -148,68 +148,67 @@ public class VerticesPickingGraphMousePlugin<V, E> extends AbstractGraphMousePlu
     final VisualizationViewer<V, E> vv = (VisualizationViewer<V, E>) e.getSource();
     final GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
     final PickedState<V> pickedVertexState = vv.getPickedVertexState();
-//    PickedState<E> pickedEdgeState = vv.getPickedEdgeState();
-    if (pickSupport != null && pickedVertexState != null) {
-      if (e.getModifiers() == modifiers) {
-        if (!firstPick) {
-          vv.addPostRenderPaintable(lensPaintable);
-        }
-        rect.setFrameFromDiagonal(down, down);
-        // p is the screen point for the mouse event
-        final Point2D ip = e.getPoint();
 
-        final Layout<V, E> layout = vv.getGraphLayout();
-        vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
-        if (vertex != null) {
-          if (firstPick) {
-            firstPick = false;
+    if (pickSupport == null || pickedVertexState == null) {
+      return;
+    }
 
-            if (!pickedVertexState.isPicked(vertex)) {
-              pickedVertexState.clear();
-              pickedVertexState.pick(vertex, true);
-            }
-            // layout.getLocation applies the layout transformer so
-            // q is transformed by the layout transformer only
-            final Point2D q = layout.transform(vertex);
-            // transform the mouse point to graph coordinate system
-            final Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
-                    Layer.LAYOUT, ip);
+    if (e.getModifiers() == modifiers) {
+      if (!firstPick) {
+        vv.addPostRenderPaintable(lensPaintable);
+      }
+      rect.setFrameFromDiagonal(down, down);
+      // p is the screen point for the mouse event
+      final Point2D ip = e.getPoint();
 
-            offsetx = (float) (gp.getX() - q.getX());
-            offsety = (float) (gp.getY() - q.getY());
-          } else {
-            final boolean wasThere = pickedVertexState.pick(vertex, !pickedVertexState.isPicked(
-                    vertex));
-            if (wasThere) {
-              vertex = null;
-            } else {
+      final Layout<V, E> layout = vv.getGraphLayout();
+      vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
 
-              // layout.getLocation applies the layout transformer so
-              // q is transformed by the layout transformer only
-              final Point2D q = layout.transform(vertex);
-              // translate mouse point to graph coord system
-              final Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
-                      Layer.LAYOUT, ip);
+      if (vertex == null) {
+        vv.addPostRenderPaintable(lensPaintable);
+        pickedVertexState.clear();
+        firstPick = true;
+        return;
+      }
 
-              offsetx = (float) (gp.getX() - q.getX());
-              offsety = (float) (gp.getY() - q.getY());
-            }
-          }
-        } else if ((edge = pickSupport.getEdge(layout, ip.getX(), ip.getY())) != null) {
-//          pickedEdgeState.clear();
-//          pickedEdgeState.pick(edge, true);
-        } else {
-          vv.addPostRenderPaintable(lensPaintable);
-//          pickedEdgeState.clear();
+      if (firstPick) {
+        firstPick = false;
+
+        if (!pickedVertexState.isPicked(vertex)) {
           pickedVertexState.clear();
-          firstPick = true;
+          pickedVertexState.pick(vertex, true);
         }
+        // layout.getLocation applies the layout transformer so
+        // q is transformed by the layout transformer only
+        final Point2D q = layout.transform(vertex);
+        // transform the mouse point to graph coordinate system
+        final Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
+                Layer.LAYOUT, ip);
 
+        offsetx = (float) (gp.getX() - q.getX());
+        offsety = (float) (gp.getY() - q.getY());
+      } else {
+        final boolean wasThere = pickedVertexState.pick(vertex, !pickedVertexState.isPicked(
+                vertex));
+        if (wasThere) {
+          vertex = null;
+          return;
+        } else {
+
+          // layout.getLocation applies the layout transformer so
+          // q is transformed by the layout transformer only
+          final Point2D q = layout.transform(vertex);
+          // translate mouse point to graph coord system
+          final Point2D gp = vv.getRenderContext().getMultiLayerTransformer().inverseTransform(
+                  Layer.LAYOUT, ip);
+
+          offsetx = (float) (gp.getX() - q.getX());
+          offsety = (float) (gp.getY() - q.getY());
+        }
       }
     }
-    if (vertex != null) {
-      e.consume();
-    }
+
+    e.consume();
   }
 
   /**

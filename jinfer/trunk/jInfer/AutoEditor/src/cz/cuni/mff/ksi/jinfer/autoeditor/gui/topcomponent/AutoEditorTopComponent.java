@@ -44,6 +44,7 @@ import org.openide.windows.WindowManager;
 // TODO rio Clean this class - too many NB warnings, dead code...
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent//AutoEditor//EN",
 autostore = false)
+@SuppressWarnings("PMD.SingularField")
 public final class AutoEditorTopComponent extends TopComponent {
 
   private static AutoEditorTopComponent instance;
@@ -297,7 +298,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     if (RunningProject.isActiveProject()) {
       final NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Closing this window will stop the inference. Proceed?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
       if (DialogDisplayer.getDefault().notify(notifyDescriptor) == NotifyDescriptor.OK_OPTION) {
-        component.GUIInterrupt();
+        component.guiInterrupt();
         return true;
       } else {
         return false;

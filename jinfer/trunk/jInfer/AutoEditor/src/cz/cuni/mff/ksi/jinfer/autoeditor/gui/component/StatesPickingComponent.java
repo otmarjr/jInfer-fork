@@ -28,6 +28,7 @@ import javax.swing.JPanel;
  *
  * @author rio
  */
+@SuppressWarnings("PMD.SingularField")
 public class StatesPickingComponent<T> extends AbstractComponent<T> {
 
   private static final long serialVersionUID = 3531235;
@@ -125,7 +126,7 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
 
     @SuppressWarnings("PMD")
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      GUIDone();
+      guiDone();
     }//GEN-LAST:event_jButton1ActionPerformed
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;

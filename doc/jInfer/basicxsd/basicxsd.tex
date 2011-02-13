@@ -93,7 +93,7 @@ XSD export itself is performed using classes derived from \code{AbstractElements
 
 To generate a human readable XSD output, it is necessary to apply correct indentation of XSD elements and their content. This is handled by \code{Indentator} class. This classes also serves as a buffer for string representation of XSD that the exporter is creating.\\
 
-Instance of this class is a member variable of the module, it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
+Instance of this class holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
 
 \subsubsection{Definition of elements}
 
@@ -212,8 +212,25 @@ Attribute \code{type} is one of a built-in types. If an attribute is obligatory,
 
 \subsubsection{Export of elements}
 
-TODO
+Classes to handle export of elements are in package \code{cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters}. Basic common logic is implemented in \code{AbstractElementsExporter} class. This class is abstract and is supposed to be extended by classes with a particular purpose. Its constructor signature is defined as following.
 
+\begin{verbatim}
+public AbstractElementsExporter(final PreprocessingResult preprocessingResult,
+                                final Indentator indentator)
+\end{verbatim}
+
+Names of parameters are self explanatory. Parameter \code{preprocessingResult} is a result of preprocessing. Parameter \code{indentator} is an instance of \code{Indentator} class to be used to buffer and indent output of exporter. This instance has not to be empty. Output of exporter is appended at the end of text held by the \code{indentator}. This behaviour is convenient when chaining output of several elements exporters.\\
+
+There are two classes extending \code{AbstractElementsExporter}. \code{GlobalElementsExporter} and \code{RootElementExporter}. Their constructors has the same signature as constructor of \code{AbstractElementsExporter} and both have \code{run()} method to perform their function.\\
+
+\code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}. TODO exmaple. TODO names and number of occurences, see properties.
+
+\code{RootElementExporter} retrieves the root element from the result of preprocessing and creates its definition. This definition is also appended to the \code{indentator} (supplied to constructor) at a level of indentation, the \code{indentator} is set. Way of handling the root element's subelements depends on if these are global elements or not.\\
+
+Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. TODO example.
+
+Elements which are not global are defined recursively. TODO example.
+ 
 --------------------------------------------------------------------------------------
 
 

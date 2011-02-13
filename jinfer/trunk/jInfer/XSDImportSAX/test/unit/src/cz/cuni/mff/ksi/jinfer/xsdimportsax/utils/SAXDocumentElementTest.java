@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimportsax.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import java.util.Map;
@@ -213,6 +214,7 @@ public class SAXDocumentElementTest {
     assertEquals(expResult, result);
   }
 
+  @Test
   public void testAssociateChoice() {
     System.out.println("test associate choice");
     final SAXDocumentElement instance = new SAXDocumentElement("choice");
@@ -225,6 +227,7 @@ public class SAXDocumentElementTest {
     assertEquals(expResult, result);
   }
 
+  @Test
   public void testAssociateSequence() {
     System.out.println("test associate sequence");
     final SAXDocumentElement instance = new SAXDocumentElement("sequence");
@@ -237,6 +240,7 @@ public class SAXDocumentElementTest {
     assertEquals(expResult, result);
   }
 
+  @Test
   public void testAssociateAll() {
     System.out.println("test associate all");
     final SAXDocumentElement instance = new SAXDocumentElement("all");
@@ -247,5 +251,50 @@ public class SAXDocumentElementTest {
     expResult = true;
     result = instance.isAssociated();
     assertEquals(expResult, result);
+  }
+
+  @Test
+  public void testDetermineRegexpType() {
+    System.out.println("test determine type of all");
+    final SAXDocumentElement instance = new SAXDocumentElement("all");
+    final RegexpType expected = RegexpType.PERMUTATION;
+    final RegexpType result = instance.determineRegexpType();
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void testDetermineRegexpType2() {
+    System.out.println("test determine type of sequence");
+    final SAXDocumentElement instance = new SAXDocumentElement("xs:sequence");
+    final RegexpType expected = RegexpType.CONCATENATION;
+    final RegexpType result = instance.determineRegexpType();
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void testDetermineRegexpType3() {
+    System.out.println("test determine type of all");
+    final SAXDocumentElement instance = new SAXDocumentElement("element");
+    final RegexpType expected = null;
+    final RegexpType result = instance.determineRegexpType();
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void testSchema() {
+    System.out.println("test is schema");
+    final SAXDocumentElement instance = new SAXDocumentElement("xsd:schema");
+    final boolean expected = true;
+    final boolean result = instance.isSchema();
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void testSchemaNot() {
+    System.out.println("test is schema");
+    final SAXDocumentElement instance = new SAXDocumentElement("schEma");
+    final boolean expected = false;
+    final boolean result = instance.isSchema();
+    assertEquals(expected, result);
   }
 }

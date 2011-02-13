@@ -17,6 +17,8 @@
 
 package cz.cuni.mff.ksi.jinfer.xsdimportsax.utils;
 
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import java.util.Map;
 import org.junit.Test;
 
@@ -94,7 +96,7 @@ public class SAXDocumentElementTest {
     final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
     instance.getAttrs().put(name, data);
     final boolean expResult = true;
-    final boolean result = instance.isNamedComplexType();
+    final boolean result = (instance.isComplexType() && instance.hasAttribute(XSDAttribute.NAME));
     assertEquals(expResult, result);
   }
 
@@ -106,7 +108,7 @@ public class SAXDocumentElementTest {
     final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
     instance.getAttrs().put(name, data);
     final boolean expResult = true;
-    final boolean result = instance.isNamedComplexType();
+    final boolean result = (instance.isComplexType() && instance.hasAttribute(XSDAttribute.NAME));
     assertEquals(expResult, result);
   }
 
@@ -118,7 +120,7 @@ public class SAXDocumentElementTest {
     final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "NO this is not a named CType");
     instance.getAttrs().put(name, data);
     final boolean expResult = false;
-    final boolean result = instance.isNamedComplexType();
+    final boolean result = (instance.isComplexType() && instance.hasAttribute(XSDAttribute.NAME));
     assertEquals(expResult, result);
   }
 
@@ -130,7 +132,7 @@ public class SAXDocumentElementTest {
     final SAXAttributeData data = new SAXAttributeData("", "/te%rrible/myQName", name, "someTyPe", "yes this is named CType");
     instance.getAttrs().put(name, data);
     final boolean expResult = false;
-    final boolean result = instance.isNamedComplexType();
+    final boolean result = (instance.isComplexType() && instance.hasAttribute(XSDAttribute.NAME));
     assertEquals(expResult, result);
   }
 
@@ -198,10 +200,46 @@ public class SAXDocumentElementTest {
     assertEquals(expResult, result);
   }
 
-  @Test
+  @Test(expected=XSDException.class)
   public void testAssociateWithUnnamedCType() {
     System.out.println("associateWithUnnamedCType");
     final SAXDocumentElement instance = new SAXDocumentElement("complexType");
+    boolean expResult = false;
+    boolean result = instance.isAssociated();
+    assertEquals(expResult, result);
+    instance.associate();
+    expResult = true;
+    result = instance.isAssociated();
+    assertEquals(expResult, result);
+  }
+
+  public void testAssociateChoice() {
+    System.out.println("test associate choice");
+    final SAXDocumentElement instance = new SAXDocumentElement("choice");
+    boolean expResult = false;
+    boolean result = instance.isAssociated();
+    assertEquals(expResult, result);
+    instance.associate();
+    expResult = true;
+    result = instance.isAssociated();
+    assertEquals(expResult, result);
+  }
+
+  public void testAssociateSequence() {
+    System.out.println("test associate sequence");
+    final SAXDocumentElement instance = new SAXDocumentElement("sequence");
+    boolean expResult = false;
+    boolean result = instance.isAssociated();
+    assertEquals(expResult, result);
+    instance.associate();
+    expResult = true;
+    result = instance.isAssociated();
+    assertEquals(expResult, result);
+  }
+
+  public void testAssociateAll() {
+    System.out.println("test associate all");
+    final SAXDocumentElement instance = new SAXDocumentElement("all");
     boolean expResult = false;
     boolean result = instance.isAssociated();
     assertEquals(expResult, result);

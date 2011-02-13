@@ -26,11 +26,11 @@ public class SAXAttributeData {
   private String uri, local, qname, type, value;
 
   public SAXAttributeData(final String uri, final String local, final String qname, final String type, final String value) {
-    this.uri = uri;
-    this.local = local;
-    this.qname = qname;
-    this.type = type;
-    this.value = value;
+    this.uri    = (uri    != null) ? uri    : "";
+    this.local  = (local  != null) ? local  : "";
+    this.qname  = (qname  != null) ? qname  : "";
+    this.type   = (type   != null) ? type   : "";
+    this.value  = (value  != null) ? value  : "";
   }
 
   public SAXAttributeData() {

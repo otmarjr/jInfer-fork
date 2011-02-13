@@ -22,10 +22,10 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.SimpleData;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.*;
 import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.*;
 import java.util.ArrayList;
@@ -46,6 +46,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * to be declared before their usage in the schema!
  * @author reseto
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public class SAXHandler extends DefaultHandler {
   private static final Logger LOG = Logger.getLogger(SAXHandler.class);
   private final boolean verbose = XSDImportSettings.isVerbose();
@@ -72,7 +73,7 @@ public class SAXHandler extends DefaultHandler {
    * Pseudo-unique name for the container elements that are pushed in contentStack
    * the name should be distict from every element name in the actual schema
    */
-  private static final String CONTAINER_NAME = "__conTAIner__";
+  
   private String currentNamedType = "";
   private final List<Element> roots = new ArrayList<Element>();
 
@@ -151,16 +152,29 @@ public class SAXHandler extends DefaultHandler {
       case SEQUENCE:
         processStartOfOrderIndicator(docElement);
         break;
+      case SCHEMA:
+      case ATTRIBUTE:
+        // these are supported and processed on element end
+        break;
       default:
         LOG.warn("Unsupported tag "+ docElement.getName() +", behavior is undefined.");
     }
    
+    LOG.info("start element-" + qName
+      + " tag-" + docElement.getTag().toString()
+      + " nameAttrVal-" + docElement.getAttributeValue(XSDAttribute.NAME)
+      + " refAttrVal-" + docElement.getAttributeValue(XSDAttribute.REF));
     docElementStack.push(docElement);
   }
 
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException, XSDException {
     final SAXDocumentElement docElement = docElementStack.pop();
+
+    LOG.info("end element-" + qName
+      + " tag-" + docElement.getTag().toString()
+      + " nameAttrVal-" + docElement.getAttributeValue(XSDAttribute.NAME)
+      + " refAttrVal-" + docElement.getAttributeValue(XSDAttribute.REF));
 
     if (!docElement.getName().equals(XSDUtility.trimNS(qName))) {
       throw new XSDException("Invalid schema. Unpaired tags " + docElement.getName() + " and " + qName);
@@ -186,7 +200,7 @@ public class SAXHandler extends DefaultHandler {
         contentStack.peek().getAttributes().add(
               new Attribute(getContext(),
                             docElement.getNameOrRefValue(),
-                            SAXHelper.getAttributeMetadata(docElement),
+                            SAXHelper.prepareAttributeMetadata(docElement),
                             attrType,
                             new ArrayList<String>(0)));
         break;
@@ -226,26 +240,28 @@ public class SAXHandler extends DefaultHandler {
       final Pair<String, Element> pair = unresolved.get(i);
       final boolean resolved = tryResolveElementType(pair.getFirst(), pair.getSecond());
       if (resolved) {
-        pair.getSecond().setImmutable();
+        SAXHelper.finalizeElement(pair.getSecond());
       } else {
         LOG.warn("Can't resolve the type of element " + pair.getSecond().getName() + "!");
       }
     }
   }
 
+  /**
+   * There are 2 kinds of "complexType" tags:
+   * 1) When there is NO "name" attribute specified - it is inside an "element" tag,
+   *    there is no need to create a container, because all inner tags will be added to the
+   *    current Element on top of the contentStack ("attribute" tags too).
+   *    Nothing is added to the contentStack.
+   * 2) When there is "name" attribute specified (named complexType)
+   *    - we must create a special container for the children,
+   *    because it has no wrapping "element" tag.
+   *    Container is pushed to the contentStack.
+   *    Also, to resolve dependencies between several "complexType" tags,
+   *    we must maintain an information about current namedType being parsed.
+   * @param docElement
+   */
   private void processStartOfComplexType(final SAXDocumentElement docElement) {
-    /* There are 2 kinds of "complexType" tags:
-     * 1) When there is NO "name" attribute specified - it is inside an "element" tag,
-     *    there is no need to create a container, because all inner tags will be added to the
-     *    current Element on top of the contentStack ("attribute" tags too).
-     *    Nothing is added to the contentStack.
-     * 2) When there is "name" attribute specified (named complexType)
-     *    - we must create a special container for the children,
-     *    because it has no wrapping "element" tag.
-     *    Container is pushed to the contentStack.
-     *    Also, to resolve dependencies between several "complexType" tags,
-     *    we must maintain an information about current namedType being parsed.
-     */
     if (docElement.hasAttribute(XSDAttribute.NAME)) {
       currentNamedType = docElement.getAttributeValue(XSDAttribute.NAME);
       namedTypes.put(currentNamedType, new XSDNamedType());
@@ -256,7 +272,7 @@ public class SAXHandler extends DefaultHandler {
   private void processEndOfComplexType(final SAXDocumentElement docElement) {
     if (docElement.hasAttribute(XSDAttribute.NAME)) {
           final Element container = contentStack.pop();
-          if (!isContainer(container)) {
+          if (!SAXHelper.isContainer(container)) {
             throw new XSDException("Unexpected element on stack " + container.getName());
           }
           currentNamedType = "";
@@ -285,16 +301,6 @@ public class SAXHandler extends DefaultHandler {
     }
   }
 
-  /**
-   * Finds out if Element elem is only a temporary container with the name set by CONTAINER_NAME constant.
-   * @param elem Element to be decided.
-   * @return True if elem is a container, false if not.
-   */
-  private boolean isContainer(final Element elem) {
-    return (elem.getName().equals(CONTAINER_NAME)
-            && elem.getMetadata().containsKey(CONTAINER_NAME)
-            && elem.getMetadata().get(CONTAINER_NAME).equals(Boolean.TRUE));
-  }
 
   private List<String> getContext() {
     List<String> ret;
@@ -305,7 +311,7 @@ public class SAXHandler extends DefaultHandler {
       final Element parent = contentStack.peek();
       ret = new ArrayList<String>(parent.getContext());
 
-      if (!isContainer(parent)) {
+      if (!SAXHelper.isContainer(parent)) {
         // parent is not a container, add its name to the context
         ret.add(parent.getName());
       }
@@ -320,30 +326,31 @@ public class SAXHandler extends DefaultHandler {
    */
   private void processEndOfElement(final SAXDocumentElement docElement) throws XSDException {
 
-    final Element old = contentStack.pop();
-    final String name = docElement.getAttributeValue(XSDAttribute.NAME);
+    final Element rule = contentStack.pop();
+    final String name = docElement.getNameOrRefValue();
     if (name == null) {
       throw new XSDException(NbBundle.getMessage(SAXHandler.class, "Error.ElementNameNull"));
     }
 
-    if (!old.getName().equals(name)) {
+    if (!rule.getName().equals(name)) {
       throw new XSDException(NbBundle.getMessage(SAXHandler.class, "Error.UnexpectedElement", name));
     }
 
     boolean resolved = true;
-    if (docElement.getAttrs().containsKey(XSDAttribute.TYPE.toString())) {
+    final String TYPE = XSDUtility.trimNS(docElement.getAttributeValue(XSDAttribute.TYPE));
+
+    if (!BaseUtils.isEmpty(TYPE)) {
       // deal with element that has specified type
-      final String TYPE = XSDUtility.trimNS(docElement.getAttrs().get(XSDAttribute.TYPE.toString()).getValue());
 
       if (XSDBuiltInDataTypes.isBuiltInType(TYPE)) {
-        if (old.getSubnodes().getChildren().isEmpty()) {
+        if (rule.getSubnodes().getChildren().isEmpty()) {
           // [SIMPLE DATA SECTION]
           // element has empty children, but its specified type is one of the built-in types
           // create SimpleData with the defined type of the element
-          old.getSubnodes().setType(RegexpType.TOKEN);
-          final List<String> newContext = new ArrayList<String>(old.getContext());
-          newContext.add(old.getName());
-          old.getSubnodes().setContent(
+          rule.getSubnodes().setType(RegexpType.TOKEN);
+          final List<String> newContext = new ArrayList<String>(rule.getContext());
+          newContext.add(rule.getName());
+          rule.getSubnodes().setContent(
             new SimpleData(newContext,
                            XSDUtility.SIMPLE_DATA_NAME,
                            Collections.<String,Object>emptyMap(),
@@ -354,16 +361,16 @@ public class SAXHandler extends DefaultHandler {
         // try to pair this element with its defined type
         // the problem is, that the complexType it may be associated with
         // can be declared later in the schema than this element
-        resolved = tryResolveElementType(TYPE, old);
+        resolved = tryResolveElementType(TYPE, rule);
         if (!resolved) {
           //TODO reseto add this to parent element as UNRESOLVED node
-          unresolved.add(new Pair<String, Element>(TYPE, old));
-          LOG.debug("Can't resolve the type of element '" + old.getName() + "' on first try.");
+          unresolved.add(new Pair<String, Element>(TYPE, rule));
+          LOG.debug("Can't resolve the type of element '" + rule.getName() + "' on first try.");
         }
       }
     }
 
-    addAsChild(old, resolved);
+    addAsChild(rule, docElement.determineInterval(), resolved);
   }
 
   /**
@@ -371,23 +378,19 @@ public class SAXHandler extends DefaultHandler {
    * and add it to adequate rules list.
    * @param elem
    */
-  private void addAsChild(final Element elem, final boolean resolved) {
-    if (elem.getSubnodes().getType() == null) {
-      elem.getSubnodes().setType(RegexpType.CONCATENATION);
-    }
+  private void addAsChild(final Element elem, final RegexpInterval interval, final boolean resolved) {
     if (resolved) {
-      elem.setImmutable();
+      SAXHelper.finalizeElement(elem);
     }
-
     if (!docElementStack.isEmpty() && docElementStack.peek().isSchema()) {
       roots.add(elem);
       if (verbose) {
         LOG.debug("adding to roots: " + elem.getName());
       }
     }
-    // always add self as token to parent
     if (!contentStack.isEmpty()) {
-      contentStack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(elem));
+      // always add self as token to parent
+      contentStack.peek().getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(elem, interval));
     }
   }
 
@@ -458,41 +461,21 @@ public class SAXHandler extends DefaultHandler {
    *
    * On the other hand, when an element starts, we have to put something on the stack,
    * to remember the context, but we don't know the type of it's Regexp
-   * -> by default it's CONCATENATION,
+   * -> by default it's null,
    * but when the element ends it's changed according to its content
    * => that is why an element is added as a child only when it ends!!
    * @param docElement Currently processed internal element.
    * @param isContainer True if docElement is an order indicator (choice,sequence,all). False if docElement is a proper xs:element.
    */
   private void createAndPushContent(final SAXDocumentElement docElement, final boolean isContainer) {
-
-    final Map<String, Object> metadata = new HashMap<String, Object>();
-
-    String name = "";
-
-    if (isContainer) {
-      metadata.put(CONTAINER_NAME, Boolean.TRUE);
-      name = CONTAINER_NAME;
-    } else {
-      // this is a normal element
-
-      if (docElement.hasAttribute(XSDAttribute.NAME)) {
-        name = docElement.getAttributeValue(XSDAttribute.NAME);
-      } else if (docElement.hasAttribute(XSDAttribute.REF)) {
-        name = docElement.getAttributeValue(XSDAttribute.REF);
-        metadata.putAll(IGGUtils.METADATA_SENTINEL); // ref don't have any contents, so it's a sentinel
-      }
-
-      metadata.putAll(IGGUtils.ATTR_FROM_SCHEMA);
-    }
-
     final Element elem = Element.getMutable();
     elem.getContext().addAll(getContext());
-    elem.setName(name);
-    elem.getMetadata().putAll(metadata);
-    elem.getSubnodes().setType(docElement.determineRegexpType());
+    elem.setName(SAXHelper.prepareElementName(docElement, isContainer));
+    elem.getMetadata().putAll(SAXHelper.prepareElementMetadata(docElement, isContainer));
     if (docElement.isOrderIndicator()) {
-      // we have to set the interval even if it is a container, because it may be a nested order indicator
+      elem.getSubnodes().setType(docElement.determineRegexpType());
+      // we have to set the interval even if it is a container,
+      // because it may be a nested order indicator
       elem.getSubnodes().setInterval(docElement.determineInterval());
     }
 

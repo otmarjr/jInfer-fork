@@ -16,14 +16,19 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimportsax.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDOccurences;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDTag;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDUtility;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  Wrapper class for tag entity read by SAX parser.
+ * Wrapper class for tags read by SAX parser.
  * @author reseto
  */
 public class SAXDocumentElement {
@@ -84,39 +89,52 @@ public class SAXDocumentElement {
   }
 
   /**
-   * Returns the value of attribute <i>name</i> if such an attribute is in the list.
-   * @return Value of attribute <i>name</i>.
+   * Checks if current instance has a non empty attribute specified by the parameter.
+   * @return {@code true} if there is an attribute with the specified name defined and it is not empty, {@code false} otherwise.
    */
-  public String attributeNameValue() {
-    if (attrs.containsKey("name")) {
-      return attrs.get("name").getValue();
-    } else if (attrs.containsKey("ref")) {
-      return attrs.get("ref").getValue();
-    } else {
-      return null;
-    }
-  }
-
-  public boolean isNamedComplexType() {
-    final SAXAttributeData nameAttr = attrs.get("name");
-    return (nameAttr != null && !nameAttr.getQName().equals("") && !nameAttr.getValue().equals("") && isComplexType()) ? true : false;
+  public boolean hasAttribute(final XSDAttribute attribute) {
+    final SAXAttributeData nameAttr = attrs.get(attribute.toString());
+    return (nameAttr != null && !nameAttr.getQName().equals("") && !nameAttr.getValue().equals(""));
   }
 
   /**
-   * Check if element is one of xs:choice, xs:sequence, xs:all.
-   * @return true if it is, false otherwise.
+   * Gets the value of specified attribute.
+   * @return Value of specified attribute or empty string if attribute value is absent.
    */
-  public boolean isOrderIndicator() {
-    return tag.isOrderIndicator();
+  public String getAttributeValue(final XSDAttribute attribute) {
+    if (!hasAttribute(attribute)) {
+      return "";
+    } else {
+      return attrs.get(attribute.toString()).getValue();
+    }
+  }
+
+  /**
+   * Returns value of <i>name</i> attribute or <i>ref<i/> attribute if any of them can be used.
+   * @return Value of either attribute or empty string if neither value is present.
+   */
+  public String getNameOrRefValue() {
+    if (hasAttribute(XSDAttribute.NAME)) {
+      return getAttributeValue(XSDAttribute.NAME);
+    } else if (hasAttribute(XSDAttribute.REF)) {
+      return getAttributeValue(XSDAttribute.REF);
+    } else {
+      return "";
+    }
   }
 
   /**
    * Couples the current instance with a "named complex type".
    * This means that current instance is a direct successor of the <i>complexType</i> tag
    * and it should not create its own container for sub-nodes, but pass all sub-nodes to its parent.
+   * @throws XSDException When current instance is not an order indicator.
    */
-  public void associate() {
-    this.associated = true;
+  public void associate() throws XSDException {
+    if (isOrderIndicator()) {
+      this.associated = true;
+    } else {
+      throw new XSDException("Unsupported operation. Trying to couple an unsupported element with its parent.");
+    }
   }
 
   /**
@@ -142,4 +160,46 @@ public class SAXDocumentElement {
   public boolean isSchema() {
     return XSDTag.SCHEMA.equals(tag);
   }
+
+  /**
+   * Check if tag of current instance is one of <i>choice</i>, <i>sequence</i>, <i>all</i>.
+   * @return true if it is, false otherwise.
+   */
+  public boolean isOrderIndicator() {
+    return tag.isOrderIndicator();
+  }
+
+  /**
+   * Match tag of current instance to a {@link RegexpType }.
+   * @return {@link RegexpType#ALTERNATION },
+   * {@link RegexpType#CONCATENATION },
+   * {@link RegexpType#PERMUTATION }
+   * or {@code null } if instance is not an order indicator.
+   */
+  public RegexpType determineRegexpType() {
+    switch (tag) {
+      case ALL:
+        return RegexpType.PERMUTATION;
+      case CHOICE:
+        return RegexpType.ALTERNATION;
+      case SEQUENCE:
+        return RegexpType.CONCATENATION;
+      default:
+        // if it's a regular element, we don't know the type yet
+        // this has to stay null, because the element can have a type defined in some named CType
+        return null;
+    }
+  }
+  
+  /**
+   * Create an interval using attributes <i>minOccurs</i> and <i>maxOccurs</i> of current instance.
+   * @return Valid or default interval.
+   * @see XSDOccurences#createInterval(java.lang.String, java.lang.String)
+   */
+  public RegexpInterval determineInterval() {
+    final String minOccurrence = getAttributeValue(XSDAttribute.MINOCCURS);
+    final String maxOccurrence = getAttributeValue(XSDAttribute.MAXOCCURS);
+    return XSDOccurences.createInterval(minOccurrence, maxOccurrence);
+  }
+
 }

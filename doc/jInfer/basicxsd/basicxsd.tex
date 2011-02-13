@@ -52,16 +52,20 @@ This is an implementation of a \jmodule{SchemaGenerator} exporting the inferred 
 
 \section{Structure}
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl}. Process of export consists of two phases described in detail in later sections.
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
 \begin{enumerate}
 	\item Preprocessing.
 	\item The export to a string representation itself.
 \end{enumerate}
-Method \code{start()} first creates an instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such as which elements should be globally defined and which element is the root element. This instance is kept as a member variable of module to be used during the whole export process.\\
+Method \code{start()} first creates an instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such as which elements should be globally defined and which element is the root element.\\
 
-Afterwards, \code{start()} method recursively traverses global elements followed by other elements starting at the root element and for each it creates element's XSD string representation.\\
+Afterwards, \code{start()} method uses instances of classes derived from \code{AbstractElementsProcessor} class to export elements of input grammar.
 
 \subsection{Preprocessing}
+
+Code to handle preprocessing resides in package \code{cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing}.
+
+\subsubsection{Purpose}
 
 As mentioned above, preprocessing is implemented in \code{Preprocessor} class and its functions are following.
 \begin{itemize}
@@ -71,19 +75,29 @@ As mentioned above, preprocessing is implemented in \code{Preprocessor} class an
 	\item Find an instance of element by its name.
 \end{itemize}
 
+\subsubsection{TODO spravny vyraz sem}
+
 Constructor of \code{Preprocessor} class gets a list of elements and a number, defining minimal number of occurrences of an element to be defined globally. It first topologically sorts input elements to decide which of the elements is the root element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occur). Finally, for each element it decides whether to mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal to the number of occurrences provided on input.\\
 
-Results of preprocessing are provided by public methods of \code{Preprocessor} class. For details see their JavaDoc.\\
+\subsubsection{Running preprocessor and obtaining its result}
+
+As described above, preprocessing is performed by creating an instance of \code{Preprocessor} class.\\
+
+Information discovered by the preprocessing can be obtained by calling \code{Preprocessor}'s \code{getResult()} method. This method returns an instance of \code{PreprocessingResult} class. Purpose of this class is to provide of what the preprocessor has discovered and to provide an easy way to search the input grammar for an element by its name. For details see JavaDoc of \code{PreprocessingResult}'s public methods.
 
 \subsection{Export}
 
-XSD export itself is performed in module's \code{start()} function right after the preprocessing.\\
+XSD export itself is performed using classes derived from \code{AbstractElementsProcessor} class and a helper class named \code{Indentator}.
 
-Useful helper class to handle indentation of text in a resulting XSD is called \code{Indentator}. Instance of this class is a member variable of the module (alike instance of \code{Preprocessor}), it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
+\subsubsection{Indentation}
 
-Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language.
+To generate a human readable XSD output, it is necessary to apply correct indentation of XSD elements and their content. This is handled by \code{Indentator} class. This classes also serves as a buffer for string representation of XSD that the exporter is creating.\\
+
+Instance of this class is a member variable of the module, it holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
 
 \subsubsection{Definition of elements}
+
+Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language.\\
 
 Element is defined by XSD element \code{element}, specifying its name and type. Let \code{xs} be XMLSchema namespace.
 
@@ -94,7 +108,7 @@ Element is defined by XSD element \code{element}, specifying its name and type. 
 Type of an element is one of following.
 
 \begin{itemize}
-	\item XSD built-in type. One of types like \code{xs:string}, \code{xs:integer}, \code{xs:positiveInteger}, etc.
+	\item XSD \emph{built-in type}. One of types like \code{xs:string}, \code{xs:integer}, \code{xs:positiveInteger}, etc.
 	\begin{verbatim}
 	<xs:element name="Person" type="xs:string"/>
 	\end{verbatim}
@@ -122,7 +136,7 @@ Type of an element is one of following.
 	  </xs:complexType>
 	</xs:element>
 	\end{verbatim}
-	An empty element is defined as empty \code{complexType}.
+	An \emph{empty element} is defined as empty \code{complexType}.
 	\begin{verbatim}
 	<xs:element name="EmptyElement">
 	  <xs:complexType>
@@ -131,7 +145,7 @@ Type of an element is one of following.
 	\end{verbatim}
 \end{itemize}
 
-Named type of an element is defined by XSD element \code{simpleType} (lack of features mentioned above) or \code{complexType} with specified attribute \code{name}. Its content is exactly the same as described above. There is of course no need to define built-in types.
+Named type of an element is defined by XSD element \code{simpleType} (lack of features mentioned above) or \code{complexType} with specified attribute \code{name}. Its content is exactly the same as described above. There is of course no need to define \emph{built-in types}.
 
 \begin{verbatim}
 <xs:complexType name="PersonType">
@@ -157,7 +171,7 @@ Default values for \code{minOccurs} and \code{maxOccurs} attributes are "1", if 
 <xs:element name="Person" type="PersonType" maxOccurs="3"/>
 \end{verbatim}
 
-Exporter supports types of mixed elements. Mixed element is an element that contains other elements as well as some text.
+Exporter supports types of \emph{mixed elements}. \emph{Mixed element} is an element that contains other elements as well as some text.
 
 \begin{verbatim}
 <mixedElement>
@@ -167,7 +181,7 @@ Exporter supports types of mixed elements. Mixed element is an element that cont
 </mixedElement>
 \end{verbatim}
 
-Mixed element type is defined as \code{complexType} with attribute \code{mixed="true"}. Definition of the element from the last example may be as following.
+\emph{Mixed element} type is defined as \code{complexType} with attribute \code{mixed="true"}. Definition of the element from the last example may be as following.
 
 \begin{verbatim}
 <xs:element name="mixedElement">
@@ -180,7 +194,7 @@ Mixed element type is defined as \code{complexType} with attribute \code{mixed="
 \end{verbatim}
 
 
-\subsection{Definition of attributes}
+\subsubsection{Definition of attributes}
 
 Attributes are defined by XSD element \code{xs:attribute} with attributes \code{name}, \code{type} and optional \code{use}. Elements \code{xs:attributes} have to be placed at the end of a \code{complexType} definition.
 
@@ -195,6 +209,10 @@ Attributes are defined by XSD element \code{xs:attribute} with attributes \code{
 \end{verbatim}
 
 Attribute \code{type} is one of a built-in types. If an attribute is obligatory, this is defined by specifying \code{use="required"}. 
+
+\subsubsection{Export of elements}
+
+TODO
 
 --------------------------------------------------------------------------------------
 

@@ -223,13 +223,34 @@ Names of parameters are self explanatory. Parameter \code{preprocessingResult} i
 
 There are two classes extending \code{AbstractElementsExporter}. \code{GlobalElementsExporter} and \code{RootElementExporter}. Their constructors has the same signature as constructor of \code{AbstractElementsExporter} and both have \code{run()} method to perform their function.\\
 
-\code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}. TODO exmaple. TODO names and number of occurences, see properties.
+\code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}. TODO exmaple. TODO names and number of occurences, see properties.\\
 
 \code{RootElementExporter} retrieves the root element from the result of preprocessing and creates its definition. This definition is also appended to the \code{indentator} (supplied to constructor) at a level of indentation, the \code{indentator} is set. Way of handling the root element's subelements depends on if these are global elements or not.\\
 
-Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. TODO example.
+Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. TODO example. This applies also to elements which are not global and their type is one of a built-in types. TODO example.
 
-Elements which are not global are defined recursively. TODO example.
+Elements which are not global and are not of a build-in type are defined recursively, at the place of their occurrence. TODO example.
+
+\subsubsection{Export of attributes}
+
+TODO translate. Export elementov zahrna taktiez export ich atributov, kedze atributy sa exportuje ako element <xs:attribute> v elemente <xs:complexType>.
+
+\subsection{Preferences}
+
+All settings provided by \jmodule{BasicXSDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicxsd.properties} package. It is possible to set the following. 
+\begin{itemize}
+	\item Turn off generation of global element types.
+	\item Minimal number of occurrences of element to define its type globally. (Only if generation of global elements is active.)
+	\item Number of spaces in output per one level of indentation.
+	\item Global type name prefix. It is a string which will be inserted before a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
+	\item Global type name suffix. It is a string which will be appended after a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
+\end{itemize}
+
+\section{Known problems and limitations}
+
+TODO namespaces
+TODO problem s vypnutym generovanim global elements
+TODO problem s rovnakymi zaciatkami sekvencii
  
 --------------------------------------------------------------------------------------
 

@@ -75,9 +75,13 @@ As mentioned above, preprocessing is implemented in \code{Preprocessor} class an
 	\item Find an instance of element by its name.
 \end{itemize}
 
-\subsubsection{TODO spravny vyraz sem}
+\subsubsection{How does it work}
 
 Constructor of \code{Preprocessor} class gets a list of elements and a number, defining minimal number of occurrences of an element to be defined globally. It first topologically sorts input elements to decide which of the elements is the root element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occur). Finally, for each element it decides whether to mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal to the number of occurrences provided on input.\\
+
+If it is desired to not generate global types, this feature can be turned off in preferences. However, turning it off is not recommended and in some cases it may cause invalidity of resulting XSD output. For more information, see \ref{section:problems}.\\
+
+Minimal number of occurrences of an element to define its type globally can be altered if preferences, as well. See \ref{subsection:preferences}.
 
 \subsubsection{Running preprocessor and obtaining its result}
 
@@ -94,6 +98,8 @@ XSD export itself is performed using classes derived from \code{AbstractElements
 To generate a human readable XSD output, it is necessary to apply correct indentation of XSD elements and their content. This is handled by \code{Indentator} class. This classes also serves as a buffer for string representation of XSD that the exporter is creating.\\
 
 Instance of this class holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
+
+Number of spaces characters per one level of indentation can be altered in project properties. See \ref{subsection:preferences}.
 
 \subsubsection{Definition of elements}
 
@@ -223,30 +229,115 @@ Names of parameters are self explanatory. Parameter \code{preprocessingResult} i
 
 There are two classes extending \code{AbstractElementsExporter}. \code{GlobalElementsExporter} and \code{RootElementExporter}. Their constructors has the same signature as constructor of \code{AbstractElementsExporter} and both have \code{run()} method to perform their function.\\
 
-\code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}. TODO exmaple. TODO names and number of occurences, see properties.\\
+\code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}.\\
+
+If a global type contains another elements, these are processed as following.
+
+\begin{itemize}
+	\item If a contained element is global or of a built-in type, its type is simply referenced.
+	\item If a contained element is not global nor of a build-in type, it is fully defined in a place of its occurrence inside the global type.
+\end{itemize}
+ 
+Name of a global type is derived from name of a corresponding global element by prefixing and suffixing it. Default prefix is "T" and default suffix is empty. These values can be changed in project properties.
+
+Examples of definition of global types.
+
+Type generated from element named "GlobalElement", containing elements "Text", which is string, and element "AnotherGlobalElement", which is another global element.
+
+\begin{verbatim}
+<xs:complexType name="TGlobalElement">
+  <xs:sequence>
+    <xs:element name="Text" type="xs:string"/>
+    <xs:element name="AnotherGlobalElement" type="TAnotherGlobalElement"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="TAnotherGlobalElement">
+  ...
+</xs:complexType>
+\end{verbatim}
+
+Type generated from element named "X", containing element "Y", which is not global element and contains elements "Text" and "GlobalElement" from the previous example. Element "X" has one mandatory string attribute named "id".
+
+\begin{verbatim}
+<xs:complexType name="TX">
+  <xs:sequence>
+    <xs:element name="Y">
+      <xs:complexType>
+        <xs:element name="Text" type="xs:string"/>
+        <xs:element name="GlobalElement" type="TGlobalElement"/>
+      </xs:complexType>
+    </xs:element>
+  </xs:sequence>
+  <xs:attribute name="id" type="xs:string"/>
+</xs:complexType>
+\end{verbatim}
 
 \code{RootElementExporter} retrieves the root element from the result of preprocessing and creates its definition. This definition is also appended to the \code{indentator} (supplied to constructor) at a level of indentation, the \code{indentator} is set. Way of handling the root element's subelements depends on if these are global elements or not.\\
 
-Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. TODO example. This applies also to elements which are not global and their type is one of a built-in types. TODO example.
+Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. This applies also to elements which are not global and their type is one of a built-in types. For example, root element "Root" contains one the following two elements. Global element "A" and string element "B".
 
-Elements which are not global and are not of a build-in type are defined recursively, at the place of their occurrence. TODO example.
+\begin{verbatim}
+<xs:complexType name="TA">
+  ...
+</xs:complexType>
+
+<xs:element name="Root">
+  <xs:complexType>
+    <xs:choice>
+      <xs:element name="A" type="TA"/>
+      <xs:element name="B" type="xs:string"/>
+    </xs:choice>
+  </xs:complexType>
+</xs:element>
+\end{verbatim}
+
+Elements which are not global and are not of a build-in type are defined recursively, at the place of their occurrence. For example, root element "Root" contains element "A", which contains two another string elements.
+
+\begin{verbatim}
+<xs:element name="Root">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="A">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="text1" type="xs:string"/>
+            <xs:element name="text2" type="xs:string"/>
+          </xs:sequence>          
+        </xs:complexType>
+      <xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+\end{verbatim}
 
 \subsubsection{Export of attributes}
 
-TODO translate. Export elementov zahrna taktiez export ich atributov, kedze atributy sa exportuje ako element <xs:attribute> v elemente <xs:complexType>.
+Export of attributes is done along with export of elements, as attributes are exported as XSD element \code{xs:attribute} in XSD element \code{xs:complexType}.
 
-\subsection{Preferences}
+\begin{verbatim}
+<xs:complexType name="...">
+  <xs:sequence>
+    ...
+  </xs:sequence>
+  <xs:attribute name="id" type="xs:string"/>
+</xs:complexType>
+\end{verbatim}
 
-All settings provided by \jmodule{BasicXSDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicxsd.properties} package. It is possible to set the following. 
+\subsection{Preferences} \label{subsection:preferences}
+
+All settings provided by \jmodule{BasicXSDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicxsd.properties} package. As mentioned above, it is possible to set the following. 
 \begin{itemize}
-	\item Turn off generation of global element types.
+	\item Turn off generation of global element types. Turning off this feature is not recommended as it may cause certain problems with validity of resulting XSD. See \ref{section:problems}.
 	\item Minimal number of occurrences of element to define its type globally. (Only if generation of global elements is active.)
 	\item Number of spaces in output per one level of indentation.
 	\item Global type name prefix. It is a string which will be inserted before a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
 	\item Global type name suffix. It is a string which will be appended after a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
 \end{itemize}
 
-\section{Known problems and limitations}
+\section{Known problems and limitations} \label{section:problems}
+
+This section describes some limitations of XSD export and some known problems, which occur in some specific cases of input grammar.
 
 TODO namespaces
 TODO problem s vypnutym generovanim global elements

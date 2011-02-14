@@ -327,6 +327,7 @@ Export of attributes is done along with export of elements, as attributes are ex
 \subsection{Preferences} \label{subsection:preferences}
 
 All settings provided by \jmodule{BasicXSDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicxsd.properties} package. As mentioned above, it is possible to set the following. 
+
 \begin{itemize}
 	\item Turn off generation of global element types. Turning off this feature is not recommended as it may cause certain problems with validity of resulting XSD. See \ref{section:problems}.
 	\item Minimal number of occurrences of element to define its type globally. (Only if generation of global elements is active.)
@@ -339,51 +340,86 @@ All settings provided by \jmodule{BasicXSDExporter} are project-wide, the prefer
 
 This section describes some limitations of XSD export and some known problems, which occur in some specific cases of input grammar.
 
-TODO namespaces
-TODO problem s vypnutym generovanim global elements
-TODO problem s rovnakymi zaciatkami sekvencii
- 
---------------------------------------------------------------------------------------
+\subsection{Namespaces}
 
+\subsubsection{Description}
 
+This basic implementation of XSD export does not support and does not handle namespaces. That means that no namespace definitions are generated in a result, namespace definitions in input are processed as regular elements and attributes and namespace usages (namespace:element) are considered as a part of name of an element.
 
+\subsubsection{Workaround}
 
+To generate a valid XSD output, it is necessary to remove all namespace definitions and usages from input. If a presence of namespaces in a resulting XSD is necessary, they need to be inserted there manually.
 
+\subsection{XSD invalidity if generation of global element types is disabled}
 
+\subsubsection{Error conditions}
 
-First, global elements are exported. For each element, its type is defined as a global type. TODO rio example. This is done by passing global elements to \code{processGlobalElement} method.
+Following conditions have to be met to cause a problem.
 
-After global elements, others are exported by calling of method \code{processElement}, supplied by the top level element as its argument. Reference to a global element type is done simply by declaring element's name and type.
+\begin{itemize}
+	\item Generation of global element types if turned off (in project properties).
+	\item Input grammar contains a concatenation or an alternation regexp with several (two or more) same elements.
+\end{itemize}
+
+\subsubsection{Description}
+
+Example of a part of generated XSD.
 
 \begin{verbatim}
-<xs:element name="Person" type="PersonType"/>
+...
+  <xs:sequence>
+    <xs:element name="A">
+      ...
+    </xs:element>
+    <xs:element name="A">
+      ...
+    </xs:element>
+  <xs:sequence>
+...
 \end{verbatim}
 
+In XSD, it is not allowed to define elements with the same name in one sequence (and other XSD constructs).
 
+\subsubsection{Workaround}
 
-To sa deje rekurzivnym priechodom so startom v korenovom elemente. Elementy, ktorych typy su definovane globalne a elementy so vstavanymi typmi, su exportovane jednoducho, uvedenim ich mena a typu. Ostatne elementy su definovane na mieste. TODO rio priklady. Na toto je potrebne zavolat metodu \code{processElement} s korenovym elementov, ako argumentom.
+Do not turn the generation of global element types off.
 
+\subsection{"Unique Particle Attribution" problem}
 
+\subsubsection{Error conditions}
 
+This problem appears if input grammar contains an alternation of two or more concatenations, which begin with at least one same element. Part of a problematic XSD is for example following.
 
-Code exporting attributes is in \code{attributeToString()}. First thing this method does is to assess the domain of a particular atribute: this is a map indexed by attribute values containing number of occurences for each such attribute. Type definition of an attribute is generated in the \code{DomainUtils.getAttributeType()} method. Based on a user setting, this might decide to enumerate all possible values of this attribute using the \code{(a|b|c)} notation, otherwise it just returns \code{\#CDATA}.\\
-Attribute requiredness is assessed based on \code{required} metadata presence. If an attribute is not deemed required, it might have a default value: if a certain value is prominent in the attribute domain (based on user setting again), it is declared default.
+\begin{verbatim}
+...
+  <xs:choice>
+    <xs:sequence>
+      <xs:element name="A" type="TA"/>
+      <xs:element name="B" type="TB"/>
+    </xs:sequence>
+    <xs:sequence>
+      <xs:element name="A" type="TA"/>
+      <xs:element name="C" type="TC"/>
+    </xs:sequence>
+  </choice>
+...
+\end{verbatim}
 
-\subsection{Preferences}
+\subsubsection{Description}
 
-All settings provided by \jmodule{BasicDTDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicdtd.properties} package. As mentioned before, it is possible to set the following. 
-\begin{itemize}
-	\item Maximum attribute domain size which is exported as a list of all values (\code{(a|b|c)} notation).
-	\item Minimal ratio an attribute value in the domain needs to have in order to be declared default.
-\end{itemize}
+If error conditions are met, input XMLs are not valid against a generated XSD.
 
 \section{Data flow}
 
 Flow of data in this module is following.
 \begin{enumerate}
-	\item \code{SchemaGeneratorImpl} topologically sorts elements (rules) it got on input.
-	\item For each element, relevant portion of DTD schema is generated.
-	\item String representation of the schema is returned along with the information that file extension should be "dtd".
+	\item \code{Preprocessor} topologically sorts elements (rules) it got on input.
+	\item For each element, its occurrence count is computed.
+	\item Unused elements (occurrence count equals 0) are removed.
+	\item For each element, it is determined if it type will be defined as a global type or not.
+	\item For each global element, its type is exported to a XSD representation by \code{GlobalElementsExporter}.
+	\item Root element and recursively all remaining elements are exported to a XSD representation by \code{RootElementExporter}.
+	\item String representation of the schema is returned along with the information that file extension should be "xsd".
 \end{enumerate}
 
 \nocite{*}

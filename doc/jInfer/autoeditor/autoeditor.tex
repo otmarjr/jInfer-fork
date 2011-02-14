@@ -1,0 +1,91 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
+\usepackage{xstring}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
+\def\.{\discretionary{}{}{}}
+\newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
+
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{18cm}
+
+\def\mftitle{jInfer AutoEditor Module Description}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+\maketitle
+\noindent Target audience: developers willing to extend jInfer, specifically alter displaying of automata .
+
+\noindent \begin{tabular}{|l|l|} \hline
+Responsible developer: & Mário Mikula \\ \hline
+Required tokens:       & org.openide.windows.WindowManager \\ \hline
+Provided tokens:       & none \\ \hline
+Module dependencies:   & Base \\ 
+					   & JUNG \\ \hline
+Public packages:       & cz.cuni.mff.ksi.jinfer.autoeditor \\ 
+					   & cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer \\
+   					   & cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts \\
+   					   & cz.cuni.mff.ksi.jinfer.autoeditor.gui.component \\ \hline
+\end{tabular}
+
+\section{Introduction}
+
+This is an implementation of a \jmodule{AutoEditor} TODO
+
+\section{Structure}
+
+TODO TODO TODO
+
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
+\begin{enumerate}
+	\item Preprocessing.
+	\item The export to a string representation itself.
+\end{enumerate}
+Method \code{start()} first creates an instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such as which elements should be globally defined and which element is the root element.\\
+
+Afterwards, \code{start()} method uses instances of classes derived from \code{AbstractElementsProcessor} class to export elements of input grammar.
+
+
+\subsection{Preferences}
+
+TODO
+
+All settings provided by \jmodule{BasicXSDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicxsd.properties} package. As mentioned above, it is possible to set the following. 
+
+\begin{itemize}
+	\item Turn off generation of global element types. Turning off this feature is not recommended as it may cause certain problems with validity of resulting XSD. See \ref{section:problems}.
+	\item Minimal number of occurrences of element to define its type globally. (Only if generation of global elements is active.)
+	\item Number of spaces in output per one level of indentation.
+	\item Global type name prefix. It is a string which will be inserted before a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
+	\item Global type name suffix. It is a string which will be appended after a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
+\end{itemize}
+
+
+\nocite{*}
+\newpage
+\bibliographystyle{alpha}
+\bibliography{literature}
+
+\end{document}

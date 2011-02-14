@@ -110,7 +110,7 @@ public class SAXDocumentElement {
   }
 
   /**
-   * Returns value of <i>name</i> attribute or <i>ref<i/> attribute if any of them can be used.
+   * Returns value of <i>name</i> attribute or <i>ref</i> attribute if any of them can be used.
    * @return Value of either attribute or empty string if neither value is present.
    */
   public String getNameOrRefValue() {

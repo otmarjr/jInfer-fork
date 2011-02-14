@@ -38,6 +38,10 @@ public final class SAXHelper {
 
   private SAXHelper() {}
 
+  /**
+   * Pseudo-unique name for the container elements that are pushed in contentStack
+   * the name should be distict from every element name in the actual schema
+   */
   private static final String CONTAINER_NAME = "__conTAIner__";
 
   /**

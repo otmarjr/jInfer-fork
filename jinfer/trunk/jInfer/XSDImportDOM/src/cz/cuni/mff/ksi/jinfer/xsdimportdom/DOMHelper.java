@@ -238,9 +238,10 @@ public final class DOMHelper {
     if (child.hasAttribute(XSDAttribute.USE.toString())) {
       if (XSDUtility.REQUIRED.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
         attrMeta.put(IGGUtils.REQUIRED, Boolean.TRUE);
-      } else if (XSDUtility.OPTIONAL.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
-        attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
       }
+      //else if (XSDUtility.OPTIONAL.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
+      //  attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
+      //}
     }
     return attrMeta;
   }

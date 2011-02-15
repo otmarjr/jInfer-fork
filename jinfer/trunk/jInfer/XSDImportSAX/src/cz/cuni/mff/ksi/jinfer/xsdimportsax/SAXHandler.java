@@ -386,6 +386,7 @@ public class SAXHandler extends DefaultHandler {
       } else {
         // set correct type
         old.getSubnodes().setType(entry.getSubnodes().getType());
+        old.getSubnodes().setInterval(entry.getSubnodes().getInterval());
       }
       // create correct prefix
       final List<String> context = old.getContext();

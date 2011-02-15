@@ -112,12 +112,18 @@ public final class TypeUtils {
 
     // Element may have set its type. If type is not set,
     // element will be defined as "xs:string".
-    final String type = ((SimpleData)element.getSubnodes().getContent()).getContentType();
-    if (!BaseUtils.isEmpty(type)) {
-      return "xs:" + type;
-    } else {
-      return "xs:string";
+    final Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
+    final AbstractStructuralNode content = subnodes.getContent();
+
+    // Content may be null for example when element is CONCATENATION of two SIMPLE_DATA TOKENS
+    if (content != null) {
+      final String type = ((SimpleData)content).getContentType();
+      if (!BaseUtils.isEmpty(type)) {
+        return "xs:" + type;
+      }
     }
+
+    return "xs:string";
   }
 
   /**

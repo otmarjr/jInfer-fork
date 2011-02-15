@@ -55,9 +55,10 @@ public final class SAXHelper {
     final Map<String, Object> attrMeta = new HashMap<String, Object>();
     if (XSDUtility.REQUIRED.equals(el.getAttributeValue(XSDAttribute.USE))) {
       attrMeta.put(IGGUtils.REQUIRED, Boolean.TRUE);
-    } else if (XSDUtility.OPTIONAL.equals(el.getAttributeValue(XSDAttribute.USE))) {
-      attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
     }
+    //else if (XSDUtility.OPTIONAL.equals(el.getAttributeValue(XSDAttribute.USE))) {
+    //  attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
+    //}
     return attrMeta;
   }
 

@@ -52,21 +52,75 @@ Public packages:       & cz.cuni.mff.ksi.jinfer.autoeditor \\
 
 \section{Introduction}
 
-This is an implementation of a \jmodule{AutoEditor} TODO
+This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, so the process of inference can be easily made user interactive.
 
 \section{Structure}
 
-TODO TODO TODO
+Structure of \jmodule{AutoEditor} can be divided into following 3 main parts.
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
-\begin{enumerate}
-	\item Preprocessing.
-	\item The export to a string representation itself.
-\end{enumerate}
-Method \code{start()} first creates an instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such as which elements should be globally defined and which element is the root element.\\
+\begin{itemize}
+	\item API - API to display automaton in GUI.
+	\item Base classes - Classes providing basic functionality that can be extended and combined to achieve desired visualization of an automaton.
+	\item Derived classes - Classes derived from the base classes that are used in existing modules and simultaneously serve as examples.
+\end{itemize}
 
-Afterwards, \code{start()} method uses instances of classes derived from \code{AbstractElementsProcessor} class to export elements of input grammar.
+First, base classes and a creation of automaton visualization will be described.
 
+\subsection{Base classes}
+
+Main two classes representing visualization of automaton are \code{Visualizer} and \code{AbstractComponent}. \code{Visualizer} is a graphical representation of automaton and \code{AbstractComponent} is a panel (extends \code{JPanel}) containing the \code{Visualizer} which will be displayed in GUI.
+TODO obrazok ako AC dedi od JPanelu a obsahuje Visualizer.
+
+\subsubsection{Visualizer}
+
+TODO translate
+
+Trieda \code{Visualizer} dedi od JUNGoveho \code{VisualizationViewer}, takze poskytuje vsetky jeho metody a navyse podporu pre ulozenie automatu do obrazku - metody \code{saveImage()} a \code{getSupportedImageFormatNames()}. Pre ulozenie obrazku vsak tieto metody nie je nutne volat, pretoze AutoEditor GUI obsahuje tlacitko na ulozenie prave vykresleneho automatu do obrazku (viz dalej).
+
+Constructor method bere ako argument instanciu triedy \code{Layout}. Viac informacii o tejto triede a jej pouzitie v kapitole TODO ref.
+
+TODO obrazok ako Visualizer dedi od VisualizationVieweru a obsahuje Layout.
+
+\subsubsection{AbstractComponent}
+
+TODO translate
+
+Trieda \code{AbstractComponent} je panel v ktorom bude vykresleny automat, presnejsie Visualizer reprezentujuci nejaky automat. Dedi od triedy \code{JPanel}, takze poskytuje vsetky jej metody a spravanie. Navyse poskytuje metody
+
+setVisualizer()
+getVisualizer()
+waitForGuiDone()
+guiDone()
+guiInterrupt()
+guiInterrupted()
+
+a abstract metodu
+getAutomatonDrawPanel()
+
+Purpose tejto triedy je rozsirit ju a poskladat si panel aky sa hodi (tlacitka, napisy, ...) s tym, ze musi obsahovat aspon jeden JPanel, v ktorom bude vykresleny nastaveny Visualizer. Ucel metody getAutomatonDrawPanel() je vratit tento JPanel, aby AutoEditor vedel, kam ma ten Visualizer vykreslit.
+
+Ak je ziadany user interaktivita, je nutne si podporu pre nu zahrnut prave do tejto triedy. Pre viac informacii viz TODO ref.
+
+Visualizer sa nenastavuje v konstruktore z toho dovodu, ze casto je ziaduce, aby sa na rovnakom paneli kreslilo postupne viac roznych automatov. Na to nie je nutne vyrabat novu instanciu, ale staci na jednej instancii volat setVisualizer().
+
+\subsection{API}
+
+API AE je velmi jednoduche. Trieda \code{AutoEditor} poskytuje tieto 3 staticke metody.
+
+drawComponentAsync()
+drawComponentAndWaitForGUI()
+closeTab()
+
+\subsection{Derived classes}
+
+StatePickingVisualizer
+StatesPickingVisualizer
+
+\subsection{GUI}
+
+TODO
+
+tlacitka
 
 \subsection{Preferences}
 

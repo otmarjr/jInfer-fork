@@ -91,7 +91,7 @@ public abstract class AbstractComponent<T> extends JPanel {
    * {@link Automaton} is shown in AutoEditor.
    * @throws InterruptedException
    */
-  public void waitForGUIDone() throws InterruptedException {
+  public void waitForGuiDone() throws InterruptedException {
     synchronized (monitor) {
       monitor.wait();
     }

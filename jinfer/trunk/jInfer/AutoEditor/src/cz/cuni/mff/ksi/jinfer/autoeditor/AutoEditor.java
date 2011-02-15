@@ -61,7 +61,7 @@ public final class AutoEditor {
    */
   public static boolean drawComponentAndWaitForGUI(final AbstractComponent component) throws InterruptedException {
     drawComponentAsync(component);
-    component.waitForGUIDone();
+    component.waitForGuiDone();
 
     if (component.guiInterrupted()) {
       throw new InterruptedException();

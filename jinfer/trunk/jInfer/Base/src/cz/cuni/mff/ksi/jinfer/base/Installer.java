@@ -51,6 +51,9 @@ public class Installer extends ModuleInstall {
     @Override
     protected void append(final LoggingEvent le) {
       final InputOutput io = IOProvider.getDefault().getIO("jInfer", false);
+      if (io.isClosed()) {
+        io.select();
+      }
 
       final Color textColor = getLogLevelColor(le.getLevel());
 

@@ -56,12 +56,13 @@ This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it prov
 
 \section{Structure}
 
-Structure of \jmodule{AutoEditor} can be divided into following 3 main parts.
+Structure of \jmodule{AutoEditor} can be divided into following four main parts.
 
 \begin{itemize}
 	\item API - API to display automaton in GUI.
 	\item Base classes - Classes providing basic functionality that can be extended and combined to achieve desired visualization of an automaton.
 	\item Derived classes - Classes derived from the base classes that are used in existing modules and simultaneously serve as examples.
+	\item Layout factory - TODO
 \end{itemize}
 
 First, base classes and a creation of automaton visualization will be described.
@@ -80,6 +81,24 @@ Trieda \code{Visualizer} dedi od JUNGoveho \code{VisualizationViewer}, takze pos
 Constructor method bere ako argument instanciu triedy \code{Layout}. Viac informacii o tejto triede a jej pouzitie v kapitole TODO ref.
 
 TODO obrazok ako Visualizer dedi od VisualizationVieweru a obsahuje Layout.
+
+\subsubsection{PluggableVisualizer}
+
+Tried \code{PluggableVisualizer} je rozsirenim triedy \code{Visualizer}, ktora poskytuje navyse jednoduchy sposob ako zapajat mouse pluginy.
+
+Mouse plugin je trieda JUNGu, ktore rozsiruje moznosti Visualizera o pracu s mysou (vyberanie stavov, zoom, ...). Spomenut uz existujuce pluginy a ref.
+
+TODO obrazok ako PluggableVisualizer dedi od Visualizeru
+
+Metody:
+
+addGraphMousePlugin()
+setVertexLabelTransformer()
+replaceVertexLabelTransformer()
+setEdgeLabelTransformer()
+replaceEdgeLabelTransformer()
+
+By default obsahuje 2 pluginy, jeden pre zoom a jeden pre posuvanie canvasu. V pripade potreby je pozne ich odstanit pomocou metod VisualizationVieweru. TODO dopisat.
 
 \subsubsection{AbstractComponent}
 
@@ -113,8 +132,14 @@ closeTab()
 
 \subsection{Derived classes}
 
+Popis tried pouzitych v inych moduloch, ktore sluzia zaroven ako priklad.
+
 StatePickingVisualizer
 StatesPickingVisualizer
+
+\subsection{Layout factory}
+
+TODO
 
 \subsection{GUI}
 

@@ -27,8 +27,10 @@ import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.TranslatingGraphMousePlugin;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.collections15.Transformer;
 
 /**
@@ -44,6 +46,7 @@ public class PluggableVisualizer<T> extends Visualizer<T> {
   private static final long serialVersionUID = 353474565;
 
   private final PluggableGraphMouse pluggableGraphMouse;
+  private final Set<GraphMousePlugin> graphMousePlugins;
 
   /**
    * Constructs instance with specified {@link Layout}, default graph mouse
@@ -58,8 +61,10 @@ public class PluggableVisualizer<T> extends Visualizer<T> {
     setEdgeLabelTransformer(new ToStringLabeller<Step<T>>());
     
     pluggableGraphMouse = new PluggableGraphMouse();
+    graphMousePlugins = new HashSet<GraphMousePlugin>();
     for (final GraphMousePlugin graphMousePlugin : getDefaultGraphMousePlugins()) {
       pluggableGraphMouse.add(graphMousePlugin);
+      graphMousePlugins.add(graphMousePlugin);
     }
     setGraphMouse(pluggableGraphMouse);
   }
@@ -72,6 +77,25 @@ public class PluggableVisualizer<T> extends Visualizer<T> {
   public void addGraphMousePlugin(final GraphMousePlugin graphMousePlugin) {
     pluggableGraphMouse.add(graphMousePlugin);
     setGraphMouse(pluggableGraphMouse);
+  }
+
+  /**
+   * Removes graph mouse plugin.
+   *
+   * @param graphMousePlugin
+   */
+  public void removeGraphMousePlugin(final GraphMousePlugin graphMousePlugin) {
+    graphMousePlugins.remove(graphMousePlugin);
+    pluggableGraphMouse.remove(graphMousePlugin);
+  }
+
+  /**
+   * Retrieves all used graph mouse plugins.
+   *
+   * @return Active graph mouse plugins.
+   */
+  public Set<GraphMousePlugin> getGraphMousePlugins() {
+    return graphMousePlugins;
   }
 
   /**

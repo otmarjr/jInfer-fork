@@ -53,7 +53,7 @@ public final class LayoutHelperFactory {
   public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException {
     final Properties p = RunningProject.getActiveProjectProps(LayoutPropertiesPanel.NAME);
 
-    final LayoutF f = ModuleSelectionHelper.lookupImpl(LayoutF.class, p.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME));
+    final LayoutFactory f = ModuleSelectionHelper.lookupImpl(LayoutFactory.class, p.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME));
     return f.createLayout(automaton, createGraph(automaton), edgeLabelTransformer);
   }
 

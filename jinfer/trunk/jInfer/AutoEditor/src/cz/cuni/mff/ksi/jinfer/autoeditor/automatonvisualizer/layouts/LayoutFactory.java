@@ -27,11 +27,11 @@ import edu.uci.ics.jung.graph.Graph;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * TODO anti Comment! And rename - what does "F" mean?
+ * TODO anti Comment!
  *
  * @author anti
  */
-public interface LayoutF extends NamedModule, Capabilities, UserModuleDescription {
+public interface LayoutFactory extends NamedModule, Capabilities, UserModuleDescription {
 
   <T> Layout<State<T>, Step<T>> createLayout(Automaton<T> automaton, Graph<State<T>, Step<T>> graph, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException;
 }

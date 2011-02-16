@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
@@ -34,8 +34,8 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Julie Vyhnanovska, rio, anti
  */
-@ServiceProvider(service = LayoutF.class)
-public class VyhnanovskaLayoutFactory implements LayoutF {
+@ServiceProvider(service = LayoutFactory.class)
+public class VyhnanovskaLayoutFactory implements LayoutFactory {
 
   public static final String NAME = "VyhnanovskaLayout";
   public static final String DISPLAY_NAME = "Vyhnanovska Layout";

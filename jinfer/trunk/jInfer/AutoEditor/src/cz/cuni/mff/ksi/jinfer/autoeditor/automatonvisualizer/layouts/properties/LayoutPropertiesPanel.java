@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska.VyhnanovskaLayoutFactory;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
@@ -113,7 +113,7 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
 
   @SuppressWarnings({"PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
   private void graphRendererActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graphRendererActionPerformed
-    final LayoutF factory = ModuleSelectionHelper.lookupImpl(LayoutF.class,
+    final LayoutFactory factory = ModuleSelectionHelper.lookupImpl(LayoutFactory.class,
             ((NamedModule) graphRenderer.getSelectedItem()).getName());
     desc.setText(htmlize(factory.getUserModuleDescription()));
   }//GEN-LAST:event_graphRendererActionPerformed
@@ -121,8 +121,8 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public final void load() {
     graphRenderer.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupImpls(LayoutF.class).toArray()));
-    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupImpl(LayoutF.class, properties.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME)));
+            ModuleSelectionHelper.lookupImpls(LayoutFactory.class).toArray()));
+    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupImpl(LayoutFactory.class, properties.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME)));
   }
 
   @Override

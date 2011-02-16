@@ -49,7 +49,7 @@ public class Visualizer<T> extends VisualizationViewer<State<T>, Step<T>> {
   private final Set<String> supportedImageFormatNames;
 
   protected Dimension legendDimension = new Dimension(400, 50);
-
+  
   /**
    * Constructs instance with specified {@link Layout}.
    *

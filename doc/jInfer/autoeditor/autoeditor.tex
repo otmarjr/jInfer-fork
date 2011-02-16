@@ -54,6 +54,8 @@ Public packages:       & cz.cuni.mff.ksi.jinfer.autoeditor \\
 
 This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, thus the process of inference can be easily made user interactive.
 
+TODO spomenut vsade packages
+
 \section{Structure}
 
 Structure of \jmodule{AutoEditor} can be divided into following four main parts.
@@ -171,21 +173,29 @@ Programmer implementing an extension of \code{AbstractComponent} is not forced t
 
 \code{Visualizer} is not set in constructor, because it is often desired to subsequently display several different automata (\code{Visualizer}s) in the same panel. In this case it is not needed to create new instance of \code{AbstractComponent} for each \code{Visualizer}, but subsequently call \code{setVisualizer()} method using one instance of \code{AbstractComponent}.
 
-\subsubsection{AbstractComponent user-interactivity support} \label{subsubsection:AbstractComponent user-interactivity support}
+\subsubsection{AbstractComponent user interactivity support} \label{subsubsection:AbstractComponent user-interactivity support}
 
-Ak je ziadany user interaktivita, je nutne si podporu pre nu zahrnut prave do tejto triedy. Pre viac informacii viz TODO ref.
+If some kind of user interactivity is desired, \code{AbstractComponent} is a right place to implement it.\\
 
-metody
-waitForGuiDone
-guiDone
+To display the component in GUI and wait for some user action, method \code{waitForGuiDone()} is used. After displaying the component, calling of this method suspend running thread thus code execution of a caller module is stopped at the place of this call. However, GUI is ran in another thread, user is able to interact with the panel (component).\\*
+Do not call method \code{waitForGuiDone()} directly. It is called by \jmodule{AutoEditor} when displaying the component by \jmodule{AutoEditor} \emph{API} method named \code{drawComponentAndWaitForGUI()}. For more information on \jmodule{AutoEditor} \emph{API}, see TODO ref.\\
+
+Method important for a programmer extending \code{AbstractComponent} is named \code{guiDone()}. This method wakes up the thread suspended in \code{waitForGuiDone()} method and the programmer is responsible for calling it. Typically, it is called upon some user action like button click, vertex pick or other GUI event.\\*
+After calling of \code{guiDone()} method, code execution of the caller module is resumed and holding instance of the \code{AbstractComponent} it is able to retrieve results of user interaction, saved in its state.\\
+
+For examples of user-interactive component, see TODO ref. 
 
 \subsection{API}
 
-API AE je velmi jednoduche. Trieda \code{AutoEditor} poskytuje tieto 3 staticke metody.
+\jmodule{AutoEditor} \emph{API} is pretty simple. Package \code{cz.cuni.mff.ksi.jinfer.autoeditor} contains class \code{AutoEditor} with three public static methods.
 
-drawComponentAsync()
-drawComponentAndWaitForGUI()
-closeTab()
+\begin{itemize}
+	\item \code{drawComponentAsync()} - Displays given \code{AbstractComponent} asynchronously in a GUI thread and immediately returns. Use this method to just display automaton, without any user interaction and without waiting for any external event. This method does not support these.
+	\item \code{drawComponentAndWaitForGUI()} - Displays given \code{AbstractComponent} in a GUI thread and a caller thread is suspended until  \code{guiDone()} method of \code{AbstractComponent()} is called. This method can wait for GUI events thus is convenient for user interaction. How to achieve it is described in detail in \ref{subsubsection:AbstractComponent user-interactivity support}.
+	\item \code{closeTab()} - Closes \jmodule{AutoEditor}'s GUI tab and interrupts inference, if running.
+\end{itemize}
+
+For examples of API usage, see TODO ref.
 
 \subsection{Derived classes}
 

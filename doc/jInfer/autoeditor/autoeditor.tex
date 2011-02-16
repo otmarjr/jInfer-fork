@@ -103,11 +103,19 @@ Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automato
 
 \subsubsection{How to create a new Layout}
 
-TODO dopisat, translate, odkaz niekam na popis modulov
+\code{Layout}s can be implemented using the modular system. To create a new implementation of \code{Layout} interface, it is needed to create a new class implementing \code{LayoutFactory} interface (package \code{package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts}) and annotate it by the following code.
 
-\code{Layout}s su implementovane pomocou modularneho systemu. Pre vyrobu noveho je treba vyrobit triedu implementujucu LayoutFactory a spravne ju oanotovat.
+\begin{verbatim}
+@ServiceProvider(service = LayoutFactory.class)
+\end{verbatim}
+
+Created implementation will be shown in project properties in the \code{Layout} selection.\\
+
+System of modules is described in detail in TODO ref.
 
 \subsection{Base classes}
+
+This section describes classes implementing basic common functionality that are supposed to be extended to create a new suitable visualization of automata for a particular method of inference. The new visualization may involve a brand new GUI panel with buttons with various functions, user interaction like selecting states or edges and others.\\
 
 Main two classes representing visualization of automaton are \code{Visualizer} and \code{AbstractComponent}. \code{Visualizer} is a graphical representation of automaton and \code{AbstractComponent} is a panel (extends \code{JPanel}) containing the \code{Visualizer} which will be displayed in GUI.
 TODO obrazok ako AC dedi od JPanelu a obsahuje Visualizer.
@@ -116,25 +124,32 @@ TODO obrazok ako AC dedi od JPanelu a obsahuje Visualizer.
 
 \code {Visualizer} class extends JUNG \code{VisualizationViewer} class, so it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see TODO ref.\\
 
-Constructor has one argument, instance of \code{Layout} class created from an automaton, typically by \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
+Constructor has one argument, instance of \code{Layout} interface created from an automaton, typically by \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
 
 TODO obrazok ako Visualizer dedi od VisualizationVieweru a obsahuje Layout.
 
 \subsubsection{PluggableVisualizer}
 
-Tried \code{PluggableVisualizer} je rozsirenim triedy \code{Visualizer}, ktora poskytuje navyse jednoduchy sposob ako zapajat mouse pluginy.
+\code{PluggableVisualizer} class is extension of \code{Visualizer} class, which primarily provides an easy way to plug \emph{graph mouse plugins}.\\
 
-Mouse plugin je trieda JUNGu, ktore rozsiruje moznosti Visualizera o pracu s mysou (vyberanie stavov, zoom, ...). Spomenut uz existujuce pluginy a ref.
+\emph{Graph mouse plugin}s are classes implementing JUNG \code{GraphMousePlugin} interface and their purpose is to enhance \code{Visualizer} with mouse support.\\
+
+By default, instance of \code{PluggableVisualizer} is constructed with two plugins enabled. They are \code{ScalingGraphMousePlugin}, providing zooming, and \code{TranslatingGraphMousePlugin}, providing translating the displayed automaton in the x and y direction. In the most cases, these plugins are useful but if they are not wanted they can be removed using methods \code{getGraphMousePlugins()} and \code{removeGraphMousePlugin()}.\\
 
 TODO obrazok ako PluggableVisualizer dedi od Visualizeru
 
-Metody:
+Public (not inherited) methods of \code{PluggableVisualizer}.
 
-addGraphMousePlugin()
-setVertexLabelTransformer()
-replaceVertexLabelTransformer()
-setEdgeLabelTransformer()
-replaceEdgeLabelTransformer()
+TODO
+\begin{itemize}
+	\item addGraphMousePlugin()
+	\item removeGraphMousePlugin()
+	\item getGraphMousePlugins()
+	\item setVertexLabelTransformer()
+	\item replaceVertexLabelTransformer()
+	\item setEdgeLabelTransformer()
+	\item replaceEdgeLabelTransformer()
+\end{itemize}
 
 By default obsahuje 2 pluginy, jeden pre zoom a jeden pre posuvanie canvasu. V pripade potreby je pozne ich odstanit pomocou metod VisualizationVieweru. TODO dopisat.
 

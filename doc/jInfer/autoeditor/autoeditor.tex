@@ -69,23 +69,43 @@ First, \code{Layout}s and use of base classes to create a visualization of autom
 
 \subsection{Layout}
 
-\code{Layout} is a JUNG interface responsible primarily of representation of automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software. TODO odkazy v predchadzajucej vete.
+\code{Layout} is a JUNG interface responsible primarily of representation of automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software. TODO odkazy v predchadzajucej vete.\\
 
 Class providing creation of \code{Layout} instances is named \code{LayoutHelperFactory}.
 
-\subsubsection{Vyhnanovska Layout}
+\subsubsection{Vyhnanovska Layout} \label{subsubsection:vyhnanovskaLayout}
 
-As mentioned above, this Layout was implemented by \emph{Julie Vyhnanovska} as a part of her master thesis. TODO link? It positions automaton states to a square grid. This \code{Layout} gives good results for relatively small automata (about 10 states of less) but for larger ones, the results are quite disarranged and confused.
+As mentioned above, this Layout was implemented by \emph{Julie Vyhnanovska} as a part of her master thesis. TODO link? It positions automaton states to a square grid. This \code{Layout} gives good results for relatively small automata (about 10 states of less) but for larger ones, the results are quite disarranged and confused.\\
 
 Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska}.
 
-\subsubsection{Graphviz Layout}
+\subsubsection{Graphviz Layout} \label{subsubsection:graphvizLayout}
 
-\code{Graphviz Layout} uses \emph{Graphviz}, third-party graph visualization software, to create positions of automaton states. TODO link? To use this \code{Layout}, \emph{Graphviz} has to be installed and path to \emph{dot} binary has to be set in options. This \code{Layout} gives nice results even on large automata.
+\code{Graphviz Layout} uses \emph{Graphviz}, third-party graph visualization software, to create positions of automaton states. TODO link? To use this \code{Layout}, \emph{Graphviz} has to be installed and path to \emph{dot} binary has to be set in options. This \code{Layout} gives nice results even on large automata.\\
+
+TODO ako presne ziskava pozicie z graphvizu
 
 Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz}.
 
-\subsubsection{LayoutHelperFactory}
+\subsubsection{LayoutHelperFactory} \label{subsubsection:LayoutHelperFactory}
+
+In project properties, it is possible to select a \code{Layout} to be used to display automata. \code{LayoutHelperFactory} is class, providing just one static method, responsible for creating instances of \code{Layout}s according to a selection in project properties.\\
+
+This method has following signature.
+
+\begin{verbatim}
+public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException;
+\end{verbatim}
+
+The first argument is a automaton to create a layout from. The second is transformer to transform an instance of automaton edge to its string representation, required by the \code{Graphviz Layout}.
+
+Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts}.
+
+\subsubsection{How to create a new Layout}
+
+TODO dopisat, translate, odkaz niekam na popis modulov
+
+\code{Layout}s su implementovane pomocou modularneho systemu. Pre vyrobu noveho je treba vyrobit triedu implementujucu LayoutFactory a spravne ju oanotovat.
 
 \subsection{Base classes}
 
@@ -94,9 +114,9 @@ TODO obrazok ako AC dedi od JPanelu a obsahuje Visualizer.
 
 \subsubsection{Visualizer}
 
-\code {Visualizer} class extends JUNG \code{VisualizationViewer} class, so it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save a save an image of displayed automaton. For information on how to to this, see TODO ref.
+\code {Visualizer} class extends JUNG \code{VisualizationViewer} class, so it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see TODO ref.\\
 
-Constructor has one argument, instance of \code{Layout} class. \code{Layout} class is described in TODO ref.
+Constructor has one argument, instance of \code{Layout} class created from an automaton, typically by \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
 
 TODO obrazok ako Visualizer dedi od VisualizationVieweru a obsahuje Layout.
 

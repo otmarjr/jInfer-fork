@@ -41,9 +41,9 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   public static final String SIMPLIFIER = "simplifier";
   public static final String SCHEMA_GENERATOR = "schemagenerator";
 
-  private static final String DEFAULT_I_G_G = "Basic_IG_Generator";
-  private static final String DEFAULT_SIMPL = "TwoStepSimplifier";
-  private static final String DEFAULT_SCHEMA_G = "Basic_XSD_exporter";
+  public static final String DEFAULT_I_G_G = "Basic_IG_Generator";
+  public static final String DEFAULT_SIMPL = "TwoStepSimplifier";
+  public static final String DEFAULT_SCHEMA_G = "Basic_XSD_exporter";
 
   public ModuleSelectionPropertiesPanel(final Properties properties) {
     super(properties);

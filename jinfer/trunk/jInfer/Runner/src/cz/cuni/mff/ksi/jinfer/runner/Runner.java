@@ -98,7 +98,7 @@ public class Runner {
     simplifier = ModuleSelectionHelper.lookupImpl(Simplifier.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
-            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMA_GENERATOR));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMA_GENERATOR, ModuleSelectionPropertiesPanel.DEFAULT_SCHEMA_G));
   }
 
   /**

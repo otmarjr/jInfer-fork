@@ -34,7 +34,6 @@ public final class LoggerPanel extends JPanel {
 
   private static final long serialVersionUID = 35345345456l;
 
-  private final LoggerController controller;
   private final Preferences preferences = NbPreferences.forModule(LoggerPanel.class);
   public static final String INTERNAL_LOG_LEVEL = "log.level.console";
   public static final String EXTERNAL_LOG_LEVEL = "log.level.file";
@@ -46,8 +45,8 @@ public final class LoggerPanel extends JPanel {
   public static final String ERROR_COLOR = "error.color";
   public static final String FATAL_COLOR = "fatal.color";
 
-  public LoggerPanel(final LoggerController controller) {
-    this.controller = controller;
+  public LoggerPanel() {
+    super();
     initComponents();
   }
 
@@ -61,12 +60,6 @@ public final class LoggerPanel extends JPanel {
   private void initComponents() {
     java.awt.GridBagConstraints gridBagConstraints;
 
-    jPanel1 = new javax.swing.JPanel();
-    internalLabel = new javax.swing.JLabel();
-    externalLabel = new javax.swing.JLabel();
-    externalLogCombo = new javax.swing.JComboBox();
-    internalLogCombo = new javax.swing.JComboBox();
-    jPanel2 = new javax.swing.JPanel();
     jPanel3 = new javax.swing.JPanel();
     jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
@@ -85,70 +78,6 @@ public final class LoggerPanel extends JPanel {
     jPanel4 = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
-
-    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jPanel1.border.title"))); // NOI18N
-    jPanel1.setLayout(new java.awt.GridBagLayout());
-
-    org.openide.awt.Mnemonics.setLocalizedText(internalLabel, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.internalLabel.text")); // NOI18N
-    internalLabel.setToolTipText(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.internalLabel.toolTipText")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    jPanel1.add(internalLabel, gridBagConstraints);
-
-    org.openide.awt.Mnemonics.setLocalizedText(externalLabel, org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.externalLabel.text")); // NOI18N
-    externalLabel.setToolTipText(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.externalLabel.toolTipText")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    jPanel1.add(externalLabel, gridBagConstraints);
-
-    externalLogCombo.setModel(LogLevels.getDefaultModel());
-    externalLogCombo.setMinimumSize(new java.awt.Dimension(100, 22));
-    externalLogCombo.setPreferredSize(new java.awt.Dimension(100, 22));
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(externalLogCombo, gridBagConstraints);
-
-    internalLogCombo.setModel(LogLevels.getDefaultModel());
-    internalLogCombo.setMinimumSize(new java.awt.Dimension(100, 22));
-    internalLogCombo.setPreferredSize(new java.awt.Dimension(100, 22));
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    jPanel1.add(internalLogCombo, gridBagConstraints);
-
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 215, Short.MAX_VALUE)
-    );
-    jPanel2Layout.setVerticalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 52, Short.MAX_VALUE)
-    );
-
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridheight = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    jPanel1.add(jPanel2, gridBagConstraints);
-
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-    gridBagConstraints.weightx = 1.0;
-    add(jPanel1, gridBagConstraints);
 
     jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(LoggerPanel.class, "LoggerPanel.jPanel3.border.title"))); // NOI18N
     jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -375,7 +304,7 @@ public final class LoggerPanel extends JPanel {
     jPanel5.setLayout(jPanel5Layout);
     jPanel5Layout.setHorizontalGroup(
       jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 191, Short.MAX_VALUE)
+      .addGap(0, 241, Short.MAX_VALUE)
     );
     jPanel5Layout.setVerticalGroup(
       jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,7 +334,7 @@ public final class LoggerPanel extends JPanel {
     );
     jPanel4Layout.setVerticalGroup(
       jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 63, Short.MAX_VALUE)
+      .addGap(0, 144, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -474,15 +403,6 @@ public final class LoggerPanel extends JPanel {
   }//GEN-LAST:event_jButton1ActionPerformed
 
   public void load() {
-    final String consoleLevel = preferences.get(INTERNAL_LOG_LEVEL, LogLevels.getConsoleThreshold());
-    final String fileLevel = preferences.get(EXTERNAL_LOG_LEVEL, LogLevels.getFileThreshold());
-
-    internalLogCombo.setSelectedItem(consoleLevel);
-    externalLogCombo.setSelectedItem(fileLevel);
-
-    LogLevels.setConsoleThreshold(consoleLevel);
-    LogLevels.setFileThreshold(fileLevel);
-
     panelTrace.setBackground(LogLevelUtils.getColorTrace());
     panelDebug.setBackground(LogLevelUtils.getColorDebug());
     panelInfo.setBackground(LogLevelUtils.getColorInfo());
@@ -492,15 +412,6 @@ public final class LoggerPanel extends JPanel {
   }
 
   public void store() {
-    final String consoleLevel = (String) internalLogCombo.getSelectedItem();
-    final String fileLevel = (String) externalLogCombo.getSelectedItem();
-
-    preferences.put(INTERNAL_LOG_LEVEL, consoleLevel);
-    preferences.put(EXTERNAL_LOG_LEVEL, fileLevel);
-
-    LogLevels.setConsoleThreshold(consoleLevel);
-    LogLevels.setFileThreshold(fileLevel);
-
     preferences.put(TRACE_COLOR, String.valueOf(panelTrace.getBackground().getRGB()));
     preferences.put(DEBUG_COLOR, String.valueOf(panelDebug.getBackground().getRGB()));
     preferences.put(INFO_COLOR, String.valueOf(panelInfo.getBackground().getRGB()));
@@ -513,10 +424,6 @@ public final class LoggerPanel extends JPanel {
     return true;
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JLabel externalLabel;
-  private javax.swing.JComboBox externalLogCombo;
-  private javax.swing.JLabel internalLabel;
-  private javax.swing.JComboBox internalLogCombo;
   private javax.swing.JButton jButton1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
@@ -524,8 +431,6 @@ public final class LoggerPanel extends JPanel {
   private javax.swing.JLabel jLabel4;
   private javax.swing.JLabel jLabel5;
   private javax.swing.JLabel jLabel6;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel jPanel3;
   private javax.swing.JPanel jPanel4;
   private javax.swing.JPanel jPanel5;

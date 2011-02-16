@@ -40,47 +40,56 @@ public final class LoggerController extends OptionsPanelController {
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
   private boolean changed;
 
+  @Override
   public void update() {
     getPanel().load();
     changed = false;
   }
 
+  @Override
   public void applyChanges() {
     getPanel().store();
     changed = false;
   }
 
+  @Override
   public void cancel() {
     // need not do anything special, if no changes have been persisted yet
   }
 
+  @Override
   public boolean isValid() {
     return getPanel().valid();
   }
 
+  @Override
   public boolean isChanged() {
     return changed;
   }
 
+  @Override
   public HelpCtx getHelpCtx() {
     return null; // new HelpCtx("...ID") if you have a help set
   }
 
+  @Override
   public JComponent getComponent(final Lookup masterLookup) {
     return getPanel();
   }
 
+  @Override
   public void addPropertyChangeListener(final PropertyChangeListener l) {
     pcs.addPropertyChangeListener(l);
   }
 
+  @Override
   public void removePropertyChangeListener(final PropertyChangeListener l) {
     pcs.removePropertyChangeListener(l);
   }
 
   private LoggerPanel getPanel() {
     if (panel == null) {
-      panel = new LoggerPanel(this);
+      panel = new LoggerPanel();
     }
     return panel;
   }

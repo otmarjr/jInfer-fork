@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz;
 
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutF;
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.LayoutFactory;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.properties.GraphvizUtils;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -49,8 +49,8 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author anti, rio
  */
-@ServiceProvider(service = LayoutF.class)
-public class GraphvizLayoutFactory implements LayoutF {
+@ServiceProvider(service = LayoutFactory.class)
+public class GraphvizLayoutFactory implements LayoutFactory {
 
   public static final String NAME = "GraphvizLayout";
   public static final String DISPLAY_NAME = "Graphviz Layout";

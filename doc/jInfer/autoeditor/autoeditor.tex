@@ -52,7 +52,7 @@ Public packages:       & cz.cuni.mff.ksi.jinfer.autoeditor \\
 
 \section{Introduction}
 
-This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, so the process of inference can be easily made user interactive.
+This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, thus the process of inference can be easily made user interactive.
 
 \section{Structure}
 
@@ -122,7 +122,7 @@ TODO obrazok ako AC dedi od JPanelu a obsahuje Visualizer.
 
 \subsubsection{Visualizer}
 
-\code {Visualizer} class extends JUNG \code{VisualizationViewer} class, so it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see TODO ref.\\
+\code {Visualizer} class extends JUNG \code{VisualizationViewer} class thus it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see TODO ref.\\
 
 Constructor has one argument, instance of \code{Layout} interface created from an automaton, typically by \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
 
@@ -138,42 +138,46 @@ By default, instance of \code{PluggableVisualizer} is constructed with two plugi
 
 TODO obrazok ako PluggableVisualizer dedi od Visualizeru
 
-Public (not inherited) methods of \code{PluggableVisualizer}.
+Public (not inherited) methods of \code{PluggableVisualizer} are the following. Their purpose is clear from their names, for details see their JavaDoc.
 
-TODO
 \begin{itemize}
-	\item addGraphMousePlugin()
-	\item removeGraphMousePlugin()
-	\item getGraphMousePlugins()
-	\item setVertexLabelTransformer()
-	\item replaceVertexLabelTransformer()
-	\item setEdgeLabelTransformer()
-	\item replaceEdgeLabelTransformer()
+	\item \code{addGraphMousePlugin()}
+	\item \code{removeGraphMousePlugin()}
+	\item \code{getGraphMousePlugins()}
+	\item \code{setVertexLabelTransformer()}
+	\item \code{replaceVertexLabelTransformer()}
+	\item \code{setEdgeLabelTransformer()}
+	\item \code{replaceEdgeLabelTransformer()}
 \end{itemize}
-
-By default obsahuje 2 pluginy, jeden pre zoom a jeden pre posuvanie canvasu. V pripade potreby je pozne ich odstanit pomocou metod VisualizationVieweru. TODO dopisat.
 
 \subsubsection{AbstractComponent}
 
-TODO translate
+\code{AbstractComponent} class is a representation of GUI panel containing an instance of \code{Visualizer} class for some automaton. It is inherited from \code{JPanel} class thus provides JPanel's method and behaviour. In addition, it provides the following methods.
 
-Trieda \code{AbstractComponent} je panel v ktorom bude vykresleny automat, presnejsie Visualizer reprezentujuci nejaky automat. Dedi od triedy \code{JPanel}, takze poskytuje vsetky jej metody a spravanie. Navyse poskytuje metody
+\begin{itemize}
+	\item \code{setVisualizer()} - Setter of \code{Visualizer}.
+	\item \code{getVisualizer()} - Getter of \code{Visualizer}.
+	\item \code{waitForGuiDone()} - Suspends its thread until method \code{guiDone} is called on this instance. Do not call this method directly, it is called by \jmodule{AutoEditor}. For more information, see \ref{subsubsection:AbstractComponent user-interactivity support}.
+	\item \code{guiDone()} - Wakes up this instance from a suspended state. For detailed description, see \ref{subsubsection:AbstractComponent user-interactivity support}.
+	\item \code{guiInterrupt()} - Called when \jmodule{AutoEditor}'s tab is closed to propagate information about terminating of inference to a caller of \jmodule{AutoEditor}. There is no need to called this method directly.
+	\item \code{guiInterrupted()} - Checks if \jmodule{AutoEditor} GUI was terminated by interrupt or regularly. Also, there is no need to call this method directly, it is called by \jmodule{AutoEditor}. For details, see TODO ref GUI.
+\end{itemize}
 
-setVisualizer()
-getVisualizer()
-waitForGuiDone()
-guiDone()
-guiInterrupt()
-guiInterrupted()
+Besides those methods, \code{AbstractComponent} has one abstract method, named \code{getAutomatonDrawPanel()}.\\
 
-a abstract metodu
-getAutomatonDrawPanel()
+Purpose of this class is to be extended to create own GUI panel, which displays some automaton using a supplied instance of \code{Visualizer}. Method \code{getAutomatonDrawPanel()} is meant to be overridden to returns an instance of \code{JPanel}, in which the \code{Visualizer} is to be drawn.\\
 
-Purpose tejto triedy je rozsirit ju a poskladat si panel aky sa hodi (tlacitka, napisy, ...) s tym, ze musi obsahovat aspon jeden JPanel, v ktorom bude vykresleny nastaveny Visualizer. Ucel metody getAutomatonDrawPanel() je vratit tento JPanel, aby AutoEditor vedel, kam ma ten Visualizer vykreslit.
+Programmer implementing an extension of \code{AbstractComponent} is not forced to place the \code{Visualizer} on its own. It is just needed to create \code{JPanel} and define \code{getAutomatonDrawPanel()} method to return this \code{JPanel}. \jmodule{AutoEditor} will take care of placing and displaying the \code{Visualizer} in the \code{JPanel}.\\
+
+\code{Visualizer} is not set in constructor, because it is often desired to subsequently display several different automata (\code{Visualizer}s) in the same panel. In this case it is not needed to create new instance of \code{AbstractComponent} for each \code{Visualizer}, but subsequently call \code{setVisualizer()} method using one instance of \code{AbstractComponent}.
+
+\subsubsection{AbstractComponent user-interactivity support} \label{subsubsection:AbstractComponent user-interactivity support}
 
 Ak je ziadany user interaktivita, je nutne si podporu pre nu zahrnut prave do tejto triedy. Pre viac informacii viz TODO ref.
 
-Visualizer sa nenastavuje v konstruktore z toho dovodu, ze casto je ziaduce, aby sa na rovnakom paneli kreslilo postupne viac roznych automatov. Na to nie je nutne vyrabat novu instanciu, ale staci na jednej instancii volat setVisualizer().
+metody
+waitForGuiDone
+guiDone
 
 \subsection{API}
 
@@ -189,10 +193,6 @@ Popis tried pouzitych v inych moduloch, ktore sluzia zaroven ako priklad.
 
 StatePickingVisualizer
 StatesPickingVisualizer
-
-\subsection{Layout factory}
-
-TODO
 
 \subsection{GUI}
 

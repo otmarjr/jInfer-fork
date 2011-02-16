@@ -103,7 +103,7 @@ Number of spaces characters per one level of indentation can be altered in proje
 
 \subsubsection{Definition of elements}
 
-Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language.\\
+Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language. This subsection covers only XSD features that the exporter supports. For list of supported features, see TODO ref.\\
 
 Element is defined by XSD element \code{element}, specifying its name and type. Let \code{xs} be XMLSchema namespace.
 
@@ -336,9 +336,21 @@ All settings provided by \jmodule{BasicXSDExporter} are project-wide, the prefer
 	\item Global type name suffix. It is a string which will be appended after a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
 \end{itemize}
 
-\section{Known problems and limitations} \label{section:problems}
+\section{Known issues and limitations} \label{section:problems}
 
-This section describes some limitations of XSD export and some known problems, which occur in some specific cases of input grammar.
+This section describes some limitations of XSD export and some known issues, which occur in some specific cases of input grammar.
+
+\subsection{Supported XSD features} \label{subsection:supportedXSDFeatures}
+
+This module is just basic implementation so many XSD features are not supported. List of supported XSD elements and their attributes follows. Let \code{xs} be XMLSchema namespace.
+
+\begin{itemize}
+	\item \code{xs:element} - \code{name}, \code{type}, \code{minOccurs}, \code{maxOccurs}
+	\item \code{xs:attribute} - \code{name}, \code{type}, \code{use}
+	\item \code{xs:complexType} - \code{name}, \code{mixed}
+	\item \code{xs:sequence} - \code{minOccurs}, \code{maxOccurs}
+	\item \code{xs:choice} - \code{minOccurs}, \code{maxOccurs}
+\end{itemize}
 
 \subsection{Namespaces}
 

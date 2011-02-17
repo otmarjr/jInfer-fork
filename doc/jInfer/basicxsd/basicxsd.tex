@@ -50,14 +50,16 @@ Public packages:       & none \\ \hline
 
 This is an implementation of a \jmodule{SchemaGenerator} exporting the inferred schema to XSD, supporting basic features of the language.
 
+For the whole document, let \code{xs} be XMLSchema namespace.
+
 \section{Structure}
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provider is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provid\-er is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
 \begin{enumerate}
 	\item Preprocessing.
 	\item The export to a string representation itself.
 \end{enumerate}
-Method \code{start()} first creates an instance of \code{Preprocessor} class supplied by rules (elements) it got in the simplified grammar on input. Phase of preprocessing is done by creating that instance (calling its constructor) and its purpose is to discover information such as which elements should be globally defined and which element is the root element.\\
+Method \code{start()} first creates an instance of \code{Preprocessor} class supplying the rules (elements) it got in the simplified grammar on input. Preprocessing itself is done by creating that instance (calling its constructor) and its results can be then retrieved by calling \code{getResult()} method. Purpose of preprocessing is to discover information necessary for export of elements. For example, determine elements which should be globally defined or which element is the root element.\\
 
 Afterwards, \code{start()} method uses instances of classes derived from \code{AbstractElementsProcessor} class to export elements of input grammar.
 
@@ -67,7 +69,7 @@ Code to handle preprocessing resides in package \code{cz.cuni.mff.ksi.jinfer.bas
 
 \subsubsection{Purpose}
 
-As mentioned above, preprocessing is implemented in \code{Preprocessor} class and its functions are following.
+As mentioned above, preprocessing is implemented in \code{Preprocessor} class and its is the following following.
 \begin{itemize}
 	\item Decide which elements should be defined globally.
 	\item Remove unused elements.
@@ -81,7 +83,7 @@ Constructor of \code{Preprocessor} class gets a list of elements and a number, d
 
 If it is desired to not generate global types, this feature can be turned off in preferences. However, turning it off is not recommended and in some cases it may cause invalidity of resulting XSD output. For more information, see \ref{section:problems}.\\
 
-Minimal number of occurrences of an element to define its type globally can be altered if preferences, as well. See \ref{subsection:preferences}.
+Minimal number of occurrences of an element to define its type globally can be altered if preferences as well. See \ref{subsection:preferences}.
 
 \subsubsection{Running preprocessor and obtaining its result}
 
@@ -103,9 +105,9 @@ Number of spaces characters per one level of indentation can be altered in proje
 
 \subsubsection{Definition of elements}
 
-Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language. This subsection covers only XSD features that the exporter supports. For list of supported features, see TODO ref.\\
+Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language. This subsection covers only XSD features that the exporter supports. For list of supported features, see \ref{subsection:supportedXSDFeatures}\\
 
-Element is defined by XSD element \code{element}, specifying its name and type. Let \code{xs} be XMLSchema namespace.
+Element is defined by XSD element \code{element}, specifying its name and type.
 
 \begin{verbatim}
 <xs:element name="Person" type="...
@@ -142,7 +144,7 @@ Type of an element is one of following.
 	  </xs:complexType>
 	</xs:element>
 	\end{verbatim}
-	An \emph{empty element} is defined as empty \code{complexType}.
+	An \emph{empty element} is defined as an empty \code{complexType}.
 	\begin{verbatim}
 	<xs:element name="EmptyElement">
 	  <xs:complexType>
@@ -214,34 +216,38 @@ Attributes are defined by XSD element \code{xs:attribute} with attributes \code{
 </xs:element>
 \end{verbatim}
 
-Attribute \code{type} is one of a built-in types. If an attribute is obligatory, this is defined by specifying \code{use="required"}. 
+Attribute \code{type} is one of a built-in types. If an attribute is obligatory, this is defined by specifying \code{use="required"}. Whether an element is obligatory can determined from its metadata by the following code, assuming \code{attribute} is an instance of \code{Attribute} class.
+
+\begin{verbatim}
+if (attribute.getMetadata().containsKey(IGGUtils.REQUIRED)) { ...
+\end{verbatim}
 
 \subsubsection{Export of elements}
 
 Classes to handle export of elements are in package \code{cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters}. Basic common logic is implemented in \code{AbstractElementsExporter} class. This class is abstract and is supposed to be extended by classes with a particular purpose. Its constructor signature is defined as following.
 
 \begin{verbatim}
-public AbstractElementsExporter(final PreprocessingResult preprocessingResult,
-                                final Indentator indentator)
+public AbstractElementsExporter(PreprocessingResult preprocessingResult,
+                                Indentator indentator)
 \end{verbatim}
 
-Names of parameters are self explanatory. Parameter \code{preprocessingResult} is a result of preprocessing. Parameter \code{indentator} is an instance of \code{Indentator} class to be used to buffer and indent output of exporter. This instance has not to be empty. Output of exporter is appended at the end of text held by the \code{indentator}. This behaviour is convenient when chaining output of several elements exporters.\\
+Names of parameters are self explanatory. Parameter \code{preprocessingResult} is a result of preprocessing. Parameter \code{indentator} is an instance of \code{Indentator} class to be used to buffer and indent output of exporter. This instance doesn't need to be empty . Output of exporter is appended at the end of text held by the \code{indentator}. This behaviour is convenient when chaining output of several elements exporters.\\
 
 There are two classes extending \code{AbstractElementsExporter}. \code{GlobalElementsExporter} and \code{RootElementExporter}. Their constructors has the same signature as constructor of \code{AbstractElementsExporter} and both have \code{run()} method to perform their function.\\
 
+\paragraph{GlobalElementsExporter}
 \code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}.\\
 
-If a global type contains another elements, these are processed as following.
+If a global type contains other elements, these are processed as following.
 
 \begin{itemize}
 	\item If a contained element is global or of a built-in type, its type is simply referenced.
-	\item If a contained element is not global nor of a build-in type, it is fully defined in a place of its occurrence inside the global type.
+	\item If a contained element is not global nor of a built-in type, it is fully defined in a place of its occurrence inside the global type.
 \end{itemize}
  
 Name of a global type is derived from name of a corresponding global element by prefixing and suffixing it. Default prefix is "T" and default suffix is empty. These values can be changed in project properties.
 
-Examples of definition of global types.
-
+\paragraph{Examples of definition of global types}
 Type generated from element named "GlobalElement", containing elements "Text", which is string, and element "AnotherGlobalElement", which is another global element.
 
 \begin{verbatim}
@@ -273,6 +279,7 @@ Type generated from element named "X", containing element "Y", which is not glob
 </xs:complexType>
 \end{verbatim}
 
+\paragraph{RootElementExporter}
 \code{RootElementExporter} retrieves the root element from the result of preprocessing and creates its definition. This definition is also appended to the \code{indentator} (supplied to constructor) at a level of indentation, the \code{indentator} is set. Way of handling the root element's subelements depends on if these are global elements or not.\\
 
 Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. This applies also to elements which are not global and their type is one of a built-in types. For example, root element "Root" contains one the following two elements. Global element "A" and string element "B".
@@ -292,7 +299,7 @@ Global elements (retrieves from the result of preprocessing) are defined by refe
 </xs:element>
 \end{verbatim}
 
-Elements which are not global and are not of a build-in type are defined recursively, at the place of their occurrence. For example, root element "Root" contains element "A", which contains two another string elements.
+Elements which are not global and are not of a built-in type are defined recursively, at the place of their occurrence. For example, root element "Root" contains element "A", which contains two other string elements.
 
 \begin{verbatim}
 <xs:element name="Root">
@@ -313,7 +320,7 @@ Elements which are not global and are not of a build-in type are defined recursi
 
 \subsubsection{Export of attributes}
 
-Export of attributes is done along with export of elements, as attributes are exported as XSD element \code{xs:attribute} in XSD element \code{xs:complexType}.
+Export of attributes is done alongside with export of elements, as attributes are exported as XSD element \code{xs:attribute} in XSD element \code{xs:complexType}.
 
 \begin{verbatim}
 <xs:complexType name="...">
@@ -329,11 +336,11 @@ Export of attributes is done along with export of elements, as attributes are ex
 All settings provided by \jmodule{BasicXSDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicxsd.properties} package. As mentioned above, it is possible to set the following. 
 
 \begin{itemize}
-	\item Turn off generation of global element types. Turning off this feature is not recommended as it may cause certain problems with validity of resulting XSD. See \ref{section:problems}.
-	\item Minimal number of occurrences of element to define its type globally. (Only if generation of global elements is active.)
+	\item Turn off generation of global element types. Turning off this feature is not recommended as it may cause certain problems with validity of the resulting XSD. See \ref{section:problems}.
+	\item Minimal number of occurrences of element to define its type globally. (Applies only if generation of global elements is active.)
 	\item Number of spaces in output per one level of indentation.
-	\item Global type name prefix. It is a string which will be inserted before a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
-	\item Global type name suffix. It is a string which will be appended after a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
+	\item Global type name prefix. It is a string which will be inserted before a name of a type, which is derived from element's name. Can be also an empty string. (Applies only if generation of global elements is active.)
+	\item Global type name suffix. It is a string which will be appended after a name of a type, which is derived from element's name. Can be also an empty string. (Applies only if generation of global elements is active.)
 \end{itemize}
 
 \section{Known issues and limitations} \label{section:problems}
@@ -342,7 +349,7 @@ This section describes some limitations of XSD export and some known issues, whi
 
 \subsection{Supported XSD features} \label{subsection:supportedXSDFeatures}
 
-This module is just basic implementation so many XSD features are not supported. List of supported XSD elements and their attributes follows. Let \code{xs} be XMLSchema namespace.
+This module is just basic implementation, thus many XSD features are not supported. List of supported XSD elements and their attributes follows. Let \code{xs} be XMLSchema namespace.
 
 \begin{itemize}
 	\item \code{xs:element} - \code{name}, \code{type}, \code{minOccurs}, \code{maxOccurs}
@@ -400,7 +407,7 @@ Do not turn the generation of global element types off.
 
 \subsubsection{Error conditions}
 
-This problem appears if input grammar contains an alternation of two or more concatenations, which begin with at least one same element. Part of a problematic XSD is for example following.
+This problem appears if input grammar contains an alternation of two or more concatenations, which share the same prefix (begin with at least one same element). An example of offending XSD follows.
 
 \begin{verbatim}
 ...
@@ -408,10 +415,13 @@ This problem appears if input grammar contains an alternation of two or more con
     <xs:sequence>
       <xs:element name="A" type="TA"/>
       <xs:element name="B" type="TB"/>
+      <xs:element name="C" type="TC"/>
     </xs:sequence>
     <xs:sequence>
       <xs:element name="A" type="TA"/>
-      <xs:element name="C" type="TC"/>
+      <xs:element name="B" type="TB"/>
+      <xs:element name="D" type="TD"/>
+      <xs:element name="E" type="TE"/>
     </xs:sequence>
   </choice>
 ...
@@ -421,9 +431,30 @@ This problem appears if input grammar contains an alternation of two or more con
 
 If error conditions are met, input XMLs are not valid against a generated XSD.
 
+\subsubsection{Workaround}
+
+To make the result valid, manual modification is needed. The same prefix elements have to be removed from both sequences and inserted into a new \code{<xs:sequence>} element before the \code{<xs:choice>} element.\\
+
+Adjusted XSD from the example can look like the following.
+\begin{verbatim}
+...
+  <xs:sequence>
+    <xs:element name="A" type="TA"/>
+    <xs:element name="B" type="TB"/>
+  <xs:sequence>
+  <xs:choice>
+    <xs:element name="C" type="TC"/>
+    <xs:sequence>
+      <xs:element name="D" type="TD"/>
+      <xs:element name="E" type="TE"/>
+    </xs:sequence>
+  </choice>
+...
+\end{verbatim}
+
 \section{Data flow}
 
-Flow of data in this module is following.
+Flow of data in this module is the following.
 \begin{enumerate}
 	\item \code{Preprocessor} topologically sorts elements (rules) it got on input.
 	\item For each element, its occurrence count is computed.

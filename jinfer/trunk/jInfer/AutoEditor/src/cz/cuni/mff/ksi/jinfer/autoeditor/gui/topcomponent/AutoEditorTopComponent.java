@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -318,10 +319,10 @@ public final class AutoEditorTopComponent extends TopComponent {
     return true;
   }
 
-  private void writeProperties(final java.util.Properties p) {
+  private void writeProperties(final Properties p) {
   }
 
-  private Object readProperties(final java.util.Properties p) {
+  private Object readProperties(final Properties p) {
     if (instance == null) {
       instance = this;
     }
@@ -329,7 +330,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     return instance;
   }
 
-  private void readPropertiesImpl(final java.util.Properties p) {
+  private void readPropertiesImpl(final Properties p) {
   }
 
   @Override

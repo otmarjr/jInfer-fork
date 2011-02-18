@@ -86,7 +86,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
-    jPanel1 = new javax.swing.JPanel();
+    fillH = new javax.swing.JPanel();
     jButton1 = new javax.swing.JButton();
     jLabel10 = new javax.swing.JLabel();
     lambdaCombo = new javax.swing.JComboBox();
@@ -100,6 +100,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     attributeCombo = new javax.swing.JComboBox();
     attributeSpinner = new javax.swing.JSpinner();
     attributeColor = new javax.swing.JPanel();
+    fillV = new javax.swing.JPanel();
     fill = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
@@ -500,24 +501,15 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.gridy = 0;
     shape.add(jLabel3, gridBagConstraints);
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 88, Short.MAX_VALUE)
-    );
-    jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 273, Short.MAX_VALUE)
-    );
-
+    fillH.setPreferredSize(new java.awt.Dimension(0, 0));
+    fillH.setLayout(null);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 5;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.gridheight = 9;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
-    shape.add(jPanel1, gridBagConstraints);
+    shape.add(fillH, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(TreeRuleDisplayerPanel.class, "TreeRuleDisplayerPanel.jButton1.text")); // NOI18N
     jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -680,12 +672,23 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 15, 2, 15);
     shape.add(attributeColor, gridBagConstraints);
 
+    fillV.setLayout(null);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 9;
+    gridBagConstraints.gridwidth = 6;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weighty = 1.0;
+    shape.add(fillV, gridBagConstraints);
+
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.weightx = 1.0;
     add(shape, gridBagConstraints);
+
+    fill.setPreferredSize(new java.awt.Dimension(0, 0));
 
     javax.swing.GroupLayout fillLayout = new javax.swing.GroupLayout(fill);
     fill.setLayout(fillLayout);
@@ -695,7 +698,7 @@ public final class TreeRuleDisplayerPanel extends JPanel {
     );
     fillLayout.setVerticalGroup(
       fillLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 6, Short.MAX_VALUE)
+      .addGap(0, 88, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -848,6 +851,8 @@ public final class TreeRuleDisplayerPanel extends JPanel {
   private javax.swing.JLabel concatLabel;
   private javax.swing.JSpinner concatSpinner;
   private javax.swing.JPanel fill;
+  private javax.swing.JPanel fillH;
+  private javax.swing.JPanel fillV;
   private javax.swing.JSpinner horizontalDistance;
   private javax.swing.JButton jButton1;
   private javax.swing.JLabel jLabel1;
@@ -862,7 +867,6 @@ public final class TreeRuleDisplayerPanel extends JPanel {
   private javax.swing.JLabel jLabel7;
   private javax.swing.JLabel jLabel8;
   private javax.swing.JLabel jLabel9;
-  private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JPanel lambdaColor;
   private javax.swing.JComboBox lambdaCombo;

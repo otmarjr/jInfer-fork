@@ -1,6 +1,6 @@
 default: all
 
-autoeditor.dvi: uml_basic_full.eps
+autoeditor.dvi: uml_basic_full.eps uml_derived_classes.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

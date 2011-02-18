@@ -56,6 +56,8 @@ This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it prov
 
 TODO spomenut vsade packages
 
+TODO UML diagramy su zjednodusene z dovodu prehladnosti
+
 \section{Structure}
 
 Structure of \jmodule{AutoEditor} can be divided into following four main parts.
@@ -128,8 +130,6 @@ TODO obrazok ako AC dedi od JPanelu a obsahuje Visualizer.
 
 Constructor has one argument, instance of \code{Layout} interface created from an automaton, typically by \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
 
-TODO obrazok ako Visualizer dedi od VisualizationVieweru a obsahuje Layout.
-
 \subsubsection{PluggableVisualizer}
 
 \code{PluggableVisualizer} class is extension of \code{Visualizer} class, which primarily provides an easy way to plug \emph{graph mouse plugins}.\\
@@ -171,6 +171,11 @@ Programmer implementing an extension of \code{AbstractComponent} is not forced t
 
 \code{Visualizer} is not set in constructor, because it is often desired to subsequently display several different automata (\code{Visualizer}s) in the same panel. In this case it is not needed to create new instance of \code{AbstractComponent} for each \code{Visualizer}, but subsequently call \code{setVisualizer()} method using one instance of \code{AbstractComponent}.
 
+\begin{figure}
+\centering\includegraphics[scale=\myscale]{uml_basic_full}
+\caption{Class diagram for the base classes.} \label{uml_basic_full}
+\end{figure}
+
 \subsubsection{AbstractComponent user interactivity support} \label{subsubsection:AbstractComponent user-interactivity support}
 
 If some kind of user interactivity is desired, \code{AbstractComponent} is a right place to implement it.\\
@@ -182,11 +187,6 @@ Method important for a programmer extending \code{AbstractComponent} is named \c
 After calling of \code{guiDone()} method, code execution of the caller module is resumed and holding instance of the \code{AbstractComponent} it is able to retrieve results of user interaction, saved in its state.\\
 
 For examples of user-interactive component, see TODO ref. 
-
-\begin{figure}
-\centering\includegraphics[scale=\myscale]{uml_basic_full}
-\caption{Class diagram for base classes.} \label{nodes_full2}
-\end{figure}
 
 \subsection{API}
 
@@ -201,6 +201,11 @@ For examples of user-interactive component, see TODO ref.
 For examples of API usage, see TODO ref.
 
 \subsection{Derived classes}
+
+\begin{figure}
+\centering\includegraphics[scale=\myscale]{uml_derived_classes}
+\caption{Class diagram for the derived classes.} \label{uml_derived_classes}
+\end{figure}
 
 Popis tried pouzitych v inych moduloch, ktore sluzia zaroven ako priklad.
 

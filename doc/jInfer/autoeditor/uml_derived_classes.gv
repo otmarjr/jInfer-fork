@@ -99,11 +99,77 @@ digraph uml_basic_full {
 	</table>>];
 }
 
+{
+	rank = same;
+	
+	StatePickingVisualizer [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-BoldItalic" point-size="10">StatePickingVisualizer&lt;T&gt;</font>
+		</td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+	</table>>];
+	
+	StatesPickingVisualizer [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-BoldItalic" point-size="10">StatesPickingVisualizer&lt;T&gt;</font>
+		</td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+	</table>>];
+	
+	StatePickingComponent [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-BoldItalic" point-size="10">StatePickingComponent&lt;T&gt;</font>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">-askUser: boolean</font></td></tr>
+			</table>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+getAutomatonDrawPanel(): JPanel</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getPickedState(): State&lt;T&gt;</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+setLabel(text: String)</font></td></tr>
+			</table>
+		</td></tr>
+	</table>>];
+
+	StatesPickingComponent [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-BoldItalic" point-size="10">StatesPickingComponent&lt;T&gt;</font>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">-askUser: boolean</font></td></tr>
+			</table>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+shallAskUser(): boolean</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getAutomatonDrawPanel(): JPanel</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getPickedStates(): List&lt;State&lt;T&gt;&gt;</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+setLabel(text: String)</font></td></tr>
+			</table>
+		</td></tr>
+	</table>>];
+}
+
 AbstractComponent -> JPanel [label = "extends"];
 VisualizationViewer -> JPanel [label = "extends"];
 
 Visualizer -> VisualizationViewer [label = "extends"];
 
 PluggableVisualizer -> Visualizer [label = "extends"];
+
+StatePickingVisualizer -> PluggableVisualizer [label = "extends"];
+StatesPickingVisualizer -> PluggableVisualizer [label = "extends"];
+StatePickingComponent -> AbstractComponent [label = "extends"];
+StatesPickingComponent -> AbstractComponent [label = "extends"];
 
 }

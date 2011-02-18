@@ -146,9 +146,7 @@ Public (not inherited) methods of \code{PluggableVisualizer} are the following. 
 	\item \code{addGraphMousePlugin()}
 	\item \code{removeGraphMousePlugin()}
 	\item \code{getGraphMousePlugins()}
-	\item \code{setVertexLabelTransformer()}
 	\item \code{replaceVertexLabelTransformer()}
-	\item \code{setEdgeLabelTransformer()}
 	\item \code{replaceEdgeLabelTransformer()}
 \end{itemize}
 
@@ -184,6 +182,11 @@ Method important for a programmer extending \code{AbstractComponent} is named \c
 After calling of \code{guiDone()} method, code execution of the caller module is resumed and holding instance of the \code{AbstractComponent} it is able to retrieve results of user interaction, saved in its state.\\
 
 For examples of user-interactive component, see TODO ref. 
+
+\begin{figure}
+\centering\includegraphics[scale=\myscale]{uml_basic_full}
+\caption{Class diagram for base classes.} \label{nodes_full2}
+\end{figure}
 
 \subsection{API}
 

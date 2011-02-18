@@ -54,7 +54,7 @@ For the whole document, let \code{xs} be XMLSchema namespace.
 
 \section{Structure}
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provid\-er is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provi\-der is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
 \begin{enumerate}
 	\item Preprocessing.
 	\item The export to a string representation itself.
@@ -69,7 +69,7 @@ Code to handle preprocessing resides in package \code{cz.cuni.mff.ksi.jinfer.bas
 
 \subsubsection{Purpose}
 
-As mentioned above, preprocessing is implemented in \code{Preprocessor} class and its is the following following.
+As mentioned above, preprocessing is implemented in \code{Preprocessor} class and its purpose is the following.
 \begin{itemize}
 	\item Decide which elements should be defined globally.
 	\item Remove unused elements.
@@ -101,7 +101,7 @@ To generate a human readable XSD output, it is necessary to apply correct indent
 
 Instance of this class holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
 
-Number of spaces characters per one level of indentation can be altered in project properties. See \ref{subsection:preferences}.
+Number of spaces characters per one level of indentation can be altered in project properties, see \ref{subsection:preferences}.
 
 \subsubsection{Definition of elements}
 

@@ -135,17 +135,8 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(regularStateColor, gridBagConstraints);
 
-    javax.swing.GroupLayout fill2Layout = new javax.swing.GroupLayout(fill2);
-    fill2.setLayout(fill2Layout);
-    fill2Layout.setHorizontalGroup(
-      fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 407, Short.MAX_VALUE)
-    );
-    fill2Layout.setVerticalGroup(
-      fill2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 18, Short.MAX_VALUE)
-    );
-
+    fill2.setPreferredSize(new java.awt.Dimension(0, 0));
+    fill2.setLayout(null);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 7;
@@ -154,17 +145,8 @@ public final class AutoEditorPanel extends javax.swing.JPanel {
     gridBagConstraints.weighty = 1.0;
     add(fill2, gridBagConstraints);
 
-    javax.swing.GroupLayout fill1Layout = new javax.swing.GroupLayout(fill1);
-    fill1.setLayout(fill1Layout);
-    fill1Layout.setHorizontalGroup(
-      fill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 7, Short.MAX_VALUE)
-    );
-    fill1Layout.setVerticalGroup(
-      fill1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 187, Short.MAX_VALUE)
-    );
-
+    fill1.setPreferredSize(new java.awt.Dimension(0, 0));
+    fill1.setLayout(null);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 4;
     gridBagConstraints.gridy = 0;

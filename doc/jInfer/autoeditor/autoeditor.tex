@@ -210,10 +210,10 @@ For examples of API usage, see TODO ref.
 This section describes classes derived from the base classes used in \jmodule{Two Step Simplifier} module to display automata. This classes may also serve as examples of extending the base classes.
 
 \subsubsection{StatePickingComponent}
-\code{StatePickingComponent} (extensions of \code{abstractComponent}) alongside with \code{StatePickingVisualizer} (extension of \code{PluggableVisualizer}) provides possibility to pick one automaton state in GUI and immediately return to the calling code, which can retrieve the picked state.
+\code{StatePickingComponent} (extensions of \code{abstractComponent}) alongside with \code{StatePickingVisualizer} (extension of \code{PluggableVisualizer}) provides possibility to pick one automaton state in GUI and immediately return to the calling code, which can retrieve the picked state.\\
 
 \code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has additional two arguments, superinitial and superfinal states as we want to distinguish these states in displayed automaton.\
-And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see TODO ref.
+And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see TODO ref.\\
 
 \code{StatePickingComponent} provides the following additional methods.
 \begin{itemize}
@@ -221,11 +221,11 @@ And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the 
 	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
-Source codes of \code{StatePickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \code{StatePickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \code{VertexPickingGraphMousePlugin}.
+Source codes of \code{StatePickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \code{StatePickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \code{VertexPickingGraphMousePlugin} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}
-final Transformer<Step<Regexp<T>>, String> transformer = new Transformer<Step<Regexp<T>>, String>() {
+    final Transformer<Step<Regexp<T>>, String> transformer = new Transformer<Step<Regexp<T>>, String>() {
       
       @Override
       public String transform(final Step<Regexp<T>> step) {
@@ -252,14 +252,81 @@ final Transformer<Step<Regexp<T>>, String> transformer = new Transformer<Step<Re
         component.setLabel("Do not select superInitial and superFinal states.");
         continue;
       }
-      LOG.debug("AUTO EDITOR selected: " + removeState.toString());
       return removeState;
     } while (true);
 \end{verbatim}
 
+\subsubsection{StatesPickingComponent}
+Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are similar to the classes described in the previous section. Purpose of these is to provide picking of multiple automaton states.\\
 
-StatePickingVisualizer
-StatesPickingVisualizer
+\code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
+Main difference compared to the \code{VertexPickingGraphMousePlugin} is \code{VerticesPickingGraphMousePlugin} does not call component's \code{guiDone()} method.\\
+
+\code{StatesPickingComponent} is almost the same as \code{StatePickingComponent} but it contains two extra GUI controls. 'Continue' button and 'Don't ask me anymore to select states to be merger' checkbox.\
+The button is supposed to be pushed when user picked all desired states and it will cause calling of component's \code{guiDone()} method (see TODO ref).\
+State of the checkbox can be retrieved by the calling code and the caller is supposed to stop showing this component in the current inference process.
+
+Methods of \code{StatesPickingComponent} are the following.
+\begin{itemize}
+	\item \code{shallAskUser()} - Retrieves state of the checkbox.
+	\item \code{getPickedStates()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see TODO ref), this method retrieves the list of user picked automaton states. In case that none of automaton states was picked, it returns an empty list.
+	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
+\end{itemize}
+
+Source codes of \code{StatesPickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \code{StatesPickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \code{VerticesPickingGraphMousePlugin} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins}.\\
+
+Example of usage follows.
+\begin{verbatim}
+  Automaton<T> simplify(Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) {
+    if (!askUser) {
+      return inputAutomaton;
+    }
+
+    List<State<T>> mergeLst;
+    final Transformer<Step<T>, String> transformer = new Transformer<Step<T>, String>() {
+
+      @Override
+      public String transform(Step<T> step) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append(symbolToString.toString(step.getAcceptSymbol()));
+        sb.append("|");
+        sb.append(String.valueOf(step.getUseCount()));
+        sb.append("}");
+        return sb.toString();
+      }
+    };
+
+    Boolean selectTwo = false;
+    do {
+      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutHelperFactory.createUserLayout(inputAutomaton, transformer), transformer);
+
+      final StatesPickingComponent<T> panel = new StatesPickingComponent<T>();
+      panel.setVisualizer(visualizer);
+      if (selectTwo) {
+        panel.setLabel("Automaton for element <" + elementName + ">. Please select states to be merged and click continue. Select at least 2 states.");
+      } else {
+        panel.setLabel("Automaton for element <" + elementName + ">. Please select states to be merged and click continue.");
+      }
+      
+      AutoEditor.drawComponentAndWaitForGUI(panel);
+      mergeLst = panel.getPickedStates();
+
+      if ((!BaseUtils.isEmpty(mergeLst)) && (mergeLst.size() >= 2)) {
+        inputAutomaton.mergeStates(mergeLst);
+        selectTwo = false;
+      } else if (mergeLst.size() < 2) {
+        selectTwo = true;
+      }
+
+      if (!panel.shallAskUser()) {
+        askUser = false;
+        break;
+      }
+    } while (!BaseUtils.isEmpty(mergeLst));
+    return inputAutomaton;
+  }
+\end{verbatim}
 
 \subsection{GUI}
 

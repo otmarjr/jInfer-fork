@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
+import org.apache.log4j.lf5.LogLevel;
 
 /**
  * Properties panel of the XSD Importer module.
@@ -97,8 +98,9 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     stopOnError = new javax.swing.JCheckBox();
     verboseLabel = new javax.swing.JLabel();
     verbose = new javax.swing.JCheckBox();
-    jPanel1 = new javax.swing.JPanel();
-    jPanel2 = new javax.swing.JPanel();
+    fillV = new javax.swing.JPanel();
+    fillH = new javax.swing.JPanel();
+    loglevelLabel2 = new javax.swing.JLabel();
 
     setMinimumSize(new java.awt.Dimension(500, 300));
     setPreferredSize(new java.awt.Dimension(500, 300));
@@ -110,9 +112,9 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(parserLabel, gridBagConstraints);
 
-    parserComboBox.setRenderer(new ProjectPropsComboRenderer(parserComboBox.getRenderer()));
     parserComboBox.setMinimumSize(new java.awt.Dimension(100, 22));
     parserComboBox.setPreferredSize(new java.awt.Dimension(150, 22));
+    parserComboBox.setRenderer(new ProjectPropsComboRenderer(parserComboBox.getRenderer()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -177,41 +179,53 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(verbose, gridBagConstraints);
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-    jPanel1.setLayout(jPanel1Layout);
-    jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 499, Short.MAX_VALUE)
+    javax.swing.GroupLayout fillVLayout = new javax.swing.GroupLayout(fillV);
+    fillV.setLayout(fillVLayout);
+    fillVLayout.setHorizontalGroup(
+      fillVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 537, Short.MAX_VALUE)
     );
-    jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 230, Short.MAX_VALUE)
+    fillVLayout.setVerticalGroup(
+      fillVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 234, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 4;
-    gridBagConstraints.gridwidth = 3;
+    gridBagConstraints.gridwidth = 4;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
-    add(jPanel1, gridBagConstraints);
+    add(fillV, gridBagConstraints);
 
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 127, Short.MAX_VALUE)
+    javax.swing.GroupLayout fillHLayout = new javax.swing.GroupLayout(fillH);
+    fillH.setLayout(fillHLayout);
+    fillHLayout.setHorizontalGroup(
+      fillHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 41, Short.MAX_VALUE)
     );
-    jPanel2Layout.setVerticalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 106, Short.MAX_VALUE)
+    fillHLayout.setVerticalGroup(
+      fillHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 102, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.gridheight = 4;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
-    add(jPanel2, gridBagConstraints);
+    add(fillH, gridBagConstraints);
+
+    loglevelLabel2.setFont(loglevelLabel2.getFont().deriveFont((loglevelLabel2.getFont().getStyle() | java.awt.Font.ITALIC), 10));
+    loglevelLabel2.setText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel2.text")); // NOI18N
+    loglevelLabel2.setToolTipText(org.openide.util.NbBundle.getMessage(XSDImportPropertiesPanel.class, "XSDImportPropertiesPanel.loglevelLabel2.toolTipText")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    add(loglevelLabel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   @Override
@@ -233,7 +247,7 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
     parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupImpl(XSDParser.class, properties.getProperty(PARSER, DEFAULT_PARSER_NAME)));
 
-    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
+    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevel.WARN.toString()));
 
     stopOnError.setSelected(
             Boolean.parseBoolean(properties.getProperty(STOP_ON_ERROR, "true")));
@@ -243,10 +257,11 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JPanel jPanel2;
+  private javax.swing.JPanel fillH;
+  private javax.swing.JPanel fillV;
   private javax.swing.JComboBox logLevelCombo;
   private javax.swing.JLabel loglevelLabel;
+  private javax.swing.JLabel loglevelLabel2;
   private javax.swing.JComboBox parserComboBox;
   private javax.swing.JLabel parserLabel;
   private javax.swing.JLabel stopLabel;

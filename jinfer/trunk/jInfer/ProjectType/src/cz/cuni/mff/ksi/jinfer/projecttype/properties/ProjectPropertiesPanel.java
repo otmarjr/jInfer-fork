@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.utils.LogLevels;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
+import org.apache.log4j.lf5.LogLevel;
 
 /**
  * Properties panel of miscellaneous project properties.
@@ -185,7 +186,7 @@ public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
   public void load() {
     defaultFolder.setModel(new DefaultComboBoxModel(FolderType.values()));
     defaultFolder.setSelectedItem(properties.getProperty(FOLDER_TYPE, FOLDER_TYPE_DEFAULT));
-    logLevel.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevels.getRootLogLevel()));
+    logLevel.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevel.WARN.toString()));
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox defaultFolder;

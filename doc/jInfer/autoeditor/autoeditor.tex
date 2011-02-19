@@ -207,7 +207,56 @@ For examples of API usage, see TODO ref.
 \caption{Class diagram for the derived classes.} \label{uml_derived_classes}
 \end{figure}
 
-Popis tried pouzitych v inych moduloch, ktore sluzia zaroven ako priklad.
+This section describes classes derived from the base classes used in \jmodule{Two Step Simplifier} module to display automata. This classes may also serve as examples of extending the base classes.
+
+\subsubsection{StatePickingComponent}
+\code{StatePickingComponent} (extensions of \code{abstractComponent}) alongside with \code{StatePickingVisualizer} (extension of \code{PluggableVisualizer}) provides possibility to pick one automaton state in GUI and immediately return to the calling code, which can retrieve the picked state.
+
+\code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has additional two arguments, superinitial and superfinal states as we want to distinguish these states in displayed automaton.\
+And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see TODO ref.
+
+\code{StatePickingComponent} provides the following additional methods.
+\begin{itemize}
+	\item \code{getPickedState()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see TODO ref), this method retrieves the user picked automaton state.
+	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
+\end{itemize}
+
+Source codes of \code{StatePickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \code{StatePickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \code{VertexPickingGraphMousePlugin}.
+
+Example of usage follows.
+\begin{verbatim}
+final Transformer<Step<Regexp<T>>, String> transformer = new Transformer<Step<Regexp<T>>, String>() {
+      
+      @Override
+      public String transform(final Step<Regexp<T>> step) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append(symbolToString.toString(step.getAcceptSymbol()));
+        sb.append("|");
+        sb.append(String.valueOf(step.getUseCount()));
+        sb.append("}");
+        return sb.toString();
+      }
+    };
+
+    State<Regexp<T>> removeState;
+    final StatePickingComponent<Regexp<T>> component = new StatePickingComponent<Regexp<T>>();
+    final StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, transformer), transformer, component, automaton.getSuperInitialState(), automaton.getSuperFinalState());
+    component.setVisualizer(visualizer);
+    
+    do {
+      AutoEditor.drawComponentAndWaitForGUI(component);
+      removeState = component.getPickedState();
+
+      if ((removeState.equals(automaton.getSuperFinalState())) || (removeState.equals(automaton.getSuperInitialState()))) {
+        component.setLabel("Do not select superInitial and superFinal states.");
+        continue;
+      }
+      LOG.debug("AUTO EDITOR selected: " + removeState.toString());
+      return removeState;
+    } while (true);
+\end{verbatim}
+
 
 StatePickingVisualizer
 StatesPickingVisualizer

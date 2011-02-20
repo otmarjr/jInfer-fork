@@ -57,7 +57,6 @@ public class Utils {
    * Vertical distance of vertices default value.
    */
   public static final int VERTICAL_DISTANCE_DEFAULT = 100;
-
   /**
    * Shape of root vertex property name.
    */
@@ -250,6 +249,7 @@ public class Utils {
    * Color of attribute vertex default value.
    */
   public static final Color ATTRIBUTE_COLOR_DEFAULT = Color.decode("-16744448");
+  public static final int VERTEX_LABEL_MAX_LENGHT = 15;
   private final VertexShape rootShape;
   private final VertexShape elementShape;
   private final VertexShape concatShape;
@@ -392,5 +392,41 @@ public class Utils {
    */
   public List<Regexp<AbstractStructuralNode>> getRoots() {
     return roots;
+  }
+
+  public static String getVertexLabel(final Regexp<? extends AbstractNamedNode> regexp, final boolean trim) {
+    if (regexp == null) {
+      return null;
+    }
+    String result;
+    switch (regexp.getType()) {
+      case LAMBDA:
+        result = "\u03BB";
+        break;
+      case TOKEN:
+        if (regexp.getContent() instanceof AbstractStructuralNode && ((AbstractStructuralNode) regexp.getContent()).isSimpleData()) {
+          result = "\"" + regexp.getContent().getName() + "\"";
+          break;
+        }
+        result = regexp.getContent().getName();
+        break;
+      case ALTERNATION:
+      case CONCATENATION:
+      case PERMUTATION:
+        result = regexp.getType().toString();
+        break;
+      default:
+        return null;
+    }
+
+    if (result != null) {
+      result = result.trim();
+
+      if (trim && result.trim().length() > VERTEX_LABEL_MAX_LENGHT) {
+        result = result.trim().substring(0, VERTEX_LABEL_MAX_LENGHT) + "...";
+      }
+    }
+
+    return result;
   }
 }

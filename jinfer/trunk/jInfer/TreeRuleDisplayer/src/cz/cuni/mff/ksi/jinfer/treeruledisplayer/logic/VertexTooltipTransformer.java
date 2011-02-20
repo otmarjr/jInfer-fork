@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010 sviro
+ *  Copyright (C) 2011 sviro
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,14 +21,13 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * Transformer for Rule Tree Vertex which transform {@link Regexp} into readeble Vertex label.
  *
  * @author sviro
  */
-public class RegexpTransformer implements Transformer<Regexp<? extends AbstractNamedNode>, String> {
+class VertexTooltipTransformer implements Transformer<Regexp<? extends AbstractNamedNode>, String> {
 
   @Override
   public String transform(final Regexp<? extends AbstractNamedNode> regexp) {
-    return Utils.getVertexLabel(regexp, true);
+    return Utils.getVertexLabel(regexp, false);
   }
 }

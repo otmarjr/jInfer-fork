@@ -79,6 +79,10 @@ public final class GraphBuilder {
 
   private static Tree<Regexp<? extends AbstractNamedNode>, RegexpInterval> getRuleTree(final Element element) {
     final DelegateTree<Regexp<? extends AbstractNamedNode>, RegexpInterval> result = new DelegateTree<Regexp<? extends AbstractNamedNode>, RegexpInterval>();
+    if (element == null) {
+      return result;
+    }
+
     final Regexp<AbstractStructuralNode> root = Regexp.getToken((AbstractStructuralNode) element, RegexpInterval.getOnce());
     result.addVertex(root);
     final RegexpInterval regexpInterval = (element.getSubnodes().getType() == RegexpType.LAMBDA) ? RegexpInterval.getOnce() : element.getSubnodes().getInterval().getCopy();
@@ -126,6 +130,10 @@ public final class GraphBuilder {
    * @return Panel with rendered rule trees.
    */
   public static JPanel buildGraphPanel(final List<Element> rules) {
+    if (rules == null) {
+      return new JPanel();
+    }
+    
     final Forest<Regexp<? extends AbstractNamedNode>, RegexpInterval> graph = getForestFromRules(rules);
     final List<Regexp<AbstractStructuralNode>> roots = getRootVertices(graph);
     final Utils utils = new Utils(roots);
@@ -148,6 +156,7 @@ public final class GraphBuilder {
     vv.getRenderContext().setEdgeLabelTransformer(new ToStringLabeller<RegexpInterval>());
     vv.getRenderContext().setEdgeFontTransformer(new EdgeFontTransformer());
     vv.getRenderContext().setVertexLabelTransformer(new RegexpTransformer());
+    vv.setVertexToolTipTransformer(new VertexTooltipTransformer());
     vv.getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer(utils));
     vv.getRenderContext().setVertexFillPaintTransformer(new VertexColorTransformer(utils.getRoots()));
     vv.getRenderContext().setVertexFontTransformer(new VertexFontTransformer());

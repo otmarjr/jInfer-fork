@@ -54,7 +54,7 @@ public class RulePanel extends JPanel {
     graphConstraints.weighty = 1.0;
     this.add(graph, graphConstraints);
 
-    final JButton settings = new JButton("Show settings");
+    final JButton settings = new JButton("Show Settings");
     settings.addActionListener(new ActionListener() {
 
       @Override

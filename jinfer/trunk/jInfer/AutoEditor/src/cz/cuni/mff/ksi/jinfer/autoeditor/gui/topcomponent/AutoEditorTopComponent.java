@@ -146,8 +146,8 @@ public final class AutoEditorTopComponent extends TopComponent {
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jButton2)
             .addGap(300, 300, 300))
-          .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
-          .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
+          .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+          .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE))
         .addContainerGap())
     );
     jPanel2Layout.setVerticalGroup(

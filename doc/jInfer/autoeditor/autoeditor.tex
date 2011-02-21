@@ -52,11 +52,9 @@ Public packages:       & cz.cuni.mff.ksi.jinfer.autoeditor \\
 
 \section{Introduction}
 
-This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, thus the process of inference can be easily made user interactive.
+This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, thus the process of inference can be easily made user interactive.\\
 
-TODO spomenut vsade packages
-
-TODO UML diagramy su zjednodusene z dovodu prehladnosti
+UML diagrams shown in this document are simplified to keep them synoptical. Simplification involves removing not important class members which are not mentioned in the text, removing members of not jInfer classes and truncating string of inheritance which are not important for this document.\ For example, \code{VisualizationViewer} class from JUNG library has many methods and does not extends \code{JPanel} class directly, though in an UML diagram it has not any methods and extends \code{JPanel} directly, because it is sufficient for understanding of this document.
 
 \section{Structure}
 
@@ -73,7 +71,7 @@ First, \code{Layout}s and use of base classes to create a visualization of autom
 
 \subsection{Layout}
 
-\code{Layout} is a JUNG interface responsible primarily of representation of automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software. TODO odkazy v predchadzajucej vete.\\
+\code{Layout} is a JUNG interface responsible primarily of representation of automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software. TODO odkazy na juliu a JUNG v predchadzajucej vete.\\
 
 Class providing creation of \code{Layout} instances is named \code{LayoutHelperFactory}.
 
@@ -87,7 +85,7 @@ Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automato
 
 \code{Graphviz Layout} uses \emph{Graphviz}, third-party graph visualization software, to create positions of automaton states. TODO link? To use this \code{Layout}, \emph{Graphviz} has to be installed and path to \emph{dot} binary has to be set in options. This \code{Layout} gives nice results even on large automata.\\
 
-TODO ako presne ziskava pozicie z graphvizu
+Automaton is transformed to the \emph{dot} representation and the \emph{dot} binary is ran with this representation on input. It processes the automaton and writes positions of its states to the standard output. Than the output is parsed and an instances of \code{Layout} is created using these positions.\\
 
 Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz}.
 
@@ -98,7 +96,8 @@ In project properties, it is possible to select a \code{Layout} to be used to di
 This method has following signature.
 
 \begin{verbatim}
-public static <T> Layout<State<T>, Step<T>> createUserLayout(final Automaton<T> automaton, final Transformer<Step<T>, String> edgeLabelTransformer) throws InterruptedException;
+public static <T> Layout<State<T>, Step<T>> createUserLayout(Automaton<T> automaton,
+                                                             Transformer<Step<T>, String> edgeLabelTransformer)
 \end{verbatim}
 
 The first argument is a automaton to create a layout from. The second is transformer to transform an instance of automaton edge to its string representation, required by the \code{Graphviz Layout}.
@@ -115,30 +114,27 @@ Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automato
 
 Created implementation will be shown in project properties in the \code{Layout} selection.\\
 
-System of modules is described in detail in TODO ref.
+System of modules is described in documentation of Architecture, TODO ref na bib.
 
 \subsection{Base classes}
 
 This section describes classes implementing basic common functionality that are supposed to be extended to create a new suitable visualization of automata for a particular method of inference. The new visualization may involve a brand new GUI panel with buttons with various functions, user interaction like selecting states or edges and others.\\
 
-Main two classes representing visualization of automaton are \code{Visualizer} and \code{AbstractComponent}. \code{Visualizer} is a graphical representation of automaton and \code{AbstractComponent} is a panel (extends \code{JPanel}) containing the \code{Visualizer} which will be displayed in GUI.
-TODO obrazok ako AC dedi od JPanelu a obsahuje Visualizer.
+Main two classes representing visualization of automaton are \code{Visualizer} and \code{AbstractComponent}. \code{Visualizer} is a graphical representation of automaton and \code{AbstractComponent} is a panel (extends \code{JPanel}) containing the \code{Visualizer} which will be displayed in GUI.\\
 
 \subsubsection{Visualizer}
 
-\code {Visualizer} class extends JUNG \code{VisualizationViewer} class thus it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see TODO ref.\\
+\code {Visualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package extends JUNG \code{VisualizationViewer} class thus it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see \ref{subsection:GUI}.\\
 
 Constructor has one argument, instance of \code{Layout} interface created from an automaton, typically by \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
 
 \subsubsection{PluggableVisualizer}
 
-\code{PluggableVisualizer} class is extension of \code{Visualizer} class, which primarily provides an easy way to plug \emph{graph mouse plugins}.\\
+\code{PluggableVisualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package is extension of \code{Visualizer} class, which primarily provides an easy way to plug \emph{graph mouse plugins}.\\
 
 \emph{Graph mouse plugin}s are classes implementing JUNG \code{GraphMousePlugin} interface and their purpose is to enhance \code{Visualizer} with mouse support.\\
 
 By default, instance of \code{PluggableVisualizer} is constructed with two plugins enabled. They are \code{ScalingGraphMousePlugin}, providing zooming, and \code{TranslatingGraphMousePlugin}, providing translating the displayed automaton in the x and y direction. In the most cases, these plugins are useful but if they are not wanted they can be removed using methods \code{getGraphMousePlugins()} and \code{removeGraphMousePlugin()}.\\
-
-TODO obrazok ako PluggableVisualizer dedi od Visualizeru
 
 Public (not inherited) methods of \code{PluggableVisualizer} are the following. Their purpose is clear from their names, for details see their JavaDoc.
 
@@ -150,9 +146,9 @@ Public (not inherited) methods of \code{PluggableVisualizer} are the following. 
 	\item \code{replaceEdgeLabelTransformer()}
 \end{itemize}
 
-\subsubsection{AbstractComponent}
+\subsubsection{AbstractComponent} \label{subsubsection:AbstractComponent}
 
-\code{AbstractComponent} class is a representation of GUI panel containing an instance of \code{Visualizer} class for some automaton. It is inherited from \code{JPanel} class thus provides JPanel's method and behaviour. In addition, it provides the following methods.
+\code{AbstractComponent} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component} package is a representation of GUI panel containing an instance of \code{Visualizer} class for some automaton. It is inherited from \code{JPanel} class thus provides JPanel's method and behaviour. In addition, it provides the following methods.
 
 \begin{itemize}
 	\item \code{setVisualizer()} - Setter of \code{Visualizer}.
@@ -160,7 +156,7 @@ Public (not inherited) methods of \code{PluggableVisualizer} are the following. 
 	\item \code{waitForGuiDone()} - Suspends its thread until method \code{guiDone} is called on this instance. Do not call this method directly, it is called by \jmodule{AutoEditor}. For more information, see \ref{subsubsection:AbstractComponent user-interactivity support}.
 	\item \code{guiDone()} - Wakes up this instance from a suspended state. For detailed description, see \ref{subsubsection:AbstractComponent user-interactivity support}.
 	\item \code{guiInterrupt()} - Called when \jmodule{AutoEditor}'s tab is closed to propagate information about terminating of inference to a caller of \jmodule{AutoEditor}. There is no need to called this method directly.
-	\item \code{guiInterrupted()} - Checks if \jmodule{AutoEditor} GUI was terminated by interrupt or regularly. Also, there is no need to call this method directly, it is called by \jmodule{AutoEditor}. For details, see TODO ref GUI.
+	\item \code{guiInterrupted()} - Checks if \jmodule{AutoEditor} GUI was terminated by interrupt or regularly. Also, there is no need to call this method directly, it is called by \jmodule{AutoEditor}. For details, see \ref{subsection:GUI}.
 \end{itemize}
 
 Besides those methods, \code{AbstractComponent} has one abstract method, named \code{getAutomatonDrawPanel()}.\\
@@ -181,14 +177,14 @@ Programmer implementing an extension of \code{AbstractComponent} is not forced t
 If some kind of user interactivity is desired, \code{AbstractComponent} is a right place to implement it.\\
 
 To display the component in GUI and wait for some user action, method \code{waitForGuiDone()} is used. After displaying the component, calling of this method suspend running thread thus code execution of a caller module is stopped at the place of this call. However, GUI is ran in another thread, user is able to interact with the panel (component).\\*
-Do not call method \code{waitForGuiDone()} directly. It is called by \jmodule{AutoEditor} when displaying the component by \jmodule{AutoEditor} \emph{API} method named \code{drawComponentAndWaitForGUI()}. For more information on \jmodule{AutoEditor} \emph{API}, see TODO ref.\\
+Do not call method \code{waitForGuiDone()} directly. It is called by \jmodule{AutoEditor} when displaying the component by \jmodule{AutoEditor} \emph{API} method named \code{drawComponentAndWaitForGUI()}. For more information on \jmodule{AutoEditor} \emph{API}, see \ref{subsection:API}.\\
 
 Method important for a programmer extending \code{AbstractComponent} is named \code{guiDone()}. This method wakes up the thread suspended in \code{waitForGuiDone()} method and the programmer is responsible for calling it. Typically, it is called upon some user action like button click, vertex pick or other GUI event.\\*
 After calling of \code{guiDone()} method, code execution of the caller module is resumed and holding instance of the \code{AbstractComponent} it is able to retrieve results of user interaction, saved in its state.\\
 
-For examples of user-interactive component, see TODO ref. 
+For examples of user-interactive component, see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent}. 
 
-\subsection{API}
+\subsection{API} \label{subsection:API}
 
 \jmodule{AutoEditor} \emph{API} is pretty simple. Package \code{cz.cuni.mff.ksi.jinfer.autoeditor} contains class \code{AutoEditor} with three public static methods.
 
@@ -198,7 +194,7 @@ For examples of user-interactive component, see TODO ref.
 	\item \code{closeTab()} - Closes \jmodule{AutoEditor}'s GUI tab and interrupts inference, if running.
 \end{itemize}
 
-For examples of API usage, see TODO ref.
+For examples of API usage, see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent}.
 
 \subsection{Derived classes}
 
@@ -209,15 +205,15 @@ For examples of API usage, see TODO ref.
 
 This section describes classes derived from the base classes used in \jmodule{Two Step Simplifier} module to display automata. This classes may also serve as examples of extending the base classes.
 
-\subsubsection{StatePickingComponent}
+\subsubsection{StatePickingComponent} \label{subsubsection:StatePickingComponent}
 \code{StatePickingComponent} (extensions of \code{abstractComponent}) alongside with \code{StatePickingVisualizer} (extension of \code{PluggableVisualizer}) provides possibility to pick one automaton state in GUI and immediately return to the calling code, which can retrieve the picked state.\\
 
 \code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has additional two arguments, superinitial and superfinal states as we want to distinguish these states in displayed automaton.\
-And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see TODO ref.\\
+And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see \ref{subsubsection:AbstractComponent}.\\
 
 \code{StatePickingComponent} provides the following additional methods.
 \begin{itemize}
-	\item \code{getPickedState()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see TODO ref), this method retrieves the user picked automaton state.
+	\item \code{getPickedState()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see \ref{subsection:API}), this method retrieves the user picked automaton state.
 	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
@@ -256,20 +252,20 @@ Example of usage follows.
     } while (true);
 \end{verbatim}
 
-\subsubsection{StatesPickingComponent}
+\subsubsection{StatesPickingComponent} \label{subsubsection:StatesPickingComponent}
 Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are similar to the classes described in the previous section. Purpose of these is to provide picking of multiple automaton states.\\
 
 \code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
 Main difference compared to the \code{VertexPickingGraphMousePlugin} is \code{VerticesPickingGraphMousePlugin} does not call component's \code{guiDone()} method.\\
 
 \code{StatesPickingComponent} is almost the same as \code{StatePickingComponent} but it contains two extra GUI controls. 'Continue' button and 'Don't ask me anymore to select states to be merger' checkbox.\
-The button is supposed to be pushed when user picked all desired states and it will cause calling of component's \code{guiDone()} method (see TODO ref).\
+The button is supposed to be pushed when user picked all desired states and it will cause calling of component's \code{guiDone()} method (see \ref{subsubsection:AbstractComponent}).\
 State of the checkbox can be retrieved by the calling code and the caller is supposed to stop showing this component in the current inference process.
 
 Methods of \code{StatesPickingComponent} are the following.
 \begin{itemize}
 	\item \code{shallAskUser()} - Retrieves state of the checkbox.
-	\item \code{getPickedStates()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see TODO ref), this method retrieves the list of user picked automaton states. In case that none of automaton states was picked, it returns an empty list.
+	\item \code{getPickedStates()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see \ref{subsection:API}), this method retrieves the list of user picked automaton states. In case that none of automaton states was picked, it returns an empty list.
 	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
@@ -328,14 +324,14 @@ Example of usage follows.
   }
 \end{verbatim}
 
-\subsection{GUI}
+\subsection{GUI} \label{subsection:GUI}
 
 \begin{figure}
 \centering\includegraphics[scale=0.6]{screenshot}
 \caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
 \end{figure}
 
-As shown at figure \ref{figure_gui}, \jmodule{AutoEditor}'s panel is placed in a tab in the main NetBeans window. It consists of two buttons, horizontal line below them and below the line, there is panel to place an extension of \code{AbstractComponent} (see TODO ref).\\
+As shown at figure \ref{figure_gui}, \jmodule{AutoEditor}'s panel is placed in a tab in the main NetBeans window. It consists of two buttons, horizontal line below them and below the line, there is panel to place an extension of \code{AbstractComponent} (see \ref{subsubsection:AbstractComponent}). Class representing this panel is named \code{AutoEditorTopComponent} and resides in \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent} package.\\
 
 Buttons have labels 'Save as image' and 'Show settings'. Pushing the first one will raise a dialog box to save currently displayed automaton to an image file. Set of supported image formats depends on installed JRE.\
 The second one will open \jmodule{AutoEditor} tab in NetBeans options. For description of the settings, see \ref{subsection:Settings}.

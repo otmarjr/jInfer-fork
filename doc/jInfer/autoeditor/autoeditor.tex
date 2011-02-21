@@ -172,8 +172,8 @@ Programmer implementing an extension of \code{AbstractComponent} is not forced t
 \code{Visualizer} is not set in constructor, because it is often desired to subsequently display several different automata (\code{Visualizer}s) in the same panel. In this case it is not needed to create new instance of \code{AbstractComponent} for each \code{Visualizer}, but subsequently call \code{setVisualizer()} method using one instance of \code{AbstractComponent}.
 
 \begin{figure}
-\centering\includegraphics[scale=\myscale]{uml_basic_full}
-\caption{Class diagram for the base classes.} \label{uml_basic_full}
+\centering\includegraphics[scale=\myscale]{uml_base_classes}
+\caption{Class diagram for the base classes.} \label{uml_base_classes}
 \end{figure}
 
 \subsubsection{AbstractComponent user interactivity support} \label{subsubsection:AbstractComponent user-interactivity support}
@@ -330,24 +330,21 @@ Example of usage follows.
 
 \subsection{GUI}
 
-TODO
+\begin{figure}
+\centering\includegraphics[scale=0.6]{screenshot}
+\caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
+\end{figure}
 
-tlacitka
+As shown at figure \ref{figure_gui}, \jmodule{AutoEditor}'s panel is placed in a tab in the main NetBeans window. It consists of two buttons, horizontal line below them and below the line, there is panel to place an extension of \code{AbstractComponent} (see TODO ref).\\
 
-\subsection{Preferences}
+Buttons have labels 'Save as image' and 'Show settings'. Pushing the first one will raise a dialog box to save currently displayed automaton to an image file. Set of supported image formats depends on installed JRE.\
+The second one will open \jmodule{AutoEditor} tab in NetBeans options. For description of the settings, see \ref{subsection:Settings}.
 
-TODO
+\subsection{Settings}
 
-All settings provided by \jmodule{BasicXSDExporter} are project-wide, the preferences panel is in \code{cz.cuni.mff.ksi.jinfer.basicxsd.properties} package. As mentioned above, it is possible to set the following. 
+All settings provided by \jmodule{AutoEditor} are NetBeans-wide. The options panel along with all the logic is in the \code{cz.cuni.mff.ksi.jinfer.autoeditor.options} package. Available options include setting the color of the background, colors and shapes of some special types of automaton states.\\
 
-\begin{itemize}
-	\item Turn off generation of global element types. Turning off this feature is not recommended as it may cause certain problems with validity of resulting XSD. See \ref{section:problems}.
-	\item Minimal number of occurrences of element to define its type globally. (Only if generation of global elements is active.)
-	\item Number of spaces in output per one level of indentation.
-	\item Global type name prefix. It is a string which will be inserted before a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
-	\item Global type name suffix. It is a string which will be appended after a name of a type, which is derived from element's name. Can be also an empty string. (Only if generation of global elements is active.)
-\end{itemize}
-
+To have some effect, these settings need to be implemented by extensions of \code{Visualizer} class. For examples, see source codes of \code{StatePickingVisualizer} and \code{StatesPickingVisualizer} classes.\\
 
 \nocite{*}
 \newpage

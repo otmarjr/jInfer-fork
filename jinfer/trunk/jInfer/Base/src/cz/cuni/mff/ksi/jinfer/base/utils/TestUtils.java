@@ -154,6 +154,22 @@ public final class TestUtils {
             Arrays.asList(content));
   }
 
+    /**
+   * Returns a simple data with provided string as its name. Simple data
+   * is otherwise quite empty: context, metadata and content are empty, content type is
+   * "string".
+   *
+   * @param name The name of simple data.
+   * @return Constructed simple data.
+   */
+  public static SimpleData getSimpleDataByName(final String name) {
+    return new SimpleData(EMPTY_CONTEXT,
+            name,
+            EMPTY_METADATA,
+            "string",
+            EMPTY_CONTEXT);
+  }
+
   /**
    * Returns an attribute with provided name. The attribute is otherwise empty:
    * context, metadata and content are empty, content type is null.

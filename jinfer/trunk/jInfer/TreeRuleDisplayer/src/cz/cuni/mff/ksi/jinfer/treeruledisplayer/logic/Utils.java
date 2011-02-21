@@ -405,8 +405,8 @@ public class Utils {
         break;
       case TOKEN:
         if (regexp.getContent() instanceof AbstractStructuralNode && ((AbstractStructuralNode) regexp.getContent()).isSimpleData()) {
-          result = "\"" + regexp.getContent().getName() + "\"";
-          break;
+          result = regexp.getContent().getName();
+          return getTrimmedSimpleData(result, trim);
         }
         result = regexp.getContent().getName();
         break;
@@ -428,5 +428,18 @@ public class Utils {
     }
 
     return result;
+  }
+
+  private static String getTrimmedSimpleData(final String text, final boolean trim) {
+    String result;
+    if (text != null) {
+      result = text.trim();
+      if (trim && result.length() > VERTEX_LABEL_MAX_LENGHT) {
+        result = result.substring(0, VERTEX_LABEL_MAX_LENGHT) + "...";
+      }
+      return "\"" + result + "\"";
+    } else {
+      return null;
+    }
   }
 }

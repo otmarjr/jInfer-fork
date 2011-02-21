@@ -107,4 +107,21 @@ public class UtilsTest {
     String result = Utils.getVertexLabel(regexp, trim);
     assertEquals(expResult, result);
   }
+
+  /**
+   * Test of getVertexLabel method, when regexp is simpleData and name length is limit + 1.
+   */
+  @Test
+  public void testGetVertexLabelSimpleData() {
+    System.out.println("getVertexLabelSimpleData");
+    StringBuilder builder = new StringBuilder(Utils.VERTEX_LABEL_MAX_LENGHT);
+    for (int i = 0; i < Utils.VERTEX_LABEL_MAX_LENGHT; i++) {
+      builder.append("a");
+    }
+    Regexp<? extends AbstractNamedNode> regexp = Regexp.<AbstractNamedNode>getToken(TestUtils.getSimpleDataByName(builder.toString() + "b"));
+    boolean trim = true;
+    String expResult = "\"" + builder.toString() + "...\"";
+    String result = Utils.getVertexLabel(regexp, trim);
+    assertEquals(expResult, result);
+  }
 }

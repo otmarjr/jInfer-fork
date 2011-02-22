@@ -1,0 +1,31 @@
+digraph interfaces_nodes {
+	rankdir = TB;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+{
+	ProjectRoot[label = "Project root directory"];
+}
+
+{
+	rank = same;
+	jinferproject;
+	output;
+}
+
+	ProjectRoot -> jinferproject;
+	ProjectRoot -> output;
+
+	Input[style = "rounded", label = "input.files"];
+	Properties[style = "rounded", label = "project.properties"];
+	jinferproject -> Input;
+	jinferproject -> Properties;
+
+	Schema1[style = "rounded", label = "generated schema 1"];
+	Schema2[style = "rounded", label = "generated schema 2"];
+	Etc[style = "rounded", label = "..."];
+
+	output -> Schema1;
+	output -> Schema2;
+	output -> Etc;
+}

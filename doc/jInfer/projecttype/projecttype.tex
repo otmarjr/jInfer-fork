@@ -67,6 +67,14 @@ Structure of \jmodule{ProjectType} can be divided into following five main parts
 
 \subsection{Base classes}
 
+\begin{figure}
+	\centering\includegraphics[scale=\myscale]{project_dir_structure}
+	\caption{Project directory structure} \label{dir-structure}
+\end{figure}
+
+This section describes classes needed for creation of the jInfer project and correct integration into NBP. With each project created in jInfer is also created specific directory structure on filesystem that describes jInfer project. This structure is described in figure \ref{dir-structure}, where rectangles represent folders and rounded rectangles files.\\
+
+Main two classes representing jInfer project type are \code{JInferProjectFactory} and \code{JInferProject}. \code{JInferProjectFactory} is a factory classes responsible for creation of jInfer project from disk directory and \code{JinferProject} is represent jInfer project in NBP.
 
 
 \subsection{Visualization classes}

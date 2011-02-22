@@ -1,4 +1,4 @@
-obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twostep treeruledisplayer autoeditor
+obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twostep treeruledisplayer autoeditor projecttype
 
 all: deploy
 

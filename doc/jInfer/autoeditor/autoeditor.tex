@@ -51,56 +51,49 @@ Public packages:       & cz.cuni.mff.ksi.jinfer.autoeditor \\
 \end{tabular}
 
 \section{Introduction}
-
-This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, thus the process of inference can be easily made user interactive.\\
+This is an implementation of a \jmodule{AutoEditor}. Using JUNG library, it provides an API to display and user interactively modify automata, thus the process of inference can be easily made user interactive. For more information on JUNG library, see \cite{jung}.\\
 
 UML diagrams shown in this document are simplified to keep them synoptical. Simplification involves removing not important class members which are not mentioned in the text, removing members of not jInfer classes and truncating string of inheritance which are not important for this document.\ For example, \code{VisualizationViewer} class from JUNG library has many methods and does not extends \code{JPanel} class directly, though in an UML diagram it has not any methods and extends \code{JPanel} directly, because it is sufficient for understanding of this document.
 
 \section{Structure}
-
 Structure of \jmodule{AutoEditor} can be divided into following four main parts.
-
 \begin{itemize}
 	\item API - API to display automaton in GUI.
 	\item Base classes - Classes providing basic functionality that can be extended and combined to achieve desired visualization of an automaton.
 	\item Derived classes - Classes derived from the base classes that are used in existing modules and simultaneously serve as examples.
 	\item Layout creation - System of creating \code{Layout}s.
 \end{itemize}
+First, \code{Layout}s and use of base classes to create a visualization of automaton will be described.\\
 
-First, \code{Layout}s and use of base classes to create a visualization of automaton will be described.
+TODO prelozit
+Ak je nejaka genericka trieda parametrizovana typom \code{T}, tak pri instanciovani tejto triedy je nutne tento typ zadat rovnaky, akym je instanciovany automat, pre ktory sa tato trieda vyraba. JUNG triedy su vacsinou parametrizovane typom pre stav a hranu. V takom pripade sa tieto triedy instanciuju typmi \code{State\textless T\textgreater} pre stav a \code{Step\textless T\textgreater} pre hranu. Refer to \cite{archdoc} for more information on these classes and see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent} for source code examples.
 
 \subsection{Layout}
-
-\code{Layout} is a JUNG interface responsible primarily of representation of automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software. TODO odkazy na juliu a JUNG v predchadzajucej vete.\\
+\code{Layout} is a JUNG interface responsible primarily of representation of automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software. TODO odkazy na juliu, graphviz a JUNG v predchadzajucej vete.\\
 
 Class providing creation of \code{Layout} instances is named \code{LayoutHelperFactory}.
 
 \subsubsection{Vyhnanovska Layout} \label{subsubsection:vyhnanovskaLayout}
-
 As mentioned above, this Layout was implemented by \emph{Julie Vyhnanovska} as a part of her master thesis. TODO link? It positions automaton states to a square grid. This \code{Layout} gives good results for relatively small automata (about 10 states of less) but for larger ones, the results are quite disarranged and confused.\\
 
-Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska}.
+Source codes reside in package\newline \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska}.
 
 \subsubsection{Graphviz Layout} \label{subsubsection:graphvizLayout}
-
 \code{Graphviz Layout} uses \emph{Graphviz}, third-party graph visualization software, to create positions of automaton states. TODO link? To use this \code{Layout}, \emph{Graphviz} has to be installed and path to \emph{dot} binary has to be set in options. This \code{Layout} gives nice results even on large automata.\\
 
 Automaton is transformed to the \emph{dot} representation and the \emph{dot} binary is ran with this representation on input. It processes the automaton and writes positions of its states to the standard output. Than the output is parsed and an instances of \code{Layout} is created using these positions.\\
 
-Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz}.
+Source codes reside in package\newline \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz}.
 
 \subsubsection{LayoutHelperFactory} \label{subsubsection:LayoutHelperFactory}
-
 In project properties, it is possible to select a \code{Layout} to be used to display automata. \code{LayoutHelperFactory} is class, providing just one static method, responsible for creating instances of \code{Layout}s according to a selection in project properties.\\
 
 This method has following signature.
-
 \begin{verbatim}
-public static <T> Layout<State<T>, Step<T>> createUserLayout(Automaton<T> automaton,
-                                                             Transformer<Step<T>, String> edgeLabelTransformer)
+public static <T> Layout<State<T>, Step<T>>
+createUserLayout(Automaton<T> automaton, Transformer<Step<T>, String> edgeLabelTransformer)
 \end{verbatim}
-
-The first argument is a automaton to create a layout from. The second is transformer to transform an instance of automaton edge to its string representation, required by the \code{Graphviz Layout}.
+The first argument is a automaton to create a layout from. The second is transformer to transform an instance of automaton edge to its string representation, required by the \code{Graphviz Layout}.\\
 
 Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts}.
 
@@ -114,19 +107,19 @@ Source codes resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automato
 
 Created implementation will be shown in project properties in the \code{Layout} selection.\\
 
-System of modules is described in documentation of Architecture, TODO ref na bib.
+System of modules is described in documentation of Architecture, see \cite{archdoc}.
 
 \subsection{Base classes}
 
 This section describes classes implementing basic common functionality that are supposed to be extended to create a new suitable visualization of automata for a particular method of inference. The new visualization may involve a brand new GUI panel with buttons with various functions, user interaction like selecting states or edges and others.\\
 
-Main two classes representing visualization of automaton are \code{Visualizer} and \code{AbstractComponent}. \code{Visualizer} is a graphical representation of automaton and \code{AbstractComponent} is a panel (extends \code{JPanel}) containing the \code{Visualizer} which will be displayed in GUI.\\
+Main two classes representing visualization of automaton are \code{Visualizer} and \code{AbstractComponent}. \code{Visualizer} is a graphical representation of automaton and \code{AbstractComponent} is a panel (extends \code{JPanel}) containing \linebreak the \code{Visualizer} which will be displayed in GUI.\\
 
 \subsubsection{Visualizer}
 
-\code {Visualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package extends JUNG \code{VisualizationViewer} class thus it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see \ref{subsection:GUI}.\\
+\code {Visualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package extends JUNG \linebreak \code{VisualizationViewer} class thus it provides all its methods and adds support for saving contained automaton to an image file. Responsible methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see \ref{subsection:GUI}.\\
 
-Constructor has one argument, instance of \code{Layout} interface created from an automaton, typically by \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
+Constructor has one argument, instance of \code{Layout} interface created from an automaton, typically by \linebreak \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
 
 \subsubsection{PluggableVisualizer}
 
@@ -134,7 +127,7 @@ Constructor has one argument, instance of \code{Layout} interface created from a
 
 \emph{Graph mouse plugin}s are classes implementing JUNG \code{GraphMousePlugin} interface and their purpose is to enhance \code{Visualizer} with mouse support.\\
 
-By default, instance of \code{PluggableVisualizer} is constructed with two plugins enabled. They are \code{ScalingGraphMousePlugin}, providing zooming, and \code{TranslatingGraphMousePlugin}, providing translating the displayed automaton in the x and y direction. In the most cases, these plugins are useful but if they are not wanted they can be removed using methods \code{getGraphMousePlugins()} and \code{removeGraphMousePlugin()}.\\
+By default, instance of \code{PluggableVisualizer} is constructed with two plugins enabled. They are \linebreak \code{ScalingGraphMousePlugin}, providing zooming, and \code{TranslatingGraphMousePlugin}, providing translating the displayed automaton in the x and y direction. In the most cases, these plugins are useful but if they are not wanted they can be removed using methods \code{getGraphMousePlugins()} and \code{removeGraphMousePlugin()}.\\
 
 Public (not inherited) methods of \code{PluggableVisualizer} are the following. Their purpose is clear from their names, for details see their JavaDoc.
 
@@ -199,7 +192,7 @@ For examples of API usage, see \ref{subsubsection:StatePickingComponent} and \re
 \subsection{Derived classes}
 
 \begin{figure}
-\centering\includegraphics[scale=\myscale]{uml_derived_classes}
+\centering\includegraphics[scale=0.65]{uml_derived_classes}
 \caption{Class diagram for the derived classes.} \label{uml_derived_classes}
 \end{figure}
 
@@ -209,7 +202,7 @@ This section describes classes derived from the base classes used in \jmodule{Tw
 \code{StatePickingComponent} (extensions of \code{abstractComponent}) alongside with \code{StatePickingVisualizer} (extension of \code{PluggableVisualizer}) provides possibility to pick one automaton state in GUI and immediately return to the calling code, which can retrieve the picked state.\\
 
 \code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has additional two arguments, superinitial and superfinal states as we want to distinguish these states in displayed automaton.\
-And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see \ref{subsubsection:AbstractComponent}.\\
+And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \linebreak \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see \ref{subsubsection:AbstractComponent}.\\
 
 \code{StatePickingComponent} provides the following additional methods.
 \begin{itemize}
@@ -217,34 +210,43 @@ And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the 
 	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
-Source codes of \code{StatePickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \code{StatePickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \code{VertexPickingGraphMousePlugin} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins}.\\
+Source codes of \code{StatePickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \code{StatePickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \linebreak \code{VertexPickingGraphMousePlugin} in \newline \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}
-    final Transformer<Step<Regexp<T>>, String> transformer = new Transformer<Step<Regexp<T>>, String>() {
+    final Transformer<Step<Regexp<T>>, String>
+      transformer = new Transformer<Step<Regexp<T>>, String>() {
       
-      @Override
-      public String transform(final Step<Regexp<T>> step) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append(symbolToString.toString(step.getAcceptSymbol()));
-        sb.append("|");
-        sb.append(String.valueOf(step.getUseCount()));
-        sb.append("}");
-        return sb.toString();
-      }
-    };
+        @Override
+        public String transform(final Step<Regexp<T>> step) {
+          StringBuilder sb = new StringBuilder();
+          sb.append("{");
+          sb.append(symbolToString.toString(step.getAcceptSymbol()));
+          sb.append("|");
+          sb.append(String.valueOf(step.getUseCount()));
+          sb.append("}");
+          return sb.toString();
+        }
+      };
 
     State<Regexp<T>> removeState;
     final StatePickingComponent<Regexp<T>> component = new StatePickingComponent<Regexp<T>>();
-    final StatePickingVisualizer<Regexp<T>> visualizer = new StatePickingVisualizer<Regexp<T>>(LayoutHelperFactory.createUserLayout(automaton, transformer), transformer, component, automaton.getSuperInitialState(), automaton.getSuperFinalState());
+    final Layout<State<T>, Step<T>> layout = LayoutHelperFactory.createUserLayout(automaton,
+                                                                                  transformer);
+    final StatePickingVisualizer<Regexp<T>>
+      visualizer = new StatePickingVisualizer<Regexp<T>>(layout,
+                                                         transformer,
+                                                         component,
+                                                         automaton.getSuperInitialState(),
+                                                         automaton.getSuperFinalState());
     component.setVisualizer(visualizer);
     
     do {
       AutoEditor.drawComponentAndWaitForGUI(component);
       removeState = component.getPickedState();
 
-      if ((removeState.equals(automaton.getSuperFinalState())) || (removeState.equals(automaton.getSuperInitialState()))) {
+      if ((removeState.equals(automaton.getSuperFinalState()))
+           || (removeState.equals(automaton.getSuperInitialState()))) {
         component.setLabel("Do not select superInitial and superFinal states.");
         continue;
       }
@@ -255,7 +257,7 @@ Example of usage follows.
 \subsubsection{StatesPickingComponent} \label{subsubsection:StatesPickingComponent}
 Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are similar to the classes described in the previous section. Purpose of these is to provide picking of multiple automaton states.\\
 
-\code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
+\code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \linebreak \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
 Main difference compared to the \code{VertexPickingGraphMousePlugin} is \code{VerticesPickingGraphMousePlugin} does not call component's \code{guiDone()} method.\\
 
 \code{StatesPickingComponent} is almost the same as \code{StatePickingComponent} but it contains two extra GUI controls. 'Continue' button and 'Don't ask me anymore to select states to be merger' checkbox.\
@@ -269,11 +271,13 @@ Methods of \code{StatesPickingComponent} are the following.
 	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
-Source codes of \code{StatesPickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \code{StatesPickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \code{VerticesPickingGraphMousePlugin} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins}.\\
+Source codes of \code{StatesPickingComponent} resides in package \newline \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component}, \newline \code{StatesPickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and \newline \code{VerticesPickingGraphMousePlugin} in \newline \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}
-  Automaton<T> simplify(Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) {
+  Automaton<T> simplify(Automaton<T> inputAutomaton,
+                        SymbolToString<T> symbolToString,
+                        String elementName) {
     if (!askUser) {
       return inputAutomaton;
     }
@@ -295,14 +299,19 @@ Example of usage follows.
 
     Boolean selectTwo = false;
     do {
-      final StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(LayoutHelperFactory.createUserLayout(inputAutomaton, transformer), transformer);
+      final Layout<State<T>, Step<T>>
+        layout = LayoutHelperFactory.createUserLayout(inputAutomaton, transformer);
+      final StatesPickingVisualizer<T>
+        visualizer = new StatesPickingVisualizer<T>(layout, transformer);
 
       final StatesPickingComponent<T> panel = new StatesPickingComponent<T>();
       panel.setVisualizer(visualizer);
       if (selectTwo) {
-        panel.setLabel("Automaton for element <" + elementName + ">. Please select states to be merged and click continue. Select at least 2 states.");
+        panel.setLabel("Automaton for element <" + elementName
+          + ">. Please select states to be merged and click continue. Select at least 2 states.");
       } else {
-        panel.setLabel("Automaton for element <" + elementName + ">. Please select states to be merged and click continue.");
+        panel.setLabel("Automaton for element <" + elementName
+          + ">. Please select states to be merged and click continue.");
       }
       
       AutoEditor.drawComponentAndWaitForGUI(panel);
@@ -336,7 +345,7 @@ As shown at figure \ref{figure_gui}, \jmodule{AutoEditor}'s panel is placed in a
 Buttons have labels 'Save as image' and 'Show settings'. Pushing the first one will raise a dialog box to save currently displayed automaton to an image file. Set of supported image formats depends on installed JRE.\
 The second one will open \jmodule{AutoEditor} tab in NetBeans options. For description of the settings, see \ref{subsection:Settings}.
 
-\subsection{Settings}
+\subsection{Settings} \label{subsection:Settings}
 
 All settings provided by \jmodule{AutoEditor} are NetBeans-wide. The options panel along with all the logic is in the \code{cz.cuni.mff.ksi.jinfer.autoeditor.options} package. Available options include setting the color of the background, colors and shapes of some special types of automaton states.\\
 

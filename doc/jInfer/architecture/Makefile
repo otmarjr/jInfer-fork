@@ -22,13 +22,14 @@ automaton_merge3.eps nodes_full2.eps module_deps.eps nodes.eps factory_pattern1.
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng $< > $(@:.eps=.png)
 
 all: architecture.pdf
 
 clean:
 	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux
 dist-clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf *.eps
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf *.eps *.png
 
 booklet: main.ps
 	cat main.ps | psbook | psnup -2 >main-booklet.ps

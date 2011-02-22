@@ -21,6 +21,7 @@ base.dvi:
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng <$ > $(@:.eps=.png)
 
 all: base.pdf
 

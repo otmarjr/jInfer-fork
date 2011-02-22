@@ -21,6 +21,7 @@ basicdtd.dvi:
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng <$ > $(@:.eps=.png)
 
 all: basicdtd.pdf
 

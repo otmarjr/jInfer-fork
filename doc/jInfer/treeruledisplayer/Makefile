@@ -1,6 +1,6 @@
 default: all
 
-treeruledisplayer.dvi:
+treeruledisplayer.dvi: class-diagram.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

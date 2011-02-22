@@ -1,0 +1,15 @@
+digraph interfaces_nodes {
+	rankdir = BT;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	BasicRuleDisplayerTopComponent;
+	RulePanel;
+	GraphBuilder;
+	JUNG;
+
+	GraphBuilder -> RulePanel [label = "1" arrowhead = diamond];
+	RulePanel -> BasicRuleDisplayerTopComponent [label = "0..n" arrowhead = diamond];
+	GraphBuilder -> JUNG [label = "<< uses >>" style = dashed];
+
+}

@@ -22,6 +22,7 @@ twostep.dvi: twostep_modules.eps automaton_merging_state_modules.eps twostep_mod
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng <$ > $(@:.eps=.png)
 
 all: twostep.pdf
 

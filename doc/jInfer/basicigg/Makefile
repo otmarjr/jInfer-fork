@@ -21,6 +21,7 @@ basicigg.dvi: process-view.eps
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng <$ > $(@:.eps=.png)
 
 all: basicigg.pdf
 

@@ -21,6 +21,7 @@ autoeditor.dvi: uml_base_classes.eps uml_derived_classes.eps
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng <$ > $(@:.eps=.png)
 
 all: autoeditor.pdf
 

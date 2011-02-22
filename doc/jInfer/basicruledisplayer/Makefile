@@ -21,6 +21,7 @@ basicruledisplayer.dvi: class-diagram.eps
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng <$ > $(@:.eps=.png)
 
 all: basicruledisplayer.pdf
 

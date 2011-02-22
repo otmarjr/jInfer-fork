@@ -17,7 +17,7 @@ digraph automaton_merging_states_submodules {
 	KHContext [style = rounded];
 	KHContext -> MergeConditionTester [label = "implements"];
 	
-	Greedy -> KHContext [label = "uses"];
+	Greedy -> KHContext [label = "<<use>>"];
 
 	UserInteractive [style = rounded];
 	UserInteractive -> AutomatonSimplifier [label = "implements"];

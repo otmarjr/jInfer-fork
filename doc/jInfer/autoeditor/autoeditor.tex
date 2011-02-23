@@ -66,20 +66,20 @@ Structure of \jmodule{AutoEditor} can be divided into following four main parts.
 First, \code{Layout}s and use of base classes to create a visualization of automaton will be described.\\
 
 TODO prelozit
-Ak je nejaka genericka trieda parametrizovana typom \code{T}, tak pri instanciovani tejto triedy je nutne tento typ zadat rovnaky, akym je instanciovany automat, pre ktory sa tato trieda vyraba. JUNG triedy su vacsinou parametrizovane typom pre stav a hranu. V takom pripade sa tieto triedy instanciuju typmi \code{State\textless T\textgreater} pre stav a \code{Step\textless T\textgreater} pre hranu. Refer to \cite{archdoc} for more information on these classes and see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent} for source code examples.
+Ak je nejaka genericka trieda parametrizovana typom \code{T}, tak pri instanciovani tejto triedy je nutne tento typ zadat rovnaky, akym je instanciovany automat, pre ktory sa tato trieda vyraba. JUNG triedy su vacsinou parametrizovane typom pre stav a hranu. V takom pripade sa tieto triedy instanciuju typmi \code{State\textless T\textgreater} pre stav a \code{Step\textless T\textgreater} pre hranu. Refer to \cite{archdoc} for more information on these classes and see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent} for source code examples.  
 
 \subsection{Layout}
-\code{Layout} is a JUNG interface responsible primarily of representation of an automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, because none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software. TODO odkazy na juliu, graphviz a JUNG v predchadzajucej vete.\\
+\code{Layout} is a JUNG interface responsible primarily of representation of an automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, because none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software.\\
 
 Class providing creation of \code{Layout} instances is named \code{LayoutHelperFactory}.
 
 \subsubsection{Vyhnanovska Layout} \label{subsubsection:vyhnanovskaLayout}
-As mentioned above, this Layout was implemented by \emph{Julie Vyhnanovska} as a part of her master thesis. TODO link? It positions automaton states on a square grid. This \code{Layout} gives good results for relatively small automata (about 10 states of less) but for larger ones, the results are quite disarranged and confusing.\\
+As mentioned above, this Layout was implemented by \emph{Julie Vyhnanovska} as a part of her master thesis (see \cite{Vyhnanovska}). It positions automaton states on a square grid. This \code{Layout} gives good results for relatively small automata (about 10 states of less) but for larger ones, the results are quite disarranged and confusing.\\
 
 Source code resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.}\\*\code{vyhnanovska}.
 
 \subsubsection{Graphviz Layout} \label{subsubsection:graphvizLayout}
-\code{Graphviz Layout} uses \emph{Graphviz}, third-party graph visualization software, to create positions of automaton states. TODO link? To use this \code{Layout}, \emph{Graphviz} has to be installed and path to \emph{dot} binary has to be set in options. This \code{Layout} gives nice results even on large automata.\\
+\code{Graphviz Layout} uses \emph{Graphviz}, third-party graph visualization software (see \cite{graphviz}), to create positions of automaton states. To use this \code{Layout}, \emph{Graphviz} has to be installed and path to \emph{dot} binary has to be set in options. This \code{Layout} gives nice results even on large automata.\\
 
 Automaton is transformed to the \emph{dot} representation and the \emph{dot} binary is invoked with this representation on input. It processes the automaton and writes positions of its states to the standard output. The output is then parsed and an instance of \code{Layout} is created using these positions.\\
 
@@ -90,8 +90,9 @@ In project properties, it is possible to select a \code{Layout} to be used to di
 
 This method has the following signature.
 \begin{verbatim}
-public static <T> Layout<State<T>, Step<T>>
-createUserLayout(Automaton<T> automaton, Transformer<Step<T>, String> edgeLabelTransformer)
+public static <T> Layout<State<T>, Step<T>> createUserLayout(
+  Automaton<T> automaton,
+  Transformer<Step<T>, String> edgeLabelTransformer)
 \end{verbatim}
 The first argument is an automaton to create layout from. The second is transformer to transform an instance of automaton edge to its string representation, required by the \code{Graphviz Layout}.\\
 
@@ -115,7 +116,7 @@ Main two classes representing visualization of automaton are \code{Visualizer} a
 
 \subsubsection{Visualizer}
 
-\code {Visualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package extends JUNG \linebreak \code{VisualizationViewer} class thus it provides all its methods and adds support for saving contained automaton to an image file. Relevant methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see \ref{subsection:GUI}.\\
+\code {Visualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package extends JUNG \linebreak \code{VisualizationViewer} class thus it inherits all its methods and adds support for saving contained automaton to an image file. Relevant methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see \ref{subsection:GUI}.\\
 
 Constructor has one argument, an instance of \code{Layout} interface created from an automaton, typically by \linebreak \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
 
@@ -147,7 +148,7 @@ Public (not inherited) methods of \code{PluggableVisualizer} are the following. 
 	\item \code{waitForGuiDone()} - Suspends its thread until method \code{guiDone} is called on this instance. Do not call this method directly, it is called by \jmodule{AutoEditor}. For more information, see \ref{subsubsection:AbstractComponent user-interactivity support}.
 	\item \code{guiDone()} - Wakes up this instance from a suspended state. For detailed description, see \ref{subsubsection:AbstractComponent user-interactivity support}.
 	\item \code{guiInterrupt()} - Called when \jmodule{AutoEditor}'s tab is closed to propagate information about terminating of inference to a caller of \jmodule{AutoEditor}. There is no need to called this method directly.
-	\item \code{guiInterrupted()} - Checks if \jmodule{AutoEditor} GUI was terminated by interrupt or regularly. Again, there is no need to call this method directly, it is called by \jmodule{AutoEditor}. For details, see \ref{subsection:GUI}.
+	\item \code{guiInterrupted()} - Checks if \jmodule{AutoEditor} GUI was terminated by \code{guiInterrupt()} method or regularly (\code{guiDone()} method or GUI was not waiting for user interaction). Again, there is no need to call this method directly, it is called by \jmodule{AutoEditor}. For details, see \ref{subsection:GUI}.
 \end{itemize}
 
 Besides those methods, \code{AbstractComponent} has one abstract method, named \code{getAutomatonDrawPanel()}.\\
@@ -191,7 +192,7 @@ For examples of API usage, see \ref{subsubsection:StatePickingComponent} and \re
 
 \begin{figure}
 \centering\includegraphics[scale=0.65]{uml_derived_classes}
-\caption{Class diagram for the derived classes.} \label{uml_derived_classes}
+\caption{Class diagram for the derived classes, not showing members of classes from figure \ref{uml_base_classes} to keep this diagram simple.} \label{uml_derived_classes}
 \end{figure}
 
 This section describes classes derived from the base classes used in \jmodule{Two Step Simplifier} module to display automata. This classes may also serve as examples of base classes extensions.

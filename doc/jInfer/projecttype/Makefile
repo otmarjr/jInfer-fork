@@ -1,6 +1,6 @@
 default: all
 
-projecttype.dvi: project_dir_structure.eps
+projecttype.dvi: project_dir_structure.eps node_structure.eps
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

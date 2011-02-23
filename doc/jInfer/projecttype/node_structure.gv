@@ -1,0 +1,16 @@
+digraph interfaces_nodes {
+	rankdir = BT;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	RootNode;
+	FolderNode;
+	OutputNode;
+	FileNode;
+	OutputFileNode;
+
+	FolderNode -> RootNode[label = "3", arrowhead = diamond];
+	OutputNode -> RootNode[label = "1", arrowhead = diamond];
+	FileNode -> FolderNode[label = "0..n", arrowhead = diamond];
+	OutputFileNode -> OutputNode[label = "0..n", arrowhead = diamond];
+}

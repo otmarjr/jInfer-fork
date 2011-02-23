@@ -39,7 +39,7 @@ digraph uml_basic_full {
 	Visualizer [shape = plaintext, label = <
 	<table cellspacing="0" cellborder="1" border="0">
 		<tr><td>
-			<font face="TeXGyrePagella-BoldItalic" point-size="10">Visualizer&lt;T&gt;</font>
+			<font face="TeXGyrePagella-Bold" point-size="10">Visualizer&lt;T&gt;</font>
 		</td></tr>
 		<tr><td></td></tr>
 		<tr><td cellpadding="0">
@@ -80,7 +80,7 @@ digraph uml_basic_full {
 	PluggableVisualizer [shape = plaintext, label = <
 	<table cellspacing="0" cellborder="1" border="0">
 		<tr><td>
-			<font face="TeXGyrePagella-BoldItalic" point-size="10">PluggableVisualizer&lt;T&gt;</font>
+			<font face="TeXGyrePagella-Bold" point-size="10">PluggableVisualizer&lt;T&gt;</font>
 		</td></tr>
 		<tr><td cellpadding="0">
 			<table cellspacing="0" cellborder="0" border="0">

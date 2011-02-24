@@ -4,7 +4,7 @@ digraph interfaces_nodes {
 	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
 
 {
-	ProjectRoot[label = "Project root directory"];
+	ProjectRoot[label = "jInfer project root directory"];
 }
 
 {

@@ -65,8 +65,7 @@ Structure of \jmodule{AutoEditor} can be divided into following four main parts.
 \end{itemize}
 First, \code{Layout}s and use of base classes to create a visualization of automaton will be described.\\
 
-TODO prelozit
-Ak je nejaka genericka trieda parametrizovana typom \code{T}, tak pri instanciovani tejto triedy je nutne tento typ zadat rovnaky, akym je instanciovany automat, pre ktory sa tato trieda vyraba. JUNG triedy su vacsinou parametrizovane typom pre stav a hranu. V takom pripade sa tieto triedy instanciuju typmi \code{State\textless T\textgreater} pre stav a \code{Step\textless T\textgreater} pre hranu. Refer to \cite{archdoc} for more information on these classes and see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent} for source code examples.  
+In case a generic class has a type parameter \code{T}, this has to be the same \code{T} that is used to parametrize jInfer automata. JUNG classes usually need a type parameter for a state and for an edge. These should be then \code{State\textless T\textgreater} (for a state) and \code{Step\textless T\textgreater} (for edge).
 
 \subsection{Layout}
 \code{Layout} is a JUNG interface responsible primarily of representation of an automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, because none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software.\\
@@ -153,7 +152,7 @@ Public (not inherited) methods of \code{PluggableVisualizer} are the following. 
 
 Besides those methods, \code{AbstractComponent} has one abstract method, named \code{getAutomatonDrawPanel()}.\\
 
-Purpose of this class is to be extended to create own GUI panel, which displays some automaton using a supplied instance of \code{Visualizer}. Method \code{getAutomatonDrawPanel()} is meant to be overridden to returns an instance of \code{JPanel}, in which the \code{Visualizer} is to be drawn.\\
+Purpose of this class is to be extended to create own GUI panel, which displays some automaton using a supplied instance of \code{Visualizer}. Method \code{getAutomatonDrawPanel()} is meant to be overridden to return an instance of \code{JPanel}, in which the \code{Visualizer} is to be drawn.\\
 
 Programmer implementing an extension of \code{AbstractComponent} is not forced to place the \code{Visualizer} on his own. It is just needed to create \code{JPanel} and define \code{getAutomatonDrawPanel()} method to return this \code{JPanel}. \jmodule{AutoEditor} will take care of placing and displaying the \code{Visualizer} in the \code{JPanel}.\\
 
@@ -253,6 +252,11 @@ Example of usage follows.
 \end{verbatim}
 
 \subsubsection{StatesPickingComponent} \label{subsubsection:StatesPickingComponent}
+\begin{figure}
+\centering\includegraphics[scale=0.6]{screenshot}
+\caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
+\end{figure}
+
 Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are similar to the classes described in the previous section. Purpose of these is to provide picking of multiple automaton states.\\
 
 \code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \linebreak \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
@@ -332,12 +336,7 @@ Example of usage follows.
 
 \subsection{GUI} \label{subsection:GUI}
 
-\begin{figure}
-\centering\includegraphics[scale=0.6]{screenshot}
-\caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
-\end{figure}
-
-As shown at figure \ref{figure_gui}, \jmodule{AutoEditor}'s panel is placed in a tab in the editor window. It consists of two buttons, horizontal line below them and and a panel to place an extension of \code{AbstractComponent} (see \ref{subsubsection:AbstractComponent}). Class representing this panel is named \code{AutoEditorTopComponent} and resides in \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent} package.\\
+As shown at figure \ref{figure_gui}, \jmodule{AutoEditor}'s panel is placed in a tab in the editor window. It consists of two buttons, horizontal line below them and a panel to place an extension of \code{AbstractComponent} (see \ref{subsubsection:AbstractComponent}). Class representing this panel is called \code{AutoEditorTopComponent} and resides in \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent} package.\\
 
 Buttons have labels 'Save as Image' and 'Show Settings'. Pushing the first one will raise a dialog box to save currently displayed automaton to an image file. Set of supported image formats depends on installed JRE.\
 The second one will open \jmodule{AutoEditor} tab in NetBeans options. For description of the settings, see \ref{subsection:Settings}.

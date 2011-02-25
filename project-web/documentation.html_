@@ -100,7 +100,7 @@
           <ul>
             <li><a href="modules/autoeditor.pdf">AutoEditor</a></li>
             <li><a href="modules/basicruledisplayer.pdf">BasicRuleDisplayer</a></li>
-            <li>ProjectType</li>
+            <li><a href="modules/projecttype.pdf">ProjectType</a></li>
             <li><a href="modules/treeruledisplayer.pdf">TreeRuleDisplayer</a></li>
           </ul>
         </p>

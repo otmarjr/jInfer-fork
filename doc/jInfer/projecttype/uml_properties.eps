@@ -1,8 +1,8 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Creator: graphviz version 2.26.3 (20100126.1600)
-%%Title: interfaces_nodes
+%%Title: uml_basic_full
 %%Pages: 1
-%%BoundingBox: 36 36 218 252
+%%BoundingBox: 36 36 746 250
 %%EndComments
 save
 %%BeginProlog
@@ -178,176 +178,248 @@ def
 %%EndSetup
 setupLatin1
 %%Page: 1 1
-%%PageBoundingBox: 36 36 218 252
+%%PageBoundingBox: 36 36 746 250
 %%PageOrientation: Portrait
 0 0 1 beginpage
 gsave
-36 36 182 216 boxprim clip newpath
+36 36 710 214 boxprim clip newpath
 1 1 set_scale 0 rotate 40 41 translate
-% RootNode
+% JPanel
 gsave
 1 setlinewidth
+solid
 0 0 0 nodecolor
-newpath 121 208 moveto
-57 208 lineto
-57 172 lineto
-121 172 lineto
+newpath 213 184 moveto
+213 201 lineto
+250 201 lineto
+250 184 lineto
 closepath stroke
 0 0 0 nodecolor
-10 /TeXGyrePagella-Regular set_font
-65 187.5 moveto 48 (RootNode) alignedtext
+10 /TeXGyrePagella-Bold set_font
+216.5 190.17 moveto 30 (JPanel) alignedtext
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 213 178 moveto
+213 184 lineto
+250 184 lineto
+250 178 lineto
+closepath stroke
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 213 172 moveto
+213 178 lineto
+250 178 lineto
+250 172 lineto
+closepath stroke
 grestore
-% FolderNode
+% VirtualCategoryPanel
 gsave
 1 setlinewidth
+solid
 0 0 0 nodecolor
-newpath 72 122 moveto
-0 122 lineto
-0 86 lineto
-72 86 lineto
+newpath 8 68 moveto
+8 85 lineto
+155 85 lineto
+155 68 lineto
 closepath stroke
 0 0 0 nodecolor
-10 /TeXGyrePagella-Regular set_font
-7.5 101.5 moveto 57 (FolderNode) alignedtext
+10 /TeXGyrePagella-Bold set_font
+30 74.17 moveto 103 (VirtualCategoryPanel) alignedtext
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 8 62 moveto
+8 68 lineto
+155 68 lineto
+155 62 lineto
+closepath stroke
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 8 32 moveto
+8 62 lineto
+155 62 lineto
+155 32 lineto
+closepath stroke
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+11 51.67 moveto 120 (+getCategoryId\(\): String) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+11 37.67 moveto 140 (+getCategoryName\(\): String) alignedtext
 grestore
-% FolderNode->RootNode
+% VirtualCategoryPanel->JPanel
 gsave
 1 setlinewidth
 0 0 0 edgecolor
-newpath 47.24 122.24 moveto
-54.27 133.64 63.46 148.57 71.44 161.51 curveto
+newpath 116.93 89.66 moveto
+142.78 111.72 177.23 141.11 201.48 161.81 curveto
+stroke
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 199.41 164.64 moveto
+209.29 168.47 lineto
+203.95 159.32 lineto
+closepath stroke
+0 0 0 edgecolor
+10 /TeXGyrePagella-Regular set_font
+187 140.5 moveto 40 (extends) alignedtext
+grestore
+% PropertiesPanelProvider
+gsave
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 206 96 moveto
+206 113 lineto
+499 113 lineto
+499 96 lineto
+closepath stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Bold set_font
+294 102.17 moveto 117 (PropertiesPanelProvider) alignedtext
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 206 90 moveto
+206 96 lineto
+499 96 lineto
+499 90 lineto
+closepath stroke
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 206 4 moveto
+206 90 lineto
+499 90 lineto
+499 4 lineto
+closepath stroke
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+209 79.67 moveto 96 (+getName\(\): String) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+209 65.67 moveto 133 (+getDisplayName\(\): String) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+209 51.67 moveto 86 (+getPriority\(\): int) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+209 37.67 moveto 286 (+getPanel\(properties: Properties\): AbstractPropertiesPanel) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+209 23.67 moveto 97 (+getParent\(\): String) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+209 9.67 moveto 245 (+getSubCategories\(\): List<VirtualCategoryPanel>) alignedtext
+grestore
+% VirtualCategoryPanel->PropertiesPanelProvider
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 162.25 59 moveto
+170.03 59 177.81 59 185.6 59 curveto
 stroke
 0 0 0 edgecolor
-newpath 71.48 161.57 moveto
-78.03 164.58 lineto
-77.78 171.79 lineto
-71.22 168.78 lineto
+newpath 185.83 59 moveto
+191.83 55 lineto
+197.83 59 lineto
+191.83 63 lineto
 closepath fill
 1 setlinewidth
 solid
 0 0 0 edgecolor
-newpath 71.48 161.57 moveto
-78.03 164.58 lineto
-77.78 171.79 lineto
-71.22 168.78 lineto
+newpath 185.83 59 moveto
+191.83 55 lineto
+197.83 59 lineto
+191.83 63 lineto
+closepath stroke
+grestore
+% AbstractPropertiesPanel
+gsave
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 550 80 moveto
+550 97 lineto
+694 97 lineto
+694 80 lineto
+closepath stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-BoldItalic set_font
+563.5 86.17 moveto 117 (AbstractPropertiesPanel) alignedtext
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 550 64 moveto
+550 80 lineto
+694 80 lineto
+694 64 lineto
+closepath stroke
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+553 69.67 moveto 114 (#properties: Properties) alignedtext
+1 setlinewidth
+solid
+0 0 0 nodecolor
+newpath 550 20 moveto
+550 64 lineto
+694 64 lineto
+694 20 lineto
+closepath stroke
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+553 53.67 moveto 117 (+<<abstract>> store\(\)) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+553 39.67 moveto 113 (+<<abstract>> load\(\)) alignedtext
+0 0 0 nodecolor
+10 /SFTT1000 set_font
+553 25.67 moveto 137 (+getProperties\(\): Properties) alignedtext
+grestore
+% AbstractPropertiesPanel->JPanel
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 551.03 101.53 moveto
+539.24 107.6 526.96 113.35 515 118 curveto
+429.71 151.19 323.62 171.87 268.38 181.18 curveto
+stroke
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 267.65 177.76 moveto
+258.35 182.84 lineto
+268.79 184.66 lineto
 closepath stroke
 0 0 0 edgecolor
 10 /TeXGyrePagella-Regular set_font
-66 144.5 moveto 7 (3) alignedtext
+462 140.5 moveto 40 (extends) alignedtext
 grestore
-% OutputNode
-gsave
-1 setlinewidth
-0 0 0 nodecolor
-newpath 165 122 moveto
-91 122 lineto
-91 86 lineto
-165 86 lineto
-closepath stroke
-0 0 0 nodecolor
-10 /TeXGyrePagella-Regular set_font
-98.5 101.5 moveto 59 (OutputNode) alignedtext
-grestore
-% OutputNode->RootNode
+% AbstractPropertiesPanel->PropertiesPanelProvider
 gsave
 1 setlinewidth
 0 0 0 edgecolor
-newpath 119.73 122.24 moveto
-114.66 133.41 108.06 147.97 102.27 160.73 curveto
+newpath 541.97 59 moveto
+534.15 59 526.34 59 518.53 59 curveto
 stroke
 0 0 0 edgecolor
-newpath 102.22 160.86 moveto
-103.38 167.98 lineto
-97.26 171.79 lineto
-96.09 164.67 lineto
+newpath 518.25 59 moveto
+512.25 63 lineto
+506.25 59 lineto
+512.25 55 lineto
 closepath fill
 1 setlinewidth
 solid
 0 0 0 edgecolor
-newpath 102.22 160.86 moveto
-103.38 167.98 lineto
-97.26 171.79 lineto
-96.09 164.67 lineto
+newpath 518.25 59 moveto
+512.25 63 lineto
+506.25 59 lineto
+512.25 55 lineto
 closepath stroke
-0 0 0 edgecolor
-10 /TeXGyrePagella-Regular set_font
-110 144.5 moveto 7 (1) alignedtext
-grestore
-% FileNode
-gsave
-1 setlinewidth
-0 0 0 nodecolor
-newpath 64 36 moveto
-6 36 lineto
-6 0 lineto
-64 0 lineto
-closepath stroke
-0 0 0 nodecolor
-10 /TeXGyrePagella-Regular set_font
-13.5 15.5 moveto 43 (FileNode) alignedtext
-grestore
-% FileNode->FolderNode
-gsave
-1 setlinewidth
-0 0 0 edgecolor
-newpath 35.21 36.24 moveto
-35.34 47.07 35.5 61.08 35.65 73.55 curveto
-stroke
-0 0 0 edgecolor
-newpath 35.65 73.79 moveto
-39.72 79.74 lineto
-35.79 85.79 lineto
-31.72 79.83 lineto
-closepath fill
-1 setlinewidth
-solid
-0 0 0 edgecolor
-newpath 35.65 73.79 moveto
-39.72 79.74 lineto
-35.79 85.79 lineto
-31.72 79.83 lineto
-closepath stroke
-0 0 0 edgecolor
-10 /TeXGyrePagella-Regular set_font
-36 58.5 moveto 19 (0..n) alignedtext
-grestore
-% OutputFileNode
-gsave
-1 setlinewidth
-0 0 0 nodecolor
-newpath 174 36 moveto
-82 36 lineto
-82 0 lineto
-174 0 lineto
-closepath stroke
-0 0 0 nodecolor
-10 /TeXGyrePagella-Regular set_font
-90 15.5 moveto 76 (OutputFileNode) alignedtext
-grestore
-% OutputFileNode->OutputNode
-gsave
-1 setlinewidth
-0 0 0 edgecolor
-newpath 128 36.24 moveto
-128 47.07 128 61.08 128 73.55 curveto
-stroke
-0 0 0 edgecolor
-newpath 128 73.79 moveto
-132 79.79 lineto
-128 85.79 lineto
-124 79.79 lineto
-closepath fill
-1 setlinewidth
-solid
-0 0 0 edgecolor
-newpath 128 73.79 moveto
-132 79.79 lineto
-128 85.79 lineto
-124 79.79 lineto
-closepath stroke
-0 0 0 edgecolor
-10 /TeXGyrePagella-Regular set_font
-128 58.5 moveto 19 (0..n) alignedtext
 grestore
 endpage
 showpage

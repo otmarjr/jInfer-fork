@@ -1,0 +1,81 @@
+digraph uml_basic_full {
+	rankdir = BT;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10, arrowhead = empty];
+
+{
+	rank = same;
+
+	JPanel [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-Bold" point-size="10">JPanel</font>
+		</td></tr>
+		<tr><td></td></tr>
+		<tr><td></td></tr>
+	</table>>];
+}
+
+{
+	rank = same;
+
+	VirtualCategoryPanel [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-Bold" point-size="10">VirtualCategoryPanel</font>
+		</td></tr>
+		<tr><td></td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+getCategoryId(): String</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getCategoryName(): String</font></td></tr>
+			</table>
+		</td></tr>
+	</table>>];
+
+	PropertiesPanelProvider [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-Bold" point-size="10">PropertiesPanelProvider</font>
+		</td></tr>
+		<tr><td></td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+getName(): String</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getDisplayName(): String</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getPriority(): int</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getPanel(properties: Properties): AbstractPropertiesPanel</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getParent(): String</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getSubCategories(): List&lt;VirtualCategoryPanel&gt;</font></td></tr>
+			</table>
+		</td></tr>
+	</table>>];
+
+	AbstractPropertiesPanel [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-BoldItalic" point-size="10"><i>AbstractPropertiesPanel</i></font>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">#properties: Properties</font></td></tr>
+			</table>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;abstract&gt;&gt; store()</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;abstract&gt;&gt; load()</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getProperties(): Properties</font></td></tr>
+			</table>
+		</td></tr>
+	</table>>];
+}
+
+AbstractPropertiesPanel -> PropertiesPanelProvider [arrowhead = diamond];
+VirtualCategoryPanel -> PropertiesPanelProvider [arrowhead = diamond];
+
+VirtualCategoryPanel -> JPanel [label = "extends"];
+AbstractPropertiesPanel -> JPanel [label = "extends"];
+
+
+}

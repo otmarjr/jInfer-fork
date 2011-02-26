@@ -93,7 +93,7 @@
             <li><a href="modules/basicxsd.pdf">BasicXSDExporter</a></li>
             <li><a href="modules/runner.pdf">Runner</a></li>
             <li><a href="modules/twostep.pdf">TwoStepSimplifier</a></li>
-            <li>XSDImporter</li>
+            <li><a href="modules/xsdimporter.pdf">XSDImporter</a></li>
           </ul>
 
         <h4>Utility modules</h4>

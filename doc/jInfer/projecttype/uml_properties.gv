@@ -33,7 +33,33 @@ digraph uml_basic_full {
 		</td></tr>
 	</table>>];
 
-	PropertiesPanelProvider [shape = plaintext, label = <
+
+	AbstractPropertiesPanel [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+		<tr><td>
+			<font face="TeXGyrePagella-BoldItalic" point-size="10"><i>AbstractPropertiesPanel</i></font>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">#properties: Properties</font></td></tr>
+			</table>
+		</td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;constructor&gt;&gt; AbstractPropertiesPanel(properties: Properties)</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;abstract&gt;&gt; store()</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;abstract&gt;&gt; load()</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+getProperties(): Properties</font></td></tr>
+			</table>
+		</td></tr>
+	</table>>];
+
+}
+
+{
+	rank = same;
+
+		PropertiesPanelProvider [shape = plaintext, label = <
 	<table cellspacing="0" cellborder="1" border="0">
 		<tr><td>
 			<font face="TeXGyrePagella-Bold" point-size="10">PropertiesPanelProvider</font>
@@ -51,31 +77,14 @@ digraph uml_basic_full {
 		</td></tr>
 	</table>>];
 
-	AbstractPropertiesPanel [shape = plaintext, label = <
-	<table cellspacing="0" cellborder="1" border="0">
-		<tr><td>
-			<font face="TeXGyrePagella-BoldItalic" point-size="10"><i>AbstractPropertiesPanel</i></font>
-		</td></tr>
-		<tr><td cellpadding="0">
-			<table cellspacing="0" cellborder="0" border="0">
-				<tr><td align="left"><font face="SFTT1000">#properties: Properties</font></td></tr>
-			</table>
-		</td></tr>
-		<tr><td cellpadding="0">
-			<table cellspacing="0" cellborder="0" border="0">
-				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;abstract&gt;&gt; store()</font></td></tr>
-				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;abstract&gt;&gt; load()</font></td></tr>
-				<tr><td align="left"><font face="SFTT1000">+getProperties(): Properties</font></td></tr>
-			</table>
-		</td></tr>
-	</table>>];
 }
-
-AbstractPropertiesPanel -> PropertiesPanelProvider [arrowhead = diamond];
-VirtualCategoryPanel -> PropertiesPanelProvider [arrowhead = diamond];
 
 VirtualCategoryPanel -> JPanel [label = "extends"];
 AbstractPropertiesPanel -> JPanel [label = "extends"];
+
+
+AbstractPropertiesPanel -> PropertiesPanelProvider [arrowhead = diamond];
+VirtualCategoryPanel -> PropertiesPanelProvider [arrowhead = diamond];
 
 
 }

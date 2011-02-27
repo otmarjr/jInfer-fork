@@ -159,18 +159,30 @@ As was written before, each jInfer project properties category is represented in
 	@ServiceProvider(service = PropertiesPanelProvider.class)
 \end{verbatim}
 
-\code{PropertiesPanelProvider} interface provides the following methods:
+\noindent\code{PropertiesPanelProvider} interface provides the following methods:
 \begin{itemize}
 	\item getName() - Gets a programmatic name of category
 	\item getDisplayName() - Gets a name of category displayed in properties window.
 	\item getPriority() - Gets a priority of category, by which is sorted among other sibling categories in a tree.
-	\item getPanel() - Gets \code{AbstractPropertiesPanel} representing the category properties pane.
+	\item getPanel(Properties) - Gets \code{AbstractPropertiesPanel} representing the category properties pane. The only parameter is instance of \code{Properties} class to which are saved properties which were set in \emph{properties pane}.
+	\item getParent() - getter for a programmatic name of category which is parent of this category in a tree hierarchy.
 	\item getSubCategories() - Gets a \code{List} of \code{VirtualCategoryPanel} representing virtual category child.
 \end{itemize}
 
+\noindent\code{VirtualCategoryPanel} extends \code{JPanel} and its constructor has three parameters:
+ \begin{itemize}
+	\item \code{categoryId} - programmatic name of the category or ID.
+	\item \code{categoryName} - human readable name of the category displayed in jInfer properties window.
+	\item \code{modules} - \code{List<? extends NamedModule>} of modules that will be children of this virtual category.
+\end{itemize}
+
+To create properties pane associated to custom category, class that extends \code{AbstractPropertiesPanel} class must be implemented. As you can see from a class diagram in the Figure \ref{uml-properties}, this abstract class has constructor with \code{Properties} parameter and two abstract methods, \code{store()} and \code{load()}, which must be implemented. Constructor gets a \code{Properties} instance as a parameter and saves it to \code{protected} field \code{properties}. This \code{Properties} instance is associated with jInfer project type \emph{lookup} and is used to store properties that are set in this panel.\\
+
+Purpose of the method \code{store()} can be easily guessed from its name, it's used to store values that are set in \emph{properties pane} elements (text field, checkbox etc.) to the provided \emph{properties} field. On the other side, \code{load()} method is used to populate \emph{properties pane} elements with already saved values in the \emph{properties}.
+
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{uml_properties}
-	\caption{Project directory structure} \label{uml-properties}
+	\caption{Class diagram for the custom jInfer project properties category.} \label{uml-properties}
 \end{figure}
 
 

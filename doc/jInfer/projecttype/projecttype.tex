@@ -129,7 +129,7 @@ Each node in project tree hierarchy contains set of actions available from its c
 
 This group contains two actions, first is action that allows adding input files into \emph{input folder} nodes (implemented by \code{FilesAddAction} class). Second one is slightly different, because unlike from the previous action, this one doesn't create new item in \emph{root} node context menu but implements functionality for item that already exists in context menu - Run action.\\
 
-First of the two actions, after it was invoked, open file choose dialog which has set file filter according to available classes that implement \code{Processor} interface registered in jInfer with \code{ServiceProvider}. After selecting files in dialog, these files are inserted into particular \emph{input file} node according to mapping of file extension to folder type gained from \code{Processor} classes.\\
+First of the two actions, after it was invoked, file choose dialog is opened which has set file filter according to available classes that implement \code{Processor} interface registered in jInfer with \code{ServiceProvider}. After selecting files in dialog, these files are inserted into particular \emph{input file} node according to mapping of file extension to folder type gained from \code{Processor} classes. If no mapping for some extension exists, this file is inserted into folder which is defined in \emph{Miscellaneous} properties category (section \ref{pref}).\\
 
 Run action, which is available in root node context menu, is also present in NBP toolbar as a \emph{Run} button and in jInfer Welcome window. This action is implemented in \code{RunAction} class and simply invokes \jmodule{Runner}s \code{run()} method, if no other inference is already running, otherwise information dialog pops up informing about already running inference. This check is done with \code{setActiveProject()} from \code{RunningProject} class.
 
@@ -169,6 +169,48 @@ As was written before, each jInfer project properties category is represented in
 	\item getSubCategories() - Gets a \code{List} of \code{VirtualCategoryPanel} representing virtual category child.
 \end{itemize}
 
+
+\noindent Example of the implemented \code{PropertiesPanelProvider}.
+
+\begin{verbatim}
+@ServiceProvider(service = PropertiesPanelProvider.class)
+public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
+
+  @Override
+  public AbstractPropertiesPanel getPanel(final Properties properties) {
+    return new ExamplePropertiesPanel(properties);
+  }
+
+  @Override
+  public String getName() {
+    return "exampleCategoryID";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Example category";
+  }
+
+  @Override
+  public int getPriority() {
+    return 1000;
+  }
+
+  @Override
+  public String getParent() {
+    return null;
+  }
+
+  @Override
+  public List<VirtualCategoryPanel> getSubCategories() {
+    final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
+    result.add(new VirtualCategoryPanel("virtual_categoryID", "example virtual category",
+            ModuleSelectionHelper.lookupImpls(IGGenerator.class)));
+
+    return result;
+  }
+\end{verbatim}
+
 \noindent\code{VirtualCategoryPanel} extends \code{JPanel} and its constructor has three parameters:
  \begin{itemize}
 	\item \code{categoryId} - programmatic name of the category or ID.
@@ -180,6 +222,36 @@ To create properties pane associated to custom category, class that extends \cod
 
 Purpose of the method \code{store()} can be easily guessed from its name, it's used to store values that are set in \emph{properties pane} elements (text field, checkbox etc.) to the provided \emph{properties} field. On the other side, \code{load()} method is used to populate \emph{properties pane} elements with already saved values in the \emph{properties}.
 
+\noindent Example of the implemented \code{AbstractPropertiesPanel}.
+
+\begin{verbatim}
+public class ProjectPropertiesPanel extends AbstractPropertiesPanel {
+
+  private javax.swing.JCheckBox checkBox;
+
+  public ProjectPropertiesPanel(final Properties properties) {
+    super(properties);
+    init();
+  }
+
+  public void init() {
+    ...
+    initialize checkBox
+    ...
+  }
+
+  @Override
+  public void store() {
+    properties.setProperty("some_property", Boolean.toString(checkBox.isSelected()));
+  }
+
+  @Override
+  public void load() {
+    checkBox.setSelected(Boolean.parseBoolean(properties.getProperty("some_property", "true")));
+  }
+}
+\end{verbatim}
+
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{uml_properties}
 	\caption{Class diagram for the custom jInfer project properties category.} \label{uml-properties}
@@ -188,8 +260,14 @@ Purpose of the method \code{store()} can be easily guessed from its name, it's u
 
 \subsection{Project wizard}
 
-\subsection{Preferences}
+This section describes ability of jInfer to create new jInfer project through \emph{new project} wizard. This wizard contains two steps, where first is standard one with project name and location selection, and the second is the selection of Initial grammar module, Simplifier and Schema generator module which will be used in inference for newly created module. In the new project creation process can be already finished in a first step, in that case, default modules will be used for inference. After finishing of the wizard, new jInfer project type is created with typed name in selected location. It is important to notice that package \code{cz.cuni.mff.ksi.jinfer.projecttype} contains \code{JInferTemplateProject.zip} file, in which is default folder structure of the jInfer project type, and the content of a zip is copied into location defined in the wizard. For more information, how to create new project wizard,  please look at \cite{project_sample}.\\
 
+All classes responsible for creation of this wizard are in package \code{cz.cuni.mff.ksi.jinfer.projecttype.sample}. It contains \code{JinferTemplateWizardIterator} class which defines number of steps in the wizard and creates panel for each step. Each step is  represented by a class implementing \code{WizardDescriptor.Panel} interface, which creates steps panel and validate its data inserted by a user. Finally there is class extending \code{JPanel} in which are components of the first step.
+
+\subsection{Preferences}\label{pref}
+
+Also jInfer project type has its own properties category in a project properties window and is called \emph{Miscellaneous}. In this category,
+two properties can be set. First property is default \emph{input file} folder to which is inserted input file selected from \emph{FilesAddAction}, that has extension, which is not defined by any \code{Processor} registered in jInfer. Second property is global \emph{LOG} level, which defines the minimum level of messages that will be displayed in jInfer output window. If some module has its own \emph{LOG} level setting, global settings are overridden by these.
 
 \nocite{*}
 \newpage

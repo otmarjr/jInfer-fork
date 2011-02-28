@@ -49,27 +49,17 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
    * @param layout Layout of automaton.
    * @param edgeLabelTransformer Transformer of edge labels.
    * @param component Component which will be this visualizer displayed at.
+   * @param superinitalState Superinitial state. Cannot be picked.
+   * @param superfinalState Superfinal state. Cannot be picked.
    */
-  public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component) {
+  public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component, final State<T> superinitialState, final State<T> superfinalState) {
     super(layout);
 
     replaceEdgeLabelTransformer(edgeLabelTransformer);
     getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<State<T>, Step<T>>());
+    getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer<T>(superinitialState, superfinalState));
 
     addGraphMousePlugin(new VertexPickingGraphMousePlugin<T>(component));
-  }
-
-  /**
-   * Constructs instance with specified {@link Layout}, edge label {@link Transformer}
-   * and {@link AbstractComponent} which will be this visualizer displayed at.
-   *
-   * @param layout Layout of automaton.
-   * @param edgeLabelTransformer Transformer of edge labels.
-   * @param component Component which will be this visualizer displayed at.
-   */
-  public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component, final State<T> initialState, final State<T> finalState) {
-    this(layout, edgeLabelTransformer, component);
-    getRenderContext().setVertexShapeTransformer(new VertexShapeTransformer<T>(initialState, finalState));
   }
 
   @Override

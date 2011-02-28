@@ -109,6 +109,11 @@ Created implementation will be shown in project properties in the \code{Layout} 
 
 \subsection{Base classes}
 
+\begin{figure}
+\centering\includegraphics[scale=\myscale]{uml_base_classes}
+\caption{Class diagram for the base classes.} \label{uml_base_classes}
+\end{figure}
+
 This section describes classes implementing basic common functionality that are supposed to be extended to create a new suitable visualization of automata for a particular method of inference. The new visualization may involve a brand new GUI panel with buttons with various functions, user interaction like selecting states or edges and others.\\
 
 Main two classes representing visualization of automaton are \code{Visualizer} and \code{AbstractComponent}. \code{Visualizer} is a graphical representation of automaton and \code{AbstractComponent} is a panel (extends \code{JPanel}) containing \linebreak the \code{Visualizer} which will be displayed in GUI.\\
@@ -158,11 +163,6 @@ Programmer implementing an extension of \code{AbstractComponent} is not forced t
 
 \code{Visualizer} is not set in constructor, because it is often desired to subsequently display several different automata (\code{Visualizer}s) in the same panel. In this case it is not needed to create new instance of \code{AbstractComponent} for each \code{Visualizer}, but subsequently call \code{setVisualizer()} method using one instance of \code{AbstractComponent}.
 
-\begin{figure}
-\centering\includegraphics[scale=\myscale]{uml_base_classes}
-\caption{Class diagram for the base classes.} \label{uml_base_classes}
-\end{figure}
-
 \subsubsection{AbstractComponent user interactivity support} \label{subsubsection:AbstractComponent user-interactivity support}
 
 If some kind of user interactivity is desired, \code{AbstractComponent} is the right place to implement it.\\
@@ -190,8 +190,8 @@ For examples of API usage, see \ref{subsubsection:StatePickingComponent} and \re
 \subsection{Derived classes}
 
 \begin{figure}
-\centering\includegraphics[scale=0.65]{uml_derived_classes}
-\caption{Class diagram for the derived classes, not showing members of classes from figure \ref{uml_base_classes} to keep this diagram simple.} \label{uml_derived_classes}
+\centering\includegraphics[scale=\myscale]{uml_derived_classes}
+\caption{Class diagram for the derived classes, not showing members of classes from figure \ref{uml_base_classes} to keep this diagram simple. Also not showing signatures of constructors of StatePickingVisualizer and StatePickingVisualizer for their length.} \label{uml_derived_classes}
 \end{figure}
 
 This section describes classes derived from the base classes used in \jmodule{Two Step Simplifier} module to display automata. This classes may also serve as examples of base classes extensions.
@@ -199,8 +199,23 @@ This section describes classes derived from the base classes used in \jmodule{Tw
 \subsubsection{StatePickingComponent} \label{subsubsection:StatePickingComponent}
 \code{StatePickingComponent} (extensions of \code{abstractComponent}) alongside with \code{StatePickingVisualizer} (extension of \code{PluggableVisualizer}) provides possibility to pick one automaton state in GUI and immediately return to the calling code, which can retrieve the picked state.\\
 
-\code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has additional two arguments, superinitial and superfinal states as we want to distinguish these states in displayed automaton.\
-And upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \linebreak \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see \ref{subsubsection:AbstractComponent}.\\
+\code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has several additional arguments. Their description follows.
+\begin{verbatim}
+public StatePickingVisualizer(
+    Layout<State<T>, Step<T>> layout,
+    Transformer<Step<T>, String> edgeLabelTransformer,
+    AbstractComponent<T> component,
+    State<T> superinitialState,
+    State<T> superfinalState)
+\end{verbatim}
+\begin{itemize}
+	\item \code{layout} - Instance of \code{Layout} which will be provided to the constructor of parent \code{Visualizer} class.
+	\item \code{edgeLabelTransformer} - Transformer to convert automaton edges to their string representations.
+	\item \code{component} - Instance of \code{AbstractComponent} to call \code{guiDone()} method on, when a state is picked.
+	\item \code{superinitialState} and \code{superfinalState} - Superinitial and superfinal states as we want to distinguish these states in displayed automaton.
+\end{itemize}
+
+Upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \linebreak \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see \ref{subsubsection:AbstractComponent}.\\
 
 \code{StatePickingComponent} provides the following additional methods.
 \begin{itemize}
@@ -261,6 +276,15 @@ Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are simi
 
 \code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \linebreak \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
 Main difference compared to the \code{VertexPickingGraphMousePlugin} is \code{VerticesPickingGraphMousePlugin} does not call component's \code{guiDone()} method.\\
+
+Signature of constructor and description of arguments follow.
+\begin{verbatim}
+public StatesPickingVisualizer(Layout<State<T>, Step<T>> layout, Transformer<Step<T>, String> edgeLabelTransformer)
+\end{verbatim}
+\begin{itemize}
+	\item \code{layout} - Instance of \code{Layout} which will be provided to the constructor of parent \code{Visualizer} class.
+	\item \code{edgeLabelTransformer} - Transformer to convert automaton edges to their string representations.
+\end{itemize}
 
 \code{StatesPickingComponent} is almost the same as \code{StatePickingComponent} but it contains two extra GUI controls. 'Continue' button and 'Don't ask me anymore to select states to be merger' checkbox.\
 The button is supposed to be clicked when user picked all desired states and it will cause calling of component's \code{guiDone()} method (see \ref{subsubsection:AbstractComponent}).\

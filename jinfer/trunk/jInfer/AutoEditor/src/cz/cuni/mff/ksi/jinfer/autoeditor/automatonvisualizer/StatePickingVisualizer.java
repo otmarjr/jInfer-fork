@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.graphmouseplugins.VertexPickingGraphMousePlugin;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.transformers.VertexShapeTransformer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.AbstractComponent;
+import cz.cuni.mff.ksi.jinfer.autoeditor.gui.component.StatePickingComponent;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import edu.uci.ics.jung.algorithms.layout.Layout;
@@ -41,11 +42,13 @@ public class StatePickingVisualizer<T> extends PluggableVisualizer<T> {
    *
    * @param layout Layout of automaton.
    * @param edgeLabelTransformer Transformer of edge labels.
-   * @param component Component which will be this visualizer displayed at.
+   * @param component Component which will be this visualizer displayed at. When
+   *                  a state is picked, <code>guiDone()</code> method will be
+   *                  called on this component.
    * @param superinitalState Superinitial state. Cannot be picked.
    * @param superfinalState Superfinal state. Cannot be picked.
    */
-  public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final AbstractComponent<T> component, final State<T> superinitialState, final State<T> superfinalState) {
+  public StatePickingVisualizer(final Layout<State<T>, Step<T>> layout, final Transformer<Step<T>, String> edgeLabelTransformer, final StatePickingComponent<T> component, final State<T> superinitialState, final State<T> superfinalState) {
     super(layout);
 
     replaceEdgeLabelTransformer(edgeLabelTransformer);

@@ -65,7 +65,8 @@ Structure of \jmodule{AutoEditor} can be divided into following four main parts.
 \end{itemize}
 First, \code{Layout}s and use of base classes to create a visualization of automaton will be described.\\
 
-In case a generic class has a type parameter \code{T}, this has to be the same \code{T} that is used to parametrize jInfer automata. JUNG classes usually need a type parameter for a state and for an edge. These should be then \code{State\textless T\textgreater} (for a state) and \code{Step\textless T\textgreater} (for edge).
+In case a generic class has a type parameter \code{T}, this has to be the same \code{T} that is used to parametrize jInfer automata. JUNG classes usually need a type parameter for a state and for an edge. These should be then \code{State\textless T\textgreater} (for a state) and \code{Step\textless T\textgreater} (for edge). Refer to \cite{archdoc} for more information on these classes and see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent} for source code examples.
+
 
 \subsection{Layout}
 \code{Layout} is a JUNG interface responsible primarily of representation of an automaton and positions of its states. JUNG library provides several implementation of \code{Layout} interface. However, because none of them is convenient for automatic automaton displaying, \jmodule{AutoEditor} provides two additional implementations. \code{Layout} by \emph{Julie Vyhnanovska}, used in her master thesis and \code{Layout} which is using external \emph{Graphviz} software.\\
@@ -99,7 +100,7 @@ Source code resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automaton
 
 \subsubsection{How to create a new Layout}
 
-New \code{Layout}s can be implemented using the modular system. For information on system of modules, see \cite{archdoc}. To create a new implementation of \code{Layout} interface, it is necessary to create a new class implementing \code{LayoutFactory} interface (package \code{package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts}) and annotate it by the following code.
+New \code{Layout}s can be implemented using the modular system. For information on system of modules, see \cite{archdoc}. To create a new implementation of \code{Layout} interface, it is necessary to create a new class implementing \code{LayoutFactory} interface (package \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts}) and annotate it by the following code.
 
 \begin{verbatim}
 @ServiceProvider(service = LayoutFactory.class)
@@ -175,6 +176,11 @@ After calling of \code{guiDone()} method, code execution of the caller module is
 
 For examples of user-interactive component, see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent}. 
 
+\begin{figure}
+\centering\includegraphics[scale=\myscale]{uml_derived_classes}
+\caption{Class diagram for the derived classes, not showing members of classes from figure \ref{uml_base_classes} to keep this diagram simple. Also not showing signatures of constructors of StatePickingVisualizer and StatePickingVisualizer for their excessive length.} \label{uml_derived_classes}
+\end{figure}
+
 \subsection{API} \label{subsection:API}
 
 \jmodule{AutoEditor} \emph{API} is pretty simple. Package \code{cz.cuni.mff.ksi.jinfer.autoeditor} contains class \code{AutoEditor} with three public static methods.
@@ -189,11 +195,6 @@ For examples of API usage, see \ref{subsubsection:StatePickingComponent} and \re
 
 \subsection{Derived classes}
 
-\begin{figure}
-\centering\includegraphics[scale=\myscale]{uml_derived_classes}
-\caption{Class diagram for the derived classes, not showing members of classes from figure \ref{uml_base_classes} to keep this diagram simple. Also not showing signatures of constructors of StatePickingVisualizer and StatePickingVisualizer for their length.} \label{uml_derived_classes}
-\end{figure}
-
 This section describes classes derived from the base classes used in \jmodule{Two Step Simplifier} module to display automata. This classes may also serve as examples of base classes extensions.
 
 \subsubsection{StatePickingComponent} \label{subsubsection:StatePickingComponent}
@@ -202,11 +203,11 @@ This section describes classes derived from the base classes used in \jmodule{Tw
 \code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has several additional arguments. Their description follows.
 \begin{verbatim}
 public StatePickingVisualizer(
-    Layout<State<T>, Step<T>> layout,
-    Transformer<Step<T>, String> edgeLabelTransformer,
-    AbstractComponent<T> component,
-    State<T> superinitialState,
-    State<T> superfinalState)
+  Layout<State<T>, Step<T>> layout,
+  Transformer<Step<T>, String> edgeLabelTransformer,
+  AbstractComponent<T> component,
+  State<T> superinitialState,
+  State<T> superfinalState)
 \end{verbatim}
 \begin{itemize}
 	\item \code{layout} - Instance of \code{Layout} which will be provided to the constructor of parent \code{Visualizer} class.
@@ -267,11 +268,6 @@ Example of usage follows.
 \end{verbatim}
 
 \subsubsection{StatesPickingComponent} \label{subsubsection:StatesPickingComponent}
-\begin{figure}
-\centering\includegraphics[scale=0.6]{screenshot}
-\caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
-\end{figure}
-
 Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are similar to the classes described in the previous section. Purpose of these is to provide picking of multiple automaton states.\\
 
 \code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \linebreak \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
@@ -279,7 +275,9 @@ Main difference compared to the \code{VertexPickingGraphMousePlugin} is \code{Ve
 
 Signature of constructor and description of arguments follow.
 \begin{verbatim}
-public StatesPickingVisualizer(Layout<State<T>, Step<T>> layout, Transformer<Step<T>, String> edgeLabelTransformer)
+public StatesPickingVisualizer(
+  Layout<State<T>, Step<T>> layout,
+  Transformer<Step<T>, String> edgeLabelTransformer)
 \end{verbatim}
 \begin{itemize}
 	\item \code{layout} - Instance of \code{Layout} which will be provided to the constructor of parent \code{Visualizer} class.
@@ -288,7 +286,7 @@ public StatesPickingVisualizer(Layout<State<T>, Step<T>> layout, Transformer<Ste
 
 \code{StatesPickingComponent} is almost the same as \code{StatePickingComponent} but it contains two extra GUI controls. 'Continue' button and 'Don't ask me anymore to select states to be merger' checkbox.\
 The button is supposed to be clicked when user picked all desired states and it will cause calling of component's \code{guiDone()} method (see \ref{subsubsection:AbstractComponent}).\
-State of the checkbox can be retrieved by the calling code and the caller is supposed to stop showing this component in the current inference process.
+State of the checkbox can be retrieved by the calling code and the caller is supposed to stop showing this component in the current inference process.\\
 
 Methods of \code{StatesPickingComponent} are the following.
 \begin{itemize}
@@ -296,6 +294,11 @@ Methods of \code{StatesPickingComponent} are the following.
 	\item \code{getPickedStates()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see \ref{subsection:API}), this method retrieves the list of user picked automaton states. In the case that none of automaton states was picked, it returns an empty list.
 	\item \code{setLabel()} - Sets text of the component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
+
+\begin{figure}
+\centering\includegraphics[scale=0.6]{screenshot}
+\caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
+\end{figure}
 
 Source codes of \code{StatesPickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.}\linebreak\code{component}, \code{StatesPickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and\linebreak \code{VerticesPickingGraphMousePlugin} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.}\linebreak\code{graphmouseplugins}.\\
 

@@ -44,7 +44,7 @@ public class StateRemovalFactory implements RegexpAutomatonSimplifierFactory {
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "State removal";
+  public static final String DISPLAY_NAME = "State Removal";
   /**
    * Property name of orderer submodule.
    */

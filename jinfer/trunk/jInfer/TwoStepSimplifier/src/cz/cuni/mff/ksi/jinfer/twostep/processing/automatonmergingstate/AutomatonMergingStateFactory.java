@@ -47,7 +47,7 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "Automaton merging state";
+  public static final String DISPLAY_NAME = "Automaton Merging State";
   /**
    * Property name (in configuration file) of first submodule - {@link AutomatonSimplifier}
    */

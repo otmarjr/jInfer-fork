@@ -39,7 +39,7 @@ public class EmptyChildrenFactory implements RegularExpressionCleanerFactory {
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "Empty children";
+  public static final String DISPLAY_NAME = "Empty Children";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {

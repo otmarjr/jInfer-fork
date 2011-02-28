@@ -69,7 +69,7 @@ digraph uml_basic_full {
 			<table cellspacing="0" cellborder="0" border="0">
 				<tr><td align="left"><font face="SFTT1000">#&lt;&lt;constructor&gt;&gt; AbstractComponent()</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">#&lt;&lt;abstract&gt;&gt; getAutomatonDrawPanel(): JPanel</font></td></tr>
-				<tr><td align="left"><font face="SFTT1000">+setVisualizer(visualizer: Visualizer&lt;T&gt;)</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">#setVisualizer(visualizer: Visualizer&lt;T&gt;)</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getVisualizer(): Visualizer&lt;T&gt;</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+waitForGuiDone()</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+guiDone()</font></td></tr>

@@ -65,7 +65,7 @@ Structure of \jmodule{AutoEditor} can be divided into following four main parts.
 \end{itemize}
 First, \code{Layout}s and use of base classes to create a visualization of automaton will be described.\\
 
-In case a generic class has a type parameter \code{T}, this has to be the same \code{T} that is used to parametrize jInfer automata. JUNG classes usually need a type parameter for a state and for an edge. These should be then \code{State\textless T\textgreater} (for a state) and \code{Step\textless T\textgreater} (for edge). Refer to \cite{archdoc} for more information on these classes and see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent} for source code examples.
+In case a generic class has a type parameter \code{T}, this has to be the same \code{T} that is used to parametrize jInfer automata. JUNG classes usually need a type parameter for a state and for an edge. These should be then \code{State<T>} (for a state) and \code{Step<T>} (for edge). Refer to \cite{archdoc} for more information on these classes and see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent} for source code examples.
 
 
 \subsection{Layout}
@@ -121,9 +121,9 @@ Main two classes representing visualization of automaton are \code{Visualizer} a
 
 \subsubsection{Visualizer}
 
-\code {Visualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package extends JUNG \linebreak \code{VisualizationViewer} class thus it inherits all its methods and adds support for saving contained automaton to an image file. Relevant methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see \ref{subsection:GUI}.\\
+\code {Visualizer} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} package extends JUNG\linebreak\code{Visualization\-Viewer} class thus it inherits all its methods and adds support for saving contained automaton to an image file. Relevant methods are \code{saveImage()} and \code{getSupportedImageFormatNames()}. However, to save an image of automaton it is not necessary to call this methods directly. \jmodule{AutoEditor} GUI contains button to save an image of displayed automaton. For information on how to to this, see \ref{subsection:GUI}.\\
 
-Constructor has one argument, an instance of \code{Layout} interface created from an automaton, typically by \linebreak \code{LayoutHelperFactory} (see \ref{subsubsection:LayoutHelperFactory}).
+Constructor has one argument, an instance of \code{Layout} interface created from an automaton, typically by \code{Layout\-Helper\-Factory} (see \ref{subsubsection:LayoutHelperFactory}).
 
 \subsubsection{PluggableVisualizer}
 
@@ -131,7 +131,7 @@ Constructor has one argument, an instance of \code{Layout} interface created fro
 
 \emph{Graph mouse plugin}s are classes implementing JUNG \code{GraphMousePlugin} interface and their purpose is to enhance \code{Visualizer} with mouse support.\\
 
-By default, instance of \code{PluggableVisualizer} is constructed with two plugins enabled. They are \linebreak \code{ScalingGraphMousePlugin}, providing zooming, and \code{TranslatingGraphMousePlugin}, providing translating the displayed automaton in the x and y direction. In the most cases these plugins are useful, otherwise they can be removed using methods \code{getGraphMousePlugins()} and \code{removeGraphMousePlugin()}.\\
+By default, instance of \code{PluggableVisualizer} is constructed with two plugins enabled. They are \code{Scaling\-Graph\-Mouse\-Plugin}, providing zooming, and \code{TranslatingGraphMousePlugin}, providing translating the displayed automaton in the x and y direction. In the most cases these plugins are useful, otherwise they can be removed using methods \code{getGraphMousePlugins()} and \code{removeGraphMousePlugin()}.\\
 
 Public (not inherited) methods of \code{PluggableVisualizer} are the following. Their purpose is clear from their names, for details see their JavaDoc.
 
@@ -148,12 +148,12 @@ Public (not inherited) methods of \code{PluggableVisualizer} are the following. 
 \code{AbstractComponent} class in \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component} package is a representation of GUI panel containing an instance of \code{Visualizer} class for some automaton. It is inherited from \code{JPanel} class, thus provides JPanel's method and behaviour. In addition, it provides the following methods.
 
 \begin{itemize}
-	\item \code{setVisualizer()} - Setter of \code{Visualizer}.
+	\item \code{setVisualizer()} - Protected setter of \code{Visualizer}. It is defined protected because extensions of this class may want to declare this setter with argument type that extends \code{Visualizer} class.
 	\item \code{getVisualizer()} - Getter of \code{Visualizer}.
 	\item \code{waitForGuiDone()} - Suspends its thread until method \code{guiDone} is called on this instance. Do not call this method directly, it is called by \jmodule{AutoEditor}. For more information, see \ref{subsubsection:AbstractComponent user-interactivity support}.
 	\item \code{guiDone()} - Wakes up this instance from a suspended state. For detailed description, see \ref{subsubsection:AbstractComponent user-interactivity support}.
 	\item \code{guiInterrupt()} - Called when \jmodule{AutoEditor}'s tab is closed to propagate information about terminating of inference to a caller of \jmodule{AutoEditor}. There is no need to called this method directly.
-	\item \code{guiInterrupted()} - Checks if \jmodule{AutoEditor} GUI was terminated by \code{guiInterrupt()} method or regularly (\code{guiDone()} method or GUI was not waiting for user interaction). Again, there is no need to call this method directly, it is called by \jmodule{AutoEditor}. For details, see \ref{subsection:GUI}.
+	\item \code{guiInterrupted()} - Checks if \jmodule{AutoEditor} GUI was terminated by \code{guiInterrupt()} method or regularly\linebreak(\code{guiDone()} method or GUI was not waiting for user interaction). Again, there is no need to call this method directly, it is called by \jmodule{AutoEditor}. For details, see \ref{subsection:GUI}.
 \end{itemize}
 
 Besides those methods, \code{AbstractComponent} has one abstract method, named \code{getAutomatonDrawPanel()}.\\
@@ -175,11 +175,6 @@ Method important for a programmer extending \code{AbstractComponent} is called \
 After calling of \code{guiDone()} method, code execution of the caller module is resumed and holding instance of the \code{AbstractComponent} it is able to retrieve results of user interaction, saved in its state.\\
 
 For examples of user-interactive component, see \ref{subsubsection:StatePickingComponent} and \ref{subsubsection:StatesPickingComponent}. 
-
-\begin{figure}
-\centering\includegraphics[scale=\myscale]{uml_derived_classes}
-\caption{Class diagram for the derived classes, not showing members of classes from figure \ref{uml_base_classes} to keep this diagram simple. Also not showing signatures of constructors of StatePickingVisualizer and StatePickingVisualizer for their excessive length.} \label{uml_derived_classes}
-\end{figure}
 
 \subsection{API} \label{subsection:API}
 
@@ -205,26 +200,27 @@ This section describes classes derived from the base classes used in \jmodule{Tw
 public StatePickingVisualizer(
   Layout<State<T>, Step<T>> layout,
   Transformer<Step<T>, String> edgeLabelTransformer,
-  AbstractComponent<T> component,
+  StatePickingComponent<T> component,
   State<T> superinitialState,
   State<T> superfinalState)
 \end{verbatim}
 \begin{itemize}
 	\item \code{layout} - Instance of \code{Layout} which will be provided to the constructor of parent \code{Visualizer} class.
 	\item \code{edgeLabelTransformer} - Transformer to convert automaton edges to their string representations.
-	\item \code{component} - Instance of \code{AbstractComponent} to call \code{guiDone()} method on, when a state is picked.
+	\item \code{component} - Instance of \code{StatePickingComponent} to call \code{guiDone()} method on, when a state is picked.
 	\item \code{superinitialState} and \code{superfinalState} - Superinitial and superfinal states as we want to distinguish these states in displayed automaton.
 \end{itemize}
 
-Upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \linebreak \code{PluggableVisualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see \ref{subsubsection:AbstractComponent}.\\
+Upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plugins of \code{Pluggable\-Visualizer}. Purpose of this plugin is to allow user to pick some state of automaton and then call \code{guiDone()} method on instance of \code{AbstractComponent}. For description of \code{guiDone()} method, see \ref{subsubsection:AbstractComponent}.\\
 
 \code{StatePickingComponent} provides the following additional methods.
 \begin{itemize}
+	\item \code{setVisualizer()} - Setter for \code{Visualizer} restricted to accept instances of \code{StatePickingVisualizer} class to prevent misuse.
 	\item \code{getPickedState()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see \ref{subsection:API}), this method retrieves the user picked automaton state.
 	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
-Source codes of \code{StatePickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.}\linebreak\code{component}, \code{StatePickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and\linebreak \code{VertexPickingGraphMousePlugin} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.}\linebreak\code{graphmouseplugins}.\\
+Source codes of \code{State\.Picking\.Component} resides in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.component}, \code{State\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Vertex\-Picking\-Graph\-Mouse\-Plugin} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}
@@ -267,10 +263,15 @@ Example of usage follows.
     } while (true);
 \end{verbatim}
 
+\begin{figure}
+\centering\includegraphics[scale=0.7]{uml_derived_classes}
+\caption{Class diagram for the derived classes, not showing members of classes from figure \ref{uml_base_classes} to keep this diagram simple. Also not showing signatures of constructors of StatePickingVisualizer and StatePickingVisualizer for their excessive length.} \label{uml_derived_classes}
+\end{figure}
+
 \subsubsection{StatesPickingComponent} \label{subsubsection:StatesPickingComponent}
 Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are similar to the classes described in the previous section. Purpose of these is to provide picking of multiple automaton states.\\
 
-\code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \linebreak \code{VerticesPickingGraphMousePlugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
+\code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \code{Vertices\-Picking\-Graph\-Mouse\-Plugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
 Main difference compared to the \code{VertexPickingGraphMousePlugin} is \code{VerticesPickingGraphMousePlugin} does not call component's \code{guiDone()} method.\\
 
 Signature of constructor and description of arguments follow.
@@ -288,19 +289,20 @@ public StatesPickingVisualizer(
 The button is supposed to be clicked when user picked all desired states and it will cause calling of component's \code{guiDone()} method (see \ref{subsubsection:AbstractComponent}).\
 State of the checkbox can be retrieved by the calling code and the caller is supposed to stop showing this component in the current inference process.\\
 
-Methods of \code{StatesPickingComponent} are the following.
-\begin{itemize}
-	\item \code{shallAskUser()} - Retrieves state of the checkbox.
-	\item \code{getPickedStates()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see \ref{subsection:API}), this method retrieves the list of user picked automaton states. In the case that none of automaton states was picked, it returns an empty list.
-	\item \code{setLabel()} - Sets text of the component label. The label can be used to communicate some information to user, for example instructions.
-\end{itemize}
-
 \begin{figure}
 \centering\includegraphics[scale=0.6]{screenshot}
 \caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
 \end{figure}
 
-Source codes of \code{StatesPickingComponent} resides in package \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.}\linebreak\code{component}, \code{StatesPickingVisualizer} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} and\linebreak \code{VerticesPickingGraphMousePlugin} in \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.}\linebreak\code{graphmouseplugins}.\\
+Methods of \code{StatesPickingComponent} are the following.
+\begin{itemize}
+	\item \code{setVisualizer()} - Setter for \code{Visualizer} restricted to accept instances of \code{StatesPickingVisualizer} class to prevent misuse.
+	\item \code{shallAskUser()} - Retrieves state of the checkbox.
+	\item \code{getPickedStates()} - After displaying the component using \code{drawComponentAndWaitForGUI()} \emph{API} method (see \ref{subsection:API}), this method retrieves the list of user picked automaton states. In the case that none of automaton states was picked, it returns an empty list.
+	\item \code{setLabel()} - Sets text of the component label. The label can be used to communicate some information to user, for example instructions.
+\end{itemize}
+
+Source codes of \code{StatesPickingComponent} resides in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.component}, \code{States\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Vertices\-Picking\-Graph\-Mouse\-Plugin} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}

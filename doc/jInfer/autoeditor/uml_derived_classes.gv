@@ -94,6 +94,7 @@ digraph uml_basic_full {
 		<tr><td cellpadding="0">
 			<table cellspacing="0" cellborder="0" border="0">
 				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;constructor&gt;&gt; StatePickingComponent()</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+setVisualizer(visualizer: StatePickingVisualizer&lt;T&gt;)</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getAutomatonDrawPanel(): JPanel</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getPickedState(): State&lt;T&gt;</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+setLabel(text: String)</font></td></tr>
@@ -114,6 +115,7 @@ digraph uml_basic_full {
 		<tr><td cellpadding="0">
 			<table cellspacing="0" cellborder="0" border="0">
 				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;constructor&gt;&gt; StatesPickingComponent()</font></td></tr>
+				<tr><td align="left"><font face="SFTT1000">+setVisualizer(visualizer: StatesPickingVisualizer&lt;T&gt;)</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+shallAskUser(): boolean</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getAutomatonDrawPanel(): JPanel</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getPickedStates(): List&lt;State&lt;T&gt;&gt;</font></td></tr>

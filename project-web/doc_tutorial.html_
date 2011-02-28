@@ -119,11 +119,11 @@ To try out interactive inference, do the following with your jInfer project:
 <ol type=1>
   <li>Open </i>Project Preferences</i>.</li>
   <li>Navigate to <i>Simplifiers</i> &gt; <i>TwoStep</i> &gt;
-      <i>Automaton merging state</i>.</li>
+      <i>Automaton Merging State</i>.</li>
   <li>In the <i>Automaton simplifier</i> combobox select
       <i>User Interactive</i>.</li>
-  <li>Navigate to <i>State removal</i>.</li>
-  <li>In the <i>State removal orderer</i> combobox select
+  <li>Navigate to <i>State Removal</i>.</li>
+  <li>In the <i>State Removal orderer</i> combobox select
       <i>User Interactive</i>.</li>
   <li>Save the preferences by clicking <i>OK</i>.</li>
   <li>Run the inference again.</li>

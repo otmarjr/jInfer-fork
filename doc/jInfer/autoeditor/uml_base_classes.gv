@@ -29,7 +29,11 @@ digraph uml_basic_full {
 				<tr><td align="left"><font face="SFTT1000">-layout: Layout&lt;State&lt;T&gt;, Step&lt;T&gt;&gt;</font></td></tr>
 			</table>
 		</td></tr>
-		<tr><td></td></tr>
+		<tr><td cellpadding="0">
+			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;constructor&gt;&gt; VisualizationViewer(layout: Layout&lt;State&lt;T&gt;, Step&lt;T&gt;&gt;) </font></td></tr>
+			</table>
+		</td></tr>
 	</table>>];
 }
 
@@ -44,6 +48,7 @@ digraph uml_basic_full {
 		<tr><td></td></tr>
 		<tr><td cellpadding="0">
 			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;constructor&gt;&gt; Visualizer(layout: Layout&lt;State&lt;T&gt;, Step&lt;T&gt;&gt;) </font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+saveImage(file: File, formatName: String)</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getSupportedImageFormatNames(): Set&lt;String&gt;</font></td></tr>
 			</table>
@@ -62,6 +67,7 @@ digraph uml_basic_full {
 		</td></tr>
 		<tr><td cellpadding="0">
 			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">#&lt;&lt;constructor&gt;&gt; AbstractComponent()</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">#&lt;&lt;abstract&gt;&gt; getAutomatonDrawPanel(): JPanel</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+setVisualizer(visualizer: Visualizer&lt;T&gt;)</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getVisualizer(): Visualizer&lt;T&gt;</font></td></tr>
@@ -89,6 +95,7 @@ digraph uml_basic_full {
 		</td></tr>
 		<tr><td cellpadding="0">
 			<table cellspacing="0" cellborder="0" border="0">
+				<tr><td align="left"><font face="SFTT1000">+&lt;&lt;constructor&gt;&gt; PluggableVisualizer(layout: Layout&lt;State&lt;T&gt;, Step&lt;T&gt;&gt;) </font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+addGraphMousePlugin(graphMousePlugin: GraphMousePlugin)</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+removeGraphMousePlugin(graphMousePlugin: GraphMousePlugin)</font></td></tr>
 				<tr><td align="left"><font face="SFTT1000">+getGraphMousePlugins(): Set&lt;GraphMousePlugin&gt;</font></td></tr>
@@ -106,4 +113,6 @@ Visualizer -> VisualizationViewer [label = "extends"];
 
 PluggableVisualizer -> Visualizer [label = "extends"];
 
+
+AbstractComponent -> Visualizer [label = "1" arrowhead = diamond];
 }

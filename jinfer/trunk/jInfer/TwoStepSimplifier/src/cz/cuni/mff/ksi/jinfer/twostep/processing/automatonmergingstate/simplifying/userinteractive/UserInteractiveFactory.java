@@ -39,7 +39,7 @@ public class UserInteractiveFactory implements AutomatonSimplifierFactory {
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "User interactive";
+  public static final String DISPLAY_NAME = "User Interactive";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {

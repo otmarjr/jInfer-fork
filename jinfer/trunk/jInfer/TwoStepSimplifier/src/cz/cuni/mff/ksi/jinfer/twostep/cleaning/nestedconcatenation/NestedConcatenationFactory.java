@@ -39,7 +39,7 @@ public class NestedConcatenationFactory implements RegularExpressionCleanerFacto
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "Nested concatenation";
+  public static final String DISPLAY_NAME = "Nested Concatenation";
 
   @Override
   public <T> RegularExpressionCleaner<T> create() {

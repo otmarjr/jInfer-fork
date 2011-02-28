@@ -40,7 +40,7 @@ public class PassRepresentantFactory implements ClusterProcessorFactory {
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "Pass representant";
+  public static final String DISPLAY_NAME = "Pass Representant";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {

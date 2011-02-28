@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.autoeditor.gui.component;
 
+import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.StatesPickingVisualizer;
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.Visualizer;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import java.util.ArrayList;
@@ -37,6 +38,14 @@ public class StatesPickingComponent<T> extends AbstractComponent<T> {
   public StatesPickingComponent() {
     super();
     initComponents();
+  }
+
+  /**
+   * Setter for {@link Visualizer} restricted to accept instances of {@link StatesPickingVisualizer}.
+   * @param visualizer
+   */
+  public void setVisualizer(final StatesPickingVisualizer<T> visualizer) {
+    super.setVisualizer(visualizer);
   }
 
   public boolean shallAskUser() {

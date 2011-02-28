@@ -47,7 +47,13 @@ public abstract class AbstractComponent<T> extends JPanel {
    */
   abstract protected JPanel getAutomatonDrawPanel();
 
-  public void setVisualizer(final Visualizer<T> visualizer) {
+  /**
+   * Setter for {@link Visualizer}. It is defined protected because extentions
+   * of this class may want to declare this setter for a type that extends
+   * {@link Visualizer}.
+   * @param visualizer
+   */
+  protected void setVisualizer(final Visualizer<T> visualizer) {
     this.visualizer = visualizer;
 
     final GridBagConstraints constraints = new GridBagConstraints();

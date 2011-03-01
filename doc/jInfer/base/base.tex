@@ -39,19 +39,19 @@
 \noindent Target audience: developers willing to extend jInfer.
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & Matej Vitásek \\ \hline
-Required tokens:       & none \\ \hline
-Provided tokens:       & none \\ \hline
-Module dependencies:   & none \\ \hline
-Public packages:       & cz.cuni.mff.ksi.jinfer.base.automaton \\ 
-& cz.cuni.mff.ksi.jinfer.base.interfaces \\ 
-& cz.cuni.mff.ksi.jinfer.base.interfaces.inference \\ 
-& cz.cuni.mff.ksi.jinfer.base.interfaces.nodes \\
-& cz.cuni.mff.ksi.jinfer.base.objects \\ 
-& cz.cuni.mff.ksi.jinfer.base.objects.nodes \\ 
-& cz.cuni.mff.ksi.jinfer.base.regexp \\ 
-& cz.cuni.mff.ksi.jinfer.base.utils \\
-& org.apache.log4j.* \\ \hline
+Responsible developer & Matej Vitásek \\ \hline
+Required tokens       & none \\ \hline
+Provided tokens       & none \\ \hline
+Module dependencies   & none \\ \hline
+Public packages       & \code{cz.cuni.mff.ksi.jinfer.base.automaton} \\ 
+& \code{cz.cuni.mff.ksi.jinfer.base.interfaces} \\ 
+& \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference} \\ 
+& \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes} \\
+& \code{cz.cuni.mff.ksi.jinfer.base.objects} \\ 
+& \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes} \\ 
+& \code{cz.cuni.mff.ksi.jinfer.base.regexp} \\ 
+& \code{cz.cuni.mff.ksi.jinfer.base.utils} \\
+& \code{org.apache.log4j.*} \\ \hline
 \end{tabular}
 
 \section{Introduction}
@@ -66,7 +66,7 @@ Description of \jmodule{Base} structure will partially mirror its JavaDoc docume
 
 \subsection{Data structures}
 
-Regular expression representation is contained in \code{cz.cuni.mff.ksi.jinfer.base.regexp} package. Most important class is of course \code{Regexp}, assisted by an enum of its type \code{RegexpType} and representation of its interval \code{RegexpInterval}.\\
+Regular expression representation is contained in \code{cz.cuni.mff.ksi.jinfer.base.regexp} package. Most important class is of course \code{Regexp}, assisted by an enum of its type \code{RegexpType} and representation of its interval \code{RegexpInter\.val}.\\
 XML node representation is described by interfaces in \code{cz.cuni.mff.ksi.jinfer.base.interfaces.nodes} package and more-less concrete implementations in \code{cz.cuni.mff.ksi.jinfer.base.objects.nodes} package.\\
 Finite state automata representation is contained in the \code{cz.cuni.mff.ksi.jinfer.base.automaton} package.\\
 Refer to \cite{archdoc} to get an accurate description of all these representations.\\

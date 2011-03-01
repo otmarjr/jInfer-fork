@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -46,9 +45,11 @@ import org.w3c.dom.Node;
  * @author reseto
  */
 public final class DOMHelper {
-  private DOMHelper() {}
 
-  private static final Logger LOG = Logger.getLogger(DOMHandler.class);
+  private DOMHelper() {
+  }
+  private static final Logger LOG = Logger.getLogger(DOMHelper.class);
+
   static {
     LOG.setLevel(XSDImportSettings.logLevel());
   }
@@ -151,13 +152,13 @@ public final class DOMHelper {
     if (destination.getSubnodes().getType() == null && subtree.getSubnodes().getType() != null) {
       destination.getSubnodes().setType(subtree.getSubnodes().getType());
     } else if (destination.getSubnodes().getType() != null
-               && subtree.getSubnodes().getType() != null
-               && destination.getSubnodes().getType() != subtree.getSubnodes().getType()) {
+      && subtree.getSubnodes().getType() != null
+      && destination.getSubnodes().getType() != subtree.getSubnodes().getType()) {
       //                                              ^^ comparing enums
       // if the two types are not null and not equal, the schema is invalid (mixing wrong types)
       final String msg = NbBundle.getMessage(DOMHelper.class, "Error.MismatchedTypes",
-        subtree.getSubnodes().getType(), subtree.getName(),
-        destination.getSubnodes().getType(), destination.getName());
+                                             subtree.getSubnodes().getType(), subtree.getName(),
+                                             destination.getSubnodes().getType(), destination.getName());
       throw new XSDException(msg);
     }
     for (Regexp<AbstractStructuralNode> regexp : subtree.getSubnodes().getChildren()) {
@@ -179,7 +180,7 @@ public final class DOMHelper {
       ret.getSubnodes().setInterval(RegexpInterval.getOnce());
     }
     if (ret.getSubnodes().getChildren().isEmpty()
-        && ret.getMetadata().containsKey(XSDAttribute.TYPE.getMetadataName())) {
+      && ret.getMetadata().containsKey(XSDAttribute.TYPE.getMetadataName())) {
       // [SIMPLE DATA SECTION]
       // element has empty children, but its specified type is one of the built-in types
       // create SimpleData with the defined type of the element
@@ -187,11 +188,11 @@ public final class DOMHelper {
       ret.getSubnodes().setContent(
         new SimpleData(newContext,
                        XSDUtility.SIMPLE_DATA_NAME,
-                       Collections.<String,Object>emptyMap(),
+                       Collections.<String, Object>emptyMap(),
                        (String) ret.getMetadata().get(XSDAttribute.TYPE.getMetadataName()),
                        Collections.<String>emptyList()));
     } else if (ret.getSubnodes().getChildren().isEmpty()
-        && ret.getSubnodes().getType() == null) {
+      && ret.getSubnodes().getType() == null) {
       // element with empty children and no specified type has currently only one option
       // since we don't support restrictions, extensions, complexcontent -> it has to be LAMBDA
       XSDUtility.setLambda(ret);
@@ -235,14 +236,13 @@ public final class DOMHelper {
    */
   public static Map<String, Object> getAttributeMetadata(final org.w3c.dom.Element child) {
     final Map<String, Object> attrMeta = new HashMap<String, Object>();
-    if (child.hasAttribute(XSDAttribute.USE.toString())) {
-      if (XSDUtility.REQUIRED.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
-        attrMeta.put(IGGUtils.REQUIRED, Boolean.TRUE);
-      }
-      //else if (XSDUtility.OPTIONAL.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
-      //  attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
-      //}
+    if (child.hasAttribute(XSDAttribute.USE.toString())
+      && XSDUtility.REQUIRED.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
+      attrMeta.put(IGGUtils.REQUIRED, Boolean.TRUE);
     }
+    //else if (XSDUtility.OPTIONAL.equals(child.getAttribute(XSDAttribute.USE.toString()))) {
+    //  attrMeta.put(IGGUtils.REQUIRED, Boolean.FALSE);
+    //}
     return attrMeta;
   }
 }

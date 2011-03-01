@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.basicruledisplayer/2
+OpenIDE-Module-Implementation-Version: 2
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/basicruledisplayer/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/basicruledisplayer/Bundle.properties
+OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer
+

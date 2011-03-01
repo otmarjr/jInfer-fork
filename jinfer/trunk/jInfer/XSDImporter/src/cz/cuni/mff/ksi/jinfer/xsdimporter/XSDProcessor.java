@@ -57,7 +57,7 @@ public class XSDProcessor implements Processor {
     try {
       if (parser != null) {
         //SAX or DOM parser selected
-        LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.ParsingMethod", parser.getDisplayName()));
+        LOG.info(NbBundle.getMessage(XSDProcessor.class, "Info.ParsingMethod", parser.getDisplayName()));
         final List<Element> rules = parser.parse(stream);
         printDebugInfo(rules, "AfterParsing");
         
@@ -88,12 +88,12 @@ public class XSDProcessor implements Processor {
    */
   private void printDebugInfo(final List<Element> rules, final String stateMessageName) {
     if (XSDImportSettings.isVerbose()) {
-      LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.Rules." + stateMessageName + ".FullMsg", rules.size()));
+      LOG.info(NbBundle.getMessage(XSDProcessor.class, "Debug.Rules." + stateMessageName + ".FullMsg", rules.size()));
       for (Element elem : rules) {
         LOG.debug(elem.toString());
       }
     } else {
-      LOG.debug(NbBundle.getMessage(XSDProcessor.class, "Debug.Rules." + stateMessageName + ".ShortMsg", rules.size()));
+      LOG.info(NbBundle.getMessage(XSDProcessor.class, "Debug.Rules." + stateMessageName + ".ShortMsg", rules.size()));
     }
   }
 

@@ -43,11 +43,11 @@
 \noindent \emph{Note: we use the term \textbf{inference} for the act of creation of schema throughout this and other jInfer documents.}
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & Michal Klempa \\ \hline
-Required tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer \\ \hline
-Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier \\ \hline
-Module dependencies:   & AutoEditor, Base, JUNG, Lookup \\ \hline
-Public packages:       & none \\ \hline
+Responsible developer & Michal Klempa \\ \hline
+Required tokens       & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer} \\ \hline
+Provided tokens       & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier} \\ \hline
+Module dependencies   & AutoEditor, Base, JUNG, Lookup \\ \hline
+Public packages       & none \\ \hline
 \end{tabular}
 
 %#### INTRO ############################################
@@ -251,7 +251,7 @@ You might have noticed that the \jmodule{Clusterer} interface and \code{Cluster}
 They may be used as design pattern not only for clustering elements in inference process.
 To address clustering of elements in more detail, we created \code{Cluster\.er\.With\.At\.tri\.bu\.tes<T, S>} interface, which extends \code{Clusterer<T>} interface.
 It adds method \code{List\.<Cluster<S>{}> get\.At\.tri\.bu\.teClusters(T representant)}, implying that each representative of
-type \code{T} (that is representative of some main cluster) has some "attribute" clusters associated with it.
+type \code{T} (that is representative of some main cluster) has some ``attribute'' clusters associated with it.
 Attribute clusters are of type \code{S} and can be retrieved by calling \code{getAttributeClusters(x)}.
 
 We provide one implementation of this interface described in \ref{section_Iname}.
@@ -320,7 +320,7 @@ Process illustrated in fig. \ref{twostep_flow} is as follows.
 \section{Submodule implementations}
 %#### SUBMODULES->Iname ############################################
 \subsection{Iname (ClusteterWithAttributes)} \label{section_Iname}
-We cluster elements in \code{Iname<AbstractStructuralNode, Attribute>} class (Iname je clusterer!), which takes \code{AbstractStructuralNode} classes to cluster as main, and \code{Attribute} classes as attributes. % TODO anti I don't understand the sentence, rewrite.
+We cluster elements in \code{Iname\.<Abstract\.Structural\.Node, Attri\.bu\.te>} class, which takes \code{Abstract\.Structural\.No\.de} classes to cluster as main, and \code{Attribute} classes as attributes.
 Clustering is done based on element's \code{getName()} equality (ignoring case).
 For each rule (element), it is first clustered by finding the cluster which representative has the same name - or create new cluster with this element as representative.
 Then we process right side of this element rule (that are nodes from \code{getSubnodes()}).
@@ -328,8 +328,8 @@ Since right side of rule is always concatenation (\jmodule{TwoStep} accepts only
 Each node on right side, is examined in the following way.
 \begin{itemize}
   \item If it is \textbf{simple data}, throw it to \code{SimpleDataClusterer} class which is associated with main element cluster. It does nothing more, than holds all \code{SimpleData} instances in one cluster. But in future it may be replaced to cluster simple data somehow, to obtain meaningful content models in schemas.
-  \item If it is \textbf{element} and it is tagged as sentinel - search main clusters to find cluster with representative of same \code{getName()}, or create new cluster with this sentinel as representative. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it. % TODO anti Please rewrite the really long sentence.
-  \item Do nothing otherwise, since it is element, it has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in Initial Grammar, thus it is already processed or is on schedule. % TODO anti Totally unclear, rewrite
+  \item If it is \textbf{element} and it is tagged as sentinel - search main clusters to find cluster with representative of same \code{getName()}, or create new cluster with this sentinel as representative. From IGG, sentinels may be only on right sides of rules and since each element in schemas has to be defined, there must exist another element with same name, which is not sentinel (and maybe it will come to process in future). So there can't be cluster with only one sentinel element in it. 
+  \item Do nothing otherwise, since it is element, it has to have its subnodes defined, and therefore it is element that is proper grammar rule and therefore it has to be somewhere in Initial Grammar, thus it is already processed or is on schedule.
 \end{itemize}
 Attributes of element are processed through a helper attribute clusterer, which is created for each element cluster.
 We have bunch of elements of same name in a cluster and one attribute clusterer associated with this bunch.
@@ -359,7 +359,7 @@ No generalization is done at all.
 
 %#### SUBMODULES->Trie ############################################
 \subsection{Trie (ClusterProcessor)} \label{section_Trie}
-This processor takes all rules in a cluster, treats them like strings and builds a prefix tree (a ``trie") of them. More precisely, it takes the first rule and declares it to be a long branch (concatenation of tokens) in a newly created tree. After that, it adds the remaining rules one by one as branches like this: as long as it can follow an existing branch, it follows it. As soon as the newly added branch starts to differ, it ``branches off" (creates an alternation at that point) the existing tree and hangs the rest of the newly added rule there. Repeating this process creates a prefix tree describing all the rules in the cluster.
+This processor takes all rules in a cluster, treats them like strings and builds a prefix tree (a ``trie'') of them. More precisely, it takes the first rule and declares it to be a long branch (concatenation of tokens) in a newly created tree. After that, it adds the remaining rules one by one as branches like this: as long as it can follow an existing branch, it follows it. As soon as the newly added branch starts to differ, it ``branches off'' (creates an alternation at that point) the existing tree and hangs the rest of the newly added rule there. Repeating this process creates a prefix tree describing all the rules in the cluster.
 The tree is the final regular expression.
 
 %#### SUBMODULES->AutomatonMergingState ############################################
@@ -420,7 +420,7 @@ The whole submodule structure is in fig. \ref{automaton_merging_state_modules}.
 \jmodule{AutomatonMergingState} works in following steps.
 \begin{enumerate}
 	\item Create prefix-tree automaton (PTA) from positive examples - right sides of rules.
-Call its submodule \jmodule{AutomatonSimplifier} to modify PTA to some generalized automaton by merging states.
+Call its submodule \jmodule{Au\.to\.ma\.ton\.Simpli\.fier} to modify PTA to some generalized automaton by merging states.
 	\item Simplified automaton is then converted to an instance of \code{RegexpAutomaton} (see \ref{section_RegexpAutomaton}) by using clone constructor.
 Regexp automaton is automaton with regular expression as symbol on transitions.
 In automata theory, such automaton is called extended NFA.

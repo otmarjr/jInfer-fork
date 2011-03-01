@@ -51,7 +51,7 @@ This document focuses on the description of modules involved in the process of i
 These modules are responsible for creating the IG rules from input files, therefore they belong in the inference modules category. 
 As a whole, they are a specialized extension of \code{BasicIGG} module.
 
-None of the modules provide nor require any tokens. Complete dependency tree is described in \cite[section 4]{archdoc} and depicted in Figure 9 of that document.
+None of the modules provide nor require any tokens. Complete dependency tree is described in \cite[section 4]{archdoc} and depicted in figure 9 of that document.
 
 \subsection{Naming convention}
 Note that there are several types of entities called `element' in the context of the described modules.
@@ -66,7 +66,7 @@ section \ref{sect:utils}.
 
 For example, the \emph{attribute} tag can have a tag attribute \emph{use}.
 While former will match \code{XSDTag.ATTRIBUTE}, the latter will match \code{XSDAttribute.USE}.
-Lastly, tag attributes should not be confused with instances of \code{Attribute}, which is a class for storing information about the tag attributes inside jInfer. Every \code{Element} has a list of \code{Attribute}s, as can be seen from Figure 4 in \cite[section 2.3]{archdoc}.
+Lastly, tag attributes should not be confused with instances of \code{Attribute}, which is a class for storing information about the tag attributes inside jInfer. Every \code{Element} has a list of \code{Attribute}s, as can be seen from figure 4 in \cite[section 2.3]{archdoc}.
 
 \subsection{Namespaces}
 XSD Schemas allow using different namespace prefixes for tag names. Our parser implementations do not recognize namespaces; all prefixes from tag names are trimmed. For example, there is no difference between \code{xs:choice} and \code{xsd:choice} tags, both will match the \code{XSDTag.CHOICE} constant.
@@ -133,7 +133,7 @@ Key interface which needs to be implemented by any parser handling the import of
 List<Element> parse(InputStream stream) throws XSDException;
 \end{verbatim}
 
-Diagram showing the inheritance of this interface, as well as both parsers bundled with jInfer, which implement it is in Figure \ref{parser_interface}.
+Diagram showing the inheritance of this interface, as well as both parsers bundled with jInfer, which implement it is in figure \ref{parser_interface}.
 
 \begin{figure}[ht]
 \centering\includegraphics[scale=\myscale]{parser_intf}

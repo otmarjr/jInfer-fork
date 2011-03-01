@@ -52,17 +52,18 @@ This is a relatively simple implementation of a \jmodule{SchemaGenerator} export
 
 \section{Structure}
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provi\-der is \code{Sche\.ma\.Ge\.ne\.ra\.tor\.Impl}. Its \code{start} method first topologically sorts all rules (elements) it got in the simplified grammar on input. This toposorting is necessary to avoid using anything not yet defined in the resulting schema. Afterwards, it creates their DTD string represenation.\\
+The main class implementing \code{SchemaGenerator} interface and simultaneously being registered as its service provi\-der is \code{Sche\.ma\.Ge\.ne\.ra\.tor\.Impl}. Its \code{start()} method first topologically sorts all rules (elements) it got in the simplified grammar on input. This sorting is necessary to avoid using anything not yet defined in the resulting schema. Afterwards, it creates their DTD string represenation.\\
 
-Export of a single element is handled in the \code{elementToString()} method. First the actual \code{<!ELEMENT \ldots>} tag is exported, after that its attributes in a \code{<!ATTLIST \ldots>} tag (if there are any).
+Export of a single element is handled in the \code{elementToString()} method. First the actual \code{<!ELEMENT \ldots>} tag is exported, and after that, its attributes in \code{<!ATTLIST \ldots>} tag (if there are any).
 
 \subsection{Element content export}
-Elements are processed \code{elementToString()} method.
-Whole element regexp is sent to method \code{expandIn\.ter\.vals\.Reg\.exp} of class \code{IntervalExpander}.
-Its purpose is to convert intervals on regexp and its children to those representable in DTD.
+Elements are processed by \code{elementToString()} method.
+Whole regexp of an element is sent to method \code{expandIn\.ter\.vals\.Reg\.exp()} of class \code{IntervalExpander}.
+Its purpose is to convert intervals of a regexp and its children to those representable in DTD.
 For example regular expression $(a\{2,5\}, b\{0,2\})$ would be transformed to $(a,a,a?,a?,a?,b?,b?)$.
+
 Class \code{IntervalExpander} works recursively.
-Regexp is passed to method \code{expandIntervalsRegexp} to handle regexp in that element.
+Regexp is passed to method \code{expandIntervalsRegexp()} to handle regexp in that element.
 This method contains a big\code{switch} based on the regexp type.
 For $\lambda$, it returns $\lambda$.
 Otherwise, it examines interval of regexp in method \code{is\.Sa\.fe\.In\.ter\.val}.
@@ -75,9 +76,9 @@ If $min$ is non-zero, last regexp in required string gets interval $\{1, \infty\
 
 After intervals are expanded, resulting regexp is passed to \code{regexpToString()}, which contains a big \code{switch} statement based on the type of regexp.
 For $\lambda$, it simply returns \code{EMPY} as string.
-Tokens are first examined if they are \code{SimpleData}, if so, string \code{\#PCDATA} is returned.
+Tokens are at first examined if they are \code{SimpleData}; if so, string \code{\#PCDATA} is returned.
 If not, element name is returned.
-If interval of this regexp is different from $\{1, 1\}$, the interval \code{toString()} representation is appended.
+If interval of this regexp is different from $\{1, 1\}$, the interval \code{toString()} representation is appended.\\
 
 Situation is a bit complicated with complex regexps that contain \code{SimpleData} somewhere inside the tree.
 They are processed in \code{comboToString} method which first checks if there are no simple data in whole tree.

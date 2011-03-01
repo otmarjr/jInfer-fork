@@ -180,23 +180,23 @@ public class SAXHandler extends DefaultHandler {
     super.endDocument();
 
     if (verbose) {
-      LOG.info("Schema registered following " + namedTypes.size() + " named types");
+      LOG.debug("Schema registered following " + namedTypes.size() + " named types");
       for (final Iterator<String> it = namedTypes.keySet().iterator(); it.hasNext();) {
         final String name = it.next();
 
         if (!BaseUtils.isEmpty(namedTypes.get(name).getSubnodes().getChildren())) {
           final int numChildren = namedTypes.get(name).getSubnodes().getChildren().size();
-          LOG.info("\t'" + name + "': " + namedTypes.get(name).getSubnodes().getType().toString().toLowerCase() + " has " + numChildren + " children:");
+          LOG.debug("\t'" + name + "': " + namedTypes.get(name).getSubnodes().getType().toString().toLowerCase() + " has " + numChildren + " children:");
           for (int i = 0; i < numChildren; i++) {
             final Regexp<AbstractStructuralNode> child = namedTypes.get(name).getSubnodes().getChild(i);
             if (child.getContent() == null) {
-              LOG.info("\t\t<unnamed> " + child.getType().toString().toLowerCase());
+              LOG.debug("\t\t<unnamed> " + child.getType().toString().toLowerCase());
             } else {
-              LOG.info("\t\t" + child.getContent().getName());
+              LOG.debug("\t\t" + child.getContent().getName());
             }
           } //end for children
         } else {
-          LOG.info("\t" + name + ": " + namedTypes.get(name).getSubnodes().getType() + " has 0 children.");
+          LOG.debug("\t" + name + ": " + namedTypes.get(name).getSubnodes().getType() + " has 0 children.");
         }
       }
     }

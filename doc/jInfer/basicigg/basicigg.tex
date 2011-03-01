@@ -40,11 +40,11 @@
 \noindent Target audience: developers willing to extend jInfer, specifically modify the way \jmodule{BasicIGG} creates initial grammar from input files, for example by adding support for a new schema language.
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & Matej Vitásek \\ \hline
-Required tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer \\ \hline
-Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator \\ \hline
-Module dependencies:   & Base \\ \hline
-Public packages:       & cz.cuni.mff.ksi.jinfer.basicigg.properties \\ \hline
+Responsible developer & Matej Vitásek \\ \hline
+Required tokens       & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer} \\ \hline
+Provided tokens       & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator} \\ \hline
+Module dependencies   & Base \\ \hline
+Public packages       & \code{cz.cuni.mff.ksi.jinfer.basicigg.properties} \\ \hline
 \end{tabular}
 
 \section{Introduction}
@@ -92,7 +92,7 @@ While the exact process by which \code{XPathHandlerImpl} creates the IG from a s
 
 Expansion is used to convert complex regular expressions in initial grammar to simple ones (concatenations of tokens) for simplifiers that can handle only the simple form. The process can be seen as breaking down a regular expression into a set of words (positive examples) that are described by this regexp. Relevant interface encapsulating any implementation of such an expander is \code{Expander} in \jmodule{Base}. Reference implementation is \code{ExpanderImpl} in this module. Note that even though this implementation is retrieved using lookups, jInfer bundles only one such implementation and does not support choice among more of them. Anyone wishing to implement his own expander will thus have to either remove jInfer's implementation, or implement the usual module selection.\\
 
-One interesting use case for expansion is simple adaptation of legacy inference methods. "Old" methods working only with \emph{simple} grammar can be used unchanged with "new" inputs - schemas.\\
+One interesting use case for expansion is simple adaptation of legacy inference methods. ``Old'' methods working only with \emph{simple} grammar can be used unchanged with ``new'' inputs - schemas.\\
 
 In \jmodule{BasicIGG}, only grammar coming from input schemas and queries is expanded, and this happens only if the following module lacks the \code{CAN\_HANDLE\_COMPLEX\_REGEXPS}.
 

@@ -39,11 +39,11 @@
 \noindent Target audience: developers willing to extend jInfer, specifically hack the XSD export.
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & Mário Mikula \\ \hline
-Required tokens:       & none \\ \hline
-Provided tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator \\ \hline
-Module dependencies:   & Base \\ \hline
-Public packages:       & none \\ \hline
+Responsible developer & Mário Mikula \\ \hline
+Required tokens       & none \\ \hline
+Provided tokens       & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator} \\ \hline
+Module dependencies   & Base \\ \hline
+Public packages       & none \\ \hline
 \end{tabular}
 
 \section{Introduction}
@@ -153,7 +153,7 @@ Type of an element is one of following.
 	\end{verbatim}
 \end{itemize}
 
-Named type of an element is defined by XSD element \code{simpleType} (lack of features mentioned above) or \code{complexType} with specified attribute \code{name}. Its content is exactly the same as described above. There is of course no need to define \emph{built-in types}.
+Named type of an element is defined by XSD element \code{simpleType} (lack of features mentioned above) or \code{complex\.Ty\.pe} with specified attribute \code{name}. Its content is exactly the same as described above. There is of course no need to define \emph{built-in types}.
 
 \begin{verbatim}
 <xs:complexType name="PersonType">
@@ -173,7 +173,7 @@ XSD elements \code{xs:element}, \code{xs:sequence} and \code{xs:choice} can have
 <xs:element name="Person" type="PersonType" minOccurs="1" maxOccurs="3"/>
 \end{verbatim}
 
-Default values for \code{minOccurs} and \code{maxOccurs} attributes are "1", if they are not specified. So the example above has the same meaning as the following one.
+Default values for \code{minOccurs} and \code{maxOccurs} attributes are ``1'', if they are not specified. So the example above has the same meaning as the following one.
 
 \begin{verbatim}
 <xs:element name="Person" type="PersonType" maxOccurs="3"/>
@@ -204,7 +204,7 @@ Exporter supports types of \emph{mixed elements}. \emph{Mixed element} is an ele
 
 \subsubsection{Definition of attributes}
 
-Attributes are defined by XSD element \code{xs:attribute} with attributes \code{name}, \code{type} and optional \code{use}. Elements \code{xs:attributes} have to be placed at the end of a \code{complexType} definition.
+Attributes are defined by XSD element \code{xs:\.attri\.bu\.te} with attributes \code{name}, \code{type} and optional \code{use}. Elements \code{xs:\.attri\.bu\.tes} have to be placed at the end of a \code{complexType} definition.
 
 \begin{verbatim}
 <xs:element name="Person">
@@ -233,7 +233,7 @@ public AbstractElementsExporter(PreprocessingResult preprocessingResult,
 
 Names of parameters are self explanatory. Parameter \code{preprocessingResult} is a result of preprocessing. Parameter \code{indentator} is an instance of \code{Indentator} class to be used to buffer and indent output of exporter. This instance doesn't need to be empty . Output of exporter is appended at the end of text held by the \code{indentator}. This behaviour is convenient when chaining output of several elements exporters.\\
 
-There are two classes extending \code{AbstractElementsExporter}. \code{GlobalElementsExporter} and \code{RootElementExporter}. Their constructors has the same signature as constructor of \code{AbstractElementsExporter} and both have \code{run()} method to perform their function.\\
+There are two classes extending \code{AbstractElementsExporter}. \code{GlobalElementsExporter} and \code{Root\.Ele\.ment\.Ex\.port\.er}. Their constructors has the same signature as constructor of \code{AbstractElementsExporter} and both have \code{run()} method to perform their function.\\
 
 \paragraph{GlobalElementsExporter}
 \code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}.\\
@@ -245,10 +245,10 @@ If a global type contains other elements, these are processed as following.
 	\item If a contained element is not global nor of a built-in type, it is fully defined in a place of its occurrence inside the global type.
 \end{itemize}
  
-Name of a global type is derived from name of a corresponding global element by prefixing and suffixing it. Default prefix is "T" and default suffix is empty. These values can be changed in project properties.
+Name of a global type is derived from name of a corresponding global element by prefixing and suffixing it. Default prefix is ``T'' and default suffix is empty. These values can be changed in project properties.
 
 \paragraph{Examples of definition of global types}
-Type generated from element named "GlobalElement", containing elements "Text", which is string, and element "AnotherGlobalElement", which is another global element.
+Type generated from element named ``GlobalElement'', containing elements ``Text'', which is string, and element ``AnotherGlobalElement'', which is another global element.
 
 \begin{verbatim}
 <xs:complexType name="TGlobalElement">
@@ -263,7 +263,7 @@ Type generated from element named "GlobalElement", containing elements "Text", w
 </xs:complexType>
 \end{verbatim}
 
-Type generated from element named "X", containing element "Y", which is not global element and contains elements "Text" and "GlobalElement" from the previous example. Element "X" has one mandatory string attribute named "id".
+Type generated from element named ``X'', containing element ``Y'', which is not global element and contains elements ``Text'' and ``GlobalElement'' from the previous example. Element ``X'' has' one mandatory string attribute named ``id''.
 
 \begin{verbatim}
 <xs:complexType name="TX">
@@ -282,7 +282,7 @@ Type generated from element named "X", containing element "Y", which is not glob
 \paragraph{RootElementExporter}
 \code{RootElementExporter} retrieves the root element from the result of preprocessing and creates its definition. This definition is also appended to the \code{indentator} (supplied to constructor) at a level of indentation, the \code{indentator} is set. Way of handling the root element's subelements depends on if these are global elements or not.\\
 
-Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. This applies also to elements which are not global and their type is one of a built-in types. For example, root element "Root" contains one the following two elements. Global element "A" and string element "B".
+Global elements (retrieves from the result of preprocessing) are defined by referencing its type, which is supposed to be defined globally. This applies also to elements which are not global and their type is one of a built-in types. For example, root element ``Root'' contains one the following two elements. Global element ``A'' and string element ``B''.
 
 \begin{verbatim}
 <xs:complexType name="TA">
@@ -299,7 +299,7 @@ Global elements (retrieves from the result of preprocessing) are defined by refe
 </xs:element>
 \end{verbatim}
 
-Elements which are not global and are not of a built-in type are defined recursively, at the place of their occurrence. For example, root element "Root" contains element "A", which contains two other string elements.
+Elements which are not global and are not of a built-in type are defined recursively, at the place of their occurrence. For example, root element ``Root'' contains element ``A'', which contains two other string elements.
 
 \begin{verbatim}
 <xs:element name="Root">
@@ -320,7 +320,7 @@ Elements which are not global and are not of a built-in type are defined recursi
 
 \subsubsection{Export of attributes}
 
-Export of attributes is done alongside with export of elements, as attributes are exported as XSD element \code{xs:attribute} in XSD element \code{xs:complexType}.
+Export of attributes is done alongside with export of elements, as attributes are exported as XSD element \code{xs:\.attri\.bu\.te} in XSD element \code{xs:complexType}.
 
 \begin{verbatim}
 <xs:complexType name="...">
@@ -403,7 +403,7 @@ In XSD, it is not allowed to define elements with the same name in one sequence 
 
 Do not turn the generation of global element types off.
 
-\subsection{"Unique Particle Attribution" problem}
+\subsection{``Unique Particle Attribution'' problem}
 
 \subsubsection{Error conditions}
 
@@ -461,8 +461,8 @@ Flow of data in this module is the following.
 	\item Unused elements (occurrence count equals 0) are removed.
 	\item For each element, it is determined if it type will be defined as a global type or not.
 	\item For each global element, its type is exported to a XSD representation by \code{GlobalElementsExporter}.
-	\item Root element and recursively all remaining elements are exported to a XSD representation by \code{RootElementExporter}.
-	\item String representation of the schema is returned along with the information that file extension should be "xsd".
+	\item Root element and recursively all remaining elements are exported to a XSD representation by \code{Root\.Element\.Ex\.porter}.
+	\item String representation of the schema is returned along with the information that file extension should be ``xsd''.
 \end{enumerate}
 
 \nocite{*}

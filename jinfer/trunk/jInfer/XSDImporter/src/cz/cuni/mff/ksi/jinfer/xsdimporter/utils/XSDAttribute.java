@@ -61,7 +61,7 @@ public enum XSDAttribute {
    * Attribute <i>substitutionGroup</i> of a tag.
    * Specifies the name of an <i>element</i> tag that can be substituted with the corresponding <i>element</i> tag.
    */
-  SUBSTITUTION("substitutionGroup"),
+  //SUBSTITUTION("substitutionGroup"),
   /**
    * Special value meaning that the parsed attribute is not known.
    */

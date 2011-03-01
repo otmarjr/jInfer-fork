@@ -39,15 +39,15 @@
 \noindent Target audience: developers willing to extend jInfer, specifically alter displaying of automata .
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & Mário Mikula \\ \hline
-Required tokens:       & org.openide.windows.WindowManager \\ \hline
-Provided tokens:       & none \\ \hline
-Module dependencies:   & Base \\ 
+Responsible developer & Mário Mikula \\ \hline
+Required tokens       & org.openide.windows.WindowManager \\ \hline
+Provided tokens       & none \\ \hline
+Module dependencies   & Base \\ 
 					   & JUNG \\ \hline
-Public packages:       & cz.cuni.mff.ksi.jinfer.autoeditor \\ 
-					   & cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer \\
-   					   & cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts \\
-   					   & cz.cuni.mff.ksi.jinfer.autoeditor.gui.component \\ \hline
+Public packages       & \code{cz.cuni.mff.ksi.jinfer.autoeditor} \\ 
+					   & \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer} \\
+   					   & \code{cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts} \\
+   					   & \code{cz.cuni.mff.ksi.jinfer.autoeditor.gui.component} \\ \hline
 \end{tabular}
 
 \section{Introduction}
@@ -228,7 +228,7 @@ Example of usage follows.
       transformer = new Transformer<Step<Regexp<T>>, String>() {
       
         @Override
-        public String transform(final Step<Regexp<T>> step) {
+        public String transform(Step<Regexp<T>> step) {
           StringBuilder sb = new StringBuilder();
           sb.append("{");
           sb.append(symbolToString.toString(step.getAcceptSymbol()));

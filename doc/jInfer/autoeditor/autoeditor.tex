@@ -195,7 +195,7 @@ This section describes classes derived from the base classes used in \jmodule{Tw
 \subsubsection{StatePickingComponent} \label{subsubsection:StatePickingComponent}
 \code{StatePickingComponent} (extensions of \code{abstractComponent}) alongside with \code{StatePickingVisualizer} (extension of \code{PluggableVisualizer}) provides possibility to pick one automaton state in GUI and immediately return to the calling code, which can retrieve the picked state.\\
 
-\code{StatePickingVisualizer} is trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has several additional arguments. Their description follows.
+\code{StatePickingVisualizer} is a trivial extension of \code{PluggableVisualizer}. It has no additional methods. Its constructor has several additional arguments. Their description follows.
 \begin{verbatim}
 public StatePickingVisualizer(
   Layout<State<T>, Step<T>> layout,
@@ -272,7 +272,7 @@ Example of usage follows.
 Classes \code{StatePickingComponent} and \code{StatesPickingVisualizer} are similar to the classes described in the previous section. Purpose of these is to provide picking of multiple automaton states.\\
 
 \code{StatesPickingVisualizer} is extension of \code{PluggableVisualizer} and upon its construction it adds \code{Vertices\-Picking\-Graph\-Mouse\-Plugin} to the graph mouse plugins. With this plugin used, user can pick and unpick automaton states separately or pick several states at once by dragging rectangular selection box over states.\
-Main difference compared to the \code{VertexPickingGraphMousePlugin} is \code{VerticesPickingGraphMousePlugin} does not call component's \code{guiDone()} method.\\
+Main difference compared to the \code{VertexPickingGraphMousePlugin} is that \code{VerticesPickingGraphMousePlugin} does not call component's \code{guiDone()} method.\\
 
 Signature of constructor and description of arguments follow.
 \begin{verbatim}
@@ -302,7 +302,7 @@ Methods of \code{StatesPickingComponent} are the following.
 	\item \code{setLabel()} - Sets text of the component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
-Source codes of \code{StatesPickingComponent} resides in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.component}, \code{States\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Vertices\-Picking\-Graph\-Mouse\-Plugin} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
+Source codes of \code{StatesPickingComponent} reside in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.component}, \code{States\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Vertices\-Picking\-Graph\-Mouse\-Plugin} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}

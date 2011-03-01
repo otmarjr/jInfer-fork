@@ -39,15 +39,15 @@
 \noindent Target audience: developers willing to extend jInfer, specifically extend jInfer project structure.
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & Michal Švirec \\ \hline
-Required tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator \\
- & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator \\
- & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier \\
- & org.openide.windows.IOProvider \\ \hline
-Provided tokens:       & none \\ \hline
-Module dependencies:   & Base \\
+Responsible developer & Michal Švirec \\ \hline
+Required tokens       & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator} \\
+ & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator} \\
+ & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier} \\
+ & \code{org.openide.windows.IOProvider} \\ \hline
+Provided tokens       & none \\ \hline
+Module dependencies   & Base \\
 	& Runner \\ \hline
-Public packages:       & cz.cuni.mff.ksi.jinfer.projecttype.actions \\ \hline
+Public packages       & \code{cz.cuni.mff.ksi.jinfer.projecttype.actions} \\ \hline
 \end{tabular}
 
 \section{Introduction}
@@ -84,7 +84,7 @@ This section describes classes needed for jInfer project creation and its integr
 
 \subsubsection{JInferProject}
 
-\code{JinferProject} class implements the \code{Project} interface from NBP and represents an in-memory representation of a jInfer project. Inner structure of this class is very simple, interface specifies only two methods: \code{getProjectDirectory()} and \code{getLookup()}. All the extensibility of a project type is done by the \emph{Lookup} functionality of NBP. Project lookup contains properties, \code{Input} class (encapsulating input files), class creating output files, class building project tree in the Projects view, etc.
+\code{JinferProject} class implements the \code{Project} interface from NBP and represents an in-memory representation of a jInfer project. Inner structure of this class is very simple, interface specifies only two methods: \code{getProject\.Directo\.ry()} and \code{getLookup()}. All the extensibility of a project type is done by the \emph{Lookup} functionality of NBP. Project lookup contains properties, \code{Input} class (encapsulating input files), class creating output files, class building project tree in the Projects view, etc.
 
 \subsubsection{InputFiles}\label{input.files}
 
@@ -148,14 +148,14 @@ For validation error handling the \code{JInferErrorHander} class is used. It ext
 
 Each jInfer project has its associated properties window through which the user can change project-wide properties. This window is accessible through \emph{Properties} action in context menu of the project \emph{root} node. Properties window consists of category tree on the left side and properties pane on the right side. With each category in the tree, one properties pane is associated. Structure of the category tree consists of two types of categories: actual categories provided by some modules and \emph{virtual} categories. An actual category has its associated properties pane, which is displayed in the right side of the properties window. \emph{Virtual} category is displayed as a special information panel in the properties pane that provides information about count and names of modules which are children of this virtual category. Each actual category can have either virtual or actual categories as its children, but not both at a same time. On the other hand, a \emph{virtual} category can have only actual categories as its children. If a \emph{virtual} category has no children, this category is not displayed in the category tree.\\
 
-A category in the properties window is represented by NBP \code{ProjectCustomizer.Category} class, properties pane is represented by \code{JPanel} class. Classes responsible for creation of this properties window are \code{JInferCustomizerProvider} and \code{JInferComponentProvider}. From jInfer module point of view the properties category is represented by \code{Properties\-Panel\-Provider} interface and associated properties pane by \code{AbstractPropertiesPanel} abstract class. How to use this interface and abstract class to create custom project properties category presented in jInfer project properties window is described in section \ref{properties_reg}.\\
+A category in the properties window is represented by NBP \code{Project\.Customizer.\.Category} class, properties pane is represented by \code{JPanel} class. Classes responsible for creation of this properties window are \code{JInfer\.Customizer\.Provider} and \code{JInfer\.Component\.Provider}. From jInfer module point of view the properties category is represented by \code{Properties\.Panel\.Provider} interface and associated properties pane by \code{Abstract\.Properties\.Panel} abstract class. How to use this interface and abstract class to create custom project properties category presented in jInfer project properties window is described in section \ref{properties_reg}.\\
 
 
-\code{JInferComponentProvider} is a very simple class that extends \code{ProjectCustomizer.CategoryComponentProvider} class from NBP and its only method is \code{create()} which takes category as a parameter and returns properties pane. In the \code{JInferCustomizer\-Provider} class (which extends NBP \code{CustomizerProvider} class) is the core functionality of collecting categories (\code{PropertiesPanelProvider} interface) with associated properties panes (\code{AbstractPropertiesPanel} class) from all jInfer modules.\\
+\code{JInferComponentProvider} is a very simple class that extends \code{ProjectCustomizer.Category\.Component\.Provider} class from NBP and its only method is \code{create()} which takes category as a parameter and returns properties pane. In the \code{JInfer\.Customizer\.Provider} class (which extends NBP \code{Customizer\.Provider} class) is the core functionality of collecting categories (\code{Properties\.Panel\.Provider} interface) with associated properties panes (\code{Abstract\.Properties\.Panel} class) from all jInfer modules.\\
 
 \subsubsection{Custom project properties category}\label{properties_reg}
 
-As was written before, each jInfer project properties category is represented in jInfer modules by \code{PropertiesPanelProvider} interface. To create new category, this interface must be implemented and implementation must be annotated by the following code.
+As was written before, each jInfer project properties category is represented in jInfer modules by \code{Properties\.Panel\.Provider} interface. To create new category, this interface must be implemented and implementation must be annotated by the following code.
 \begin{verbatim}
 	@ServiceProvider(service = PropertiesPanelProvider.class)
 \end{verbatim}

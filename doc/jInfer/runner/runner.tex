@@ -39,26 +39,26 @@
 \noindent Target audience: developers willing to extend jInfer, specifically hack (or expand) the inference process.
 
 \noindent \begin{tabular}{|l|l|} \hline
-Responsible developer: & Matej Vitásek \\ \hline
-Required tokens:       & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator \\
- & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator \\
- & cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier \\ 
- & org.openide.windows.IOProvider \\ \hline
-Provided tokens:       & none \\ \hline
-Module dependencies:   & Base \\ \hline
-Public packages:       & cz.cuni.mff.ksi.jinfer.runner \\
-  & cz.cuni.mff.ksi.jinfer.runner.properties \\ \hline
+Responsible developer & Matej Vitásek \\ \hline
+Required tokens       & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator} \\
+ & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator} \\
+ & \code{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier} \\ 
+ & \code{org.openide.windows.IOProvider} \\ \hline
+Provided tokens       & none \\ \hline
+Module dependencies   & Base \\ \hline
+Public packages       & \code{cz.cuni.mff.ksi.jinfer.runner} \\
+  & \code{cz.cuni.mff.ksi.jinfer.runner.properties} \\ \hline
 \end{tabular}
 
 \section{Introduction}
 
-\jmodule{Runner} it the module responsible for inference process. The fact that the inference consists of exactly 3 steps as described in TODO link architecture is hard-wired in jInfer via this module.
+\jmodule{Runner} it the module responsible for inference process. The fact that the inference consists of exactly 3 steps as described in \cite{archdoc}, is hard-wired in jInfer via this module.
 
 \section{Structure and operation}
 
 The main class responsible for the inference run is the \code{Runner} in \code{cz.cuni.mff.ksi.jinfer.runner} package. During its construction it loads the properties of the currently running project (via the \code{RunningProject} class) to find out which modules are selected for the inference. These modules are looked up and remembered - each new inference run should therefore use a new instance of runner.\\
 
-The only public method in \code{Runner} is, unsurprisingly, \code{run()}. This method will start the first step of the inference process by invoking the selected \jmodule{IGGenerator}'s \code{start()} method, as described in TODO link inference process in architecture. Callback methods \code{finishedIGGenerator()}, \code{finishedSimplifier()} and \code{finishedSchemaGenerator()} are responsible for invoking the following stages of inference, or in the latter case for presenting the resulting schema to the user and terminating the inference process.\\
+The only public method in \code{Runner} is, unsurprisingly, \code{run()}. This method will start the first step of the inference process by invoking the selected \jmodule{IGGenerator}'s \code{start()} method, as described in \cite[section 3.5.1]{archdoc}. Callback methods \code{finishedIGGenerator()}, \code{finishedSimplifier()} and \code{finishedSchemaGenerator()} are responsible for invoking the following stages of inference, or in the latter case for presenting the resulting schema to the user and terminating the inference process.\\
 
 Invocation of every step in the process is encapsulated in a NetBeans \emph{task}: this is the responsibility of \code{runAsync()} method. First of all, this means that all the work is done in an asynchronous thread independent from the GUI. Second, NBP presents each such task as a progressbar in the bottom right corner of the window, and allows the user to cancel it. Should this happen, the currently running module detects this  by checking for \code{Thread.interrupted()} and responds by throwing an \code{InterruptedException}. \code{Runner} catches this exception, terminates the inference and informs the user (\code{interrupted()} method).\\
 

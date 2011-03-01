@@ -1,0 +1,18 @@
+digraph parser_intf {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10, arrowhead = empty];
+	rankdir = BT;
+{
+	rank = same;
+	interface;
+	class [style= rounded];
+	NamedModule;
+}
+	XSDParser;
+	DOMParser [style= rounded];
+	SAXParser [style= rounded];
+
+	XSDParser -> NamedModule [label = "extends"];
+	DOMParser -> XSDParser [style = dashed, label = "implements"];
+	SAXParser -> XSDParser [style = dashed, label = "implements"];
+}

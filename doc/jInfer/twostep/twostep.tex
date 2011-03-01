@@ -62,8 +62,7 @@ In this document, we will list all modules and submodules of the simplifier and 
 %#### FACTORY ############################################
 \section{Factory pattern usage} \label{section_factory}
 In \jmodule{TwoStepSimplifier} we employ a factory pattern (as described in \cite[section 4.2]{archdoc}) to divide the module into submodules.
-Since service providing classes are being kept as singletons in the NB platform, we use them as factories:
-For example:
+Since service providing classes are being kept as singletons in the NB platform, we use them as factories. For example:
 \begin{verbatim}
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public interface AutomatonSimplifierFactory extends 
@@ -270,7 +269,7 @@ We provide one implementation of this interface described in \ref{section_Iname}
 
 %#### STRUCTURE->ClusterProcessor ############################################
 \subsection{ClusterProcessor module}
-\jmodule{ClusterProcessor} takes rules of one cluster of element and somehow obtains regular expression representing that set of elements. It returns one rule - element with name set to desired name of element in schema (not all elements in a cluster have to have same name, if advanced clustering scheme is used, then processor has to choose the right name for the resulting element) and with subnodes set to regular expression inferred.
+\jmodule{ClusterProcessor} takes rules of one cluster of element and obtains a regular expression representing that set of elements. It returns one element, a rule, with name set to desired name of element in schema (not all elements in a cluster have to have same name, if advanced clustering scheme is used, then processor has to choose the right name for the resulting element) and with subnodes set to regular expression inferred.
 It processes attributes of all elements in a cluster to obtain meaningful schema attribute specification. These attributes have to be attached to the resulting element.
 
 Interface of submodule is defined as follows.

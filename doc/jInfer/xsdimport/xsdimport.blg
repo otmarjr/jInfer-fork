@@ -1,0 +1,69 @@
+This is BibTeX, Version 0.99d (TeX Live 2010/Arch Linux)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: xsdimport.aux
+The style file: alpha.bst
+Database file #1: literature.bib
+Warning--to sort, need author or key in wikiregexp
+Warning--to sort, need author or key in jung
+Warning--to sort, need author or key in graphviz
+Warning--to sort, need author or key in modules_api
+Warning--to sort, need author or key in lookup_api
+Warning--to sort, need author or key in log4j
+Warning--to sort, need author or key in JAXB
+Warning--to sort, need author or key in project_sample
+Warning--empty publisher in archdoc
+Warning--empty year in archdoc
+Warning--empty publisher in autoeditordoc
+Warning--empty year in autoeditordoc
+Warning--empty publisher in basedoc
+Warning--empty year in basedoc
+Warning--empty publisher in basicdtddoc
+Warning--empty year in basicdtddoc
+Warning--empty publisher in basiciggdoc
+Warning--empty year in basiciggdoc
+Warning--empty publisher in basicruledisplayerdoc
+Warning--empty year in basicruledisplayerdoc
+Warning--empty publisher in twostepdoc
+Warning--empty year in twostepdoc
+You've used 23 entries,
+            2543 wiz_defined-function locations,
+            640 strings with 6819 characters,
+and the built_in function-call counts, 7450 in all, are:
+= -- 664
+> -- 389
+< -- 5
++ -- 144
+- -- 136
+* -- 525
+:= -- 1170
+add.period$ -- 54
+call.type$ -- 23
+change.case$ -- 135
+chr.to.int$ -- 16
+cite$ -- 53
+duplicate$ -- 294
+empty$ -- 603
+format.name$ -- 147
+if$ -- 1520
+int.to.chr$ -- 8
+int.to.str$ -- 0
+missing$ -- 18
+newline$ -- 103
+num.names$ -- 45
+pop$ -- 271
+preamble$ -- 1
+purify$ -- 167
+quote$ -- 0
+skip$ -- 221
+stack$ -- 0
+substring$ -- 219
+swap$ -- 30
+text.length$ -- 5
+text.prefix$ -- 4
+top$ -- 0
+type$ -- 152
+warning$ -- 22
+while$ -- 46
+width$ -- 27
+write$ -- 233
+(There were 22 warnings)

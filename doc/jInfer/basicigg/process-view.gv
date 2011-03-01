@@ -18,7 +18,7 @@ digraph interfaces_nodes {
 	OtherProcessor [style = rounded, label = "..."]; 
 }
 	
-	Verification [label = "Simple grammar?"]
+	Verification [label = "Simple grammar"]
 	Expansion [label = "Expansion (?)"];
 
 	Input -> BasicIGG;

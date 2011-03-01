@@ -27,8 +27,12 @@ all: xsdimport.pdf
 
 clean:
 	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux
-dist-clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf *.eps
+
+web:	clean
+	rm -f *.png *.eps
+
+dist-clean: web
+	rm -f *.html *.pdf
 
 booklet: main.ps
 	cat main.ps | psbook | psnup -2 >main-booklet.ps

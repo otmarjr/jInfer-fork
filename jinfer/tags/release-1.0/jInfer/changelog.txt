@@ -1,0 +1,66 @@
+
+                                jInfer
+                Java framework for XML schema inference
+
+                              CHANGELOG
+
+  Version 0.4/1.0
+  ---------------
+
+  New features:
+  - Brand new Tree Rule Displayer based on JUNG's graphing capabilities.
+  - Rule Displayer now selectable.
+  - Optional GraphViz Dot integration used in automaton editor.
+  - Complex -> simple grammar translation using Expander.
+  - User interactive regexper.
+  - Log level settings are now per-project.
+  Improvements:
+  - Major overhaul of Project Properties window.
+  - Major overhaul of NB Options windows.
+  - Improved automaton editor GUI.
+  Major bugfixes.
+
+  Version 0.3
+  -----------
+
+  New features:
+  - Supports import from XSD schemas.
+  - Unified simplifiers into one module, added more algorithms.
+  - Rewritten k,h-context condition tester.
+  - Clusterer and element processor can be replaced.
+  - Default iname clusterer supports attribute clustering.
+  - Automaton cluster processor has replaceable submodule: AutomatonSimplifier.
+  - RegexpAutomaton simplifying made replaceable, ordering submodule made
+    replaceable.
+  - Added nice properties panels for all submodules.
+  - Added finite state automaton editor.
+  Major changes in object model.
+  Various bugfixes.
+
+  Version 0.2
+  -----------
+
+  New features:
+  - Added new simplifier.
+  - Added XSD schema exporter.
+  - Inference process can be now interrupted from the progress bar in bottom.
+  Various bugfixes.
+  
+  XSD schema exporter features:
+  - Export of elements, attributes.
+  - Global definition of element types.
+  - XSD elements sequence, choice, complexType.
+  - elements with mixed content.
+  - optional occurrence of element, choice, sequence expressed using minOccurs=0.
+  - kleene star of element, choice, sequence expressed using minOccurs=0
+    maxOccurs=unbounded.
+
+
+  Version 0.1
+  -----------
+
+  Features:
+  - Initial grammar can be retrieved from XML documents, DTD schemas and XPath
+    queries
+  - Simplifier uses name-based clustering, trie and naive approach to inferring
+    Kleene star.

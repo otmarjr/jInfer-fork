@@ -146,12 +146,12 @@ For validation error handling the \code{JInferErrorHander} class is used. It ext
 
 \subsection{Properties}
 
-Each jInfer project type has associated properties window through which can user change project-wide properties. This window is accessible through \emph{properties} action in context menu of project \emph{root} node. Properties window consists of category tree on a left side and properties pane on a right side. With each category in a tree is associated one properties pane. Structure of the category tree consists of two type of categories: actual category provided by some module and \emph{virtual} category. Actual category has associated properties pane, which is displayed in a right side of the properties window. \emph{Virtual} category displays as a properties pane special information panel that provides information about count and name of modules which are children of this virtual category. Each actual category could have virtual categories as a children or another actual categories, but not both at a same time. On the other side \emph{virtual} category can have only actual categories as a children. If a \emph{virtual} category has no child, this category is not displayed in a category tree.\\
+Each jInfer project has its associated properties window through which the user can change project-wide properties. This window is accessible through \emph{Properties} action in context menu of the project \emph{root} node. Properties window consists of category tree on the left side and properties pane on the right side. With each category in the tree, one properties pane is associated. Structure of the category tree consists of two types of categories: actual categories provided by some modules and \emph{virtual} categories. An actual category has its associated properties pane, which is displayed in the right side of the properties window. \emph{Virtual} category is displayed as a special information panel in the properties pane that provides information about count and names of modules which are children of this virtual category. Each actual category can have either virtual or actual categories as its children, but not both at a same time. On the other hand, a \emph{virtual} category can have only actual categories as its children. If a \emph{virtual} category has no children, this category is not displayed in the category tree.\\
 
-Category in a properties window is represented by NB platform \code{ProjectCustomizer.Category} class and properties pane is represented by \code{JPanel} class. Classes responsible for creation of this properties window are\\ \code{JInferCustomizerProvider} and \code{JInferComponentProvider}. From Jinfer module point of view is properties category represented by \code{PropertiesPanelProvider} interface and associated properties pane by \code{AbstractPropertiesPanel} abstract class. How to use this interface and abstract class to create custom project properties category presented in jInfer project type properties window is described in section \ref{properties_reg}.\\
+A category in the properties window is represented by NBP \code{ProjectCustomizer.Category} class, properties pane is represented by \code{JPanel} class. Classes responsible for creation of this properties window are \code{JInferCustomizerProvider} and \code{JInferComponentProvider}. From jInfer module point of view the properties category is represented by \code{PropertiesPanelProvider} interface and associated properties pane by \code{AbstractPropertiesPanel} abstract class. How to use this interface and abstract class to create custom project properties category presented in jInfer project properties window is described in section \ref{properties_reg}.\\
 
 
-\code{JInferComponentProvider} is very simple class that extends \code{ProjectCustomizer.CategoryComponentProvider} class from NBP and its only method is \code{create()} which takes category as a parameter and returns properties pane. In the \code{JInferCustomizerProvider} class, which extends NBP \code{CustomizerProvider} class, is the core functionality of collecting categories (\code{PropertiesPanelProvider} interface) with associated properties panes (\code{AbstractPropertiesPanel} class) from all jInfer modules.\\
+\code{JInferComponentProvider} is a very simple class that extends \code{ProjectCustomizer.CategoryComponentProvider} class from NBP and its only method is \code{create()} which takes category as a parameter and returns properties pane. In the \code{JInferCustomizerProvider} class (which extends NBP \code{CustomizerProvider} class) is the core functionality of collecting categories (\code{PropertiesPanelProvider} interface) with associated properties panes (\code{AbstractPropertiesPanel} class) from all jInfer modules.\\
 
 \subsubsection{Custom project properties category}\label{properties_reg}
 
@@ -162,12 +162,12 @@ As was written before, each jInfer project properties category is represented in
 
 \noindent\code{PropertiesPanelProvider} interface provides the following methods:
 \begin{itemize}
-	\item getName() - Gets a programmatic name of category.
-	\item getDisplayName() - Gets a name of category displayed in properties window.
-	\item getPriority() - Gets a priority of category, by which is sorted among other sibling categories in a tree.
-	\item getPanel(Properties) - Gets the \code{AbstractPropertiesPanel} instance representing the category \emph{properties pane}. The only parameter is instance of \code{Properties} class to which are saved properties which were set in \emph{properties pane}.
-	\item getParent() - Getter for a programmatic name of category which is parent of this category in a tree hierarchy.
-	\item getSubCategories() - Gets a \code{List} of \code{VirtualCategoryPanel} instances representing virtual category children.
+	\item getName() - gets a programmatic name of this category.
+	\item getDisplayName() - gets a name of this category which will be displayed in properties window.
+	\item getPriority() - gets priority of this category, by which it is sorted among other sibling categories in the tree.
+	\item getPanel(Properties) - gets the \code{AbstractPropertiesPanel} instance representing the category \emph{properties pane}. The only parameter is an instance of \code{Properties} class holding stored properties for the \emph{properties pane}.
+	\item getParent() - getter for a programmatic name of category which is the parent of this category in the tree hierarchy.
+	\item getSubCategories() - gets a \code{List} of \code{VirtualCategoryPanel} instances representing virtual category children.
 \end{itemize}
 
 
@@ -212,23 +212,23 @@ public class PropertiesPanelProviderImpl implements PropertiesPanelProvider{
   }
 \end{verbatim}
 
-\noindent\code{VirtualCategoryPanel} extends \code{JPanel} and its constructor has three parameters:
+\noindent\code{VirtualCategoryPanel} extends \code{JPanel}, its constructor has three parameters:
  \begin{itemize}
 	\item \code{categoryId} - programmatic name of the category or ID.
 	\item \code{categoryName} - human readable name of the category displayed in jInfer properties window.
 	\item \code{modules} - \code{List<?\ extends NamedModule>} of modules that will be children of this virtual category.
 \end{itemize}
 
-To create properties pane associated to custom category, class that extends \code{AbstractPropertiesPanel} class must be implemented. As you can see from a class diagram in the Figure \ref{uml-properties}, this abstract class has constructor with \code{Properties} parameter and two abstract methods, \code{store()} and \code{load()}, which must be implemented. Constructor gets a \code{Properties} instance as a parameter and saves it to \code{protected} field \code{properties}. This \code{Properties} instance is associated with jInfer project type \emph{lookup} and is used to store properties that are set in this panel.\\
+To create properties pane associated with a custom category, class extending \code{AbstractPropertiesPanel} class must be implemented. As you can see from the class diagram in the Figure \ref{uml-properties}, this abstract class has a constructor with \code{Properties} parameter and two abstract methods, \code{store()} and \code{load()}, which must be implemented. Constructor gets a \code{Properties} instance as a parameter and saves it to \code{protected} field \code{properties}. This \code{Properties} instance is associated with jInfer project type \emph{lookup} and is used to store properties that are set in this panel.\\
 
-Purpose of the method \code{store()} can be easily guessed from its name, it's used to store values that are set in \emph{properties pane} elements (text field, checkbox etc.) to the provided \emph{properties} field. On the other side, \code{load()} method is used to populate \emph{properties pane} elements with already saved values in the \emph{properties}.
+Purpose of the method \code{store()} can be easily guessed from its name, it's used to store values that are set in \emph{properties pane} elements (text fields, checkboxes etc.) to the provided \emph{properties} field. On the other hand, \code{load()} method is used to populate \emph{properties pane} elements with already saved values in the \emph{properties}.
 
 \noindent Example of the implemented \code{AbstractPropertiesPanel}.
 
 \begin{verbatim}
 public class ExamplePropertiesPanel extends AbstractPropertiesPanel {
 
-  private javax.swing.JCheckBox checkBox;
+  private JCheckBox checkBox;
 
   public ExamplePropertiesPanel(final Properties properties) {
     super(properties);
@@ -237,7 +237,7 @@ public class ExamplePropertiesPanel extends AbstractPropertiesPanel {
 
   public void init() {
     ...
-    initialize checkBox
+    // initialize checkBox
     ...
   }
 
@@ -261,28 +261,28 @@ public class ExamplePropertiesPanel extends AbstractPropertiesPanel {
 
 \subsection{Project wizard}
 
-This section describes ability of jInfer to create new jInfer project through \emph{new project} wizard. This wizard contains two steps, where first is standard one with project name and location selection, and the second is the selection of Initial grammar module, Simplifier and Schema generator module which will be used in inference for newly created module. New project creation process can be already finished in a first step, in that case, default modules will be used for inference. After finishing of the wizard, new jInfer project type is created with typed name in selected location. It is important to notice that package \code{cz.cuni.mff.ksi.jinfer.projecttype} contains \code{JInferTemplateProject.zip} file, in which is default folder structure of the jInfer project type, and the content of a zip is copied into location defined in the wizard. For more information, how to create new project wizard,  please look at \cite{project_sample}.\\
+This section describes the ability of jInfer to create a new jInfer project through a \emph{new project} wizard. This wizard contains two steps, where first is a standard one with project name and location selection, and the second is the selection of Initial Grammar Generator, Simplifier and Schema Generator modules which will be used in inference for this newly created project. New project creation process can be finished in the first step, in which case the default modules will be used for the inference. After finishing the wizard, new jInfer project is created with chosen name in the chosen location. It is important to notice that package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.projecttype} contains \code{JInferTemplateProject.zip} file, in which the default folder structure of a jInfer project is stored. The content of this zip is copied into location defined in the wizard. For more information on how to create a new project wizard, please refer to \cite{project_sample}.\\
 
-All classes responsible for creation of this wizard are in package \code{cz.cuni.mff.ksi.jinfer.projecttype.sample}. It contains \code{JinferTemplateWizardIterator} class which defines number of steps in the wizard and creates panel for each step. Each step is  represented by a class implementing \code{WizardDescriptor.Panel} interface, which creates steps panel and validate its data inserted by a user. Finally there is class extending \code{JPanel} in which are components of the first step.
+All classes responsible for creation of this wizard are in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.projecttype.\.sample} package. It contains \code{JinferTemplateWizardIterator} class defining the number of steps in the wizard and creates a panel for each of these steps. Each step is represented by a class implementing \code{WizardDescriptor.Panel} interface, which creates a step panel and validates its data inserted by the user. Finally there is a class extending \code{JPanel} containing components of the first step.
 
 \subsection{Preferences}\label{pref}
 
-Also jInfer project type has its own properties category in a project properties window called \emph{Miscellaneous}, and it is implemented by \code{ProjectPropertiesPanelProvider} and \code{ProjectPropertiesPanel} classes. In this category, two properties can be set. First property is default \emph{input file} folder to which is inserted input file selected from \emph{FilesAddAction}, that has extension which is not defined by any \code{Processor} registered in jInfer. Second property is global \emph{LOG} level, which defines the minimum level of messages that will be displayed in jInfer output window. If some module has its own \emph{LOG} level setting, global settings are overridden by these.
+A jInfer project has its own properties category in the project properties window called \emph{Miscellaneous}. This is implemented by \code{ProjectPropertiesPanelProvider} and \code{ProjectPropertiesPanel} classes. In this category, two properties can be set. First property is default \emph{input file} folder to which an unknown input file is inserted (its extension is not defined by any \code{Processor} registered in jInfer). Second property is a global \emph{log} level, which defines the minimum level of messages that will be displayed in jInfer output window. If a module has its own \emph{log} level setting, global settings are overridden by it.
 
 
 \subsection{RunningProject utility class}\label{running-project}
 
-This section describes \code{RunningProject} utility class, which is not part of the \jmodule{ProjectType} module, but is closely related to it. This class can be found in a \code{cz.cuni.mff.ksi.jinfer.base.utils} package in the \jmodule{Base} module. The main purpose of this class is to allow all jInfer \jmodule{module}s to access \code{JInferProject} instance of the actual running inference. Notice that in jInfer application can be only one running inference at a time.\\
+This section describes \code{RunningProject} utility class, which is not part of the \jmodule{ProjectType} module, but is closely related to it. This class can be found in a \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.base.\.utils} package in the \jmodule{Base} module. The main purpose of this class is to allow all jInfer \jmodule{module}s to access the \code{JInferProject} instance of the actual running inference. Notice that in jInfer application only one running inference is allowed at a time.\\
 
 \noindent \code{RunningProject} class implements these methods:
 \begin{itemize}
-	\item \code{setActiveProject()} - Setter of the \code{JInferProject} instance of a running project, which set the \code{JInferProject} instance if no other inference is running (no other \code{JInferProject} instance is already set). Returns \code{boolean} value, according as the setting was successful or not.
-	\item \code{removeActiveProject()} - Removes \code{JInferProject} instance if some inference is running.
-	\item \code{getActiveProject()} - Getter of the \code{JInferProject} instance of a running project.
-	\item \code{isActiveProject()} - Checks if some inference is running (the \code{JInferProject} instance is set).
-	\item \code{getActiveProjectProps()} - Gets \code{Properties} instance of the actual running inference (\code{Properties} instance is part of the \code{JInferProject} instace).
-	\item \code{getNextModuleCaps()} - Getter of a capability of the next module in the inference chain.
-	\item \code{setNextModuleCaps()} - Setter of a capability of the next module in the inference chain.
+	\item \code{setActiveProject()} - setter of the \code{JInferProject} instance of a running project, which sets the \code{JInferProject} instance if no other inference is running (no other \code{JInferProject} instance is already set). Returns \code{boolean} value, based on whether the setting was successful.
+	\item \code{removeActiveProject()} - removes the \code{JInferProject} instance if some inference is running.
+	\item \code{getActiveProject()} - getter of the \code{JInferProject} instance of a running project.
+	\item \code{isActiveProject()} - checks if some inference is running (the \code{JInferProject} instance is set).
+	\item \code{getActiveProjectProps()} - gets the \code{Properties} instance from the actual running inference (\code{Properties} instance is part of the \code{JInferProject} instace). If no project is running at the moment, an empty \code{Properties} instance is returned - this allows the JUnit tests to run with default settings.
+	\item \code{getNextModuleCaps()} - getter of capabilities of the next module in the inference chain.
+	\item \code{setNextModuleCaps()} - setter of capabilities of the next module in the inference chain.
 \end{itemize}
 
 

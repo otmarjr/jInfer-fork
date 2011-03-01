@@ -40,7 +40,7 @@
 
 \noindent \begin{tabular}{|l|l|} \hline
 Responsible developer & Mário Mikula \\ \hline
-Required tokens       & org.openide.windows.WindowManager \\ \hline
+Required tokens       & \code{org.openide.windows.WindowManager} \\ \hline
 Provided tokens       & none \\ \hline
 Module dependencies   & Base \\ 
 					   & JUNG \\ \hline
@@ -111,7 +111,7 @@ Created implementation will be shown in project properties in the \code{Layout} 
 \subsection{Base classes}
 
 \begin{figure}
-\centering\includegraphics[scale=\myscale]{uml_base_classes}
+\centering\includegraphics[width=\textwidth]{uml_base_classes}
 \caption{Class diagram for the base classes.} \label{uml_base_classes}
 \end{figure}
 
@@ -220,7 +220,7 @@ Upon construction, it just adds \code{VertexPickingGraphMousePlugin} to the plug
 	\item \code{setLabel()} - Sets text of a component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
-Source codes of \code{State\.Picking\.Component} resides in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.component}, \code{State\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Vertex\-Picking\-Graph\-Mouse\-Plugin} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
+Source codes of \code{State\.Picking\.Component} resides in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.com\.po\.nent}, \code{State\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Ver\.tex\-Pick\.ing\-Graph\-Mou\.se\-Plug\.in} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}
@@ -241,7 +241,8 @@ Example of usage follows.
 
     State<Regexp<T>> removeState;
     StatePickingComponent<Regexp<T>> component = new StatePickingComponent<Regexp<T>>();
-    Layout<State<T>, Step<T>> layout = LayoutHelperFactory.createUserLayout(automaton, transformer);
+    Layout<State<T>, Step<T>> layout = 
+      LayoutHelperFactory.createUserLayout(automaton, transformer);
     StatePickingVisualizer<Regexp<T>>
       visualizer = new StatePickingVisualizer<Regexp<T>>(layout,
                                                          transformer,
@@ -290,7 +291,7 @@ The button is supposed to be clicked when user picked all desired states and it 
 State of the checkbox can be retrieved by the calling code and the caller is supposed to stop showing this component in the current inference process.\\
 
 \begin{figure}
-\centering\includegraphics[scale=0.6]{screenshot}
+\centering\includegraphics[width=\textwidth]{screenshot}
 \caption{Screenshot of \jmodule{AutoEditor} GUI} \label{figure_gui}
 \end{figure}
 
@@ -302,7 +303,7 @@ Methods of \code{StatesPickingComponent} are the following.
 	\item \code{setLabel()} - Sets text of the component label. The label can be used to communicate some information to user, for example instructions.
 \end{itemize}
 
-Source codes of \code{StatesPickingComponent} reside in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.component}, \code{States\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Vertices\-Picking\-Graph\-Mouse\-Plugin} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
+Source codes of \code{StatesPickingComponent} reside in package \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.gui.\.com\.po\.nent}, \code{States\-Picking\-Visualizer} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer} and \code{Vertices\-Picking\-Graph\-Mouse\-Plugin} in \code{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.autoeditor.\.automatonvisualizer.\.graphmouseplugins}.\\
 
 Example of usage follows.
 \begin{verbatim}
@@ -332,13 +333,15 @@ Example of usage follows.
     do {
       Layout<State<T>, Step<T>>
         layout = LayoutHelperFactory.createUserLayout(inputAutomaton, transformer);
-      StatesPickingVisualizer<T> visualizer = new StatesPickingVisualizer<T>(layout, transformer);
+      StatesPickingVisualizer<T> visualizer = 
+          new StatesPickingVisualizer<T>(layout, transformer);
 
       StatesPickingComponent<T> panel = new StatesPickingComponent<T>();
       panel.setVisualizer(visualizer);
       if (selectTwo) {
         panel.setLabel("Automaton for element <" + elementName
-          + ">. Please select states to be merged and click continue. Select at least 2 states.");
+          + ">. Please select states to be merged and click continue."
+          + " Select at least 2 states.");
       } else {
         panel.setLabel("Automaton for element <" + elementName
           + ">. Please select states to be merged and click continue.");
@@ -372,9 +375,9 @@ The second one will open \jmodule{AutoEditor} tab in NetBeans options. For descr
 
 \subsection{Settings} \label{subsection:Settings}
 
-All settings provided by \jmodule{AutoEditor} are NetBeans-wide. The options panel along with all the logic is in the \code{cz.cuni.mff.ksi.jinfer.autoeditor.options} package. Available options include setting the color of the background, colors and shapes of some special types of automaton states.\\
+All settings provided by \jmodule{AutoEditor} are NetBeans-wide. The options panel along with all the logic is in the \code{cz.cuni.mff.ksi.jinfer.autoeditor.options} package. Available options include setting the color of the background, colors and shapes of some special types of automaton states. \\
 
-To have some effect, these settings need to be implemented by extensions of \code{Visualizer} class. For examples, see source codes of \code{StatePickingVisualizer} and \code{StatesPickingVisualizer} classes.\\
+To have some effect, these settings need to be implemented by extensions of \code{Visualizer} class. For examples, see source codes of \code{StatePickingVisualizer} and \code{StatesPickingVisualizer} classes.
 
 \nocite{*}
 \newpage

@@ -21,6 +21,7 @@ xsdimport.dvi: parser_intf.eps
 
 %.eps: %.gv Makefile
 	dot -Teps $< > $@
+	dot -Tpng <$ > $(@:.eps=.png)
 
 all: xsdimport.pdf
 

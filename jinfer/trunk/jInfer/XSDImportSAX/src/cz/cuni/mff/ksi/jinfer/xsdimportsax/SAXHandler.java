@@ -162,12 +162,14 @@ public class SAXHandler extends DefaultHandler {
         if (!XSDBuiltInDataTypes.isBuiltInType(attrType)) {
           attrType = "";
         }
-        contentStack.peek().getAttributes().add(
+        if (!contentStack.isEmpty()) {
+          contentStack.peek().getAttributes().add(
               new Attribute(getContext(),
                             docElement.getNameOrRefValue(),
                             SAXHelper.prepareAttributeMetadata(docElement),
                             attrType,
                             new ArrayList<String>(0)));
+        }
         break;
       default:
     }
@@ -239,6 +241,7 @@ public class SAXHandler extends DefaultHandler {
       if (!SAXHelper.isContainer(container)) {
         throw new XSDException("Unexpected element on stack " + container.getName());
       }
+      SAXHelper.finalizeElement(container);
       // add the container to the correct named type
       namedTypes.put(currentNamedType, container);
       currentNamedType = "";
@@ -386,6 +389,9 @@ public class SAXHandler extends DefaultHandler {
       } else {
         // set correct type
         old.getSubnodes().setType(entry.getSubnodes().getType());
+        if (old.getType() == null && verbose) {
+          LOG.warn("element " + old.getName() + " is still null type");
+        }
         old.getSubnodes().setInterval(entry.getSubnodes().getInterval());
       }
       // create correct prefix
@@ -400,7 +406,13 @@ public class SAXHandler extends DefaultHandler {
 
       // add all children
       for (Regexp<AbstractStructuralNode> child : entry.getSubnodes().getChildren()) {
+        try {
         old.getSubnodes().addChild(cloner.cloneRegexp(child, prefix));
+        } catch (IllegalArgumentException e) {
+          if (verbose) {
+            LOG.warn("Unresolved subtree of " + entry.getName() + ". Skipping unresolved child. This is an open issue.");
+          }
+        }
       }
 
       // add all attributes

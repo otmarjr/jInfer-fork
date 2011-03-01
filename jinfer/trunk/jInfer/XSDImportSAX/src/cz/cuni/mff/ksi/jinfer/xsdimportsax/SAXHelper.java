@@ -23,10 +23,12 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDAttribute;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDUtility;
 import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.SAXDocumentElement;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  * Helper class for {@link DOMHandler }, provides convenience methods used during parsing.
@@ -37,6 +39,11 @@ import java.util.Map;
 public final class SAXHelper {
 
   private SAXHelper() {}
+
+  private static final Logger LOG = Logger.getLogger(SAXHelper.class);
+  static {
+    LOG.setLevel(XSDImportSettings.logLevel());
+  }
 
   /**
    * Pseudo-unique name for the container elements that are pushed in contentStack
@@ -123,6 +130,10 @@ public final class SAXHelper {
    * @param elem Element to finalize.
    */
   public static void finalizeElement(Element elem) {
+    if (RegexpType.LAMBDA.equals(elem.getSubnodes().getType())) {
+      XSDUtility.setLambda(elem);
+      return;
+    }
     if (elem.getSubnodes().getInterval() == null) {
       elem.getSubnodes().setInterval(RegexpInterval.getOnce());
     }
@@ -130,7 +141,9 @@ public final class SAXHelper {
         && elem.getSubnodes().getType() == null) {
       // make it a lambda
       XSDUtility.setLambda(elem);
+      return;
     } else if (elem.getSubnodes().getType() == null) {
+      LOG.warn("Element " + elem.getName() + " had no defined regexp type, but contained sub-nodes. Setting type to concatenation.");
       elem.getSubnodes().setType(RegexpType.CONCATENATION);
     }
     if (elem.isMutable()) {

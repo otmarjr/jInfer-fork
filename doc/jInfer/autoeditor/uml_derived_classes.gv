@@ -138,6 +138,6 @@ StatePickingComponent -> AbstractComponent [label = "extends"];
 StatesPickingComponent -> AbstractComponent [label = "extends"];
 
 
-AbstractComponent -> Visualizer [label = "1" arrowhead = diamond];
-StatePickingVisualizer -> StatePickingComponent [label = "1" arrowhead = odiamond];
+Visualizer -> AbstractComponent [label = "1" arrowhead = diamond];
+StatePickingComponent -> StatePickingVisualizer [label = "1" arrowhead = odiamond];
 }

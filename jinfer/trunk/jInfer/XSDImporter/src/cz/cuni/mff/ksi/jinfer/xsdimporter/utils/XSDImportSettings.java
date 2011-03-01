@@ -37,7 +37,7 @@ public final class XSDImportSettings {
 
   /**
    * Get the selected parser from XSD Import project properties.
-   * Parser is selected from all available parsers using lookup for <code>XSDParser.class</code>.
+   * Parser is selected from all available parsers using lookup for <code>XSDParser</code> interface.
    * @return Selected parser.
    */
   public static XSDParser getParser() {

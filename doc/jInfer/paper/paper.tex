@@ -39,29 +39,29 @@
 \maketitle
 
 \abstract
-Today, many algorithms solving XML schema inference problem exist.
-None of them is widely used by public to practically solve the problem.
-This is because the lack of simple user interface to algorithms.
-We present NetBeans (\cite{netbeans}) based pluggable framework to fill this gap.
-Thus enabling people dealing with XML in practice to obtain schema for their documents by following simple steps, without need to read and understand theoretical aspects.
-We hope our solution will boost usage of XML schemas in practice, since creating schema for existing set of documents will be more effordable (one doesn't have to write one by hand).
+At the present day, there are many algorithms solving the XML schema inference problem.
+However, none of them is widely used by the public to practically solve the problem.
+This is partly because of the lack of a simple user interface to these algorithms.
+We present a NetBeans (\cite{netbeans}) based pluggable framework to fill this gap.
+This way we enable people to deal with XML in practice, to obtain schema for their documents by following simple steps, without need to read and understand theoretical aspects.
+We hope our solution will boost usage of XML schemas in practice, since creating schema for existing set of documents will be more affordable (one doesn't have to write one by hand).
 
 \section*{Introduction}
 Although many algorithms (\cite{ahonen, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, 1802522, vyhnanovska}) 
 % TODO name all papers
-try to solve problem of infering schema for existing set of XML documents, have you ever tried to sovle the problem in practice?
+try to solve the problem of schema inference for an existing set of XML documents, have you ever tried to solve the problem in practice?
 
-When the problem arises, one wants to find solution as quickly as possible, without need to investigate many scientific papers.
-We focus on this group of potential users - programmers, system administrators, xml coders, xml maintaners in private and scientific sector.
+When the problem arises, one wants to find a solution as quickly as possible, without the need to investigate many scientific papers.
+We focus on this group of potential users - programmers, system administrators, XML coders, XML maintaners in private and R \& D.
 
-Framework is designed extensible and is implemented as a set of plug-ins for NetBeans platform.
-This brings second group of users (although much smaller in counts) of framework - scientific developers willing to experiment with their new algorithms may easily gain benefits of user interface provided, thus speeding up their development, easing them comparison with other algorithms already developed for framework.
+Framework is designed to be extensible and is implemented as a set of modules for NetBeans platform.
+This means a second group of users (although much smaller in counts) of our framework - researchers willing to experiment with their new algorithms may easily gain benefits of user interface provided, thus speeding up their development, easing them comparison with other algorithms already developed for framework.
 
 But it is not all about user interface.
-We bring in XML/XSD/DTD import/export modules ready to use.
-We implement sample infering algorithm (see \cite{ahonen}).
-We provide visualization tools to visualize input XML documents as a set of grammar rules, and tools to visualize non-deterministic finite automatons used in many of infering algorithms.
-Thus extending existing NFA base algorithm with user interaction is made simple for scientific developers.
+We provide XML/XSD/DTD import/export modules ready to use.
+We implement a sample inference algorithm (see \cite{ahonen}).
+We provide visualization tools to display input XML documents as a set of grammar rules, and tools to visualize non-deterministic finite automatons used in many of the inference algorithms.
+This way, extending existing NFA base algorithms with user interaction is easier for researchers.
 
 \section*{Related work}
 Most of the algorithms named, doesn't have avalaible implementation, nor are made ready to use.

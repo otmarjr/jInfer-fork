@@ -48,18 +48,18 @@ Public packages       & none \\ \hline
 
 \section{Introduction}
 
-This is fairly basic rule displayer draws rules as series of nested coloured rectangles. It does so by recursively descending down the regexp tree to draw the innermost nodes first, composing the outer nodes from them. User interface-wise, it creates a component with multiple panels: each one for a new grammar to display.
+This is a fairly basic rule displayer, which draws rules as series of nested coloured rectangles. It does so by recursively descending down the regexp tree to draw the innermost nodes first, composing the outer nodes from them. User interface-wise, it creates a component with multiple tabs - each one for a new grammar to be displayed.
 
 \section{Structure}
 
-The main class implementing \code{RuleDisplayer} inference interface and simultaneously registered as its service provider is \code{BasicRuleDisplayer}. Main method of this class is \code{createDisplayer()}, which looks up the component, adds a new panel to it and renders the specified grammar in it.\\
+The main class implementing \code{RuleDisplayer} inference interface and simultaneously being registered as its service provider is \code{BasicRuleDisplayer}. Main method of this class is \code{createDisplayer()}, which looks up the component, adds a new panel to it and renders the specified grammar in it.\\
 
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{class-diagram}
 	\caption{BasicRuleDisplayer class diagram} \label{figure-class-diagram}
 \end{figure}
 
-The diagram of classes involved in rule display is in figure \ref{figure-class-diagram}. The top component of the rule displayer has a few panels in it: each contains its own \code{RuleDisplayer} responsible for rendering specified grammar once into an internal \code{Image}, then keeping it and drawing it onto panel's \code{Canvas} each time repainting is needed.\\
+The diagram of classes involved in rule display is in figure \ref{figure-class-diagram}. The top component of the rule displayer has a few panels in it, each containing its own \code{RuleDisplayer}, responsible for rendering specified grammar into an internal \code{Image} once, and then keeping it and drawing it onto panel's \code{Canvas} each time repainting is needed.\\
 
 Grammar is rendered in the \code{drawRules()} method by recursively rendering its rules and stacking their image representations into the image. Rule painting is handled in the \code{NodePainter} class, with most important method \code{drawNode()}. While the code itself is a nice recursion programming exercise, there is nothing of a special interest in it.\\
 

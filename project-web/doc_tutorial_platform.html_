@@ -47,7 +47,7 @@
 <h2 id="1-module-visibility">Module visibility</h2>
 
 <p>
-  Each NBP module allows to set some spackages as public, which means their content
+  Each NBP module allows to set some packages as public, which means their content
   will be available to other modules. That means, if module <i>A</i> declares a
   dependency on module <i>B</i>, it will be able to use only classes from
   those packages that were set as public in module <i>B</i>.

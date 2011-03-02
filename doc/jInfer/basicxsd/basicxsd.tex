@@ -54,12 +54,12 @@ For the whole document, let \code{xs} be XMLSchema namespace.
 
 \section{Structure}
 
-The main class implementing \code{SchemaGenerator} inference interface and simultaneously registered as its service provi\-der is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
+The main class implementing \code{SchemaGenerator} inference interface and simultaneously being registered as its service provi\-der is \code{SchemaGeneratorImpl} in package \code{cz.cuni.mff.ksi.jinfer.basicxsd}. Process of export consists of two phases described in detail in later sections.
 \begin{enumerate}
 	\item Preprocessing.
 	\item The export to a string representation itself.
 \end{enumerate}
-Method \code{start()} first creates an instance of \code{Preprocessor} class supplying the rules (elements) it got in the simplified grammar on input. Preprocessing itself is done by creating that instance (calling its constructor) and its results can be then retrieved by calling \code{getResult()} method. Purpose of preprocessing is to discover information necessary for export of elements. For example, determine elements which should be globally defined or which element is the root element.\\
+Method \code{start()} first creates an instance of \code{Preprocessor} class supplying the rules (elements) it got from the simplified grammar on input. Preprocessing itself is done by creating that instance (calling its constructor) and its results can be then retrieved by calling \code{getResult()} method. Purpose of preprocessing is to discover information necessary for export of elements. For example, determine elements which should be globally defined or which element is the root element.\\
 
 Afterwards, \code{start()} method uses instances of classes derived from \code{AbstractElementsProcessor} class to export elements of input grammar.
 
@@ -81,9 +81,9 @@ As mentioned above, preprocessing is implemented in \code{Preprocessor} class an
 
 Constructor of \code{Preprocessor} class gets a list of elements and a number, defining minimal number of occurrences of an element to be defined globally. It first topologically sorts input elements to decide which of the elements is the root element. Afterwards, it counts occurrences of the elements and removes unused ones (those which did not occur). Finally, for each element it decides whether to mark it as a global one or not. An element is considered global if its occurrence count is greater than or equal to the number of occurrences provided on input.\\
 
-If it is desired to not generate global types, this feature can be turned off in preferences. However, turning it off is not recommended and in some cases it may cause invalidity of resulting XSD output. For more information, see \ref{section:problems}.\\
+If it is desired to not generate global types, this feature can be turned off in preferences. However, turning it off is not recommended and in some cases it may cause invalidity of the resulting XSD output. For more information, see section \ref{section:problems}.\\
 
-Minimal number of occurrences of an element to define its type globally can be altered if preferences as well. See \ref{subsection:preferences}.
+Minimal number of occurrences of an element to define its type globally can be altered if preferences as well. See subsection \ref{subsection:preferences}.
 
 \subsubsection{Running preprocessor and obtaining its result}
 
@@ -97,15 +97,15 @@ XSD export itself is performed using classes derived from \code{AbstractElements
 
 \subsubsection{Indentation}
 
-To generate a human readable XSD output, it is necessary to apply correct indentation of XSD elements and their content. This is handled by \code{Indentator} class. This classes also serves as a buffer for string representation of XSD that the exporter is creating.\\
+To generate a human readable XSD output, it is necessary to apply correct indentation of XSD elements and their content. This is handled by \code{Indentator} class. This class also serves as a buffer for string representation of XSD that the exporter is creating.\\
 
 Instance of this class holds text appended to it and keeps indentation level state. Text can be appended without indentation (method \code{append()}) or indented (method \code{indent()}). Level of indentation can be incremented or decremented by methods \code{increaseIndentation()} and \code{decreaseIndentation()}. At the end of export, when textual representation of each element has been appended to the \code{Indentator}, \code{Indentator}'s method \code{toString()} will return string representation of the resulting XSD.\\
 
-Number of spaces characters per one level of indentation can be altered in project properties, see \ref{subsection:preferences}.
+Number of spaces characters per one level of indentation can be altered in project properties, see paragraph \ref{subsection:preferences}.
 
 \subsubsection{Definition of elements}
 
-Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language. This subsection covers only XSD features that the exporter supports. For list of supported features, see \ref{subsection:supportedXSDFeatures}\\
+Before we describe the export of elements, let's take a look on how we define elements and their attributes using XSD language. This subsection covers only XSD features that the exporter supports. For list of supported features, please refer to section \ref{subsection:supportedXSDFeatures}\\
 
 Element is defined by XSD element \code{element}, specifying its name and type.
 
@@ -224,21 +224,21 @@ if (attribute.getMetadata().containsKey(IGGUtils.REQUIRED)) { ...
 
 \subsubsection{Export of elements}
 
-Classes to handle export of elements are in package \code{cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters}. Basic common logic is implemented in \code{AbstractElementsExporter} class. This class is abstract and is supposed to be extended by classes with a particular purpose. Its constructor signature is defined as following.
+Classes to handle export of elements are in package \code{cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters}. Basic common logic is implemented in \code{AbstractElementsExporter} class. This class is abstract and is supposed to be extended by classes with a particular purpose. Its constructor signature is defined as follows.
 
 \begin{verbatim}
 public AbstractElementsExporter(PreprocessingResult preprocessingResult,
                                 Indentator indentator)
 \end{verbatim}
 
-Names of parameters are self explanatory. Parameter \code{preprocessingResult} is a result of preprocessing. Parameter \code{indentator} is an instance of \code{Indentator} class to be used to buffer and indent output of exporter. This instance doesn't need to be empty . Output of exporter is appended at the end of text held by the \code{indentator}. This behaviour is convenient when chaining output of several elements exporters.\\
+Names of parameters are self explanatory. Parameter \code{preprocessingResult} is a result of preprocessing. Parameter \code{indentator} is an instance of \code{Indentator} class to be used to buffer and indent output of exporter. This instance doesn't need to be empty. Output of exporter is appended at the end of text held by the \code{indentator}. This behaviour is convenient when chaining output of several elements exporters.\\
 
 There are two classes extending \code{AbstractElementsExporter}. \code{GlobalElementsExporter} and \code{Root\.Ele\.ment\.Ex\.port\.er}. Their constructors has the same signature as constructor of \code{AbstractElementsExporter} and both have \code{run()} method to perform their function.\\
 
 \paragraph{GlobalElementsExporter}
 \code{GlobalElementsExporter} retrieves global elements from the result of preprocessing and creates global definition of their types. These definitions are appended to the \code{indentator}. The \code{indentator} should be set to a level of indentation at which it is desired to append the global type definitions (typically, no indentation). After return from a \code{run()} method call, output of exporter is appended to the \code{indentator}.\\
 
-If a global type contains other elements, these are processed as following.
+If a global type contains other elements, these are processed as follows.
 
 \begin{itemize}
 	\item If a contained element is global or of a built-in type, its type is simply referenced.
@@ -349,7 +349,7 @@ This section describes some limitations of XSD export and some known issues, whi
 
 \subsection{Supported XSD features} \label{subsection:supportedXSDFeatures}
 
-This module is just basic implementation, thus many XSD features are not supported. List of supported XSD elements and their attributes follows. Let \code{xs} be XMLSchema namespace.
+This module is just basic implementation, thus many XSD features are not supported. A list of supported XSD elements and their attributes follows. Let \code{xs} be XMLSchema namespace.
 
 \begin{itemize}
 	\item \code{xs:element} - \code{name}, \code{type}, \code{minOccurs}, \code{maxOccurs}
@@ -363,7 +363,7 @@ This module is just basic implementation, thus many XSD features are not support
 
 \subsubsection{Description}
 
-This basic implementation of XSD export does not support and does not handle namespaces. That means that no namespace definitions are generated in a result, namespace definitions in input are processed as regular elements and attributes and namespace usages (namespace:element) are considered as a part of name of an element.
+This basic implementation of XSD export does not support, nor handle, namespaces; that means that no namespace definitions are generated in the result. Namespace definitions in input are processed as regular elements and attributes, and namespace usages (namespace:element) are considered as a part of the name of an element.
 
 \subsubsection{Workaround}
 

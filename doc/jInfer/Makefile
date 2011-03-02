@@ -5,6 +5,8 @@ all: deploy
 deploy: subdirs
 	mkdir -p modules/;
 	for i in $(obj); do cp $$i/$$i.pdf modules/; done
+
+upload: deploy
 	rsync --delete -r modules/ svirooo,jinfer@web.sourceforge.net:htdocs/modules/
 
 subdirs:

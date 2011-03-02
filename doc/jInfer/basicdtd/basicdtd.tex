@@ -60,7 +60,7 @@ Export of a single element is handled in the \code{elementToString()} method. Fi
 Elements are processed by \code{elementToString()} method.
 Whole regexp of an element is sent to method \code{expandIn\.ter\.vals\.Reg\.exp()} of class \code{IntervalExpander}.
 Its purpose is to convert intervals of a regexp and its children to those representable in DTD.
-For example regular expression $(a\{2,5\}, b\{0,2\})$ would be transformed to $(a,a,a?,a?,a?,b?,b?)$.
+For example regular expression $(a\{2,5\}, b\{0,2\})$ would be transformed to $(a,a,a?,a?,a?,b?,b?)$.\\
 
 Class \code{IntervalExpander} works recursively.
 Regexp is passed to method \code{expandIntervalsRegexp()} to handle regexp in that element.
@@ -72,7 +72,7 @@ If an interval is not safe, it has to be expanded.
 It is easy to do so, first output $min$-times the regexp itself - that is the minimum occurences, with interval set to $\{1, 1\}$.
 Then, if interval is bounded, output $max - min$-times the regexp itself with interval $\{0, 1\}$ - that is optional part.
 If it is unbounded and $min$ is zero, attach the regexp once, with interval $\{0, \infty\}$.
-If $min$ is non-zero, last regexp in required string gets interval $\{1, \infty\}$.
+If $min$ is non-zero, last regexp in required string gets interval $\{1, \infty\}$.\\
 
 After intervals are expanded, resulting regexp is passed to \code{regexpToString()}, which contains a big \code{switch} statement based on the type of regexp.
 For $\lambda$, it simply returns \code{EMPY} as string.
@@ -90,7 +90,8 @@ On output is string \code{(\#PCDATA, a, b, c, d)*}, as this is the only way to r
 
 \subsection{Attribute export}
 
-Code exporting attributes is in \code{attributeToString()}. First thing this method does is to assess the domain of a particular atribute: this is a map indexed by attribute values containing number of occurences for each such attribute. Type definition of an attribute is generated in the \code{DomainUtils.getAttributeType()} method. Based on a user setting, this might decide to enumerate all possible values of this attribute using the \code{(a|b|c)} notation, otherwise it just returns \code{\#CDATA}.\\
+Code exporting attributes is in \code{attributeToString()}. First thing this method does is to assess the domain of a particular atribute: this is a map indexed by attribute values containing number of occurences for each such attribute. Type definition of an attribute is generated in the \code{DomainUtils.getAttributeType()} method. Based on a user setting, this might decide to enumerate all possible values of this attribute using the \code{(a|b|c)} notation, otherwise it just returns \code{\#CDATA}.
+
 Attribute requiredness is assessed based on \code{required} metadata presence. If an attribute is not deemed required, it might have a default value: if a certain value is prominent in the attribute domain (based on user setting again), it is declared default.
 
 \subsection{Preferences}

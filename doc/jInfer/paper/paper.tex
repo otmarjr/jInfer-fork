@@ -11,7 +11,7 @@
 \usepackage{xstring}
 \usepackage{wrapfig}
 
-\newcommand{\myscale}{0.74}
+\newcommand{\myscale}{0.9}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
 \newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
 \def\.{\discretionary{}{}{}}
@@ -94,13 +94,22 @@ On input, all various formats are first converted into internal representation -
 
 Rules are send to \jmodule{Simplifier} module, which has to do the simplification algorithm and return \emph{Simplified Grammar}, which is then easily exporter by exporter modules.
 
+\begin{figure}
+	\centering\includegraphics[width=\myscale\columnwidth]{screenshot}
+	\caption{Visualization of automaton in inference process} \label{screenshot}
+\end{figure}
 Simplification can be either automatic, or user-aided.
 We provide visualization of non-deterministic finite automatons.
 This helps algorithms that use merging state algorithm with user interaction.
 Using simple API, algorithm developer can call our library to present automaton to user to make human decisions and continue in simplification process.
+See figure \ref{screenshot} for automaton visualization tool.
 
+\begin{figure}
+	\centering\includegraphics[width=\myscale\columnwidth]{ruledisplayer}
+	\caption{Visualization of grammar rule} \label{ruledisplayer}
+\end{figure}
 We provide visualization of rules itself, which is useful for methods not using automatons at all.
-Algorithm can use API to display rules
+Algorithm can use API to display rules to user in progress (see fig. \ref{ruledisplayer}).
 
 \section*{Extensibility}
 Developers willing to experiment with their own algorithms have to take care only of \jmodule{Simplifier} module.

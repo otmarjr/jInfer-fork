@@ -54,7 +54,7 @@ Make sure you understand the difference between the two types of initial grammar
 
 \section{Structure}
 
-The main class implementing \code{IGGenerator} inference interface and simultaneously registered as its service provider is \code{IGGeneratorImpl}. In its \code{start} method it enumerates all files in the input parameter (of type \code{Input}). For each file, based on its extension the correct \emph{processor} is selected, executed and returned rules are aggregated. Rules coming from XML documents are verified to be \emph{simple} grammar representation. After each file has been processed, the resulting grammar is expanded if necessary and returned by invoking the \code{finished} method of the callback argument. This process is illustrated in fig. \ref{figure-process}.
+The main class implementing \code{IGGenerator} inference interface and simultaneously registered as its service provider is \code{IGGeneratorImpl}. In its \code{start()} method it enumerates all files in the input parameter (of type \code{Input}). For each file, based on its extension the correct \emph{processor} is selected, executed and returned rules are aggregated. Rules coming from XML documents are verified to be \emph{simple} grammar representation. After each file has been processed, the resulting grammar is expanded if necessary and returned by invoking the \code{finished()} method of the callback argument. This process is illustrated in figure \ref{figure-process}.
 
 \begin{figure}
 	\centering\includegraphics[scale=\myscale]{process-view}

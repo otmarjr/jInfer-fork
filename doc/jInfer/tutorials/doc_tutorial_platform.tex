@@ -1,0 +1,634 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
+\usepackage{xstring}
+\usepackage{wrapfig}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
+\def\.{\discretionary{}{}{}}
+\newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
+
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{18cm}
+
+\def\mftitle{Dealing with jInfer and NetBeans Platform}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+
+\maketitle
+ 
+
+
+\section*{Dealing with jInfer and NetBeans Platform}
+\par 
+  Target audience: jInfer developers. Anyone who needs to interact with jInfer
+  or NetBeans while hacking our framework.
+
+\par 
+  This tutorial deals with a few important but pretty specific parts of interface
+  between your module (or any logic you implement) and either jInfer or NetBeans
+  Platform. Not nearly everything regarding interaction with NBP is mentioned here,
+  please refer to the relevant FAQ.
+
+\par 
+  
+    This tutorial assumes that you are a seasoned Java developer. Having
+    experience with programming in some kind of framework (NetBeans Platform
+    above all) will help you a lot.
+    Make sure you have read the article on
+    architecture, data structures and inference process to understand what you
+    will be implementing. Having read the documentation for
+    remaining modules will help you too.
+    Also, before starting this tutorial, make sure you can
+    build jInfer from sources.
+  
+
+\subsection*{Overview}
+\begin{enumerate}
+  \item Module visibility
+  \item Error handling
+  \item Interruptions
+  \item Dialogs
+  \item Configuration - options, preferences
+  \item Rule display
+  \item Console output, logging
+  \item RunningProject class
+  \item Module selection
+\end{enumerate}
+\subsection*{Module visibility}
+\par 
+  Each NBP module allows to set some spackages as public, which means their content
+  will be available to other modules. That means, if module \textit{A} declares a
+  dependency on module \textit{B}, it will be able to use only classes from
+  those packages that were set as public in module \textit{B}.
+
+\textit{
+  \textbf{Important notice:} Public packages do not affect
+  Lookup mechanism, i.e.
+  class annotated with \texttt{@ServiceProvider}
+  does not need to be in a public package in order to be looked up.
+}
+\par 
+  There are two ways to set packages visible, first is to set it manually in
+  module's \texttt{project.xml} file located in
+  \textit{ModulePath/nbproject/} folder.
+
+Example:
+\begin{verbatim}
+// This is a portion of example project.xml file.
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="\url{http://www.netbeans.org/ns/project/1">}
+    <type>org.netbeans.modules.apisupport.project</type>
+    <configuration>
+        <data xmlns="\url{http://www.netbeans.org/ns/nb-module-project/3">}
+            ....
+            <public-packages>
+                <package>some.example.package.name</package>
+            </public-packages>
+        </data>
+    </configuration>
+</project>
+\end{verbatim}
+\par 
+  Another way to set public packages is through GUI:
+  \begin{enumerate}
+    \item Right-click the module, select \textit{Properties}.
+    \item In \textit{API Versioning}, there is a \textit{Public Packages} section.
+    \item Check all packages that should be public.
+  \end{enumerate}
+
+\subsection*{Error handling}
+\par 
+  Each run of inference is encapsulated in a \texttt{try-catch} block,
+  so it is safe to throw any exception in the inference process.
+  Each thrown exception will be caught, get logged, presented to the user and
+  inference will stop. However if module uses threads which throw exceptions,
+  it is caught by NBP, instead of our code. Because of this its reasonable to
+  catch this exception in your module and re-throw it in the right thread.
+
+\subsection*{Interruptions}
+\par 
+  In jInfer user can stop the inference at any moment of its run. For this
+  reason, modules have to check in every time-consuming place (such as long loops)
+  whether this is the case. Example below shows how to check the interruption
+  from user and what to do to correctly stop the inference.
+
+Example:
+\begin{verbatim}
+for (forever) {
+    if (Thread.interrupted()) {
+        throw new InterruptedException();
+    }
+    doStuff();
+}
+\end{verbatim}
+\subsection*{Dialogs}
+\par 
+  Creation of open/save dialogs or message windows is done using standard NBP API.
+  For dialogs you can use the standard Java \texttt{JFileChooser},
+  but NBP \texttt{FileChooserBuilder}
+  is more convenient. This class creates dialog which remembers last-used
+  directory according to a key passed into its constructor.
+
+Example:
+\begin{verbatim}
+// The default dir to use if no value is stored
+File home = new File(System.getProperty("user.home"));
+// Now build a file chooser and invoke the dialog in one line of code
+File toAdd = new FileChooserBuilder(CallingClass.class)
+                   .setTitle("Some dialog title")
+                   .setDefaultWorkingDirectory(home).showOpenDialog();
+// Result will be null if the user clicked cancel or closed the dialog w/o OK
+if (toAdd != null) {
+    //do something
+}
+\end{verbatim}
+\par 
+  For message windows the \texttt{DialogDisplayer} NBP API
+  class is used. To determine which type of message will be shown
+  (Confirmation dialog, message dialog...),
+  \texttt{NotifyDescriptor}
+  is used. Following is a small example, which creates standard message
+  notification. For more information please look at
+  NBP Dialogs API FAQ.
+
+Example:
+\begin{verbatim}
+// Creates standard information message with text "Hello world"
+NotifyDescriptor nd = new NotifyDescriptor
+                            .Message("Hello world",
+                               NotifyDescriptor.INFORMATION_MESSAGE);
+DialogDisplayer.getDefault().notify(nd);
+\end{verbatim}
+\subsection*{Configuration - options, preferences}
+\par 
+  Option panels located in \textit{Tools > Options} menu are a standard part of
+  NBP API. We created a \textit{jInfer} option sub-category to place panels with
+  configuration valid across all jInfer projects. Description of the few step
+  to create your own option panel follows. For more information, please visit
+  NetBeans Options tutorial.
+
+\begin{enumerate}
+ \item Create options window:
+  \begin{itemize}
+   \item Right click \textit{Source Packages} in your module,
+                            select \textit{New > Other}.
+   \item Under Categories, select Module Development. Under
+                            File Types, select Options Panel. Click \textit{Next}.
+   \item Keep checked \textit{Create Secondary Panel} and choose
+                            jInfer as the \textit{Primary Panel}. Fill in remaining
+                            fields. Click \textit{Next}.
+   
+   \item Fill in \textit{Class Name Prefix} and \textit{Package}
+                            and click \textit{Finish}.
+  \end{itemize}
+ 
+ \item Design newly created \textit{ClassNamePrefix}Panel.java.
+ \item Implement \texttt{store()} and \texttt{load()} methods according to comments inside.
+\end{enumerate}
+\par 
+  Both \texttt{store()} and \texttt{load()} methods use
+  \texttt{NbPreferences}
+  class. Example below shows how to store and load Preferences.
+
+Example:
+\begin{verbatim}
+public void store() {
+  // Saves the state of checkBox into Preferences for ExampleClass
+  // class in property with name "PropertyName"
+  NbPreferences.forModule(ExampleClass.class)
+      .putBoolean("PropertyName", someCheckBox.isSelected());
+}
+public void load() {
+  // Get from ExampleClass class preferences the property with name
+  // "PropertyName". Second parameter of method getBoolean is used
+  // as default if no property with defined name is saved in preferences.
+  someCheckBox.setSelected(NbPreferences.forModule(ExampleClass.class)
+                               .getBoolean("PropertyName", true));
+}
+\end{verbatim}
+\par 
+  Second type of preferences used in jInfer is Project properties. Each jInfer
+  project has its properties panel accessible in its content menu and
+  these properties are applied for each project separately. To implement this
+  kind of preferences, it is necessary to implement
+  \texttt{PropertiesPanelProvider}
+  interface and extend the
+  \texttt{AbstractPropertiesPanel}
+  class. Each Project properties window has category tree, where each category
+  represents a separate panel with properties. This category is declared in the
+  provider interface, properties panel itself is defined in class extending
+  \texttt{AbstractPropertiesPanel}.
+
+\paragraph*{\texttt{PropertiesPanelProvider}}
+\par 
+  As was mentioned above, \texttt{PropertiesPanelProvider} defines
+  category in Project properties windows. In the example below, we'll try to
+  explain how to create a simple provider and what each method is responsible for.
+
+Example:
+\begin{verbatim}
+public class ExampleProvider implemenets PropertiesPanelProvider {
+  // Programmatic name of this provider.
+  public String getName() {
+    return "ExampleProvider";
+  }
+  // User-friendly name - this name will be displayed in category tree.
+  public String getDisplayName() {
+    return "Example Category";
+  }
+  // Priority of category. Higher the number, higher
+  // will the category be in the tree. If two categories have
+  // same priorities, they are sorted according
+  // to their names.
+  public int getPriority() {
+    return 0;
+  }
+  // Returns properties panel defined for this category.
+  public AbstractPropertiesPanel getPanel(final Properties properties) {
+    return new ExamplePropertiesPanel(properties);
+  }
+
+  // Defines parent category of this category. If null is returned, this is top
+  // level category. In other cases id (programmatic name) of parent category
+  // must be returned.
+  public String getParent() {
+    return null;
+  }
+
+  // Optional. For each category, list of virtual categories can be defined.
+  // Instead of properties panel, VirtualCategoryPanel only informs of type and
+  // installed number of modules of a certain type.
+  public List getSubCategories() {
+    return null;
+  }
+}
+\end{verbatim}
+
+\paragraph*{\texttt{AbstractPropertiesPanel}}
+\par 
+  This class represents the visual component of properties category. You can
+  design it in whatever way you like. For proper functionality, a few steps must
+  be followed.
+
+\begin{enumerate}
+  \item 
+    Call \texttt{super(Properties)} in constructor: this causes
+    \texttt{Properties} instance to be saved into
+    \texttt{properties} protected field and you can use it in
+    \texttt{load()} and \texttt{store()} methods.
+  
+  \item 
+    Implement \texttt{load()} method: In this method values previously saved
+    into \texttt{Properties} instance provided to this panel are loaded into
+    components in this panel.
+  
+  \item 
+    Implement \texttt{store()} method: Here the values gathered from
+    components in this panel are saved into \texttt{Properties}.
+  
+\end{enumerate}
+
+Example:
+\begin{verbatim}
+// This is only a part of the actual class...
+public class ExamplePanel extends AbstractPropertiesPanel {
+
+  public ExamplePanel(final Properties properties) {
+    super(properties);
+  }
+
+  public abstract void store() {
+    properties.setProperty("exampleKey", someTextField.getText());
+  }
+
+  public abstract void load() {
+    String propValue = properties.getProperty("exampleKey", "default value");
+    someTextField.setText(propValue);
+  }
+}
+\end{verbatim}
+
+\subsection*{Rule display}
+
+\par 
+  \textit{Rule displayer} is a component used for visualization of rules in any
+  step of inference process. If rule displayers bundled with jInfer are
+  insufficient, you can implement a rule displayer on your own.
+  You just need to follow these few easy steps.
+
+\begin{enumerate}
+  \item 
+    Implement \texttt{cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer}
+    \begin{itemize}
+      \item 
+        \texttt{RuleDisplayer} interface extends \texttt{NamedModule},
+        so you need to override its methods too.
+      
+      \item 
+        Implement \texttt{createDisplayer(name, rules)} method which creates
+        displayer window responsible for displaying rules.
+      
+    \end{itemize}
+  
+  \item 
+    Annotate this class with
+    \texttt{@ServiceProvider(service = RuleDisplayer.class)}.
+  
+\end{enumerate}
+
+\par 
+  \textbf{Important notice:} never forget to clone the rules you want
+  to display. Rule displayer usually runs in its own thread, and accessing the
+  rules that are being simplified at the same time might lead to weird results.
+  You can use \texttt{CloneHelper} to clone the rules.
+
+
+Example:
+\begin{verbatim}
+@ServiceProvider(service = RuleDisplayer.class)
+public final class ExampleRuleDisplayer implements RuleDisplayer {
+
+  @Override
+  public void createDisplayer(String panelName, List rules) {
+    // Creates standard NBP TopComponent in which are rules displayed.
+    ExampleRDTopComp topComponent = ExampleRDTopComp.findInstance();
+    if (!topComponent.isOpened()) {
+      topComponent.open();
+    }
+    topComponent.createRuleDisplayer(panelName, rules);
+  }
+
+  @Override
+  public String getName() {
+    return "ExampleDisplayer";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Example rule displayer";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getDisplayName();
+  }
+}
+\end{verbatim}
+
+
+
+Example of invocation with cloning:
+\begin{verbatim}
+RuleDisplayerHelper.showRulesAsync("Panel name",
+    new CloneHelper().cloneGrammar(grammar), true);
+\end{verbatim}
+
+\subsection*{Console output, logging}
+
+\par 
+  To print to console output, NBP provides
+  \texttt{IOProvider}
+  and \texttt{InputOutput}
+  classes. \texttt{IOProvider}'s method \texttt{getIO(String, boolean)}
+  returns \texttt{InputOutput} instance, which can be used to obtain
+  \texttt{Reader}/\texttt{OutputWriter} to read/write into output window.
+
+
+Example:
+\begin{verbatim}
+// Creates new output window, where first parameter is a name and second
+// is flag determining whether a new window should be created even if there is
+//  already a window with the same name.
+InputOutput ioResult = IOProvider.getDefault().getIO("Example", true);
+ioResult.getOut().println("Hello world");
+
+// After writing everything into output window, close the output.
+ioResult.getOut().close();
+\end{verbatim}
+
+\par 
+  Logging is done in jInfer using
+  Log4j tool.
+  If you are not familiar with Log4j, example below shows simple usage. All
+  logged messages are saved in a standard log file placed in \textit{UserHome/.jinfer/}
+  folder and printed into "jInfer" output window in the application. For each
+  of these two places a log level can be set in jInfer options.
+
+
+Example:
+\begin{verbatim}
+// Creates Logger instance for this particular class
+private static final Logger LOG = Logger.getLogger(Example.class);
+
+    ...
+
+// Log a message with info level
+LOG.info("Some message with info log level");
+// Log an error message
+LOG.error("OMG, error occurred!");
+\end{verbatim}
+
+\subsection*{\texttt{RunningProject} class}
+
+\par 
+  This class provides access to information regarding currently running inference.
+  It is a singleton, corresponding with the fact that at a given time, at most
+  one inference (project) can be running in the whole NB. Consequently, all relevant methods
+  are synchronized.
+  NB project corresponding to the running inference can be retrieved by
+  calling \texttt{getActiveProject()}. Its properties can be retrieved by
+  calling \texttt{getActiveProjectProps()}. This
+  method will work also if there is no running project - it just retrieves an
+  empty instance of \texttt{Preferences}, which is useful for example in JUnit
+  tests.
+
+Example code retrieving properties for DTD export:
+\begin{verbatim}
+Properties properties = RunningProject.getActiveProjectProps(
+                            DTDExportPropertiesPanel.NAME);
+\end{verbatim}
+
+\par 
+  Aside from keeping information about the currently running project, this class
+  keeps information about the capabilities of the following module in the inference
+  chain. This can be retrieved by calling the \texttt{getNextModuleCaps()} method.
+  Again, if this information is not available, empty \texttt{Capabilities}
+  instance will be returned.
+
+Example code retrieving \textit{Simplifier} capabilities
+in \textit{BasicIGG}:
+\begin{verbatim}
+if (!RunningProject.getNextModuleCaps().getCapabilities().contains(
+            Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
+  ... expand rules ...
+}
+\end{verbatim}
+
+\subsection*{Module selection}
+
+\par 
+  This part of the tutorial will show the full process of implementing a choice
+  between two submodules in an inference module, for example simplifier. Similar
+  principles apply one level higher, when dealing with inference modules themselves.
+
+
+\subsubsection*{Interface}
+
+\par 
+  First of all, we need an interface encapsulating the new submodule. It has to
+  extend \texttt{NamedModule} interface.
+
+
+\begin{verbatim}
+public interface Foo extends NamedModule {
+
+  String bar();
+}
+\end{verbatim}
+
+\subsubsection*{Implementations}
+
+\par 
+  Second, we need some implementations of this interface. At least two, otherwise
+  it's boring.
+  They will have to implement all required methods and register themselves as
+  service providers for \texttt{Foo}.
+
+
+Example of the first implementation. The second will be the same (just change "ones" to "twos").
+\begin{verbatim}
+@ServiceProvider(service = Foo.class)
+public class Impl1 implements Foo {
+
+  // NamedModule stuff
+
+  @Override
+  public String getName() {
+    return "Impl1"; // unix-style name
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Foo implementation number 1"; // user-friendly name
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getDisplayName(); // irrelevant now
+  }
+
+  // logic from Foo
+
+  @Override
+  public String bar() {
+    return "Hello world from Impl1!";
+  }
+}
+\end{verbatim}
+
+\subsubsection*{Properties panel}
+
+\par 
+  Now we have to create a properties panel. Refer to an
+  earlier part of this document for general
+  reference. Here we assume a combo box already present on the properties panel,
+  with the correct renderer set (\texttt{ProjectPropsComboRenderer}).
+  We need to do 2 things: while loading the properties panel, fill it with
+  names of all implementations and select the currently chosen one (or default).
+  While saving, we have to get the name of
+  the selected implementation and save it.
+
+
+Example of panel load code:
+\begin{verbatim}
+@Override
+public final void load() {
+  combo.setModel(new DefaultComboBoxModel(
+          ModuleSelectionHelper.lookupImpls(Foo.class).toArray()));
+
+  combo.setSelectedItem(ModuleSelectionHelper.lookupImpl(Foo.class,
+                   properties.getProperty(
+                      "selected.foo.implementation", // property name
+                      "Impl1"))); // default property value
+                                             // - same as Impl1.getName()!
+}
+\end{verbatim}
+
+Example of panel save code:
+\begin{verbatim}
+@Override
+public void store() {
+  properties.setProperty("selected.foo.implementation",
+          ((NamedModule) combo.getSelectedItem()).getName());
+}
+\end{verbatim}
+
+Example of combo box renderer setting:
+\begin{verbatim}
+combo.setRenderer(new ProjectPropsComboRenderer(combo.getRenderer()));
+\end{verbatim}
+
+\subsubsection*{Invocation}
+
+\par 
+  Finally, there will be a place (in our example simplifier) where we actually
+  want to load the properties of the running project and lookup the selected
+  implementation of \texttt{Foo}.
+
+
+Example lookup and usage:
+\begin{verbatim}
+Properties p = RunningProject.
+    getActiveProjectProps("ExampleProvider"); // the name provided in
+                                              // properties panel provider
+
+Foo foo = ModuleSelectionHelper.lookupImpl(Foo.class,
+    p.getProperty("selected.foo.implementation", "Impl1"));
+
+println(foo.bar());
+\end{verbatim}
+
+\par 
+  A few things should be noted:
+  \begin{itemize}
+    \item Module names (\texttt{getName()}) have to be unique.
+    \item It is a good practice to store property names and default values as
+      constants, for example in super module - do a reference search in our
+      code to find out how we do it.
+    \item \texttt{getUserDescription()} should work in modules that have
+      submodules as follows: it should somehow return the name of the module
+      and names of all selected submodules to indicate inner workings of this
+      module. For example
+      \textit{My Simplifier (Clustering Logic A, Regexper \#3)}.
+  \end{itemize}
+
+
+
+
+ 
+
+
+\end{document}

@@ -1,0 +1,179 @@
+\documentclass[a4paper,10pt,oneside]{article}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+%\usepackage[scale=0.9]{tgcursor}
+%\usepackage[scale=0.9]{tgheros}
+\usepackage{xstring}
+\usepackage{wrapfig}
+
+\newcommand{\myscale}{0.74}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
+\def\.{\discretionary{}{}{}}
+\newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
+
+\setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
+\setlength{\voffset}{-1in} %analogous voffset
+\setlength{\oddsidemargin}{1.5cm}
+\setlength{\evensidemargin}{1.5cm}
+\setlength{\topmargin}{1.5cm}
+\setlength{\textheight}{24cm}
+\setlength{\textwidth}{18cm}
+
+\def\mftitle{Module Developer's Tutorial}
+\def\mfauthor{Michal Klempa, Mário Mikula, Robert Smetana, Michal Švirec, Matej Vitásek}
+\def\mfadvisor{RNDr. Irena Mlýnková, Ph.D., Martin Nečaský, Ph.D.}
+\def\mfplacedate{Praha, 2011}
+\title{\bf\mftitle}
+\author{\mfauthor \\ Advisors: \mfadvisor}
+\date{\mfplacedate}
+
+\ifx\pdfoutput\undefined\relax\else\pdfinfo{ /Title (\mftitle) /Author (\mfauthor) /Creator (PDFLaTeX) } \fi
+
+\begin{document}
+
+\maketitle
+
+\section*{Module Developer's Tutorial}
+\par 
+  Target audience: jInfer module developers. Anyone who needs to extend jInfer capabilities by writing a new module.
+
+\par 
+  
+    This tutorial assumes that you are a seasoned Java developer. Having
+    experience with programming in some kind of framework (NetBeans Platform
+    above all) will help you a lot.
+    Make sure you have read the article on
+    architecture, data structures and inference process to understand what you
+    will be implementing. Having read the documentation for
+    remaining modules will help you too.
+    Also, before starting this tutorial, make sure you can
+    build jInfer from sources.
+  
+
+\subsection*{Overview}
+  \begin{enumerate}
+    \item Get NetBeans, jInfer sources, try a build.
+    \item Decide on the type of module you want to create.
+    \item Create new NetBeans module.
+    \item Implement jInfer-specific interfaces.
+    \item Implement your logic.
+  \end{enumerate}
+\subsection*{Building jInfer from sources}
+  \par 
+    Refer to the official instructions.
+  
+\subsection*{What type of module?}
+  \par 
+    First thing you need to realize is what kind of module you will be
+    implementing. Is it going to be a part of the inference? If yes, what stage?
+    Importing the initial grammar? Simplifying it? Exporting to resulting schema?
+    If you are not sure what these terms mean, go read the articles on interence process again.
+  
+  \par 
+    If your logic doesn't belong to the inference process, it might just extend
+    one of the existing modules. Try looking for the code you would like to change.
+  
+\subsection*{New NetBeans module}
+\par 
+  This section assumes you have successfully imported jInfer in NetBeans.
+
+\begin{enumerate}
+  \item Expand the jInfer suite (brown puzzles icon).
+  \item Right-click \textit{Modules}, select \textit{Add New...}.
+  \item On the first page, pick a name for your module. Click \textit{Next}.
+  \item On the second page, fill out the following:
+    \begin{itemize}
+      \item 
+        \textit{Code base}: this will be the package structure in which your code is placed.
+        If you want, follow our convention: \texttt{cz.cuni.mff.ksi.jinfer.\textit{yourmodule}}.
+        Otherwise choose something like \texttt{\textit{tld.company.jinfer.yourmodule}}.
+      
+      \item \textit{Module display name}: pretty obvious.
+      \item \textit{Generate XML layer}: you may want to check this option, but it doesn't really matter at this stage.
+    \end{itemize}
+    Rest of the options is uninteresting in most cases.
+  
+  \item Click \textit{Finish}.
+\end{enumerate}
+\subsection*{Implement jInfer's specifics}
+\par 
+This section will show how to deal with a new inference module - a simplifier
+that does no actual simplification, just returns the grammar it got on input.
+Your module will need a "main" class implementing the chosen inference
+interface, annotated with a \texttt{@ServiceProvider} annotation.
+
+\par 
+But first, we need to do some setup.
+\begin{enumerate}
+  \item Right-click the newly created module, select \textit{Properties}.
+  \item In \textit{Libraries > Module Dependencies}, click \textit{Add Dependency...}.
+  \item Filter for "base" and select \textit{Base} as a dependency. Click \textit{OK}.
+  \item 
+      Still in \textit{Properties}, switch to \textit{Display} category. Fill in:
+      \begin{itemize}
+        \item \textit{Display Name}: Fill in a user-friendly name of your module.
+        \item \textit{Display Category}: type in \textit{jInfer}.
+        \item \textit{Short \& Long Description}: unleash your inner poet!
+      \end{itemize}
+  
+  \item Still in \textit{Properties}, switch to \textit{API Versioning}.
+  \item Type \texttt{cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier} in \textit{Provided Tokens}.
+  \item Close \textit{Properties} by clicking \textit{OK}.
+\end{enumerate}
+
+\par 
+Now to the class itself.
+\begin{enumerate}
+  \item Add a new Java class: right click \textit{Source Packages} in your new
+      module, select \textit{New > Java Class...}.
+  \item Fill in class name, for example \textit{MySimplifierImpl}.
+  \item Fill in package based on the \textit{Code base} you selected while creating
+      the module itself.
+  \item Click \textit{Finish}.
+  \item In the heading line of the class, add \texttt{implements Simplifier} and
+      fix the imports (you need \texttt{Simplifier} from Base module).
+  \item Annotate this class with \texttt{@ServiceProvider(service = Simplifier.class)}.
+  \item NetBeans will complain about missing method implementations, add them.
+  \item 
+    Now fill in method bodies:
+    \begin{itemize}
+      \item \texttt{getName()}: return a string with module unix name, for example \texttt{"mysimplifier"}.
+      \item \texttt{getDisplayName()}: return a user friendly module name, for example \texttt{"My First Simplifier"}.
+      \item \texttt{getModuleDescription()}: return a short module description. You can also return \texttt{getDisplayName()} in this case.
+      \item \texttt{getCapabilities()}: for the moment, it is enough to return \texttt{Collections.emptyList()}.
+      \item \texttt{start()}: here is where your main logic belongs. In the case of a simplifier, you would do something with the rules and return a simplified grammar. For now, just do \texttt{callback.finished(initialGrammar);}
+    \end{itemize}
+  
+\end{enumerate}
+
+\subsection*{Run jInfer}
+\par 
+  At this moment, run the whole jInfer suite from the NetBeans you imported it into.
+  A new, child NetBeans should open with your module correctly installed. You can
+  now follow the User tutorial, just select your new
+  simplifier while creating a new jInfer project.
+  That's it! Start hacking you logic now!
+
+\subsection*{Implement your logic}
+\par 
+  This is the part where you actually have to do some thinking :-) Implementing
+  an importer? Take that \texttt{InputStream} and create some rules of it! Simplifier?
+  Take the rules you got and compact them somehow! Exporter? Take those rules and
+  write them out as a \texttt{String}! It only depends on which module you are
+  in and algorithm you're implementing.
+
+\subsection*{Dealing with jInfer and NetBeans Platform}
+\par 
+  You will soon get into situation where you need to interact either with
+  jInfer or directly NetBeans. There is a
+  tutorial for dealing with these cases.
+
+
+
+\end{document}

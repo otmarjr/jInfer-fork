@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt,oneside,twocolumn]{article}
+\documentclass[a4paper,8pt,oneside,twocolumn]{article}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{url}
@@ -77,13 +77,37 @@ Some XML editors also offers XML schema generation,
 % TODO editors - oxygen, stylus, can they do something? how they do it, they are not free
 
 \section*{Short architecture overview}
-We divide the process of inference into three steps:
+\begin{figure}
+	\centering\includegraphics[width=\myscale\columnwidth]{inference_process}
+	\caption{High-level view of the inference process} \label{inference_process}
+\end{figure}
+We divide the inference process into three steps (as illustrated on fig. \ref{inference_process}):
 \begin{enumerate}
-	\item 
-	TODO steps, graph from architecture, short mention of internal structure = grammar
+	\item Import of various formats (XML/XSD/DTD/XPath) into internal representation - \emph{Initial Grammar}.
+	\item Simlification (generalization) of \emph{Initial Grammar} with optional help of user interaction.
+	\item Export into various schema formats (XSD/DTD).
 \end{enumerate}	
+Our internal representation consist of regular grammar, that is list of rules.
+We represent right side of grammar rule as regular expression with our own set of classes to represent regular expressions.
+
+On input, all various formats are first converted into internal representation - from XML rules are extracted as positive examples, concatenations, from XSD/DTD rules are extracted as ther are written in schemata. From XPath we extract only explicit concatenations for now.
+
+Rules are send to \jmodule{Simplifier} module, which has to do the simplification algorithm and return \emph{Simplified Grammar}, which is then easily exporter by exporter modules.
+
+Simplification can be either automatic, or user-aided.
+We provide visualization of non-deterministic finite automatons.
+This helps algorithms that use merging state algorithm with user interaction.
+Using simple API, algorithm developer can call our library to present automaton to user to make human decisions and continue in simplification process.
+
+We provide visualization of rules itself, which is useful for methods not using automatons at all.
+Algorithm can use API to display rules
+
 \section*{Extensibility}
-TODO short description of how easily can framework be extended ??? maybe not
+Developers willing to experiment with their own algorithms have to take care only of \jmodule{Simplifier} module.
+We provide sample one, which is divided into submodules again, and again and again.
+One can find exact place he wants to replace functionality, and replace only that part of simplification chain.
+It then remains configurable whether to use his new experimental module or the old one, from GUI.
+He doesn't need to code into jInfer sources, keeping his software installed in same NB instance as jInfer is enough.
 
 \section*{More work/Open issues}
 There are still many issues to be worked on.

@@ -117,7 +117,7 @@ To try out interactive inference, do the following with your jInfer project:
 </p>
 
 <ol type=1>
-  <li>Open </i>Project Preferences</i>.</li>
+  <li>Open <i>Project Preferences</i>.</li>
   <li>Navigate to <i>Simplifiers</i> &gt; <i>TwoStep</i> &gt;
       <i>Automaton Merging State</i>.</li>
   <li>In the <i>Automaton simplifier</i> combobox select

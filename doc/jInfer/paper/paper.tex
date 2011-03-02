@@ -45,11 +45,10 @@ This is partly because of the lack of a simple user interface to these algorithm
 We present a NetBeans (\cite{netbeans}) based pluggable framework to fill this gap.
 This way we enable people to deal with XML in practice, to obtain schema for their documents by following simple steps, without need to read and understand theoretical aspects.
 We hope our solution will boost usage of XML schemas in practice, since creating schema for existing set of documents will be more affordable (one doesn't have to write one by hand).
+We suggest framework will be used as a experimental sandbox for scientific developers, willing to test their own new algorithms without need to develop complicated GUI.
 
 \section*{Introduction}
-Although many algorithms (\cite{ahonen, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, 1802522, vyhnanovska}) 
-% TODO name all papers
-try to solve the problem of schema inference for an existing set of XML documents, have you ever tried to solve the problem in practice?
+Although many algorithms (for example \cite{ahonen, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, 1802522, vyhnanovska}) try to solve the problem of schema inference for an existing set of XML documents, have you ever tried to solve the problem in practice?
 
 When the problem arises, one wants to find a solution as quickly as possible, without the need to investigate many scientific papers.
 We focus on this group of potential users - programmers, system administrators, XML coders, XML maintaners in private and R \& D.
@@ -66,15 +65,12 @@ This way, extending existing NFA base algorithms with user interaction is easier
 \section*{Related work}
 Most of the algorithms named, doesn't have avalaible implementation, nor are made ready to use.
 Probably best solution nowadays is \cite{Bex:2008:SSI:1376616.1376750}.
-It deals with schema infering, user interaction, schema visualization and user-aided refinement.
-Authors use their own algorithms for schema inference (\cite{Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964}).
-Compared to our software, they are better in user interaction and schema visualization.
-There is no mention of extensibility, however, which we solve as our top priority.
-
-Since both are trying to solve nearly same problem, we predict that we will approach some good ideas from other solution in further work.
-
-Some XML editors also offers XML schema generation, 
-% TODO editors - oxygen, stylus, can they do something? how they do it, they are not free
+It deals with schema infering and schema evolution as well.
+It employs user interaction, schema visualization and user-aided schema refinement to obtain better results.
+Authors use their own algorithms for automatic schema inference (\cite{Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964}) and then present user generated schema with option of GUI refining it.
+Schema refinement and visualization are strong sides of this solution and also possibility to do schema evolution (given old schema and not-all-valid XML documents, update schema) is unique in the field.
+Since we both, are trying to solve nearly same problem, we predict that we will approach some good ideas from other solution in further work.
+There is no mention of extensibility and pluggable design, however, which we solve as our top priority.
 
 \section*{Short architecture overview}
 \begin{figure}
@@ -118,11 +114,25 @@ One can find exact place he wants to replace functionality, and replace only tha
 It then remains configurable whether to use his new experimental module or the old one, from GUI.
 He doesn't need to code into jInfer sources, keeping his software installed in same NB instance as jInfer is enough.
 
-\section*{More work/Open issues}
+As we implement \cite{ahonen}, we provide good support for merging state algorithms - automaton visualization for example.
+We divide merging of automaton states in two tasks: merging strategy and merging criterion.
+Former one is responsible of deciding whether to merge two states or not.
+It has to decide where to stop merging and work is done, it uses merging criterion to test two states equivalency and can measure automaton as it wants to decide whether to continue or stop process.
+Merging criterion (we implement $k,h$-context) can be replaced and plugged into merging strategy. One can implement for example $s,k$-strings (\cite{Garofalakis:2000:XSE:335191.335409}).
+
+We provide replacable parts in automaton to regular expression conversion problem, so one can replace our state removal method (with simple weighted heuristic).
+
+Possibilities are open.
+
+\section*{Open issues}
 There are still many issues to be worked on.
 First is set of supported input/output formats.
 On input, one can imagine XML Queries, on output Relax NG or Schematron. 
-There is room for implementing schema visualization tool into jInfer, to enable user-aided schema refinement.
+There is room for implementing schema visualization tool into jInfer, to enable user-aided schema refinement (to approach \cite{Bex:2008:SSI:1376616.1376750}).
+
+For now, we ignore content models of attribute and text node values, but there is interface available to be implemented.
+So simple data type detection is waiting for its imlementor.
+
 Many algorithms published wait to be implemented as jInfer modules, maybe some of them will be tried in study of our master theses.
 
 \section*{Conclusion}
@@ -130,8 +140,9 @@ Framework presented aims to be the tool used to obtain schemas from XML/XSD/DTD 
 While maintaining distributable bundle for users, with best of module selections and algorithms implemented so far, we predict it will be used in future studies of new algorithms as a test environment.
 Best of them will probably migrate into jInfer source tree to aid common users to solve their document set quickly enough, to even bother with schema generation at all.
 
-Weak side of the solution is the lack of good quality automatic or semi-automatic algorithms to be used by common user.
-Goal was to produce stable framework for future development and we hope to negate this issue by implementing master theses in this environment, providing it with bundle of different algorithms, solving different input and output formats and infering more concise schemas.
+Weak side of the solution is the lack of good quality automatic or semi-automatic algorithms to be used by common user and
+lack of content model inference.
+Goal was to produce stable framework for future development and we hope to negate this issues by implementing master theses in this environment, providing it with bundle of different algorithms, solving different input and output formats and infering more concise schemas.
 
 \nocite{*}
 \newpage

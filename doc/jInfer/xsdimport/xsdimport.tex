@@ -170,7 +170,7 @@ Helper class for creating intervals from string representation of occurrences fo
 
 \paragraph{XSD Attribude}
 
-Enumeration of tag attributes currently recognized by our parsers. They are the following.
+Enumeration of tag attributes currently recognized by our parsers. Others are simply skipped. They are the following.
 \begin{itemize}
 	\item \code{name}
 	\item \code{ref}
@@ -183,7 +183,7 @@ List should be extended according to the parser, to reflect its functionality.
 
 \paragraph{XSD Tag}
 
-Enumeration of tags currently known by our parsers. They are the following.
+Enumeration of tags currently known by our parsers. Others are simply skipped. They are the following.
 \begin{itemize}
 	\item \code{schema}
 	\item \code{element}
@@ -387,7 +387,8 @@ DOM parser is set as the default parsing method.
 
 Module \code{XSDImporter} itself is an example of an extension of \code{BasicIGG}, for which it provides a specific funcionality. Other modules that handle different definition languages can be created in a similar fashion.
 
-The modular design of the parser implementations is also an example of extensibility which can be achieved using the NetBeans platform. It allows developers to add, or remove, custom parsers just by creating a module with a new parser implementation; there is no need to change any code within \code{XSDImporter} module. Only exception is the re-definition of the default parser (currently DOM), which is not needed even if the module of default parser is not present.\\
+The modular design of the parser implementations is also an example of extensibility which can be achieved using the NetBeans platform. It allows developers to add, or remove, custom parsers just by creating a module with a new parser implementation; there is no need to change any code within \code{XSDImporter} module. Only exception is the re-definition of the default parser (currently DOM), which is not needed even if the module of default parser is not present.
+
 Parsers with extended or custom functionality can be created using \code{XSDImportDOM} module as example (recomended).
 
 \nocite{*}

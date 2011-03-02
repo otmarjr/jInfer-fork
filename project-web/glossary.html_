@@ -114,6 +114,13 @@
                 C, D). In jInfer most commonly represented as an
                 element - element itself is the LHS, its subnodes are the RHS.</span>
             </li>
+            
+            <li class="glossary">
+              <span class="gloss-term">Rule tree</span>
+              <span class="gloss-definition">A tree data structure consisting of 
+                Rules as vertices. It branches from a root rule according to 
+                its subnodes, then their subnodes, etc.</span>
+            </li>
 
             <li class="glossary">
               <span class="gloss-term">Schema Generator</span>

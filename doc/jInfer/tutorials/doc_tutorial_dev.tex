@@ -92,7 +92,7 @@
       \item 
         \textit{Code base}: this will be the package structure in which your code is placed.
         If you want, follow our convention: \texttt{cz.cuni.mff.ksi.jinfer.\textit{yourmodule}}.
-        Otherwise choose something like \texttt{\textit{tld.company.jinfer.yourmodule}}.
+        Otherwise choose something like \texttt{\textit{tld.\.company.\.jinfer.\.yourmodule}}.
       
       \item \textit{Module display name}: pretty obvious.
       \item \textit{Generate XML layer}: you may want to check this option, but it doesn't really matter at this stage.
@@ -105,15 +105,15 @@
 \par 
 This section will show how to deal with a new inference module - a simplifier
 that does no actual simplification, just returns the grammar it got on input.
-Your module will need a "main" class implementing the chosen inference
+Your module will need a ``main'' class implementing the chosen inference
 interface, annotated with a \texttt{@ServiceProvider} annotation.
 
 \par 
-But first, we need to do some setup.
+\noindent But first, we need to do some setup.
 \begin{enumerate}
   \item Right-click the newly created module, select \textit{Properties}.
   \item In \textit{Libraries > Module Dependencies}, click \textit{Add Dependency...}.
-  \item Filter for "base" and select \textit{Base} as a dependency. Click \textit{OK}.
+  \item Filter for ``base'' and select \textit{Base} as a dependency. Click \textit{OK}.
   \item 
       Still in \textit{Properties}, switch to \textit{Display} category. Fill in:
       \begin{itemize}
@@ -128,7 +128,7 @@ But first, we need to do some setup.
 \end{enumerate}
 
 \par 
-Now to the class itself.
+\noindent Now to the class itself.
 \begin{enumerate}
   \item Add a new Java class: right click \textit{Source Packages} in your new
       module, select \textit{New > Java Class...}.
@@ -143,8 +143,8 @@ Now to the class itself.
   \item 
     Now fill in method bodies:
     \begin{itemize}
-      \item \texttt{getName()}: return a string with module unix name, for example \texttt{"mysimplifier"}.
-      \item \texttt{getDisplayName()}: return a user friendly module name, for example \texttt{"My First Simplifier"}.
+      \item \texttt{getName()}: return a string with module unix name, for example \texttt{``mysimplifier''}.
+      \item \texttt{getDisplayName()}: return a user friendly module name, for example \texttt{``My First Simplifier''}.
       \item \texttt{getModuleDescription()}: return a short module description. You can also return \texttt{getDisplayName()} in this case.
       \item \texttt{getCapabilities()}: for the moment, it is enough to return \texttt{Collections.emptyList()}.
       \item \texttt{start()}: here is where your main logic belongs. In the case of a simplifier, you would do something with the rules and return a simplified grammar. For now, just do \texttt{callback.finished(initialGrammar);}

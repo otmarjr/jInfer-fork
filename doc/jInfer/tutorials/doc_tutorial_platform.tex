@@ -79,7 +79,7 @@
 \end{enumerate}
 \subsection*{Module visibility}
 \par 
-  Each NBP module allows to set some spackages as public, which means their content
+  Each NBP module allows to set some packages as public, which means their content
   will be available to other modules. That means, if module \textit{A} declares a
   dependency on module \textit{B}, it will be able to use only classes from
   those packages that were set as public in module \textit{B}.
@@ -95,14 +95,14 @@
   module's \texttt{project.xml} file located in
   \textit{ModulePath/nbproject/} folder.
 
-Example:
+\noindent Example:
 \begin{verbatim}
 // This is a portion of example project.xml file.
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="\url{http://www.netbeans.org/ns/project/1">}
+<project xmlns="http://www.netbeans.org/ns/project/1">
     <type>org.netbeans.modules.apisupport.project</type>
     <configuration>
-        <data xmlns="\url{http://www.netbeans.org/ns/nb-module-project/3">}
+        <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             ....
             <public-packages>
                 <package>some.example.package.name</package>
@@ -112,7 +112,7 @@ Example:
 </project>
 \end{verbatim}
 \par 
-  Another way to set public packages is through GUI:
+\noindent  Another way to set public packages is through GUI:
   \begin{enumerate}
     \item Right-click the module, select \textit{Properties}.
     \item In \textit{API Versioning}, there is a \textit{Public Packages} section.
@@ -135,7 +135,7 @@ Example:
   whether this is the case. Example below shows how to check the interruption
   from user and what to do to correctly stop the inference.
 
-Example:
+\noindent Example:
 \begin{verbatim}
 for (forever) {
     if (Thread.interrupted()) {
@@ -152,7 +152,7 @@ for (forever) {
   is more convenient. This class creates dialog which remembers last-used
   directory according to a key passed into its constructor.
 
-Example:
+\noindent Example:
 \begin{verbatim}
 // The default dir to use if no value is stored
 File home = new File(System.getProperty("user.home"));
@@ -174,7 +174,7 @@ if (toAdd != null) {
   notification. For more information please look at
   NBP Dialogs API FAQ.
 
-Example:
+\noindent Example:
 \begin{verbatim}
 // Creates standard information message with text "Hello world"
 NotifyDescriptor nd = new NotifyDescriptor
@@ -213,7 +213,7 @@ DialogDisplayer.getDefault().notify(nd);
   \texttt{NbPreferences}
   class. Example below shows how to store and load Preferences.
 
-Example:
+\noindent Example:
 \begin{verbatim}
 public void store() {
   // Saves the state of checkBox into Preferences for ExampleClass
@@ -221,6 +221,7 @@ public void store() {
   NbPreferences.forModule(ExampleClass.class)
       .putBoolean("PropertyName", someCheckBox.isSelected());
 }
+
 public void load() {
   // Get from ExampleClass class preferences the property with name
   // "PropertyName". Second parameter of method getBoolean is used
@@ -234,21 +235,21 @@ public void load() {
   project has its properties panel accessible in its content menu and
   these properties are applied for each project separately. To implement this
   kind of preferences, it is necessary to implement
-  \texttt{PropertiesPanelProvider}
+  \texttt{Properties\.Panel\.Provider}
   interface and extend the
-  \texttt{AbstractPropertiesPanel}
+  \texttt{Abstract\.Properties\.Panel}
   class. Each Project properties window has category tree, where each category
   represents a separate panel with properties. This category is declared in the
   provider interface, properties panel itself is defined in class extending
   \texttt{AbstractPropertiesPanel}.
 
-\paragraph*{\texttt{PropertiesPanelProvider}}
+\subsubsection*{PropertiesPanelProvider}
 \par 
   As was mentioned above, \texttt{PropertiesPanelProvider} defines
   category in Project properties windows. In the example below, we'll try to
   explain how to create a simple provider and what each method is responsible for.
 
-Example:
+\noindent Example:	
 \begin{verbatim}
 public class ExampleProvider implemenets PropertiesPanelProvider {
   // Programmatic name of this provider.
@@ -270,14 +271,12 @@ public class ExampleProvider implemenets PropertiesPanelProvider {
   public AbstractPropertiesPanel getPanel(final Properties properties) {
     return new ExamplePropertiesPanel(properties);
   }
-
   // Defines parent category of this category. If null is returned, this is top
   // level category. In other cases id (programmatic name) of parent category
   // must be returned.
   public String getParent() {
     return null;
   }
-
   // Optional. For each category, list of virtual categories can be defined.
   // Instead of properties panel, VirtualCategoryPanel only informs of type and
   // installed number of modules of a certain type.
@@ -287,7 +286,7 @@ public class ExampleProvider implemenets PropertiesPanelProvider {
 }
 \end{verbatim}
 
-\paragraph*{\texttt{AbstractPropertiesPanel}}
+\subsubsection*{AbstractPropertiesPanel}
 \par 
   This class represents the visual component of properties category. You can
   design it in whatever way you like. For proper functionality, a few steps must
@@ -310,8 +309,7 @@ public class ExampleProvider implemenets PropertiesPanelProvider {
     components in this panel are saved into \texttt{Properties}.
   
 \end{enumerate}
-
-Example:
+\noindent Example:
 \begin{verbatim}
 // This is only a part of the actual class...
 public class ExamplePanel extends AbstractPropertiesPanel {
@@ -330,10 +328,9 @@ public class ExamplePanel extends AbstractPropertiesPanel {
   }
 }
 \end{verbatim}
+\newpage
 
 \subsection*{Rule display}
-
-\par 
   \textit{Rule displayer} is a component used for visualization of rules in any
   step of inference process. If rule displayers bundled with jInfer are
   insufficient, you can implement a rule displayer on your own.
@@ -359,14 +356,14 @@ public class ExamplePanel extends AbstractPropertiesPanel {
   
 \end{enumerate}
 
-\par 
+\par \noindent
   \textbf{Important notice:} never forget to clone the rules you want
   to display. Rule displayer usually runs in its own thread, and accessing the
   rules that are being simplified at the same time might lead to weird results.
   You can use \texttt{CloneHelper} to clone the rules.
 
 
-Example:
+\noindent Example:
 \begin{verbatim}
 @ServiceProvider(service = RuleDisplayer.class)
 public final class ExampleRuleDisplayer implements RuleDisplayer {
@@ -397,9 +394,6 @@ public final class ExampleRuleDisplayer implements RuleDisplayer {
   }
 }
 \end{verbatim}
-
-
-
 Example of invocation with cloning:
 \begin{verbatim}
 RuleDisplayerHelper.showRulesAsync("Panel name",
@@ -416,8 +410,7 @@ RuleDisplayerHelper.showRulesAsync("Panel name",
   returns \texttt{InputOutput} instance, which can be used to obtain
   \texttt{Reader}/\texttt{OutputWriter} to read/write into output window.
 
-
-Example:
+\noindent Example:
 \begin{verbatim}
 // Creates new output window, where first parameter is a name and second
 // is flag determining whether a new window should be created even if there is
@@ -428,17 +421,14 @@ ioResult.getOut().println("Hello world");
 // After writing everything into output window, close the output.
 ioResult.getOut().close();
 \end{verbatim}
-
-\par 
   Logging is done in jInfer using
   Log4j tool.
   If you are not familiar with Log4j, example below shows simple usage. All
   logged messages are saved in a standard log file placed in \textit{UserHome/.jinfer/}
-  folder and printed into "jInfer" output window in the application. For each
+  folder and printed into ``jInfer'' output window in the application. For each
   of these two places a log level can be set in jInfer options.
 
-
-Example:
+\noindent Example:
 \begin{verbatim}
 // Creates Logger instance for this particular class
 private static final Logger LOG = Logger.getLogger(Example.class);
@@ -451,7 +441,7 @@ LOG.info("Some message with info log level");
 LOG.error("OMG, error occurred!");
 \end{verbatim}
 
-\subsection*{\texttt{RunningProject} class}
+\subsection*{RunningProject class}
 
 \par 
   This class provides access to information regarding currently running inference.
@@ -504,7 +494,6 @@ if (!RunningProject.getNextModuleCaps().getCapabilities().contains(
 
 \begin{verbatim}
 public interface Foo extends NamedModule {
-
   String bar();
 }
 \end{verbatim}
@@ -518,7 +507,7 @@ public interface Foo extends NamedModule {
   service providers for \texttt{Foo}.
 
 
-Example of the first implementation. The second will be the same (just change "ones" to "twos").
+\noindent Example of the first implementation. The second will be the same (just change ``ones'' to ``twos'').
 \begin{verbatim}
 @ServiceProvider(service = Foo.class)
 public class Impl1 implements Foo {
@@ -562,7 +551,7 @@ public class Impl1 implements Foo {
   the selected implementation and save it.
 
 
-Example of panel load code:
+\noindent Example of panel load code:
 \begin{verbatim}
 @Override
 public final void load() {
@@ -577,7 +566,7 @@ public final void load() {
 }
 \end{verbatim}
 
-Example of panel save code:
+\noindent Example of panel save code:
 \begin{verbatim}
 @Override
 public void store() {
@@ -586,7 +575,7 @@ public void store() {
 }
 \end{verbatim}
 
-Example of combo box renderer setting:
+\noindent Example of combo box renderer setting:
 \begin{verbatim}
 combo.setRenderer(new ProjectPropsComboRenderer(combo.getRenderer()));
 \end{verbatim}

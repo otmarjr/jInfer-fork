@@ -50,7 +50,7 @@
 	<h3>JavaDoc</h3>
 	
 	<p>
-	  jInfer features an extensive <a href="/javadoc">JavaDoc documentation</a>.
+	  jInfer features an extensive <a href="javadoc/index.html">JavaDoc documentation</a>.
 	</p>
 
         <h3>Building jInfer</h3>

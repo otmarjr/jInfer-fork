@@ -63,14 +63,13 @@ We provide visualization tools to display input XML documents as a set of gramma
 This way, extending existing NFA base algorithms with user interaction is easier for researchers.
 
 \section*{Related work}
-Most of the algorithms named, doesn't have avalaible implementation, nor are made ready to use.
-Probably best solution nowadays is \cite{Bex:2008:SSI:1376616.1376750}.
-It deals with schema infering and schema evolution as well.
+Most of the algorithms mentioned don't have an implementation publicly available, nor are they ready to use.
+Probably best solution nowadays is \cite{Bex:2008:SSI:1376616.1376750}, dealing with schema inference and evolution.
 It employs user interaction, schema visualization and user-aided schema refinement to obtain better results.
-Authors use their own algorithms for automatic schema inference (\cite{Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964}) and then present user generated schema with option of GUI refining it.
-Schema refinement and visualization are strong sides of this solution and also possibility to do schema evolution (given old schema and not-all-valid XML documents, update schema) is unique in the field.
-Since we both, are trying to solve nearly same problem, we predict that we will approach some good ideas from other solution in further work.
-There is no mention of extensibility and pluggable design, however, which we solve as our top priority.
+Authors use their own algorithms for automatic schema inference (\cite{Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964}) and then present a user generated schema with optional GUI to refine it.
+Schema refinement and visualization are strong points of this solution. Also the possibility to do schema evolution (given old schema and not-all-valid XML documents, update schema) is unique in the field.
+Since we both are trying to solve nearly the same problem, we predict that we will approach some good ideas from the other solution in further work.
+There is no mention of extensibility or pluggable design, however, which we consider our top priority.
 
 \section*{Short architecture overview}
 \begin{figure}
@@ -79,26 +78,26 @@ There is no mention of extensibility and pluggable design, however, which we sol
 \end{figure}
 We divide the inference process into three steps (as illustrated on fig. \ref{inference_process}):
 \begin{enumerate}
-	\item Import of various formats (XML/XSD/DTD/XPath) into internal representation - \emph{Initial Grammar}.
-	\item Simlification (generalization) of \emph{Initial Grammar} with optional help of user interaction.
-	\item Export into various schema formats (XSD/DTD).
+	\item Import of various formats (XML/XSD/DTD/XPath/\ldots) into an internal representation - \emph{Initial Grammar}.
+	\item Simplification (generalization) of \emph{Initial Grammar} with optional help of user interaction.
+	\item Export into various schema formats (XSD/DTD/\ldots).
 \end{enumerate}	
-Our internal representation consist of regular grammar, that is list of rules.
-We represent right side of grammar rule as regular expression with our own set of classes to represent regular expressions.
+Our internal representation is a regular grammar, i.e. a list of rules.
+We represent the right side of grammar rule as a regular expression with our own set of classes to represent regexps.
 
-On input, all various formats are first converted into internal representation - from XML rules are extracted as positive examples, concatenations, from XSD/DTD rules are extracted as ther are written in schemata. From XPath we extract only explicit concatenations for now.
+On input, all various formats are at first converted into internal representation - from XML, rules are extracted as positive examples, concatenations; from XSD/DTD, rules are extracted as they are written in the schema. From XPath we extract only explicit concatenations for now.
 
-Rules are send to \jmodule{Simplifier} module, which has to do the simplification algorithm and return \emph{Simplified Grammar}, which is then easily exporter by exporter modules.
+Rules are sent to \jmodule{Simplifier} module, which has to do the simplification algorithm and return a \emph{Simplified Grammar}, which is then easily exported by \jmodule{Schema Generator} modules.
 
 \begin{figure}
 	\centering\includegraphics[width=\myscale\columnwidth]{screenshot}
 	\caption{Visualization of automaton in inference process} \label{screenshot}
 \end{figure}
 Simplification can be either automatic, or user-aided.
-We provide visualization of non-deterministic finite automatons.
-This helps algorithms that use merging state algorithm with user interaction.
-Using simple API, algorithm developer can call our library to present automaton to user to make human decisions and continue in simplification process.
-See figure \ref{screenshot} for automaton visualization tool.
+We provide visualization of non-deterministic finite automata.
+This helps algorithms that use merging state algorithms with user interaction.
+Using simple API, algorithm developer can call our library to present the automaton to the user to make human decisions and continue in simplification process.
+See figure \ref{screenshot} for an automaton visualization tool.
 
 \begin{figure}
 	\centering\includegraphics[width=\myscale\columnwidth]{ruledisplayer}

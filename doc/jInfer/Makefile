@@ -1,4 +1,4 @@
-obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twostep treeruledisplayer autoeditor projecttype xsdimport
+obj= architecture base basicdtd basicigg basicruledisplayer basicxsd runner twostep treeruledisplayer autoeditor projecttype xsdimport paper
 
 all: deploy
 

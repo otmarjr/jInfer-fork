@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<!-- Inferred on Sun Mar 06 18:57:57 CET 2011 by Basic IG generator, TwoStep(Iname (with attributes), Automaton Merging State(Greedy(k,h-context), State Removal(Weighted)), Chained(Empty Children, Nested Concatenation, Null)), Basic XSD exporter -->
+
+<!-- global types -->
+<xs:complexType name="Thome">
+</xs:complexType>
+
+<xs:complexType name="Tproblem">
+</xs:complexType>
+
+<xs:complexType name="Tedge">
+</xs:complexType>
+
+<xs:complexType name="Tidentity">
+</xs:complexType>
+
+<xs:complexType name="Tprobability">
+</xs:complexType>
+
+<xs:complexType name="Ta">
+  <xs:choice>
+    <xs:sequence>
+      <xs:element name="home" type="Thome"/>
+      <xs:element name="problem" type="Tproblem"/>
+      <xs:element name="edge" type="Tedge"/>
+      <xs:element name="edge" type="Tedge" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:sequence>
+      <xs:element name="home" type="Thome"/>
+      <xs:element name="identity" type="Tidentity"/>
+      <xs:choice>
+        <xs:element name="edge" type="Tedge"/>
+        <xs:sequence>
+          <xs:element name="problem" type="Tproblem"/>
+          <xs:element name="edge" type="Tedge"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:element name="edge" type="Tedge" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:sequence>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element name="home" type="Thome"/>
+          <xs:element name="probability" type="Tprobability"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="home" type="Thome"/>
+          <xs:element name="identity" type="Tidentity"/>
+          <xs:element name="probability" type="Tprobability"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:element name="edge" type="Tedge"/>
+      <xs:element name="edge" type="Tedge" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="Troot">
+  <xs:sequence>
+    <xs:element name="a" type="Ta"/>
+    <xs:element name="a" type="Ta" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<!-- top level element -->
+<xs:element name="root" type="Troot"/>
+</xs:schema>

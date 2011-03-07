@@ -2,7 +2,7 @@ CPP=/usr/bin/cpp -P -w -C -undef
 
 .PHONY: images photos style pdfs outputdir
 
-all: outputdir about.html doc_tutorial.html documentation.html download.html empty.html footer.html header.html help.html index.html legal.html makingof.html building_jinfer.html glossary.html screenshots.html doc_tutorial_dev.html doc_tutorial_platform.html images photos style htaccess screenshots
+all: outputdir about.html doc_tutorial.html documentation.html download.html footer.html header.html help.html index.html legal.html makingof.html building_jinfer.html glossary.html screenshots.html doc_tutorial_dev.html doc_tutorial_platform.html images photos style htaccess screenshots
 
 IMGS= jinfer-logo.png document-save-2.png edit-find-4.png configure-4.png help-hint.png background3.png box-downleft.png
 
@@ -14,6 +14,7 @@ outputdir:
 images:
 	mkdir -p output/images
 	for i in $(IMGS); do cp images/$$i output/images/$$i; done
+	cp -r testdata/ output/
 
 photos:
 	mkdir -p output/photos

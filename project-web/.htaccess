@@ -1,1 +1,2 @@
 redirectmatch /modules/$ http://jinfer.sourceforge.net/documentation.html
+Options +Indexes

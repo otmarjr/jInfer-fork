@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="shiporder">
+  <xs:complexType>
+    <xs:all>
+      <xs:element name="custom">
+          <xs:complexType>
+              <xs:sequence>
+                <xs:element name="a7" type="xs:string" minOccurs="0" maxOccurs="7" />
+                <xs:element name="au" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+          </xs:complexType>
+      </xs:element>
+      <xs:element name="b">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element name="ca" type="xs:string"/>
+                <xs:element name="cb" type="xs:string"/>
+                <xs:element name="cc" type="xs:string"/>
+            </xs:choice>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="c" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="ca" type="xs:string"/>
+                <xs:element name="cb" type="xs:string"/>
+                <xs:element name="cc" type="xs:string"/>
+            </xs:all>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="d">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="da" type="xs:string"/>
+                <xs:element name="db" type="xs:string"/>
+                <xs:element name="dc" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:all>
+  </xs:complexType>
+</xs:element>
+</xs:schema>

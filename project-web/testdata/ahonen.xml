@@ -1,0 +1,35 @@
+<root>
+<a>
+    <home/>
+    <problem/>
+    <edge/>
+</a>
+<a>
+    <home/>
+    <identity/>
+    <problem/>
+    <edge/>
+    <edge/>
+    <edge/>
+</a>
+<a>
+    <home/>
+    <identity/>
+    <edge/>
+    <edge/>
+</a>
+<a>
+    <home/>
+    <identity/>
+    <probability/>
+    <edge/>
+    <edge/>
+    <edge/>
+</a>
+<a>
+    <home/>
+    <probability/>
+    <edge/>
+    <edge/>
+</a>
+</root>

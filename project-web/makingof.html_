@@ -70,20 +70,20 @@ We are using mainly 4 of the facilities SF.net provides: <a href="https://source
 
 		<p>
 			We use this tool to track our progress in various metrics, such as number of files, LOC, distribution of commits over time etc. It is also a very useful tool to measure performance of each team member :-)<br/>
-			<img src="images/screen-statsvn.png" alt="StatSVN screenshot" class="screenshot"/>
+			<img src="images/screenshots/-statsvn.png" alt="StatSVN screenshot" class="screenshot"/>
 		</p>
 
 		<h3><a href="http://java.net/projects/hudson/">Hudson</a></h3>
 
 		<p>
 			To automatize our process of building and testing, we deployed a Hudson continuous integration server. Every 3 hours, this builds and tests the whole project and reports any problems. Additionally, Hudson daily generates JavaDoc and StatSVN reports and publishes them.<br/>
-			<img src="images/screen-hudson.png" alt="Hudson screenshot" class="screenshot"/>
+			<img src="images/screenshots/-hudson.png" alt="Hudson screenshot" class="screenshot"/>
 		</p>
 
                 <h3>Validator</h3>
                 <p>
                         To facilitate various checks of the source code (correctly filled project properties, metadata etc), a validator was created. It can be found in the jInfer <a href="http://jinfer.svn.sourceforge.net/viewvc/jinfer/jInfer%20Validator/">repository</a>.<br/>
-                        <img src="images/screen-validator.png" alt="jInfer Validator" class="screenshot"/>
+                        <img src="images/screenshots/-validator.png" alt="jInfer Validator" class="screenshot"/>
                 </p>
 
 	<h2>Practices</h2>

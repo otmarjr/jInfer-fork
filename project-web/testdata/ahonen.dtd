@@ -1,8 +1,0 @@
-<!-- Inferred on Sun Mar 06 18:56:15 CET 2011 by Basic IG generator, TwoStep(Iname (with attributes), Automaton Merging State(Greedy(k,h-context), State Removal(Weighted)), Chained(Empty Children, Nested Concatenation, Null)), Basic DTD exporter -->
-<!ELEMENT home EMPTY>
-<!ELEMENT problem EMPTY>
-<!ELEMENT edge EMPTY>
-<!ELEMENT identity EMPTY>
-<!ELEMENT probability EMPTY>
-<!ELEMENT a ((home,problem,edge,edge*)|(home,identity,(edge|(problem,edge)),edge*)|(((home,probability)|(home,identity,probability)),edge,edge*))>
-<!ELEMENT root (a,a*)>

@@ -1,9 +1,0 @@
-<ludia>
-  <meno id="1">Martin</meno>
-  <meno><id>2</id>Lubos</meno>
-  <meno>
-      <ludia>
-          <meno>Stano</meno>
-      </ludia>
-  </meno>
-</ludia>

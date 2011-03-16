@@ -1,6 +1,0 @@
-<!-- Inferred on Sun Mar 06 19:02:49 CET 2011 by Basic IG generator, TwoStep(Iname (with attributes), Automaton Merging State(User Interactive, State Removal(Weighted)), Chained(Empty Children, Nested Concatenation, Null)), Basic DTD exporter -->
-<!ELEMENT a EMPTY>
-<!ELEMENT b EMPTY>
-<!ELEMENT c EMPTY>
-<!ELEMENT x (a,b,(c,a,b)*)>
-<!ELEMENT root (x)>

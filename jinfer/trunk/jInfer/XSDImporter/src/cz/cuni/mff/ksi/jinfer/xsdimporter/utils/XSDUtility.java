@@ -57,9 +57,11 @@ public final class XSDUtility {
    * Extract all rules from a subtree of <code>Element</code>, not including the root itself.
    * @param root Root of the subtree from which we extract the rules.
    * @param elementRules List where all the rules are stored.
+   * @throws InterruptedException When user interrupts operation.
    */
-  public static void getRulesFromElement(final Element root, final List<Element> elementRules) {
+  public static void getRulesFromElement(final Element root, final List<Element> elementRules) throws InterruptedException {
     for (AbstractStructuralNode node : root.getSubnodes().getTokens()) {
+      InterruptChecker.checkInterrupt();
       if (node.isElement()) {
         elementRules.add((Element) node);
         getRulesFromElement((Element) node, elementRules);

@@ -34,7 +34,8 @@ public interface XSDParser extends NamedModule {
    * @param stream Stream containing XSDSchema document.
    * @return Rules contained within. Empty list if there are no rules or an error occurs.
    * @throws XSDException When parsing error occurs.
+   * @throws InterruptedException When user cancels the operation.
    */
-  List<Element> parse(final InputStream stream) throws XSDException;
+  List<Element> parse(final InputStream stream) throws XSDException, InterruptedException;
   
 }

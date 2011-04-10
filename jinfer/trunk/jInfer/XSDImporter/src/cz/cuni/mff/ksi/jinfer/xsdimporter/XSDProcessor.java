@@ -50,7 +50,7 @@ public class XSDProcessor implements Processor {
   }
 
   @Override
-  public List<Element> process(final InputStream stream) {
+  public List<Element> process(final InputStream stream) throws InterruptedException {
     LOG.setLevel(XSDImportSettings.logLevel());
     final XSDParser parser = XSDImportSettings.getParser();
 

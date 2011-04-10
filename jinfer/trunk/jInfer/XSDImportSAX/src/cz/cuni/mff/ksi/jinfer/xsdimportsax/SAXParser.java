@@ -19,8 +19,10 @@ package cz.cuni.mff.ksi.jinfer.xsdimportsax;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
+import cz.cuni.mff.ksi.jinfer.xsdimportsax.utils.SAXInterruptedException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -44,13 +46,16 @@ public class SAXParser implements XSDParser {
   private static final Logger LOG = Logger.getLogger(SAXParser.class);
 
   @Override
-  public List<Element> parse(final InputStream stream) throws XSDException {
+  public List<Element> parse(final InputStream stream) throws XSDException, InterruptedException {
     LOG.setLevel(XSDImportSettings.logLevel());
 
     final SAXHandler handler = new SAXHandler();
 
     try {
       PARSER_FACTORY.newSAXParser().parse(stream, handler);
+      InterruptChecker.checkInterrupt();
+    } catch (SAXInterruptedException sIe) {
+      throw new InterruptedException();
     } catch (SAXException ex) {
       throw new XSDException(NbBundle.getMessage(SAXParser.class, "Error.GenericExceptionMessage"), ex);
     } catch (IOException ex) {

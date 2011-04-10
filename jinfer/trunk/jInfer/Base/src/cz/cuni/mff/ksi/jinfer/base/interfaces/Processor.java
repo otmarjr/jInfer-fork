@@ -62,6 +62,7 @@ public interface Processor {
    * 
    * @param s Input of any arbitrary type.
    * @return Rules contained within. Empty list if there are no rules or an error occurs.
+   * @throws InterruptedException When user interrupts the processing operation at any moment.
    */
-  List<Element> process(final InputStream s);
+  List<Element> process(final InputStream s) throws InterruptedException;
 }

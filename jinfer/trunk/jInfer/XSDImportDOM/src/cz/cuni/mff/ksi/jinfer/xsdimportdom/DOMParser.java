@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDImportSettings;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.interfaces.XSDParser;
+import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDException;
 import cz.cuni.mff.ksi.jinfer.xsdimporter.utils.XSDUtility;
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class DOMParser implements XSDParser {
   private static final Logger LOG = Logger.getLogger(DOMParser.class);
 
   @Override
-  public List<Element> parse(final InputStream stream) throws XSDException {
+  public List<Element> parse(final InputStream stream) throws XSDException, InterruptedException {
     LOG.setLevel(XSDImportSettings.logLevel());
 
     final List<Element> rules = new ArrayList<Element>();
@@ -80,6 +81,8 @@ public class DOMParser implements XSDParser {
         parser.parse(new InputSource(stream));
         final Document doc = parser.getDocument();
 
+        InterruptChecker.checkInterrupt();
+        
         final DOMHandler handler = new DOMHandler();
         final List<Element> ruleTrees = handler.createRuleTrees(doc.getDocumentElement());
 
@@ -88,6 +91,7 @@ public class DOMParser implements XSDParser {
           rules.add(el);
           XSDUtility.getRulesFromElement(el, elementRules);
           rules.addAll(elementRules);
+          InterruptChecker.checkInterrupt();
         }
 
         return rules;

@@ -86,7 +86,7 @@ public class SAXHandler extends DefaultHandler {
    * Returns rules extracted from the schema.
    * @return Rules extracted from the schema.
    */
-  public List<Element> getRules() {
+  public List<Element> getRules() throws InterruptedException {
     final List<Element> rules = new ArrayList<Element>();
     for (Element root : roots) {
       final List<Element> elementRules = new ArrayList<Element>();
@@ -100,6 +100,8 @@ public class SAXHandler extends DefaultHandler {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException, XSDException {
 
+    SAXInterruptChecker.checkInterrupt();
+    
     // first, create xsd-element that can be pushed into documentElementStack
     // this contains all attributes of the schema element
     final SAXDocumentElement docElement = new SAXDocumentElement(qName);
@@ -141,6 +143,8 @@ public class SAXHandler extends DefaultHandler {
   public void endElement(final String uri, final String localName, final String qName) throws SAXException, XSDException {
     final SAXDocumentElement docElement = docElementStack.pop();
 
+    SAXInterruptChecker.checkInterrupt();
+    
     if (!docElement.getName().equals(XSDUtility.trimNS(qName))) {
       throw new XSDException("Invalid schema. Unpaired tags " + docElement.getName() + " and " + qName);
     }
@@ -177,6 +181,8 @@ public class SAXHandler extends DefaultHandler {
 
   @Override
   public void endDocument() throws SAXException {
+    SAXInterruptChecker.checkInterrupt();
+    
     super.endDocument();
 
     if (verbose) {

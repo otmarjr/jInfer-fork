@@ -92,7 +92,7 @@ public class DOMHandler {
    * @param root Root of the DOM tree, (<i>schema</i> tag) node.
    * @return Rule-trees of all top level <i>element</i> tags, or empty list if schema was empty.
    */
-  public List<Element> createRuleTrees(final org.w3c.dom.Element root) throws XSDException {
+  public List<Element> createRuleTrees(final org.w3c.dom.Element root) throws XSDException, InterruptedException {
     // All <i>complexType</i> tags with <i>name</i> tag attribute are added to the <code>namedCTypes</code> map.
     // All <i>element</i> tags with <i>name</i> tag attribute are added to the <code>referenced</code> map.
     // Then, the whole rule-tree is built using the DOM tree and the two maps.
@@ -109,6 +109,7 @@ public class DOMHandler {
           // complexType with name must be added to the map, unnamed complexType is not allowed
           addNamedCType(domElem);
         }
+        InterruptChecker.checkInterrupt();
       }
       // if domElem == null, it's not interesting for us
     }
@@ -194,7 +195,9 @@ public class DOMHandler {
    */
   private Pair<Element, RegexpInterval> buildRuleSubtree(final org.w3c.dom.Element currentNode,
                                    final List<String> context,
-                                   final List<org.w3c.dom.Element> visited) throws XSDException {
+                                   final List<org.w3c.dom.Element> visited) throws XSDException, InterruptedException {
+
+    InterruptChecker.checkInterrupt();
 
     final List<org.w3c.dom.Element> newVisited = new ArrayList<org.w3c.dom.Element>(visited);
     final List<String> newContext = new ArrayList<String>(context);
@@ -231,7 +234,7 @@ public class DOMHandler {
                               final List<org.w3c.dom.Element> visited,
                               final List<String> newContext,
                               final List<org.w3c.dom.Element> newVisited,
-                              final RegexpInterval interval) throws XSDException {
+                              final RegexpInterval interval) throws XSDException, InterruptedException {
     switch (tag) {
       case ELEMENT:
         final Element selfElement = inspectElement(currentNode, ret, context, visited, newContext, newVisited);
@@ -268,7 +271,7 @@ public class DOMHandler {
                                final Element ret,
                                final List<String> newContext,
                                final List<org.w3c.dom.Element> newVisited,
-                               final RegexpInterval interval) throws XSDException {
+                               final RegexpInterval interval) throws XSDException, InterruptedException {
     for (int i = 0; i < children.getLength(); i++) {
       final org.w3c.dom.Element child = DOMHelper.getDOMElement(children.item(i));
       if (child != null) {
@@ -303,7 +306,7 @@ public class DOMHandler {
                                  final List<String> context,
                                  final List<org.w3c.dom.Element> visited,
                                  final List<String> newContext,
-                                 final List<org.w3c.dom.Element> newVisited) {
+                                 final List<org.w3c.dom.Element> newVisited) throws InterruptedException {
     // check if node was visited previously
     final Element sentinelOfVisited = checkElementVisited(currentNode, context, visited);
     if (sentinelOfVisited != null) {
@@ -360,7 +363,7 @@ public class DOMHandler {
                                           final Element ret,
                                           final List<String> newContext,
                                           final List<org.w3c.dom.Element> newVisited,
-                                          final String name) {
+                                          final String name) throws InterruptedException {
     if (!BaseUtils.isEmpty(currentNode.getAttribute(XSDAttribute.TYPE.toString()))) {
       // element has defined type
       final String type = XSDUtility.trimNS(currentNode.getAttribute(XSDAttribute.TYPE.toString()));
@@ -389,7 +392,7 @@ public class DOMHandler {
                                   final XSDTag childTag,
                                   final List<String> newContext,
                                   final List<org.w3c.dom.Element> newVisited,
-                                  final RegexpInterval interval) throws XSDException {
+                                  final RegexpInterval interval) throws XSDException, InterruptedException {
     if (XSDTag.ELEMENT.equals(tag)) {
       // parent is also element
       throw new XSDException(DOMHelper.errorWrongNested(childTag, tag));
@@ -410,7 +413,7 @@ public class DOMHandler {
                                       final XSDTag tag,
                                       final XSDTag childTag,
                                       final List<String> newContext,
-                                      final List<org.w3c.dom.Element> newVisited) throws XSDException {
+                                      final List<org.w3c.dom.Element> newVisited) throws XSDException, InterruptedException {
     if (XSDTag.ELEMENT.equals(tag)) {
       DOMHelper.extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_CTYPE);
     } else if (XSDTag.REDEFINE.equals(tag)) {
@@ -427,7 +430,7 @@ public class DOMHandler {
                               final XSDTag tag,
                               final XSDTag childTag,
                               final List<String> newContext,
-                              final List<org.w3c.dom.Element> newVisited) throws XSDException {
+                              final List<org.w3c.dom.Element> newVisited) throws XSDException, InterruptedException {
     if (XSDTag.COMPLEXTYPE.equals(tag)) {
       DOMHelper.extractSubnodesFromContainer(buildRuleSubtree(child, newContext, newVisited).getFirst(), ret, CONTAINER_ORDER);
     } else if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
@@ -442,7 +445,7 @@ public class DOMHandler {
                                          final XSDTag tag,
                                          final XSDTag childTag,
                                          final List<String> newContext,
-                                         final List<org.w3c.dom.Element> newVisited) throws XSDException {
+                                         final List<org.w3c.dom.Element> newVisited) throws XSDException, InterruptedException {
     if (XSDTag.CHOICE.equals(tag) || XSDTag.SEQUENCE.equals(tag)) {
       ret.getSubnodes().addChild(buildRuleSubtree(child, newContext, newVisited).getFirst().getSubnodes());
     } else if (XSDTag.COMPLEXTYPE.equals(tag)) {

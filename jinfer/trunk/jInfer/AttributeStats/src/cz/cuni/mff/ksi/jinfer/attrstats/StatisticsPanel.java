@@ -162,6 +162,7 @@ public class StatisticsPanel extends JPanel {
 
     tableView.setLayout(new java.awt.GridBagLayout());
 
+    table.setAutoCreateRowSorter(true);
     table.setModel(new javax.swing.table.DefaultTableModel(
       new Object [][] {
         {null, null, null, null},
@@ -173,6 +174,7 @@ public class StatisticsPanel extends JPanel {
         "Title 1", "Title 2", "Title 3", "Title 4"
       }
     ));
+    table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     tablePane.setViewportView(table);
 
     gridBagConstraints = new java.awt.GridBagConstraints();

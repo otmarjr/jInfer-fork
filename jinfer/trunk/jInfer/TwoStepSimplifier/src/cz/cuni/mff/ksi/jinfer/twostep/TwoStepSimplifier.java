@@ -16,12 +16,15 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.AttributeStatsHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
@@ -177,6 +180,8 @@ public class TwoStepSimplifier {
     }
 
     RuleDisplayerHelper.showRulesAsync("Simplified", new CloneHelper().cloneGrammar(finalGrammar), true);
+    AttributeStatsHelper.showStatisticsAsync("Result", new CloneHelper().cloneGrammar(finalGrammar), true);
+    
     return finalGrammar;
   }
 }

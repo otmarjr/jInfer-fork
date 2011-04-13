@@ -14,35 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package cz.cuni.mff.ksi.jinfer.attrstats;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * TODO vektor Comment!
  * 
  * @author vektor
  */
-package cz.cuni.mff.ksi.jinfer.attrstats;
-
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import java.util.List;
-import javax.swing.JPanel;
-import javax.swing.table.DefaultTableModel;
-
-/**
- *
- * @author vektor
- */
 public class StatisticsPanel extends JPanel {
   
-  private static final long serialVersionUID = 5415245241L;  
+  private static final long serialVersionUID = 5415245241L;
+  
+  private final List<Triplet> model = new ArrayList<Triplet>();
 
   public StatisticsPanel() {
     initComponents();
     
-    table.setModel(new MyTableModel());
+    table.setModel(new MyTableModel());    
   }
   
   public void setModel(final List<Element> grammar) {
-    // TODO vektor
+    model.clear();
+    // TODO vektor Extract the extraction into a method - and TEST IT!
+    for (final Element e : grammar) {
+      for (final Attribute a : e.getAttributes()) {
+        for (final String v : a.getContent()) {
+          model.add(new Triplet(e.getName(), a.getName(), v));
+        }
+      }
+    }
   }
   
   private class MyTableModel extends DefaultTableModel {
@@ -66,6 +73,31 @@ public class StatisticsPanel extends JPanel {
         default:
           throw new IllegalArgumentException("Unkown column: " + column);
       }
+    }
+
+    @Override
+    public int getRowCount() {
+      return model.size();
+    }
+
+    @Override
+    public Object getValueAt(int row, int column) {
+      final Triplet value = model.get(row);
+      switch (column) {
+        case 0:
+          return value.getElement();
+        case 1:
+          return value.getAttribute();
+        case 2:
+          return value.getValue();
+        default:
+          throw new IllegalArgumentException("Unkown column: " + column);
+      }
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+      return false;
     }
 
   }

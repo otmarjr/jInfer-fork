@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.utils.AttributeStatsHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
@@ -97,6 +98,9 @@ public class IGGeneratorImpl implements IGGenerator {
 
       // show the rules
       RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(documentRules), true);
+      
+      // show the attribute statistics
+      AttributeStatsHelper.showStatisticsAsync("Input", new CloneHelper().cloneGrammar(documentRules), true);
 
       callback.finished(documentRules);
       return;
@@ -119,6 +123,9 @@ public class IGGeneratorImpl implements IGGenerator {
     
     // show the rules after expansion
     RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(ret), true);
+    
+    // show the attribute statistics
+    AttributeStatsHelper.showStatisticsAsync("Input", new CloneHelper().cloneGrammar(ret), true);
 
     // return expanded
     callback.finished(ret);

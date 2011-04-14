@@ -18,10 +18,13 @@ package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /*
  * TODO vektor Comment!
@@ -33,25 +36,34 @@ public class StatisticsPanel extends JPanel {
   private static final long serialVersionUID = 5415245241L;
   
   private final List<Triplet> model = new ArrayList<Triplet>();
+  
+  private final DefaultMutableTreeNode root = new DefaultMutableTreeNode("...");
 
   public StatisticsPanel() {
     initComponents();
     
-    table.setModel(new MyTableModel());    
+    table.setModel(new MyTableModel());
   }
   
   public void setModel(final List<Element> grammar) {
     model.clear();
     // TODO vektor Extract the extraction into a method - and TEST IT!
     for (final Element e : grammar) {
-      for (final Attribute a : e.getAttributes()) {
-        for (final String v : a.getContent()) {
-          model.add(new Triplet(e.getName(), a.getName(), v));
+      if (!BaseUtils.isEmpty(e.getAttributes())) {
+        final DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(e.getName());
+        for (final Attribute a : e.getAttributes()) {
+          final DefaultMutableTreeNode attributeNode = new DefaultMutableTreeNode(a.getName());
+          for (final String v : a.getContent()) {
+            model.add(new Triplet(e.getName(), a.getName(), v));
+          }
+          elementNode.add(attributeNode);
         }
+        root.add(elementNode);
       }
     }
+    nodeTree.setModel(new DefaultTreeModel(root));
   }
-  
+    
   private class MyTableModel extends DefaultTableModel {
     
     private static final long serialVersionUID = 78974631624L;

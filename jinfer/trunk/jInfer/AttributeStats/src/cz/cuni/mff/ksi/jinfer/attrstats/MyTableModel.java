@@ -65,7 +65,7 @@ class MyTableModel extends DefaultTableModel {
   }
 
   @Override
-  public Object getValueAt(int row, int column) {
+  public Object getValueAt(final int row, final int column) {
     final Triplet value = model.get(row);
     switch (column) {
       case 0:
@@ -80,7 +80,7 @@ class MyTableModel extends DefaultTableModel {
   }
 
   @Override
-  public boolean isCellEditable(int row, int column) {
+  public boolean isCellEditable(final int row, final int column) {
     return false;
   }
   

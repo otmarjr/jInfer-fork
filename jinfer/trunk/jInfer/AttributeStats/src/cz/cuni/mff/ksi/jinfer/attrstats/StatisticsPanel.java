@@ -17,12 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 
 /*

@@ -30,7 +30,7 @@ import javax.swing.tree.TreeNode;
  * 
  * @author vektor
  */
-public class MappingExtractor {
+public final class MappingExtractor {
   
   private MappingExtractor() {
     

@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Properties;
 import javax.swing.JScrollPane;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
@@ -106,6 +107,7 @@ public final class AttrStatsTopComponent extends TopComponent {
     return getDefault();
   }
 
+  @SuppressWarnings("PMD")
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
@@ -142,15 +144,13 @@ public final class AttrStatsTopComponent extends TopComponent {
     // TODO add custom code on component closing
   }
 
-  void writeProperties(java.util.Properties p) {
+  private void writeProperties(final Properties p) {
     // better to version settings since initial version as advocated at
     // http://wiki.apidesign.org/wiki/PropertyFiles
-    p.setProperty("version", "1.0");
     // TODO store your settings
   }
 
-  void readProperties(java.util.Properties p) {
-    String version = p.getProperty("version");
+  private void readProperties(final Properties p) {
     // TODO read your settings according to their version
   }
 }

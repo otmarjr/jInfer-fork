@@ -50,7 +50,7 @@ public class Triplet implements Comparable<Triplet> {
   }
 
   @Override
-  public int compareTo(Triplet o) {
+  public int compareTo(final Triplet o) {
     if (o == null) {
       return 1;
     }

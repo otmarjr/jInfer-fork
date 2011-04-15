@@ -50,7 +50,7 @@ public class StatisticsPanel extends JPanel {
     nodeTreePane = new javax.swing.JScrollPane();
     nodeTree = new javax.swing.JTree();
     jFreeChartPlaceholder = new javax.swing.JPanel();
-    labelPlaceholder = new javax.swing.JLabel();
+    jLabel1 = new javax.swing.JLabel();
     tableView = new javax.swing.JPanel();
     tablePane = new javax.swing.JScrollPane();
     table = new javax.swing.JTable();
@@ -71,24 +71,12 @@ public class StatisticsPanel extends JPanel {
 
     splitPane.setLeftComponent(nodeTreePane);
 
-    labelPlaceholder.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelPlaceholder.text")); // NOI18N
+    jFreeChartPlaceholder.setLayout(new java.awt.GridBagLayout());
 
-    javax.swing.GroupLayout jFreeChartPlaceholderLayout = new javax.swing.GroupLayout(jFreeChartPlaceholder);
-    jFreeChartPlaceholder.setLayout(jFreeChartPlaceholderLayout);
-    jFreeChartPlaceholderLayout.setHorizontalGroup(
-      jFreeChartPlaceholderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jFreeChartPlaceholderLayout.createSequentialGroup()
-        .addGap(127, 127, 127)
-        .addComponent(labelPlaceholder)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-    );
-    jFreeChartPlaceholderLayout.setVerticalGroup(
-      jFreeChartPlaceholderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jFreeChartPlaceholderLayout.createSequentialGroup()
-        .addContainerGap(127, Short.MAX_VALUE)
-        .addComponent(labelPlaceholder)
-        .addGap(125, 125, 125))
-    );
+    jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+19f));
+    jLabel1.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow"));
+    jLabel1.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.jLabel1.text")); // NOI18N
+    jFreeChartPlaceholder.add(jLabel1, new java.awt.GridBagConstraints());
 
     splitPane.setRightComponent(jFreeChartPlaceholder);
 
@@ -139,18 +127,20 @@ public class StatisticsPanel extends JPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void nodeTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_nodeTreeValueChanged
-    final Object o = evt.getNewLeadSelectionPath().getLastPathComponent();
-    if (o instanceof AttributeTreeNode) {
-      final AttributeTreeNode atn = (AttributeTreeNode) o;
-      splitPane.setRightComponent(JFCWrapper.createGraphPanel(
-              atn.getElementName() + "@" + atn.getAttributeName(), atn.getContent()));
+    if (evt.getNewLeadSelectionPath() == null
+            || !(evt.getNewLeadSelectionPath().getLastPathComponent() instanceof AttributeTreeNode)) {
+      splitPane.setRightComponent(jFreeChartPlaceholder);
+      return;
     }
+    final AttributeTreeNode atn = (AttributeTreeNode) evt.getNewLeadSelectionPath().getLastPathComponent();
+    splitPane.setRightComponent(JFCWrapper.createGraphPanel(
+            atn.getElementName() + "@" + atn.getAttributeName(), atn.getContent()));
   }//GEN-LAST:event_nodeTreeValueChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel graphicalView;
   private javax.swing.JPanel jFreeChartPlaceholder;
-  private javax.swing.JLabel labelPlaceholder;
+  private javax.swing.JLabel jLabel1;
   private javax.swing.JTree nodeTree;
   private javax.swing.JScrollPane nodeTreePane;
   private javax.swing.JSplitPane splitPane;

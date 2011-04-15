@@ -20,18 +20,18 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
- * 
+ * Interface of a module providing attribute statistics computation and display.
+ *
  * @author vektor
  */
 public interface AttributeStatistics extends NamedModule {
-  
+
   /**
-   * TODO vektor Comment!
-   * 
-   * @param panelName
-   * @param grammar
+   * Computes and displays attribute statistics for the provided grammar.
+   *
+   * @param panelName Title of the panel where this statistics will be displayed.
+   * @param grammar Grammar to calculate statistics from.
    */
   void showStatistics(final String panelName, final List<Element> grammar);
-  
+
 }

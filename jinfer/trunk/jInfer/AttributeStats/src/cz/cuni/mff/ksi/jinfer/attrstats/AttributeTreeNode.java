@@ -16,12 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
-import java.util.Collections;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
- * TODO vektor Comment!
+ * Class representing an {@link Attribute} in a {@link JTree}.
  *
  * @author vektor
  */
@@ -29,11 +31,33 @@ public class AttributeTreeNode extends DefaultMutableTreeNode {
 
   private static final long serialVersionUID = 454563134L;
 
+  private final String elementName;
+
+  private final String attributeName;
+
   private final List<String> content;
 
-  public AttributeTreeNode(final String name, final List<String> content) {
-    super(name);
+  /**
+   * Full constructor.
+   *
+   * @param elementName Name of the {@link Element} where the represented {@link Attribute} resides.
+   * @param attributeName Name of the represented {@link Attribute}.
+   * @param content Content of the represented {@link Attribute} (see {@link Attribute#content}).
+   */
+  public AttributeTreeNode(final String elementName,
+          final String attributeName, final List<String> content) {
+    super(attributeName);
+    this.elementName = elementName;
+    this.attributeName = attributeName;
     this.content = content;
+  }
+
+  public String getElementName() {
+    return elementName;
+  }
+
+  public String getAttributeName() {
+    return attributeName;
   }
 
   public List<String> getContent() {

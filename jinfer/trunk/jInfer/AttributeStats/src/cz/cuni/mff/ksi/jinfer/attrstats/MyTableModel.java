@@ -18,15 +18,17 @@ package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
- * TODO vektor Comment!
- * 
+ * An implementation of {@link TableModel} for use in {@link StatisticsPanel}.
+ *
  * @author vektor
  */
 class MyTableModel extends DefaultTableModel {
-  
+
   private static final long serialVersionUID = 78974631624L;
+  
   private final List<Triplet> model;
 
   public MyTableModel(final List<Triplet> model) {
@@ -83,5 +85,5 @@ class MyTableModel extends DefaultTableModel {
   public boolean isCellEditable(final int row, final int column) {
     return false;
   }
-  
+
 }

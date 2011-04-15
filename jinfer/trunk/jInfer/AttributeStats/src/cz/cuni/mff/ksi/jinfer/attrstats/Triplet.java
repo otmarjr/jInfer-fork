@@ -22,13 +22,16 @@ package cz.cuni.mff.ksi.jinfer.attrstats;
  * 
  * @author vektor
  */
-public class Triplet {
+public class Triplet implements Comparable<Triplet> {
   
   private final String element;
   private final String attribute;
   private final String value;
   
   public Triplet(final String element, final String attribute, final String value) {
+    if (element == null || attribute == null || value == null) {
+      throw new IllegalArgumentException("All three arguments must be not null.");
+    }
     this.element = element;
     this.attribute = attribute;
     this.value = value;
@@ -44,6 +47,18 @@ public class Triplet {
 
   public String getValue() {
     return value;
+  }
+
+  @Override
+  public int compareTo(Triplet o) {
+    if (o == null) {
+      return 1;
+    }
+    final int cmpElement = element.compareTo(o.getElement());
+    if (cmpElement != 0) {
+      return cmpElement;
+    }
+    return attribute.compareTo(o.getAttribute());
   }
   
 }

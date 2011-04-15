@@ -16,9 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractNamedNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -116,4 +119,27 @@ public final class BaseUtils {
     }
     return ret;
   }
+  
+  /**
+   * Comparator for {@link AbstractNamedNode}s, based on their 
+   * {@link AbstractNamedNode#name}.
+   * Potential <code>null</code> values will be sorted last.
+   */
+  public static final Comparator<AbstractNamedNode> NAMED_NODE_COMPARATOR = 
+          new Comparator<AbstractNamedNode>() {
+
+    @Override
+    public int compare(final AbstractNamedNode o1, final AbstractNamedNode o2) {
+      if (o1 == null && o2 == null) {
+        return 0;
+      }
+      if (o1 == null) {
+        return 1;
+      }
+      if (o2 == null) {
+        return -1;
+      }
+      return o1.getName().compareTo(o2.getName());
+    }
+  };
 }

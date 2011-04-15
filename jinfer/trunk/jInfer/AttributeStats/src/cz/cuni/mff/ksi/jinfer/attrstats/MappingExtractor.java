@@ -22,25 +22,29 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
- * TODO vektor Comment!
- * 
+ * Library class for attribute mapping extraction.
+ *
  * @author vektor
  */
 public final class MappingExtractor {
-  
+
   private MappingExtractor() {
-    
+
   }
-  
+
   /**
-   * TODO vektor Comment!
-   * 
-   * @param grammar
-   * @return 
+   * Extracts the attribute mapping from the specified grammar as a flat list
+   * of {@link Triplet}s <code>(element name, attribute name, attribute content)</code>.
+   *
+   * @param grammar Grammar from which the attribute mapping should be retrieved.
+   * @return Flat representation of the attribute mapping contained in the
+   * specified grammar. Resulting list of {@link Triplet}s is sorted
+   * (see {@link Triplet#compareTo(Triplet)}).
    */
   public static List<Triplet> extractFlat(final List<Element> grammar) {
     final List<Triplet> ret = new ArrayList<Triplet>();
@@ -53,21 +57,25 @@ public final class MappingExtractor {
         }
       }
     }
-    
+
     Collections.sort(ret);
-    
+
     return ret;
   }
-  
+
   /**
-   * TODO vektor Comment!
-   * 
-   * @param grammar
-   * @return 
+   * Extracts the attribute mapping from the specified grammar as a tree ready
+   * to be used in a {@link JTree}.
+   *
+   * @param grammar Grammar from which the attribute mapping should be retrieved.
+   * @return Tree representation of the attribute mapping contained in the
+   * specified grammar. Under the root node there are nodes representing each
+   * {@link Element} in the grammar. The element nodes then contain nodes for
+   * each of the {@link Attribute}s they contain.
    */
   public static TreeNode createTree(final List<Element> grammar) {
     Collections.sort(grammar, BaseUtils.NAMED_NODE_COMPARATOR);
-    
+
     final DefaultMutableTreeNode ret = new DefaultMutableTreeNode("");
     for (final Element e : grammar) {
       if (!BaseUtils.isEmpty(e.getAttributes())) {
@@ -75,14 +83,15 @@ public final class MappingExtractor {
         final List<Attribute> attributes = new ArrayList<Attribute>(e.getAttributes());
         Collections.sort(attributes, BaseUtils.NAMED_NODE_COMPARATOR);
         for (final Attribute a : attributes) {
-          final AttributeTreeNode attributeNode = new AttributeTreeNode(a.getName(), a.getContent());
+          final AttributeTreeNode attributeNode =
+                  new AttributeTreeNode(e.getName(), a.getName(), a.getContent());
           elementNode.add(attributeNode);
         }
         ret.add(elementNode);
       }
     }
-    
+
     return ret;
   }
-  
+
 }

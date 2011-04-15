@@ -29,8 +29,9 @@ import org.openide.awt.ActionReference;
 import org.openide.windows.WindowManager;
 
 /**
- * TODO vektor Comment!
- * 
+ * Top component for attribute statistics presentation. Works similar to rule
+ * displayers, showing a number of panels, each representing one statistics.
+ *
  * @author vektor
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.attrstats//AttrStats//EN",
@@ -50,7 +51,7 @@ public final class AttrStatsTopComponent extends TopComponent {
   private int panelSequence = 0;
   private static AttrStatsTopComponent instance;
   public static final String PREFERRED_ID = "AttrStatsTopComponent";
-  
+
   public AttrStatsTopComponent() {
     initComponents();
     setName(NbBundle.getMessage(AttrStatsTopComponent.class, "CTL_AttrStatsTopComponent"));
@@ -70,9 +71,9 @@ public final class AttrStatsTopComponent extends TopComponent {
           panels.remove(tabIndex);
         }
       }
-    });    
+    });
   }
-  
+
   public StatisticsPanel createNewPanel(final String name) {
     final StatisticsPanel panel = new StatisticsPanel();
     final JScrollPane jsp = new JScrollPane(panel);
@@ -84,8 +85,8 @@ public final class AttrStatsTopComponent extends TopComponent {
     }
 
     return panel;
-  }  
-    
+  }
+
   // TODO vektor This is obviously wrong in NBP 7.0, rewrite
   public static synchronized AttrStatsTopComponent getDefault() {
     if (instance == null) {

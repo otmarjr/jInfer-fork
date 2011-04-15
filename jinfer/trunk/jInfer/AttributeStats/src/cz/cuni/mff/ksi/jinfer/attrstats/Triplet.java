@@ -16,18 +16,29 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+
 /**
- * TODO vektor Provisional name
- * TODO vektor Comment!
- * 
+ * A class representing the triplet <code>(element name, attribute name,
+ * attribute value)</code> for use in attribute mapping.
+ *
  * @author vektor
  */
+// TODO vektor Provisional name
 public class Triplet implements Comparable<Triplet> {
-  
+
   private final String element;
   private final String attribute;
   private final String value;
-  
+
+  /**
+   * Full constructor.
+   *
+   * @param element {@link Element} name.
+   * @param attribute {@link Attribute} name.
+   * @param value {@link Attribute} value.
+   */
   public Triplet(final String element, final String attribute, final String value) {
     if (element == null || attribute == null || value == null) {
       throw new IllegalArgumentException("All three arguments must be not null.");
@@ -49,6 +60,15 @@ public class Triplet implements Comparable<Triplet> {
     return value;
   }
 
+  /**
+   * Compares to another {@link Triplet}. First of all, <code>null</code> is
+   * supposed to be the last. Second, the comparison is done first on element name,
+   * then on attribute name (it is assumed that the pair <code>(element name,
+   * attribute name)</code> is a unique key).
+   *
+   * @param o The other {@link Triplet} to be compared. May be null.
+   * @return
+   */
   @Override
   public int compareTo(final Triplet o) {
     if (o == null) {
@@ -60,5 +80,5 @@ public class Triplet implements Comparable<Triplet> {
     }
     return attribute.compareTo(o.getAttribute());
   }
-  
+
 }

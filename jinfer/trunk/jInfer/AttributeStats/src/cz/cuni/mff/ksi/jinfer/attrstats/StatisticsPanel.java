@@ -17,26 +17,80 @@
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultTreeModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 
 /*
  * TODO vektor Comment!
- * 
+ *
  * @author vektor
  */
 public class StatisticsPanel extends JPanel {
-  
-  private static final long serialVersionUID = 5415245241L;  
+
+  private static final long serialVersionUID = 5415245241L;
 
   public StatisticsPanel() {
     initComponents();
   }
-  
+
   public void setModel(final List<Element> grammar) {
     table.setModel(new MyTableModel(MappingExtractor.extractFlat(grammar)));
     nodeTree.setModel(new DefaultTreeModel(MappingExtractor.createTree(grammar)));
+  }
+
+  private PieDataset createDataset(final List<String> content) {
+    final DefaultPieDataset dataset = new DefaultPieDataset();
+
+    Collections.sort(content);
+
+    String last = null;
+    int count = 1;
+
+    for (final String s : content) {
+      if (!s.equals(last)) {
+        // output the last group
+        if (last != null) {
+          dataset.setValue(last, count);
+        }
+        // start a new group
+        last = s;
+        count = 1;
+      }
+      count++;
+    }
+
+    if (last != null) {
+      dataset.setValue(last, count);
+    }
+
+    return dataset;
+  }
+
+  private JFreeChart createChart(final String title, final PieDataset dataset) {
+    final JFreeChart chart = ChartFactory.createPieChart(title, dataset, true, true, false);
+
+    final PiePlot plot = (PiePlot) chart.getPlot();
+    plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+    plot.setNoDataMessage("No data available");
+    plot.setCircular(true);
+    plot.setLabelGap(0.02);
+    return chart;
+  }
+
+  private JPanel createDemoPanel(final String title, final List<String> content) {
+    final ChartPanel ret = new ChartPanel(createChart(title, createDataset(content)));
+    ret.setPreferredSize(new Dimension(320, 240));
+    return ret;
   }
 
   @SuppressWarnings("unchecked")
@@ -141,7 +195,9 @@ public class StatisticsPanel extends JPanel {
   private void nodeTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_nodeTreeValueChanged
     final Object o = evt.getNewLeadSelectionPath().getLastPathComponent();
     if (o instanceof AttributeTreeNode) {
-      labelPlaceholder.setText(((AttributeTreeNode) o).getContent().toString());
+      // labelPlaceholder.setText(((AttributeTreeNode) o).getContent().toString());
+      final AttributeTreeNode atn = (AttributeTreeNode) o;
+      splitPane.setRightComponent(createDemoPanel("TODO", atn.getContent()));
     }
   }//GEN-LAST:event_nodeTreeValueChanged
 

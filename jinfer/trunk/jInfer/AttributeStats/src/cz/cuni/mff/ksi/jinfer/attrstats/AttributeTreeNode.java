@@ -22,22 +22,22 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * TODO vektor Comment!
- * 
+ *
  * @author vektor
  */
 public class AttributeTreeNode extends DefaultMutableTreeNode {
-  
+
   private static final long serialVersionUID = 454563134L;
-  
+
   private final List<String> content;
-  
+
   public AttributeTreeNode(final String name, final List<String> content) {
     super(name);
     this.content = content;
   }
-  
+
   public List<String> getContent() {
-    return Collections.unmodifiableList(content);
+    return content;
   }
-  
+
 }

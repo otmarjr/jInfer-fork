@@ -18,7 +18,9 @@ package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.tree.DefaultTreeModel;
 
 /*
@@ -45,7 +47,7 @@ public class StatisticsPanel extends JPanel {
     java.awt.GridBagConstraints gridBagConstraints;
 
     tabbedPane = new javax.swing.JTabbedPane();
-    graphicalView = new javax.swing.JPanel();
+    chartView = new javax.swing.JPanel();
     splitPane = new javax.swing.JSplitPane();
     nodeTreePane = new javax.swing.JScrollPane();
     nodeTree = new javax.swing.JTree();
@@ -54,10 +56,11 @@ public class StatisticsPanel extends JPanel {
     tableView = new javax.swing.JPanel();
     tablePane = new javax.swing.JScrollPane();
     table = new javax.swing.JTable();
+    misc = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
 
-    graphicalView.setLayout(new java.awt.GridBagLayout());
+    chartView.setLayout(new java.awt.GridBagLayout());
 
     splitPane.setDividerLocation(200);
 
@@ -87,9 +90,9 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    graphicalView.add(splitPane, gridBagConstraints);
+    chartView.add(splitPane, gridBagConstraints);
 
-    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.graphicalView.TabConstraints.tabTitle"), graphicalView); // NOI18N
+    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.chartView.TabConstraints.tabTitle"), chartView); // NOI18N
 
     tableView.setLayout(new java.awt.GridBagLayout());
 
@@ -105,7 +108,6 @@ public class StatisticsPanel extends JPanel {
         "Title 1", "Title 2", "Title 3", "Title 4"
       }
     ));
-    table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     tablePane.setViewportView(table);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -118,6 +120,7 @@ public class StatisticsPanel extends JPanel {
     tableView.add(tablePane, gridBagConstraints);
 
     tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.tableView.TabConstraints.tabTitle"), tableView); // NOI18N
+    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.misc.TabConstraints.tabTitle"), misc); // NOI18N
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -133,14 +136,34 @@ public class StatisticsPanel extends JPanel {
       return;
     }
     final AttributeTreeNode atn = (AttributeTreeNode) evt.getNewLeadSelectionPath().getLastPathComponent();
+
+    // TODO vektor Modify the method to get chart to accept more nodes, with aggregated content
+    // this way making it possible to create chart representing multiple attributes
+    // tree.getSelectionPaths()
+
+
+    // also, selection in the table should translate to selection in the tree
+
     splitPane.setRightComponent(JFCWrapper.createGraphPanel(
             atn.getElementName() + "@" + atn.getAttributeName(), atn.getContent()));
+
+    final ListSelectionModel selectionModel = new DefaultListSelectionModel();
+    selectionModel.clearSelection();
+    for (int i = 0; i < table.getModel().getRowCount(); i++)  {
+      if (atn.getElementName().equals(table.getModel().getValueAt(table.convertRowIndexToModel(i), 0))
+              && atn.getAttributeName().equals(table.getModel().getValueAt(table.convertRowIndexToModel(i), 1))) {
+        selectionModel.addSelectionInterval(i, i);
+      }
+    }
+
+    table.setSelectionModel(selectionModel);
   }//GEN-LAST:event_nodeTreeValueChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JPanel graphicalView;
+  private javax.swing.JPanel chartView;
   private javax.swing.JPanel jFreeChartPlaceholder;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JPanel misc;
   private javax.swing.JTree nodeTree;
   private javax.swing.JScrollPane nodeTreePane;
   private javax.swing.JSplitPane splitPane;

@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.JPanel;
@@ -40,6 +40,28 @@ public final class JFCWrapper {
   }
 
   /**
+   * Creates a {@link JPanel} containing a pie chart describing the content of
+   * the provided {@link Attribute}s.
+   *
+   * @param nodes List of attribute nodes to display.
+   * @return Panel containing the requested graph.
+   */
+  public static JPanel createGraphPanel(final List<AttributeTreeNode> nodes) {
+    final List<String> content = new ArrayList<String>();
+    for (final AttributeTreeNode atn : nodes) {
+      content.addAll(atn.getContent());
+    }
+    return createGraphPanel(getChartTitle(nodes), content);
+  }
+
+  private static String getChartTitle(final List<AttributeTreeNode> nodes) {
+    if (nodes.size() == 1) {
+      return nodes.get(0).getElementName() + "@" + nodes.get(0).getAttributeName();
+    }
+    return "Multiple attributes";
+  }
+
+  /**
    * Creates a {@link JPanel} containing a pie chart with provided title,
    * visualizing the domain of the provided {@link Attribute#content}.
    *
@@ -49,7 +71,7 @@ public final class JFCWrapper {
    * times it is found there.
    * @return JPanel containing a constructed JFreeChart pie chart.
    */
-  public static JPanel createGraphPanel(final String title, final List<String> content) {
+  private static JPanel createGraphPanel(final String title, final List<String> content) {
     final ChartPanel ret = new ChartPanel(createChart(title, createDataset(content)));
     ret.setPreferredSize(new Dimension(320, 240));
     return ret;

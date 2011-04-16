@@ -23,8 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -39,7 +37,7 @@ public class DOMParserTest {
   private static final String SCHEMA_E = "</xs:schema>";
   private static final char NL = '\n';
 
-  private List<Element> make(final InputStream stream) {
+  private List<Element> make(final InputStream stream) throws InterruptedException {
     final DOMParser parser = new DOMParser();
     return parser.parse(stream);
   }
@@ -50,7 +48,7 @@ public class DOMParserTest {
   }
 
   @Test
-  public void testDOMNull() {
+  public void testDOMNull() throws InterruptedException {
     System.out.println("DOM null");
     final List<Element> expResult = new ArrayList<Element>(0);
     final List<Element> result = make(null);
@@ -63,7 +61,7 @@ public class DOMParserTest {
     + SCHEMA_E;
 
   @Test
-  public void testDOMEmpty() {
+  public void testDOMEmpty() throws InterruptedException {
     System.out.println("DOM empty schema");
     final List<Element> expResult = new ArrayList<Element>(0);
     final List<Element> result = make(new ByteArrayInputStream(EMPTY1.getBytes()));
@@ -77,7 +75,7 @@ public class DOMParserTest {
     + SCHEMA_E;
 
   @Test
-  public void testDOMEmpty2() {
+  public void testDOMEmpty2() throws InterruptedException {
     System.out.println("DOM empty comment");
     final InputStream s = new ByteArrayInputStream(EMPTY2.getBytes());
     final List<Element> expResult = new ArrayList<Element>(0);
@@ -92,7 +90,7 @@ public class DOMParserTest {
     + SCHEMA_E;
 
   @Test(expected = XSDException.class)
-  public void testDOMRefTop() {
+  public void testDOMRefTop() throws InterruptedException {
     System.out.println("DOM top element with ref");
     final InputStream s = new ByteArrayInputStream(TOP_REF.getBytes());
     final List<Element> expResult = new ArrayList<Element>(0);
@@ -111,7 +109,7 @@ public class DOMParserTest {
   };
 
   @Test
-  public void testDOM1() {
+  public void testDOM1() throws InterruptedException {
     System.out.println("DOM normal element");
     final InputStream s = new ByteArrayInputStream(TEST1.getBytes());
     final List<Element> result = make(s);

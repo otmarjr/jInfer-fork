@@ -17,13 +17,19 @@
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
-/*
+/**
  * Panel representing and displaying one complete attribute statistics.
  *
  * @author vektor
@@ -39,6 +45,26 @@ public class StatisticsPanel extends JPanel {
   public void setModel(final List<Element> grammar) {
     table.setModel(new MyTableModel(MappingExtractor.extractFlat(grammar)));
     nodeTree.setModel(new DefaultTreeModel(MappingExtractor.createTree(grammar)));
+  }
+
+  private void selectInTable(final List<AttributeTreeNode> nodes) {
+    final ListSelectionModel selectionModel = new DefaultListSelectionModel();
+    selectionModel.clearSelection();
+    final TableModel m = table.getModel();
+
+    for (int i = 0; i < m.getRowCount(); i++) {
+      final int row = table.convertRowIndexToModel(i);
+      for (final AttributeTreeNode atn : nodes) {
+        if (atn.getElementName().equals(m.getValueAt(row, 0))
+                && atn.getAttributeName().equals(m.getValueAt(row, 1))
+                && atn.getContent().contains(m.getValueAt(row, 2))) {
+          selectionModel.addSelectionInterval(i, i);
+          break;
+        }
+      }
+    }
+
+    table.setSelectionModel(selectionModel);
   }
 
   @SuppressWarnings("unchecked")
@@ -126,37 +152,29 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(tabbedPane, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void nodeTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_nodeTreeValueChanged
-    if (evt.getNewLeadSelectionPath() == null
-            || !(evt.getNewLeadSelectionPath().getLastPathComponent() instanceof AttributeTreeNode)) {
+    if (nodeTree.getSelectionPaths() == null || nodeTree.getSelectionPaths().length < 1) {
       splitPane.setRightComponent(jFreeChartPlaceholder);
       return;
     }
-    final AttributeTreeNode atn = (AttributeTreeNode) evt.getNewLeadSelectionPath().getLastPathComponent();
-
-    // TODO vektor Modify the method to get chart to accept more nodes, with aggregated content
-    // this way making it possible to create chart representing multiple attributes
-    // tree.getSelectionPaths()
-
-
-    // also, selection in the table should translate to selection in the tree
-
-    splitPane.setRightComponent(JFCWrapper.createGraphPanel(
-            atn.getElementName() + "@" + atn.getAttributeName(), atn.getContent()));
-
-    final ListSelectionModel selectionModel = new DefaultListSelectionModel();
-    selectionModel.clearSelection();
-    for (int i = 0; i < table.getModel().getRowCount(); i++)  {
-      if (atn.getElementName().equals(table.getModel().getValueAt(table.convertRowIndexToModel(i), 0))
-              && atn.getAttributeName().equals(table.getModel().getValueAt(table.convertRowIndexToModel(i), 1))) {
-        selectionModel.addSelectionInterval(i, i);
+    final List<AttributeTreeNode> atns = new ArrayList<AttributeTreeNode>();
+    for (final TreePath tp : nodeTree.getSelectionPaths()) {
+      if (tp.getLastPathComponent() instanceof AttributeTreeNode) {
+        atns.add((AttributeTreeNode) tp.getLastPathComponent());
       }
     }
+    if (BaseUtils.isEmpty(atns)) {
+      splitPane.setRightComponent(jFreeChartPlaceholder);
+      return;
+    }
 
-    table.setSelectionModel(selectionModel);
+    splitPane.setRightComponent(JFCWrapper.createGraphPanel(atns));
+
+    selectInTable(atns);
   }//GEN-LAST:event_nodeTreeValueChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

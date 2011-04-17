@@ -23,8 +23,6 @@ import java.util.List;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;

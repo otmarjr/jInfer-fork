@@ -41,8 +41,8 @@ public class StatisticsPanel extends JPanel {
   }
 
   public void setModel(final List<Element> grammar) {
-    table.setModel(new MyTableModel(MappingExtractor.extractFlat(grammar)));
-    nodeTree.setModel(new DefaultTreeModel(MappingExtractor.createTree(grammar)));
+    table.setModel(new MyTableModel(MappingUtils.extractFlat(grammar)));
+    nodeTree.setModel(new DefaultTreeModel(MappingUtils.createTree(grammar)));
   }
 
   private void selectInTable(final List<AttributeTreeNode> nodes) {

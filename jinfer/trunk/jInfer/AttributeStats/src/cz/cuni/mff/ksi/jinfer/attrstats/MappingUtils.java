@@ -16,24 +16,29 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
- * Library class for attribute mapping extraction.
+ * Library class containing utility functions for attribute mapping.
  *
  * @author vektor
  */
-public final class MappingExtractor {
+public final class MappingUtils {
 
-  private MappingExtractor() {
+  private MappingUtils() {
 
   }
 
@@ -94,4 +99,66 @@ public final class MappingExtractor {
     return ret;
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param targetMapping
+   * @param allMappings
+   * @return
+   */
+  public static double support(final Triplet targetMapping, final List<Triplet> allMappings) {
+    if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
+      throw new IllegalArgumentException("Expecting non-null, non empty parameters");
+    }
+
+    int mappingSize = 0;
+    for (final Triplet triplet : allMappings) {
+      if (triplet.getElement().equals(targetMapping.getElement())
+              && triplet.getAttribute().equals(targetMapping.getAttribute())) {
+        mappingSize++;
+      }
+    }
+    return (double)mappingSize / allMappings.size();
+  }
+
+  /**
+   * TODO vektor Comment!
+   *
+   * @param targetMapping
+   * @param allMappings
+   * @return
+   */
+  public static double coverage(final Triplet targetMapping, final List<Triplet> allMappings) {
+    if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
+      throw new IllegalArgumentException("Expecting non-null, non empty parameters");
+    }
+
+    final Map<Pair<String, String>, Set<String>> map = new HashMap<Pair<String, String>, Set<String>>();
+
+    for (final Triplet triplet : allMappings) {
+      final Pair<String, String> key = new Pair<String, String>(triplet.getElement(), triplet.getAttribute());
+      if (!map.containsKey(key)) {
+        map.put(key, new HashSet<String>());
+      }
+      map.get(key).add(triplet.getValue());
+    }
+
+    final Pair<String, String> target = new Pair<String, String>(targetMapping.getElement(), targetMapping.getAttribute());
+    final Set<String> targetImage = map.get(target);
+
+    double sum1 = 0;
+
+    for (final Map.Entry<Pair<String, String>, Set<String>> mapping : map.entrySet()) {
+      if (!mapping.getKey().equals(target)) {
+        sum1 += 0; // TODO vektor Size of crossection(mapping.getValue(), targetImage)
+      }
+    }
+
+    double sumImageSizes = 0;
+    for (final Set<String> s : map.values()) {
+      sumImageSizes += s.size();
+    }
+
+    return sum1 / sumImageSizes;
+  }
 }

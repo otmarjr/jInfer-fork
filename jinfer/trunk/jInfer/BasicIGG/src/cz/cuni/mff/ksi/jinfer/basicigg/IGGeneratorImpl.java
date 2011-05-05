@@ -93,7 +93,7 @@ public class IGGeneratorImpl implements IGGenerator {
     // if there are no schema/query rules, or the next module can handle simple
     // grammar, just output all of it without expansion
     if (BaseUtils.isEmpty(schemaQueryRules)
-            || RunningProject.getNextModuleCaps().getCapabilities().contains(Capabilities.CAN_HANDLE_COMPLEX_REGEXPS)) {
+            || RunningProject.getNextModuleCaps().getCapabilities().contains("can.handle.complex.regexps")) {
       documentRules.addAll(schemaQueryRules);
 
       // show the rules

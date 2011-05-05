@@ -33,12 +33,4 @@ public interface Capabilities {
    */
   List<String> getCapabilities();
 
-  // TODO vektor It's not very nice to have constants in interfaces
-  // (and even less so in the "defining" interface), therefore consider moving
-  // this(these) constant(s) somewhere else
-
-  /** Capability of a Simplifier implementation meaning that it can receive
-   more complex inputs than simple concatenations. */
-  String CAN_HANDLE_COMPLEX_REGEXPS = "can.handle.complex.regexps";
-
 }

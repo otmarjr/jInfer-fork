@@ -31,25 +31,31 @@ package cz.cuni.mff.ksi.jinfer.base.regexp;
  * @author anti
  */
 public final class RegexpInterval {
-
-  // TODO anti Comment public methods, including constructors!
-
+  /** Minimum value */
   private final int min;
+  /** Maximum value */
   private final int max;
+  /** If it is unbounded, in case of unbouded, maximum value has no sense */
   private final boolean unbounded;
 
+  /** Create bounded interval with min/max */
   private RegexpInterval(final int min, final int max) {
     this.min = min;
     this.max = max;
     this.unbounded = false;
   }
 
+  /** Create unbouded interval with min */
   private RegexpInterval(final int min) {
     this.min = min;
     this.max = -1;
     this.unbounded = true;
   }
 
+  /** Clone existing interval\
+   *
+   * @return copy of interval
+   */
   public RegexpInterval getCopy() {
     if (unbounded) {
       return RegexpInterval.getUnbounded(min);
@@ -58,78 +64,103 @@ public final class RegexpInterval {
   }
 
   /**
-   * get a bounded interval, specify min, max integers
-   * @param min
-   * @param max
-   * @return
+   * Get a bounded interval, specify min, max integers
+   * 
+   * @param min interval min
+   * @param max interval max
+   * @return new interval
    */
   public static RegexpInterval getBounded(final int min, final int max) {
     return new RegexpInterval(min, max);
   }
 
   /**
-   * get right unbounded interval, specify only minimum, maximum is considered
+   * Get right unbounded interval, specify only minimum, maximum is considered
    * unbounded
-   * @param min
-   * @return
+   * @param min interval min
+   * @return new interval
    */
   public static RegexpInterval getUnbounded(final int min) {
     return new RegexpInterval(min);
   }
 
   /**
-   * get interval with exactly once meaning, that is min=max=1
-   * @return
+   * Get interval with exactly once meaning, that is min=max=1
+   * @return new interval
    */
   public static RegexpInterval getOnce() {
     return new RegexpInterval(1, 1);
   }
 
   /**
-   * get ? quantification, that is zero or once. min = 0, max = 1
+   * Get ? quantification, that is zero or once. min = 0, max = 1
+   * @return new interval
    */
   public static RegexpInterval getOptional() {
     return new RegexpInterval(0, 1);
   }
 
   /**
-   * get KleeneStar *, asterisk. That is zero or more, unbounded. min =0, max is
+   * Get KleeneStar *, asterisk. That is zero or more, unbounded. min =0, max is
    * unbounded.
-   * @return
+   * @return new interval
    */
   public static RegexpInterval getKleeneStar() {
     return new RegexpInterval(0);
   }
 
   /**
-   * get KleeneCross, that is + quantification, min= 1, max is unbounded
-   * @return
+   * Get KleeneCross, that is + quantification, min= 1, max is unbounded
+   * @return new interval
    */
   public static RegexpInterval getKleeneCross() {
     return new RegexpInterval(1);
   }
 
-  // TODO anti JavaDoc for all the isXYZ() and getXYZ() methods
+  /**
+   * Whether interval is unbouded.
+   * @return true when interval is unbounded
+   */
   public boolean isUnbounded() {
     return unbounded;
   }
 
+  /**
+   * Whether interval is bounded {1,1}.
+   * @return true when interval is "exactly once", false otherwise
+   */
   public boolean isOnce() {
     return (!unbounded) && (min == 1) && (max == 1);
   }
 
+  /**
+   * Whether interval is ?
+   * @return true when interval is {0,1}
+   */
   public boolean isOptional() {
     return (!unbounded) && (min == 0) && (max == 1);
   }
 
+  /**
+   * Whether interval is *
+   * @return true when interval is unbounded {0,}
+   */
   public boolean isKleeneStar() {
     return (unbounded) && (min == 0);
   }
 
+  /**
+   * Whether interval is +
+   * @return true when interval is unbounded {1,}
+   */
   public boolean isKleeneCross() {
     return (unbounded) && (min == 1);
   }
 
+  /**
+   * Get the maximum value, throws exception on unbounded interval (ask using {@link isUnbounded()} before calling getMax().
+   * @return max value
+   */
   public int getMax() {
     if (this.unbounded) {
       throw new IllegalStateException("Cannot return regexp bound max, as this is unbounded. Should verify by a call to isUnbounded() before trying to get max.");
@@ -137,6 +168,10 @@ public final class RegexpInterval {
     return max;
   }
 
+  /**
+   * Get minimum value
+   * @return min value
+   */
   public int getMin() {
     return min;
   }

@@ -33,25 +33,23 @@ import java.util.Map;
  */
 public abstract class AbstractNamedNode implements NamedNode {
 
-  // TODO anti Comment public methods, including constructors!
-
   /** Names of all elements along the path from root to this element (excluded). */
   private final List<String> context;
   /** Name of this node. */
   private String name;
   /** List of unspecific attributes - metadata assigned to this node. */
   private final Map<String, Object> metadata;
+  /** Holds true when node is mutable, false when not. */
   protected boolean mutable;
 
-  private void checkConstraits() {
-    if (context == null) {
-      throw new IllegalArgumentException("Context has to be non-null.");
-    }
-    if (metadata == null) {
-      throw new IllegalArgumentException("Metadata has to be non-null.");
-    }
-  }
-
+  /**
+   * Create new node given all members.
+   * 
+   * @param context context of node in document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with node
+   * @param mutable true iff node is to be created as mutable
+   */
   protected AbstractNamedNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata, final boolean mutable) {
@@ -62,6 +60,13 @@ public abstract class AbstractNamedNode implements NamedNode {
     checkConstraits();
   }
 
+  /**
+   * Public constructor, creates immutable node.
+   *
+   * @param context context of node in document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with node
+   */
   public AbstractNamedNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata) {
@@ -84,6 +89,11 @@ public abstract class AbstractNamedNode implements NamedNode {
     return name;
   }
 
+  /** Sets the name of node (if mutable).
+   * Throws {@link IllegalStateException} when immutable.
+   * 
+   * @param name new name of node
+   */
   public void setName(final String name) {
     if (mutable) {
       this.name = name;
@@ -103,10 +113,18 @@ public abstract class AbstractNamedNode implements NamedNode {
     return Collections.unmodifiableMap(metadata);
   }
 
+  /** Check whether node is mutable
+   *
+   * @return true iff is mutable
+   */
   public boolean isMutable() {
     return this.mutable;
   }
 
+  /**
+   * Set object to immutable mode (cannot be changed back to mutable).
+   * Lock the node for changing.
+   */
   public void setImmutable() {
     if (this.mutable) {
       mutable = false;
@@ -128,5 +146,14 @@ public abstract class AbstractNamedNode implements NamedNode {
     // + name
     ret.append(name);
     return ret.toString();
+  }
+
+  private void checkConstraits() {
+    if (context == null) {
+      throw new IllegalArgumentException("Context has to be non-null.");
+    }
+    if (metadata == null) {
+      throw new IllegalArgumentException("Metadata has to be non-null.");
+    }
   }
 }

@@ -142,16 +142,16 @@ public final class AttrStatsTopComponent extends TopComponent {
 
   @Override
   public void componentClosed() {
-    // TODO add custom code on component closing
+    // TODO vektor add custom code on component closing
   }
 
   private void writeProperties(final Properties p) {
     // better to version settings since initial version as advocated at
     // http://wiki.apidesign.org/wiki/PropertyFiles
-    // TODO store your settings
+    // TODO vektor store your settings
   }
 
   private void readProperties(final Properties p) {
-    // TODO read your settings according to their version
+    // TODO vektor read your settings according to their version
   }
 }

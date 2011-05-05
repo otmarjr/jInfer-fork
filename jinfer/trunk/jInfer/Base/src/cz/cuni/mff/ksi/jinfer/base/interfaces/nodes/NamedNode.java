@@ -39,6 +39,8 @@ public interface NamedNode {
   List<String> getContext();
 
   /**
+   * Name of the node.
+   * 
    * @return name of the node.
    */
   String getName();

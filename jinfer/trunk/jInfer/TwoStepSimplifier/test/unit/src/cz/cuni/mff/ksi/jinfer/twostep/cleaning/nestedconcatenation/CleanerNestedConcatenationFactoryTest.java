@@ -23,7 +23,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * TODO anti Comment!
+ * Test for {@link CleanerNestedConcatenationFactory}
  *
  * @author anti
  */

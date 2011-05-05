@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
 public class MappingUtilsTest {
 
   //@Test
+  // TODO vektor empty test
   public void testExtractFlat() {
     System.out.println("extractFlat");
     List<Element> grammar = null;
@@ -43,6 +44,8 @@ public class MappingUtilsTest {
   }
 
   //@Test
+    // TODO vektor empty test
+
   public void testCreateTree() {
     System.out.println("createTree");
     List<Element> grammar = null;
@@ -116,6 +119,8 @@ public class MappingUtilsTest {
   }
 
   //@Test
+    // TODO vektor empty test
+
   public void testCoverage() {
     System.out.println("coverage");
     Triplet targetMapping = null;

@@ -27,14 +27,21 @@ import java.util.Map;
  */
 public class Attribute extends AbstractNamedNode implements ContentNode {
 
-  // TODO anti Comment public methods, including constructors!
-
   /** Unspecific type of textual data. */
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list
    * contains only one item. */
   private final List<String> content;
 
+  /**
+   * Public constructor, create attribute given all members (immutable).
+   *
+   * @param context context of the node in XML document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with the node
+   * @param contentType type of content of attribute
+   * @param content content of attribute
+   */
   public Attribute(final List<String> context,
           final String name,
           final Map<String, Object> metadata,

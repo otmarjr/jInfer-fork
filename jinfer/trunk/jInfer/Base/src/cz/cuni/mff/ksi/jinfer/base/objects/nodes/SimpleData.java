@@ -30,20 +30,21 @@ import java.util.Map;
  */
 public class SimpleData extends AbstractStructuralNode implements ContentNode {
 
-  // TODO anti Comment public methods, including constructors!
-
   /** Unspecific type of textual data. */
   private final String contentType;
   /** List of all data found in this node. If not aggregating, this list
    * contains only one item. */
   private final List<String> content;
 
-  private void checkConstraits() {
-    if (content == null) {
-      throw new IllegalArgumentException("Content must not be null");
-    }
-  }
-
+  /**
+   * Create text node given all members (immutable)
+   * 
+   * @param context context of the in the document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with the node
+   * @param contentType type of the content
+   * @param content content of the node
+   */
   public SimpleData(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
@@ -52,6 +53,16 @@ public class SimpleData extends AbstractStructuralNode implements ContentNode {
     this(context, name, metadata, contentType, content, false);
   }
 
+  /**
+   * Create text node given all members.
+   * 
+   * @param context context of the in the document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with the node
+   * @param contentType type of the content
+   * @param content content of the node
+   * @param mutable if it has to be mutable
+   */
   private SimpleData(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
@@ -64,6 +75,12 @@ public class SimpleData extends AbstractStructuralNode implements ContentNode {
     checkConstraits();
   }
 
+  /**
+   * Standard way of obtaining empty mutable text node.
+   * Be sure to set all fields properly after creating.
+   * 
+   * @return empty mutable text node
+   */
   public static SimpleData getMutable() {
     return new SimpleData(new ArrayList<String>(),
             null,
@@ -108,4 +125,12 @@ public class SimpleData extends AbstractStructuralNode implements ContentNode {
     }
     return ret.toString();
   }
+
+  private void checkConstraits() {
+    if (content == null) {
+      throw new IllegalArgumentException("Content must not be null");
+    }
+  }
+
+
 }

@@ -43,16 +43,15 @@ import java.util.List;
  * @author vektor
  */
 public class Regexp<T> {
-
-  // TODO anti Comment public methods, including constructors!
-
   /** If regexp is a token, its token. */
   private T content;
   /** If this is not a token, list of children. */
   private List<Regexp<T>> children;
   /** One of RegexpType types */
   private RegexpType type;
+  /** Interval of regexp, may be {m,n}, {m,} or ?, *, + */
   private RegexpInterval interval;
+  /** Whether regexp is mutable */
   private boolean mutable;
 
   /**
@@ -60,8 +59,8 @@ public class Regexp<T> {
    * 
    * @param content content of token regexp or null for not-tokens
    * @param children children of concatenations, alternation and permutation regexps
-   * @param type
-   * @param interval
+   * @param type type of regexp
+   * @param interval interval of regexp
    */
   public Regexp(final T content,
           final List<Regexp<T>> children,
@@ -70,6 +69,15 @@ public class Regexp<T> {
     this(content, children, type, interval, false);
   }
 
+  /**
+   * Create new regexp given all fields.
+   * 
+   * @param content content of token regexp or null for not-tokens
+   * @param children children of concatenations, alternation and permutation regexps
+   * @param type type of regexp
+   * @param interval interval of regexp
+   * @param mutable whether regexp is to be created as mutable
+   */
   private Regexp(final T content,
           final List<Regexp<T>> children,
           final RegexpType type,
@@ -359,7 +367,8 @@ public class Regexp<T> {
   }
 
   /**
-   *
+   * If it is token type.
+   * 
    * @return true iff type of this regexp equals RegexpType.TOKEN
    */
   public boolean isToken() {
@@ -367,7 +376,8 @@ public class Regexp<T> {
   }
 
   /**
-   *
+   * If it is concatenation type.
+   * 
    * @return true iff type of this regexp equals RegexpType.CONCATENATION
    */
   public boolean isConcatenation() {
@@ -375,7 +385,8 @@ public class Regexp<T> {
   }
 
   /**
-   *
+   * If it is alternation.
+   * 
    * @return true iff type of this regexp equals RegexpType.ALTERNATION
    */
   public boolean isAlternation() {
@@ -383,7 +394,8 @@ public class Regexp<T> {
   }
 
   /**
-   *
+   * If it is permutation.
+   * 
    * @return true iff type of this regexp equals RegexpType.PERMUTATION
    */
   public boolean isPermutation() {
@@ -391,6 +403,7 @@ public class Regexp<T> {
   }
 
   /**
+   * If it is lambda.
    *
    * @return true iff type of this regexp equals RegexpType.LAMBDA
    */
@@ -460,7 +473,7 @@ public class Regexp<T> {
    * Returns the suffix of this concatenation, from parameter <code>from</code> to the end.
    * 
    * @param from
-   * @return
+   * @return TODO vektor Comment
    */
   public Regexp<T> getEnd(final int from) {
     if (!isConcatenation()) {

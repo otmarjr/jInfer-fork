@@ -22,20 +22,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class representing a XML node (rule in grammar).
+ * Class representing a XML node (rule in grammar): element and text node.
  * 
  * @author vektor
  */
 public abstract class AbstractStructuralNode extends AbstractNamedNode implements StructuralNode {
 
-  // TODO anti Comment public methods, including constructors!
-
+  /** Create new structural node given all members.
+   *
+   * @param context context of the node in document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with node
+   * @param mutable whether node is to be created as mutable
+   */
   protected AbstractStructuralNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata, final boolean mutable) {
     super(context, name, metadata, mutable);
   }
 
+  /**
+   * Create new immutable structural node.
+   * 
+   * @param context context of the node in document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with node
+   */
   protected AbstractStructuralNode(final List<String> context,
           final String name,
           final Map<String, Object> metadata) {

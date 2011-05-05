@@ -32,23 +32,23 @@ import java.util.Map;
  */
 public class Element extends AbstractStructuralNode {
 
-  // TODO anti Comment public methods, including constructors!
-
   /** List of all subnodes of this element, in the same order as in the
    * document. */
   private final Regexp<AbstractStructuralNode> subnodes;
+  /**
+   * List of all attributes of this element. Order doesn't matter.
+   */
   private final List<Attribute> attributes;
 
-  // TODO anti Please move away from the top of the file
-  private void checkConstraits() {
-    if (subnodes == null) {
-      throw new IllegalArgumentException("Subnodes has to be non-null.");
-    }
-    if (attributes == null) {
-      throw new IllegalArgumentException("Attributes has to be non-null.");
-    }
-  }
-
+  /**
+   * Create immutable element given all members.
+   *
+   * @param context context of the element in document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with the node
+   * @param subnodes regular expression representing subnodes of the element (content model)
+   * @param attributes attributes of the element
+   */
   public Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
@@ -57,6 +57,16 @@ public class Element extends AbstractStructuralNode {
     this(context, name, metadata, subnodes, attributes, false);
   }
 
+  /**
+   * Create element given all members.
+   *
+   * @param context context of the element in document (if any)
+   * @param name name of the node
+   * @param metadata any metadata associated with the node
+   * @param subnodes regular expression representing subnodes of the element (content model)
+   * @param attributes attributes of the element
+   * @param mutable if it has to be mutable
+   */
   private Element(final List<String> context,
           final String name,
           final Map<String, Object> metadata,
@@ -70,6 +80,12 @@ public class Element extends AbstractStructuralNode {
     checkConstraits();
   }
 
+  /**
+   * Standard method of obtaining empty mutable element.
+   * Be sure to set all members properly before using the element or calling {@link setImmutable()}.
+   *
+   * @return new Element with empty fields, which is mutable
+   */
   public static Element getMutable() {
     return new Element(new ArrayList<String>(),
             null,
@@ -84,10 +100,18 @@ public class Element extends AbstractStructuralNode {
     return StructuralNodeType.ELEMENT;
   }
 
+  /**
+   * Get the subnodes regexp.
+   * @return subnodes
+   */
   public Regexp<AbstractStructuralNode> getSubnodes() {
     return subnodes;
   }
 
+  /**
+   * Get all attributes of element
+   * @return list of attributes
+   */
   public List<Attribute> getAttributes() {
     if (attributes == null) {
       return null;
@@ -125,4 +149,14 @@ public class Element extends AbstractStructuralNode {
     }
     return ret.toString();
   }
+
+  private void checkConstraits() {
+    if (subnodes == null) {
+      throw new IllegalArgumentException("Subnodes has to be non-null.");
+    }
+    if (attributes == null) {
+      throw new IllegalArgumentException("Attributes has to be non-null.");
+    }
+  }
+
 }

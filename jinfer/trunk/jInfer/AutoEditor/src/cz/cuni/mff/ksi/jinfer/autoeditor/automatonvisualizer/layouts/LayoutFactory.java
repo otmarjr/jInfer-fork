@@ -27,8 +27,10 @@ import edu.uci.ics.jung.graph.Graph;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * TODO anti Comment!
- *
+ * Interface to create JUNG layout from given automaton, graph and labeler.
+ * May be implemented to return static layout with positions designed specially in automaton in mind, or just
+ * return any JUNG-implemented layout.
+ * 
  * @author anti
  */
 public interface LayoutFactory extends NamedModule, Capabilities, UserModuleDescription {

@@ -25,9 +25,7 @@ import java.util.Deque;
 import org.apache.commons.collections15.Transformer;
 
 /**
- * Converts {@link Automaton} to dot string representation.
- *
- * TODO anti Comment!
+ * Converts {@link Automaton} to dot language string representation used as input to graphviz.
  *
  * @author anti
  */

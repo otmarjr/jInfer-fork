@@ -37,3 +37,7 @@ screenshots:
 
 clean:
 	rm -fr output
+
+upload: all
+        rsync -r output/ svirooo,jinfer@web.sourceforge.net:htdocs/
+

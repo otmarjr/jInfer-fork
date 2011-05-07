@@ -106,15 +106,15 @@ public final class MappingUtils {
    * @param allMappings
    * @return
    */
-  public static double support(final Triplet targetMapping, final List<Triplet> allMappings) {
+  public static double support(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
     if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
 
     int mappingSize = 0;
     for (final Triplet triplet : allMappings) {
-      if (triplet.getElement().equals(targetMapping.getElement())
-              && triplet.getAttribute().equals(targetMapping.getAttribute())) {
+      if (triplet.getElement().equals(targetMapping.getFirst())
+              && triplet.getAttribute().equals(targetMapping.getSecond())) {
         mappingSize++;
       }
     }
@@ -128,7 +128,7 @@ public final class MappingUtils {
    * @param allMappings
    * @return
    */
-  public static double coverage(final Triplet targetMapping, final List<Triplet> allMappings) {
+  public static double coverage(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
     if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
@@ -144,14 +144,17 @@ public final class MappingUtils {
       map.get(key).add(triplet.getValue());
     }
 
-    final Pair<String, String> target = new Pair<String, String>(targetMapping.getElement(), targetMapping.getAttribute());
-    final Set<String> targetImage = map.get(target);
+    if (!map.containsKey(targetMapping)) {
+      throw new IllegalArgumentException("All of the attribute mappings must contain the mapping for which the coverage is calculated.");
+    }
+
+    final Set<String> targetImage = map.get(targetMapping);
 
     double sum1 = 0;
 
     for (final Map.Entry<Pair<String, String>, Set<String>> mapping : map.entrySet()) {
-      if (!mapping.getKey().equals(target)) {
-        sum1 += crossection(mapping.getValue(), targetImage).size();
+      if (!mapping.getKey().equals(targetMapping)) {
+        sum1 += BaseUtils.intersect(mapping.getValue(), targetImage).size();
       }
     }
 
@@ -161,35 +164,5 @@ public final class MappingUtils {
     }
 
     return sum1 / sumImageSizes;
-  }
-  
-  /**
-   * TODO vektor Comment!
-   * 
-   * @param set1
-   * @param set2
-   * @return 
-   */
-  public static Set<String> crossection(final Set<String> set1, final Set<String> set2) {
-    if (set1 == null || set2 == null) {
-      throw new IllegalArgumentException("Sets to crosssect must not be null.");
-    }
-    
-    final Set<String> ret = new HashSet<String>();
-    
-    if (set1.isEmpty() || set2.isEmpty()) {
-      return ret;
-    }    
-    
-    for (final String s1 : set1) {
-      for (final String s2 : set2) {
-        if (s1.equals(s2)) {
-          ret.add(s1);
-          break;
-        }
-      }
-    }
-    
-    return ret;
   }
 }

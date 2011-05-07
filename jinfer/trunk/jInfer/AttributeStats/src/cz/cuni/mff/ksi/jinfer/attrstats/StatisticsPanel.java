@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import java.util.List;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -43,6 +46,24 @@ public class StatisticsPanel extends JPanel {
   public void setModel(final List<Element> grammar) {
     table.setModel(new MyTableModel(MappingUtils.extractFlat(grammar)));
     nodeTree.setModel(new DefaultTreeModel(MappingUtils.createTree(grammar)));
+
+    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+      @Override
+      public void valueChanged(ListSelectionEvent e) {
+        if (table.getSelectedRowCount() == 1) {
+          final int row = table.convertRowIndexToModel(table.getSelectedRow());
+          final Pair<String, String> targetMapping = new Pair<String, String>((String)table.getModel().getValueAt(row, 0), (String)table.getModel().getValueAt(row, 1));
+          final List<Triplet> allMappings = ((MyTableModel)table.getModel()).getModel();
+          support.setText(String.valueOf(MappingUtils.support(targetMapping, allMappings)));
+          coverage.setText(String.valueOf(MappingUtils.coverage(targetMapping, allMappings)));
+        }
+        else {
+          support.setText("N/A");
+          coverage.setText("N/A");
+        }
+      }
+    });
   }
 
   private void selectInTable(final List<AttributeTreeNode> nodes) {
@@ -55,7 +76,7 @@ public class StatisticsPanel extends JPanel {
       for (final AttributeTreeNode atn : nodes) {
         if (atn.getElementName().equals(m.getValueAt(row, 0))
                 && atn.getAttributeName().equals(m.getValueAt(row, 1))
-                && atn.getContent().contains(m.getValueAt(row, 2))) {
+                && atn.getContent().contains((String)m.getValueAt(row, 2))) {
           selectionModel.addSelectionInterval(i, i);
           break;
         }
@@ -80,6 +101,11 @@ public class StatisticsPanel extends JPanel {
     tableView = new javax.swing.JPanel();
     tablePane = new javax.swing.JScrollPane();
     table = new javax.swing.JTable();
+    stats = new javax.swing.JPanel();
+    labelSupport = new javax.swing.JLabel();
+    support = new javax.swing.JLabel();
+    labelCoverage = new javax.swing.JLabel();
+    coverage = new javax.swing.JLabel();
     misc = new javax.swing.JPanel();
 
     setLayout(new java.awt.GridBagLayout());
@@ -133,6 +159,10 @@ public class StatisticsPanel extends JPanel {
       }
     ));
     tablePane.setViewportView(table);
+    table.getColumnModel().getColumn(0).setHeaderValue(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.table.columnModel.title0")); // NOI18N
+    table.getColumnModel().getColumn(1).setHeaderValue(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.table.columnModel.title1")); // NOI18N
+    table.getColumnModel().getColumn(2).setHeaderValue(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.table.columnModel.title2")); // NOI18N
+    table.getColumnModel().getColumn(3).setHeaderValue(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.table.columnModel.title3")); // NOI18N
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -142,6 +172,37 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     tableView.add(tablePane, gridBagConstraints);
+
+    stats.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.stats.border.title"))); // NOI18N
+    stats.setLayout(new java.awt.GridBagLayout());
+
+    labelSupport.setFont(labelSupport.getFont().deriveFont(labelSupport.getFont().getStyle() | java.awt.Font.BOLD));
+    labelSupport.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelSupport.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    stats.add(labelSupport, gridBagConstraints);
+
+    support.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.support.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    stats.add(support, gridBagConstraints);
+
+    labelCoverage.setFont(labelCoverage.getFont().deriveFont(labelCoverage.getFont().getStyle() | java.awt.Font.BOLD));
+    labelCoverage.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelCoverage.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    stats.add(labelCoverage, gridBagConstraints);
+
+    coverage.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.coverage.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    stats.add(coverage, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    tableView.add(stats, gridBagConstraints);
 
     tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.tableView.TabConstraints.tabTitle"), tableView); // NOI18N
     tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.misc.TabConstraints.tabTitle"), misc); // NOI18N
@@ -177,12 +238,17 @@ public class StatisticsPanel extends JPanel {
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel chartView;
+  private javax.swing.JLabel coverage;
   private javax.swing.JPanel jFreeChartPlaceholder;
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel labelCoverage;
+  private javax.swing.JLabel labelSupport;
   private javax.swing.JPanel misc;
   private javax.swing.JTree nodeTree;
   private javax.swing.JScrollPane nodeTreePane;
   private javax.swing.JSplitPane splitPane;
+  private javax.swing.JPanel stats;
+  private javax.swing.JLabel support;
   private javax.swing.JTabbedPane tabbedPane;
   private javax.swing.JTable table;
   private javax.swing.JScrollPane tablePane;

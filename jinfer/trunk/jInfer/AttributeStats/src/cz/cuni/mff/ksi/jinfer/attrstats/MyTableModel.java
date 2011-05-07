@@ -28,7 +28,7 @@ import javax.swing.table.TableModel;
 class MyTableModel extends DefaultTableModel {
 
   private static final long serialVersionUID = 78974631624L;
-  
+
   private final List<Triplet> model;
 
   public MyTableModel(final List<Triplet> model) {
@@ -37,6 +37,10 @@ class MyTableModel extends DefaultTableModel {
       throw new IllegalArgumentException("Model must be not null.");
     }
     this.model = model;
+  }
+
+  public List<Triplet> getModel() {
+    return model;
   }
 
   @Override

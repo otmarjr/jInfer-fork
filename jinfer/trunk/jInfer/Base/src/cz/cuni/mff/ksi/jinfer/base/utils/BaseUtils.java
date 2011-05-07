@@ -1,39 +1,40 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractNamedNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Various utility functions for jInfer. Library class.
- * 
+ *
  * @author vektor
  */
 public final class BaseUtils {
 
   private BaseUtils() {
   }
-  
+
   /**
    * Interface describing an object that decides whether the predicate
    * (described by this object) applies to an argument or not.
@@ -75,7 +76,7 @@ public final class BaseUtils {
 
   /**
    * Checks whether the collection is empty, that means NULL or empty as in "no elements within".
-   * 
+   *
    * @param <T>
    * @param c Collection to check.
    * @return True if the collection is NULL or contains no elements.
@@ -96,7 +97,7 @@ public final class BaseUtils {
 
   /**
    * Creates a list containing the specified list N times in a row.
-   * 
+   *
    * @param l List to be cloned. Must not be <code>null</code>.
    * @param n How many times should the list be cloned. Must be non-negative.
    * @return Flat list containing the input list N times in a row. If the input
@@ -112,20 +113,20 @@ public final class BaseUtils {
     if (n == 0 || isEmpty(l)) {
       return Collections.emptyList();
     }
-    
+
     final List<T> ret = new ArrayList<T>();
     for (int i = 0; i < n; i++) {
       ret.addAll(l);
     }
     return ret;
   }
-  
+
   /**
-   * Comparator for {@link AbstractNamedNode}s, based on their 
+   * Comparator for {@link AbstractNamedNode}s, based on their
    * {@link AbstractNamedNode#name}.
    * Potential <code>null</code> values will be sorted last.
    */
-  public static final Comparator<AbstractNamedNode> NAMED_NODE_COMPARATOR = 
+  public static final Comparator<AbstractNamedNode> NAMED_NODE_COMPARATOR =
           new Comparator<AbstractNamedNode>() {
 
     @Override
@@ -142,4 +143,21 @@ public final class BaseUtils {
       return o1.getName().compareTo(o2.getName());
     }
   };
+
+  /**
+   * Calculates and returns the intersection of the two specified sets.
+   *
+   * @param set1 First set to interset, must not be <code>null</code>.
+   * @param set2 Second set to interset, must not be <code>null</code>.
+   * @return A new set containing the intersection of these two sets. Might be
+   * empty, if the two parameters have no intersection.
+   */
+  public static <T> Set<T> intersect(final Set<T> set1, final Set<T> set2) {
+    if (set1 == null || set2 == null) {
+      throw new IllegalArgumentException("Sets to crosssect must not be null.");
+    }
+    final Set<T> ret = new HashSet<T>(set1);
+    ret.retainAll(set2);
+    return ret;
+  }
 }

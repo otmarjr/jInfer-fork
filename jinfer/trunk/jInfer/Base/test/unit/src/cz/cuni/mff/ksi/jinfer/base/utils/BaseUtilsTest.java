@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -161,4 +161,46 @@ public class BaseUtilsTest {
     final List<String> result = BaseUtils.cloneList(Arrays.asList("a", "b"), 3);
     assertEquals(expResult, result);
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCrossectionNull() {
+    System.out.println("crossectionNull");
+    BaseUtils.intersect(null, null);
+  }
+
+  @Test
+  public void testCrossectionEmpty() {
+    System.out.println("crossectionEmpty");
+    final Set<String> arg1 = new HashSet<String>(Arrays.asList("a", "b", "c"));
+    final Set<String> arg2 = new HashSet<String>();
+
+    final Set<String> ret1 = BaseUtils.intersect(arg1, arg2);
+    assertEquals("Expecting empty crossection", arg2, ret1);
+
+    final Set<String> ret2 = BaseUtils.intersect(arg2, arg1);
+    assertEquals("Expecting empty crossection", arg2, ret2);
+  }
+
+  @Test
+  public void testCrossection1() {
+    System.out.println("crossection1");
+    final Set<String> arg1 = new HashSet<String>(Arrays.asList("a", "b", "c"));
+    final Set<String> arg2 = new HashSet<String>(Arrays.asList("b", "c", "d"));
+    final Set<String> expected = new HashSet<String>(Arrays.asList("b", "c"));
+
+    final Set<String> ret = BaseUtils.intersect(arg1, arg2);
+    assertEquals(expected, ret);
+  }
+
+  @Test
+  public void testCrossection2() {
+    System.out.println("crossection2");
+    final Set<String> arg1 = new HashSet<String>(Arrays.asList("a", "b", "c"));
+    final Set<String> arg2 = new HashSet<String>(Arrays.asList("d", "e", "f"));
+    final Set<String> expected = new HashSet<String>();
+
+    final Set<String> ret = BaseUtils.intersect(arg1, arg2);
+    assertEquals(expected, ret);
+  }
+
 }

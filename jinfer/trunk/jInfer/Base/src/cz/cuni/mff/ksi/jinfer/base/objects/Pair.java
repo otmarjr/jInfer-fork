@@ -19,6 +19,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
 /**
  * Class representing a generic 2-tuple. Immutable class.
  * 
+ * @param <S> Type argument of the first object in the pair.
+ * @param <T> Type argument of the second object in the pair.
  * @author vektor
  */
 public class Pair<S, T> {
@@ -58,4 +60,36 @@ public class Pair<S, T> {
   public String toString() {
     return "Pair:" + first.toString() + ":" + second.toString() + ";";
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof Pair)) {
+      return false;
+    }
+    @SuppressWarnings("unchecked")
+    final Pair<S, T> other = (Pair) obj;
+    final boolean firstEqual = equal(first, other.getFirst());
+    final boolean secondEqual = equal(second, other.getSecond());
+    return firstEqual && secondEqual;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 97 * hash + (this.first != null ? this.first.hashCode() : 0);
+    hash = 97 * hash + (this.second != null ? this.second.hashCode() : 0);
+    return hash;
+  }
+  
+  private static <X> boolean equal(final X arg1, final X arg2) {
+    if (arg1 == null && arg1 == null) {
+      return true;
+    }
+    if (arg2 == null) {
+      return false;
+    }
+    return arg1.equals(arg2);
+  }
+  
+  
 }

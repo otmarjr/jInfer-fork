@@ -133,6 +133,7 @@ public final class MappingUtils {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
 
+    // this will be a mapping (element, attribute) -> {domain}
     final Map<Pair<String, String>, Set<String>> map = new HashMap<Pair<String, String>, Set<String>>();
 
     for (final Triplet triplet : allMappings) {
@@ -150,7 +151,7 @@ public final class MappingUtils {
 
     for (final Map.Entry<Pair<String, String>, Set<String>> mapping : map.entrySet()) {
       if (!mapping.getKey().equals(target)) {
-        sum1 += 0; // TODO vektor Size of crossection(mapping.getValue(), targetImage)
+        sum1 += crossection(mapping.getValue(), targetImage).size();
       }
     }
 
@@ -160,5 +161,35 @@ public final class MappingUtils {
     }
 
     return sum1 / sumImageSizes;
+  }
+  
+  /**
+   * TODO vektor Comment!
+   * 
+   * @param set1
+   * @param set2
+   * @return 
+   */
+  public static Set<String> crossection(final Set<String> set1, final Set<String> set2) {
+    if (set1 == null || set2 == null) {
+      throw new IllegalArgumentException("Sets to crosssect must not be null.");
+    }
+    
+    final Set<String> ret = new HashSet<String>();
+    
+    if (set1.isEmpty() || set2.isEmpty()) {
+      return ret;
+    }    
+    
+    for (final String s1 : set1) {
+      for (final String s2 : set2) {
+        if (s1.equals(s2)) {
+          ret.add(s1);
+          break;
+        }
+      }
+    }
+    
+    return ret;
   }
 }

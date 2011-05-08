@@ -64,6 +64,9 @@
                   <SubComponents>
                     <Component class="javax.swing.JTree" name="nodeTree">
                       <Properties>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[150, 48]"/>
+                        </Property>
                         <Property name="rootVisible" type="boolean" value="false"/>
                       </Properties>
                       <Events>

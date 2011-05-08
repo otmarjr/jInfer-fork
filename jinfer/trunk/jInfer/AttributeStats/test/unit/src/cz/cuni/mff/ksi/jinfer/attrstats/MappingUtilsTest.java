@@ -180,4 +180,47 @@ public class MappingUtilsTest {
       assertTrue("Coverage of an attribute mapping must be between zero and one.", result >= 0.0 && result <= 1.0);
     }
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCandidateEmpty1() {
+    System.out.println("candidateEmpty1");
+    Pair<String, String> targetMapping = null;
+    List<Triplet> allMappings = new ArrayList<Triplet>();
+    MappingUtils.isCandidateMapping(targetMapping, allMappings);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testCandidateEmpty2() {
+    System.out.println("candidateEmpty2");
+    Pair<String, String> targetMapping = new Pair<String, String>(null, null);
+    List<Triplet> allMappings = null;
+    MappingUtils.isCandidateMapping(targetMapping, allMappings);
+  }
+
+  private static final List<Triplet> MAPPINGS_FROM_ARTICLE = Arrays.asList(
+          new Triplet("a", "x", "1"),
+          new Triplet("b", "y", "1"),
+          new Triplet("a", "x", "2"),
+          new Triplet("a", "z", "p"),
+          new Triplet("c", "w", "1"),
+          new Triplet("c", "w", "p"),
+          new Triplet("c", "w", "p")
+          );
+
+  @Test
+  public void testCandidate() {
+    System.out.println("candidate");
+
+    final Pair<String, String> mapping1 = new Pair<String, String>("a", "x");
+    assertTrue("a->x must be a candidate mapping.", MappingUtils.isCandidateMapping(mapping1, MAPPINGS_FROM_ARTICLE));
+
+    final Pair<String, String> mapping2 = new Pair<String, String>("a", "z");
+    assertTrue("a->z must be a candidate mapping.", MappingUtils.isCandidateMapping(mapping2, MAPPINGS_FROM_ARTICLE));
+
+    final Pair<String, String> mapping3 = new Pair<String, String>("b", "y");
+    assertTrue("b->y must be a candidate mapping.", MappingUtils.isCandidateMapping(mapping3, MAPPINGS_FROM_ARTICLE));
+
+    final Pair<String, String> mapping4 = new Pair<String, String>("c", "w");
+    assertTrue("c->w must not be a candidate mapping.", !MappingUtils.isCandidateMapping(mapping4, MAPPINGS_FROM_ARTICLE));
+  }
 }

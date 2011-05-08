@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +35,8 @@ import javax.swing.tree.TreeNode;
 /**
  * Library class containing utility functions for attribute mapping.
  *
+ * Please see the article "Finding ID Attributes in XML Documents" for reference.
+ *
  * @author vektor
  */
 public final class MappingUtils {
@@ -46,6 +49,12 @@ public final class MappingUtils {
    * Extracts the attribute mapping from the specified grammar as a flat list
    * of {@link Triplet}s <code>(element name, attribute name, attribute content)</code>.
    *
+   * <p>Note that the original content of the attribute is split into tokens on spaces.
+   * For example an element <code>e</code> with attribute <code>a</code> that
+   * contains the string <code>"1 p p"</code> in the original document will
+   * produce 3 {@link Triplet}s, containing the <code>attribute content</code>
+   * <code>1</code>, <code>p</code> and <code>p</code> respectively.</p>
+   *
    * @param grammar Grammar from which the attribute mapping should be retrieved.
    * @return Flat representation of the attribute mapping contained in the
    * specified grammar. Resulting list of {@link Triplet}s is sorted
@@ -57,7 +66,10 @@ public final class MappingUtils {
       if (!BaseUtils.isEmpty(e.getAttributes())) {
         for (final Attribute a : e.getAttributes()) {
           for (final String c : a.getContent()) {
-            ret.add(new Triplet(e.getName(), a.getName(), c));
+            final String[] values = c.split(" ");
+            for (final String value : values) {
+              ret.add(new Triplet(e.getName(), a.getName(), value));
+            }
           }
         }
       }
@@ -71,6 +83,9 @@ public final class MappingUtils {
   /**
    * Extracts the attribute mapping from the specified grammar as a tree ready
    * to be used in a {@link JTree}.
+   *
+   * <p>Please note that the attribute content is split into tokens on spaces,
+   * see {@link MappingUtils#extractFlat } for details.</p>
    *
    * @param grammar Grammar from which the attribute mapping should be retrieved.
    * @return Tree representation of the attribute mapping contained in the
@@ -88,8 +103,14 @@ public final class MappingUtils {
         final List<Attribute> attributes = new ArrayList<Attribute>(e.getAttributes());
         Collections.sort(attributes, BaseUtils.NAMED_NODE_COMPARATOR);
         for (final Attribute a : attributes) {
+          final List<String> content = new ArrayList<String>();
+          for (final String oneContent : a.getContent()) {
+            final String[] values = oneContent.split(" ");
+            content.addAll(Arrays.asList(values));
+          }
+
           final AttributeTreeNode attributeNode =
-                  new AttributeTreeNode(e.getName(), a.getName(), a.getContent());
+                  new AttributeTreeNode(e.getName(), a.getName(), content);
           elementNode.add(attributeNode);
         }
         ret.add(elementNode);
@@ -100,11 +121,12 @@ public final class MappingUtils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Please see the "Finding ID Attributes in XML Documents" article for the
+   * definition of this function.
    *
-   * @param targetMapping
-   * @param allMappings
-   * @return
+   * @param targetMapping Mapping for which <cite>support</cite> should be calculated.
+   * @param allMappings All the attribute mappings of the grammar.
+   * @return Support of the specified mapping.
    */
   public static double support(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
     if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
@@ -122,11 +144,12 @@ public final class MappingUtils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Please see the "Finding ID Attributes in XML Documents" article for the
+   * definition of this function.
    *
-   * @param targetMapping
-   * @param allMappings
-   * @return
+   * @param targetMapping Mapping for which <cite>coverage</cite> should be calculated.
+   * @param allMappings All the attribute mappings of the grammar.
+   * @return Coverage of the specified mapping.
    */
   public static double coverage(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
     if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
@@ -164,5 +187,35 @@ public final class MappingUtils {
     }
 
     return sum1 / sumImageSizes;
+  }
+
+  /**
+   * Verifies whether the specified attribute mapping is a candidate mapping.
+   *
+   * <p>An attribute mapping is a <cite>candidate mapping</cite>, iff it is
+   * an injective function: if its every value is unique.</p>
+   *
+   * @param targetMapping Mapping to be verified.
+   * @param allMappings All the attribute mappings of the grammar.
+   * @return True if the specified mapping is a candidate, false otherwise.
+   */
+  public static boolean isCandidateMapping(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
+    if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
+      throw new IllegalArgumentException("Expecting non-null, non empty parameters");
+    }
+
+    final Set<String> domain = new HashSet<String>();
+
+    for (final Triplet triplet : allMappings) {
+      if (triplet.getElement().equals(targetMapping.getFirst())
+              && triplet.getAttribute().equals(targetMapping.getSecond())) {
+        if (domain.contains(triplet.getValue())) {
+          return false;
+        }
+        domain.add(triplet.getValue());
+      }
+    }
+
+    return true;
   }
 }

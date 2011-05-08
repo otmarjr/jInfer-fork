@@ -41,6 +41,7 @@ public class StatisticsPanel extends JPanel {
 
   public StatisticsPanel() {
     initComponents();
+    table.setSelectionModel(new DefaultListSelectionModel());
   }
 
   public void setModel(final List<Element> grammar) {
@@ -51,23 +52,13 @@ public class StatisticsPanel extends JPanel {
 
       @Override
       public void valueChanged(ListSelectionEvent e) {
-        if (table.getSelectedRowCount() == 1) {
-          final int row = table.convertRowIndexToModel(table.getSelectedRow());
-          final Pair<String, String> targetMapping = new Pair<String, String>((String)table.getModel().getValueAt(row, 0), (String)table.getModel().getValueAt(row, 1));
-          final List<Triplet> allMappings = ((MyTableModel)table.getModel()).getModel();
-          support.setText(String.valueOf(MappingUtils.support(targetMapping, allMappings)));
-          coverage.setText(String.valueOf(MappingUtils.coverage(targetMapping, allMappings)));
-        }
-        else {
-          support.setText("N/A");
-          coverage.setText("N/A");
-        }
+        computeStats();
       }
     });
   }
 
   private void selectInTable(final List<AttributeTreeNode> nodes) {
-    final ListSelectionModel selectionModel = new DefaultListSelectionModel();
+    final DefaultListSelectionModel selectionModel = (DefaultListSelectionModel)table.getSelectionModel();
     selectionModel.clearSelection();
     final TableModel m = table.getModel();
 
@@ -82,8 +73,20 @@ public class StatisticsPanel extends JPanel {
         }
       }
     }
+  }
 
-    table.setSelectionModel(selectionModel);
+  private void computeStats() {
+    if (table.getSelectedRowCount() == 1) {
+      final MyTableModel model = (MyTableModel)table.getModel();
+      final int row = table.convertRowIndexToModel(table.getSelectedRow());
+      final Pair<String, String> targetMapping = new Pair<String, String>((String) model.getValueAt(row, 0), (String) model.getValueAt(row, 1));
+      final List<Triplet> allMappings = model.getModel();
+      support.setText(String.valueOf(MappingUtils.support(targetMapping, allMappings)));
+      coverage.setText(String.valueOf(MappingUtils.coverage(targetMapping, allMappings)));
+    } else {
+      support.setText("N/A");
+      coverage.setText("N/A");
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -114,6 +117,7 @@ public class StatisticsPanel extends JPanel {
 
     splitPane.setDividerLocation(200);
 
+    nodeTree.setPreferredSize(new java.awt.Dimension(150, 48));
     nodeTree.setRootVisible(false);
     nodeTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
       public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {

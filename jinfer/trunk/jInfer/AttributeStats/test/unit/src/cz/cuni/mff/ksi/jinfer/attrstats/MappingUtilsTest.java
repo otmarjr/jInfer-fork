@@ -206,21 +206,31 @@ public class MappingUtilsTest {
           new Triplet("c", "w", "p"),
           new Triplet("c", "w", "p")
           );
+  private static final Pair<String, String> EXAMPLE_MAPPING_1 = new Pair<String, String>("a", "x");
+  private static final Pair<String, String> EXAMPLE_MAPPING_2 = new Pair<String, String>("a", "z");
+  private static final Pair<String, String> EXAMPLE_MAPPING_3 = new Pair<String, String>("b", "y");
+  private static final Pair<String, String> EXAMPLE_MAPPING_4 = new Pair<String, String>("c", "w");
 
   @Test
   public void testCandidate() {
     System.out.println("candidate");
+    assertTrue("a->x must be a candidate mapping.", MappingUtils.isCandidateMapping(EXAMPLE_MAPPING_1, MAPPINGS_FROM_ARTICLE));
+    assertTrue("a->z must be a candidate mapping.", MappingUtils.isCandidateMapping(EXAMPLE_MAPPING_2, MAPPINGS_FROM_ARTICLE));
+    assertTrue("b->y must be a candidate mapping.", MappingUtils.isCandidateMapping(EXAMPLE_MAPPING_3, MAPPINGS_FROM_ARTICLE));
+    assertTrue("c->w must not be a candidate mapping.", !MappingUtils.isCandidateMapping(EXAMPLE_MAPPING_4, MAPPINGS_FROM_ARTICLE));
+  }
 
-    final Pair<String, String> mapping1 = new Pair<String, String>("a", "x");
-    assertTrue("a->x must be a candidate mapping.", MappingUtils.isCandidateMapping(mapping1, MAPPINGS_FROM_ARTICLE));
-
-    final Pair<String, String> mapping2 = new Pair<String, String>("a", "z");
-    assertTrue("a->z must be a candidate mapping.", MappingUtils.isCandidateMapping(mapping2, MAPPINGS_FROM_ARTICLE));
-
-    final Pair<String, String> mapping3 = new Pair<String, String>("b", "y");
-    assertTrue("b->y must be a candidate mapping.", MappingUtils.isCandidateMapping(mapping3, MAPPINGS_FROM_ARTICLE));
-
-    final Pair<String, String> mapping4 = new Pair<String, String>("c", "w");
-    assertTrue("c->w must not be a candidate mapping.", !MappingUtils.isCandidateMapping(mapping4, MAPPINGS_FROM_ARTICLE));
+  @Test
+  public void testIDset() {
+    System.out.println("IDset");
+    assertTrue("a->x must be an ID set.", MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_1), MAPPINGS_FROM_ARTICLE));
+    assertTrue("a->z must be an ID set.", MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_2), MAPPINGS_FROM_ARTICLE));
+    assertTrue("b->y must be an ID set.", MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_3), MAPPINGS_FROM_ARTICLE));
+    assertTrue("{a->z, b->y} must be an ID set.", MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_2, EXAMPLE_MAPPING_3), MAPPINGS_FROM_ARTICLE));
+    assertTrue("c->w must not be an ID set.", !MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_4), MAPPINGS_FROM_ARTICLE));
+    assertTrue("{a->x, a->z} must not be an ID set.", !MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_1, EXAMPLE_MAPPING_2), MAPPINGS_FROM_ARTICLE));
+    assertTrue("{a->x, a->x} must not be an ID set.", !MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_1, EXAMPLE_MAPPING_1), MAPPINGS_FROM_ARTICLE));
+    assertTrue("{a->x, c->w} must not be an ID set.", !MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_1, EXAMPLE_MAPPING_4), MAPPINGS_FROM_ARTICLE));
+    assertTrue("All mappings together must not be an ID set.", !MappingUtils.isIDset(Arrays.asList(EXAMPLE_MAPPING_1, EXAMPLE_MAPPING_2, EXAMPLE_MAPPING_3, EXAMPLE_MAPPING_4), MAPPINGS_FROM_ARTICLE));
   }
 }

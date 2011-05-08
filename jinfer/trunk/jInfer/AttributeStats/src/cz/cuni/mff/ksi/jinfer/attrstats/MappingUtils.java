@@ -218,4 +218,55 @@ public final class MappingUtils {
 
     return true;
   }
+
+  /**
+   * Determines whether a list of attribute mappings constitutes an ID set.
+   *
+   * Three conditions must hold for a set of mappings to be an ID set:
+   * <ol>
+   *  <li>All the attribute mappings must be <cite>candidate mappings</cite>
+   *  (see {@link MappingUtils#isCandidateMapping}).</li>
+   *  <li>The <cite>types</cite> of all the mappings (= their respective
+   *  element names) must be distinct.</li>
+   *  <li>The <cite>domains</cite> of all the mappings (= sets of their values)
+   *  must be distincs (no overlaps).</li>
+   * </ol>
+   *
+   * @param mappings List of the attribute mappings to verify.
+   * @param allMappings All the attribute mappings of the grammar.
+   * @return True if the specified list consitutes an ID set, false otherwise.
+   */
+  public static boolean isIDset(final List<Pair<String, String>> mappings, final List<Triplet> allMappings) {
+    if (BaseUtils.isEmpty(mappings) || BaseUtils.isEmpty(allMappings)) {
+      throw new IllegalArgumentException("Expecting non-null, non empty parameters");
+    }
+
+    final Set<String> types = new HashSet<String>();
+    for (final Pair<String, String> mapping : mappings) {
+      // 1. every single mapping must be a candidate mapping
+      if (!isCandidateMapping(mapping, allMappings)) {
+        return false;
+      }
+      // 2. all the types (= element names) must be distinct
+      if (types.contains(mapping.getFirst())) {
+        return false;
+      }
+      types.add(mapping.getFirst());
+    }
+
+    // 3. all the domains must be distinct
+    final Set<String> values = new HashSet<String>();
+
+    for (final Triplet triplet : allMappings) {
+      final Pair<String, String> p = new Pair<String, String>(triplet.getElement(), triplet.getAttribute());
+      if (mappings.contains(p)) {
+        if (values.contains(triplet.getValue())) {
+          return false;
+        }
+        values.add(triplet.getValue());
+      }
+    }
+
+    return true;
+  }
 }

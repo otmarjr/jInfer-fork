@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import java.util.Collections;
 import java.util.Iterator;
@@ -132,22 +133,17 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
     return node.getName();
   }
 
-  // TODO anti Can this be converted to CollectionToString.colToString() ?
   private String childrenListToString(
           final List<Regexp<AbstractStructuralNode>> children,
           final String delimiter) {
-    final StringBuilder sb = new StringBuilder();
-    sb.append('(');
-    final Iterator<Regexp<AbstractStructuralNode>> it = children.iterator();
-    while (it.hasNext()) {
-      final Regexp<AbstractStructuralNode> child = it.next();
-      sb.append(regexpToString(child));
-      if (it.hasNext()) {
-        sb.append(delimiter);
-      }
-    }
-    sb.append(')');
-    return sb.toString();
+    return CollectionToString.colToString(children, delimiter, 
+            new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+              @Override
+              public String toString(Regexp<AbstractStructuralNode> t) {
+                return t.toString();
+              }
+            }
+            );
   }
 
   private String attributesToString(final List<Attribute> attributes) {

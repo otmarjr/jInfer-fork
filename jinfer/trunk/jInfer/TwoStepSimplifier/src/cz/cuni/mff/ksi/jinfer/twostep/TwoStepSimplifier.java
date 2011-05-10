@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.twostep;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.ContentNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -32,6 +33,8 @@ import cz.cuni.mff.ksi.jinfer.twostep.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererWithAttributes;
+import cz.cuni.mff.ksi.jinfer.twostep.contentinfering.ContentInferrer;
+import cz.cuni.mff.ksi.jinfer.twostep.contentinfering.ContentInferrerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.ArrayList;
@@ -69,6 +72,7 @@ public class TwoStepSimplifier {
   private final ClustererFactory clustererFactory;
   private final ClusterProcessorFactory clusterProcessorFactory;
   private final RegularExpressionCleanerFactory regularExpressionCleanerFactory;
+  private final ContentInferrerFactory contentInfererFactory;
 
   /**
    * Create new simplifier and give all submodule factories to it.
@@ -79,10 +83,12 @@ public class TwoStepSimplifier {
    */
   public TwoStepSimplifier(final ClustererFactory clustererFactory,
           final ClusterProcessorFactory clusterProcessorFactory,
-          final RegularExpressionCleanerFactory regularExpressionCleanerFactory) {
+          final RegularExpressionCleanerFactory regularExpressionCleanerFactory,
+          final ContentInferrerFactory contentInfererFactory) {
     this.clustererFactory = clustererFactory;
     this.clusterProcessorFactory = clusterProcessorFactory;
     this.regularExpressionCleanerFactory = regularExpressionCleanerFactory;
+    this.contentInfererFactory = contentInfererFactory;
   }
 
   private void verifyInput(final List<Element> initialGrammar) throws InterruptedException {
@@ -92,6 +98,8 @@ public class TwoStepSimplifier {
       }
       if (node == null) {
         throw new IllegalArgumentException("Got null as left side in grammar.");
+      } else if (Boolean.TRUE.equals(node.getMetadata().get(IGGUtils.IS_SENTINEL))) {
+        throw new IllegalArgumentException("Left side of grammar rule cannot be sentinel node!. Read documentation on architecture.");
       }
     }
   }
@@ -126,17 +134,8 @@ public class TwoStepSimplifier {
         throw new InterruptedException();
       }
 
-      final List<AbstractStructuralNode> rules = BaseUtils.<AbstractStructuralNode>filter(
-              new ArrayList<AbstractStructuralNode>(cluster.getMembers()),
-              new BaseUtils.Predicate<AbstractStructuralNode>() {
-
-                @Override
-                public boolean apply(final AbstractStructuralNode argument) {
-                  return !Boolean.TRUE.equals(
-                          argument.getMetadata().get(IGGUtils.IS_SENTINEL));
-                }
-              });
-      final AbstractStructuralNode node = processor.processCluster(clusterer, rules);
+      final AbstractStructuralNode node = processor.processCluster(
+              clusterer, new ArrayList<AbstractStructuralNode>(cluster.getMembers()));
 
       // 3.1 process attributes if supported
       final List<Attribute> attList = new ArrayList<Attribute>();
@@ -147,7 +146,11 @@ public class TwoStepSimplifier {
 
         for (Cluster<Attribute> attCluster : attributeClusters) {
           final Attribute representant = attCluster.getRepresentant();
-          Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), representant.getContentType(), representant.getContent());
+          final ContentInferrer contentInferer = contentInfererFactory.create();
+          Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), 
+                  contentInferer.inferContentType(new ArrayList<ContentNode>(attCluster.getMembers())),
+                  representant.getContent());
+
           if (attCluster.size() < cluster.size()) {
             final Map<String, Object> m = new HashMap<String, Object>(representant.getMetadata());
             m.remove(IGGUtils.REQUIRED);

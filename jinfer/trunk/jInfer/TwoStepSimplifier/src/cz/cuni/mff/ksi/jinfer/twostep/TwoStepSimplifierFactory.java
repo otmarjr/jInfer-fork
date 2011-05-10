@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.contentinfering.ContentInferrerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
 import java.util.Collections;
 import java.util.List;
@@ -71,6 +72,14 @@ public class TwoStepSimplifierFactory implements Simplifier {
    * Default cleaner to be used if none selected.
    */
   public static final String PROPERTIES_CLEANER_DEFAULT = "TwoStepRegularExpressionCleanerChained";
+  /**
+   * Property name of content inferrer submodule.
+   */
+  public static final String PROPERTIES_CONTENT_INFERRER = "content-inferrer";
+  /** 
+   * Default content inferrer to be used if none selected.
+   */
+  public static final String PROPERTIES_CONTENT_INFERRER_DEFAULT = "TwoStepContentInferrerSimple";
 
   /**
    * Canonical name
@@ -119,10 +128,20 @@ public class TwoStepSimplifierFactory implements Simplifier {
     return ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, p.getProperty(PROPERTIES_CLEANER, PROPERTIES_CLEANER_DEFAULT));
   }
 
+  private ContentInferrerFactory getContentInferrerFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(this.getName());
+
+    return ModuleSelectionHelper.lookupImpl(ContentInferrerFactory.class, p.getProperty(PROPERTIES_CONTENT_INFERRER, PROPERTIES_CONTENT_INFERRER_DEFAULT));
+  }
+  
   @Override
   public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     final TwoStepSimplifier simplifier = new TwoStepSimplifier(
-            getClustererFactory(), getClusterProcessorFactory(), getRegularExpressionCleanerFactory());
+            getClustererFactory(), 
+            getClusterProcessorFactory(), 
+            getRegularExpressionCleanerFactory(),
+            getContentInferrerFactory()
+            );
     callback.finished(
             simplifier.simplify(initialGrammar));
   }

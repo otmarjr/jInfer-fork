@@ -20,10 +20,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
@@ -38,6 +39,9 @@ import javax.swing.tree.TreePath;
 public class StatisticsPanel extends JPanel {
 
   private static final long serialVersionUID = 5415245241L;
+
+  private final Map<Pair<String, String>, Pair<Double, Double>> cache =
+          new HashMap<Pair<String, String>, Pair<Double, Double>>();
 
   public StatisticsPanel() {
     initComponents();
@@ -79,14 +83,28 @@ public class StatisticsPanel extends JPanel {
     if (table.getSelectedRowCount() == 1) {
       final MyTableModel model = (MyTableModel)table.getModel();
       final int row = table.convertRowIndexToModel(table.getSelectedRow());
-      final Pair<String, String> targetMapping = new Pair<String, String>((String) model.getValueAt(row, 0), (String) model.getValueAt(row, 1));
-      final List<Triplet> allMappings = model.getModel();
-      support.setText(String.valueOf(MappingUtils.support(targetMapping, allMappings)));
-      coverage.setText(String.valueOf(MappingUtils.coverage(targetMapping, allMappings)));
+      showStats(new Pair<String, String>((String) model.getValueAt(row, 0), (String) model.getValueAt(row, 1)),
+              model.getModel());
     } else {
       support.setText("N/A");
       coverage.setText("N/A");
     }
+  }
+
+  private void showStats(final Pair<String, String> targetMapping,
+          final List<Triplet> allMappings) {
+    final Pair<Double, Double> value;
+    if (cache.containsKey(targetMapping)) {
+      value = cache.get(targetMapping);
+    }
+    else {
+      value = new Pair<Double, Double>(
+              Double.valueOf(MappingUtils.support(targetMapping, allMappings)),
+              Double.valueOf(MappingUtils.coverage(targetMapping, allMappings)));
+      cache.put(targetMapping, value);
+    }
+    support.setText(value.getFirst().toString());
+    coverage.setText(value.getSecond().toString());
   }
 
   @SuppressWarnings("unchecked")
@@ -100,7 +118,7 @@ public class StatisticsPanel extends JPanel {
     nodeTreePane = new javax.swing.JScrollPane();
     nodeTree = new javax.swing.JTree();
     jFreeChartPlaceholder = new javax.swing.JPanel();
-    jLabel1 = new javax.swing.JLabel();
+    labelPlaceholder = new javax.swing.JLabel();
     tableView = new javax.swing.JPanel();
     tablePane = new javax.swing.JScrollPane();
     table = new javax.swing.JTable();
@@ -117,7 +135,10 @@ public class StatisticsPanel extends JPanel {
 
     splitPane.setDividerLocation(200);
 
-    nodeTree.setPreferredSize(new java.awt.Dimension(150, 48));
+    nodeTreePane.setMinimumSize(new java.awt.Dimension(200, 23));
+    nodeTreePane.setPreferredSize(new java.awt.Dimension(200, 322));
+
+    nodeTree.setPreferredSize(null);
     nodeTree.setRootVisible(false);
     nodeTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
       public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
@@ -130,10 +151,10 @@ public class StatisticsPanel extends JPanel {
 
     jFreeChartPlaceholder.setLayout(new java.awt.GridBagLayout());
 
-    jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()+19f));
-    jLabel1.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow"));
-    jLabel1.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.jLabel1.text")); // NOI18N
-    jFreeChartPlaceholder.add(jLabel1, new java.awt.GridBagConstraints());
+    labelPlaceholder.setFont(labelPlaceholder.getFont().deriveFont(labelPlaceholder.getFont().getSize()+19f));
+    labelPlaceholder.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow"));
+    labelPlaceholder.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelPlaceholder.text")); // NOI18N
+    jFreeChartPlaceholder.add(labelPlaceholder, new java.awt.GridBagConstraints());
 
     splitPane.setRightComponent(jFreeChartPlaceholder);
 
@@ -244,8 +265,8 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JPanel chartView;
   private javax.swing.JLabel coverage;
   private javax.swing.JPanel jFreeChartPlaceholder;
-  private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel labelCoverage;
+  private javax.swing.JLabel labelPlaceholder;
   private javax.swing.JLabel labelSupport;
   private javax.swing.JPanel misc;
   private javax.swing.JTree nodeTree;

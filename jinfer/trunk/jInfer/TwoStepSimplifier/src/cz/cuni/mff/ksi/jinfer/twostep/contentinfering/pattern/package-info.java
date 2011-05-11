@@ -14,16 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.contentinfering;
-
-import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.ContentNode;
-import java.util.List;
-
 /**
- * TODO anti Comment!
- *
- * @author anti
+ * Infers pattern string expression for content using some automaton simplifying algorithm
+ * (basically the same that is configured to be used with elements).
  */
-public interface ContentInferrer {
-  String inferContentType(List<ContentNode> nodes) throws InterruptedException;
-}
+package cz.cuni.mff.ksi.jinfer.twostep.contentinfering.pattern;

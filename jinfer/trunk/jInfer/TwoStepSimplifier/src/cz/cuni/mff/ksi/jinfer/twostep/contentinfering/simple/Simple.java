@@ -18,7 +18,9 @@ package cz.cuni.mff.ksi.jinfer.twostep.contentinfering.simple;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.ContentNode;
 import cz.cuni.mff.ksi.jinfer.twostep.contentinfering.ContentInferrer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO anti Comment!
@@ -28,7 +30,11 @@ import java.util.List;
 public class Simple implements ContentInferrer {
   @Override
   public String inferContentType(List<ContentNode> nodes) {
-    return nodes.get(0).getContentType();
+    Map<ContentNode, String> whatCouldBe = new HashMap<ContentNode, String>();
+    for (ContentNode node : nodes) {
+      
+    }
+    return "";
   }
   
 }

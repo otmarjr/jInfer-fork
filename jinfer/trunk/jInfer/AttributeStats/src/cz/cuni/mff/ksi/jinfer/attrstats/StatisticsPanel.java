@@ -17,6 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
@@ -43,8 +45,10 @@ public class StatisticsPanel extends JPanel {
 
   private static final long serialVersionUID = 5415245241L;
 
-  private final Map<Pair<String, String>, Pair<Double, Double>> cache =
-          new HashMap<Pair<String, String>, Pair<Double, Double>>();
+  private final Map<AttributeMappingId, Pair<Double, Double>> cache =
+          new HashMap<AttributeMappingId, Pair<Double, Double>>();
+
+  private AMModel model;
 
   public StatisticsPanel() {
     initComponents();
@@ -52,8 +56,9 @@ public class StatisticsPanel extends JPanel {
   }
 
   public void setModel(final List<Element> grammar) {
-    table.setModel(new MyTableModel(MappingUtils.extractFlat(grammar)));
-    nodeTree.setModel(new DefaultTreeModel(MappingUtils.createTree(grammar)));
+    model = new AMModel(grammar);
+    table.setModel(new MyTableModel(model.getFlat()));
+    nodeTree.setModel(new DefaultTreeModel(model.getTree()));
 
     table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -84,26 +89,25 @@ public class StatisticsPanel extends JPanel {
 
   private void computeStats() {
     if (table.getSelectedRowCount() == 1) {
-      final MyTableModel model = (MyTableModel)table.getModel();
+      final MyTableModel tableModel = (MyTableModel)table.getModel();
       final int row = table.convertRowIndexToModel(table.getSelectedRow());
-      showStats(new Pair<String, String>((String) model.getValueAt(row, 0), (String) model.getValueAt(row, 1)),
-              model.getModel());
-    } else {
+      showStats(new AttributeMappingId((String) tableModel.getValueAt(row, 0), (String) tableModel.getValueAt(row, 1)));
+    }
+    else {
       support.setText("N/A");
       coverage.setText("N/A");
     }
   }
 
-  private void showStats(final Pair<String, String> targetMapping,
-          final List<Triplet> allMappings) {
+  private void showStats(final AttributeMappingId targetMapping) {
     final Pair<Double, Double> value;
     if (cache.containsKey(targetMapping)) {
       value = cache.get(targetMapping);
     }
     else {
       value = new Pair<Double, Double>(
-              Double.valueOf(MappingUtils.support(targetMapping, allMappings)),
-              Double.valueOf(MappingUtils.coverage(targetMapping, allMappings)));
+              Double.valueOf(MappingUtils.support(targetMapping, model)),
+              Double.valueOf(MappingUtils.coverage(targetMapping, model)));
       cache.put(targetMapping, value);
     }
     support.setText(value.getFirst().toString());

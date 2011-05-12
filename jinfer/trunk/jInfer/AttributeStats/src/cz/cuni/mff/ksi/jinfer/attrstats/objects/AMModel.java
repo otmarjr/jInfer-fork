@@ -21,12 +21,16 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.tree.TreeNode;
 
 /**
  * TODO vektor Comment!
+ *
+ * NOT thread-safe!
  *
  * @author vektor
  */
@@ -39,6 +43,8 @@ public class AMModel {
   private TreeNode tree = null;
 
   private final Map<AttributeMappingId, AttributeMapping> mappings = new HashMap<AttributeMappingId, AttributeMapping>();
+
+  private Set<String> types = null;
 
   public AMModel(final List<Element> grammar) {
     if (BaseUtils.isEmpty(grammar)) {
@@ -73,6 +79,27 @@ public class AMModel {
       }
     }
     return mappings;
+  }
+
+  // TODO vektor JUnit test to verify that size() returns the same as getFlat().size()
+  public int size() {
+    int ret = 0;
+
+    for (final AttributeMapping mapping : getAMs().values()) {
+      ret += mapping.size();
+    }
+
+    return ret;
+  }
+
+  public Set<String> getTypes() {
+    if (types == null) {
+      types = new HashSet<String>();
+      for (final AttributeMappingId mapping : getAMs().keySet()) {
+        types.add(mapping.getElement());
+      }
+    }
+    return types;
   }
 
 }

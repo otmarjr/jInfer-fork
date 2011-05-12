@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  * A few utilities to be used in JUnit tests.
- * 
+ *
  * @author vektor
  */
 public final class TestUtils {
@@ -44,7 +44,7 @@ public final class TestUtils {
    * {@link cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
    */
   public static final List<String> EMPTY_CONTEXT = Collections.emptyList();
-  
+
   /**
    * Empty metadata, can be used in
    * {@link cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element} construction.
@@ -79,7 +79,7 @@ public final class TestUtils {
   public static String regexpToStr(final Regexp<AbstractStructuralNode> r) {
     switch (r.getType()) {
       case TOKEN:
-        return r.getContent().isElement() 
+        return r.getContent().isElement()
                 ? elementToStr((Element)r.getContent()) + r.getInterval().toString()
                 : "\"" + r.getContent().getName() + "\"";
       case CONCATENATION:
@@ -139,15 +139,39 @@ public final class TestUtils {
   }
 
   /**
+   * TODO vektor Comment!
+   * 
+   * @param element
+   * @param attribute
+   * @param value
+   * @return
+   */
+  public static Element getElementWithAttribute(final String element,
+          final String attribute, final String value) {
+    return new Element(
+            EMPTY_CONTEXT,
+            element,
+            EMPTY_METADATA,
+            Regexp.<AbstractStructuralNode>getLambda(),
+            Arrays.asList(new Attribute(
+                    EMPTY_CONTEXT,
+                    attribute,
+                    EMPTY_METADATA,
+                    null,
+                    Arrays.<String>asList(value)))
+            );
+  }
+
+  /**
    * Returns a simple data with provided string as its only content. Simple data
    * is otherwise quite empty: context and metadata are empty, content type is
    * "string".
-   * 
+   *
    * @param content The only content string this simple data should have.
    * @return Constructed simple data.
    */
   public static SimpleData getSimpleData(final String content) {
-    return new SimpleData(EMPTY_CONTEXT, 
+    return new SimpleData(EMPTY_CONTEXT,
             "simple data",
             EMPTY_METADATA,
             "string",

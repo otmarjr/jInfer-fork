@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.logic;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMapping;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
@@ -62,6 +65,7 @@ public final class MappingUtils {
    * specified grammar. Resulting list of {@link Triplet}s is sorted
    * (see {@link Triplet#compareTo(Triplet)}).
    */
+  // TODO vektor Move to AMModel
   public static List<Triplet> extractFlat(final List<Element> grammar) {
     final List<Triplet> ret = new ArrayList<Triplet>();
     for (final Element e : grammar) {
@@ -95,6 +99,7 @@ public final class MappingUtils {
    * {@link Element} in the grammar. The element nodes then contain nodes for
    * each of the {@link Attribute}s they contain.
    */
+  // TODO vektor Move to AMModel
   public static TreeNode createTree(final List<Element> grammar) {
     Collections.sort(grammar, BaseUtils.NAMED_NODE_COMPARATOR);
 
@@ -130,19 +135,17 @@ public final class MappingUtils {
    * @param allMappings All the attribute mappings of the grammar.
    * @return Support of the specified mapping.
    */
-  public static double support(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
-    if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
+  public static double support(final AttributeMappingId targetMapping, final AMModel model) {
+    if (targetMapping == null || model == null) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
 
-    int mappingSize = 0;
-    for (final Triplet triplet : allMappings) {
-      if (triplet.getElement().equals(targetMapping.getFirst())
-              && triplet.getAttribute().equals(targetMapping.getSecond())) {
-        mappingSize++;
-      }
+    // TODO vektor JUnit test this!
+    if (!model.getAMs().containsKey(targetMapping)) {
+      throw new IllegalArgumentException("Target mapping not found in the model.");
     }
-    return (double)mappingSize / allMappings.size();
+
+    return (double)model.getAMs().get(targetMapping).size() / model.size();
   }
 
   /**
@@ -153,42 +156,27 @@ public final class MappingUtils {
    * @param allMappings All the attribute mappings of the grammar.
    * @return Coverage of the specified mapping.
    */
-  public static double coverage(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
-    if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
+  public static double coverage(final AttributeMappingId targetMapping, final AMModel model) {
+    if (targetMapping == null || model == null) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
 
-    // this will be a mapping (element, attribute) -> {domain}
-    final Map<Pair<String, String>, Set<String>> map = new HashMap<Pair<String, String>, Set<String>>();
-
-    for (final Triplet triplet : allMappings) {
-      final Pair<String, String> key = new Pair<String, String>(triplet.getElement(), triplet.getAttribute());
-      if (!map.containsKey(key)) {
-        map.put(key, new HashSet<String>());
-      }
-      map.get(key).add(triplet.getValue());
+    // TODO vektor JUnit test this!
+    if (!model.getAMs().containsKey(targetMapping)) {
+      throw new IllegalArgumentException("Target mapping not found in the model.");
     }
-
-    if (!map.containsKey(targetMapping)) {
-      throw new IllegalArgumentException("All of the attribute mappings must contain the mapping for which the coverage is calculated.");
-    }
-
-    final Set<String> targetImage = map.get(targetMapping);
 
     double sum1 = 0;
 
-    for (final Map.Entry<Pair<String, String>, Set<String>> mapping : map.entrySet()) {
+    for (final Map.Entry<AttributeMappingId, AttributeMapping> mapping : model.getAMs().entrySet()) {
       if (!mapping.getKey().equals(targetMapping)) {
-        sum1 += BaseUtils.intersect(mapping.getValue(), targetImage).size();
+        sum1 += BaseUtils.intersect(
+                new HashSet<String>(mapping.getValue().getImage()),
+                new HashSet<String>(model.getAMs().get(targetMapping).getImage())).size();
       }
     }
 
-    double sumImageSizes = 0;
-    for (final Set<String> s : map.values()) {
-      sumImageSizes += s.size();
-    }
-
-    return sum1 / sumImageSizes;
+    return sum1 / model.size();
   }
 
   /**
@@ -201,24 +189,21 @@ public final class MappingUtils {
    * @param allMappings All the attribute mappings of the grammar.
    * @return True if the specified mapping is a candidate, false otherwise.
    */
-  public static boolean isCandidateMapping(final Pair<String, String> targetMapping, final List<Triplet> allMappings) {
-    if (targetMapping == null || BaseUtils.isEmpty(allMappings)) {
+  public static boolean isCandidateMapping(final AttributeMappingId targetMapping, final AMModel model) {
+    if (targetMapping == null || model == null) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
 
-    final Set<String> domain = new HashSet<String>();
-
-    for (final Triplet triplet : allMappings) {
-      if (triplet.getElement().equals(targetMapping.getFirst())
-              && triplet.getAttribute().equals(targetMapping.getSecond())) {
-        if (domain.contains(triplet.getValue())) {
-          return false;
-        }
-        domain.add(triplet.getValue());
-      }
+    // TODO vektor JUnit test this!
+    if (!model.getAMs().containsKey(targetMapping)) {
+      throw new IllegalArgumentException("Target mapping not found in the model.");
     }
 
-    return true;
+    final AttributeMapping mapping = model.getAMs().get(targetMapping);
+
+    final Set<String> domain = new HashSet<String>(mapping.getImage());
+
+    return domain.size() == mapping.getImage().size();
   }
 
   /**
@@ -238,34 +223,35 @@ public final class MappingUtils {
    * @param allMappings All the attribute mappings of the grammar.
    * @return True if the specified list consitutes an ID set, false otherwise.
    */
-  public static boolean isIDset(final List<Pair<String, String>> mappings, final List<Triplet> allMappings) {
-    if (BaseUtils.isEmpty(mappings) || BaseUtils.isEmpty(allMappings)) {
+  public static boolean isIDset(final List<AttributeMappingId> mappings, final AMModel model) {
+    if (BaseUtils.isEmpty(mappings) || model == null) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
 
     final Set<String> types = new HashSet<String>();
-    for (final Pair<String, String> mapping : mappings) {
+    for (final AttributeMappingId mapping : mappings) {
       // 1. every single mapping must be a candidate mapping
-      if (!isCandidateMapping(mapping, allMappings)) {
+      if (!isCandidateMapping(mapping, model)) {
         return false;
       }
       // 2. all the types (= element names) must be distinct
-      if (types.contains(mapping.getFirst())) {
+      if (types.contains(mapping.getElement())) {
         return false;
       }
-      types.add(mapping.getFirst());
+      types.add(mapping.getElement());
     }
 
     // 3. all the domains must be distinct
     final Set<String> values = new HashSet<String>();
 
-    for (final Triplet triplet : allMappings) {
-      final Pair<String, String> p = new Pair<String, String>(triplet.getElement(), triplet.getAttribute());
-      if (mappings.contains(p)) {
-        if (values.contains(triplet.getValue())) {
-          return false;
+    for (final AttributeMapping mapping : model.getAMs().values()) {
+      if (mappings.contains(mapping.getId())) {
+        for (final String value : mapping.getImage()) {
+          if (values.contains(value)) {
+            return false;
+          }
+          values.add(value);
         }
-        values.add(triplet.getValue());
       }
     }
 

@@ -40,4 +40,21 @@ public class AttributeMappingId {
     return attribute;
   }
 
+  @Override
+  public boolean equals(final Object obj) {
+    if (!(obj instanceof AttributeMappingId)) {
+      return false;
+    }
+    final AttributeMappingId other = (AttributeMappingId) obj;
+    return element.equals(other.getElement()) && attribute.equals(other.getAttribute());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 43 * hash + (this.element != null ? this.element.hashCode() : 0);
+    hash = 43 * hash + (this.attribute != null ? this.attribute.hashCode() : 0);
+    return hash;
+  }
+
 }

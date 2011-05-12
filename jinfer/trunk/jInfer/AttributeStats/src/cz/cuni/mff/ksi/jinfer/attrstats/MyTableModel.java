@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;

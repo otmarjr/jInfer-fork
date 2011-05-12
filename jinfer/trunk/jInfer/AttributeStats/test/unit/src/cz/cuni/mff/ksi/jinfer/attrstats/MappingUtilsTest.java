@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.Set;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;

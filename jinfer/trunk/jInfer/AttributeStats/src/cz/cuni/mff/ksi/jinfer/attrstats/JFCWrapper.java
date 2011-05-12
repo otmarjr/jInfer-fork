@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import java.awt.Dimension;
 import java.awt.Font;

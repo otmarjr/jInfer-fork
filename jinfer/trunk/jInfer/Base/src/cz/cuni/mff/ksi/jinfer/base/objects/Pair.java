@@ -21,8 +21,10 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
  *
  * @param <S> Type argument of the first object in the pair.
  * @param <T> Type argument of the second object in the pair.
+ *
  * @author vektor
  */
+// TODO vektor Rename to ImmutablePair and hide under a Pair interface
 public class Pair<S, T> {
 
   private final S first;

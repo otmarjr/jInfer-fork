@@ -17,7 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
 /**
- * TODO vektor Comment!
+ * This is a representation of an attribute mapping identifier, as described in
+ * the article "Finding ID Attributes in XML Documents". It contains the
+ * element and attribute names. This representation follows the immutable object
+ * design pattern.
  *
  * @author vektor
  */
@@ -28,10 +31,10 @@ public class AttributeMappingId {
   private final String attribute;
 
   /**
-   * TODO vektor Comment!
+   * Full constructor.
    *
-   * @param element
-   * @param attribute
+   * @param element Element name.
+   * @param attribute Attribute name.
    */
   public AttributeMappingId(final String element, final String attribute) {
     this.element = element;
@@ -47,9 +50,13 @@ public class AttributeMappingId {
   }
 
   /**
-   * TODO vektor Comment!
-   * @param obj
-   * @return 
+   * Two attribute mapping IDs are equal iff their element and attribute names
+   * are equal (case sensitive).
+   *
+   * @param obj Other object to check equality.
+   * @return <code>true</code> if the other object is {@link AttributeMappingId}
+   * and its element and attribute names are equal to ones in this mapping,
+   * <code>false<code> otherwise.
    */
   @Override
   public boolean equals(final Object obj) {

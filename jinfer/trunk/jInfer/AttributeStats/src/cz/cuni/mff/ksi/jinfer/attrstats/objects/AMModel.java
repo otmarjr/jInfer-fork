@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -28,13 +29,34 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
- * TODO vektor Comment!
+ * Class representing a model for attribute mappings operations. It is
+ * constructed from a specified grammar and provides various views of the
+ * mappings in that grammar, notably:
+ * <ul>
+ *    <li>
+ *      Flat view, returned by the {@link AMModel#getFlat() } method:
+ *      attribute mappings are returned as a list of {@link Triplet}s.
+ *    </li>
+ *    <li>
+ *      Tree view ready to be used in {@link JTree}, returned by the
+ *      {@link AMModel#getTree() }.
+ *    </li>
+ *    <li>
+ *      Map view, returned by the {@link AMModel#getAMs() } method:
+ *      mappings are returned in a map indexed by their IDs
+ *      ({@link AttributeMappingId }) containing the full mappings
+ *      ({@link AttributeMapping}).
+ *    </li>
+ * </ul>
  *
- * NOT thread-safe!
+ * Most of these methods cache their results (the input grammar cannot change
+ * later anyway) and return them lazily. Be aware though that the lazy
+ * implementations are <strong>not</strong> thread-safe!
  *
  * @author vektor
  */
@@ -46,14 +68,14 @@ public class AMModel {
 
   private TreeNode tree = null;
 
-  private final Map<AttributeMappingId, AttributeMapping> mappings = new HashMap<AttributeMappingId, AttributeMapping>();
+  private Map<AttributeMappingId, AttributeMapping> mappings = null;
 
   private Set<String> types = null;
 
   /**
-   * TODO vektor Comment!
+   * Full constructor.
    *
-   * @param grammar
+   * @param grammar Grammar from which the model should be created.
    */
   public AMModel(final List<Element> grammar) {
     if (BaseUtils.isEmpty(grammar)) {
@@ -64,7 +86,7 @@ public class AMModel {
   }
 
   /**
-   * Extracts the attribute mapping from the underlyin grammar as a flat list
+   * Extracts the attribute mapping from the underlying grammar as a flat list
    * of {@link Triplet}s <code>(element name, attribute name, attribute content)</code>.
    *
    * <p>Note that the original content of the attribute is split into tokens on spaces.
@@ -139,12 +161,15 @@ public class AMModel {
   }
 
   /**
-   * TODO vektor Comment!
+   * Returns all attribute mappings in the underlying grammar as a map
+   * indexed by their IDs ({@link AttributeMappingId }) containing the full
+   * mappings ({@link AttributeMapping}).
    *
-   * @return
+   * @return Map of all the attribute mappings.
    */
   public Map<AttributeMappingId, AttributeMapping> getAMs() {
-    if (mappings.isEmpty()) {
+    if (mappings == null) {
+      mappings = new HashMap<AttributeMappingId, AttributeMapping>();
       for (final Triplet t : getFlat()) {
         final AttributeMappingId mapping = new AttributeMappingId(t.getElement(), t.getAttribute());
         if (!mappings.containsKey(mapping)) {
@@ -158,9 +183,10 @@ public class AMModel {
 
   // TODO vektor JUnit test to verify that size() returns the same as getFlat().size()
   /**
-   * TODO vektor Comment!
+   * Returns the total size of all attribute mappings represented in this model.
    *
-   * @return
+   * @return Size of all the attribute mappings in this model. It is the sum
+   * of sizes of all the mappings represented.
    */
   public int size() {
     int ret = 0;
@@ -173,9 +199,9 @@ public class AMModel {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @return
+   * Returns all the element <cite>types</cite> represented in this model.
+   *
+   * @return Set of all element types (names) in this model.
    */
   public Set<String> getTypes() {
     if (types == null) {

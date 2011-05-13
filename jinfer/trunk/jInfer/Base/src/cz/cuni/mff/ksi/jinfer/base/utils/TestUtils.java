@@ -103,8 +103,9 @@ public final class TestUtils {
   }
 
   /**
-   * Returns an element with provided name and subnodes. The element is otherwise
-   * empty: context and metadata are empty. The element will be created as immutable.
+   * Returns an element with provided name and subnodes. The element is
+   * otherwise empty: context and metadata are empty, there are no attributes.
+   * The element will be created as immutable.
    *
    * @param name Name for this element.
    * @param subnodes Subnodes of this element.
@@ -123,7 +124,7 @@ public final class TestUtils {
   /**
    * Returns an element with provided name. The element is otherwise
    * empty: context and metadata are empty, the subnodes are
-   * {@link RegexpType#LAMBDA}.
+   * {@link RegexpType#LAMBDA}, there are no attributes.
    * The element will be created as immutable.
    *
    * @param name Name for this element.
@@ -139,12 +140,15 @@ public final class TestUtils {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param element
-   * @param attribute
-   * @param value
-   * @return
+   * Returns an element with provided name, containing an attribute with
+   * provided name and content. The element is otherwise empty: context and
+   * metadata are empty, the subnodes are {@link RegexpType#LAMBDA}.
+   * The element will be created as immutable.
+   *
+   * @param element Name for this element.
+   * @param attribute Name of its only attribute.
+   * @param value The only value of the attribute.
+   * @return Constructed element.
    */
   public static Element getElementWithAttribute(final String element,
           final String attribute, final String value) {

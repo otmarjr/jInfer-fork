@@ -17,7 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
 /**
- * TODO vektor Comment!
+ * Class representing a generic 2-tuple. Mutable class (contrast {@link Pair}).
+ *
+ * @param <S> Type argument of the first object in the pair.
+ * @param <T> Type argument of the second object in the pair.
  *
  * @author vektor
  */
@@ -28,6 +31,7 @@ public class MutablePair<S, T> {
 
   /**
    * Full constructor. Both members of this pair must be specified.
+   *
    * @param first First member of this pair.
    * @param second Second member of this pair.
    */
@@ -46,9 +50,9 @@ public class MutablePair<S, T> {
   }
 
   /**
-   * TODO vektor Comment!
+   * Sets the first member of this pair.
    *
-   * @param first
+   * @param first First member of this pair.
    */
   public void setFirst(final S first) {
     this.first = first;
@@ -64,9 +68,9 @@ public class MutablePair<S, T> {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param second
+   * Sets the second member of this pair.
+   *
+   * @param second Second member of this pair.
    */
   public void setSecond(final T second) {
     this.second = second;
@@ -79,11 +83,11 @@ public class MutablePair<S, T> {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof Pair)) {
+    if (obj == null || !(obj instanceof MutablePair)) {
       return false;
     }
     @SuppressWarnings("unchecked")
-    final Pair<S, T> other = (Pair) obj;
+    final MutablePair<S, T> other = (MutablePair) obj;
     final boolean firstEqual = equal(first, other.getFirst());
     final boolean secondEqual = equal(second, other.getSecond());
     return firstEqual && secondEqual;

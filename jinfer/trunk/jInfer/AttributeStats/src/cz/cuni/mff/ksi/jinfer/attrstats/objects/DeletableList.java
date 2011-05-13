@@ -22,7 +22,10 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Class representing a "list" that can be traversed even as items are removed
+ * from it. The iteration should be done using the {@link DeletableList#hasNext()}
+ * and {@link DeletableList#next()} methods. Note that after one pass using these
+ * methods the list cannot be traversed anymore.
  *
  * @author vektor
  */
@@ -33,9 +36,9 @@ public class DeletableList<T> {
   private int index = 0;
 
   /**
-   * TODO vektor Comment!
+   * Full constructor.
    *
-   * @param data
+   * @param data List of items this object will represent.
    */
   public DeletableList(final List<T> data) {
     model = new ArrayList<MutablePair<T, Boolean>>(data.size());
@@ -48,9 +51,10 @@ public class DeletableList<T> {
   }
 
   /**
-   * TODO vektor Comment!
+   * Checks whether there are more items to iterate.
    *
-   * @return
+   * @return <code>true</code> if there are more items to iterate,
+   * <code>false</code> otherwise.
    */
   public boolean hasNext() {
     int idx = index;
@@ -64,9 +68,10 @@ public class DeletableList<T> {
   }
 
   /**
-   * TODO vektor Comment!
+   * Returns the next item of the list.
    *
-   * @return
+   * @return The next element in the iteration or <code>null</code> if there are
+   * no left.
    */
   public T next() {
     while (index < model.size()) {
@@ -80,9 +85,10 @@ public class DeletableList<T> {
   }
 
   /**
-   * TODO vektor Comment!
+   * Removes all occurences of the specified item from the list. Uses
+   * {@link Object#equals(java.lang.Object) } to check for equality.
    *
-   * @param t
+   * @param t The object to remove.
    */
   public void remove(final T t) {
     for (final MutablePair<T, Boolean> p : model) {
@@ -93,11 +99,16 @@ public class DeletableList<T> {
   }
 
   /**
-   * TODO vektor Comment!
+   * Removes from this object all occurences of all items in the specified
+   * collection. Uses {@link Object#equals(java.lang.Object) } to check for
+   * equality.
    *
-   * @param c
+   * @param c Collection containing items to be removed.
    */
   public void removeAll(final Collection<T> c) {
+    if (c == null) {
+      throw new IllegalArgumentException("Expecting non-null collection");
+    }
     for (final MutablePair<T, Boolean> p : model) {
       if (c.contains(p.getFirst())) {
         p.setSecond(Boolean.FALSE);
@@ -106,9 +117,10 @@ public class DeletableList<T> {
   }
 
   /**
-   * TODO vektor Comment!
+   * Returns a list of items that are still "alive" in this object, i.e. those
+   * that were not removed.
    *
-   * @return
+   * @return List of all "live" items in this list.
    */
   public List<T> getLive() {
     final List<T> ret = new ArrayList<T>();

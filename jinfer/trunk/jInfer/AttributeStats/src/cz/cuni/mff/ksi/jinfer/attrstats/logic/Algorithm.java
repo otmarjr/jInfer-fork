@@ -31,7 +31,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
- * TODO vektor Comment!
+ * Implementation of the heuristic algorithm for finding ID set as described
+ * in the "Finding ID Attributes in XML Documents" article.
  *
  * @author vektor
  */
@@ -47,10 +48,11 @@ public final class Algorithm {
   }
 
   /**
-   * TODO vektor Comment!
+   * Finds the "best" ID set in the specified attribute mapping model. For
+   * detailed information on the algorithm itself, please refer to the article.
    *
-   * @param model
-   * @return
+   * @param model Model to work on.
+   * @return List of attribute mappings constituting the ID set found.
    */
   public static List<AttributeMappingId> findIDSet(final AMModel model) {
 

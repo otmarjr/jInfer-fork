@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
- *
- * Note that the image is stored non-uniquely.
+ * This is a representation of an attribute mapping, as described in the
+ * article "Finding ID Attributes in XML Documents". It contains the mapping
+ * itself (element and attribute name), as well as its image (all values the
+ * attribute under the element ever has). Note that the image is stored as a
+ * list (not a set), thus duplicate values are all stored.
  *
  * @author vektor
  */
@@ -33,30 +35,30 @@ public class AttributeMapping {
   private final List<String> image = new ArrayList<String>();
 
   /**
-   * TODO vektor Comment!
+   * Minimal constructor. Image of this mapping will be created as empty.
    *
-   * @param element
-   * @param attribute
+   * @param element Element name.
+   * @param attribute Attribute name.
    */
   public AttributeMapping(final String element, final String attribute) {
     this.id = new AttributeMappingId(element, attribute);
   }
 
   /**
-   * TODO vektor Comment!
+   * Minimal constructor. Image of this mapping will be created as empty.
    *
-   * @param id
+   * @param id Identifier of this mapping.
    */
   public AttributeMapping(final AttributeMappingId id) {
     this.id = id;
   }
 
   /**
-   * TODO vektor Comment!
+   * Full constructor.
    *
-   * @param element
-   * @param attribute
-   * @param image
+   * @param element Element name.
+   * @param attribute Attribute name.
+   * @param image Attribute mapping image.
    */
   public AttributeMapping(final String element, final String attribute, final List<String> image) {
     this.id = new AttributeMappingId(element, attribute);
@@ -64,10 +66,10 @@ public class AttributeMapping {
   }
 
   /**
-   * TODO vektor Comment!
+   * Full constructor.
    *
-   * @param id
-   * @param image
+   * @param id Identifier of this mapping.
+   * @param image Attribute mapping image.
    */
   public AttributeMapping(final AttributeMappingId id, final List<String> image) {
     this.id = id;

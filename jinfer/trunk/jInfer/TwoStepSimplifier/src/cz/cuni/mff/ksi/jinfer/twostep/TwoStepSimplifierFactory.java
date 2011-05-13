@@ -79,7 +79,7 @@ public class TwoStepSimplifierFactory implements Simplifier {
   /** 
    * Default content inferrer to be used if none selected.
    */
-  public static final String PROPERTIES_CONTENT_INFERRER_DEFAULT = "TwoStepContentInferrerPattern";
+  public static final String PROPERTIES_CONTENT_INFERRER_DEFAULT = "TwoStepContentInferrerSimple";
 
   /**
    * Canonical name

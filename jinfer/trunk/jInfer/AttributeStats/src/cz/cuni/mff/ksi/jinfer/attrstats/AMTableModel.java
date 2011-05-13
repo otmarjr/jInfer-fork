@@ -26,13 +26,13 @@ import javax.swing.table.TableModel;
  *
  * @author vektor
  */
-class MyTableModel extends DefaultTableModel {
+public class AMTableModel extends DefaultTableModel {
 
   private static final long serialVersionUID = 78974631624L;
 
   private final List<Triplet> model;
 
-  public MyTableModel(final List<Triplet> model) {
+  public AMTableModel(final List<Triplet> model) {
     super(model.size(), 3);
     if (model == null) {
       throw new IllegalArgumentException("Model must be not null.");

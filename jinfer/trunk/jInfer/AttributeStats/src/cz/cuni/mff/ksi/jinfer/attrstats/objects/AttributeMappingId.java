@@ -57,4 +57,9 @@ public class AttributeMappingId {
     return hash;
   }
 
+  @Override
+  public String toString() {
+    return "(" + element + "," + attribute + ")";
+  }
+
 }

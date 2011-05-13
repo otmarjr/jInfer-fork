@@ -33,6 +33,11 @@ public class DeletableList<T> {
 
   private int index = 0;
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param data
+   */
   public DeletableList(final List<T> data) {
     model = new ArrayList<MutablePair<T, Boolean>>(data.size());
     for (final T t : data) {
@@ -43,6 +48,11 @@ public class DeletableList<T> {
     }
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @return
+   */
   public boolean hasNext() {
     int idx = index;
     while (idx < model.size()) {
@@ -54,6 +64,11 @@ public class DeletableList<T> {
     return false;
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @return
+   */
   public T next() {
     while (index < model.size()) {
       if (model.get(index).getSecond().booleanValue()) {
@@ -65,6 +80,11 @@ public class DeletableList<T> {
     return null;
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param t
+   */
   public void remove(final T t) {
     for (final MutablePair<T, Boolean> p : model) {
       if (p.getFirst().equals(t)) {
@@ -73,6 +93,11 @@ public class DeletableList<T> {
     }
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param c
+   */
   public void removeAll(final Collection<T> c) {
     for (final MutablePair<T, Boolean> p : model) {
       if (c.contains(p.getFirst())) {
@@ -81,6 +106,11 @@ public class DeletableList<T> {
     }
   }
 
+  /**
+   * TODO vektor Comment!
+   * 
+   * @return
+   */
   public List<T> getLive() {
     final List<T> ret = new ArrayList<T>();
 

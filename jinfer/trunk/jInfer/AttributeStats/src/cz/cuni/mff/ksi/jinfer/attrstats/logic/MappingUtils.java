@@ -21,14 +21,12 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMapping;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,83 +46,6 @@ public final class MappingUtils {
 
   private MappingUtils() {
 
-  }
-
-  /**
-   * Extracts the attribute mapping from the specified grammar as a flat list
-   * of {@link Triplet}s <code>(element name, attribute name, attribute content)</code>.
-   *
-   * <p>Note that the original content of the attribute is split into tokens on spaces.
-   * For example an element <code>e</code> with attribute <code>a</code> that
-   * contains the string <code>"1 p p"</code> in the original document will
-   * produce 3 {@link Triplet}s, containing the <code>attribute content</code>
-   * <code>1</code>, <code>p</code> and <code>p</code> respectively.</p>
-   *
-   * @param grammar Grammar from which the attribute mapping should be retrieved.
-   * @return Flat representation of the attribute mapping contained in the
-   * specified grammar. Resulting list of {@link Triplet}s is sorted
-   * (see {@link Triplet#compareTo(Triplet)}).
-   */
-  // TODO vektor Move to AMModel
-  public static List<Triplet> extractFlat(final List<Element> grammar) {
-    final List<Triplet> ret = new ArrayList<Triplet>();
-    for (final Element e : grammar) {
-      if (!BaseUtils.isEmpty(e.getAttributes())) {
-        for (final Attribute a : e.getAttributes()) {
-          for (final String c : a.getContent()) {
-            final String[] values = c.split(" ");
-            for (final String value : values) {
-              ret.add(new Triplet(e.getName(), a.getName(), value));
-            }
-          }
-        }
-      }
-    }
-
-    Collections.sort(ret);
-
-    return ret;
-  }
-
-  /**
-   * Extracts the attribute mapping from the specified grammar as a tree ready
-   * to be used in a {@link JTree}.
-   *
-   * <p>Please note that the attribute content is split into tokens on spaces,
-   * see {@link MappingUtils#extractFlat } for details.</p>
-   *
-   * @param grammar Grammar from which the attribute mapping should be retrieved.
-   * @return Tree representation of the attribute mapping contained in the
-   * specified grammar. Under the root node there are nodes representing each
-   * {@link Element} in the grammar. The element nodes then contain nodes for
-   * each of the {@link Attribute}s they contain.
-   */
-  // TODO vektor Move to AMModel
-  public static TreeNode createTree(final List<Element> grammar) {
-    Collections.sort(grammar, BaseUtils.NAMED_NODE_COMPARATOR);
-
-    final DefaultMutableTreeNode ret = new DefaultMutableTreeNode("");
-    for (final Element e : grammar) {
-      if (!BaseUtils.isEmpty(e.getAttributes())) {
-        final DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(e.getName());
-        final List<Attribute> attributes = new ArrayList<Attribute>(e.getAttributes());
-        Collections.sort(attributes, BaseUtils.NAMED_NODE_COMPARATOR);
-        for (final Attribute a : attributes) {
-          final List<String> content = new ArrayList<String>();
-          for (final String oneContent : a.getContent()) {
-            final String[] values = oneContent.split(" ");
-            content.addAll(Arrays.asList(values));
-          }
-
-          final AttributeTreeNode attributeNode =
-                  new AttributeTreeNode(e.getName(), a.getName(), content);
-          elementNode.add(attributeNode);
-        }
-        ret.add(elementNode);
-      }
-    }
-
-    return ret;
   }
 
   /**

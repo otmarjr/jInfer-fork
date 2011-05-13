@@ -27,6 +27,12 @@ public class AttributeMappingId {
 
   private final String attribute;
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param element
+   * @param attribute
+   */
   public AttributeMappingId(final String element, final String attribute) {
     this.element = element;
     this.attribute = attribute;
@@ -40,6 +46,11 @@ public class AttributeMappingId {
     return attribute;
   }
 
+  /**
+   * TODO vektor Comment!
+   * @param obj
+   * @return 
+   */
   @Override
   public boolean equals(final Object obj) {
     if (!(obj instanceof AttributeMappingId)) {

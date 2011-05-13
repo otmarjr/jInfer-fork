@@ -17,10 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * TODO vektor Comment!
+ *
+ * Note that the image is stored non-uniquely.
  *
  * @author vektor
  */
@@ -30,19 +33,43 @@ public class AttributeMapping {
 
   private final List<String> image = new ArrayList<String>();
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param element
+   * @param attribute
+   */
   public AttributeMapping(final String element, final String attribute) {
     this.id = new AttributeMappingId(element, attribute);
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param id
+   */
   public AttributeMapping(final AttributeMappingId id) {
     this.id = id;
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param element
+   * @param attribute
+   * @param image
+   */
   public AttributeMapping(final String element, final String attribute, final List<String> image) {
     this.id = new AttributeMappingId(element, attribute);
     this.image.addAll(image);
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param id
+   * @param image
+   */
   public AttributeMapping(final AttributeMappingId id, final List<String> image) {
     this.id = id;
     this.image.addAll(image);
@@ -64,6 +91,12 @@ public class AttributeMapping {
     return image;
   }
 
+  /**
+   * Returns the size of the image of this mapping.
+   *
+   * @return Size of the image of this mapping, which is the number of all values
+   * this mapping has.
+   */
   public int size() {
     return image.size();
   }

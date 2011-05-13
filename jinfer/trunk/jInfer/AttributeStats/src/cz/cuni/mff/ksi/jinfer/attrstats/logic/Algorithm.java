@@ -46,13 +46,19 @@ public final class Algorithm {
 
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param model
+   * @return
+   */
   public static List<AttributeMappingId> findIDSet(final AMModel model) {
 
     // 1.  M := all AMs
 
     final List<AttributeMappingId> M = new ArrayList<AttributeMappingId>(model.getAMs().keySet());
 
-    System.out.println("M: " + M.toString());
+    LOG.info("M: " + M.toString());
 
     // 1.  C := all candidate AMs sorted by decreasing size
 
@@ -74,7 +80,7 @@ public final class Algorithm {
 
     });
 
-    System.out.println("C: " + C.toString());
+    LOG.info("C: " + C.toString());
 
     // 2.  compute weight for each m in C
 
@@ -118,7 +124,7 @@ public final class Algorithm {
       final List<AttributeMappingId> conflicts = new ArrayList<AttributeMappingId>();
       double conflicsWeight = 0;
       for (final AttributeMappingId c : C2.getLive()) {
-        if (!c.equals(m) && intersects(m, c, model)) {
+        if (!c.equals(m) && imagesIntersect(m, c, model)) {
           conflicsWeight += weights.get(c);
         }
       }
@@ -136,13 +142,13 @@ public final class Algorithm {
 
     }
 
-    System.out.println("C2: " + C2.getLive().toString());
+    LOG.info("C2: " + C2.getLive().toString());
 
     // 11. return C
     return C2.getLive();
   }
 
-  private static boolean intersects(final AttributeMappingId am1,
+  private static boolean imagesIntersect(final AttributeMappingId am1,
           final AttributeMappingId am2, final AMModel model) {
     if (am1 == null || am2 == null || model == null) {
       throw new IllegalArgumentException("Expecting non-null parameters");

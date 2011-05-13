@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.MutablePair;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -108,7 +107,7 @@ public class DeletableList<T> {
 
   /**
    * TODO vektor Comment!
-   * 
+   *
    * @return
    */
   public List<T> getLive() {

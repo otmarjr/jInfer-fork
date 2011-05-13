@@ -109,7 +109,7 @@ public final class Algorithm {
 
     }
 
-    System.out.println("C1: " + C1.toString());
+    LOG.info("C1: " + C1.toString());
 
     // 7.  for m in C do
 
@@ -126,6 +126,7 @@ public final class Algorithm {
       for (final AttributeMappingId c : C2.getLive()) {
         if (!c.equals(m) && imagesIntersect(m, c, model)) {
           conflicsWeight += weights.get(c);
+          conflicts.add(c);
         }
       }
 
@@ -166,13 +167,13 @@ public final class Algorithm {
             new HashSet<String>(image2)).isEmpty();
   }
 
-  private static Double weight(AttributeMappingId mapping, AMModel model) {
+  private static Double weight(final AttributeMappingId mapping, final AMModel model) {
     return Double.valueOf(
             ALPHA * MappingUtils.support(mapping, model)
             + BETA * MappingUtils.coverage(mapping, model));
   }
 
-  private static AttributeMappingId findMaxWeight(String type,
+  private static AttributeMappingId findMaxWeight(final String type,
           final Map<AttributeMappingId, Double> weights) {
     double maxWeight = 0;
     AttributeMappingId max = null;

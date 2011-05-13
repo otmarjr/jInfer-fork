@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

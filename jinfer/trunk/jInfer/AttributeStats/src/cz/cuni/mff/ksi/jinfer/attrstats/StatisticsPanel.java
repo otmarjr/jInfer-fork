@@ -65,7 +65,7 @@ public class StatisticsPanel extends JPanel {
     table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
       @Override
-      public void valueChanged(ListSelectionEvent e) {
+      public void valueChanged(final ListSelectionEvent e) {
         computeStats();
       }
     });
@@ -117,7 +117,7 @@ public class StatisticsPanel extends JPanel {
     coverage.setText(value.getSecond().toString());
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked", "PMD"})
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
     java.awt.GridBagConstraints gridBagConstraints;

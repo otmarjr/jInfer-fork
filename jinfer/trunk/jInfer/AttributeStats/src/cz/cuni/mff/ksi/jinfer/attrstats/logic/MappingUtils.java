@@ -19,21 +19,11 @@ package cz.cuni.mff.ksi.jinfer.attrstats.logic;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMapping;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 /**
  * Library class containing utility functions for attribute mapping.

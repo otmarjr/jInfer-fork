@@ -168,4 +168,34 @@ public final class MappingUtils {
 
     return true;
   }
+
+  /**
+   * Checks whether the images of the two specified attribute mappings in the
+   * specified model intersect.
+   *
+   * @param am1 ID of the first mapping to check.
+   * @param am2 ID of the second mapping to check.
+   * @param model Attribute mapping model to check intersection in.
+   * 
+   * @return <code>true</code> if the two attribute mapping images intersect
+   * (have at least one common value), <code>false</code> otherwise.
+   */
+  // TODO vektor JUnit test!
+  public static boolean imagesIntersect(
+          final AttributeMappingId am1,
+          final AttributeMappingId am2, final AMModel model) {
+    if (am1 == null || am2 == null || model == null) {
+      throw new IllegalArgumentException("Expecting non-null parameters");
+    }
+    if (!model.getAMs().containsKey(am1)) {
+      throw new IllegalArgumentException("Mapping " + am1 + " not found in the model");
+    }
+    if (!model.getAMs().containsKey(am2)) {
+      throw new IllegalArgumentException("Mapping " + am2 + " not found in the model");
+    }
+    return !BaseUtils.intersect(
+            new HashSet<String>(model.getAMs().get(am1).getImage()),
+            new HashSet<String>(model.getAMs().get(am2).getImage()))
+            .isEmpty();
+  }
 }

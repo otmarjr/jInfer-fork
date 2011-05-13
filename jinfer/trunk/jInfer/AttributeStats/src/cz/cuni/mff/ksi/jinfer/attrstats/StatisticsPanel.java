@@ -313,7 +313,7 @@ public class StatisticsPanel extends JPanel {
   private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
     final List<AttributeMappingId> ids = Algorithm.findIDSet(model);
     // TODO vektor Less ugly please
-    list.setModel(new DefaultComboBoxModel(new Vector(ids)));
+    list.setModel(new DefaultComboBoxModel(new Vector<AttributeMappingId>(ids)));
   }//GEN-LAST:event_runActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

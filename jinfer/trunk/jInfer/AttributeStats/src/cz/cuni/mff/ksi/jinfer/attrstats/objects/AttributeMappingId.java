@@ -45,6 +45,19 @@ public class AttributeMappingId {
     return element;
   }
 
+  /**
+   * Checks whether this object represents an attribute mapping of the specified
+   * type (whether the element has the speficied name). This check is
+   * case-sensitive.
+   *
+   * @param type Type to check.
+   * @return <code>true</code> if this mapping is of the specified type,
+   * <code>false</code> otherwise.
+   */
+  public boolean isType(final String type) {
+    return getElement().equals(type);
+  }
+
   public String getAttribute() {
     return attribute;
   }

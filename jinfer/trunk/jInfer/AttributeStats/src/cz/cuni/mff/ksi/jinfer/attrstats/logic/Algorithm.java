@@ -126,7 +126,7 @@ public final class Algorithm {
       final List<AttributeMappingId> conflicts = new ArrayList<AttributeMappingId>();
       double conflicsWeight = 0;
       for (final AttributeMappingId c : C2.getLive()) {
-        if (!c.equals(m) && imagesIntersect(m, c, model)) {
+        if (!c.equals(m) && MappingUtils.imagesIntersect(m, c, model)) {
           conflicsWeight += weights.get(c);
           conflicts.add(c);
         }
@@ -151,24 +151,6 @@ public final class Algorithm {
     return C2.getLive();
   }
 
-  private static boolean imagesIntersect(final AttributeMappingId am1,
-          final AttributeMappingId am2, final AMModel model) {
-    if (am1 == null || am2 == null || model == null) {
-      throw new IllegalArgumentException("Expecting non-null parameters");
-    }
-    if (!model.getAMs().containsKey(am1)) {
-      throw new IllegalArgumentException("Mapping " + am1 + " not found in the model");
-    }
-    if (!model.getAMs().containsKey(am2)) {
-      throw new IllegalArgumentException("Mapping " + am2 + " not found in the model");
-    }
-    final List<String> image1 = model.getAMs().get(am1).getImage();
-    final List<String> image2 = model.getAMs().get(am2).getImage();
-    return !BaseUtils.intersect(
-            new HashSet<String>(image1),
-            new HashSet<String>(image2)).isEmpty();
-  }
-
   private static Double weight(final AttributeMappingId mapping, final AMModel model) {
     return Double.valueOf(
             ALPHA * MappingUtils.support(mapping, model)
@@ -180,9 +162,10 @@ public final class Algorithm {
     double maxWeight = 0;
     AttributeMappingId max = null;
     for (final Map.Entry<AttributeMappingId, Double> e : weights.entrySet()) {
-      if (e.getKey().getElement().equals(type)
-            && e.getValue().doubleValue() > maxWeight) {
-        maxWeight = e.getValue().doubleValue();
+      final double weight = e.getValue().doubleValue();
+      if (e.getKey().isType(type)
+            && weight > maxWeight) {
+        maxWeight = weight;
         max = e.getKey();
       }
     }

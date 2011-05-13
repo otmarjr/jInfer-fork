@@ -14,10 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 
 /**
  * TODO vektor Comment!
@@ -28,8 +39,70 @@ public class TableViewPanel extends JPanel {
 
   private static final long serialVersionUID = 18443L;
 
+  private AMModel model;
+  private final Map<AttributeMappingId, Pair<Double, Double>> cache =
+          new HashMap<AttributeMappingId, Pair<Double, Double>>();
+
   public TableViewPanel() {
     initComponents();
+    tableFlat.setSelectionModel(new DefaultListSelectionModel());
+  }
+
+  public void setModel(final AMModel model) {
+    this.model = model;
+    tableFlat.setModel(new AMTableModel(model.getFlat()));
+    tableFlat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+      @Override
+      public void valueChanged(final ListSelectionEvent e) {
+        computeStats();
+      }
+    });
+  }
+
+  public void selectInTable(final List<AttributeTreeNode> nodes) {
+    final DefaultListSelectionModel selectionModel = (DefaultListSelectionModel)tableFlat.getSelectionModel();
+    selectionModel.clearSelection();
+    final TableModel m = tableFlat.getModel();
+
+    for (int i = 0; i < m.getRowCount(); i++) {
+      final int row = tableFlat.convertRowIndexToModel(i);
+      for (final AttributeTreeNode atn : nodes) {
+        if (atn.getElementName().equals(m.getValueAt(row, 0))
+                && atn.getAttributeName().equals(m.getValueAt(row, 1))
+                && atn.getContent().contains((String)m.getValueAt(row, 2))) {
+          selectionModel.addSelectionInterval(i, i);
+          break;
+        }
+      }
+    }
+  }
+
+  private void computeStats() {
+    if (tableFlat.getSelectedRowCount() == 1) {
+      final AMTableModel tableModel = (AMTableModel)tableFlat.getModel();
+      final int row = tableFlat.convertRowIndexToModel(tableFlat.getSelectedRow());
+      showStats(new AttributeMappingId((String) tableModel.getValueAt(row, 0), (String) tableModel.getValueAt(row, 1)));
+    }
+    else {
+      support.setText("N/A");
+      coverage.setText("N/A");
+    }
+  }
+
+  private void showStats(final AttributeMappingId targetMapping) {
+    final Pair<Double, Double> value;
+    if (cache.containsKey(targetMapping)) {
+      value = cache.get(targetMapping);
+    }
+    else {
+      value = new Pair<Double, Double>(
+              Double.valueOf(MappingUtils.support(targetMapping, model)),
+              Double.valueOf(MappingUtils.coverage(targetMapping, model)));
+      cache.put(targetMapping, value);
+    }
+    support.setText(value.getFirst().toString());
+    coverage.setText(value.getSecond().toString());
   }
 
   @SuppressWarnings({"unchecked", "PMD"})
@@ -43,9 +116,6 @@ public class TableViewPanel extends JPanel {
     tableFlat = new javax.swing.JTable();
     panelMappings = new javax.swing.JPanel();
     splitVertical = new javax.swing.JSplitPane();
-    panelValues = new javax.swing.JPanel();
-    paneValues = new javax.swing.JScrollPane();
-    listValues = new javax.swing.JList();
     panelMappingsTable = new javax.swing.JPanel();
     paneMappings = new javax.swing.JScrollPane();
     tableMappings = new javax.swing.JTable();
@@ -55,6 +125,9 @@ public class TableViewPanel extends JPanel {
     coverage = new javax.swing.JLabel();
     labelIDset = new javax.swing.JLabel();
     idSet = new javax.swing.JLabel();
+    panelValues = new javax.swing.JPanel();
+    paneValues = new javax.swing.JScrollPane();
+    listValues = new javax.swing.JList();
 
     setLayout(new java.awt.BorderLayout());
 
@@ -62,7 +135,7 @@ public class TableViewPanel extends JPanel {
     splitHorizontal.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
     splitHorizontal.setContinuousLayout(true);
 
-    panelFlat.setBorder(javax.swing.BorderFactory.createTitledBorder("Flat View")); // NOI18N
+    panelFlat.setBorder(javax.swing.BorderFactory.createTitledBorder("Flat View"));
     panelFlat.setLayout(new java.awt.BorderLayout());
 
     tableFlat.setModel(new javax.swing.table.DefaultTableModel(
@@ -90,30 +163,13 @@ public class TableViewPanel extends JPanel {
 
     splitHorizontal.setTopComponent(panelFlat);
 
-    panelMappings.setBorder(javax.swing.BorderFactory.createTitledBorder("Attribute Mappings")); // NOI18N
+    panelMappings.setBorder(javax.swing.BorderFactory.createTitledBorder("Attribute Mappings"));
     panelMappings.setLayout(new java.awt.BorderLayout());
 
-    splitVertical.setDividerLocation(250);
-
-    panelValues.setBorder(javax.swing.BorderFactory.createTitledBorder("Image")); // NOI18N
-    panelValues.setPreferredSize(new java.awt.Dimension(0, 0));
-    panelValues.setLayout(new java.awt.GridBagLayout());
-
-    paneValues.setViewportView(listValues);
-
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    panelValues.add(paneValues, gridBagConstraints);
-
-    splitVertical.setLeftComponent(panelValues);
+    splitVertical.setDividerLocation(300);
 
     panelMappingsTable.setMinimumSize(new java.awt.Dimension(0, 0));
-    panelMappingsTable.setPreferredSize(new java.awt.Dimension(0, 0));
+    panelMappingsTable.setPreferredSize(new java.awt.Dimension(300, 100));
     panelMappingsTable.setLayout(new java.awt.GridBagLayout());
 
     tableMappings.setModel(new javax.swing.table.DefaultTableModel(
@@ -199,7 +255,24 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 12);
     panelMappingsTable.add(idSet, gridBagConstraints);
 
-    splitVertical.setRightComponent(panelMappingsTable);
+    splitVertical.setLeftComponent(panelMappingsTable);
+
+    panelValues.setBorder(javax.swing.BorderFactory.createTitledBorder("Image"));
+    panelValues.setPreferredSize(new java.awt.Dimension(0, 0));
+    panelValues.setLayout(new java.awt.GridBagLayout());
+
+    paneValues.setViewportView(listValues);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelValues.add(paneValues, gridBagConstraints);
+
+    splitVertical.setRightComponent(panelValues);
 
     panelMappings.add(splitVertical, java.awt.BorderLayout.CENTER);
 

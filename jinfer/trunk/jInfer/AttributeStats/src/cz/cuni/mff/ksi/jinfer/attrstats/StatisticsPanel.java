@@ -124,7 +124,7 @@ public class StatisticsPanel extends JPanel {
 
     tabbedPane = new javax.swing.JTabbedPane();
     chartView = new javax.swing.JPanel();
-    splitPane = new javax.swing.JSplitPane();
+    splitPaneChart = new javax.swing.JSplitPane();
     nodeTreePane = new javax.swing.JScrollPane();
     nodeTree = new javax.swing.JTree();
     jFreeChartPlaceholder = new javax.swing.JPanel();
@@ -147,7 +147,7 @@ public class StatisticsPanel extends JPanel {
 
     chartView.setLayout(new java.awt.GridBagLayout());
 
-    splitPane.setDividerLocation(200);
+    splitPaneChart.setDividerLocation(200);
 
     nodeTreePane.setMinimumSize(new java.awt.Dimension(200, 23));
     nodeTreePane.setPreferredSize(new java.awt.Dimension(200, 322));
@@ -160,7 +160,7 @@ public class StatisticsPanel extends JPanel {
     });
     nodeTreePane.setViewportView(nodeTree);
 
-    splitPane.setLeftComponent(nodeTreePane);
+    splitPaneChart.setLeftComponent(nodeTreePane);
 
     jFreeChartPlaceholder.setLayout(new java.awt.GridBagLayout());
 
@@ -169,7 +169,7 @@ public class StatisticsPanel extends JPanel {
     labelPlaceholder.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelPlaceholder.text")); // NOI18N
     jFreeChartPlaceholder.add(labelPlaceholder, new java.awt.GridBagConstraints());
 
-    splitPane.setRightComponent(jFreeChartPlaceholder);
+    splitPaneChart.setRightComponent(jFreeChartPlaceholder);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -178,7 +178,7 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    chartView.add(splitPane, gridBagConstraints);
+    chartView.add(splitPaneChart, gridBagConstraints);
 
     tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.chartView.TabConstraints.tabTitle"), chartView); // NOI18N
 
@@ -291,7 +291,7 @@ public class StatisticsPanel extends JPanel {
 
   private void nodeTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_nodeTreeValueChanged
     if (nodeTree.getSelectionPaths() == null || nodeTree.getSelectionPaths().length < 1) {
-      splitPane.setRightComponent(jFreeChartPlaceholder);
+      splitPaneChart.setRightComponent(jFreeChartPlaceholder);
       return;
     }
     final List<AttributeTreeNode> atns = new ArrayList<AttributeTreeNode>();
@@ -301,16 +301,17 @@ public class StatisticsPanel extends JPanel {
       }
     }
     if (BaseUtils.isEmpty(atns)) {
-      splitPane.setRightComponent(jFreeChartPlaceholder);
+      splitPaneChart.setRightComponent(jFreeChartPlaceholder);
       return;
     }
 
-    splitPane.setRightComponent(JFCWrapper.createGraphPanel(atns));
+    splitPaneChart.setRightComponent(JFCWrapper.createGraphPanel(atns));
 
     selectInTable(atns);
   }//GEN-LAST:event_nodeTreeValueChanged
 
   private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
+    // TODO vektor Parameters should be customizable
     final List<AttributeMappingId> ids = Algorithm.findIDSet(model);
     // TODO vektor Less ugly please
     list.setModel(new DefaultComboBoxModel(new Vector<AttributeMappingId>(ids)));
@@ -330,7 +331,7 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JScrollPane nodeTreePane;
   private javax.swing.JPanel panelArticle;
   private javax.swing.JButton run;
-  private javax.swing.JSplitPane splitPane;
+  private javax.swing.JSplitPane splitPaneChart;
   private javax.swing.JPanel stats;
   private javax.swing.JLabel support;
   private javax.swing.JTabbedPane tabbedPane;

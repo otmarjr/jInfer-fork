@@ -60,6 +60,11 @@ public class Triplet implements Comparable<Triplet> {
     return value;
   }
 
+  @Override
+  public String toString() {
+    return "(" + getElement() + ", " + getAttribute() + ", " + getValue() + ")";
+  }
+
   /**
    * Compares to another {@link Triplet}. First of all, <code>null</code> is
    * supposed to be the last. Second, the comparison is done first on element name,
@@ -79,6 +84,26 @@ public class Triplet implements Comparable<Triplet> {
       return cmpElement;
     }
     return attribute.compareTo(o.getAttribute());
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (!(obj instanceof Triplet)) {
+      return false;
+    }
+    final Triplet other = (Triplet) obj;
+    return element.equals(other.getElement())
+            && attribute.equals(other.getAttribute())
+            && value.equals(other.getValue());
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 71 * hash + (this.element != null ? this.element.hashCode() : 0);
+    hash = 71 * hash + (this.attribute != null ? this.attribute.hashCode() : 0);
+    hash = 71 * hash + (this.value != null ? this.value.hashCode() : 0);
+    return hash;
   }
 
 }

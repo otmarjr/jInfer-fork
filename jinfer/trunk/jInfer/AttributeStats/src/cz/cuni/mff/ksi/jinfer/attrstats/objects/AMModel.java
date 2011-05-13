@@ -181,7 +181,6 @@ public class AMModel {
     return Collections.unmodifiableMap(mappings);
   }
 
-  // TODO vektor JUnit test to verify that size() returns the same as getFlat().size()
   /**
    * Returns the total size of all attribute mappings represented in this model.
    *

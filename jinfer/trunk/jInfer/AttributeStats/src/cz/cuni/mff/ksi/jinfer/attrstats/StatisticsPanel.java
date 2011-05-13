@@ -16,11 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.logic.Algorithm;
 import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
@@ -57,7 +59,7 @@ public class StatisticsPanel extends JPanel {
 
   public void setModel(final List<Element> grammar) {
     model = new AMModel(grammar);
-    table.setModel(new MyTableModel(model.getFlat()));
+    table.setModel(new AMTableModel(model.getFlat()));
     nodeTree.setModel(new DefaultTreeModel(model.getTree()));
 
     table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -69,6 +71,7 @@ public class StatisticsPanel extends JPanel {
     });
   }
 
+  // TODO vektor When a number of rows is selected, display info whether this is a feasible ID set
   private void selectInTable(final List<AttributeTreeNode> nodes) {
     final DefaultListSelectionModel selectionModel = (DefaultListSelectionModel)table.getSelectionModel();
     selectionModel.clearSelection();
@@ -89,7 +92,7 @@ public class StatisticsPanel extends JPanel {
 
   private void computeStats() {
     if (table.getSelectedRowCount() == 1) {
-      final MyTableModel tableModel = (MyTableModel)table.getModel();
+      final AMTableModel tableModel = (AMTableModel)table.getModel();
       final int row = table.convertRowIndexToModel(table.getSelectedRow());
       showStats(new AttributeMappingId((String) tableModel.getValueAt(row, 0), (String) tableModel.getValueAt(row, 1)));
     }
@@ -134,7 +137,11 @@ public class StatisticsPanel extends JPanel {
     support = new javax.swing.JLabel();
     labelCoverage = new javax.swing.JLabel();
     coverage = new javax.swing.JLabel();
-    misc = new javax.swing.JPanel();
+    idSet = new javax.swing.JPanel();
+    panelArticle = new javax.swing.JPanel();
+    run = new javax.swing.JButton();
+    listPane = new javax.swing.JScrollPane();
+    list = new javax.swing.JList();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -145,7 +152,6 @@ public class StatisticsPanel extends JPanel {
     nodeTreePane.setMinimumSize(new java.awt.Dimension(200, 23));
     nodeTreePane.setPreferredSize(new java.awt.Dimension(200, 322));
 
-    nodeTree.setPreferredSize(null);
     nodeTree.setRootVisible(false);
     nodeTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
       public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
@@ -237,7 +243,43 @@ public class StatisticsPanel extends JPanel {
     tableView.add(stats, gridBagConstraints);
 
     tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.tableView.TabConstraints.tabTitle"), tableView); // NOI18N
-    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.misc.TabConstraints.tabTitle"), misc); // NOI18N
+
+    idSet.setLayout(new java.awt.GridBagLayout());
+
+    panelArticle.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.panelArticle.border.title"))); // NOI18N
+    panelArticle.setLayout(new java.awt.GridBagLayout());
+
+    run.setText("Run the algorithm"); // NOI18N
+    run.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        runActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelArticle.add(run, gridBagConstraints);
+
+    listPane.setViewportView(list);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelArticle.add(listPane, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    idSet.add(panelArticle, gridBagConstraints);
+
+    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.idSet.TabConstraints.tabTitle"), idSet); // NOI18N
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -268,16 +310,26 @@ public class StatisticsPanel extends JPanel {
     selectInTable(atns);
   }//GEN-LAST:event_nodeTreeValueChanged
 
+  private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
+    final List<AttributeMappingId> ids = Algorithm.findIDSet(model);
+    // TODO vektor Less ugly please
+    list.setModel(new DefaultComboBoxModel(new Vector(ids)));
+  }//GEN-LAST:event_runActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel chartView;
   private javax.swing.JLabel coverage;
+  private javax.swing.JPanel idSet;
   private javax.swing.JPanel jFreeChartPlaceholder;
   private javax.swing.JLabel labelCoverage;
   private javax.swing.JLabel labelPlaceholder;
   private javax.swing.JLabel labelSupport;
-  private javax.swing.JPanel misc;
+  private javax.swing.JList list;
+  private javax.swing.JScrollPane listPane;
   private javax.swing.JTree nodeTree;
   private javax.swing.JScrollPane nodeTreePane;
+  private javax.swing.JPanel panelArticle;
+  private javax.swing.JButton run;
   private javax.swing.JSplitPane splitPane;
   private javax.swing.JPanel stats;
   private javax.swing.JLabel support;

@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.logic;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.log4j.Logger;
 
 /**
  * TODO vektor Comment!
@@ -38,14 +40,10 @@ public final class Algorithm {
   private static final double ALPHA = 1.0d;
   private static final double BETA = 1.0d;
 
+  private static final Logger LOG = Logger.getLogger(Algorithm.class);
+
   private Algorithm() {
 
-  }
-
-  private static Double weight(AttributeMappingId mapping, AMModel model) {
-    return Double.valueOf(
-            ALPHA * MappingUtils.support(mapping, model)
-            + BETA * MappingUtils.coverage(mapping, model));
   }
 
   public static List<AttributeMappingId> findIDSet(final AMModel model) {
@@ -53,6 +51,8 @@ public final class Algorithm {
     // 1.  M := all AMs
 
     final List<AttributeMappingId> M = new ArrayList<AttributeMappingId>(model.getAMs().keySet());
+
+    System.out.println("M: " + M.toString());
 
     // 1.  C := all candidate AMs sorted by decreasing size
 
@@ -74,18 +74,22 @@ public final class Algorithm {
 
     });
 
+    System.out.println("C: " + C.toString());
+
     // 2.  compute weight for each m in C
 
     final Map<AttributeMappingId, Double> weights = new HashMap<AttributeMappingId, Double>();
+    final Set<String> types = new HashSet<String>();
 
     for (final AttributeMappingId mapping : C) {
+      types.add(mapping.getElement());
       weights.put(mapping, weight(mapping, model));
     }
 
     // 3.  for each type (element name) t do
     final List<AttributeMappingId> C1 = new ArrayList<AttributeMappingId>();
 
-    for (final String type : model.getTypes()) {
+    for (final String type : types) {
 
     // 4.    m := highest-weight mapping of type t in C
 
@@ -99,16 +103,22 @@ public final class Algorithm {
 
     }
 
+    System.out.println("C1: " + C1.toString());
+
     // 7.  for m in C do
 
-    for (final AttributeMappingId m : C1) {
+    final DeletableList<AttributeMappingId> C2 = new DeletableList<AttributeMappingId>(C1);
+
+    while (C2.hasNext()) {
+
+      final AttributeMappingId m = C2.next();
 
     // 8.    S := all mappings in C whose images intersect that of m
 
       final List<AttributeMappingId> conflicts = new ArrayList<AttributeMappingId>();
       double conflicsWeight = 0;
-      for (final AttributeMappingId c : C1) {
-        if (intersects(m, c, model)) {
+      for (final AttributeMappingId c : C2.getLive()) {
+        if (!c.equals(m) && intersects(m, c, model)) {
           conflicsWeight += weights.get(c);
         }
       }
@@ -116,27 +126,44 @@ public final class Algorithm {
     // 9.    if weight(m) > SUM_p in S [ weight(p) ], remove S, else remove m from C
 
       if (weights.get(m) > conflicsWeight) {
-        C1.removeAll(conflicts);
+        C2.removeAll(conflicts);
       }
       else {
-        C1.remove(m);
+        C2.remove(m);
       }
 
     // 10. end for
 
     }
 
+    System.out.println("C2: " + C2.getLive().toString());
+
     // 11. return C
-    return null;
+    return C2.getLive();
   }
 
   private static boolean intersects(final AttributeMappingId am1,
           final AttributeMappingId am2, final AMModel model) {
+    if (am1 == null || am2 == null || model == null) {
+      throw new IllegalArgumentException("Expecting non-null parameters");
+    }
+    if (!model.getAMs().containsKey(am1)) {
+      throw new IllegalArgumentException("Mapping " + am1 + " not found in the model");
+    }
+    if (!model.getAMs().containsKey(am2)) {
+      throw new IllegalArgumentException("Mapping " + am2 + " not found in the model");
+    }
     final List<String> image1 = model.getAMs().get(am1).getImage();
     final List<String> image2 = model.getAMs().get(am2).getImage();
     return !BaseUtils.intersect(
             new HashSet<String>(image1),
             new HashSet<String>(image2)).isEmpty();
+  }
+
+  private static Double weight(AttributeMappingId mapping, AMModel model) {
+    return Double.valueOf(
+            ALPHA * MappingUtils.support(mapping, model)
+            + BETA * MappingUtils.coverage(mapping, model));
   }
 
   private static AttributeMappingId findMaxWeight(String type,
@@ -149,6 +176,9 @@ public final class Algorithm {
         maxWeight = e.getValue().doubleValue();
         max = e.getKey();
       }
+    }
+    if (max == null) {
+      throw new IllegalStateException("No mappings of type " + type + " found");
     }
     return max;
   }

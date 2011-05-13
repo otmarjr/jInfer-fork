@@ -102,4 +102,9 @@ public class AttributeMapping {
     return image.size();
   }
 
+  @Override
+  public String toString() {
+    return "(" + id.getElement() + ", " + id.getAttribute() + ", " + image.size() + " values)";
+  }
+
 }

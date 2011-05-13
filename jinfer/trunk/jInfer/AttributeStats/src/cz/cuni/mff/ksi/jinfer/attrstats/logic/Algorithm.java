@@ -44,7 +44,6 @@ public final class Algorithm {
   private static final Logger LOG = Logger.getLogger(Algorithm.class);
 
   private Algorithm() {
-
   }
 
   /**

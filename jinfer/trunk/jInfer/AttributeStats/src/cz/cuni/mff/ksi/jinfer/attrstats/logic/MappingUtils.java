@@ -47,15 +47,7 @@ public final class MappingUtils {
    * @return Support of the specified mapping.
    */
   public static double support(final AttributeMappingId targetMapping, final AMModel model) {
-    if (targetMapping == null || model == null) {
-      throw new IllegalArgumentException("Expecting non-null, non empty parameters");
-    }
-
-    // TODO vektor JUnit test this!
-    if (!model.getAMs().containsKey(targetMapping)) {
-      throw new IllegalArgumentException("Target mapping not found in the model.");
-    }
-
+    verify(targetMapping, model);
     return (double)model.getAMs().get(targetMapping).size() / model.size();
   }
 
@@ -68,14 +60,7 @@ public final class MappingUtils {
    * @return Coverage of the specified mapping.
    */
   public static double coverage(final AttributeMappingId targetMapping, final AMModel model) {
-    if (targetMapping == null || model == null) {
-      throw new IllegalArgumentException("Expecting non-null, non empty parameters");
-    }
-
-    // TODO vektor JUnit test this!
-    if (!model.getAMs().containsKey(targetMapping)) {
-      throw new IllegalArgumentException("Target mapping not found in the model.");
-    }
+    verify(targetMapping, model);
 
     double sum1 = 0;
 
@@ -101,20 +86,19 @@ public final class MappingUtils {
    * @return True if the specified mapping is a candidate, false otherwise.
    */
   public static boolean isCandidateMapping(final AttributeMappingId targetMapping, final AMModel model) {
+    verify(targetMapping, model);
+    final AttributeMapping mapping = model.getAMs().get(targetMapping);
+    final Set<String> domain = new HashSet<String>(mapping.getImage());
+    return domain.size() == mapping.getImage().size();
+  }
+
+  private static void verify(final AttributeMappingId targetMapping, final AMModel model) {
     if (targetMapping == null || model == null) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
     }
-
-    // TODO vektor JUnit test this!
     if (!model.getAMs().containsKey(targetMapping)) {
       throw new IllegalArgumentException("Target mapping not found in the model.");
     }
-
-    final AttributeMapping mapping = model.getAMs().get(targetMapping);
-
-    final Set<String> domain = new HashSet<String>(mapping.getImage());
-
-    return domain.size() == mapping.getImage().size();
   }
 
   /**
@@ -176,11 +160,10 @@ public final class MappingUtils {
    * @param am1 ID of the first mapping to check.
    * @param am2 ID of the second mapping to check.
    * @param model Attribute mapping model to check intersection in.
-   * 
+   *
    * @return <code>true</code> if the two attribute mapping images intersect
    * (have at least one common value), <code>false</code> otherwise.
    */
-  // TODO vektor JUnit test!
   public static boolean imagesIntersect(
           final AttributeMappingId am1,
           final AttributeMappingId am2, final AMModel model) {

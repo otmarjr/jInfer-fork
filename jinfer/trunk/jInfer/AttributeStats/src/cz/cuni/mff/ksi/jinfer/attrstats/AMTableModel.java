@@ -30,18 +30,14 @@ public class AMTableModel extends DefaultTableModel {
 
   private static final long serialVersionUID = 78974631624L;
 
-  private final List<Triplet> model;
+  private final List<Triplet> data;
 
-  public AMTableModel(final List<Triplet> model) {
-    super(model.size(), 3);
-    if (model == null) {
+  public AMTableModel(final List<Triplet> data) {
+    super(data.size(), 3);
+    if (data == null) {
       throw new IllegalArgumentException("Model must be not null.");
     }
-    this.model = model;
-  }
-
-  public List<Triplet> getModel() {
-    return model;
+    this.data = data;
   }
 
   @Override
@@ -65,15 +61,15 @@ public class AMTableModel extends DefaultTableModel {
 
   @Override
   public int getRowCount() {
-    if (model == null) {
+    if (data == null) {
       return 0;
     }
-    return model.size();
+    return data.size();
   }
 
   @Override
   public Object getValueAt(final int row, final int column) {
-    final Triplet value = model.get(row);
+    final Triplet value = data.get(row);
     switch (column) {
       case 0:
         return value.getElement();

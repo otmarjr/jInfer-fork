@@ -16,15 +16,19 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
@@ -46,6 +50,11 @@ public class AMModel {
 
   private Set<String> types = null;
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param grammar
+   */
   public AMModel(final List<Element> grammar) {
     if (BaseUtils.isEmpty(grammar)) {
       throw new IllegalArgumentException("Grammar must not be empty");
@@ -54,20 +63,86 @@ public class AMModel {
     this.grammar = ch.cloneGrammar(grammar);
   }
 
+  /**
+   * Extracts the attribute mapping from the underlyin grammar as a flat list
+   * of {@link Triplet}s <code>(element name, attribute name, attribute content)</code>.
+   *
+   * <p>Note that the original content of the attribute is split into tokens on spaces.
+   * For example an element <code>e</code> with attribute <code>a</code> that
+   * contains the string <code>"1 p p"</code> in the original document will
+   * produce 3 {@link Triplet}s, containing the <code>attribute content</code>
+   * <code>1</code>, <code>p</code> and <code>p</code> respectively.</p>
+   *
+   * @return Flat representation of the attribute mapping contained in the
+   * underlying grammar. Resulting list of {@link Triplet}s is sorted
+   * (see {@link Triplet#compareTo(Triplet)}).
+   */
   public List<Triplet> getFlat() {
     if (flat == null) {
-      flat = MappingUtils.extractFlat(grammar);
+      flat = new ArrayList<Triplet>();
+      for (final Element e : grammar) {
+        if (!BaseUtils.isEmpty(e.getAttributes())) {
+          for (final Attribute a : e.getAttributes()) {
+            for (final String c : a.getContent()) {
+              final String[] values = c.split(" ");
+              for (final String value : values) {
+                flat.add(new Triplet(e.getName(), a.getName(), value));
+              }
+            }
+          }
+        }
+      }
+
+      Collections.sort(flat);
     }
-    return flat;
+    return Collections.unmodifiableList(flat);
   }
 
+  /**
+   * Extracts the attribute mapping from the underlying grammar as a tree ready
+   * to be used in a {@link JTree}.
+   *
+   * <p>Please note that the attribute content is split into tokens on spaces,
+   * see {@link MappingUtils#extractFlat } for details.</p>
+   *
+   * @return Tree representation of the attribute mapping contained in the
+   * underlying grammar. Under the root node there are nodes representing each
+   * {@link Element} in the grammar. The element nodes then contain nodes for
+   * each of the {@link Attribute}s they contain.
+   */
   public TreeNode getTree() {
     if (tree == null) {
-      tree = MappingUtils.createTree(grammar);
+      Collections.sort(grammar, BaseUtils.NAMED_NODE_COMPARATOR);
+
+      tree = new DefaultMutableTreeNode("");
+      for (final Element e : grammar) {
+        if (!BaseUtils.isEmpty(e.getAttributes())) {
+          final DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(e.getName());
+          final List<Attribute> attributes = new ArrayList<Attribute>(e.getAttributes());
+          Collections.sort(attributes, BaseUtils.NAMED_NODE_COMPARATOR);
+          for (final Attribute a : attributes) {
+            final List<String> content = new ArrayList<String>();
+            for (final String oneContent : a.getContent()) {
+              final String[] values = oneContent.split(" ");
+              content.addAll(Arrays.asList(values));
+            }
+
+            final AttributeTreeNode attributeNode =
+                    new AttributeTreeNode(e.getName(), a.getName(), content);
+            elementNode.add(attributeNode);
+          }
+          ((DefaultMutableTreeNode)tree).add(elementNode);
+        }
+      }
     }
     return tree;
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @return
+   */
   public Map<AttributeMappingId, AttributeMapping> getAMs() {
     if (mappings.isEmpty()) {
       for (final Triplet t : getFlat()) {
@@ -78,10 +153,15 @@ public class AMModel {
         mappings.get(mapping).getImage().add(t.getValue());
       }
     }
-    return mappings;
+    return Collections.unmodifiableMap(mappings);
   }
 
   // TODO vektor JUnit test to verify that size() returns the same as getFlat().size()
+  /**
+   * TODO vektor Comment!
+   *
+   * @return
+   */
   public int size() {
     int ret = 0;
 
@@ -92,6 +172,11 @@ public class AMModel {
     return ret;
   }
 
+  /**
+   * TODO vektor Comment!
+   * 
+   * @return
+   */
   public Set<String> getTypes() {
     if (types == null) {
       types = new HashSet<String>();
@@ -99,7 +184,7 @@ public class AMModel {
         types.add(mapping.getElement());
       }
     }
-    return types;
+    return Collections.unmodifiableSet(types);
   }
 
 }

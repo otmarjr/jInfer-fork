@@ -14,35 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats;
+package cz.cuni.mff.ksi.jinfer.attrstats.tables;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.Triplet;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
- * An implementation of {@link TableModel} for use in {@link StatisticsPanel}.
+ * TODO vektor Comment!
  *
  * @author vektor
  */
-public class AMTableModel extends DefaultTableModel {
+public class MappingsModel extends DefaultTableModel {
 
-  private static final long serialVersionUID = 78974631624L;
+  private static final long serialVersionUID = 1874512L;
 
-  private final List<Triplet> data;
+  private final List<AttributeMappingId> data;
 
-  public AMTableModel(final List<Triplet> data) {
-    super(data.size(), 3);
-    if (data == null) {
-      throw new IllegalArgumentException("Model must be not null.");
-    }
-    this.data = data;
+  public MappingsModel(final Collection<AttributeMappingId> data) {
+    super(data.size(), 2);
+    this.data = new ArrayList<AttributeMappingId>(data);
   }
 
   @Override
   public int getColumnCount() {
-    return 3;
+    return 2;
   }
 
   @Override
@@ -52,8 +50,6 @@ public class AMTableModel extends DefaultTableModel {
         return "Element";
       case 1:
         return "Attribute";
-      case 2:
-        return "Value";
       default:
         throw new IllegalArgumentException("Unkown column: " + column);
     }
@@ -69,14 +65,12 @@ public class AMTableModel extends DefaultTableModel {
 
   @Override
   public Object getValueAt(final int row, final int column) {
-    final Triplet value = data.get(row);
+    final AttributeMappingId value = data.get(row);
     switch (column) {
       case 0:
         return value.getElement();
       case 1:
         return value.getAttribute();
-      case 2:
-        return value.getValue();
       default:
         throw new IllegalArgumentException("Unkown column: " + column);
     }
@@ -85,6 +79,10 @@ public class AMTableModel extends DefaultTableModel {
   @Override
   public boolean isCellEditable(final int row, final int column) {
     return false;
+  }
+
+  public AttributeMappingId getObjectAt(final int row) {
+    return data.get(row);
   }
 
 }

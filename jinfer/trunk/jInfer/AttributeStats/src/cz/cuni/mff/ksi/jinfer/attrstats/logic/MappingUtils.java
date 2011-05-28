@@ -34,6 +34,9 @@ import java.util.Set;
  */
 public final class MappingUtils {
 
+  private static final double ALPHA = 1.0d;
+  private static final double BETA = 1.0d;
+
   private MappingUtils() {
 
   }
@@ -180,5 +183,18 @@ public final class MappingUtils {
             new HashSet<String>(model.getAMs().get(am1).getImage()),
             new HashSet<String>(model.getAMs().get(am2).getImage()))
             .isEmpty();
+  }
+
+  /**
+   * TODO vektor Comment!
+   *
+   * @param mapping
+   * @param model
+   * @return
+   */
+  public static Double weight(final AttributeMappingId mapping, final AMModel model) {
+    return Double.valueOf(
+            ALPHA * MappingUtils.support(mapping, model)
+            + BETA * MappingUtils.coverage(mapping, model));
   }
 }

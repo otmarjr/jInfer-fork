@@ -16,8 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkInputGenerator;
+import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkRunner;
+import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.logic.Algorithm;
-import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
@@ -30,13 +32,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
 
 /**
  * Panel representing and displaying one complete attribute statistics.
@@ -80,6 +80,13 @@ public class StatisticsPanel extends JPanel {
     run = new javax.swing.JButton();
     listPane = new javax.swing.JScrollPane();
     list = new javax.swing.JList();
+    glpk = new javax.swing.JPanel();
+    panelGlpk = new javax.swing.JPanel();
+    checkGlpk = new javax.swing.JButton();
+    generateInput = new javax.swing.JButton();
+    glpkInputPane = new javax.swing.JScrollPane();
+    glpkInput = new javax.swing.JTextArea();
+    runGlpk = new javax.swing.JButton();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -119,7 +126,7 @@ public class StatisticsPanel extends JPanel {
     chartView.add(splitPaneChart, gridBagConstraints);
 
     tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.chartView.TabConstraints.tabTitle"), chartView); // NOI18N
-    tabbedPane.addTab("Table View", tableView); // NOI18N
+    tabbedPane.addTab("Table View", tableView);
 
     idSet.setLayout(new java.awt.GridBagLayout());
 
@@ -158,6 +165,72 @@ public class StatisticsPanel extends JPanel {
 
     tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.idSet.TabConstraints.tabTitle"), idSet); // NOI18N
 
+    glpk.setLayout(new java.awt.GridBagLayout());
+
+    panelGlpk.setBorder(javax.swing.BorderFactory.createTitledBorder("ID set via GLPK MIP optimization")); // NOI18N
+    panelGlpk.setLayout(new java.awt.GridBagLayout());
+
+    checkGlpk.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.checkGlpk.text")); // NOI18N
+    checkGlpk.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        checkGlpkActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridwidth = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelGlpk.add(checkGlpk, gridBagConstraints);
+
+    generateInput.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.generateInput.text")); // NOI18N
+    generateInput.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        generateInputActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelGlpk.add(generateInput, gridBagConstraints);
+
+    glpkInput.setColumns(20);
+    glpkInput.setRows(5);
+    glpkInputPane.setViewportView(glpkInput);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelGlpk.add(glpkInputPane, gridBagConstraints);
+
+    runGlpk.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.runGlpk.text")); // NOI18N
+    runGlpk.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        runGlpkActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelGlpk.add(runGlpk, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    glpk.add(panelGlpk, gridBagConstraints);
+
+    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.glpk.TabConstraints.tabTitle_1"), glpk); // NOI18N
+
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
@@ -194,8 +267,35 @@ public class StatisticsPanel extends JPanel {
     list.setModel(new DefaultComboBoxModel(new Vector<AttributeMappingId>(ids)));
   }//GEN-LAST:event_runActionPerformed
 
+  private void generateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInputActionPerformed
+    glpkInput.setText(GlpkInputGenerator.generateGlpkInput(model));
+  }//GEN-LAST:event_generateInputActionPerformed
+
+  private void runGlpkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runGlpkActionPerformed
+    final boolean glpkOk = GlpkUtils.isBinaryValid();
+    if (!glpkOk)  {
+      DialogDisplayer.getDefault().notify(
+            new NotifyDescriptor.Message("There is a problem with GLPK binary.",
+            NotifyDescriptor.ERROR_MESSAGE));
+      return;
+    }
+    glpkInput.setText(GlpkRunner.run(model));
+  }//GEN-LAST:event_runGlpkActionPerformed
+
+  private void checkGlpkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkGlpkActionPerformed
+    final boolean glpkOk = GlpkUtils.isBinaryValid();
+    DialogDisplayer.getDefault().notify(
+            new NotifyDescriptor.Message(glpkOk ? "GLPK binary is OK." : "There is a problem with GLPK binary.",
+            glpkOk ? NotifyDescriptor.INFORMATION_MESSAGE : NotifyDescriptor.ERROR_MESSAGE));
+  }//GEN-LAST:event_checkGlpkActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel chartView;
+  private javax.swing.JButton checkGlpk;
+  private javax.swing.JButton generateInput;
+  private javax.swing.JPanel glpk;
+  private javax.swing.JTextArea glpkInput;
+  private javax.swing.JScrollPane glpkInputPane;
   private javax.swing.JPanel idSet;
   private javax.swing.JPanel jFreeChartPlaceholder;
   private javax.swing.JLabel labelPlaceholder;
@@ -204,7 +304,9 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JTree nodeTree;
   private javax.swing.JScrollPane nodeTreePane;
   private javax.swing.JPanel panelArticle;
+  private javax.swing.JPanel panelGlpk;
   private javax.swing.JButton run;
+  private javax.swing.JButton runGlpk;
   private javax.swing.JSplitPane splitPaneChart;
   private javax.swing.JTabbedPane tabbedPane;
   private cz.cuni.mff.ksi.jinfer.attrstats.TableViewPanel tableView;

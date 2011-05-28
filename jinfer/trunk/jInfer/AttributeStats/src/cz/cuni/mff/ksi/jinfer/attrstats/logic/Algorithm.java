@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.attrstats.logic;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,9 +36,6 @@ import org.apache.log4j.Logger;
  * @author vektor
  */
 public final class Algorithm {
-
-  private static final double ALPHA = 1.0d;
-  private static final double BETA = 1.0d;
 
   private static final Logger LOG = Logger.getLogger(Algorithm.class);
 
@@ -90,7 +86,7 @@ public final class Algorithm {
 
     for (final AttributeMappingId mapping : C) {
       types.add(mapping.getElement());
-      weights.put(mapping, weight(mapping, model));
+      weights.put(mapping, MappingUtils.weight(mapping, model));
     }
 
     // 3.  for each type (element name) t do
@@ -148,12 +144,6 @@ public final class Algorithm {
 
     // 11. return C
     return C2.getLive();
-  }
-
-  private static Double weight(final AttributeMappingId mapping, final AMModel model) {
-    return Double.valueOf(
-            ALPHA * MappingUtils.support(mapping, model)
-            + BETA * MappingUtils.coverage(mapping, model));
   }
 
   private static AttributeMappingId findMaxWeight(final String type,

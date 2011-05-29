@@ -26,7 +26,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 
 /**
- * TODO vektor Comment!
+ * Utility class for GLPK invocation.
  *
  * @author vektor
  */
@@ -40,6 +40,15 @@ public final class GlpkRunner {
   private static final String OUTPUT = "glpk_output.txt";
   private static final String TMP = System.getProperty("java.io.tmpdir");
 
+  /**
+   * Constructs the GLPK problem formulation from the provided model, runs
+   * GLPK optimalization and returns the resulting file in a string. This can
+   * be directly displayed for verification or parsed for actual AMs appearing
+   * in the "optimal" ID set.
+   *
+   * @param model Model to find "optimal" ID set in.
+   * @return String representation of GLPK optimalization output.
+   */
   public static String run(final AMModel model) {
     final File input = new File(TMP + INPUT);
     final File output = new File(TMP + OUTPUT);

@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Utility class for conversion from {@link AMModel} to GLPK MathProg plaintext
+ * format.
  *
  * @author vektor
  */
@@ -40,10 +41,30 @@ public final class GlpkInputGenerator {
   private static final String CONSTRAINT = "s.t. c{index}: x['{mapping1}'] + x['{mapping2}'] <= 1;";
 
   /**
-   * TODO vektor Comment!
+   * Generates a GLPK MathProg representation of the ID set optimization for the
+   * provided model.
    *
-   * @param model
-   * @return
+   * In this representation, we need to provide variables, constraints and the
+   * objective function.
+   * <ul>
+   *   <li>Every <cite>candidate</cite> attribute mapping corresponds to one
+   *      binary variable (<code>am<sub>i</sub></code>).</li>
+   *   <li>For each two AMs <code>am<sub>i</sub></code>,
+   *      <code>am<sub>j</sub></code> that cannot be in the same ID set together,
+   *      a constraint is added: <code>am<sub>i</sub> + am<sub>j</sub> &lt;= 1</code>.
+   *      Two AMs cannot be in the same ID set together, if:
+   *      <ul>
+   *        <li>Their type (element name) is the same, or</li>
+   *        <li>Their images intersect.</li>
+   *      </ul>
+   *   </li>
+   *   <li>The objective function is a weighted sum of active variables, where
+   *      their weight is defined by {@link MappingUtils#weight(AttributeMappingId, AMModel) }.</li>
+   * </ul>
+   *
+   * @param model Model from which the problem formulation should be generated.
+   * @return String representation of the problem formulation in MathProg
+   * language, that can be directly passed to GLPK Solver.
    */
   public static String generateGlpkInput(final AMModel model) {
     final List<AttributeMappingId> candidates = new ArrayList<AttributeMappingId>();

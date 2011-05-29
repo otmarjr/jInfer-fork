@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 
 /**
- * TODO vektor Comment!
+ * Utility class for GLPK binding.
  *
  * @author vektor
  */
@@ -31,19 +31,34 @@ public final class GlpkUtils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Returns the full path to the GLPK Solver binary in a String.
    * TODO vektor Make this configurable!
    *
-   * @return
+   * @return Full path to the GLPK Solver binary.
    */
   public static String getPath() {
     return "C:\\Program Files (x86)\\GnuWin32\\bin\\glpsol.exe";
   }
 
+  /**
+   * Verifies, whether the GLPK binary is valid. See
+   * {@link FileUtils#isBinaryValid(String, String, String, boolean) } for details.
+   *
+   * @return <code>True</code> if the binary found at path provided by
+   * {@link GlpkUtils#getPath() } is a valid GLPK Solver binary, <code>false</code>
+   * otherwise.
+   */
   public static boolean isBinaryValid() {
     return FileUtils.isBinaryValid(getPath(), "-v", "GLPSOL: GLPK LP/MIP Solver", false);
   }
 
+  /**
+   * Returns a "name" for the provided attribute mapping.
+   *
+   * @param mapping Mapping to get a name for.
+   * @return Name of the provided mapping constructed in the following fashion:
+   * <code>element name-attribute name</code>
+   */
   public static String getName(final AttributeMappingId mapping) {
     return mapping.getElement() + "-" +mapping.getAttribute();
   }

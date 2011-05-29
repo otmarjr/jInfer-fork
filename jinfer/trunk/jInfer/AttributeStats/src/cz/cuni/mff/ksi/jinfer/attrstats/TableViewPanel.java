@@ -38,7 +38,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 /**
- * TODO vektor Comment!
+ * A panel containing a table representation of an AM model. There is a
+ * "flat view" table, a list of all mappings and their images.
  *
  * @author vektor
  */

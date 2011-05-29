@@ -36,23 +36,31 @@ public final class GlpkRunner {
 
   }
 
+  private static final String INPUT = "glpk_input.txt";
+  private static final String OUTPUT = "glpk_output.txt";
   private static final String TMP = System.getProperty("java.io.tmpdir");
 
   public static String run(final AMModel model) {
+    final File input = new File(TMP + INPUT);
+    final File output = new File(TMP + OUTPUT);
     PrintWriter pw = null;
     final StringBuilder ret = new StringBuilder();
     try {
-      final String input = GlpkInputGenerator.generateGlpkInput(model);
-      pw = new PrintWriter(TMP + "/glpk_input.txt");
-      pw.write(input);
-    } catch (final IOException ex) {
-      ex.printStackTrace();
+      pw = new PrintWriter(input);
+      pw.write(GlpkInputGenerator.generateGlpkInput(model));
+    } catch (final IOException e) {
+      throw new RuntimeException(e);
     } finally {
       pw.close();
     }
 
     try {
-      final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList(GlpkUtils.getPath(), "--math", TMP + "glpk_input.txt", "-o", TMP + "glpk_output.txt"));
+      final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList(
+              GlpkUtils.getPath(),
+              "--math",
+              TMP + INPUT,
+              "-o",
+              TMP + OUTPUT));
       final Process process = processBuilder.start();
 
       final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -63,22 +71,18 @@ public final class GlpkRunner {
         ret.append(line).append('\n');
       }
 
-      final BufferedReader outputReader = new BufferedReader(new FileReader(TMP + "glpk_output.txt"));
+      final BufferedReader outputReader = new BufferedReader(new FileReader(output));
       while ((line = outputReader.readLine()) != null) {
         ret.append(line).append('\n');
       }
 
-      final File input = new File(TMP + "glpk_input.txt");
       input.delete();
-      final File output = new File(TMP + "glpk_output.txt");
       output.delete();
 
       return ret.toString();
     } catch (final IOException e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
-
-    return null;
   }
 
 }

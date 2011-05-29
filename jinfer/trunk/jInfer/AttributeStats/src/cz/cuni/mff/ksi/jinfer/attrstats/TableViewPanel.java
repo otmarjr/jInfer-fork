@@ -47,12 +47,14 @@ public class TableViewPanel extends JPanel {
   private static final long serialVersionUID = 18443L;
 
   private static final Format FORMAT = NumberFormat.getInstance();
+  private static final String NA = "N/A";
 
   private AMModel model;
   private final Map<AttributeMappingId, Pair<Double, Double>> cache =
           new HashMap<AttributeMappingId, Pair<Double, Double>>();
 
   public TableViewPanel() {
+    super();
     initComponents();
     tableFlat.setSelectionModel(new DefaultListSelectionModel());
   }
@@ -102,8 +104,8 @@ public class TableViewPanel extends JPanel {
     }
     else {
       listValues.setModel(new DefaultListModel());
-      support.setText("N/A");
-      coverage.setText("N/A");
+      support.setText(NA);
+      coverage.setText(NA);
     }
 
     final List<AttributeMappingId> ids = new ArrayList<AttributeMappingId>(tableMappings.getSelectedRowCount());
@@ -251,7 +253,7 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelMappingsTable.add(labelSupport, gridBagConstraints);
 
-    support.setText("N/A");
+    support.setText(NA);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
@@ -266,7 +268,7 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelMappingsTable.add(labelCoverage, gridBagConstraints);
 
-    coverage.setText("N/A");
+    coverage.setText(NA);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 1;
@@ -281,7 +283,7 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelMappingsTable.add(labelIDset, gridBagConstraints);
 
-    idSet.setText("N/A"); // NOI18N
+    idSet.setText(NA);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 5;
     gridBagConstraints.gridy = 1;

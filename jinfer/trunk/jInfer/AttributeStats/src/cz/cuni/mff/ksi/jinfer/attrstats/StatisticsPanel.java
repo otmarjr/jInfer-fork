@@ -25,17 +25,13 @@ import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultTreeModel;
@@ -60,6 +56,7 @@ public class StatisticsPanel extends JPanel {
   private AMModel model;
 
   public StatisticsPanel() {
+    super();
     initComponents();
   }
 
@@ -306,8 +303,7 @@ public class StatisticsPanel extends JPanel {
             new NotifyDescriptor.Message("Oops! This is not an ID set.",
             NotifyDescriptor.ERROR_MESSAGE));
     }
-    // TODO vektor Less ugly please
-    list.setModel(new DefaultComboBoxModel(new Vector<AttributeMappingId>(ids)));
+    list.setModel(new DefaultComboBoxModel(ids.toArray()));
     labelArticleWeight.setText("Result ID set weight: " + FORMAT.format(MappingUtils.weight(ids, model)));
   }//GEN-LAST:event_runActionPerformed
 
@@ -334,8 +330,7 @@ public class StatisticsPanel extends JPanel {
             new NotifyDescriptor.Message("Oops! This is not an ID set.",
             NotifyDescriptor.ERROR_MESSAGE));
     }
-    // TODO vektor Less ugly please
-    glpkResultList.setModel(new DefaultComboBoxModel(new Vector<AttributeMappingId>(ids)));
+    glpkResultList.setModel(new DefaultComboBoxModel(ids.toArray()));
     labelGlpkWeight.setText("Result ID set weight: " + FORMAT.format(MappingUtils.weight(ids, model)));
   }//GEN-LAST:event_runGlpkActionPerformed
 

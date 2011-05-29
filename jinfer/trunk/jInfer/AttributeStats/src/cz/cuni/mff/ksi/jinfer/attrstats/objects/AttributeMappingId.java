@@ -94,7 +94,7 @@ public class AttributeMappingId implements Comparable<AttributeMappingId> {
   }
 
   @Override
-  public int compareTo(AttributeMappingId o) {
+  public int compareTo(final AttributeMappingId o) {
     final int cmpElement = element.compareTo(o.getElement());
     if (cmpElement != 0) {
       return cmpElement;

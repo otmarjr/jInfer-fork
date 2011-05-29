@@ -53,6 +53,7 @@ public final class AttrStatsTopComponent extends TopComponent {
   public static final String PREFERRED_ID = "AttrStatsTopComponent";
 
   public AttrStatsTopComponent() {
+    super();
     initComponents();
     setName(NbBundle.getMessage(AttrStatsTopComponent.class, "CTL_AttrStatsTopComponent"));
     setToolTipText(NbBundle.getMessage(AttrStatsTopComponent.class, "HINT_AttrStatsTopComponent"));

@@ -63,7 +63,7 @@ public final class GlpkInputGenerator {
     }
 
     try {
-      final InputStream is = GlpkInputGenerator.class.getClassLoader().getResourceAsStream("cz/cuni/mff/ksi/jinfer/attrstats/glpk/GlpkInputTemplate.txt");
+      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("cz/cuni/mff/ksi/jinfer/attrstats/glpk/GlpkInputTemplate.txt");
       final BufferedReader br = new BufferedReader(new InputStreamReader(is));
       final StringBuilder ret = new StringBuilder();
       String line;

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 
 /**
@@ -41,6 +42,10 @@ public final class GlpkUtils {
 
   public static boolean isBinaryValid() {
     return FileUtils.isBinaryValid(getPath(), "-v", "GLPSOL: GLPK LP/MIP Solver", false);
+  }
+
+  public static String getName(final AttributeMappingId mapping) {
+    return mapping.getElement() + "-" +mapping.getAttribute();
   }
 
 }

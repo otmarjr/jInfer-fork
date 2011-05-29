@@ -86,7 +86,7 @@ public final class Algorithm {
 
     for (final AttributeMappingId mapping : C) {
       types.add(mapping.getElement());
-      weights.put(mapping, MappingUtils.weight(mapping, model));
+      weights.put(mapping, Double.valueOf(MappingUtils.weight(mapping, model)));
     }
 
     // 3.  for each type (element name) t do

@@ -57,7 +57,7 @@ public final class GlpkInputGenerator {
     final StringBuilder weights = new StringBuilder();
 
     for (final AttributeMappingId mapping : candidates) {
-      final String name = getName(mapping);
+      final String name = GlpkUtils.getName(mapping);
       mappings.append(name).append('\n');
       weights.append(name).append(' ').append(MappingUtils.weight(mapping, model)).append('\n');
     }
@@ -95,8 +95,8 @@ public final class GlpkInputGenerator {
           index++;
           final String constraint = CONSTRAINT
                   .replace("{index}", String.valueOf(index))
-                  .replace("{mapping1}", getName(mapping1))
-                  .replace("{mapping2}", getName(mapping2));
+                  .replace("{mapping1}", GlpkUtils.getName(mapping1))
+                  .replace("{mapping2}", GlpkUtils.getName(mapping2));
           ret.append(constraint).append('\n');
         }
       }
@@ -111,10 +111,6 @@ public final class GlpkInputGenerator {
       return true;
     }
     return MappingUtils.imagesIntersect(mapping1, mapping2, model);
-  }
-
-  private static String getName(final AttributeMappingId mapping) {
-    return mapping.getElement() + "-" +mapping.getAttribute();
   }
 
 }

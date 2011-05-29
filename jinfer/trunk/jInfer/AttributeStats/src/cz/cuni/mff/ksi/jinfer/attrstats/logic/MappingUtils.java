@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMapping;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -192,9 +193,24 @@ public final class MappingUtils {
    * @param model
    * @return
    */
-  public static Double weight(final AttributeMappingId mapping, final AMModel model) {
-    return Double.valueOf(
-            ALPHA * MappingUtils.support(mapping, model)
-            + BETA * MappingUtils.coverage(mapping, model));
+  public static double weight(final AttributeMappingId mapping, final AMModel model) {
+    return ALPHA * MappingUtils.support(mapping, model)
+            + BETA * MappingUtils.coverage(mapping, model);
+  }
+
+  /**
+   * TODO vektor Comment!
+   * 
+   * @param mappings
+   * @param model
+   * @return
+   */
+  public static double weight(final Collection<AttributeMappingId> mappings,
+          final AMModel model) {
+    double sum = 0.0;
+    for (final AttributeMappingId mapping : mappings) {
+      sum += weight(mapping, model);
+    }
+    return sum;
   }
 }

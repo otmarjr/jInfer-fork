@@ -24,7 +24,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.objects;
  *
  * @author vektor
  */
-public class AttributeMappingId {
+public class AttributeMappingId implements Comparable<AttributeMappingId> {
 
   private final String element;
 
@@ -91,6 +91,15 @@ public class AttributeMappingId {
   @Override
   public String toString() {
     return "(" + element + "," + attribute + ")";
+  }
+
+  @Override
+  public int compareTo(AttributeMappingId o) {
+    final int cmpElement = element.compareTo(o.getElement());
+    if (cmpElement != 0) {
+      return cmpElement;
+    }
+    return attribute.compareTo(o.getAttribute());
   }
 
 }

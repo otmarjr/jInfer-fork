@@ -25,7 +25,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
- * TODO vektor Comment!
+ * Utility class for parsing the GLPK optimization result into a set of attribute
+ * mappings from the "optimal" ID set.
  *
  * @author vektor
  */
@@ -35,11 +36,13 @@ public final class GlpkOutputParser {
   }
 
   /**
-   * TODO vektor Comment!
+   * Parses the string representing the GLPK optimization result and returns
+   * a list of attribute mappings belonging to the "optimal" ID set.
    *
-   * @param output
-   * @param model
-   * @return
+   * @param output String representation of the GLPK result. Basically the file
+   * that GLPK produces loaded into a string.
+   * @param model Model to which all the AMs belong.
+   * @return List of AMs belonging to the "optimal" ID set.
    */
   public static List<AttributeMappingId> getIDSet(final String output, final AMModel model) {
     final Set<AttributeMappingId> ret = new HashSet<AttributeMappingId>();

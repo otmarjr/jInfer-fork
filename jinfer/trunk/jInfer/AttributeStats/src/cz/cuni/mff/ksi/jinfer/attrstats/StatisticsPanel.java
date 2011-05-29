@@ -312,6 +312,7 @@ public class StatisticsPanel extends JPanel {
   }//GEN-LAST:event_generateInputActionPerformed
 
   private void runGlpkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runGlpkActionPerformed
+    // TODO vektor Parameters should be customizable
     final boolean glpkOk = GlpkUtils.isBinaryValid();
     if (!glpkOk)  {
       DialogDisplayer.getDefault().notify(

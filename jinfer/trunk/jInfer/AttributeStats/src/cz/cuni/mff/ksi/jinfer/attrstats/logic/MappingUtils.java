@@ -187,11 +187,17 @@ public final class MappingUtils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Returns the weight of the provided AM in the context of the provided AM model
+   * as a weighted sum of their <cite>support</cite> and <cite>coverage</cite>.
+   * The respective weights are defined in {@link MappingUtils#ALPHA} and
+   * {@link MappingUtils#BETA}.
    *
-   * @param mapping
-   * @param model
-   * @return
+   * @param mapping Mapping to compute weight for.
+   * @param model Model in context of which the weight is calculated.
+   * @return Weight of the provided mapping in the context of the provided model.
+   *
+   * @see MappingUtils#support(AttributeMappingId, AMModel)
+   * @see MappingUtils#coverage(AttributeMappingId, AMModel)
    */
   public static double weight(final AttributeMappingId mapping, final AMModel model) {
     return ALPHA * MappingUtils.support(mapping, model)
@@ -199,11 +205,14 @@ public final class MappingUtils {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param mappings
-   * @param model
-   * @return
+   * Returns the sum of weights of all the mappings provided in the context of
+   * the provided AM model.
+   *
+   * @param mappings List of the mappings to calculate the weight for.
+   * @param model Model in context of which the weight is calculated.
+   * @return Sum of all the weights of all the provided mappings.
+   *
+   * @see MappingUtils#weight(AttributeMappingId, AMModel)
    */
   public static double weight(final Collection<AttributeMappingId> mappings,
           final AMModel model) {

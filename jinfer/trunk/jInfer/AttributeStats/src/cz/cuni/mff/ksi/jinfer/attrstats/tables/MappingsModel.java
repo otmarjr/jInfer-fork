@@ -23,7 +23,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * TODO vektor Comment!
+ * Table model for a list of attribute mapping IDs.
  *
  * @author vektor
  */

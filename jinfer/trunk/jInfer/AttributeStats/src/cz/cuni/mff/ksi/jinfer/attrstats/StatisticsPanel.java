@@ -44,6 +44,7 @@ import org.openide.NotifyDescriptor;
  *
  * @author vektor
  */
+@SuppressWarnings("PMD.SingularField")
 public class StatisticsPanel extends JPanel {
 
   private static final long serialVersionUID = 5415245241L;
@@ -87,7 +88,6 @@ public class StatisticsPanel extends JPanel {
     labelArticleWeight = new javax.swing.JLabel();
     glpk = new javax.swing.JPanel();
     panelGlpk = new javax.swing.JPanel();
-    checkGlpk = new javax.swing.JButton();
     generateInput = new javax.swing.JButton();
     runGlpk = new javax.swing.JButton();
     jSplitPane1 = new javax.swing.JSplitPane();
@@ -186,20 +186,6 @@ public class StatisticsPanel extends JPanel {
     panelGlpk.setBorder(javax.swing.BorderFactory.createTitledBorder("ID set via GLPK MIP optimization"));
     panelGlpk.setLayout(new java.awt.GridBagLayout());
 
-    checkGlpk.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.checkGlpk.text")); // NOI18N
-    checkGlpk.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        checkGlpkActionPerformed(evt);
-      }
-    });
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    panelGlpk.add(checkGlpk, gridBagConstraints);
-
     generateInput.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.generateInput.text")); // NOI18N
     generateInput.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,8 +193,8 @@ public class StatisticsPanel extends JPanel {
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelGlpk.add(generateInput, gridBagConstraints);
@@ -220,6 +206,8 @@ public class StatisticsPanel extends JPanel {
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelGlpk.add(runGlpk, gridBagConstraints);
@@ -335,16 +323,8 @@ public class StatisticsPanel extends JPanel {
     labelGlpkWeight.setText("Result ID set weight: " + FORMAT.format(MappingUtils.weight(ids, model)));
   }//GEN-LAST:event_runGlpkActionPerformed
 
-  private void checkGlpkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkGlpkActionPerformed
-    final boolean glpkOk = GlpkUtils.isBinaryValid();
-    DialogDisplayer.getDefault().notify(
-            new NotifyDescriptor.Message(glpkOk ? "GLPK binary is OK." : "There is a problem with GLPK binary.",
-            glpkOk ? NotifyDescriptor.INFORMATION_MESSAGE : NotifyDescriptor.ERROR_MESSAGE));
-  }//GEN-LAST:event_checkGlpkActionPerformed
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel chartView;
-  private javax.swing.JButton checkGlpk;
   private javax.swing.JButton generateInput;
   private javax.swing.JPanel glpk;
   private javax.swing.JTextArea glpkInput;

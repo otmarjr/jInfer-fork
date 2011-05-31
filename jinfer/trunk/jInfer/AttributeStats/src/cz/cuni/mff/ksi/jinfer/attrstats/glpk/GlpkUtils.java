@@ -16,8 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.glpk.options.GlpkPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import org.openide.util.NbPreferences;
 
 /**
  * Utility class for GLPK binding.
@@ -25,6 +27,9 @@ import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
  * @author vektor
  */
 public final class GlpkUtils {
+
+  public static final String BINARY_PATH_PROP = "glpk.binary";
+  public static final String BINARY_PATH_DEFAULT = "";
 
   private GlpkUtils() {
 
@@ -37,11 +42,11 @@ public final class GlpkUtils {
    * @return Full path to the GLPK Solver binary.
    */
   public static String getPath() {
-    return "C:\\Program Files (x86)\\GnuWin32\\bin\\glpsol.exe";
+    return NbPreferences.forModule(GlpkPanel.class).get(BINARY_PATH_PROP, BINARY_PATH_DEFAULT);
   }
 
   /**
-   * Verifies, whether the GLPK binary is valid. See
+   * Verifies whether the GLPK binary is valid. See
    * {@link FileUtils#isBinaryValid(String, String, String, boolean) } for details.
    *
    * @return <code>True</code> if the binary found at path provided by
@@ -50,6 +55,18 @@ public final class GlpkUtils {
    */
   public static boolean isBinaryValid() {
     return FileUtils.isBinaryValid(getPath(), "-v", "GLPSOL: GLPK LP/MIP Solver", false);
+  }
+
+  /**
+   * Verifies whether the provided path to GLPK binary is valid. See
+   * {@link FileUtils#isBinaryValid(String, String, String, boolean) } for details.
+   *
+   * @param binaryPath Path to the binary to check.
+   * @return <code>True</code> if the binary found at path provided is a valid
+   * GLPK Solver binary, <code>false</code> otherwise.
+   */
+  public static boolean isBinaryValid(final String binaryPath) {
+    return FileUtils.isBinaryValid(binaryPath, "-v", "GLPSOL: GLPK LP/MIP Solver", true);
   }
 
   /**

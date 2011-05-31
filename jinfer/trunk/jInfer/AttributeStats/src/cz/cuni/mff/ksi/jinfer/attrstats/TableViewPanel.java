@@ -43,6 +43,7 @@ import javax.swing.table.TableModel;
  *
  * @author vektor
  */
+@SuppressWarnings("PMD.SingularField")
 public class TableViewPanel extends JPanel {
 
   private static final long serialVersionUID = 18443L;

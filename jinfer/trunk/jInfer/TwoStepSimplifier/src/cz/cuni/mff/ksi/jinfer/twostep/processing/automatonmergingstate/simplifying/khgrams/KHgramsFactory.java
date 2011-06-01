@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifyi
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
 import java.util.List;
-import org.GNOME.Accessibility.Collection;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 

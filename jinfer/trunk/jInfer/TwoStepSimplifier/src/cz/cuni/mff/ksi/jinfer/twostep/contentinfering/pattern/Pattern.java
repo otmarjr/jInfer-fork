@@ -56,9 +56,8 @@ public class Pattern implements ContentInferrer {
       if (node.getContent().size() == 1) {
         pta.buildPTAOnSymbol(stringToListOfChars(node.getContent().get(0)));
       } else {
-        pta.buildPTAOnSymbol(stringToListOfChars(""));
+        return "empty";
       }
-      
     }
     LOG.fatal(pta);
     

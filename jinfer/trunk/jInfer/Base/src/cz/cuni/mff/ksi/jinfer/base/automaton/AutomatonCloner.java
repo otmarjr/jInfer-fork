@@ -76,7 +76,8 @@ public class AutomatonCloner<A, B> {
                 newSymbol,
                 stateConversionMap.get(anotherStep.getSource()),
                 stateConversionMap.get(anotherStep.getDestination()),
-                anotherStep.getUseCount()
+                anotherStep.getUseCount(),
+                anotherStep.getMinUseCount()
                 );
 
         newAutomaton.delta.get(myState).add(newStep);

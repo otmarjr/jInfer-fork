@@ -35,6 +35,7 @@ package cz.cuni.mff.ksi.jinfer.base.automaton;
  * @author anti
  */
 public class Step<T> {
+  // TODO anti Comment publics
   /**
    * Whatever object the automaton is build on. When doing comparisons, automaton
    * uses .equals on symbols too. So take care that same symbols really yields
@@ -44,8 +45,16 @@ public class Step<T> {
   /**
    * Number the times transition was used when builded as PTA. Its useful as
    * probability in some simplification methods.
+   * This is the maximum number, when merging steps, it is incremented.
    */
   private int useCount;
+  /**
+   * Number the times transition was used when builded as PTA. Its useful as
+   * probability in some simplification methods.
+   * This is kind a minimum value, when merging steps, it is taken as minimum of
+   * two values. Useful in regexp intervals on output.
+   */
+  private int minUseCount;
   /**
    * State source of transition
    */
@@ -63,10 +72,12 @@ public class Step<T> {
    * @param source
    * @param destination
    * @param useCount
+   * @param minUseCount  
    */
-  public Step(final T acceptSymbol, final State<T> source, final State<T> destination, final int useCount) {
+  public Step(final T acceptSymbol, final State<T> source, final State<T> destination, final int useCount, final int minUseCount) {
     this.acceptSymbol= acceptSymbol;
     this.useCount= useCount;
+    this.minUseCount= minUseCount;
     this.source= source;
     this.destination= destination;
   }
@@ -100,6 +111,21 @@ public class Step<T> {
   }
 
   /**
+   * @return 
+   */
+  public int getMinUseCount() {
+    return minUseCount;
+  }
+
+  /**
+   * 
+   * @param minUseCount 
+   */
+  public void setMinUseCount(int minUseCount) {
+    this.minUseCount = minUseCount;
+  }
+  
+  /**
    * Increment useCount by one, useful in PTA build procedure
    */
   public void incUseCount() {
@@ -119,6 +145,13 @@ public class Step<T> {
     this.setUseCount(this.getUseCount() + i);
   }
 
+  /**
+   * TODO anti comment
+   */
+  public void incMinUseCount(int anotherMinUseCount) {
+    this.setMinUseCount(anotherMinUseCount + this.minUseCount);
+  }
+  
   /**
    * @return the source
    */

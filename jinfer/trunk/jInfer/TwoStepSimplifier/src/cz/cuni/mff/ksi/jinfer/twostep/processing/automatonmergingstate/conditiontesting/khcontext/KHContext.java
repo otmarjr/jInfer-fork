@@ -134,10 +134,10 @@ public class KHContext<T> implements MergeConditionTester<T> {
       if (!context1.get(i).getAcceptSymbol().equals(context2.get(i).getAcceptSymbol())) {
         return Collections.<List<List<State<T>>>>emptyList();
       }
-      if ((i >= k - h) && (!context1.get(i).getSource().equals(context2.get(i).getSource()))) {
+      if ((i >= h) && (!context1.get(i).getSource().equals(context2.get(i).getSource()))) {
         totalSame = false;
       }
-      if (i >= k - h) {
+      if (i >= h) {
         final List<State<T>> mergePair = new ArrayList<State<T>>();
         mergePair.add(context1.get(i).getSource());
         mergePair.add(context2.get(i).getSource());

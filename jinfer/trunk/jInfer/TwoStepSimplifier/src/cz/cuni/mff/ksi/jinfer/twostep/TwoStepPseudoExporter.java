@@ -140,7 +140,7 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
             new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
               @Override
               public String toString(Regexp<AbstractStructuralNode> t) {
-                return t.toString();
+                return regexpToString(t);
               }
             }
             );

@@ -183,7 +183,7 @@ public class Automaton<T> {
    * @return
    */
   private Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
-    final Step<T> newStep= new Step<T>(onSymbol, source, destination, 1);
+    final Step<T> newStep= new Step<T>(onSymbol, source, destination, 1, 1);
     this.delta.get(source).add(newStep);
     this.reverseDelta.get(destination).add(newStep);
     return newStep;
@@ -220,6 +220,7 @@ public class Automaton<T> {
       if (inBuckets.containsKey(inStep.getSource())) {
         if (inBuckets.get(inStep.getSource()).containsKey(inStep.getAcceptSymbol())) {
           inBuckets.get(inStep.getSource()).get(inStep.getAcceptSymbol()).incUseCount(inStep.getUseCount());
+          inBuckets.get(inStep.getSource()).get(inStep.getAcceptSymbol()).incMinUseCount(inStep.getMinUseCount());
           this.delta.get(inStep.getSource()).remove(inStep);
           this.reverseDelta.get(inStep.getDestination()).remove(inStep);
         } else {
@@ -237,6 +238,7 @@ public class Automaton<T> {
       if (outBuckets.containsKey(outStep.getDestination())) {
         if (outBuckets.get(outStep.getDestination()).containsKey(outStep.getAcceptSymbol())) {
           outBuckets.get(outStep.getDestination()).get(outStep.getAcceptSymbol()).incUseCount(outStep.getUseCount());
+          outBuckets.get(outStep.getDestination()).get(outStep.getAcceptSymbol()).incMinUseCount(outStep.getMinUseCount());
           this.delta.get(outStep.getSource()).remove(outStep);
           this.reverseDelta.get(outStep.getDestination()).remove(outStep);
         } else {

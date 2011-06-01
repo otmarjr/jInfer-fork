@@ -55,7 +55,7 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
   /**
    * Default {@link AutomatonSimplifier} implementation if none is set.
    */
-  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierGreedy";
+  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierKHgrams";
   /**
    * Property name (in configuration file) of second submodule - {@link RegexpAutomatonSimplifier}
    */

@@ -85,7 +85,7 @@ public class KHContextFactory implements MergeConditionTesterFactory {
     final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append(" finds all <i>k,h</i>-context of states being tested. If there are two"
             + " contexts that are equivalent (same symbol string), the states"
-            + " are considered mergable (<i>k,h</i>-equivalent). Also <i>h</i> preceeding states in contexts are merged.");
+            + " are considered mergable (<i>k,h</i>-equivalent). Also <i>k - h</i> preceeding states in contexts are merged.");
     return sb.toString();
   }
 
@@ -101,8 +101,8 @@ public class KHContextFactory implements MergeConditionTesterFactory {
               + "be same (by means of symbols) before state. Default value: 2.";
     }
     if ("h".equals(parameterName)) {
-      return "h in <i>k,h</i>-context. That is the number of preceeding states merged,"
-              + " not including the states tested for <i>k,h</i>-context equivality. Default value: 1.";
+      return "h in <i>k,h</i>-context. Subsequent elements are the same already after <i>h</i> characters"
+              + " Default value: 1.";
     }
     throw new IllegalArgumentException("Asking for a description of unknown parameter");
   }

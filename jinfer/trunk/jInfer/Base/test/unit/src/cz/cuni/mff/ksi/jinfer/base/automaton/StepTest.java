@@ -30,7 +30,7 @@ public class StepTest {
   private Step<String> createInstance() {
     final State<String> f = new State<String>(10, 1);
     final State<String> t = new State<String>(20, 2);
-    return new Step<String>("testSymbol", f, t, 0);
+    return new Step<String>("testSymbol", f, t, 0, 0);
   }
 
   /**

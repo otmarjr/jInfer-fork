@@ -1,22 +1,21 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package cz.cuni.mff.ksi.jinfer.basicigg;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Expander;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
@@ -49,7 +48,7 @@ import org.openide.util.lookup.ServiceProvider;
  * DTD schemas, XPath queries and provides an extension framework to enable
  * support for additional languages
  * (see {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}).
- * 
+ *
  * @author vektor
  */
 @ServiceProvider(service = IGGenerator.class)
@@ -83,7 +82,7 @@ public class IGGeneratorImpl implements IGGenerator {
 
     final List<Element> documentRules = new ArrayList<Element>();
     final List<Element> schemaQueryRules = new ArrayList<Element>();
-    
+
     // run processors on input, gather IG rules
     documentRules.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));
     verifySimpleGrammar(documentRules);
@@ -98,7 +97,7 @@ public class IGGeneratorImpl implements IGGenerator {
 
       // show the rules
       RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(documentRules), true);
-      
+
       // show the attribute statistics
       AttributeStatsHelper.showStatisticsAsync("Input", new CloneHelper().cloneGrammar(documentRules), true);
 
@@ -120,10 +119,10 @@ public class IGGeneratorImpl implements IGGenerator {
     final List<Element> ret = new ArrayList<Element>();
     ret.addAll(documentRules);
     ret.addAll(expanded);
-    
+
     // show the rules after expansion
     RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(ret), true);
-    
+
     // show the attribute statistics
     AttributeStatsHelper.showStatisticsAsync("Input", new CloneHelper().cloneGrammar(ret), true);
 

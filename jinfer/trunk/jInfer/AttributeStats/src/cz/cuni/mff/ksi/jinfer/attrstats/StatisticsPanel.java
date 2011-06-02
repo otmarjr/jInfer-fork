@@ -27,12 +27,9 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.text.Format;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -48,11 +45,6 @@ import org.openide.NotifyDescriptor;
 public class StatisticsPanel extends JPanel {
 
   private static final long serialVersionUID = 5415245241L;
-
-  private static final Format FORMAT = NumberFormat.getInstance();
-  static {
-    ((NumberFormat)FORMAT).setMaximumFractionDigits(5);
-  }
 
   private AMModel model;
 
@@ -83,19 +75,15 @@ public class StatisticsPanel extends JPanel {
     idSet = new javax.swing.JPanel();
     panelArticle = new javax.swing.JPanel();
     run = new javax.swing.JButton();
-    listPane = new javax.swing.JScrollPane();
-    list = new javax.swing.JList();
-    labelArticleWeight = new javax.swing.JLabel();
+    idSetArticle = new cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel();
     glpk = new javax.swing.JPanel();
     panelGlpk = new javax.swing.JPanel();
     generateInput = new javax.swing.JButton();
     runGlpk = new javax.swing.JButton();
-    jSplitPane1 = new javax.swing.JSplitPane();
-    glpkResultPane = new javax.swing.JScrollPane();
-    glpkResultList = new javax.swing.JList();
+    split = new javax.swing.JSplitPane();
     glpkInputPane = new javax.swing.JScrollPane();
     glpkInput = new javax.swing.JTextArea();
-    labelGlpkWeight = new javax.swing.JLabel();
+    idSetGlpk = new cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -152,24 +140,13 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelArticle.add(run, gridBagConstraints);
-
-    listPane.setViewportView(list);
-
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    panelArticle.add(listPane, gridBagConstraints);
-
-    labelArticleWeight.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelArticleWeight.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    panelArticle.add(labelArticleWeight, gridBagConstraints);
+    panelArticle.add(idSetArticle, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -212,18 +189,16 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelGlpk.add(runGlpk, gridBagConstraints);
 
-    jSplitPane1.setDividerLocation(150);
-    jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-
-    glpkResultPane.setViewportView(glpkResultList);
-
-    jSplitPane1.setTopComponent(glpkResultPane);
+    split.setDividerLocation(250);
+    split.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+    split.setPreferredSize(new java.awt.Dimension(300, 200));
 
     glpkInput.setColumns(20);
     glpkInput.setRows(5);
     glpkInputPane.setViewportView(glpkInput);
 
-    jSplitPane1.setRightComponent(glpkInputPane);
+    split.setRightComponent(glpkInputPane);
+    split.setLeftComponent(idSetGlpk);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -233,15 +208,7 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    panelGlpk.add(jSplitPane1, gridBagConstraints);
-
-    labelGlpkWeight.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelGlpkWeight.text")); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    panelGlpk.add(labelGlpkWeight, gridBagConstraints);
+    panelGlpk.add(split, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -291,8 +258,7 @@ public class StatisticsPanel extends JPanel {
             new NotifyDescriptor.Message("Oops! This is not an ID set.",
             NotifyDescriptor.ERROR_MESSAGE));
     }
-    list.setModel(new DefaultComboBoxModel(ids.toArray()));
-    labelArticleWeight.setText("Result ID set weight: " + FORMAT.format(MappingUtils.weight(ids, model)));
+    idSetArticle.setModel(ids, model);
   }//GEN-LAST:event_runActionPerformed
 
   private void generateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInputActionPerformed
@@ -319,8 +285,7 @@ public class StatisticsPanel extends JPanel {
             new NotifyDescriptor.Message("Oops! This is not an ID set.",
             NotifyDescriptor.ERROR_MESSAGE));
     }
-    glpkResultList.setModel(new DefaultComboBoxModel(ids.toArray()));
-    labelGlpkWeight.setText("Result ID set weight: " + FORMAT.format(MappingUtils.weight(ids, model)));
+    idSetGlpk.setModel(ids, model);
   }//GEN-LAST:event_runGlpkActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -329,22 +294,18 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JPanel glpk;
   private javax.swing.JTextArea glpkInput;
   private javax.swing.JScrollPane glpkInputPane;
-  private javax.swing.JList glpkResultList;
-  private javax.swing.JScrollPane glpkResultPane;
   private javax.swing.JPanel idSet;
+  private cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel idSetArticle;
+  private cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel idSetGlpk;
   private javax.swing.JPanel jFreeChartPlaceholder;
-  private javax.swing.JSplitPane jSplitPane1;
-  private javax.swing.JLabel labelArticleWeight;
-  private javax.swing.JLabel labelGlpkWeight;
   private javax.swing.JLabel labelPlaceholder;
-  private javax.swing.JList list;
-  private javax.swing.JScrollPane listPane;
   private javax.swing.JTree nodeTree;
   private javax.swing.JScrollPane nodeTreePane;
   private javax.swing.JPanel panelArticle;
   private javax.swing.JPanel panelGlpk;
   private javax.swing.JButton run;
   private javax.swing.JButton runGlpk;
+  private javax.swing.JSplitPane split;
   private javax.swing.JSplitPane splitPaneChart;
   private javax.swing.JTabbedPane tabbedPane;
   private cz.cuni.mff.ksi.jinfer.attrstats.TableViewPanel tableView;

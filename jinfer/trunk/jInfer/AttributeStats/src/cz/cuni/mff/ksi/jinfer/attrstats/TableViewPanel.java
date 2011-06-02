@@ -24,8 +24,6 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.MappingsModel;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.text.Format;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
+import static cz.cuni.mff.ksi.jinfer.attrstats.Utils.NA;
 
 /**
  * A panel containing a table representation of an AM model. There is a
@@ -47,9 +46,6 @@ import javax.swing.table.TableModel;
 public class TableViewPanel extends JPanel {
 
   private static final long serialVersionUID = 18443L;
-
-  private static final Format FORMAT = NumberFormat.getInstance();
-  private static final String NA = "N/A";
 
   private AMModel model;
   private final Map<AttributeMappingId, Pair<Double, Double>> cache =
@@ -117,7 +113,7 @@ public class TableViewPanel extends JPanel {
 
     if (!BaseUtils.isEmpty(ids)) {
       idSet.setText(MappingUtils.isIDset(ids, model) ? "yes" : "no");
-      weight.setText(FORMAT.format(MappingUtils.weight(ids, model)));
+      weight.setText(Utils.FORMAT.format(MappingUtils.weight(ids, model)));
     }
     else {
       idSet.setText("no");
@@ -136,8 +132,8 @@ public class TableViewPanel extends JPanel {
               Double.valueOf(MappingUtils.coverage(targetMapping, model)));
       cache.put(targetMapping, value);
     }
-    support.setText(FORMAT.format(value.getFirst()));
-    coverage.setText(FORMAT.format(value.getSecond()));
+    support.setText(Utils.FORMAT.format(value.getFirst()));
+    coverage.setText(Utils.FORMAT.format(value.getSecond()));
   }
 
   @SuppressWarnings({"unchecked", "PMD"})

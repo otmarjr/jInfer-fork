@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -71,6 +72,7 @@ public final class GlpkInputGenerator {
    * language, that can be directly passed to GLPK Solver.
    */
   public static String generateGlpkInput(final AMModel model) {
+    final long startTime = Calendar.getInstance().getTimeInMillis();
     final List<AttributeMappingId> candidates = new ArrayList<AttributeMappingId>();
     for (final AttributeMappingId mapping : model.getAMs().keySet()) {
       if (MappingUtils.isCandidateMapping(mapping, model)) {
@@ -98,13 +100,18 @@ public final class GlpkInputGenerator {
 
       final Pair<CharSequence, Integer> constraints = getConstraints(candidates, model);
 
-      LOG.info("Graph interpretation: " + candidates.size() + " vertices, "
-              + constraints.getSecond().intValue() + " edges.");
-
-      return ret.toString()
+      final String result = ret.toString()
               .replace("{constraints}", constraints.getFirst())
               .replace("{mappings}", mappings)
               .replace("{weights}", weights);
+
+      LOG.info("Graph interpretation: " + candidates.size() + " vertices, "
+              + constraints.getSecond().intValue() + " edges.");
+      LOG.info("Input generator took "
+              + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
+      LOG.info("Input length is " + result.length() + " chars.");
+
+      return result;
     } catch (final IOException ex) {
       return null;
     }

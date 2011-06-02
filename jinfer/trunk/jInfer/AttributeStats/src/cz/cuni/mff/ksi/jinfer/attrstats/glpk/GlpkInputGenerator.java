@@ -19,12 +19,14 @@ package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
 import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * Utility class for conversion from {@link AMModel} to GLPK MathProg plaintext
@@ -37,6 +39,8 @@ public final class GlpkInputGenerator {
   private GlpkInputGenerator() {
 
   }
+
+  private static final Logger LOG = Logger.getLogger(GlpkInputGenerator.class);
 
   private static final String CONSTRAINT = "s.t. c{index}: x['{mapping1}'] + x['{mapping2}'] <= 1;";
 
@@ -92,8 +96,13 @@ public final class GlpkInputGenerator {
         ret.append(line).append('\n');
       }
 
+      final Pair<CharSequence, Integer> constraints = getConstraints(candidates, model);
+
+      LOG.info("Graph interpretation: " + candidates.size() + " vertices, "
+              + constraints.getSecond().intValue() + " edges.");
+
       return ret.toString()
-              .replace("{constraints}", getConstraints(candidates, model))
+              .replace("{constraints}", constraints.getFirst())
               .replace("{mappings}", mappings)
               .replace("{weights}", weights);
     } catch (final IOException ex) {
@@ -101,7 +110,7 @@ public final class GlpkInputGenerator {
     }
   }
 
-  private static CharSequence getConstraints(
+  private static Pair<CharSequence, Integer> getConstraints(
           final List<AttributeMappingId> candidates, final AMModel model) {
     final StringBuilder ret = new StringBuilder();
 
@@ -123,7 +132,7 @@ public final class GlpkInputGenerator {
       }
     }
 
-    return ret;
+    return new Pair<CharSequence, Integer>(ret, Integer.valueOf(index));
   }
 
   private static boolean mappingsCollide(final AttributeMappingId mapping1,

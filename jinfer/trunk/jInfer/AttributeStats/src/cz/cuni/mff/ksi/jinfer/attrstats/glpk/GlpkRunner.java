@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Calendar;
+import org.apache.log4j.Logger;
 
 /**
  * Utility class for GLPK invocation.
@@ -35,6 +37,8 @@ public final class GlpkRunner {
   private GlpkRunner() {
 
   }
+
+  private static final Logger LOG = Logger.getLogger(GlpkRunner.class);
 
   private static final String INPUT = "glpk_input.txt";
   private static final String OUTPUT = "glpk_output.txt";
@@ -64,6 +68,8 @@ public final class GlpkRunner {
     }
 
     try {
+      final long startTime = Calendar.getInstance().getTimeInMillis();
+
       final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList(
               GlpkUtils.getPath(),
               "--math",
@@ -87,6 +93,8 @@ public final class GlpkRunner {
 
       input.delete();
       output.delete();
+
+      LOG.info("GLPK run took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
 
       return ret.toString();
     } catch (final IOException e) {

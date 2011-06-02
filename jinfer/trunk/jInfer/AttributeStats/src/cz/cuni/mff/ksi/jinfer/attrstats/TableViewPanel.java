@@ -117,9 +117,11 @@ public class TableViewPanel extends JPanel {
 
     if (!BaseUtils.isEmpty(ids)) {
       idSet.setText(MappingUtils.isIDset(ids, model) ? "yes" : "no");
+      weight.setText(FORMAT.format(MappingUtils.weight(ids, model)));
     }
     else {
       idSet.setText("no");
+      weight.setText(NA);
     }
   }
 
@@ -158,6 +160,8 @@ public class TableViewPanel extends JPanel {
     coverage = new javax.swing.JLabel();
     labelIDset = new javax.swing.JLabel();
     idSet = new javax.swing.JLabel();
+    labelWeight = new javax.swing.JLabel();
+    weight = new javax.swing.JLabel();
     panelValues = new javax.swing.JPanel();
     paneValues = new javax.swing.JScrollPane();
     listValues = new javax.swing.JList();
@@ -252,6 +256,7 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
     panelMappingsTable.add(labelSupport, gridBagConstraints);
 
@@ -259,7 +264,8 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 12);
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelMappingsTable.add(support, gridBagConstraints);
 
     labelCoverage.setFont(labelCoverage.getFont().deriveFont(labelCoverage.getFont().getStyle() | java.awt.Font.BOLD));
@@ -267,6 +273,7 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelMappingsTable.add(labelCoverage, gridBagConstraints);
 
@@ -274,23 +281,43 @@ public class TableViewPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 1;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 12);
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelMappingsTable.add(coverage, gridBagConstraints);
 
     labelIDset.setFont(labelIDset.getFont().deriveFont(labelIDset.getFont().getStyle() | java.awt.Font.BOLD));
     labelIDset.setText("Feasible ID set:"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 4;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelMappingsTable.add(labelIDset, gridBagConstraints);
 
     idSet.setText(NA);
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 5;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 12);
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     panelMappingsTable.add(idSet, gridBagConstraints);
+
+    labelWeight.setFont(labelWeight.getFont().deriveFont(labelWeight.getFont().getStyle() | java.awt.Font.BOLD));
+    labelWeight.setText("Weight:"); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelMappingsTable.add(labelWeight, gridBagConstraints);
+
+    weight.setText(NA);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    panelMappingsTable.add(weight, gridBagConstraints);
 
     splitVertical.setLeftComponent(panelMappingsTable);
 
@@ -323,6 +350,7 @@ public class TableViewPanel extends JPanel {
   private javax.swing.JLabel labelCoverage;
   private javax.swing.JLabel labelIDset;
   private javax.swing.JLabel labelSupport;
+  private javax.swing.JLabel labelWeight;
   private javax.swing.JList listValues;
   private javax.swing.JScrollPane paneFlat;
   private javax.swing.JScrollPane paneMappings;
@@ -336,5 +364,6 @@ public class TableViewPanel extends JPanel {
   private javax.swing.JLabel support;
   private javax.swing.JTable tableFlat;
   private javax.swing.JTable tableMappings;
+  private javax.swing.JLabel weight;
   // End of variables declaration//GEN-END:variables
 }

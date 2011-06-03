@@ -33,8 +33,10 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
 
 /**
  * Panel representing and displaying one complete attribute statistics.
@@ -45,6 +47,8 @@ import org.openide.NotifyDescriptor;
 public class StatisticsPanel extends JPanel {
 
   private static final long serialVersionUID = 5415245241L;
+
+  private static final Logger LOG = Logger.getLogger(StatisticsPanel.class);
 
   private AMModel model;
 
@@ -57,6 +61,12 @@ public class StatisticsPanel extends JPanel {
     model = new AMModel(grammar);
     tableView.setModel(model);
     nodeTree.setModel(new DefaultTreeModel(model.getTree()));
+  }
+
+  private void notAnIdSet() {
+    DialogDisplayer.getDefault().notify(
+            new NotifyDescriptor.Message("Oops! This is not an ID set.",
+            NotifyDescriptor.ERROR_MESSAGE));
   }
 
   @SuppressWarnings({"unchecked", "PMD"})
@@ -252,17 +262,25 @@ public class StatisticsPanel extends JPanel {
     // TODO vektor Parameters should be customizable
     final List<AttributeMappingId> ids = Algorithm.findIDSet(model);
     Collections.sort(ids);
-    final boolean isIDset = MappingUtils.isIDset(ids, model);
-    if (!isIDset) {
-      DialogDisplayer.getDefault().notify(
-            new NotifyDescriptor.Message("Oops! This is not an ID set.",
-            NotifyDescriptor.ERROR_MESSAGE));
+    if (!MappingUtils.isIDset(ids, model)) {
+      notAnIdSet();
     }
     idSetArticle.setModel(ids, model);
   }//GEN-LAST:event_runActionPerformed
 
   private void generateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInputActionPerformed
-    glpkInput.setText(GlpkInputGenerator.generateGlpkInput(model));
+    runAsync(new Runnable() {
+
+      @Override
+      public void run() {
+        try {
+          glpkInput.setText(GlpkInputGenerator.generateGlpkInput(model));
+        }
+        catch (final InterruptedException e) {
+          LOG.error("User interrupted GLPK input generation.");
+        }
+      }
+    }, "Generating GLPK input");
   }//GEN-LAST:event_generateInputActionPerformed
 
   private void runGlpkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runGlpkActionPerformed
@@ -274,18 +292,25 @@ public class StatisticsPanel extends JPanel {
             NotifyDescriptor.ERROR_MESSAGE));
       return;
     }
-    final String glpkOut = GlpkRunner.run(model);
-    glpkInput.setText(glpkOut);
+    runAsync(new Runnable() {
 
-    final List<AttributeMappingId> ids = GlpkOutputParser.getIDSet(glpkOut, model);
-    Collections.sort(ids);
-    final boolean isIDset = MappingUtils.isIDset(ids, model);
-    if (!isIDset) {
-      DialogDisplayer.getDefault().notify(
-            new NotifyDescriptor.Message("Oops! This is not an ID set.",
-            NotifyDescriptor.ERROR_MESSAGE));
-    }
-    idSetGlpk.setModel(ids, model);
+      @Override
+      public void run() {
+        try {
+          final String glpkOut = GlpkRunner.run(model);
+          glpkInput.setText(glpkOut);
+
+          final List<AttributeMappingId> ids = GlpkOutputParser.getIDSet(glpkOut, model);
+          Collections.sort(ids);
+          if (!MappingUtils.isIDset(ids, model)) {
+            notAnIdSet();
+          }
+          idSetGlpk.setModel(ids, model);
+        } catch (final InterruptedException e) {
+          LOG.error("User interrupted GLPK run.");
+        }
+      }
+    }, "Running GLPK");
   }//GEN-LAST:event_runGlpkActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

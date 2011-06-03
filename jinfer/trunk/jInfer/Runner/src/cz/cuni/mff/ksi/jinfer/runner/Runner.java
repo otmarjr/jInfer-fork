@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 rio
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -34,17 +34,13 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import org.netbeans.api.progress.ProgressHandle;
-import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.NbPreferences;
-import org.openide.util.RequestProcessor;
-import org.openide.util.Task;
-import org.openide.util.TaskListener;
 import org.openide.windows.IOProvider;
 import org.openide.windows.IOSelect;
 import org.openide.windows.InputOutput;
+import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
 
 /**
  * Runner is responsible for running other modules in process of inference,
@@ -56,7 +52,7 @@ import org.openide.windows.InputOutput;
  *  for that specific inference run: every Runner should be used for one
  *  inference only!
  * </p>
- * 
+ *
  * @author rio
  */
 public class Runner {
@@ -190,21 +186,6 @@ public class Runner {
 
     RunningProject.removeActiveProject();
     LOG.info("------------- DONE -------------");
-  }
-
-  private static void runAsync(final Runnable r, final String taskName) {
-    final RequestProcessor rp = new RequestProcessor("interruptible", 1, true);
-    final RequestProcessor.Task theTask = rp.create(r);
-    final ProgressHandle handle = ProgressHandleFactory.createHandle(taskName, theTask);
-    theTask.addTaskListener(new TaskListener() {
-
-      @Override
-      public void taskFinished(final Task task) {
-        handle.finish();
-      }
-    });
-    handle.start();
-    theTask.schedule(0);
   }
 
   private static void interrupted() {

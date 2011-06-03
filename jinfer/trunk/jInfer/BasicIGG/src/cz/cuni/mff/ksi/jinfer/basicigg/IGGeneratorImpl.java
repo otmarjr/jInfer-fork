@@ -155,12 +155,17 @@ public class IGGeneratorImpl implements IGGenerator {
         throw new InterruptedException();
       }
       try {
-        final String ext = FileUtils.getExtension(f.getAbsolutePath());
-        if (mappings.containsKey(ext)) {
-          ret.addAll(mappings.get(ext).process(new FileInputStream(f)));
-        } else if (mappings.containsKey("*")) {
-          ret.addAll(mappings.get("*").process(new FileInputStream(f)));
-        } else {
+        final Processor p = getProcessorForExtension(
+                FileUtils.getExtension(f.getAbsolutePath()),
+                mappings);
+        if (p != null) {
+          final List<Element> rules = p.process(new FileInputStream(f));
+          for (final Element rule : rules) {
+            rule.getMetadata().put(IGGUtils.FILE_ORIGIN, f.getAbsoluteFile());
+          }
+          ret.addAll(rules);
+        }
+        else {
           LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
         }
       } catch (final FileNotFoundException e) {
@@ -169,6 +174,17 @@ public class IGGeneratorImpl implements IGGenerator {
     }
 
     return ret;
+  }
+
+  private static Processor getProcessorForExtension(final String extension,
+          final Map<String, Processor> mappings) {
+    if (mappings.containsKey(extension)) {
+      return mappings.get(extension);
+    }
+    if (mappings.containsKey("*")) {
+      return mappings.get("*");
+    }
+    return null;
   }
 
   /**

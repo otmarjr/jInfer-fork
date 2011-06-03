@@ -120,11 +120,15 @@ public final class MappingUtils {
    *
    * @param mappings List of the attribute mappings to verify.
    * @param allMappings All the attribute mappings of the grammar.
-   * @return True if the specified list consitutes an ID set, false otherwise.
+   * @return <code>True</code> if the specified list consitutes an ID set
+   * (an empty set is ID set too), <code>false</code> otherwise.
    */
   public static boolean isIDset(final List<AttributeMappingId> mappings, final AMModel model) {
-    if (BaseUtils.isEmpty(mappings) || model == null) {
+    if (mappings == null || model == null) {
       throw new IllegalArgumentException("Expecting non-null, non empty parameters");
+    }
+    if (BaseUtils.isEmpty(mappings)) {
+      return true;
     }
 
     final Set<String> types = new HashSet<String>();

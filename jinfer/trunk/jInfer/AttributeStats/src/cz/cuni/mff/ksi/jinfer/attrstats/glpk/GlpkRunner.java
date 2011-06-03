@@ -43,6 +43,8 @@ public final class GlpkRunner {
   private static final String INPUT = "glpk_input.txt";
   private static final String OUTPUT = "glpk_output.txt";
   private static final String TMP = System.getProperty("java.io.tmpdir");
+  /** Time limit for GLPK run in seconds. */
+  private static final int TMLIM = 60;
 
   /**
    * Constructs the GLPK problem formulation from the provided model, runs
@@ -67,12 +69,16 @@ public final class GlpkRunner {
       pw.close();
     }
 
+    LOG.info("Time limit set to " + TMLIM + " seconds.");
+
     try {
       final long startTime = Calendar.getInstance().getTimeInMillis();
 
       final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList(
               GlpkUtils.getPath(),
               "--math",
+              "--tmlim",
+              String.valueOf(TMLIM),
               TMP + INPUT,
               "-o",
               TMP + OUTPUT));
@@ -98,7 +104,8 @@ public final class GlpkRunner {
 
       return ret.toString();
     } catch (final IOException e) {
-      throw new RuntimeException(e);
+      LOG.error("Error running GLPK.", e);
+      return "Running GLPK encountered an error, check log for details.";
     }
   }
 

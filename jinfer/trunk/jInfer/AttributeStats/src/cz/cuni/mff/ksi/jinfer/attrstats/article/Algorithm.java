@@ -14,11 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.logic;
+package cz.cuni.mff.ksi.jinfer.attrstats.article;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,7 +51,7 @@ public final class Algorithm {
    * @param model Model to work on.
    * @return List of attribute mappings constituting the ID set found.
    */
-  public static List<AttributeMappingId> findIDSet(final AMModel model) {
+  public static IdSet findIDSet(final AMModel model) {
 
     // 1.  M := all AMs
 
@@ -143,7 +145,7 @@ public final class Algorithm {
     LOG.info("C2: " + C2.getLive().toString());
 
     // 11. return C
-    return C2.getLive();
+    return new IdSet(C2.getLive());
   }
 
   private static AttributeMappingId findMaxWeight(final String type,

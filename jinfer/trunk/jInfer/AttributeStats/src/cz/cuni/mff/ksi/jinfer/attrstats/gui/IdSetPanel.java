@@ -17,17 +17,17 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
-import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.MappingsModel;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import static cz.cuni.mff.ksi.jinfer.attrstats.Utils.NA;
 
 /**
- * TODO vektor Comment!
+ * Panel displaying one ID set in a table.
  *
  * @author vektor
  */
@@ -36,7 +36,7 @@ public class IdSetPanel extends JPanel {
 
   private static final long serialVersionUID = 187541L;
 
-  private List<AttributeMappingId> idSet;
+  private IdSet idSet;
   private AMModel model;
 
   public IdSetPanel() {
@@ -45,12 +45,14 @@ public class IdSetPanel extends JPanel {
     table.setModel(new DefaultTableModel());
   }
 
-  public void setModel(final List<AttributeMappingId> idSet, final AMModel model) {
-    this.idSet = new ArrayList<AttributeMappingId>(idSet);
+  public void setModel(final IdSet idSet, final AMModel model) {
+    this.idSet = idSet;
+    Collections.sort(this.idSet.getMappings());
     this.model = model;
 
-    table.setModel(new MappingsModel(idSet));
-    weight.setText(Utils.FORMAT.format(MappingUtils.weight(idSet, model)));
+    table.setModel(new MappingsModel(idSet.getMappings()));
+    weight.setText(Utils.FORMAT.format(MappingUtils.weight(idSet.getMappings(), model)));
+    optimal.setText(Utils.boolToString(idSet.isOptimal()));
   }
 
   @SuppressWarnings({"unchecked", "PMD"})
@@ -63,6 +65,8 @@ public class IdSetPanel extends JPanel {
     labelWeight = new javax.swing.JLabel();
     weight = new javax.swing.JLabel();
     use = new javax.swing.JButton();
+    labelOptimal = new javax.swing.JLabel();
+    optimal = new javax.swing.JLabel();
 
     setPreferredSize(new java.awt.Dimension(300, 200));
     setLayout(new java.awt.GridBagLayout());
@@ -85,7 +89,7 @@ public class IdSetPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridwidth = 3;
+    gridBagConstraints.gridwidth = 5;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
@@ -100,23 +104,40 @@ public class IdSetPanel extends JPanel {
     add(labelWeight, gridBagConstraints);
 
     weight.setFont(weight.getFont().deriveFont(weight.getFont().getStyle() | java.awt.Font.BOLD));
-    weight.setText("N/A"); // NOI18N
+    weight.setText(NA);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 1;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 2);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(weight, gridBagConstraints);
 
     use.setText("Use in Schema"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridx = 4;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(use, gridBagConstraints);
+
+    labelOptimal.setText("Optimal?"); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(labelOptimal, gridBagConstraints);
+
+    optimal.setFont(optimal.getFont().deriveFont(optimal.getFont().getStyle() | java.awt.Font.BOLD));
+    optimal.setText(NA);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(optimal, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JLabel labelOptimal;
   private javax.swing.JLabel labelWeight;
+  private javax.swing.JLabel optimal;
   private javax.swing.JScrollPane pane;
   private javax.swing.JTable table;
   private javax.swing.JButton use;

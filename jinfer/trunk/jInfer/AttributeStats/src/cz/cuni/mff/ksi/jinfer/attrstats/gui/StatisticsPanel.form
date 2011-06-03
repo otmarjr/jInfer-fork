@@ -29,9 +29,7 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Chart View">
-                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="cz/cuni/mff/ksi/jinfer/attrstats/Bundle.properties" key="StatisticsPanel.chartView.TabConstraints.tabTitle" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </Property>
+                <Property name="tabTitle" type="java.lang.String" value="Chart View" noResource="true"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -99,9 +97,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="69" green="69" id="Button.darkShadow" palette="3" red="69" type="palette"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/attrstats/Bundle.properties" key="StatisticsPanel.labelPlaceholder.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                        </Property>
+                        <Property name="text" type="java.lang.String" value="&lt; Select an attribute to see its content" noResource="true"/>
                       </Properties>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -127,10 +123,8 @@
         <Container class="javax.swing.JPanel" name="idSet">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="ID set - article">
-                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="cz/cuni/mff/ksi/jinfer/attrstats/Bundle.properties" key="StatisticsPanel.idSet.TabConstraints.tabTitle" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </Property>
+              <JTabbedPaneConstraints tabName="ID set - Article">
+                <Property name="tabTitle" type="java.lang.String" value="ID set - Article" noResource="true"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -141,9 +135,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Article &quot;Finding ID Attributes in XML Documents&quot;">
-                      <ResourceString PropertyName="titleX" bundle="cz/cuni/mff/ksi/jinfer/attrstats/Bundle.properties" key="StatisticsPanel.panelArticle.border.title" replaceFormat="org.openide.util.NbBundle.getMessage(StatisticsPanel.class, &quot;{key}&quot;)"/>
-                    </TitledBorder>
+                    <TitledBorder title="Article &quot;Finding ID Attributes in XML Documents&quot;"/>
                   </Border>
                 </Property>
               </Properties>
@@ -183,9 +175,7 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="ID set - GLPK">
-                <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                  <ResourceString bundle="cz/cuni/mff/ksi/jinfer/attrstats/Bundle.properties" key="StatisticsPanel.glpk.TabConstraints.tabTitle_1" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                </Property>
+                <Property name="tabTitle" type="java.lang.String" value="ID set - GLPK" noResource="true"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -210,9 +200,7 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="generateInput">
                   <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/cuni/mff/ksi/jinfer/attrstats/Bundle.properties" key="StatisticsPanel.generateInput.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </Property>
+                    <Property name="text" type="java.lang.String" value="Just Generate Input" noResource="true"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generateInputActionPerformed"/>
@@ -225,9 +213,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="runGlpk">
                   <Properties>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="cz/cuni/mff/ksi/jinfer/attrstats/Bundle.properties" key="StatisticsPanel.runGlpk.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-                    </Property>
+                    <Property name="text" type="java.lang.String" value="Run GLPK" noResource="true"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="runGlpkActionPerformed"/>

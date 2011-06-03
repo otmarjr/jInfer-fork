@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,7 @@ public final class GlpkOutputParser {
    * @param model Model to which all the AMs belong.
    * @return List of AMs belonging to the "optimal" ID set.
    */
-  public static List<AttributeMappingId> getIDSet(final String output, final AMModel model) {
+  public static IdSet getIDSet(final String output, final AMModel model) {
     final Set<AttributeMappingId> ret = new HashSet<AttributeMappingId>();
 
     final Scanner s = new Scanner(output);
@@ -67,7 +68,7 @@ public final class GlpkOutputParser {
       }
     }
 
-    return new ArrayList<AttributeMappingId>(ret);
+    return new IdSet(new ArrayList<AttributeMappingId>(ret), output.contains("INTEGER OPTIMAL SOLUTION FOUND"));
   }
 
 }

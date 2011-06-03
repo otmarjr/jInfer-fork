@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.FlatModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
@@ -113,7 +113,7 @@ public class TableViewPanel extends JPanel {
     }
 
     if (!BaseUtils.isEmpty(ids)) {
-      idSet.setText(MappingUtils.isIDset(ids, model) ? "yes" : "no");
+      idSet.setText(Utils.boolToString(MappingUtils.isIDset(ids, model)));
       weight.setText(Utils.FORMAT.format(MappingUtils.weight(ids, model)));
     }
     else {

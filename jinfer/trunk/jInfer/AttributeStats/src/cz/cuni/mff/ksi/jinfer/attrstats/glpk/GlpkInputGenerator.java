@@ -71,10 +71,13 @@ public final class GlpkInputGenerator {
    * @return String representation of the problem formulation in MathProg
    * language, that can be directly passed to GLPK Solver.
    */
-  public static String generateGlpkInput(final AMModel model) {
+  public static String generateGlpkInput(final AMModel model) throws InterruptedException {
     final long startTime = Calendar.getInstance().getTimeInMillis();
     final List<AttributeMappingId> candidates = new ArrayList<AttributeMappingId>();
     for (final AttributeMappingId mapping : model.getAMs().keySet()) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       if (MappingUtils.isCandidateMapping(mapping, model)) {
         candidates.add(mapping);
       }
@@ -84,6 +87,9 @@ public final class GlpkInputGenerator {
     final StringBuilder weights = new StringBuilder();
 
     for (final AttributeMappingId mapping : candidates) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       final String name = GlpkUtils.getName(mapping);
       mappings.append(name).append('\n');
       weights.append(name).append(' ').append(MappingUtils.weight(mapping, model)).append('\n');
@@ -118,7 +124,8 @@ public final class GlpkInputGenerator {
   }
 
   private static Pair<CharSequence, Integer> getConstraints(
-          final List<AttributeMappingId> candidates, final AMModel model) {
+          final List<AttributeMappingId> candidates, final AMModel model)
+          throws InterruptedException {
     final StringBuilder ret = new StringBuilder();
 
     int index = 0;
@@ -126,6 +133,10 @@ public final class GlpkInputGenerator {
       for (final AttributeMappingId mapping2 : candidates) {
         if (mapping1.equals(mapping2)) {
           continue;
+        }
+
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
         }
 
         if (mappingsCollide(mapping1, mapping2, model)) {

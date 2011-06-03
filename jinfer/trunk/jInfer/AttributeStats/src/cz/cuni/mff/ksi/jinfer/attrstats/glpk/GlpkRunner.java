@@ -55,7 +55,7 @@ public final class GlpkRunner {
    * @param model Model to find "optimal" ID set in.
    * @return String representation of GLPK optimalization output.
    */
-  public static String run(final AMModel model) {
+  public static String run(final AMModel model) throws InterruptedException {
     final File input = new File(TMP + INPUT);
     final File output = new File(TMP + OUTPUT);
     PrintWriter pw = null;
@@ -85,16 +85,23 @@ public final class GlpkRunner {
       final Process process = processBuilder.start();
 
       final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-      process.getOutputStream().close();
 
       String line;
       while ((line = reader.readLine()) != null) {
         ret.append(line).append('\n');
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
       }
+
+      process.getOutputStream().close();
 
       final BufferedReader outputReader = new BufferedReader(new FileReader(output));
       while ((line = outputReader.readLine()) != null) {
         ret.append(line).append('\n');
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
       }
 
       input.delete();

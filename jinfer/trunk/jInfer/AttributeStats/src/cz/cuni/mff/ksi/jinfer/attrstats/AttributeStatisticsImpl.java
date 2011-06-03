@@ -16,12 +16,15 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.gui.StatisticsPanel;
+import cz.cuni.mff.ksi.jinfer.attrstats.gui.AttrStatsTopComponent;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * TODO vektor Comment!
  *
  * @author vektor
  */
@@ -30,7 +33,7 @@ public class AttributeStatisticsImpl implements AttributeStatistics {
 
   private static final String NAME = "AttributeStatistics";
   private static final String DISPLAY_NAME = "Attribute Statistics";
-  
+
   @Override
   public void showStatistics(final String panelName, final List<Element> grammar) {
     final AttrStatsTopComponent topComponent = AttrStatsTopComponent.findInstance();
@@ -55,5 +58,5 @@ public class AttributeStatisticsImpl implements AttributeStatistics {
   public String getModuleDescription() {
     return getDisplayName();
   }
-  
+
 }

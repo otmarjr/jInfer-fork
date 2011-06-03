@@ -16,13 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.JFCWrapper;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkInputGenerator;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkOutputParser;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkRunner;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkUtils;
-import cz.cuni.mff.ksi.jinfer.attrstats.logic.Algorithm;
-import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.article.Algorithm;
+import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
@@ -119,7 +120,7 @@ public class StatisticsPanel extends JPanel {
 
     labelPlaceholder.setFont(labelPlaceholder.getFont().deriveFont(labelPlaceholder.getFont().getSize()+19f));
     labelPlaceholder.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow"));
-    labelPlaceholder.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.labelPlaceholder.text")); // NOI18N
+    labelPlaceholder.setText("< Select an attribute to see its content");
     jFreeChartPlaceholder.add(labelPlaceholder, new java.awt.GridBagConstraints());
 
     splitPaneChart.setRightComponent(jFreeChartPlaceholder);
@@ -133,12 +134,12 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     chartView.add(splitPaneChart, gridBagConstraints);
 
-    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.chartView.TabConstraints.tabTitle"), chartView); // NOI18N
+    tabbedPane.addTab("Chart View", chartView); // NOI18N
     tabbedPane.addTab("Table View", tableView);
 
     idSet.setLayout(new java.awt.GridBagLayout());
 
-    panelArticle.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.panelArticle.border.title"))); // NOI18N
+    panelArticle.setBorder(javax.swing.BorderFactory.createTitledBorder("Article \"Finding ID Attributes in XML Documents\"")); // NOI18N
     panelArticle.setLayout(new java.awt.GridBagLayout());
 
     run.setText("Run \"the algorithm\""); // NOI18N
@@ -167,14 +168,14 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     idSet.add(panelArticle, gridBagConstraints);
 
-    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.idSet.TabConstraints.tabTitle"), idSet); // NOI18N
+    tabbedPane.addTab("ID set - Article", idSet); // NOI18N
 
     glpk.setLayout(new java.awt.GridBagLayout());
 
     panelGlpk.setBorder(javax.swing.BorderFactory.createTitledBorder("ID set via GLPK MIP optimization"));
     panelGlpk.setLayout(new java.awt.GridBagLayout());
 
-    generateInput.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.generateInput.text")); // NOI18N
+    generateInput.setText("Just Generate Input"); // NOI18N
     generateInput.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         generateInputActionPerformed(evt);
@@ -187,7 +188,7 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelGlpk.add(generateInput, gridBagConstraints);
 
-    runGlpk.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.runGlpk.text")); // NOI18N
+    runGlpk.setText("Run GLPK"); // NOI18N
     runGlpk.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         runGlpkActionPerformed(evt);
@@ -228,7 +229,7 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     glpk.add(panelGlpk, gridBagConstraints);
 
-    tabbedPane.addTab(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.glpk.TabConstraints.tabTitle_1"), glpk); // NOI18N
+    tabbedPane.addTab("ID set - GLPK", glpk); // NOI18N
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -261,12 +262,11 @@ public class StatisticsPanel extends JPanel {
 
   private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
     // TODO vektor Parameters should be customizable
-    final List<AttributeMappingId> ids = Algorithm.findIDSet(model);
-    Collections.sort(ids);
-    if (!MappingUtils.isIDset(ids, model)) {
+    final IdSet idSet = Algorithm.findIDSet(model);
+    if (!idSet.isValid(model)) {
       notAnIdSet();
     }
-    idSetArticle.setModel(ids, model);
+    idSetArticle.setModel(idSet, model);
   }//GEN-LAST:event_runActionPerformed
 
   private void generateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInputActionPerformed
@@ -301,12 +301,11 @@ public class StatisticsPanel extends JPanel {
           final String glpkOut = GlpkRunner.run(model);
           glpkInput.setText(glpkOut);
 
-          final List<AttributeMappingId> ids = GlpkOutputParser.getIDSet(glpkOut, model);
-          Collections.sort(ids);
-          if (!MappingUtils.isIDset(ids, model)) {
+          final IdSet idSet = GlpkOutputParser.getIDSet(glpkOut, model);
+          if (!idSet.isValid(model)) {
             notAnIdSet();
           }
-          idSetGlpk.setModel(ids, model);
+          idSetGlpk.setModel(idSet, model);
         } catch (final InterruptedException e) {
           LOG.error("User interrupted GLPK run.");
         }

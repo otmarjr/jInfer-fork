@@ -14,39 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats;
+package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
-import java.text.Format;
-import java.text.NumberFormat;
+import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import java.util.List;
 
 /**
- * Attribute statistics module utils.
+ * TODO vektor Comment!
  *
  * @author vektor
  */
-public final class Utils {
+public class IdSet {
 
-  private Utils() {
+  private final List<AttributeMappingId> mappings;
 
+  private final boolean optimal;
+
+  public IdSet(final List<AttributeMappingId> mappings, final boolean optimal) {
+    super();
+    this.mappings = mappings;
+    this.optimal = optimal;
   }
 
-  /**
-   * TODO vektor Comment!
-   */
-  public static final Format FORMAT = NumberFormat.getInstance();
-  static {
-    ((NumberFormat)FORMAT).setMaximumFractionDigits(5);
+  public IdSet(final List<AttributeMappingId> mappings) {
+    this(mappings, false);
   }
-  public static final String NA = "N/A";
 
-  /**
-   * TODO vektor Comment!
-   *
-   * @param b
-   * @return
-   */
-  public static String boolToString(final boolean b) {
-    return b ? "yes" : "no";
+  public List<AttributeMappingId> getMappings() {
+    return mappings;
+  }
+
+  public boolean isOptimal() {
+    return optimal;
+  }
+
+  public boolean isValid(final AMModel model) {
+    return MappingUtils.isIDset(mappings, model);
   }
 
 }

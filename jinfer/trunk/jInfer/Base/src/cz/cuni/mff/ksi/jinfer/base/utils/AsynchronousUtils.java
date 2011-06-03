@@ -23,7 +23,7 @@ import org.openide.util.Task;
 import org.openide.util.TaskListener;
 
 /**
- * TODO vektor Comment!
+ * Utility class for asynchronous invocation of a task.
  *
  * @author vektor
  */
@@ -33,14 +33,16 @@ public final class AsynchronousUtils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Executes the specified task asynchronously and shows a NBP progress bar
+   * for it.
    *
-   * @param r
-   * @param taskName
+   * @param task Task to execute.
+   * @param taskName Name of the task. Will be displayed next to its NBP
+   * progress bar.
    */
-  public static void runAsync(final Runnable r, final String taskName) {
+  public static void runAsync(final Runnable task, final String taskName) {
     final RequestProcessor rp = new RequestProcessor("interruptible", 1, true);
-    final RequestProcessor.Task theTask = rp.create(r);
+    final RequestProcessor.Task theTask = rp.create(task);
     final ProgressHandle handle = ProgressHandleFactory.createHandle(taskName, theTask);
     theTask.addTaskListener(new TaskListener() {
 

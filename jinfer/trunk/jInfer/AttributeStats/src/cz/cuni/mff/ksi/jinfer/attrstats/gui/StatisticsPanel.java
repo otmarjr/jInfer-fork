@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats;
+package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.JFCWrapper;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkInputGenerator;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkOutputParser;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkRunner;
@@ -81,11 +82,11 @@ public class StatisticsPanel extends JPanel {
     nodeTree = new javax.swing.JTree();
     jFreeChartPlaceholder = new javax.swing.JPanel();
     labelPlaceholder = new javax.swing.JLabel();
-    tableView = new cz.cuni.mff.ksi.jinfer.attrstats.TableViewPanel();
+    tableView = new cz.cuni.mff.ksi.jinfer.attrstats.gui.TableViewPanel();
     idSet = new javax.swing.JPanel();
     panelArticle = new javax.swing.JPanel();
     run = new javax.swing.JButton();
-    idSetArticle = new cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel();
+    idSetArticle = new cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel();
     glpk = new javax.swing.JPanel();
     panelGlpk = new javax.swing.JPanel();
     generateInput = new javax.swing.JButton();
@@ -93,7 +94,7 @@ public class StatisticsPanel extends JPanel {
     split = new javax.swing.JSplitPane();
     glpkInputPane = new javax.swing.JScrollPane();
     glpkInput = new javax.swing.JTextArea();
-    idSetGlpk = new cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel();
+    idSetGlpk = new cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -320,8 +321,8 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JTextArea glpkInput;
   private javax.swing.JScrollPane glpkInputPane;
   private javax.swing.JPanel idSet;
-  private cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel idSetArticle;
-  private cz.cuni.mff.ksi.jinfer.attrstats.IdSetPanel idSetGlpk;
+  private cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel idSetArticle;
+  private cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel idSetGlpk;
   private javax.swing.JPanel jFreeChartPlaceholder;
   private javax.swing.JLabel labelPlaceholder;
   private javax.swing.JTree nodeTree;
@@ -333,6 +334,6 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JSplitPane split;
   private javax.swing.JSplitPane splitPaneChart;
   private javax.swing.JTabbedPane tabbedPane;
-  private cz.cuni.mff.ksi.jinfer.attrstats.TableViewPanel tableView;
+  private cz.cuni.mff.ksi.jinfer.attrstats.gui.TableViewPanel tableView;
   // End of variables declaration//GEN-END:variables
 }

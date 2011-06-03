@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats;
+package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.logic.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
@@ -30,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author vektor
  */
+@SuppressWarnings("PMD.SingularField")
 public class IdSetPanel extends JPanel {
 
   private static final long serialVersionUID = 187541L;

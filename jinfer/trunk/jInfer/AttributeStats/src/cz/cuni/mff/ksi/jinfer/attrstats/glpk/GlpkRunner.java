@@ -112,7 +112,7 @@ public final class GlpkRunner {
       return ret.toString();
     } catch (final IOException e) {
       LOG.error("Error running GLPK.", e);
-      return "Running GLPK encountered an error, check log for details.";
+      return ret.toString() + "\nRunning GLPK encountered an error, check log for details.";
     }
   }
 

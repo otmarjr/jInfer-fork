@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.apache.log4j.Logger;
 
 /**
  * Utilities for file handling.
@@ -31,6 +32,8 @@ public final class FileUtils {
 
   private FileUtils() {
   }
+
+  private static final Logger LOG = Logger.getLogger(FileUtils.class);
 
   /**
    * Returns the extension of the provided file.
@@ -69,6 +72,7 @@ public final class FileUtils {
 
     final File binaryFile = new File(pathToBinary);
     if (!binaryFile.isFile() || !binaryFile.canExecute()) {
+      LOG.warn("The path is not a file or it's not executable: " + pathToBinary);
       return false;
     }
 
@@ -86,11 +90,12 @@ public final class FileUtils {
         errorReader.close();
         return true;
       }
+      LOG.warn("Actual output does not match expected for the file " + pathToBinary);
+      return false;
     } catch (final IOException ex) {
+      LOG.error("An exception occured while verifying the file " + pathToBinary, ex);
       return false;
     }
-
-    return false;
   }
 
 }

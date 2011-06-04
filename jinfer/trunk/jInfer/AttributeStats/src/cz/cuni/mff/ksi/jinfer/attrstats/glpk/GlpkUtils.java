@@ -77,7 +77,8 @@ public final class GlpkUtils {
    * <code>element name-attribute name</code>
    */
   public static String getName(final AttributeMappingId mapping) {
-    return mapping.getElement() + "-" +mapping.getAttribute();
+    final String name = mapping.getElement() + "-" +mapping.getAttribute();
+    return name.replace(':', '-');
   }
 
 }

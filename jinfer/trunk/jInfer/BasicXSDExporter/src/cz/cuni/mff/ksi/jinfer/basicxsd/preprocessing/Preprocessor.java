@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 rio
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -48,14 +48,14 @@ public final class Preprocessor {
   /// Number of occurrences of element to consider it as a global type.
   private final int numberToGlobal;
 
-  
+
   /**
    * Constructs an instance and performs preprocessing without determination
    * of global element types. Results can be retrieved by public methods.
    *
    * @param elements A non empty list of elements.
    */
-  public Preprocessor(final List<Element> elements) {
+  public Preprocessor(final List<Element> elements) throws InterruptedException {
     this(elements, Integer.MIN_VALUE);
   }
 
@@ -67,7 +67,8 @@ public final class Preprocessor {
    * @param numberToGlobal Number of occurrences of an element to consider its type
    * as a global type. Passing of a non positive integer means no generation of global types.
    */
-  public Preprocessor(final List<Element> elements, final int numberToGlobal) {
+  public Preprocessor(final List<Element> elements, final int numberToGlobal)
+      throws InterruptedException {
     if (elements.isEmpty()) {
       throw new IllegalStateException("An empty grammar was passed in.");
     }
@@ -80,7 +81,7 @@ public final class Preprocessor {
   /**
    * Need to be called before calling of any other public method.
    */
-  private void run() {
+  private void run() throws InterruptedException {
     assert (!originalElements.isEmpty());
 
     // sort elements topologically
@@ -89,7 +90,7 @@ public final class Preprocessor {
 
     // count occurrences of elements
     final Map<String, Integer> elementOccurrenceCounts = countOccurrences(toposortedElementsWithUnused);
-    
+
     toposortedElements = removeUnused(toposortedElementsWithUnused, elementOccurrenceCounts);
     // presence of any unused elements means there is more than one top level element
     if (!toposortedElements.equals(toposortedElementsWithUnused)) {
@@ -131,12 +132,12 @@ public final class Preprocessor {
   private Map<String, Integer> countOccurrences(final List<Element> toposortedElements) {
     final Map<String, Integer> occurrenceCounts = new HashMap<String, Integer>();
     final Stack<Element> recursionStack = new Stack<Element>();
-    
+
     // initialize counts to 0s
     for (Element e : toposortedElements) {
       occurrenceCounts.put(e.getName(), 0);
     }
-    
+
     // run recursion from the top element
     final Element topElement = toposortedElements.get(toposortedElements.size() - 1);
     countOccurrencesRecursion(toposortedElements, occurrenceCounts, topElement, recursionStack);
@@ -168,7 +169,7 @@ public final class Preprocessor {
     if (rootCount < Integer.MAX_VALUE) {
       occurrenceCounts.put(root.getName(), occurrenceCounts.get(root.getName()) + 1);
     }
-    
+
     for (AbstractStructuralNode node : root.getSubnodes().getTokens()) {
       if (node.getType().equals(StructuralNodeType.ELEMENT)) {
         countOccurrencesRecursion(elements, occurrenceCounts, getElementByName(node.getName()), recursionStack);
@@ -209,7 +210,7 @@ public final class Preprocessor {
    */
   private Map<String, Boolean> makeGlobalFlags(final List<Element> elements, final Map<String, Integer> occurrenceCounts) {
     final Map<String, Boolean> globalFlags = new HashMap<String, Boolean>();
-    
+
     for (Element element : elements) {
       if (generateGlobal) {
         final boolean isGlobal = (occurrenceCounts.get(element.getName()) >= numberToGlobal) ? true : false;

@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -52,6 +53,8 @@ public final class Algorithm {
    * @return List of attribute mappings constituting the ID set found.
    */
   public static IdSet findIDSet(final AMModel model) {
+
+    final long startTime = Calendar.getInstance().getTimeInMillis();
 
     // 1.  M := all AMs
 
@@ -143,6 +146,8 @@ public final class Algorithm {
     }
 
     LOG.info("C2: " + C2.getLive().toString());
+
+    LOG.info("Algorithm run took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
 
     // 11. return C
     return new IdSet(C2.getLive());

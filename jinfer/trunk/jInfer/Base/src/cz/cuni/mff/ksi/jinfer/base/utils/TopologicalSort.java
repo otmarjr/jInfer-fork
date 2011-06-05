@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Topological sorting of elements. In the DAG where sorting takes place,
  * elements are vertices and edges go from depending to dependant elements.
- * 
+ *
  * @author vektor
  */
 public final class TopologicalSort {
@@ -37,7 +37,7 @@ public final class TopologicalSort {
   /**
    * Constructor of the toposorting class. All elements that should be sorted
    * must be specified at this moment.
-   * 
+   *
    * @param elements Elements to be toposorted.
    */
   public TopologicalSort(final List<Element> elements) {
@@ -46,11 +46,15 @@ public final class TopologicalSort {
 
   /**
    * Performs the topological sorting and returns a list of sorted elements.
-   * 
+   *
    * @return List of toposorted elements.
+   * @throws InterruptedException If this sorting is interrupted.
    */
-  public List<Element> sort() {
+  public List<Element> sort() throws InterruptedException {
     for (final Element e : elements) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       visit(e);
     }
     return ret;

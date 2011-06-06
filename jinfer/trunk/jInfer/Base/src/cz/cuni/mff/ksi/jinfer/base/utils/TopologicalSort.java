@@ -60,8 +60,11 @@ public final class TopologicalSort {
     return ret;
   }
 
-  private void visit(final Element e) {
+  private void visit(final Element e) throws InterruptedException {
     for (final Element vis : visited) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       if (vis == e) {
         return;
       }
@@ -71,11 +74,17 @@ public final class TopologicalSort {
 
     // visit all my subnodes
     for (final AbstractStructuralNode node : e.getSubnodes().getTokens()) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       if (node.getType().equals(StructuralNodeType.ELEMENT)) {
         visit((Element) node);
       }
       // links between input elements might be torn, try to visit others too
       for (final Element el : elements) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         if (el.getName().equalsIgnoreCase(node.getName())) {
           visit(el);
         }
@@ -84,6 +93,9 @@ public final class TopologicalSort {
 
     // output only original elements
     for (final Element original : elements) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       if (e == original) {
         ret.add(e);
         break;

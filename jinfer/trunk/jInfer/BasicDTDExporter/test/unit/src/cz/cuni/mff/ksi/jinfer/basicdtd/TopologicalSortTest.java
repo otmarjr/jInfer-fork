@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,19 +37,19 @@ import static org.junit.Assert.*;
 public class TopologicalSortTest {
 
   @Test(expected=NullPointerException.class)
-  public void testNull() {
+  public void testNull() throws InterruptedException {
     final TopologicalSort s = new TopologicalSort(null);
     s.sort();
   }
 
   @Test
-  public void testEmpty() {
+  public void testEmpty() throws InterruptedException {
     final TopologicalSort s = new TopologicalSort(Collections.<Element>emptyList());
     assertEquals(Collections.<Element>emptyList(), s.sort());
   }
 
   @Test
-  public void testOne() {
+  public void testOne() throws InterruptedException {
     final Element e =  TestUtils.getElement("test", Regexp.<AbstractStructuralNode>getMutable());
     e.getSubnodes().setType(RegexpType.CONCATENATION);
     e.getSubnodes().setInterval(RegexpInterval.getOnce());
@@ -60,7 +60,7 @@ public class TopologicalSortTest {
   }
 
   @Test
-  public void testSort() {
+  public void testSort() throws InterruptedException {
     final Element e1 = TestUtils.getElement("test1", Regexp.<AbstractStructuralNode>getMutable());
     final Element e2 = TestUtils.getElement("test2", Regexp.<AbstractStructuralNode>getMutable());
     final Element e3 = TestUtils.getElement("test3", Regexp.<AbstractStructuralNode>getMutable());
@@ -95,7 +95,7 @@ public class TopologicalSortTest {
     e4.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e6));
     e5.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e6));
     e7.getSubnodes().addChild(Regexp.<AbstractStructuralNode>getToken(e8));
-    
+
     final List<Element> elements = Arrays.asList(e1, e2, e3, e4, e5, e6, e7, e8);
 
     Collections.shuffle(elements);
@@ -114,7 +114,7 @@ public class TopologicalSortTest {
   }
 
   @Test
-  public void testMore() {
+  public void testMore() throws InterruptedException {
     final Element e1 = TestUtils.getElement("test1", Regexp.<AbstractStructuralNode>getMutable());
     final Element e2 = TestUtils.getElement("test2", Regexp.<AbstractStructuralNode>getMutable());
     final Element e3 = TestUtils.getElement("test3", Regexp.<AbstractStructuralNode>getMutable());

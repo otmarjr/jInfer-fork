@@ -92,7 +92,7 @@ public final class GlpkPanel extends JPanel {
     );
     fillVLayout.setVerticalGroup(
       fillVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 75, Short.MAX_VALUE)
+      .addGap(0, 61, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -114,7 +114,7 @@ public final class GlpkPanel extends JPanel {
     );
     fillHLayout.setVerticalGroup(
       fillHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 77, Short.MAX_VALUE)
+      .addGap(0, 91, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -133,7 +133,7 @@ public final class GlpkPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelTimeLimit, gridBagConstraints);
 
-    timeLimit.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(60), Integer.valueOf(1), null, Integer.valueOf(1)));
+    timeLimit.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(60), Integer.valueOf(0), null, Integer.valueOf(1)));
     timeLimit.setMinimumSize(new java.awt.Dimension(60, 20));
     timeLimit.setPreferredSize(new java.awt.Dimension(60, 20));
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -144,7 +144,7 @@ public final class GlpkPanel extends JPanel {
     add(timeLimit, gridBagConstraints);
 
     labelTimeLimitExplain.setFont(labelTimeLimitExplain.getFont().deriveFont((labelTimeLimitExplain.getFont().getStyle() | java.awt.Font.ITALIC)));
-    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimitExplain, "<html>How long will be GLPK allowed to run.<br/>If it needs to run longer, it will return<br/>the best solution found so far.</html>"); // NOI18N
+    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimitExplain, "<html>\nHow long will be GLPK allowed to run.<br/>\nIf it needs to run longer, it will return<br/>\nthe best solution found so far.<br/>\n0 - no limit.\n</html>"); // NOI18N
     labelTimeLimitExplain.setMaximumSize(new java.awt.Dimension(0, 0));
     labelTimeLimitExplain.setMinimumSize(new java.awt.Dimension(0, 0));
     gridBagConstraints = new java.awt.GridBagConstraints();

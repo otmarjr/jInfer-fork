@@ -81,7 +81,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="75" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="61" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -109,7 +109,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="77" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="91" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -127,7 +127,7 @@
     <Component class="javax.swing.JSpinner" name="timeLimit">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="60" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
+          <SpinnerModel initial="60" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
         </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[60, 20]"/>
@@ -149,7 +149,7 @@
             <Font component="labelTimeLimitExplain" italic="true" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;How long will be GLPK allowed to run.&lt;br/&gt;If it needs to run longer, it will return&lt;br/&gt;the best solution found so far.&lt;/html&gt;" noResource="true"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;How long will be GLPK allowed to run.&lt;br/&gt;&#xa;If it needs to run longer, it will return&lt;br/&gt;&#xa;the best solution found so far.&lt;br/&gt;&#xa;0 - no limit.&#xa;&lt;/html&gt;" noResource="true"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[0, 0]"/>
         </Property>

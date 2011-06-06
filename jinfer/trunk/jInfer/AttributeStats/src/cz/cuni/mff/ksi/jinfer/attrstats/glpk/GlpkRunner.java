@@ -24,7 +24,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Calendar;
 import org.apache.log4j.Logger;
 import org.openide.util.NbPreferences;
@@ -72,19 +71,10 @@ public final class GlpkRunner {
     final int timeLimit = NbPreferences.forModule(GlpkPanel.class)
             .getInt(GlpkUtils.TIME_LIMIT_PROP, GlpkUtils.TIME_LIMIT_DEFAULT);
 
-    LOG.info("Time limit set to " + timeLimit + " seconds.");
-
     try {
       final long startTime = Calendar.getInstance().getTimeInMillis();
 
-      final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList(
-              GlpkUtils.getPath(),
-              "--math",
-              "--tmlim",
-              String.valueOf(timeLimit),
-              TMP + INPUT,
-              "-o",
-              TMP + OUTPUT));
+      final ProcessBuilder processBuilder = new ProcessBuilder(getParameters(timeLimit));
       final Process process = processBuilder.start();
 
       final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -117,6 +107,29 @@ public final class GlpkRunner {
       LOG.error("Error running GLPK.", e);
       return ret.toString() + "\nRunning GLPK encountered an error, check log for details.";
     }
+  }
+
+  private static String[] getParameters(final int timeLimit) {
+    if (timeLimit == 0) {
+      LOG.info("Run time not limited.");
+      return new String[] {
+              GlpkUtils.getPath(),
+              "--math",
+              TMP + INPUT,
+              "-o",
+              TMP + OUTPUT
+      };
+    }
+    LOG.info("Time limit set to " + timeLimit + " seconds.");
+    return new String[] {
+              GlpkUtils.getPath(),
+              "--math",
+              "--tmlim",
+              String.valueOf(timeLimit),
+              TMP + INPUT,
+              "-o",
+              TMP + OUTPUT
+    };
   }
 
 }

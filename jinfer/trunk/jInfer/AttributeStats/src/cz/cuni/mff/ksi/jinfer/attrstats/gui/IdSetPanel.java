@@ -63,10 +63,10 @@ public class IdSetPanel extends JPanel {
     pane = new javax.swing.JScrollPane();
     table = new javax.swing.JTable();
     labelWeight = new javax.swing.JLabel();
-    weight = new javax.swing.JLabel();
     use = new javax.swing.JButton();
     labelOptimal = new javax.swing.JLabel();
-    optimal = new javax.swing.JLabel();
+    weight = new javax.swing.JTextField();
+    optimal = new javax.swing.JTextField();
 
     setPreferredSize(new java.awt.Dimension(300, 200));
     setLayout(new java.awt.GridBagLayout());
@@ -103,14 +103,6 @@ public class IdSetPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelWeight, gridBagConstraints);
 
-    weight.setFont(weight.getFont().deriveFont(weight.getFont().getStyle() | java.awt.Font.BOLD));
-    weight.setText(NA);
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(weight, gridBagConstraints);
-
     use.setText("Use in Schema"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 4;
@@ -126,8 +118,20 @@ public class IdSetPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelOptimal, gridBagConstraints);
 
+    weight.setEditable(false);
+    weight.setFont(weight.getFont().deriveFont(weight.getFont().getStyle() | java.awt.Font.BOLD));
+    weight.setText(NA);
+    weight.setBorder(null);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(weight, gridBagConstraints);
+
+    optimal.setEditable(false);
     optimal.setFont(optimal.getFont().deriveFont(optimal.getFont().getStyle() | java.awt.Font.BOLD));
     optimal.setText(NA);
+    optimal.setBorder(null);
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 1;
@@ -137,10 +141,10 @@ public class IdSetPanel extends JPanel {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel labelOptimal;
   private javax.swing.JLabel labelWeight;
-  private javax.swing.JLabel optimal;
+  private javax.swing.JTextField optimal;
   private javax.swing.JScrollPane pane;
   private javax.swing.JTable table;
   private javax.swing.JButton use;
-  private javax.swing.JLabel weight;
+  private javax.swing.JTextField weight;
   // End of variables declaration//GEN-END:variables
 }

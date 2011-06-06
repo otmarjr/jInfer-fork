@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import org.netbeans.api.options.OptionsDisplayer;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.JFCWrapper;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkInputGenerator;
@@ -23,14 +24,11 @@ import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkOutputParser;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkRunner;
 import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.article.Algorithm;
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultTreeModel;
@@ -96,6 +94,7 @@ public class StatisticsPanel extends JPanel {
     glpkInputPane = new javax.swing.JScrollPane();
     glpkInput = new javax.swing.JTextArea();
     idSetGlpk = new cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel();
+    settings = new javax.swing.JButton();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -120,7 +119,7 @@ public class StatisticsPanel extends JPanel {
 
     labelPlaceholder.setFont(labelPlaceholder.getFont().deriveFont(labelPlaceholder.getFont().getSize()+19f));
     labelPlaceholder.setForeground(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow"));
-    labelPlaceholder.setText("< Select an attribute to see its content");
+    labelPlaceholder.setText("< Select an attribute to see its content"); // NOI18N
     jFreeChartPlaceholder.add(labelPlaceholder, new java.awt.GridBagConstraints());
 
     splitPaneChart.setRightComponent(jFreeChartPlaceholder);
@@ -134,12 +133,12 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     chartView.add(splitPaneChart, gridBagConstraints);
 
-    tabbedPane.addTab("Chart View", chartView); // NOI18N
+    tabbedPane.addTab("Chart View", chartView);
     tabbedPane.addTab("Table View", tableView);
 
     idSet.setLayout(new java.awt.GridBagLayout());
 
-    panelArticle.setBorder(javax.swing.BorderFactory.createTitledBorder("Article \"Finding ID Attributes in XML Documents\"")); // NOI18N
+    panelArticle.setBorder(javax.swing.BorderFactory.createTitledBorder("Article \"Finding ID Attributes in XML Documents\""));
     panelArticle.setLayout(new java.awt.GridBagLayout());
 
     run.setText("Run \"the algorithm\""); // NOI18N
@@ -168,7 +167,7 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     idSet.add(panelArticle, gridBagConstraints);
 
-    tabbedPane.addTab("ID set - Article", idSet); // NOI18N
+    tabbedPane.addTab("ID set - Article", idSet);
 
     glpk.setLayout(new java.awt.GridBagLayout());
 
@@ -206,6 +205,8 @@ public class StatisticsPanel extends JPanel {
     split.setPreferredSize(new java.awt.Dimension(300, 200));
 
     glpkInput.setColumns(20);
+    glpkInput.setEditable(false);
+    glpkInput.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
     glpkInput.setRows(5);
     glpkInputPane.setViewportView(glpkInput);
 
@@ -222,6 +223,19 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     panelGlpk.add(split, gridBagConstraints);
 
+    settings.setText("GLPK settings..."); // NOI18N
+    settings.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        settingsActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelGlpk.add(settings, gridBagConstraints);
+
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
@@ -229,7 +243,7 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     glpk.add(panelGlpk, gridBagConstraints);
 
-    tabbedPane.addTab("ID set - GLPK", glpk); // NOI18N
+    tabbedPane.addTab("ID set - GLPK", glpk);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -261,12 +275,11 @@ public class StatisticsPanel extends JPanel {
   }//GEN-LAST:event_nodeTreeValueChanged
 
   private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
-    // TODO vektor Parameters should be customizable
-    final IdSet idSet = Algorithm.findIDSet(model);
-    if (!idSet.isValid(model)) {
+    final IdSet resultingSet = Algorithm.findIDSet(model);
+    if (!resultingSet.isValid(model)) {
       notAnIdSet();
     }
-    idSetArticle.setModel(idSet, model);
+    idSetArticle.setModel(resultingSet, model);
   }//GEN-LAST:event_runActionPerformed
 
   private void generateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInputActionPerformed
@@ -285,7 +298,6 @@ public class StatisticsPanel extends JPanel {
   }//GEN-LAST:event_generateInputActionPerformed
 
   private void runGlpkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runGlpkActionPerformed
-    // TODO vektor Parameters should be customizable
     final boolean glpkOk = GlpkUtils.isBinaryValid();
     if (!glpkOk)  {
       DialogDisplayer.getDefault().notify(
@@ -313,6 +325,10 @@ public class StatisticsPanel extends JPanel {
     }, "Running GLPK");
   }//GEN-LAST:event_runGlpkActionPerformed
 
+  private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
+    OptionsDisplayer.getDefault().open("jInfer/Glpk");
+  }//GEN-LAST:event_settingsActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel chartView;
   private javax.swing.JButton generateInput;
@@ -330,6 +346,7 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JPanel panelGlpk;
   private javax.swing.JButton run;
   private javax.swing.JButton runGlpk;
+  private javax.swing.JButton settings;
   private javax.swing.JSplitPane split;
   private javax.swing.JSplitPane splitPaneChart;
   private javax.swing.JTabbedPane tabbedPane;

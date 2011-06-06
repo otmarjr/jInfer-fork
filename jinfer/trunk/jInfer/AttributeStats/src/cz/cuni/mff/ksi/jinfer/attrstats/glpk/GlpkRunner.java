@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.glpk.options.GlpkPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +27,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Calendar;
 import org.apache.log4j.Logger;
+import org.openide.util.NbPreferences;
 
 /**
  * Utility class for GLPK invocation.
@@ -43,8 +45,6 @@ public final class GlpkRunner {
   private static final String INPUT = "glpk_input.txt";
   private static final String OUTPUT = "glpk_output.txt";
   private static final String TMP = System.getProperty("java.io.tmpdir");
-  /** Time limit for GLPK run in seconds. */
-  private static final int TMLIM = 60;
 
   /**
    * Constructs the GLPK problem formulation from the provided model, runs
@@ -69,7 +69,10 @@ public final class GlpkRunner {
       pw.close();
     }
 
-    LOG.info("Time limit set to " + TMLIM + " seconds.");
+    final int timeLimit = NbPreferences.forModule(GlpkPanel.class)
+            .getInt(GlpkUtils.TIME_LIMIT_PROP, GlpkUtils.TIME_LIMIT_DEFAULT);
+
+    LOG.info("Time limit set to " + timeLimit + " seconds.");
 
     try {
       final long startTime = Calendar.getInstance().getTimeInMillis();
@@ -78,7 +81,7 @@ public final class GlpkRunner {
               GlpkUtils.getPath(),
               "--math",
               "--tmlim",
-              String.valueOf(TMLIM),
+              String.valueOf(timeLimit),
               TMP + INPUT,
               "-o",
               TMP + OUTPUT));

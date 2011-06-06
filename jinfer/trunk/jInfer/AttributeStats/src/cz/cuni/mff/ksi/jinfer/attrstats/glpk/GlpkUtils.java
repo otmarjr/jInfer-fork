@@ -30,6 +30,8 @@ public final class GlpkUtils {
 
   public static final String BINARY_PATH_PROP = "glpk.binary";
   public static final String BINARY_PATH_DEFAULT = "";
+  public static final String TIME_LIMIT_PROP = "glpk.time.limit";
+  public static final int TIME_LIMIT_DEFAULT = 60;
 
   private GlpkUtils() {
 

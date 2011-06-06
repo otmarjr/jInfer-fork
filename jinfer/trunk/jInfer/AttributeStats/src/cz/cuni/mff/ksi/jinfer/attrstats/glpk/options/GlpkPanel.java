@@ -49,11 +49,15 @@ public final class GlpkPanel extends JPanel {
     browse = new javax.swing.JButton();
     fillV = new javax.swing.JPanel();
     fillH = new javax.swing.JPanel();
+    labelTimeLimit = new javax.swing.JLabel();
+    timeLimit = new javax.swing.JSpinner();
+    labelTimeLimitExplain = new javax.swing.JLabel();
 
     setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(label, "GLPK Binary Path"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(label, gridBagConstraints);
 
@@ -62,6 +66,7 @@ public final class GlpkPanel extends JPanel {
     binaryPath.setMinimumSize(new java.awt.Dimension(250, 27));
     binaryPath.setPreferredSize(new java.awt.Dimension(250, 27));
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(binaryPath, gridBagConstraints);
 
@@ -72,43 +77,83 @@ public final class GlpkPanel extends JPanel {
       }
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 8, 2, 8);
     add(browse, gridBagConstraints);
+
+    fillV.setMaximumSize(new java.awt.Dimension(0, 0));
+    fillV.setPreferredSize(new java.awt.Dimension(0, 0));
 
     javax.swing.GroupLayout fillVLayout = new javax.swing.GroupLayout(fillV);
     fillV.setLayout(fillVLayout);
     fillVLayout.setHorizontalGroup(
       fillVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 520, Short.MAX_VALUE)
+      .addGap(0, 634, Short.MAX_VALUE)
     );
     fillVLayout.setVerticalGroup(
       fillVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 64, Short.MAX_VALUE)
+      .addGap(0, 75, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.gridwidth = 4;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
     add(fillV, gridBagConstraints);
 
+    fillH.setMaximumSize(new java.awt.Dimension(0, 0));
+    fillH.setPreferredSize(new java.awt.Dimension(0, 0));
+
     javax.swing.GroupLayout fillHLayout = new javax.swing.GroupLayout(fillH);
     fillH.setLayout(fillHLayout);
     fillHLayout.setHorizontalGroup(
       fillHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 65, Short.MAX_VALUE)
+      .addGap(0, 36, Short.MAX_VALUE)
     );
     fillHLayout.setVerticalGroup(
       fillHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 31, Short.MAX_VALUE)
+      .addGap(0, 77, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 3;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     add(fillH, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimit, "Time Limit [s]"); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(labelTimeLimit, gridBagConstraints);
+
+    timeLimit.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(60), Integer.valueOf(1), null, Integer.valueOf(1)));
+    timeLimit.setMinimumSize(new java.awt.Dimension(60, 20));
+    timeLimit.setPreferredSize(new java.awt.Dimension(60, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(timeLimit, gridBagConstraints);
+
+    labelTimeLimitExplain.setFont(labelTimeLimitExplain.getFont().deriveFont((labelTimeLimitExplain.getFont().getStyle() | java.awt.Font.ITALIC)));
+    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimitExplain, "<html>How long will be GLPK allowed to run.<br/>If it needs to run longer, it will return<br/>the best solution found so far.</html>"); // NOI18N
+    labelTimeLimitExplain.setMaximumSize(new java.awt.Dimension(0, 0));
+    labelTimeLimitExplain.setMinimumSize(new java.awt.Dimension(0, 0));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(labelTimeLimitExplain, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void browseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseActionPerformed
@@ -132,10 +177,12 @@ public final class GlpkPanel extends JPanel {
 
   public void load() {
     binaryPath.setText(GlpkUtils.getPath());
+    timeLimit.setValue(NbPreferences.forModule(GlpkPanel.class).getInt(GlpkUtils.TIME_LIMIT_PROP, GlpkUtils.TIME_LIMIT_DEFAULT));
   }
 
   public void store() {
     NbPreferences.forModule(GlpkPanel.class).put(GlpkUtils.BINARY_PATH_PROP, binaryPath.getText());
+    NbPreferences.forModule(GlpkPanel.class).putInt(GlpkUtils.TIME_LIMIT_PROP, ((Integer)timeLimit.getValue()).intValue());
   }
 
   public boolean valid() {
@@ -149,5 +196,8 @@ public final class GlpkPanel extends JPanel {
   private javax.swing.JPanel fillH;
   private javax.swing.JPanel fillV;
   private javax.swing.JLabel label;
+  private javax.swing.JLabel labelTimeLimit;
+  private javax.swing.JLabel labelTimeLimitExplain;
+  private javax.swing.JSpinner timeLimit;
   // End of variables declaration//GEN-END:variables
 }

@@ -29,7 +29,7 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="Chart View">
-                <Property name="tabTitle" type="java.lang.String" value="Chart View" noResource="true"/>
+                <Property name="tabTitle" type="java.lang.String" value="Chart View"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -124,7 +124,7 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="ID set - Article">
-                <Property name="tabTitle" type="java.lang.String" value="ID set - Article" noResource="true"/>
+                <Property name="tabTitle" type="java.lang.String" value="ID set - Article"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -175,7 +175,7 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="ID set - GLPK">
-                <Property name="tabTitle" type="java.lang.String" value="ID set - GLPK" noResource="true"/>
+                <Property name="tabTitle" type="java.lang.String" value="ID set - GLPK"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -255,6 +255,10 @@
                         <Component class="javax.swing.JTextArea" name="glpkInput">
                           <Properties>
                             <Property name="columns" type="int" value="20"/>
+                            <Property name="editable" type="boolean" value="false"/>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Courier New" size="12" style="0"/>
+                            </Property>
                             <Property name="rows" type="int" value="5"/>
                           </Properties>
                         </Component>
@@ -269,6 +273,19 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JButton" name="settings">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="GLPK settings..." noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="settingsActionPerformed"/>
+                  </Events>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
+                      <GridBagConstraints gridX="2" gridY="0" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="2" insetsLeft="2" insetsBottom="2" insetsRight="2" anchor="13" weightX="0.0" weightY="0.0"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>

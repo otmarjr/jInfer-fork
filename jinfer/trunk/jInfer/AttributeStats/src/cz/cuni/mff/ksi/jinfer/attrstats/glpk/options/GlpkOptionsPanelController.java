@@ -28,7 +28,8 @@ import org.openide.util.Lookup;
     displayName = "#AdvancedOption_DisplayName_Glpk",
     keywords = "#AdvancedOption_Keywords_Glpk",
     keywordsCategory = "jInfer/Glpk",
-    position = 100)
+    position = 100,
+    id = "Glpk")
 public final class GlpkOptionsPanelController extends OptionsPanelController {
 
   private GlpkPanel panel;

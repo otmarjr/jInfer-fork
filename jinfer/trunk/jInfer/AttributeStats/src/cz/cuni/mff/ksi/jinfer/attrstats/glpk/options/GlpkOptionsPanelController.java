@@ -23,6 +23,9 @@ import org.netbeans.spi.options.OptionsPanelController;
 import org.openide.util.HelpCtx;
 import org.openide.util.Lookup;
 
+/**
+ * @author vektor
+ */ 
 @OptionsPanelController.SubRegistration(
     location = "jInfer",
     displayName = "#AdvancedOption_DisplayName_Glpk",

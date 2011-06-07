@@ -119,6 +119,7 @@ public final class GlpkInputGenerator {
 
       return result;
     } catch (final IOException ex) {
+      LOG.error("Exception occured while creating GLPK input.", ex);
       return null;
     }
   }

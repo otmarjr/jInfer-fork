@@ -41,9 +41,9 @@ public final class GlpkRunner {
 
   private static final Logger LOG = Logger.getLogger(GlpkRunner.class);
 
-  private static final String INPUT = "glpk_input.txt";
-  private static final String OUTPUT = "glpk_output.txt";
   private static final String TMP = System.getProperty("java.io.tmpdir");
+  private static final String INPUT = TMP + "glpk_input.txt";
+  private static final String OUTPUT = TMP + "glpk_output.txt";
 
   /**
    * Constructs the GLPK problem formulation from the provided model, runs
@@ -55,8 +55,8 @@ public final class GlpkRunner {
    * @return String representation of GLPK optimalization output.
    */
   public static String run(final AMModel model) throws InterruptedException {
-    final File input = new File(TMP + INPUT);
-    final File output = new File(TMP + OUTPUT);
+    final File input = new File(INPUT);
+    final File output = new File(OUTPUT);
     PrintWriter pw = null;
     final StringBuilder ret = new StringBuilder();
     try {
@@ -115,9 +115,9 @@ public final class GlpkRunner {
       return new String[] {
               GlpkUtils.getPath(),
               "--math",
-              TMP + INPUT,
+              INPUT,
               "-o",
-              TMP + OUTPUT
+              OUTPUT
       };
     }
     LOG.info("Time limit set to " + timeLimit + " seconds.");
@@ -126,9 +126,9 @@ public final class GlpkRunner {
               "--math",
               "--tmlim",
               String.valueOf(timeLimit),
-              TMP + INPUT,
+              INPUT,
               "-o",
-              TMP + OUTPUT
+              OUTPUT
     };
   }
 

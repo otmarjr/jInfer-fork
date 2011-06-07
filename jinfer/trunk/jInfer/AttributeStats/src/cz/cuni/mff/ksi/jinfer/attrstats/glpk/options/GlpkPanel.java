@@ -27,6 +27,9 @@ import org.openide.NotifyDescriptor;
 import org.openide.filesystems.FileChooserBuilder;
 import org.openide.util.NbPreferences;
 
+/**
+ * @author vektor
+ */ 
 @SuppressWarnings("PMD.SingularField")
 public final class GlpkPanel extends JPanel {
 

@@ -26,6 +26,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author anti
+ */ 
 class HelperAutomaton extends Automaton<String> {
   protected int k;
   protected int h;

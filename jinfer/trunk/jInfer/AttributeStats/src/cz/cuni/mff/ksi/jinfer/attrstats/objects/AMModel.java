@@ -227,8 +227,8 @@ public class AMModel {
    */
   public double weight(final AttributeMappingId mapping,
           final double alpha, final double beta) {
-    return alpha * MappingUtils.support(mapping, this)
-            + beta * MappingUtils.coverage(mapping, this);
+    return alpha * support(mapping)
+            + beta * coverage(mapping);
   }
 
   /**
@@ -249,6 +249,50 @@ public class AMModel {
       sum += weight(mapping, alpha, beta);
     }
     return sum;
+  }
+
+  /**
+   * Please see the "Finding ID Attributes in XML Documents" article for the
+   * definition of this function.
+   *
+   * @param targetMapping Mapping for which <cite>support</cite> should be calculated.
+   * @return Support of the specified mapping.
+   */
+  public double support(final AttributeMappingId targetMapping) {
+    verify(targetMapping);
+    return (double)getAMs().get(targetMapping).size() / size();
+  }
+
+  /**
+   * Please see the "Finding ID Attributes in XML Documents" article for the
+   * definition of this function.
+   *
+   * @param targetMapping Mapping for which <cite>coverage</cite> should be calculated.
+   * @return Coverage of the specified mapping.
+   */
+  public double coverage(final AttributeMappingId targetMapping) {
+    verify(targetMapping);
+
+    double sum1 = 0;
+
+    for (final Map.Entry<AttributeMappingId, AttributeMapping> mapping : getAMs().entrySet()) {
+      if (!mapping.getKey().equals(targetMapping)) {
+        sum1 += BaseUtils.intersect(
+                new HashSet<String>(mapping.getValue().getImage()),
+                new HashSet<String>(getAMs().get(targetMapping).getImage())).size();
+      }
+    }
+
+    return sum1 / size();
+  }
+
+  private void verify(final AttributeMappingId targetMapping) {
+    if (targetMapping == null) {
+      throw new IllegalArgumentException("Expecting non-null, non empty parameters");
+    }
+    if (!getAMs().containsKey(targetMapping)) {
+      throw new IllegalArgumentException("Target mapping not found in the model.");
+    }
   }
 
 }

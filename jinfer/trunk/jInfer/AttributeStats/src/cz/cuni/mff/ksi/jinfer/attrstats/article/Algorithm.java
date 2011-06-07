@@ -75,16 +75,7 @@ public final class Algorithm {
       }
     }
 
-    Collections.sort(C, new Comparator<AttributeMappingId>() {
-
-      @Override
-      public int compare(final AttributeMappingId o1, final AttributeMappingId o2) {
-        final Integer size1 = Integer.valueOf(model.getAMs().get(o1).size());
-        final Integer size2 = Integer.valueOf(model.getAMs().get(o2).size());
-        return -size1.compareTo(size2);
-      }
-
-    });
+    Collections.sort(C, new ImageSizeComparator(model));
 
     LOG.info("C: " + C.toString());
 
@@ -174,4 +165,20 @@ public final class Algorithm {
     }
     return max;
   }
+
+  private static class ImageSizeComparator implements Comparator<AttributeMappingId> {
+
+    private final AMModel model;
+
+    public ImageSizeComparator(final AMModel model) {
+      this.model = model;
+    }
+
+    @Override
+    public int compare(final AttributeMappingId o1, final AttributeMappingId o2) {
+      final Integer size1 = Integer.valueOf(model.getAMs().get(o1).size());
+      final Integer size2 = Integer.valueOf(model.getAMs().get(o2).size());
+      return -size1.compareTo(size2);
+    }
+  };
 }

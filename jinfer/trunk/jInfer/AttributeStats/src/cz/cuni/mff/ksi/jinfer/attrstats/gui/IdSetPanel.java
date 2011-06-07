@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.MappingsModel;

@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,43 +35,6 @@ public final class MappingUtils {
 
   private MappingUtils() {
 
-  }
-
-  /**
-   * Please see the "Finding ID Attributes in XML Documents" article for the
-   * definition of this function.
-   *
-   * @param targetMapping Mapping for which <cite>support</cite> should be calculated.
-   * @param allMappings All the attribute mappings of the grammar.
-   * @return Support of the specified mapping.
-   */
-  public static double support(final AttributeMappingId targetMapping, final AMModel model) {
-    verify(targetMapping, model);
-    return (double)model.getAMs().get(targetMapping).size() / model.size();
-  }
-
-  /**
-   * Please see the "Finding ID Attributes in XML Documents" article for the
-   * definition of this function.
-   *
-   * @param targetMapping Mapping for which <cite>coverage</cite> should be calculated.
-   * @param allMappings All the attribute mappings of the grammar.
-   * @return Coverage of the specified mapping.
-   */
-  public static double coverage(final AttributeMappingId targetMapping, final AMModel model) {
-    verify(targetMapping, model);
-
-    double sum1 = 0;
-
-    for (final Map.Entry<AttributeMappingId, AttributeMapping> mapping : model.getAMs().entrySet()) {
-      if (!mapping.getKey().equals(targetMapping)) {
-        sum1 += BaseUtils.intersect(
-                new HashSet<String>(mapping.getValue().getImage()),
-                new HashSet<String>(model.getAMs().get(targetMapping).getImage())).size();
-      }
-    }
-
-    return sum1 / model.size();
   }
 
   /**

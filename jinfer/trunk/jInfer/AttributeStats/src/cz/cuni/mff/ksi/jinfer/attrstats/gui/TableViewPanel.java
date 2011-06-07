@@ -134,8 +134,8 @@ public class TableViewPanel extends JPanel {
     }
     else {
       value = new Pair<Double, Double>(
-              Double.valueOf(MappingUtils.support(targetMapping, model)),
-              Double.valueOf(MappingUtils.coverage(targetMapping, model)));
+              Double.valueOf(model.support(targetMapping)),
+              Double.valueOf(model.coverage(targetMapping)));
       cache.put(targetMapping, value);
     }
     support.setText(Utils.FORMAT.format(value.getFirst()));

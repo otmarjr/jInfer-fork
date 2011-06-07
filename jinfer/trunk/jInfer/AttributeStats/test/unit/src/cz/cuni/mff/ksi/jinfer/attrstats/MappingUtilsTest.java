@@ -23,7 +23,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils.*;
@@ -34,14 +33,11 @@ import static cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils.*;
 @SuppressWarnings("PMD.SystemPrintln")
 public class MappingUtilsTest {
 
-  private final static Random RND = new Random();
-  private static final int ITERATIONS = 100;
   private static final AMModel TRIVIAL_MODEL = new AMModel(Arrays.asList(TestUtils.getElement("e")));
   private static final AttributeMappingId NULL_MAPPING = new AttributeMappingId(null, null);
   private static final AttributeMappingId TARGET_MAPPING = new AttributeMappingId("element", "attribute");
   private static final AttributeMappingId OTHER_MAPPING = new AttributeMappingId("otherElement", "attribute");
   private static final Element TARGET_ELEMENT = TestUtils.getElementWithAttribute("element", "attribute", "value");
-  private static final Element OTHER_ELEMENT = TestUtils.getElementWithAttribute("otherElement", "attribute", "value");
 
   public static final AMModel MODEL_FROM_ARTICLE = new AMModel(Arrays.asList(
           TestUtils.getElementWithAttribute("a", "x", "1"),
@@ -55,135 +51,6 @@ public class MappingUtilsTest {
   public static final AttributeMappingId EXAMPLE_MAPPING_2 = new AttributeMappingId("a", "z");
   public static final AttributeMappingId EXAMPLE_MAPPING_3 = new AttributeMappingId("b", "y");
   public static final AttributeMappingId EXAMPLE_MAPPING_4 = new AttributeMappingId("c", "w");
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testSupportEmpty1() {
-    System.out.println("supportEmpty1");
-    support(null, TRIVIAL_MODEL);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testSupportEmpty2() {
-    System.out.println("supportEmpty2");
-    support(NULL_MAPPING, null);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testSupportNotFound() {
-    System.out.println("supportNotFound");
-    final List<Element> grammar = new ArrayList<Element>(10);
-    for (int i = 0; i < 10; i++) {
-      grammar.add(TARGET_ELEMENT);
-    }
-    support(OTHER_MAPPING, new AMModel(grammar));
-  }
-
-  @Test
-  public void testSupport1() {
-    System.out.println("support1");
-    final List<Element> grammar = new ArrayList<Element>(10);
-    for (int i = 0; i < 10; i++) {
-      grammar.add(TARGET_ELEMENT);
-    }
-    final double expResult = 1.0;
-    final double result = support(TARGET_MAPPING, new AMModel(grammar));
-    assertEquals(expResult, result, 0.0);
-  }
-
-  @Test
-  public void testSupport2() {
-    System.out.println("support2");
-    final List<Element> grammar = new ArrayList<Element>(10);
-    grammar.add(TARGET_ELEMENT);
-    for (int i = 0; i < 10; i++) {
-      grammar.add(OTHER_ELEMENT);
-    }
-    final double expResult = (double) 1 / 11;
-    final double result = support(TARGET_MAPPING, new AMModel(grammar));
-    assertEquals(expResult, result, 0.0);
-  }
-
-  @Test
-  public void testSupport3() {
-    System.out.println("support3");
-    for (int j = 0; j < ITERATIONS; j++) {
-      final List<Element> grammar = new ArrayList<Element>(ITERATIONS);
-      for (int i = 0; i < ITERATIONS; i++) {
-        grammar.add(RND.nextBoolean() ? TARGET_ELEMENT : OTHER_ELEMENT);
-      }
-      final double result = support(TARGET_MAPPING, new AMModel(grammar));
-      assertTrue("Support of an attribute mapping must be between zero and one.", result >= 0.0 && result <= 1.0);
-    }
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testCoverageEmpty1() {
-    System.out.println("coverageEmpty1");
-    final AttributeMappingId targetMapping = null;
-    coverage(targetMapping, TRIVIAL_MODEL);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testCoverageEmpty2() {
-    System.out.println("coverageEmpty2");
-    coverage(NULL_MAPPING, TRIVIAL_MODEL);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void testCoverageNotFound() {
-    System.out.println("coverageNotFound");
-    final List<Element> grammar = new ArrayList<Element>();
-    grammar.add(TestUtils.getElementWithAttribute("e1", "a1", "e"));
-    grammar.add(TestUtils.getElementWithAttribute("e1", "a1", "f"));
-    grammar.add(TestUtils.getElementWithAttribute("e2", "a2", "g"));
-    grammar.add(TestUtils.getElementWithAttribute("e2", "a2", "g"));
-    coverage(TARGET_MAPPING, new AMModel(grammar));
-  }
-
-  @Test
-  public void testCoverage0() {
-    System.out.println("coverage0");
-    final AttributeMappingId targetMapping = new AttributeMappingId("e", "a");
-    final List<Element> grammar = new ArrayList<Element>();
-    grammar.add(TestUtils.getElementWithAttribute("e", "a", "d"));
-    grammar.add(TestUtils.getElementWithAttribute("e1", "a1", "e"));
-    grammar.add(TestUtils.getElementWithAttribute("e1", "a1", "f"));
-    grammar.add(TestUtils.getElementWithAttribute("e2", "a2", "g"));
-    grammar.add(TestUtils.getElementWithAttribute("e2", "a2", "g"));
-    final double expResult = 0.0;
-    final double result = coverage(targetMapping, new AMModel(grammar));
-    assertEquals(expResult, result, 0.0);
-  }
-
-  @Test
-  public void testCoverageMax() {
-    System.out.println("coverageMax");
-    final AttributeMappingId targetMapping = new AttributeMappingId("e", "a");
-    final List<Element> grammar = new ArrayList<Element>();
-    grammar.add(TestUtils.getElementWithAttribute("e", "a", "d"));
-    grammar.add(TestUtils.getElementWithAttribute("e1", "a1", "d"));
-    grammar.add(TestUtils.getElementWithAttribute("e1", "a1", "d"));
-    grammar.add(TestUtils.getElementWithAttribute("e2", "a2", "d"));
-    grammar.add(TestUtils.getElementWithAttribute("e2", "a2", "d"));
-    grammar.add(TestUtils.getElementWithAttribute("e3", "a2", "d"));
-    grammar.add(TestUtils.getElementWithAttribute("e3", "a2", "d"));
-    final double expResult = (double) 3 / 7;
-    final double result = coverage(targetMapping, new AMModel(grammar));
-    assertEquals(expResult, result, 0.0);
-  }
-
-  @Test
-  public void testCoverage3() {
-    System.out.println("coverage3");
-    for (int j = 0; j < ITERATIONS; j++) {
-      final List<Element> grammar = new ArrayList<Element>(ITERATIONS);
-      for (int i = 0; i < ITERATIONS; i++) {
-        grammar.add(RND.nextBoolean() ? TARGET_ELEMENT : OTHER_ELEMENT);
-      }
-      final double result = coverage(TARGET_MAPPING, new AMModel(grammar));
-      assertTrue("Coverage of an attribute mapping must be between zero and one.", result >= 0.0 && result <= 1.0);
-    }
-  }
 
   @Test(expected = IllegalArgumentException.class)
   public void testCandidateEmpty1() {

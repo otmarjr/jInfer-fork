@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.glpk.options.GlpkPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -52,24 +52,28 @@ public final class GlpkRunner {
    * in the "optimal" ID set.
    *
    * @param model Model to find "optimal" ID set in.
+   * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
+   * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
+   * 
    * @return String representation of GLPK optimalization output.
    */
-  public static String run(final AMModel model) throws InterruptedException {
+  public static String run(final AMModel model,
+          final double alpha, final double beta) throws InterruptedException {
     final File input = new File(INPUT);
     final File output = new File(OUTPUT);
     PrintWriter pw = null;
     final StringBuilder ret = new StringBuilder();
     try {
       pw = new PrintWriter(input);
-      pw.write(GlpkInputGenerator.generateGlpkInput(model));
+      pw.write(GlpkInputGenerator.generateGlpkInput(model, alpha, beta));
     } catch (final IOException e) {
       throw new RuntimeException(e);
     } finally {
       pw.close();
     }
 
-    final int timeLimit = NbPreferences.forModule(GlpkPanel.class)
-            .getInt(GlpkUtils.TIME_LIMIT_PROP, GlpkUtils.TIME_LIMIT_DEFAULT);
+    final int timeLimit = NbPreferences.forModule(AttrStatsPanel.class)
+            .getInt(AttrStatsPanel.TIME_LIMIT_PROP, AttrStatsPanel.TIME_LIMIT_DEFAULT);
 
     try {
       final long startTime = Calendar.getInstance().getTimeInMillis();

@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMapping;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +33,6 @@ import java.util.Set;
  * @author vektor
  */
 public final class MappingUtils {
-
-  private static final double ALPHA = 1.0d;
-  private static final double BETA = 1.0d;
 
   private MappingUtils() {
 
@@ -188,42 +184,5 @@ public final class MappingUtils {
             new HashSet<String>(model.getAMs().get(am1).getImage()),
             new HashSet<String>(model.getAMs().get(am2).getImage()))
             .isEmpty();
-  }
-
-  /**
-   * Returns the weight of the provided AM in the context of the provided AM model
-   * as a weighted sum of their <cite>support</cite> and <cite>coverage</cite>.
-   * The respective weights are defined in {@link MappingUtils#ALPHA} and
-   * {@link MappingUtils#BETA}.
-   *
-   * @param mapping Mapping to compute weight for.
-   * @param model Model in context of which the weight is calculated.
-   * @return Weight of the provided mapping in the context of the provided model.
-   *
-   * @see MappingUtils#support(AttributeMappingId, AMModel)
-   * @see MappingUtils#coverage(AttributeMappingId, AMModel)
-   */
-  public static double weight(final AttributeMappingId mapping, final AMModel model) {
-    return ALPHA * MappingUtils.support(mapping, model)
-            + BETA * MappingUtils.coverage(mapping, model);
-  }
-
-  /**
-   * Returns the sum of weights of all the mappings provided in the context of
-   * the provided AM model.
-   *
-   * @param mappings List of the mappings to calculate the weight for.
-   * @param model Model in context of which the weight is calculated.
-   * @return Sum of all the weights of all the provided mappings.
-   *
-   * @see MappingUtils#weight(AttributeMappingId, AMModel)
-   */
-  public static double weight(final Collection<AttributeMappingId> mappings,
-          final AMModel model) {
-    double sum = 0.0;
-    for (final AttributeMappingId mapping : mappings) {
-      sum += weight(mapping, model);
-    }
-    return sum;
   }
 }

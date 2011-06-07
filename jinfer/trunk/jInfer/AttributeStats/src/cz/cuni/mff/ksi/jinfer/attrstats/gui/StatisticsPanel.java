@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
+import org.openide.util.NbPreferences;
 import org.netbeans.api.options.OptionsDisplayer;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.JFCWrapper;
@@ -86,6 +88,7 @@ public class StatisticsPanel extends JPanel {
     panelArticle = new javax.swing.JPanel();
     run = new javax.swing.JButton();
     idSetArticle = new cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel();
+    jButton1 = new javax.swing.JButton();
     glpk = new javax.swing.JPanel();
     panelGlpk = new javax.swing.JPanel();
     generateInput = new javax.swing.JButton();
@@ -154,10 +157,22 @@ public class StatisticsPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
     panelArticle.add(idSetArticle, gridBagConstraints);
+
+    jButton1.setText("Settings..."); // NOI18N
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1ActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelArticle.add(jButton1, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -206,7 +221,7 @@ public class StatisticsPanel extends JPanel {
 
     glpkInput.setColumns(20);
     glpkInput.setEditable(false);
-    glpkInput.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
+    glpkInput.setFont(new java.awt.Font("Courier New", 0, 12));
     glpkInput.setRows(5);
     glpkInputPane.setViewportView(glpkInput);
 
@@ -275,11 +290,14 @@ public class StatisticsPanel extends JPanel {
   }//GEN-LAST:event_nodeTreeValueChanged
 
   private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
-    final IdSet resultingSet = Algorithm.findIDSet(model);
+    final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
+    final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
+
+    final IdSet resultingSet = Algorithm.findIDSet(model, alpha, beta);
     if (!resultingSet.isValid(model)) {
       notAnIdSet();
     }
-    idSetArticle.setModel(resultingSet, model);
+    idSetArticle.setModel(resultingSet, model, alpha, beta);
   }//GEN-LAST:event_runActionPerformed
 
   private void generateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateInputActionPerformed
@@ -288,7 +306,9 @@ public class StatisticsPanel extends JPanel {
       @Override
       public void run() {
         try {
-          glpkInput.setText(GlpkInputGenerator.generateGlpkInput(model));
+          final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
+          final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
+          glpkInput.setText(GlpkInputGenerator.generateGlpkInput(model, alpha, beta));
         }
         catch (final InterruptedException e) {
           LOG.error("User interrupted GLPK input generation.");
@@ -310,14 +330,16 @@ public class StatisticsPanel extends JPanel {
       @Override
       public void run() {
         try {
-          final String glpkOut = GlpkRunner.run(model);
+          final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
+          final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
+          final String glpkOut = GlpkRunner.run(model, alpha, beta);
           glpkInput.setText(glpkOut);
 
           final IdSet idSet = GlpkOutputParser.getIDSet(glpkOut, model);
           if (!idSet.isValid(model)) {
             notAnIdSet();
           }
-          idSetGlpk.setModel(idSet, model);
+          idSetGlpk.setModel(idSet, model, alpha, beta);
         } catch (final InterruptedException e) {
           LOG.error("User interrupted GLPK run.");
         }
@@ -326,8 +348,12 @@ public class StatisticsPanel extends JPanel {
   }//GEN-LAST:event_runGlpkActionPerformed
 
   private void settingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsActionPerformed
-    OptionsDisplayer.getDefault().open("jInfer/Glpk");
+    OptionsDisplayer.getDefault().open("jInfer/AttrStats");
   }//GEN-LAST:event_settingsActionPerformed
+
+  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    OptionsDisplayer.getDefault().open("jInfer/AttrStats");
+  }//GEN-LAST:event_jButton1ActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel chartView;
@@ -338,6 +364,7 @@ public class StatisticsPanel extends JPanel {
   private javax.swing.JPanel idSet;
   private cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel idSetArticle;
   private cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel idSetGlpk;
+  private javax.swing.JButton jButton1;
   private javax.swing.JPanel jFreeChartPlaceholder;
   private javax.swing.JLabel labelPlaceholder;
   private javax.swing.JTree nodeTree;

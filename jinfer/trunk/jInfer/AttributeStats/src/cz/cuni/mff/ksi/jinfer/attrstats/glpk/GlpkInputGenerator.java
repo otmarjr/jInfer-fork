@@ -64,14 +64,18 @@ public final class GlpkInputGenerator {
    *      </ul>
    *   </li>
    *   <li>The objective function is a weighted sum of active variables, where
-   *      their weight is defined by {@link MappingUtils#weight(AttributeMappingId, AMModel) }.</li>
+   *      their weight is defined by {@link MappingUtils#weight(AttributeMappingId, AMModel, double, double) }.</li>
    * </ul>
    *
    * @param model Model from which the problem formulation should be generated.
+   * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
+   * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
+   *
    * @return String representation of the problem formulation in MathProg
    * language, that can be directly passed to GLPK Solver.
    */
-  public static String generateGlpkInput(final AMModel model) throws InterruptedException {
+  public static String generateGlpkInput(final AMModel model,
+          final double alpha, final double beta) throws InterruptedException {
     final long startTime = Calendar.getInstance().getTimeInMillis();
     final List<AttributeMappingId> candidates = new ArrayList<AttributeMappingId>();
     for (final AttributeMappingId mapping : model.getAMs().keySet()) {
@@ -92,7 +96,10 @@ public final class GlpkInputGenerator {
       }
       final String name = GlpkUtils.getName(mapping);
       mappings.append(name).append('\n');
-      weights.append(name).append(' ').append(MappingUtils.weight(mapping, model)).append('\n');
+      weights.append(name)
+              .append(' ')
+              .append(model.weight(mapping, alpha, beta))
+              .append('\n');
     }
 
     try {

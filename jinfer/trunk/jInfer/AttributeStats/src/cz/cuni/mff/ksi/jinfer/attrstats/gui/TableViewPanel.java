@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.FlatModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
@@ -35,6 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
+import org.openide.util.NbPreferences;
 import static cz.cuni.mff.ksi.jinfer.attrstats.Utils.NA;
 
 /**
@@ -113,8 +115,11 @@ public class TableViewPanel extends JPanel {
     }
 
     if (!BaseUtils.isEmpty(ids)) {
+      final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
+      final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
+
       idSet.setText(Utils.boolToString(MappingUtils.isIDset(ids, model)));
-      weight.setText(Utils.FORMAT.format(MappingUtils.weight(ids, model)));
+      weight.setText(Utils.FORMAT.format(model.weight(ids, alpha, beta)));
     }
     else {
       idSet.setText("no");

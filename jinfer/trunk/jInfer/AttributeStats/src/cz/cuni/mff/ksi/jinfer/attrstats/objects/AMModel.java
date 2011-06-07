@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -210,6 +211,44 @@ public class AMModel {
       }
     }
     return Collections.unmodifiableSet(types);
+  }
+
+  /**
+   * Returns the weight of the provided AM in the context of this AM model
+   * as a weighted sum of its <cite>support</cite> and <cite>coverage</cite>.
+   *
+   * @param mapping Mapping to compute weight for.
+   * @param alpha Weight of the mapping <cite>support</cite>.
+   * @param beta Weight of the mapping <cite>coverage</cite>.
+   * @return Weight of the provided mapping in the context this model.
+   *
+   * @see MappingUtils#support(AttributeMappingId, AMModel)
+   * @see MappingUtils#coverage(AttributeMappingId, AMModel)
+   */
+  public double weight(final AttributeMappingId mapping,
+          final double alpha, final double beta) {
+    return alpha * MappingUtils.support(mapping, this)
+            + beta * MappingUtils.coverage(mapping, this);
+  }
+
+  /**
+   * Returns the sum of weights of all the mappings provided in the context
+   * this AM model.
+   *
+   * @param mappings List of the mappings to calculate the weight for.
+   * @param alpha Weight of the mapping <cite>support</cite>.
+   * @param beta Weight of the mapping <cite>coverage</cite>.
+   * @return Sum of all the weights of all the provided mappings.
+   *
+   * @see MappingUtils#weight(AttributeMappingId, AMModel)
+   */
+  public double weight(final Collection<AttributeMappingId> mappings,
+          final double alpha, final double beta) {
+    double sum = 0.0;
+    for (final AttributeMappingId mapping : mappings) {
+      sum += weight(mapping, alpha, beta);
+    }
+    return sum;
   }
 
 }

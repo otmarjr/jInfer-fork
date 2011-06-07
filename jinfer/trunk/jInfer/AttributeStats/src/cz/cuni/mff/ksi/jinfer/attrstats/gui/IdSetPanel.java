@@ -45,13 +45,22 @@ public class IdSetPanel extends JPanel {
     table.setModel(new DefaultTableModel());
   }
 
-  public void setModel(final IdSet idSet, final AMModel model) {
+  /**
+   * TODO vektor Comment!
+   *
+   * @param idSet
+   * @param model
+   * @param alpha
+   * @param beta
+   */
+  public void setModel(final IdSet idSet, final AMModel model,
+          final double alpha, final double beta) {
     this.idSet = idSet;
     Collections.sort(this.idSet.getMappings());
     this.model = model;
 
     table.setModel(new MappingsModel(idSet.getMappings()));
-    weight.setText(Utils.FORMAT.format(MappingUtils.weight(idSet.getMappings(), model)));
+    weight.setText(Utils.FORMAT.format(model.weight(idSet.getMappings(), alpha, beta)));
     optimal.setText(Utils.boolToString(idSet.isOptimal()));
   }
 
@@ -63,7 +72,6 @@ public class IdSetPanel extends JPanel {
     pane = new javax.swing.JScrollPane();
     table = new javax.swing.JTable();
     labelWeight = new javax.swing.JLabel();
-    use = new javax.swing.JButton();
     labelOptimal = new javax.swing.JLabel();
     weight = new javax.swing.JTextField();
     optimal = new javax.swing.JTextField();
@@ -103,14 +111,6 @@ public class IdSetPanel extends JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(labelWeight, gridBagConstraints);
 
-    use.setText("Use in Schema"); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 4;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    add(use, gridBagConstraints);
-
     labelOptimal.setText("Optimal?"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
@@ -144,7 +144,6 @@ public class IdSetPanel extends JPanel {
   private javax.swing.JTextField optimal;
   private javax.swing.JScrollPane pane;
   private javax.swing.JTable table;
-  private javax.swing.JButton use;
   private javax.swing.JTextField weight;
   // End of variables declaration//GEN-END:variables
 }

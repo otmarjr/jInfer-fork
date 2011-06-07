@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.glpk.options;
+package cz.cuni.mff.ksi.jinfer.attrstats.options;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -25,17 +25,17 @@ import org.openide.util.Lookup;
 
 /**
  * @author vektor
- */ 
+ */
 @OptionsPanelController.SubRegistration(
     location = "jInfer",
-    displayName = "#AdvancedOption_DisplayName_Glpk",
-    keywords = "#AdvancedOption_Keywords_Glpk",
-    keywordsCategory = "jInfer/Glpk",
+    displayName = "#AdvancedOption_DisplayName_AttrStats",
+    keywords = "#AdvancedOption_Keywords_AttrStats",
+    keywordsCategory = "jInfer/AttrStats",
     position = 100,
-    id = "Glpk")
-public final class GlpkOptionsPanelController extends OptionsPanelController {
+    id = "AttrStats")
+public final class AttrStatsController extends OptionsPanelController {
 
-  private GlpkPanel panel;
+  private AttrStatsPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
   private boolean changed;
 
@@ -86,9 +86,9 @@ public final class GlpkOptionsPanelController extends OptionsPanelController {
     pcs.removePropertyChangeListener(l);
   }
 
-  private GlpkPanel getPanel() {
+  private AttrStatsPanel getPanel() {
     if (panel == null) {
-      panel = new GlpkPanel();
+      panel = new AttrStatsPanel();
     }
     return panel;
   }

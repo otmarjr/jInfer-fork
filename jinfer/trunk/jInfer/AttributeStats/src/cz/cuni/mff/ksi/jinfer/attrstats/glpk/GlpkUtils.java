@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.glpk.options.GlpkPanel;
+import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import org.openide.util.NbPreferences;
@@ -27,11 +27,6 @@ import org.openide.util.NbPreferences;
  * @author vektor
  */
 public final class GlpkUtils {
-
-  public static final String BINARY_PATH_PROP = "glpk.binary";
-  public static final String BINARY_PATH_DEFAULT = "";
-  public static final String TIME_LIMIT_PROP = "glpk.time.limit";
-  public static final int TIME_LIMIT_DEFAULT = 60;
 
   private GlpkUtils() {
 
@@ -44,7 +39,7 @@ public final class GlpkUtils {
    * @return Full path to the GLPK Solver binary.
    */
   public static String getPath() {
-    return NbPreferences.forModule(GlpkPanel.class).get(BINARY_PATH_PROP, BINARY_PATH_DEFAULT);
+    return NbPreferences.forModule(AttrStatsPanel.class).get(AttrStatsPanel.BINARY_PATH_PROP, AttrStatsPanel.BINARY_PATH_DEFAULT);
   }
 
   /**

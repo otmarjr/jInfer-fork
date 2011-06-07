@@ -50,9 +50,13 @@ public final class Algorithm {
    * detailed information on the algorithm itself, please refer to the article.
    *
    * @param model Model to work on.
+   * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
+   * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
+   *
    * @return List of attribute mappings constituting the ID set found.
    */
-  public static IdSet findIDSet(final AMModel model) {
+  public static IdSet findIDSet(final AMModel model,
+          final double alpha, final double beta) {
 
     final long startTime = Calendar.getInstance().getTimeInMillis();
 
@@ -91,7 +95,7 @@ public final class Algorithm {
 
     for (final AttributeMappingId mapping : C) {
       types.add(mapping.getElement());
-      weights.put(mapping, Double.valueOf(MappingUtils.weight(mapping, model)));
+      weights.put(mapping, Double.valueOf(model.weight(mapping, alpha, beta)));
     }
 
     // 3.  for each type (element name) t do

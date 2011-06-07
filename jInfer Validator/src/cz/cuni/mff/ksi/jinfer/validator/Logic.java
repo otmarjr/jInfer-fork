@@ -63,7 +63,7 @@ public final class Logic {
         }
       }
       if (!found) {
-        ret.add(new Remark(providedPackage.getModule(), null, null, 
+        ret.add(new Remark(providedPackage.getModule(), null, null,
                 Severity.ERROR, "Package " + providedPackage.getName() +
                 " is provided but never used outside"));
       }
@@ -98,23 +98,23 @@ public final class Logic {
 
     if (!project.contains("license.file=../gpl30.txt")) {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,
-              null, Severity.ERROR, "Module license file not specified"));
+              null, Severity.ERROR, "Module license file not specified (license.file)"));
     }
     if (!project.contains("nbm.homepage=http://jinfer.sourceforge.net/")) {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,
-              null, Severity.ERROR, "Project homepage not specified correctly"));
+              null, Severity.ERROR, "Project homepage not specified correctly (nbm.homepage)"));
     }
     if (!project.contains("nbm.module.author=")) {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,
-              null, Severity.ERROR, "Project author(s) not specified"));
+              null, Severity.ERROR, "Project author(s) not specified (nbm.module.author)"));
     }
     if (!project.contains("project.license=gpl30")) {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,
-              null, Severity.ERROR, "Module license not specified/incorrect"));
+              null, Severity.ERROR, "Module license not specified/incorrect (project.license)"));
     }
     if (!project.contains("spec.version.base=")) {
       ret.getRemarks().add(new Remark(module.getName(), projectFile,
-              null, Severity.ERROR, "Module specification version not found"));
+              null, Severity.ERROR, "Module specification version not found (spec.version.base)"));
     }
 
     // check project.xml

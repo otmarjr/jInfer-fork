@@ -32,9 +32,9 @@ public class MainWnd extends JFrame {
 
   // TODO vektor Column widths
   private static final long serialVersionUID = 7542612L;
-  private static final String ANT = "C:\\Program Files\\NetBeans 6.9\\java\\ant\\bin\\ant.bat";
+  private static final String ANT = "C:\\Program Files\\NetBeans 7.0\\java\\ant\\bin\\ant.bat";
   private static final String ANT_LINUX = "/usr/share/java/apache-ant/bin/ant";
-  private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\My Documents\\Sukromne\\jinfer";
+  private static final String PROJECT_ROOT = "C:\\Documents and Settings\\vitasek\\Documents\\Soukrome\\jInfer\\jinfer\\trunk\\jInfer";
   private final List<Remark> model = new ArrayList<Remark>();
 
   public MainWnd() {

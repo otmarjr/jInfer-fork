@@ -209,6 +209,6 @@ public class MergeConditionTesterKHContextTest {
     assertEquals(
             "[1|0]>>1--a|1--2   1--b|1--6   [2|0]>>2--b|1--3   [3|0]>>3--a|1--4   [4|0]+[8|0]>>4--c|2--5   [5|2]+[9|1]   [6|0]>>6--b|1--7   [7|0]>>7--a|1--4   @@@[1|0]   [2|0]<<1--a|1--2   [3|0]<<2--b|1--3   [4|0]+[8|0]<<3--a|1--4   7--a|1--4   [5|2]+[9|1]<<4--c|2--5   [6|0]<<1--b|1--6   [7|0]<<6--b|1--7   ",
             testGetMergableStatesMergeAll(Arrays.<String>asList(
-            "abac", "bbac"), 3, 1));
+            "abac", "bbac"), 3, 2));
   }
 }

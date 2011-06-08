@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 anti
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,6 +35,8 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   private static final long serialVersionUID = 784463431L;
   public static final String NAME = "AutomatonVisualizer";
   public static final String DISPLAY_NAME = "Automaton visualizer";
+  public static final String LAYOUT_PROP = "user-layout";
+  public static final String LAYOUT_DEFAULT = VyhnanovskaLayoutFactory.NAME;
 
   /** Creates new form ModuleSelectionJPanel */
   public LayoutPropertiesPanel(final Properties properties) {
@@ -122,13 +124,12 @@ public class LayoutPropertiesPanel extends AbstractPropertiesPanel {
   public final void load() {
     graphRenderer.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupImpls(LayoutFactory.class).toArray()));
-    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupImpl(LayoutFactory.class, properties.getProperty("user-layout", VyhnanovskaLayoutFactory.NAME)));
+    graphRenderer.setSelectedItem(ModuleSelectionHelper.lookupImpl(LayoutFactory.class, properties.getProperty(LAYOUT_PROP, LAYOUT_DEFAULT)));
   }
 
   @Override
   public void store() {
-    properties.setProperty("user-layout",
-            ((NamedModule) graphRenderer.getSelectedItem()).getName());
+    properties.setProperty(LAYOUT_PROP, ((NamedModule) graphRenderer.getSelectedItem()).getName());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextPane desc;

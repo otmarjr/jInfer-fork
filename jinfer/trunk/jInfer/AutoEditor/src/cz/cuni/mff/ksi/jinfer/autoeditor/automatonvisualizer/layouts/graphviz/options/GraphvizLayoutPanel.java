@@ -1,20 +1,20 @@
 /*
  *  Copyright (C) 2011 sviro
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.properties;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.options;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,15 +27,17 @@ import org.openide.util.NbPreferences;
 
 /**
  * Options panel of Graphviz layout binary selection.
- * 
+ *
  * @author sviro
  */
 @SuppressWarnings("PMD.SingularField")
 final class GraphvizLayoutPanel extends JPanel {
 
   private static final long serialVersionUID = 4535346356l;
-
   private static final Logger LOG = Logger.getLogger(GraphvizLayoutPanel.class);
+
+  public static final String BINARY_PATH_PROP = "dot.binary";
+  public static final String BINARY_PATH_DEFAULT = "";
 
   public GraphvizLayoutPanel() {
     super();
@@ -88,7 +90,7 @@ final class GraphvizLayoutPanel extends JPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 7, Short.MAX_VALUE)
+      .addGap(0, 49, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,7 +155,7 @@ final class GraphvizLayoutPanel extends JPanel {
    * Save all values in fields into properties.
    */
   public void store() {
-    NbPreferences.forModule(GraphvizLayoutPanel.class).put(GraphvizUtils.BINARY_PATH_PROP, binaryTextField.getText());
+    NbPreferences.forModule(GraphvizLayoutPanel.class).put(BINARY_PATH_PROP, binaryTextField.getText());
   }
 
   /**
@@ -174,7 +176,7 @@ final class GraphvizLayoutPanel extends JPanel {
 
   /**
    * Show warning dialog about invalidity of entered path to dot binary.
-   * 
+   *
    * @param binaryPath Path for which is dialog shown.
    */
   public void showInvalidBinaryDialog(final String binaryPath) {

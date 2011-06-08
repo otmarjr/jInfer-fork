@@ -146,7 +146,7 @@ public class JInferProject implements Project {
       final FileObject inputFilesFileOb = projectDir.getFileObject(JInferProjectFactory.PROJECT_DIR
               + "/" + JInferProjectFactory.PROJECT_INPUTFILE);
 
-      input = new Input(new InputFilesList(), new InputFilesList(), new InputFilesList());
+      input = new Input(new InputFilesList(), new InputFilesList(), new InputFilesList(), new InputFilesList());
       if (inputFilesFileOb != null && inputFilesFileOb.isData()) {
         try {
           InputFiles.load(inputFilesFileOb.getInputStream(), input);

@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.projecttype;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.ObjectFactory;
+import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.Tfds;
 import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.Tfile;
 import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.Tjinfer;
 import cz.cuni.mff.ksi.jinfer.projecttype.jaxb.Tqueries;
@@ -61,18 +62,22 @@ public final class InputFiles {
 
     final Tjinfer jinfer = objFactory.createTjinfer();
 
-    final Txml Txml = objFactory.createTxml();
-    jinfer.setXml(Txml);
+    final Txml xml = objFactory.createTxml();
+    jinfer.setXml(xml);
 
-    final Tschemas Tschemas = objFactory.createTschemas();
-    jinfer.setSchemas(Tschemas);
+    final Tschemas schemas = objFactory.createTschemas();
+    jinfer.setSchemas(schemas);
 
-    final Tqueries Tqueries = objFactory.createTqueries();
-    jinfer.setQueries(Tqueries);
+    final Tqueries queries = objFactory.createTqueries();
+    jinfer.setQueries(queries);
 
-    writeCollection(objFactory, input.getDocuments(), Txml.getFile());
-    writeCollection(objFactory, input.getSchemas(), Tschemas.getFile());
-    writeCollection(objFactory, input.getQueries(), Tqueries.getFile());
+    final Tfds fds = objFactory.createTfds();
+    jinfer.setFds(fds);
+    
+    writeCollection(objFactory, input.getDocuments(), xml.getFile());
+    writeCollection(objFactory, input.getSchemas(), schemas.getFile());
+    writeCollection(objFactory, input.getQueries(), queries.getFile());
+    writeCollection(objFactory, input.getFunctionalDependencies(), fds.getFile());
 
     final JAXBElement<Tjinfer> jinferInput = objFactory.createJinferinput(jinfer);
 
@@ -151,6 +156,7 @@ public final class InputFiles {
       readCollection(jinfer.getXml().getFile(), input.getDocuments());
       readCollection(jinfer.getSchemas().getFile(), input.getSchemas());
       readCollection(jinfer.getQueries().getFile(), input.getQueries());
+      readCollection(jinfer.getFds().getFile(), input.getFunctionalDependencies());
 
       if (inputStream != null) {
         inputStream.close();

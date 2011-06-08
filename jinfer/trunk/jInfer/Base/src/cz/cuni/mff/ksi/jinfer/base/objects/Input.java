@@ -31,20 +31,22 @@ public class Input {
   private final Collection<File> documents;
   private final Collection<File> schemas;
   private final Collection<File> queries;
+  private final Collection<File> functionalDependencies;
 
   public Input(final Collection<File> documents,
           final Collection<File> schemas,
-          final Collection<File> queries) {
+          final Collection<File> queries, final Collection<File> fds) {
     this.documents = documents;
     this.schemas = schemas;
     this.queries = queries;
+    this.functionalDependencies = fds;
   }
 
   /**
    * Create a new, empty instance.
    */
   public Input() {
-    this(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
+    this(new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>(), new ArrayList<File>());
   }
 
   /**
@@ -72,5 +74,14 @@ public class Input {
    */
   public Collection<File> getQueries() {
     return queries;
+  }
+  
+  /**
+   * Returns the list of functional dependencies in this input object.
+   *
+   * @return All functional dependencies in this object.
+   */
+  public Collection<File> getFunctionalDependencies() {
+    return functionalDependencies;
   }
 }

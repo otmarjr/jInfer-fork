@@ -103,6 +103,8 @@ public class FileAddAction extends AbstractAction {
       builder.append("Schema files (");
     } else if (FolderType.QUERY.equals(type)) { //NOPMD - QUERY is handling separately
       //
+    } else if (FolderType.FD.equals(type)) {
+        builder.append("FD files(");
     }
     boolean first = true;
     for (Processor processor : processors) {

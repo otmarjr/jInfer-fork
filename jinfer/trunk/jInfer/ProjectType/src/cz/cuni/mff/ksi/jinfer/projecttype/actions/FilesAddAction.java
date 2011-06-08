@@ -80,17 +80,20 @@ public class FilesAddAction extends AbstractAction {
               FolderType.SCHEMA));
       final Collection<File> queryFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
               FolderType.QUERY));
+      final Collection<File> fdsFiles = getSpecificFiles(selectedFilesList, registeredProcessors.get(
+              FolderType.FD));
 
-      removeKnownSelectegFiles(selectedFilesList, xmlFiles, schemaFiles, queryFiles);
+      removeKnownSelectegFiles(selectedFilesList, xmlFiles, schemaFiles, queryFiles, fdsFiles);
 
       if (!selectedFilesList.isEmpty()) {
-        addRemainingFilesToDefault(selectedFilesList, xmlFiles,  schemaFiles, queryFiles);
+        addRemainingFilesToDefault(selectedFilesList, xmlFiles,  schemaFiles, queryFiles, fdsFiles);
       }
 
       final Input input = project.getLookup().lookup(Input.class);
       input.getDocuments().addAll(xmlFiles);
       input.getSchemas().addAll(schemaFiles);
       input.getQueries().addAll(queryFiles);
+      input.getFunctionalDependencies().addAll(fdsFiles);
 
       project.getLookup().lookup(ProjectState.class).markModified();
 
@@ -106,7 +109,7 @@ public class FilesAddAction extends AbstractAction {
     }
   }
 
-  private void addRemainingFilesToDefault(final List<File> selectedFilesList, final Collection<File> xmlFiles,  final Collection<File> schemaFiles, final Collection<File> queryFiles) {
+  private void addRemainingFilesToDefault(final List<File> selectedFilesList, final Collection<File> xmlFiles,  final Collection<File> schemaFiles, final Collection<File> queryFiles, final Collection<File> fdFiles) {
     final Properties properties = new ModuleProperties(ProjectPropertiesPanelProvider.CATEGORY_NAME, project.getLookup().lookup(Properties.class));
     final String defaultFolder = properties.getProperty(ProjectPropertiesPanel.FOLDER_TYPE, ProjectPropertiesPanel.FOLDER_TYPE_DEFAULT);
     if (defaultFolder.equals(FolderType.DOCUMENT.getName())) {
@@ -118,12 +121,17 @@ public class FilesAddAction extends AbstractAction {
     if (defaultFolder.equals(FolderType.QUERY.getName())) {
       queryFiles.addAll(selectedFilesList);
     }
+    if (defaultFolder.equals(FolderType.FD.getName())) {
+      fdFiles.addAll(selectedFilesList);
+    }
+    
   }
 
-  private void removeKnownSelectegFiles(final List<File> selectedFilesList, final Collection<File> xmlFiles, final Collection<File> schemaFiles, final Collection<File> queryFiles) {
+  private void removeKnownSelectegFiles(final List<File> selectedFilesList, final Collection<File> xmlFiles, final Collection<File> schemaFiles, final Collection<File> queryFiles, final Collection<File> fdFiles) {
     selectedFilesList.removeAll(xmlFiles);
     selectedFilesList.removeAll(schemaFiles);
     selectedFilesList.removeAll(queryFiles);
+    selectedFilesList.removeAll(fdFiles);
   }
 
   private File[] getSelectedFiles() {

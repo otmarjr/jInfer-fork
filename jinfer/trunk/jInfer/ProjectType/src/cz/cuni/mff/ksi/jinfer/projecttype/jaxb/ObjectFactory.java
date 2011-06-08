@@ -75,6 +75,14 @@ public class ObjectFactory {
     public Tschemas createTschemas() {
         return new Tschemas();
     }
+    
+    /**
+     * Create an instance of {@link Tfds }
+     * 
+     */
+    public Tfds createTfds() {
+        return new Tfds();
+    }
 
     /**
      * Create an instance of {@link Tfile }

@@ -31,19 +31,37 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class KHgrams<T> implements AutomatonSimplifier<T> {
+
+  private int k;
+  private int h;
+
   public KHgrams() {
-    // TODO anti safety k,h check for k >= h >= 0
+    this.k = 2;
+    this.h = 1;
   }
-  
+
+  public KHgrams(final int k, final int h) {
+    if (!(k > 0)) {
+      throw new IllegalArgumentException("k parameter must be greater than zero.");
+    }
+    if (!((h > 0) && (h <= k))) {
+      throw new IllegalArgumentException("h parameter must satisfy 0 < h <= k.");
+    }
+    this.k = k;
+    this.h = h;
+  }
+
   @Override
   public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString) throws InterruptedException {
-    HelperAutomaton helperAutomaton = new HelperAutomaton(false, 2, 1);
-    final Map<T, String> conversionMap= new HashMap<T, String>();
+    HelperAutomaton helperAutomaton = new HelperAutomaton(false, this.k, this.h);
+    final Map<T, String> conversionMap = new HashMap<T, String>();
     final Map<String, T> reverseConversionMap = new HashMap<String, T>();
     AutomatonCloner<T, String> cl = new AutomatonCloner<T, String>();
-    
+
     cl.convertAutomaton(inputAutomaton, helperAutomaton, new AutomatonClonerSymbolConverter<T, String>() {
+
       private char lastC = 'A';
+
       @Override
       public String convertSymbol(T symbol) {
         if (conversionMap.containsKey(symbol)) {
@@ -52,16 +70,17 @@ public class KHgrams<T> implements AutomatonSimplifier<T> {
         String nstr = String.valueOf(lastC);
         conversionMap.put(symbol, nstr);
         reverseConversionMap.put(nstr, symbol);
-        lastC+= 1;
+        lastC += 1;
         return nstr;
       }
     });
-    
+
     helperAutomaton.kcontextMe();
-    
+
     AutomatonCloner<String, T> lc = new AutomatonCloner<String, T>();
-    
-    Automaton<T> resultAutomaton= lc.convertAutomaton(helperAutomaton, new AutomatonClonerSymbolConverter<String, T>() {
+
+    Automaton<T> resultAutomaton = lc.convertAutomaton(helperAutomaton, new AutomatonClonerSymbolConverter<String, T>() {
+
       @Override
       public T convertSymbol(String symbol) {
         return reverseConversionMap.get(symbol);
@@ -75,4 +94,3 @@ public class KHgrams<T> implements AutomatonSimplifier<T> {
     return simplify(inputAutomaton, symbolToString);
   }
 }
-

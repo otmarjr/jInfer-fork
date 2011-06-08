@@ -14,3 +14,6 @@ subdirs:
 
 clean:
 	for i in $(obj); do cd $$i && $(MAKE) clean && cd ..; done
+
+dist-clean:
+	for i in $(obj); do cd $$i && $(MAKE) dist-clean && cd ..; done

@@ -46,6 +46,14 @@ public final class IGGUtils {
   public static final String REQUIRED = "required";
   /** Metadata representing the name of the file where this node originated from. */
   public static final String FILE_ORIGIN = "file.origin";
+  /**
+   * Metadata string meaning "Attribute is ID".
+   *
+   * See <a href="http://www.w3.org/TR/REC-xml/#id ">DTD reference</a> and
+   * <a href="http://www.w3.org/TR/xmlschema11-2/#ID">XSD reference</a> for
+   * further information.
+   */
+  public static final String IS_ID = "is.ID";
 
   /** Metadata map containing a single piece of metadata: "Node comes from a schema". */
   public static final Map<String, Object> ATTR_FROM_SCHEMA = new HashMap<String, Object>(1);

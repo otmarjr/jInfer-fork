@@ -42,7 +42,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * A simple DTD exporter.
- * 
+ *
  * @author vektor
  */
 @ServiceProvider(service = SchemaGenerator.class)
@@ -169,7 +169,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return false;
   }
 
-  private String comboToString(final Regexp<AbstractStructuralNode> regexp, 
+  private String comboToString(final Regexp<AbstractStructuralNode> regexp,
           final String delimiter) {
     if (!containsPCDATA(regexp.getTokens())) {
       return listToString(regexp.getChildren(), delimiter) +
@@ -223,7 +223,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
               }
             }) + "*";
   }
-  
+
   private String listToString(final List<Regexp<AbstractStructuralNode>> list,
           final String separator) {
     return CollectionToString.colToString(
@@ -255,13 +255,21 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     final StringBuilder ret = new StringBuilder();
     // type declaration of this attribute
     ret.append("\n\t")
-        .append(a.getName())
-        .append(DomainUtils.getAttributeType(domain, maxEnumSize));
+        .append(a.getName());
+
+    // ID attribute
+    if (a.getMetadata().containsKey(IGGUtils.IS_ID)) {
+      ret.append(" ID #REQUIRED");
+      return ret.toString();
+    }
+
+    ret.append(DomainUtils.getAttributeType(domain, maxEnumSize));
 
     // requiredness/default value
     if (a.getMetadata().containsKey(IGGUtils.REQUIRED)) {
       ret.append("#REQUIRED");
-    } else {
+    }
+    else {
       ret.append(DomainUtils.getDefault(domain, minDefaultRatio));
     }
     return ret.toString();

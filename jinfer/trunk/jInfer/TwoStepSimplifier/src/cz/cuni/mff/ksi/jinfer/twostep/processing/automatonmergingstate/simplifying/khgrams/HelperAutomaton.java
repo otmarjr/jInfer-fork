@@ -99,6 +99,9 @@ class HelperAutomaton extends Automaton<String> {
           while (firstIt.hasNext()) {
             if (i >= this.h) {
               mergeStates(firstIt.next(), mergIt.next());
+            } else {
+              firstIt.next();
+              mergIt.next();
             }
             i++;
           }

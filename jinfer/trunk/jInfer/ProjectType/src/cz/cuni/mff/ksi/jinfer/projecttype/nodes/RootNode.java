@@ -57,7 +57,7 @@ public class RootNode extends AbstractNode {
         setKeys(new Node[]{new FolderNode(project, FolderType.DOCUMENT,
                   input.getDocuments()), new FolderNode(project, FolderType.SCHEMA,
                   input.getSchemas()), new FolderNode(project, FolderType.QUERY,
-                  input.getQueries()),
+                  input.getQueries()), new FolderNode(project, FolderType.FD, input.getFunctionalDependencies()),
                   new OutputNode(DataFolder.findFolder(project.getOutputFolder(true)).
                   getNodeDelegate(),
                   project)});

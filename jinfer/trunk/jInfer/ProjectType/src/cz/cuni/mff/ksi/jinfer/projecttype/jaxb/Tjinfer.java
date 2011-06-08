@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Tjinfer", propOrder = {
     "xml",
     "schemas",
-    "queries"
+    "queries",
+    "fds"
 })
 public class Tjinfer {
 
@@ -46,6 +47,8 @@ public class Tjinfer {
     protected Tschemas schemas;
     @XmlElement(required = true)
     protected Tqueries queries;
+    @XmlElement(required = true)
+    protected Tfds fds;
 
     /**
      * Gets the value of the xml property.
@@ -118,5 +121,31 @@ public class Tjinfer {
     public void setQueries(final Tqueries value) {
         this.queries = value;
     }
+
+    /**
+     * Gets the value of the fds property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Tfds }
+     *     
+     */
+    public Tfds getFds() {
+        return fds;
+    }
+
+    /**
+     * Sets the value of the fds property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Tfds }
+     *     
+     */
+    public void setFds(final Tfds fds) {
+        this.fds = fds;
+    }
+    
+    
 
 }

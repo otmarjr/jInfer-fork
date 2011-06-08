@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -117,7 +117,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
     if (operator == Operator.EQUALS
             && lastLiteral != null
             && lastAttribute != null
-            && Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES, "true"))) {
+            && Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES_PROP, BasicIGGPropertiesPanel.KEEP_ATTRIBUTES_DEFAULT))) {
       lastAttribute.getContent().add(lastLiteral);
     }
     if (operator == Operator.EQUALS
@@ -125,7 +125,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
             && isSimpleData
             && lastElement != null) {
       final SimpleData newSimpleData;
-      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
+      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA_PROP, BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA_DEFAULT))) {
         newSimpleData = new SimpleData(IGGUtils.EMPTY_CONTEXT, lastLiteral,
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       } else {
@@ -149,7 +149,7 @@ public class XPathHandlerImpl extends DefaultXPathHandler {
 
     if (lastElement != null) {
       final SimpleData newSimpleData;
-      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
+      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA_PROP, BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA_DEFAULT))) {
         newSimpleData = new SimpleData(IGGUtils.EMPTY_CONTEXT, null,
                 IGGUtils.ATTR_FROM_QUERY, null, new ArrayList<String>(0));
       } else {

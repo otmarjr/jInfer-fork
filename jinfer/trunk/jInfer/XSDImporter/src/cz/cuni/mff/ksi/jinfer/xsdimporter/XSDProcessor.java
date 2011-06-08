@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 reseto
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -51,7 +51,7 @@ public class XSDProcessor implements Processor {
 
   @Override
   public List<Element> process(final InputStream stream) throws InterruptedException {
-    LOG.setLevel(XSDImportSettings.logLevel());
+    LOG.setLevel(XSDImportSettings.getLogLevel());
     final XSDParser parser = XSDImportSettings.getParser();
 
     try {
@@ -60,7 +60,7 @@ public class XSDProcessor implements Processor {
         LOG.info(NbBundle.getMessage(XSDProcessor.class, "Info.ParsingMethod", parser.getDisplayName()));
         final List<Element> rules = parser.parse(stream);
         printDebugInfo(rules, "AfterParsing");
-        
+
         return rules;
       } else {
         //no parser selected
@@ -68,7 +68,7 @@ public class XSDProcessor implements Processor {
         return Collections.emptyList();
       }
     } catch (final XSDException e) {
-      if (XSDImportSettings.stopOnError()) {
+      if (XSDImportSettings.isStopOnError()) {
         throw new RuntimeException(NbBundle.getMessage(XSDProcessor.class, "Exception.Parsing"), e);
       } else {
         LOG.error(NbBundle.getMessage(XSDProcessor.class, "Error.IgnoreParsing"), e);

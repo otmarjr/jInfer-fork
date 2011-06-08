@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,7 +41,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * SAX handler for the Basic IGG module.
- * 
+ *
  * @author vektor
  */
 public class TrivialHandler extends DefaultHandler {
@@ -77,10 +77,10 @@ public class TrivialHandler extends DefaultHandler {
         final Map<String, Object> metadata = new HashMap<String, Object>(1);
         metadata.put(IGGUtils.REQUIRED, Boolean.TRUE);
         final List<String> content = new ArrayList<String>(1);
-        if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES, "true"))) {
+        if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES_PROP, BasicIGGPropertiesPanel.KEEP_ATTRIBUTES_DEFAULT))) {
           content.add(attributes.getValue(i));
         }
-        final Attribute a = new Attribute(attrContext, attributes.getQName(i), 
+        final Attribute a = new Attribute(attrContext, attributes.getQName(i),
                 metadata, null, content);
         elAttributes.add(a);
       }
@@ -116,7 +116,7 @@ public class TrivialHandler extends DefaultHandler {
     end.getSubnodes().setType(RegexpType.CONCATENATION);
     end.getSubnodes().setInterval(RegexpInterval.getOnce());
     end.setImmutable();
-    
+
     rules.add(end);
   }
 
@@ -129,7 +129,7 @@ public class TrivialHandler extends DefaultHandler {
     }
     if (stack.peek().getType().equals(StructuralNodeType.ELEMENT)) {
       final SimpleData sd;
-      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA, "true"))) {
+      if (Boolean.valueOf(properties.getProperty(BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA_PROP, BasicIGGPropertiesPanel.KEEP_SIMPLE_DATA_DEFAULT))) {
         sd = new SimpleData(getContext(), text, new HashMap<String, Object>(), null, Arrays.asList(""));
       }
       else {

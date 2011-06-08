@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 rio
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,17 +30,16 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
   private static final long serialVersionUID = 35787687;
 
   public static final String NAME = "basicxsdexporter";
-  public static final String GENERATE_GLOBAL = "generate.global";
-  public static final String NUMBER_TO_GLOBAL = "number.to.global";
-  public static final String SPACES_PER_INDENT = "spaces.per.indent";
-  public static final String TYPENAME_PREFIX = "typename.prefix";
-  public static final String TYPENAME_POSTFIX = "typename.postfix";
-
+  public static final String GENERATE_GLOBAL_PROP = "generate.global";
   public final static boolean GENERATE_GLOBAL_DEFAULT = true;
+  public static final String NUMBER_TO_GLOBAL_PROP = "number.to.global";
   /// Default value of number of occurrences of element to consider it as a global type.
   public final static int NUMBER_TO_GLOBAL_DEFAULT = 1;
+  public static final String SPACES_PER_INDENT_PROP = "spaces.per.indent";
   public final static int SPACES_PER_INDENT_DEFAULT = 2;
+  public static final String TYPENAME_PREFIX_PROP = "typename.prefix";
   public final static String TYPENAME_PREFIX_DEFAULT = "T";
+  public static final String TYPENAME_POSTFIX_PROP = "typename.postfix";
   public final static String TYPENAME_POSTFIX_DEFAULT = "";
 
   /** Creates new form XSDExportPropertiesPanel */
@@ -265,29 +264,29 @@ public final class XSDExportPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public void load() {
     generateGlobalTypes.setSelected(Boolean.parseBoolean(properties
-            .getProperty(GENERATE_GLOBAL, String.valueOf(GENERATE_GLOBAL_DEFAULT))));
+            .getProperty(GENERATE_GLOBAL_PROP, String.valueOf(GENERATE_GLOBAL_DEFAULT))));
     countToGlobal.setValue(Integer.valueOf(properties
-            .getProperty(NUMBER_TO_GLOBAL, String.valueOf(NUMBER_TO_GLOBAL_DEFAULT))));
+            .getProperty(NUMBER_TO_GLOBAL_PROP, String.valueOf(NUMBER_TO_GLOBAL_DEFAULT))));
     spacesPerIndent.setValue(Integer.valueOf(properties
-            .getProperty(SPACES_PER_INDENT, String.valueOf(SPACES_PER_INDENT_DEFAULT))));
+            .getProperty(SPACES_PER_INDENT_PROP, String.valueOf(SPACES_PER_INDENT_DEFAULT))));
     typenamePrefix.setText(properties
-            .getProperty(TYPENAME_PREFIX,TYPENAME_PREFIX_DEFAULT));
+            .getProperty(TYPENAME_PREFIX_PROP,TYPENAME_PREFIX_DEFAULT));
     typenamePostfix.setText(properties
-            .getProperty(TYPENAME_POSTFIX, TYPENAME_POSTFIX_DEFAULT));
+            .getProperty(TYPENAME_POSTFIX_PROP, TYPENAME_POSTFIX_DEFAULT));
     generateGlobalTypesItemStateChanged(null);
   }
 
   @Override
   public void store() {
-    properties.setProperty(GENERATE_GLOBAL,
+    properties.setProperty(GENERATE_GLOBAL_PROP,
             Boolean.toString(generateGlobalTypes.isSelected()));
-    properties.setProperty(NUMBER_TO_GLOBAL,
+    properties.setProperty(NUMBER_TO_GLOBAL_PROP,
             ((Integer) countToGlobal.getValue()).toString());
-    properties.setProperty(SPACES_PER_INDENT,
+    properties.setProperty(SPACES_PER_INDENT_PROP,
             ((Integer) spacesPerIndent.getValue()).toString());
-    properties.setProperty(TYPENAME_PREFIX,
+    properties.setProperty(TYPENAME_PREFIX_PROP,
             typenamePrefix.getText());
-    properties.setProperty(TYPENAME_POSTFIX,
+    properties.setProperty(TYPENAME_POSTFIX_PROP,
             typenamePostfix.getText());
   }
 }

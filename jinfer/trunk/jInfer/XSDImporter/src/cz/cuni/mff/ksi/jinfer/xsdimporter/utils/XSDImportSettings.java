@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 reseto
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,7 +41,7 @@ public final class XSDImportSettings {
    * @return Selected parser.
    */
   public static XSDParser getParser() {
-    return ModuleSelectionHelper.lookupImpl(XSDParser.class, PROPERTIES.getProperty(XSDImportPropertiesPanel.PARSER));
+    return ModuleSelectionHelper.lookupImpl(XSDParser.class, PROPERTIES.getProperty(XSDImportPropertiesPanel.PARSER_PROP));
   }
 
   /**
@@ -49,15 +49,15 @@ public final class XSDImportSettings {
    * @return True if verbose setting enabled, else false. False on error.
    */
   public static boolean isVerbose() {
-    return Boolean.parseBoolean(PROPERTIES.getProperty(XSDImportPropertiesPanel.VERBOSE_INFO, "false"));
+    return Boolean.parseBoolean(PROPERTIES.getProperty(XSDImportPropertiesPanel.VERBOSE_INFO_PROP, XSDImportPropertiesPanel.VERBOSE_INFO_DEFAULT));
   }
 
   /**
    * Get current log level for module XSD Importer. On error, or by default this method returns root log level.
    * @return Current log level for XSD Importer.
    */
-  public static Level logLevel() {
-    return Level.toLevel(PROPERTIES.getProperty(XSDImportPropertiesPanel.LOG_LEVEL), Logger.getRootLogger().getLevel());
+  public static Level getLogLevel() {
+    return Level.toLevel(PROPERTIES.getProperty(XSDImportPropertiesPanel.LOG_LEVEL_PROP, XSDImportPropertiesPanel.LOG_LEVEL_DEFAULT), Logger.getRootLogger().getLevel());
   }
 
   /**
@@ -66,7 +66,7 @@ public final class XSDImportSettings {
    * By default this setting is enabled.
    * @return True if "Stop on error" checkbox is checked, else false. True if exception occurs.
    */
-  public static boolean stopOnError() {
-    return Boolean.parseBoolean(PROPERTIES.getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR, "true"));
+  public static boolean isStopOnError() {
+    return Boolean.parseBoolean(PROPERTIES.getProperty(XSDImportPropertiesPanel.STOP_ON_ERROR_PROP, XSDImportPropertiesPanel.STOP_ON_ERROR_DEFAULT));
   }
 }

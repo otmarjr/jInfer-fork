@@ -33,7 +33,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * A basic implementation of XSD exporter.
- * 
+ *
  * @author riacik
  */
 @ServiceProvider(service = SchemaGenerator.class)
@@ -83,7 +83,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
 
     final Properties properties = RunningProject.getActiveProjectProps(XSDExportPropertiesPanel.NAME);
 
-    final int spacesPerIndent = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.SPACES_PER_INDENT, String.valueOf(XSDExportPropertiesPanel.SPACES_PER_INDENT_DEFAULT)));
+    final int spacesPerIndent = Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.SPACES_PER_INDENT_PROP, String.valueOf(XSDExportPropertiesPanel.SPACES_PER_INDENT_DEFAULT)));
     final Indentator indentator = new Indentator(spacesPerIndent);
 
     // Generate head of a new XSD.
@@ -91,8 +91,8 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     indentator.indent("<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n");
     indentator.indent(GENERATED_SUBSTITUTION_STRING);
 
-    final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(XSDExportPropertiesPanel.GENERATE_GLOBAL, String.valueOf(XSDExportPropertiesPanel.GENERATE_GLOBAL_DEFAULT)));
-    final int numberToGlobal = generateGlobal ? Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL, String.valueOf(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_DEFAULT))) : 0;
+    final boolean generateGlobal = Boolean.parseBoolean(properties.getProperty(XSDExportPropertiesPanel.GENERATE_GLOBAL_PROP, String.valueOf(XSDExportPropertiesPanel.GENERATE_GLOBAL_DEFAULT)));
+    final int numberToGlobal = generateGlobal ? Integer.parseInt(properties.getProperty(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_PROP, String.valueOf(XSDExportPropertiesPanel.NUMBER_TO_GLOBAL_DEFAULT))) : 0;
     final Preprocessor preprocessor = new Preprocessor(grammar, numberToGlobal);
     final PreprocessingResult preprocessingResult = preprocessor.getResult();
 

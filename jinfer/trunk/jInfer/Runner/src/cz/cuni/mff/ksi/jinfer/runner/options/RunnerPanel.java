@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
@@ -37,11 +38,11 @@ import org.openide.util.NbPreferences;
 public final class RunnerPanel extends JPanel {
 
   private static final long serialVersionUID = 3534679876l;
-  public static final String OUTPUT_SHOW = "output.show";
-  public static final String SCHEMA_OPEN = "schema.open";
-  public static final String NAME_PATTERN = "name.pattern";
+  public static final String OUTPUT_SHOW_PROP = "output.show";
   public static final boolean OUTPUT_SHOW_DEFAULT = false;
+  public static final String SCHEMA_OPEN_PROP = "schema.open";
   public static final boolean SCHEMA_OPEN_DEFAULT = true;
+  public static final String NAME_PATTERN_PROP = "name.pattern";
   public static final String NAME_PATTERN_DEFAULT = "generated-schema{n}";
   public static final String RULE_DISPLAYER_DEFAULT = "TreeRuleDisplayer";
 
@@ -283,12 +284,13 @@ public final class RunnerPanel extends JPanel {
    * Load previously entered values into the fields.
    */
   public void load() {
-    openSchema.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(SCHEMA_OPEN, SCHEMA_OPEN_DEFAULT));
-    showOutputWindow.setSelected(NbPreferences.forModule(RunnerPanel.class).getBoolean(OUTPUT_SHOW, OUTPUT_SHOW_DEFAULT));
-    namePattern.setText(NbPreferences.forModule(RunnerPanel.class).get(NAME_PATTERN, NAME_PATTERN_DEFAULT));
+    final Preferences p = NbPreferences.forModule(RunnerPanel.class);
+    openSchema.setSelected(p.getBoolean(SCHEMA_OPEN_PROP, SCHEMA_OPEN_DEFAULT));
+    showOutputWindow.setSelected(p.getBoolean(OUTPUT_SHOW_PROP, OUTPUT_SHOW_DEFAULT));
+    namePattern.setText(p.get(NAME_PATTERN_PROP, NAME_PATTERN_DEFAULT));
 
     ruleDisplayerCombo.setModel(new DefaultComboBoxModel(ModuleSelectionHelper.lookupImpls(RuleDisplayer.class).toArray()));
-    final String ruleDisplayerName = NbPreferences.forModule(RuleDisplayer.class).get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, RULE_DISPLAYER_DEFAULT);
+    final String ruleDisplayerName = p.get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, RULE_DISPLAYER_DEFAULT);
     ruleDisplayerCombo.setSelectedItem(ModuleSelectionHelper.lookupImpl(RuleDisplayer.class, ruleDisplayerName));
   }
 
@@ -296,16 +298,17 @@ public final class RunnerPanel extends JPanel {
    * Save entered values of fields.
    */
   public void store() {
-    NbPreferences.forModule(RunnerPanel.class).putBoolean(SCHEMA_OPEN, openSchema.isSelected());
-    NbPreferences.forModule(RunnerPanel.class).putBoolean(OUTPUT_SHOW, showOutputWindow.isSelected());
+    final Preferences p = NbPreferences.forModule(RunnerPanel.class);
+    p.putBoolean(SCHEMA_OPEN_PROP, openSchema.isSelected());
+    p.putBoolean(OUTPUT_SHOW_PROP, showOutputWindow.isSelected());
     if (namePattern.getText().trim().isEmpty()) {
       namePattern.setText(NAME_PATTERN_DEFAULT);
     }
 
-    NbPreferences.forModule(RunnerPanel.class).put(NAME_PATTERN, namePattern.getText());
+    p.put(NAME_PATTERN_PROP, namePattern.getText());
 
     final String ruleDisplayerName = ((NamedModule) ruleDisplayerCombo.getSelectedItem()).getName();
-    NbPreferences.forModule(RuleDisplayer.class).put(RuleDisplayer.RULE_DISPLAYER_PROPERTY, ruleDisplayerName);
+    p.put(RuleDisplayer.RULE_DISPLAYER_PROPERTY, ruleDisplayerName);
   }
 
   /**

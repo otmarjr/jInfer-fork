@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,18 +38,18 @@ import org.openide.util.NbPreferences;
 public class RulePainter {
 
   /** Maximum rules drawn (in each cluster). */
-  private final int maxRules;
+  private final int maxRules = NbPreferences.forModule(BasicRuleDisplayerPanel.class)
+      .getInt(BasicRuleDisplayerPanel.MAX_RULES_PROP, BasicRuleDisplayerPanel.MAX_RULES_DEFAULT);
   private final Component root;
   private Image image;
 
   /**
    * Full constructor.
-   * 
+   *
    * @param root Root component, in which rules will be rendered.
    */
   public RulePainter(final Component root) {
     this.root = root;
-    maxRules = NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("max.rules", 50);
   }
 
   /**

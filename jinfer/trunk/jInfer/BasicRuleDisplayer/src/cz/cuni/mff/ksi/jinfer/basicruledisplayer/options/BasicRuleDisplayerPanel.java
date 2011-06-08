@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.basicruledisplayer.options;
 
 import cz.cuni.mff.ksi.jinfer.basicruledisplayer.logic.Utils;
 import java.awt.Color;
+import java.util.prefs.Preferences;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import org.openide.util.NbPreferences;
@@ -31,6 +32,25 @@ import org.openide.util.NbPreferences;
 public final class BasicRuleDisplayerPanel extends JPanel {
 
   private static final long serialVersionUID = 1211214L;
+
+  public static final String MAX_PANELS_PROP = "max.panels";
+  public static final int MAX_PANELS_DEFAULT = 8;
+  public static final String NESTING_LEVEL_PROP = "nesting.level";
+  public static final int NESTING_LEVEL_DEFAULT = 25;
+  public static final String MAX_RULES_PROP = "max.rules";
+  public static final int MAX_RULES_DEFAULT = 50;
+  public static final String MARGIN_PROP = "margin";
+  public static final int MARGIN_DEFAULT = 2;
+  public static final String COLOR_ELEMENT_PROP = "element.color";
+  public static final Color COLOR_ELEMENT_DEFAULT = Color.gray;
+  public static final String COLOR_ATTRIBUTE_PROP = "attribute.color";
+  public static final Color COLOR_ATTRIBUTE_DEFAULT = Color.blue;
+  public static final String COLOR_SIMPLE_DATA_PROP = "simple.data.color";
+  public static final Color COLOR_SIMPLE_DATA_DEFAULT = Color.black;
+  public static final String COLOR_CONCATENATION_PROP = "concatenation.color";
+  public static final Color COLOR_CONCATENATION_DEFAULT = Color.red;
+  public static final String COLOR_ALTERNATION_PROP = "alternation.color";
+  public static final Color COLOR_ALTERNATION_DEFAULT = Color.yellow;
 
   public BasicRuleDisplayerPanel() {
     super();
@@ -464,11 +484,11 @@ public final class BasicRuleDisplayerPanel extends JPanel {
   }//GEN-LAST:event_panelSimpleDataMouseClicked
 
   private void resetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetActionPerformed
-    panelElement.setBackground(Utils.COLOR_ELEMENT);
-    panelAttribute.setBackground(Utils.COLOR_ATTRIBUTE);
-    panelSimpleData.setBackground(Utils.COLOR_SIMPLE_DATA);
-    panelConcatenation.setBackground(Utils.COLOR_CONCATENATION);
-    panelAlternation.setBackground(Utils.COLOR_ALTERNATION);
+    panelElement.setBackground(COLOR_ELEMENT_DEFAULT);
+    panelAttribute.setBackground(COLOR_ATTRIBUTE_DEFAULT);
+    panelSimpleData.setBackground(COLOR_SIMPLE_DATA_DEFAULT);
+    panelConcatenation.setBackground(COLOR_CONCATENATION_DEFAULT);
+    panelAlternation.setBackground(COLOR_ALTERNATION_DEFAULT);
   }//GEN-LAST:event_resetActionPerformed
 
   private void panelConcatenationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelConcatenationMouseClicked
@@ -486,10 +506,11 @@ public final class BasicRuleDisplayerPanel extends JPanel {
   }//GEN-LAST:event_panelAlternationMouseClicked
 
   public void load() {
-    maxPanels.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("max.panels", 8));
-    nestingLevel.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("nesting.level", 25));
-    maxRules.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("max.rules", 50));
-    margin.setValue(NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("margin", 2));
+    final Preferences p = NbPreferences.forModule(BasicRuleDisplayerPanel.class);
+    maxPanels.setValue(p.getInt(MAX_PANELS_PROP, MAX_PANELS_DEFAULT));
+    nestingLevel.setValue(p.getInt(NESTING_LEVEL_PROP, NESTING_LEVEL_DEFAULT));
+    maxRules.setValue(p.getInt(MAX_RULES_PROP, MAX_RULES_DEFAULT));
+    margin.setValue(p.getInt(MARGIN_PROP, MARGIN_DEFAULT));
 
     panelElement.setBackground(Utils.getColorElement());
     panelAttribute.setBackground(Utils.getColorAttribute());
@@ -499,16 +520,17 @@ public final class BasicRuleDisplayerPanel extends JPanel {
   }
 
   public void store() {
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("max.panels", ((Integer) maxPanels.getValue()).intValue());
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("nesting.level", ((Integer) nestingLevel.getValue()).intValue());
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("max.rules", ((Integer) maxRules.getValue()).intValue());
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).putInt("margin", ((Integer) margin.getValue()).intValue());
+    final Preferences p = NbPreferences.forModule(BasicRuleDisplayerPanel.class);
+    p.putInt(MAX_PANELS_PROP, ((Integer) maxPanels.getValue()).intValue());
+    p.putInt(NESTING_LEVEL_PROP, ((Integer) nestingLevel.getValue()).intValue());
+    p.putInt(MAX_RULES_PROP, ((Integer) maxRules.getValue()).intValue());
+    p.putInt(MARGIN_PROP, ((Integer) margin.getValue()).intValue());
 
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("element.color", String.valueOf(panelElement.getBackground().getRGB()));
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("attribute.color", String.valueOf(panelAttribute.getBackground().getRGB()));
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("simple.data.color", String.valueOf(panelSimpleData.getBackground().getRGB()));
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("concatenation.color", String.valueOf(panelConcatenation.getBackground().getRGB()));
-    NbPreferences.forModule(BasicRuleDisplayerPanel.class).put("alternation.color", String.valueOf(panelAlternation.getBackground().getRGB()));
+    p.put(COLOR_ELEMENT_PROP, String.valueOf(panelElement.getBackground().getRGB()));
+    p.put(COLOR_ATTRIBUTE_PROP, String.valueOf(panelAttribute.getBackground().getRGB()));
+    p.put(COLOR_SIMPLE_DATA_PROP, String.valueOf(panelSimpleData.getBackground().getRGB()));
+    p.put(COLOR_CONCATENATION_PROP, String.valueOf(panelConcatenation.getBackground().getRGB()));
+    p.put(COLOR_ALTERNATION_PROP, String.valueOf(panelAlternation.getBackground().getRGB()));
   }
 
   public boolean valid() {

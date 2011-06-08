@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 sviro
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,13 +37,13 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   private static final long serialVersionUID = 784463434L;
   public static final String NAME = "moduleselector";
   public static final String DISPLAY_NAME = "Module selection";
-  public static final String INITIAL_GRAMMAR = "initialgrammar";
-  public static final String SIMPLIFIER = "simplifier";
-  public static final String SCHEMA_GENERATOR = "schemagenerator";
 
-  public static final String DEFAULT_I_G_G = "Basic_IG_Generator";
-  public static final String DEFAULT_SIMPL = "TwoStepSimplifier";
-  public static final String DEFAULT_SCHEMA_G = "Basic_XSD_exporter";
+  public static final String IGG_PROP = "initialgrammar";
+  public static final String IGG_DEFAULT = "Basic_IG_Generator";
+  public static final String SIMPLIFIER_PROP = "simplifier";
+  public static final String SIMPLIFIER_DEFAULT = "TwoStepSimplifier";
+  public static final String SCHEMAGEN_PROP = "schemagenerator";
+  public static final String SCHEMAGEN_DEFAULT = "Basic_XSD_exporter";
 
   public ModuleSelectionPropertiesPanel(final Properties properties) {
     super(properties);
@@ -151,18 +151,18 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
     schemaGenerator.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupImpls(SchemaGenerator.class).toArray()));
 
-    initialGrammar.setSelectedItem(ModuleSelectionHelper.lookupImpl(IGGenerator.class, properties.getProperty(INITIAL_GRAMMAR, DEFAULT_I_G_G)));
-    simplifier.setSelectedItem(ModuleSelectionHelper.lookupImpl(Simplifier.class, properties.getProperty(SIMPLIFIER, DEFAULT_SIMPL)));
-    schemaGenerator.setSelectedItem(ModuleSelectionHelper.lookupImpl(SchemaGenerator.class, properties.getProperty(SCHEMA_GENERATOR, DEFAULT_SCHEMA_G)));
+    initialGrammar.setSelectedItem(ModuleSelectionHelper.lookupImpl(IGGenerator.class, properties.getProperty(IGG_PROP, IGG_DEFAULT)));
+    simplifier.setSelectedItem(ModuleSelectionHelper.lookupImpl(Simplifier.class, properties.getProperty(SIMPLIFIER_PROP, SIMPLIFIER_DEFAULT)));
+    schemaGenerator.setSelectedItem(ModuleSelectionHelper.lookupImpl(SchemaGenerator.class, properties.getProperty(SCHEMAGEN_PROP, SCHEMAGEN_DEFAULT)));
   }
 
   @Override
   public void store() {
-    properties.setProperty(INITIAL_GRAMMAR,
+    properties.setProperty(IGG_PROP,
             ((NamedModule) initialGrammar.getSelectedItem()).getName());
-    properties.setProperty(SIMPLIFIER,
+    properties.setProperty(SIMPLIFIER_PROP,
             ((NamedModule) simplifier.getSelectedItem()).getName());
-    properties.setProperty(SCHEMA_GENERATOR,
+    properties.setProperty(SCHEMAGEN_PROP,
             ((NamedModule) schemaGenerator.getSelectedItem()).getName());
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables

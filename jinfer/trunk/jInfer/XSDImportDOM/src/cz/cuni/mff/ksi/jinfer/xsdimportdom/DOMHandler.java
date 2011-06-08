@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 reseto
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,7 +37,7 @@ import org.w3c.dom.NodeList;
  * Extracts information from existing DOM tree to create rule-trees.
  * Rule-trees are tree data structures, where vertices are instances of {@link Element }
  * and edges are the relations between them stored in {@link Regexp } instances within vertices.
- * Every vertex is a rule by itself, so in order to obtain IG rules, 
+ * Every vertex is a rule by itself, so in order to obtain IG rules,
  * one must extract all <code>Element</code>s from a rule-tree.
  * </p>
  * Please read package info.
@@ -79,7 +79,7 @@ public class DOMHandler {
    * Construct this parser, set loglevel as defined in XSD Import properties.
    */
   public DOMHandler() {
-    LOG.setLevel(XSDImportSettings.logLevel());
+    LOG.setLevel(XSDImportSettings.getLogLevel());
   }
 
   /**
@@ -206,11 +206,11 @@ public class DOMHandler {
     final XSDTag tag = XSDTag.matchName(XSDUtility.trimNS(currentNode.getNodeName()));
 
     // RET is the Element that is returned from this recursive method
-    // most methods below use this instance of RET to store data in it, 
+    // most methods below use this instance of RET to store data in it,
     final Element ret = Element.getMutable();
     ret.getContext().addAll(context);
     ret.getMetadata().putAll(XSDUtility.prepareMetadata(interval));
-    
+
     // inspect self
     final Element self = inspectSelf(currentNode, tag, ret, context, visited, newContext, newVisited, interval);
     if (self != null) {

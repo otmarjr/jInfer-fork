@@ -90,11 +90,11 @@ public class Runner {
     final Properties projectProperties = RunningProject.getActiveProjectProps(ModuleSelectionPropertiesPanel.NAME);
 
     igGenerator = ModuleSelectionHelper.lookupImpl(IGGenerator.class,
-            projectProperties.getProperty(ModuleSelectionPropertiesPanel.INITIAL_GRAMMAR));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.IGG_PROP));
     simplifier = ModuleSelectionHelper.lookupImpl(Simplifier.class,
-            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER_PROP));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
-            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMA_GENERATOR, ModuleSelectionPropertiesPanel.DEFAULT_SCHEMA_G));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
   }
 
   /**

@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 reseto
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -58,21 +58,23 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
   /**
    * Property name of the selected parser.
    */
-  public static final String PARSER = "parser";
+  public static final String PARSER_PROP = "parser";
+  public static final String PARSER_DEFAULT = "DOMParser";
   /**
    * Property name of the stop on error setting.
    */
-  public static final String STOP_ON_ERROR = "stop.on.error";
+  public static final String STOP_ON_ERROR_PROP = "stop.on.error";
+  public static final String STOP_ON_ERROR_DEFAULT = "true";
   /**
    * Property name of the verbose info setting.
    */
-  public static final String VERBOSE_INFO = "verbose.info";
+  public static final String VERBOSE_INFO_PROP = "verbose.info";
+  public static final String VERBOSE_INFO_DEFAULT = "false";
   /**
    * Property name of the selected logging level setting.
    */
-  public static final String LOG_LEVEL = "log.level";
-
-  private static final String DEFAULT_PARSER_NAME = "DOMParser";
+  public static final String LOG_LEVEL_PROP = "log.level";
+  public static final String LOG_LEVEL_DEFAULT = LogLevel.WARN.toString();
 
   /** Creates new form XSDImportPropertiesPanel */
   public XSDImportPropertiesPanel(final Properties properties) {
@@ -230,13 +232,13 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void store() {
-    properties.setProperty(PARSER,
+    properties.setProperty(PARSER_PROP,
             ((NamedModule) parserComboBox.getSelectedItem()).getName());
-    properties.setProperty(LOG_LEVEL,
+    properties.setProperty(LOG_LEVEL_PROP,
             (String) logLevelCombo.getSelectedItem());
-    properties.setProperty(STOP_ON_ERROR,
+    properties.setProperty(STOP_ON_ERROR_PROP,
             Boolean.toString(stopOnError.isSelected()));
-    properties.setProperty(VERBOSE_INFO,
+    properties.setProperty(VERBOSE_INFO_PROP,
             Boolean.toString(verbose.isSelected()));
   }
 
@@ -245,14 +247,14 @@ public class XSDImportPropertiesPanel extends AbstractPropertiesPanel {
     final List<? extends NamedModule> names = ModuleSelectionHelper.lookupImpls(XSDParser.class);
     parserComboBox.setModel(new DefaultComboBoxModel(names.toArray()));
 
-    parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupImpl(XSDParser.class, properties.getProperty(PARSER, DEFAULT_PARSER_NAME)));
+    parserComboBox.setSelectedItem(ModuleSelectionHelper.lookupImpl(XSDParser.class, properties.getProperty(PARSER_PROP, PARSER_DEFAULT)));
 
-    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL, LogLevel.WARN.toString()));
+    logLevelCombo.setSelectedItem(properties.getProperty(LOG_LEVEL_PROP, LOG_LEVEL_DEFAULT));
 
     stopOnError.setSelected(
-            Boolean.parseBoolean(properties.getProperty(STOP_ON_ERROR, "true")));
+            Boolean.parseBoolean(properties.getProperty(STOP_ON_ERROR_PROP, STOP_ON_ERROR_DEFAULT)));
     verbose.setSelected(
-            Boolean.parseBoolean(properties.getProperty(VERBOSE_INFO, "false")));
+            Boolean.parseBoolean(properties.getProperty(VERBOSE_INFO_PROP, VERBOSE_INFO_DEFAULT)));
   }
 
 

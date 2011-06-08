@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,7 +21,7 @@ import java.util.Properties;
 
 /**
  * Properties panel of the Basic IGG module.
- * 
+ *
  * @author vektor
  */
 @SuppressWarnings("PMD.SingularField")
@@ -30,9 +30,12 @@ public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {
   private static final long serialVersionUID = 18746542132L;
 
   public static final String NAME = "basicIGG";
-  public static final String KEEP_ATTRIBUTES = "keep.attributes";
-  public static final String KEEP_SIMPLE_DATA = "keep.simple.data";
-  public static final String STOP_ON_ERROR = "stop.on.error";
+  public static final String KEEP_ATTRIBUTES_PROP = "keep.attributes";
+  public static final String KEEP_ATTRIBUTES_DEFAULT = "true";
+  public static final String KEEP_SIMPLE_DATA_PROP = "keep.simple.data";
+  public static final String KEEP_SIMPLE_DATA_DEFAULT = "true";
+  public static final String STOP_ON_ERROR_PROP = "stop.on.error";
+  public static final String STOP_ON_ERROR_DEFAULT = "true";
 
   /** Creates new form BasicIGGPropertiesPanel */
   public BasicIGGPropertiesPanel(final Properties properties) {
@@ -107,24 +110,24 @@ public class BasicIGGPropertiesPanel extends AbstractPropertiesPanel {
 
   @Override
   public void store() {
-    properties.setProperty(KEEP_ATTRIBUTES,
+    properties.setProperty(KEEP_ATTRIBUTES_PROP,
             Boolean.toString(keepAttributeValues.isSelected()));
-    properties.setProperty(KEEP_SIMPLE_DATA,
+    properties.setProperty(KEEP_SIMPLE_DATA_PROP,
             Boolean.toString(keepSimpleData.isSelected()));
-    properties.setProperty(STOP_ON_ERROR,
+    properties.setProperty(STOP_ON_ERROR_PROP,
             Boolean.toString(stopOnError.isSelected()));
   }
 
   @Override
   public void load() {
     keepAttributeValues.setSelected(Boolean.parseBoolean(properties
-            .getProperty(KEEP_ATTRIBUTES, "true")));
+            .getProperty(KEEP_ATTRIBUTES_PROP, KEEP_ATTRIBUTES_DEFAULT)));
     keepSimpleData.setSelected(Boolean.parseBoolean(properties
-            .getProperty(KEEP_SIMPLE_DATA, "true")));
+            .getProperty(KEEP_SIMPLE_DATA_PROP, KEEP_SIMPLE_DATA_DEFAULT)));
     stopOnError.setSelected(Boolean.parseBoolean(properties
-            .getProperty(STOP_ON_ERROR, "true")));
+            .getProperty(STOP_ON_ERROR_PROP, STOP_ON_ERROR_DEFAULT)));
   }
-  
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel fill;
   private javax.swing.JCheckBox keepAttributeValues;

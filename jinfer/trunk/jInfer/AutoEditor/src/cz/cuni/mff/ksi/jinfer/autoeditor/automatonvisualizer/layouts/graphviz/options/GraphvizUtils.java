@@ -15,7 +15,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.properties;
+package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.graphviz.options;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import org.openide.util.NbPreferences;
@@ -27,9 +27,6 @@ import org.openide.util.NbPreferences;
  */
 public final class GraphvizUtils {
 
-  public static final String BINARY_PATH_PROP = "dot.binary";
-  public static final String BINARY_PATH_DEFAULT = "";
-
   private GraphvizUtils() {};
 
   /**
@@ -38,7 +35,7 @@ public final class GraphvizUtils {
    * @return Path to graphviz binary if it's saved in options, othervise returns empty String.
    */
   public static String getPath() {
-    return NbPreferences.forModule(GraphvizLayoutPanel.class).get(BINARY_PATH_PROP, BINARY_PATH_DEFAULT);
+    return NbPreferences.forModule(GraphvizLayoutPanel.class).get(GraphvizLayoutPanel.BINARY_PATH_PROP, GraphvizLayoutPanel.BINARY_PATH_DEFAULT);
   }
 
   /**

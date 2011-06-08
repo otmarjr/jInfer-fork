@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,18 +30,19 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 import org.openide.util.NbPreferences;
 
 /**
  * Class for painting XML nodes.
- * 
+ *
  * @author vektor
  */
 public class NodePainter {
 
   /** Maximum nesting level. */
   private final int maxLevel;
-  
+
   private final List<AbstractStructuralNode> visited = new ArrayList<AbstractStructuralNode>();
 
   private final Graphics2D graphics;
@@ -54,14 +55,15 @@ public class NodePainter {
    * @param graphics Graphics object used to get font metrics.
    */
   public NodePainter(final Graphics2D graphics) {
-    this.maxLevel = NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("nesting.level", 25);
-    this.margin = NbPreferences.forModule(BasicRuleDisplayerPanel.class).getInt("margin", 2);
+    final Preferences p = NbPreferences.forModule(BasicRuleDisplayerPanel.class);
+    this.maxLevel = p.getInt(BasicRuleDisplayerPanel.NESTING_LEVEL_PROP, BasicRuleDisplayerPanel.NESTING_LEVEL_DEFAULT);
+    this.margin = p.getInt(BasicRuleDisplayerPanel.MARGIN_PROP, BasicRuleDisplayerPanel.MARGIN_DEFAULT);
     this.graphics = graphics;
   }
 
   /**
    * Renders an abstract node and returns its image representation.
-   * 
+   *
    * @param r Node to be rendered. Must not be null.
    * @param level Level of recursion - how deep in the tree are we.
    * @return Image representation of this node. If the level is higher that the
@@ -160,7 +162,7 @@ public class NodePainter {
       width += Utils.getWidth(img) + margin;
       height = Math.max(height, Utils.getHeight(img));
     }
-    final BufferedImage concatRet = Utils.getImage(width + margin, 
+    final BufferedImage concatRet = Utils.getImage(width + margin,
             height + 2 * margin,
             Utils.getColorElement());
     final Graphics2D g = concatRet.createGraphics();
@@ -257,7 +259,7 @@ public class NodePainter {
       width = Math.max(width, Utils.getWidth(img));
       height += Utils.getHeight(img) + margin;
     }
-    final BufferedImage altRet = Utils.getImage(width + 2 * margin, 
+    final BufferedImage altRet = Utils.getImage(width + 2 * margin,
             height + margin,
             Utils.getColorAlternation());
     final Graphics2D g = altRet.createGraphics();
@@ -282,7 +284,7 @@ public class NodePainter {
       width += Utils.getWidth(img) + margin;
       height = Math.max(height, Utils.getHeight(img));
     }
-    final BufferedImage concatRet = Utils.getImage(width + margin, 
+    final BufferedImage concatRet = Utils.getImage(width + margin,
             height + 2 * margin,
             Utils.getColorConcatenation());
     final Graphics2D g = concatRet.createGraphics();

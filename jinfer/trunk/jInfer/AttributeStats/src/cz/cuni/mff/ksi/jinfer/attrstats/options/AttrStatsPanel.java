@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
@@ -307,17 +308,19 @@ public final class AttrStatsPanel extends JPanel {
   }//GEN-LAST:event_browseActionPerformed
 
   public void load() {
+    final Preferences p = NbPreferences.forModule(AttrStatsPanel.class);
     binaryPath.setText(GlpkUtils.getPath());
-    timeLimit.setValue(NbPreferences.forModule(AttrStatsPanel.class).getInt(TIME_LIMIT_PROP, TIME_LIMIT_DEFAULT));
-    alpha.setValue(NbPreferences.forModule(AttrStatsPanel.class).getFloat(ALPHA_PROP, ALPHA_DEFAULT));
-    beta.setValue(NbPreferences.forModule(AttrStatsPanel.class).getFloat(BETA_PROP, BETA_DEFAULT));
+    timeLimit.setValue(p.getInt(TIME_LIMIT_PROP, TIME_LIMIT_DEFAULT));
+    alpha.setValue(p.getFloat(ALPHA_PROP, ALPHA_DEFAULT));
+    beta.setValue(p.getFloat(BETA_PROP, BETA_DEFAULT));
   }
 
   public void store() {
-    NbPreferences.forModule(AttrStatsPanel.class).put(BINARY_PATH_PROP, binaryPath.getText());
-    NbPreferences.forModule(AttrStatsPanel.class).putInt(TIME_LIMIT_PROP, ((Integer)timeLimit.getValue()).intValue());
-    NbPreferences.forModule(AttrStatsPanel.class).putFloat(ALPHA_PROP, ((Number)alpha.getValue()).floatValue());
-    NbPreferences.forModule(AttrStatsPanel.class).putFloat(BETA_PROP, ((Number)beta.getValue()).floatValue());
+    final Preferences p = NbPreferences.forModule(AttrStatsPanel.class);
+    p.put(BINARY_PATH_PROP, binaryPath.getText());
+    p.putInt(TIME_LIMIT_PROP, ((Integer)timeLimit.getValue()).intValue());
+    p.putFloat(ALPHA_PROP, ((Number)alpha.getValue()).floatValue());
+    p.putFloat(BETA_PROP, ((Number)beta.getValue()).floatValue());
   }
 
   public boolean valid() {

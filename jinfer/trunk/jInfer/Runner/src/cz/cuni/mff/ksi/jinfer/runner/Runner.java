@@ -165,15 +165,15 @@ public class Runner {
     final String commentedSchema = getCommentedSchema(schema);
 
     final boolean openSchema = NbPreferences.forModule(RunnerPanel.class).getBoolean(
-            RunnerPanel.SCHEMA_OPEN, RunnerPanel.SCHEMA_OPEN_DEFAULT);
+            RunnerPanel.SCHEMA_OPEN_PROP, RunnerPanel.SCHEMA_OPEN_DEFAULT);
 
-    final String namePattern = NbPreferences.forModule(RunnerPanel.class).get(RunnerPanel.NAME_PATTERN, RunnerPanel.NAME_PATTERN_DEFAULT);
+    final String namePattern = NbPreferences.forModule(RunnerPanel.class).get(RunnerPanel.NAME_PATTERN_PROP, RunnerPanel.NAME_PATTERN_DEFAULT);
 
     RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class).addOutput(
             namePattern, commentedSchema, extension, openSchema);
 
     final boolean showOutput = NbPreferences.forModule(RunnerPanel.class).getBoolean(
-            RunnerPanel.OUTPUT_SHOW, RunnerPanel.OUTPUT_SHOW_DEFAULT);
+            RunnerPanel.OUTPUT_SHOW_PROP, RunnerPanel.OUTPUT_SHOW_DEFAULT);
 
     final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer result", true);
     ioResult.getOut().println(commentedSchema);

@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,34 +25,32 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.UIManager;
+import org.apache.log4j.Logger;
 import org.openide.util.NbPreferences;
 
 /**
  * Some rule painter utils.
- * 
+ *
  * @author vektor
  */
 public final class Utils {
 
   private Utils() { }
 
-  public static final Color COLOR_ELEMENT = Color.gray;
-  public static final Color COLOR_ATTRIBUTE = Color.blue;
-  public static final Color COLOR_SIMPLE_DATA = Color.black;
-  public static final Color COLOR_CONCATENATION = Color.red;
-  public static final Color COLOR_ALTERNATION = Color.yellow;
+  private static final Logger LOG = Logger.getLogger(Utils.class);
 
-  public static final Image LAMBDA = loadStatic("cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/lambda.png");
-  public static final Image DOTS = loadStatic("cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/dots.png");
-  public static final Image ARROW = loadStatic("cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/arrow.png");
+  public static final Image LAMBDA = loadStatic("lambda.png");
+  public static final Image DOTS = loadStatic("dots.png");
+  public static final Image ARROW = loadStatic("arrow.png");
 
   /**
    * Returns the background color for an element from the options.
-   * 
+   *
    * @return Background color for an element.
    */
   public static Color getColorElement() {
-    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("element.color", String.valueOf(COLOR_ELEMENT.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get(BasicRuleDisplayerPanel.COLOR_ELEMENT_PROP,
+            String.valueOf(BasicRuleDisplayerPanel.COLOR_ELEMENT_DEFAULT.getRGB())));
   }
 
   /**
@@ -61,7 +59,8 @@ public final class Utils {
    * @return Background color for an attribute.
    */
   public static Color getColorAttribute() {
-    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("attribute.color", String.valueOf(COLOR_ATTRIBUTE.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get(BasicRuleDisplayerPanel.COLOR_ATTRIBUTE_PROP,
+            String.valueOf(BasicRuleDisplayerPanel.COLOR_ATTRIBUTE_DEFAULT.getRGB())));
   }
 
   /**
@@ -70,7 +69,8 @@ public final class Utils {
    * @return Background color for simple data.
    */
   public static Color getColorSimpleData() {
-    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("simple.data.color", String.valueOf(COLOR_SIMPLE_DATA.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get(BasicRuleDisplayerPanel.COLOR_SIMPLE_DATA_PROP,
+            String.valueOf(BasicRuleDisplayerPanel.COLOR_SIMPLE_DATA_DEFAULT.getRGB())));
   }
 
   /**
@@ -79,7 +79,8 @@ public final class Utils {
    * @return Background color for a concatenation.
    */
   public static Color getColorConcatenation() {
-    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("concatenation.color", String.valueOf(COLOR_CONCATENATION.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get(BasicRuleDisplayerPanel.COLOR_CONCATENATION_PROP,
+            String.valueOf(BasicRuleDisplayerPanel.COLOR_CONCATENATION_DEFAULT.getRGB())));
   }
 
   /**
@@ -88,9 +89,10 @@ public final class Utils {
    * @return Background color for an alternation.
    */
   public static Color getColorAlternation() {
-    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get("alternation.color", String.valueOf(COLOR_ALTERNATION.getRGB())));
+    return Color.decode(NbPreferences.forModule(BasicRuleDisplayerPanel.class).get(BasicRuleDisplayerPanel.COLOR_ALTERNATION_PROP,
+            String.valueOf(BasicRuleDisplayerPanel.COLOR_ALTERNATION_DEFAULT.getRGB())));
   }
-  
+
   /**
    * Returns the background color for the rule displayer.
    *
@@ -113,7 +115,7 @@ public final class Utils {
 
   /**
    * Return the background color for the specified node.
-   * 
+   *
    * @param n Node for which the background color should be found.
    * @return Background color based on the type of the node specified.
    */
@@ -130,7 +132,7 @@ public final class Utils {
 
   /**
    * Creates an image of specified dimension, filled with the background color.
-   * 
+   *
    * @param width Positive integer representing the width of the image.
    * @param height Positive integer representing the height of the image.
    * @return BufferedImage of specified dimension.
@@ -158,7 +160,7 @@ public final class Utils {
     g.fillRect(0, 0, width, height);
     return ret;
   }
-  
+
   /**
    * Returns the width of the specified image.
    *
@@ -179,8 +181,10 @@ public final class Utils {
 
   private static Image loadStatic(final String url) {
     try {
-      return ImageIO.read(Utils.class.getClassLoader().getResource(url));
+      return ImageIO.read(Utils.class.getClassLoader()
+              .getResource("cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/" + url));
     } catch (IOException ex) {
+      LOG.error("Problem while loading static image", ex);
       return null;
     }
   }

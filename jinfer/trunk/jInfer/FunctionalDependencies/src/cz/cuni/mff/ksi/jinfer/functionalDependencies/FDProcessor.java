@@ -29,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author sviro
  */
 @ServiceProvider(service = Processor.class)
-public class FDProcessor implements Processor{
+public class FDProcessor implements Processor<Element> {
 
     @Override
     public FolderType getFolder() {
@@ -49,6 +49,11 @@ public class FDProcessor implements Processor{
     @Override
     public List<Element> process(InputStream s) throws InterruptedException {
         return new ArrayList<Element>();
+    }
+    
+    @Override
+    public Class<?> getResultType() {
+        return Element.class;
     }
     
 }

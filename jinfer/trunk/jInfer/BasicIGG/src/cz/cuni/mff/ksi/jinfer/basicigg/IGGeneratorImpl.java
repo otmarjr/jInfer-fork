@@ -78,7 +78,7 @@ public class IGGeneratorImpl implements IGGenerator {
   public void start(final Input input, final IGGeneratorCallback callback)
           throws InterruptedException {
     // find processor mappings for all folders
-    final Map<FolderType, Map<String, Processor>> registeredProcessors = getRegisteredProcessors();
+    final Map<FolderType, Map<String, Processor<Element>>> registeredProcessors = getRegisteredProcessors();
 
     final List<Element> documentRules = new ArrayList<Element>();
     final List<Element> schemaQueryRules = new ArrayList<Element>();
@@ -143,7 +143,7 @@ public class IGGeneratorImpl implements IGGenerator {
    * @return List of IG rules. Empty, if there are no input files or an error occurs.
    */
   private static List<Element> getRulesFromInput(final Collection<File> files,
-          final Map<String, Processor> mappings) throws InterruptedException {
+          final Map<String, Processor<Element>> mappings) throws InterruptedException {
     if (BaseUtils.isEmpty(files)) {
       return new ArrayList<Element>(0);
     }
@@ -155,7 +155,7 @@ public class IGGeneratorImpl implements IGGenerator {
         throw new InterruptedException();
       }
       try {
-        final Processor p = getProcessorForExtension(
+        final Processor<Element> p = getProcessorForExtension(
                 FileUtils.getExtension(f.getAbsolutePath()),
                 mappings);
         if (p != null) {
@@ -176,8 +176,8 @@ public class IGGeneratorImpl implements IGGenerator {
     return ret;
   }
 
-  private static Processor getProcessorForExtension(final String extension,
-          final Map<String, Processor> mappings) {
+  private static Processor<Element> getProcessorForExtension(final String extension,
+          final Map<String, Processor<Element>> mappings) {
     if (mappings.containsKey(extension)) {
       return mappings.get(extension);
     }
@@ -189,21 +189,23 @@ public class IGGeneratorImpl implements IGGenerator {
 
   /**
    * Returns the map (folder - (extension - processor) ) of all processors
-   * installed in this NetBeans.
+   * installed in this NetBeans which process IG.
    */
-  private Map<FolderType, Map<String, Processor>> getRegisteredProcessors() {
-    final Map<FolderType, Map<String, Processor>> ret =
-            new HashMap<FolderType, Map<String, Processor>>();
+  private Map<FolderType, Map<String, Processor<Element>>> getRegisteredProcessors() {
+    final Map<FolderType, Map<String, Processor<Element>>> ret =
+            new HashMap<FolderType, Map<String, Processor<Element>>>();
 
     for (final FolderType ft : FolderType.values()) {
-      ret.put(ft, new HashMap<String, Processor>());
+      ret.put(ft, new HashMap<String, Processor<Element>>());
     }
 
     for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
-      if (p.processUndefined()) {
-        ret.get(p.getFolder()).put("*", p);
+      if (p.getResultType().equals(Element.class)) {
+        if (p.processUndefined()) {
+          ret.get(p.getFolder()).put("*", p);
+        }
+        ret.get(p.getFolder()).put(p.getExtension(), p);
       }
-      ret.get(p.getFolder()).put(p.getExtension(), p);
     }
 
     return ret;

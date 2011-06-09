@@ -16,20 +16,20 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import java.io.InputStream;
 import java.util.List;
 
 /**
- * Interface of any class that can take an InputStream and produce IG rules 
+ * Interface of any class that can take an InputStream and produce {@link List} of elements T
  * from it. The class must work as a singleton, subsequent calls to
  * {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor#process(InputStream)}
  * will be on the same instance.
  * 
+ * @param <T> Type of items returned in List by {@link #process(java.io.InputStream) } method.
  * @author vektor
  */
-public interface Processor {
+public interface Processor<T> {
 
   /**
    * Which folder does this processor operate on.
@@ -58,11 +58,17 @@ public interface Processor {
   boolean processUndefined();
 
   /**
-   * Returns the rules contained in the input.
+   * Returns the {@link List} of type defined for this processor which represents the input.
    * 
    * @param s Input of any arbitrary type.
    * @return Rules contained within. Empty list if there are no rules or an error occurs.
    * @throws InterruptedException When user interrupts the processing operation at any moment.
    */
-  List<Element> process(final InputStream s) throws InterruptedException;
+  List<T> process(final InputStream s) throws InterruptedException;
+  
+  /**
+   * Get {@link Class} of the type this processor returns by process method within {@link List}.
+   * @return {@link Class} of the type this processor returns by process method within {@link List}.
+   */
+  Class<?> getResultType();
 }

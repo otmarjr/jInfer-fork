@@ -39,7 +39,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author vektor
  */
 @ServiceProvider(service = Processor.class)
-public class XMLProcessor implements Processor {
+public class XMLProcessor implements Processor<Element> {
 
   private static final SAXParserFactory PARSER_FACTORY = SAXParserFactory.newInstance();
   private static final Logger LOG = Logger.getLogger(XMLProcessor.class);
@@ -84,4 +84,9 @@ public class XMLProcessor implements Processor {
       }
     }
   }
+  
+  @Override
+    public Class<?> getResultType() {
+        return Element.class;
+    }
 }

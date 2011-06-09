@@ -42,7 +42,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author vektor
  */
 @ServiceProvider(service = Processor.class)
-public class XPathProcessor implements Processor {
+public class XPathProcessor implements Processor<Element> {
 
   private static final Logger LOG = Logger.getLogger(XPathProcessor.class);
 
@@ -111,5 +111,10 @@ public class XPathProcessor implements Processor {
       }
     }
   }
+
+    @Override
+    public Class<?> getResultType() {
+        return Element.class;
+    }
 
 }

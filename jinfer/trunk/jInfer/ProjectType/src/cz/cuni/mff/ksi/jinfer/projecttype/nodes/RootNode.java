@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunAction;
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.RunRepairAction;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class RootNode extends AbstractNode {
     final List<Action> nodeActions = new ArrayList<Action>();
     nodeActions.add(new FilesAddAction(project));
     nodeActions.add(new RunAction(project));
+    nodeActions.add(new RunRepairAction(project));
     nodeActions.add(null); //separator
     nodeActions.add(CommonProjectActions.renameProjectAction());
     nodeActions.add(CommonProjectActions.moveProjectAction());

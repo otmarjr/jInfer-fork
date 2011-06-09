@@ -24,7 +24,9 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>cz.cuni.mff.ksi.jinfer.functionalDependencies</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

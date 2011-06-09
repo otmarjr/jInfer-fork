@@ -35,7 +35,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author reseto
  */
 @ServiceProvider(service = Processor.class)
-public class XSDProcessor implements Processor {
+public class XSDProcessor implements Processor<Element> {
 
   private static final Logger LOG = Logger.getLogger(XSDProcessor.class);
 
@@ -101,4 +101,9 @@ public class XSDProcessor implements Processor {
   public boolean processUndefined() {
     return false;
   }
+  
+  @Override
+    public Class<?> getResultType() {
+        return Element.class;
+    }
 }

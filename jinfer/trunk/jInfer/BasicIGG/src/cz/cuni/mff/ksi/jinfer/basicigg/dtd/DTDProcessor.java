@@ -45,7 +45,7 @@ import org.xmlmiddleware.schemas.dtds.ElementType;
  * @author vektor
  */
 @ServiceProvider(service = Processor.class)
-public class DTDProcessor implements Processor {
+public class DTDProcessor implements Processor<Element> {
 
   private static final Logger LOG = Logger.getLogger(DTDProcessor.class);
 
@@ -125,4 +125,9 @@ public class DTDProcessor implements Processor {
     }
     return attList;
   }
+  
+  @Override
+    public Class<?> getResultType() {
+        return Element.class;
+    }
 }

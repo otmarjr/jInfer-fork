@@ -52,6 +52,16 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
 
   /**
    * Create with factory of {@link MergeConditionTester} selected.
+   * Without parameters capability!
+   *
+   * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
+   */
+  public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory) {
+    this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
+  }
+  
+  /**
+   * Create with factory of {@link MergeConditionTester} selected.
    *
    * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
    * @param properties project properties (from which it takes parameter values).

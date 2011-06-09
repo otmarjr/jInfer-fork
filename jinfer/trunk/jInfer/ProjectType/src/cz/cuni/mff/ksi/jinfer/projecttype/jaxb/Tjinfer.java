@@ -47,7 +47,7 @@ public class Tjinfer {
     protected Tschemas schemas;
     @XmlElement(required = true)
     protected Tqueries queries;
-    @XmlElement(required = true)
+    @XmlElement(required = false)
     protected Tfds fds;
 
     /**

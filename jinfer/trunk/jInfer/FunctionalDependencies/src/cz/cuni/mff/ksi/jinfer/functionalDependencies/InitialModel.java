@@ -16,10 +16,30 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author sviro
  */
 public class InitialModel {
+
+  private final List<FD> functionalDependencies;
+
+  public InitialModel() {
+    functionalDependencies = new ArrayList<FD>();
+  }
+  
+  public void addFD(List<FD> fDs) {
+    functionalDependencies.addAll(fDs);
+  }
+
+  public List<FD> getFunctionalDependencies() {
+    return functionalDependencies;
+  }
+  
+  
   
 }

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.AttrStatsAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.ValidateAction;
 import java.io.File;
 import java.io.IOException;
@@ -77,9 +78,10 @@ public class FileNode extends FilterNode {
   @Override
   public Action[] getActions(final boolean context) {
     final Action[] actions = super.getActions(context);
-    Action[] result = new Action[actions.length + 1];
+    Action[] result = new Action[actions.length + 2];
 
     System.arraycopy(actions, 0, result, 0, actions.length);
+    result[result.length - 2] = AttrStatsAction.getInstance();
     result[result.length - 1] = ValidateAction.getInstance();
     return result;
   }

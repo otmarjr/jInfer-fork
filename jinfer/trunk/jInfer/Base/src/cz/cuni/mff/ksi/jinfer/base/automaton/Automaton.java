@@ -201,6 +201,7 @@ public class Automaton<T> {
       final Step<T> xStep= this.getOutStepOnSymbol(xState, symbol);
       if (xStep != null) {
         xStep.incUseCount();
+        xStep.incMinUseCount();
         xState= xStep.getDestination();
       } else {
         final State<T> newState= this.createNewState();

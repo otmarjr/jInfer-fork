@@ -147,9 +147,17 @@ public class Step<T> {
 
   /**
    * TODO anti comment
+   * @param anotherMinUseCount 
    */
   public void incMinUseCount(int anotherMinUseCount) {
     this.setMinUseCount(anotherMinUseCount + this.minUseCount);
+  }
+
+  /**
+   * TODO anti comment
+   */
+  public void incMinUseCount() {
+    this.incMinUseCount(1);
   }
   
   /**

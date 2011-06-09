@@ -116,33 +116,29 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
               new Step<Regexp<T>>(
               new Regexp<T>(
               symbol.getContent(), symbol.getChildren(),
-              symbol.getType(), RegexpInterval.getBounded(oldLoopStep.getMinUseCount(), oldLoopStep.getUseCount())),
+              symbol.getType(), RegexpInterval.getKleeneStar()),
               state,
               state,
-              1, 1);
+              oldLoopStep.getUseCount(), oldLoopStep.getMinUseCount());
       this.delta.get(state).remove(oldLoopStep);
       this.reverseDelta.get(state).remove(oldLoopStep);
       return newLoopStep;
     }
 
-    int max = Integer.MIN_VALUE;
-    int min = Integer.MAX_VALUE;
+    int max = 0;
+    int min = 0;
     for (Step<Regexp<T>> oldLoopStep : loopSteps) {
       loopChildren.add(oldLoopStep.getAcceptSymbol());
-      if (oldLoopStep.getUseCount() > max) {
-        max = oldLoopStep.getUseCount();
-      }
-      if (oldLoopStep.getMinUseCount() < min) {
-        min = oldLoopStep.getMinUseCount();
-      }
+      max+= oldLoopStep.getUseCount();
+      min+= oldLoopStep.getMinUseCount();
     }
 
-    final Regexp<T> loopRegexpAlt = Regexp.<T>getAlternation(loopChildren, RegexpInterval.getBounded(min, max));
+    final Regexp<T> loopRegexpAlt = Regexp.<T>getAlternation(loopChildren, RegexpInterval.getKleeneStar());
     for (Step<Regexp<T>> oldLoopStep : loopSteps) {
       this.delta.get(state).remove(oldLoopStep);
       this.reverseDelta.get(state).remove(oldLoopStep);
     }
-    newLoopStep = new Step<Regexp<T>>(loopRegexpAlt, state, state, 1, 1);
+    newLoopStep = new Step<Regexp<T>>(loopRegexpAlt, state, state, max, min);
     return newLoopStep;
   }
 
@@ -175,24 +171,20 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
         continue; // don't process buckets with only one member
       }
 
-      int max = Integer.MIN_VALUE;
-      int min = Integer.MAX_VALUE;
+      int max = 0;
+      int min = 0;
       /* collapse to alternation */
       final List<Regexp<T>> inStepRegexps = new LinkedList<Regexp<T>>();
       for (Step<Regexp<T>> inBucketStep : inStepBuckets.get(inBucketSourceState)) {
         inStepRegexps.add(inBucketStep.getAcceptSymbol());
-        if (inBucketStep.getUseCount() > max) {
-          max = inBucketStep.getUseCount();
-        }
-        if (inBucketStep.getMinUseCount() < min) {
-          min = inBucketStep.getMinUseCount();
-        }
+        max+= inBucketStep.getUseCount();
+        min+= inBucketStep.getMinUseCount();
         this.delta.get(inBucketSourceState).remove(inBucketStep);
         this.reverseDelta.get(state).remove(inBucketStep);
       }
       /* build up new instep with alternation regex */
-      final Regexp<T> newInRegexp = Regexp.<T>getAlternation(inStepRegexps, RegexpInterval.getBounded(min, max));
-      final Step<Regexp<T>> newInStep = new Step<Regexp<T>>(newInRegexp, inBucketSourceState, state, 1, 1);
+      final Regexp<T> newInRegexp = Regexp.<T>getAlternation(inStepRegexps, RegexpInterval.getOnce());
+      final Step<Regexp<T>> newInStep = new Step<Regexp<T>>(newInRegexp, inBucketSourceState, state, max, min);
       this.delta.get(inBucketSourceState).add(newInStep);
       this.reverseDelta.get(state).add(newInStep);
 
@@ -228,21 +220,19 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
         continue;
       }
 
-      int max = Integer.MIN_VALUE;
-      int min = Integer.MAX_VALUE;
+      int max = 0;
+      int min = 0;
       /* collapse to alternation */
       final List<Regexp<T>> outStepRegexps = new LinkedList<Regexp<T>>();
       boolean isOptional = false;
       for (Step<Regexp<T>> outBucketStep : outStepBuckets.get(outBucketDestinationState)) {
         if (!outBucketStep.getAcceptSymbol().isLambda()) {
           outStepRegexps.add(outBucketStep.getAcceptSymbol());
+        } else {
+          isOptional= true;
         }
-        if (outBucketStep.getUseCount() > max) {
-          max = outBucketStep.getUseCount();
-        }
-        if (outBucketStep.getMinUseCount() < min) {
-          min = outBucketStep.getMinUseCount();
-        }
+        max+= outBucketStep.getUseCount();
+        min+= outBucketStep.getMinUseCount();
         this.reverseDelta.get(outBucketDestinationState).remove(outBucketStep);
         this.delta.get(state).remove(outBucketStep);
       }
@@ -250,12 +240,21 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
       final Regexp<T> newOutRegexp;
       if (outStepRegexps.size() == 1) {
         final Regexp<T> oldOutRegexp = outStepRegexps.get(0);
-        newOutRegexp = new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),
-                RegexpInterval.getBounded(min, max));
+        if (isOptional) {
+          newOutRegexp = new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),
+                RegexpInterval.getOptional());
+        } else {
+          newOutRegexp = new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),
+                RegexpInterval.getOnce());
+        }
       } else {
-        newOutRegexp = Regexp.<T>getAlternation(outStepRegexps, RegexpInterval.getBounded(min, max));
+        if (isOptional) {
+          newOutRegexp = Regexp.<T>getAlternation(outStepRegexps, RegexpInterval.getOptional());
+        } else {
+          newOutRegexp = Regexp.<T>getAlternation(outStepRegexps, RegexpInterval.getOnce());
+        }
       }
-      final Step<Regexp<T>> newOutStep = new Step<Regexp<T>>(newOutRegexp, state, outBucketDestinationState, 1, 1);
+      final Step<Regexp<T>> newOutStep = new Step<Regexp<T>>(newOutRegexp, state, outBucketDestinationState, max, min);
       this.reverseDelta.get(outBucketDestinationState).add(newOutStep);
       this.delta.get(state).add(newOutStep);
     }

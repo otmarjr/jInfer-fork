@@ -16,8 +16,18 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
+import org.openide.windows.IOProvider;
+import org.openide.windows.IOSelect;
+import org.openide.windows.InputOutput;
+import java.util.EnumSet;
 import org.apache.log4j.Logger;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGenerator;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGeneratorCallback;
+import org.openide.util.Lookup;
 import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
 
 /**
@@ -27,16 +37,62 @@ import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
 public class RepairRunner {
   
   private static final Logger LOG = Logger.getLogger(RepairRunner.class);
+  private final ModelGenerator modelGenerator;
+  
+  private final ModelGeneratorCallback mgCallback = new ModelGeneratorCallback() {
+
+    @Override
+    public void finished(InitialModel model) {
+      LOG.info("Initial Model has been created.");
+      LOG.debug("Number of FDs: " + model.getFunctionalDependencies().size());
+      RunningProject.removeActiveProject();
+    }
+  };
+
+  public RepairRunner() {
+    modelGenerator = Lookup.getDefault().lookup(ModelGenerator.class);
+  }
+
+  
+  
   
   public void run() {
     runAsync(new Runnable() {
 
       @Override
       public void run() {
-        LOG.info("Repair successfully started and finished");
-        RunningProject.removeActiveProject();
+        LOG.info("Starting retreiving input files");
+        try {
+          modelGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), mgCallback);
+        } catch (final InterruptedException e) {
+          interrupted();
+        }
+        catch (final Throwable t) {
+          unexpected(t);
+        }
       }
     }, "Retreiving XML Tree");
+  }
+  
+  private static void interrupted() {
+    // TODO vektor Perhaps a message box?
+    LOG.error("User interrupted the inference.");
+    RunningProject.removeActiveProject();
+    RunningProject.setNextModuleCaps(null);
+  }
+
+  private static void unexpected(final Throwable t) {
+    LOG.error("Inference interrupted due to an unexpected error.", t);
+    RunningProject.removeActiveProject();
+    RunningProject.setNextModuleCaps(null);
+
+    // show Output window
+    final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer", false);
+    IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
+
+    // display a message box
+    final NotifyDescriptor message = new NotifyDescriptor.Message("Process of inferrence caused an unexpected error:\n\n" + t.toString() + "\n\n Detailed information was logged to the logfile and inferrence was cancelled.", NotifyDescriptor.ERROR_MESSAGE);
+    DialogDisplayer.getDefault().notify(message);
   }
   
 }

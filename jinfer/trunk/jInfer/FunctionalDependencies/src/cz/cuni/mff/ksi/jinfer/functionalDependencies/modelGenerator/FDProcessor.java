@@ -1,0 +1,98 @@
+/*
+ * Copyright (C) 2011 sviro
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package cz.cuni.mff.ksi.jinfer.functionalDependencies.modelGenerator;
+
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.Tdependencies;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
+import javax.xml.bind.Unmarshaller;
+import org.apache.log4j.Logger;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
+import org.openide.util.lookup.ServiceProvider;
+
+/**
+ * 
+ * @author sviro
+ */
+@ServiceProvider(service = Processor.class)
+public class FDProcessor implements Processor<FD> {
+
+  private static final Logger LOG = Logger.getLogger(FDProcessor.class);
+
+  @Override
+  public FolderType getFolder() {
+    return FolderType.FD;
+  }
+
+  @Override
+  public String getExtension() {
+    return "fd";
+  }
+
+  @Override
+  public boolean processUndefined() {
+    return false;
+  }
+
+  @Override
+  public List<FD> process(InputStream inputStream) {
+    final ClassLoader orig = Thread.currentThread().getContextClassLoader();
+    Thread.currentThread().setContextClassLoader(Tdependencies.class.getClassLoader()); //NOPMD
+    try {
+      final JAXBContext context = JAXBContext.newInstance(Tdependencies.class.getPackage().getName());
+      final Unmarshaller unmarshaller = context.createUnmarshaller();
+      @SuppressWarnings("unchecked")
+      final JAXBElement<Tdependencies> dependenciesElement = (JAXBElement<Tdependencies>) unmarshaller.unmarshal(
+              inputStream);
+      final Tdependencies dependencies = dependenciesElement.getValue();
+      return dependencies.getDependency();
+    } catch (UnmarshalException ex) {
+      LOG.error("File with functional dependencies is broken");
+    } catch (JAXBException ex) {
+      LOG.error(ex);
+    } finally {
+      Thread.currentThread().setContextClassLoader(orig);
+      try {
+        if (inputStream != null) {
+          inputStream.close();
+        }
+      } catch (IOException ex) {
+        //
+      }
+    }
+
+    return new ArrayList<FD>(0);
+  }
+
+  @Override
+  public Class<?> getResultType() {
+    return FD.class;
+  }
+}

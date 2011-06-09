@@ -43,14 +43,14 @@ public class Weighted<T> implements Orderer<T> {
   }
 
   private int getStateWeight(final StateRemovalRegexpAutomaton<T> automaton, final State<Regexp<T>> state) {
-    int weight = 0;
+    int weight = state.getFinalCount();
     for (Step<Regexp<T>> step : automaton.getReverseDelta().get(state)) {
-      weight += this.getRegexpWeight(step.getAcceptSymbol())*step.getUseCount()*step.getMinUseCount();
+      weight += this.getRegexpWeight(step.getAcceptSymbol());
     }
     for (Step<Regexp<T>> step : automaton.getDelta().get(state)) {
       if (!step.getDestination().equals(state)) {
         // To prevent twice counting the loops
-        weight += this.getRegexpWeight(step.getAcceptSymbol())*step.getUseCount()*step.getMinUseCount();
+        weight += this.getRegexpWeight(step.getAcceptSymbol());
       }
     }
     return weight;
@@ -72,8 +72,8 @@ public class Weighted<T> implements Orderer<T> {
         minWeight = this.getStateWeight(automaton, state);
       } else {
         final int stateWeight = this.getStateWeight(automaton, state);
-        if ((stateWeight <= minWeight)
-                && (state.getName() < minState.getName())) {
+        if ((stateWeight < minWeight)||((stateWeight == minWeight) && (state.getName() < minState.getName()))
+               ) {
           minWeight = stateWeight;
           minState = state;
         }

@@ -79,6 +79,7 @@ class HelperAutomaton extends Automaton<String> {
             contextMap.put(currentContext, new LinkedList<Deque<State<String>>>());
           }
           Deque<State<String>> copy = new LinkedList<State<String>>();
+          copy.addLast(inStep.getSource());
           for (State<String> x : currentStates) {
             copy.addLast(x);
           }
@@ -95,7 +96,7 @@ class HelperAutomaton extends Automaton<String> {
         for (Deque<State<String>> merg : contextMap.get(key)) {
           Iterator<State<String>> mergIt = merg.iterator();
           Iterator<State<String>> firstIt = first.iterator();
-          int i = 1;
+          int i = 0;
           while (firstIt.hasNext()) {
             if (i >= this.h) {
               mergeStates(firstIt.next(), mergIt.next());
@@ -108,55 +109,6 @@ class HelperAutomaton extends Automaton<String> {
         }
       }
     }
-  }
-  
-}
-
-class Gram<T> extends LinkedList<T> {
-  private static final long serialVersionUID = 6377796L;
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    @SuppressWarnings("unchecked")
-    final Gram<T> other = (Gram<T>) obj;
-    if (this.size() != other.size()) {
-      return false;
-    }
-    Iterator<T> myIt = this.iterator();
-    Iterator<T> otherIt = other.iterator();
-    while (myIt.hasNext()) {
-      if (!myIt.next().equals(otherIt.next())) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    int i = 0;
-    for (T x : this) {
-      i+= x.hashCode();
-    }
-    return i;
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("{");
-    Iterator<T> it = this.iterator();
-    while (it.hasNext()) {
-      sb.append(it.next().toString() + ", ");
-    }
-    sb.append("}");
-    return sb.toString();
   }
 }
 

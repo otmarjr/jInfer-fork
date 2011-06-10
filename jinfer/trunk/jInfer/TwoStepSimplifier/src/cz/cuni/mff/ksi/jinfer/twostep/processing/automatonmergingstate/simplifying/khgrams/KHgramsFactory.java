@@ -16,10 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.khgrams;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -39,11 +41,20 @@ public class KHgramsFactory implements AutomatonSimplifierFactory {
    * Name presented to user.
    */
   public static final String DISPLAY_NAME = "k,h-grams";
+  /** TODO anti comment */
+  public static final String PROPERTIES_K = "kvalue";
+  /** TODO anti comment */
+  public static final String PROPERTIES_K_DEFAULT = "2";
+  /** TODO anti comment */
+  public static final String PROPERTIES_H = "hvalue";
+  /** TODO anti comment */
+  public static final String PROPERTIES_H_DEFAULT = "1";
   
   @Override
   public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
-    return new KHgrams<T>();
+    Properties p =   RunningProject.getActiveProjectProps(getName());
+    return new KHgrams<T>(Integer.parseInt(p.getProperty(PROPERTIES_K, PROPERTIES_K_DEFAULT)), Integer.parseInt(p.getProperty(PROPERTIES_H, PROPERTIES_H_DEFAULT)));
   }
 
   @Override

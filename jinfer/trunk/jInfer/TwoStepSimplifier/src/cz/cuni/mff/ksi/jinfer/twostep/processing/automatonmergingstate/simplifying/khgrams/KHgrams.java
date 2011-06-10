@@ -44,8 +44,8 @@ public class KHgrams<T> implements AutomatonSimplifier<T> {
     if (!(k > 0)) {
       throw new IllegalArgumentException("k parameter must be greater than zero.");
     }
-    if (!((h > 0) && (h <= k))) {
-      throw new IllegalArgumentException("h parameter must satisfy 0 < h <= k.");
+    if (!((h >= 0) && (h <= k))) {
+      throw new IllegalArgumentException("h parameter must satisfy 0 <= h <= k.");
     }
     this.k = k;
     this.h = h;

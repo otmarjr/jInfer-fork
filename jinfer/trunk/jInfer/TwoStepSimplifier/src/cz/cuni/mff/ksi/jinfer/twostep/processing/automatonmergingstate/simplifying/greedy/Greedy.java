@@ -75,10 +75,9 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
 
       for (String parameterName : parameterNames) {
         final String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
-        int intValue;
         try {
-          intValue = Integer.parseInt(value);
-          factoryParam.setParameter(parameterName, intValue);
+          int intValue = Integer.parseInt(value);
+          factoryParam.setParameter(parameterName, value);
         } catch (NumberFormatException e) {
           LOG.error("Parameter named "
                   + parameterName

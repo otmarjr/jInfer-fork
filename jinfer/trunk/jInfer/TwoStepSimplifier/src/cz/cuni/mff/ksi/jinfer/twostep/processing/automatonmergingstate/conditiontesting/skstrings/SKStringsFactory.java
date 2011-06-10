@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings;
 
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
@@ -25,43 +25,47 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory for {@link KHContext}.
+ * Factory for {@link SKStrings}.
  *
  * Implements "parameters" capability {@see ModuleParameters}.
  * 
  * @author anti
  */
 @ServiceProvider(service = MergeConditionTesterFactory.class)
-public class KHContextFactory implements MergeConditionTesterFactory {
+public class SKStringsFactory implements MergeConditionTesterFactory {
 
-  private static final Logger LOG = Logger.getLogger(KHContextFactory.class);
+  private static final Logger LOG = Logger.getLogger(SKStringsFactory.class);
   private int parameterK = -1;
-  private int parameterH = -1;
+  private int parameterS = -1;
+  private String parameterStrategy = "OR";
   private static final int K_DEFAULT_VALUE = 2;
-  private static final int H_DEFAULT_VALUE = 1;
+  private static final int S_DEFAULT_VALUE = 1;
+  private static final String STRATEGY_DEFAULT_VALUE = "OR";
   /**
    * Canonical name.
    */
-  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterKHContext";
+  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterSKStrings";
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "k,h-context";
+  public static final String DISPLAY_NAME = "s,k-strings";
 
   @Override
   public <T> MergeConditionTester<T> create() {
     LOG.debug("Creating new " + NAME);
-    if ((parameterH >= 0) && (parameterK >= parameterH)) {
-      return new KHContext<T>(parameterK, parameterH);
+    if ((parameterS >= 0) && (parameterS <= 100) && (parameterK > 0)
+            && (("OR".equals(parameterStrategy)) || ("AND".equals(parameterStrategy)))) {
+      return new SKStrings<T>(parameterK, parameterS, parameterStrategy);
     } else {
       LOG.warn("Wrong parameters set k: "
               + parameterK
-              + ", h: "
-              + parameterH
-              + ". Parameters have to satisfy: k >= h >= 0."
+              + ", s: "
+              + parameterS
+              + ". Parameters have to satisfy: k > 0; 0 <= s <= 100. Strategy has to be"
+              + " one of: AND, OR."
               + " Using default values of k = " + K_DEFAULT_VALUE
-              + ", h = " + H_DEFAULT_VALUE + ".");
-      return new KHContext<T>(K_DEFAULT_VALUE, H_DEFAULT_VALUE);
+              + ", s = " + S_DEFAULT_VALUE + ", strategy = " + STRATEGY_DEFAULT_VALUE + ".");
+      return new SKStrings<T>(K_DEFAULT_VALUE, S_DEFAULT_VALUE, STRATEGY_DEFAULT_VALUE);
     }
   }
 
@@ -83,26 +87,32 @@ public class KHContextFactory implements MergeConditionTesterFactory {
   @Override
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getDisplayName());
-    sb.append(" finds all <i>k,h</i>-context of states being tested. If there are two"
-            + " contexts that are equivalent (same symbol string), the states"
-            + " are considered mergable (<i>k,h</i>-equivalent). Also <i>k - h</i> preceeding states in contexts are merged.");
+    sb.append(" finds all <i>s,k</i>-strings of states being tested. States"
+            + " are considered mergable (<i>s,k</i>-strings equivalent) when <i>s</i> percent of"
+            + "<i>k</i>-strings (tails up to lenght <i>k</i>) are same (<b>AND</b> strategy), or are subset"
+            + " of another state <i>k</i>-tails (<b>OR</b> strategy).");
     return sb.toString();
   }
 
   @Override
   public List<String> getParameterNames() {
-    return Arrays.<String>asList("k", "h");
+    return Arrays.<String>asList("k", "s", "strategy");
   }
 
   @Override
   public String getParameterDisplayDescription(final String parameterName) {
     if ("k".equals(parameterName)) {
-      return "k in <i>k,h</i>-context. That is the number of transitions that have to"
-              + "be same (by means of symbols) before state. Default value: 2.";
+      return "k in <i>s,k</i>-strings. That is the number of transitions that have to"
+              + "be same (by means of symbols) after state (<i>k</i>-tail). Default value: 2.";
     }
-    if ("h".equals(parameterName)) {
-      return "h in <i>k,h</i>-context. Subsequent elements are the same already after <i>h</i> characters"
-              + " Default value: 1.";
+    if ("s".equals(parameterName)) {
+      return "s in <i>s,k</i>-strings. States are equivalent when <i>s</i> percent of all <i>k</i>-tails are equivalent."
+              + " Default value: 80.";
+    }
+    if ("strategy".equals(parameterName)) {
+      return "Strategy: <b>OR</b> - <i>s</i> percent of one state <i>k</i>-tails are subset of another state <i>k</i>-tails. <br>"
+              + " Default value: OR.";
+      // TODO anti comment
     }
     throw new IllegalArgumentException("Asking for a description of unknown parameter");
   }
@@ -113,7 +123,10 @@ public class KHContextFactory implements MergeConditionTesterFactory {
       this.parameterK = Integer.parseInt(newValue);
     }
     if ("h".equals(parameterName)) {
-      this.parameterH = Integer.parseInt(newValue);
+      this.parameterS = Integer.parseInt(newValue);
+    }
+    if ("strategy".equals(parameterName)) {
+      this.parameterStrategy = newValue;
     }
   }
 
@@ -127,7 +140,9 @@ public class KHContextFactory implements MergeConditionTesterFactory {
     if ("k".equals(parameterName)) {
       return String.valueOf(K_DEFAULT_VALUE);
     } else if ("h".equals(parameterName)) {
-      return String.valueOf(H_DEFAULT_VALUE);
+      return String.valueOf(S_DEFAULT_VALUE);
+    } else if ("strategy".equals(parameterName)) {
+      return String.valueOf(STRATEGY_DEFAULT_VALUE);
     } else {
       return "";
     }

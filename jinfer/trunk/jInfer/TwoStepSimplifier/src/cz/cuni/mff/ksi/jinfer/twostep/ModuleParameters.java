@@ -60,5 +60,5 @@ public interface ModuleParameters {
    * @param parameterName name of parameter (as obtained by previous calling {@link getParameterNames}
    * @param newValue value to set
    */
-  void setParameter(final String parameterName, final int newValue);
+  void setParameter(final String parameterName, final String newValue);
 }

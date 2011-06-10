@@ -54,10 +54,13 @@ class HelperAutomaton extends Automaton<String> {
     init(k, h);
   }
   
-  public void kcontextMe() {
+  public void kcontextMe() throws InterruptedException {
     List<State<String>> finalStates = new LinkedList<State<String>>();
     for (State<String> state : reverseDelta.keySet()) {
       if (state.getFinalCount() > 0) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         finalStates.add(state);
       }
     }
@@ -67,6 +70,9 @@ class HelperAutomaton extends Automaton<String> {
       String currentContext = "";
       Deque<State<String>> currentStates = new LinkedList<State<String>>();
       while (!currentState.equals(this.initialState)) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         Step<String> inStep = reverseDelta.get(currentState).iterator().next();
         currentContext= inStep.getAcceptSymbol() + currentContext;
         currentStates.addFirst(currentState);
@@ -82,6 +88,9 @@ class HelperAutomaton extends Automaton<String> {
           copy.addLast(inStep.getSource());
           for (State<String> x : currentStates) {
             copy.addLast(x);
+            if (Thread.interrupted()) {
+              throw new InterruptedException();
+            }
           }
           contextMap.get(currentContext).add(copy);
         }
@@ -98,6 +107,9 @@ class HelperAutomaton extends Automaton<String> {
           Iterator<State<String>> firstIt = first.iterator();
           int i = 0;
           while (firstIt.hasNext()) {
+            if (Thread.interrupted()) {
+              throw new InterruptedException();
+            }
             if (i >= this.h) {
               mergeStates(firstIt.next(), mergIt.next());
             } else {

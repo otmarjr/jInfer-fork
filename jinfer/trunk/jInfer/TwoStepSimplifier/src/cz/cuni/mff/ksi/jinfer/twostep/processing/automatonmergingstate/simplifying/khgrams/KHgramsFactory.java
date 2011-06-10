@@ -69,7 +69,7 @@ public class KHgramsFactory implements AutomatonSimplifierFactory {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -104,33 +105,49 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString) throws InterruptedException {
-    final Map<State<T>, Set<Step<T>>> delta = inputAutomaton.getDelta();
-
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
-    for (State<T> mainState : delta.keySet()) {
-      for (State<T> mergedState : delta.keySet()) {
-        mergableStates.addAll(mergeConditionTester.getMergableStates(mainState, mergedState, inputAutomaton));
-        if (Thread.interrupted()) {
-          throw new InterruptedException();
+    boolean search = true;
+    while (search) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      mergableStates.clear();
+      final Iterator<State<T>> mainIt = inputAutomaton.getDelta().keySet().iterator();
+      while (mainIt.hasNext()&&search) {
+        State<T> mainState = mainIt.next();
+        final Iterator<State<T>> mergedIt = inputAutomaton.getDelta().keySet().iterator();
+        while (mergedIt.hasNext()&&search) {
+          if (Thread.interrupted()) {
+            throw new InterruptedException();
+          }
+          State<T> mergedState = mergedIt.next();
+          mergableStates.addAll(mergeConditionTester.getMergableStates(mainState, mergedState, inputAutomaton));
+          if (!mergableStates.isEmpty()) {
+            search= false;
+            LOG.debug("Found states to merge\n");
+          }
+        }
+      }
+      search = false;
+      
+      for (List<List<State<T>>> mergableAlternative : mergableStates) {
+        for (List<State<T>> mergeSeq : mergableAlternative) {
+          if (Thread.interrupted()) {
+            throw new InterruptedException();
+          }
+          final String st = CollectionToString.<State<T>>colToString(mergeSeq, " + ",
+                  new CollectionToString.ToString<State<T>>() {
+                    @Override
+                    public String toString(final State<T> t) {
+                      return t.toString();
+                    }
+                  });
+          LOG.debug("Merging states: " + st + "\n");
+          inputAutomaton.mergeStates(mergeSeq);
+          search = true;
         }
       }
     }
-    LOG.debug("Found states to merge\n");
-    for (List<List<State<T>>> mergableAlternative : mergableStates) {
-      for (List<State<T>> mergeSeq : mergableAlternative) {
-        final String st = CollectionToString.<State<T>>colToString(mergeSeq, " + ",
-                new CollectionToString.ToString<State<T>>() {
-
-                  @Override
-                  public String toString(final State<T> t) {
-                    return t.toString();
-                  }
-                });
-        LOG.debug("Merging states: " + st + "\n");
-        inputAutomaton.mergeStates(mergeSeq);
-      }
-    }
-    mergableStates.clear();
     return inputAutomaton;
   }
 

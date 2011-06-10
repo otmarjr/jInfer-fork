@@ -66,6 +66,8 @@ public class KHgramsPropertiesPanel extends AbstractPropertiesPanel {
     lblH = new javax.swing.JLabel();
     txtK = new javax.swing.JTextField();
     txtH = new javax.swing.JTextField();
+    jPanel1 = new javax.swing.JPanel();
+    jPanel2 = new javax.swing.JPanel();
 
     setMinimumSize(new java.awt.Dimension(500, 300));
     setPreferredSize(new java.awt.Dimension(500, 50));
@@ -115,6 +117,18 @@ public class KHgramsPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(txtH, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    add(jPanel1, gridBagConstraints);
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.gridwidth = 3;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    add(jPanel2, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void txtKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKActionPerformed
@@ -162,6 +176,8 @@ public class KHgramsPropertiesPanel extends AbstractPropertiesPanel {
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel jLabel2;
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JPanel jPanel2;
   private javax.swing.JLabel lblH;
   private javax.swing.JLabel lblK;
   private javax.swing.JTextField txtH;

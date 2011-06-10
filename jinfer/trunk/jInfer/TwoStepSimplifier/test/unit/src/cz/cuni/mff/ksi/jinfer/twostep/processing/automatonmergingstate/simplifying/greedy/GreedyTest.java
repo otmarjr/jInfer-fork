@@ -98,7 +98,7 @@ public class GreedyTest {
       }
 
       @Override
-      public void setParameter(String parameterName, int newValue) {
+      public void setParameter(String parameterName, String newValue) {
         throw new UnsupportedOperationException("Not supported yet.");
       }
     });

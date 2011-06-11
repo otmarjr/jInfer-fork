@@ -18,25 +18,24 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.modelGenerator;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.XMLTree;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
-import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /**
  *
  * @author sviro
  */
 @ServiceProvider(service = Processor.class)
-public class XMLProcessor implements Processor<XMLTree> {
+public class PathsProcessor implements Processor<String> {
 
   private static final Logger LOG = Logger.getLogger(XMLProcessor.class);
 
@@ -56,31 +55,31 @@ public class XMLProcessor implements Processor<XMLTree> {
   }
 
   @Override
-  public List<XMLTree> process(InputStream s) throws InterruptedException {
-    ArrayList<XMLTree> result = new ArrayList<XMLTree>();
+  public List<String> process(InputStream s) throws InterruptedException {
+    SAXParserFactory saxFactory = SAXParserFactory.newInstance();
+    saxFactory.setNamespaceAware(true);
+    saxFactory.setValidating(false);
+    PathsContentHandler pathsContentHandler = new PathsContentHandler();
 
-
-    DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-    builderFactory.setNamespaceAware(true);
     try {
-      DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-      Document document = documentBuilder.parse(s);
-
-      result.add(new XMLTree(document));
-
+      SAXParser saxParser = saxFactory.newSAXParser();
+      XMLReader xmlReader = saxParser.getXMLReader();
+      xmlReader.setContentHandler(pathsContentHandler);
+      xmlReader.parse(new InputSource(s));
     } catch (ParserConfigurationException ex) {
       LOG.error(ex);
     } catch (SAXException ex) {
-      LOG.error("Error processing XML", ex);
+      LOG.error("Error processing XML for paths", ex);
     } catch (IOException ex) {
-      LOG.error("Error processing XML", ex);
+      LOG.error("Error processing XML for paths", ex);
     }
 
-    return result;
+
+    return pathsContentHandler.getPaths();
   }
 
   @Override
   public Class<?> getResultType() {
-    return XMLTree.class;
+    return String.class;
   }
 }

@@ -32,7 +32,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -49,20 +48,20 @@ public class ModelGeneratorImpl implements ModelGenerator {
   public void start(Input input, ModelGeneratorCallback callback) throws InterruptedException {
     InitialModel result = new InitialModel();
 
-    result.addFD(this.<FD>getDataFromInput(input.getFunctionalDependencies(), FD.class));
-    result.addXMLTree(this.<XMLTree>getDataFromInput(input.getDocuments(), XMLTree.class));
+    result.addFD(getFDFromInput(input.getFunctionalDependencies()));
+    result.addXMLTree(getDataFromInput(input.getDocuments()));
 
     callback.finished(result);
     return;
   }
-
-  private <T> List<T> getDataFromInput(final Collection<File> files, Class<?> clazz) throws InterruptedException {
+  
+  private List<FD> getFDFromInput(final Collection<File> files) throws InterruptedException {
     if (BaseUtils.isEmpty(files)) {
-      return Collections.<T>emptyList();
+      return Collections.<FD>emptyList();
     }
-    final List<T> result = new ArrayList<T>();
+    final List<FD> result = new ArrayList<FD>();
 
-    Processor<T> processor = ModelGeneratorImpl.<T>getProcessor(clazz);
+    Processor<FD> processor = ModelGeneratorImpl.<FD>getProcessor(FD.class);
 
     if (processor != null) {
       for (File file : files) {
@@ -76,7 +75,37 @@ public class ModelGeneratorImpl implements ModelGenerator {
         }
       }
     } else {
-      LOG.error("No processor for " + clazz.toString() + " has been found.");
+      LOG.error("No processor for FD has been found.");
+    }
+    return result;
+  }
+
+  private List<XMLTree> getDataFromInput(final Collection<File> files) throws InterruptedException {
+    if (BaseUtils.isEmpty(files)) {
+      return Collections.<XMLTree>emptyList();
+    }
+    final List<XMLTree> result = new ArrayList<XMLTree>();
+
+    Processor<XMLTree> xmlProcessor = ModelGeneratorImpl.<XMLTree>getProcessor(XMLTree.class);
+    Processor<String> pathProcessor = ModelGeneratorImpl.<String>getProcessor(String.class);
+
+    if (xmlProcessor != null && pathProcessor != null) {
+      for (File file : files) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
+        try {
+          List<XMLTree> xmlTrees = xmlProcessor.process(new FileInputStream(file));
+          if (!xmlTrees.isEmpty()) {
+            xmlTrees.get(0).setPaths(pathProcessor.process(new FileInputStream(file)));
+          }
+          result.addAll(xmlTrees);
+        } catch (FileNotFoundException ex) {
+          throw new RuntimeException("File not found: " + file.getAbsolutePath(), ex);
+        }
+      }
+    } else {
+      LOG.error("No processor for XML has been found.");
     }
     return result;
   }

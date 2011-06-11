@@ -80,6 +80,13 @@ public class SidePaths {
     
     return this.getPath().equals(((SidePaths)obj).getPath());
   }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 53 * hash + (this.path != null ? this.path.hashCode() : 0);
+    return hash;
+  }
     
     
   

@@ -48,6 +48,7 @@ public class RepairRunner {
       LOG.debug("Number of Trees: " + model.getTrees().size());
       for (RXMLTree rXMLTree : model.getTrees()) {
         LOG.debug("Tree:\n" + rXMLTree.getXmlTree().toString() + "\n");
+        LOG.debug("Paths:" + rXMLTree.getXmlTree().pathsToString() + "\n");
       }
       RunningProject.removeActiveProject();
     }

@@ -62,6 +62,9 @@ public class InitialModel {
     return result;
   }
   
-  
+  public List<String> getPaths(final RXMLTree rXmlTree) {
+    int treeIndex = trees.indexOf(rXmlTree);
+    return trees.get(treeIndex).getXmlTree().getPaths();
+  }
   
 }

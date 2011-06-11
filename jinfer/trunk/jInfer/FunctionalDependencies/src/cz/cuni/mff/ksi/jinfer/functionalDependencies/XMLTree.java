@@ -17,9 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 import java.io.StringWriter;
+import java.util.Collection;
+import java.util.List;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -34,6 +35,7 @@ import org.w3c.dom.Document;
 public class XMLTree {
 
   private final Document document;
+  private List<String> paths = null;
 
   public XMLTree(final Document document) {
     this.document = document;
@@ -56,7 +58,24 @@ public class XMLTree {
     } catch (TransformerException ex) {
       Exceptions.printStackTrace(ex);
     }
-    
+
     return null;
+  }
+
+  public List<String> getPaths() {
+    return paths;
+  }
+
+  public void setPaths(List<String> paths) {
+    this.paths = paths;
+  }
+  
+  public String pathsToString() {
+    StringBuilder builder = new StringBuilder();
+    for (String path : paths) {
+      builder.append(path).append("\n");
+    }
+    
+    return builder.toString();
   }
 }

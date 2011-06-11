@@ -45,6 +45,10 @@ public class RepairRunner {
     public void finished(InitialModel model) {
       LOG.info("Initial Model has been created.");
       LOG.debug("Number of FDs: " + model.getFunctionalDependencies().size());
+      LOG.debug("Number of Trees: " + model.getTrees().size());
+      for (RXMLTree rXMLTree : model.getTrees()) {
+        LOG.debug("Tree:\n" + rXMLTree.getXmlTree().toString() + "\n");
+      }
       RunningProject.removeActiveProject();
     }
   };

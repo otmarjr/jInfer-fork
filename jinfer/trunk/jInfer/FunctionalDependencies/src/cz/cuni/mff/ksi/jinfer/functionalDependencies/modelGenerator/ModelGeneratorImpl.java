@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.XMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGenerator;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGeneratorCallback;
@@ -28,9 +29,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -45,45 +47,44 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
   @Override
   public void start(Input input, ModelGeneratorCallback callback) throws InterruptedException {
-
-
     InitialModel result = new InitialModel();
 
-    result.addFD(getFDsFromInput(input.getFunctionalDependencies()));
+    result.addFD(this.<FD>getDataFromInput(input.getFunctionalDependencies(), FD.class));
+    result.addXMLTree(this.<XMLTree>getDataFromInput(input.getDocuments(), XMLTree.class));
 
     callback.finished(result);
     return;
   }
 
-  private List<FD> getFDsFromInput(final Collection<File> files) throws InterruptedException {
+  private <T> List<T> getDataFromInput(final Collection<File> files, Class<?> clazz) throws InterruptedException {
     if (BaseUtils.isEmpty(files)) {
-      return new ArrayList<FD>(0);
+      return Collections.<T>emptyList();
     }
-    final List<FD> result = new ArrayList<FD>();
+    final List<T> result = new ArrayList<T>();
 
-    Processor<FD> fdProcessor = getFDProcessor();
+    Processor<T> processor = ModelGeneratorImpl.<T>getProcessor(clazz);
 
-    if (fdProcessor != null) {
+    if (processor != null) {
       for (File file : files) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
         try {
-          result.addAll(fdProcessor.process(new FileInputStream(file)));
+          result.addAll(processor.process(new FileInputStream(file)));
         } catch (FileNotFoundException ex) {
           throw new RuntimeException("File not found: " + file.getAbsolutePath(), ex);
         }
       }
     } else {
-      LOG.error("No processor for functional dependencies has been found.");
+      LOG.error("No processor for " + clazz.toString() + " has been found.");
     }
     return result;
   }
-
-  private Processor<FD> getFDProcessor() {
+  
+  private static <T> Processor<T> getProcessor(Class<?> clazz) {
     for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
-      if (p.getResultType().equals(FD.class)) {
-        return p;
+      if (p.getResultType().equals(clazz)) {
+        return (Processor<T>) p;
       }
     }
 

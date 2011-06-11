@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,9 +28,11 @@ import java.util.List;
 public class InitialModel {
 
   private final List<FD> functionalDependencies;
+  private final List<RXMLTree> trees;
 
   public InitialModel() {
     functionalDependencies = new ArrayList<FD>();
+    trees = new ArrayList<RXMLTree>();
   }
   
   public void addFD(List<FD> fDs) {
@@ -38,6 +41,25 @@ public class InitialModel {
 
   public List<FD> getFunctionalDependencies() {
     return functionalDependencies;
+  }
+
+  public List<RXMLTree> getTrees() {
+    return trees;
+  }
+  
+  
+
+  public void addXMLTree(List<XMLTree> xmlTrees) {
+    trees.addAll(createRXMLTrees(xmlTrees));
+  }
+
+  private Collection<? extends RXMLTree> createRXMLTrees(List<XMLTree> xmlTrees) {
+    List<RXMLTree> result = new ArrayList<RXMLTree>();
+    for (XMLTree xmlTree : xmlTrees) {
+      result.add(new RXMLTree(xmlTree));
+    }
+    
+    return result;
   }
   
   

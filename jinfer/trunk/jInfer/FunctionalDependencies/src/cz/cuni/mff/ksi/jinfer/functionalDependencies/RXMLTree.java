@@ -21,5 +21,16 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies;
  * @author sviro
  */
 public class RXMLTree {
+  private final XMLTree xmlTree;
+
+  RXMLTree(XMLTree xmlTree) {
+    this.xmlTree = xmlTree;
+  }
+
+  public XMLTree getXmlTree() {
+    return xmlTree;
+  }
+  
+  
   
 }

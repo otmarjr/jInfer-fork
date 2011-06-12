@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import java.util.List;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.windows.IOProvider;
@@ -27,6 +28,8 @@ import org.apache.log4j.Logger;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGenerator;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback;
 import org.openide.util.Lookup;
 import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
 
@@ -35,32 +38,37 @@ import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
  * @author sviro
  */
 public class RepairRunner {
-  
+
   private static final Logger LOG = Logger.getLogger(RepairRunner.class);
   private final ModelGenerator modelGenerator;
-  
+  private final Repairer repairer;
   private final ModelGeneratorCallback mgCallback = new ModelGeneratorCallback() {
 
     @Override
     public void finished(InitialModel model) {
-      LOG.info("Initial Model has been created.");
-      LOG.debug("Number of FDs: " + model.getFunctionalDependencies().size());
-      LOG.debug("Number of Trees: " + model.getTrees().size());
       for (RXMLTree rXMLTree : model.getTrees()) {
         LOG.debug("Tree:\n" + rXMLTree.getXmlTree().toString() + "\n");
         LOG.debug("Paths:" + rXMLTree.getXmlTree().pathsToString() + "\n");
       }
+      
+      RepairRunner.this.finishedModelGenerator(model);
+    }
+  };
+  
+  private final RepairerCallback repairerCallback = new RepairerCallback() {
+
+    @Override
+    public void finished(List<RXMLTree> repairedTrees) {
+      LOG.info("Finished repairing.");
       RunningProject.removeActiveProject();
     }
   };
 
   public RepairRunner() {
     modelGenerator = Lookup.getDefault().lookup(ModelGenerator.class);
+    repairer = Lookup.getDefault().lookup(Repairer.class);
   }
 
-  
-  
-  
   public void run() {
     runAsync(new Runnable() {
 
@@ -71,14 +79,32 @@ public class RepairRunner {
           modelGenerator.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), mgCallback);
         } catch (final InterruptedException e) {
           interrupted();
-        }
-        catch (final Throwable t) {
+        } catch (final Throwable t) {
           unexpected(t);
         }
       }
     }, "Retreiving XML Tree");
   }
-  
+
+  private void finishedModelGenerator(final InitialModel model) {
+    LOG.info("Initial Model has been created.");
+    LOG.info("Repair Runner: initial model contains " + model.getFDsCount() + " functional dependencies and " + model.getTreesCount() + " trees.");
+    
+    runAsync(new Runnable() {
+
+      @Override
+      public void run() {
+        try {
+          repairer.start(model, repairerCallback);
+        } catch (final InterruptedException e) {
+          interrupted();
+        } catch (final Throwable t) {
+          unexpected(t);
+        }
+      }
+    }, "Repairing XMLs");
+  }
+
   private static void interrupted() {
     // TODO vektor Perhaps a message box?
     LOG.error("User interrupted the inference.");
@@ -99,5 +125,4 @@ public class RepairRunner {
     final NotifyDescriptor message = new NotifyDescriptor.Message("Process of inferrence caused an unexpected error:\n\n" + t.toString() + "\n\n Detailed information was logged to the logfile and inferrence was cancelled.", NotifyDescriptor.ERROR_MESSAGE);
     DialogDisplayer.getDefault().notify(message);
   }
-  
 }

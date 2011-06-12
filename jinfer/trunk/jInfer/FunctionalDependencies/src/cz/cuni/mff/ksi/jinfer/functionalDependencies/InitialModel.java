@@ -67,4 +67,11 @@ public class InitialModel {
     return trees.get(treeIndex).getXmlTree().getPaths();
   }
   
+  public int getFDsCount() {
+    return functionalDependencies.size();
+  }
+  
+  public int getTreesCount() {
+    return trees.size();
+  }
 }

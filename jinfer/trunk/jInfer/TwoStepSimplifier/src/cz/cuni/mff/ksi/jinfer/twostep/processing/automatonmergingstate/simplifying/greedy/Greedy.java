@@ -75,18 +75,7 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
 
       for (String parameterName : parameterNames) {
         final String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
-        try {
-          int intValue = Integer.parseInt(value);
-          factoryParam.setParameter(parameterName, value);
-        } catch (NumberFormatException e) {
-          LOG.error("Parameter named "
-                  + parameterName
-                  + " which should be set for using submodule "
-                  + mergeConditionTesterFactory.getName()
-                  + " is not a number. "
-                  + "Submodule will use some default value. "
-                  + "This error was triggered by exception: " + e.toString());
-        }
+        factoryParam.setParameter(parameterName, value);
       }
     }
     this.mergeConditionTester = mergeConditionTesterFactory.<T>create();

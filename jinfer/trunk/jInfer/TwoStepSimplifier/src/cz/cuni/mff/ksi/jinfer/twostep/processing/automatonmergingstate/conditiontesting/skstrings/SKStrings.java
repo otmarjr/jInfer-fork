@@ -43,7 +43,7 @@ import java.util.Set;
 public class SKStrings<T> implements MergeConditionTester<T> {
 
   private int k;
-  private int s;
+  private double s;
   private String strategy;
 
   /**
@@ -52,27 +52,30 @@ public class SKStrings<T> implements MergeConditionTester<T> {
    * @param k
    * @param h
    */
-  public SKStrings(final int k, final int s, final String strategy) {
+  public SKStrings(final int k, final double s, final String strategy) {
     this.k = k;
     this.s = s;
     this.strategy= strategy;
+    if (!((k > 0)&&(s >= 0)&&(s <= 1))) {
+      throw new IllegalArgumentException("Parameter k must be greater than 0. Parameter s must satisfy: 0 <= s <= 1.");
+    }
   }
 
-  private SKBucket<T> findSKStrings(final int _k, final State<T> state, final Map<State<T>, Set<Step<T>>> delta) {
+  public SKBucket<T> findSKStrings(final int _k, final State<T> state, final Map<State<T>, Set<Step<T>>> delta) {
     final SKBucket<T> result = new SKBucket<T>();
     int sum = 0;
     for (Step<T> step : delta.get(state)) {
       sum+= step.getUseCount();
     }
 
-    if (k > 1) {
+    if (_k > 1) {
       for (Step<T> step : delta.get(state)) {
         SKBucket<T> fromHim = findSKStrings(_k - 1, step.getDestination(), delta);
         fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
         result.addAll(fromHim);
       }
       return result;
-    } else if (k == 1) {
+    } else if (_k == 1) {
       for (Step<T> step : delta.get(state)) {
         result.add(step, (double) step.getUseCount() / (double) sum);
       }
@@ -85,11 +88,14 @@ public class SKStrings<T> implements MergeConditionTester<T> {
   public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) {
     final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
     final List<List<List<State<T>>>> alternatives = new ArrayList<List<List<State<T>>>>();
+    if (state1.equals(state2)) {
+      return alternatives;
+    }
 
     final SKBucket<T> state1strings = this.findSKStrings(k, state1, delta);
     final SKBucket<T> state2strings = this.findSKStrings(k, state2, delta);
     if ("AND".equals(this.strategy)) {
-      if (state1strings.getMostProbable(this.s).areSubset(state2strings) && state2strings.getMostProbable(this.s).areSubset(state2strings)) {
+      if (state1strings.getMostProbable(this.s).areSubset(state2strings) && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
         List<State<T>> mergePair = new ArrayList<State<T>>();
         mergePair.add(state1);
         mergePair.add(state2);
@@ -98,13 +104,34 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         alternatives.add(ret);
       }
     } else if ("OR".equals(this.strategy)) {
-      if (state1strings.getMostProbable(this.s).areSubset(state2strings) || state2strings.getMostProbable(this.s).areSubset(state2strings)) {
+      if (state1strings.getMostProbable(this.s).areSubset(state2strings) || state2strings.getMostProbable(this.s).areSubset(state1strings)) {
         List<State<T>> mergePair = new ArrayList<State<T>>();
         mergePair.add(state1);
         mergePair.add(state2);
         List<List<State<T>>> ret= new ArrayList<List<State<T>>>();
         ret.add(mergePair);
         alternatives.add(ret);
+      }
+    } else if ("LAX".equals(this.strategy)) {
+      SKBucket<T> state1tops = state1strings.getMostProbable(this.s);
+      SKBucket<T> state2tops = state2strings.getMostProbable(this.s);
+      Iterator<SKString<T>> s1it = state1tops.getSKStrings().iterator();
+      Iterator<SKString<T>> s2it = state2tops.getSKStrings().iterator();
+      if (state1tops.getSKStrings().size() == state2tops.getSKStrings().size()) {
+        boolean same = true;
+        while (s1it.hasNext()&&same) {
+          if (!s1it.next().equals(s2it.next())) {
+            same=false;
+          }
+        }
+        if (same) {
+          List<State<T>> mergePair = new ArrayList<State<T>>();
+          mergePair.add(state1);
+          mergePair.add(state2);
+          List<List<State<T>>> ret= new ArrayList<List<State<T>>>();
+          ret.add(mergePair);
+          alternatives.add(ret);
+        }
       }
     }
     return alternatives;

@@ -156,7 +156,9 @@ public final class InputFiles {
       readCollection(jinfer.getXml().getFile(), input.getDocuments());
       readCollection(jinfer.getSchemas().getFile(), input.getSchemas());
       readCollection(jinfer.getQueries().getFile(), input.getQueries());
-      readCollection(jinfer.getFds().getFile(), input.getFunctionalDependencies());
+      if (jinfer.getFds() != null) {
+        readCollection(jinfer.getFds().getFile(), input.getFunctionalDependencies());
+      }
 
       if (inputStream != null) {
         inputStream.close();

@@ -36,10 +36,10 @@ public class SKStringsFactory implements MergeConditionTesterFactory {
 
   private static final Logger LOG = Logger.getLogger(SKStringsFactory.class);
   private int parameterK = -1;
-  private int parameterS = -1;
+  private double parameterS = -1.0;
   private String parameterStrategy = "OR";
   private static final int K_DEFAULT_VALUE = 2;
-  private static final int S_DEFAULT_VALUE = 1;
+  private static final double S_DEFAULT_VALUE = 1.0;
   private static final String STRATEGY_DEFAULT_VALUE = "OR";
   /**
    * Canonical name.
@@ -61,7 +61,7 @@ public class SKStringsFactory implements MergeConditionTesterFactory {
               + parameterK
               + ", s: "
               + parameterS
-              + ". Parameters have to satisfy: k > 0; 0 <= s <= 100. Strategy has to be"
+              + ". Parameters have to satisfy: k > 0; 0 <= s <= 1. Strategy has to be"
               + " one of: AND, OR."
               + " Using default values of k = " + K_DEFAULT_VALUE
               + ", s = " + S_DEFAULT_VALUE + ", strategy = " + STRATEGY_DEFAULT_VALUE + ".");
@@ -107,7 +107,7 @@ public class SKStringsFactory implements MergeConditionTesterFactory {
     }
     if ("s".equals(parameterName)) {
       return "s in <i>s,k</i>-strings. States are equivalent when <i>s</i> percent of all <i>k</i>-tails are equivalent."
-              + " Default value: 80.";
+              + " Default value: 1.0";
     }
     if ("strategy".equals(parameterName)) {
       return "Strategy: <b>OR</b> - <i>s</i> percent of one state <i>k</i>-tails are subset of another state <i>k</i>-tails. <br>"
@@ -122,8 +122,8 @@ public class SKStringsFactory implements MergeConditionTesterFactory {
     if ("k".equals(parameterName)) {
       this.parameterK = Integer.parseInt(newValue);
     }
-    if ("h".equals(parameterName)) {
-      this.parameterS = Integer.parseInt(newValue);
+    if ("s".equals(parameterName)) {
+      this.parameterS = Double.parseDouble(newValue);
     }
     if ("strategy".equals(parameterName)) {
       this.parameterStrategy = newValue;
@@ -139,7 +139,7 @@ public class SKStringsFactory implements MergeConditionTesterFactory {
   public String getParameterDefaultValue(final String parameterName) {
     if ("k".equals(parameterName)) {
       return String.valueOf(K_DEFAULT_VALUE);
-    } else if ("h".equals(parameterName)) {
+    } else if ("s".equals(parameterName)) {
       return String.valueOf(S_DEFAULT_VALUE);
     } else if ("strategy".equals(parameterName)) {
       return String.valueOf(STRATEGY_DEFAULT_VALUE);

@@ -87,4 +87,9 @@ class SKString<T> {
     }
     return hash;
   }
+
+  @Override
+  public String toString() {
+    return "SKString{" + "str=" + str + ", probability=" + probability + '}';
+  }
 }

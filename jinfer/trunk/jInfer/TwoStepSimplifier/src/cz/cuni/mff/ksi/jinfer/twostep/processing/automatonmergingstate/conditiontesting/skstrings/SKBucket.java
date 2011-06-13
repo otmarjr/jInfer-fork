@@ -58,8 +58,7 @@ class SKBucket<T> {
     return Collections.unmodifiableList(this.skstrings);
   }
 
-  public SKBucket<T> getMostProbable(final int _s) {
-    double s = (double) _s / 100;
+  public SKBucket<T> getMostProbable(final double s) {
     double intersum = 0.0;
     SKBucket<T> result = new SKBucket<T>();
     Collections.sort(this.skstrings, new Comparator<SKString<T>>() {
@@ -84,6 +83,14 @@ class SKBucket<T> {
   }
 
   public boolean areSubset(SKBucket<T> anotherBucket) {
-    return anotherBucket.getSKStrings().containsAll(this.skstrings);
+    if (this.skstrings.size() == 0) {
+      return false;
+    }
+    return (anotherBucket.getSKStrings().containsAll(this.skstrings));
+  }
+
+  @Override
+  public String toString() {
+    return "SKBucket{" + "skstrings=" + skstrings + '}';
   }
 }

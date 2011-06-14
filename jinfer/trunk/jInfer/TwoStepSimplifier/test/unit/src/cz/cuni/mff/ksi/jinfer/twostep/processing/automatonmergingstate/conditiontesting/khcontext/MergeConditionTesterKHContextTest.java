@@ -41,7 +41,7 @@ public class MergeConditionTesterKHContextTest {
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
   @Test(expected = IllegalArgumentException.class)
-  public void testBadKHSet() {
+  public void testBadKHSet() throws InterruptedException {
     System.out.println("k,h bad values set");
     final Automaton<String> automaton = new Automaton<String>(true);
     automaton.buildPTAOnSymbol(Arrays.<String>asList());
@@ -53,7 +53,7 @@ public class MergeConditionTesterKHContextTest {
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
   @Test(expected = NullPointerException.class)
-  public void testGetMergableStatesEmptyAut() {
+  public void testGetMergableStatesEmptyAut() throws InterruptedException {
     System.out.println("getMergableStates empty automaton");
     final Automaton<String> automaton = new Automaton<String>(false);
     final KHContext<String> instance = new KHContext<String>(2, 1);
@@ -61,7 +61,7 @@ public class MergeConditionTesterKHContextTest {
     assertTrue(result.isEmpty());
   }
 
-  private void testGetMergableStatesNoAlt(final List<String> pta, final int k, final int h) {
+  private void testGetMergableStatesNoAlt(final List<String> pta, final int k, final int h) throws InterruptedException {
     System.out.println("getMergableStates no alternatives " + inputToString(pta));
     final Automaton<String> automaton = new Automaton<String>(true);
     for (String in : pta) {
@@ -80,7 +80,7 @@ public class MergeConditionTesterKHContextTest {
     }
   }
 
-  private String testUniverzal(final List<String> pta, final int k, final int h) {
+  private String testUniverzal(final List<String> pta, final int k, final int h) throws InterruptedException {
     System.out.println("getMergableStates merge all " + inputToString(pta));
     final Automaton<String> automaton = new Automaton<String>(true);
     for (String in : pta) {
@@ -124,72 +124,72 @@ public class MergeConditionTesterKHContextTest {
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
   @Test
-  public void testGetMergableStates1() {
+  public void testGetMergableStates1() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates2() {
+  public void testGetMergableStates2() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates3() {
+  public void testGetMergableStates3() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a", "a"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates4() {
+  public void testGetMergableStates4() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a", "a", "a"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates5() {
+  public void testGetMergableStates5() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a", "a", "a", "a", "a", "a", "a", "a", "a", "b", "b", "b", "b", "b", "b", "b", "b"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates6() {
+  public void testGetMergableStates6() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "aa", "bb", "bb"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates7() {
+  public void testGetMergableStates7() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "aa", "bb", "bb", "aa", "bb", "bb", "aa", "bb", "bb", "aa", "bb", "bb", "aa", "bb", "bb"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates8() {
+  public void testGetMergableStates8() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "aa", "bb", "bb", "cc", "dd"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates9() {
+  public void testGetMergableStates9() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "ab", "ac", "ad", "aba", "aca", "ada"), 2, 2);
   }
 
   @Test
-  public void testGetMergableStates10() {
+  public void testGetMergableStates10() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aab", "bab"), 3, 1);
   }
 
   @Test
-  public void testGetMergableStates11() {
+  public void testGetMergableStates11() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aaaaa", "aaaaa"), 5, 1);
   }
 
   @Test
-  public void testGetMergableStates12() {
+  public void testGetMergableStates12() throws InterruptedException {
     assertEquals(
             "[1|0]>>1--a|2--2   [2|0]>>2--a|2--3   [3|2]   @@@[1|0]   [2|0]<<1--a|2--2   [3|2]<<2--a|2--3   ",
             testUniverzal(Arrays.<String>asList(
@@ -197,7 +197,7 @@ public class MergeConditionTesterKHContextTest {
   }
 
   @Test
-  public void testGetMergableStates13() {
+  public void testGetMergableStates13() throws InterruptedException {
     assertEquals(
             "[1|0]>>1--a|1--2   1--b|1--5   [2|0]>>2--b|1--3   [3|0]+[6|0]>>3--a|2--4   [4|2]+[7|1]   [5|0]>>5--b|1--3   @@@[1|0]   [2|0]<<1--a|1--2   [3|0]+[6|0]<<2--b|1--3   5--b|1--3   [4|2]+[7|1]<<3--a|2--4   [5|0]<<1--b|1--5   ",
             testUniverzal(Arrays.<String>asList(
@@ -205,13 +205,13 @@ public class MergeConditionTesterKHContextTest {
   }
 
   @Test
-  public void testGetMergableStates14() {
+  public void testGetMergableStates14() throws InterruptedException {
     assertEquals(
             "[1|0]>>1--a|1--2   1--b|1--6   [2|0]>>2--b|1--3   [3|0]>>3--a|1--4   [4|0]+[8|0]>>4--c|2--5   [5|2]+[9|1]   [6|0]>>6--b|1--7   [7|0]>>7--a|1--4   @@@[1|0]   [2|0]<<1--a|1--2   [3|0]<<2--b|1--3   [4|0]+[8|0]<<3--a|1--4   7--a|1--4   [5|2]+[9|1]<<4--c|2--5   [6|0]<<1--b|1--6   [7|0]<<6--b|1--7   ",
             testUniverzal(Arrays.<String>asList(
             "abac", "bbac"), 3, 2));
   }
-  
+
   /**
    * Test of simplify method, of class KHgrams.
    */
@@ -220,12 +220,10 @@ public class MergeConditionTesterKHContextTest {
     assertEquals(
             "[1|0]>>1--h|3--2   1--p|1--7   [2|0]>>2--p|1--3   2--h|1--11   2--e|1--17   [3|0]>>3--e|1--4   [4|0]+[13|0]>>4--e|2--5   [5|0]+[9|0]+[14|0]>>5--e|2--6   5--h|1--10   [6|1]+[15|0]>>6--h|1--10   [7|0]>>7--e|1--8   [8|0]>>8--e|1--5   [10|2]+[16|1]   [11|0]>>11--p|1--12   [12|0]>>12--e|1--4   [17|0]>>17--e|1--18   [18|1]   @@@[1|0]   [2|0]<<1--h|3--2   [3|0]<<2--p|1--3   [4|0]+[13|0]<<3--e|1--4   12--e|1--4   [5|0]+[9|0]+[14|0]<<4--e|2--5   8--e|1--5   [6|1]+[15|0]<<5--e|2--6   [7|0]<<1--p|1--7   [8|0]<<7--e|1--8   [10|2]+[16|1]<<5--h|1--10   6--h|1--10   [11|0]<<2--h|1--11   [12|0]<<11--p|1--12   [17|0]<<2--e|1--17   [18|1]<<17--e|1--18   ",
             testUniverzal(Arrays.<String>asList(
-            "hpeee", "peeh", "hhpeeeh", "hee"
-            ), 3, 3));
+            "hpeee", "peeh", "hhpeeeh", "hee"), 3, 3));
 
   }
 
-  
   /**
    * Test of simplify method, of class KHgrams.
    */
@@ -234,11 +232,10 @@ public class MergeConditionTesterKHContextTest {
     assertEquals(
             "[1|0]>>1--h|3--2   1--p|1--7   [2|0]>>2--p|1--3   2--h|1--11   2--e|1--17   [3|0]+[12|0]>>3--e|2--4   [4|0]+[13|0]+[8|0]>>4--e|3--5   [5|1]+[9|0]+[14|0]+[6|1]+[15|0]>>5--e|2--5   5--h|2--10   [7|0]>>7--e|1--4   [10|2]+[16|1]   [11|0]>>11--p|1--3   [17|0]>>17--e|1--18   [18|1]   @@@[1|0]   [2|0]<<1--h|3--2   [3|0]+[12|0]<<2--p|1--3   11--p|1--3   [4|0]+[13|0]+[8|0]<<3--e|2--4   7--e|1--4   [5|1]+[9|0]+[14|0]+[6|1]+[15|0]<<4--e|3--5   5--e|2--5   [7|0]<<1--p|1--7   [10|2]+[16|1]<<5--h|2--10   [11|0]<<2--h|1--11   [17|0]<<2--e|1--17   [18|1]<<17--e|1--18   ",
             testUniverzal(Arrays.<String>asList(
-            "hpeee", "peeh", "hhpeeeh", "hee"
-            ), 3, 2));
+            "hpeee", "peeh", "hhpeeeh", "hee"), 3, 2));
 
-  }  
-  
+  }
+
   /**
    * Test of simplify method, of class KHgrams.
    */
@@ -247,9 +244,7 @@ public class MergeConditionTesterKHContextTest {
     assertEquals(
             "[1|0]>>1--h|3--2   1--p|1--3   [2|0]+[11|0]>>2--p|2--3   2--h|1--2   2--e|1--17   [3|0]+[12|0]+[7|0]>>3--e|3--4   [4|1]+[13|0]+[8|0]+[5|0]+[9|0]+[14|0]+[6|1]+[15|0]>>4--e|5--4   4--h|2--10   [10|2]+[16|1]   [17|0]>>17--e|1--18   [18|1]   @@@[1|0]   [2|0]+[11|0]<<1--h|3--2   2--h|1--2   [3|0]+[12|0]+[7|0]<<2--p|2--3   1--p|1--3   [4|1]+[13|0]+[8|0]+[5|0]+[9|0]+[14|0]+[6|1]+[15|0]<<3--e|3--4   4--e|5--4   [10|2]+[16|1]<<4--h|2--10   [17|0]<<2--e|1--17   [18|1]<<17--e|1--18   ",
             testUniverzal(Arrays.<String>asList(
-            "hpeee", "peeh", "hhpeeeh", "hee"
-            ), 3, 1));
+            "hpeee", "peeh", "hhpeeeh", "hee"), 3, 1));
 
-  }  
-  
+  }
 }

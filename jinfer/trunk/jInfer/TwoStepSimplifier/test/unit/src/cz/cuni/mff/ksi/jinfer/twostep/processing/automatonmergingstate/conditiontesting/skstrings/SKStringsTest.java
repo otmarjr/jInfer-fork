@@ -43,7 +43,7 @@ public class SKStringsTest {
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
   @Test(expected = IllegalArgumentException.class)
-  public void testBadKSSet() {
+  public void testBadKSSet() throws InterruptedException {
     System.out.println("k,s bad values set");
     final Automaton<String> automaton = new Automaton<String>(true);
     automaton.buildPTAOnSymbol(Arrays.<String>asList());
@@ -55,7 +55,7 @@ public class SKStringsTest {
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
   @Test(expected = NullPointerException.class)
-  public void testGetMergableStatesEmptyAut() {
+  public void testGetMergableStatesEmptyAut() throws InterruptedException {
     System.out.println("getMergableStates empty automaton");
     final Automaton<String> automaton = new Automaton<String>(false);
     final SKStrings<String> instance = new SKStrings<String>(2, 0.01, "AND");
@@ -64,7 +64,7 @@ public class SKStringsTest {
   }
   
 
-  private void testGetMergableStatesNoAlt(final List<String> pta, final int k, final double s) {
+  private void testGetMergableStatesNoAlt(final List<String> pta, final int k, final double s) throws InterruptedException {
     System.out.println("getMergableStates no alternatives " + inputToString(pta));
     final Automaton<String> automaton = new Automaton<String>(true);
     for (String in : pta) {
@@ -87,72 +87,72 @@ public class SKStringsTest {
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
   @Test
-  public void testGetMergableStates1() {
+  public void testGetMergableStates1() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates2() {
+  public void testGetMergableStates2() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates3() {
+  public void testGetMergableStates3() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a", "a"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates4() {
+  public void testGetMergableStates4() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a", "a", "a"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates5() {
+  public void testGetMergableStates5() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "a", "a", "a", "a", "a", "a", "a", "a", "a", "b", "b", "b", "b", "b", "b", "b", "b"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates6() {
+  public void testGetMergableStates6() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "aa", "bb", "bb"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates7() {
+  public void testGetMergableStates7() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "aa", "bb", "bb", "aa", "bb", "bb", "aa", "bb", "bb", "aa", "bb", "bb", "aa", "bb", "bb"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates8() {
+  public void testGetMergableStates8() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "aa", "bb", "bb", "cc", "dd"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates9() {
+  public void testGetMergableStates9() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aa", "ab", "ac", "ad", "aba", "aca", "ada"), 2, 1);
   }
 
   @Test
-  public void testGetMergableStates10() {
+  public void testGetMergableStates10() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aab", "bab"), 3, 1);
   }
 
   @Test
-  public void testGetMergableStates11() {
+  public void testGetMergableStates11() throws InterruptedException {
     testGetMergableStatesNoAlt(Arrays.<String>asList(
             "aaaaa", "aaaaa"), 5, 1);
   }
 
   @Test
-  public void testSimplify12() {
+  public void testSimplify12() throws InterruptedException {
     assertEquals(
             "[1|0]>>1--a|2--2   [2|0]>>2--a|2--3   [3|2]   @@@[1|0]   [2|0]<<1--a|2--2   [3|2]<<2--a|2--3   ",
             testUniverzal(Arrays.<String>asList(
@@ -207,7 +207,7 @@ public class SKStringsTest {
   
 
   @Test
-  public void testUnity() {
+  public void testUnity() throws InterruptedException {
     System.out.println("testUnity");
     final Automaton<String> automaton = new Automaton<String>(true);
     List<String> pta = Arrays.<String>asList("hpeee", "peeh", "hhpeeeh", "hee");
@@ -240,7 +240,7 @@ public class SKStringsTest {
   }
   
   
-  private String testUniverzal(final List<String> pta, final int k, final double s) {
+  private String testUniverzal(final List<String> pta, final int k, final double s) throws InterruptedException {
     System.out.println("getMergableStates merge all " + inputToString(pta));
     final Automaton<String> automaton = new Automaton<String>(true);
     for (String in : pta) {

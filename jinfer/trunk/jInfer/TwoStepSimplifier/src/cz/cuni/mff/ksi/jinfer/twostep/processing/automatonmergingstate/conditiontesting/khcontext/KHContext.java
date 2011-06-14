@@ -74,7 +74,10 @@ public class KHContext<T> implements MergeConditionTester<T> {
   }
 
   private List<List<Step<T>>> findKHContexts(final int _k,
-          final Step<T> step, final Map<State<T>, Set<Step<T>>> reverseDelta) {
+          final Step<T> step, final Map<State<T>, Set<Step<T>>> reverseDelta) throws InterruptedException {
+    if (Thread.interrupted()) {
+      throw new InterruptedException();
+    }
     final List<List<Step<T>>> result = new LinkedList<List<Step<T>>>();
     if (_k == 1) {
       final List<Step<T>> d = new LinkedList<Step<T>>();
@@ -92,7 +95,7 @@ public class KHContext<T> implements MergeConditionTester<T> {
     return result;
   }
 
-  private List<List<Step<T>>> findKHContexts(final int _k, final State<T> state, final Map<State<T>, Set<Step<T>>> reverseDelta) {
+  private List<List<Step<T>>> findKHContexts(final int _k, final State<T> state, final Map<State<T>, Set<Step<T>>> reverseDelta) throws InterruptedException {
     final List<List<Step<T>>> result = new ArrayList<List<Step<T>>>();
     for (Step<T> step : reverseDelta.get(state)) {
       final List<List<Step<T>>> indu = findKHContexts(_k, step, reverseDelta);
@@ -108,7 +111,7 @@ public class KHContext<T> implements MergeConditionTester<T> {
   }
 
   @Override
-  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) {
+  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) throws InterruptedException {
     checkConstraits();
     final Map<State<T>, Set<Step<T>>> reverseDelta = automaton.getReverseDelta();
     final List<List<List<State<T>>>> alternatives = new ArrayList<List<List<State<T>>>>();
@@ -123,7 +126,7 @@ public class KHContext<T> implements MergeConditionTester<T> {
     return alternatives;
   }
 
-  private List<List<List<State<T>>>> getAlternatives(final List<Step<T>> context1, final List<Step<T>> context2) {
+  private List<List<List<State<T>>>> getAlternatives(final List<Step<T>> context1, final List<Step<T>> context2) throws InterruptedException {
     if ((context1.size() != k) || (context2.size() != k)) {
       return Collections.<List<List<State<T>>>>emptyList();
     }
@@ -131,6 +134,9 @@ public class KHContext<T> implements MergeConditionTester<T> {
 
     boolean totalSame = true;
     for (int i = 0; i < k; i++) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       if (!context1.get(i).getAcceptSymbol().equals(context2.get(i).getAcceptSymbol())) {
         return Collections.<List<List<State<T>>>>emptyList();
       }

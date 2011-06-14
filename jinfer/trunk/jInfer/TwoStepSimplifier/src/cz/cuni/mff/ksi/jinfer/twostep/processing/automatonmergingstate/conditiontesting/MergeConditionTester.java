@@ -73,5 +73,5 @@ public interface MergeConditionTester<T> {
    * @param automaton whole automaton on which we work
    * @return list of alternatives as describe above
    */
-  List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton);
+  List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) throws InterruptedException;
 }

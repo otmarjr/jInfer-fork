@@ -21,11 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,7 +57,10 @@ public class SKStrings<T> implements MergeConditionTester<T> {
     }
   }
 
-  public SKBucket<T> findSKStrings(final int _k, final State<T> state, final Map<State<T>, Set<Step<T>>> delta) {
+  public SKBucket<T> findSKStrings(final int _k, final State<T> state, final Map<State<T>, Set<Step<T>>> delta) throws InterruptedException {
+    if (Thread.interrupted()) {
+      throw new InterruptedException();
+    }
     final SKBucket<T> result = new SKBucket<T>();
     int sum = 0;
     for (Step<T> step : delta.get(state)) {
@@ -85,7 +84,7 @@ public class SKStrings<T> implements MergeConditionTester<T> {
   }
 
   @Override
-  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) {
+  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) throws InterruptedException {
     final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
     final List<List<List<State<T>>>> alternatives = new ArrayList<List<List<State<T>>>>();
     if (state1.equals(state2)) {

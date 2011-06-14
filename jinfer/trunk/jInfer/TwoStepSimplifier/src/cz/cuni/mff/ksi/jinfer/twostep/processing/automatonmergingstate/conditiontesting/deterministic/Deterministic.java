@@ -21,16 +21,9 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * k,h-context equivalence criterion implementation.
@@ -48,19 +41,22 @@ public class Deterministic<T> implements MergeConditionTester<T> {
   }
 
   @Override
-  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) {
+  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) throws InterruptedException {
     final List<List<List<State<T>>>> alternatives = new ArrayList<List<List<State<T>>>>();
 
     List<List<State<T>>> ret= new ArrayList<List<State<T>>>();
     for (State<T> state : automaton.getDelta().keySet()) {
       Map<T, State<T>> mm = new HashMap<T, State<T>>();
       for (Step<T> step : automaton.getDelta().get(state)) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         if (!mm.containsKey(step.getAcceptSymbol())) {
           mm.put(step.getAcceptSymbol(), step.getDestination());
-        } else {
+        } else if (!mm.get(step.getAcceptSymbol()).equals(step.getDestination())) {
           List<State<T>> mergePair = new ArrayList<State<T>>();
-          mergePair.add(state);
           mergePair.add(mm.get(step.getAcceptSymbol()));
+          mergePair.add(step.getDestination());
           ret.add(mergePair);
         }
       }

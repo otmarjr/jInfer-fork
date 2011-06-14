@@ -127,7 +127,6 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     add(jLabel2, gridBagConstraints);
 
     panelParams.setMinimumSize(new java.awt.Dimension(200, 22));
-    panelParams.setPreferredSize(new java.awt.Dimension(200, 22));
     panelParams.setLayout(new java.awt.GridBagLayout());
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
@@ -150,6 +149,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
     descContitionTester.setText(htmlize(factory.getUserModuleDescription()));
 
     panelParams.removeAll();
+    panelParams.validate();
     dynamicComponents = new HashMap<String, JTextField>();
     dynamicParameters = new HashMap<String, String>();
     GridBagConstraints gridBagConstraints;
@@ -213,6 +213,7 @@ public class GreedyPropertiesPanel extends AbstractPropertiesPanel {
       gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
       panelParams.add(l, gridBagConstraints);
     }
+    panelParams.validate();
   }//GEN-LAST:event_comboConditionTesterChanged
 
   @Override

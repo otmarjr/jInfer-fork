@@ -49,22 +49,13 @@ public class InitialModel {
   
   
 
-  public void addXMLTree(List<XMLTree> xmlTrees) {
-    trees.addAll(createRXMLTrees(xmlTrees));
-  }
-
-  private Collection<? extends RXMLTree> createRXMLTrees(List<XMLTree> xmlTrees) {
-    List<RXMLTree> result = new ArrayList<RXMLTree>();
-    for (XMLTree xmlTree : xmlTrees) {
-      result.add(new RXMLTree(xmlTree));
-    }
-    
-    return result;
+  public void addTree(List<RXMLTree> xmlTrees) {
+    trees.addAll(xmlTrees);
   }
   
   public List<String> getPaths(final RXMLTree rXmlTree) {
     int treeIndex = trees.indexOf(rXmlTree);
-    return trees.get(treeIndex).getXmlTree().getPaths();
+    return trees.get(treeIndex).getPaths();
   }
   
   public int getFDsCount() {

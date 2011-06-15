@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.XMLTree;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGenerator;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGeneratorCallback;
@@ -49,7 +49,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
     InitialModel result = new InitialModel();
 
     result.addFD(getFDFromInput(input.getFunctionalDependencies()));
-    result.addXMLTree(getDataFromInput(input.getDocuments()));
+    result.addTree(getDataFromInput(input.getDocuments()));
 
     callback.finished(result);
     return;
@@ -80,13 +80,13 @@ public class ModelGeneratorImpl implements ModelGenerator {
     return result;
   }
 
-  private List<XMLTree> getDataFromInput(final Collection<File> files) throws InterruptedException {
+  private List<RXMLTree> getDataFromInput(final Collection<File> files) throws InterruptedException {
     if (BaseUtils.isEmpty(files)) {
-      return Collections.<XMLTree>emptyList();
+      return Collections.<RXMLTree>emptyList();
     }
-    final List<XMLTree> result = new ArrayList<XMLTree>();
+    final List<RXMLTree> result = new ArrayList<RXMLTree>();
 
-    Processor<XMLTree> xmlProcessor = ModelGeneratorImpl.<XMLTree>getProcessor(XMLTree.class);
+    Processor<RXMLTree> xmlProcessor = ModelGeneratorImpl.<RXMLTree>getProcessor(RXMLTree.class);
     Processor<String> pathProcessor = ModelGeneratorImpl.<String>getProcessor(String.class);
 
     if (xmlProcessor != null && pathProcessor != null) {
@@ -95,7 +95,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
           throw new InterruptedException();
         }
         try {
-          List<XMLTree> xmlTrees = xmlProcessor.process(new FileInputStream(file));
+          List<RXMLTree> xmlTrees = xmlProcessor.process(new FileInputStream(file));
           if (!xmlTrees.isEmpty()) {
             xmlTrees.get(0).setPaths(pathProcessor.process(new FileInputStream(file)));
           }

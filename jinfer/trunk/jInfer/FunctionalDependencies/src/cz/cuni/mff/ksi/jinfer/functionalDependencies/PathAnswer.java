@@ -34,7 +34,8 @@ public class PathAnswer {
   //TODO sviro unit tests
   public PathAnswer(NodeList nodeList) {
     if (nodeList != null && nodeList.getLength() > 0) {
-      if (nodeList.item(0).getNodeType() == Node.TEXT_NODE) {
+      final short nodeType = nodeList.item(0).getNodeType();
+      if (nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE) {
         isValue = true;
       }
       nodeAnswers = new ArrayList<Node>();
@@ -47,7 +48,8 @@ public class PathAnswer {
 
   public PathAnswer(List<Node> nodeList) {
     if (nodeList != null && nodeList.size() > 0) {
-      if (nodeList.get(0).getNodeType() == Node.TEXT_NODE) {
+      final short nodeType = nodeList.get(0).getNodeType();
+      if (nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE) {
         isValue = true;
       }
       

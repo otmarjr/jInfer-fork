@@ -47,8 +47,8 @@ public class RepairRunner {
     @Override
     public void finished(InitialModel model) {
       for (RXMLTree rXMLTree : model.getTrees()) {
-        LOG.debug("Tree:\n" + rXMLTree.getXmlTree().toString() + "\n");
-        LOG.debug("Paths:" + rXMLTree.getXmlTree().pathsToString() + "\n");
+        LOG.debug("Tree:\n" + rXMLTree.toString() + "\n");
+        LOG.debug("Paths:" + rXMLTree.pathsToString() + "\n");
       }
       
       RepairRunner.this.finishedModelGenerator(model);

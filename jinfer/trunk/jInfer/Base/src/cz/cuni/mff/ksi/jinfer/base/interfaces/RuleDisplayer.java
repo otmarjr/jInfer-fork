@@ -26,11 +26,12 @@ import java.util.List;
  */
 public interface RuleDisplayer extends NamedModule {
 
-  String RULE_DISPLAYER_PROPERTY = "rule.displayer";
+  public static final String RULE_DISPLAYER_PROP = "rule.displayer";
+  public static final String RULE_DISPLAYER_DEFAULT = "TreeRuleDisplayer";
 
   /**
    * Creates rule displayer window in which rules are displayed.
-   * 
+   *
    * @param panelName Name of the rule displayer window.
    * @param rules Rules to be displayed in rule displayer.
    */

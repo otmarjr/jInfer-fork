@@ -104,18 +104,15 @@ public class PathAnswer {
 
   public List<Node> getNodeAnswers() {
     if (isEmpty()) {
-      return null;
+      return new ArrayList<Node>();
     }
-    
-    if (!isNodeAnswer()) {
-      throw new UnsupportedOperationException(NbBundle.getMessage(PathAnswer.class, "pathAnswer.wrongAnswerType.retreive"));
-    }
+
     return nodeAnswers;
   }
 
   public List<String> getValueAnswers() {
     if (isEmpty()) {
-      return null;
+      return new ArrayList<String>();
     }
     
     if (!isValueAnswer()) {

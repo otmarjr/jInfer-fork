@@ -17,6 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.modelGenerator;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,18 +38,36 @@ public class PathsContentHandler extends DefaultHandler {
   private Stack<String> tags;
   String lastClosedTag;
   private static final Logger LOG = Logger.getLogger(PathsContentHandler.class);
+  
+  private static Comparator<String> pathComparator = new Comparator<String>() {
+
+    @Override
+    public int compare(String o1, String o2) {
+      int path1Size = getPathSize(o1);
+      int path2Size = getPathSize(o2);
+      return path1Size - path2Size;
+    }
+    
+    private int getPathSize(String path) {
+      return path.replaceAll("[^/]", "").length();
+    }
+  };
 
   public PathsContentHandler() {
     paths = new HashSet<String>();
   }
 
-  private String getCurrentXPath(String attribute) {
+  private String getCurrentXPath(String attribute, boolean isText) {
     String str = "/";
     for (String tag : tags) {
       str += "/" + tag;
     }
     if (attribute != null) {
       str += "/@" + attribute;
+    }
+    
+    if (isText) {
+      str += "/text()";
     }
     return str;
   }
@@ -77,7 +97,7 @@ public class PathsContentHandler extends DefaultHandler {
       tags.push(localName);
     }
 
-    paths.add(getCurrentXPath(null));
+    paths.add(getCurrentXPath(null, false));
     addAttributePaths(attributes);
 
 
@@ -85,6 +105,13 @@ public class PathsContentHandler extends DefaultHandler {
     lastClosedTag = null;
   }
 
+  @Override
+  public void characters(char[] ch, int start, int length) throws SAXException {
+    paths.add(getCurrentXPath(null, true));
+  }
+  
+  
+  
   @Override
   public void endElement(String uri, String localName, String qName) throws SAXException {
     // if two tags are closed in succession (without an intermediate opening tag),
@@ -96,13 +123,15 @@ public class PathsContentHandler extends DefaultHandler {
   }
 
   List<String> getPaths() {
-    return new ArrayList<String>(paths);
+    ArrayList<String> result = new ArrayList<String>(paths);
+    Collections.sort(result, pathComparator);
+    return result;
   }
 
   private void addAttributePaths(Attributes attributes) {
     for (int i = 0; i < attributes.getLength(); i++) {
       String attrName = attributes.getLocalName(i);
-      paths.add(getCurrentXPath(attrName));
+      paths.add(getCurrentXPath(attrName, false));
     }
   }
 }

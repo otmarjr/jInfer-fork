@@ -17,8 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -28,11 +33,32 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = Repairer.class)
 public class RepairerImpl implements Repairer {
 
+  private static final Logger LOG = Logger.getLogger(RepairerImpl.class);
+  
   @Override
   public void start(InitialModel model, RepairerCallback callback) throws InterruptedException {
+    List<RXMLTree> result = new ArrayList<RXMLTree>();
     
-    callback.finished(null);
+    List<FD> functionalDependencies = model.getFunctionalDependencies();
+    for (RXMLTree rXMLTree : model.getTrees()) {
+      RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies);
+      if (repairedTree != null) {
+        result.add(repairedTree);
+      }
+    }
+    callback.finished(result);
     return;
+  }
+
+  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) {
+    for (FD fd : functionalDependencies) {
+      if (!rXMLTree.isSatisfyingFD(fd)) {
+//        List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(rXMLTree.getTuples());
+        LOG.debug("XML is inconsistent to FD.");
+      }
+    }
+    
+    return null;
   }
   
 }

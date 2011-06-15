@@ -267,13 +267,14 @@ public class PathAnswerTest {
   public void testGetNodeAnswers() {
     PathAnswer instance = new PathAnswer(new ArrayList<Node>());
     List<Node> valueAnswers = instance.getNodeAnswers();
-    assertNull(valueAnswers);
+    List<Node> expected = new ArrayList<Node>();
+    assertEquals(expected, valueAnswers);
   }
 
   /**
    * Test of getNodeAnswers method, of class PathAnswer.
    */
-  @Test(expected = UnsupportedOperationException.class)
+  @Test
   public void testGetNodeAnswers2() throws ParserConfigurationException {
     DocumentBuilder newDocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     Document document = newDocumentBuilder.newDocument();
@@ -282,7 +283,10 @@ public class PathAnswerTest {
     list.add(textNode);
 
     PathAnswer instance = new PathAnswer(list);
-    List<Node> valueAnswers = instance.getNodeAnswers();
+    List<Node> nodeAnswers = instance.getNodeAnswers();
+    List<Node> expected = new ArrayList<Node>();
+    expected.add(textNode);
+    assertEquals(expected, nodeAnswers);
   }
 
   /**
@@ -310,7 +314,9 @@ public class PathAnswerTest {
   public void testGetValueAnswers() throws ParserConfigurationException {
     PathAnswer instance = new PathAnswer(new ArrayList<Node>());
     List<String> valueAnswers = instance.getValueAnswers();
-    assertNull(valueAnswers);
+    List<String> expected = new ArrayList<String>();
+    
+    assertEquals(expected, valueAnswers);
   }
 
   /**

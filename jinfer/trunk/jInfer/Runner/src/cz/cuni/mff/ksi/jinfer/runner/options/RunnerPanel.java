@@ -44,7 +44,6 @@ public final class RunnerPanel extends JPanel {
   public static final boolean SCHEMA_OPEN_DEFAULT = true;
   public static final String NAME_PATTERN_PROP = "name.pattern";
   public static final String NAME_PATTERN_DEFAULT = "generated-schema{n}";
-  public static final String RULE_DISPLAYER_DEFAULT = "TreeRuleDisplayer";
 
   public RunnerPanel() {
     super();
@@ -290,7 +289,7 @@ public final class RunnerPanel extends JPanel {
     namePattern.setText(p.get(NAME_PATTERN_PROP, NAME_PATTERN_DEFAULT));
 
     ruleDisplayerCombo.setModel(new DefaultComboBoxModel(ModuleSelectionHelper.lookupImpls(RuleDisplayer.class).toArray()));
-    final String ruleDisplayerName = p.get(RuleDisplayer.RULE_DISPLAYER_PROPERTY, RULE_DISPLAYER_DEFAULT);
+    final String ruleDisplayerName = NbPreferences.forModule(RuleDisplayer.class).get(RuleDisplayer.RULE_DISPLAYER_PROP, RuleDisplayer.RULE_DISPLAYER_DEFAULT);
     ruleDisplayerCombo.setSelectedItem(ModuleSelectionHelper.lookupImpl(RuleDisplayer.class, ruleDisplayerName));
   }
 
@@ -308,7 +307,7 @@ public final class RunnerPanel extends JPanel {
     p.put(NAME_PATTERN_PROP, namePattern.getText());
 
     final String ruleDisplayerName = ((NamedModule) ruleDisplayerCombo.getSelectedItem()).getName();
-    p.put(RuleDisplayer.RULE_DISPLAYER_PROPERTY, ruleDisplayerName);
+    NbPreferences.forModule(RuleDisplayer.class).put(RuleDisplayer.RULE_DISPLAYER_PROP, ruleDisplayerName);
   }
 
   /**

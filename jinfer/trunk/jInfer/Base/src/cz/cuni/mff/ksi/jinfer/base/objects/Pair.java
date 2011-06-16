@@ -84,7 +84,7 @@ public class Pair<S, T> {
   }
 
   private static <X> boolean equal(final X arg1, final X arg2) {
-    if (arg1 == null && arg1 == null) {
+    if (arg1 == null && arg2 == null) {
       return true;
     }
     if (arg2 == null) {

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author sviro
  */
 @XmlTransient
-public class SidePaths {
+public abstract class SidePaths {
   
   @XmlElement(required = true)
     protected List<String> path;

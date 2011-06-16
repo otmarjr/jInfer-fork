@@ -69,6 +69,9 @@ public class RXMLTree {
       tuples = TupleFactory.createTuples(this);
     }
     List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(tuples);
+    if (tuplePairs == null || tuplePairs.isEmpty()) {
+      throw new RuntimeException("List of tuple pairs can't be null or empty.");
+    }
 
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
       Tuple tuple1 = tuplePair.getFirst();
@@ -169,34 +172,33 @@ public class RXMLTree {
   }
 
   public PathAnswer getPathAnswerForTuple(final String path, final Tuple tuple) {
-    XPathFactory xpathFactory = XPathFactory.newInstance();
-    XPath xPath = xpathFactory.newXPath();
-    XPathExpression xPathExpression;
+    if (path != null) {
+      XPathFactory xpathFactory = XPathFactory.newInstance();
+      XPath xPath = xpathFactory.newXPath();
+      XPathExpression xPathExpression;
 
-    List<Node> result = new ArrayList<Node>();
-    try {
-      xPathExpression = xPath.compile(path);
-      NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
+      List<Node> result = new ArrayList<Node>();
+      try {
+        xPathExpression = xPath.compile(path);
+        NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
 
-      if (tuple != null) {
-        for (int i = 0; i < nodeList.getLength(); i++) {
-          Node node = nodeList.item(i);
-          if (tuplesMap.get(node).contains(tuple)) {
-            result.add(node);
+        if (tuple != null) {
+          for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (tuplesMap.get(node).contains(tuple)) {
+              result.add(node);
+            }
           }
+
+          return new PathAnswer(result);
         }
-//        if (result.size() > 1) {
-//          throw new RuntimeException("The path answer for tuple must return max one node");
-//        }
-        
-        return new PathAnswer(result);
+
+        return new PathAnswer(nodeList);
+      } catch (XPathExpressionException ex) {
+        LOG.error("Path " + path + " cannot be compiled or evaluated.", ex);
       }
-      
-      return new PathAnswer(nodeList);
-    } catch (XPathExpressionException ex) {
-      LOG.error("Path " + path + " cannot be compiled or evaluated.", ex);
     }
-    
+
     return null;
   }
 

@@ -55,6 +55,9 @@ public class TupleFactory {
         Tuple lastTuple = lastAddedTuples.poll();
 
         PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, lastTuple);
+        if (pathAnswer == null) {
+          throw new RuntimeException("PathAnswer can't be null.");
+        }
         if (!pathAnswer.hasMaxOneElement()) {
           for (Node node : pathAnswer.getNodeAnswers()) {
             int newTupleID = tree.getNewTupleID();
@@ -74,8 +77,11 @@ public class TupleFactory {
     return result;
   }
 
-  //TODO sviro unit test
   public static List<Pair<Tuple, Tuple>> getTuplePairs(List<Tuple> tuples) {
+    if (tuples == null) {
+      return null;
+    }
+    
     List<Pair<Tuple, Tuple>> result = new ArrayList<Pair<Tuple, Tuple>>();
     for (Tuple tuple : tuples) {
       for (Tuple tuple1 : tuples) {
@@ -88,18 +94,26 @@ public class TupleFactory {
     return result;
   }
 
+  //TODO sviro implement
   public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(List<Tuple> tuples, FD fd) {
     List<Tuple> notSatisfyingTuples = new ArrayList<Tuple>();
     for (Tuple tuple : tuples) {
     }
-
+    
 
 
     return getTuplePairs(notSatisfyingTuples);
   }
 
   public static List<PathAnswer> getFDSidePathAnswers(RXMLTree tree, Tuple tuple, SidePaths sidePaths) {
-    //TODO sviro implement
+    if (tuple == null) {
+      throw new RuntimeException("Tuple can't be null.");
+    }
+    
+    if (sidePaths == null) {
+      throw new RuntimeException("Side paths can't be null.");
+    }
+    
     List<PathAnswer> result = new ArrayList<PathAnswer>();
     for (String path : sidePaths.getPath()) {
       PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, tuple);

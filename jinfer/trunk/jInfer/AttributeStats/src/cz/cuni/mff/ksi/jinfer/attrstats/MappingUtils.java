@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMapping;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -146,5 +147,18 @@ public final class MappingUtils {
             new HashSet<String>(model.getAMs().get(am1).getImage()),
             new HashSet<String>(model.getAMs().get(am2).getImage()))
             .isEmpty();
+  }
+
+  /**
+   * TODO vektor Comment!
+   */
+  public static List<AttributeMappingId> getCandidates(final AMModel model) {
+    final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();
+    for (final AttributeMappingId mapping : model.getAMs().keySet()) {
+      if (MappingUtils.isCandidateMapping(mapping, model)) {
+        ret.add(mapping);
+      }
+    }
+    return ret;
   }
 }

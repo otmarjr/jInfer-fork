@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
+package cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
@@ -24,14 +24,24 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
  *
  * @author vektor
  */
-public interface QualityMeasurement {
+public class TimeIterations implements TerminationCriterion {
 
-  /**
-   * TODO vektor Comment!
-   *
-   * @param solution
-   * @return
-   */
-  Quality measure(final AMModel model, final IdSet solution);
+  private final int maxIterations;
+  private int iterations = 0;
+  private final long maxTime;
+
+  public TimeIterations(final int maxIterations, final long maxTime) {
+    this.maxIterations = maxIterations;
+    this.maxTime = maxTime;
+  }
+
+  @Override
+  public boolean terminate(final long time, final IdSet solution) {
+    iterations++;
+    if (iterations > maxIterations || time > maxTime) {
+      return true;
+    }
+    return false;
+  }
 
 }

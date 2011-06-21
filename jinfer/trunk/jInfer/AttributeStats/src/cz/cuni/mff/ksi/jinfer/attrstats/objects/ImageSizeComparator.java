@@ -14,25 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
+package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.Comparator;
 
 /**
  * TODO vektor Comment!
  *
  * @author vektor
  */
-public interface TerminationCriteria {
+public class ImageSizeComparator implements Comparator<AttributeMappingId> {
 
-  /**
-   * Returns a flag whether to terminate the iterations of the metaheuristic.
-   *
-   * @param time Total time taken so far.
-   * @param solution The latest solution that was produced.
-   * @return <code>True</code> if the metaheuristic should be terminated,
-   * <code>false<code> otherwise.
-   */
-  boolean terminate(final long time, final IdSet solution);
+  private final AMModel model;
 
+  public ImageSizeComparator(final AMModel model) {
+    this.model = model;
+  }
+
+  @Override
+  public int compare(final AttributeMappingId o1, final AttributeMappingId o2) {
+    final Integer size1 = Integer.valueOf(model.getAMs().get(o1).size());
+    final Integer size2 = Integer.valueOf(model.getAMs().get(o2).size());
+    // TODO vektor Is this correct?!
+    return -size1.compareTo(size2);
+  }
 }

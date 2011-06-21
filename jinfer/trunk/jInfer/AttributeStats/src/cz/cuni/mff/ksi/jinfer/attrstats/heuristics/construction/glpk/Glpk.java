@@ -14,24 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
+package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
  * TODO vektor Comment!
  *
  * @author vektor
  */
-public interface QualityMeasurement {
+public class Glpk implements ConstructionHeuristic {
 
-  /**
-   * TODO vektor Comment!
-   *
-   * @param solution
-   * @return
-   */
-  Quality measure(final AMModel model, final IdSet solution);
+  private final double alpha;
+  private final double beta;
+  private final int timeLimit;
+
+  public Glpk(final double alpha, final double beta, final int timeLimit) {
+    this.alpha = alpha;
+    this.beta = beta;
+    this.timeLimit = timeLimit;
+  }
+
+  @Override
+  public void start(final AMModel model, final HeuristicCallback callback)
+          throws InterruptedException {
+    callback.finished(GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model));
+  }
 
 }

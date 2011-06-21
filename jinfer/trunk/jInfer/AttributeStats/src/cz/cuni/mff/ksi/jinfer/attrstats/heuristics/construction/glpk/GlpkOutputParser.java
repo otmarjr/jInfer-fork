@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
+package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;

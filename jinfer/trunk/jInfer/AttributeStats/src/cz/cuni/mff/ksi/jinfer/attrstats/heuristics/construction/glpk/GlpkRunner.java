@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
+package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
@@ -54,7 +54,7 @@ public final class GlpkRunner {
    * @param model Model to find "optimal" ID set in.
    * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
    * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
-   * 
+   *
    * @return String representation of GLPK optimalization output.
    */
   public static String run(final AMModel model,

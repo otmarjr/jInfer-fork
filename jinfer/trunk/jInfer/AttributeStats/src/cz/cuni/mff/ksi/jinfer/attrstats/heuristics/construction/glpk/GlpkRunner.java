@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -26,7 +25,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import org.apache.log4j.Logger;
-import org.openide.util.NbPreferences;
 
 /**
  * Utility class for GLPK invocation.
@@ -58,7 +56,8 @@ public final class GlpkRunner {
    * @return String representation of GLPK optimalization output.
    */
   public static String run(final AMModel model,
-          final double alpha, final double beta) throws InterruptedException {
+          final double alpha, final double beta, final int timeLimit)
+          throws InterruptedException {
     final File input = new File(INPUT);
     final File output = new File(OUTPUT);
     PrintWriter pw = null;
@@ -71,9 +70,6 @@ public final class GlpkRunner {
     } finally {
       pw.close();
     }
-
-    final int timeLimit = NbPreferences.forModule(AttrStatsPanel.class)
-            .getInt(AttrStatsPanel.TIME_LIMIT_PROP, AttrStatsPanel.TIME_LIMIT_DEFAULT);
 
     try {
       final long startTime = Calendar.getInstance().getTimeInMillis();

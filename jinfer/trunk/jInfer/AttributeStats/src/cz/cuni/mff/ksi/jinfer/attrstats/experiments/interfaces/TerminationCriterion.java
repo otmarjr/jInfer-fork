@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
@@ -24,14 +23,16 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
  *
  * @author vektor
  */
-public interface QualityMeasurement {
+public interface TerminationCriterion {
 
   /**
-   * TODO vektor Comment!
+   * Returns a flag whether to terminate the iterations of the metaheuristic.
    *
-   * @param solution
-   * @return
+   * @param time Total time taken so far.
+   * @param solution The latest solution that was produced.
+   * @return <code>True</code> if the metaheuristic should be terminated,
+   * <code>false<code> otherwise.
    */
-  Quality measure(final AMModel model, final IdSet solution);
+  boolean terminate(final long time, final IdSet solution);
 
 }

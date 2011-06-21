@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
+package cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
@@ -24,14 +26,30 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
  *
  * @author vektor
  */
-public interface QualityMeasurement {
+public class Weight implements QualityMeasurement {
 
-  /**
-   * TODO vektor Comment!
-   *
-   * @param solution
-   * @return
-   */
-  Quality measure(final AMModel model, final IdSet solution);
+  private final double alpha;
+  private final double beta;
+
+  public Weight(final double alpha, final double beta) {
+    this.alpha = alpha;
+    this.beta = beta;
+  }
+
+  @Override
+  public Quality measure(final AMModel model, final IdSet solution) {
+    return new Quality() {
+
+      @Override
+      public double getScalar() {
+        return model.weight(solution.getMappings(), alpha, beta);
+      }
+
+      @Override
+      public boolean isOptimal() {
+        return solution.isOptimal();
+      }
+    };
+  }
 
 }

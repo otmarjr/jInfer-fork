@@ -14,24 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
+package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.fidax;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
  * TODO vektor Comment!
  *
  * @author vektor
  */
-public interface QualityMeasurement {
+public class Fidax implements ConstructionHeuristic {
 
-  /**
-   * TODO vektor Comment!
-   *
-   * @param solution
-   * @return
-   */
-  Quality measure(final AMModel model, final IdSet solution);
+  private final double alpha;
+  private final double beta;
+
+  public Fidax(final double alpha, final double beta) {
+    this.alpha = alpha;
+    this.beta = beta;
+  }
+
+  @Override
+  public void start(final AMModel model, final HeuristicCallback callback)
+          throws InterruptedException {
+    callback.finished(FidaxAlgorithm.findIDSet(model, alpha, beta));
+  }
 
 }

@@ -30,12 +30,23 @@ public class IdSet {
 
   private final boolean optimal;
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param mappings
+   * @param optimal
+   */
   public IdSet(final List<AttributeMappingId> mappings, final boolean optimal) {
     super();
     this.mappings = mappings;
     this.optimal = optimal;
   }
 
+  /**
+   * TODO vektor Comment!
+   * 
+   * @param mappings
+   */
   public IdSet(final List<AttributeMappingId> mappings) {
     this(mappings, false);
   }

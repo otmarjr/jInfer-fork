@@ -25,7 +25,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkInputGe
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkOutputParser;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkRunner;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
-import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.fidax.Algorithm;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.fidax.FidaxAlgorithm;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -293,7 +293,7 @@ public class StatisticsPanel extends JPanel {
     final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
     final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
 
-    final IdSet resultingSet = Algorithm.findIDSet(model, alpha, beta);
+    final IdSet resultingSet = FidaxAlgorithm.findIDSet(model, alpha, beta);
     if (!resultingSet.isValid(model)) {
       notAnIdSet();
     }
@@ -332,7 +332,8 @@ public class StatisticsPanel extends JPanel {
         try {
           final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
           final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
-          final String glpkOut = GlpkRunner.run(model, alpha, beta);
+          final int timeLimit = NbPreferences.forModule(AttrStatsPanel.class).getInt(AttrStatsPanel.TIME_LIMIT_PROP, AttrStatsPanel.TIME_LIMIT_DEFAULT);
+          final String glpkOut = GlpkRunner.run(model, alpha, beta, timeLimit);
           glpkInput.setText(glpkOut);
 
           final IdSet idSet = GlpkOutputParser.getIDSet(glpkOut, model);

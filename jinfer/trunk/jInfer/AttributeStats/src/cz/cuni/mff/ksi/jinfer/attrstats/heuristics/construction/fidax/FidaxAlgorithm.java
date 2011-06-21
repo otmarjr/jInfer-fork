@@ -21,10 +21,10 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -38,11 +38,11 @@ import org.apache.log4j.Logger;
  *
  * @author vektor
  */
-public final class Algorithm {
+public final class FidaxAlgorithm {
 
-  private static final Logger LOG = Logger.getLogger(Algorithm.class);
+  private static final Logger LOG = Logger.getLogger(FidaxAlgorithm.class);
 
-  private Algorithm() {
+  private FidaxAlgorithm() {
   }
 
   /**
@@ -60,20 +60,11 @@ public final class Algorithm {
 
     final long startTime = Calendar.getInstance().getTimeInMillis();
 
-    // 1.  M := all AMs
-
-    final List<AttributeMappingId> M = new ArrayList<AttributeMappingId>(model.getAMs().keySet());
-
-    LOG.info("M: " + M.toString());
+    // 1.  M := all AMs - hidden here
 
     // 1.  C := all candidate AMs sorted by decreasing size
 
-    final List<AttributeMappingId> C = new ArrayList<AttributeMappingId>();
-    for (final AttributeMappingId mapping : M) {
-      if (MappingUtils.isCandidateMapping(mapping, model)) {
-        C.add(mapping);
-      }
-    }
+    final List<AttributeMappingId> C = MappingUtils.getCandidates(model);
 
     Collections.sort(C, new ImageSizeComparator(model));
 
@@ -166,19 +157,4 @@ public final class Algorithm {
     return max;
   }
 
-  private static class ImageSizeComparator implements Comparator<AttributeMappingId> {
-
-    private final AMModel model;
-
-    public ImageSizeComparator(final AMModel model) {
-      this.model = model;
-    }
-
-    @Override
-    public int compare(final AttributeMappingId o1, final AttributeMappingId o2) {
-      final Integer size1 = Integer.valueOf(model.getAMs().get(o1).size());
-      final Integer size2 = Integer.valueOf(model.getAMs().get(o2).size());
-      return -size1.compareTo(size2);
-    }
-  };
 }

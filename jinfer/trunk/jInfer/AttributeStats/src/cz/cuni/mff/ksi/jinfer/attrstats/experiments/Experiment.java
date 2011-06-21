@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ExperimentListener;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
@@ -31,6 +32,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +44,8 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
+  // TODO vektor Block showing stats in BasicIGG
+
   private String hwInfo;
   private String osInfo;
   private String javaInfo;
@@ -49,22 +53,22 @@ public class Experiment implements IGGeneratorCallback {
 
   private Object[] settings;
 
-  private String fileName;
+  private final String fileName;
   private long fileSize;
   private FileCharacteristics characteristics;
   /** Number of vertices and edges in the graph representation of this file. */
   private Pair<Integer, Integer> graphRepresentation;
 
-  private ConstructionHeuristic constructionHeuristic;
+  private final ConstructionHeuristic constructionHeuristic;
   /**
    * List of improvement heuristics to be run in a loop until the termination
    * criterion is met.
    */
-  private List<ImprovementHeuristic> improvementHeuristics;
+  private final List<ImprovementHeuristic> improvementHeuristics;
 
-  private QualityMeasurement measurement;
+  private final QualityMeasurement measurement;
 
-  private TerminationCriterion terminationCriterion;
+  private final TerminationCriterion terminationCriterion;
 
   /** Time of the experiment start, absolute, in ms. */
   private long startTime;
@@ -76,12 +80,35 @@ public class Experiment implements IGGeneratorCallback {
   /** Result of the construction heuristic run. */
   private HeuristicResult constructionResult;
   /** List of improvement heuristic runs results. */
-  private List<HeuristicResult> improvementResults;
+  private final List<HeuristicResult> improvementResults = new ArrayList<HeuristicResult>();
+
+  private final List<ExperimentListener> listeners = new ArrayList<ExperimentListener>();
+
+  /**
+   * TODO vektor Comment!
+   *
+   * @param fileName
+   * @param constructionHeuristic
+   * @param improvementHeuristics
+   * @param measurement
+   * @param terminationCriterion
+   */
+  public Experiment(final String fileName,
+          final ConstructionHeuristic constructionHeuristic,
+          final List<ImprovementHeuristic> improvementHeuristics,
+          final QualityMeasurement measurement,
+          final TerminationCriterion terminationCriterion) {
+    this.fileName = fileName;
+    this.constructionHeuristic = constructionHeuristic;
+    this.improvementHeuristics = new ArrayList<ImprovementHeuristic>(improvementHeuristics);
+    this.measurement = measurement;
+    this.terminationCriterion = terminationCriterion;
+  }
 
   /**
    * TODO vektor Comment!
    */
-  public void fillMiscInfo() {
+  private void fillMiscInfo() {
     // TODO vektor Fill out hwInfo, osInfo, javaInfo, glpkInfo, ...
   }
 
@@ -96,11 +123,38 @@ public class Experiment implements IGGeneratorCallback {
         .append("\nFile name: ").append(fileName).append(" (").append(fileSize).append(" b)")
         .append("\n\nResults:")
         .append("\nStart time: ").append(new Date(startTime))
-        .append("\nTotal time spent: ").append(totalTime)
-        .append("\nFinal quality: ").append(finalQuality.getScalar());
+        .append("\nTotal time spent: ").append(totalTime).append(" ms")
+        .append("\nFinal quality: ").append(finalQuality.getScalar())
+        .append("\nConstruction phase: ")
+        .append("\n    Time taken: ").append(constructionResult.getTime()).append(" ms")
+        .append("\n    Quality: ").append(constructionResult.getQuality().getScalar())
+        .append("\nImprovement phase: ");
+
+    int i = 0;
+    for (final HeuristicResult result : improvementResults) {
+      i++;
+      ret.append("\n  pass #").append(i).append(": ")
+        .append("\n    Time taken: ").append(result.getTime()).append(" ms")
+        .append("\n    Quality: ").append(result.getQuality().getScalar());
+    }
+
     return ret.toString();
   }
 
+  /**
+   * TODO vektor Comment!
+   *
+   * @param el v
+   */
+  public void addListener(final ExperimentListener el) {
+    listeners.add(el);
+  }
+
+  /**
+   * TODO vektor Comment!
+   *
+   * @throws InterruptedException
+   */
   public void run() throws InterruptedException {
     // get IG from the file
     final IGGenerator igg = ModuleSelectionHelper.lookupImpl(IGGenerator.class, "Basic_IG_Generator");
@@ -134,8 +188,7 @@ public class Experiment implements IGGeneratorCallback {
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
           if (terminationCriterion.terminate(totTime, idSet)) {
-            totalTime = totTime;
-            finalQuality = constructionQuality;
+            notifyFinished(totTime, constructionQuality);
             return;
           }
 
@@ -165,8 +218,7 @@ public class Experiment implements IGGeneratorCallback {
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
           if (terminationCriterion.terminate(totTime, idSet)) {
-            totalTime = totTime;
-            finalQuality = improvementQuality;
+            notifyFinished(totTime, improvementQuality);
             return;
           }
 
@@ -174,6 +226,14 @@ public class Experiment implements IGGeneratorCallback {
         }
       });
     } catch (final InterruptedException e) {
+    }
+  }
+
+  private void notifyFinished(final long totalTime, final Quality finalQuality) {
+    this.totalTime = totalTime;
+    this.finalQuality = finalQuality;
+    for (final ExperimentListener el : listeners) {
+      el.experimentFinished(this);
     }
   }
 }

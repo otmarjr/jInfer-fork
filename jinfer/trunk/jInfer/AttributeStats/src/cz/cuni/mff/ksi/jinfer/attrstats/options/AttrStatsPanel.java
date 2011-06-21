@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.options;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.glpk.GlpkUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.io.File;
 import java.io.IOException;

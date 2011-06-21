@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.glpk;
+package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -43,6 +44,7 @@ public final class GlpkInputGenerator {
 
   private static final Logger LOG = Logger.getLogger(GlpkInputGenerator.class);
 
+  private static final String TEMPLATE = "/cz/cuni/mff/ksi/jinfer/attrstats/heuristics/construction/glpk/GlpkInputTemplate.txt";
   private static final String CONSTRAINT = "s.t. c{index}: x['{mapping1}'] + x['{mapping2}'] <= 1;";
 
   /**
@@ -87,6 +89,8 @@ public final class GlpkInputGenerator {
       }
     }
 
+    Collections.shuffle(candidates);
+
     final StringBuilder mappings = new StringBuilder();
     final StringBuilder weights = new StringBuilder();
 
@@ -103,7 +107,7 @@ public final class GlpkInputGenerator {
     }
 
     try {
-      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("cz/cuni/mff/ksi/jinfer/attrstats/glpk/GlpkInputTemplate.txt");
+      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(TEMPLATE);
       final BufferedReader br = new BufferedReader(new InputStreamReader(is));
       final StringBuilder ret = new StringBuilder();
       String line;

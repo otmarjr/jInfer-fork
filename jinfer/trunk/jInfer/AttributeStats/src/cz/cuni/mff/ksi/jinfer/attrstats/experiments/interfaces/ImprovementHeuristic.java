@@ -26,9 +26,11 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
  */
 public interface ImprovementHeuristic {
 
+  // TODO vektor New argument - pool of feasible solutions
+
   /**
    * TODO vektor Comment!
-   * 
+   *
    * @param model
    * @param incumbent
    * @param callback

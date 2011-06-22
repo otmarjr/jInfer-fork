@@ -14,8 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
+package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
@@ -23,15 +26,13 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
  *
  * @author vektor
  */
-public interface HeuristicCallback {
+public class Crossover implements ImprovementHeuristic {
 
-  // TODO vektor Return a set of ID sets (pool of feasible solutions) and an incumbent solution
-
-  /**
-   * TODO vektor Comment!
-   *
-   * @param idSet
-   */
-  void finished(final IdSet idSet);
+  @Override
+  public void start(final AMModel model, final IdSet incumbent,
+  final HeuristicCallback callback) throws InterruptedException {
+    // TODO vektor Implement
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
 }

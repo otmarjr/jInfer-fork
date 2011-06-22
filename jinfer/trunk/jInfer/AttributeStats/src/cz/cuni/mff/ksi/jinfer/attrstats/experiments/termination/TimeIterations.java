@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -36,7 +37,7 @@ public class TimeIterations implements TerminationCriterion {
   }
 
   @Override
-  public boolean terminate(final long time, final IdSet solution) {
+  public boolean terminate(final long time, final List<IdSet> solutions) {
     iterations++;
     if (iterations > maxIterations || time > maxTime) {
       return true;

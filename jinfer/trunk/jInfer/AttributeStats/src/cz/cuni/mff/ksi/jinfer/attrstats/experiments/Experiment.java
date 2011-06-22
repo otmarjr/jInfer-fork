@@ -178,51 +178,51 @@ public class Experiment implements IGGeneratorCallback {
       constructionHeuristic.start(model, 10, new HeuristicCallback() {
 
         @Override
-        public void finished(final List<IdSet> feasiblePool, final IdSet incumbent) {
+        public void finished(final List<IdSet> feasiblePool) {
           // take the time after CH
           final long constructionTime = (Calendar.getInstance().getTimeInMillis() - startTime);
-          // measure the quality
-          final Quality constructionQuality = measurement.measure(model, incumbent);
-          constructionResult = new HeuristicResult(constructionTime, constructionQuality);
+          // get the incumbent solution and its quality
+          final Pair<IdSet, Quality> incumbent = getBest(feasiblePool);
+          constructionResult = new HeuristicResult(constructionTime, incumbent.getSecond());
 
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
-          if (terminationCriterion.terminate(totTime, incumbent)) {
-            notifyFinished(totTime, constructionQuality);
+          if (terminationCriterion.terminate(totTime, feasiblePool)) {
+            notifyFinished(totTime, incumbent.getSecond());
             return;
           }
 
-          runImprovement(feasiblePool, incumbent, 0);
+          runImprovement(feasiblePool, 0);
         }
       });
     } catch (final InterruptedException e) {
     }
   }
 
-  private void runImprovement(final List<IdSet> feasiblePool, final IdSet incumbent, final int iteration) {
+  private void runImprovement(final List<IdSet> feasiblePool, final int iteration) {
     final ImprovementHeuristic current = improvementHeuristics.get(iteration % improvementHeuristics.size());
     //   take the time before IH
     final long ihStartTime = Calendar.getInstance().getTimeInMillis();
     //   run the IH
     try {
-      current.start(model, feasiblePool, incumbent, new HeuristicCallback() {
+      current.start(model, feasiblePool, new HeuristicCallback() {
 
         @Override
-        public void finished(final List<IdSet> feasiblePool, final IdSet incumbent) {
+        public void finished(final List<IdSet> feasiblePool) {
           //   take the time after IH
           final long improvementTime = (Calendar.getInstance().getTimeInMillis() - ihStartTime);
-          //   measure the quality
-          final Quality improvementQuality = measurement.measure(model, incumbent);
-          improvementResults.add(new HeuristicResult(improvementTime, improvementQuality));
+          // get the incumbent solution and its quality
+          final Pair<IdSet, Quality> incumbent = getBest(feasiblePool);
+          improvementResults.add(new HeuristicResult(improvementTime, incumbent.getSecond()));
 
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
-          if (terminationCriterion.terminate(totTime, incumbent)) {
-            notifyFinished(totTime, improvementQuality);
+          if (terminationCriterion.terminate(totTime, feasiblePool)) {
+            notifyFinished(totTime, incumbent.getSecond());
             return;
           }
 
-          runImprovement(feasiblePool, incumbent, iteration + 1);
+          runImprovement(feasiblePool, iteration + 1);
         }
       });
     } catch (final InterruptedException e) {
@@ -235,5 +235,18 @@ public class Experiment implements IGGeneratorCallback {
     for (final ExperimentListener el : listeners) {
       el.experimentFinished(this);
     }
+  }
+
+  private Pair<IdSet, Quality> getBest(final List<IdSet> solutions) {
+    Quality maxQuality = Quality.ZERO;
+    IdSet bestSolution = null;
+    for (final IdSet solution : solutions) {
+      final Quality quality = measurement.measure(model, solution);
+      if (quality.getScalar() >= maxQuality.getScalar()) {
+        maxQuality = quality;
+        bestSolution = solution;
+      }
+    }
+    return new Pair<IdSet, Quality>(bestSolution, maxQuality);
   }
 }

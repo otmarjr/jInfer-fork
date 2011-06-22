@@ -53,8 +53,8 @@ public class Incremental implements ConstructionHeuristic {
       }
     }
 
-    final IdSet incumbent = new IdSet(ret);
-    callback.finished(Arrays.asList(incumbent), incumbent);
+    final IdSet solution = new IdSet(ret);
+    callback.finished(Arrays.asList(solution));
   }
 
 }

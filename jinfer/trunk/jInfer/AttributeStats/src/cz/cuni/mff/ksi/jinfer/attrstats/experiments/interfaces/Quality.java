@@ -40,4 +40,17 @@ public interface Quality {
    */
   boolean isOptimal();
 
+  public static final Quality ZERO = new Quality() {
+
+    @Override
+    public double getScalar() {
+      return 0;
+    }
+
+    @Override
+    public boolean isOptimal() {
+      return false;
+    }
+  };
+
 }

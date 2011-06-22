@@ -42,10 +42,9 @@ public class Glpk implements ConstructionHeuristic {
   @Override
   public void start(final AMModel model, final int poolSize,
         final HeuristicCallback callback) throws InterruptedException {
-    // TODO vektor Create more solutions and return the best as incumbent
-    // this BTW means that we need the access to Quality here
-    final IdSet incumbent = GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model);
-    callback.finished(Arrays.asList(incumbent), incumbent);
+    // TODO vektor Create more solutions
+    final IdSet solution = GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model);
+    callback.finished(Arrays.asList(solution));
   }
 
 }

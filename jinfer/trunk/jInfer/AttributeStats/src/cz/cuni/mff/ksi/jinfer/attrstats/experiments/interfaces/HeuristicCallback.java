@@ -32,8 +32,7 @@ public interface HeuristicCallback {
    * TODO vektor Comment!
    *
    * @param feasiblePool
-   * @param incumbent 
    */
-  void finished(final List<IdSet> feasiblePool, final IdSet incumbent);
+  void finished(final List<IdSet> feasiblePool);
 
 }

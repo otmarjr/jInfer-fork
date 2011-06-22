@@ -40,8 +40,8 @@ public class Fidax implements ConstructionHeuristic {
   @Override
   public void start(final AMModel model, final int poolSize,
         final HeuristicCallback callback) throws InterruptedException {
-    final IdSet incumbent = FidaxAlgorithm.findIDSet(model, alpha, beta);
-    callback.finished(Arrays.asList(incumbent), incumbent);
+    final IdSet solution = FidaxAlgorithm.findIDSet(model, alpha, beta);
+    callback.finished(Arrays.asList(solution));
   }
 
 }

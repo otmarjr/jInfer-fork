@@ -31,8 +31,7 @@ public class Mutation implements ImprovementHeuristic {
 
   @Override
   public void start(final AMModel model, final List<IdSet> feasiblePool,
-        final IdSet incumbent, final HeuristicCallback callback)
-        throws InterruptedException {
+        final HeuristicCallback callback) throws InterruptedException {
     // TODO vektor Implement
 
     // Fix a few to their current values and run again

@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -29,10 +30,10 @@ public interface TerminationCriterion {
    * Returns a flag whether to terminate the iterations of the metaheuristic.
    *
    * @param time Total time taken so far.
-   * @param solution The latest solution that was produced.
+   * @param solutions The pool solutions that were produced in the last run.
    * @return <code>True</code> if the metaheuristic should be terminated,
    * <code>false<code> otherwise.
    */
-  boolean terminate(final long time, final IdSet solution);
+  boolean terminate(final long time, final List<IdSet> solutions);
 
 }

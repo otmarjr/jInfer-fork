@@ -32,12 +32,10 @@ public interface ImprovementHeuristic {
    *
    * @param model
    * @param feasiblePool
-   * @param incumbent
    * @param callback
    * @throws InterruptedException
    */
   void start(final AMModel model, final List<IdSet> feasiblePool,
-          final IdSet incumbent, final HeuristicCallback callback)
-          throws InterruptedException;
+          final HeuristicCallback callback) throws InterruptedException;
 
 }

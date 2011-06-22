@@ -54,8 +54,8 @@ public class Removal implements ConstructionHeuristic {
       candidates.remove(id);
     }
 
-    final IdSet incumbent = new IdSet(candidates);
-    callback.finished(Arrays.asList(incumbent), incumbent);
+    final IdSet solution = new IdSet(candidates);
+    callback.finished(Arrays.asList(solution));
   }
 
 }

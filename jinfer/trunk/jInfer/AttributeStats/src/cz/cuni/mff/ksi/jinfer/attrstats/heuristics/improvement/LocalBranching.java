@@ -31,8 +31,7 @@ public class LocalBranching implements ImprovementHeuristic {
 
   @Override
   public void start(final AMModel model, final List<IdSet> feasiblePool,
-        final IdSet incumbent, final HeuristicCallback callback)
-        throws InterruptedException {
+        final HeuristicCallback callback) throws InterruptedException {
     // TODO vektor Implement
 
     // Add a constrain - new solution cannot be far from the incumbent

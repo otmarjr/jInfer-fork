@@ -19,6 +19,8 @@ package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.Arrays;
 
 /**
  * TODO vektor Comment!
@@ -31,8 +33,6 @@ public class Glpk implements ConstructionHeuristic {
   private final double beta;
   private final int timeLimit;
 
-  // TODO vektor Argument how many solutions should be produced
-
   public Glpk(final double alpha, final double beta, final int timeLimit) {
     this.alpha = alpha;
     this.beta = beta;
@@ -40,9 +40,12 @@ public class Glpk implements ConstructionHeuristic {
   }
 
   @Override
-  public void start(final AMModel model, final HeuristicCallback callback)
-          throws InterruptedException {
-    callback.finished(GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model));
+  public void start(final AMModel model, final int poolSize,
+        final HeuristicCallback callback) throws InterruptedException {
+    // TODO vektor Create more solutions and return the best as incumbent
+    // this BTW means that we need the access to Quality here
+    final IdSet incumbent = GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model);
+    callback.finished(Arrays.asList(incumbent), incumbent);
   }
 
 }

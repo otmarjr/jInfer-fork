@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -26,17 +27,17 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
  */
 public interface ImprovementHeuristic {
 
-  // TODO vektor New argument - pool of feasible solutions
-
   /**
    * TODO vektor Comment!
    *
    * @param model
+   * @param feasiblePool
    * @param incumbent
    * @param callback
    * @throws InterruptedException
    */
-  void start(final AMModel model, final IdSet incumbent,
-          final HeuristicCallback callback) throws InterruptedException;
+  void start(final AMModel model, final List<IdSet> feasiblePool,
+          final IdSet incumbent, final HeuristicCallback callback)
+          throws InterruptedException;
 
 }

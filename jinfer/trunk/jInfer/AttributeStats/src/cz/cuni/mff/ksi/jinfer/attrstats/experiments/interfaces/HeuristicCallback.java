@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -30,8 +31,9 @@ public interface HeuristicCallback {
   /**
    * TODO vektor Comment!
    *
-   * @param idSet
+   * @param feasiblePool
+   * @param incumbent 
    */
-  void finished(final IdSet idSet);
+  void finished(final List<IdSet> feasiblePool, final IdSet incumbent);
 
 }

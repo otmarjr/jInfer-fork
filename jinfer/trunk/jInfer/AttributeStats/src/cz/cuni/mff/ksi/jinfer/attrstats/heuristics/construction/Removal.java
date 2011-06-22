@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,8 +36,8 @@ import java.util.List;
 public class Removal implements ConstructionHeuristic {
 
   @Override
-  public void start(final AMModel model, final HeuristicCallback callback)
-          throws InterruptedException {
+  public void start(final AMModel model, final int poolSize,
+        final HeuristicCallback callback) throws InterruptedException {
 
     final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
 
@@ -53,7 +54,8 @@ public class Removal implements ConstructionHeuristic {
       candidates.remove(id);
     }
 
-    callback.finished(new IdSet(candidates));
+    final IdSet incumbent = new IdSet(candidates);
+    callback.finished(Arrays.asList(incumbent), incumbent);
   }
 
 }

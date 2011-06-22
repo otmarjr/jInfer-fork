@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -29,9 +30,10 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 public class Identity implements ImprovementHeuristic {
 
   @Override
-  public void start(final AMModel model, final IdSet incumbent,
-      final HeuristicCallback callback) throws InterruptedException {
-    callback.finished(incumbent);
+  public void start(final AMModel model, final List<IdSet> feasiblePool,
+        final IdSet incumbent, final HeuristicCallback callback)
+        throws InterruptedException {
+    callback.finished(feasiblePool, incumbent);
   }
 
 }

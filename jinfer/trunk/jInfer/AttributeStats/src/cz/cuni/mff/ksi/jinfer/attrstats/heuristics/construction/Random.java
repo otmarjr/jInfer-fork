@@ -27,15 +27,9 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
  */
 public class Random implements ConstructionHeuristic {
 
-  private final int numberSolutions;
-
-  public Random(final int numberSolutions) {
-    this.numberSolutions = numberSolutions;
-  }
-
   @Override
-  public void start(final AMModel model, final HeuristicCallback callback)
-          throws InterruptedException {
+  public void start(final AMModel model, final int poolSize,
+        final HeuristicCallback callback) throws InterruptedException {
     // TODO vektor Generate and return the specified number of solutions
     throw new UnsupportedOperationException("Not supported yet.");
   }

@@ -20,7 +20,9 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuris
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.Glpk;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Hungry;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.RandomRemove;
 import java.util.Arrays;
 
@@ -35,11 +37,11 @@ public final class ExperimentFactory {
   }
 
   public static Experiment createExperiment(final String fileName) {
-    return new Experiment(fileName, 1,
-            new Glpk(1, 1, 1),
-            Arrays.<ImprovementHeuristic>asList(new Hungry(), new RandomRemove(0.3)),
+    return new Experiment(fileName, 3,
+            new Glpk(1, 1, 100),
+            Arrays.<ImprovementHeuristic>asList(new RandomRemove(0.1), new Mutation(0.1, 1, 1, 1), new RandomRemove(0.1), new Crossover(0.3, 1, 1, 1)),
             new Weight(1, 1),
-            new TimeIterations(100, 100000));
+            new TimeIterations(3, 2000000));
   }
 
 }

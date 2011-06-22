@@ -34,4 +34,19 @@ public class Random implements ConstructionHeuristic {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
+  @Override
+  public String getName() {
+    return "Random";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return getName();
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
 }

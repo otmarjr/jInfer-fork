@@ -27,6 +27,8 @@ public class HeuristicResult {
 
   /** Time taken in this heuristics run in milliseconds. */
   private final long time;
+  /** TODO vektor Comment! */
+  private final int poolSize;
   /** Quality of the solution found in this run. */
   private final Quality quality;
 
@@ -38,13 +40,18 @@ public class HeuristicResult {
    * @param time Time taken in this heuristics run in milliseconds.
    * @param quality Quality of the solution found in this run.
    */
-  public HeuristicResult(final long time, final Quality quality) {
+  public HeuristicResult(final long time, final int poolSize, final Quality quality) {
     this.time = time;
+    this.poolSize = poolSize;
     this.quality = quality;
   }
 
   public long getTime() {
     return time;
+  }
+
+  public int getPoolSize() {
+    return poolSize;
   }
 
   public Quality getQuality() {

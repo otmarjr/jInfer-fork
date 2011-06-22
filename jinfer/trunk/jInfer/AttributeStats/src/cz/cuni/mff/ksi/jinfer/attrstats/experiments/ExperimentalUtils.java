@@ -14,12 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
+package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
@@ -27,27 +28,24 @@ import java.util.List;
  *
  * @author vektor
  */
-public class Identity implements ImprovementHeuristic {
+public final class ExperimentalUtils {
 
-  @Override
-  public void start(final AMModel model, final List<IdSet> feasiblePool,
-        final HeuristicCallback callback) throws InterruptedException {
-    callback.finished(feasiblePool);
+  private ExperimentalUtils() {
+
   }
 
-  @Override
-  public String getName() {
-    return "Identity";
-  }
-
-  @Override
-  public String getDisplayName() {
-    return getName();
-  }
-
-  @Override
-  public String getModuleDescription() {
-    return getName();
+  public static Pair<IdSet, Quality> getBest(final AMModel model,
+          final QualityMeasurement measurement, final List<IdSet> solutions) {
+    IdSet bestSolution = null;
+    Quality maxQuality = Quality.ZERO;
+    for (final IdSet solution : solutions) {
+      final Quality quality = measurement.measure(model, solution);
+      if (quality.getScalar() >= maxQuality.getScalar()) {
+        maxQuality = quality;
+        bestSolution = solution;
+      }
+    }
+    return new Pair<IdSet, Quality>(bestSolution, maxQuality);
   }
 
 }

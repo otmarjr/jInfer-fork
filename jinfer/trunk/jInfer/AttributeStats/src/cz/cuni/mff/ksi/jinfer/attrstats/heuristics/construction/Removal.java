@@ -58,4 +58,19 @@ public class Removal implements ConstructionHeuristic {
     callback.finished(Arrays.asList(solution));
   }
 
+  @Override
+  public String getName() {
+    return "Removal";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return getName();
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
 }

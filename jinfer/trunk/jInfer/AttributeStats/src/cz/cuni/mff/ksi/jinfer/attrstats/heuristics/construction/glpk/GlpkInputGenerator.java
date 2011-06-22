@@ -46,6 +46,15 @@ public final class GlpkInputGenerator {
 
   private static final String TEMPLATE = "/cz/cuni/mff/ksi/jinfer/attrstats/heuristics/construction/glpk/GlpkInputTemplate.txt";
   private static final String CONSTRAINT = "s.t. c{index}: x['{mapping1}'] + x['{mapping2}'] <= 1;";
+  private static final String FIX = "s.t. f{index}: x['{mapping}'] = 1;";
+
+  /**
+   * @see GlpkInputGenerator#generateGlpkInput(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, double, double, java.util.List)
+   */
+  public static String generateGlpkInput(final AMModel model,
+          final double alpha, final double beta) throws InterruptedException {
+    return generateGlpkInput(model, Collections.<AttributeMappingId>emptyList(), alpha, beta);
+  }
 
   /**
    * Generates a GLPK MathProg representation of the ID set optimization for the
@@ -72,11 +81,13 @@ public final class GlpkInputGenerator {
    * @param model Model from which the problem formulation should be generated.
    * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
    * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
+   * @param fixed TODO vektor Comment!
    *
    * @return String representation of the problem formulation in MathProg
    * language, that can be directly passed to GLPK Solver.
    */
   public static String generateGlpkInput(final AMModel model,
+          final List<AttributeMappingId> fixed,
           final double alpha, final double beta) throws InterruptedException {
     final long startTime = Calendar.getInstance().getTimeInMillis();
     final List<AttributeMappingId> candidates = new ArrayList<AttributeMappingId>();
@@ -115,7 +126,7 @@ public final class GlpkInputGenerator {
         ret.append(line).append('\n');
       }
 
-      final Pair<CharSequence, Integer> constraints = getConstraints(candidates, model);
+      final Pair<CharSequence, Integer> constraints = getConstraints(candidates, fixed, model);
 
       final String result = ret.toString()
               .replace("{constraints}", constraints.getFirst())
@@ -136,11 +147,24 @@ public final class GlpkInputGenerator {
   }
 
   private static Pair<CharSequence, Integer> getConstraints(
-          final List<AttributeMappingId> candidates, final AMModel model)
+          final List<AttributeMappingId> candidates,
+          final List<AttributeMappingId> fixed, final AMModel model)
           throws InterruptedException {
     final StringBuilder ret = new StringBuilder();
 
     int index = 0;
+    for (final AttributeMappingId mapping : fixed) {
+      if (candidates.contains(mapping)) {
+        index++;
+        final String fix = FIX
+                .replace("{index}", String.valueOf(index))
+                .replace("{mapping}", GlpkUtils.getName(mapping));
+        ret.append(fix).append('\n');
+      }
+    }
+
+    // TODO vektor Possible optimization: any AM that is collides with a fixed one is fixed to 0 automatically
+
     for (final AttributeMappingId mapping1 : candidates) {
       for (final AttributeMappingId mapping2 : candidates) {
         if (mapping1.equals(mapping2)) {

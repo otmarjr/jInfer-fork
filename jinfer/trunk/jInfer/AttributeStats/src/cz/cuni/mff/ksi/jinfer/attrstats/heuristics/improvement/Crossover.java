@@ -18,9 +18,16 @@ package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkOutputParser;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkRunner;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * TODO vektor Comment!
@@ -29,11 +36,67 @@ import java.util.List;
  */
 public class Crossover implements ImprovementHeuristic {
 
+  private final double ratio;
+  private final double alpha;
+  private final double beta;
+  private final int timeLimit;
+
+  public Crossover(final double ratio, final double alpha, final double beta, final int timeLimit) {
+    super();
+    if (ratio < 0 || ratio >= 1) {
+      throw new IllegalArgumentException("Invalid ratio: " + ratio);
+    }
+    this.ratio = ratio;
+    this.alpha = alpha;
+    this.beta = beta;
+    this.timeLimit = timeLimit;
+  }
+
   @Override
   public void start(final AMModel model, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
-    // TODO vektor Implement
-    throw new UnsupportedOperationException("Not supported yet.");
+
+    // not guaranteed to get exactly this many
+    final int toFix = (int)Math.round(feasiblePool.size() * ratio);
+    final Set<IdSet> selectedSets = new HashSet<IdSet>(toFix);
+
+    for (int i = 0; i < toFix; i++) {
+      selectedSets.add(feasiblePool.get((int)(Math.random() * feasiblePool.size())));
+    }
+
+    final List<AttributeMappingId> all = new ArrayList<AttributeMappingId>(model.getAMs().keySet());
+    final List<AttributeMappingId> common = new ArrayList<AttributeMappingId>(all);
+    for (final AttributeMappingId mapping : all) {
+      boolean inAll = true;
+      for (final IdSet selectedSet : selectedSets) {
+        if (!selectedSet.getMappings().contains(mapping)) {
+          inAll = false;
+          break;
+        }
+      }
+      if (!inAll) {
+        common.remove(mapping);
+      }
+    }
+
+    final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(model, new ArrayList<AttributeMappingId>(common), alpha, beta, timeLimit), model);
+
+    callback.finished(Arrays.asList(improved));
+  }
+
+  @Override
+  public String getName() {
+    return "Crossover";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return getName();
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
   }
 
 }

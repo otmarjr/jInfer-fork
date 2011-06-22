@@ -60,4 +60,19 @@ public class RandomRemove implements ImprovementHeuristic {
     callback.finished(ret);
   }
 
+  @Override
+  public String getName() {
+    return "RandomRemove";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Random Remove";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName() + ", ratio = " + ratio;
+  }
+
 }

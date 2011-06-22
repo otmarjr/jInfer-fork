@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author vektor
  */
-public interface ImprovementHeuristic {
+public interface ImprovementHeuristic extends Heuristics {
 
   /**
    * TODO vektor Comment!

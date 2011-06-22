@@ -51,4 +51,19 @@ public class Glpk implements ConstructionHeuristic {
     callback.finished(initialSolutions);
   }
 
+  @Override
+  public String getName() {
+    return "GLPK";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return getName();
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName() + ", alpha = " + alpha + ", beta = " + beta + ", limit = " + timeLimit + " s";
+  }
+
 }

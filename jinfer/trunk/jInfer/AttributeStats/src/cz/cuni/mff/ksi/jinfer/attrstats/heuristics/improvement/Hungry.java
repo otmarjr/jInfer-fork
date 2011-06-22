@@ -70,4 +70,19 @@ public class Hungry implements ImprovementHeuristic {
     return new IdSet(ret);
   }
 
+    @Override
+  public String getName() {
+    return "Hungry";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return getName();
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
 }

@@ -44,7 +44,9 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
-  // TODO vektor Block showing stats in BasicIGG
+  // TODO vektor Block showing stats in BasicIGG and Simplifier
+  // TODO vektor Make sure that optimum doesn't get optimized anymore
+  // TODO vektor Output why we stop
 
   private String hwInfo;
   private String osInfo;
@@ -132,16 +134,20 @@ public class Experiment implements IGGeneratorCallback {
         .append("\nFinal quality: ").append(finalQuality.getText())
         .append("\nHighest quality: ").append(highestQuality.getText())
         .append("\nConstruction phase: ")
+        .append("\n  Algorithm: ").append(constructionHeuristic.getModuleDescription())
         .append("\n    Time taken: ").append(constructionResult.getTime()).append(" ms")
+        .append("\n    Pool size: ").append(constructionResult.getPoolSize())
         .append("\n    Quality: ").append(constructionResult.getQuality().getText())
         .append("\nImprovement phase: ");
 
     int i = 0;
     for (final HeuristicResult result : improvementResults) {
-      i++;
-      ret.append("\n  pass #").append(i).append(": ")
+      ret.append("\n  pass #").append(i + 1).append(": ")
+        .append("\n  Algorithm: ").append(improvementHeuristics.get(i % improvementHeuristics.size()).getModuleDescription())
         .append("\n    Time taken: ").append(result.getTime()).append(" ms")
+        .append("\n    Pool size: ").append(result.getPoolSize())
         .append("\n    Quality: ").append(result.getQuality().getText());
+      i++;
     }
 
     return ret.toString();
@@ -188,11 +194,11 @@ public class Experiment implements IGGeneratorCallback {
           // take the time after CH
           final long constructionTime = (Calendar.getInstance().getTimeInMillis() - startTime);
           // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = getBest(feasiblePool);
+          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(model, measurement, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
-          constructionResult = new HeuristicResult(constructionTime, incumbent.getSecond());
+          constructionResult = new HeuristicResult(constructionTime, feasiblePool.size(), incumbent.getSecond());
 
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
@@ -221,11 +227,11 @@ public class Experiment implements IGGeneratorCallback {
           //   take the time after IH
           final long improvementTime = (Calendar.getInstance().getTimeInMillis() - ihStartTime);
           // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = getBest(feasiblePool);
+          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(model, measurement, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
-          improvementResults.add(new HeuristicResult(improvementTime, incumbent.getSecond()));
+          improvementResults.add(new HeuristicResult(improvementTime, feasiblePool.size(), incumbent.getSecond()));
 
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
@@ -247,18 +253,5 @@ public class Experiment implements IGGeneratorCallback {
     for (final ExperimentListener el : listeners) {
       el.experimentFinished(this);
     }
-  }
-
-  private Pair<IdSet, Quality> getBest(final List<IdSet> solutions) {
-    Quality maxQuality = Quality.ZERO;
-    IdSet bestSolution = null;
-    for (final IdSet solution : solutions) {
-      final Quality quality = measurement.measure(model, solution);
-      if (quality.getScalar() >= maxQuality.getScalar()) {
-        maxQuality = quality;
-        bestSolution = solution;
-      }
-    }
-    return new Pair<IdSet, Quality>(bestSolution, maxQuality);
   }
 }

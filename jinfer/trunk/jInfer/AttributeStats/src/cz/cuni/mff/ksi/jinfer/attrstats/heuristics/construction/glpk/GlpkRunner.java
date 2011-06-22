@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -44,18 +47,30 @@ public final class GlpkRunner {
   private static final String OUTPUT = TMP + "glpk_output.txt";
 
   /**
+   * @see GlpkRunner#run(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, java.util.List, double, double, int)
+   */
+  public static String run(final AMModel model,
+          final double alpha, final double beta, final int timeLimit)
+          throws InterruptedException {
+    return run(model, Collections.<AttributeMappingId>emptyList(), alpha, beta, timeLimit);
+  }
+
+  /**
    * Constructs the GLPK problem formulation from the provided model, runs
    * GLPK optimalization and returns the resulting file in a string. This can
    * be directly displayed for verification or parsed for actual AMs appearing
    * in the "optimal" ID set.
    *
    * @param model Model to find "optimal" ID set in.
+   * @param fixed TODO vektor Comment!
    * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
    * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
+   * @param timeLimit TODO vektor Comment!
    *
    * @return String representation of GLPK optimalization output.
    */
   public static String run(final AMModel model,
+          final List<AttributeMappingId> fixed,
           final double alpha, final double beta, final int timeLimit)
           throws InterruptedException {
     final File input = new File(INPUT);
@@ -64,7 +79,7 @@ public final class GlpkRunner {
     final StringBuilder ret = new StringBuilder();
     try {
       pw = new PrintWriter(input);
-      pw.write(GlpkInputGenerator.generateGlpkInput(model, alpha, beta));
+      pw.write(GlpkInputGenerator.generateGlpkInput(model, fixed, alpha, beta));
     } catch (final IOException e) {
       throw new RuntimeException(e);
     } finally {

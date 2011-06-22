@@ -40,4 +40,19 @@ public class LocalBranching implements ImprovementHeuristic {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
+  @Override
+  public String getName() {
+    return "LocalBranching";
+  }
+
+  @Override
+  public String getDisplayName() {
+    return "Local Branching";
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
+  }
+
 }

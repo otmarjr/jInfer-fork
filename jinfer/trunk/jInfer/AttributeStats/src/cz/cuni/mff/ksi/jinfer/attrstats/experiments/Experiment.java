@@ -175,54 +175,54 @@ public class Experiment implements IGGeneratorCallback {
 
     try {
       // run the CH
-      constructionHeuristic.start(model, new HeuristicCallback() {
+      constructionHeuristic.start(model, 10, new HeuristicCallback() {
 
         @Override
-        public void finished(final IdSet idSet) {
+        public void finished(final List<IdSet> feasiblePool, final IdSet incumbent) {
           // take the time after CH
           final long constructionTime = (Calendar.getInstance().getTimeInMillis() - startTime);
           // measure the quality
-          final Quality constructionQuality = measurement.measure(model, idSet);
+          final Quality constructionQuality = measurement.measure(model, incumbent);
           constructionResult = new HeuristicResult(constructionTime, constructionQuality);
 
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
-          if (terminationCriterion.terminate(totTime, idSet)) {
+          if (terminationCriterion.terminate(totTime, incumbent)) {
             notifyFinished(totTime, constructionQuality);
             return;
           }
 
-          runImprovement(idSet, 0);
+          runImprovement(feasiblePool, incumbent, 0);
         }
       });
     } catch (final InterruptedException e) {
     }
   }
 
-  private void runImprovement(final IdSet incumbent, final int iteration) {
+  private void runImprovement(final List<IdSet> feasiblePool, final IdSet incumbent, final int iteration) {
     final ImprovementHeuristic current = improvementHeuristics.get(iteration % improvementHeuristics.size());
     //   take the time before IH
     final long ihStartTime = Calendar.getInstance().getTimeInMillis();
     //   run the IH
     try {
-      current.start(model, incumbent, new HeuristicCallback() {
+      current.start(model, feasiblePool, incumbent, new HeuristicCallback() {
 
         @Override
-        public void finished(final IdSet idSet) {
+        public void finished(final List<IdSet> feasiblePool, final IdSet incumbent) {
           //   take the time after IH
           final long improvementTime = (Calendar.getInstance().getTimeInMillis() - ihStartTime);
           //   measure the quality
-          final Quality improvementQuality = measurement.measure(model, idSet);
+          final Quality improvementQuality = measurement.measure(model, incumbent);
           improvementResults.add(new HeuristicResult(improvementTime, improvementQuality));
 
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
-          if (terminationCriterion.terminate(totTime, idSet)) {
+          if (terminationCriterion.terminate(totTime, incumbent)) {
             notifyFinished(totTime, improvementQuality);
             return;
           }
 
-          runImprovement(incumbent, iteration + 1);
+          runImprovement(feasiblePool, incumbent, iteration + 1);
         }
       });
     } catch (final InterruptedException e) {

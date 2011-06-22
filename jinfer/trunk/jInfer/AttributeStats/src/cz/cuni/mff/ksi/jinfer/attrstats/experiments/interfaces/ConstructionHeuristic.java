@@ -29,9 +29,10 @@ public interface ConstructionHeuristic {
    * TODO vektor Comment!
    *
    * @param model
+   * @param poolSize
    * @param callback
    */
-  void start(final AMModel model, final HeuristicCallback callback)
-          throws InterruptedException;
+  void start(final AMModel model, final int poolSize,
+          final HeuristicCallback callback) throws InterruptedException;
 
 }

@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -29,8 +30,9 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 public class LocalBranching implements ImprovementHeuristic {
 
   @Override
-  public void start(final AMModel model, final IdSet incumbent,
-  final HeuristicCallback callback) throws InterruptedException {
+  public void start(final AMModel model, final List<IdSet> feasiblePool,
+        final IdSet incumbent, final HeuristicCallback callback)
+        throws InterruptedException {
     // TODO vektor Implement
 
     // Add a constrain - new solution cannot be far from the incumbent

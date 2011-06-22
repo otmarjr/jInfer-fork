@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import java.util.List;
 public class Incremental implements ConstructionHeuristic {
 
   @Override
-  public void start(final AMModel model, final HeuristicCallback callback)
+  public void start(final AMModel model, final int poolSize, final HeuristicCallback callback)
           throws InterruptedException {
 
     final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
@@ -52,7 +53,8 @@ public class Incremental implements ConstructionHeuristic {
       }
     }
 
-    callback.finished(new IdSet(ret));
+    final IdSet incumbent = new IdSet(ret);
+    callback.finished(Arrays.asList(incumbent), incumbent);
   }
 
 }

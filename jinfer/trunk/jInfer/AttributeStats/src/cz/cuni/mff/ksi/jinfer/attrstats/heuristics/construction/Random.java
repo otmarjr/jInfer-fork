@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
+package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
@@ -25,24 +25,19 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
  *
  * @author vektor
  */
-public class Glpk implements ConstructionHeuristic {
+public class Random implements ConstructionHeuristic {
 
-  private final double alpha;
-  private final double beta;
-  private final int timeLimit;
+  private final int numberSolutions;
 
-  // TODO vektor Argument how many solutions should be produced
-
-  public Glpk(final double alpha, final double beta, final int timeLimit) {
-    this.alpha = alpha;
-    this.beta = beta;
-    this.timeLimit = timeLimit;
+  public Random(final int numberSolutions) {
+    this.numberSolutions = numberSolutions;
   }
 
   @Override
   public void start(final AMModel model, final HeuristicCallback callback)
           throws InterruptedException {
-    callback.finished(GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model));
+    // TODO vektor Generate and return the specified number of solutions
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
 }

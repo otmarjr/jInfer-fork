@@ -20,7 +20,9 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuri
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -42,9 +44,11 @@ public class Glpk implements ConstructionHeuristic {
   @Override
   public void start(final AMModel model, final int poolSize,
         final HeuristicCallback callback) throws InterruptedException {
-    // TODO vektor Create more solutions
-    final IdSet solution = GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model);
-    callback.finished(Arrays.asList(solution));
+    final List<IdSet> initialSolutions = new ArrayList<IdSet>(poolSize);
+    for (int i = 0; i < poolSize; i++) {
+      initialSolutions.add(GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model));
+    }
+    callback.finished(initialSolutions);
   }
 
 }

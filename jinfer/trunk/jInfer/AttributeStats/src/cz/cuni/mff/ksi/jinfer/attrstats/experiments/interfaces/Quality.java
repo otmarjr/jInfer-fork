@@ -40,6 +40,13 @@ public interface Quality {
    */
   boolean isOptimal();
 
+  /**
+   * Get the quality info in textual form.
+   *
+   * @return String describing the quality.
+   */
+  String getText();
+
   public static final Quality ZERO = new Quality() {
 
     @Override
@@ -50,6 +57,11 @@ public interface Quality {
     @Override
     public boolean isOptimal() {
       return false;
+    }
+
+    @Override
+    public String getText() {
+      return "0";
     }
   };
 

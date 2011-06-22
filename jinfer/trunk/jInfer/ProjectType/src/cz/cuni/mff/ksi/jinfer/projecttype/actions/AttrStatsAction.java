@@ -104,8 +104,7 @@ public class AttrStatsAction extends NodeAction {
 
                     @Override
                     public void finished(final List<Element> grammar) {
-                      // Actually, we don't need to do anything. Everything is already done in the IGG run.
-                      // It might be a different story with IGG other than BasicIGG, though.
+                      AttributeStatsHelper.showStatisticsAsync("Attribute stats", grammar, true);
                     }
                   });
         } catch (final InterruptedException e) {

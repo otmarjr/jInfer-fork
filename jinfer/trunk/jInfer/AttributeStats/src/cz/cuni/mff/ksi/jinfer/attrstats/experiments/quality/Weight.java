@@ -49,6 +49,11 @@ public class Weight implements QualityMeasurement {
       public boolean isOptimal() {
         return solution.isOptimal();
       }
+
+      @Override
+      public String getText() {
+        return String.valueOf(getScalar()) + " (" + solution.getMappings().size() + " AMs)";
+      }
     };
   }
 

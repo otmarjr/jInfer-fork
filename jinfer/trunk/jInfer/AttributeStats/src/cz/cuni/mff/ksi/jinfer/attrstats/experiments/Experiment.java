@@ -59,6 +59,8 @@ public class Experiment implements IGGeneratorCallback {
   /** Number of vertices and edges in the graph representation of this file. */
   private Pair<Integer, Integer> graphRepresentation;
 
+  private final int poolSize;
+
   private final ConstructionHeuristic constructionHeuristic;
   /**
    * List of improvement heuristics to be run in a loop until the termination
@@ -74,6 +76,7 @@ public class Experiment implements IGGeneratorCallback {
   private long startTime;
   /** Total time of the experiment run, in ms. */
   private long totalTime;
+  private Quality highestQuality = Quality.ZERO;
   private Quality finalQuality;
   private AMModel model;
 
@@ -94,11 +97,13 @@ public class Experiment implements IGGeneratorCallback {
    * @param terminationCriterion
    */
   public Experiment(final String fileName,
+          final int poolSize,
           final ConstructionHeuristic constructionHeuristic,
           final List<ImprovementHeuristic> improvementHeuristics,
           final QualityMeasurement measurement,
           final TerminationCriterion terminationCriterion) {
     this.fileName = fileName;
+    this.poolSize = poolSize;
     this.constructionHeuristic = constructionHeuristic;
     this.improvementHeuristics = new ArrayList<ImprovementHeuristic>(improvementHeuristics);
     this.measurement = measurement;
@@ -124,10 +129,11 @@ public class Experiment implements IGGeneratorCallback {
         .append("\n\nResults:")
         .append("\nStart time: ").append(new Date(startTime))
         .append("\nTotal time spent: ").append(totalTime).append(" ms")
-        .append("\nFinal quality: ").append(finalQuality.getScalar())
+        .append("\nFinal quality: ").append(finalQuality.getText())
+        .append("\nHighest quality: ").append(highestQuality.getText())
         .append("\nConstruction phase: ")
         .append("\n    Time taken: ").append(constructionResult.getTime()).append(" ms")
-        .append("\n    Quality: ").append(constructionResult.getQuality().getScalar())
+        .append("\n    Quality: ").append(constructionResult.getQuality().getText())
         .append("\nImprovement phase: ");
 
     int i = 0;
@@ -135,7 +141,7 @@ public class Experiment implements IGGeneratorCallback {
       i++;
       ret.append("\n  pass #").append(i).append(": ")
         .append("\n    Time taken: ").append(result.getTime()).append(" ms")
-        .append("\n    Quality: ").append(result.getQuality().getScalar());
+        .append("\n    Quality: ").append(result.getQuality().getText());
     }
 
     return ret.toString();
@@ -175,7 +181,7 @@ public class Experiment implements IGGeneratorCallback {
 
     try {
       // run the CH
-      constructionHeuristic.start(model, 10, new HeuristicCallback() {
+      constructionHeuristic.start(model, poolSize, new HeuristicCallback() {
 
         @Override
         public void finished(final List<IdSet> feasiblePool) {
@@ -183,6 +189,9 @@ public class Experiment implements IGGeneratorCallback {
           final long constructionTime = (Calendar.getInstance().getTimeInMillis() - startTime);
           // get the incumbent solution and its quality
           final Pair<IdSet, Quality> incumbent = getBest(feasiblePool);
+          if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
+            highestQuality = incumbent.getSecond();
+          }
           constructionResult = new HeuristicResult(constructionTime, incumbent.getSecond());
 
           // while not termination criterion
@@ -213,6 +222,9 @@ public class Experiment implements IGGeneratorCallback {
           final long improvementTime = (Calendar.getInstance().getTimeInMillis() - ihStartTime);
           // get the incumbent solution and its quality
           final Pair<IdSet, Quality> incumbent = getBest(feasiblePool);
+          if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
+            highestQuality = incumbent.getSecond();
+          }
           improvementResults.add(new HeuristicResult(improvementTime, incumbent.getSecond()));
 
           // while not termination criterion

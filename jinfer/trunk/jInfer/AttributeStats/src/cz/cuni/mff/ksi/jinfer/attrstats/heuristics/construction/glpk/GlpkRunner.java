@@ -43,8 +43,8 @@ public final class GlpkRunner {
   private static final Logger LOG = Logger.getLogger(GlpkRunner.class);
 
   private static final String TMP = System.getProperty("java.io.tmpdir");
-  private static final String INPUT = TMP + "glpk_input.txt";
-  private static final String OUTPUT = TMP + "glpk_output.txt";
+  private static final String INPUT = TMP + "/glpk_input.txt";
+  private static final String OUTPUT = TMP + "/glpk_output.txt";
 
   /**
    * @see GlpkRunner#run(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, java.util.List, double, double, int)

@@ -42,7 +42,6 @@ import org.w3c.dom.Node;
 public class RepairerImpl implements Repairer {
 
   private static final Logger LOG = Logger.getLogger(RepairerImpl.class);
-  
   private int newValueID = 0;
 
   @Override
@@ -51,9 +50,13 @@ public class RepairerImpl implements Repairer {
 
     List<FD> functionalDependencies = model.getFunctionalDependencies();
     for (RXMLTree rXMLTree : model.getTrees()) {
-      RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies);
-      if (repairedTree != null) {
-        result.add(repairedTree);
+      if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
+        RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies);
+        if (repairedTree != null) {
+          result.add(repairedTree);
+        }
+      } else {
+        LOG.error("Some of the functional dependencies is not defined for XML tree.");
       }
     }
     callback.finished(result);
@@ -70,12 +73,12 @@ public class RepairerImpl implements Repairer {
           repairs.addAll(computeRepairs(rXMLTree, tuplePair, fd));
         }
 
+        List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
+        Repair repair = mergeRepairs(minimalRepairs);
+
+        rXMLTree.applyRepair(repair);
       }
     }
-    List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
-    Repair repair = mergeRepairs(minimalRepairs);
-
-    rXMLTree.applyRepair(repair);
     return rXMLTree;
   }
 
@@ -121,14 +124,14 @@ public class RepairerImpl implements Repairer {
 
   private List<Repair> removeNonMinimalRepairs(RXMLTree rXMLTree, List<Repair> repairs) {
     List<Repair> result = new ArrayList<Repair>();
-    
-    while (!repairs.isEmpty()) {      
+
+    while (!repairs.isEmpty()) {
       Repair repair = repairs.get(0);
-      
+
       List<Repair> minRepairs = getMinimalRepairs(repairs, repair);
       result.addAll(minRepairs);
     }
-    
+
     return result;
   }
 
@@ -207,7 +210,7 @@ public class RepairerImpl implements Repairer {
     Set<Repair> repairsToRemove = new HashSet<Repair>();
 
     result.add(repair);
-    
+
     for (Repair repair1 : repairs) {
       if (Repair.COMPARE_EQUAL == repair1.compareTo(result.get(0))) {
         result.add(repair1);
@@ -219,10 +222,10 @@ public class RepairerImpl implements Repairer {
         repairsToRemove.add(repair1);
       }
     }
-    
+
     repairsToRemove.addAll(result);
     repairs.removeAll(repairsToRemove);
-    
+
     return result;
   }
 }

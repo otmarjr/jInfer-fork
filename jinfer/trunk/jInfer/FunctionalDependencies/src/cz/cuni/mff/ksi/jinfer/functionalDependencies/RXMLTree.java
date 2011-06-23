@@ -302,4 +302,28 @@ public class RXMLTree {
       traverseTree(child, nodesMap);
     }
   }
+
+  public boolean isFDDefinedForTree(List<FD> functionalDependencies) {
+    if (paths == null) {
+      throw new RuntimeException("Paths defined for XML tree cannot be null");
+    }
+    
+    for (FD fd : functionalDependencies) {
+      for (Path path : fd.getLeftSidePaths().getPaths()) {
+        if (!isPathDefined(path)) {
+          return false;
+        }
+      }
+      
+      if (!isPathDefined(fd.getRightSidePaths().getPathObj())) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  private boolean isPathDefined(final Path path) {
+    return paths.contains(path);
+  }
 }

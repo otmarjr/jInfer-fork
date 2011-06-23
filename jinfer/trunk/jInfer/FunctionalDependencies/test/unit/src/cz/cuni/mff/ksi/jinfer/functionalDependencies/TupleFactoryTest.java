@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.ObjectFactory;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -60,8 +61,8 @@ public class TupleFactoryTest {
   @Test
   public void testGetTuplePairsEmpty() {
     List<Tuple> tuples = new ArrayList<Tuple>();
-    List<Tuple> expResult = new ArrayList<Tuple>();
-    List result = TupleFactory.getTuplePairs(tuples);
+    List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
+    List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
     
@@ -74,8 +75,8 @@ public class TupleFactoryTest {
     tuples.add(new Tuple(0));
     
     
-    List<Tuple> expResult = new ArrayList<Tuple>();
-    List result = TupleFactory.getTuplePairs(tuples);
+    List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
+    List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
       
@@ -90,8 +91,8 @@ public class TupleFactoryTest {
     tuples.add(tuple1);
     tuples.add(tuple1);
     
-    List<Tuple> expResult = new ArrayList<Tuple>();
-    List result = TupleFactory.getTuplePairs(tuples);
+    List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
+    List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
   
@@ -114,7 +115,7 @@ public class TupleFactoryTest {
     expResult.add(new Pair<Tuple, Tuple>(tuple1, tuple2));
     expResult.add(new Pair<Tuple, Tuple>(tuple1, tuple3));
     expResult.add(new Pair<Tuple, Tuple>(tuple2, tuple3));
-    List result = TupleFactory.getTuplePairs(tuples);
+    List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
 
@@ -122,11 +123,16 @@ public class TupleFactoryTest {
    * Test of getFDSidePathAnswers method, of class TupleFactory.
    */
   @Test(expected=RuntimeException.class)
-  public void testGetFDSidePathAnswersNull() {
-    RXMLTree tree = new RXMLTree(null);
+  public void testGetFDSidePathAnswersNull() throws ParserConfigurationException {
+    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    Document document = builder.newDocument();
+    Element element = document.createElement("test");
+    document.appendChild(element);
+    
+    RXMLTree tree = new RXMLTree(document);
     Tuple tuple = null;
     SidePaths sidePaths = null;
-    List result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
+    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
   }
   
   
@@ -134,11 +140,16 @@ public class TupleFactoryTest {
    * Test of getFDSidePathAnswers method, of class TupleFactory.
    */
   @Test(expected=RuntimeException.class)
-  public void testGetFDSidePathAnswersNull2() {
-    RXMLTree tree = new RXMLTree(null);
+  public void testGetFDSidePathAnswersNull2() throws ParserConfigurationException {
+    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    Document document = builder.newDocument();
+    Element element = document.createElement("test");
+    document.appendChild(element);
+    
+    RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(0);
     SidePaths sidePaths = null;
-    List result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
+    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
   }
   
     
@@ -146,8 +157,13 @@ public class TupleFactoryTest {
    * Test of getFDSidePathAnswers method, of class TupleFactory.
    */
   @Test
-  public void testGetFDSidePathAnswersEmpty() {
-    RXMLTree tree = new RXMLTree(null);
+  public void testGetFDSidePathAnswersEmpty() throws ParserConfigurationException {
+    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    Document document = builder.newDocument();
+    Element element = document.createElement("test");
+    document.appendChild(element);
+    
+    RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(0);
     SidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
     List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
@@ -167,16 +183,15 @@ public class TupleFactoryTest {
     
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(0);
-    tree.getTuplesMap().put(element, new HashSet<Tuple>());
-    tree.getTuplesMap().get(element).add(tuple);
-    
-    SidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
+    tree.getNodesMap().put(element, new NodeAttribute());
+    tree.getNodesMap().get(element).addToTuple(tuple);
+    TleftSidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
     sidePaths.getPath().add("//bib");
     List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
     
     List<PathAnswer> expected = new ArrayList<PathAnswer>();
     List<Node> nodes = new ArrayList<Node>();
-    expected.add(new PathAnswer(nodes));
+    expected.add(new PathAnswer(nodes, false));
     assertEquals(expected, result);
   }
 }

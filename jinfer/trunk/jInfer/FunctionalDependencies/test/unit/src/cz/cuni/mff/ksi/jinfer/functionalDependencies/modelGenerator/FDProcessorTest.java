@@ -104,8 +104,7 @@ public class FDProcessorTest {
     
     TrightSidePaths rightSide = objectFactory.createTrightSidePaths();
     fd.setRightSidePaths(rightSide);
-    List<String> rightPaths = rightSide.getPath();
-    rightPaths.add("path4");
+    rightSide.setPath("path4");
     
     return fds;
   }

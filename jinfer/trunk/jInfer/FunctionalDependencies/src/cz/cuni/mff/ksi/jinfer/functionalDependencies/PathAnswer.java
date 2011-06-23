@@ -31,13 +31,15 @@ public class PathAnswer {
   private List<Node> nodeAnswers;
   private boolean isValue = false;
 
-  //TODO sviro unit tests
-  public PathAnswer(NodeList nodeList) {
+  public PathAnswer(final NodeList nodeList, final boolean isValue) {
     if (nodeList != null && nodeList.getLength() > 0) {
       final short nodeType = nodeList.item(0).getNodeType();
-      if (nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE) {
-        isValue = true;
+      boolean isValueNode = nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE;
+      if (isValueNode != isValue) {
+        throw new RuntimeException("isValue not match actual content of a node list.");
       }
+
+      this.isValue = isValue;
       nodeAnswers = new ArrayList<Node>();
       for (int i = 0; i < nodeList.getLength(); i++) {
         nodeAnswers.add(nodeList.item(i));
@@ -46,13 +48,16 @@ public class PathAnswer {
     }
   }
 
-  public PathAnswer(List<Node> nodeList) {
+  public PathAnswer(final List<Node> nodeList, final boolean isValue) {
     if (nodeList != null && nodeList.size() > 0) {
       final short nodeType = nodeList.get(0).getNodeType();
-      if (nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE) {
-        isValue = true;
+      boolean isValueNode = nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE;
+      if (isValueNode != isValue) {
+        throw new RuntimeException("isValue not match actual content of a node list.");
       }
-      
+
+      this.isValue = isValue;
+
       nodeAnswers = new ArrayList<Node>();
       nodeAnswers.addAll(nodeList);
     }
@@ -88,11 +93,11 @@ public class PathAnswer {
     if (!this.isSameType(pathAnswer)) {
       return false;
     }
-    
+
     if (this.isValueAnswer()) {
       return this.getValueAnswers().equals(pathAnswer.getValueAnswers());
     }
-    
+
     return this.getNodeAnswers().equals(pathAnswer.getNodeAnswers());
   }
 
@@ -116,7 +121,7 @@ public class PathAnswer {
     if (isEmpty()) {
       return new ArrayList<String>();
     }
-    
+
     if (!isValueAnswer()) {
       throw new UnsupportedOperationException(NbBundle.getMessage(PathAnswer.class, "pathAnswer.wrongAnswerType.retreive"));
     }
@@ -141,5 +146,29 @@ public class PathAnswer {
 
   private boolean isSameType(PathAnswer pathAnswer) {
     return (this.isNodeAnswer() && pathAnswer.isNodeAnswer()) || (this.isValueAnswer() && pathAnswer.isValueAnswer());
+  }
+
+  public Node getTupleNodeAnswer() {
+    if (!hasMaxOneElement()) {
+      throw new UnsupportedOperationException("PathAnswer is not an answer for a tuple.");
+    }
+
+    if (hasOneElement()) {
+      return nodeAnswers.get(0);
+    }
+
+    return null;
+  }
+
+  public String getTupleValueAnswer() {
+    if (!hasMaxOneElement()) {
+      throw new UnsupportedOperationException("PathAnswer is not an answer for a tuple.");
+    }
+
+    if (hasOneElement()) {
+      return nodeAnswers.get(0).getNodeValue();
+    }
+
+    return null;
   }
 }

@@ -16,78 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.fd;
 
-import java.util.ArrayList;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
 import java.util.List;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author sviro
  */
-@XmlTransient
-public abstract class SidePaths {
-  
-  @XmlElement(required = true)
-    protected List<String> path;
-
-    /**
-     * Gets the value of the path property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the path property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getPath().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getPath() {
-        if (path == null) {
-            path = new ArrayList<String>();
-        }
-        return this.path;
-    }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
-    }
-    
-    if (!(obj instanceof SidePaths)) {
-      return false;
-    }
-    
-    if ((this instanceof TleftSidePaths) && (obj instanceof TrightSidePaths)) {
-      return false;
-    }
-    
-    if ((this instanceof TrightSidePaths) && (obj instanceof TleftSidePaths)) {
-      return false;
-    }
-    
-    return this.getPath().equals(((SidePaths)obj).getPath());
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 53 * hash + (this.path != null ? this.path.hashCode() : 0);
-    return hash;
-  }
-    
-    
-  
+public interface SidePaths {
 }

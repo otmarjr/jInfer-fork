@@ -192,10 +192,12 @@ public final class TupleFactory {
         }
       }
 
-      NodeList childNodes = node.getChildNodes();
-      for (int i = 0; i < childNodes.getLength(); i++) {
-        Node child = childNodes.item(i);
-        traverseTree(child, nodesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
+      if (node.getNodeType() != Node.ATTRIBUTE_NODE) {
+        NodeList childNodes = node.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+          Node child = childNodes.item(i);
+          traverseTree(child, nodesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
+        }
       }
     }
   }

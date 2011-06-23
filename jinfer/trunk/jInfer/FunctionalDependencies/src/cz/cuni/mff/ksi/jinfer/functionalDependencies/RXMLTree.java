@@ -136,7 +136,7 @@ public class RXMLTree {
     if (tuples == null) {
       tuples = TupleFactory.createTuples(this);
     }
-    
+
     List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(tuples);
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
       boolean isUnreliable = isUnreliableSide(tuplePair, fd.getLeftSidePaths()) || isUnreliableSide(tuplePair, fd.getRightSidePaths());
@@ -144,14 +144,14 @@ public class RXMLTree {
         return false;
       }
     }
-    
+
     return true;
   }
-  
+
   private boolean isUnreliableSide(final Pair<Tuple, Tuple> tuplePair, SidePaths side) {
     return isUnreliableTuple(tuplePair.getFirst(), side) || isUnreliableTuple(tuplePair.getSecond(), side);
   }
-  
+
   private boolean isUnreliableTuple(Tuple tuple, SidePaths side) {
     List<PathAnswer> pathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, side);
     for (PathAnswer pathAnswer : pathAnswers) {
@@ -159,7 +159,7 @@ public class RXMLTree {
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -208,16 +208,15 @@ public class RXMLTree {
   public PathAnswer getPathAnswer(Path path) {
     return getPathAnswerForTuple(path, null);
   }
-  
+
   public PathAnswer getPathAnswerForCreatingTuple(final Path path, final Tuple tuple) {
     return getGenericPathAnswerForTuple(path, tuple, true);
   }
-  
+
   public PathAnswer getPathAnswerForTuple(final Path path, final Tuple tuple) {
     return getGenericPathAnswerForTuple(path, tuple, false);
   }
 
-  
   /**
    * 
    * @param path
@@ -243,14 +242,14 @@ public class RXMLTree {
               result.add(node);
             }
           }
-          
+
           if (!isCreatingTuple && result.size() > 1) {
             throw new RuntimeException("Tuple must have max 1 answer");
           }
 
           return new PathAnswer(result, path.isStringPath());
         }
-        
+
         return new PathAnswer(nodeList, path.isStringPath());
       } catch (XPathExpressionException ex) {
         LOG.error("Path " + path + " cannot be compiled or evaluated.", ex);
@@ -296,10 +295,12 @@ public class RXMLTree {
       }
     }
 
-    NodeList childNodes = node.getChildNodes();
-    for (int i = 0; i < childNodes.getLength(); i++) {
-      Node child = childNodes.item(i);
-      traverseTree(child, nodesMap);
+    if (node.getNodeType() != Node.ATTRIBUTE_NODE) {
+      NodeList childNodes = node.getChildNodes();
+      for (int i = 0; i < childNodes.getLength(); i++) {
+        Node child = childNodes.item(i);
+        traverseTree(child, nodesMap);
+      }
     }
   }
 
@@ -307,22 +308,22 @@ public class RXMLTree {
     if (paths == null) {
       throw new RuntimeException("Paths defined for XML tree cannot be null");
     }
-    
+
     for (FD fd : functionalDependencies) {
       for (Path path : fd.getLeftSidePaths().getPaths()) {
         if (!isPathDefined(path)) {
           return false;
         }
       }
-      
+
       if (!isPathDefined(fd.getRightSidePaths().getPathObj())) {
         return false;
       }
     }
-    
+
     return true;
   }
-  
+
   private boolean isPathDefined(final Path path) {
     return paths.contains(path);
   }

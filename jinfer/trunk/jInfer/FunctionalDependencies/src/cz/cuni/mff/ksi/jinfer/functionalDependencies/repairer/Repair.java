@@ -31,13 +31,11 @@ import org.w3c.dom.NodeList;
  * @author sviro
  */
 public class Repair implements Comparable<Repair> {
-  
+
   public static final int COMPARE_SMALLER = -1;
   public static final int COMPARE_EQUAL = 0;
   public static final int COMPARE_GREATER = 1;
   public static final int COMPARE_UNAVAILABLE = 2;
-  
-
   private Set<Node> unreliableNodes;
   private Map<Node, String> valueNodes;
 
@@ -105,18 +103,19 @@ public class Repair implements Comparable<Repair> {
 
   private void addUnreliableChildren(Node unreliableNode) {
     unreliableNodes.add(unreliableNode);
-    
+
     NamedNodeMap attributes = unreliableNode.getAttributes();
     if (attributes != null) {
       for (int i = 0; i < attributes.getLength(); i++) {
         addUnreliableChildren(attributes.item(i));
       }
     }
-    
-    NodeList childNodes = unreliableNode.getChildNodes();
-    if (childNodes != null) {
-      for (int i = 0; i < childNodes.getLength(); i++) {
-        addUnreliableChildren(childNodes.item(i));
+    if (unreliableNode.getNodeType() != Node.ATTRIBUTE_NODE) {
+      NodeList childNodes = unreliableNode.getChildNodes();
+      if (childNodes != null) {
+        for (int i = 0; i < childNodes.getLength(); i++) {
+          addUnreliableChildren(childNodes.item(i));
+        }
       }
     }
   }
@@ -132,17 +131,18 @@ public class Repair implements Comparable<Repair> {
     if (isSmaller(this, repair) && isSmaller(repair, this)) {
       return 0;
     }
-    
+
     if (isSmaller(this, repair)) {
       return -1;
     }
-    
+
     if (isSmaller(repair, this)) {
       return 1;
     }
-   
+
     return 2;
   }
+
   /**
    * 
    * @param modified1
@@ -156,9 +156,10 @@ public class Repair implements Comparable<Repair> {
     Collection<Node> modifiedNodes2 = repair2.getModifiedNodes();
     Collection<Node> falseNodes1 = repair1.getFalseNodes();
     Collection<Node> falseNodes2 = repair2.getFalseNodes();
-    
+
     return isSubset(modifiedNodes1, modifiedNodes2) && isSubset(falseNodes1, falseNodes2);
   }
+
   /**
    * Determines if set1 is subset of set2.
    * @param set1
@@ -168,29 +169,28 @@ public class Repair implements Comparable<Repair> {
   private static boolean isSubset(Collection<Node> set1, Collection<Node> set2) {
     return set2.containsAll(set1);
   }
-  
-  
+
   public Collection<Node> getUpdatedNodes() {
     return valueNodes.keySet();
   }
-  
+
   public Collection<Node> getFalseNodes() {
     return unreliableNodes;
   }
-  
+
   public Collection<Node> getModifiedNodes() {
     Collection<Node> result = new ArrayList<Node>(getUpdatedNodes().size() + getFalseNodes().size());
-    
+
     result.addAll(getUpdatedNodes());
     result.addAll(getFalseNodes());
-    
+
     return result;
   }
 
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    
+
     builder.append("Repair:\n");
     builder.append("\t").append("Unreliable nodes:\n");
     for (Node node : unreliableNodes) {
@@ -199,11 +199,9 @@ public class Repair implements Comparable<Repair> {
     builder.append("\t").append("Value nodes:\n");
     for (Node node : valueNodes.keySet()) {
       builder.append("\t\t").append("node: ").append(node.toString()).append(" value: ").append(valueNodes.get(node)).append("\n");
-      
+
     }
-    
+
     return builder.toString();
   }
-  
-  
 }

@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TrightSidePaths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,11 +38,14 @@ import org.w3c.dom.Text;
  *
  * @author sviro
  */
-public class TupleFactory {
+public final class TupleFactory {
+
+  private TupleFactory() {
+  }
 
   public static List<Tuple> createTuples(RXMLTree tree) {
     List<Tuple> result = new ArrayList<Tuple>();
-    List<String> paths = tree.getPaths();
+    List<Path> paths = tree.getPaths();
     Queue<Tuple> lastAddedTuples = new ArrayDeque<Tuple>();
 
     int firstTupleId = tree.getNewTupleID();
@@ -49,12 +53,12 @@ public class TupleFactory {
     Tuple firstTuple = markNodesToTuple(tree, null, firstTupleId, null, null);
     lastAddedTuples.add(firstTuple);
 
-    for (String path : paths) {
+    for (Path path : paths) {
       Queue<Tuple> newAddedTuples = new ArrayDeque<Tuple>();
       while (!lastAddedTuples.isEmpty()) {
         Tuple lastTuple = lastAddedTuples.poll();
 
-        PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, lastTuple);
+        PathAnswer pathAnswer = tree.getPathAnswerForCreatingTuple(path, lastTuple);
         if (pathAnswer == null) {
           throw new RuntimeException("PathAnswer can't be null.");
         }
@@ -81,7 +85,7 @@ public class TupleFactory {
     if (tuples == null) {
       return null;
     }
-    
+
     List<Pair<Tuple, Tuple>> result = new ArrayList<Pair<Tuple, Tuple>>();
     for (Tuple tuple : tuples) {
       for (Tuple tuple1 : tuples) {
@@ -94,29 +98,43 @@ public class TupleFactory {
     return result;
   }
 
-  //TODO sviro implement
-  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(List<Tuple> tuples, FD fd) {
-    List<Tuple> notSatisfyingTuples = new ArrayList<Tuple>();
-    for (Tuple tuple : tuples) {
+  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(RXMLTree tree, FD fd) {
+    List<Pair<Tuple, Tuple>> notSatisfyingTuples = new ArrayList<Pair<Tuple, Tuple>>();
+
+    List<Pair<Tuple, Tuple>> tuplePairs = getTuplePairs(tree.getTuples());
+    if (tuplePairs == null || tuplePairs.isEmpty()) {
+      throw new RuntimeException("List of tuple pairs can't be null or empty.");
     }
-    
 
+    for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
+      if (!tree.isTuplePairSatisfyingFD(tuplePair, fd)) {
+        notSatisfyingTuples.add(tuplePair);
+      }
+    }
 
-    return getTuplePairs(notSatisfyingTuples);
+    return notSatisfyingTuples;
   }
 
   public static List<PathAnswer> getFDSidePathAnswers(RXMLTree tree, Tuple tuple, SidePaths sidePaths) {
     if (tuple == null) {
       throw new RuntimeException("Tuple can't be null.");
     }
-    
+
     if (sidePaths == null) {
       throw new RuntimeException("Side paths can't be null.");
     }
-    
+
     List<PathAnswer> result = new ArrayList<PathAnswer>();
-    for (String path : sidePaths.getPath()) {
-      PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, tuple);
+    if (sidePaths instanceof TleftSidePaths) {
+      TleftSidePaths leftSide = (TleftSidePaths) sidePaths;
+
+      for (Path path : leftSide.getPaths()) {
+        PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, tuple);
+        result.add(pathAnswer);
+      }
+    } else if (sidePaths instanceof TrightSidePaths) {
+      TrightSidePaths rightSide = (TrightSidePaths) sidePaths;
+      PathAnswer pathAnswer = tree.getPathAnswerForTuple(rightSide.getPathObj(), tuple);
       result.add(pathAnswer);
     }
 
@@ -126,13 +144,13 @@ public class TupleFactory {
   private static Tuple markNodesToTuple(final RXMLTree tree, final Node cuttingNode, final int tupleId, final Tuple actualTuple, final List<Node> tupleCut) {
     Tuple result = new Tuple(tupleId);
 
-    traverseTree(tree.getDocument().getDocumentElement(), tree.getTuplesMap(), cuttingNode, actualTuple, result, tupleCut, false);
+    traverseTree(tree.getDocument().getDocumentElement(), tree.getNodesMap(), cuttingNode, actualTuple, result, tupleCut, false);
 
     return result;
   }
 
   private static void unmarkNodesFromTuple(RXMLTree tree, Tuple lastTuple) {
-    traverseTree(tree.getDocument().getDocumentElement(), tree.getTuplesMap(), null, null, lastTuple, null, true);
+    traverseTree(tree.getDocument().getDocumentElement(), tree.getNodesMap(), null, null, lastTuple, null, true);
   }
 
   /**
@@ -140,27 +158,27 @@ public class TupleFactory {
    * this means that {@code actualTuple} will be divided into new tuples where each new tuple is represented
    * by one node of {@code tupleCut}(the {@code cuttingNode} is representative for this tuple). 
    * @param node Node to be added into {@code currentTuple}
-   * @param tuplesMap Map holding information for each Node to which tuple belongs to.
+   * @param nodesMap Map holding information for each Node to which tuple belongs to.
    * @param cuttingNode Representative for tuple division. If it is {@code null}, there is no dividing of tuple.
    * @param actualTuple The tuple which is actually traversed. If it is {@code null}, whole xml tree is traversed. 
    * @param currentTuple Tuple to which are nodes added or removed from.
    * @param tupleCut List of nodes for which dividing of node is provided.
    * @param remove Flag indicationg if {@code currentTuple} is added or removed.
    */
-  private static void traverseTree(Node node, Map<Node, Set<Tuple>> tuplesMap, Node cuttingNode, Tuple actualTuple, Tuple currentTuple, List<Node> tupleCut, boolean remove) {
-    if (!tuplesMap.containsKey(node)) {
-      tuplesMap.put(node, new HashSet<Tuple>());
+  private static void traverseTree(Node node, Map<Node, NodeAttribute> nodesMap, Node cuttingNode, Tuple actualTuple, Tuple currentTuple, List<Node> tupleCut, boolean remove) {
+    if (!nodesMap.containsKey(node)) {
+      throw new RuntimeException("There must be a reference for all nodes in a tree.");
     }
 
-    if (actualTuple == null || tuplesMap.get(node).contains(actualTuple)) {
+    if (actualTuple == null || nodesMap.get(node).isInTuple(actualTuple)) {
       boolean wasRemoved = false;
       if (remove) {
-        wasRemoved = tuplesMap.get(node).remove(currentTuple);
+        wasRemoved = nodesMap.get(node).removeFromTuple(currentTuple);
       } else {
         if (cuttingNode != null && tupleCut != null && tupleCut.contains(node) && !node.equals(cuttingNode)) {
           return;
         }
-        tuplesMap.get(node).add(currentTuple);
+        nodesMap.get(node).addToTuple(currentTuple);
       }
 
       if (remove && !wasRemoved) {
@@ -170,14 +188,14 @@ public class TupleFactory {
       NamedNodeMap attributes = node.getAttributes();
       if (attributes != null) {
         for (int j = 0; j < attributes.getLength(); j++) {
-          traverseTree(attributes.item(j), tuplesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
+          traverseTree(attributes.item(j), nodesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
         }
       }
 
       NodeList childNodes = node.getChildNodes();
       for (int i = 0; i < childNodes.getLength(); i++) {
         Node child = childNodes.item(i);
-        traverseTree(child, tuplesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
+        traverseTree(child, nodesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
       }
     }
   }

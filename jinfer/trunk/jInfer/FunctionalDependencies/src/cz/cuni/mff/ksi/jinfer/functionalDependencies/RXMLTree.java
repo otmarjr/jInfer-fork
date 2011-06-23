@@ -18,12 +18,15 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TrightSidePaths;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -38,6 +41,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -49,15 +53,16 @@ public class RXMLTree {
 
   private static final Logger LOG = Logger.getLogger(RXMLTree.class);
   private final Document document;
-  private List<String> paths = null;
-  private Map<Node, Set<Tuple>> tuplesMap;
+  private List<Path> paths = null;
+  private Map<Node, NodeAttribute> nodesMap;
   private List<Tuple> tuples;
   private int tupleID;
 
   public RXMLTree(final Document document) {
     this.document = document;
-    tuplesMap = new HashMap<Node, Set<Tuple>>();
+    nodesMap = new HashMap<Node, NodeAttribute>();
     tupleID = 0;
+    nodesMap = createNodesMap(document);
   }
 
   public boolean isSatisfyingFD(FD fd) {
@@ -74,23 +79,30 @@ public class RXMLTree {
     }
 
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
-      Tuple tuple1 = tuplePair.getFirst();
-      Tuple tuple2 = tuplePair.getSecond();
-      List<PathAnswer> tuple1LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getLeftSidePaths());
-      List<PathAnswer> tuple2LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getLeftSidePaths());
-      List<PathAnswer> tuple1RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getRightSidePaths());
-      List<PathAnswer> tuple2RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getRightSidePaths());
-
-      boolean leftSideEqual = areTuplePathAnswersEqual(tuple1LeftSideAnswers, tuple2LeftSideAnswers);
-      boolean tuple1PathAnswersNotEmpty = isTuplePathAnswersNotEmpty(tuple1LeftSideAnswers);
-      boolean rightSideEqual = areTuplePathAnswersEqual(tuple1RightSideAnswers, tuple2RightSideAnswers);
-
-
-      if (leftSideEqual && tuple1PathAnswersNotEmpty && !rightSideEqual) {
+      if (!isTuplePairSatisfyingFD(tuplePair, fd)) {
         return false;
       }
     }
 
+    return true;
+  }
+
+  public boolean isTuplePairSatisfyingFD(Pair<Tuple, Tuple> tuplePair, FD fd) {
+    Tuple tuple1 = tuplePair.getFirst();
+    Tuple tuple2 = tuplePair.getSecond();
+
+    List<PathAnswer> tuple1LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getLeftSidePaths());
+    List<PathAnswer> tuple2LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getLeftSidePaths());
+    List<PathAnswer> tuple1RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getRightSidePaths());
+    List<PathAnswer> tuple2RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getRightSidePaths());
+
+    boolean leftSideEqual = areTuplePathAnswersEqual(tuple1LeftSideAnswers, tuple2LeftSideAnswers);
+    boolean tuple1PathAnswersNotEmpty = isTuplePathAnswersNotEmpty(tuple1LeftSideAnswers);
+    boolean rightSideEqual = areTuplePathAnswersEqual(tuple1RightSideAnswers, tuple2RightSideAnswers);
+
+    if (leftSideEqual && tuple1PathAnswersNotEmpty && !rightSideEqual) {
+      return false;
+    }
     return true;
   }
 
@@ -121,7 +133,33 @@ public class RXMLTree {
   }
 
   private boolean isReliabilitySatisfyFD(FD fd) {
-    //TODO sviro implement;
+    if (tuples == null) {
+      tuples = TupleFactory.createTuples(this);
+    }
+    
+    List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(tuples);
+    for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
+      boolean isUnreliable = isUnreliableSide(tuplePair, fd.getLeftSidePaths()) || isUnreliableSide(tuplePair, fd.getRightSidePaths());
+      if (!isUnreliable) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  private boolean isUnreliableSide(final Pair<Tuple, Tuple> tuplePair, SidePaths side) {
+    return isUnreliableTuple(tuplePair.getFirst(), side) || isUnreliableTuple(tuplePair.getSecond(), side);
+  }
+  
+  private boolean isUnreliableTuple(Tuple tuple, SidePaths side) {
+    List<PathAnswer> pathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, side);
+    for (PathAnswer pathAnswer : pathAnswers) {
+      if (!nodesMap.get(pathAnswer.getTupleNodeAnswer()).isReliable()) {
+        return true;
+      }
+    }
+    
     return false;
   }
 
@@ -150,28 +188,44 @@ public class RXMLTree {
     return null;
   }
 
-  public List<String> getPaths() {
+  public List<Path> getPaths() {
     return paths;
   }
 
-  public void setPaths(List<String> paths) {
+  public void setPaths(List<Path> paths) {
     this.paths = paths;
   }
 
   public String pathsToString() {
     StringBuilder builder = new StringBuilder();
-    for (String path : paths) {
-      builder.append(path).append("\n");
+    for (Path path : paths) {
+      builder.append(path.getPathValue()).append("\n");
     }
 
     return builder.toString();
   }
 
-  public PathAnswer getPathAnswer(String path) {
+  public PathAnswer getPathAnswer(Path path) {
     return getPathAnswerForTuple(path, null);
   }
+  
+  public PathAnswer getPathAnswerForCreatingTuple(final Path path, final Tuple tuple) {
+    return getGenericPathAnswerForTuple(path, tuple, true);
+  }
+  
+  public PathAnswer getPathAnswerForTuple(final Path path, final Tuple tuple) {
+    return getGenericPathAnswerForTuple(path, tuple, false);
+  }
 
-  public PathAnswer getPathAnswerForTuple(final String path, final Tuple tuple) {
+  
+  /**
+   * 
+   * @param path
+   * @param tuple
+   * @param isCreatingTuple
+   * @return
+   */
+  public PathAnswer getGenericPathAnswerForTuple(final Path path, final Tuple tuple, final boolean isCreatingTuple) {
     if (path != null) {
       XPathFactory xpathFactory = XPathFactory.newInstance();
       XPath xPath = xpathFactory.newXPath();
@@ -179,21 +233,25 @@ public class RXMLTree {
 
       List<Node> result = new ArrayList<Node>();
       try {
-        xPathExpression = xPath.compile(path);
+        xPathExpression = xPath.compile(path.getPathValue());
         NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
 
         if (tuple != null) {
           for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            if (tuplesMap.get(node).contains(tuple)) {
+            if (nodesMap.get(node).isInTuple(tuple)) {
               result.add(node);
             }
           }
+          
+          if (!isCreatingTuple && result.size() > 1) {
+            throw new RuntimeException("Tuple must have max 1 answer");
+          }
 
-          return new PathAnswer(result);
+          return new PathAnswer(result, path.isStringPath());
         }
-
-        return new PathAnswer(nodeList);
+        
+        return new PathAnswer(nodeList, path.isStringPath());
       } catch (XPathExpressionException ex) {
         LOG.error("Path " + path + " cannot be compiled or evaluated.", ex);
       }
@@ -210,7 +268,38 @@ public class RXMLTree {
     return tupleID++;
   }
 
-  public Map<Node, Set<Tuple>> getTuplesMap() {
-    return tuplesMap;
+  public Map<Node, NodeAttribute> getNodesMap() {
+    return nodesMap;
+  }
+
+  public void applyRepair(Repair repair) {
+    LOG.debug(repair.toString());
+  }
+
+  private static Map<Node, NodeAttribute> createNodesMap(final Document document) {
+    Map<Node, NodeAttribute> result = new HashMap<Node, NodeAttribute>();
+    traverseTree(document.getDocumentElement(), result);
+
+    return result;
+  }
+
+  private static void traverseTree(Node node, Map<Node, NodeAttribute> nodesMap) {
+    if (!nodesMap.containsKey(node)) {
+      nodesMap.put(node, new NodeAttribute());
+    }
+
+    //check attributes
+    NamedNodeMap attributes = node.getAttributes();
+    if (attributes != null) {
+      for (int j = 0; j < attributes.getLength(); j++) {
+        traverseTree(attributes.item(j), nodesMap);
+      }
+    }
+
+    NodeList childNodes = node.getChildNodes();
+    for (int i = 0; i < childNodes.getLength(); i++) {
+      Node child = childNodes.item(i);
+      traverseTree(child, nodesMap);
+    }
   }
 }

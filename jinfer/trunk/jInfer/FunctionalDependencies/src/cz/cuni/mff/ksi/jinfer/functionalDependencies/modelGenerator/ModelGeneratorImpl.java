@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGenerator;
@@ -87,7 +88,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
     final List<RXMLTree> result = new ArrayList<RXMLTree>();
 
     Processor<RXMLTree> xmlProcessor = ModelGeneratorImpl.<RXMLTree>getProcessor(RXMLTree.class);
-    Processor<String> pathProcessor = ModelGeneratorImpl.<String>getProcessor(String.class);
+    Processor<Path> pathProcessor = ModelGeneratorImpl.<Path>getProcessor(Path.class);
 
     if (xmlProcessor != null && pathProcessor != null) {
       for (File file : files) {

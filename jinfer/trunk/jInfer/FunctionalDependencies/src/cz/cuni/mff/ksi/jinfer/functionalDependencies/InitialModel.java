@@ -53,7 +53,7 @@ public class InitialModel {
     trees.addAll(xmlTrees);
   }
   
-  public List<String> getPaths(final RXMLTree rXmlTree) {
+  public List<Path> getPaths(final RXMLTree rXmlTree) {
     int treeIndex = trees.indexOf(rXmlTree);
     return trees.get(treeIndex).getPaths();
   }

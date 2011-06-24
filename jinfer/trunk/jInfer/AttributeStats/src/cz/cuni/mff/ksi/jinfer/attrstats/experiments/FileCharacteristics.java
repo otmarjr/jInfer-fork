@@ -28,6 +28,7 @@ public enum FileCharacteristics {
   /** Realistic data with some text content converted to attributes. */
   CONVERTED,
   /** Artificially generated data. */
-  ARTIFICIAL;
+  ARTIFICIAL,
+  UNKNOWN;
 
 }

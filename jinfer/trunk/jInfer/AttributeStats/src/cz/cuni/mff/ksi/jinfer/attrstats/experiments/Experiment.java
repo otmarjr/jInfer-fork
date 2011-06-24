@@ -31,11 +31,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * TODO vektor Comment!
@@ -46,16 +46,7 @@ public class Experiment implements IGGeneratorCallback {
 
   // TODO vektor Known optimum
 
-  private String hwInfo;
-  private String osInfo;
-  private String javaInfo;
-  private String glpkInfo;
-
-  private Object[] settings;
-
-  private final String fileName;
-  private long fileSize;
-  private FileCharacteristics characteristics;
+  private final InputFile file;
   /** Number of vertices and edges in the graph representation of this file. */
   private Pair<Integer, Integer> graphRepresentation;
 
@@ -100,7 +91,7 @@ public class Experiment implements IGGeneratorCallback {
    * @param measurement
    * @param terminationCriterion
    */
-  public Experiment(final String fileName,
+  public Experiment(final InputFile file,
           final int poolSize,
           final double alpha,
           final double beta,
@@ -108,7 +99,7 @@ public class Experiment implements IGGeneratorCallback {
           final List<ImprovementHeuristic> improvementHeuristics,
           final QualityMeasurement measurement,
           final TerminationCriterion terminationCriterion) {
-    this.fileName = fileName;
+    this.file = file;
     this.poolSize = poolSize;
     this.alpha = alpha;
     this.beta = beta;
@@ -119,21 +110,16 @@ public class Experiment implements IGGeneratorCallback {
   }
 
   /**
-   * TODO vektor Comment!
-   */
-  private void fillMiscInfo() {
-    // TODO vektor Fill out hwInfo, osInfo, javaInfo, glpkInfo, ...
-  }
-
-  /**
    * Returns a string report of this whole experiment, its setting and results.
    *
    * @return String report of this experiment.
    */
   public String getReport() {
     final StringBuilder ret = new StringBuilder();
-    ret.append("Configuration:")
-        .append("\nFile name: ").append(fileName).append(" (").append(fileSize).append(" b)")
+    ret.append(SystemInfo.getInfo())
+        .append("\n\nConfiguration:")
+        .append("\nFile name: ").append(file.getName()).append(" (").append(file.getSize()).append(" b)")
+        .append("\nalpha: ").append(alpha).append(", beta: ").append(beta)
         .append("\n\nResults:")
         .append("\nStart time: ").append(new Date(startTime))
         .append("\nTotal time spent: ").append(totalTime).append(" ms")
@@ -179,9 +165,7 @@ public class Experiment implements IGGeneratorCallback {
     // get IG from the file
     final IGGenerator igg = ModuleSelectionHelper.lookupImpl(IGGenerator.class, "Basic_IG_Generator");
     final Input input = new Input();
-    final File inputFile = new File(fileName);
-    fileSize = inputFile.length();
-    input.getDocuments().add(inputFile);
+    input.getDocuments().add(file.getFile());
     igg.start(input, this);
   }
 

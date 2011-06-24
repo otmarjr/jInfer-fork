@@ -46,7 +46,8 @@ public final class GlpkInputGenerator {
 
   private static final String TEMPLATE = "/cz/cuni/mff/ksi/jinfer/attrstats/heuristics/construction/glpk/GlpkInputTemplate.txt";
   private static final String CONSTRAINT = "s.t. c{index}: x['{mapping1}'] + x['{mapping2}'] <= 1;";
-  private static final String FIX = "s.t. f{index}: x['{mapping}'] = 1;";
+  private static final String FIX_TO_1 = "s.t. f{index}: x['{mapping}'] = 1;";
+  private static final String FIX_TO_0 = "s.t. f{index}: x['{mapping}'] = 0;";
 
   /**
    * @see GlpkInputGenerator#generateGlpkInput(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, double, double, java.util.List)
@@ -135,6 +136,7 @@ public final class GlpkInputGenerator {
 
       LOG.info("Graph interpretation: " + candidates.size() + " vertices, "
               + constraints.getSecond().intValue() + " edges.");
+      LOG.info("Fixed to 1: " + fixed.size());
       LOG.info("Input generator took "
               + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
       LOG.info("Input length is " + result.length() + " chars.");
@@ -152,41 +154,55 @@ public final class GlpkInputGenerator {
           throws InterruptedException {
     final StringBuilder ret = new StringBuilder();
 
-    int index = 0;
+    int fixedIndex = 0;
     for (final AttributeMappingId mapping : fixed) {
       if (candidates.contains(mapping)) {
-        index++;
-        final String fix = FIX
-                .replace("{index}", String.valueOf(index))
-                .replace("{mapping}", GlpkUtils.getName(mapping));
-        ret.append(fix).append('\n');
+        fixedIndex = addFixedConstraint(FIX_TO_1, ret, fixedIndex, mapping);
       }
     }
 
-    // TODO vektor Possible optimization: any AM that is collides with a fixed one is fixed to 0 automatically
+    int constraintIndex = 0;
 
     for (final AttributeMappingId mapping1 : candidates) {
       for (final AttributeMappingId mapping2 : candidates) {
-        if (mapping1.equals(mapping2)) {
-          continue;
-        }
-
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
 
-        if (mappingsCollide(mapping1, mapping2, model)) {
-          index++;
-          final String constraint = CONSTRAINT
-                  .replace("{index}", String.valueOf(index))
-                  .replace("{mapping1}", GlpkUtils.getName(mapping1))
-                  .replace("{mapping2}", GlpkUtils.getName(mapping2));
-          ret.append(constraint).append('\n');
+        if (mappingsCollide(mapping1, mapping2, model)
+                && mapping1.compareTo(mapping2) < 0) {
+
+          final boolean fixed1 = fixed.contains(mapping1);
+          final boolean fixed2 = fixed.contains(mapping2);
+          if (fixed1 || fixed2) {
+            if (fixed1) {
+              fixedIndex = addFixedConstraint(FIX_TO_0, ret, fixedIndex, mapping2);
+            }
+            if (fixed2) {
+              fixedIndex = addFixedConstraint(FIX_TO_0, ret, fixedIndex, mapping1);
+            }
+          }
+          else {
+            constraintIndex++;
+            final String constraint = CONSTRAINT
+                    .replace("{index}", String.valueOf(constraintIndex))
+                    .replace("{mapping1}", GlpkUtils.getName(mapping1))
+                    .replace("{mapping2}", GlpkUtils.getName(mapping2));
+            ret.append(constraint).append('\n');
+          }
         }
       }
     }
 
-    return new Pair<CharSequence, Integer>(ret, Integer.valueOf(index));
+    return new Pair<CharSequence, Integer>(ret, Integer.valueOf(constraintIndex));
+  }
+
+  private static int addFixedConstraint(final String template, final StringBuilder sb, final int index, final AttributeMappingId mapping) {
+    final String fix = template
+            .replace("{index}", String.valueOf(index + 1))
+            .replace("{mapping}", GlpkUtils.getName(mapping));
+    sb.append(fix).append('\n');
+    return index + 1;
   }
 
   private static boolean mappingsCollide(final AttributeMappingId mapping1,

@@ -32,8 +32,6 @@ public class HeuristicResult {
   /** Quality of the solution found in this run. */
   private final Quality quality;
 
-  // TODO vektor Do I want the IdSet to be here too?
-
   /**
    * Full constructor.
    *

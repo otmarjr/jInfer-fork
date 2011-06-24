@@ -87,7 +87,7 @@ public class Crossover implements ImprovementHeuristic {
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getName() + ", ratio = " + ratio + ", limit = " + timeLimit + " s";
   }
 
 }

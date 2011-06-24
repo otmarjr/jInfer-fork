@@ -54,4 +54,27 @@ public final class ExperimentalUtils {
     return new Pair<IdSet, Quality>(bestSolution, maxQuality);
   }
 
+  /**
+   * Returns the worst solution from the provided pool in the context of the
+   * provided experiment.
+   *
+   * @param experiment Experiment, in context of which to find the worst solution.
+   * @param solutions List of solutions among which to find the worst one.
+   * @return Worst solution.
+   */
+  public static IdSet getWorst(final Experiment experiment,
+          final List<IdSet> solutions) {
+    IdSet worstSolution = null;
+    Quality minQuality = null;
+    for (final IdSet solution : solutions) {
+      final Quality quality = experiment.getQualityMeasurement().measure(experiment, solution);
+      if (minQuality == null
+              || quality.getScalar() < minQuality.getScalar()) {
+        minQuality = quality;
+        worstSolution = solution;
+      }
+    }
+    return worstSolution;
+  }
+
 }

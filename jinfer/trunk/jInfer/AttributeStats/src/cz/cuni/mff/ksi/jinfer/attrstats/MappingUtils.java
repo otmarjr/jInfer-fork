@@ -169,22 +169,4 @@ public final class MappingUtils {
     }
     return ret;
   }
-
-  /**
-   * Returns the list of candidate attribute mappings sorted according to their
-   * weight from the specified model.
-   *
-   * Weight is defined in
-   * {@link AMModel#weight(AttributeMappingId, double, double)}. For the rest,
-   * see {@link MappingUtils#getCandidates(AMModel)}.
-   *
-   * @param Model to find the list of candidate AMs in.
-   * @return List of candidate mappings in the specified model, sorted according
-   * to their weight.
-   */
-  public static List<AttributeMappingId> getCandidatesSorted(final AMModel model) {
-    final List<AttributeMappingId> ret = getCandidates(model);
-    Collections.sort(ret, new ImageSizeComparator(model));
-    return ret;
-  }
 }

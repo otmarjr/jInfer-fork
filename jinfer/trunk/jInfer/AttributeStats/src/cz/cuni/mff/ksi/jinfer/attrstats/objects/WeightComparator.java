@@ -19,28 +19,27 @@ package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 import java.util.Comparator;
 
 /**
- * Comparator of attribute mappings based on the size of their images in the
- * provided model.
+ * Comparator of attribute mappings based on their weights in the context of
+ * the provided experiment.
  *
  * @author vektor
  */
-public class ImageSizeComparator implements Comparator<AttributeMappingId> {
+public class WeightComparator implements Comparator<AttributeMappingId> {
 
   private final AMModel model;
+  private final double alpha;
+  private final double beta;
 
-  /**
-   * Constructor.
-   *
-   * @param Model in context of which the AMs should be compared.
-   */
-  public ImageSizeComparator(final AMModel model) {
+  public WeightComparator(AMModel model, double alpha, double beta) {
     this.model = model;
+    this.alpha = alpha;
+    this.beta = beta;
   }
 
   @Override
   public int compare(final AttributeMappingId o1, final AttributeMappingId o2) {
-    final Integer size1 = Integer.valueOf(model.getAMs().get(o1).size());
-    final Integer size2 = Integer.valueOf(model.getAMs().get(o2).size());
-    return -size1.compareTo(size2);
+    final Double weight1 = model.weight(o1, alpha, beta);
+    final Double weight2 = model.weight(o2, alpha, beta);
+    return -weight1.compareTo(weight2);
   }
 }

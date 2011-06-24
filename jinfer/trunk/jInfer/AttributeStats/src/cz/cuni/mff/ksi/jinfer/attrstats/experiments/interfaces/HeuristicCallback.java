@@ -26,8 +26,6 @@ import java.util.List;
  */
 public interface HeuristicCallback {
 
-  // TODO vektor Return a set of ID sets (pool of feasible solutions) and an incumbent solution
-
   /**
    * TODO vektor Comment!
    *

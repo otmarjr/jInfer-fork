@@ -16,13 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
 
 /**
  *
  * @author sviro
  */
-public interface Repairer {
+public interface Repairer extends NamedModule {
   
   void start(final InitialModel model, RepairerCallback callback) throws InterruptedException;
 }

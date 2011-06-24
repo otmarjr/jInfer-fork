@@ -39,13 +39,14 @@ import org.w3c.dom.Node;
  * @author sviro
  */
 @ServiceProvider(service = Repairer.class)
-public class RepairerImpl implements Repairer {
+public class NewRepairerImpl implements Repairer {
 
-  private static final Logger LOG = Logger.getLogger(RepairerImpl.class);
+  private static final Logger LOG = Logger.getLogger(NewRepairerImpl.class);
   private int newValueID = 0;
 
   @Override
   public void start(InitialModel model, RepairerCallback callback) throws InterruptedException {
+    LOG.info("This is NEW repairer");
     List<RXMLTree> result = new ArrayList<RXMLTree>();
 
     List<FD> functionalDependencies = model.getFunctionalDependencies();
@@ -232,16 +233,16 @@ public class RepairerImpl implements Repairer {
 
   @Override
   public String getName() {
-    return "old_repairer";
+    return "new_repairer";
   }
 
   @Override
   public String getDisplayName() {
-    return "Generic repairer";
+    return "Thesis repairer";
   }
 
   @Override
   public String getModuleDescription() {
-    return "This repairer is implemented from the paper.";
+    return "This repairer is an implementation from thesis.";
   }
 }

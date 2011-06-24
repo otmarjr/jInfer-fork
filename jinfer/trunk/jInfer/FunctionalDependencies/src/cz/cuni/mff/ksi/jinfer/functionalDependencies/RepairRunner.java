@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import java.util.List;
 import org.openide.DialogDisplayer;
@@ -28,6 +29,8 @@ import org.apache.log4j.Logger;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGenerator;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.ModelGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairedXMLGenerator;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairedXMLGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback;
 import org.openide.util.Lookup;
@@ -42,6 +45,7 @@ public class RepairRunner {
   private static final Logger LOG = Logger.getLogger(RepairRunner.class);
   private final ModelGenerator modelGenerator;
   private final Repairer repairer;
+  private final RepairedXMLGenerator repairedXMLGenerator;
   private final ModelGeneratorCallback mgCallback = new ModelGeneratorCallback() {
 
     @Override
@@ -50,23 +54,29 @@ public class RepairRunner {
         LOG.debug("Tree:\n" + rXMLTree.toString() + "\n");
         LOG.debug("Paths:" + rXMLTree.pathsToString() + "\n");
       }
-      
+
       RepairRunner.this.finishedModelGenerator(model);
     }
   };
-  
   private final RepairerCallback repairerCallback = new RepairerCallback() {
 
     @Override
     public void finished(List<RXMLTree> repairedTrees) {
-      LOG.info("Finished repairing.");
-      RunningProject.removeActiveProject();
+      RepairRunner.this.finishedRepairer(repairedTrees);
+    }
+  };
+  private final RepairedXMLGeneratorCallback repairedXMLCallback = new RepairedXMLGeneratorCallback() {
+
+    @Override
+    public void finished(List<String> xmls) {
+      RepairRunner.this.finishedRepairedXMLGenerator(xmls);
     }
   };
 
   public RepairRunner() {
     modelGenerator = Lookup.getDefault().lookup(ModelGenerator.class);
     repairer = Lookup.getDefault().lookup(Repairer.class);
+    repairedXMLGenerator = Lookup.getDefault().lookup(RepairedXMLGenerator.class);
   }
 
   public void run() {
@@ -89,7 +99,7 @@ public class RepairRunner {
   private void finishedModelGenerator(final InitialModel model) {
     LOG.info("Initial Model has been created.");
     LOG.info("Repair Runner: initial model contains " + model.getFDsCount() + " functional dependencies and " + model.getTreesCount() + " trees.");
-    
+
     runAsync(new Runnable() {
 
       @Override
@@ -103,6 +113,44 @@ public class RepairRunner {
         }
       }
     }, "Repairing XMLs");
+  }
+
+  private void finishedRepairer(final List<RXMLTree> repairedTrees) {
+    LOG.info("Finished repairing.");
+
+    runAsync(new Runnable() {
+
+      @Override
+      public void run() {
+        try {
+          repairedXMLGenerator.start(repairedTrees, repairedXMLCallback);
+        } catch (final InterruptedException e) {
+          interrupted();
+        } catch (final Throwable t) {
+          unexpected(t);
+        }
+      }
+    }, "Creating Repaired XMLs");
+  }
+
+  private void finishedRepairedXMLGenerator(List<String> xmls) {
+    LOG.info("Repair Runner: writing repaired XMLs.");
+
+    final InputOutput ioResult = IOProvider.getDefault().getIO("jInfer repair result", true);
+
+    for (String xml : xmls) {
+      RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class).addOutput(
+              "repaired-xml{n}", xml, "xml", true);
+      
+      ioResult.getOut().println(xml);
+      ioResult.getOut().println();
+    }
+
+    IOSelect.select(ioResult, EnumSet.allOf(IOSelect.AdditionalOperation.class));
+    ioResult.getOut().close();
+
+    RunningProject.removeActiveProject();
+    LOG.info("------------- DONE -------------");
   }
 
   private static void interrupted() {

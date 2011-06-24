@@ -90,17 +90,19 @@ public class RepairerImpl implements Repairer {
     PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond());
 
     if (rightPath.isStringPath()) {
-      if (!t1Answer.isEmpty()) {
+      if (!t1Answer.isEmpty() && !t2Answer.isEmpty()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer()));
-      }
-      if (!t2Answer.isEmpty()) {
+      } else if (!t1Answer.isEmpty()) {
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer()));
+      } else if (!t2Answer.isEmpty()) {
         result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer()));
       }
     } else {
-      if (!t1Answer.isEmpty()) {
+      if (!t1Answer.isEmpty() && !t2Answer.isEmpty()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer()));
-      }
-      if (t2Answer.isEmpty()) {
+      } else if (!t1Answer.isEmpty()) {
+        result.add(new Repair(t1Answer.getTupleNodeAnswer()));
+      } else if (!t2Answer.isEmpty()) {
         result.add(new Repair(t2Answer.getTupleNodeAnswer()));
       }
     }
@@ -111,11 +113,10 @@ public class RepairerImpl implements Repairer {
 
       if (path.isStringPath()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue()));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue()));
+//        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue()));
       } else {
         result.add(new Repair(t1Answer.getTupleNodeAnswer()));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer()));
-
+//        result.add(new Repair(t2Answer.getTupleNodeAnswer()));
       }
     }
 

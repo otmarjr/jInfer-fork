@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
+
 /**
  * TODO vektor Comment!
  *
@@ -58,7 +60,12 @@ public class SystemInfo {
         .append("\n  Architecture: ").append(OS_ARCH)
         .append("\nJava info")
         .append("\n  Version: ").append(JAVA_VERSION)
-        .append("\n  VM: ").append(JAVA_VM_NAME);
+        .append("\n  VM: ").append(JAVA_VM_NAME)
+        .append("\nGLPK info")
+        .append("\n  ").append(GlpkUtils.getVersion());
+    if (GlpkUtils.getPath().contains("cygwin")) {
+      ret.append(" (probably Cygwin)");
+    }
     return ret.toString();
   }
 

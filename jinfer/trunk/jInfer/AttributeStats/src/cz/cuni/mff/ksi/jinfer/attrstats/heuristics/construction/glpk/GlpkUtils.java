@@ -28,6 +28,9 @@ import org.openide.util.NbPreferences;
  */
 public final class GlpkUtils {
 
+  private static final String CMD_OPTS = "-v";
+  private static final String EXPECTED = "GLPSOL: GLPK LP/MIP Solver";
+
   private GlpkUtils() {
 
   }
@@ -51,7 +54,7 @@ public final class GlpkUtils {
    * otherwise.
    */
   public static boolean isBinaryValid() {
-    return FileUtils.isBinaryValid(getPath(), "-v", "GLPSOL: GLPK LP/MIP Solver", false);
+    return FileUtils.isBinaryValid(getPath(), CMD_OPTS, EXPECTED, false);
   }
 
   /**
@@ -63,7 +66,16 @@ public final class GlpkUtils {
    * GLPK Solver binary, <code>false</code> otherwise.
    */
   public static boolean isBinaryValid(final String binaryPath) {
-    return FileUtils.isBinaryValid(binaryPath, "-v", "GLPSOL: GLPK LP/MIP Solver", true);
+    return FileUtils.isBinaryValid(binaryPath, CMD_OPTS, EXPECTED, true);
+  }
+
+  /**
+   * TODO vektor Comment!
+   * 
+   * @return
+   */
+  public static String getVersion() {
+    return FileUtils.getBinaryResult(getPath(), CMD_OPTS);
   }
 
   /**

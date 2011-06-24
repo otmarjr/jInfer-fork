@@ -98,4 +98,30 @@ public final class FileUtils {
     }
   }
 
+  /**
+   * TODO vektor Comment!
+   * 
+   * @param pathToBinary
+   * @param cmdLineOpts
+   * @return
+   */
+  public static String getBinaryResult(
+          final String pathToBinary,
+          final String cmdLineOpts) {
+    final File binaryFile = new File(pathToBinary);
+    if (!binaryFile.isFile() || !binaryFile.canExecute()) {
+      LOG.warn("The path is not a file or it's not executable: " + pathToBinary);
+      return null;
+    }
+    final ProcessBuilder pb = new ProcessBuilder(pathToBinary, cmdLineOpts);
+    try {
+      final Process process = pb.start();
+      final BufferedReader inputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+      return inputReader.readLine();
+    } catch (final IOException ex) {
+      LOG.error("An exception occured while running the file " + pathToBinary, ex);
+      return null;
+    }
+  }
+
 }

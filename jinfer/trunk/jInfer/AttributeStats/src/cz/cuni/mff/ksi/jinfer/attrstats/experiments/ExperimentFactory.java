@@ -38,10 +38,10 @@ public final class ExperimentFactory {
 
   public static Experiment createExperiment(final String fileName) {
     return new Experiment(fileName, 3,
-            new Glpk(1, 1, 100),
-            Arrays.<ImprovementHeuristic>asList(new RandomRemove(0.1), new Mutation(0.1, 1, 1, 1), new RandomRemove(0.1), new Crossover(0.3, 1, 1, 1)),
+            new Glpk(1, 1, 5),
+            Arrays.<ImprovementHeuristic>asList(new RandomRemove(0.1), new Mutation(0.1, 1, 1, 1), new RandomRemove(0.4), new Crossover(0.3, 1, 1, 1)),
             new Weight(1, 1),
-            new TimeIterations(3, 2000000));
+            new TimeIterations(50, 2000000));
   }
 
 }

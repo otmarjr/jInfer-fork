@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
@@ -36,13 +37,18 @@ public class TimeIterations implements TerminationCriterion {
     this.maxTime = maxTime;
   }
 
+  private static final Pair<Boolean, String> FALSE = new Pair<Boolean, String>(Boolean.FALSE, null);
+
   @Override
-  public boolean terminate(final long time, final List<IdSet> solutions) {
+  public Pair<Boolean, String> terminate(final long time, final List<IdSet> solutions) {
     iterations++;
-    if (iterations > maxIterations || time > maxTime) {
-      return true;
+    if (iterations > maxIterations) {
+      return new Pair<Boolean, String>(Boolean.TRUE, "Maximum iterations exceeded.");
     }
-    return false;
+    if (time > maxTime) {
+      return new Pair<Boolean, String>(Boolean.TRUE, "Maximum time exceeded.");
+    }
+    return FALSE;
   }
 
 }

@@ -27,11 +27,9 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * TODO vektor Comment!
@@ -63,16 +61,10 @@ public class Mutation implements ImprovementHeuristic {
     // Parameter k - fraction to be fixed
 
     // TODO vektor Get quality from somewhere else!..
-    final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(model, new Weight(1, 1), feasiblePool);
+    final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(model, new Weight(alpha, beta), feasiblePool);
 
     final List<AttributeMappingId> mappings = incumbent.getFirst().getMappings();
-    final Set<AttributeMappingId> fixed = new HashSet<AttributeMappingId>();
-    // not guaranteed to get exactly this many
-    final int toFix = (int)Math.round(mappings.size() * ratio);
-
-    for (int i = 0; i < toFix; i++) {
-      fixed.add(mappings.get((int)(Math.random() * mappings.size())));
-    }
+    final List<AttributeMappingId> fixed = BaseUtils.rndSubset(mappings, ratio);
 
     final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(model, new ArrayList<AttributeMappingId>(fixed), alpha, beta, timeLimit), model);
     final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);

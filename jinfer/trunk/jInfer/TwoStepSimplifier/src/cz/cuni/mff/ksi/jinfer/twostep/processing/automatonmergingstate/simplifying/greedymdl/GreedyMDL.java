@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedymdl;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
@@ -24,15 +24,18 @@ import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluator;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
 /**
- * Greedy simplifier, given {@link MergeContitionTester}, will merge all states
+ * GreedyMDL simplifier, given {@link MergeContitionTester}, will merge all states
  * that tester returns as equivalent.
  *
  * It will ask the tester for capability "parameters".
@@ -43,10 +46,11 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class Greedy<T> implements AutomatonSimplifier<T> {
+public class GreedyMDL<T> implements AutomatonSimplifier<T> {
 
-  private static final Logger LOG = Logger.getLogger(Greedy.class);
+  private static final Logger LOG = Logger.getLogger(GreedyMDL.class);
   private final MergeConditionTester<T> mergeConditionTester;
+  private final AutomatonEvaluator<T> evaluator;
 
   /**
    * Create with factory of {@link MergeConditionTester} selected.
@@ -54,8 +58,9 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
    *
    * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
    */
-  public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory) {
+  public GreedyMDL(final MergeConditionTesterFactory mergeConditionTesterFactory, final AutomatonEvaluatorFactory evaluatorFactory) {
     this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
+    this.evaluator= evaluatorFactory.<T>create();
   }
   
   /**
@@ -64,7 +69,7 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
    * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
    * @param properties project properties (from which it takes parameter values).
    */
-  public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory,
+  public GreedyMDL(final MergeConditionTesterFactory mergeConditionTesterFactory, final AutomatonEvaluatorFactory evaluatorFactory,
           final Properties properties) {
     if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
       final ModuleParameters factoryParam = ((ModuleParameters) mergeConditionTesterFactory);
@@ -76,6 +81,7 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
       }
     }
     this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
+    this.evaluator= evaluatorFactory.<T>create();
   }
 
   /**
@@ -89,49 +95,42 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
    */
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
-          final SymbolToString<T> symbolToString) throws InterruptedException {
+          final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
-    boolean search = true;
-    while (search) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      mergableStates.clear();
-      final Iterator<State<T>> mainIt = inputAutomaton.getDelta().keySet().iterator();
-      while (mainIt.hasNext()&&search) {
-        State<T> mainState = mainIt.next();
-        final Iterator<State<T>> mergedIt = inputAutomaton.getDelta().keySet().iterator();
-        while (mergedIt.hasNext()&&search) {
-          if (Thread.interrupted()) {
-            throw new InterruptedException();
-          }
-          State<T> mergedState = mergedIt.next();
-          mergableStates.addAll(mergeConditionTester.getMergableStates(mainState, mergedState, inputAutomaton));
-          if (!mergableStates.isEmpty()) {
-            search= false;
-            LOG.debug("Found states to merge\n");
-          }
+    for (State<T> state1 : inputAutomaton.getDelta().keySet()) {
+      for (State<T> state2 : inputAutomaton.getDelta().keySet()) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
         }
+        mergableStates.addAll(mergeConditionTester.getMergableStates(state1, state2, inputAutomaton));      
       }
-      search = false;
-      
-      for (List<List<State<T>>> mergableAlternative : mergableStates) {
-        for (List<State<T>> mergeSeq : mergableAlternative) {
-          if (Thread.interrupted()) {
-            throw new InterruptedException();
-          }
-          final String st = CollectionToString.<State<T>>colToString(mergeSeq, " + ",
-                  new CollectionToString.ToString<State<T>>() {
-                    @Override
-                    public String toString(final State<T> t) {
-                      return t.toString();
-                    }
-                  });
-          LOG.debug("Merging states: " + st + "\n");
-          inputAutomaton.mergeStates(mergeSeq);
-          search = true;
+    }
+    List<Automaton<T>> newAutomatons = new LinkedList<Automaton<T>>();
+    for (List<List<State<T>>> mergeAlternative : mergableStates) {
+      Automaton<T> newAutomaton = new Automaton<T>(inputAutomaton);
+      for (List<State<T>> mergeChain : mergeAlternative) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
         }
+        newAutomaton.mergeStates(mergeChain);
       }
+      newAutomatons.add(newAutomaton);
+    }
+    double minD = Double.MAX_VALUE;
+    Automaton<T> minAut = null;
+    this.evaluator.setInputStrings(inputStrings);
+    for (Automaton<T> aut : newAutomatons) {
+      double thisD = this.evaluator.evaluate(aut);
+      if (thisD < minD) {
+        minD = thisD;
+        minAut = aut;
+      }
+    }
+    if (minAut == null) {
+      return inputAutomaton;
+    }
+    if (minD < this.evaluator.evaluate(inputAutomaton)) {
+      return this.simplify(minAut, symbolToString, inputStrings);
     }
     return inputAutomaton;
   }
@@ -149,17 +148,17 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(
           final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString,
-          final String elementName) throws InterruptedException {
-    return simplify(inputAutomaton, symbolToString);
+          final String elementName, List<List<T>> inputStrings) throws InterruptedException {
+    return simplify(inputAutomaton, symbolToString, inputStrings);
   }
 
   @Override
-  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
-    return simplify(inputAutomaton, symbolToString);
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString) throws InterruptedException {
+    throw new UnsupportedOperationException("Needs input strings to do evaluation.");
   }
 
   @Override
-  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName, List<List<T>> inputStrings) throws InterruptedException {
-    return simplify(inputAutomaton, symbolToString, elementName);
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName) throws InterruptedException {
+    throw new UnsupportedOperationException("Needs input strings to do evaluation.");
   }
 }

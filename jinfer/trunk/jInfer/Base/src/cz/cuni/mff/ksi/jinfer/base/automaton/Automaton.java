@@ -17,6 +17,7 @@
 
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -96,6 +97,8 @@ public class Automaton<T> {
    * 
    */
   protected final Map<State<T>, Set<State<T>>> reverseMergedStates;
+  /** TODO anti comment */
+  protected final Map<Integer, State<T>> nameMap;
 
   /**
    * Constructor which doesn't create initialState
@@ -106,6 +109,7 @@ public class Automaton<T> {
     this.reverseDelta= new LinkedHashMap<State<T>, Set<Step<T>>>();
     this.mergedStates= new LinkedHashMap<State<T>, State<T>>();
     this.reverseMergedStates= new LinkedHashMap<State<T>, Set<State<T>>>();
+    this.nameMap = new LinkedHashMap<Integer, State<T>>();
     this.initialState= null;
   }
 
@@ -153,6 +157,7 @@ public class Automaton<T> {
     this.delta.put(newState, new LinkedHashSet<Step<T>>());
     this.reverseDelta.put(newState, new LinkedHashSet<Step<T>>());
     this.reverseMergedStates.put(newState, new LinkedHashSet<State<T>>());
+    this.nameMap.put(newStateName, newState);
     return newState;
   }
 
@@ -164,7 +169,7 @@ public class Automaton<T> {
    * @param symbol
    * @return
    */
-  protected Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
+  public Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
     final Set<Step<T>> steps= this.delta.get(state);
     for (Step<T> step : steps) {
       if (step.getAcceptSymbol().equals(symbol)) {
@@ -258,13 +263,18 @@ public class Automaton<T> {
     }
     if (this.delta.containsKey(state)) {
       return state;
-    } else {
+    }
+    if (this.mergedStates.get(state) != null) {
       /* this is union-find-set with path shortening along the way */
       final State<T> realState= this.getRealState(this.mergedStates.get(state));
       this.mergedStates.put(state, realState);
       this.reverseMergedStates.get(realState).add(state);
       return realState;
     }
+    if (this.nameMap.containsKey(state.getName())) {
+      return this.nameMap.get(state.getName());
+    }
+    throw new IllegalStateException("Not possible");
   }
 
   public void mergeStates(final List<State<T>> lst) {

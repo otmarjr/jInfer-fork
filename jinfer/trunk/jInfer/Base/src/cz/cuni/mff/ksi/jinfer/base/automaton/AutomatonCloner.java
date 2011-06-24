@@ -58,6 +58,7 @@ public class AutomatonCloner<A, B> {
       newAutomaton.delta.put(newState, new LinkedHashSet<Step<B>>());
       newAutomaton.reverseDelta.put(newState, new LinkedHashSet<Step<B>>());
       newAutomaton.reverseMergedStates.put(newState, new LinkedHashSet<State<B>>());
+      newAutomaton.nameMap.put(newState.getName(), newState);
       for (State<A> anotherState2 : anotherAutomaton.getReverseMergedStates().get(anotherState)) {
         final State<B> newState2=new State<B>(
                   anotherState2.getFinalCount(), anotherState2.getName()

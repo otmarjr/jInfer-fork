@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
@@ -92,5 +93,15 @@ public class KHgrams<T> implements AutomatonSimplifier<T> {
   @Override
   public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName) throws InterruptedException {
     return simplify(inputAutomaton, symbolToString);
+  }
+
+  @Override
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
+    return simplify(inputAutomaton, symbolToString);
+  }
+
+  @Override
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName, List<List<T>> inputStrings) throws InterruptedException {
+    return simplify(inputAutomaton, symbolToString, elementName);
   }
 }

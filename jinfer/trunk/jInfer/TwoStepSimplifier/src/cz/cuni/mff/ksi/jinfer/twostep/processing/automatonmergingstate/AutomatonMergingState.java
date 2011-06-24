@@ -133,6 +133,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     // 3.1 construct PTA
     final Automaton<AbstractStructuralNode> automaton = new Automaton<AbstractStructuralNode>(true);
 
+    List<List<AbstractStructuralNode>> inputStrings = new LinkedList<List<AbstractStructuralNode>>();
     for (final AbstractStructuralNode instance : rules) {
       final Element element = (Element) instance;
       final Regexp<AbstractStructuralNode> rightSide = element.getSubnodes();
@@ -148,6 +149,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
         symbolString.add(clusterer.getRepresentantForItem(token));
       }
       automaton.buildPTAOnSymbol(symbolString);
+      inputStrings.add(symbolString);
     }
     LOG.debug("--- AutomatonMergingStateProcessor on element:");
     LOG.debug(rules.get(0));
@@ -155,7 +157,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton = automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName());
+    final Automaton<AbstractStructuralNode> simplifiedAutomaton = automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName(), inputStrings);
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
 

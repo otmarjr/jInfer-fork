@@ -99,11 +99,11 @@ public final class FileUtils {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param pathToBinary
-   * @param cmdLineOpts
-   * @return
+   * Returns the first line of the stdout of the specified program run.
+   *
+   * @param pathToBinary Full path to the binary to be run, including its name.
+   * @param cmdLineOpts Command line options to be passed to the binary.
+   * @return First line of the standard output of this program.
    */
   public static String getBinaryResult(
           final String pathToBinary,

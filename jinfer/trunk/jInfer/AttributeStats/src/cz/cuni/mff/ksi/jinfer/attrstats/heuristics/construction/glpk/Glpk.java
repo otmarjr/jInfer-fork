@@ -24,7 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Construction heuristic - encapsulation of the GLPK approach to finding
+ * ID sets.
+ *
+ * The way to achieve different solutions ({@link IdSet}s) returned by GLPK
+ * is via randomizing the order in which AMs appear in its input.
  *
  * @author vektor
  */
@@ -32,6 +36,11 @@ public class Glpk implements ConstructionHeuristic {
 
   private final int timeLimit;
 
+  /**
+   * Constructs a new instance of this heuristic and sets the time limit.
+   *
+   * @param timeLimit Time limit (in seconds) of the GLPK run.
+   */
   public Glpk(final int timeLimit) {
     this.timeLimit = timeLimit;
   }

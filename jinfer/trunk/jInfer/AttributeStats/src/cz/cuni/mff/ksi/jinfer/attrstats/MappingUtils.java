@@ -19,8 +19,10 @@ package cz.cuni.mff.ksi.jinfer.attrstats;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMapping;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -150,15 +152,39 @@ public final class MappingUtils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Returns the list of candidate attribute mappings from the specified model.
+   *
+   * To understand what a candidate mapping is, see
+   * {@link MappingUtils#isCandidateMapping(AttributeMappingId, AMModel)}.
+   *
+   * @param Model to find the list of candidate AMs in.
+   * @return List of candidate mappings in the specified model.
    */
   public static List<AttributeMappingId> getCandidates(final AMModel model) {
     final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();
     for (final AttributeMappingId mapping : model.getAMs().keySet()) {
-      if (MappingUtils.isCandidateMapping(mapping, model)) {
+      if (isCandidateMapping(mapping, model)) {
         ret.add(mapping);
       }
     }
+    return ret;
+  }
+
+  /**
+   * Returns the list of candidate attribute mappings sorted according to their
+   * weight from the specified model.
+   *
+   * Weight is defined in
+   * {@link AMModel#weight(AttributeMappingId, double, double)}. For the rest,
+   * see {@link MappingUtils#getCandidates(AMModel)}.
+   *
+   * @param Model to find the list of candidate AMs in.
+   * @return List of candidate mappings in the specified model, sorted according
+   * to their weight.
+   */
+  public static List<AttributeMappingId> getCandidatesSorted(final AMModel model) {
+    final List<AttributeMappingId> ret = getCandidates(model);
+    Collections.sort(ret, new ImageSizeComparator(model));
     return ret;
   }
 }

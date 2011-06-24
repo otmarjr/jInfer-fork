@@ -20,7 +20,8 @@ import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Class representing an ID set. Basically it's a list of attribute mappings.
+ * Also, it keeps a flag whether this ID set is known to be optimal or not.
  *
  * @author vektor
  */
@@ -31,10 +32,10 @@ public class IdSet {
   private final boolean optimal;
 
   /**
-   * TODO vektor Comment!
+   * Full constructor.
    *
-   * @param mappings
-   * @param optimal
+   * @param mappings List of attribute mappings constituting this ID set.
+   * @param optimal Flag whether this ID set is known to be optimal or not.
    */
   public IdSet(final List<AttributeMappingId> mappings, final boolean optimal) {
     super();
@@ -43,9 +44,10 @@ public class IdSet {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param mappings
+   * Partial constructor. Assumes this ID set to not be known optimal. It still
+   * <cite>might</cite> be optimal, it's just not <cite>known</cite>.
+   *
+   * @param mappings List of attribute mappings constituting this ID set.
    */
   public IdSet(final List<AttributeMappingId> mappings) {
     this(mappings, false);

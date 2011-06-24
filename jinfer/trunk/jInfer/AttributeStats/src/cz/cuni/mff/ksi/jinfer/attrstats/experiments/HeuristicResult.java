@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 
 /**
- * TODO vektor Comment!
+ * Result of running a heuristics.
  *
  * @author vektor
  */
@@ -27,16 +27,17 @@ public class HeuristicResult {
 
   /** Time taken in this heuristics run in milliseconds. */
   private final long time;
-  /** TODO vektor Comment! */
+  /** Size of the solution pool after this heuristic run. */
   private final int poolSize;
-  /** Quality of the solution found in this run. */
+  /** Quality of the best (incumbent) solution found in this run. */
   private final Quality quality;
 
   /**
    * Full constructor.
    *
    * @param time Time taken in this heuristics run in milliseconds.
-   * @param quality Quality of the solution found in this run.
+   * @param poolSize Size of the solution pool after this heuristic run.
+   * @param quality Quality of the best (incumbent) solution found in this run.
    */
   public HeuristicResult(final long time, final int poolSize, final Quality quality) {
     this.time = time;

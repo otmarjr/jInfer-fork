@@ -23,14 +23,19 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * A simple construction heuristic. Orders all AMs according to their weight,
+ * creates a solution containing all AMs (and thus probably violating the ID set
+ * condition) and starting from the least valuable tries to remove them from
+ * the solution. As soon as the solution becomes an ID set, it is returned.
+ *
+ * Note that the pool created by this heuristic contains only one solution
+ * ({@link IdSet}).
  *
  * @author vektor
  */
@@ -41,13 +46,8 @@ public class Removal implements ConstructionHeuristic {
         final HeuristicCallback callback) throws InterruptedException {
 
     final AMModel model = experiment.getModel();
-
-    final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
-
-    Collections.sort(candidates, new ImageSizeComparator(model));
-
+    final List<AttributeMappingId> candidates = MappingUtils.getCandidatesSorted(model);
     final List<AttributeMappingId> reverse = new ArrayList<AttributeMappingId>(candidates);
-
     Collections.reverse(reverse);
 
     for (final AttributeMappingId id : reverse) {

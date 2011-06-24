@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.MappingsModel;
 import java.util.Collections;
@@ -36,7 +37,6 @@ public class IdSetPanel extends JPanel {
   private static final long serialVersionUID = 187541L;
 
   private IdSet idSet;
-  private AMModel model;
 
   public IdSetPanel() {
     super();
@@ -45,18 +45,19 @@ public class IdSetPanel extends JPanel {
   }
 
   /**
-   * TODO vektor Comment!
+   * Sets the model in this panel, thus displaying the list of AMs in the
+   * provided ID set.
    *
-   * @param idSet
-   * @param model
-   * @param alpha
-   * @param beta
+   * @param idSet ID set - list of {@link AttributeMappingId attribute mappings}
+   * to be displayed.
+   * @param model Model in context of which this ID set was found.
+   * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
+   * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
    */
   public void setModel(final IdSet idSet, final AMModel model,
           final double alpha, final double beta) {
     this.idSet = idSet;
     Collections.sort(this.idSet.getMappings());
-    this.model = model;
 
     table.setModel(new MappingsModel(idSet.getMappings()));
     weight.setText(Utils.FORMAT.format(model.weight(idSet.getMappings(), alpha, beta)));

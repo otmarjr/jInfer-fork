@@ -17,13 +17,13 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
 /**
- * TODO vektor Comment!
+ * Interface representing general quality of a solution. It needs to be able to
+ * state some kind of a number describing a "linear" quality for sorting and
+ * similar purposes, as well as report whether the solution is optimal.
  *
  * @author vektor
  */
 public interface Quality {
-
-  // TODO vektor What else should be here?
 
   /**
    * Returns a scalar representation of the quality of the solution.
@@ -41,7 +41,7 @@ public interface Quality {
   boolean isOptimal();
 
   /**
-   * Get the quality info in textual form.
+   * Get the quality information in textual form.
    *
    * @return String describing the quality.
    */

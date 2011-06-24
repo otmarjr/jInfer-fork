@@ -19,7 +19,8 @@ package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 import java.util.Comparator;
 
 /**
- * TODO vektor Comment!
+ * Comparator of attribute mappings based on the size of their images in the
+ * provided model.
  *
  * @author vektor
  */
@@ -27,6 +28,11 @@ public class ImageSizeComparator implements Comparator<AttributeMappingId> {
 
   private final AMModel model;
 
+  /**
+   * Constructor.
+   *
+   * @param Model in context of which the AMs should be compared.
+   */
   public ImageSizeComparator(final AMModel model) {
     this.model = model;
   }
@@ -36,6 +42,6 @@ public class ImageSizeComparator implements Comparator<AttributeMappingId> {
     final Integer size1 = Integer.valueOf(model.getAMs().get(o1).size());
     final Integer size2 = Integer.valueOf(model.getAMs().get(o2).size());
     // TODO vektor Is this correct?!
-    return -size1.compareTo(size2);
+    return size1.compareTo(size2);
   }
 }

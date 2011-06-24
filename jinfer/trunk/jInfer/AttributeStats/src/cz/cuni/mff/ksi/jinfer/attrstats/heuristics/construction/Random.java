@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * A trivial construction heuristics. Incrementally builds the solution by
+ * adding random AMs that don't break the ID set property.
  *
  * @author vektor
  */

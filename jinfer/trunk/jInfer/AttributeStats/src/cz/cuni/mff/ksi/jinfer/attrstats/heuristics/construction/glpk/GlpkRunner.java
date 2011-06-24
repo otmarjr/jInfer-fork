@@ -62,10 +62,11 @@ public final class GlpkRunner {
    * in the "optimal" ID set.
    *
    * @param model Model to find "optimal" ID set in.
-   * @param fixed TODO vektor Comment!
+   * @param fixed List of attribute mappings that should be present in the
+   * solution.
    * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
    * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
-   * @param timeLimit TODO vektor Comment!
+   * @param timeLimit Time limit for this GLPK run in seconds.
    *
    * @return String representation of GLPK optimalization output.
    */

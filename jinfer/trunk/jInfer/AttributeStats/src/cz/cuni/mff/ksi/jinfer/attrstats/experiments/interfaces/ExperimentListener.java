@@ -19,15 +19,16 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 
 /**
+ * Listener of the event that an experiment has finished running.
  *
  * @author vektor
  */
 public interface ExperimentListener {
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param e
+   * Event that the experiment has finished running.
+   *
+   * @param e Experiment that raised this event.
    */
   void experimentFinished(final Experiment e);
 

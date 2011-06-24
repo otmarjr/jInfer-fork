@@ -19,18 +19,27 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 
 /**
- * TODO vektor Comment!
+ * Interface representing a construction heuristic. Its responsibility is to
+ * create one or more starting solutions from the model provided in the
+ * experiment to be optimized later in improvement heuristics.
+ *
+ * Note that the solution(s) created by this heuristic might already be optimal.
+ * In this case it is up to the experiment to recognize this and stop the
+ * optimizations.
+ *
+ * Note that heuristics use the callback "design pattern", meaning that the
+ * result of this heuristic is returned via a callback provided while invoking it.
  *
  * @author vektor
  */
 public interface ConstructionHeuristic extends Heuristics {
 
   /**
-   * TODO vektor Comment!
+   * Start the heuristic run. Use the information in the provided experiment to
+   * create a pool (possibly only one) of start solutions.
    *
-   * @param model
-   * @param poolSize
-   * @param callback
+   * @param experiment Experiment in context of which to run the heuristic.
+   * @param callback Callback to be invoked when finished.
    */
   void start(final Experiment experiment, final HeuristicCallback callback)
           throws InterruptedException;

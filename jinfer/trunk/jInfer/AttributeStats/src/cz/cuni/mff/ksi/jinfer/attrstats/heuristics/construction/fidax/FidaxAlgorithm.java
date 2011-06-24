@@ -21,10 +21,8 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,9 +62,7 @@ public final class FidaxAlgorithm {
 
     // 1.  C := all candidate AMs sorted by decreasing size
 
-    final List<AttributeMappingId> C = MappingUtils.getCandidates(model);
-
-    Collections.sort(C, new ImageSizeComparator(model));
+    final List<AttributeMappingId> C = MappingUtils.getCandidatesSorted(model);
 
     LOG.info("C: " + C.toString());
 

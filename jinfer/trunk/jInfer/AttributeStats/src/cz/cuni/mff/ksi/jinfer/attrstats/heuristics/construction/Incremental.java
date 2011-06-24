@@ -23,14 +23,17 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * A simple construction heuristic. Orders all AMs according to their weight,
+ * and starting from the most valuable tries to insert them in the solution. If
+ * the solution remains ID set OK, otherwise the AM is not added.
+ *
+ * Note that the pool created by this heuristic contains only one solution
+ * ({@link IdSet}).
  *
  * @author vektor
  */
@@ -42,9 +45,7 @@ public class Incremental implements ConstructionHeuristic {
 
     final AMModel model = experiment.getModel();
 
-    final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
-
-    Collections.sort(candidates, new ImageSizeComparator(model));
+    final List<AttributeMappingId> candidates = MappingUtils.getCandidatesSorted(model);
 
     final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();
 

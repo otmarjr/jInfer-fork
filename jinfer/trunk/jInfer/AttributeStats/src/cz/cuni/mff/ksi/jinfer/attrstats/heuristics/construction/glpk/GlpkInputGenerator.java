@@ -82,7 +82,8 @@ public final class GlpkInputGenerator {
    * @param model Model from which the problem formulation should be generated.
    * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
    * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
-   * @param fixed TODO vektor Comment!
+   * @param fixed List of attribute mappings that should be present in the
+   * solution (their value is fixed to 1).
    *
    * @return String representation of the problem formulation in MathProg
    * language, that can be directly passed to GLPK Solver.

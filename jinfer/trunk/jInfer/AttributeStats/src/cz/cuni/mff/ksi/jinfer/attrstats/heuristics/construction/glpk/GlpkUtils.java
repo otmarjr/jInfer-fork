@@ -37,7 +37,6 @@ public final class GlpkUtils {
 
   /**
    * Returns the full path to the GLPK Solver binary in a String.
-   * TODO vektor Make this configurable!
    *
    * @return Full path to the GLPK Solver binary.
    */
@@ -70,9 +69,11 @@ public final class GlpkUtils {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @return
+   * Returns the first line that GLPK returns when run with "-v" option,
+   * hopefully containing the version of GLPK.
+   *
+   * @return String containing GLPK identification and version.
+   * <code>null</code> if something goes wrong.
    */
   public static String getVersion() {
     return FileUtils.getBinaryResult(getPath(), CMD_OPTS);

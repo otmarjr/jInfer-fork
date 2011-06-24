@@ -23,7 +23,11 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.Arrays;
 
 /**
- * TODO vektor Comment!
+ * Construction heuristic - encapsulation of the heuristic proposed in the
+ * "Finding ID Attributes in XML Documents" article.
+ * 
+ * Note that the pool created by this heuristic contains only one solution
+ * ({@link IdSet}).
  *
  * @author vektor
  */

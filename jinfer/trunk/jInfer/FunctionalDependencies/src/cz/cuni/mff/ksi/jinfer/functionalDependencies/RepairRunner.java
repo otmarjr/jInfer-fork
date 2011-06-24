@@ -16,8 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
+import java.util.Properties;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.List;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -33,6 +35,7 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairedXMLGener
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairedXMLGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.properties.RepairerPropertiesPanel;
 import org.openide.util.Lookup;
 import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
 
@@ -74,8 +77,10 @@ public class RepairRunner {
   };
 
   public RepairRunner() {
+    final Properties projectProperties = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
+    
     modelGenerator = Lookup.getDefault().lookup(ModelGenerator.class);
-    repairer = Lookup.getDefault().lookup(Repairer.class);
+    repairer = ModuleSelectionHelper.lookupImpl(Repairer.class, projectProperties.getProperty(RepairerPropertiesPanel.REPAIRER_PROP));
     repairedXMLGenerator = Lookup.getDefault().lookup(RepairedXMLGenerator.class);
   }
 

@@ -16,9 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO vektor Comment!
@@ -30,8 +35,30 @@ public class Random implements ConstructionHeuristic {
   @Override
   public void start(final Experiment experiment,
         final HeuristicCallback callback) throws InterruptedException {
-    // TODO vektor Generate and return the specified number of solutions
-    throw new UnsupportedOperationException("Not supported yet.");
+    final List<IdSet> ret = new ArrayList<IdSet>(experiment.getPoolSize());
+    final List<AttributeMappingId> candidates = MappingUtils.getCandidates(experiment.getModel());
+
+    for (int i = 0; i < experiment.getPoolSize(); i++) {
+      final List<AttributeMappingId> idSet = new ArrayList<AttributeMappingId>();
+      final List<AttributeMappingId> cs = new ArrayList<AttributeMappingId>(candidates);
+
+      while (!cs.isEmpty()) {
+        // pick one from cs at random
+        final AttributeMappingId random = cs.get((int)(cs.size() * Math.random()));
+        // if possible, add it to the ID set
+        final List<AttributeMappingId> potential = new ArrayList<AttributeMappingId>(idSet);
+        potential.add(random);
+        if (MappingUtils.isIDset(potential, experiment.getModel())) {
+          idSet.add(random);
+        }
+        // remove it from cs
+        cs.remove(random);
+      }
+
+      ret.add(new IdSet(idSet));
+    }
+
+    callback.finished(ret);
   }
 
   @Override

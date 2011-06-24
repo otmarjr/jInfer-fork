@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
 public class LocalBranching implements ImprovementHeuristic {
 
   @Override
-  public void start(final AMModel model, final List<IdSet> feasiblePool,
+  public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
     // TODO vektor Implement
 

@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
@@ -36,12 +37,12 @@ import java.util.List;
 public class Hungry implements ImprovementHeuristic {
 
   @Override
-  public void start(final AMModel model, final List<IdSet> feasiblePool,
+  public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
     final List<IdSet> improved = new ArrayList<IdSet>(feasiblePool.size());
 
     for (final IdSet solution : feasiblePool) {
-      improved.add(improve(model, solution));
+      improved.add(improve(experiment.getModel(), solution));
     }
 
     callback.finished(improved);

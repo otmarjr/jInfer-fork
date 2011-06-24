@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
@@ -36,8 +37,10 @@ import java.util.List;
 public class Incremental implements ConstructionHeuristic {
 
   @Override
-  public void start(final AMModel model, final int poolSize, final HeuristicCallback callback)
+  public void start(final Experiment experiment, final HeuristicCallback callback)
           throws InterruptedException {
+
+    final AMModel model = experiment.getModel();
 
     final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
 

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkOutputParser;
@@ -35,25 +36,22 @@ import java.util.List;
 public class Crossover implements ImprovementHeuristic {
 
   private final double ratio;
-  private final double alpha;
-  private final double beta;
   private final int timeLimit;
 
-  public Crossover(final double ratio, final double alpha, final double beta, final int timeLimit) {
+  public Crossover(final double ratio, final int timeLimit) {
     super();
     if (ratio < 0 || ratio >= 1) {
       throw new IllegalArgumentException("Invalid ratio: " + ratio);
     }
     this.ratio = ratio;
-    this.alpha = alpha;
-    this.beta = beta;
     this.timeLimit = timeLimit;
   }
 
   @Override
-  public void start(final AMModel model, final List<IdSet> feasiblePool,
+  public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
 
+    final AMModel model = experiment.getModel();
     final List<IdSet> selectedSets = BaseUtils.rndSubset(feasiblePool, ratio);
 
     final List<AttributeMappingId> all = new ArrayList<AttributeMappingId>(model.getAMs().keySet());
@@ -71,7 +69,7 @@ public class Crossover implements ImprovementHeuristic {
       }
     }
 
-    final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(model, new ArrayList<AttributeMappingId>(common), alpha, beta, timeLimit), model);
+    final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(model, new ArrayList<AttributeMappingId>(common), experiment.getAlpha(), experiment.getBeta(), timeLimit), model);
     final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);
     ret.add(improved);
     callback.finished(ret);

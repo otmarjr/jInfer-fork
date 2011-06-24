@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 
 /**
  * TODO vektor Comment!
@@ -28,7 +28,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 public class Random implements ConstructionHeuristic {
 
   @Override
-  public void start(final AMModel model, final int poolSize,
+  public void start(final Experiment experiment,
         final HeuristicCallback callback) throws InterruptedException {
     // TODO vektor Generate and return the specified number of solutions
     throw new UnsupportedOperationException("Not supported yet.");

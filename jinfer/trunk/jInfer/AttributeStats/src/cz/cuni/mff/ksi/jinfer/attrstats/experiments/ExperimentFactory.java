@@ -27,8 +27,6 @@ import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.RandomRemove;
 import java.util.Arrays;
 
 /**
- * TODO vektor Comment!
- *
  * @author vektor
  */
 public final class ExperimentFactory {

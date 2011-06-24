@@ -32,7 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * A slightly more complex improvement heuristic. Finds the best (incumbent)
+ * solution in the solution pool, fixes a fraction of its AMs and runs the
+ * GLPK on the resulting sub-problem. Its solution is then added to the pool
+ * and returned.
  *
  * @author vektor
  */
@@ -41,6 +44,12 @@ public class Mutation implements ImprovementHeuristic {
   private final double ratio;
   private final int timeLimit;
 
+  /**
+   * Constructs an instance of this heuristic.
+   *
+   * @param ratio Fraction of AMs in the incumbent solution to be fixed.
+   * @param timeLimit Time limit in seconds of the GLPK run.
+   */
   public Mutation(final double ratio, final int timeLimit) {
     super();
     if (ratio < 0 || ratio >= 1) {
@@ -54,10 +63,6 @@ public class Mutation implements ImprovementHeuristic {
   public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
     final AMModel model = experiment.getModel();
-    // Fix a few to their current values and run again
-    // Parameter k - fraction to be fixed
-
-    // TODO vektor Get quality from somewhere else!..
     final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(experiment, feasiblePool);
 
     final List<AttributeMappingId> mappings = incumbent.getFirst().getMappings();

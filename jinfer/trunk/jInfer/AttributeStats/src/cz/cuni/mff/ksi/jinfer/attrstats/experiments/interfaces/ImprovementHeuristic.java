@@ -21,19 +21,24 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Interface representing an improvement heuristic. Its responsibility is to
+ * start with a pool (possibly just one) of feasible solutions and improve one
+ * or more of them, or add new ones.
+ *
+ * Note that heuristics use the callback "design pattern", meaning that the
+ * result of this heuristic is returned via a callback provided while invoking it.
  *
  * @author vektor
  */
 public interface ImprovementHeuristic extends Heuristics {
 
   /**
-   * TODO vektor Comment!
+   * Start the heuristic run. Use the information in the provided experiment to
+   * improve the provided pool (possibly only one) of feasible solutions.
    *
-   * @param model
-   * @param feasiblePool
-   * @param callback
-   * @throws InterruptedException
+   * @param experiment Experiment in context of which to run the heuristic.
+   * @param feasiblePool List of feasible solutions found so far.
+   * @param callback Callback to be invoked when finished.
    */
   void start(final Experiment experiment, final List<IdSet> feasiblePool,
           final HeuristicCallback callback) throws InterruptedException;

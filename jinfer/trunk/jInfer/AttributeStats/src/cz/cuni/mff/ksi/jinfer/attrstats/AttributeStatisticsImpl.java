@@ -24,7 +24,7 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO vektor Comment!
+ * Implementation of the Attribute Statistics service.
  *
  * @author vektor
  */

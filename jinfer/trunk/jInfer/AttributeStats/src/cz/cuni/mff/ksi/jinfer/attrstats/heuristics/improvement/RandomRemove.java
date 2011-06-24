@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * A simple improvement heuristic that removes a specified fraction of AMs at
+ * random from every solution in the pool.
  *
  * @author vektor
  */

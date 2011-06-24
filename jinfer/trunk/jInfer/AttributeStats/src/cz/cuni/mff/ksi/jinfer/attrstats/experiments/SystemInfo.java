@@ -19,7 +19,10 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
 
 /**
- * TODO vektor Comment!
+ * Provides the info about the system (CPU, RAM, OS, Java, etc) in textual form.
+ *
+ * Info that is not easily obtained from within Java has to be set in constants,
+ * though.
  *
  * @author vektor
  */
@@ -46,6 +49,12 @@ public class SystemInfo {
   /** Java Virtual Machine. */
   private static final String JAVA_VM_NAME = System.getProperty("java.vm.name");
 
+  /**
+   * Returns the complete system info in a formatted string.
+   *
+   * @return String containing formatted info about the CPU, RAM, OS, Java,
+   * GLPK etc.
+   */
   public static String getInfo() {
     final StringBuilder ret = new StringBuilder();
     ret.append("CPU info")

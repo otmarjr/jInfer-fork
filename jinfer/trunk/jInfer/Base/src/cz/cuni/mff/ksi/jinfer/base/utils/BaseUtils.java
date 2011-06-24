@@ -165,36 +165,37 @@ public final class BaseUtils {
   private static final Random RND = new Random();
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param <T>
-   * @param l
-   * @param ratio
-   * @return
+   * Returns a random subset of the specified collection, so that its size is a
+   * specified ratio of the original collection size.
+   *
+   * @param <T> Type parameter.
+   * @param c Collection to pick from.
+   * @param ratio Requested ratio.
+   * @return List of randomly picked elements of the collection.
    */
-  public static <T> List<T> rndSubset(final Collection<T> l, final double ratio) {
-    return rndSubset(l, (int)Math.round(l.size() * ratio));
+  public static <T> List<T> rndSubset(final Collection<T> c, final double ratio) {
+    return rndSubset(c, (int)Math.round(c.size() * ratio));
   }
 
   /**
-   * TODO vektor Comment!
+   * Returns a random subset of the specified collection of requested size.
    *
-   * @param <T>
-   * @param l
-   * @param count
-   * @return
+   * @param <T> Type parameter.
+   * @param c Collection to pick from.
+   * @param count Requested size of the subset.
+   * @return List of randomly picked elements of the collection.
    */
   // TODO vektor JUnit test
-  public static <T> List<T> rndSubset(final Collection<T> l, final int count) {
+  public static <T> List<T> rndSubset(final Collection<T> c, final int count) {
     if (count < 0) {
       throw new IllegalArgumentException("Size of the subset cannot be negative: " + count);
     }
-    if (count > l.size()) {
+    if (count > c.size()) {
       throw new IllegalArgumentException("Subset cannot be bigger than the original set: " + count);
     }
 
     final List<T> ret = new ArrayList<T>(count);
-    final List<T> tmp = new ArrayList<T>(l);
+    final List<T> tmp = new ArrayList<T>(c);
 
     for (int i = 0; i < count; i++) {
       final int toRemove = RND.nextInt(tmp.size());

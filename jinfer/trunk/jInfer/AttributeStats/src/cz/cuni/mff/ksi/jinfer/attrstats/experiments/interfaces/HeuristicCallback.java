@@ -20,16 +20,19 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Callback interface used by heuristics to report their results to
+ * their invoker.
  *
  * @author vektor
  */
 public interface HeuristicCallback {
 
   /**
-   * TODO vektor Comment!
+   * Report that a heuristic has finished and get the pool of solutions from
+   * the argument.
    *
-   * @param feasiblePool
+   * @param feasiblePool List of feasible solutions found by this run of the
+   * heuristic.
    */
   void finished(final List<IdSet> feasiblePool);
 

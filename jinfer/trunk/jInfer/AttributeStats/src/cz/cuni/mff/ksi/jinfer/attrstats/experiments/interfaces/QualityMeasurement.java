@@ -20,17 +20,20 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
- * TODO vektor Comment!
+ * Interface for measuring quality of a certain solution ({@link IdSet})
+ * in the context of an experiment.
  *
  * @author vektor
  */
 public interface QualityMeasurement {
 
   /**
-   * TODO vektor Comment!
+   * Returns the quality of the provided solution in the context of the provided
+   * experiment.
    *
-   * @param solution
-   * @return
+   * @param experiment Experiment in context of which to measure the quality.
+   * @param solution Solution for which the quality should be calculated.
+   * @return Quality of the solution in the context of the experiment.
    */
   Quality measure(final Experiment experiment, final IdSet solution);
 

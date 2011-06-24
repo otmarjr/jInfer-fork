@@ -31,7 +31,7 @@ public final class Utils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Formatter that formats numbers to a maximum of 5 fraction digits.
    */
   public static final Format FORMAT = NumberFormat.getInstance();
   static {
@@ -40,10 +40,10 @@ public final class Utils {
   public static final String NA = "N/A";
 
   /**
-   * TODO vektor Comment!
+   * Converts a boolean to {@link String} in form yes/no.
    *
-   * @param b
-   * @return
+   * @param b Boolean to be converted.
+   * @return "yes" or "no".
    */
   public static String boolToString(final boolean b) {
     return b ? "yes" : "no";

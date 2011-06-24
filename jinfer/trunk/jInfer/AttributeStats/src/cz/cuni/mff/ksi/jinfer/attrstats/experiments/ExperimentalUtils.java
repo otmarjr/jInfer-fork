@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Utility class for experiments.
  *
  * @author vektor
  */
@@ -32,6 +32,14 @@ public final class ExperimentalUtils {
 
   }
 
+  /**
+   * Returns the best solution from the provided pool in the context of the
+   * provided experiment.
+   *
+   * @param experiment Experiment, in context of which to find the best solution.
+   * @param solutions List of solutions among which to find the best one.
+   * @return Best solution along with its {@link Quality quality}.
+   */
   public static Pair<IdSet, Quality> getBest(final Experiment experiment,
           final List<IdSet> solutions) {
     IdSet bestSolution = null;

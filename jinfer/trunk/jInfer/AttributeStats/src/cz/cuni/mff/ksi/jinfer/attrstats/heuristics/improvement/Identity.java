@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * This trivial improvement heuristic simply returns the provided solution pool.
  *
  * @author vektor
  */

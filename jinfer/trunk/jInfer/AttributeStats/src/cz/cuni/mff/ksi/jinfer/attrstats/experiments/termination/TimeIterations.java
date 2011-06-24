@@ -22,7 +22,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * An implementation of the {@link TerminationCriterion} based on the total time
+ * spent running the metaheuristics and the number of iterations - improvement
+ * heuristics runs.
  *
  * @author vektor
  */
@@ -32,6 +34,14 @@ public class TimeIterations implements TerminationCriterion {
   private int iterations = 0;
   private final long maxTime;
 
+  /**
+   * Full constructor. Initializes this criterion to run at most the specified
+   * time or number of iterations, whichever comes first.
+   *
+   * @param maxIterations Maximum number of iterations - improvement
+   * heuristics runs allowed.
+   * @param maxTime Maximal time allowed, in milliseconds.
+   */
   public TimeIterations(final int maxIterations, final long maxTime) {
     this.maxIterations = maxIterations;
     this.maxTime = maxTime;

@@ -23,9 +23,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuris
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,9 +38,9 @@ public class Hungry implements ImprovementHeuristic {
   public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
     final List<IdSet> improved = new ArrayList<IdSet>(feasiblePool.size());
-
+    final List<AttributeMappingId> candidates = MappingUtils.getCandidatesSorted(experiment.getModel());
     for (final IdSet solution : feasiblePool) {
-      improved.add(improve(experiment.getModel(), solution));
+      improved.add(improve(experiment.getModel(), solution, candidates));
     }
 
     callback.finished(improved);
@@ -51,11 +49,8 @@ public class Hungry implements ImprovementHeuristic {
   /**
    * Try improving this ID set by adding as many heavy AMs as possible.
    */
-  private static IdSet improve(final AMModel model, final IdSet idSet) {
-    final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
-
-    Collections.sort(candidates, new ImageSizeComparator(model));
-
+  private static IdSet improve(final AMModel model, final IdSet idSet,
+          final List<AttributeMappingId> candidates) {
     final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>(idSet.getMappings());
 
     for (final AttributeMappingId id : candidates) {
@@ -71,7 +66,7 @@ public class Hungry implements ImprovementHeuristic {
     return new IdSet(ret);
   }
 
-    @Override
+  @Override
   public String getName() {
     return "Hungry";
   }

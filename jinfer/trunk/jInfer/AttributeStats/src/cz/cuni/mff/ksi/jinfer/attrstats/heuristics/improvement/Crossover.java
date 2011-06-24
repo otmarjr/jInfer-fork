@@ -29,7 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * A slightly more complex improvement heuristic. From the pool of feasible
+ * solutions picks a fraction at random, finds all common AMs, fixes them and
+ * runs the GLPK optimization on the resulting sub-problem. Its solution is
+ * then added to the pool and returned.
  *
  * @author vektor
  */
@@ -38,6 +41,12 @@ public class Crossover implements ImprovementHeuristic {
   private final double ratio;
   private final int timeLimit;
 
+  /**
+   * Constructs an instance of this heuristic.
+   *
+   * @param ratio Fraction of the solution pool to be scanned for common AMs.
+   * @param timeLimit Time limit in seconds of the GLPK run.
+   */
   public Crossover(final double ratio, final int timeLimit) {
     super();
     if (ratio < 0 || ratio >= 1) {

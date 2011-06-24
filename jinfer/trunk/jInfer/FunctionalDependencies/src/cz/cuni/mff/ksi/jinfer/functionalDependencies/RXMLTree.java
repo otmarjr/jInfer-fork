@@ -40,10 +40,13 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
 import org.openide.util.Exceptions;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -182,7 +185,7 @@ public class RXMLTree {
       trans.transform(source, result);
       return sw.toString();
     } catch (TransformerException ex) {
-      Exceptions.printStackTrace(ex);
+      LOG.error(ex);
     }
 
     return null;
@@ -273,6 +276,29 @@ public class RXMLTree {
 
   public void applyRepair(Repair repair) {
     LOG.debug(repair.toString());
+    
+    for (Node node : repair.getUnreliableNodes()) {
+      setNodeUnreliable(node);
+    }
+    
+    for (Node node : repair.getValueNodes().keySet()) {
+      String newValue = repair.getValueNodes().get(node);
+      if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
+        Attr attribute = (Attr) node;
+        attribute.setValue(newValue);
+      } else if (node.getNodeType() == Node.TEXT_NODE) {
+        Text textnode = (Text) node;
+        textnode.setNodeValue(newValue);
+      }
+    }
+    
+  }
+  
+  private void setNodeUnreliable(Node node) {
+    if (node.getNodeType() == Node.ELEMENT_NODE) {
+        Element element = (Element) node;
+        element.setAttribute("unreliable", "true");
+      }
   }
 
   private static Map<Node, NodeAttribute> createNodesMap(final Document document) {

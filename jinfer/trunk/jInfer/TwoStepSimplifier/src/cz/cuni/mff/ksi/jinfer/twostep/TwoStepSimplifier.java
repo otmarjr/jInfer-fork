@@ -1,31 +1,26 @@
 /*
  *  Copyright (C) 2010 anti
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package cz.cuni.mff.ksi.jinfer.twostep;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.ContentNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.utils.AttributeStatsHelper;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
-import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleaner;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
@@ -33,7 +28,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererWithAttributes;
-import cz.cuni.mff.ksi.jinfer.twostep.contentinfering.ContentInferrer;
 import cz.cuni.mff.ksi.jinfer.twostep.contentinfering.ContentInferrerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
@@ -147,12 +141,12 @@ public class TwoStepSimplifier {
         for (Cluster<Attribute> attCluster : attributeClusters) {
           final Attribute representant = attCluster.getRepresentant();
           //final ContentInferrer contentInferer = contentInfererFactory.create();
-/*          Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), 
+/*          Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(),
                   contentInferer.inferContentType(new ArrayList<ContentNode>(attCluster.getMembers())),
                   representant.getContent());
 */
           Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), representant.getContentType(), representant.getContent());
-          
+
           if (attCluster.size() < cluster.size()) {
             final Map<String, Object> m = new HashMap<String, Object>(representant.getMetadata());
             m.remove(IGGUtils.REQUIRED);
@@ -185,8 +179,7 @@ public class TwoStepSimplifier {
     }
 
     RuleDisplayerHelper.showRulesAsync("Simplified", new CloneHelper().cloneGrammar(finalGrammar), true);
-    AttributeStatsHelper.showStatisticsAsync("Result", new CloneHelper().cloneGrammar(finalGrammar), true);
-    
+
     return finalGrammar;
   }
 }

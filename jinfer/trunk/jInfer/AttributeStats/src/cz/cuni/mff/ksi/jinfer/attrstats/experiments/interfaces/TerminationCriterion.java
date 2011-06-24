@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
 /**
@@ -34,6 +35,6 @@ public interface TerminationCriterion {
    * @return <code>True</code> if the metaheuristic should be terminated,
    * <code>false<code> otherwise.
    */
-  boolean terminate(final long time, final List<IdSet> solutions);
+  Pair<Boolean, String> terminate(final long time, final List<IdSet> solutions);
 
 }

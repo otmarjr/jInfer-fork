@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -158,6 +159,49 @@ public final class BaseUtils {
     }
     final Set<T> ret = new HashSet<T>(set1);
     ret.retainAll(set2);
+    return ret;
+  }
+
+  private static final Random RND = new Random();
+
+  /**
+   * TODO vektor Comment!
+   * 
+   * @param <T>
+   * @param l
+   * @param ratio
+   * @return
+   */
+  public static <T> List<T> rndSubset(final Collection<T> l, final double ratio) {
+    return rndSubset(l, (int)Math.round(l.size() * ratio));
+  }
+
+  /**
+   * TODO vektor Comment!
+   *
+   * @param <T>
+   * @param l
+   * @param count
+   * @return
+   */
+  // TODO vektor JUnit test
+  public static <T> List<T> rndSubset(final Collection<T> l, final int count) {
+    if (count < 0) {
+      throw new IllegalArgumentException("Size of the subset cannot be negative: " + count);
+    }
+    if (count > l.size()) {
+      throw new IllegalArgumentException("Subset cannot be bigger than the original set: " + count);
+    }
+
+    final List<T> ret = new ArrayList<T>(count);
+    final List<T> tmp = new ArrayList<T>(l);
+
+    for (int i = 0; i < count; i++) {
+      final int toRemove = RND.nextInt(tmp.size());
+      ret.add(tmp.get(toRemove));
+      tmp.remove(toRemove);
+    }
+
     return ret;
   }
 }

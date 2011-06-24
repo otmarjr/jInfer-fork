@@ -44,9 +44,7 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
-  // TODO vektor Block showing stats in BasicIGG and Simplifier
-  // TODO vektor Make sure that optimum doesn't get optimized anymore
-  // TODO vektor Output why we stop
+  // TODO vektor Block showing stats in Simplifier
 
   private String hwInfo;
   private String osInfo;
@@ -80,6 +78,7 @@ public class Experiment implements IGGeneratorCallback {
   private long totalTime;
   private Quality highestQuality = Quality.ZERO;
   private Quality finalQuality;
+  private Pair<Boolean, String> finalTermination;
   private AMModel model;
 
   /** Result of the construction heuristic run. */
@@ -150,6 +149,8 @@ public class Experiment implements IGGeneratorCallback {
       i++;
     }
 
+    ret.append("\nTermination reason: ").append(finalTermination.getSecond());
+
     return ret.toString();
   }
 
@@ -201,8 +202,11 @@ public class Experiment implements IGGeneratorCallback {
           constructionResult = new HeuristicResult(constructionTime, feasiblePool.size(), incumbent.getSecond());
 
           // while not termination criterion
+          // TODO vektor If optimum found, stop here
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
-          if (terminationCriterion.terminate(totTime, feasiblePool)) {
+          final Pair<Boolean, String> termination = terminationCriterion.terminate(totTime, feasiblePool);
+          if (termination.getFirst().booleanValue()) {
+            finalTermination = termination;
             notifyFinished(totTime, incumbent.getSecond());
             return;
           }
@@ -235,7 +239,9 @@ public class Experiment implements IGGeneratorCallback {
 
           // while not termination criterion
           final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
-          if (terminationCriterion.terminate(totTime, feasiblePool)) {
+          final Pair<Boolean, String> termination = terminationCriterion.terminate(totTime, feasiblePool);
+          if (termination.getFirst().booleanValue()) {
+            finalTermination = termination;
             notifyFinished(totTime, incumbent.getSecond());
             return;
           }

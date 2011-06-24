@@ -23,11 +23,9 @@ import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkRunner;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * TODO vektor Comment!
@@ -56,13 +54,7 @@ public class Crossover implements ImprovementHeuristic {
   public void start(final AMModel model, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
 
-    // not guaranteed to get exactly this many
-    final int toFix = (int)Math.round(feasiblePool.size() * ratio);
-    final Set<IdSet> selectedSets = new HashSet<IdSet>(toFix);
-
-    for (int i = 0; i < toFix; i++) {
-      selectedSets.add(feasiblePool.get((int)(Math.random() * feasiblePool.size())));
-    }
+    final List<IdSet> selectedSets = BaseUtils.rndSubset(feasiblePool, ratio);
 
     final List<AttributeMappingId> all = new ArrayList<AttributeMappingId>(model.getAMs().keySet());
     final List<AttributeMappingId> common = new ArrayList<AttributeMappingId>(all);
@@ -80,8 +72,9 @@ public class Crossover implements ImprovementHeuristic {
     }
 
     final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(model, new ArrayList<AttributeMappingId>(common), alpha, beta, timeLimit), model);
-
-    callback.finished(Arrays.asList(improved));
+    final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);
+    ret.add(improved);
+    callback.finished(ret);
   }
 
   @Override

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 
 /**
  * TODO vektor Comment!
@@ -32,7 +32,7 @@ public interface ConstructionHeuristic extends Heuristics {
    * @param poolSize
    * @param callback
    */
-  void start(final AMModel model, final int poolSize,
-          final HeuristicCallback callback) throws InterruptedException;
+  void start(final Experiment experiment, final HeuristicCallback callback)
+          throws InterruptedException;
 
 }

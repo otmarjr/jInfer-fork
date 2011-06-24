@@ -44,7 +44,7 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
-  // TODO vektor Block showing stats in Simplifier
+  // TODO vektor Known optimum
 
   private String hwInfo;
   private String osInfo;
@@ -60,6 +60,9 @@ public class Experiment implements IGGeneratorCallback {
   private Pair<Integer, Integer> graphRepresentation;
 
   private final int poolSize;
+
+  private final double alpha;
+  private final double beta;
 
   private final ConstructionHeuristic constructionHeuristic;
   /**
@@ -99,12 +102,16 @@ public class Experiment implements IGGeneratorCallback {
    */
   public Experiment(final String fileName,
           final int poolSize,
+          final double alpha,
+          final double beta,
           final ConstructionHeuristic constructionHeuristic,
           final List<ImprovementHeuristic> improvementHeuristics,
           final QualityMeasurement measurement,
           final TerminationCriterion terminationCriterion) {
     this.fileName = fileName;
     this.poolSize = poolSize;
+    this.alpha = alpha;
+    this.beta = beta;
     this.constructionHeuristic = constructionHeuristic;
     this.improvementHeuristics = new ArrayList<ImprovementHeuristic>(improvementHeuristics);
     this.measurement = measurement;
@@ -184,18 +191,18 @@ public class Experiment implements IGGeneratorCallback {
     model = new AMModel(grammar);
 
     // take the time before CH
-    startTime = Calendar.getInstance().getTimeInMillis();
+    startTime = time();
 
     try {
       // run the CH
-      constructionHeuristic.start(model, poolSize, new HeuristicCallback() {
+      constructionHeuristic.start(Experiment.this, new HeuristicCallback() {
 
         @Override
         public void finished(final List<IdSet> feasiblePool) {
           // take the time after CH
-          final long constructionTime = (Calendar.getInstance().getTimeInMillis() - startTime);
+          final long constructionTime = delta(startTime);
           // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(model, measurement, feasiblePool);
+          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(Experiment.this, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
@@ -203,7 +210,7 @@ public class Experiment implements IGGeneratorCallback {
 
           // while not termination criterion
           // TODO vektor If optimum found, stop here
-          final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
+          final long totTime = delta(startTime);
           final Pair<Boolean, String> termination = terminationCriterion.terminate(totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
             finalTermination = termination;
@@ -221,24 +228,24 @@ public class Experiment implements IGGeneratorCallback {
   private void runImprovement(final List<IdSet> feasiblePool, final int iteration) {
     final ImprovementHeuristic current = improvementHeuristics.get(iteration % improvementHeuristics.size());
     //   take the time before IH
-    final long ihStartTime = Calendar.getInstance().getTimeInMillis();
+    final long ihStartTime = time();
     //   run the IH
     try {
-      current.start(model, feasiblePool, new HeuristicCallback() {
+      current.start(Experiment.this, feasiblePool, new HeuristicCallback() {
 
         @Override
         public void finished(final List<IdSet> feasiblePool) {
           //   take the time after IH
-          final long improvementTime = (Calendar.getInstance().getTimeInMillis() - ihStartTime);
+          final long improvementTime = delta(ihStartTime);
           // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(model, measurement, feasiblePool);
+          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(Experiment.this, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
           improvementResults.add(new HeuristicResult(improvementTime, feasiblePool.size(), incumbent.getSecond()));
 
           // while not termination criterion
-          final long totTime = Calendar.getInstance().getTimeInMillis() - startTime;
+          final long totTime = delta(startTime);
           final Pair<Boolean, String> termination = terminationCriterion.terminate(totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
             finalTermination = termination;
@@ -259,5 +266,36 @@ public class Experiment implements IGGeneratorCallback {
     for (final ExperimentListener el : listeners) {
       el.experimentFinished(this);
     }
+  }
+
+  // --- TIMING ----------------------------------------------------------------
+
+  private static long time() {
+    return Calendar.getInstance().getTimeInMillis();
+  }
+
+  private static long delta(final long from) {
+    return time() - from;
+  }
+
+  // --- GETTERS ---------------------------------------------------------------
+
+  public int getPoolSize() {
+    return poolSize;
+  }
+
+  public AMModel getModel() {
+    return model;
+  }
+
+  public double getAlpha() {
+    return alpha;
+  }
+  public double getBeta() {
+    return beta;
+  }
+
+  public QualityMeasurement getQualityMeasurement() {
+    return measurement;
   }
 }

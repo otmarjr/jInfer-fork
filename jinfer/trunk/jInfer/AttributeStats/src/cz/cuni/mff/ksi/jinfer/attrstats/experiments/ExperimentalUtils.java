@@ -17,8 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
@@ -34,12 +32,12 @@ public final class ExperimentalUtils {
 
   }
 
-  public static Pair<IdSet, Quality> getBest(final AMModel model,
-          final QualityMeasurement measurement, final List<IdSet> solutions) {
+  public static Pair<IdSet, Quality> getBest(final Experiment experiment,
+          final List<IdSet> solutions) {
     IdSet bestSolution = null;
     Quality maxQuality = Quality.ZERO;
     for (final IdSet solution : solutions) {
-      final Quality quality = measurement.measure(model, solution);
+      final Quality quality = experiment.getQualityMeasurement().measure(experiment, solution);
       if (quality.getScalar() >= maxQuality.getScalar()) {
         maxQuality = quality;
         bestSolution = solution;

@@ -47,7 +47,7 @@ public interface Quality {
    */
   String getText();
 
-  public static final Quality ZERO = new Quality() {
+  Quality ZERO = new Quality() {
 
     @Override
     public double getScalar() {

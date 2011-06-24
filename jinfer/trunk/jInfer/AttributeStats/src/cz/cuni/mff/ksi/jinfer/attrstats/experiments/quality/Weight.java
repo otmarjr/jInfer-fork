@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
@@ -28,21 +28,13 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
  */
 public class Weight implements QualityMeasurement {
 
-  private final double alpha;
-  private final double beta;
-
-  public Weight(final double alpha, final double beta) {
-    this.alpha = alpha;
-    this.beta = beta;
-  }
-
   @Override
-  public Quality measure(final AMModel model, final IdSet solution) {
+  public Quality measure(final Experiment experiment, final IdSet solution) {
     return new Quality() {
 
       @Override
       public double getScalar() {
-        return model.weight(solution.getMappings(), alpha, beta);
+        return experiment.getModel().weight(solution.getMappings(), experiment.getAlpha(), experiment.getBeta());
       }
 
       @Override
@@ -52,7 +44,7 @@ public class Weight implements QualityMeasurement {
 
       @Override
       public String getText() {
-        return String.valueOf(getScalar()) + " (" + solution.getMappings().size() + " AMs)";
+        return getScalar() + " (" + solution.getMappings().size() + " AMs)";
       }
     };
   }

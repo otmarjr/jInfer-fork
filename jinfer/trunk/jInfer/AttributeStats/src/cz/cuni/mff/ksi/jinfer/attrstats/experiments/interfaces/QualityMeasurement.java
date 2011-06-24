@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
@@ -32,6 +32,6 @@ public interface QualityMeasurement {
    * @param solution
    * @return
    */
-  Quality measure(final AMModel model, final IdSet solution);
+  Quality measure(final Experiment experiment, final IdSet solution);
 
 }

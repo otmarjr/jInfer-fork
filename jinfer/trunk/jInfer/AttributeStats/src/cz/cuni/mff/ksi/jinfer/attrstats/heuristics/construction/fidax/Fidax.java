@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.fidax;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.Arrays;
 
@@ -29,18 +29,10 @@ import java.util.Arrays;
  */
 public class Fidax implements ConstructionHeuristic {
 
-  private final double alpha;
-  private final double beta;
-
-  public Fidax(final double alpha, final double beta) {
-    this.alpha = alpha;
-    this.beta = beta;
-  }
-
   @Override
-  public void start(final AMModel model, final int poolSize,
+  public void start(final Experiment experiment,
         final HeuristicCallback callback) throws InterruptedException {
-    final IdSet solution = FidaxAlgorithm.findIDSet(model, alpha, beta);
+    final IdSet solution = FidaxAlgorithm.findIDSet(experiment.getModel(), experiment.getAlpha(), experiment.getBeta());
     callback.finished(Arrays.asList(solution));
   }
 

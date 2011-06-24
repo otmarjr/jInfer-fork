@@ -16,12 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,22 +30,18 @@ import java.util.List;
  */
 public class Glpk implements ConstructionHeuristic {
 
-  private final double alpha;
-  private final double beta;
   private final int timeLimit;
 
-  public Glpk(final double alpha, final double beta, final int timeLimit) {
-    this.alpha = alpha;
-    this.beta = beta;
+  public Glpk(final int timeLimit) {
     this.timeLimit = timeLimit;
   }
 
   @Override
-  public void start(final AMModel model, final int poolSize,
+  public void start(final Experiment experiment,
         final HeuristicCallback callback) throws InterruptedException {
-    final List<IdSet> initialSolutions = new ArrayList<IdSet>(poolSize);
-    for (int i = 0; i < poolSize; i++) {
-      initialSolutions.add(GlpkOutputParser.getIDSet(GlpkRunner.run(model, alpha, beta, timeLimit), model));
+    final List<IdSet> initialSolutions = new ArrayList<IdSet>(experiment.getPoolSize());
+    for (int i = 0; i < experiment.getPoolSize(); i++) {
+      initialSolutions.add(GlpkOutputParser.getIDSet(GlpkRunner.run(experiment.getModel(), experiment.getAlpha(), experiment.getBeta(), timeLimit), experiment.getModel()));
     }
     callback.finished(initialSolutions);
   }
@@ -63,7 +58,7 @@ public class Glpk implements ConstructionHeuristic {
 
   @Override
   public String getModuleDescription() {
-    return getName() + ", alpha = " + alpha + ", beta = " + beta + ", limit = " + timeLimit + " s";
+    return getName() + ", limit = " + timeLimit + " s";
   }
 
 }

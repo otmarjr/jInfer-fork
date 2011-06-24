@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class RandomRemove implements ImprovementHeuristic {
   }
 
   @Override
-  public void start(final AMModel model, final List<IdSet> feasiblePool,
+  public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
 
     final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool.size());

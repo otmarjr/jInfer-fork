@@ -117,4 +117,14 @@ public class UserInteractive<T> implements AutomatonSimplifier<T> {
     } while (!BaseUtils.isEmpty(mergeLst));
     return inputAutomaton;
   }
+
+  @Override
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
+    return simplify(inputAutomaton, symbolToString);
+  }
+
+  @Override
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName, List<List<T>> inputStrings) throws InterruptedException {
+    return simplify(inputAutomaton, symbolToString, elementName);
+  }
 }

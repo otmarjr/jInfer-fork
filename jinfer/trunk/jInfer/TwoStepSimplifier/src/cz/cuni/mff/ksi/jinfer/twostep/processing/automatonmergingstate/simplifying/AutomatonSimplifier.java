@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplify
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import java.util.List;
 
 /**
  * Interface for simplifying automaton - given PTA should return something
@@ -47,4 +48,25 @@ public interface AutomatonSimplifier<T> {
    * @throws InterruptedException
    */
   Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException;
+
+  /**
+   * Simplify an automaton.
+   *
+   * @param inputAutomaton automaton to process
+   * @param symbolToString converter of symbols (of type T) to string - for rendering automaton to user
+   * @return new automaton, which accepts more general language and is simple in design
+   * @throws InterruptedException
+   */
+  Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException;
+
+  /**
+   * Simplify an automaton.
+   *
+   * @param inputAutomaton automaton to process
+   * @param symbolToString converter of symbols (of type T) to string - for rendering automaton to user
+   * @elementName name of element we process right now
+   * @return new automaton, which accepts more general language and is simple in design
+   * @throws InterruptedException
+   */
+  Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName, List<List<T>> inputStrings) throws InterruptedException;
 }

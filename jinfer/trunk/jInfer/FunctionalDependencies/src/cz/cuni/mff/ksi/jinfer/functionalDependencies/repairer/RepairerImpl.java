@@ -72,13 +72,16 @@ public class RepairerImpl implements Repairer {
         for (Pair<Tuple, Tuple> tuplePair : tuplePairNotSatisfyingFD) {
           repairs.addAll(computeRepairs(rXMLTree, tuplePair, fd));
         }
-
-        List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
-        Repair repair = mergeRepairs(minimalRepairs);
-
-        rXMLTree.applyRepair(repair);
       }
     }
+    
+    if (!repairs.isEmpty()) {
+      List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
+      Repair repair = mergeRepairs(minimalRepairs);
+
+      rXMLTree.applyRepair(repair);
+    }
+
     return rXMLTree;
   }
 

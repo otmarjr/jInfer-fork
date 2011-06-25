@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
+package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
@@ -26,6 +26,8 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.TupleFactory;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.RepairFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -85,25 +87,23 @@ public class NewRepairerImpl implements Repairer {
 
   private List<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {
     List<Repair> result = new ArrayList<Repair>();
-
+    
     Path rightPath = fd.getRightSidePaths().getPathObj();
     PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst());
     PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond());
 
     if (rightPath.isStringPath()) {
-      if (!t1Answer.isEmpty() && !t2Answer.isEmpty()) {
+      if (!t1Answer.isEmpty()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer()));
-      } else if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer()));
-      } else if (!t2Answer.isEmpty()) {
+      }
+      if (!t2Answer.isEmpty()) {
         result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer()));
       }
     } else {
-      if (!t1Answer.isEmpty() && !t2Answer.isEmpty()) {
+      if (!t1Answer.isEmpty()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer()));
-      } else if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer()));
-      } else if (!t2Answer.isEmpty()) {
+      }
+      if (!t2Answer.isEmpty()) {
         result.add(new Repair(t2Answer.getTupleNodeAnswer()));
       }
     }
@@ -114,10 +114,10 @@ public class NewRepairerImpl implements Repairer {
 
       if (path.isStringPath()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue()));
-//        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue()));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue()));
       } else {
         result.add(new Repair(t1Answer.getTupleNodeAnswer()));
-//        result.add(new Repair(t2Answer.getTupleNodeAnswer()));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer()));
       }
     }
 

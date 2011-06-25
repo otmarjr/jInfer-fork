@@ -16,10 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.w3c.dom.NamedNodeMap;
@@ -36,8 +38,11 @@ public class Repair implements Comparable<Repair> {
   public static final int COMPARE_EQUAL = 0;
   public static final int COMPARE_GREATER = 1;
   public static final int COMPARE_UNAVAILABLE = 2;
+  
   private Set<Node> unreliableNodes;
   private Map<Node, String> valueNodes;
+  private double weight;
+  private List<RepairGroup> repairGroups;
 
   public Repair() {
     this.unreliableNodes = new HashSet<Node>();
@@ -54,7 +59,7 @@ public class Repair implements Comparable<Repair> {
     valueNodes.put(valueNode, changedValue);
   }
 
-  boolean hasReliabilityRepair() {
+  public boolean hasReliabilityRepair() {
     return !unreliableNodes.isEmpty();
   }
 
@@ -70,7 +75,7 @@ public class Repair implements Comparable<Repair> {
     unreliableNodes.addAll(nodes);
   }
 
-  boolean hasValueRepair() {
+  public boolean hasValueRepair() {
     return !valueNodes.isEmpty();
   }
 
@@ -93,11 +98,11 @@ public class Repair implements Comparable<Repair> {
     return hash;
   }
 
-  void addUnreliableNode(Node node) {
+  public void addUnreliableNode(Node node) {
     unreliableNodes.add(node);
   }
 
-  void addValueNode(Node node, String value) {
+  public void addValueNode(Node node, String value) {
     valueNodes.put(node, value);
   }
 
@@ -203,5 +208,13 @@ public class Repair implements Comparable<Repair> {
     }
 
     return builder.toString();
+  }
+
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
+
+  public double getWeight() {
+    return weight;
   }
 }

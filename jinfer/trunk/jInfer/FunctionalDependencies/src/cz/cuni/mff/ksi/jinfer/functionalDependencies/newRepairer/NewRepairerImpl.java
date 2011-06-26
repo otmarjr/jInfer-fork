@@ -29,6 +29,7 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.RepairFactory;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,36 +76,40 @@ public class NewRepairerImpl implements Repairer {
         for (Pair<Tuple, Tuple> tuplePair : tuplePairNotSatisfyingFD) {
           repairs.addAll(computeRepairs(rXMLTree, tuplePair, fd));
         }
-
-        List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
-        Repair repair = mergeRepairs(minimalRepairs);
-
-        rXMLTree.applyRepair(repair);
       }
     }
+
+    if (!repairs.isEmpty()) {      
+      List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
+      Repair repair = mergeRepairs(minimalRepairs);
+
+      rXMLTree.applyRepair(repair);
+    }
+
     return rXMLTree;
   }
 
-  private List<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {
-    List<Repair> result = new ArrayList<Repair>();
-    
+  private Collection<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {
+    Set<Repair> result = new HashSet<Repair>();
+    RepairGroup repairGroup = new RepairGroup(fd);
+
     Path rightPath = fd.getRightSidePaths().getPathObj();
     PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst());
     PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond());
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer()));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer()));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree));
       }
     } else {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer()));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer()));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree));
       }
     }
 
@@ -113,13 +118,16 @@ public class NewRepairerImpl implements Repairer {
       t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond());
 
       if (path.isStringPath()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue()));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue()));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue(), tree));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue(), tree));
       } else {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer()));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer()));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree));
       }
     }
+
+    repairGroup.addRepairs(result);
+    tree.addRepairGroup(repairGroup);
 
     return result;
   }

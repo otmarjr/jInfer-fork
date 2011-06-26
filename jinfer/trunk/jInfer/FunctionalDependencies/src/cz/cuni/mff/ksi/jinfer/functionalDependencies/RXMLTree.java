@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TrightSidePaths;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -53,6 +54,9 @@ import org.w3c.dom.Text;
  * @author sviro
  */
 public class RXMLTree {
+  
+  private static final double LEAF_WEIGHT = 0.2;
+  private static final double NODE_WEIGHT = 0.4;
 
   private static final Logger LOG = Logger.getLogger(RXMLTree.class);
   private final Document document;
@@ -60,10 +64,12 @@ public class RXMLTree {
   private Map<Node, NodeAttribute> nodesMap;
   private List<Tuple> tuples;
   private int tupleID;
+  private List<RepairGroup> repairGroups;
 
   public RXMLTree(final Document document) {
     this.document = document;
     nodesMap = new HashMap<Node, NodeAttribute>();
+    this.repairGroups = new ArrayList<RepairGroup>();
     tupleID = 0;
     nodesMap = createNodesMap(document);
   }
@@ -312,6 +318,13 @@ public class RXMLTree {
     if (!nodesMap.containsKey(node)) {
       nodesMap.put(node, new NodeAttribute());
     }
+    NodeAttribute nodeAttribute = nodesMap.get(node);
+    short nodeType = node.getNodeType();
+    if (nodeType == Node.ATTRIBUTE_NODE || nodeType == Node.TEXT_NODE) {
+      nodeAttribute.setWeight(LEAF_WEIGHT);
+    } else {
+      nodeAttribute.setWeight(NODE_WEIGHT);
+    }
 
     //check attributes
     NamedNodeMap attributes = node.getAttributes();
@@ -352,5 +365,13 @@ public class RXMLTree {
 
   private boolean isPathDefined(final Path path) {
     return paths.contains(path);
+  }
+  
+  public void addRepairGroup(final RepairGroup repairGroup) {
+    repairGroups.add(repairGroup);
+  }
+
+  public List<RepairGroup> getRepairGroups() {
+    return repairGroups;
   }
 }

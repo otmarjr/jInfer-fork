@@ -65,4 +65,8 @@ public class NodeAttribute {
   public double getWeight() {
     return weight;
   }
+
+  void setReliability(boolean reliability) {
+    this.reliability = reliability;
+  }
 }

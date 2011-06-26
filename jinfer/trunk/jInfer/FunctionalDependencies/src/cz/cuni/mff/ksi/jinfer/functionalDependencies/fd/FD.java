@@ -100,7 +100,28 @@ public class FD {
     
     return this.getLeftSidePaths().equals(fd2.getLeftSidePaths()) && this.getRightSidePaths().equals(fd2.getRightSidePaths());
   }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("{");
     
+    boolean first = true;
+    for (String path : leftSidePaths.getPath()) {
+      if (first) {
+        first = false;
+      } else {
+        builder.append(",");
+      }
+      
+      builder.append(path);
+    }
     
+    builder.append("} -> ").append(rightSidePaths.getPath());
+    
+    return builder.toString();
+  }
+    
+  
 
 }

@@ -97,8 +97,16 @@ public final class TupleFactory {
 
     return result;
   }
-
+  
+  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDThesis(final RXMLTree tree, final FD fd) {
+    return getTuplePairNotSatisfyingFDGeneral(tree, fd, true);
+  }
+  
   public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(RXMLTree tree, FD fd) {
+    return getTuplePairNotSatisfyingFDGeneral(tree, fd, false);
+  }
+
+  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDGeneral(final RXMLTree tree, final FD fd, final boolean isThesis) {
     List<Pair<Tuple, Tuple>> notSatisfyingTuples = new ArrayList<Pair<Tuple, Tuple>>();
 
     List<Pair<Tuple, Tuple>> tuplePairs = getTuplePairs(tree.getTuples());
@@ -107,7 +115,7 @@ public final class TupleFactory {
     }
 
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
-      if (!tree.isTuplePairSatisfyingFD(tuplePair, fd)) {
+      if (!tree.isTuplePairSatisfyingFDGeneral(tuplePair, fd, isThesis)) {
         notSatisfyingTuples.add(tuplePair);
       }
     }
@@ -115,7 +123,7 @@ public final class TupleFactory {
     return notSatisfyingTuples;
   }
 
-  public static List<PathAnswer> getFDSidePathAnswers(RXMLTree tree, Tuple tuple, SidePaths sidePaths) {
+  public static List<PathAnswer> getFDSidePathAnswers(final RXMLTree tree, final Tuple tuple, final SidePaths sidePaths, final boolean isThesis) {
     if (tuple == null) {
       throw new RuntimeException("Tuple can't be null.");
     }
@@ -129,12 +137,12 @@ public final class TupleFactory {
       TleftSidePaths leftSide = (TleftSidePaths) sidePaths;
 
       for (Path path : leftSide.getPaths()) {
-        PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, tuple);
+        PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, tuple, isThesis);
         result.add(pathAnswer);
       }
     } else if (sidePaths instanceof TrightSidePaths) {
       TrightSidePaths rightSide = (TrightSidePaths) sidePaths;
-      PathAnswer pathAnswer = tree.getPathAnswerForTuple(rightSide.getPathObj(), tuple);
+      PathAnswer pathAnswer = tree.getPathAnswerForTuple(rightSide.getPathObj(), tuple, isThesis);
       result.add(pathAnswer);
     }
 

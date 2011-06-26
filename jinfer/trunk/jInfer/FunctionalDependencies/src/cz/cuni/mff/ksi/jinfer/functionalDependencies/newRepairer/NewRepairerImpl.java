@@ -54,39 +54,45 @@ public class NewRepairerImpl implements Repairer {
 
     List<FD> functionalDependencies = model.getFunctionalDependencies();
     for (RXMLTree rXMLTree : model.getTrees()) {
-      if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
+//      if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
         RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies);
         if (repairedTree != null) {
           result.add(repairedTree);
         }
-      } else {
-        LOG.error("Some of the functional dependencies is not defined for XML tree.");
-      }
+//      } else {
+//        LOG.error("Some of the functional dependencies is not defined for XML tree.");
+//      }
     }
     callback.finished(result);
     return;
   }
 
   private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) {
+    while (rXMLTree.isInconsistent(functionalDependencies)) {
+      repairRXMLTree2(rXMLTree, functionalDependencies);
+    }
+
+    return rXMLTree;
+  }
+
+  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies) {
     List<Repair> repairs = new ArrayList<Repair>();
     for (FD fd : functionalDependencies) {
-      if (!rXMLTree.isSatisfyingFD(fd)) {
-        LOG.debug("XML is inconsistent to FD.");
-        List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFD(rXMLTree, fd);
+      if (!rXMLTree.isSatisfyingFDThesis(fd)) {
+        LOG.debug("XML is inconsistent to FD " + fd.toString());
+        List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFDThesis(rXMLTree, fd);
         for (Pair<Tuple, Tuple> tuplePair : tuplePairNotSatisfyingFD) {
           repairs.addAll(computeRepairs(rXMLTree, tuplePair, fd));
         }
       }
     }
 
-    if (!repairs.isEmpty()) {      
-      List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
-      Repair repair = mergeRepairs(minimalRepairs);
-
-      rXMLTree.applyRepair(repair);
+    if (!repairs.isEmpty()) {
+      Repair minimalRepair = rXMLTree.getMinimalRepairGroup().getMinimalRepair();
+      
+      rXMLTree.applyRepair(minimalRepair);
+      rXMLTree.clearRepairs();
     }
-
-    return rXMLTree;
   }
 
   private Collection<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {
@@ -94,8 +100,8 @@ public class NewRepairerImpl implements Repairer {
     RepairGroup repairGroup = new RepairGroup(fd);
 
     Path rightPath = fd.getRightSidePaths().getPathObj();
-    PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst());
-    PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond());
+    PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst(), false);
+    PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond(), false);
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty()) {
@@ -114,8 +120,8 @@ public class NewRepairerImpl implements Repairer {
     }
 
     for (Path path : fd.getLeftSidePaths().getPaths()) {
-      t1Answer = tree.getPathAnswerForTuple(path, tuplePair.getFirst());
-      t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond());
+      t1Answer = tree.getPathAnswerForTuple(path, tuplePair.getFirst(), false);
+      t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue(), tree));

@@ -89,8 +89,8 @@ public class RepairerImpl implements Repairer {
     List<Repair> result = new ArrayList<Repair>();
 
     Path rightPath = fd.getRightSidePaths().getPathObj();
-    PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst());
-    PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond());
+    PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst(), false);
+    PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond(), false);
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty() && !t2Answer.isEmpty()) {
@@ -111,8 +111,8 @@ public class RepairerImpl implements Repairer {
     }
 
     for (Path path : fd.getLeftSidePaths().getPaths()) {
-      t1Answer = tree.getPathAnswerForTuple(path, tuplePair.getFirst());
-      t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond());
+      t1Answer = tree.getPathAnswerForTuple(path, tuplePair.getFirst(), false);
+      t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
         result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue()));

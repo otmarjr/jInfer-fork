@@ -20,6 +20,8 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -72,5 +74,21 @@ public class RepairGroup {
     }
     
     return result;     
+  }
+  
+  public Repair getMinimalRepair() {
+    if (!repairs.isEmpty()) {
+      Collections.sort(repairs, new Comparator<Repair>() {
+
+        @Override
+        public int compare(Repair o1, Repair o2) {
+          return (int) (o1.getWeight() - o2.getWeight());
+        }
+      });
+      
+      return repairs.get(0);
+    }
+    
+    return null;
   }
 }

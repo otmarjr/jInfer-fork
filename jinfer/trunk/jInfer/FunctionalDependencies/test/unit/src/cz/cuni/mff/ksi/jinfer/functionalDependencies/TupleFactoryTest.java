@@ -132,7 +132,7 @@ public class TupleFactoryTest {
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = null;
     SidePaths sidePaths = null;
-    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
+    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
   }
   
   
@@ -149,7 +149,7 @@ public class TupleFactoryTest {
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(0);
     SidePaths sidePaths = null;
-    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
+    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
   }
   
     
@@ -166,7 +166,7 @@ public class TupleFactoryTest {
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(0);
     SidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
-    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
+    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
     List<PathAnswer> expected = new ArrayList<PathAnswer>();
     assertEquals(expected, result);
   }
@@ -187,7 +187,7 @@ public class TupleFactoryTest {
     tree.getNodesMap().get(element).addToTuple(tuple);
     TleftSidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
     sidePaths.getPath().add("//bib");
-    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths);
+    List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
     
     List<PathAnswer> expected = new ArrayList<PathAnswer>();
     List<Node> nodes = new ArrayList<Node>();

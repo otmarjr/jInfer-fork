@@ -25,6 +25,8 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,10 +56,9 @@ import org.w3c.dom.Text;
  * @author sviro
  */
 public class RXMLTree {
-  
+
   private static final double LEAF_WEIGHT = 0.2;
   private static final double NODE_WEIGHT = 0.4;
-
   private static final Logger LOG = Logger.getLogger(RXMLTree.class);
   private final Document document;
   private List<Path> paths = null;
@@ -68,17 +69,24 @@ public class RXMLTree {
 
   public RXMLTree(final Document document) {
     this.document = document;
-    nodesMap = new HashMap<Node, NodeAttribute>();
     this.repairGroups = new ArrayList<RepairGroup>();
     tupleID = 0;
     nodesMap = createNodesMap(document);
   }
 
-  public boolean isSatisfyingFD(FD fd) {
-    return isTreeSatisfyingFD(fd) || isReliabilitySatisfyFD(fd);
+  public boolean isSatisfyingFD(final FD fd) {
+    return isSatisfyingFDGeneral(fd, false);
   }
 
-  private boolean isTreeSatisfyingFD(FD fd) {
+  public boolean isSatisfyingFDThesis(final FD fd) {
+    return isSatisfyingFDGeneral(fd, true);
+  }
+
+  private boolean isSatisfyingFDGeneral(final FD fd, final boolean isThesis) {
+    return isTreeSatisfyingFD(fd, isThesis) || isReliabilitySatisfyFD(fd);
+  }
+
+  private boolean isTreeSatisfyingFD(final FD fd, final boolean isThesis) {
     if (tuples == null) {
       tuples = TupleFactory.createTuples(this);
     }
@@ -88,7 +96,7 @@ public class RXMLTree {
     }
 
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
-      if (!isTuplePairSatisfyingFD(tuplePair, fd)) {
+      if (!isTuplePairSatisfyingFDGeneral(tuplePair, fd, isThesis)) {
         return false;
       }
     }
@@ -96,14 +104,22 @@ public class RXMLTree {
     return true;
   }
 
-  public boolean isTuplePairSatisfyingFD(Pair<Tuple, Tuple> tuplePair, FD fd) {
+  public boolean isTuplePairSatisfyingFDThesis(final Pair<Tuple, Tuple> tuplePair, final FD fd) {
+    return isTuplePairSatisfyingFDGeneral(tuplePair, fd, true);
+  }
+
+  public boolean isTuplePairSatisfyingFD(final Pair<Tuple, Tuple> tuplePair, final FD fd) {
+    return isTuplePairSatisfyingFDGeneral(tuplePair, fd, false);
+  }
+
+  public boolean isTuplePairSatisfyingFDGeneral(final Pair<Tuple, Tuple> tuplePair, final FD fd, final boolean isThesis) {
     Tuple tuple1 = tuplePair.getFirst();
     Tuple tuple2 = tuplePair.getSecond();
 
-    List<PathAnswer> tuple1LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getLeftSidePaths());
-    List<PathAnswer> tuple2LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getLeftSidePaths());
-    List<PathAnswer> tuple1RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getRightSidePaths());
-    List<PathAnswer> tuple2RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getRightSidePaths());
+    List<PathAnswer> tuple1LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getLeftSidePaths(), isThesis);
+    List<PathAnswer> tuple2LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getLeftSidePaths(), isThesis);
+    List<PathAnswer> tuple1RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getRightSidePaths(), isThesis);
+    List<PathAnswer> tuple2RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getRightSidePaths(), isThesis);
 
     boolean leftSideEqual = areTuplePathAnswersEqual(tuple1LeftSideAnswers, tuple2LeftSideAnswers);
     boolean tuple1PathAnswersNotEmpty = isTuplePathAnswersNotEmpty(tuple1LeftSideAnswers);
@@ -162,7 +178,7 @@ public class RXMLTree {
   }
 
   private boolean isUnreliableTuple(Tuple tuple, SidePaths side) {
-    List<PathAnswer> pathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, side);
+    List<PathAnswer> pathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, side, false);
     for (PathAnswer pathAnswer : pathAnswers) {
       if (!nodesMap.get(pathAnswer.getTupleNodeAnswer()).isReliable()) {
         return true;
@@ -215,15 +231,15 @@ public class RXMLTree {
   }
 
   public PathAnswer getPathAnswer(Path path) {
-    return getPathAnswerForTuple(path, null);
+    return getPathAnswerForTuple(path, null, false);
   }
 
   public PathAnswer getPathAnswerForCreatingTuple(final Path path, final Tuple tuple) {
-    return getGenericPathAnswerForTuple(path, tuple, true);
+    return getGenericPathAnswerForTuple(path, tuple, true, false);
   }
 
-  public PathAnswer getPathAnswerForTuple(final Path path, final Tuple tuple) {
-    return getGenericPathAnswerForTuple(path, tuple, false);
+  public PathAnswer getPathAnswerForTuple(final Path path, final Tuple tuple, final boolean isThesis) {
+    return getGenericPathAnswerForTuple(path, tuple, false, isThesis);
   }
 
   /**
@@ -233,7 +249,7 @@ public class RXMLTree {
    * @param isCreatingTuple
    * @return
    */
-  public PathAnswer getGenericPathAnswerForTuple(final Path path, final Tuple tuple, final boolean isCreatingTuple) {
+  public PathAnswer getGenericPathAnswerForTuple(final Path path, final Tuple tuple, final boolean isCreatingTuple, boolean isThesis) {
     if (path != null) {
       XPathFactory xpathFactory = XPathFactory.newInstance();
       XPath xPath = xpathFactory.newXPath();
@@ -247,8 +263,11 @@ public class RXMLTree {
         if (tuple != null) {
           for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            if (nodesMap.get(node).isInTuple(tuple)) {
-              result.add(node);
+            NodeAttribute nodeAttribute = nodesMap.get(node);
+            if (nodeAttribute.isInTuple(tuple)) {
+              if (!isThesis || (isThesis && nodeAttribute.isReliable())) {
+                result.add(node);
+              }
             }
           }
 
@@ -282,11 +301,11 @@ public class RXMLTree {
 
   public void applyRepair(Repair repair) {
     LOG.debug(repair.toString());
-    
+
     for (Node node : repair.getUnreliableNodes()) {
       setNodeUnreliable(node);
     }
-    
+
     for (Node node : repair.getValueNodes().keySet()) {
       String newValue = repair.getValueNodes().get(node);
       if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
@@ -297,14 +316,16 @@ public class RXMLTree {
         textnode.setNodeValue(newValue);
       }
     }
-    
+
   }
-  
+
   private void setNodeUnreliable(Node node) {
+    nodesMap.get(node).setReliability(false);
+
     if (node.getNodeType() == Node.ELEMENT_NODE) {
-        Element element = (Element) node;
-        element.setAttribute("unreliable", "true");
-      }
+      Element element = (Element) node;
+      element.setAttribute("unreliable", "true");
+    }
   }
 
   private static Map<Node, NodeAttribute> createNodesMap(final Document document) {
@@ -366,12 +387,42 @@ public class RXMLTree {
   private boolean isPathDefined(final Path path) {
     return paths.contains(path);
   }
-  
+
   public void addRepairGroup(final RepairGroup repairGroup) {
     repairGroups.add(repairGroup);
   }
 
   public List<RepairGroup> getRepairGroups() {
     return repairGroups;
+  }
+
+  public boolean isInconsistent(List<FD> functionalDependencies) {
+    for (FD fd : functionalDependencies) {
+      if (!isSatisfyingFDThesis(fd)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public RepairGroup getMinimalRepairGroup() {
+    if (!repairGroups.isEmpty()) {
+      Collections.sort(repairGroups, new Comparator<RepairGroup>() {
+
+        @Override
+        public int compare(RepairGroup o1, RepairGroup o2) {
+          return (int) (o1.getWeight() - o2.getWeight());
+        }
+      });
+
+      return repairGroups.get(0);
+    }
+
+    return null;
+  }
+
+  public void clearRepairs() {
+    repairGroups.clear();
   }
 }

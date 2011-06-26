@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,25 +39,37 @@ public class Repair implements Comparable<Repair> {
   public static final int COMPARE_EQUAL = 0;
   public static final int COMPARE_GREATER = 1;
   public static final int COMPARE_UNAVAILABLE = 2;
-  
+  private static final double UNRELIABLE_KOEF = 1.5;
   private Set<Node> unreliableNodes;
   private Map<Node, String> valueNodes;
-  private double weight;
+  private double weight = -1;
   private List<RepairGroup> repairGroups;
+  private RXMLTree tree;
 
   public Repair() {
     this.unreliableNodes = new HashSet<Node>();
     this.valueNodes = new HashMap<Node, String>();
+    this.repairGroups = new ArrayList<RepairGroup>();
   }
 
-  public Repair(Node unreliableNode) {
+  public Repair(final Node unreliableNode) {
     this();
     addUnreliableChildren(unreliableNode);
   }
 
-  public Repair(Node valueNode, String changedValue) {
+  public Repair(final Node valueNode, final String changedValue) {
     this();
     valueNodes.put(valueNode, changedValue);
+  }
+
+  public Repair(final Node unreliableNode, final RXMLTree tree) {
+    this(unreliableNode);
+    this.tree = tree;
+  }
+
+  public Repair(final Node valueNode, final String changedValue, final RXMLTree tree) {
+    this(valueNode, changedValue);
+    this.tree = tree;
   }
 
   public boolean hasReliabilityRepair() {
@@ -215,6 +228,26 @@ public class Repair implements Comparable<Repair> {
   }
 
   public double getWeight() {
+    if (weight == -1) {
+      weight = computeWeight();
+    }
     return weight;
+  }
+
+  public void addToRepairGroup(final RepairGroup repairGroup) {
+    repairGroups.add(repairGroup);
+  }
+
+  private double computeWeight() {
+    double result = 0;
+    for (Node node : unreliableNodes) {
+      result += tree.getNodesMap().get(node).getWeight() * UNRELIABLE_KOEF;
+    }
+    
+    for (Node node : valueNodes.keySet()) {
+      result += tree.getNodesMap().get(node).getWeight();
+    }
+    
+    return result;
   }
 }

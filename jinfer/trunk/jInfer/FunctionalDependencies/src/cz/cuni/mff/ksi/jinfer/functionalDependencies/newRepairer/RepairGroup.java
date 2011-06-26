@@ -28,8 +28,9 @@ import java.util.List;
  */
 public class RepairGroup {
   
-  final List<Repair> repairs;
-  final FD functionalDependency;
+  private final List<Repair> repairs;
+  private final FD functionalDependency;
+  private double weight = -1;
   
   public RepairGroup(final FD functionalDependency) {
     repairs = new ArrayList<Repair>();
@@ -41,7 +42,35 @@ public class RepairGroup {
   }
   
   public void addRepairs(final Collection<Repair> repairs) {
-    repairs.addAll(repairs);
+    this.repairs.addAll(repairs);
+    
+    for (Repair repair : repairs) {
+      repair.addToRepairGroup(this);
+    }
   }
-  
+
+  public List<Repair> getRepairs() {
+    return repairs;
+  }
+
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
+
+  public double getWeight() {
+    if (weight == -1) {
+      weight = computeWeight();
+    }
+    return weight;
+  }
+
+  private double computeWeight() {
+    double result = 0;
+    
+    for (Repair repair : repairs) {
+      result += repair.getWeight();
+    }
+    
+    return result;     
+  }
 }

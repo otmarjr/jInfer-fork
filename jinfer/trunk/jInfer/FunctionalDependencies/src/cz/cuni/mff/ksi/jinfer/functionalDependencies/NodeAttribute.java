@@ -27,6 +27,7 @@ public class NodeAttribute {
   
   private Set<Tuple> tuples;
   private boolean reliability;
+  private double weight;
   
   public NodeAttribute(final boolean reliability) {
     this.reliability = reliability;
@@ -56,5 +57,12 @@ public class NodeAttribute {
   void addToTuple(Tuple tuple) {
     tuples.add(tuple);
   }
-  
+
+  public void setWeight(double weight) {
+    this.weight = weight;
+  }
+
+  public double getWeight() {
+    return weight;
+  }
 }

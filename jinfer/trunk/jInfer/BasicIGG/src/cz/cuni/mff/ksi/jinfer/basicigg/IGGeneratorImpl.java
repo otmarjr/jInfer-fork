@@ -184,6 +184,7 @@ public class IGGeneratorImpl implements IGGenerator {
    * Returns the map (folder - (extension - processor) ) of all processors
    * installed in this NetBeans which process IG.
    */
+  @SuppressWarnings("unchecked")
   private Map<FolderType, Map<String, Processor<Element>>> getRegisteredProcessors() {
     final Map<FolderType, Map<String, Processor<Element>>> ret =
             new HashMap<FolderType, Map<String, Processor<Element>>>();

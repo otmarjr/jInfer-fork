@@ -111,6 +111,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
     return result;
   }
   
+  @SuppressWarnings("unchecked")
   private static <T> Processor<T> getProcessor(Class<?> clazz) {
     for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
       if (p.getResultType().equals(clazz)) {

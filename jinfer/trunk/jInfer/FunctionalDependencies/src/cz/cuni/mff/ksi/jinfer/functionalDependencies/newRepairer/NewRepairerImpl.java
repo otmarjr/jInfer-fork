@@ -94,6 +94,12 @@ public class NewRepairerImpl implements Repairer {
       rXMLTree.clearRepairs();
     }
   }
+  
+  private Repair getMinimalRepair() {
+    
+    
+    return null;
+  }
 
   private Collection<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {
     Set<Repair> result = new HashSet<Repair>();

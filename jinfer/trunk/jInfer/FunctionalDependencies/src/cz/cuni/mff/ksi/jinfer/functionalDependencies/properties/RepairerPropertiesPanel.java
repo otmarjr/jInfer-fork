@@ -20,7 +20,9 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairPickerImpl;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
@@ -33,7 +35,9 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
   private static final long serialVersionUID = 123445353L;
   public static final String NAME = "repairer";
   public static final String REPAIRER_PROP = "repairer_prop";
+  public static final String REPAIR_PICKER_PROP = "repair_picker_prop";
   public static final String REPAIRER_DEFAULT = "old_repairer";
+  public static final String REPAIR_PICKER_DEFAULT = RepairPickerImpl.NAME;
 
   /** Creates new form RepairerPropertiesPanel */
   public RepairerPropertiesPanel(final Properties properties) {
@@ -44,13 +48,16 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
   @Override
   public void store() {
     properties.setProperty(REPAIRER_PROP, ((NamedModule) repairer.getSelectedItem()).getName());
+    properties.setProperty(REPAIR_PICKER_PROP, ((NamedModule) repairPicker.getSelectedItem()).getName());
   }
 
   @Override
   public void load() {
     repairer.setModel(new DefaultComboBoxModel(ModuleSelectionHelper.lookupImpls(Repairer.class).toArray()));
+    repairPicker.setModel(new DefaultComboBoxModel(ModuleSelectionHelper.lookupImpls(RepairPicker.class).toArray()));
     
     repairer.setSelectedItem(ModuleSelectionHelper.lookupImpl(Repairer.class, properties.getProperty(REPAIRER_PROP, REPAIRER_DEFAULT)));
+    repairPicker.setSelectedItem(ModuleSelectionHelper.lookupImpl(RepairPicker.class, properties.getProperty(REPAIR_PICKER_PROP, REPAIR_PICKER_DEFAULT)));
   }
   
   
@@ -69,6 +76,8 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     repairer = new javax.swing.JComboBox();
     jPanel1 = new javax.swing.JPanel();
     jPanel2 = new javax.swing.JPanel();
+    jLabel2 = new javax.swing.JLabel();
+    repairPicker = new javax.swing.JComboBox();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -77,14 +86,17 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-    gridBagConstraints.insets = new java.awt.Insets(2, 10, 2, 10);
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
     repairer.setRenderer(new ProjectPropsComboRenderer(repairer.getRenderer()));
+    repairer.setMinimumSize(new java.awt.Dimension(180, 22));
+    repairer.setPreferredSize(new java.awt.Dimension(180, 22));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.weightx = 0.5;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(repairer, gridBagConstraints);
 
@@ -92,18 +104,19 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 285, Short.MAX_VALUE)
+      .addGap(0, 110, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 100, Short.MAX_VALUE)
+      .addGap(0, 52, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridheight = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weightx = 0.5;
     add(jPanel1, gridBagConstraints);
 
     javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -114,21 +127,42 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 200, Short.MAX_VALUE)
+      .addGap(0, 248, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
+    gridBagConstraints.gridy = 2;
     gridBagConstraints.gridwidth = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
     add(jPanel2, gridBagConstraints);
+
+    jLabel2.setText(org.openide.util.NbBundle.getMessage(RepairerPropertiesPanel.class, "RepairerPropertiesPanel.jLabel2.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel2, gridBagConstraints);
+
+    repairPicker.setRenderer(new ProjectPropsComboRenderer(repairPicker.getRenderer()));
+    repairPicker.setMinimumSize(new java.awt.Dimension(180, 22));
+    repairPicker.setPreferredSize(new java.awt.Dimension(180, 22));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(repairPicker, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
+  private javax.swing.JComboBox repairPicker;
   private javax.swing.JComboBox repairer;
   // End of variables declaration//GEN-END:variables
 }

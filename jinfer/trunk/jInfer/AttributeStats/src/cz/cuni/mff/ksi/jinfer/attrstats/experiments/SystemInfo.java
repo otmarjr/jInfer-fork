@@ -26,7 +26,10 @@ import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
  *
  * @author vektor
  */
-public class SystemInfo {
+public final class SystemInfo {
+
+  private SystemInfo() {
+  }
 
   /** Number of processor cores. */
   private static final int PROCESSOR_CORES = 4;

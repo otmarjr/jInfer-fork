@@ -30,7 +30,7 @@ public class WeightComparator implements Comparator<AttributeMappingId> {
   private final double alpha;
   private final double beta;
 
-  public WeightComparator(AMModel model, double alpha, double beta) {
+  public WeightComparator(final AMModel model, final double alpha, final double beta) {
     this.model = model;
     this.alpha = alpha;
     this.beta = beta;

@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluatin
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * TODO anti Comment!
@@ -49,28 +50,18 @@ public class NaiveRules<T> implements Evaluator<Automaton<T>> {
   public double evaluate(Automaton<T> aut) throws InterruptedException {
     Map<State<T>, Double> units = new HashMap<State<T>, Double>();
 
-    for (State<T> state : aut.getDelta().keySet()) {
-      double unity = 0;
-      for (Step<T> step : aut.getDelta().get(state)) {
-        unity += step.getUseCount();
-      }
-      unity+= state.getFinalCount();
-      units.put(state, unity);
-    }
-    double result = 0;
+    double result = 0.0;
     for (List<T> inputString : inputStrings) {
-      State<T> actual= aut.getInitialState();
+      StepPaths<T> paths = new StepPaths<T>(aut);
       for (T rs : inputString) {
-        Step<T> outStep = aut.getOutStepOnSymbol(actual, rs);
-      //  assert outStep != null;
-        if (outStep == null) {
-          break;
-        }
-        result+= -UniversalCodeForIntegers.log2(outStep.getUseCount() / units.get(actual));
-        actual= outStep.getDestination();
+        paths.suffix(rs);
       }
-      //assert actual.getFinalCount() > 0;
-      result+= -UniversalCodeForIntegers.log2(actual.getFinalCount() / units.get(actual));
+      paths.finalState();
+      assert paths.getPaths().size() > 0;
+      
+      double inter = paths.getMinimumMDL();
+      assert inter >= 0;
+      result+= inter;
     }
     return result;
   }

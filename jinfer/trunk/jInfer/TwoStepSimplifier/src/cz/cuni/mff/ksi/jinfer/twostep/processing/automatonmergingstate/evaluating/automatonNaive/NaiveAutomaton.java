@@ -44,7 +44,7 @@ public class NaiveAutomaton<T> implements Evaluator<Automaton<T>> {
         result+= uic.evaluate(step.getUseCount());
       }
     }
-    result+= uic.evaluate(steps_count) + uic.evaluate(states_count)*steps_count;
+    result+= uic.evaluate(states_count)*steps_count;
     return result;
   }
   

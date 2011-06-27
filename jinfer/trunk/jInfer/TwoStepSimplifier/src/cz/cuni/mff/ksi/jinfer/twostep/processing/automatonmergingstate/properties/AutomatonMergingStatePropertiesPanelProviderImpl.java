@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.AutomatonMergingStateFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class AutomatonMergingStatePropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
+  private static final String MERGING_STATE_AUTOMATON_CONDITION_TESTING = "ConditionTesting";
+  private static final String MERGING_STATE_AUTOMATON_CONDITION_TESTING_DISPLAY = "Condition testers";
   private static final String MERGING_STATE_AUTOMATON_SIMPLIFIER = "AutomatonSimplifier";
   private static final String MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY = "Automaton simplifiers";
   private static final String MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER = "RegexpAutomatonSimplifier";
@@ -72,6 +75,7 @@ public class AutomatonMergingStatePropertiesPanelProviderImpl implements Propert
   @Override
   public List<VirtualCategoryPanel> getSubCategories() {
     final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
+    result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_CONDITION_TESTING, MERGING_STATE_AUTOMATON_CONDITION_TESTING_DISPLAY, ModuleSelectionHelper.lookupImpls(MergeConditionTesterFactory.class)));
     result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_SIMPLIFIER, MERGING_STATE_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupImpls(AutomatonSimplifierFactory.class)));
     result.add(new VirtualCategoryPanel(MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER, MERGING_STATE_REGEXP_AUTOMATON_SIMPLIFIER_DISPLAY, ModuleSelectionHelper.lookupImpls(RegexpAutomatonSimplifierFactory.class)));
     result.add(new VirtualCategoryPanel(MERGING_STATE_AUTOMATON_RENDERER, MERGING_STATE_AUTOMATON_RENDERER_DISPLAY, null));

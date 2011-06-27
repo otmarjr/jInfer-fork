@@ -272,7 +272,7 @@ public class Automaton<T> {
       return realState;
     }
     if (this.nameMap.containsKey(state.getName())) {
-      return this.nameMap.get(state.getName());
+      return getRealState(this.nameMap.get(state.getName()));
     }
     throw new IllegalStateException("Not possible");
   }

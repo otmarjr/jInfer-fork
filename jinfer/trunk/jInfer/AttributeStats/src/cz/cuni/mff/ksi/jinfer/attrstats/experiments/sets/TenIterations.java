@@ -37,10 +37,7 @@ import java.util.List;
  *
  * @author vektor
  */
-public class VariousBetas extends ExperimentSet {
-
-  private static final double[] alphas = new double[] {0.1, 0.5, 1.0};
-  private static final double[] betas = new double[] {0.1, 0.5, 1.0};
+public class TenIterations extends ExperimentSet {
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
@@ -52,12 +49,10 @@ public class VariousBetas extends ExperimentSet {
             new RemoveWorst());
     final InputFile file = new InputFile("C:\\Users\\vektor\\Dropbox\\school\\jInfer\\example-data\\keys\\graph.xml", FileCharacteristics.ARTIFICIAL);
 
-    final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(alphas.length * betas.length);
+    final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (final double alpha : alphas) {
-      for (final double beta : betas) {
-        ret.add(new ExperimentParameters(file, 10, alpha, beta, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
-      }
+    for (int i = 0; i < 10; i++) {
+      ret.add(new ExperimentParameters(file, 10, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
     }
 
     return ret;

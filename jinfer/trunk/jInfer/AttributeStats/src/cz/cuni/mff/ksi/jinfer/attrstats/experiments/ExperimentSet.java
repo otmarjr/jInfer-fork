@@ -41,24 +41,20 @@ public abstract class ExperimentSet {
       return;
     }
 
-    for (int index = startIndex; index < set.size(); index++) {
-      final ExperimentParameters params = set.get(index);
+    final ExperimentParameters params = set.get(startIndex);
 
-      final Experiment e = new Experiment(params);
-      e.addListener(new ExperimentListener() {
+    final Experiment e = new Experiment(params);
+    e.addListener(new ExperimentListener() {
 
-        @Override
-        public void experimentFinished(final Experiment e) {
-          LOG.info(e.getReport());
-          run(startIndex + 1);
-        }
-      });
-      try {
-        e.run();
+      @Override
+      public void experimentFinished(final Experiment e) {
+        LOG.info(e.getCsv());
+        run(startIndex + 1);
       }
-      catch (final InterruptedException ex) {
-
-      }
+    });
+    try {
+      e.run();
+    } catch (final InterruptedException ex) {
     }
   }
 

@@ -33,13 +33,14 @@ public class ExperimentParameters {
   private final int poolSize;
   private final double alpha;
   private final double beta;
+  private final Double knownOptimum;
   private final ConstructionHeuristic constructionHeuristic;
   private final List<ImprovementHeuristic> improvementHeuristics;
   private final QualityMeasurement measurement;
   private final TerminationCriterion terminationCriterion;
 
   /**
-   * Full constructor.
+   * Almost full constructor.
    *
    * @param file File to run the experiment on.
    * @param poolSize Requested size of the pool from construction heuristic.
@@ -58,10 +59,38 @@ public class ExperimentParameters {
           final List<ImprovementHeuristic> improvementHeuristics,
           final QualityMeasurement measurement,
           final TerminationCriterion terminationCriterion) {
+    this(file, poolSize, alpha, beta, null, constructionHeuristic,
+            improvementHeuristics, measurement, terminationCriterion);
+  }
+
+  /**
+   * Full constructor.
+   *
+   * @param file File to run the experiment on.
+   * @param poolSize Requested size of the pool from construction heuristic.
+   * @param alpha Weight parameter alpha.
+   * @param beta Weight parameter beta.
+   * @param knownOptimum Known optimum or <code>null</code> if unavailable.
+   * @param constructionHeuristic Requested construction heuristic.
+   * @param improvementHeuristics List of requested improvement heuristics. They
+   * will be run in a loop until the termination criterion is met.
+   * @param measurement Something to measure the quality of the solutions.
+   * @param terminationCriterion Termination criterion. Experiment will stop
+   * running as soon as this tells it to.
+   */
+  public ExperimentParameters(final InputFile file, final int poolSize,
+          final double alpha, final double beta,
+          final Double knownOptimum,
+          final ConstructionHeuristic constructionHeuristic,
+          final List<ImprovementHeuristic> improvementHeuristics,
+          final QualityMeasurement measurement,
+          final TerminationCriterion terminationCriterion) {
+    super();
     this.file = file;
     this.poolSize = poolSize;
     this.alpha = alpha;
     this.beta = beta;
+    this.knownOptimum = knownOptimum;
     this.constructionHeuristic = constructionHeuristic;
     this.improvementHeuristics = improvementHeuristics;
     this.measurement = measurement;
@@ -82,6 +111,10 @@ public class ExperimentParameters {
 
   public double getBeta() {
     return beta;
+  }
+
+  public Double getKnownOptimum() {
+    return knownOptimum;
   }
 
   public ConstructionHeuristic getConstructionHeuristic() {

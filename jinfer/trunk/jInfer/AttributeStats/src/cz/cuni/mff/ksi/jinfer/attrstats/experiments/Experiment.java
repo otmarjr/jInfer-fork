@@ -42,13 +42,14 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
+  // TODO vektor Really really have to write output
+
   private final ExperimentParameters params;
 
   /** Time of the experiment start, absolute, in ms. */
   private long startTime;
   /** Total time of the experiment run, in ms. */
   private long totalTime;
-  private Double knownOptimum;
   private Quality highestQuality = Quality.ZERO;
   private Quality finalQuality;
   private Pair<Boolean, String> terminationReason;
@@ -244,10 +245,6 @@ public class Experiment implements IGGeneratorCallback {
   }
 
   public Double getKnownOptimum() {
-    return knownOptimum;
-  }
-
-  public void setKnownOptimum(Double knownOptimum) {
-    this.knownOptimum = knownOptimum;
+    return params.getKnownOptimum();
   }
 }

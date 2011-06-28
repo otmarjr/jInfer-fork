@@ -16,13 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ExperimentListener;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
@@ -44,25 +42,7 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
-  private final InputFile file;
-  /** Number of vertices and edges in the graph representation of this file. */
-  private Pair<Integer, Integer> graphRepresentation;
-
-  private final int poolSize;
-
-  private final double alpha;
-  private final double beta;
-
-  private final ConstructionHeuristic constructionHeuristic;
-  /**
-   * List of improvement heuristics to be run in a loop until the termination
-   * criterion is met.
-   */
-  private final List<ImprovementHeuristic> improvementHeuristics;
-
-  private final QualityMeasurement measurement;
-
-  private final TerminationCriterion terminationCriterion;
+  private final ExperimentParameters params;
 
   /** Time of the experiment start, absolute, in ms. */
   private long startTime;
@@ -81,36 +61,8 @@ public class Experiment implements IGGeneratorCallback {
 
   private final List<ExperimentListener> listeners = new ArrayList<ExperimentListener>();
 
-  /**
-   * Full constructor.
-   *
-   * @param file File to run the experiment on.
-   * @param poolSize Requested size of the pool from construction heuristic.
-   * @param alpha Weight parameter alpha.
-   * @param beta Weight parameter beta.
-   * @param constructionHeuristic Requested construction heuristic.
-   * @param improvementHeuristics List of requested improvement heuristics. They
-   * will be run in a loop until the termination criterion is met.
-   * @param measurement Something to measure the quality of the solutions.
-   * @param terminationCriterion Termination criterion. Experiment will stop
-   * running as soon as this tells it to.
-   */
-  public Experiment(final InputFile file,
-          final int poolSize,
-          final double alpha,
-          final double beta,
-          final ConstructionHeuristic constructionHeuristic,
-          final List<ImprovementHeuristic> improvementHeuristics,
-          final QualityMeasurement measurement,
-          final TerminationCriterion terminationCriterion) {
-    this.file = file;
-    this.poolSize = poolSize;
-    this.alpha = alpha;
-    this.beta = beta;
-    this.constructionHeuristic = constructionHeuristic;
-    this.improvementHeuristics = new ArrayList<ImprovementHeuristic>(improvementHeuristics);
-    this.measurement = measurement;
-    this.terminationCriterion = terminationCriterion;
+  public Experiment(final ExperimentParameters params) {
+    this.params = params;
   }
 
   /**
@@ -122,15 +74,15 @@ public class Experiment implements IGGeneratorCallback {
     final StringBuilder ret = new StringBuilder();
     ret.append(SystemInfo.getInfo())
         .append("\n\nConfiguration:")
-        .append("\nFile name: ").append(file.getName()).append(" (").append(file.getSize()).append(" b)")
-        .append("\nalpha: ").append(alpha).append(", beta: ").append(beta)
+        .append("\nFile name: ").append(params.getFile().getName()).append(" (").append(params.getFile().getSize()).append(" b)")
+        .append("\nalpha: ").append(params.getAlpha()).append(", beta: ").append(params.getBeta())
         .append("\n\nResults:")
         .append("\nStart time: ").append(new Date(startTime))
         .append("\nTotal time spent: ").append(totalTime).append(" ms")
         .append("\nFinal quality: ").append(finalQuality.getText())
         .append("\nHighest quality: ").append(highestQuality.getText())
         .append("\nConstruction phase: ")
-        .append("\n  Algorithm: ").append(constructionHeuristic.getModuleDescription())
+        .append("\n  Algorithm: ").append(params.getConstructionHeuristic().getModuleDescription())
         .append("\n    Time taken: ").append(constructionResult.getTime()).append(" ms")
         .append("\n    Pool size: ").append(constructionResult.getPoolSize())
         .append("\n    Quality: ").append(constructionResult.getQuality().getText())
@@ -139,7 +91,7 @@ public class Experiment implements IGGeneratorCallback {
     int i = 0;
     for (final HeuristicResult result : improvementResults) {
       ret.append("\n  pass #").append(i + 1).append(": ")
-        .append("\n  Algorithm: ").append(improvementHeuristics.get(i % improvementHeuristics.size()).getModuleDescription())
+        .append("\n  Algorithm: ").append(params.getImprovementHeuristics().get(i % params.getImprovementHeuristics().size()).getModuleDescription())
         .append("\n    Time taken: ").append(result.getTime()).append(" ms")
         .append("\n    Time since start: ").append(result.getTotalTime()).append(" ms")
         .append("\n    Pool size: ").append(result.getPoolSize())
@@ -173,7 +125,7 @@ public class Experiment implements IGGeneratorCallback {
     // get IG from the file
     final IGGenerator igg = ModuleSelectionHelper.lookupImpl(IGGenerator.class, "Basic_IG_Generator");
     final Input input = new Input();
-    input.getDocuments().add(file.getFile());
+    input.getDocuments().add(params.getFile().getFile());
     igg.start(input, this);
   }
 
@@ -187,7 +139,7 @@ public class Experiment implements IGGeneratorCallback {
 
     try {
       // run the CH
-      constructionHeuristic.start(Experiment.this, new HeuristicCallback() {
+      params.getConstructionHeuristic().start(Experiment.this, new HeuristicCallback() {
 
         @Override
         public void finished(final List<IdSet> feasiblePool) {
@@ -202,7 +154,7 @@ public class Experiment implements IGGeneratorCallback {
 
           // while not termination criterion
           final long totTime = delta(startTime);
-          final Pair<Boolean, String> termination = terminationCriterion.terminate(Experiment.this, totTime, feasiblePool);
+          final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
             terminationReason = termination;
             notifyFinished(totTime, incumbent.getSecond());
@@ -217,7 +169,7 @@ public class Experiment implements IGGeneratorCallback {
   }
 
   private void runImprovement(final List<IdSet> feasiblePool, final int iteration) {
-    final ImprovementHeuristic current = improvementHeuristics.get(iteration % improvementHeuristics.size());
+    final ImprovementHeuristic current = params.getImprovementHeuristics().get(iteration % params.getImprovementHeuristics().size());
     //   take the time before IH
     final long ihStartTime = time();
     //   run the IH
@@ -238,7 +190,7 @@ public class Experiment implements IGGeneratorCallback {
 
           // while not termination criterion
           final long totTime = delta(startTime);
-          final Pair<Boolean, String> termination = terminationCriterion.terminate(Experiment.this, totTime, feasiblePool);
+          final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
             terminationReason = termination;
             notifyFinished(totTime, incumbent.getSecond());
@@ -273,7 +225,7 @@ public class Experiment implements IGGeneratorCallback {
   // --- GETTERS / SETTERS -----------------------------------------------------
 
   public int getPoolSize() {
-    return poolSize;
+    return params.getPoolSize();
   }
 
   public AMModel getModel() {
@@ -281,14 +233,14 @@ public class Experiment implements IGGeneratorCallback {
   }
 
   public double getAlpha() {
-    return alpha;
+    return params.getAlpha();
   }
   public double getBeta() {
-    return beta;
+    return params.getBeta();
   }
 
   public QualityMeasurement getQualityMeasurement() {
-    return measurement;
+    return params.getMeasurement();
   }
 
   public Double getKnownOptimum() {

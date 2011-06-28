@@ -35,7 +35,7 @@ public final class ExperimentFactory {
   }
 
   public static Experiment createExperiment(final String fileName) {
-    final Experiment e = new Experiment(
+    final ExperimentParameters params = new ExperimentParameters(
             new InputFile(fileName),
             10, 1, 1,
             new Random(),
@@ -43,6 +43,7 @@ public final class ExperimentFactory {
             Arrays.<ImprovementHeuristic>asList(new RandomRemove(0.1), new Mutation(0.1, 1), new RandomRemove(0.4), new Crossover(0.3, 1), new RemoveWorst()),
             new Weight(),
             new TimeIterations(100, 10000));
+    final Experiment e = new Experiment(params);
     e.setKnownOptimum(0.2429268293);
     return e;
   }

@@ -16,9 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.windows.WindowManager;
 
 /**
  *
@@ -28,10 +30,15 @@ import org.openide.util.lookup.ServiceProvider;
 public class RepairPickerUserInteractive implements RepairPicker {
 
   public static final String NAME = "repair_picker_UI";
-  
+
   @Override
-  public Repair getRepair() {
-    throw new UnsupportedOperationException("Not supported yet.");
+  public Repair getRepair(final RXMLTree tree) throws InterruptedException {
+    RepairPickerComponent component = new RepairPickerComponent();
+    component.setModel(tree.getRepairGroups());
+    
+    drawComponentAndWaitForGUI(component);
+    
+    return component.getPickedRepair();
   }
 
   @Override
@@ -48,5 +55,50 @@ public class RepairPickerUserInteractive implements RepairPicker {
   public String getModuleDescription() {
     return "This picker depends on user selection of repair.";
   }
-  
+
+  private static void drawInGUI(final RepairPickerComponent component) {
+    // Call GUI in a special thread. Required by NB.
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        // Pass this as argument so the thread will be able to wake us up.
+        RepairPickerTopComponent.findInstance().drawRepairPicker(component);
+      }
+    });
+  }
+
+  /**
+   * Asynchronously draws component in the AutoEditor tab.
+   *
+   * This function is asynchronous, which means that the drawing is not done
+   * in a thread which this function is executed in. So this function can return
+   * before the drawing is done.
+   *
+   * @param component Component with initialized instance of {@link Visualizer}.
+   */
+  public static void drawComponentAsync(final RepairPickerComponent component) {
+    drawInGUI(component);
+  }
+
+  /**
+   * Draws component in the AutoEditor tab.
+   *
+   * This function is synchronous. It returns when drawn component signals it.
+   *
+   * @param component Component with initialized instance of {@link Visualizer}.
+   * @return Value of <code>true</code> if the component signaled return,
+   * <code>false</code> if waiting was interrupted by another thread.
+   * @throws InterruptedException If the AutoEditor tab was closed.
+   */
+  public static boolean drawComponentAndWaitForGUI(final RepairPickerComponent component) throws InterruptedException {
+    drawComponentAsync(component);
+    component.waitForGuiDone();
+
+    if (component.guiInterrupted()) {
+      throw new InterruptedException();
+    }
+
+    return true;
+  }
 }

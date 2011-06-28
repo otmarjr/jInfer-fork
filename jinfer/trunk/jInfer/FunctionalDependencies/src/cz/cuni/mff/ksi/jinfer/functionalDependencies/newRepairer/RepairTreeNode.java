@@ -14,17 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces;
+package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
  * @author sviro
  */
-public interface RepairPicker extends NamedModule {
+public class RepairTreeNode extends DefaultMutableTreeNode {
+
+  private final Repair repair;
   
-  Repair getRepair(RXMLTree tree) throws InterruptedException;
+  RepairTreeNode(final Repair repair) {
+    this.repair = repair;
+  }
+
+  public Repair getRepair() {
+    return repair;
+  }
 }

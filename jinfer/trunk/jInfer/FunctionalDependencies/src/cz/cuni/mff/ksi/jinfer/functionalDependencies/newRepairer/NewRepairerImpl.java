@@ -17,6 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.PathAnswer;
@@ -24,14 +26,17 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Tuple;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.TupleFactory;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.properties.RepairerPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.RepairFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -67,7 +72,7 @@ public class NewRepairerImpl implements Repairer {
     return;
   }
 
-  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) {
+  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) throws InterruptedException {
     while (rXMLTree.isInconsistent(functionalDependencies)) {
       repairRXMLTree2(rXMLTree, functionalDependencies);
     }
@@ -75,7 +80,7 @@ public class NewRepairerImpl implements Repairer {
     return rXMLTree;
   }
 
-  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies) {
+  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies) throws InterruptedException {
     List<Repair> repairs = new ArrayList<Repair>();
     for (FD fd : functionalDependencies) {
       if (!rXMLTree.isSatisfyingFDThesis(fd)) {
@@ -88,17 +93,17 @@ public class NewRepairerImpl implements Repairer {
     }
 
     if (!repairs.isEmpty()) {
-      Repair minimalRepair = rXMLTree.getMinimalRepairGroup().getMinimalRepair();
+      Repair minimalRepair = getRepairFromPicker(rXMLTree);
       
       rXMLTree.applyRepair(minimalRepair);
       rXMLTree.clearRepairs();
     }
   }
   
-  private Repair getMinimalRepair() {
-    
-    
-    return null;
+  private Repair getRepairFromPicker(final RXMLTree tree) throws InterruptedException {
+    final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
+    RepairPicker repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));
+    return repairPicker.getRepair(tree);
   }
 
   private Collection<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {

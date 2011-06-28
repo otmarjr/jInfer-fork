@@ -52,6 +52,15 @@ public class RepairGroup {
   }
 
   public List<Repair> getRepairs() {
+    if (!repairs.isEmpty()) {
+      Collections.sort(repairs, new Comparator<Repair>() {
+
+        @Override
+        public int compare(Repair o1, Repair o2) {
+          return (int) (o1.getWeight() - o2.getWeight());
+        }
+      });
+    }
     return repairs;
   }
 
@@ -78,15 +87,7 @@ public class RepairGroup {
   
   public Repair getMinimalRepair() {
     if (!repairs.isEmpty()) {
-      Collections.sort(repairs, new Comparator<Repair>() {
-
-        @Override
-        public int compare(Repair o1, Repair o2) {
-          return (int) (o1.getWeight() - o2.getWeight());
-        }
-      });
-      
-      return repairs.get(0);
+      return getRepairs().get(0);
     }
     
     return null;

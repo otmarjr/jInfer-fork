@@ -393,6 +393,15 @@ public class RXMLTree {
   }
 
   public List<RepairGroup> getRepairGroups() {
+    if (!repairGroups.isEmpty()) {
+      Collections.sort(repairGroups, new Comparator<RepairGroup>() {
+
+        @Override
+        public int compare(RepairGroup o1, RepairGroup o2) {
+          return (int) (o1.getWeight() - o2.getWeight());
+        }
+      });
+    }
     return repairGroups;
   }
 
@@ -408,15 +417,8 @@ public class RXMLTree {
 
   public RepairGroup getMinimalRepairGroup() {
     if (!repairGroups.isEmpty()) {
-      Collections.sort(repairGroups, new Comparator<RepairGroup>() {
 
-        @Override
-        public int compare(RepairGroup o1, RepairGroup o2) {
-          return (int) (o1.getWeight() - o2.getWeight());
-        }
-      });
-
-      return repairGroups.get(0);
+      return getRepairGroups().get(0);
     }
 
     return null;

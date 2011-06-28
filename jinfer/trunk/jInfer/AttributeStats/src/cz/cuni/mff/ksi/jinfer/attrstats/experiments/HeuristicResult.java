@@ -27,6 +27,8 @@ public class HeuristicResult {
 
   /** Time taken in this heuristics run in milliseconds. */
   private final long time;
+  /** Time taken since the experiment started in milliseconds. */
+  private final long totalTime;
   /** Size of the solution pool after this heuristic run. */
   private final int poolSize;
   /** Quality of the best (incumbent) solution found in this run. */
@@ -36,17 +38,24 @@ public class HeuristicResult {
    * Full constructor.
    *
    * @param time Time taken in this heuristics run in milliseconds.
+   * @param totalTime Time taken since the experiment started in milliseconds.
    * @param poolSize Size of the solution pool after this heuristic run.
    * @param quality Quality of the best (incumbent) solution found in this run.
    */
-  public HeuristicResult(final long time, final int poolSize, final Quality quality) {
+  public HeuristicResult(final long time, final long totalTime,
+          final int poolSize, final Quality quality) {
     this.time = time;
+    this.totalTime = totalTime;
     this.poolSize = poolSize;
     this.quality = quality;
   }
 
   public long getTime() {
     return time;
+  }
+
+  public long getTotalTime() {
+    return totalTime;
   }
 
   public int getPoolSize() {

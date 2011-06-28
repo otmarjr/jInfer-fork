@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentalUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
@@ -30,6 +33,7 @@ import java.util.List;
  */
 public class TimeIterations implements TerminationCriterion {
 
+  private static final double THRESHOLD = 0.0000001;
   private final int maxIterations;
   private int iterations = 0;
   private final long maxTime;
@@ -50,7 +54,8 @@ public class TimeIterations implements TerminationCriterion {
   private static final Pair<Boolean, String> FALSE = new Pair<Boolean, String>(Boolean.FALSE, null);
 
   @Override
-  public Pair<Boolean, String> terminate(final long time, final List<IdSet> solutions) {
+  public Pair<Boolean, String> terminate(final Experiment experiment,
+        final long time, final List<IdSet> solutions) {
     iterations++;
     if (iterations > maxIterations) {
       return new Pair<Boolean, String>(Boolean.TRUE, "Maximum iterations exceeded.");
@@ -58,6 +63,14 @@ public class TimeIterations implements TerminationCriterion {
     if (time > maxTime) {
       return new Pair<Boolean, String>(Boolean.TRUE, "Maximum time exceeded.");
     }
+
+    final Pair<IdSet, Quality> best = ExperimentalUtils.getBest(experiment, solutions);
+
+    if (experiment.getKnownOptimum() != null
+            && Math.abs(experiment.getKnownOptimum().doubleValue() - best.getSecond().getScalar()) < THRESHOLD) {
+      return new Pair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
+    }
+
     return FALSE;
   }
 

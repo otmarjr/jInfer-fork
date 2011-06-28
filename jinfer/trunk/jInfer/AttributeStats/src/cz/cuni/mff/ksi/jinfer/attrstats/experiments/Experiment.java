@@ -32,7 +32,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +43,7 @@ import java.util.List;
 public class Experiment implements IGGeneratorCallback {
 
   // TODO vektor Known optimum
+  // what does it depend on? Input file, alpha, beta
 
   private final InputFile file;
   /** Number of vertices and edges in the graph representation of this file. */
@@ -69,9 +69,10 @@ public class Experiment implements IGGeneratorCallback {
   private long startTime;
   /** Total time of the experiment run, in ms. */
   private long totalTime;
+  private Double knownOptimum;
   private Quality highestQuality = Quality.ZERO;
   private Quality finalQuality;
-  private Pair<Boolean, String> finalTermination;
+  private Pair<Boolean, String> terminationReason;
   private AMModel model;
 
   /** Result of the construction heuristic run. */
@@ -136,12 +137,13 @@ public class Experiment implements IGGeneratorCallback {
       ret.append("\n  pass #").append(i + 1).append(": ")
         .append("\n  Algorithm: ").append(improvementHeuristics.get(i % improvementHeuristics.size()).getModuleDescription())
         .append("\n    Time taken: ").append(result.getTime()).append(" ms")
+        .append("\n    Time since start: ").append(result.getTotalTime()).append(" ms")
         .append("\n    Pool size: ").append(result.getPoolSize())
         .append("\n    Quality: ").append(result.getQuality().getText());
       i++;
     }
 
-    ret.append("\nTermination reason: ").append(finalTermination.getSecond());
+    ret.append("\nTermination reason: ").append(terminationReason.getSecond());
 
     return ret.toString();
   }
@@ -189,14 +191,14 @@ public class Experiment implements IGGeneratorCallback {
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
-          constructionResult = new HeuristicResult(constructionTime, feasiblePool.size(), incumbent.getSecond());
+          constructionResult = new HeuristicResult(constructionTime, constructionTime, feasiblePool.size(), incumbent.getSecond());
 
           // while not termination criterion
           // TODO vektor If optimum found, stop here
           final long totTime = delta(startTime);
-          final Pair<Boolean, String> termination = terminationCriterion.terminate(totTime, feasiblePool);
+          final Pair<Boolean, String> termination = terminationCriterion.terminate(Experiment.this, totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
-            finalTermination = termination;
+            terminationReason = termination;
             notifyFinished(totTime, incumbent.getSecond());
             return;
           }
@@ -220,18 +222,19 @@ public class Experiment implements IGGeneratorCallback {
         public void finished(final List<IdSet> feasiblePool) {
           //   take the time after IH
           final long improvementTime = delta(ihStartTime);
+          final long totalTime = delta(startTime);
           // get the incumbent solution and its quality
           final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(Experiment.this, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
-          improvementResults.add(new HeuristicResult(improvementTime, feasiblePool.size(), incumbent.getSecond()));
+          improvementResults.add(new HeuristicResult(improvementTime, totalTime, feasiblePool.size(), incumbent.getSecond()));
 
           // while not termination criterion
           final long totTime = delta(startTime);
-          final Pair<Boolean, String> termination = terminationCriterion.terminate(totTime, feasiblePool);
+          final Pair<Boolean, String> termination = terminationCriterion.terminate(Experiment.this, totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
-            finalTermination = termination;
+            terminationReason = termination;
             notifyFinished(totTime, incumbent.getSecond());
             return;
           }
@@ -254,14 +257,14 @@ public class Experiment implements IGGeneratorCallback {
   // --- TIMING ----------------------------------------------------------------
 
   private static long time() {
-    return Calendar.getInstance().getTimeInMillis();
+    return System.nanoTime() / 1000000;
   }
 
   private static long delta(final long from) {
     return time() - from;
   }
 
-  // --- GETTERS ---------------------------------------------------------------
+  // --- GETTERS / SETTERS -----------------------------------------------------
 
   public int getPoolSize() {
     return poolSize;
@@ -280,5 +283,13 @@ public class Experiment implements IGGeneratorCallback {
 
   public QualityMeasurement getQualityMeasurement() {
     return measurement;
+  }
+
+  public Double getKnownOptimum() {
+    return knownOptimum;
+  }
+
+  public void setKnownOptimum(Double knownOptimum) {
+    this.knownOptimum = knownOptimum;
   }
 }

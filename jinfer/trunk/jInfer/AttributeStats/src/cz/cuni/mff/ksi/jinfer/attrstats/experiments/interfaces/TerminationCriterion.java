@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
@@ -33,6 +34,7 @@ public interface TerminationCriterion {
   /**
    * Returns a flag whether to terminate the iterations of the metaheuristic.
    *
+   * @param experiment Experiment in context of which to measure the quality.
    * @param time Total time taken so far.
    * @param solutions The pool solutions that were produced in the last run.
    * @return The first item of the pair is <code>true</code> if the
@@ -40,6 +42,6 @@ public interface TerminationCriterion {
    * is a string describing why the metaheuristics was terminated, in
    * user-friendly language.
    */
-  Pair<Boolean, String> terminate(final long time, final List<IdSet> solutions);
+  Pair<Boolean, String> terminate(final Experiment experiment, final long time, final List<IdSet> solutions);
 
 }

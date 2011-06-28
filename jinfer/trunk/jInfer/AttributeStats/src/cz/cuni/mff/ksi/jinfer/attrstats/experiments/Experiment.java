@@ -42,7 +42,8 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
-  // TODO vektor Really really have to write output
+  // TODO vektor Really really have to write output (actual AMs)
+  // TODO vektor Solve interruptibility
 
   private final ExperimentParameters params;
 
@@ -85,6 +86,7 @@ public class Experiment implements IGGeneratorCallback {
         .append("\nConstruction phase: ")
         .append("\n  Algorithm: ").append(params.getConstructionHeuristic().getModuleDescription())
         .append("\n    Time taken: ").append(constructionResult.getTime()).append(" ms")
+        .append("\n    Time since start: ").append(constructionResult.getTotalTime()).append(" ms")
         .append("\n    Pool size: ").append(constructionResult.getPoolSize())
         .append("\n    Quality: ").append(constructionResult.getQuality().getText())
         .append("\nImprovement phase: ");
@@ -102,6 +104,17 @@ public class Experiment implements IGGeneratorCallback {
 
     ret.append("\nTermination reason: ").append(terminationReason.getSecond());
 
+    return ret.toString();
+  }
+
+  public String getCsv() {
+    final StringBuilder ret = new StringBuilder();
+    // TODO vektor Might be interesting to have #of AMs here too
+    ret.append("Time,Quality\n")
+        .append(constructionResult.getTotalTime()).append(',').append(constructionResult.getQuality().getScalar()).append('\n');
+    for (final HeuristicResult result : improvementResults) {
+      ret.append(result.getTotalTime()).append(',').append(result.getQuality().getScalar()).append('\n');
+    }
     return ret.toString();
   }
 

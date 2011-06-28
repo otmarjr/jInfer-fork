@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import org.openide.util.lookup.ServiceProvider;
@@ -30,8 +31,8 @@ public class RepairPickerImpl implements RepairPicker {
   public static final String NAME = "repair_picker";
   
   @Override
-  public Repair getRepair() {
-    throw new UnsupportedOperationException("Not supported yet.");
+  public Repair getRepair(final RXMLTree tree) {
+    return tree.getMinimalRepairGroup().getMinimalRepair();
   }
 
   @Override

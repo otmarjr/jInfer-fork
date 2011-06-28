@@ -36,14 +36,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Class encapsulating an ID set search experiment. After all the input
+ * parameters are set and information about the system is collected, the ID
+ * set search is run and evaluated.
  *
  * @author vektor
  */
 public class Experiment implements IGGeneratorCallback {
-
-  // TODO vektor Known optimum
-  // what does it depend on? Input file, alpha, beta
 
   private final InputFile file;
   /** Number of vertices and edges in the graph representation of this file. */
@@ -83,13 +82,18 @@ public class Experiment implements IGGeneratorCallback {
   private final List<ExperimentListener> listeners = new ArrayList<ExperimentListener>();
 
   /**
-   * TODO vektor Comment!
+   * Full constructor.
    *
-   * @param fileName
-   * @param constructionHeuristic
-   * @param improvementHeuristics
-   * @param measurement
-   * @param terminationCriterion
+   * @param file File to run the experiment on.
+   * @param poolSize Requested size of the pool from construction heuristic.
+   * @param alpha Weight parameter alpha.
+   * @param beta Weight parameter beta.
+   * @param constructionHeuristic Requested construction heuristic.
+   * @param improvementHeuristics List of requested improvement heuristics. They
+   * will be run in a loop until the termination criterion is met.
+   * @param measurement Something to measure the quality of the solutions.
+   * @param terminationCriterion Termination criterion. Experiment will stop
+   * running as soon as this tells it to.
    */
   public Experiment(final InputFile file,
           final int poolSize,
@@ -149,16 +153,19 @@ public class Experiment implements IGGeneratorCallback {
   }
 
   /**
-   * TODO vektor Comment!
+   * Adds a "experiment finished" listener.
    *
-   * @param el v
+   * @param el Listener which will receive a notification when this experiment
+   * finishes.
    */
   public void addListener(final ExperimentListener el) {
     listeners.add(el);
   }
 
   /**
-   * TODO vektor Comment!
+   * Runs this experiment. This function returns almost immediately, as the run
+   * itself is asynchronous. Use {@link ExperimentListener} to be notified about
+   * the experiment finish.
    *
    * @throws InterruptedException
    */
@@ -194,7 +201,6 @@ public class Experiment implements IGGeneratorCallback {
           constructionResult = new HeuristicResult(constructionTime, constructionTime, feasiblePool.size(), incumbent.getSecond());
 
           // while not termination criterion
-          // TODO vektor If optimum found, stop here
           final long totTime = delta(startTime);
           final Pair<Boolean, String> termination = terminationCriterion.terminate(Experiment.this, totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {

@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.RandomVsFuzzy;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.TimeQuality;
 import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,7 +43,7 @@ public final class ExperimentAction implements ActionListener {
 
       @Override
       public void run() {
-        new RandomVsFuzzy().run(0);
+        new TimeQuality().run(0);
       }
     }, "Experimenting");
   }

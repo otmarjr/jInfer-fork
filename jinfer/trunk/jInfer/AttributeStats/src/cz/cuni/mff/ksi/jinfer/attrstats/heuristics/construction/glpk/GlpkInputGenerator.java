@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;

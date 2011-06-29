@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
@@ -24,7 +24,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.tables.MappingsModel;
 import java.util.Collections;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
-import static cz.cuni.mff.ksi.jinfer.attrstats.Utils.NA;
+import static cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils.NA;
 
 /**
  * Panel displaying one ID set in a table.

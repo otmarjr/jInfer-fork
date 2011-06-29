@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
@@ -160,7 +161,7 @@ public class Experiment implements IGGeneratorCallback {
           // take the time after CH
           final long constructionTime = delta(startTime);
           // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(Experiment.this, feasiblePool);
+          final Pair<IdSet, Quality> incumbent = Utils.getBest(Experiment.this, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
@@ -196,7 +197,7 @@ public class Experiment implements IGGeneratorCallback {
           final long improvementTime = delta(ihStartTime);
           final long totalTime = delta(startTime);
           // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(Experiment.this, feasiblePool);
+          final Pair<IdSet, Quality> incumbent = Utils.getBest(Experiment.this, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }

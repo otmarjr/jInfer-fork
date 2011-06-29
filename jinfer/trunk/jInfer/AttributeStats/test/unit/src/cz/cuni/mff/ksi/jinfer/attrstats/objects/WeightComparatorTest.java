@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.WeightComparator;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import java.util.ArrayList;

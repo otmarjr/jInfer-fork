@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils.*;
+import static cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils.*;
 
 /**
  * @author vektor

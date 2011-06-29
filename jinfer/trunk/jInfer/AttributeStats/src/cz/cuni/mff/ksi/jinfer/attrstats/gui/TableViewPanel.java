@@ -17,9 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
-import cz.cuni.mff.ksi.jinfer.attrstats.Utils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.FlatModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
@@ -37,7 +37,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import org.openide.util.NbPreferences;
-import static cz.cuni.mff.ksi.jinfer.attrstats.Utils.NA;
+import static cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils.NA;
 
 /**
  * A panel containing a table representation of an AM model. There is a

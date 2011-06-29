@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentalUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
@@ -26,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkRunner;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class Mutation implements ImprovementHeuristic {
   public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
     final AMModel model = experiment.getModel();
-    final Pair<IdSet, Quality> incumbent = ExperimentalUtils.getBest(experiment, feasiblePool);
+    final Pair<IdSet, Quality> incumbent = Utils.getBest(experiment, feasiblePool);
 
     final List<AttributeMappingId> mappings = incumbent.getFirst().getMappings();
     final List<AttributeMappingId> fixed = BaseUtils.rndSubset(mappings, ratio);

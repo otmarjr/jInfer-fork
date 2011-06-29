@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.FileCharacteristics;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.InputFile;
 
 /**
- * TODO vektor Comment!
+ * A few constants used throughout the project.
  *
  * @author vektor
  */

@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.WeightedRandomGenerator;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +35,6 @@ import java.util.List;
  * @author vektor
  */
 public class Fuzzy implements ConstructionHeuristic {
-
-  // TODO vektor This is infinitely stupid
-  private static final int MAX_ITERS = 1000;
 
   @Override
   public void start(final Experiment experiment,
@@ -61,8 +59,8 @@ public class Fuzzy implements ConstructionHeuristic {
   private List<AttributeMappingId> createFuzzy(final Experiment experiment,
           final List<AttributeMappingId> candidates, final List<Double> weights) {
     final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();
-    int iterations = 0;
-    while (true) {
+
+    while (!BaseUtils.isEmpty(candidates)) {
       final double[] weights_ = new double[weights.size()];
       for (int i = 0; i < weights.size(); i++) {
         weights_[i] = weights.get(i).doubleValue();
@@ -76,9 +74,11 @@ public class Fuzzy implements ConstructionHeuristic {
         weights.remove(chosen);
       }
 
-      iterations++;
-      if (iterations > MAX_ITERS) {
-        break;
+      for (int i = candidates.size() - 1; i >= 0; i--) {
+        if (!MappingUtils.isIDset(Utils.append(ret, candidates.get(i)), experiment.getModel())) {
+          candidates.remove(i);
+          weights.remove(i);
+        }
       }
     }
     return ret;

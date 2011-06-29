@@ -44,7 +44,7 @@ import java.util.List;
 public class Experiment implements IGGeneratorCallback {
 
   // TODO vektor Really really have to write output (actual AMs)
-  // TODO vektor Solve interruptibility
+  // TODO vektor Solve interruptibility - is it broken now?
   // TODO vektor Get graph representation in here somehow
   // TODO vektor Tell GLPK what the optimum is - add constraint?
 

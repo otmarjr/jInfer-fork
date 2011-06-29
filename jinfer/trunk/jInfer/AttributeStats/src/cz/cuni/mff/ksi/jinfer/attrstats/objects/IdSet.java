@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import java.util.List;
 
 /**

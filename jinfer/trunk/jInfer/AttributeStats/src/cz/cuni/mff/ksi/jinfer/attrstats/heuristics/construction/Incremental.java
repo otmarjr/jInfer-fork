@@ -16,14 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.WeightComparator;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.WeightComparator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

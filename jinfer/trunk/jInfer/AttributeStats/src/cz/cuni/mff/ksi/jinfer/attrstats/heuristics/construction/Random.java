@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;

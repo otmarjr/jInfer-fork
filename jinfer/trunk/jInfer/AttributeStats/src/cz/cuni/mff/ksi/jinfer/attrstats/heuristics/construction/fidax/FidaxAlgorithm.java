@@ -16,12 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.fidax;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.ImageSizeComparator;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.ImageSizeComparator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;

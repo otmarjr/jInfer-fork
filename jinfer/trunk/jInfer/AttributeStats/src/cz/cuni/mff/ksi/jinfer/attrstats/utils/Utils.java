@@ -14,25 +14,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
+package cz.cuni.mff.ksi.jinfer.attrstats.utils;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.text.Format;
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
- * Utility class for experiments.
+ * Attribute statistics module utils.
  *
  * @author vektor
  */
-public final class ExperimentalUtils {
+public final class Utils {
 
-  private ExperimentalUtils() {
+  private Utils() {
 
   }
 
   /**
+   * Formatter that formats numbers to a maximum of 5 fraction digits.
+   */
+  public static final Format FORMAT = NumberFormat.getInstance();
+  static {
+    ((NumberFormat)FORMAT).setMaximumFractionDigits(5);
+  }
+  public static final String NA = "N/A";
+
+  /**
+   * Converts a boolean to {@link String} in form yes/no.
+   *
+   * @param b Boolean to be converted.
+   * @return "yes" or "no".
+   */
+  public static String boolToString(final boolean b) {
+    return b ? "yes" : "no";
+  }
+
+    /**
    * Returns the best solution from the provided pool in the context of the
    * provided experiment.
    *

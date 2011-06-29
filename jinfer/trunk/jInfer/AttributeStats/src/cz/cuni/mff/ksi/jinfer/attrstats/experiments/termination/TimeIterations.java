@@ -17,10 +17,10 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentalUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class TimeIterations implements TerminationCriterion {
     }
 
     if (experiment.getKnownOptimum() != null) {
-      final Pair<IdSet, Quality> best = ExperimentalUtils.getBest(experiment, solutions);
+      final Pair<IdSet, Quality> best = Utils.getBest(experiment, solutions);
       if (Math.abs(experiment.getKnownOptimum().doubleValue() - best.getSecond().getScalar()) < THRESHOLD) {
         return new Pair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
       }

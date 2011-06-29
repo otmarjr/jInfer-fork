@@ -16,14 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
 import org.openide.util.NbPreferences;
 import org.netbeans.api.options.OptionsDisplayer;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.JFCWrapper;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentFactory;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ExperimentListener;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkInputGenerator;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkOutputParser;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkRunner;
@@ -101,10 +98,6 @@ public class StatisticsPanel extends JPanel {
     glpkInput = new javax.swing.JTextArea();
     idSetGlpk = new cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel();
     settings = new javax.swing.JButton();
-    experiment = new javax.swing.JPanel();
-    jButton2 = new javax.swing.JButton();
-    jScrollPane1 = new javax.swing.JScrollPane();
-    jTextArea1 = new javax.swing.JTextArea();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -267,40 +260,6 @@ public class StatisticsPanel extends JPanel {
 
     tabbedPane.addTab("ID set - GLPK", glpk);
 
-    jButton2.setText(org.openide.util.NbBundle.getMessage(StatisticsPanel.class, "StatisticsPanel.jButton2.text")); // NOI18N
-    jButton2.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton2ActionPerformed(evt);
-      }
-    });
-
-    jTextArea1.setColumns(20);
-    jTextArea1.setRows(5);
-    jScrollPane1.setViewportView(jTextArea1);
-
-    javax.swing.GroupLayout experimentLayout = new javax.swing.GroupLayout(experiment);
-    experiment.setLayout(experimentLayout);
-    experimentLayout.setHorizontalGroup(
-      experimentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(experimentLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(experimentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
-          .addComponent(jButton2))
-        .addContainerGap())
-    );
-    experimentLayout.setVerticalGroup(
-      experimentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(experimentLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(jButton2)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
-        .addContainerGap())
-    );
-
-    tabbedPane.addTab("Experiment", experiment); // NOI18N
-
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
@@ -397,30 +356,8 @@ public class StatisticsPanel extends JPanel {
     OptionsDisplayer.getDefault().open("jInfer/AttrStats");
   }//GEN-LAST:event_jButton1ActionPerformed
 
-  private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    runAsync(new Runnable() {
-
-      @Override
-      public void run() {
-        final Experiment e = ExperimentFactory.createExperiment("C:\\Users\\vektor\\Dropbox\\school\\jInfer\\example-data\\keys\\graph.xml");
-        e.addListener(new ExperimentListener() {
-
-          @Override
-          public void experimentFinished(final Experiment e) {
-            jTextArea1.setText(e.getReport());
-          }
-        });
-        try {
-          e.run();
-        } catch (final InterruptedException ex) {
-        }
-      }
-    }, "Running experiment");
-  }//GEN-LAST:event_jButton2ActionPerformed
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel chartView;
-  private javax.swing.JPanel experiment;
   private javax.swing.JButton generateInput;
   private javax.swing.JPanel glpk;
   private javax.swing.JTextArea glpkInput;
@@ -429,10 +366,7 @@ public class StatisticsPanel extends JPanel {
   private cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel idSetArticle;
   private cz.cuni.mff.ksi.jinfer.attrstats.gui.IdSetPanel idSetGlpk;
   private javax.swing.JButton jButton1;
-  private javax.swing.JButton jButton2;
   private javax.swing.JPanel jFreeChartPlaceholder;
-  private javax.swing.JScrollPane jScrollPane1;
-  private javax.swing.JTextArea jTextArea1;
   private javax.swing.JLabel labelPlaceholder;
   private javax.swing.JTree nodeTree;
   private javax.swing.JScrollPane nodeTreePane;

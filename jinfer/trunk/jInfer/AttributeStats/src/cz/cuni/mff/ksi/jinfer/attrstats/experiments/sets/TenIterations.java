@@ -18,8 +18,6 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.AbstractExperimentSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.FileCharacteristics;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.InputFile;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination.TimeIterations;
@@ -28,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.RandomRemove;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.RemoveWorst;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,12 +46,11 @@ public class TenIterations extends AbstractExperimentSet {
             new RandomRemove(0.2),
             new Crossover(0.2, 1),
             new RemoveWorst());
-    final InputFile file = new InputFile("C:\\Users\\vitasek\\Documents\\Soukrome\\test-xml\\graph.xml", FileCharacteristics.ARTIFICIAL);
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
     for (int i = 0; i < 10; i++) {
-      ret.add(new ExperimentParameters(file, 10, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
+      ret.add(new ExperimentParameters(Constants.GRAPH, 10, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
     }
 
     return ret;

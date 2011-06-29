@@ -18,13 +18,12 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentParameters;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.FileCharacteristics;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.InputFile;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.Glpk;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Identity;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,13 +39,12 @@ public class TimeQuality extends AbstractExperimentSet {
    @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
-    final InputFile file = new InputFile("C:\\Users\\vitasek\\Documents\\Soukrome\\test-xml\\graph.xml", FileCharacteristics.ARTIFICIAL);
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
     for (int i = 1; i < 20; i++) {
       for (int j = 0; j < 10; j++) {
-        ret.add(new ExperimentParameters(file, 1, 1, 1, 0.2429268293, new Glpk(i), improvement, new Weight(), new TimeIterations(1)));
+        ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Glpk(i), improvement, new Weight(), new TimeIterations(1)));
       }
     }
 

@@ -62,6 +62,7 @@ class SKString<T> {
     if (getClass() != obj.getClass()) {
       return false;
     }
+    @SuppressWarnings("unchecked")
     final SKString<T> other = (SKString<T>) obj;
     Deque<Step<T>> otherStr = other.getStr();
     if (this.str.size() != otherStr.size()) {

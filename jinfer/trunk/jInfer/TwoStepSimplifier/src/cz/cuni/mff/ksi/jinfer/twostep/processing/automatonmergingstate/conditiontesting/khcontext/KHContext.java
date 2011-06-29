@@ -18,11 +18,12 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -61,107 +62,71 @@ public class KHContext<T> implements MergeConditionTester<T> {
     checkConstraits();
   }
 
-  /**
-   * Set parameters.
-   *
-   * @param k
-   * @param h
-   */
-  public void setKH(final int k, final int h) {
-    this.k = k;
-    this.h = h;
-    checkConstraits();
-  }
+  @Override
+  public List<List<List<State<T>>>> getMergableStates(final Automaton<T> automaton) throws InterruptedException {
+    KHContextHelperAutomaton helperAutomaton = new KHContextHelperAutomaton(false, this.k, this.h);
+    final Map<T, String> conversionMap = new HashMap<T, String>();
+    final Map<String, T> reverseConversionMap = new HashMap<String, T>();
+    AutomatonCloner<T, String> cl = new AutomatonCloner<T, String>();
 
-  private List<List<Step<T>>> findKHContexts(final int _k,
-          final Step<T> step, final Map<State<T>, Set<Step<T>>> reverseDelta) throws InterruptedException {
-    if (Thread.interrupted()) {
-      throw new InterruptedException();
-    }
-    final List<List<Step<T>>> result = new LinkedList<List<Step<T>>>();
-    if (_k == 1) {
-      final List<Step<T>> d = new LinkedList<Step<T>>();
-      d.add(step);
-      result.add(d);
-      return result;
-    }
-    for (Step<T> inStep : reverseDelta.get(step.getSource())) {
-      final List<List<Step<T>>> indu = findKHContexts(_k - 1, inStep, reverseDelta);
-      for (List<Step<T>> context : indu) {
-        context.add(step);
-      }
-      result.addAll(indu);
-    }
-    return result;
-  }
+    cl.convertAutomaton(automaton, helperAutomaton, new AutomatonClonerSymbolConverter<T, String>() {
 
-  private List<List<Step<T>>> findKHContexts(final int _k, final State<T> state, final Map<State<T>, Set<Step<T>>> reverseDelta) throws InterruptedException {
-    final List<List<Step<T>>> result = new ArrayList<List<Step<T>>>();
-    for (Step<T> step : reverseDelta.get(state)) {
-      final List<List<Step<T>>> indu = findKHContexts(_k, step, reverseDelta);
-      result.addAll(indu);
-    }
-    return BaseUtils.<List<Step<T>>>filter(result, new BaseUtils.Predicate<List<Step<T>>>() {
+      private char lastC = 'A';
 
       @Override
-      public boolean apply(final List<Step<T>> argument) {
-        return argument.size() == _k;
+      public String convertSymbol(T symbol) {
+        if (conversionMap.containsKey(symbol)) {
+          return conversionMap.get(symbol);
+        }
+        String nstr = String.valueOf(lastC);
+        conversionMap.put(symbol, nstr);
+        reverseConversionMap.put(nstr, symbol);
+        lastC += 1;
+        return nstr;
       }
     });
-  }
 
-  @Override
-  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) throws InterruptedException {
-    checkConstraits();
-    final Map<State<T>, Set<Step<T>>> reverseDelta = automaton.getReverseDelta();
-    final List<List<List<State<T>>>> alternatives = new ArrayList<List<List<State<T>>>>();
+    helperAutomaton.kcontextMe();
+    Map<String, Set<StateHString>> contextMap = helperAutomaton.getContextMap();
+    
+    List<List<List<State<T>>>> alts = new LinkedList<List<List<State<T>>>>();
+    for (String key : contextMap.keySet()) {
+      if (contextMap.get(key).size() >= 2) {
+        List<List<State<T>>> mergSeq = new LinkedList<List<State<T>>>();
+        Iterator<StateHString> it = contextMap.get(key).iterator();
+        Deque<State<String>> first= it.next().getStates();
+        int j = 0;
+        for (State<String> fS : first) {
+          if (j >= this.h) {
+            List<State<T>> tmp = new LinkedList<State<T>>();
+            tmp.add(cl.getReverseStateConversionMap().get(fS));
+            mergSeq.add(tmp);
+          }
+          j++;
+        }
+        while (it.hasNext()) {
+          StateHString merg = it.next();
+          Iterator<State<String>> mergIt = merg.getStates().iterator();
+          Iterator<List<State<T>>> mergseqIt = mergSeq.iterator();
+          int i = 0;
+          while (mergseqIt.hasNext()) {
+            if (Thread.interrupted()) {
+              throw new InterruptedException();
+            }
+            if (i >= this.h) {
+              mergseqIt.next().add(cl.getReverseStateConversionMap().get(mergIt.next()));
+            } else {
+              mergIt.next();
+            }
+            i++;
+          }
+        }
+        if (!mergSeq.isEmpty()) {
+          alts.add(mergSeq);
+        }
+      }
+    }
+    return alts;
 
-    final List<List<Step<T>>> state1KHContexts = this.findKHContexts(k, state1, reverseDelta);
-    final List<List<Step<T>>> state2KHContexts = this.findKHContexts(k, state2, reverseDelta);
-    for (List<Step<T>> context1 : state1KHContexts) {
-      for (List<Step<T>> context2 : state2KHContexts) {
-        alternatives.addAll(getAlternatives(context1, context2));
-      }
-    }
-    return alternatives;
-  }
-
-  private List<List<List<State<T>>>> getAlternatives(final List<Step<T>> context1, final List<Step<T>> context2) throws InterruptedException {
-    if ((context1.size() != k) || (context2.size() != k)) {
-      return Collections.<List<List<State<T>>>>emptyList();
-    }
-    final List<List<State<T>>> result = new ArrayList<List<State<T>>>();
-
-    boolean totalSame = true;
-    for (int i = 0; i < k; i++) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      if (!context1.get(i).getAcceptSymbol().equals(context2.get(i).getAcceptSymbol())) {
-        return Collections.<List<List<State<T>>>>emptyList();
-      }
-      if ((i >= h) && (!context1.get(i).getSource().equals(context2.get(i).getSource()))) {
-        totalSame = false;
-      }
-      if (i >= h) {
-        final List<State<T>> mergePair = new ArrayList<State<T>>();
-        mergePair.add(context1.get(i).getSource());
-        mergePair.add(context2.get(i).getSource());
-        result.add(mergePair);
-      }
-    }
-    final List<State<T>> mergePair = new ArrayList<State<T>>();
-    if (!context1.get(k - 1).getDestination().equals(context2.get(k - 1).getDestination())) {
-      totalSame = false;
-    }
-    mergePair.add(context1.get(k - 1).getDestination());
-    mergePair.add(context2.get(k - 1).getDestination());
-    result.add(mergePair);
-    if (totalSame) {
-      return Collections.<List<List<State<T>>>>emptyList();
-    }
-    final List<List<List<State<T>>>> r = new ArrayList<List<List<State<T>>>>();
-    r.add(result);
-    return r;
   }
 }

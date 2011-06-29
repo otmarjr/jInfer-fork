@@ -20,17 +20,13 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToS
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomaton;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.StateRemoval;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.StateRemovalRegexpAutomaton;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordering.weighted.WeightedFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -76,14 +72,14 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
    */
   public HeuristicMDL(final MergeConditionTesterFactory mergeConditionTesterFactory, final AutomatonEvaluatorFactory evaluatorFactory,
           final Properties properties) {
-/*    if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
-      final ModuleParameters factoryParam = ((ModuleParameters) mergeConditionTesterFactory);
-      final List<String> parameterNames = factoryParam.getParameterNames();
-
-      for (String parameterName : parameterNames) {
-        final String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
-        factoryParam.setParameter(parameterName, value);
-      }
+    /*    if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
+    final ModuleParameters factoryParam = ((ModuleParameters) mergeConditionTesterFactory);
+    final List<String> parameterNames = factoryParam.getParameterNames();
+    
+    for (String parameterName : parameterNames) {
+    final String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
+    factoryParam.setParameter(parameterName, value);
+    }
     }*/
     this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
     this.evaluator = evaluatorFactory.<T>create();
@@ -106,49 +102,60 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
     solutions.put(this.evaluator.evaluate(inputAutomaton), inputAutomaton);
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
 
-    boolean staggering = true;
+    int stagger = 0;
+    double oldBest = solutions.firstKey();
     do {
-      Automaton<T> actual= solutions.get(solutions.firstKey());
+      Automaton<T> actual = solutions.get(myRandom(solutions.keySet()));
       mergableStates.clear();
-      for (State<T> state1 : actual.getDelta().keySet()) {
-        for (State<T> state2 : actual.getDelta().keySet()) {
-          if (Thread.interrupted()) {
-            throw new InterruptedException();
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      mergableStates.addAll(mergeConditionTester.getMergableStates(actual));
+      if (!mergableStates.isEmpty()) {
+        for (List<List<State<T>>> mergeAlternative : mergableStates) {
+          Automaton<T> newAutomaton = new Automaton<T>(actual);
+          for (List<State<T>> mergeChain : mergeAlternative) {
+            if (Thread.interrupted()) {
+              throw new InterruptedException();
+            }
+            newAutomaton.mergeStates(mergeChain);
           }
-          mergableStates.addAll(mergeConditionTester.getMergableStates(state1, state2, actual));
+          double thisD = this.evaluator.evaluate(newAutomaton);
+          if (thisD < solutions.lastKey()) {
+            solutions.put(thisD, newAutomaton);
+          }
+          if (solutions.size() > 10) {
+            solutions.remove(solutions.lastKey());
+          }
         }
       }
-
-      for (List<List<State<T>>> mergeAlternative : mergableStates) {
-        Automaton<T> newAutomaton = new Automaton<T>(actual);
-        for (List<State<T>> mergeChain : mergeAlternative) {
-          if (Thread.interrupted()) {
-            throw new InterruptedException();
-          }
-          newAutomaton.mergeStates(mergeChain);
-        }
-        double thisD = this.evaluator.evaluate(newAutomaton);
-        if (thisD < solutions.lastKey()) {
-          solutions.put(thisD, newAutomaton);
-        }
-        if (solutions.size() > 10) {
-          solutions.remove(solutions.lastKey());
-        }
+      if (!(solutions.firstKey() < oldBest)) {
+        stagger++;
       }
-    } while (!staggering);
+      oldBest = solutions.firstKey();
+    } while (stagger < 10);
     return solutions.get(solutions.firstKey());
   }
-  
+
   private Double myRandom(Set<Double> srt) {
-    int size = srt.size();
-    int index= (int) Math.floor(Math.random()*size);
-    Iterator<Double> it = srt.iterator();
-    int i = 0;
-    while (it.hasNext()&&i < index) {
-      it.next();
-      i++;
+    List<Double> prd = new LinkedList<Double>();
+    double sum = 0.0;
+    for (Double x : srt) {
+      sum += 1 / x;
+      prd.add(sum);
     }
-    return it.next();
+
+    double rnd = Math.random() * sum;
+    Iterator<Double> prdit = prd.iterator();
+    Iterator<Double> srtit = srt.iterator();
+    while (prdit.hasNext()) {
+      Double x = prdit.next();
+      Double orig = srtit.next();
+      if (x >= rnd) {
+        return orig;
+      }
+    }
+    throw new IllegalStateException("Impossible");
   }
 
   /**

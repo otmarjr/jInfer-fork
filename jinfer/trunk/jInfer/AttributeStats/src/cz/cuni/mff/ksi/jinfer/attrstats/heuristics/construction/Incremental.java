@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.WeightComparator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,9 +54,7 @@ public class Incremental implements ConstructionHeuristic {
     final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();
 
     for (final AttributeMappingId id : candidates) {
-      final List<AttributeMappingId> potential = new ArrayList<AttributeMappingId>(ret);
-      potential.add(id);
-      if (MappingUtils.isIDset(potential, model)) {
+      if (MappingUtils.isIDset(Utils.append(ret, id), model)) {
         ret.add(id);
       }
     }

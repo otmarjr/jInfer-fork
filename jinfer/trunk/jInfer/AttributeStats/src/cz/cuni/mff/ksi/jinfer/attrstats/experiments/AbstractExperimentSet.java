@@ -22,7 +22,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * TODO vektor Comment!
+ * Abstract class representing an experiment set. After it gets the list of
+ * experiments (via {@link ExperimentParameters}) to run, it starts to execute
+ * them sequentially.
  *
  * @author vektor
  */

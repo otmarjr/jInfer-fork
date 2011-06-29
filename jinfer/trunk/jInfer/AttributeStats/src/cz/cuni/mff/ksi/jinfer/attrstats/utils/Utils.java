@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,6 +98,21 @@ public final class Utils {
       }
     }
     return worstSolution;
+  }
+
+  /**
+   * Returns a new list, constructed from the provided list with the provided
+   * element appended at the end.
+   *
+   * @param <T> Type parameter.
+   * @param list List to append to.
+   * @param element Element to be appended.
+   * @return New appended list.
+   */
+  public static <T> List<T> append(final List<T> list, final T element) {
+    final List<T> ret = new ArrayList<T>(list);
+    ret.add(element);
+    return ret;
   }
 
 }

@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Experiment comparing effects of various values of parameters alpha and beta.
  *
  * @author vektor
  */

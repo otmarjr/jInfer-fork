@@ -68,12 +68,12 @@ public class SKStringsDeterministic<T> implements MergeConditionTester<T> {
 
 
   @Override
-  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) throws InterruptedException {
-    List<List<List<State<T>>>> alternatives = this.skstrings.getMergableStates(state1, state2, automaton);
+  public List<List<List<State<T>>>> getMergableStates(final Automaton<T> automaton) throws InterruptedException {
+    List<List<List<State<T>>>> alternatives = this.skstrings.getMergableStates(automaton);
     if (!alternatives.isEmpty()) {
       return alternatives;
     }
-    alternatives = deterministic.getMergableStates(state1, state2, automaton);
+    alternatives = deterministic.getMergableStates(automaton);
     return alternatives;
   }
 }

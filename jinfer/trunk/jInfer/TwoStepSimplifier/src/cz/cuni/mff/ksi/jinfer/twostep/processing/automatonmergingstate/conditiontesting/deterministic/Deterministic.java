@@ -41,7 +41,7 @@ public class Deterministic<T> implements MergeConditionTester<T> {
   }
 
   @Override
-  public List<List<List<State<T>>>> getMergableStates(final State<T> state1, final State<T> state2, final Automaton<T> automaton) throws InterruptedException {
+  public List<List<List<State<T>>>> getMergableStates(final Automaton<T> automaton) throws InterruptedException {
     final List<List<List<State<T>>>> alternatives = new ArrayList<List<List<State<T>>>>();
 
     List<List<State<T>>> ret= new ArrayList<List<State<T>>>();

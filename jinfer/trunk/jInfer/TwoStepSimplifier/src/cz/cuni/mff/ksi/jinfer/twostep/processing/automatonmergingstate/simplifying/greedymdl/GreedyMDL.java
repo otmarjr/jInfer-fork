@@ -97,42 +97,34 @@ public class GreedyMDL<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
-    for (State<T> state1 : inputAutomaton.getDelta().keySet()) {
-      for (State<T> state2 : inputAutomaton.getDelta().keySet()) {
-        if (Thread.interrupted()) {
-          throw new InterruptedException();
+    Automaton<T> oldAut = inputAutomaton;
+    evaluator.setInputStrings(inputStrings);
+    double oldMdl = evaluator.evaluate(oldAut);
+    Automaton<T> newAut = null;
+    double newMdl = Double.MAX_VALUE;
+    boolean stager = false;
+    do {
+      mergableStates.clear();
+      stager= true;
+      newAut = new Automaton<T>(oldAut);
+      mergableStates.addAll(mergeConditionTester.getMergableStates(newAut));
+      if (!mergableStates.isEmpty()) {
+        for (List<List<State<T>>> mergAlt : mergableStates) {
+          for (List<State<T>> mergSeq : mergAlt) {
+            newAut.mergeStates(mergSeq);
+          }
+          newMdl = evaluator.evaluate(newAut);
+          if (newMdl < oldMdl) {
+            oldAut = newAut;
+            oldMdl = newMdl;
+            stager = false;
+          } else {
+            newAut = oldAut;
+          }
         }
-        mergableStates.addAll(mergeConditionTester.getMergableStates(state1, state2, inputAutomaton));      
       }
-    }
-    List<Automaton<T>> newAutomatons = new LinkedList<Automaton<T>>();
-    for (List<List<State<T>>> mergeAlternative : mergableStates) {
-      Automaton<T> newAutomaton = new Automaton<T>(inputAutomaton);
-      for (List<State<T>> mergeChain : mergeAlternative) {
-        if (Thread.interrupted()) {
-          throw new InterruptedException();
-        }
-        newAutomaton.mergeStates(mergeChain);
-      }
-      newAutomatons.add(newAutomaton);
-    }
-    double minD = Double.MAX_VALUE;
-    Automaton<T> minAut = null;
-    this.evaluator.setInputStrings(inputStrings);
-    for (Automaton<T> aut : newAutomatons) {
-      double thisD = this.evaluator.evaluate(aut);
-      if (thisD < minD) {
-        minD = thisD;
-        minAut = aut;
-      }
-    }
-    if (minAut == null) {
-      return inputAutomaton;
-    }
-    if (minD < this.evaluator.evaluate(inputAutomaton)) {
-      return this.simplify(minAut, symbolToString, inputStrings);
-    }
-    return inputAutomaton;
+    } while (!mergableStates.isEmpty() && !stager);
+    return oldAut;
   }
 
   /**

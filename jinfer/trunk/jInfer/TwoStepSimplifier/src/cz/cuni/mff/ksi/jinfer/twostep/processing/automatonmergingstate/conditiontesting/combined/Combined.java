@@ -39,10 +39,10 @@ public class Combined<T> implements MergeConditionTester<T> {
   }
 
   @Override
-  public List<List<List<State<T>>>> getMergableStates(State<T> state1, State<T> state2, Automaton<T> automaton) throws InterruptedException {
+  public List<List<List<State<T>>>> getMergableStates(Automaton<T> automaton) throws InterruptedException {
     List<List<List<State<T>>>> result = new LinkedList<List<List<State<T>>>>();
     for (MergeConditionTester<T> t : this.testers) {
-      result.addAll(t.getMergableStates(state1, state2, automaton));
+      result.addAll(t.getMergableStates(automaton));
     }
     return result;
   }

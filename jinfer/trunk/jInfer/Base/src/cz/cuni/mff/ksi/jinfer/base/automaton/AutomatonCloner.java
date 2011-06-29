@@ -36,7 +36,9 @@ import java.util.Set;
  * @author anti
  */
 public class AutomatonCloner<A, B> {
-
+  private Map<State<A>, State<B>> stateConversionMap;
+  private Map<State<B>, State<A>> reverseStateConversionMap;
+  
   public Automaton<B> convertAutomaton(final Automaton<A> anotherAutomaton, final AutomatonClonerSymbolConverter<A, B> symbolConverter) {
     final Automaton<B> newAutomaton= new Automaton<B>(false);
 
@@ -48,13 +50,15 @@ public class AutomatonCloner<A, B> {
   public void convertAutomaton(final Automaton<A> anotherAutomaton, final Automaton<B> newAutomaton, final AutomatonClonerSymbolConverter<A, B> symbolConverter) {
     /* other states */
     final Map<State<A>, Set<Step<A>>> anotherDelta= anotherAutomaton.getDelta();
-
-    final Map<State<A>, State<B>> stateConversionMap= new LinkedHashMap<State<A>, State<B>>();
+    
+    stateConversionMap = new LinkedHashMap<State<A>, State<B>>();
+    reverseStateConversionMap = new LinkedHashMap<State<B>, State<A>>();
     for (State<A> anotherState : anotherDelta.keySet()) {
       final State<B> newState=new State<B>(
                 anotherState.getFinalCount(), anotherState.getName()
               );
       stateConversionMap.put(anotherState, newState);
+      reverseStateConversionMap.put(newState, anotherState);
       newAutomaton.delta.put(newState, new LinkedHashSet<Step<B>>());
       newAutomaton.reverseDelta.put(newState, new LinkedHashSet<Step<B>>());
       newAutomaton.reverseMergedStates.put(newState, new LinkedHashSet<State<B>>());
@@ -64,6 +68,7 @@ public class AutomatonCloner<A, B> {
                   anotherState2.getFinalCount(), anotherState2.getName()
                 );
         stateConversionMap.put(anotherState2, newState2);
+        reverseStateConversionMap.put(newState2, anotherState2);
         newAutomaton.reverseMergedStates.get(newState).add(newState2);
       }
     }
@@ -98,4 +103,14 @@ public class AutomatonCloner<A, B> {
     newAutomaton.initialState= stateConversionMap.get(anotherAutomaton.getInitialState());
     newAutomaton.newStateName= anotherAutomaton.getNewStateName();
   }
+
+  public Map<State<B>, State<A>> getReverseStateConversionMap() {
+    return reverseStateConversionMap;
+  }
+
+  public Map<State<A>, State<B>> getStateConversionMap() {
+    return stateConversionMap;
+  }
+  
+  
 }

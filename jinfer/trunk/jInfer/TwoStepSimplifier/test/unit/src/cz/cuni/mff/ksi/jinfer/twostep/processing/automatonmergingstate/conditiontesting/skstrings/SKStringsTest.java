@@ -48,18 +48,17 @@ public class SKStringsTest {
     final Automaton<String> automaton = new Automaton<String>(true);
     automaton.buildPTAOnSymbol(Arrays.<String>asList());
     final SKStrings<String> instance = new SKStrings<String>(3, 4, "AND");
-    final List<List<List<State<String>>>> result = instance.getMergableStates(automaton.getInitialState(), automaton.getInitialState(), automaton);
+    final List<List<List<State<String>>>> result = instance.getMergableStates(automaton);
   }
 
   /**
    * Test of getMergableStates method, of class MergeConditionTesterKHContext.
    */
-  @Test(expected = NullPointerException.class)
   public void testGetMergableStatesEmptyAut() throws InterruptedException {
     System.out.println("getMergableStates empty automaton");
     final Automaton<String> automaton = new Automaton<String>(false);
     final SKStrings<String> instance = new SKStrings<String>(2, 0.01, "AND");
-    final List<List<List<State<String>>>> result = instance.getMergableStates(null, null, automaton);
+    final List<List<List<State<String>>>> result = instance.getMergableStates(automaton);
     assertTrue(result.isEmpty());
   }
   
@@ -77,7 +76,7 @@ public class SKStringsTest {
     final SKStrings<String> instance = new SKStrings<String>(k, s, "AND");
     for (State<String> state1 : automaton.getDelta().keySet()) {
       for (State<String> state2 : automaton.getDelta().keySet()) {
-        final List<List<List<State<String>>>> result = instance.getMergableStates(state1, state2, automaton);
+        final List<List<List<State<String>>>> result = instance.getMergableStates(automaton);
         assertTrue(result.isEmpty());
       }
     }
@@ -258,7 +257,7 @@ public class SKStringsTest {
       search = false;
       for (State<String> state1 : automaton.getDelta().keySet()) {
         for (State<String> state2 : automaton.getDelta().keySet()) {
-          result = instance.getMergableStates(state1, state2, automaton);
+          result = instance.getMergableStates(automaton);
           if (!result.isEmpty()) {
             found = true;
             break;

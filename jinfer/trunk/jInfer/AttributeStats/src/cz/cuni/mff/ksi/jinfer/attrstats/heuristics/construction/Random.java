@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ConstructionHeuri
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +48,7 @@ public class Random implements ConstructionHeuristic {
         // pick one from cs at random
         final AttributeMappingId random = cs.get((int)(cs.size() * Math.random()));
         // if possible, add it to the ID set
-        final List<AttributeMappingId> potential = new ArrayList<AttributeMappingId>(idSet);
-        potential.add(random);
-        if (MappingUtils.isIDset(potential, experiment.getModel())) {
+        if (MappingUtils.isIDset(Utils.append(idSet, random), experiment.getModel())) {
           idSet.add(random);
         }
         // remove it from cs

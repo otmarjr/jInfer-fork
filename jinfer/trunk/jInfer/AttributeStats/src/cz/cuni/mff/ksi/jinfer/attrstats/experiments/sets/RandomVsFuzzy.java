@@ -16,13 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.AbstractExperimentSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.FileCharacteristics;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.InputFile;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination.TimeIterations;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.Fuzzy;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.Random;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Mutation;
@@ -33,11 +34,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Simply runs the same experiment ten times.
+ * Experiment comparing Random and Fuzzy construction heuristics.
  *
  * @author vektor
  */
-public class TenIterations extends AbstractExperimentSet {
+public class RandomVsFuzzy extends AbstractExperimentSet {
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
@@ -51,8 +52,12 @@ public class TenIterations extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
       ret.add(new ExperimentParameters(file, 10, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
+    }
+
+    for (int i = 0; i < 3; i++) {
+      ret.add(new ExperimentParameters(file, 10, 1, 1, 0.2429268293, new Fuzzy(), improvement, new Weight(), new TimeIterations(100, 10000)));
     }
 
     return ret;

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.TenIterations;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.RandomVsFuzzy;
 import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,7 +42,7 @@ public final class ExperimentAction implements ActionListener {
 
       @Override
       public void run() {
-        new TenIterations().run(0);
+        new RandomVsFuzzy().run(0);
       }
     }, "Experimenting");
   }

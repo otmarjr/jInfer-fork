@@ -23,14 +23,12 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.DeletableList;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.ImageSizeComparator;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.log4j.Logger;
 
 /**
  * Implementation of the heuristic algorithm for finding ID set as described
@@ -39,8 +37,6 @@ import org.apache.log4j.Logger;
  * @author vektor
  */
 public final class FidaxAlgorithm {
-
-  private static final Logger LOG = Logger.getLogger(FidaxAlgorithm.class);
 
   private FidaxAlgorithm() {
   }
@@ -58,8 +54,6 @@ public final class FidaxAlgorithm {
   public static IdSet findIDSet(final AMModel model,
           final double alpha, final double beta) {
 
-    final long startTime = Calendar.getInstance().getTimeInMillis();
-
     // 1.  M := all AMs - hidden here
 
     // 1.  C := all candidate AMs sorted by decreasing size
@@ -67,8 +61,6 @@ public final class FidaxAlgorithm {
     final List<AttributeMappingId> C = MappingUtils.getCandidates(model);
 
     Collections.sort(C, new ImageSizeComparator(model));
-
-    LOG.info("C: " + C.toString());
 
     // 2.  compute weight for each m in C
 
@@ -96,8 +88,6 @@ public final class FidaxAlgorithm {
     // 6.  end for
 
     }
-
-    LOG.info("C1: " + C1.toString());
 
     // 7.  for m in C do
 
@@ -130,10 +120,6 @@ public final class FidaxAlgorithm {
     // 10. end for
 
     }
-
-    LOG.info("C2: " + C2.getLive().toString());
-
-    LOG.info("Algorithm run took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
 
     // 11. return C
     return new IdSet(C2.getLive());

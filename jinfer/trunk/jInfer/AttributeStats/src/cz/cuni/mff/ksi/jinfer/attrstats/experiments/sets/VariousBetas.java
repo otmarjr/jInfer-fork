@@ -18,8 +18,6 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.AbstractExperimentSet;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.FileCharacteristics;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.InputFile;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination.TimeIterations;
@@ -28,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.RandomRemove;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.RemoveWorst;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,13 +49,12 @@ public class VariousBetas extends AbstractExperimentSet {
             new RandomRemove(0.4),
             new Crossover(0.3, 1),
             new RemoveWorst());
-    final InputFile file = new InputFile("C:\\Users\\vektor\\Dropbox\\school\\jInfer\\example-data\\keys\\graph.xml", FileCharacteristics.ARTIFICIAL);
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(alphas.length * betas.length);
 
     for (final double alpha : alphas) {
       for (final double beta : betas) {
-        ret.add(new ExperimentParameters(file, 10, alpha, beta, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
+        ret.add(new ExperimentParameters(Constants.GRAPH, 10, alpha, beta, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
       }
     }
 

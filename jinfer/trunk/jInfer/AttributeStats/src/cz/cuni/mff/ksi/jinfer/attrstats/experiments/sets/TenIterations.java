@@ -42,12 +42,12 @@ public class TenIterations extends ExperimentSet {
   @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
-            new RandomRemove(0.1),
+            new RandomRemove(0.2),
             new Mutation(0.1, 1),
-            new RandomRemove(0.4),
-            new Crossover(0.3, 1),
+            new RandomRemove(0.2),
+            new Crossover(0.2, 1),
             new RemoveWorst());
-    final InputFile file = new InputFile("C:\\Users\\vektor\\Dropbox\\school\\jInfer\\example-data\\keys\\graph.xml", FileCharacteristics.ARTIFICIAL);
+    final InputFile file = new InputFile("C:\\Users\\vitasek\\Documents\\Soukrome\\test-xml\\graph.xml", FileCharacteristics.ARTIFICIAL);
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 

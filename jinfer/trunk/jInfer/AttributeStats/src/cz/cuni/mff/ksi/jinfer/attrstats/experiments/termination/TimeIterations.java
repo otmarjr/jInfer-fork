@@ -27,7 +27,8 @@ import java.util.List;
 /**
  * An implementation of the {@link TerminationCriterion} based on the total time
  * spent running the metaheuristics and the number of iterations - improvement
- * heuristics runs.
+ * heuristics runs. Also, as soon as known optimum is reached, this criterion
+ * is met.
  *
  * @author vektor
  */
@@ -64,11 +65,11 @@ public class TimeIterations implements TerminationCriterion {
       return new Pair<Boolean, String>(Boolean.TRUE, "Maximum time exceeded.");
     }
 
-    final Pair<IdSet, Quality> best = ExperimentalUtils.getBest(experiment, solutions);
-
-    if (experiment.getKnownOptimum() != null
-            && Math.abs(experiment.getKnownOptimum().doubleValue() - best.getSecond().getScalar()) < THRESHOLD) {
-      return new Pair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
+    if (experiment.getKnownOptimum() != null) {
+      final Pair<IdSet, Quality> best = ExperimentalUtils.getBest(experiment, solutions);
+      if (Math.abs(experiment.getKnownOptimum().doubleValue() - best.getSecond().getScalar()) < THRESHOLD) {
+        return new Pair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
+      }
     }
 
     return FALSE;

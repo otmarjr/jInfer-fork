@@ -110,10 +110,10 @@ public class Experiment implements IGGeneratorCallback {
   public String getCsv() {
     final StringBuilder ret = new StringBuilder();
     // TODO vektor Might be interesting to have #of AMs here too
-    ret.append("Time,Quality\n")
-        .append(constructionResult.getTotalTime()).append(',').append(constructionResult.getQuality().getScalar()).append('\n');
+    ret.append("\nTime,Quality\n")
+        .append(constructionResult.getTotalTime()).append(',').append(constructionResult.getQuality().getScalar());
     for (final HeuristicResult result : improvementResults) {
-      ret.append(result.getTotalTime()).append(',').append(result.getQuality().getScalar()).append('\n');
+      ret.append('\n').append(result.getTotalTime()).append(',').append(result.getQuality().getScalar());
     }
     return ret.toString();
   }

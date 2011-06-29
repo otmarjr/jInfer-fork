@@ -30,6 +30,8 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractExperimentSet {
 
+  // TODO vektor Absolutely neccessary - change callbacks to waiting! Otherwise the stack grows too high!
+
   protected abstract List<ExperimentParameters> getExperiments();
 
   private List<ExperimentParameters> cache = null;

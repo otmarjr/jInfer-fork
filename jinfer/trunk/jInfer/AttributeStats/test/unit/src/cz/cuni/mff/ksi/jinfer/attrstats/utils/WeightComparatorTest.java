@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.attrstats.objects;
+package cz.cuni.mff.ksi.jinfer.attrstats.utils;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.WeightComparator;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;

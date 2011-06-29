@@ -20,7 +20,7 @@ import java.util.Random;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.TestUtils;
 import java.util.ArrayList;
-import cz.cuni.mff.ksi.jinfer.attrstats.MappingUtilsTest;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtilsTest;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;

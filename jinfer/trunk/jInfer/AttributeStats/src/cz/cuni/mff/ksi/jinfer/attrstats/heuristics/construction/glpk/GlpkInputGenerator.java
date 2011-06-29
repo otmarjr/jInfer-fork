@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +45,7 @@ public final class GlpkInputGenerator {
 
   private static final Logger LOG = Logger.getLogger(GlpkInputGenerator.class);
 
-  private static final String TEMPLATE = "/cz/cuni/mff/ksi/jinfer/attrstats/heuristics/construction/glpk/GlpkInputTemplate.txt";
+  private static final String TEMPLATE = "cz/cuni/mff/ksi/jinfer/attrstats/heuristics/construction/glpk/GlpkInputTemplate.txt";
   private static final String CONSTRAINT = "s.t. c{index}: x['{mapping1}'] + x['{mapping2}'] <= 1;";
   private static final String FIX_TO_1 = "s.t. f{index}: x['{mapping}'] = 1;";
   private static final String FIX_TO_0 = "s.t. f{index}: x['{mapping}'] = 0;";
@@ -137,7 +138,9 @@ public final class GlpkInputGenerator {
 
       LOG.info("Graph interpretation: " + candidates.size() + " vertices, "
               + constraints.getSecond().intValue() + " edges.");
-      LOG.info("Fixed to 1: " + fixed.size());
+      if (!BaseUtils.isEmpty(fixed)) {
+        LOG.info("Fixed to 1: " + fixed.size());
+      }
       LOG.info("Input generator took "
               + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
       LOG.info("Input length is " + result.length() + " chars.");

@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractExperimentSet {
 
-  // TODO vektor Absolutely neccessary - change callbacks to waiting! Otherwise the stack grows too high!
+  private final Object monitor = new Object();
 
   protected abstract List<ExperimentParameters> getExperiments();
 
@@ -38,27 +38,36 @@ public abstract class AbstractExperimentSet {
 
   private static final Logger LOG = Logger.getLogger(AbstractExperimentSet.class);
 
-  public void run(final int startIndex) {
-    final List<ExperimentParameters> set = getCached();
+  public void run() throws InterruptedException {
+    for (final ExperimentParameters params : getCached()) {
+      final Experiment e = new Experiment(params);
+      e.addListener(new ExperimentListener() {
 
-    if (startIndex >= set.size()) {
-      return;
-    }
+        @Override
+        public void experimentFinished(final Experiment e) {
+          LOG.info(e.getCsv());
+          synchronized (monitor) {
+            monitor.notifyAll();
+          }
+        }
+      });
+      final Thread t = new Thread(new Runnable() {
 
-    final ExperimentParameters params = set.get(startIndex);
+        @Override
+        public void run() {
+          try {
+            e.run();
+          }
+          catch (final InterruptedException ex) {
 
-    final Experiment e = new Experiment(params);
-    e.addListener(new ExperimentListener() {
+          }
+        }
+      });
+      t.start();
 
-      @Override
-      public void experimentFinished(final Experiment e) {
-        LOG.info(e.getCsv());
-        run(startIndex + 1);
+      synchronized (monitor) {
+        monitor.wait();
       }
-    });
-    try {
-      e.run();
-    } catch (final InterruptedException ex) {
     }
   }
 

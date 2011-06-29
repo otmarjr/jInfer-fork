@@ -26,13 +26,13 @@ import org.apache.log4j.Logger;
  *
  * @author vektor
  */
-public abstract class ExperimentSet {
+public abstract class AbstractExperimentSet {
 
   protected abstract List<ExperimentParameters> getExperiments();
 
   private List<ExperimentParameters> cache = null;
 
-  private static final Logger LOG = Logger.getLogger(ExperimentSet.class);
+  private static final Logger LOG = Logger.getLogger(AbstractExperimentSet.class);
 
   public void run(final int startIndex) {
     final List<ExperimentParameters> set = getCached();

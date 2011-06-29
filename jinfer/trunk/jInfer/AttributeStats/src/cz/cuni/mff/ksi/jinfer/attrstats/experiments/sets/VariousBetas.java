@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentParameters;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.FileCharacteristics;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.InputFile;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
@@ -37,7 +37,7 @@ import java.util.List;
  *
  * @author vektor
  */
-public class VariousBetas extends ExperimentSet {
+public class VariousBetas extends AbstractExperimentSet {
 
   private static final double[] alphas = new double[] {0.1, 0.5, 1.0};
   private static final double[] betas = new double[] {0.1, 0.5, 1.0};

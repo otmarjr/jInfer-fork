@@ -28,7 +28,8 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback
 public class Fuzzy implements ConstructionHeuristic {
 
   @Override
-  public void start(Experiment experiment, HeuristicCallback callback) throws InterruptedException {
+  public void start(final Experiment experiment,
+        final HeuristicCallback callback) throws InterruptedException {
     // TODO vektor Do it like following: weigh all AMs, pick at weighted random
     throw new UnsupportedOperationException("Not supported yet.");
   }

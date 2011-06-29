@@ -46,6 +46,7 @@ public class Experiment implements IGGeneratorCallback {
   // TODO vektor Really really have to write output (actual AMs)
   // TODO vektor Solve interruptibility
   // TODO vektor Get graph representation in here somehow
+  // TODO vektor Tell GLPK what the optimum is - add constraint?
 
   private final ExperimentParameters params;
 

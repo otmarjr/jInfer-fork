@@ -40,6 +40,17 @@ public class TimeIterations implements TerminationCriterion {
   private final long maxTime;
 
   /**
+   * Constructor. Initializes this criterion to run at most the specified
+   * number of iterations, max time is set to "infinity".
+   *
+   * @param maxIterations Maximum number of iterations - improvement
+   * heuristics runs allowed.
+   */
+  public TimeIterations(final int maxIterations) {
+    this(maxIterations, Long.MAX_VALUE);
+  }
+
+  /**
    * Full constructor. Initializes this criterion to run at most the specified
    * time or number of iterations, whichever comes first.
    *

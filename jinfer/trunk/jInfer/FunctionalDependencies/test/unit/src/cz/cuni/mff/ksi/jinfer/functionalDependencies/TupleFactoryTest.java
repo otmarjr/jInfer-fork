@@ -72,7 +72,7 @@ public class TupleFactoryTest {
   @Test
   public void testGetTuplePairs() {
     List<Tuple> tuples = new ArrayList<Tuple>();
-    tuples.add(new Tuple(0));
+    tuples.add(new Tuple(null, 0));
     
     
     List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
@@ -86,7 +86,7 @@ public class TupleFactoryTest {
   @Test
   public void testGetTuplePairs2() {
     List<Tuple> tuples = new ArrayList<Tuple>();
-    Tuple tuple1 = new Tuple(0);
+    Tuple tuple1 = new Tuple(null, 0);
     
     tuples.add(tuple1);
     tuples.add(tuple1);
@@ -103,9 +103,9 @@ public class TupleFactoryTest {
   @Test
   public void testGetTuplePairs3() {
     List<Tuple> tuples = new ArrayList<Tuple>();
-    Tuple tuple1 = new Tuple(0);
-    Tuple tuple2 = new Tuple(1);
-    Tuple tuple3 = new Tuple(2);
+    Tuple tuple1 = new Tuple(null, 0);
+    Tuple tuple2 = new Tuple(null, 1);
+    Tuple tuple3 = new Tuple(null, 2);
     
     tuples.add(tuple1);
     tuples.add(tuple2);
@@ -147,7 +147,7 @@ public class TupleFactoryTest {
     document.appendChild(element);
     
     RXMLTree tree = new RXMLTree(document);
-    Tuple tuple = new Tuple(0);
+    Tuple tuple = new Tuple(null, 0);
     SidePaths sidePaths = null;
     List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
   }
@@ -164,7 +164,7 @@ public class TupleFactoryTest {
     document.appendChild(element);
     
     RXMLTree tree = new RXMLTree(document);
-    Tuple tuple = new Tuple(0);
+    Tuple tuple = new Tuple(null, 0);
     SidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
     List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
     List<PathAnswer> expected = new ArrayList<PathAnswer>();
@@ -182,7 +182,7 @@ public class TupleFactoryTest {
     document.appendChild(element);
     
     RXMLTree tree = new RXMLTree(document);
-    Tuple tuple = new Tuple(0);
+    Tuple tuple = new Tuple(null, 0);
     tree.getNodesMap().put(element, new NodeAttribute());
     tree.getNodesMap().get(element).addToTuple(tuple);
     TleftSidePaths sidePaths = new ObjectFactory().createTleftSidePaths();

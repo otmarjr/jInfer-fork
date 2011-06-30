@@ -69,4 +69,8 @@ public class NodeAttribute {
   void setReliability(boolean reliability) {
     this.reliability = reliability;
   }
+
+  void removeFromAllTuples() {
+    tuples.clear();
+  }
 }

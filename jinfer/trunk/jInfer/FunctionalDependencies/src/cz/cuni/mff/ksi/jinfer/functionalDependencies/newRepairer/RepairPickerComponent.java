@@ -20,6 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.util.List;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -27,16 +29,20 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class RepairPickerComponent extends javax.swing.JPanel {
 
+  private static final Logger LOG = Logger.getLogger(RepairPickerComponent.class);
   private static final long serialVersionUID = 764324657L;
   private final Object monitor;
   private boolean interrupted = false;
   private RepairGroupModel model;
+  private XMLShower xmlShower;
+  private boolean isGUIDone = false;
 
   /** Creates new form NewJPanel */
   public RepairPickerComponent() {
     super();
     monitor = new Object();
     initComponents();
+    xmlShower = new XMLShower();
   }
 
   /** This method is called from within the constructor to
@@ -52,8 +58,7 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     repairTreePane = new javax.swing.JSplitPane();
     jScrollPane1 = new javax.swing.JScrollPane();
     repairTree = new javax.swing.JTree();
-    jScrollPane2 = new javax.swing.JScrollPane();
-    jPanel1 = new javax.swing.JPanel();
+    xmlTreePlaceholder = new javax.swing.JPanel();
     jLabel1 = new javax.swing.JLabel();
     jButton1 = new javax.swing.JButton();
 
@@ -61,17 +66,25 @@ public class RepairPickerComponent extends javax.swing.JPanel {
 
     repairTreePane.setDividerLocation(200);
 
+    repairTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     repairTree.setRootVisible(false);
+    repairTree.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+      public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+        repairTreeValueChanged(evt);
+      }
+    });
     jScrollPane1.setViewportView(repairTree);
 
     repairTreePane.setLeftComponent(jScrollPane1);
 
+    xmlTreePlaceholder.setLayout(new java.awt.GridBagLayout());
+
+    jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 32));
+    jLabel1.setForeground(new java.awt.Color(105, 105, 105));
     jLabel1.setText(org.openide.util.NbBundle.getMessage(RepairPickerComponent.class, "RepairPickerComponent.jLabel1.text")); // NOI18N
-    jPanel1.add(jLabel1);
+    xmlTreePlaceholder.add(jLabel1, new java.awt.GridBagConstraints());
 
-    jScrollPane2.setViewportView(jPanel1);
-
-    repairTreePane.setRightComponent(jScrollPane2);
+    repairTreePane.setRightComponent(xmlTreePlaceholder);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -80,6 +93,12 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     add(repairTreePane, gridBagConstraints);
 
     jButton1.setText(org.openide.util.NbBundle.getMessage(RepairPickerComponent.class, "RepairPickerComponent.jButton1.text")); // NOI18N
+    jButton1.setEnabled(false);
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1ActionPerformed(evt);
+      }
+    });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
@@ -87,14 +106,38 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jButton1, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
+
+  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    guiDone();
+    jButton1.setEnabled(isGUIDone);
+  }//GEN-LAST:event_jButton1ActionPerformed
+
+  private void repairTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_repairTreeValueChanged
+    if (isGUIDone || repairTree.getSelectionCount() == 0 || !(repairTree.getLastSelectedPathComponent() instanceof RepairTreeNode)) {
+      repairTreePane.setRightComponent(xmlTreePlaceholder);
+      jButton1.setEnabled(false);
+      return;
+    }
+    
+    RepairTreeNode repairTreeNode = (RepairTreeNode) repairTree.getLastSelectedPathComponent();
+    try {
+      xmlShower.setContent(repairTreeNode.getRepair().getContentAfterRepair());
+    } catch (InterruptedException ex) {
+      LOG.error(ex);
+      guiInterrupt();
+      return;
+    }
+    repairTreePane.setRightComponent(xmlShower);
+    jButton1.setEnabled(true);
+  }//GEN-LAST:event_repairTreeValueChanged
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;
   private javax.swing.JLabel jLabel1;
-  private javax.swing.JPanel jPanel1;
   private javax.swing.JScrollPane jScrollPane1;
-  private javax.swing.JScrollPane jScrollPane2;
   private javax.swing.JTree repairTree;
   private javax.swing.JSplitPane repairTreePane;
+  private javax.swing.JPanel xmlTreePlaceholder;
   // End of variables declaration//GEN-END:variables
 
   /**
@@ -114,6 +157,7 @@ public class RepairPickerComponent extends javax.swing.JPanel {
    * <code>waitForGUIDone()</code> on this instance.
    */
   public void guiDone() {
+    isGUIDone = true;
     synchronized (monitor) {
       monitor.notifyAll();
     }
@@ -125,6 +169,7 @@ public class RepairPickerComponent extends javax.swing.JPanel {
    */
   public void guiInterrupt() {
     interrupted = true;
+    jButton1.setEnabled(false);
     guiDone();
   }
 
@@ -136,7 +181,12 @@ public class RepairPickerComponent extends javax.swing.JPanel {
   }
 
   public Repair getPickedRepair() {
-    throw new UnsupportedOperationException("Not yet implemented");
+    Object lastPathComponent = repairTree.getLastSelectedPathComponent();
+    if (lastPathComponent instanceof RepairTreeNode) {
+      return ((RepairTreeNode) lastPathComponent).getRepair();
+    }
+    
+    return null;
   }
 
   public void setModel(final List<RepairGroup> repairGroups) {

@@ -54,10 +54,11 @@ public class RepairedXMLGeneratorImpl implements RepairedXMLGenerator {
   private String transformTreeToXML(final RXMLTree tree) {
     try {
       TransformerFactory transfac = TransformerFactory.newInstance();
+      transfac.setAttribute("indent-number", new Integer(4));
       Transformer trans = transfac.newTransformer();
       trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
       trans.setOutputProperty(OutputKeys.INDENT, "yes");
-
+      
       //create string from xml tree
       StringWriter sw = new StringWriter();
       StreamResult result = new StreamResult(sw);

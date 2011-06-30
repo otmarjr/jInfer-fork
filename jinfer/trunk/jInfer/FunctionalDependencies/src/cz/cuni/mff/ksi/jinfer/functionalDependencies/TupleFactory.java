@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TrightSidePaths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,30 @@ import org.w3c.dom.Text;
  * @author sviro
  */
 public final class TupleFactory {
+
+  public static boolean isTuple(RXMLTree tree, Tuple tuple) {
+    List<Tuple> allTuples = tree.getTuples();
+    
+    for (Tuple tuple1 : allTuples) {
+      if (!tuple1.equals(tuple) && tuple1.contains(tuple)) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+
+  public static void removeTuple(RXMLTree tree, Tuple tuple) {
+    unmarkNodesFromTuple(tree, tuple);
+    
+    tree.removeTuple(tuple);
+  }
+
+  public static void removeTuples(RXMLTree tree, Set<Tuple> tuplesToRemove) {
+    for (Tuple tuple : tuplesToRemove) {
+      removeTuple(tree, tuple);
+    }
+  }
 
   private TupleFactory() {
   }
@@ -150,7 +175,7 @@ public final class TupleFactory {
   }
 
   private static Tuple markNodesToTuple(final RXMLTree tree, final Node cuttingNode, final int tupleId, final Tuple actualTuple, final List<Node> tupleCut) {
-    Tuple result = new Tuple(tupleId);
+    Tuple result = new Tuple(tree, tupleId);
 
     traverseTree(tree.getDocument().getDocumentElement(), tree.getNodesMap(), cuttingNode, actualTuple, result, tupleCut, false);
 
@@ -159,6 +184,15 @@ public final class TupleFactory {
 
   private static void unmarkNodesFromTuple(RXMLTree tree, Tuple lastTuple) {
     traverseTree(tree.getDocument().getDocumentElement(), tree.getNodesMap(), null, null, lastTuple, null, true);
+  }
+  
+  public static Collection<Tuple> unmarkNodeFromAllTuples(RXMLTree tree, Node node) {
+    NodeAttribute nodeAttribute = tree.getNodesMap().get(node);
+    Set<Tuple> result = new HashSet<Tuple>(nodeAttribute.getTuples());
+    
+    nodeAttribute.removeFromAllTuples();
+    
+    return result;
   }
 
   /**

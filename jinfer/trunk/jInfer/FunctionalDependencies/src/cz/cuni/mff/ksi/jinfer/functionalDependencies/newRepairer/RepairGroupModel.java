@@ -43,9 +43,8 @@ public class RepairGroupModel {
     if (tree == null) {
       tree = new DefaultMutableTreeNode("");
       
-      int i = 0;
       for (RepairGroup repairGroup : repairGroups) {
-        final DefaultMutableTreeNode repairGroupNode = new DefaultMutableTreeNode("repairGroup" + i++);
+        final DefaultMutableTreeNode repairGroupNode = new DefaultMutableTreeNode("repairGroup - " + repairGroup.getWeight());
         
         for (Repair repair : repairGroup.getRepairs()) {
           final RepairTreeNode repairNode = new RepairTreeNode(repair);

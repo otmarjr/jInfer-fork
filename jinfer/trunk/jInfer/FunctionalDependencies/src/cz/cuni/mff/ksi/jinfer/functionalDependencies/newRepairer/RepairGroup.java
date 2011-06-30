@@ -76,7 +76,7 @@ public class RepairGroup {
   }
 
   private double computeWeight() {
-    double result = 0;
+    double result = 0d;
     
     for (Repair repair : repairs) {
       result += repair.getWeight();

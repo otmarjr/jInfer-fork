@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
  * Result of running a heuristics.
@@ -31,6 +32,8 @@ public class HeuristicResult {
   private final long totalTime;
   /** Size of the solution pool after this heuristic run. */
   private final int poolSize;
+  /** Best (incumbent) solution in the pool after this heuristic run. */
+  private final IdSet incumbent;
   /** Quality of the best (incumbent) solution found in this run. */
   private final Quality quality;
 
@@ -40,13 +43,15 @@ public class HeuristicResult {
    * @param time Time taken in this heuristics run in milliseconds.
    * @param totalTime Time taken since the experiment started in milliseconds.
    * @param poolSize Size of the solution pool after this heuristic run.
+   * @param incumbent Best (incumbent) solution in the pool after this heuristic run.
    * @param quality Quality of the best (incumbent) solution found in this run.
    */
   public HeuristicResult(final long time, final long totalTime,
-          final int poolSize, final Quality quality) {
+          final int poolSize, final IdSet incumbent, final Quality quality) {
     this.time = time;
     this.totalTime = totalTime;
     this.poolSize = poolSize;
+    this.incumbent = incumbent;
     this.quality = quality;
   }
 
@@ -60,6 +65,10 @@ public class HeuristicResult {
 
   public int getPoolSize() {
     return poolSize;
+  }
+
+  public IdSet getIncumbent() {
+    return incumbent;
   }
 
   public Quality getQuality() {

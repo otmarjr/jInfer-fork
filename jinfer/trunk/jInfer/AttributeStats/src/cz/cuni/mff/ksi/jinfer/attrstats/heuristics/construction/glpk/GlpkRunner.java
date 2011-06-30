@@ -76,7 +76,10 @@ public final class GlpkRunner {
           throws InterruptedException {
     final File input = new File(INPUT);
     final File output = new File(OUTPUT);
-    // TODO vektor Flush both files
+
+    input.delete();
+    output.delete();
+
     PrintWriter pw = null;
     final StringBuilder ret = new StringBuilder();
     try {

@@ -42,9 +42,27 @@ public final class GlpkOutputParser {
    * @param output String representation of the GLPK result. Basically the file
    * that GLPK produces loaded into a string.
    * @param model Model to which all the AMs belong.
+   *
    * @return List of AMs belonging to the "optimal" ID set.
    */
   public static IdSet getIDSet(final String output, final AMModel model) {
+    return getIDSet(output, model, false);
+  }
+
+  /**
+   * Parses the string representing the GLPK optimization result and returns
+   * a list of attribute mappings belonging to the "optimal" ID set.
+   *
+   * @param output String representation of the GLPK result. Basically the file
+   * that GLPK produces loaded into a string.
+   * @param model Model to which all the AMs belong.
+   * @param isFixed Flag whether there were any fixed variables. If
+   * <code>true</code>, optimum possibly found by GLPK is not an optimal ID set.
+   *
+   * @return List of AMs belonging to the "optimal" ID set.
+   */
+  public static IdSet getIDSet(final String output, final AMModel model,
+          final boolean isFixed) {
     final Set<AttributeMappingId> ret = new HashSet<AttributeMappingId>();
 
     final Scanner s = new Scanner(output);
@@ -67,7 +85,9 @@ public final class GlpkOutputParser {
       }
     }
 
-    return new IdSet(new ArrayList<AttributeMappingId>(ret), output.contains("INTEGER OPTIMAL SOLUTION FOUND"));
+    return new IdSet(
+            new ArrayList<AttributeMappingId>(ret),
+            !isFixed && output.contains("INTEGER OPTIMAL SOLUTION FOUND"));
   }
 
 }

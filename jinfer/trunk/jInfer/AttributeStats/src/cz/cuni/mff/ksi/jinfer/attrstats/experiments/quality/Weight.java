@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
@@ -25,9 +24,6 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**
  * Weight-based implementation of the {@link QualityMeasurement} interface.
- * Quality returned by this measurement is just the weight
- * (see {@link AMModel#weight(AttributeMappingId, double, double) }) of
- * the provided solution ({@link IdSet}).
  *
  * @author vektor
  */
@@ -35,23 +31,10 @@ public class Weight implements QualityMeasurement {
 
   @Override
   public Quality measure(final Experiment experiment, final IdSet solution) {
-    return new Quality() {
-
-      @Override
-      public double getScalar() {
-        return experiment.getModel().weight(solution.getMappings(), experiment.getAlpha(), experiment.getBeta());
-      }
-
-      @Override
-      public boolean isOptimal() {
-        return solution.isOptimal();
-      }
-
-      @Override
-      public String getText() {
-        return getScalar() + " (" + solution.getMappings().size() + " AMs)";
-      }
-    };
+    return new Quality(
+            experiment.getModel().weight(solution.getMappings(), experiment.getAlpha(), experiment.getBeta()),
+            solution.getMappings().size(),
+            solution.isOptimal());
   }
 
 }

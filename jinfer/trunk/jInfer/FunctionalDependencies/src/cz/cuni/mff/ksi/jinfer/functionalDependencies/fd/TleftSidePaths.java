@@ -74,4 +74,17 @@ public class TleftSidePaths implements SidePaths {
 
     return result;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof TleftSidePaths)) {
+      return false;
+    }
+    
+    TleftSidePaths leftSide = (TleftSidePaths) obj;
+    
+    return this.getPath().equals(leftSide.getPath());
+  }
+  
+  
 }

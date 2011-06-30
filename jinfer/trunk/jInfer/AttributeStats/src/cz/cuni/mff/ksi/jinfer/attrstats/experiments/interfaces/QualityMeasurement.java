@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 

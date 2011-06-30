@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ExperimentListener;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
@@ -55,7 +55,6 @@ public class Experiment implements IGGeneratorCallback {
   /** Total time of the experiment run, in ms. */
   private long totalTime;
   private Quality highestQuality = Quality.ZERO;
-  private Quality finalQuality;
   private Pair<Boolean, String> terminationReason;
   private AMModel model;
 
@@ -84,7 +83,7 @@ public class Experiment implements IGGeneratorCallback {
         .append("\n\nResults:")
         .append("\nStart time: ").append(new Date(startTime))
         .append("\nTotal time spent: ").append(totalTime).append(" ms")
-        .append("\nFinal quality: ").append(finalQuality.getText())
+        .append("\nFinal quality: ").append(improvementResults.get(improvementResults.size() - 1).getQuality().getText())
         .append("\nHighest quality: ").append(highestQuality.getText())
         .append("\nConstruction phase: ")
         .append("\n  Algorithm: ").append(params.getConstructionHeuristic().getModuleDescription())
@@ -112,11 +111,15 @@ public class Experiment implements IGGeneratorCallback {
 
   public String getCsv() {
     final StringBuilder ret = new StringBuilder();
-    // TODO vektor Might be interesting to have #of AMs here too
-    ret.append("\nTime,Quality\n")
-        .append(constructionResult.getTotalTime()).append(',').append(constructionResult.getQuality().getScalar());
+    ret.append("\nTime,Quality,AMs\n")
+        .append(constructionResult.getTotalTime()).append(',')
+        .append(constructionResult.getQuality().getScalar()).append(',')
+        .append(constructionResult.getQuality().getAmCount());
     for (final HeuristicResult result : improvementResults) {
-      ret.append('\n').append(result.getTotalTime()).append(',').append(result.getQuality().getScalar());
+      ret.append('\n')
+          .append(result.getTotalTime()).append(',')
+          .append(result.getQuality().getScalar()).append(',')
+          .append(result.getQuality().getAmCount());
     }
     return ret.toString();
   }
@@ -161,20 +164,19 @@ public class Experiment implements IGGeneratorCallback {
         @Override
         public void finished(final List<IdSet> feasiblePool) {
           // take the time after CH
-          final long constructionTime = delta(startTime);
+          final long timeTaken = delta(startTime);
           // get the incumbent solution and its quality
           final Pair<IdSet, Quality> incumbent = Utils.getBest(Experiment.this, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
-          constructionResult = new HeuristicResult(constructionTime, constructionTime, feasiblePool.size(), incumbent.getSecond());
+          constructionResult = new HeuristicResult(timeTaken, timeTaken, feasiblePool.size(), incumbent.getFirst(), incumbent.getSecond());
 
           // while not termination criterion
           final long totTime = delta(startTime);
           final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
-            terminationReason = termination;
-            notifyFinished(totTime, incumbent.getSecond());
+            notifyFinished(termination, totTime);
             return;
           }
 
@@ -196,21 +198,20 @@ public class Experiment implements IGGeneratorCallback {
         @Override
         public void finished(final List<IdSet> feasiblePool) {
           //   take the time after IH
-          final long improvementTime = delta(ihStartTime);
+          final long timeTaken = delta(ihStartTime);
           final long totalTime = delta(startTime);
           // get the incumbent solution and its quality
           final Pair<IdSet, Quality> incumbent = Utils.getBest(Experiment.this, feasiblePool);
           if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
             highestQuality = incumbent.getSecond();
           }
-          improvementResults.add(new HeuristicResult(improvementTime, totalTime, feasiblePool.size(), incumbent.getSecond()));
+          improvementResults.add(new HeuristicResult(timeTaken, totalTime, feasiblePool.size(), incumbent.getFirst(), incumbent.getSecond()));
 
           // while not termination criterion
           final long totTime = delta(startTime);
           final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);
           if (termination.getFirst().booleanValue()) {
-            terminationReason = termination;
-            notifyFinished(totTime, incumbent.getSecond());
+            notifyFinished(termination, totTime);
             return;
           }
 
@@ -221,9 +222,10 @@ public class Experiment implements IGGeneratorCallback {
     }
   }
 
-  private void notifyFinished(final long totalTime, final Quality finalQuality) {
+  private void notifyFinished(final Pair<Boolean, String> terminationReason,
+          final long totalTime) {
+    this.terminationReason = terminationReason;
     this.totalTime = totalTime;
-    this.finalQuality = finalQuality;
     for (final ExperimentListener el : listeners) {
       el.experimentFinished(this);
     }

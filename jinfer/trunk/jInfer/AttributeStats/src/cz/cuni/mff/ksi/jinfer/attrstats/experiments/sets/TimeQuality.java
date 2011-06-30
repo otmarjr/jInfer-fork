@@ -42,7 +42,7 @@ public class TimeQuality extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 1; i < 20; i++) {
+    for (int i = 1; i < 30; i++) {
       for (int j = 0; j < 10; j++) {
         ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Glpk(i), improvement, new Weight(), new TimeIterations(1)));
       }

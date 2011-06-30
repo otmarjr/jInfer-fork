@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ExperimentListener;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -34,18 +33,16 @@ public abstract class AbstractExperimentSet {
 
   protected abstract List<ExperimentParameters> getExperiments();
 
-  private List<ExperimentParameters> cache = null;
-
   private static final Logger LOG = Logger.getLogger(AbstractExperimentSet.class);
 
   public void run() throws InterruptedException {
-    for (final ExperimentParameters params : getCached()) {
+    for (final ExperimentParameters params : getExperiments()) {
       final Experiment e = new Experiment(params);
       e.addListener(new ExperimentListener() {
 
         @Override
         public void experimentFinished(final Experiment e) {
-          LOG.info(e.getCsv());
+          LOG.info(e.getReport());
           synchronized (monitor) {
             monitor.notifyAll();
           }
@@ -70,12 +67,4 @@ public abstract class AbstractExperimentSet {
       }
     }
   }
-
-  private List<ExperimentParameters> getCached() {
-    if (cache == null) {
-      cache = new ArrayList<ExperimentParameters>(getExperiments());
-    }
-    return cache;
-  }
-
 }

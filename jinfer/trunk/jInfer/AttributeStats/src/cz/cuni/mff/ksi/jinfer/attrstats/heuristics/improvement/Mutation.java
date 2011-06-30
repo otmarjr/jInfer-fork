@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkOutputParser;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkRunner;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
@@ -68,7 +68,10 @@ public class Mutation implements ImprovementHeuristic {
     final List<AttributeMappingId> mappings = incumbent.getFirst().getMappings();
     final List<AttributeMappingId> fixed = BaseUtils.rndSubset(mappings, ratio);
 
-    final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(model, new ArrayList<AttributeMappingId>(fixed), experiment.getAlpha(), experiment.getBeta(), timeLimit), model);
+    final IdSet improved = GlpkOutputParser.getIDSet(
+            GlpkRunner.run(model, fixed, experiment.getAlpha(), experiment.getBeta(), timeLimit),
+            model,
+            !BaseUtils.isEmpty(fixed));
     final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);
     ret.add(improved);
     callback.finished(ret);

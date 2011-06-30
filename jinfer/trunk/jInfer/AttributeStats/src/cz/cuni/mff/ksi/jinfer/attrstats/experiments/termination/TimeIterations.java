@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;

@@ -78,7 +78,10 @@ public class Crossover implements ImprovementHeuristic {
       }
     }
 
-    final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(model, new ArrayList<AttributeMappingId>(common), experiment.getAlpha(), experiment.getBeta(), timeLimit), model);
+    final IdSet improved = GlpkOutputParser.getIDSet(
+            GlpkRunner.run(model, common, experiment.getAlpha(), experiment.getBeta(), timeLimit),
+            model,
+            !BaseUtils.isEmpty(common));
     final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);
     ret.add(improved);
     callback.finished(ret);

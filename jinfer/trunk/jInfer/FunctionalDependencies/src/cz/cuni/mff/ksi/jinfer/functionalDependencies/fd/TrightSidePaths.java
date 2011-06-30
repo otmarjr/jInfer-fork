@@ -61,4 +61,17 @@ public class TrightSidePaths implements SidePaths {
   public void setPath(String value) {
     this.path = value;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof TrightSidePaths)) {
+      return false;
+    }
+    
+    TrightSidePaths rightSide = (TrightSidePaths) obj;
+    
+    return this.getPath().equals(rightSide.getPath());
+  }
+  
+  
 }

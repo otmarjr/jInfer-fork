@@ -28,6 +28,7 @@ public class RepairTreeNode extends DefaultMutableTreeNode {
   private final Repair repair;
   
   RepairTreeNode(final Repair repair) {
+    super("Repair - " + repair.getWeight());
     this.repair = repair;
   }
 

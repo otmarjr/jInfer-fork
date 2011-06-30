@@ -63,7 +63,7 @@ public class RepairerImpl implements Repairer {
     return;
   }
 
-  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) {
+  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) throws InterruptedException {
     List<Repair> repairs = new ArrayList<Repair>();
     for (FD fd : functionalDependencies) {
       if (!rXMLTree.isSatisfyingFD(fd)) {

@@ -96,7 +96,7 @@ public class NewRepairerImpl implements Repairer {
       Repair minimalRepair = getRepairFromPicker(rXMLTree);
       
       rXMLTree.applyRepair(minimalRepair);
-      rXMLTree.clearRepairs();
+      rXMLTree.clearRepairs(minimalRepair);
     }
   }
   

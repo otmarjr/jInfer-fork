@@ -16,20 +16,69 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import org.w3c.dom.Node;
+
 /**
  *
  * @author sviro
  */
 public class Tuple {
   private final int tupleId;
+  private final RXMLTree tree;
+  private List<Node> nodes = null;
 
-  public Tuple(final int tupleId) {
+  public Tuple(RXMLTree tree, final int tupleId) {
+    this.tree = tree;
     this.tupleId = tupleId;
   }
 
   public int getId() {
     return tupleId;
   }
+
+  public boolean contains(Tuple tuple) {
+    List<Node> tupleNodes = tuple.getNodes();
+    if (this.getNodes().containsAll(tupleNodes)) {
+      return true;
+    }
+    
+    return false;
+  }
+
+  public List<Node> getNodes() {
+    if (nodes == null) {
+      nodes = computeNodes();
+    }
+    return nodes;
+  }
+
+  private List<Node> computeNodes() {
+    List<Node> result = new ArrayList<Node>();
+    
+    Map<Node, NodeAttribute> nodesMap = tree.getNodesMap();
+    for (Node node : nodesMap.keySet()) {
+      if (nodesMap.get(node).isInTuple(this)) {
+        result.add(node);
+      }
+    }
+    
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof Tuple)) {
+      return false;
+    }
+    
+    Tuple tuple = (Tuple) obj;
+    
+    return this.getId() == tuple.getId();
+  }
+  
   
   
 }

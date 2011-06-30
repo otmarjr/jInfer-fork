@@ -19,8 +19,6 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TrightSidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.io.StringWriter;
@@ -28,8 +26,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -42,7 +42,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
-import org.openide.util.Exceptions;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,8 +56,8 @@ import org.w3c.dom.Text;
  */
 public class RXMLTree {
 
-  private static final double LEAF_WEIGHT = 0.2;
-  private static final double NODE_WEIGHT = 0.4;
+  private static final double LEAF_WEIGHT = 0.2d;
+  private static final double NODE_WEIGHT = 0.4d;
   private static final Logger LOG = Logger.getLogger(RXMLTree.class);
   private final Document document;
   private List<Path> paths = null;
@@ -74,26 +73,24 @@ public class RXMLTree {
     nodesMap = createNodesMap(document);
   }
 
-  public boolean isSatisfyingFD(final FD fd) {
+  public boolean isSatisfyingFD(final FD fd) throws InterruptedException {
     return isSatisfyingFDGeneral(fd, false);
   }
 
-  public boolean isSatisfyingFDThesis(final FD fd) {
+  public boolean isSatisfyingFDThesis(final FD fd) throws InterruptedException {
     return isSatisfyingFDGeneral(fd, true);
   }
 
-  private boolean isSatisfyingFDGeneral(final FD fd, final boolean isThesis) {
+  private boolean isSatisfyingFDGeneral(final FD fd, final boolean isThesis) throws InterruptedException {
     return isTreeSatisfyingFD(fd, isThesis) || isReliabilitySatisfyFD(fd);
   }
 
-  private boolean isTreeSatisfyingFD(final FD fd, final boolean isThesis) {
+  private boolean isTreeSatisfyingFD(final FD fd, final boolean isThesis) throws InterruptedException {
     if (tuples == null) {
       tuples = TupleFactory.createTuples(this);
     }
+    
     List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(tuples);
-    if (tuplePairs == null || tuplePairs.isEmpty()) {
-      throw new RuntimeException("List of tuple pairs can't be null or empty.");
-    }
 
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
       if (!isTuplePairSatisfyingFDGeneral(tuplePair, fd, isThesis)) {
@@ -180,6 +177,9 @@ public class RXMLTree {
   private boolean isUnreliableTuple(Tuple tuple, SidePaths side) {
     List<PathAnswer> pathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, side, false);
     for (PathAnswer pathAnswer : pathAnswers) {
+      if (pathAnswer.isEmpty()) {
+        continue;
+      }
       if (!nodesMap.get(pathAnswer.getTupleNodeAnswer()).isReliable()) {
         return true;
       }
@@ -405,7 +405,7 @@ public class RXMLTree {
     return repairGroups;
   }
 
-  public boolean isInconsistent(List<FD> functionalDependencies) {
+  public boolean isInconsistent(List<FD> functionalDependencies) throws InterruptedException {
     for (FD fd : functionalDependencies) {
       if (!isSatisfyingFDThesis(fd)) {
         return true;
@@ -424,7 +424,26 @@ public class RXMLTree {
     return null;
   }
 
-  public void clearRepairs() {
+  public void clearRepairs(final Repair repair) {
+    Set<Tuple> tuplesToCheck = new HashSet<Tuple>();
+    
+    for (Node node : repair.getUnreliableNodes()) {
+      tuplesToCheck.addAll(TupleFactory.unmarkNodeFromAllTuples(this, node));
+    }
+    
+    Set<Tuple> tuplesToRemove = new HashSet<Tuple>();
+    for (Tuple tuple : tuplesToCheck) {
+      if (!TupleFactory.isTuple(this, tuple)) {
+        tuplesToRemove.add(tuple);
+      }
+    }
+    
+    TupleFactory.removeTuples(this, tuplesToRemove);
+    
     repairGroups.clear();
+  }
+
+  void removeTuple(final Tuple tuple) {
+    tuples.remove(tuple);
   }
 }

@@ -24,6 +24,8 @@ import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.Deterministic;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.DeterministicFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
 import java.util.ArrayList;
@@ -60,9 +62,9 @@ public class GreedyMDL<T> implements AutomatonSimplifier<T> {
    */
   public GreedyMDL(final MergeConditionTesterFactory mergeConditionTesterFactory, final AutomatonEvaluatorFactory evaluatorFactory) {
     this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
-    this.evaluator= evaluatorFactory.<T>create();
+    this.evaluator = evaluatorFactory.<T>create();
   }
-  
+
   /**
    * Create with factory of {@link MergeConditionTester} selected.
    *
@@ -81,7 +83,7 @@ public class GreedyMDL<T> implements AutomatonSimplifier<T> {
       }
     }
     this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
-    this.evaluator= evaluatorFactory.<T>create();
+    this.evaluator = evaluatorFactory.<T>create();
   }
 
   /**
@@ -97,33 +99,39 @@ public class GreedyMDL<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
+    MergeConditionTester<T> dt = (new DeterministicFactory()).<T>create();
     Automaton<T> oldAut = inputAutomaton;
     evaluator.setInputStrings(inputStrings);
     double oldMdl = evaluator.evaluate(oldAut);
     Automaton<T> newAut = null;
     double newMdl = Double.MAX_VALUE;
-    boolean stager = false;
+    boolean stagger = true;
     do {
+      stagger = true;
       mergableStates.clear();
-      stager= true;
-      newAut = new Automaton<T>(oldAut);
-      mergableStates.addAll(mergeConditionTester.getMergableStates(newAut));
+      mergableStates.addAll(mergeConditionTester.getMergableStates(oldAut));
       if (!mergableStates.isEmpty()) {
+        newAut = new Automaton<T>(oldAut);
         for (List<List<State<T>>> mergAlt : mergableStates) {
           for (List<State<T>> mergSeq : mergAlt) {
             newAut.mergeStates(mergSeq);
+          }
+          for (List<List<State<T>>> mA : dt.getMergableStates(newAut)) {
+            for (List<State<T>> mS : mA) {
+              newAut.mergeStates(mS);
+            }
           }
           newMdl = evaluator.evaluate(newAut);
           if (newMdl < oldMdl) {
             oldAut = newAut;
             oldMdl = newMdl;
-            stager = false;
+            stagger = false;
           } else {
-            newAut = oldAut;
+            newAut = new Automaton<T>(oldAut);
           }
         }
       }
-    } while (!mergableStates.isEmpty() && !stager);
+    } while (!stagger);
     return oldAut;
   }
 

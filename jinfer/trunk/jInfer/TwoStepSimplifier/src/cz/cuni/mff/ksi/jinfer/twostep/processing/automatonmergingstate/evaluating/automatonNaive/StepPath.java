@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,79 +33,42 @@ class StepPath<T> {
 
   private Automaton<T> aut;
   private State<T> lastState;
-  private StepPath<T> predecessor;
-  private Step<T> myStep;
-  private double probability;
+  private double mdl;
 
   public StepPath(Automaton<T> aut) {
     this.aut = aut;
-    this.predecessor = null;
-    this.myStep = null;
-    this.lastState = aut.getInitialState();
-    this.probability= 1.0;
+    this.lastState= aut.getInitialState();
    }
 
-  public StepPath(Automaton<T> aut, StepPath<T> predecessor, Step<T> myStep, double probability) {
-    this.aut = aut;
-    this.predecessor = predecessor;
-    this.myStep = myStep;
-    this.lastState = myStep.getDestination();
-    this.probability= probability;
-  }
-
-  public StepPath(Automaton<T> aut, StepPath<T> predecessor, double probability) {
-    this.aut = aut;
-    this.predecessor = predecessor;
-    this.myStep = null;
-    this.lastState = null;
-    this.probability= probability;
-    assert probability > 0;
-    assert probability <= 1;
-  }
-
-  public List<StepPath<T>> suffix(T symbol) {
-    List<StepPath<T>> result = new LinkedList<StepPath<T>>();
-    double unity = 0;
-    for (Step<T> step : aut.getDelta().get(lastState)) {
-      unity += step.getUseCount();
-    }
-    unity += lastState.getFinalCount();
-
-    for (Step<T> outStep : aut.getDelta().get(lastState)) {
-      if (outStep.getAcceptSymbol().equals(symbol)) {
-        result.add(
-                new StepPath<T>(aut, this, outStep, outStep.getUseCount() / unity));
+  public void suffix(T symbol) {
+      double unity = 0;
+      for (Step<T> step : aut.getDelta().get(lastState)) {
+        unity += step.getUseCount();
       }
-    }
-    assert probability > 0;
-    assert probability <= 1;
-    return result;
+      unity += lastState.getFinalCount();
+
+      for (Step<T> outStep : aut.getDelta().get(lastState)) {
+         if (outStep.getAcceptSymbol().equals(symbol)) {
+           lastState = outStep.getDestination();
+           mdl-= UniversalCodeForIntegers.log2(outStep.getUseCount() / unity);
+           break;
+        }
+      }
   }
 
-  public List<StepPath<T>> finalState() {
-    List<StepPath<T>> result = new LinkedList<StepPath<T>>();
-    double unity = 0;
-    for (Step<T> step : aut.getDelta().get(lastState)) {
-      unity += step.getUseCount();
-    }
-    unity += lastState.getFinalCount();
+  public void finalState() {
+      double unity = 0;
+      for (Step<T> step : aut.getDelta().get(lastState)) {
+        unity += step.getUseCount();
+      }
+      unity += lastState.getFinalCount();
     
-    if (this.lastState.getFinalCount() > 0) {
-      result.add(
-              new StepPath<T>(aut, this, lastState.getFinalCount() / unity)
-              );
-    }
-    assert probability > 0;
-    assert probability <= 1;
-    return result;
+      if (lastState.getFinalCount() > 0) {
+        mdl-= UniversalCodeForIntegers.log2(lastState.getFinalCount() / unity);
+      }
   }
 
   public double getMDL() {
-    double result = -UniversalCodeForIntegers.log2(this.probability);
-    assert result >= 0;
-    if (this.predecessor != null) {
-      result+= this.predecessor.getMDL();
-    }
-    return result;
+    return mdl;
   }
 }

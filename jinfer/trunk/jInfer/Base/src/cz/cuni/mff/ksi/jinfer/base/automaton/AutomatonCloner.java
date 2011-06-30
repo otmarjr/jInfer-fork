@@ -69,6 +69,7 @@ public class AutomatonCloner<A, B> {
                 );
         stateConversionMap.put(anotherState2, newState2);
         reverseStateConversionMap.put(newState2, anotherState2);
+        newAutomaton.nameMap.put(newState2.getName(), newState2);
         newAutomaton.reverseMergedStates.get(newState).add(newState2);
       }
     }
@@ -98,6 +99,9 @@ public class AutomatonCloner<A, B> {
               stateConversionMap.get(anotherState),
               stateConversionMap.get(anotherMergedStates.get(anotherState))
               );
+      newAutomaton.nameMap.put(
+              stateConversionMap.get(anotherState).getName(), 
+              stateConversionMap.get(anotherState));
     }
 
     newAutomaton.initialState= stateConversionMap.get(anotherAutomaton.getInitialState());

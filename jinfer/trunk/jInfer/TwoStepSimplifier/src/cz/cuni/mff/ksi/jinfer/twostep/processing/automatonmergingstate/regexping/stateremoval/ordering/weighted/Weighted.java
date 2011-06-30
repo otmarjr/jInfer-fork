@@ -23,6 +23,8 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexp.RegexpMDL;
 
 /**
  * Simple heuristic for ordering states in automaton. Weight = sum of {in | out | loop}-transitions
@@ -37,28 +39,43 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
  * @author anti
  */
 public class Weighted<T> implements Orderer<T> {
+  private RegexpEvaluator<T> rEval;
 
-  private int getRegexpWeight(final Regexp<T> regexp) {
-    return regexp.getTokens().size();
+  public Weighted() {
+    this.rEval= new RegexpMDL<T>();
+  }
+  
+  private double getRegexpWeight(final Regexp<T> regexp) throws InterruptedException {
+    return rEval.evaluate(regexp); // regexp.getTokens().size();
   }
 
-  private int getStateWeight(final StateRemovalRegexpAutomaton<T> automaton, final State<Regexp<T>> state) {
-    int weight = state.getFinalCount();
+  private double getStateWeight(final StateRemovalRegexpAutomaton<T> automaton, final State<Regexp<T>> state) throws InterruptedException {
+    double weight = 0;
+    double current = 0;
+    int outSize =automaton.getDelta().get(state).size();
+    int inSize = automaton.getReverseDelta().get(state).size();
     for (Step<Regexp<T>> step : automaton.getReverseDelta().get(state)) {
-      weight += this.getRegexpWeight(step.getAcceptSymbol());
+      if (!step.getSource().equals(state)) {
+        weight += this.getRegexpWeight(step.getAcceptSymbol())*outSize;
+        current +=  this.getRegexpWeight(step.getAcceptSymbol());
+      } else {
+        weight += this.getRegexpWeight(step.getAcceptSymbol())*outSize*inSize;
+        current +=  this.getRegexpWeight(step.getAcceptSymbol());
+      }
     }
     for (Step<Regexp<T>> step : automaton.getDelta().get(state)) {
       if (!step.getDestination().equals(state)) {
         // To prevent twice counting the loops
-        weight += this.getRegexpWeight(step.getAcceptSymbol());
+        weight += this.getRegexpWeight(step.getAcceptSymbol())*inSize;
+        current +=  this.getRegexpWeight(step.getAcceptSymbol());
       }
     }
-    return weight;
+    return weight - current;
   }
 
   @Override
   public State<Regexp<T>> getStateToRemove(final StateRemovalRegexpAutomaton<T> automaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
-    int minWeight = Integer.MAX_VALUE;
+    double minWeight = Double.MAX_VALUE;
     State<Regexp<T>> minState = null;
     for (State<Regexp<T>> state : automaton.getDelta().keySet()) {
       if (Thread.interrupted()) {
@@ -71,7 +88,7 @@ public class Weighted<T> implements Orderer<T> {
         minState = state;
         minWeight = this.getStateWeight(automaton, state);
       } else {
-        final int stateWeight = this.getStateWeight(automaton, state);
+        final double stateWeight = this.getStateWeight(automaton, state);
         if ((stateWeight < minWeight)||((stateWeight == minWeight) && (state.getName() < minState.getName()))
                ) {
           minWeight = stateWeight;

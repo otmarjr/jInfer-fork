@@ -56,6 +56,11 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
    */
   public StateRemovalRegexpAutomaton(final RegexpAutomaton<T> anotherAutomaton) {
     super(anotherAutomaton);
+    this.mergedStates.clear();
+    for (State<Regexp<T>> t : this.reverseMergedStates.keySet()) {
+      this.reverseMergedStates.get(t).clear();
+    }
+    this.nameMap.clear();
     this.createSuperInitialState();
     this.createSuperFinalState();
   }
@@ -274,7 +279,8 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
    * 
    * @param state to be removed from automaton
    */
-  public void removeState(final State<Regexp<T>> state) {
+  public void removeState(final State<Regexp<T>> _state) {
+    final State<Regexp<T>> state = getRealState(_state);
     final Step<Regexp<T>> loopStep = this.collapseStateParallelSteps(state);
     final List<Step<Regexp<T>>> inSteps = new LinkedList<Step<Regexp<T>>>();
 
@@ -327,6 +333,7 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
       this.reverseDelta.get(outStep.getDestination()).remove(outStep);
     }
     this.delta.remove(state);
+    
     LOG.debug(this);
   }
 

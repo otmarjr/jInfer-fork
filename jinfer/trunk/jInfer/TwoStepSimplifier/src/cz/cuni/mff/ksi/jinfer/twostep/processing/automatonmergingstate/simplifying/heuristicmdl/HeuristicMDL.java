@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.DeterministicFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     SortedMap<Double, Automaton<T>> solutions = new TreeMap<Double, Automaton<T>>();
+    MergeConditionTester<T> dt = (new DeterministicFactory()).<T>create();
     this.evaluator.setInputStrings(inputStrings);
     solutions.put(this.evaluator.evaluate(inputAutomaton), inputAutomaton);
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
@@ -120,6 +122,12 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
             }
             newAutomaton.mergeStates(mergeChain);
           }
+          for (List<List<State<T>>> mA : dt.getMergableStates(newAutomaton)) {
+            for (List<State<T>> mS : mA) {
+              newAutomaton.mergeStates(mS);
+            }
+          }
+          
           double thisD = this.evaluator.evaluate(newAutomaton);
           if (thisD < solutions.lastKey()) {
             solutions.put(thisD, newAutomaton);

@@ -48,18 +48,16 @@ public class NaiveRules<T> implements Evaluator<Automaton<T>> {
   
   @Override
   public double evaluate(Automaton<T> aut) throws InterruptedException {
-    Map<State<T>, Double> units = new HashMap<State<T>, Double>();
 
     double result = 0.0;
     for (List<T> inputString : inputStrings) {
-      StepPaths<T> paths = new StepPaths<T>(aut);
+      StepPath<T> path = new StepPath<T>(aut);
       for (T rs : inputString) {
-        paths.suffix(rs);
+        path.suffix(rs);
       }
-      paths.finalState();
-      assert paths.getPaths().size() > 0;
+      path.finalState();
       
-      double inter = paths.getMinimumMDL();
+      double inter = path.getMDL();
       assert inter >= 0;
       result+= inter;
     }

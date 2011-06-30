@@ -153,11 +153,11 @@ public class Automaton<T> {
    */
   protected final State<T> createNewState() {
     final State<T> newState= new State<T>(0, this.newStateName);
+    this.nameMap.put(newStateName, newState);
     this.newStateName++;
     this.delta.put(newState, new LinkedHashSet<Step<T>>());
     this.reverseDelta.put(newState, new LinkedHashSet<Step<T>>());
     this.reverseMergedStates.put(newState, new LinkedHashSet<State<T>>());
-    this.nameMap.put(newStateName, newState);
     return newState;
   }
 
@@ -418,17 +418,18 @@ public class Automaton<T> {
   }
 
   /**
-   * @return the delta, unmodifiable!
+   * @return the delta
+   * 
    */
   public Map<State<T>, Set<Step<T>>> getDelta() {
-    return Collections.unmodifiableMap(delta);
+    return delta;
   }
 
   /**
-   * @return the reverseDelta, unmodifiable!
+   * @return the reverseDelta
    */
   public Map<State<T>, Set<Step<T>>> getReverseDelta() {
-    return Collections.unmodifiableMap(reverseDelta);
+    return reverseDelta;
   }
 
   /**
@@ -442,13 +443,13 @@ public class Automaton<T> {
    * @return the mergedStates
    */
   public Map<State<T>, State<T>> getMergedStates() {
-    return Collections.unmodifiableMap(mergedStates);
+    return mergedStates;
   }
 
   /**
    * @return the reverseMergedStates
    */
   public Map<State<T>, Set<State<T>>> getReverseMergedStates() {
-    return Collections.unmodifiableMap(reverseMergedStates);
+    return reverseMergedStates;
   }
 }

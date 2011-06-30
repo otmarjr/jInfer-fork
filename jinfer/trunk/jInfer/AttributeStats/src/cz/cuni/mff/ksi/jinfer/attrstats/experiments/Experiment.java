@@ -142,7 +142,6 @@ public class Experiment implements IGGeneratorCallback {
    * @throws InterruptedException
    */
   public void run() throws InterruptedException {
-    // get IG from the file
     final IGGenerator igg = ModuleSelectionHelper.lookupImpl(IGGenerator.class, "Basic_IG_Generator");
     final Input input = new Input();
     input.getDocuments().add(params.getFile().getFile());
@@ -151,74 +150,62 @@ public class Experiment implements IGGeneratorCallback {
 
   @Override
   public void finished(final List<Element> grammar) {
-    // create the model
     model = new AMModel(grammar);
-
-    // take the time before CH
     startTime = time();
-
     try {
-      // run the CH
-      params.getConstructionHeuristic().start(Experiment.this, new HeuristicCallback() {
-
-        @Override
-        public void finished(final List<IdSet> feasiblePool) {
-          // take the time after CH
-          final long timeTaken = delta(startTime);
-          // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = Utils.getBest(Experiment.this, feasiblePool);
-          if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
-            highestQuality = incumbent.getSecond();
-          }
-          constructionResult = new HeuristicResult(timeTaken, timeTaken, feasiblePool.size(), incumbent.getFirst(), incumbent.getSecond());
-
-          // while not termination criterion
-          final long totTime = delta(startTime);
-          final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);
-          if (termination.getFirst().booleanValue()) {
-            notifyFinished(termination, totTime);
-            return;
-          }
-
-          runImprovement(feasiblePool, 0);
-        }
-      });
+      params.getConstructionHeuristic().start(Experiment.this, new Callback(-1, startTime));
     } catch (final InterruptedException e) {
     }
   }
 
   private void runImprovement(final List<IdSet> feasiblePool, final int iteration) {
     final ImprovementHeuristic current = params.getImprovementHeuristics().get(iteration % params.getImprovementHeuristics().size());
-    //   take the time before IH
-    final long ihStartTime = time();
-    //   run the IH
     try {
-      current.start(Experiment.this, feasiblePool, new HeuristicCallback() {
-
-        @Override
-        public void finished(final List<IdSet> feasiblePool) {
-          //   take the time after IH
-          final long timeTaken = delta(ihStartTime);
-          final long totalTime = delta(startTime);
-          // get the incumbent solution and its quality
-          final Pair<IdSet, Quality> incumbent = Utils.getBest(Experiment.this, feasiblePool);
-          if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
-            highestQuality = incumbent.getSecond();
-          }
-          improvementResults.add(new HeuristicResult(timeTaken, totalTime, feasiblePool.size(), incumbent.getFirst(), incumbent.getSecond()));
-
-          // while not termination criterion
-          final long totTime = delta(startTime);
-          final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);
-          if (termination.getFirst().booleanValue()) {
-            notifyFinished(termination, totTime);
-            return;
-          }
-
-          runImprovement(feasiblePool, iteration + 1);
-        }
-      });
+      current.start(Experiment.this, feasiblePool, new Callback(iteration, time()));
     } catch (final InterruptedException e) {
+    }
+  }
+
+  private class Callback implements HeuristicCallback {
+
+    /**
+     * Number of this iteration. -1 is construction heuristic run. 0, 1, ...
+     * are improvement heuristics runs.
+     */
+    private final int iteration;
+    /** Time in milliseconds when this iteration started. */
+    private final long iterationStartTime;
+
+    public Callback(int iteration, long iterationStartTime) {
+      this.iteration = iteration;
+      this.iterationStartTime = iterationStartTime;
+    }
+
+    @Override
+    public void finished(final List<IdSet> feasiblePool) {
+      final long timeTaken = delta(iterationStartTime);
+      final long totalTime = delta(startTime);
+
+      final Pair<IdSet, Quality> incumbent = Utils.getBest(Experiment.this, feasiblePool);
+      if (incumbent.getSecond().getScalar() >= highestQuality.getScalar()) {
+        highestQuality = incumbent.getSecond();
+      }
+      final HeuristicResult result = new HeuristicResult(timeTaken, totalTime, feasiblePool.size(), incumbent.getFirst(), incumbent.getSecond());
+      if (iteration == -1) {
+        constructionResult = result;
+      }
+      else {
+        improvementResults.add(result);
+      }
+
+      final long totTime = delta(startTime);
+      final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);
+      if (termination.getFirst().booleanValue()) {
+        notifyFinished(termination, totTime);
+        return;
+      }
+
+      runImprovement(feasiblePool, iteration + 1);
     }
   }
 

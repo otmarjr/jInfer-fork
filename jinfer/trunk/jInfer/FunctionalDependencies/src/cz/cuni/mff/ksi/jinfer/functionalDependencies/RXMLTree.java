@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.weights.Tweight;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +43,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
+import org.openide.util.Exceptions;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -89,7 +91,7 @@ public class RXMLTree {
     if (tuples == null) {
       tuples = TupleFactory.createTuples(this);
     }
-    
+
     List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(tuples);
 
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
@@ -426,24 +428,46 @@ public class RXMLTree {
 
   public void clearRepairs(final Repair repair) {
     Set<Tuple> tuplesToCheck = new HashSet<Tuple>();
-    
+
     for (Node node : repair.getUnreliableNodes()) {
       tuplesToCheck.addAll(TupleFactory.unmarkNodeFromAllTuples(this, node));
     }
-    
+
     Set<Tuple> tuplesToRemove = new HashSet<Tuple>();
     for (Tuple tuple : tuplesToCheck) {
       if (!TupleFactory.isTuple(this, tuple)) {
         tuplesToRemove.add(tuple);
       }
     }
-    
+
     TupleFactory.removeTuples(this, tuplesToRemove);
-    
+
     repairGroups.clear();
   }
 
   void removeTuple(final Tuple tuple) {
     tuples.remove(tuple);
+  }
+
+  public void setWeights(List<Tweight> weights) {
+    XPathFactory xpathFactory = XPathFactory.newInstance();
+    XPath xPath = xpathFactory.newXPath();
+    XPathExpression xPathExpression;
+
+    for (Tweight weight : weights) {
+      try {
+        xPathExpression = xPath.compile(weight.getPath());
+        NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
+        
+        for (int i = 0; i < nodeList.getLength(); i++) {
+          Node node = nodeList.item(i);
+          nodesMap.get(node).setWeight(weight.getValue().doubleValue());
+        }
+      } catch (XPathExpressionException ex) {
+        LOG.error("Path " + weight.getPath() + " cannot be compiled or evaluated.", ex);
+      }
+
+    }
+
   }
 }

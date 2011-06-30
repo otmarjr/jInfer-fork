@@ -8,6 +8,7 @@
 %\usepackage{tgpagella}
 \usepackage{xstring}
 \usepackage{wrapfig}
+\usepackage{appendix}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -177,7 +178,7 @@ Klíčová slova:  [3-5 keywords in Czech]
 \setlength\parindent{0mm}
 \setlength\parskip{5mm}
 
-Title:  [the master thesis title in English]
+Title:  Inference of XML Integrity Constraints
 
 Author: \mfauthor
 
@@ -188,7 +189,7 @@ Supervisor: \mfadvisor{}, Department of Software Engineering
 Abstract:  [abstract of 80-200 words in English, but not a copy of the assignment of
 the master thesis]
 
-Keywords: [3-5 keywords in English]
+Keywords: XML, ID attributes, inference
 
 \vss}
 
@@ -206,21 +207,24 @@ Keywords: [3-5 keywords in English]
 % =============== TEXT ================
 \newpage
 
-\chapter*{Preface}
-\addcontentsline{toc}{chapter}{Preface}
+\chapwithtoc{Preface}
 
 TODO why is this important
 
 \chapter{Definitions}
 
-TODO talk about key definition from KfXML
+TODO talk about key definition from \cite{keX}
 
 talk about ID, IDREF, ... talk about XML schema keys
 
 \chapter{Research}
 
+According to the article \cite{fidax}, ...
+
 TODO talk about FIDAX
 To the best of our knowledge, there are no other articles dealing with this problem 
+
+TODO talk about Fajt - but that's different, that's keys
 
 \section{Independent Set}
 
@@ -239,8 +243,13 @@ TODO how GLPK works, how to construct a problem, how output looks, how to interp
 \section{Heuristics}
 
 TODO what is heuristics (link wise books), what is metaheuristics (we will be using them)
+TODO mention things like Taboo search
+
+TODO we will be working with heus striving to do the following: input is a list of AMs, they have their weight, we try to find a non-conflicting subset which maximizes the weight
 
 \subsection{Constructions Heuristics}
+
+TODO construction heuristics are heus that provide us with at least some solution.
 
 \subsubsection{FIDAX}
 
@@ -262,7 +271,7 @@ TODO trivial, hungry
 
 TODO trivial, "hungry"
 
-\subsubsection{Truncated Branch & Bound}
+\subsubsection{Truncated Branch \& Bound}
 
 TODO if we limit GLPK's runtime, we get this 
 
@@ -270,13 +279,33 @@ TODO if we limit GLPK's runtime, we get this
 
 TODO what they are, that they need a pool sometimes, how do we give them pool, ...
 
+\subsubsection{Identity}
+
+TODO trivial trivial
+
 \subsubsection{Remove Worst}
 
 TODO trivial
 
-\subsubsection{Remove Random}
+\subsubsection{Random Remove}
 
 TODO trivial, perturbation
+
+\subsubsection{Hungry}
+
+TODO trivial
+
+\subsubsection{Mutation}
+
+TODO
+
+\subsubsection{Crossover}
+
+TODO
+
+\subsubsection{Local Branching}
+
+TODO
 
 \chapter{Experiments}
 
@@ -298,8 +327,9 @@ Does Fuzzy beat Random? (Seems that Random is better and even has smaller varian
 
 \section{The "Best" Algorithm}
 
-\chapter*{Conclusion}
-\addcontentsline{toc}{chapter}{Conclusion}
+\chapwithtoc{Conclusion}
+
+TODO conclusion
 
 %%% Seznam použité literatury
 \newpage
@@ -308,7 +338,7 @@ Does Fuzzy beat Random? (Seems that Random is better and even has smaller varian
 \bibliography{literature}
 
 %%% Tabulky v diplomové práci, existují-li.
-\chapwithtoc{List of Tables}
+%\chapwithtoc{List of Tables}
 \listoftables
 
 %%% Použité zkratky v diplomové práci, existují-li, včetně jejich vysvětlení.
@@ -320,6 +350,11 @@ Does Fuzzy beat Random? (Seems that Random is better and even has smaller varian
 
 %% TODO Appendix - About jInfer 
 
-\chapwithtoc{Attachments}
+\appendix
+
 \openright
+\addcontentsline{toc}{chapter}{Appendices}
+
+\chapter{jInfer}
+
 \end{document}

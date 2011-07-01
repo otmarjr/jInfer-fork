@@ -57,7 +57,7 @@ public class FDProcessor implements Processor<FD> {
   }
 
   @Override
-  public List<FD> process(InputStream inputStream) {
+  public List<FD> process(InputStream inputStream) throws InterruptedException {
     final ClassLoader orig = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(Tdependencies.class.getClassLoader()); //NOPMD
     try {
@@ -70,9 +70,14 @@ public class FDProcessor implements Processor<FD> {
       return dependencies.getDependency();
     } catch (UnmarshalException ex) {
       LOG.error("File with functional dependencies is broken");
+      throw new InterruptedException();
     } catch (JAXBException ex) {
       LOG.error(ex);
-    } finally {
+      throw new InterruptedException();
+    } catch (IllegalArgumentException ex) {
+      LOG.error("Input stream must not be null.");
+      throw new InterruptedException();
+    }finally {
       Thread.currentThread().setContextClassLoader(orig);
       try {
         if (inputStream != null) {
@@ -82,8 +87,6 @@ public class FDProcessor implements Processor<FD> {
         //
       }
     }
-
-    return new ArrayList<FD>(0);
   }
 
   @Override

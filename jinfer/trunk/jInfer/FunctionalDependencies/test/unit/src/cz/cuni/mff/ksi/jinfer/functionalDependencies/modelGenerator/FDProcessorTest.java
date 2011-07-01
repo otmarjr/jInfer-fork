@@ -37,30 +37,26 @@ public class FDProcessorTest {
   public FDProcessorTest() {
   }
 
-  @Test(expected = RuntimeException.class)
-  public void testProcessNull() {
+  @Test(expected = InterruptedException.class)
+  public void testProcessNull() throws InterruptedException {
     System.out.println("processNull");
     final List<FD> expResult = new ArrayList<FD>(0);
     final List<FD> result = new FDProcessor().process(null);
     assertEquals(expResult, result);
   }
 
-  @Test
-  public void testProcessEmpty() {
+  @Test(expected=InterruptedException.class)
+  public void testProcessEmpty() throws InterruptedException {
     System.out.println("processEmpty");
     final InputStream s = new ByteArrayInputStream("".getBytes());
-    final List<FD> expResult = new ArrayList<FD>(0);
     final List<FD> result = new FDProcessor().process(s);
-    assertEquals(expResult, result);
   }
 
-  @Test
-  public void testProcessEmpty2() {
+  @Test(expected=InterruptedException.class)
+  public void testProcessEmpty2() throws InterruptedException {
     System.out.println("processEmpty2");
     final InputStream s = new ByteArrayInputStream("<!-- Inferred on Sat Jul 24 17:53:09 CEST 2010 by Trivial IG Generator, Modular Simplifier, Trivial DTD exporter -->\n\n\n".getBytes());
-    final List<FD> expResult = new ArrayList<FD>(0);
     final List<FD> result = new FDProcessor().process(s);
-    assertEquals(expResult, result);
   }
   
   private static final String FD1 = 
@@ -79,7 +75,7 @@ public class FDProcessorTest {
             
   
   @Test
-  public void testProcess() {
+  public void testProcess() throws InterruptedException {
     System.out.println("process");
     final InputStream s = new ByteArrayInputStream(FD1.getBytes());
     List<FD> result = new FDProcessor().process(s);

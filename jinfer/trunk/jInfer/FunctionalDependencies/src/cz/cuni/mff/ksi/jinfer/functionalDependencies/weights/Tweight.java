@@ -87,4 +87,17 @@ public class Tweight {
         this.value = value;
     }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof Tweight)) {
+      return false;
+    }
+    
+    Tweight weight = (Tweight) obj;
+    
+    return this.getPath().equals(weight.getPath()) && this.getValue().equals(weight.getValue());
+  }
+    
+    
+
 }

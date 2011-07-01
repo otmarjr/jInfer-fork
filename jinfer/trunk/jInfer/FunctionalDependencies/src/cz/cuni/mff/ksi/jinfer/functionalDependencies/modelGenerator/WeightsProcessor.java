@@ -100,11 +100,17 @@ public class WeightsProcessor implements Processor<Tweight> {
       return weights.getWeight();
     } catch (SAXException ex) {
       LOG.error(ex);
+      throw new InterruptedException();
     } catch (UnmarshalException ex) {
       LOG.error("File with weights is broken");
+      throw new InterruptedException();
     } catch (JAXBException ex) {
       LOG.error(ex);
-    } finally {
+      throw new InterruptedException();
+    } catch (IllegalArgumentException ex) {
+      LOG.error("Input stream must not be null.");
+      throw new InterruptedException();
+    }finally {
       Thread.currentThread().setContextClassLoader(orig);
       try {
         if (inputStream != null) {
@@ -114,8 +120,6 @@ public class WeightsProcessor implements Processor<Tweight> {
         //
       }
     }
-
-    return new ArrayList<Tweight>(0);
   }
 
   @Override

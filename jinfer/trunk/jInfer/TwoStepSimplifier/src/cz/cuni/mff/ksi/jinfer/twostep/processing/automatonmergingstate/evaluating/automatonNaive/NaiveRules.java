@@ -22,9 +22,11 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.Evaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.apache.log4j.Logger;
 
 /**
  * TODO anti Comment!
@@ -32,7 +34,7 @@ import java.util.Set;
  * @author anti
  */
 public class NaiveRules<T> implements Evaluator<Automaton<T>> {
-
+  private static final Logger LOG = Logger.getLogger(NaiveRules.class);
   private List<List<T>> inputStrings;
   
   public NaiveRules() {
@@ -48,7 +50,19 @@ public class NaiveRules<T> implements Evaluator<Automaton<T>> {
   
   @Override
   public double evaluate(Automaton<T> aut) throws InterruptedException {
-
+    double result2= 0.0;
+    for (State<T> state : aut.getDelta().keySet()) {
+      double unity = state.getFinalCount();
+      for (Step<T> step : aut.getDelta().get(state)) {
+        unity+= step.getUseCount();
+      }
+      if (state.getFinalCount() > 0) {
+        result2+= ((double) state.getFinalCount()) * (-UniversalCodeForIntegers.log2(state.getFinalCount() / unity));
+      }
+      for (Step<T> step : aut.getDelta().get(state)) {
+        result2+= ((double) step.getUseCount()) * (-UniversalCodeForIntegers.log2(step.getUseCount() / unity));
+      }
+    }
     double result = 0.0;
     for (List<T> inputString : inputStrings) {
       StepPath<T> path = new StepPath<T>(aut);
@@ -61,6 +75,7 @@ public class NaiveRules<T> implements Evaluator<Automaton<T>> {
       assert inter >= 0;
       result+= inter;
     }
-    return result;
+    LOG.error("Reeeeee" + String.valueOf(result) + "    " + String.valueOf(result2));
+    return result2;
   }
 }

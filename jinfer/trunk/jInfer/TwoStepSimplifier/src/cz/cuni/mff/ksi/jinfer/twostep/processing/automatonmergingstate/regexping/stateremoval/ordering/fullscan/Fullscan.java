@@ -24,8 +24,9 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexp.RegexpMDL;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode.BitCode;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
@@ -42,28 +43,30 @@ import org.apache.log4j.Logger;
  */
 public class Fullscan<T> implements Orderer<T> {
 
-  private static final Logger LOG = Logger.getLogger(Fullscan.class);
   private RegexpEvaluator<T> rEval;
 
   public Fullscan() {
-    this.rEval= new RegexpMDL<T>();
+    this.rEval= new BitCode<T>();
   }
 
   private double getAutomatonLength(final StateRemovalRegexpAutomaton<T> automaton) throws InterruptedException {
     double result = 0.0;
+    Set<Step<Regexp<T>>> brum = new HashSet<Step<Regexp<T>>>();
     for (State<Regexp<T>> state : automaton.getDelta().keySet()) {
       for (Step<Regexp<T>> step : automaton.getDelta().get(state)) {
-        result+= rEval.evaluate(step.getAcceptSymbol());
+        brum.add(step);
       }
+    }
+    for (Step<Regexp<T>> step : brum) {
+      result+= rEval.evaluate(step.getAcceptSymbol());
     }
     return result;
   }
-  
+
   @Override
   public State<Regexp<T>> getStateToRemove(final StateRemovalRegexpAutomaton<T> automaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
     StateRemovalRegexpAutomaton<T> newAut;
-    double oldLength = getAutomatonLength(automaton);
-    double minLenght = Double.MAX_VALUE;
+    double minLength = Double.MAX_VALUE;
     State<Regexp<T>> minState = null;
     for (State<Regexp<T>> state : automaton.getDelta().keySet()) {
       if (state.equals(automaton.getSuperFinalState())||state.equals(automaton.getSuperInitialState())) {
@@ -72,13 +75,12 @@ public class Fullscan<T> implements Orderer<T> {
       newAut= new StateRemovalRegexpAutomaton<T>(automaton);
       newAut.removeState(state);
       double thisLength= getAutomatonLength(newAut);
-      if (thisLength < minLenght) {
-        minLenght= thisLength;
+      if ((thisLength < minLength)||((thisLength == minLength)&&(state.getName() < minState.getName()))) { 
+        minLength= thisLength;
         minState = state;
       }
     }
     assert minState != null;
-    LOG.debug("Old automaton length: " + String.valueOf(oldLength) + ", new automaton length: " + String.valueOf(minLenght));
     return minState;
   }
 

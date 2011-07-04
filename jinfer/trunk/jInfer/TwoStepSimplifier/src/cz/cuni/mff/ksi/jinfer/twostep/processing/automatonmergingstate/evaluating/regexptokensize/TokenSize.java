@@ -14,25 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexp;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexptokensize;
 
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.Evaluator;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
+import java.util.List;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public class BasicInterval implements Evaluator<RegexpInterval> {
+public class TokenSize<T> implements RegexpEvaluator<T> {
 
   @Override
-  public double evaluate(RegexpInterval x) throws InterruptedException {
-    if (x.isUnbounded()) {
-      return 1+UniversalCodeForIntegers.getSingleton().evaluate(x.getMin());
-    }
-    return 1+UniversalCodeForIntegers.getSingleton().evaluate(x.getMin()) + UniversalCodeForIntegers.getSingleton().evaluate(x.getMax());
+  public void setInputStrings(List<List<T>> inputStrings) {
   }
-  
+
+  @Override
+  public double evaluate(Regexp<T> x) throws InterruptedException {
+    return x.getTokens().size();
+  }
 }

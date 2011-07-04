@@ -20,9 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * TODO anti Comment!
@@ -30,7 +28,8 @@ import java.util.List;
  * @author anti
  */
 class StepPath<T> {
-
+  private static final Logger LOG = Logger.getLogger(StepPath.class
+          );
   private Automaton<T> aut;
   private State<T> lastState;
   private double mdl;
@@ -47,11 +46,16 @@ class StepPath<T> {
       }
       unity += lastState.getFinalCount();
 
+      boolean visited = false;
       for (Step<T> outStep : aut.getDelta().get(lastState)) {
          if (outStep.getAcceptSymbol().equals(symbol)) {
+           if (visited) {
+             LOG.fatal("TUUUUUUUUU");
+             break;
+           }
            lastState = outStep.getDestination();
            mdl-= UniversalCodeForIntegers.log2(outStep.getUseCount() / unity);
-           break;
+           visited = true;
         }
       }
   }

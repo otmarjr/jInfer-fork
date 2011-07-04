@@ -29,6 +29,8 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveMDL;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveMDLFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -54,6 +56,7 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
   private static final Logger LOG = Logger.getLogger(AutomatonMergingState.class);
   private final AutomatonSimplifier<AbstractStructuralNode> automatonSimplifier;
   private final RegexpAutomatonSimplifier<AbstractStructuralNode> regexpAutomatonSimplifier;
+  private final AutomatonSimplifier<AbstractStructuralNode> defective = (new DefectiveMDLFactory()).<AbstractStructuralNode>create();
 
   private class AbstractStructuralNodeSymbolToString implements SymbolToString<AbstractStructuralNode> {
 
@@ -157,8 +160,12 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     LOG.debug(automaton);
 
     // 3.2 simplify by merging states
-    final Automaton<AbstractStructuralNode> simplifiedAutomaton = automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName(), inputStrings);
+    Automaton<AbstractStructuralNode> simplifiedAutomaton = automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName(), inputStrings);
     LOG.debug(">>> After automaton simplifying:");
+    LOG.debug(simplifiedAutomaton);
+    
+    simplifiedAutomaton= defective.simplify(simplifiedAutomaton, elementSymbolToString, inputStrings);
+    LOG.debug(">>> After defecting:");
     LOG.debug(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton

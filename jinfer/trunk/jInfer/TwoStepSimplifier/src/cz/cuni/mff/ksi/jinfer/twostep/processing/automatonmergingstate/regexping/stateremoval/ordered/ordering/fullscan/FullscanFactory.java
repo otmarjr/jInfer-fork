@@ -16,10 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.fullscan;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.Orderer;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.OrdererFactory;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -40,11 +44,13 @@ public class FullscanFactory implements OrdererFactory {
    */
   public static final String DISPLAY_NAME = "Fullscan";
   private static final Logger LOG = Logger.getLogger(FullscanFactory.class);
+  public static final String PROPERTIES_REVAL = "regexp-evaluator";
+  public static final String PROPERTIES_REVAL_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpEvaluatorToStringSize";
 
   @Override
   public <T> Orderer<T> create() {
     LOG.debug("Creating new " + NAME);
-    return new Fullscan<T>();
+    return new Fullscan<T>(getRevalFactory());
   }
 
   @Override
@@ -75,4 +81,13 @@ public class FullscanFactory implements OrdererFactory {
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
+
+  private RegexpEvaluatorFactory getRevalFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(getName());
+
+    return ModuleSelectionHelper.lookupImpl(RegexpEvaluatorFactory.class,
+            p.getProperty(PROPERTIES_REVAL, PROPERTIES_REVAL_DEFAULT));
+    
+  }
+  
 }

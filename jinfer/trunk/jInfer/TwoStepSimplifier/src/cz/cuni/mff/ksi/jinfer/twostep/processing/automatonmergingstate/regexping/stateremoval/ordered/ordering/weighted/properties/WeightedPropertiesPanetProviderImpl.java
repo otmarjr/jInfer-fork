@@ -22,12 +22,14 @@ import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.weighted.WeightedFactory;
 import java.util.List;
 import java.util.Properties;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
+@ServiceProvider(service = PropertiesPanelProvider.class)
 public class WeightedPropertiesPanetProviderImpl implements PropertiesPanelProvider {
   private static final int PANEL_PRIORITY = 400000;
   private static final String UPCATEGORY = "ordering";

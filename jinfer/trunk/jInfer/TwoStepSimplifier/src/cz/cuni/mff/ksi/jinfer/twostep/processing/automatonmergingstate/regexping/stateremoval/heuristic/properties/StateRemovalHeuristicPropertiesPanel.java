@@ -23,8 +23,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.heuristic.StateRemovalHeuristicFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.StateRemovalOrdered;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.StateRemovalOrderedFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.RegexpEvaluatorFactory;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
 
@@ -71,7 +69,7 @@ public class StateRemovalHeuristicPropertiesPanel extends AbstractPropertiesPane
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(labelOrderer, gridBagConstraints);
 
-    comboOrderer.setRenderer(new ProjectPropsComboRenderer());
+    comboOrderer.setRenderer(new ProjectPropsComboRenderer(comboOrderer.getRenderer()));
     comboOrderer.setMinimumSize(new java.awt.Dimension(200, 22));
     comboOrderer.setPreferredSize(new java.awt.Dimension(200, 22));
     comboOrderer.addActionListener(new java.awt.event.ActionListener() {

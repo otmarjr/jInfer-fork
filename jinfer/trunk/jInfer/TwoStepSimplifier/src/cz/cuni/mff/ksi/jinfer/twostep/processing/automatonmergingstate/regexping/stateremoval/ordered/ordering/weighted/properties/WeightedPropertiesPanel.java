@@ -51,7 +51,7 @@ public class WeightedPropertiesPanel extends AbstractPropertiesPanel  {
     jLabel1 = new javax.swing.JLabel();
     jComboBox1 = new javax.swing.JComboBox();
     jScrollPane1 = new javax.swing.JScrollPane();
-    descOrderer = new javax.swing.JTextArea();
+    descOrderer = new javax.swing.JTextPane();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -62,7 +62,7 @@ public class WeightedPropertiesPanel extends AbstractPropertiesPanel  {
     add(jLabel1, gridBagConstraints);
 
     jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-    jComboBox1.setRenderer(new ProjectPropsComboRenderer());
+    jComboBox1.setRenderer(new ProjectPropsComboRenderer(jComboBox1.getRenderer()));
     jComboBox1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jComboBox1ActionPerformed(evt);
@@ -73,15 +73,19 @@ public class WeightedPropertiesPanel extends AbstractPropertiesPanel  {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jComboBox1, gridBagConstraints);
 
-    descOrderer.setColumns(20);
-    descOrderer.setRows(5);
+    descOrderer.setContentType("text/html");
+    descOrderer.setEditable(false);
+    descOrderer.setFocusable(false);
+    descOrderer.setOpaque(false);
     jScrollPane1.setViewportView(descOrderer);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jScrollPane1, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
@@ -98,7 +102,7 @@ public class WeightedPropertiesPanel extends AbstractPropertiesPanel  {
   }//GEN-LAST:event_jComboBox1ActionPerformed
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JTextArea descOrderer;
+  private javax.swing.JTextPane descOrderer;
   private javax.swing.JComboBox jComboBox1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JScrollPane jScrollPane1;
@@ -113,7 +117,7 @@ public class WeightedPropertiesPanel extends AbstractPropertiesPanel  {
   @Override
   public void load() {
     jComboBox1.setModel(new DefaultComboBoxModel(
-            ModuleSelectionHelper.lookupImpls(OrdererFactory.class).toArray()));
+            ModuleSelectionHelper.lookupImpls(RegexpEvaluatorFactory.class).toArray()));
 
     jComboBox1.setSelectedItem(ModuleSelectionHelper.lookupImpl(RegexpEvaluatorFactory.class,
             properties.getProperty(WeightedFactory.PROPERTIES_REVAL,

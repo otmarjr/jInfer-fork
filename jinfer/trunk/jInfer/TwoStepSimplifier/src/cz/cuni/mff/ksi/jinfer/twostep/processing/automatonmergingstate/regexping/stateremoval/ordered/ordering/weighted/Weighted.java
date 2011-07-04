@@ -24,6 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode.BitCode;
 
 /**
@@ -41,8 +42,8 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluatin
 public class Weighted<T> implements Orderer<T> {
   private RegexpEvaluator<T> rEval;
 
-  public Weighted() {
-    this.rEval= new BitCode<T>();
+  public Weighted(RegexpEvaluatorFactory factory) {
+    this.rEval= factory.<T>create();
   }
   
   private double getStateWeight(final StateRemovalRegexpAutomaton<T> automaton, final State<Regexp<T>> state) throws InterruptedException {

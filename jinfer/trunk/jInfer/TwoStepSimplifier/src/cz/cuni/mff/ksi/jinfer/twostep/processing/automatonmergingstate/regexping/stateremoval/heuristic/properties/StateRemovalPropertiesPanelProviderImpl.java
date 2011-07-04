@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexpin
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.StateRemovalOrderedFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.heuristic.StateRemovalHeuristicFactory;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
@@ -41,12 +41,12 @@ public class StateRemovalPropertiesPanelProviderImpl implements PropertiesPanelP
 
   @Override
   public String getName() {
-    return StateRemovalOrderedFactory.NAME;
+    return StateRemovalHeuristicFactory.NAME;
   }
 
   @Override
   public String getDisplayName() {
-    return StateRemovalOrderedFactory.DISPLAY_NAME;
+    return StateRemovalHeuristicFactory.DISPLAY_NAME;
   }
 
   @Override

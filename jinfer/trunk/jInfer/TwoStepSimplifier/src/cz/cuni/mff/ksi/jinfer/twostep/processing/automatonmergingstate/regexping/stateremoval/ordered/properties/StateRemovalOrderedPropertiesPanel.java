@@ -71,7 +71,7 @@ public class StateRemovalOrderedPropertiesPanel extends AbstractPropertiesPanel 
 
     comboOrderer.setMinimumSize(new java.awt.Dimension(200, 22));
     comboOrderer.setPreferredSize(new java.awt.Dimension(200, 22));
-    comboOrderer.setRenderer(new ProjectPropsComboRenderer());
+    comboOrderer.setRenderer(new ProjectPropsComboRenderer(comboOrderer.getRenderer()));
     comboOrderer.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         comboOrdererChanged(evt);

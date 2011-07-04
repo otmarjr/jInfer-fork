@@ -50,32 +50,19 @@ public class NaiveRules<T> implements Evaluator<Automaton<T>> {
   
   @Override
   public double evaluate(Automaton<T> aut) throws InterruptedException {
-    double result2= 0.0;
+    double result= 0.0;
     for (State<T> state : aut.getDelta().keySet()) {
       double unity = state.getFinalCount();
       for (Step<T> step : aut.getDelta().get(state)) {
         unity+= step.getUseCount();
       }
       if (state.getFinalCount() > 0) {
-        result2+= ((double) state.getFinalCount()) * (-UniversalCodeForIntegers.log2(state.getFinalCount() / unity));
+        result+= ((double) state.getFinalCount()) * (-UniversalCodeForIntegers.log2(state.getFinalCount() / unity));
       }
       for (Step<T> step : aut.getDelta().get(state)) {
-        result2+= ((double) step.getUseCount()) * (-UniversalCodeForIntegers.log2(step.getUseCount() / unity));
+        result+= ((double) step.getUseCount()) * (-UniversalCodeForIntegers.log2(step.getUseCount() / unity));
       }
     }
-    double result = 0.0;
-    for (List<T> inputString : inputStrings) {
-      StepPath<T> path = new StepPath<T>(aut);
-      for (T rs : inputString) {
-        path.suffix(rs);
-      }
-      path.finalState();
-      
-      double inter = path.getMDL();
-      assert inter >= 0;
-      result+= inter;
-    }
-    LOG.error("Reeeeee" + String.valueOf(result) + "    " + String.valueOf(result2));
-    return result2;
+    return result;
   }
 }

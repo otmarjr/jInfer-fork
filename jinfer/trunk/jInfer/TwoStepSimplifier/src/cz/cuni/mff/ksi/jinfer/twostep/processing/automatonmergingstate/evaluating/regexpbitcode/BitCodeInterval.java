@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexp;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode;
 
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.Evaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
 
@@ -25,29 +25,14 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluatin
  *
  * @author anti
  */
-class BasicRegexp<T> implements Evaluator<Regexp<T>> {
-  BasicInterval bi = new BasicInterval();
- 
+public class BitCodeInterval implements Evaluator<RegexpInterval> {
+
   @Override
-  public double evaluate(Regexp<T> x) throws InterruptedException {
-    UniversalCodeForIntegers uic = UniversalCodeForIntegers.getSingleton();
-    double result = 2;
-    switch (x.getType()) {
-      case LAMBDA:
-        return 0;
-      case TOKEN: 
-        return result + bi.evaluate(x.getInterval());
-      case CONCATENATION:
-      case ALTERNATION:
-      case PERMUTATION:
-        result+= uic.evaluate(x.getChildren().size());
-        for (Regexp<T> y : x.getChildren()) {
-          result+= this.evaluate(y);
-        }
-        return result;
-      default:
-        throw new IllegalStateException("Unknown regexp type.");
+  public double evaluate(RegexpInterval x) throws InterruptedException {
+    if (x.isUnbounded()) {
+      return 1+UniversalCodeForIntegers.getSingleton().evaluate(x.getMin());
     }
+    return 1+UniversalCodeForIntegers.getSingleton().evaluate(x.getMin()) + UniversalCodeForIntegers.getSingleton().evaluate(x.getMax());
   }
- 
+  
 }

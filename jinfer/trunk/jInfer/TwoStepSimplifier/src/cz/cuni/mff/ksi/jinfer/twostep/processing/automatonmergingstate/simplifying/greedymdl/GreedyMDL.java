@@ -99,7 +99,6 @@ public class GreedyMDL<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
-    MergeConditionTester<T> dt = (new DeterministicFactory()).<T>create();
     Automaton<T> oldAut = inputAutomaton;
     evaluator.setInputStrings(inputStrings);
     double oldMdl = evaluator.evaluate(oldAut);
@@ -115,11 +114,6 @@ public class GreedyMDL<T> implements AutomatonSimplifier<T> {
         for (List<List<State<T>>> mergAlt : mergableStates) {
           for (List<State<T>> mergSeq : mergAlt) {
             newAut.mergeStates(mergSeq);
-          }
-          for (List<List<State<T>>> mA : dt.getMergableStates(newAut)) {
-            for (List<State<T>> mS : mA) {
-              newAut.mergeStates(mS);
-            }
           }
           newMdl = evaluator.evaluate(newAut);
           if (newMdl < oldMdl) {

@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexp;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
 import java.util.List;
 
 /**
@@ -25,22 +26,38 @@ import java.util.List;
  *
  * @author anti
  */
-public class RegexpMDL<T> implements RegexpEvaluator<T> {
-  private BasicRegexp<T> basicRegexp;
+public class BitCode<T> implements RegexpEvaluator<T> {
 
-  public RegexpMDL() {
-    this.basicRegexp = new BasicRegexp<T>();
+  BitCodeInterval bi;
+
+  public BitCode() {
+    this.bi = new BitCodeInterval();
   }
 
-  
   @Override
   public void setInputStrings(List<List<T>> inputStrings) {
-
   }
 
   @Override
   public double evaluate(Regexp<T> x) throws InterruptedException {
-    return basicRegexp.evaluate(x);
+    UniversalCodeForIntegers uic = UniversalCodeForIntegers.getSingleton();
+    double result = 2;
+    switch (x.getType()) {
+      case LAMBDA:
+        return 0;
+      case TOKEN:
+        return result + bi.evaluate(x.getInterval());
+      case CONCATENATION:
+      case ALTERNATION:
+      case PERMUTATION:
+        result += uic.evaluate(x.getChildren().size());
+        for (Regexp<T> y : x.getChildren()) {
+          result += this.evaluate(y);
+        }
+        return result;
+      default:
+        throw new IllegalStateException("Unknown regexp type.");
+    }
+
   }
-  
 }

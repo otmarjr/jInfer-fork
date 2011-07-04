@@ -25,7 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexp.RegexpMDL;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode.BitCode;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,7 +53,7 @@ public class Total<T> implements Orderer<T> {
   public Total() {
     this.totalOrdering = new LinkedList<Pair<State<Regexp<T>>, Double>>();
     this.uic= UniversalCodeForIntegers.getSingleton();
-    this.rEval= new RegexpMDL<T>();
+    this.rEval= new BitCode<T>();
   }
   
   private double getStepWeight(final StateRemovalRegexpAutomaton<T> automaton, final Step<Regexp<T>> step) throws InterruptedException {

@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval;
 
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
+import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -70,7 +72,21 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
    * @param anotherAutomaton another {@link StateRemovalRegexpAutomaton} we will be clone of
    */
   public StateRemovalRegexpAutomaton(final StateRemovalRegexpAutomaton<T> anotherAutomaton) {
-    super(anotherAutomaton);
+    super(false);
+    
+    final AutomatonCloner<Regexp<T>, Regexp<T>> cloner= new AutomatonCloner<Regexp<T>, Regexp<T>>();
+
+    cloner.convertAutomaton(anotherAutomaton, this,
+            new
+              AutomatonClonerSymbolConverter<Regexp<T>, Regexp<T>>() {
+                @Override
+                public Regexp<T> convertSymbol(Regexp<T> symbol) {
+                  return symbol;
+                }
+              }
+    );
+    this.superInitialState = cloner.getStateConversionMap().get(anotherAutomaton.getSuperInitialState());
+    this.superFinalState = cloner.getStateConversionMap().get(anotherAutomaton.getSuperFinalState());
   }
 
   private void createSuperInitialState() {
@@ -127,6 +143,8 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
               oldLoopStep.getUseCount(), oldLoopStep.getMinUseCount());
       this.delta.get(state).remove(oldLoopStep);
       this.reverseDelta.get(state).remove(oldLoopStep);
+      this.delta.get(state).add(newLoopStep);
+      this.reverseDelta.get(state).add(newLoopStep);
       return newLoopStep;
     }
 
@@ -144,6 +162,8 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
       this.reverseDelta.get(state).remove(oldLoopStep);
     }
     newLoopStep = new Step<Regexp<T>>(loopRegexpAlt, state, state, max, min);
+    this.delta.get(state).add(newLoopStep);
+    this.reverseDelta.get(state).add(newLoopStep);
     return newLoopStep;
   }
 
@@ -266,7 +286,7 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
 
   }
 
-  private Step<Regexp<T>> collapseStateParallelSteps(final State<Regexp<T>> state) {
+  public Step<Regexp<T>> collapseStateParallelSteps(final State<Regexp<T>> state) {
     final Step<Regexp<T>> newLoopStep = this.collapseStateLoops(state);
 
     this.collapseStateInSteps(state);

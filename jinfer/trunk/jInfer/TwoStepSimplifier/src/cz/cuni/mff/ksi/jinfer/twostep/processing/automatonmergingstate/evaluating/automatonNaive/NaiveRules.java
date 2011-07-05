@@ -60,7 +60,9 @@ public class NaiveRules<T> implements Evaluator<Automaton<T>> {
         result+= ((double) state.getFinalCount()) * (-UniversalCodeForIntegers.log2(state.getFinalCount() / unity));
       }
       for (Step<T> step : aut.getDelta().get(state)) {
-        result+= ((double) step.getUseCount()) * (-UniversalCodeForIntegers.log2(step.getUseCount() / unity));
+        if (step.getUseCount() > 0) {
+          result+= ((double) step.getUseCount()) * (-UniversalCodeForIntegers.log2(step.getUseCount() / unity));
+        }
       }
     }
     return result;

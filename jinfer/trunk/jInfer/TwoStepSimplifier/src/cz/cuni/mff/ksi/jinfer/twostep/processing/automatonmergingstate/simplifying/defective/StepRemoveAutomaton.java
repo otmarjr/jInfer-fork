@@ -29,11 +29,13 @@ public class StepRemoveAutomaton<T> extends Automaton<T> {
     super(anotherAutomaton);
   }
   
-  public void tryRemoveStep(Step<T> step) {
-    this.delta.get(step.getSource()).remove(step);
+  public int tryRemoveStep(Step<T> step) {
+    step.setUseCount(0);
+    return step.getMinUseCount();
   }
   
-  public void undoRemoveStep(Step<T> step) {
-    this.delta.get(step.getSource()).add(step);
+  
+  public void undoRemoveStep(Step<T> step, int useCount) {
+    step.setUseCount(useCount);
   }
 }

@@ -22,12 +22,12 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.DeterministicFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -72,16 +72,22 @@ public class DefectiveMDL<T> implements AutomatonSimplifier<T> {
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     evaluator.setInputStrings(inputStrings);
     StepRemoveAutomaton<T> stepAutomaton = new StepRemoveAutomaton<T>(inputAutomaton);
+    Set<Step<T>> toRemoveSet = new HashSet<Step<T>>();
     for (State<T> state : stepAutomaton.getDelta().keySet()) {
       for (Step<T> step : stepAutomaton.getDelta().get(state)) {
         double mdl = evaluator.evaluate(stepAutomaton);
-        stepAutomaton.tryRemoveStep(step);
+        int useCount = stepAutomaton.tryRemoveStep(step);
         double mdl2 = evaluator.evaluate(stepAutomaton);
+        LOG.error("mdl:" + String.valueOf(mdl) + " mdl2: " + String.valueOf(mdl2));
         assert mdl2 < mdl;
-        UniversalCodeForIntegers uic =  UniversalCodeForIntegers.getSingleton();
-        mdl2+= 2*UniversalCodeForIntegers.log2(stepAutomaton.getDelta().size());
+        mdl2+= useCount * 2 * UniversalCodeForIntegers.log2(1 + stepAutomaton.getDelta().size());
         if (mdl2 > mdl) {
-          stepAutomaton.undoRemoveStep(step);
+          stepAutomaton.undoRemoveStep(step, useCount);
+        } else {
+          stepAutomaton.undoRemoveStep(step, useCount);
+          toRemoveSet.add(step);
+          LOG.error("Removed step : " + step.toString());
+          
         }
       }
     }

@@ -1,0 +1,1 @@
+makeindex diplomka.nlo -s nomencl.ist -o diplomka.nls

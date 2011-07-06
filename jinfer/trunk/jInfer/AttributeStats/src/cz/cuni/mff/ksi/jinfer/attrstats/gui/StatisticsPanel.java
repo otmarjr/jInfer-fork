@@ -45,7 +45,8 @@ import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
  *
  * @author vektor
  */
-@SuppressWarnings("PMD.SingularField")
+@SuppressWarnings({"PMD.SingularField", "PMD.UnusedFormalParameter",
+  "PMD.MethodArgumentCouldBeFinal", "PMD.TooManyFields", "PMD.TooManyMethods"})
 public class StatisticsPanel extends JPanel {
 
   private static final long serialVersionUID = 5415245241L;

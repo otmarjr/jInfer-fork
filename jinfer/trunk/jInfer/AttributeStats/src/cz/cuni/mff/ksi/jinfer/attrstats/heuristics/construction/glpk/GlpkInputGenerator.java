@@ -16,15 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.LocalBranching;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -50,20 +46,40 @@ public final class GlpkInputGenerator {
   private static final String FIX_TO_0 = "s.t. f{index}: x['{mapping}'] = 0;";
 
   /**
-   * TODO vektor Comment!
+   * Generates a GLPK MathProg representation of the ID set optimization for the
+   * provided model, in this variant specifically for Local Branching heuristic.
    *
-   * @param model
-   * @param alpha
-   * @param beta
-   * @param incumbentAMs
-   * @param k
-   * @return
+   * <p>
+   * Please see {@link GlpkInputGenerator#generateGlpkInput(AMModel, List, double, double) }
+   * for general info.
+   * </p>
+   *
+   * <p>
+   * This variant will add one more constraint to ensure the
+   * Hamming distance from the incumbent solution in the form:<br/>
+   * <code>SUM<sub>I</sub> (1 - am<sub>i</sub>) + SUM<sub>J</sub> am<sub>j</sub> &lt;= k</code><br/>
+   * where <code>I</code> is the set of AMs in the incumbent solution,
+   * <code>J</code> is the set of remaining AMs in the model.
+   * </p>
+   *
+   * @param model Model from which the problem formulation should be generated.
+   * @param alpha Weight of the attribute mapping <cite>support</cite> in its total weight.
+   * @param beta Weight of the attribute mapping <cite>coverage</cite> in its total weight.
+   * @param incumbentAMs List of AMs contained in the currently incumbent
+   *   solution.
+   * @param k Maximal Hamming distance from the specified incumbent solution.
+   *
+   * @return String representation of the problem formulation in MathProg
+   * language, that can be directly passed to GLPK Solver.
+   *
+   * @see LocalBranching
    */
   public static String generateGlpkInput(final AMModel model,
           final double alpha, final double beta,
           final List<AttributeMappingId> incumbentAMs, final long k)
           throws InterruptedException {
-    final List<AttributeMappingId> candidates = getCandidates(model);
+    final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
+    Collections.shuffle(candidates);
 
     final StringBuilder mappings = new StringBuilder();
     final StringBuilder weights = new StringBuilder();
@@ -88,7 +104,7 @@ public final class GlpkInputGenerator {
       }
     }
 
-    return loadTemplate(TEMPLATE_LB).toString()
+    return GlpkUtils.loadTemplate(TEMPLATE_LB).toString()
             .replace("{constraints}", getConstraints(candidates, Collections.<AttributeMappingId>emptyList(), model))
             .replace("{mappings}", mappings)
             .replace("{weights}", weights)
@@ -98,7 +114,7 @@ public final class GlpkInputGenerator {
   }
 
   /**
-   * @see GlpkInputGenerator#generateGlpkInput(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, double, double, java.util.List)
+   * @see GlpkInputGenerator#generateGlpkInput(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, java.util.List, double, double)
    */
   public static String generateGlpkInput(final AMModel model,
           final double alpha, final double beta) throws InterruptedException {
@@ -139,7 +155,8 @@ public final class GlpkInputGenerator {
   public static String generateGlpkInput(final AMModel model,
           final List<AttributeMappingId> fixed,
           final double alpha, final double beta) throws InterruptedException {
-    final List<AttributeMappingId> candidates = getCandidates(model);
+    final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
+    Collections.shuffle(candidates);
 
     final StringBuilder mappings = new StringBuilder();
     final StringBuilder weights = new StringBuilder();
@@ -156,7 +173,7 @@ public final class GlpkInputGenerator {
               .append('\n');
     }
 
-    final String result = loadTemplate(TEMPLATE).toString()
+    final String result = GlpkUtils.loadTemplate(TEMPLATE).toString()
             .replace("{constraints}", getConstraints(candidates, fixed, model))
             .replace("{mappings}", mappings)
             .replace("{weights}", weights);
@@ -225,45 +242,11 @@ public final class GlpkInputGenerator {
     return index + 1;
   }
 
-  // TODO vektor Move these to utils?
-
   private static boolean mappingsCollide(final AttributeMappingId mapping1,
           final AttributeMappingId mapping2, final AMModel model) {
     if (mapping1.getElement().equals(mapping2.getElement())) {
       return true;
     }
     return MappingUtils.imagesIntersect(mapping1, mapping2, model);
-  }
-
-  private static List<AttributeMappingId> getCandidates(final AMModel model)
-          throws InterruptedException {
-    final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();
-    for (final AttributeMappingId mapping : model.getAMs().keySet()) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      if (MappingUtils.isCandidateMapping(mapping, model)) {
-        ret.add(mapping);
-      }
-    }
-
-    Collections.shuffle(ret);
-    return ret;
-  }
-
-  private static String loadTemplate(final String resource) {
-    try {
-      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
-      final BufferedReader br = new BufferedReader(new InputStreamReader(is));
-      final StringBuilder ret = new StringBuilder();
-      String line;
-      while ((line = br.readLine()) != null) {
-        ret.append(line).append('\n');
-      }
-      return ret.toString();
-    } catch (final IOException ex) {
-      LOG.error("Exception occured while creating GLPK input.", ex);
-      return null;
-    }
   }
 }

@@ -9,6 +9,7 @@
 \usepackage{xstring}
 \usepackage{wrapfig}
 \usepackage{appendix}
+\usepackage{nomencl}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -56,6 +57,9 @@
 \chapter*{#1}
 \addcontentsline{toc}{chapter}{#1}
 }
+
+\renewcommand{\nomname}{List of Abbreviations}
+\makenomenclature
 
 \begin{document}
 
@@ -211,11 +215,21 @@ Keywords: XML, ID attributes, inference
 
 TODO why is this important
 
+TODO link to the article mentioning how few XMLs have schemas
+
 \chapter{Definitions}
 
 TODO talk about key definition from \cite{keX}
 
-talk about ID, IDREF, ... talk about XML schema keys
+\begin{itemize}
+	\item XML tree
+	\item Element, Attribute
+	\item ID, IDREF, IDREFS attribute according to specification
+	\item XSD keys (compare them to ID attributes)
+	\item Key according to Keys for XML
+	\item Attribute mapping
+	\item ID set
+\end{itemize}
 
 \chapter{Research}
 
@@ -232,7 +246,9 @@ TODO other approaches to max IS
 
 \chapter{MIP Approach}
 
-TODO FIDAX is cool, but their heuristic might not be the best. It is a IS problem, let's try a multi-purpose solver.
+\nomenclature{MIP}{Mixed Integer Problem}
+
+TODO FIDAX is cool, but their heuristic might not be the best. It is a IS problem, let's try a multi-purpose solver. Use GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
 
 \section{Finding ID sets with GLPK}
 
@@ -279,6 +295,8 @@ TODO if we limit GLPK's runtime, we get this
 
 TODO what they are, that they need a pool sometimes, how do we give them pool, ...
 
+TODO mention intensification, diversification
+
 \subsubsection{Identity}
 
 TODO trivial trivial
@@ -305,25 +323,35 @@ TODO
 
 \subsubsection{Local Branching}
 
-TODO
+TODO explain how this translates to GLPK input
 
 \chapter{Experiments}
 
 \section{Experimental Data}
 
+TODO types of data:
+\begin{itemize}
+	\item Realistic - TODO talk about all that are used
+	\item Artificial - random graphs - TODO talk about their generation
+\end{itemize}
+
 \section{Experimental Setup}
+
+TODO we will be using jInfer, see \ref{jInfer}.
 
 \section{Experimental Results}
 
 TODO following experiments + more
 
-Input -> How long the search for optimum lasts
-Time limit -> Quality
-Structure of the data -> Which algorithms perform the best
-Alpha, Beta -> Quality
-Which GLPK -> *
-Do I beat FIDAX with random?
-Does Fuzzy beat Random? (Seems that Random is better and even has smaller variance)
+\begin{itemize}
+	\item Input -> How long the search for optimum lasts
+	\item Time limit -> Quality
+	\item Structure of the data -> Which algorithms perform the best
+	\item Alpha, Beta -> Quality
+	\item Which GLPK -> *
+	\item Do I beat FIDAX with random?
+	\item Does Fuzzy beat Random? (Seems that Random is better and even has smaller variance)
+\end{itemize}
 
 \section{The "Best" Algorithm}
 
@@ -340,15 +368,17 @@ TODO conclusion
 %%% Tabulky v diplomové práci, existují-li.
 %\chapwithtoc{List of Tables}
 \listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
 
 %%% Použité zkratky v diplomové práci, existují-li, včetně jejich vysvětlení.
-\chapwithtoc{List of Abbreviations}
+%\chapwithtoc{List of Abbreviations}
+
+\printnomenclature
+\addcontentsline{toc}{chapter}{List of Abbreviations}
 
 %%% Přílohy k diplomové práci, existují-li (různé dodatky jako výpisy programů,
 %%% diagramy apod.). Každá příloha musí být alespoň jednou odkazována z vlastního
 %%% textu práce. Přílohy se číslují.
-
-%% TODO Appendix - About jInfer 
 
 \appendix
 
@@ -356,5 +386,6 @@ TODO conclusion
 \addcontentsline{toc}{chapter}{Appendices}
 
 \chapter{jInfer}
+\label{jInfer}
 
 \end{document}

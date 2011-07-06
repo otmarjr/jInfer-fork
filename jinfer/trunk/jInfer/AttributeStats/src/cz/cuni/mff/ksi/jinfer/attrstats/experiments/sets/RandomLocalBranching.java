@@ -29,8 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
- *
  * @author vektor
  */
 public class RandomLocalBranching extends AbstractExperimentSet {

@@ -19,6 +19,14 @@ package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Reader;
+import org.apache.log4j.Logger;
 import org.openide.util.NbPreferences;
 
 /**
@@ -30,6 +38,11 @@ public final class GlpkUtils {
 
   private static final String CMD_OPTS = "-v";
   private static final String EXPECTED = "GLPSOL: GLPK LP/MIP Solver";
+  private static final String TMP = System.getProperty("java.io.tmpdir");
+  public static final String INPUT = TMP + "/glpk_input.txt";
+  public static final String OUTPUT = TMP + "/glpk_output.txt";
+
+  private static final Logger LOG = Logger.getLogger(GlpkUtils.class);
 
   private GlpkUtils() {
 
@@ -89,6 +102,82 @@ public final class GlpkUtils {
   public static String getName(final AttributeMappingId mapping) {
     final String name = mapping.getElement() + "-" +mapping.getAttribute();
     return name.replace(':', '-');
+  }
+
+  /**
+   * Reads the specified {@link Reader} and writes its content to the specified
+   * {@link StringBuilder}.
+   *
+   * @param r Reader to read from.
+   * @param sb String buffer to write to.
+   * @throws InterruptedException If the thread is interrupted.
+   * @throws IOException If there is a problem with reading.
+   */
+  public static void readerToBuilder(final Reader r, final StringBuilder sb)
+          throws InterruptedException, IOException {
+    final BufferedReader reader = new BufferedReader(r);
+
+    String line = reader.readLine();
+    while (line != null) {
+      sb.append(line).append('\n');
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      line = reader.readLine();
+    }
+  }
+
+  /**
+   * Loads the specified resource file and returns it as String.
+   *
+   * @param resource Path to the Java resource.
+   * @return String content of the resource file.
+   */
+  public static String loadTemplate(final String resource) {
+    try {
+      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+      final StringBuilder ret = new StringBuilder();
+      readerToBuilder(new InputStreamReader(is), ret);
+      return ret.toString();
+    } catch (final Exception ex) {
+      LOG.error("Exception occured while creating GLPK input.", ex);
+      return null;
+    }
+  }
+
+  public static String[] getParameters(final int timeLimit) {
+    if (timeLimit == 0) {
+      LOG.info("Run time not limited.");
+      return new String[] {
+              GlpkUtils.getPath(),
+              "--math",
+              INPUT,
+              "-o",
+              OUTPUT
+      };
+    }
+    LOG.info("Time limit set to " + timeLimit + " seconds.");
+    return new String[] {
+              GlpkUtils.getPath(),
+              "--math",
+              "--tmlim",
+              String.valueOf(timeLimit),
+              INPUT,
+              "-o",
+              OUTPUT
+    };
+  }
+
+  public static void writeInput(final File input, final String inputString) {
+    PrintWriter pw = null;
+    try {
+      pw = new PrintWriter(input);
+      pw.write(inputString);
+    } catch (final IOException e) {
+      throw new RuntimeException(e);
+    } finally {
+      pw.close();
+    }
   }
 
 }

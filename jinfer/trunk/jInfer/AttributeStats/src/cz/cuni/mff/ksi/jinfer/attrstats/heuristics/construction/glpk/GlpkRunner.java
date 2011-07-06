@@ -18,12 +18,10 @@ package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -41,10 +39,6 @@ public final class GlpkRunner {
   }
 
   private static final Logger LOG = Logger.getLogger(GlpkRunner.class);
-
-  private static final String TMP = System.getProperty("java.io.tmpdir");
-  private static final String INPUT = TMP + "/glpk_input.txt";
-  private static final String OUTPUT = TMP + "/glpk_output.txt";
 
   /**
    * @see GlpkRunner#run(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, java.util.List, double, double, int)
@@ -78,48 +72,36 @@ public final class GlpkRunner {
   }
 
   /**
-   * TODO vektor Comment!
+   * Runs GLPK optimalization on the specified input (has to be already in
+   * MathProg format) and returns the resulting file in a string. This can
+   * be directly displayed for verification or parsed for actual AMs appearing
+   * in the "optimal" ID set.
    *
-   * @param inputString
-   * @param timeLimit
-   * @return
+   * @param inputString String representation of the GLPK input in MathProg
+   *   format.
+   * @param timeLimit Time limit for this GLPK run in seconds.
+   *
+   * @return String representation of GLPK optimalization output.
    */
   public static String run(final String inputString, final int timeLimit)
         throws InterruptedException {
-    final File inputFile = new File(INPUT);
-    final File outputFile = new File(OUTPUT);
+    final File inputFile = new File(GlpkUtils.INPUT);
+    final File outputFile = new File(GlpkUtils.OUTPUT);
 
     inputFile.delete();
     outputFile.delete();
 
-    writeInput(inputFile, inputString);
+    GlpkUtils.writeInput(inputFile, inputString);
 
     final StringBuilder ret = new StringBuilder();
     try {
       final long startTime = Calendar.getInstance().getTimeInMillis();
 
-      final ProcessBuilder processBuilder = new ProcessBuilder(getParameters(timeLimit));
+      final ProcessBuilder processBuilder = new ProcessBuilder(GlpkUtils.getParameters(timeLimit));
       final Process process = processBuilder.start();
-
-      final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-      String line;
-      while ((line = reader.readLine()) != null) {
-        ret.append(line).append('\n');
-        if (Thread.interrupted()) {
-          throw new InterruptedException();
-        }
-      }
-
+      GlpkUtils.readerToBuilder(new InputStreamReader(process.getInputStream()), ret);
       process.getOutputStream().close();
-
-      final BufferedReader outputReader = new BufferedReader(new FileReader(outputFile));
-      while ((line = outputReader.readLine()) != null) {
-        ret.append(line).append('\n');
-        if (Thread.interrupted()) {
-          throw new InterruptedException();
-        }
-      }
+      GlpkUtils.readerToBuilder(new FileReader(outputFile), ret);
 
       inputFile.delete();
       outputFile.delete();
@@ -132,42 +114,4 @@ public final class GlpkRunner {
       return ret.toString() + "\nRunning GLPK encountered an error, check log for details.";
     }
   }
-
-  // TODO vektor Move these to utils?
-
-  private static String[] getParameters(final int timeLimit) {
-    if (timeLimit == 0) {
-      LOG.info("Run time not limited.");
-      return new String[] {
-              GlpkUtils.getPath(),
-              "--math",
-              INPUT,
-              "-o",
-              OUTPUT
-      };
-    }
-    LOG.info("Time limit set to " + timeLimit + " seconds.");
-    return new String[] {
-              GlpkUtils.getPath(),
-              "--math",
-              "--tmlim",
-              String.valueOf(timeLimit),
-              INPUT,
-              "-o",
-              OUTPUT
-    };
-  }
-
-  private static void writeInput(final File input, final String inputString) {
-    PrintWriter pw = null;
-    try {
-      pw = new PrintWriter(input);
-      pw.write(inputString);
-    } catch (final IOException e) {
-      throw new RuntimeException(e);
-    } finally {
-      pw.close();
-    }
-  }
-
 }

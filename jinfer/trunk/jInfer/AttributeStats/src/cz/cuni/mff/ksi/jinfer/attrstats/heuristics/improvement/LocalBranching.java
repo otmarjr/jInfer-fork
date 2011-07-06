@@ -19,25 +19,72 @@ package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkInputGenerator;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkOutputParser;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkRunner;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
+import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * This heuristic works by creating a constrained sub-problem and then solving
+ * it. The constraint is as follows: the maximum Hamming distance between the
+ * old and new solution is limited to a constant <code>k</code>.
+ *
+ * Some implementation details:
+ * <ul>
+ *  <li>When working with AMs and ID sets, the Hamming distance is defined
+ *    as follows: sum over all AMs of (1 if solutions differ at this AM,
+ *    0 otherwise).</li>
+ *  <li><code>k</code> is fixed to be a ratio of the total AM count.</li>
+ * </ul>
+ *
+ * Local branching always works on the incumbent solution, and adds the new
+ * solution to the pool.
  *
  * @author vektor
  */
 public class LocalBranching implements ImprovementHeuristic {
 
+  private final double ratio;
+  private final int timeLimit;
+
+  /**
+   * Constructs an instance of this heuristic.
+   *
+   * @param ratio The total number of AMs is multiplied by this fraction, result
+   *   is the parameter <code>k</code> - maximum Hamming distance between the
+   *   old and the new solution.
+   * @param timeLimit Time limit in seconds of the GLPK run.
+   */
+  public LocalBranching(final double ratio, final int timeLimit) {
+    super();
+    if (ratio < 0 || ratio >= 1) {
+      throw new IllegalArgumentException("Invalid ratio: " + ratio);
+    }
+    this.ratio = ratio;
+    this.timeLimit = timeLimit;
+  }
+
   @Override
   public void start(final Experiment experiment, final List<IdSet> feasiblePool,
         final HeuristicCallback callback) throws InterruptedException {
-    // TODO vektor Implement
+    final AMModel model = experiment.getModel();
+    final Pair<IdSet, Quality> incumbent = Utils.getBest(experiment, feasiblePool);
 
-    // Add a constrain - new solution cannot be far from the incumbent
-    // Parameter k - max. Hamming distance
+    final long k = Math.round(model.getAMs().size() * ratio);
 
-    throw new UnsupportedOperationException("Not supported yet.");
+    final String glpkInput = GlpkInputGenerator.generateGlpkInput(model, experiment.getAlpha(), experiment.getBeta(), incumbent.getFirst().getMappings(), k);
+
+    final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(glpkInput, timeLimit), model, true);
+
+    final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);
+    ret.add(improved);
+    callback.finished(ret);
   }
 
   @Override

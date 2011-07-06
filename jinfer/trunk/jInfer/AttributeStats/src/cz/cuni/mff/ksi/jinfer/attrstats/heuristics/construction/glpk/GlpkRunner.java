@@ -74,23 +74,27 @@ public final class GlpkRunner {
           final List<AttributeMappingId> fixed,
           final double alpha, final double beta, final int timeLimit)
           throws InterruptedException {
-    final File input = new File(INPUT);
-    final File output = new File(OUTPUT);
+    return run(GlpkInputGenerator.generateGlpkInput(model, fixed, alpha, beta), timeLimit);
+  }
 
-    input.delete();
-    output.delete();
+  /**
+   * TODO vektor Comment!
+   *
+   * @param inputString
+   * @param timeLimit
+   * @return
+   */
+  public static String run(final String inputString, final int timeLimit)
+        throws InterruptedException {
+    final File inputFile = new File(INPUT);
+    final File outputFile = new File(OUTPUT);
 
-    PrintWriter pw = null;
+    inputFile.delete();
+    outputFile.delete();
+
+    writeInput(inputFile, inputString);
+
     final StringBuilder ret = new StringBuilder();
-    try {
-      pw = new PrintWriter(input);
-      pw.write(GlpkInputGenerator.generateGlpkInput(model, fixed, alpha, beta));
-    } catch (final IOException e) {
-      throw new RuntimeException(e);
-    } finally {
-      pw.close();
-    }
-
     try {
       final long startTime = Calendar.getInstance().getTimeInMillis();
 
@@ -109,7 +113,7 @@ public final class GlpkRunner {
 
       process.getOutputStream().close();
 
-      final BufferedReader outputReader = new BufferedReader(new FileReader(output));
+      final BufferedReader outputReader = new BufferedReader(new FileReader(outputFile));
       while ((line = outputReader.readLine()) != null) {
         ret.append(line).append('\n');
         if (Thread.interrupted()) {
@@ -117,8 +121,8 @@ public final class GlpkRunner {
         }
       }
 
-      input.delete();
-      output.delete();
+      inputFile.delete();
+      outputFile.delete();
 
       LOG.info("GLPK run took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
 
@@ -128,6 +132,8 @@ public final class GlpkRunner {
       return ret.toString() + "\nRunning GLPK encountered an error, check log for details.";
     }
   }
+
+  // TODO vektor Move these to utils?
 
   private static String[] getParameters(final int timeLimit) {
     if (timeLimit == 0) {
@@ -150,6 +156,18 @@ public final class GlpkRunner {
               "-o",
               OUTPUT
     };
+  }
+
+  private static void writeInput(final File input, final String inputString) {
+    PrintWriter pw = null;
+    try {
+      pw = new PrintWriter(input);
+      pw.write(inputString);
+    } catch (final IOException e) {
+      throw new RuntimeException(e);
+    } finally {
+      pw.close();
+    }
   }
 
 }

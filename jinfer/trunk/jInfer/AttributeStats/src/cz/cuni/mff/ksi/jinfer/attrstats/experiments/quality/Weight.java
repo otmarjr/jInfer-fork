@@ -18,8 +18,6 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
-import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 
 /**

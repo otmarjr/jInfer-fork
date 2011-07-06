@@ -21,34 +21,29 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.termination.TimeIterations;
-import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.Fuzzy;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.Random;
-import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.Identity;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.improvement.LocalBranching;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Experiment comparing Random and Fuzzy construction heuristics, only their
- * first steps.
+ * TODO vektor Comment!
  *
  * @author vektor
  */
-public class RandomVsFuzzyStart extends AbstractExperimentSet {
+public class RandomLocalBranching extends AbstractExperimentSet {
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
-    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
+    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
+            new LocalBranching(0.1, 0));
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 0; i < 100; i++) {
-      ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(0)));
-    }
-
-    for (int i = 0; i < 100; i++) {
-      ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Fuzzy(), improvement, new Weight(), new TimeIterations(0)));
+    for (int i = 0; i < 3; i++) {
+      ret.add(new ExperimentParameters(Constants.GRAPH, 10, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(1, 10000)));
     }
 
     return ret;

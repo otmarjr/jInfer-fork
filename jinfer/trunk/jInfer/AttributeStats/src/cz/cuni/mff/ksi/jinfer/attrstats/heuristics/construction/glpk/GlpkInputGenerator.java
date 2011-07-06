@@ -19,14 +19,12 @@ package cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -46,9 +44,58 @@ public final class GlpkInputGenerator {
   private static final Logger LOG = Logger.getLogger(GlpkInputGenerator.class);
 
   private static final String TEMPLATE = "cz/cuni/mff/ksi/jinfer/attrstats/heuristics/construction/glpk/GlpkInputTemplate.txt";
+  private static final String TEMPLATE_LB = "cz/cuni/mff/ksi/jinfer/attrstats/heuristics/construction/glpk/GlpkInputTemplateLB.txt";
   private static final String CONSTRAINT = "s.t. c{index}: x['{mapping1}'] + x['{mapping2}'] <= 1;";
   private static final String FIX_TO_1 = "s.t. f{index}: x['{mapping}'] = 1;";
   private static final String FIX_TO_0 = "s.t. f{index}: x['{mapping}'] = 0;";
+
+  /**
+   * TODO vektor Comment!
+   *
+   * @param model
+   * @param alpha
+   * @param beta
+   * @param incumbentAMs
+   * @param k
+   * @return
+   */
+  public static String generateGlpkInput(final AMModel model,
+          final double alpha, final double beta,
+          final List<AttributeMappingId> incumbentAMs, final long k)
+          throws InterruptedException {
+    final List<AttributeMappingId> candidates = getCandidates(model);
+
+    final StringBuilder mappings = new StringBuilder();
+    final StringBuilder weights = new StringBuilder();
+    final StringBuilder incumbent = new StringBuilder();
+    final StringBuilder remaining = new StringBuilder();
+
+    for (final AttributeMappingId mapping : candidates) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      final String name = GlpkUtils.getName(mapping);
+      mappings.append(name).append('\n');
+      weights.append(name)
+              .append(' ')
+              .append(model.weight(mapping, alpha, beta))
+              .append('\n');
+      if (incumbentAMs.contains(mapping)) {
+        incumbent.append(name).append('\n');
+      }
+      else {
+        remaining.append(name).append('\n');
+      }
+    }
+
+    return loadTemplate(TEMPLATE_LB).toString()
+            .replace("{constraints}", getConstraints(candidates, Collections.<AttributeMappingId>emptyList(), model))
+            .replace("{mappings}", mappings)
+            .replace("{weights}", weights)
+            .replace("{k}", String.valueOf(k))
+            .replace("{incumbent}", incumbent)
+            .replace("{remaining}", remaining);
+  }
 
   /**
    * @see GlpkInputGenerator#generateGlpkInput(cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel, double, double, java.util.List)
@@ -92,18 +139,7 @@ public final class GlpkInputGenerator {
   public static String generateGlpkInput(final AMModel model,
           final List<AttributeMappingId> fixed,
           final double alpha, final double beta) throws InterruptedException {
-    final long startTime = Calendar.getInstance().getTimeInMillis();
-    final List<AttributeMappingId> candidates = new ArrayList<AttributeMappingId>();
-    for (final AttributeMappingId mapping : model.getAMs().keySet()) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      if (MappingUtils.isCandidateMapping(mapping, model)) {
-        candidates.add(mapping);
-      }
-    }
-
-    Collections.shuffle(candidates);
+    final List<AttributeMappingId> candidates = getCandidates(model);
 
     final StringBuilder mappings = new StringBuilder();
     final StringBuilder weights = new StringBuilder();
@@ -120,39 +156,19 @@ public final class GlpkInputGenerator {
               .append('\n');
     }
 
-    try {
-      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(TEMPLATE);
-      final BufferedReader br = new BufferedReader(new InputStreamReader(is));
-      final StringBuilder ret = new StringBuilder();
-      String line;
-      while ((line = br.readLine()) != null) {
-        ret.append(line).append('\n');
-      }
+    final String result = loadTemplate(TEMPLATE).toString()
+            .replace("{constraints}", getConstraints(candidates, fixed, model))
+            .replace("{mappings}", mappings)
+            .replace("{weights}", weights);
 
-      final Pair<CharSequence, Integer> constraints = getConstraints(candidates, fixed, model);
-
-      final String result = ret.toString()
-              .replace("{constraints}", constraints.getFirst())
-              .replace("{mappings}", mappings)
-              .replace("{weights}", weights);
-
-      LOG.info("Graph interpretation: " + candidates.size() + " vertices, "
-              + constraints.getSecond().intValue() + " edges.");
-      if (!BaseUtils.isEmpty(fixed)) {
-        LOG.info("Fixed to 1: " + fixed.size());
-      }
-      LOG.info("Input generator took "
-              + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms.");
-      LOG.info("Input length is " + result.length() + " chars.");
-
-      return result;
-    } catch (final IOException ex) {
-      LOG.error("Exception occured while creating GLPK input.", ex);
-      return null;
+    if (!BaseUtils.isEmpty(fixed)) {
+      LOG.info("Fixed to 1: " + fixed.size());
     }
+
+    return result;
   }
 
-  private static Pair<CharSequence, Integer> getConstraints(
+  private static String getConstraints(
           final List<AttributeMappingId> candidates,
           final List<AttributeMappingId> fixed, final AMModel model)
           throws InterruptedException {
@@ -198,7 +214,7 @@ public final class GlpkInputGenerator {
       }
     }
 
-    return new Pair<CharSequence, Integer>(ret, Integer.valueOf(constraintIndex));
+    return ret.toString();
   }
 
   private static int addFixedConstraint(final String template, final StringBuilder sb, final int index, final AttributeMappingId mapping) {
@@ -209,6 +225,8 @@ public final class GlpkInputGenerator {
     return index + 1;
   }
 
+  // TODO vektor Move these to utils?
+
   private static boolean mappingsCollide(final AttributeMappingId mapping1,
           final AttributeMappingId mapping2, final AMModel model) {
     if (mapping1.getElement().equals(mapping2.getElement())) {
@@ -217,4 +235,35 @@ public final class GlpkInputGenerator {
     return MappingUtils.imagesIntersect(mapping1, mapping2, model);
   }
 
+  private static List<AttributeMappingId> getCandidates(final AMModel model)
+          throws InterruptedException {
+    final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();
+    for (final AttributeMappingId mapping : model.getAMs().keySet()) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      if (MappingUtils.isCandidateMapping(mapping, model)) {
+        ret.add(mapping);
+      }
+    }
+
+    Collections.shuffle(ret);
+    return ret;
+  }
+
+  private static String loadTemplate(final String resource) {
+    try {
+      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+      final BufferedReader br = new BufferedReader(new InputStreamReader(is));
+      final StringBuilder ret = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+        ret.append(line).append('\n');
+      }
+      return ret.toString();
+    } catch (final IOException ex) {
+      LOG.error("Exception occured while creating GLPK input.", ex);
+      return null;
+    }
+  }
 }

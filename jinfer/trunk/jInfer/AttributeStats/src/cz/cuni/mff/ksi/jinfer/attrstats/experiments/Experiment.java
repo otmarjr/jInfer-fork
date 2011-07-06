@@ -176,7 +176,7 @@ public class Experiment implements IGGeneratorCallback {
     /** Time in milliseconds when this iteration started. */
     private final long iterationStartTime;
 
-    public Callback(int iteration, long iterationStartTime) {
+    public Callback(final int iteration, final long iterationStartTime) {
       this.iteration = iteration;
       this.iterationStartTime = iterationStartTime;
     }

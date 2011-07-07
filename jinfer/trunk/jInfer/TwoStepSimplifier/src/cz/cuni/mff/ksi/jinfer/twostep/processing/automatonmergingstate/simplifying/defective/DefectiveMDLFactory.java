@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.SuspectionFactory;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -46,12 +47,15 @@ public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
   public static final String DISPLAY_NAME = "DefectiveMDL";
   public static final String PROPERTIES_EVALUATOR = "evaluator";
   public static final String PROPERTIES_EVALUATOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaiveDefective";
-
+  public static final String PROPERTIES_SUSPECTION = "suspection";
+  public static final String PROPERTIES_SUSPECTION_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveMDLSuspectionOnebyone";
+  
   @Override
   public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
     return new DefectiveMDL<T>(
-            getAutomatonEvaluatorFactory()
+            getAutomatonEvaluatorFactory(),
+            getSuspectionFactory()
             );
   }
 
@@ -65,6 +69,8 @@ public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
     final StringBuilder sb = new StringBuilder(getDisplayName());
     sb.append("(");
     sb.append(getAutomatonEvaluatorFactory().getModuleDescription());
+    sb.append(",");
+    sb.append(getSuspectionFactory().getModuleDescription());
     sb.append(")");
     return sb.toString();
   }
@@ -87,6 +93,12 @@ public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(DefectiveAutomatonEvaluatorFactory.class, p.getProperty(PROPERTIES_EVALUATOR, PROPERTIES_EVALUATOR_DEFAULT));
+  }
+
+  private SuspectionFactory getSuspectionFactory() {
+    final Properties p = RunningProject.getActiveProjectProps(getName());
+
+    return ModuleSelectionHelper.lookupImpl(SuspectionFactory.class, p.getProperty(PROPERTIES_SUSPECTION, PROPERTIES_SUSPECTION_DEFAULT));
   }
 
   @Override

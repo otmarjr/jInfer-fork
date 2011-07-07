@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.automatonNaive;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.automatonNaiveAlphabet;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
@@ -22,26 +22,25 @@ import java.util.Collections;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
-
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
 @ServiceProvider(service = AutomatonEvaluatorFactory.class)
-public class NaiveFactory implements AutomatonEvaluatorFactory {
+public class NaiveAlphabetFactory implements AutomatonEvaluatorFactory {
   /**
    * Canonical name.
    */
-  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaive";
+  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaiveAlphabet";
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "Naive";
+  public static final String DISPLAY_NAME = "Naive Alphabet";
 
   @Override
   public <T> AutomatonEvaluator<T> create() {
-    return new Naive<T>();
+    return new NaiveAlphabet<T>();
   }
   
   @Override

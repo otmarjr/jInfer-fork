@@ -46,10 +46,6 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
     this.removedInputStrings= new LinkedList<List<T>>();
   }
   
-  public void removeInputString(List<T> string) {
-    this.removedInputStrings.add(string);
-  }
-  
   public List<List<T>> getRemovedInputStrings() {
     return this.removedInputStrings;
   }
@@ -111,6 +107,7 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
       assert toTake != null;
       assert toTake.getUseCount() > 0;
       toTake.setUseCount(toTake.getUseCount() - 1);
+      toTake.removeInputString(string);
       actual= toTake.getDestination();
     }
     assert actual.getFinalCount() > 0;
@@ -125,6 +122,7 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
       assert toTake != null;
       assert toTake.getUseCount() >= 0;
       toTake.setUseCount(toTake.getUseCount() + 1);
+      toTake.addInputString(string);
       actual= toTake.getDestination();
     }
     assert actual.getFinalCount() >= 0;

@@ -165,7 +165,7 @@ signature
 \setlength\parindent{0mm}
 \setlength\parskip{5mm}
 
-Název práce: Title [accurate translation of the master thesis title in Czech]
+Název práce: Odvozování integritních omezení v XML % TODO how to translate this correctly?
 
 Autor: \mfauthor
 
@@ -176,7 +176,7 @@ Vedoucí diplomové práce: \mfadvisor{}, Katedra softwarového inženýrství
 Abstrakt: [abstract of 80-200 words in Czech, but not a copy of the assignment of the
 master thesis]
 
-Klíčová slova:  [3-5 keywords in Czech]
+Klíčová slova:  XML, ID atributy, odvozování
 
 \vss}\nobreak\vbox to 0.49\vsize{
 \setlength\parindent{0mm}
@@ -238,14 +238,12 @@ An extension to jInfer for finding ID attributes using MIP solver and a combinat
 
 \chapter{Definitions}
 
-TODO talk about key definition from \cite{keX}
-
 \begin{itemize}
-	\item XML tree
+	\item XML tree - from FIDAX or wherever
 	\item Element, Attribute
 	\item ID, IDREF, IDREFS attribute according to specification
 	\item XSD keys (compare them to ID attributes)
-	\item Key according to Keys for XML
+	\item Key according to Keys for XML \cite{keX}
 	\item Attribute mapping
 	\item ID set
 \end{itemize}
@@ -255,11 +253,13 @@ TODO talk about key definition from \cite{keX}
 According to the article \cite{fidax}, ...
 
 TODO talk about FIDAX
-To the best of our knowledge, there are no other articles dealing with this problem 
+To the best of our knowledge, there are no other articles dealing with this problem. 
 
 TODO talk about Fajt - but that's different, that's keys
 
 \section{Independent Set}
+
+TODO define IS rigorously
 
 TODO other approaches to max IS
 
@@ -278,12 +278,14 @@ TODO how GLPK works, how to construct a problem, how output looks, how to interp
 \section{Heuristics}
 
 TODO what is heuristics (link wise books), what is metaheuristics (we will be using them)
-TODO mention things like Taboo search
 
-TODO we will be working with heus striving to do the following: input is a list of AMs, they have their weight, we try to find a non-conflicting subset which maximizes the weight
+TODO mention things like Taboo search (we won't be using them)
+
+TODO we will be working with heuristics striving to do the following: input is a list of AMs, they have their weight, we try to find a non-conflicting subset which maximizes the weight
 
 \subsection{Constructions Heuristics}
 
+% TODO can I format things in nomenclature?
 \nomenclature{CH}{Construction Heuristic} %TODO decide on how to format CH/IH 
 
 TODO construction heuristics are heus that provide us with at least some solution.
@@ -354,9 +356,20 @@ TODO explain how this translates to GLPK input
 
 TODO types of data:
 \begin{itemize}
-	\item Realistic - TODO talk about all that are used
-	\item Artificial - random graphs - TODO talk about their generation
+	\item Realistic 
+	\item Artificial
 \end{itemize}
+
+\subsection{Realistic data}
+
+TODO talk about all that are used - mention the dataset name, some characteristics (excel sheet)
+
+\subsection{Artificial data}
+
+TODO these are random graphs.
+TODO talk about how they are created, about their structure.
+TODO talk about some "density".
+TODO show a picture, possibly from GraphViz.
 
 \section{Experimental Setup}
 
@@ -381,7 +394,15 @@ TODO following experiments + more
 
 \section{The "Best" Algorithm}
 
-TODO
+TODO we have asked a lot of questions and got the answers, now is the time to summarize, to find some "wisdom".
+
+First of all: if we have the time, it is best to just let the GLPK run. 
+We will find the optimum in this way. 
+And for many purposes, this is just fine - we need to infer something about the schema, we do it only once, so it doesn't matter that much how long it takes.
+
+Second: if we don't have enough time, we should do XYZ but it might depend on the characteristics of the data.
+For realistic (looks like THIS in graph representation) it is best to do A B C.
+Whereas, for artificial data (having IJK as their representation) it is best to just do 1 2 3.  
 
 \chapwithtoc{Conclusion}
 

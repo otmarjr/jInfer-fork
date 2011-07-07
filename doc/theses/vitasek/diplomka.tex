@@ -211,11 +211,30 @@ Keywords: XML, ID attributes, inference
 % =============== TEXT ================
 \newpage
 
+% TODO what style of quotation marks to use? 
+
 \chapwithtoc{Preface}
 
-TODO why is this important
+TODO why is this important - XMLs are extensively used but lack schemas (link Vosta's Even ant can create...).
+We already have tools to infer the structure (see jInfer), now we would like to go a bit further - to find some integrity constraints to impose on these schemas.
+Integrity schemas can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro?), etc.
+We will focus on the first kind - ID and IDREF attributes.
 
-TODO link to the article mentioning how few XMLs have schemas
+\section{Structure of the thesis}
+
+The thesis will be structured as follows. 
+
+First, we will introduce a few notions required throughout the work, such as XML tree, ID attributes, ID sets and keys for XML. 
+
+Secondly, we will review approaches to ID attribute and XML keys search from previous articles on this topic. 
+
+This will lead us to the NP-complete problem of maximal independent set (IS)\nomenclature{IS}{Independent Set}, where we will inspect approaches for solving it.
+
+We will discuss a closely related Mixed Integer Problem (MIP)\nomenclature{MIP}{Mixed Integer Problem} and prove their "equality".
+
+Afterwards, we will show how to use an external MIP solver and various heuristics to tackle this problem.
+
+An extension to jInfer for finding ID attributes using MIP solver and a combination of heuristics will be presented and experimentally evaluated in the closing chapters.
 
 \chapter{Definitions}
 
@@ -246,7 +265,7 @@ TODO other approaches to max IS
 
 \chapter{MIP Approach}
 
-\nomenclature{MIP}{Mixed Integer Problem}
+TODO rigorously define MIP - optimization problem, some of the variables integral
 
 TODO FIDAX is cool, but their heuristic might not be the best. It is a IS problem, let's try a multi-purpose solver. Use GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
 
@@ -264,6 +283,8 @@ TODO mention things like Taboo search
 TODO we will be working with heus striving to do the following: input is a list of AMs, they have their weight, we try to find a non-conflicting subset which maximizes the weight
 
 \subsection{Constructions Heuristics}
+
+\nomenclature{CH}{Construction Heuristic} %TODO decide on how to format CH/IH 
 
 TODO construction heuristics are heus that provide us with at least some solution.
 
@@ -292,6 +313,8 @@ TODO trivial, "hungry"
 TODO if we limit GLPK's runtime, we get this 
 
 \subsection{Improvement Heuristics}
+
+\nomenclature{IH}{Improvement Heuristic}
 
 TODO what they are, that they need a pool sometimes, how do we give them pool, ...
 
@@ -344,16 +367,21 @@ TODO we will be using jInfer, see \ref{jInfer}.
 TODO following experiments + more
 
 \begin{itemize}
-	\item Input -> How long the search for optimum lasts
-	\item Time limit -> Quality
+  \item Which construction heuristic is the best - limit GLPK to like 1 second
+  \item With the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
+  \item With the best IH from the previous step, how about using Random as CH?
+	\item GLPK: Input -> How long the search for optimum lasts
+	\item GLPK: Time limit -> Quality
 	\item Structure of the data -> Which algorithms perform the best
 	\item Alpha, Beta -> Quality
 	\item Which GLPK -> *
-	\item Do I beat FIDAX with random?
+	\item Do I beat FIDAX with Random?
 	\item Does Fuzzy beat Random? (Seems that Random is better and even has smaller variance)
 \end{itemize}
 
 \section{The "Best" Algorithm}
+
+TODO
 
 \chapwithtoc{Conclusion}
 

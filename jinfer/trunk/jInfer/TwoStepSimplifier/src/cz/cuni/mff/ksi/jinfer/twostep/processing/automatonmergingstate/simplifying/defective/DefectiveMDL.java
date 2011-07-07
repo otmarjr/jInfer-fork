@@ -22,6 +22,9 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluatorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.Suspection;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.onebyone.Onebyone;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.stepsuspect.StepSuspect;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -42,6 +45,7 @@ public class DefectiveMDL<T> implements AutomatonSimplifier<T> {
 
   private static final Logger LOG = Logger.getLogger(DefectiveMDL.class);
   private final DefectiveAutomatonEvaluator<T> evaluator;
+  private final Suspection<T> suspection;
 
   /**
    * Create with factory of {@link MergeConditionTester} selected.
@@ -51,6 +55,7 @@ public class DefectiveMDL<T> implements AutomatonSimplifier<T> {
    */
   public DefectiveMDL(final DefectiveAutomatonEvaluatorFactory evaluatorFactory) {
     this.evaluator = evaluatorFactory.<T>create();
+    this.suspection = new StepSuspect<T>  ();
   }
 
   /**
@@ -66,15 +71,27 @@ public class DefectiveMDL<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     DefectiveAutomaton<T> stepAutomaton = new DefectiveAutomaton<T>(inputAutomaton);
-    for (List<T> string : inputStrings) {
+    this.suspection.setInputStrings(inputStrings);
+    this.suspection.setSymbolToString(symbolToString);
+    this.suspection.setInputAutomaton(inputAutomaton);
+
+    List<List<T>> suspected;
+    while (null != (suspected = this.suspection.getNextSuspectedInputStrings())) {
       double mdl = evaluator.evaluate(stepAutomaton);
-      stepAutomaton.tryRemoveInputString(string);
+      for (List<T> inputString : suspected) {
+        stepAutomaton.tryRemoveInputString(inputString);
+      }
       double mdl2 = evaluator.evaluate(stepAutomaton);
-      LOG.error("string: " +string.toString() + " mdl:" + String.valueOf(mdl) + " mdl2: " + String.valueOf(mdl2));
+      for (List<T> inputString : suspected) {
+        LOG.error("string: " + inputString.toString());
+      }
+      LOG.error(" mdl:" + String.valueOf(mdl) + " mdl2: " + String.valueOf(mdl2));
       if (mdl2 >= mdl) {
-        stepAutomaton.undoRemoveInputString(string);
+        for (List<T> inputString : suspected) {
+          stepAutomaton.undoRemoveInputString(inputString);
+        }
       } else {
-        LOG.error("Removed string : " + string.toString());
+        LOG.error("Removed strings");
       }
     }
     stepAutomaton.minimize();

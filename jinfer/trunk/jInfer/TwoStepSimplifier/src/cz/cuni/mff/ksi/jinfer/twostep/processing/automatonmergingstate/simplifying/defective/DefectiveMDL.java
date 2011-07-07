@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.condition
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.Suspection;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.SuspectionFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.onebyone.Onebyone;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.stepsuspect.StepSuspect;
 import java.util.List;
@@ -53,9 +54,9 @@ public class DefectiveMDL<T> implements AutomatonSimplifier<T> {
    *
    * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
    */
-  public DefectiveMDL(final DefectiveAutomatonEvaluatorFactory evaluatorFactory) {
+  public DefectiveMDL(final DefectiveAutomatonEvaluatorFactory evaluatorFactory, SuspectionFactory suspectionFactory) {
     this.evaluator = evaluatorFactory.<T>create();
-    this.suspection = new StepSuspect<T>  ();
+    this.suspection = suspectionFactory.<T>create();
   }
 
   /**

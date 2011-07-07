@@ -18,9 +18,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplify
 
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
@@ -47,7 +45,7 @@ public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
    */
   public static final String DISPLAY_NAME = "DefectiveMDL";
   public static final String PROPERTIES_EVALUATOR = "evaluator";
-  public static final String PROPERTIES_EVALUATOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaive";
+  public static final String PROPERTIES_EVALUATOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaiveDefective";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
@@ -85,10 +83,10 @@ public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
     return Collections.<String>emptyList();
   }
 
-  private AutomatonEvaluatorFactory getAutomatonEvaluatorFactory() {
+  private DefectiveAutomatonEvaluatorFactory getAutomatonEvaluatorFactory() {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
-    return ModuleSelectionHelper.lookupImpl(AutomatonEvaluatorFactory.class, p.getProperty(PROPERTIES_EVALUATOR, PROPERTIES_EVALUATOR_DEFAULT));
+    return ModuleSelectionHelper.lookupImpl(DefectiveAutomatonEvaluatorFactory.class, p.getProperty(PROPERTIES_EVALUATOR, PROPERTIES_EVALUATOR_DEFAULT));
   }
 
   @Override

@@ -14,28 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating;
 
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomaton;
 
 /**
  * TODO anti Comment!
  *
  * @author anti
  */
-public class StepRemoveAutomaton<T> extends Automaton<T> {
-  public StepRemoveAutomaton(final Automaton<T> anotherAutomaton) {
-    super(anotherAutomaton);
-  }
-  
-  public int tryRemoveStep(Step<T> step) {
-    step.setUseCount(0);
-    return step.getMinUseCount();
-  }
-  
-  
-  public void undoRemoveStep(Step<T> step, int useCount) {
-    step.setUseCount(useCount);
-  }
+public interface DefectiveAutomatonEvaluator<T> extends Evaluator<DefectiveAutomaton<T>> {
 }

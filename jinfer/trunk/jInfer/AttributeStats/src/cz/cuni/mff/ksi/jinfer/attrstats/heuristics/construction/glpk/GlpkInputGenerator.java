@@ -206,7 +206,7 @@ public final class GlpkInputGenerator {
           throw new InterruptedException();
         }
 
-        if (mappingsCollide(mapping1, mapping2, model)
+        if (MappingUtils.mappingsCollide(mapping1, mapping2, model)
                 && mapping1.compareTo(mapping2) < 0) {
 
           final boolean fixed1 = fixed.contains(mapping1);
@@ -240,13 +240,5 @@ public final class GlpkInputGenerator {
             .replace("{mapping}", GlpkUtils.getName(mapping));
     sb.append(fix).append('\n');
     return index + 1;
-  }
-
-  private static boolean mappingsCollide(final AttributeMappingId mapping1,
-          final AttributeMappingId mapping2, final AMModel model) {
-    if (mapping1.getElement().equals(mapping2.getElement())) {
-      return true;
-    }
-    return MappingUtils.imagesIntersect(mapping1, mapping2, model);
   }
 }

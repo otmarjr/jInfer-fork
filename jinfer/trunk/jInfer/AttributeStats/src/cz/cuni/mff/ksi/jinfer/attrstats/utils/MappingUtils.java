@@ -129,7 +129,7 @@ public final class MappingUtils {
    * @param model Attribute mapping model to check intersection in.
    *
    * @return <code>true</code> if the two attribute mapping images intersect
-   * (have at least one common value), <code>false</code> otherwise.
+   *   (have at least one common value), <code>false</code> otherwise.
    */
   public static boolean imagesIntersect(
           final AttributeMappingId am1,
@@ -147,6 +147,27 @@ public final class MappingUtils {
             new HashSet<String>(model.getAMs().get(am1).getImage()),
             new HashSet<String>(model.getAMs().get(am2).getImage()))
             .isEmpty();
+  }
+
+  /**
+   * Checks whether two mappings collide, i.e. cannot be in the same ID set
+   * together. This can happen either if they share the type (that is the
+   * element name), or their images intersect (see
+   * {@link MappingUtils#imagesIntersect(AttributeMappingId, AttributeMappingId, AMModel) }).
+   *
+   * @param mapping1 ID of the first mapping to check.
+   * @param mapping2 ID of the second mapping to check.
+   * @param model Attribute mapping model to check the collision in.
+   * @return <code>true</code> if the two attribute mapping collide
+   *   (have the same type or their images collide),
+   *   <code>false</code> otherwise.
+   */
+  public static boolean mappingsCollide(final AttributeMappingId mapping1,
+          final AttributeMappingId mapping2, final AMModel model) {
+    if (mapping1.getElement().equals(mapping2.getElement())) {
+      return true;
+    }
+    return imagesIntersect(mapping1, mapping2, model);
   }
 
   /**

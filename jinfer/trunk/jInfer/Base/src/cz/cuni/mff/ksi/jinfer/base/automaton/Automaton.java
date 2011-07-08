@@ -207,6 +207,7 @@ public class Automaton<T> {
       if (xStep != null) {
         xStep.incUseCount();
         xStep.incMinUseCount();
+        xStep.addInputString(symbolString);
         xState= xStep.getDestination();
       } else {
         final State<T> newState= this.createNewState();
@@ -227,6 +228,7 @@ public class Automaton<T> {
         if (inBuckets.get(inStep.getSource()).containsKey(inStep.getAcceptSymbol())) {
           inBuckets.get(inStep.getSource()).get(inStep.getAcceptSymbol()).incUseCount(inStep.getUseCount());
           inBuckets.get(inStep.getSource()).get(inStep.getAcceptSymbol()).incMinUseCount(inStep.getMinUseCount());
+          inBuckets.get(inStep.getSource()).get(inStep.getAcceptSymbol()).addAllInputStrings(inStep.getInputStrings());
           this.delta.get(inStep.getSource()).remove(inStep);
           this.reverseDelta.get(inStep.getDestination()).remove(inStep);
         } else {
@@ -245,6 +247,7 @@ public class Automaton<T> {
         if (outBuckets.get(outStep.getDestination()).containsKey(outStep.getAcceptSymbol())) {
           outBuckets.get(outStep.getDestination()).get(outStep.getAcceptSymbol()).incUseCount(outStep.getUseCount());
           outBuckets.get(outStep.getDestination()).get(outStep.getAcceptSymbol()).incMinUseCount(outStep.getMinUseCount());
+          outBuckets.get(outStep.getDestination()).get(outStep.getAcceptSymbol()).addAllInputStrings(outStep.getInputStrings());
           this.delta.get(outStep.getSource()).remove(outStep);
           this.reverseDelta.get(outStep.getDestination()).remove(outStep);
         } else {

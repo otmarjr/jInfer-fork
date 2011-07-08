@@ -17,6 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Class representing step sin finite automaton.
  * It's just a container for .equals() runs in automaton.
@@ -63,6 +67,7 @@ public class Step<T> {
    * And destination, simple.
    */
   private State<T> destination;
+  private List<List<T>> inputStrings;
 
   /**
    * All settings at one constructor. In time of creating step, states from and to
@@ -80,6 +85,7 @@ public class Step<T> {
     this.minUseCount= minUseCount;
     this.source= source;
     this.destination= destination;
+    this.inputStrings= new LinkedList<List<T>>();
   }
 
   /**
@@ -186,6 +192,22 @@ public class Step<T> {
    */
   public void setDestination(final State<T> destination) {
     this.destination = destination;
+  }
+
+  public void removeInputString(List<T> inputString) {
+    this.inputStrings.remove(inputString);
+  }
+  
+  public void addInputString(List<T> inputString) {
+    this.inputStrings.add(inputString);
+  }
+  
+  public void addAllInputStrings(Collection<List<T>> inputStrings) {
+    this.inputStrings.addAll(inputStrings);
+  }
+  
+  public List<List<T>> getInputStrings() {
+    return this.inputStrings;
   }
 
   @Override

@@ -48,7 +48,7 @@ public class DefectiveMDLFactory implements DefectiveAutomatonSimplifierFactory 
   public static final String PROPERTIES_EVALUATOR = "evaluator";
   public static final String PROPERTIES_EVALUATOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaiveDefective";
   public static final String PROPERTIES_SUSPECTION = "suspection";
-  public static final String PROPERTIES_SUSPECTION_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveMDLSuspectionOnebyone";
+  public static final String PROPERTIES_SUSPECTION_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveDefectiveMDLSuspectionStepSuspect";
   
   @Override
   public <T> DefectiveAutomatonSimplifier<T> create() {

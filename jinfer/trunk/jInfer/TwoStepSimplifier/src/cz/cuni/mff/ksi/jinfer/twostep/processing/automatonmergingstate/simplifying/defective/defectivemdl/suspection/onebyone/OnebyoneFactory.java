@@ -29,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = SuspectionFactory.class)
 public class OnebyoneFactory implements SuspectionFactory{
-  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveMDLSuspectionOnebyone";
+  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveDefectiveMDLSuspectionOnebyone";
   /**
    * Name presented to user.
    */

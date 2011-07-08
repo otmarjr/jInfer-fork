@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.stepsuspect;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.stepsuspect;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.Suspection;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.Suspection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +38,7 @@ public class StepSuspect<T> implements Suspection<T> {
   private Iterator<State<T>> stateIterator;
   private Iterator<Step<T>> stepIterator;
   private State<T> actualState;
+  private boolean emptyAut;
 
   @Override
   public void setInputStrings(List<List<T>> inputStrings) {
@@ -55,12 +56,20 @@ public class StepSuspect<T> implements Suspection<T> {
   public void setInputAutomaton(Automaton<T> inputAutomaton) {
     this.inputAutomaton = inputAutomaton;
     this.stateIterator = inputAutomaton.getDelta().keySet().iterator();
-    this.actualState = stateIterator.next();
-    this.stepIterator = inputAutomaton.getDelta().get(actualState).iterator();
+    if (stateIterator.hasNext()) {
+      this.actualState = stateIterator.next();
+      this.stepIterator = inputAutomaton.getDelta().get(actualState).iterator();
+      this.emptyAut= false;
+    } else {
+      this.emptyAut= true;
+    }
   }
 
   @Override
   public List<List<T>> getNextSuspectedInputStrings() {
+    if (emptyAut) {
+      return null;
+    }
     while (!stepIterator.hasNext()) {
       if (!stateIterator.hasNext()) {
         return null;

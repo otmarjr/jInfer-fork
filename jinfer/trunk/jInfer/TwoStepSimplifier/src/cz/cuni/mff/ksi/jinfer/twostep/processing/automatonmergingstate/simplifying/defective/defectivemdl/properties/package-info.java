@@ -17,4 +17,4 @@
 /**
  * Properties panel for {@link DefectiveMDL} module.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.properties;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.properties;

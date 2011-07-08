@@ -52,7 +52,7 @@ public class StepSuspectFactory implements SuspectionFactory{
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

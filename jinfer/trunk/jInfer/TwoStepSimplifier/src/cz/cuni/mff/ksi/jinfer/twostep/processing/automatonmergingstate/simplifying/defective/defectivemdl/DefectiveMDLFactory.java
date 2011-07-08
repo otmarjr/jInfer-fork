@@ -19,8 +19,8 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplify
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluatorFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.SuspectionFactory;
 import java.util.Collections;
 import java.util.List;
@@ -33,14 +33,14 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author anti
  */
-@ServiceProvider(service = AutomatonSimplifierFactory.class)
-public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
+@ServiceProvider(service = DefectiveAutomatonSimplifierFactory.class)
+public class DefectiveMDLFactory implements DefectiveAutomatonSimplifierFactory {
 
   private static final Logger LOG = Logger.getLogger(DefectiveMDLFactory.class);
   /**
    * Canonical name.
    */
-  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveMDL";
+  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveDefectiveMDL";
   /**
    * Name presented to user.
    */
@@ -51,7 +51,7 @@ public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
   public static final String PROPERTIES_SUSPECTION_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveMDLSuspectionOnebyone";
   
   @Override
-  public <T> AutomatonSimplifier<T> create() {
+  public <T> DefectiveAutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
     return new DefectiveMDL<T>(
             getAutomatonEvaluatorFactory(),

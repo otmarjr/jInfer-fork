@@ -14,19 +14,14 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.properties;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.AutomatonMergingStateFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.DefectiveMDLFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.Suspection;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.SuspectionFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -37,23 +32,23 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
-public class DefectiveMDLPropertiesPanelProviderImpl implements PropertiesPanelProvider {
+public class DefectivePropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   private static final int PANEL_PRIORITY = 400000;
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new DefectiveMDLPropertiesPanel(properties);
+    return new DefectivePropertiesPanel(properties);
   }
 
   @Override
   public String getName() {
-    return DefectiveMDLFactory.NAME;
+    return DefectiveFactory.NAME;
   }
 
   @Override
   public String getDisplayName() {
-    return DefectiveMDLFactory.DISPLAY_NAME;
+    return DefectiveFactory.DISPLAY_NAME;
   }
 
   @Override
@@ -63,13 +58,13 @@ public class DefectiveMDLPropertiesPanelProviderImpl implements PropertiesPanelP
 
   @Override
   public String getParent() {
-    return "DefectiveAutomatonSimplifier";
+    return "AutomatonSimplifier";
   }
 
   @Override
   public List<VirtualCategoryPanel> getSubCategories() {
     final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
-    result.add(new VirtualCategoryPanel("suspecting", "Suspecting", ModuleSelectionHelper.lookupImpls(SuspectionFactory.class)));
+    result.add(new VirtualCategoryPanel("DefectiveAutomatonSimplifier", "Defective automaton simplifier", ModuleSelectionHelper.lookupImpls(DefectiveAutomatonSimplifierFactory.class)));
 
     return result;
   }

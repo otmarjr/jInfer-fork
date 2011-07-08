@@ -163,10 +163,6 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     Automaton<AbstractStructuralNode> simplifiedAutomaton = automatonSimplifier.simplify(automaton, elementSymbolToString, clusterer.getRepresentantForItem(rules.get(0)).getName(), inputStrings);
     LOG.debug(">>> After automaton simplifying:");
     LOG.debug(simplifiedAutomaton);
-    
-    simplifiedAutomaton= defective.simplify(simplifiedAutomaton, elementSymbolToString, inputStrings);
-    LOG.debug(">>> After defecting:");
-    LOG.debug(simplifiedAutomaton);
 
     // 3.3 convert to regexpautomaton
     final RegexpAutomaton<AbstractStructuralNode> regexpAutomaton = new RegexpAutomaton<AbstractStructuralNode>(simplifiedAutomaton);

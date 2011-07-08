@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.onebyone;
 
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.suspection.stepsuspect.*;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.Suspection;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.SuspectionFactory;
 import java.util.Collections;
@@ -53,7 +52,7 @@ public class OnebyoneFactory implements SuspectionFactory{
 
   @Override
   public String getModuleDescription() {
-    return getName();
+    return getDisplayName();
   }
 
   @Override

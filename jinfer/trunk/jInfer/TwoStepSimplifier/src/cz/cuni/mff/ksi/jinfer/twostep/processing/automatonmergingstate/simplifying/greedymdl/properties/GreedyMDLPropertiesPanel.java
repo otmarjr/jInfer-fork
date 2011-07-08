@@ -84,9 +84,9 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel1, gridBagConstraints);
 
-    comboConditionTester.setRenderer(new ProjectPropsComboRenderer(comboConditionTester.getRenderer()));
     comboConditionTester.setMinimumSize(new java.awt.Dimension(200, 22));
     comboConditionTester.setPreferredSize(new java.awt.Dimension(200, 22));
+    comboConditionTester.setRenderer(new ProjectPropsComboRenderer(comboConditionTester.getRenderer()));
     comboConditionTester.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         comboConditionTesterChanged(evt);
@@ -131,9 +131,9 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jLabel3, gridBagConstraints);
 
-    comboConditionTester.setRenderer(new ProjectPropsComboRenderer(comboConditionTester.getRenderer()));
     evaluator.setMinimumSize(new java.awt.Dimension(200, 22));
     evaluator.setPreferredSize(new java.awt.Dimension(200, 22));
+    evaluator.setRenderer(new ProjectPropsComboRenderer(evaluator.getRenderer()));
     evaluator.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         evaluatorChanged(evt);

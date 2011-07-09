@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexptostringsize;
 
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode.*;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
 import java.util.Collections;
@@ -30,6 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegexpEvaluatorFactory.class)
 public class ToStringSizeFactory implements RegexpEvaluatorFactory {
+
   /**
    * Canonical name.
    */
@@ -53,13 +53,11 @@ public class ToStringSizeFactory implements RegexpEvaluatorFactory {
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
-  
 
   @Override
   public String getModuleDescription() {
     return getName();
   }
-  
 
   @Override
   public List<String> getCapabilities() {
@@ -70,6 +68,4 @@ public class ToStringSizeFactory implements RegexpEvaluatorFactory {
   public String getUserModuleDescription() {
     return "Computes codelength for regexp as number chars of its toString, not associative.";
   }
-  
-  
 }

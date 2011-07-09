@@ -30,7 +30,8 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author anti
  */
-public class WeightedPropertiesPanel extends AbstractPropertiesPanel  {
+public class WeightedPropertiesPanel extends AbstractPropertiesPanel {
+
   private static final long serialVersionUID = 784463438L;
 
   public WeightedPropertiesPanel(Properties properties) {
@@ -93,14 +94,12 @@ public class WeightedPropertiesPanel extends AbstractPropertiesPanel  {
   private String htmlize(String text) {
     return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
   }
-  
-  
+
   private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
     descOrderer.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(RegexpEvaluatorFactory.class,
             ((NamedModule) jComboBox1.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_jComboBox1ActionPerformed
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextPane descOrderer;
   private javax.swing.JComboBox jComboBox1;

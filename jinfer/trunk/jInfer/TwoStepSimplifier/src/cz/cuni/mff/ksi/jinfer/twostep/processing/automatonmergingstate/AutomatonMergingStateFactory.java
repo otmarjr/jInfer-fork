@@ -26,7 +26,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;

@@ -34,5 +34,5 @@ public interface DefectiveAutomatonSimplifierFactory extends NamedModule, Capabi
    * @param <T> type of symbol in automaton (alphabet domain)
    * @return instance of {@link DefectiveAutomatonSimplifier} implementation
    */
-  <T> DefectiveAutomatonSimplifier<T> create();
+   <T> DefectiveAutomatonSimplifier<T> create();
 }

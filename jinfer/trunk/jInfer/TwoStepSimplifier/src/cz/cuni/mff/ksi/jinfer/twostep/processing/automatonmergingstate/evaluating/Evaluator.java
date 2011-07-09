@@ -22,5 +22,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluati
  * @author anti
  */
 public interface Evaluator<T> {
+
   double evaluate(T x) throws InterruptedException;
 }

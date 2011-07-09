@@ -25,10 +25,8 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode.BitCode;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.log4j.Logger;
 
 /**
  * Simple heuristic for ordering states in automaton. Weight = sum of {in | out | loop}-transitions
@@ -47,7 +45,7 @@ public class Fullscan<T> implements Orderer<T> {
   private RegexpEvaluator<T> rEval;
 
   public Fullscan(RegexpEvaluatorFactory factory) {
-    this.rEval= factory.<T>create();
+    this.rEval = factory.<T>create();
   }
 
   private double getAutomatonLength(final StateRemovalRegexpAutomaton<T> automaton) throws InterruptedException {
@@ -59,7 +57,7 @@ public class Fullscan<T> implements Orderer<T> {
       }
     }
     for (Step<Regexp<T>> step : brum) {
-      result+= rEval.evaluate(step.getAcceptSymbol());
+      result += rEval.evaluate(step.getAcceptSymbol());
     }
     return result;
   }
@@ -70,19 +68,18 @@ public class Fullscan<T> implements Orderer<T> {
     double minLength = Double.MAX_VALUE;
     State<Regexp<T>> minState = null;
     for (State<Regexp<T>> state : automaton.getDelta().keySet()) {
-      if (state.equals(automaton.getSuperFinalState())||state.equals(automaton.getSuperInitialState())) {
+      if (state.equals(automaton.getSuperFinalState()) || state.equals(automaton.getSuperInitialState())) {
         continue;
       }
-      newAut= new StateRemovalRegexpAutomaton<T>(automaton);
+      newAut = new StateRemovalRegexpAutomaton<T>(automaton);
       newAut.removeState(state);
-      double thisLength= getAutomatonLength(newAut);
-      if ((thisLength < minLength)||((thisLength == minLength)&&(state.getName() < minState.getName()))) { 
-        minLength= thisLength;
+      double thisLength = getAutomatonLength(newAut);
+      if ((thisLength < minLength) || ((thisLength == minLength) && (state.getName() < minState.getName()))) {
+        minLength = thisLength;
         minState = state;
       }
     }
     assert minState != null;
     return minState;
   }
-
 }

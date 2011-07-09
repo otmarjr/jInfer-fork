@@ -33,5 +33,5 @@ public interface RegexpAutomatonSimplifierFactory extends NamedModule, Capabilit
    * @param <T> type of automaton symbol.
    * @return
    */
-  <T> RegexpAutomatonSimplifier<T> create();
+   <T> RegexpAutomatonSimplifier<T> create();
 }

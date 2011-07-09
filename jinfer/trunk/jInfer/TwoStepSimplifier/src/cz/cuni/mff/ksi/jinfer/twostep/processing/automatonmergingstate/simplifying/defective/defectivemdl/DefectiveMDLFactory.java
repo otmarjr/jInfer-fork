@@ -49,14 +49,13 @@ public class DefectiveMDLFactory implements DefectiveAutomatonSimplifierFactory 
   public static final String PROPERTIES_EVALUATOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaiveDefective";
   public static final String PROPERTIES_SUSPECTION = "suspection";
   public static final String PROPERTIES_SUSPECTION_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveDefectiveMDLSuspectionStepSuspect";
-  
+
   @Override
   public <T> DefectiveAutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
     return new DefectiveMDL<T>(
             getAutomatonEvaluatorFactory(),
-            getSuspectionFactory()
-            );
+            getSuspectionFactory());
   }
 
   @Override

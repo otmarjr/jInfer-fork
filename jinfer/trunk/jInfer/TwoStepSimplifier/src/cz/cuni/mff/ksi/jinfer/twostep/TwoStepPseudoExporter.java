@@ -136,14 +136,14 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
   private String childrenListToString(
           final List<Regexp<AbstractStructuralNode>> children,
           final String delimiter) {
-    return CollectionToString.colToString(children, delimiter, 
+    return CollectionToString.colToString(children, delimiter,
             new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+
               @Override
               public String toString(Regexp<AbstractStructuralNode> t) {
                 return regexpToString(t);
               }
-            }
-            );
+            });
   }
 
   private String attributesToString(final List<Attribute> attributes) {

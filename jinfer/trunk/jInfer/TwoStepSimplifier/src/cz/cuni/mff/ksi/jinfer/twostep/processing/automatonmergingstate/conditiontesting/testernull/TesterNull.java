@@ -19,11 +19,8 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * k,h-context equivalence criterion implementation.
@@ -43,4 +40,3 @@ public class TesterNull<T> implements MergeConditionTester<T> {
     return alternatives;
   }
 }
-

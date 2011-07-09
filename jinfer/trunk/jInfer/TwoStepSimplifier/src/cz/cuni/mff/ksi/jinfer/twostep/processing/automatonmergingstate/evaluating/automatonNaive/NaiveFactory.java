@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
-
 /**
  * TODO anti Comment!
  *
@@ -30,6 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AutomatonEvaluatorFactory.class)
 public class NaiveFactory implements AutomatonEvaluatorFactory {
+
   /**
    * Canonical name.
    */
@@ -43,7 +43,7 @@ public class NaiveFactory implements AutomatonEvaluatorFactory {
   public <T> AutomatonEvaluator<T> create() {
     return new Naive<T>();
   }
-  
+
   @Override
   public String getName() {
     return NAME;

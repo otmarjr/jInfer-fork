@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
-import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.ChainedFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.combined.CombinedFactory;
 import java.util.List;
 import java.util.Properties;

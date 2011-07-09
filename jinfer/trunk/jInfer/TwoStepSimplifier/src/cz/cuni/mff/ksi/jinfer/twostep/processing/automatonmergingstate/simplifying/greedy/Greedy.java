@@ -21,13 +21,10 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifyi
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
-import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -55,26 +52,6 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
    * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
    */
   public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory) {
-    this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
-  }
-
-  /**
-   * Create with factory of {@link MergeConditionTester} selected.
-   *
-   * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
-   * @param properties project properties (from which it takes parameter values).
-   */
-  public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory,
-          final Properties properties) {
-    if (mergeConditionTesterFactory.getCapabilities().contains("parameters")) {
-      final ModuleParameters factoryParam = ((ModuleParameters) mergeConditionTesterFactory);
-      final List<String> parameterNames = factoryParam.getParameterNames();
-
-      for (String parameterName : parameterNames) {
-        final String value = properties.getProperty(mergeConditionTesterFactory.getName() + parameterName);
-        factoryParam.setParameter(parameterName, value);
-      }
-    }
     this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
   }
 
@@ -118,7 +95,7 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
         }
       }
     } while (!mergableStates.isEmpty());
-    
+
     return inputAutomaton;
   }
 

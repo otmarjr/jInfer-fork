@@ -21,11 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.Evaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
@@ -34,34 +30,35 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class NaiveDefectiveRules<T> implements Evaluator<Automaton<T>> {
+
   private static final Logger LOG = Logger.getLogger(NaiveDefectiveRules.class);
   private List<List<T>> inputStrings;
-  
+
   public NaiveDefectiveRules() {
   }
 
   public NaiveDefectiveRules(List<List<T>> inputStrings) {
-    this.inputStrings= inputStrings;
+    this.inputStrings = inputStrings;
   }
 
   public void setInputStrings(List<List<T>> inputStrings) {
     this.inputStrings = inputStrings;
   }
-  
+
   @Override
   public double evaluate(Automaton<T> aut) throws InterruptedException {
-    double result= 0.0;
+    double result = 0.0;
     for (State<T> state : aut.getDelta().keySet()) {
       double unity = state.getFinalCount();
       for (Step<T> step : aut.getDelta().get(state)) {
-        unity+= step.getUseCount();
+        unity += step.getUseCount();
       }
       if (state.getFinalCount() > 0) {
-        result+= ((double) state.getFinalCount()) * (-UniversalCodeForIntegers.log2(state.getFinalCount() / unity));
+        result += ((double) state.getFinalCount()) * (-UniversalCodeForIntegers.log2(state.getFinalCount() / unity));
       }
       for (Step<T> step : aut.getDelta().get(state)) {
         if (step.getUseCount() > 0) {
-          result+= ((double) step.getUseCount()) * (-UniversalCodeForIntegers.log2(step.getUseCount() / unity));
+          result += ((double) step.getUseCount()) * (-UniversalCodeForIntegers.log2(step.getUseCount() / unity));
         }
       }
     }

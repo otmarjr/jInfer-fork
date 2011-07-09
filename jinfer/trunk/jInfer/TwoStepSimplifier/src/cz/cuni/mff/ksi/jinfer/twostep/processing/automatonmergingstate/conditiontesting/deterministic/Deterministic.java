@@ -44,7 +44,7 @@ public class Deterministic<T> implements MergeConditionTester<T> {
   public List<List<List<State<T>>>> getMergableStates(final Automaton<T> automaton) throws InterruptedException {
     final List<List<List<State<T>>>> alternatives = new ArrayList<List<List<State<T>>>>();
 
-    List<List<State<T>>> ret= new ArrayList<List<State<T>>>();
+    List<List<State<T>>> ret = new ArrayList<List<State<T>>>();
     for (State<T> state : automaton.getDelta().keySet()) {
       Map<T, State<T>> mm = new HashMap<T, State<T>>();
       for (Step<T> step : automaton.getDelta().get(state)) {
@@ -67,4 +67,3 @@ public class Deterministic<T> implements MergeConditionTester<T> {
     return alternatives;
   }
 }
-

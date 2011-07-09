@@ -34,5 +34,5 @@ public interface AutomatonSimplifierFactory extends NamedModule, Capabilities, U
    * @param <T> type of symbol in automaton (alphabet domain)
    * @return instance of {@link AutomatonSimplifier} implementation
    */
-  <T> AutomatonSimplifier<T> create();
+   <T> AutomatonSimplifier<T> create();
 }

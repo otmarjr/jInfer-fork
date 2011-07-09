@@ -28,18 +28,19 @@ import java.util.Map;
 
 /**
  * @author anti
- */ 
+ */
 class HelperAutomaton extends Automaton<String> {
+
   protected int k;
   protected int h;
   protected Map<String, List<Deque<State<String>>>> contextMap;
-  
+
   private void init(int k, int h) {
     this.k = k;
     this.h = h;
-    this.contextMap= new HashMap<String, List<Deque<State<String>>>>();
+    this.contextMap = new HashMap<String, List<Deque<State<String>>>>();
   }
-  
+
   public HelperAutomaton(int k, int h) {
     init(k, h);
   }
@@ -53,7 +54,7 @@ class HelperAutomaton extends Automaton<String> {
     super(anotherAutomaton);
     init(k, h);
   }
-  
+
   public void kcontextMe() throws InterruptedException {
     List<State<String>> finalStates = new LinkedList<State<String>>();
     for (State<String> state : reverseDelta.keySet()) {
@@ -64,7 +65,7 @@ class HelperAutomaton extends Automaton<String> {
         finalStates.add(state);
       }
     }
-    
+
     for (State<String> fS : finalStates) {
       State<String> currentState = fS;
       String currentContext = "";
@@ -74,11 +75,11 @@ class HelperAutomaton extends Automaton<String> {
           throw new InterruptedException();
         }
         Step<String> inStep = reverseDelta.get(currentState).iterator().next();
-        currentContext= inStep.getAcceptSymbol() + currentContext;
+        currentContext = inStep.getAcceptSymbol() + currentContext;
         currentStates.addFirst(currentState);
         if (currentContext.length() > k) {
           currentStates.removeLast();
-          currentContext= currentContext.substring(0, currentContext.length() - 1);
+          currentContext = currentContext.substring(0, currentContext.length() - 1);
         }
         if (currentContext.length() == k) {
           if (!contextMap.containsKey(currentContext)) {
@@ -94,13 +95,13 @@ class HelperAutomaton extends Automaton<String> {
           }
           contextMap.get(currentContext).add(copy);
         }
-        currentState= inStep.getSource();
+        currentState = inStep.getSource();
       }
     }
-    
+
     for (String key : contextMap.keySet()) {
       if (!contextMap.get(key).isEmpty()) {
-        Deque<State<String>> first= contextMap.get(key).get(0);
+        Deque<State<String>> first = contextMap.get(key).get(0);
         contextMap.get(key).remove(0);
         for (Deque<State<String>> merg : contextMap.get(key)) {
           Iterator<State<String>> mergIt = merg.iterator();
@@ -123,4 +124,3 @@ class HelperAutomaton extends Automaton<String> {
     }
   }
 }
-

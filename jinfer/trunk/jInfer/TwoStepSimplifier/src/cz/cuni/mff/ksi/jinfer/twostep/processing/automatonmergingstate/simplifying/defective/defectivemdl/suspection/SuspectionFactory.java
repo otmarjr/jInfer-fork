@@ -26,6 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
  * @author anti
  */
 public interface SuspectionFactory extends NamedModule, Capabilities, UserModuleDescription {
-    <T> Suspection<T> create();
 
+   <T> Suspection<T> create();
 }

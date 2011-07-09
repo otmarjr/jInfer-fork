@@ -34,7 +34,6 @@ public interface DefectiveAutomatonSimplifier<T> extends AutomatonSimplifier<T> 
    * @throws InterruptedException
    */
 //  Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString) throws InterruptedException;
-
   /**
    * Simplify an automaton.
    *
@@ -45,7 +44,6 @@ public interface DefectiveAutomatonSimplifier<T> extends AutomatonSimplifier<T> 
    * @throws InterruptedException
    */
   //Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, final String elementName) throws InterruptedException;
-
   /**
    * Simplify an automaton.
    *
@@ -55,7 +53,6 @@ public interface DefectiveAutomatonSimplifier<T> extends AutomatonSimplifier<T> 
    * @throws InterruptedException
    */
   //Automaton<T> simplify(final Automaton<T> inputAutomaton, final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException;
-
   /**
    * Simplify an automaton.
    *

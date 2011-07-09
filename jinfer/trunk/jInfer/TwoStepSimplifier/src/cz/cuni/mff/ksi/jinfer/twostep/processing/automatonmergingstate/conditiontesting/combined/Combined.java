@@ -29,10 +29,11 @@ import java.util.List;
  * @author anti
  */
 public class Combined<T> implements MergeConditionTester<T> {
+
   private final List<MergeConditionTester<T>> testers;
 
   public Combined(List<MergeConditionTesterFactory> factories) {
-    this.testers= new LinkedList<MergeConditionTester<T>>();
+    this.testers = new LinkedList<MergeConditionTester<T>>();
     for (MergeConditionTesterFactory f : factories) {
       this.testers.add(f.<T>create());
     }
@@ -46,5 +47,4 @@ public class Combined<T> implements MergeConditionTester<T> {
     }
     return result;
   }
-  
 }

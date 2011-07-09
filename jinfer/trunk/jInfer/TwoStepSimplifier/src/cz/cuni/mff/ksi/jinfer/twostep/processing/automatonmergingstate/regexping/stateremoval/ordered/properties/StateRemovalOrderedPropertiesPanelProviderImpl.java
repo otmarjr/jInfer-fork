@@ -68,6 +68,6 @@ public class StateRemovalOrderedPropertiesPanelProviderImpl implements Propertie
     result.add(new VirtualCategoryPanel("ordering", "State Ordering", ModuleSelectionHelper.lookupImpls(OrdererFactory.class)));
 
     return result;
-    
+
   }
 }

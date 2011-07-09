@@ -20,8 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext.KHContextFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.GreedyFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.khgrams.KHgramsFactory;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;

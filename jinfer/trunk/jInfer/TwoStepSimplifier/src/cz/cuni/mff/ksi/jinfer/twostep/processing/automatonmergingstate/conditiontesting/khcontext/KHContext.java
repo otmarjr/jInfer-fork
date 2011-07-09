@@ -88,13 +88,13 @@ public class KHContext<T> implements MergeConditionTester<T> {
 
     helperAutomaton.kcontextMe();
     Map<String, Set<StateHString>> contextMap = helperAutomaton.getContextMap();
-    
+
     List<List<List<State<T>>>> alts = new LinkedList<List<List<State<T>>>>();
     for (String key : contextMap.keySet()) {
       if (contextMap.get(key).size() >= 2) {
         List<List<State<T>>> mergSeq = new LinkedList<List<State<T>>>();
         Iterator<StateHString> it = contextMap.get(key).iterator();
-        Deque<State<String>> first= it.next().getStates();
+        Deque<State<String>> first = it.next().getStates();
         int j = 0;
         for (State<String> fS : first) {
           if (j >= this.h) {

@@ -142,9 +142,9 @@ public class TwoStepSimplifier {
           final Attribute representant = attCluster.getRepresentant();
           //final ContentInferrer contentInferer = contentInfererFactory.create();
 /*          Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(),
-                  contentInferer.inferContentType(new ArrayList<ContentNode>(attCluster.getMembers())),
-                  representant.getContent());
-*/
+          contentInferer.inferContentType(new ArrayList<ContentNode>(attCluster.getMembers())),
+          representant.getContent());
+           */
           Attribute output = new Attribute(representant.getContext(), representant.getName(), representant.getMetadata(), representant.getContentType(), representant.getContent());
 
           if (attCluster.size() < cluster.size()) {

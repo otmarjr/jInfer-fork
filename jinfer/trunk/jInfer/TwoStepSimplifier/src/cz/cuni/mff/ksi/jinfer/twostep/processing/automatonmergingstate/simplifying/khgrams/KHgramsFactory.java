@@ -32,6 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class KHgramsFactory implements AutomatonSimplifierFactory {
+
   private static final Logger LOG = Logger.getLogger(KHgramsFactory.class);
   /**
    * Canonical name.
@@ -49,11 +50,11 @@ public class KHgramsFactory implements AutomatonSimplifierFactory {
   public static final String PROPERTIES_H = "hvalue";
   /** TODO anti comment */
   public static final String PROPERTIES_H_DEFAULT = "1";
-  
+
   @Override
   public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
-    Properties p =   RunningProject.getActiveProjectProps(getName());
+    Properties p = RunningProject.getActiveProjectProps(getName());
     return new KHgrams<T>(Integer.parseInt(p.getProperty(PROPERTIES_K, PROPERTIES_K_DEFAULT)), Integer.parseInt(p.getProperty(PROPERTIES_H, PROPERTIES_H_DEFAULT)));
   }
 

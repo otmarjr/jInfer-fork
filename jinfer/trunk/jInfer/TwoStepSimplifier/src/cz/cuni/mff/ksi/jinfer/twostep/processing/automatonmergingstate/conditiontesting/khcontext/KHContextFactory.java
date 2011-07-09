@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Arrays;
@@ -29,7 +28,6 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  * Factory for {@link KHContext}.
  *
- * Implements "parameters" capability {@see ModuleParameters}.
  * 
  * @author anti
  */
@@ -37,10 +35,6 @@ import org.openide.util.lookup.ServiceProvider;
 public class KHContextFactory implements MergeConditionTesterFactory {
 
   private static final Logger LOG = Logger.getLogger(KHContextFactory.class);
-  private int parameterK = -1;
-  private int parameterH = -1;
-  private static final int K_DEFAULT_VALUE = 2;
-  private static final int H_DEFAULT_VALUE = 1;
   /**
    * Canonical name.
    */
@@ -95,46 +89,7 @@ public class KHContextFactory implements MergeConditionTesterFactory {
   }
 
   @Override
-  public List<String> getParameterNames() {
-    return Arrays.<String>asList("k", "h");
-  }
-
-  @Override
-  public String getParameterDisplayDescription(final String parameterName) {
-    if ("k".equals(parameterName)) {
-      return "k in <i>k,h</i>-context. That is the number of transitions that have to"
-              + "be same (by means of symbols) before state. Default value: 2.";
-    }
-    if ("h".equals(parameterName)) {
-      return "h in <i>k,h</i>-context. Subsequent elements are the same already after <i>h</i> characters"
-              + " Default value: 1.";
-    }
-    throw new IllegalArgumentException("Asking for a description of unknown parameter");
-  }
-
-  @Override
-  public void setParameter(final String parameterName, final String newValue) {
-    if ("k".equals(parameterName)) {
-      this.parameterK = Integer.parseInt(newValue);
-    }
-    if ("h".equals(parameterName)) {
-      this.parameterH = Integer.parseInt(newValue);
-    }
-  }
-
-  @Override
   public String getDisplayName() {
     return DISPLAY_NAME;
-  }
-
-  @Override
-  public String getParameterDefaultValue(final String parameterName) {
-    if ("k".equals(parameterName)) {
-      return String.valueOf(K_DEFAULT_VALUE);
-    } else if ("h".equals(parameterName)) {
-      return String.valueOf(H_DEFAULT_VALUE);
-    } else {
-      return "";
-    }
   }
 }

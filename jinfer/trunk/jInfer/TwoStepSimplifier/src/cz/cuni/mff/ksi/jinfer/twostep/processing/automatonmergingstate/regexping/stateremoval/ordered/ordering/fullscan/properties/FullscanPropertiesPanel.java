@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.OrdererFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.weighted.WeightedFactory;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
@@ -30,7 +29,8 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author anti
  */
-public class FullscanPropertiesPanel extends AbstractPropertiesPanel  {
+public class FullscanPropertiesPanel extends AbstractPropertiesPanel {
+
   private static final long serialVersionUID = 784463438L;
 
   public FullscanPropertiesPanel(Properties properties) {
@@ -93,14 +93,12 @@ public class FullscanPropertiesPanel extends AbstractPropertiesPanel  {
   private String htmlize(String text) {
     return "<html><head></head><body style=\"margin-top: 0; font-family: sans;\">" + text + "</body></html>";
   }
-  
-  
+
   private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
     descOrderer.setText(htmlize(
             ModuleSelectionHelper.lookupImpl(RegexpEvaluatorFactory.class,
             ((NamedModule) jComboBox1.getSelectedItem()).getName()).getUserModuleDescription()));
   }//GEN-LAST:event_jComboBox1ActionPerformed
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextPane descOrderer;
   private javax.swing.JComboBox jComboBox1;

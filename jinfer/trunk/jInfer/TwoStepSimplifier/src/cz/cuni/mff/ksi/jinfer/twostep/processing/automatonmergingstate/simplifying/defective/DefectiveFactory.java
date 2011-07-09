@@ -32,6 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
 public class DefectiveFactory implements AutomatonSimplifierFactory {
+
   /**
    * Canonical name.
    */
@@ -69,7 +70,7 @@ public class DefectiveFactory implements AutomatonSimplifierFactory {
     sb.append(getDefectiveAutomatonSimplifierFactory().getModuleDescription());
     sb.append(")");
     return sb.toString();
- }
+  }
 
   @Override
   public List<String> getCapabilities() {
@@ -81,7 +82,7 @@ public class DefectiveFactory implements AutomatonSimplifierFactory {
     return "TODO anti write sth";
   }
 
-    private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
+  private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
     final Properties p = RunningProject.getActiveProjectProps(getName());
 
     return ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, p.getProperty(PROPERTIES_AUTOMATON_SIMPLIFIER, PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT));
@@ -92,5 +93,4 @@ public class DefectiveFactory implements AutomatonSimplifierFactory {
 
     return ModuleSelectionHelper.lookupImpl(DefectiveAutomatonSimplifierFactory.class, p.getProperty(PROPERTIES_DEFECTIVE, PROPERTIES_DEFECTIVE_DEFAULT));
   }
-
 }

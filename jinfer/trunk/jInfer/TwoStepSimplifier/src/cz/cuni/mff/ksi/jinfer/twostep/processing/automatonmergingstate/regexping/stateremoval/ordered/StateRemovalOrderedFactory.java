@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
@@ -35,8 +34,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegexpAutomatonSimplifierFactory.class)
 public class StateRemovalOrderedFactory implements RegexpAutomatonSimplifierFactory {
-  private static final Logger LOG = Logger.getLogger(StateRemovalOrderedFactory.class);
 
+  private static final Logger LOG = Logger.getLogger(StateRemovalOrderedFactory.class);
   /**
    * Canonical name.
    */
@@ -99,5 +98,4 @@ public class StateRemovalOrderedFactory implements RegexpAutomatonSimplifierFact
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
-
 }

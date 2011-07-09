@@ -18,7 +18,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
 
 /**
@@ -26,12 +25,12 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
  *
  * @author anti
  */
-public interface MergeConditionTesterFactory extends NamedModule, Capabilities, UserModuleDescription, ModuleParameters {
+public interface MergeConditionTesterFactory extends NamedModule, Capabilities, UserModuleDescription {
 
   /**
    * Create {@link MergeConditionTester}
    * @param <T> type of symbol of automaton to work with (alphabet)
    * @return instance
    */
-  <T> MergeConditionTester<T> create();
+   <T> MergeConditionTester<T> create();
 }

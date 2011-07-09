@@ -29,6 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = DefectiveAutomatonEvaluatorFactory.class)
 public class NaiveDefectiveFactory implements DefectiveAutomatonEvaluatorFactory {
+
   /**
    * Canonical name.
    */
@@ -42,7 +43,7 @@ public class NaiveDefectiveFactory implements DefectiveAutomatonEvaluatorFactory
   public <T> DefectiveAutomatonEvaluator<T> create() {
     return new NaiveDefective<T>();
   }
-  
+
   @Override
   public String getName() {
     return NAME;

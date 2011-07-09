@@ -18,7 +18,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluati
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
 import java.util.List;
 
 /**

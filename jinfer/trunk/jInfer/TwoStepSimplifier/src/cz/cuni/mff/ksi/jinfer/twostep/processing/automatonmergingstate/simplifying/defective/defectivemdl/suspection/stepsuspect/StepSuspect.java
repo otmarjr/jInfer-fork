@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.Suspection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -59,9 +58,9 @@ public class StepSuspect<T> implements Suspection<T> {
     if (stateIterator.hasNext()) {
       this.actualState = stateIterator.next();
       this.stepIterator = inputAutomaton.getDelta().get(actualState).iterator();
-      this.emptyAut= false;
+      this.emptyAut = false;
     } else {
-      this.emptyAut= true;
+      this.emptyAut = true;
     }
   }
 

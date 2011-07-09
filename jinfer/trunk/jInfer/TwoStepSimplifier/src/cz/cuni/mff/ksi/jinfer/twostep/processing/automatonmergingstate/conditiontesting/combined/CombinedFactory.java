@@ -96,26 +96,6 @@ public class CombinedFactory implements MergeConditionTesterFactory {
     return sb.toString();
   }
 
-  @Override
-  public List<String> getParameterNames() {
-    return Collections.<String>emptyList();
-  }
-
-  @Override
-  public String getParameterDisplayDescription(String parameterName) {
-    throw new IllegalStateException("Not allowed.");
-  }
-
-  @Override
-  public String getParameterDefaultValue(String parameterName) {
-    throw new IllegalStateException("Not allowed.");
-  }
-
-  @Override
-  public void setParameter(String parameterName, String newValue) {
-    throw new IllegalStateException("Not allowed.");
-  }
-
   private List<MergeConditionTesterFactory> getMergeConditionTesterFactories() {
     final Properties p = RunningProject.getActiveProjectProps(NAME);
     final List<MergeConditionTesterFactory> result = new ArrayList<MergeConditionTesterFactory>();

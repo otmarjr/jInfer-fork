@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.fullscan.FullscanFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.weighted.WeightedFactory;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
@@ -32,9 +31,9 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
 public class FullscanPropertiesPanetProviderImpl implements PropertiesPanelProvider {
+
   private static final int PANEL_PRIORITY = 400000;
   private static final String UPCATEGORY = "ordering";
-
 
   @Override
   public AbstractPropertiesPanel getPanel(Properties properties) {
@@ -65,5 +64,4 @@ public class FullscanPropertiesPanetProviderImpl implements PropertiesPanelProvi
   public List<VirtualCategoryPanel> getSubCategories() {
     return null;
   }
-  
 }

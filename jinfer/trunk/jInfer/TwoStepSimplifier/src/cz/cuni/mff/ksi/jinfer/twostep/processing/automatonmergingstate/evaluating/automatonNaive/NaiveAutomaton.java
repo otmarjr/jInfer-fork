@@ -21,8 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.Evaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.universalCodeForIntegers.UniversalCodeForIntegers;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * TODO anti Comment!
@@ -30,6 +28,7 @@ import java.util.Set;
  * @author anti
  */
 public class NaiveAutomaton<T> implements Evaluator<Automaton<T>> {
+
   @Override
   public double evaluate(Automaton<T> x) throws InterruptedException {
     UniversalCodeForIntegers uic = UniversalCodeForIntegers.getSingleton();
@@ -37,15 +36,14 @@ public class NaiveAutomaton<T> implements Evaluator<Automaton<T>> {
     double result = uic.evaluate(states_count);
     int steps_count = 0;
     for (State<T> state : x.getDelta().keySet()) {
-      result+= uic.evaluate(state.getFinalCount());
-      result+= uic.evaluate(x.getDelta().get(state).size());
+      result += uic.evaluate(state.getFinalCount());
+      result += uic.evaluate(x.getDelta().get(state).size());
       for (Step<T> step : x.getDelta().get(state)) {
-        steps_count+= 1;
-        result+= uic.evaluate(step.getUseCount());
+        steps_count += 1;
+        result += uic.evaluate(step.getUseCount());
       }
     }
-    result+= uic.evaluate(states_count)*steps_count;
+    result += uic.evaluate(states_count) * steps_count;
     return result;
   }
-  
 }

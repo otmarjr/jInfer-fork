@@ -24,7 +24,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifyi
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
 
 /**
  * TODO anti Comment!

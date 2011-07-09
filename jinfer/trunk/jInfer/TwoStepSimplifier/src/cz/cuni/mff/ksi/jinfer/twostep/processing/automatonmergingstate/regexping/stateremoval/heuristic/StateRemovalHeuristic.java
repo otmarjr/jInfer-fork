@@ -24,8 +24,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode.BitCode;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexptostringsize.ToStringSize;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.StateRemovalRegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.Orderer;
 import java.util.HashSet;
@@ -96,8 +94,8 @@ public class StateRemovalHeuristic<T> implements RegexpAutomatonSimplifier<T> {
           newAut.removeState(state);
           double thisLength = getAutomatonLength(newAut);
           toAdd.put(thisLength, newAut);
-/*          if (toAdd.keySet().size() > 10) {
-            toAdd.remove(toAdd.lastKey());
+          /*          if (toAdd.keySet().size() > 10) {
+          toAdd.remove(toAdd.lastKey());
           }*/
         }
       }

@@ -20,19 +20,12 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.Greedy;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedymdl.GreedyMDLFactory;
-import java.awt.GridBagConstraints;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
 /**
  * Properties panel for {@link Greedy}.
@@ -42,8 +35,6 @@ import javax.swing.JTextPane;
 public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
 
   private static final long serialVersionUID = 784463431L;
-  private static Map<String, JTextField> dynamicComponents;
-  private static Map<String, String> dynamicParameters;
 
   /** Creates new form ModuleSelectionJPanel */
   public GreedyMDLPropertiesPanel(final Properties properties) {
@@ -69,8 +60,6 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
     evaluator = new javax.swing.JComboBox();
     jScrollPane4 = new javax.swing.JScrollPane();
     descEvaluator = new javax.swing.JTextPane();
-    jLabel2 = new javax.swing.JLabel();
-    panelParams = new javax.swing.JPanel();
 
     setMinimumSize(new java.awt.Dimension(500, 300));
     setPreferredSize(new java.awt.Dimension(500, 50));
@@ -169,26 +158,6 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(2, 1, 2, 1);
     add(jScrollPane4, gridBagConstraints);
-
-    jLabel2.setText("Parameters of submodule");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    add(jLabel2, gridBagConstraints);
-
-    panelParams.setMinimumSize(new java.awt.Dimension(200, 22));
-    panelParams.setLayout(new java.awt.GridBagLayout());
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 3;
-    gridBagConstraints.gridwidth = 2;
-    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.weighty = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 1, 2, 1);
-    add(panelParams, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private String htmlize(String text) {
@@ -199,73 +168,6 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
     final MergeConditionTesterFactory factory = ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
             ((NamedModule) comboConditionTester.getSelectedItem()).getName());
     descContitionTester.setText(htmlize(factory.getUserModuleDescription()));
-
-    panelParams.removeAll();
-    panelParams.validate();
-    dynamicComponents = new HashMap<String, JTextField>();
-    dynamicParameters = new HashMap<String, String>();
-    GridBagConstraints gridBagConstraints;
-    if (factory.getCapabilities().contains("parameters")) {
-      final ModuleParameters factParams = (ModuleParameters) factory;
-      int i = 0;
-      for (String parameterName : factParams.getParameterNames()) {
-        final JLabel l = new JLabel("Parameter " + parameterName);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2 * i;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-        gridBagConstraints.weightx = 0.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-        panelParams.add(l, gridBagConstraints);
-
-
-        final JTextField t = new JTextField(properties.getProperty(factory.getName() + parameterName, factParams.getParameterDefaultValue(parameterName)));
-        l.setLabelFor(t);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2 * i;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        t.setColumns(10);
-        panelParams.add(t, gridBagConstraints);
-
-        final JTextPane ar = new JTextPane();
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2 * i + 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.CENTER;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-        ar.setContentType("text/html");
-        ar.setEditable(false);
-        ar.setFocusable(false);
-        ar.setOpaque(false);
-        ar.setText(htmlize(factParams.getParameterDisplayDescription(parameterName)));
-
-        panelParams.add(ar, gridBagConstraints);
-
-        dynamicComponents.put(parameterName, t);
-        dynamicParameters.put(parameterName, factory.getName() + parameterName);
-        ++i;
-      }
-    } else {
-      final JLabel l = new JLabel("Submodule has no parameters to set.");
-      gridBagConstraints = new java.awt.GridBagConstraints();
-      gridBagConstraints.gridx = 0;
-      gridBagConstraints.gridy = 0;
-      gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
-      gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-      gridBagConstraints.weightx = 0.0;
-      gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-      panelParams.add(l, gridBagConstraints);
-    }
-    panelParams.validate();
   }//GEN-LAST:event_comboConditionTesterChanged
 
   private void evaluatorChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evaluatorChanged
@@ -281,13 +183,13 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
     comboConditionTester.setSelectedItem(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class,
             properties.getProperty(GreedyMDLFactory.PROPERTIES_CONDITION_TESTER,
             GreedyMDLFactory.PROPERTIES_CONDITION_TESTER_DEFAULT)));
-    
+
     evaluator.setModel(new DefaultComboBoxModel(
             ModuleSelectionHelper.lookupImpls(AutomatonEvaluatorFactory.class).toArray()));
     evaluator.setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonEvaluatorFactory.class,
             properties.getProperty(GreedyMDLFactory.PROPERTIES_EVALUATOR,
             GreedyMDLFactory.PROPERTIES_EVALUATOR_DEFAULT)));
-    
+
     comboConditionTesterChanged(null);
     evaluatorChanged(null);
   }
@@ -298,13 +200,8 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
             ((NamedModule) comboConditionTester.getSelectedItem()).getName());
 
     properties.setProperty(GreedyMDLFactory.PROPERTIES_EVALUATOR,
-        ((NamedModule) evaluator.getSelectedItem()).getName());
+            ((NamedModule) evaluator.getSelectedItem()).getName());
 
-    for (String parameterName : dynamicComponents.keySet()) {
-      properties.setProperty(
-              dynamicParameters.get(parameterName),
-              dynamicComponents.get(parameterName).getText());
-    }
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox comboConditionTester;
@@ -312,10 +209,8 @@ public class GreedyMDLPropertiesPanel extends AbstractPropertiesPanel {
   private javax.swing.JTextPane descEvaluator;
   private javax.swing.JComboBox evaluator;
   private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JScrollPane jScrollPane3;
   private javax.swing.JScrollPane jScrollPane4;
-  private javax.swing.JPanel panelParams;
   // End of variables declaration//GEN-END:variables
 }

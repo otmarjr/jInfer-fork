@@ -33,5 +33,5 @@ public interface OrdererFactory extends NamedModule, Capabilities, UserModuleDes
    * @param <T> type of symbol of automaton (alphabet)
    * @return orderer instance
    */
-  <T> Orderer<T> create();
+   <T> Orderer<T> create();
 }

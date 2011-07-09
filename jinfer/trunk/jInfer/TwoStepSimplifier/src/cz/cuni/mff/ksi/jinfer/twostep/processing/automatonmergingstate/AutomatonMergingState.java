@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
+import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomaton;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
@@ -29,7 +30,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.DefectiveMDL;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.DefectiveMDLFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,6 +125,29 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     this.elementSymbolToString = new AbstractStructuralNodeSymbolToString();
     this.regexpAbstractToString = new RegexpAbstractSymbolToString();
   }
+  
+  
+  private Regexp<AbstractStructuralNode> convertRegexpToRepresentant(Clusterer<AbstractStructuralNode> clusterer, Regexp<AbstractStructuralNode>  regexp) {
+    switch (regexp.getType()) {
+      case LAMBDA:
+        throw new IllegalArgumentException("Lambda lambada");
+      case TOKEN:
+        return Regexp.<AbstractStructuralNode>getToken(clusterer.getRepresentantForItem(regexp.getContent()), regexp.getInterval());
+      case CONCATENATION:
+      case ALTERNATION:
+        List<Regexp<AbstractStructuralNode>> newCh = new ArrayList<Regexp<AbstractStructuralNode>> (regexp.getChildren().size());
+        for (Regexp<AbstractStructuralNode> ch : regexp.getChildren()) {
+          newCh.add(convertRegexpToRepresentant(clusterer, ch));
+        }
+        return new Regexp<AbstractStructuralNode>(null, 
+                newCh,
+                regexp.getType(), regexp.getInterval());
+      case PERMUTATION: 
+        throw new IllegalArgumentException("Can't handle permutation input.");
+      default:
+        throw new IllegalArgumentException("Unknown regexp type.");
+    }
+  }
 
   @Override
   public AbstractStructuralNode processCluster(
@@ -138,21 +161,29 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
 
     List<List<AbstractStructuralNode>> inputStrings = new LinkedList<List<AbstractStructuralNode>>();
     for (final AbstractStructuralNode instance : rules) {
+      if (instance.getMetadata().containsKey(IGGUtils.IS_SENTINEL)){
+        continue;
+      }
       final Element element = (Element) instance;
       final Regexp<AbstractStructuralNode> rightSide = element.getSubnodes();
+      
+      if (element.getMetadata().containsKey("from.schema")) {
+        Regexp<AbstractStructuralNode> representantRegexp = convertRegexpToRepresentant(clusterer, rightSide);
+        automaton.buildPTAOnRegexp(representantRegexp);
+      } else {
+        if (!rightSide.isConcatenation()) {
+          throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp. It is " + element.toString());
+        }
 
-      if (!rightSide.isConcatenation()) {
-        throw new IllegalArgumentException("Right side of rule at element: " + element.toString() + " is not a concatenation regexp. It is " + element.toString());
+        final List<AbstractStructuralNode> rightSideTokens = rightSide.getTokens();
+
+        final List<AbstractStructuralNode> symbolString = new LinkedList<AbstractStructuralNode>();
+        for (AbstractStructuralNode token : rightSideTokens) {
+          symbolString.add(clusterer.getRepresentantForItem(token));
+        }
+        automaton.buildPTAOnSymbol(symbolString);
+        inputStrings.add(symbolString);
       }
-
-      final List<AbstractStructuralNode> rightSideTokens = rightSide.getTokens();
-
-      final List<AbstractStructuralNode> symbolString = new LinkedList<AbstractStructuralNode>();
-      for (AbstractStructuralNode token : rightSideTokens) {
-        symbolString.add(clusterer.getRepresentantForItem(token));
-      }
-      automaton.buildPTAOnSymbol(symbolString);
-      inputStrings.add(symbolString);
     }
     LOG.debug("--- AutomatonMergingStateProcessor on element:");
     LOG.debug(rules.get(0));

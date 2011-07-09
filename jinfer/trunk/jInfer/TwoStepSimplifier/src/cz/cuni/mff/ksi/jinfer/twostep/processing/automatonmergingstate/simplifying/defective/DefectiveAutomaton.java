@@ -85,12 +85,18 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
 
   public void minimize() {
     Set<State<T>> toremove = new HashSet<State<T>>();
+    Set<Step<T>> toremovestep = new HashSet<Step<T>>();
     for (State<T> state : this.delta.keySet()) {
       for (Step<T> step : this.delta.get(state)) {
         if (step.getUseCount() == 0) {
-          removeStep(step);
+          toremovestep.add(step);
         }
       }
+    }
+    for (Step<T> step : toremovestep) {
+      removeStep(step);      
+    }
+    for (State<T> state : this.delta.keySet()) {
       if (shouldBeRemoved(state)) {
         toremove.add(state);
       }

@@ -14,13 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,6 +45,7 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class Automaton<T> {
+
   private static final Logger LOG = Logger.getLogger(Automaton.class);
   /**
    * Initial state of automaton, entry point. State in which automaton is
@@ -104,13 +104,13 @@ public class Automaton<T> {
    * Constructor which doesn't create initialState
    */
   public Automaton() {
-    this.newStateName= 1;
-    this.delta= new LinkedHashMap<State<T>, Set<Step<T>>>();
-    this.reverseDelta= new LinkedHashMap<State<T>, Set<Step<T>>>();
-    this.mergedStates= new LinkedHashMap<State<T>, State<T>>();
-    this.reverseMergedStates= new LinkedHashMap<State<T>, Set<State<T>>>();
+    this.newStateName = 1;
+    this.delta = new LinkedHashMap<State<T>, Set<Step<T>>>();
+    this.reverseDelta = new LinkedHashMap<State<T>, Set<Step<T>>>();
+    this.mergedStates = new LinkedHashMap<State<T>, State<T>>();
+    this.reverseMergedStates = new LinkedHashMap<State<T>, Set<State<T>>>();
     this.nameMap = new LinkedHashMap<Integer, State<T>>();
-    this.initialState= null;
+    this.initialState = null;
   }
 
   /**
@@ -119,24 +119,23 @@ public class Automaton<T> {
   public Automaton(final boolean createInitialState) {
     this();
     if (createInitialState) {
-      this.initialState= this.createNewState();
+      this.initialState = this.createNewState();
     }
   }
 
   public Automaton(final Automaton<T> anotherAutomaton) {
     this(false);
-    
-    final AutomatonCloner<T, T> cloner= new AutomatonCloner<T, T>();
+
+    final AutomatonCloner<T, T> cloner = new AutomatonCloner<T, T>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
-            new
-              AutomatonClonerSymbolConverter<T, T>() {
-                @Override
-                public T convertSymbol(final T symbol) {
-                  return symbol;
-                }
+            new AutomatonClonerSymbolConverter<T, T>() {
+
+              @Override
+              public T convertSymbol(final T symbol) {
+                return symbol;
               }
-    );
+            });
   }
 
   /**
@@ -152,7 +151,7 @@ public class Automaton<T> {
    * @return
    */
   protected final State<T> createNewState() {
-    final State<T> newState= new State<T>(0, this.newStateName);
+    final State<T> newState = new State<T>(0, this.newStateName);
     this.nameMap.put(newStateName, newState);
     this.newStateName++;
     this.delta.put(newState, new LinkedHashSet<Step<T>>());
@@ -170,7 +169,7 @@ public class Automaton<T> {
    * @return
    */
   public Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
-    final Set<Step<T>> steps= this.delta.get(state);
+    final Set<Step<T>> steps = this.delta.get(state);
     for (Step<T> step : steps) {
       if (step.getAcceptSymbol().equals(symbol)) {
         return step;
@@ -188,7 +187,7 @@ public class Automaton<T> {
    * @return
    */
   private Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
-    final Step<T> newStep= new Step<T>(onSymbol, source, destination, 1, 1);
+    final Step<T> newStep = new Step<T>(onSymbol, source, destination, 1, 1);
     this.delta.get(source).add(newStep);
     this.reverseDelta.get(destination).add(newStep);
     return newStep;
@@ -201,28 +200,89 @@ public class Automaton<T> {
    * @param symbolString - list of symbols (one word from accepting language)
    */
   public void buildPTAOnSymbol(final List<T> symbolString) {
-    State<T> xState= this.getInitialState();
+    State<T> xState = this.getInitialState();
     for (T symbol : symbolString) {
-      final Step<T> xStep= this.getOutStepOnSymbol(xState, symbol);
+      final Step<T> xStep = this.getOutStepOnSymbol(xState, symbol);
       if (xStep != null) {
         xStep.incUseCount();
         xStep.incMinUseCount();
         xStep.addInputString(symbolString);
-        xState= xStep.getDestination();
+        xState = xStep.getDestination();
       } else {
-        final State<T> newState= this.createNewState();
-        final Step<T> newStep= this.createNewStep(symbol, xState, newState);
+        final State<T> newState = this.createNewState();
+        final Step<T> newStep = this.createNewStep(symbol, xState, newState);
         assert newStep.getDestination().equals(newState);
-        xState= newStep.getDestination();
+        xState = newStep.getDestination();
       }
     }
     xState.incFinalCount();
   }
 
-  private void collapseStepsAfterMerge(final State<T> mainState) {
-    final Map<State<T>, Map<T, Step<T>>> inBuckets= new LinkedHashMap<State<T>, Map<T, Step<T>>>();
+  private State<T> buildPTAOnRegexpExpandStep(State<T> fromState, Regexp<T> regexp) {
+    switch (regexp.getType()) {
+      case TOKEN:
+        Step<T> outStep = this.getOutStepOnSymbol(fromState, regexp.getContent());
+        State<T> newState;
+        if (outStep == null) {
+          newState = this.createNewState();
+          Step<T> newStep = this.createNewStep(regexp.getContent(), fromState, newState);
+          newStep.setUseCount(0);
+        } else {
+          newState = outStep.getDestination();
+        }
+        if (regexp.getInterval().isUnbounded()) {
+          mergeStates(fromState, newState);
+          return fromState;
+        }
+        return newState;
+      case CONCATENATION:
+        State<T> prevState = fromState;
+        for (Regexp<T> ch : regexp.getChildren()) {
+          prevState = buildPTAOnRegexpExpandStep(prevState, ch);
+        }
+        if (regexp.getInterval().isUnbounded()) {
+          mergeStates(fromState, prevState);
+          return fromState;
+        }
+        return prevState;
+      case ALTERNATION:
+        List<State<T>> endStates = new LinkedList<State<T>>();
+        for (Regexp<T> ch : regexp.getChildren()) {
+          endStates.add(buildPTAOnRegexpExpandStep(fromState, ch));
+        }
+        this.mergeStates(endStates);
+        if (regexp.getInterval().isUnbounded()) {
+          mergeStates(fromState, endStates.get(0));
+          return fromState;
+        }
+        return endStates.get(0);
+      case PERMUTATION:
+        throw new IllegalArgumentException("Permutation not possible.");
+      default:
+        throw new IllegalArgumentException("Unkown regexp type");
+    }
+  }
 
-    final Set<Step<T>> inSteps= new LinkedHashSet<Step<T>>(this.reverseDelta.get(mainState));
+  public void buildPTAOnRegexp(final Regexp<T> regexp) {
+    switch (regexp.getType()) {
+      case LAMBDA:
+        return;
+      case TOKEN:
+      case CONCATENATION:
+      case ALTERNATION:
+        Regexp<T> nR = AutomatonRegexpIntervalExpander.expandIntervalsRegexp(regexp);
+        State<T> fS = buildPTAOnRegexpExpandStep(initialState, nR);
+        fS.incFinalCount();
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown regexp type.");
+    }
+  }
+
+  private void collapseStepsAfterMerge(final State<T> mainState) {
+    final Map<State<T>, Map<T, Step<T>>> inBuckets = new LinkedHashMap<State<T>, Map<T, Step<T>>>();
+
+    final Set<Step<T>> inSteps = new LinkedHashSet<Step<T>>(this.reverseDelta.get(mainState));
     for (Step<T> inStep : inSteps) {
       if (inBuckets.containsKey(inStep.getSource())) {
         if (inBuckets.get(inStep.getSource()).containsKey(inStep.getAcceptSymbol())) {
@@ -240,8 +300,8 @@ public class Automaton<T> {
       }
     }
 
-    final Map<State<T>, Map<T, Step<T>>> outBuckets= new LinkedHashMap<State<T>, Map<T, Step<T>>>();
-    final Set<Step<T>> outSteps= new LinkedHashSet<Step<T>>(this.delta.get(mainState));
+    final Map<State<T>, Map<T, Step<T>>> outBuckets = new LinkedHashMap<State<T>, Map<T, Step<T>>>();
+    final Set<Step<T>> outSteps = new LinkedHashSet<Step<T>>(this.delta.get(mainState));
     for (Step<T> outStep : outSteps) {
       if (outBuckets.containsKey(outStep.getDestination())) {
         if (outBuckets.get(outStep.getDestination()).containsKey(outStep.getAcceptSymbol())) {
@@ -269,7 +329,7 @@ public class Automaton<T> {
     }
     if (this.mergedStates.get(state) != null) {
       /* this is union-find-set with path shortening along the way */
-      final State<T> realState= this.getRealState(this.mergedStates.get(state));
+      final State<T> realState = this.getRealState(this.mergedStates.get(state));
       this.mergedStates.put(state, realState);
       this.reverseMergedStates.get(realState).add(state);
       return realState;
@@ -289,24 +349,24 @@ public class Automaton<T> {
       throw new IllegalArgumentException("List with states to merge has to have"
               + " at least 2 items.");
     }
-    final State<T> state= lst.get(0);
+    final State<T> state = lst.get(0);
     for (State<T> anotherState : lst.subList(1, lst.size())) {
       this.mergeStates(state, anotherState);
     }
   }
 
   public void mergeStates(final State<T> _mainState, final State<T> _mergedState) {
-    final State<T> mainState= this.getRealState(_mainState);
-    final State<T> mergedState= this.getRealState(_mergedState);
+    final State<T> mainState = this.getRealState(_mainState);
+    final State<T> mergedState = this.getRealState(_mergedState);
     LOG.debug("mergeStates: Got to merge states: " + _mainState + " + " + _mergedState + "\n");
-    LOG.debug("mergeStates: Real states merging: " +  mainState + " + " +  mergedState + "\n");
+    LOG.debug("mergeStates: Real states merging: " + mainState + " + " + mergedState + "\n");
     if (mergedState.equals(mainState)) {
       LOG.debug("mergeStates: States equal, doing nothing\n");
       return;
     }
 
     /* insteps */
-    final Set<Step<T>> mergedStateInSteps= this.reverseDelta.get(mergedState);
+    final Set<Step<T>> mergedStateInSteps = this.reverseDelta.get(mergedState);
     for (Step<T> mergedStateInStep : mergedStateInSteps) {
       mergedStateInStep.setDestination(mainState);
     }
@@ -314,9 +374,9 @@ public class Automaton<T> {
     this.reverseDelta.get(mainState).addAll(mergedStateInSteps);
 
     /* outsteps */
-    final Set<Step<T>> mergedStateOutSteps= this.delta.get(mergedState);
+    final Set<Step<T>> mergedStateOutSteps = this.delta.get(mergedState);
     for (Step<T> mergedStateOutStep : mergedStateOutSteps) {
-        mergedStateOutStep.setSource(mainState);
+      mergedStateOutStep.setSource(mainState);
     }
     this.delta.remove(mergedState);
     this.delta.get(mainState).addAll(mergedStateOutSteps);
@@ -331,9 +391,9 @@ public class Automaton<T> {
       this.reverseMergedStates.get(mainState).add(t);
     }
     this.reverseMergedStates.get(mergedState).clear();
-    
+
     if (mergedState.equals(initialState)) {
-      this.initialState= mainState;
+      this.initialState = mainState;
     }
     LOG.debug("after merge");
     LOG.debug(this);
@@ -345,7 +405,7 @@ public class Automaton<T> {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("Automaton\n");
-    for (State<T> state: delta.keySet()) {
+    for (State<T> state : delta.keySet()) {
       sb.append(state);
       for (State<T> mergedState : this.reverseMergedStates.get(state)) {
         sb.append(" + ");
@@ -359,9 +419,9 @@ public class Automaton<T> {
     }
 
     sb.append("reversed:\n");
-    for (State<T> state: reverseDelta.keySet()) {
+    for (State<T> state : reverseDelta.keySet()) {
       sb.append(state);
-      for (State<T> mergedState: this.reverseMergedStates.get(state)) {
+      for (State<T> mergedState : this.reverseMergedStates.get(state)) {
         sb.append(" + ");
         sb.append(mergedState);
       }
@@ -376,7 +436,7 @@ public class Automaton<T> {
 
   public String toTestString() {
     final StringBuilder sb = new StringBuilder();
-    for (State<T> state: delta.keySet()) {
+    for (State<T> state : delta.keySet()) {
       sb.append(state);
       for (State<T> mergedState : this.reverseMergedStates.get(state)) {
         sb.append("+");
@@ -394,9 +454,9 @@ public class Automaton<T> {
     }
 
     sb.append("@@@");
-    for (State<T> state: reverseDelta.keySet()) {
+    for (State<T> state : reverseDelta.keySet()) {
       sb.append(state);
-      for (State<T> mergedState: this.reverseMergedStates.get(state)) {
+      for (State<T> mergedState : this.reverseMergedStates.get(state)) {
         sb.append("+");
         sb.append(mergedState);
       }

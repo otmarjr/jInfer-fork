@@ -16,11 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -49,24 +51,31 @@ public class SKStringsFactory implements MergeConditionTesterFactory {
    * Name presented to user.
    */
   public static final String DISPLAY_NAME = "s,k-strings";
+  public static final String PROPERTIES_S = "s";
+  public static final String PROPERTIES_S_DEFAULT = "0.5";
+  public static final String PROPERTIES_K = "k";
+  public static final String PROPERTIES_K_DEFAULT = "2";
+  public static final String PROPERTIES_STRATEGY = "strategy";
+  public static final String PROPERTIES_STRATEGY_DEFAULT = "OR";
 
   @Override
   public <T> MergeConditionTester<T> create() {
     LOG.debug("Creating new " + NAME);
-    if ((parameterS >= 0) && (parameterS <= 100) && (parameterK > 0)
-            && (("OR".equals(parameterStrategy)) || ("AND".equals(parameterStrategy)))) {
-      return new SKStrings<T>(parameterK, parameterS, parameterStrategy);
-    } else {
-      LOG.warn("Wrong parameters set k: "
-              + parameterK
-              + ", s: "
-              + parameterS
-              + ". Parameters have to satisfy: k > 0; 0 <= s <= 1. Strategy has to be"
-              + " one of: AND, OR."
-              + " Using default values of k = " + K_DEFAULT_VALUE
-              + ", s = " + S_DEFAULT_VALUE + ", strategy = " + STRATEGY_DEFAULT_VALUE + ".");
-      return new SKStrings<T>(K_DEFAULT_VALUE, S_DEFAULT_VALUE, STRATEGY_DEFAULT_VALUE);
+    Properties p = RunningProject.getActiveProjectProps(NAME);
+    try {
+      return new SKStrings<T> (
+              Integer.parseInt(p.getProperty(PROPERTIES_K, PROPERTIES_K_DEFAULT)),
+              Double.parseDouble(p.getProperty(PROPERTIES_S, PROPERTIES_S_DEFAULT)),
+              p.getProperty(PROPERTIES_STRATEGY, PROPERTIES_STRATEGY_DEFAULT)
+              );
+    } catch (NumberFormatException e) {
+      LOG.error("Parameters s,k must be numbers. NumberFormatException. Creating " + NAME + " with default values.");
+      return new SKStrings<T>(
+              Integer.parseInt(PROPERTIES_K_DEFAULT),
+              Double.parseDouble(PROPERTIES_S_DEFAULT),
+              PROPERTIES_STRATEGY_DEFAULT);
     }
+
   }
 
   @Override

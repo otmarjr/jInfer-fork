@@ -16,11 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -47,21 +49,24 @@ public class KHContextFactory implements MergeConditionTesterFactory {
    * Name presented to user.
    */
   public static final String DISPLAY_NAME = "k,h-context";
+  public static final String PROPERTIES_K = "k";
+  public static final String PROPERTIES_K_DEFAULT = "2";
+  public static final String PROPERTIES_H = "h";
+  public static final String PROPERTIES_H_DEFAULT = "1";
 
   @Override
   public <T> MergeConditionTester<T> create() {
     LOG.debug("Creating new " + NAME);
-    if ((parameterH >= 0) && (parameterK >= parameterH)) {
-      return new KHContext<T>(parameterK, parameterH);
-    } else {
-      LOG.warn("Wrong parameters set k: "
-              + parameterK
-              + ", h: "
-              + parameterH
-              + ". Parameters have to satisfy: k >= h >= 0."
-              + " Using default values of k = " + K_DEFAULT_VALUE
-              + ", h = " + H_DEFAULT_VALUE + ".");
-      return new KHContext<T>(K_DEFAULT_VALUE, H_DEFAULT_VALUE);
+    Properties p = RunningProject.getActiveProjectProps(NAME);
+    try {
+      return new KHContext<T>(
+              Integer.parseInt(p.getProperty(PROPERTIES_K, PROPERTIES_K_DEFAULT)),
+              Integer.parseInt(p.getProperty(PROPERTIES_H, PROPERTIES_H_DEFAULT)));
+    } catch (NumberFormatException e) {
+      LOG.error("Parameter k,h must be numbers, NumberFormatException. Creating " + NAME + " with default values.");
+      return new KHContext<T>(
+              Integer.parseInt(PROPERTIES_K_DEFAULT),
+              Integer.parseInt(PROPERTIES_H_DEFAULT));
     }
   }
 

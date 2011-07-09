@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext.KHContextFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstringsdeterministic.SKStringsDeterministicFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings.SKStringsFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +49,7 @@ public class CombinedFactory implements MergeConditionTesterFactory {
   public static final String DISPLAY_NAME = "Combined";
   public static final String PROPERTIES_PREFIX = "combination";
   public static final String PROPERTIES_COUNT = "count";
-  public static final String PROPERTIES_TESTER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterDeterministic";
+  public static final String PROPERTIES_TESTER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterNull";
 
   @Override
   public <T> MergeConditionTester<T> create() {
@@ -123,7 +123,7 @@ public class CombinedFactory implements MergeConditionTesterFactory {
     final String _count = p.getProperty(PROPERTIES_COUNT, "notJebHojid4");
     if ("notJebHojid4".equals(_count)) {
       result.add(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, KHContextFactory.NAME));
-      result.add(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, SKStringsDeterministicFactory.NAME));
+      result.add(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, SKStringsFactory.NAME));
     } else {
       int count;
       try {

@@ -15,6 +15,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * sk-strings equivalence implementation with determinisation of automaton.
+ * Properties panel for {@link KHContext} module.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstringsdeterministic;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext.properties;

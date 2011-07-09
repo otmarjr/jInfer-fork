@@ -25,7 +25,7 @@ import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.contentinfering.ContentInferrerFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessorFactory;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
@@ -107,7 +107,10 @@ public class TwoStepSimplifierFactory implements Simplifier {
 
   @Override
   public List<String> getCapabilities() {
-    return Collections.emptyList();
+    LinkedList<String> ab = new LinkedList<String>();
+    ab.addAll(getClustererFactory().getCapabilities());
+    ab.retainAll(getClusterProcessorFactory().getCapabilities());
+    return ab;
   }
 
   private ClustererFactory getClustererFactory() {

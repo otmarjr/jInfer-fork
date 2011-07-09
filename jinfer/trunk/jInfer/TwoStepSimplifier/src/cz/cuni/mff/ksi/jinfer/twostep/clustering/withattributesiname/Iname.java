@@ -99,7 +99,7 @@ public class Iname implements ClustererWithAttributes<AbstractStructuralNode, At
       if (node.isElement()) {
         for (AbstractStructuralNode subNode : ((Element) node).getSubnodes().getTokens()) {
           if (Boolean.TRUE.equals(subNode.getMetadata().get(IGGUtils.IS_SENTINEL))) {
-            continue;
+            this.addNode(subNode);
           }
           if (subNode.isSimpleData()) {
             if (!this.simpleDataClusterers.containsKey(representant)) {

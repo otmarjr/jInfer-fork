@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -116,7 +117,7 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
 
   @Override
   public List<String> getCapabilities() {
-    return Collections.<String>emptyList();
+    return Arrays.asList("can.handle.complex.regexps");
   }
 
   @Override

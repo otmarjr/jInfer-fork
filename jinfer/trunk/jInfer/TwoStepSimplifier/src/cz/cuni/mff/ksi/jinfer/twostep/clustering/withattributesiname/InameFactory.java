@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.ClustererWithAttributes;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -64,9 +64,7 @@ public class InameFactory implements ClustererFactory {
 
   @Override
   public List<String> getCapabilities() {
-    final List<String> l = new ArrayList<String>();
-    l.add("attributeClusters");
-    return l;
+    return Arrays.asList("attributeClusters", "can.handle.complex.regexps");
   }
 
   @Override

@@ -19,16 +19,46 @@ Given an alphabet of nodes $\mathbb{N}$ and an alphabet of node labels $\Sigma$,
 	\end{enumerate}\qed
 \end{define}
 
-\begin{example}
+\begin{example}\label{example1ref}
+Consider the following XML document representing a collection of books, and is graphically represented as an XML tree in Fig. \ref{example1}.
+\begin{verbatim}
+<bib>
+  <book>
+    <written_by>
+      <author ano="A1">
+        <name>John Writer</name>
+      </author>
+      <author ano="A1">
+        <name>Eric Seller</name>
+      </author>
+    </written_by>
+    <title>Some title</title>
+  </book>
+  <book>
+    <written_by>
+      <author ano="A2">
+        <name>Adam Publisher</name>
+      </author>
+    </written_by>
+    <title>Some title 2</title>
+  </book>
+</bib>
+\end{verbatim}
+
+The nodes of an XML tree have a label denoting the tag name of the element and unique element identifier in brackets. Leaf nodes are either an attribute or the textual content of an element. The label of a textual node contains string contained inside of element and unique element identifier. The label of an attribute node contains in addition to textual node a name of the attribute.\qed
 \end{example}
 
-\begin{figure}
+\begin{figure}[h]
     \centering\includegraphics[scale=\myscale]{example1-new}
-	\caption{XML Tree} \label{example1}
+	\caption{An XML Tree} \label{example1}
 \end{figure}
 
 \begin{define}[DTD]\label{dtdDef}
 {\sl DTD} is a tuple $D = (\tau, \alpha, P, R, rt)$ where: i) $\tau$ and $\alpha$ are of the same definition as in the \emph{XML tree}; ii) $P$ is the set of \emph{element type definitions}; iii) R is the set of \emph{attribute lists}; iv) $rt \in \tau$ is the tag of the document root element.\qed
+\end{define}
+
+\begin{define}[Path Expression]
+A path expression is an expression of the form $p = ('/' | '//')s_1 \dots ('/'|'//')s_m$ where $s_1, \dots, s_{m-1} \in \tau$, and $s_m \in \tau \cup \alpha \cup \{S\}$.
 \end{define}
 
 \begin{define}[Path]
@@ -36,36 +66,55 @@ Given an alphabet of nodes $\mathbb{N}$ and an alphabet of node labels $\Sigma$,
 	\begin{enumerate}
 		\item $s_1=rt$;
 		\item for each $i$ in $2..m-1$, $s_i \in \tau$ and $s_i$ appears in the element type definition of $s_{i-1}$;
-		\item $s_m \in \alpha \rightarrow s_m$ appears in the attribute list of $s_{m-1}$;
-		\item $s_m \in \tau \cup \{S\} \rightarrow s_m$ appears the element type definition on $s_{m-1}$.
+		\item $s_m \in \alpha \Rightarrow s_m$ appears in the attribute list of $s_{m-1}$;
+		\item $s_m \in \tau \cup \{S\} \Rightarrow s_m$ appears in the element type definition of $s_{m-1}$.
 	\end{enumerate}\qed
 \end{define}
 
-As we defined \emph{path} on a DTD $D$, let denote as $paths(D)$ the set of paths which can be defined on a DTD $D$. Also another important notion is $p(XT)$ (or $\{[\![p]\!]\}$), which is the set of nodes from XML tree $XT$ conforming DTD $D$, which can be reached by the path $p \in paths(D)$, starting from the root of $XT$. The set of nodes reachable from a node $v$ following path $p$ is denoted as $\{v[\![p]\!]\}$. When there is only one node in $\{v[\![p]\!]\}$, we use $v[\![p]\!]$ to denote this node. Moreover, let denote $XT.p$ the \emph{answer} of the path $p$ applied on $XT$ , that is:
+As we have defined a \emph{path} on a DTD $D$, let us denote as $paths(D)$ the set of paths which can be defined on a DTD $D$. Also another important notion is $p(XT)$ (or $\{[\![p]\!]\}$), which is the set of nodes from XML tree $XT$ conforming DTD $D$, which can be reached by the path $p \in paths(D)$, starting from the root of $XT$. The set of nodes reachable from a node $v$ following path $p$ is denoted as $\{v[\![p]\!]\}$. When there is only one node in $\{v[\![p]\!]\}$, we use $v[\![p]\!]$ to denote this node. Moreover, let denote $XT.p$ the \emph{answer} of the path $p$ applied on $XT$ , that is:
 \begin{itemize}
 	\item[-] if $p \in EPath(D)$, where $EPath(D)$ denotes the set of the paths whose last symbol denotes an element, then $XT.p = p(XT)$
 	\item[-] if $p \in StrPath(D)$, where $StrPath(D)$ denotes the set of paths whose last symbol denotes either the textual content of an element or an
 attribute, then $XT.p = \{\delta_T(x)|x \in p(XT)\}$.
 \end{itemize}
 
-\section{Integrity Constraints and Functional Dependencies}
+\section{Integrity Constraints}
 
-In relational database $D$, correspondence between values $A$ and $B$ in the tuple of $D$, models the functional dependency denoted as $A \rightarrow B$. Because in XML is not such a standard tuple concept, authors introduce the concept of tree tuples, corresponding to relational databases concept of tuples.
+Before defining of XML integrity constaint, let us introduce some notation used in the definition. A \emph{path atom} is an expression of the form $[x_1]p[x_2]$, where $p$ is a path expression, $x_1$ and $x_2$ are terms, and $x_1 \not \in Str$.\\
+A conjunction of path and built-in atoms $C = [X_1]p_1[Y_1] \cap \dots \cap [X_n]p_n[Y_n] \cap U_1\theta_1 V_1 \cap \dots \cap U_k \theta_k V_k$ is said to be safe if all variables in $C$ are \emph{range restricted}, i.e. if
+\begin{itemize}
+ 	\item for every $[X_i]p_i[Y_i]$, either $X_i$ is a constant (node identifier of a string), or there is some $[X_j]p_j[Y_j]$ in $C$ where $X_j$ is range restricted;
+    \item for every built-in term $U_i\theta_i V_i$ occuring in $C$, if $\theta_i$ is equal to $"="$ then at least one of the two terms is range restricted; otherwise both $U_i$ and $V_i$ must be range restricted.
+ \end{itemize}
+A rootless tree formula is an expression of the form $p(\Phi_1 \land \dots \land \Phi_k)$ where $\Phi_i$ is a rootless path formula (expression of the form $p[y]$ where $p$ is a path expression and $y$ is a term) or a rootless tree formula and $p$ is a path expression. A tree atom is an expression of the form $[x]T$ where $T$ is a rootless tree formula and $x$ is a term.
 
-\begin{define}[Tree Tuple]
-Given an XML tree XT conforming the DTD D, a tree tuple t of XT is a maximal sub-tree of XT such that, for every path $p \in paths(D)$, t.p contains at most one element.\qed
+\begin{define}[XML Integrity Constraint]\label{integConstr}
+An XML constraint is a formula of the form: $$(\forall X)[\Phi(X)\supset (\exists Y_1)\Psi_1(X,Y_1) \lor \dots \lor (\exists Y_k)(X,Y_k)]$$
+where $X,Y_1,\dots, Y_k$ denote distinct sets of universally and existentially quantified variables, $\Phi(X)$ and $\Phi(X) \land \Psi_i(X, Y_i) (\forall i \in [1..k])$ are safe conjuctions of built-in and tree atoms.\qed
 \end{define}
 
-\begin{define}[Functional Dependency]
-Given a DTD D, a functional dependency on D is an expression of the form $S \rightarrow p$, where S is a finite non empty subset of $paths(D)$ and p is an element of $paths(D)$.\qed
+\section{Functional Dependencies}
+
+Since different approaches uses slighty different representation of an XML document, also definition of functional dependencies differs. This is reason we introduce in this section two different definitions.
+
+\subsection{Functional Dependency 1}
+
+In a relational database $DB$, a correspondence between values $A$ and $B$ in the tuple of $D$, models the functional dependency denoted as $A \rightarrow B$. Since in XML there is not such a standard tuple concept, the concept of XML tree tuples is introduced, corresponding to relational databases concept of tuples.
+
+\begin{define}[Tree Tuple]\label{treeTuple}
+Given an XML tree XT conforming the DTD $D$, a tree tuple $t$ of $XT$ is a maximal sub-tree of $XT$ such that, for every path $p \in paths(D)$, $t.p$ contains at most one element.\qed
 \end{define}
 
-Given an XML tree $XT$ conforming a DTD $D$ and a functional dependency $F : S_1 \rightarrow S_2$ , we say that $XT$ satisfies $F (XT \models F )$ if for each pair of tree tuples $t_1, t_2$ of $XT$, $t_1.S_1 = t_2.S_1 \land t_1.S_1 = \emptyset \Rightarrow t_1.S_2 = t_2.S_2$ . Given a set of functional dependencies $\mathcal{FD} = \{F_1 , \dots, F_n\}$ over $D$, we say that $XT$ satisfies $\cal FD$ if it satisfies $F_i$ for every $i \in 1..n$.
-
-\todo[inline]{tuto treba doplnit definiciu satisfiability of tree to FD}
-\begin{define}[satisf tree to FD]\label{treeSatisf}
+\begin{define}[Functional Dependency]\label{fd1}
+Given a DTD D, a functional dependency on D is an expression of the form $S \rightarrow p$, where S is a finite non empty subset of $paths(D)$ and $p \in paths(D)$.\qed
 \end{define}
 
-\todo[inline]{tuto treba doplnit definiciu integrity constraints}
-\begin{define}[Integrity Constraints]\label{integConstr}
+\begin{example}
+Consider the XML tree of Fig \ref{example1}. The following functional dependency express the constraint that two distinct authors of the same book cannot have the same value of attribute \texttt{ano}:$$\{/bib/book, /bib/book/written\_by/author/@ano\} \rightarrow /bib/book/written\_by/author$$\qed
+\end{example}
+
+\subsection{Functional Dependency 2}
+
+\begin{define}[Functional Dependency]\label{fd2}
+With a given DTD $D$, a functional dependency is of the form $\sigma = (P, P', (P_1, \dots, P_n \rightarrow P_{n+1}))$. Here $P$ is a  root path (path where first element is a root element of an XML document), or $P = \epsilon$ (empty path). Each $P_i (i \in [1,n])$ is a singleton leaf path, and there is a no non-empty common prefix for $P_1, \dots, P_{n+1}$. Given an XML document $T$ conforming to $D$, we say $T$ satisfies $\sigma$:iff $\forall v \in \{[\![P]\!]\}, \forall v_1, v_2 \in \{v[\![P']\!]\}$, if $v_1[\![P_i]\!] \equiv v_2[\![P_i]\!]$ for all $i \in [1,n]$, then $v_1[\![P_{n+1}]\!] \equiv v_2[\![p_{n+1}]\!]$.\qed
 \end{define}

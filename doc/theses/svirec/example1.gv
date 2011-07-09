@@ -11,7 +11,7 @@ digraph xml_tree_example {
 {
 	rank = same;
 	book1[label = "<book> (v2)"];
-	book2[label = "<book> (v2)"];
+	book2[label = "<book> (v14)"];
 }
 
 	Root -> book1;
@@ -19,9 +19,9 @@ digraph xml_tree_example {
 {
     rank = same;
 	writtenby1[label = "<written_by> (v3)"];
-	writtenby2[label = "<written_by> (v3)"];
+	writtenby2[label = "<written_by> (v15)"];
     title1[label = "<title> (v12)"];
-    title2[label = "<title> (v12)"];
+    title2[label = "<title> (v20)"];
 
 }
     book1 -> writtenby1;
@@ -35,8 +35,8 @@ digraph xml_tree_example {
 	author1[label = "<author> (v4)"];
     author2[label = "<author> (v8)"];
     titleValue1[label = "\"Some title\" (v13)"];
-    author3[label = "<author> (v8)"];
-    titleValue2[label = "\"Some title 2\" (v13)"];
+    author3[label = "<author> (v16)"];
+    titleValue2[label = "\"Some title 2\" (v21)"];
 
 }
     writtenby1 -> author1;
@@ -52,8 +52,8 @@ digraph xml_tree_example {
     name1[label = "name (v6)"];
     ano2[label = "@ano \"A1\" (v9)"];
     name2[label = "name (v10)"];
-    ano3[label = "@ano \"A1\" (v5)"];
-    name3[label = "name (v6)"];
+    ano3[label = "@ano \"A1\" (v17)"];
+    name3[label = "name (v18)"];
 
 }
     author1 -> ano1;
@@ -65,7 +65,7 @@ digraph xml_tree_example {
 
     nameValue1[label = "\"John Writer\" (v7)"];
     nameValue2[label = "\"Eric Seller\" (v11)"];
-    nameValue3[label = "\"Adam Publisher\" (v7)"];
+    nameValue3[label = "\"Adam Publisher\" (v19)"];
 
     name1 -> nameValue1;
     name2 -> nameValue2;

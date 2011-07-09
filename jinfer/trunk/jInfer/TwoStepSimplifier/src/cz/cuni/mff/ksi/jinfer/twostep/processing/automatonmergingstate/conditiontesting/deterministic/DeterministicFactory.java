@@ -72,27 +72,7 @@ public class DeterministicFactory implements MergeConditionTesterFactory {
   }
 
   @Override
-  public List<String> getParameterNames() {
-    return Collections.<String>emptyList();
-  }
-
-  @Override
-  public String getParameterDisplayDescription(final String parameterName) {
-    throw new IllegalStateException("Not allowed.");
-  }
-
-  @Override
-  public void setParameter(final String parameterName, final String newValue) {
-    throw new IllegalStateException("Not allowed.");
-  }
-
-  @Override
   public String getDisplayName() {
     return DISPLAY_NAME;
-  }
-
-  @Override
-  public String getParameterDefaultValue(final String parameterName) {
-    throw new IllegalStateException("Not allowed.");
   }
 }

@@ -29,6 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = AutomatonEvaluatorFactory.class)
 public class NaiveAlphabetFactory implements AutomatonEvaluatorFactory {
+
   /**
    * Canonical name.
    */
@@ -42,7 +43,7 @@ public class NaiveAlphabetFactory implements AutomatonEvaluatorFactory {
   public <T> AutomatonEvaluator<T> create() {
     return new NaiveAlphabet<T>();
   }
-  
+
   @Override
   public String getName() {
     return NAME;

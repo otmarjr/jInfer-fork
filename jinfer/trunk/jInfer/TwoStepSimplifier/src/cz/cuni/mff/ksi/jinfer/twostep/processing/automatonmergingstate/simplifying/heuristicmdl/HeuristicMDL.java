@@ -127,7 +127,7 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
               newAutomaton.mergeStates(mS);
             }
           }
-          
+
           double thisD = this.evaluator.evaluate(newAutomaton);
           if (thisD < solutions.lastKey()) {
             solutions.put(thisD, newAutomaton);

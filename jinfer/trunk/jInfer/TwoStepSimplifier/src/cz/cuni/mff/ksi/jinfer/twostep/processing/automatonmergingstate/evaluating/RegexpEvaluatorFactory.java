@@ -26,5 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
  * @author anti
  */
 public interface RegexpEvaluatorFactory extends NamedModule, Capabilities, UserModuleDescription {
-  <T> RegexpEvaluator<T> create();
+
+   <T> RegexpEvaluator<T> create();
 }

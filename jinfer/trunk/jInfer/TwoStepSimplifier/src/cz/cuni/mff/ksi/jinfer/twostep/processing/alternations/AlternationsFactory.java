@@ -33,8 +33,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = ClusterProcessorFactory.class)
 public class AlternationsFactory implements ClusterProcessorFactory {
-  private static final Logger LOG = Logger.getLogger(AlternationsFactory.class);
 
+  private static final Logger LOG = Logger.getLogger(AlternationsFactory.class);
   public static final String NAME = "TwoStepClusterProcessorAlternations";
   public static final String DISPLAY_NAME = "Alternations";
 

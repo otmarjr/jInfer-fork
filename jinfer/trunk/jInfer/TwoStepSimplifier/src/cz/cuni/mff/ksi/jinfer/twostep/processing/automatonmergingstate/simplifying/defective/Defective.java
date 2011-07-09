@@ -28,11 +28,13 @@ import java.util.List;
  * @author anti
  */
 public class Defective<T> implements AutomatonSimplifier<T> {
+
   private AutomatonSimplifier<T> automatonSimplifier;
   private DefectiveAutomatonSimplifier<T> defectiveAutomatonSimplifier;
+
   Defective(AutomatonSimplifierFactory automatonSimplifierFactory, DefectiveAutomatonSimplifierFactory defectiveAutomatonSimplifierFactory) {
     this.automatonSimplifier = automatonSimplifierFactory.<T>create();
-    this.defectiveAutomatonSimplifier= defectiveAutomatonSimplifierFactory.<T>create();
+    this.defectiveAutomatonSimplifier = defectiveAutomatonSimplifierFactory.<T>create();
   }
 
   @Override
@@ -54,6 +56,4 @@ public class Defective<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName, List<List<T>> inputStrings) throws InterruptedException {
     return defectiveAutomatonSimplifier.simplify(automatonSimplifier.simplify(inputAutomaton, symbolToString, elementName, inputStrings), symbolToString, elementName, inputStrings);
   }
- 
-  
 }

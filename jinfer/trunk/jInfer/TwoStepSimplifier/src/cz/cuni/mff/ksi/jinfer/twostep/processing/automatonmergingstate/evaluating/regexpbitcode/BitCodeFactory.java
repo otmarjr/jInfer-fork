@@ -29,6 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegexpEvaluatorFactory.class)
 public class BitCodeFactory implements RegexpEvaluatorFactory {
+
   /**
    * Canonical name.
    */
@@ -52,13 +53,11 @@ public class BitCodeFactory implements RegexpEvaluatorFactory {
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
-  
 
   @Override
   public String getModuleDescription() {
     return getName();
   }
-  
 
   @Override
   public List<String> getCapabilities() {
@@ -69,6 +68,4 @@ public class BitCodeFactory implements RegexpEvaluatorFactory {
   public String getUserModuleDescription() {
     return "Computes codelength for regexp in bits, not associative.";
   }
-  
-  
 }

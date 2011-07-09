@@ -25,5 +25,6 @@ import java.util.List;
  * @author anti
  */
 public interface AutomatonEvaluator<T> extends Evaluator<Automaton<T>> {
+
   void setInputStrings(List<List<T>> inputStrings);
 }

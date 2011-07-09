@@ -18,7 +18,6 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplify
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,8 +26,12 @@ import java.util.List;
  * @author anti
  */
 public interface Suspection<T> {
+
   void setInputStrings(List<List<T>> inputStrings);
+
   void setSymbolToString(SymbolToString<T> symbolToString);
+
   void setInputAutomaton(Automaton<T> inputAutomaton);
+
   List<List<T>> getNextSuspectedInputStrings();
 }

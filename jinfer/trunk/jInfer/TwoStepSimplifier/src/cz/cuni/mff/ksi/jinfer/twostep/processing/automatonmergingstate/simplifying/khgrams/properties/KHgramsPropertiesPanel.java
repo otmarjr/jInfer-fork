@@ -16,25 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.khgrams.properties;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
-import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.Greedy;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy.GreedyFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.khgrams.KHgramsFactory;
-import java.awt.GridBagConstraints;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
 /**
  * Properties panel for {@link Greedy}.
@@ -144,6 +132,7 @@ public class KHgramsPropertiesPanel extends AbstractPropertiesPanel {
     txtK.setText(properties.getProperty(KHgramsFactory.PROPERTIES_K, KHgramsFactory.PROPERTIES_K_DEFAULT));
     txtH.setText(properties.getProperty(KHgramsFactory.PROPERTIES_H, KHgramsFactory.PROPERTIES_H_DEFAULT));
     txtK.setInputVerifier(new InputVerifier() {
+
       @Override
       public boolean verify(JComponent input) {
         JTextField x = (JTextField) input;
@@ -156,6 +145,7 @@ public class KHgramsPropertiesPanel extends AbstractPropertiesPanel {
       }
     });
     txtH.setInputVerifier(new InputVerifier() {
+
       @Override
       public boolean verify(JComponent input) {
         JTextField x = (JTextField) input;

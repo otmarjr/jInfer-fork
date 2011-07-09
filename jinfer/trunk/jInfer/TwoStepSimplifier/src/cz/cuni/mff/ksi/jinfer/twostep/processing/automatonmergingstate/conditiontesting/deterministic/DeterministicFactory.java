@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic;
 
-import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Collections;
@@ -27,7 +26,7 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  * Factory for {@link Deterministic}.
  *
- * Implements "parameters" capability {@see ModuleParameters}.
+ * 
  * 
  * @author anti
  */

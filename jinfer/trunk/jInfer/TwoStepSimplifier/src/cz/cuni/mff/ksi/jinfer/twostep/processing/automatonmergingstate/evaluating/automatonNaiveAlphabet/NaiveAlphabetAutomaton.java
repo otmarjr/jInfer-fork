@@ -30,6 +30,7 @@ import java.util.Map;
  * @author anti
  */
 public class NaiveAlphabetAutomaton<T> implements Evaluator<Automaton<T>> {
+
   @Override
   public double evaluate(Automaton<T> x) throws InterruptedException {
     UniversalCodeForIntegers uic = UniversalCodeForIntegers.getSingleton();
@@ -38,23 +39,22 @@ public class NaiveAlphabetAutomaton<T> implements Evaluator<Automaton<T>> {
     double result = uic.evaluate(states_count);
     int steps_count = 0;
     for (State<T> state : x.getDelta().keySet()) {
-      result+= uic.evaluate(state.getFinalCount());
-      result+= uic.evaluate(x.getDelta().get(state).size());
+      result += uic.evaluate(state.getFinalCount());
+      result += uic.evaluate(x.getDelta().get(state).size());
       for (Step<T> step : x.getDelta().get(state)) {
         if (alphabet.containsKey(step.getAcceptSymbol())) {
-          alphabet.put(step.getAcceptSymbol(),  1+ alphabet.get(step.getAcceptSymbol()));
+          alphabet.put(step.getAcceptSymbol(), 1 + alphabet.get(step.getAcceptSymbol()));
         } else {
           alphabet.put(step.getAcceptSymbol(), 1);
         }
-        steps_count+= 1;
-        result+= uic.evaluate(step.getUseCount());
+        steps_count += 1;
+        result += uic.evaluate(step.getUseCount());
       }
     }
-    result+= uic.evaluate(states_count)*steps_count;
+    result += uic.evaluate(states_count) * steps_count;
     for (T symbol : alphabet.keySet()) {
-      result+= UniversalCodeForIntegers.log2( 1 + alphabet.size() ) * alphabet.get(symbol);
+      result += UniversalCodeForIntegers.log2(1 + alphabet.size()) * alphabet.get(symbol);
     }
     return result;
   }
-  
 }

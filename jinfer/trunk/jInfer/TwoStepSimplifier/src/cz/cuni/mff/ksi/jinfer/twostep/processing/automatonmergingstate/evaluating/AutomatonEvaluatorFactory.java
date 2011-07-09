@@ -26,5 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
  * @author anti
  */
 public interface AutomatonEvaluatorFactory extends NamedModule, Capabilities, UserModuleDescription {
-  <T> AutomatonEvaluator<T> create();
+
+   <T> AutomatonEvaluator<T> create();
 }

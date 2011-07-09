@@ -30,9 +30,8 @@ public class BitCodeInterval implements Evaluator<RegexpInterval> {
   @Override
   public double evaluate(RegexpInterval x) throws InterruptedException {
     if (x.isUnbounded()) {
-      return 1+UniversalCodeForIntegers.getSingleton().evaluate(x.getMin());
+      return 1 + UniversalCodeForIntegers.getSingleton().evaluate(x.getMin());
     }
-    return 1+UniversalCodeForIntegers.getSingleton().evaluate(x.getMin()) + UniversalCodeForIntegers.getSingleton().evaluate(x.getMax());
+    return 1 + UniversalCodeForIntegers.getSingleton().evaluate(x.getMin()) + UniversalCodeForIntegers.getSingleton().evaluate(x.getMax());
   }
-  
 }

@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * TODO anti Comment!
@@ -28,6 +27,7 @@ import java.util.LinkedList;
  * @author anti
  */
 class StateHString {
+
   private int k;
   private int h;
   private Deque<State<String>> states;
@@ -41,7 +41,7 @@ class StateHString {
     this.steps = another.getSteps();
     this.context = another.getContext();
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {
@@ -61,21 +61,21 @@ class StateHString {
       return false;
     }
     {
-    Iterator<State<String>> itThis = this.states.iterator();
-    Iterator<State<String>> itOther = other.getStates().iterator();
-    int i = 0;
-    while (itThis.hasNext()) {
-      State<String> sThis = itThis.next();
-      State<String> sOther = itOther.next();
-      if (i >= this.h) {
-      if (sThis != sOther && (sThis == null || !sThis.equals(sOther))) {
-        return false;
+      Iterator<State<String>> itThis = this.states.iterator();
+      Iterator<State<String>> itOther = other.getStates().iterator();
+      int i = 0;
+      while (itThis.hasNext()) {
+        State<String> sThis = itThis.next();
+        State<String> sOther = itOther.next();
+        if (i >= this.h) {
+          if (sThis != sOther && (sThis == null || !sThis.equals(sOther))) {
+            return false;
+          }
+        }
+        i++;
       }
-      }
-      i++;
     }
-    }
-    
+
     if (this.steps.size() != other.getSteps().size()) {
       return false;
     }
@@ -86,9 +86,9 @@ class StateHString {
       Step<String> sThis = itThis.next();
       Step<String> sOther = itOther.next();
       if (i >= this.h) {
-      if (sThis != sOther && (sThis == null || !sThis.equals(sOther))) {
-        return false;
-      }
+        if (sThis != sOther && (sThis == null || !sThis.equals(sOther))) {
+          return false;
+        }
       }
       i++;
     }
@@ -104,7 +104,7 @@ class StateHString {
     int i = 0;
     while (it.hasNext()) {
       if (i >= this.h) {
-        hash = 59* hash + it.next().hashCode();
+        hash = 59 * hash + it.next().hashCode();
       } else {
         it.next();
       }
@@ -131,7 +131,4 @@ class StateHString {
   public String getContext() {
     return context;
   }
-  
-  
-  
 }

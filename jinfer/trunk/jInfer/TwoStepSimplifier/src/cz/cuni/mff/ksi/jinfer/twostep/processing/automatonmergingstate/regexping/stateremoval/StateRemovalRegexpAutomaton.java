@@ -73,18 +73,17 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
    */
   public StateRemovalRegexpAutomaton(final StateRemovalRegexpAutomaton<T> anotherAutomaton) {
     super(false);
-    
-    final AutomatonCloner<Regexp<T>, Regexp<T>> cloner= new AutomatonCloner<Regexp<T>, Regexp<T>>();
+
+    final AutomatonCloner<Regexp<T>, Regexp<T>> cloner = new AutomatonCloner<Regexp<T>, Regexp<T>>();
 
     cloner.convertAutomaton(anotherAutomaton, this,
-            new
-              AutomatonClonerSymbolConverter<Regexp<T>, Regexp<T>>() {
-                @Override
-                public Regexp<T> convertSymbol(Regexp<T> symbol) {
-                  return symbol;
-                }
+            new AutomatonClonerSymbolConverter<Regexp<T>, Regexp<T>>() {
+
+              @Override
+              public Regexp<T> convertSymbol(Regexp<T> symbol) {
+                return symbol;
               }
-    );
+            });
     this.superInitialState = cloner.getStateConversionMap().get(anotherAutomaton.getSuperInitialState());
     this.superFinalState = cloner.getStateConversionMap().get(anotherAutomaton.getSuperFinalState());
   }
@@ -152,8 +151,8 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
     int min = 0;
     for (Step<Regexp<T>> oldLoopStep : loopSteps) {
       loopChildren.add(oldLoopStep.getAcceptSymbol());
-      max+= oldLoopStep.getUseCount();
-      min+= oldLoopStep.getMinUseCount();
+      max += oldLoopStep.getUseCount();
+      min += oldLoopStep.getMinUseCount();
     }
 
     final Regexp<T> loopRegexpAlt = Regexp.<T>getAlternation(loopChildren, RegexpInterval.getKleeneStar());
@@ -202,8 +201,8 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
       final List<Regexp<T>> inStepRegexps = new LinkedList<Regexp<T>>();
       for (Step<Regexp<T>> inBucketStep : inStepBuckets.get(inBucketSourceState)) {
         inStepRegexps.add(inBucketStep.getAcceptSymbol());
-        max+= inBucketStep.getUseCount();
-        min+= inBucketStep.getMinUseCount();
+        max += inBucketStep.getUseCount();
+        min += inBucketStep.getMinUseCount();
         this.delta.get(inBucketSourceState).remove(inBucketStep);
         this.reverseDelta.get(state).remove(inBucketStep);
       }
@@ -254,10 +253,10 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
         if (!outBucketStep.getAcceptSymbol().isLambda()) {
           outStepRegexps.add(outBucketStep.getAcceptSymbol());
         } else {
-          isOptional= true;
+          isOptional = true;
         }
-        max+= outBucketStep.getUseCount();
-        min+= outBucketStep.getMinUseCount();
+        max += outBucketStep.getUseCount();
+        min += outBucketStep.getMinUseCount();
         this.reverseDelta.get(outBucketDestinationState).remove(outBucketStep);
         this.delta.get(state).remove(outBucketStep);
       }
@@ -267,10 +266,10 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
         final Regexp<T> oldOutRegexp = outStepRegexps.get(0);
         if (isOptional) {
           newOutRegexp = new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),
-                RegexpInterval.getOptional());
+                  RegexpInterval.getOptional());
         } else {
           newOutRegexp = new Regexp<T>(oldOutRegexp.getContent(), oldOutRegexp.getChildren(), oldOutRegexp.getType(),
-                RegexpInterval.getOnce());
+                  RegexpInterval.getOnce());
         }
       } else {
         if (isOptional) {
@@ -353,7 +352,7 @@ public class StateRemovalRegexpAutomaton<T> extends RegexpAutomaton<T> {
       this.reverseDelta.get(outStep.getDestination()).remove(outStep);
     }
     this.delta.remove(state);
-    
+
     LOG.debug(this);
   }
 

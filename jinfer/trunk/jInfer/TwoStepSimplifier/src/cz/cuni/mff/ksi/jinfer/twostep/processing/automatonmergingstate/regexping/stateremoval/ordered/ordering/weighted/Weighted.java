@@ -25,7 +25,6 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.regexpbitcode.BitCode;
 
 /**
  * Simple heuristic for ordering states in automaton. Weight = sum of {in | out | loop}-transitions
@@ -40,12 +39,13 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluatin
  * @author anti
  */
 public class Weighted<T> implements Orderer<T> {
+
   private RegexpEvaluator<T> rEval;
 
   public Weighted(RegexpEvaluatorFactory factory) {
-    this.rEval= factory.<T>create();
+    this.rEval = factory.<T>create();
   }
-  
+
   private double getStateWeight(final StateRemovalRegexpAutomaton<T> automaton, final State<Regexp<T>> state) throws InterruptedException {
     double weight = 0;
     int loopSize = automaton.getLoopSteps(state).size();
@@ -53,20 +53,19 @@ public class Weighted<T> implements Orderer<T> {
     int inSize = automaton.getReverseDelta().get(state).size() - loopSize;
     for (Step<Regexp<T>> step : automaton.getReverseDelta().get(state)) {
       if (!step.getSource().equals(state)) {
-        weight += rEval.evaluate(step.getAcceptSymbol())*(outSize-1);
+        weight += rEval.evaluate(step.getAcceptSymbol()) * (outSize - 1);
       } else {
-        weight +=  rEval.evaluate(step.getAcceptSymbol())*((outSize*inSize)-1);
+        weight += rEval.evaluate(step.getAcceptSymbol()) * ((outSize * inSize) - 1);
       }
     }
     for (Step<Regexp<T>> step : automaton.getDelta().get(state)) {
       if (!step.getDestination().equals(state)) {
         // To prevent twice counting the loops
-        weight +=  rEval.evaluate(step.getAcceptSymbol())*(inSize-1);
+        weight += rEval.evaluate(step.getAcceptSymbol()) * (inSize - 1);
       }
     }
     return weight;
-  }  
-  
+  }
 
   @Override
   public State<Regexp<T>> getStateToRemove(final StateRemovalRegexpAutomaton<T> automaton, final SymbolToString<Regexp<T>> symbolToString) throws InterruptedException {
@@ -85,8 +84,7 @@ public class Weighted<T> implements Orderer<T> {
         minWeight = this.getStateWeight(automaton, state);
       } else {
         final double stateWeight = this.getStateWeight(automaton, state);
-        if ((stateWeight < minWeight)||((stateWeight == minWeight) && (state.getName() < minState.getName()))
-               ) {
+        if ((stateWeight < minWeight) || ((stateWeight == minWeight) && (state.getName() < minState.getName()))) {
           minWeight = stateWeight;
           minState = state;
         }

@@ -25,11 +25,12 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifyi
  * @author anti
  */
 public class NaiveDefective<T> implements DefectiveAutomatonEvaluator<T> {
+
   private NaiveDefectiveAutomaton<T> naiveAutomaton;
   private NaiveDefectiveRules<T> naiveRules;
- 
+
   public NaiveDefective() {
-    this.naiveAutomaton= new NaiveDefectiveAutomaton<T>();
+    this.naiveAutomaton = new NaiveDefectiveAutomaton<T>();
     this.naiveRules = new NaiveDefectiveRules<T>();
   }
 

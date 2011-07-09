@@ -26,5 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
  * @author anti
  */
 public interface DefectiveAutomatonEvaluatorFactory extends NamedModule, Capabilities, UserModuleDescription {
-  <T> DefectiveAutomatonEvaluator<T> create();
+
+   <T> DefectiveAutomatonEvaluator<T> create();
 }

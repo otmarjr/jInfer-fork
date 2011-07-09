@@ -26,16 +26,17 @@ import java.util.List;
  * @author anti
  */
 public class NaiveAlphabet<T> implements AutomatonEvaluator<T> {
+
   private NaiveAlphabetAutomaton<T> naiveAutomaton;
   private NaiveAlphabetRules<T> naiveRules;
- 
+
   @Override
   public void setInputStrings(List<List<T>> inputStrings) {
     this.naiveRules.setInputStrings(inputStrings);
   }
 
   public NaiveAlphabet() {
-    this.naiveAutomaton= new NaiveAlphabetAutomaton<T>();
+    this.naiveAutomaton = new NaiveAlphabetAutomaton<T>();
     this.naiveRules = new NaiveAlphabetRules<T>();
   }
 

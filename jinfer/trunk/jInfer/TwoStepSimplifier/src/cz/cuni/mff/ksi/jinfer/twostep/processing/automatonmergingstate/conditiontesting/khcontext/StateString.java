@@ -28,6 +28,7 @@ import java.util.LinkedList;
  * @author anti
  */
 class StateString {
+
   private int k;
   private int h;
   private Deque<State<String>> states;
@@ -36,9 +37,9 @@ class StateString {
 
   public StateString(State<String> firstState, int k, int h) {
     this.context = "";
-    this.states= new LinkedList<State<String>>();
+    this.states = new LinkedList<State<String>>();
     this.states.addFirst(firstState);
-    this.steps= new LinkedList<Step<String>>();
+    this.steps = new LinkedList<Step<String>>();
     this.k = k;
     this.h = h;
   }
@@ -50,17 +51,17 @@ class StateString {
     this.steps = steps;
     this.context = context;
   }
-  
+
   public State<String> getFirstState() {
     return this.states.getFirst();
   }
-  
+
   public StateString clonePreceed(Step<String> inStep) {
     Deque<State<String>> newStates = new LinkedList<State<String>>();
     Deque<Step<String>> newSteps = new LinkedList<Step<String>>();
     newStates.addAll(this.states);
     newStates.addFirst(inStep.getSource());
-    if (newStates.size() > k+1){ 
+    if (newStates.size() > k + 1) {
       newStates.removeLast();
     }
     newSteps.addAll(this.steps);
@@ -68,14 +69,14 @@ class StateString {
     if (newSteps.size() > k) {
       newSteps.removeLast();
     }
-    
+
     String newContext = inStep.getAcceptSymbol() + this.context;
     if (newContext.length() > k) {
-      newContext= newContext.substring(0, k);
+      newContext = newContext.substring(0, k);
     }
     return new StateString(k, h, newStates, newSteps, newContext);
   }
-  
+
   public boolean isLenghtK() {
     return this.steps.size() == this.k;
   }
@@ -99,17 +100,17 @@ class StateString {
       return false;
     }
     {
-    Iterator<State<String>> itThis = this.states.iterator();
-    Iterator<State<String>> itOther = other.getStates().iterator();
-    while (itThis.hasNext()) {
-      State<String> sThis = itThis.next();
-      State<String> sOther = itOther.next();
-      if (sThis != sOther && (sThis == null || !sThis.equals(sOther))) {
-        return false;
+      Iterator<State<String>> itThis = this.states.iterator();
+      Iterator<State<String>> itOther = other.getStates().iterator();
+      while (itThis.hasNext()) {
+        State<String> sThis = itThis.next();
+        State<String> sOther = itOther.next();
+        if (sThis != sOther && (sThis == null || !sThis.equals(sOther))) {
+          return false;
+        }
       }
     }
-    }
-    
+
     if (this.steps.size() != other.getSteps().size()) {
       return false;
     }
@@ -154,7 +155,4 @@ class StateString {
   public String getContext() {
     return context;
   }
-  
-  
-  
 }

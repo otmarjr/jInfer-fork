@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.testernull;
 
-import cz.cuni.mff.ksi.jinfer.twostep.ModuleParameters;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import java.util.Collections;
@@ -27,7 +26,6 @@ import org.openide.util.lookup.ServiceProvider;
 /**
  * Factory for {@link TesterNull}.
  *
- * Implements "parameters" capability {@see ModuleParameters}.
  * 
  * @author anti
  */
@@ -73,27 +71,7 @@ public class TesterNullFactory implements MergeConditionTesterFactory {
   }
 
   @Override
-  public List<String> getParameterNames() {
-    return Collections.<String>emptyList();
-  }
-
-  @Override
-  public String getParameterDisplayDescription(final String parameterName) {
-    throw new IllegalStateException("Not allowed.");
-  }
-
-  @Override
-  public void setParameter(final String parameterName, final String newValue) {
-    throw new IllegalStateException("Not allowed.");
-  }
-
-  @Override
   public String getDisplayName() {
     return DISPLAY_NAME;
-  }
-
-  @Override
-  public String getParameterDefaultValue(final String parameterName) {
-    throw new IllegalStateException("Not allowed.");
   }
 }

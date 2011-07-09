@@ -31,6 +31,7 @@ import java.util.Map;
  * @author anti
  */
 public class NaiveDefectiveAutomaton<T> implements Evaluator<DefectiveAutomaton<T>> {
+
   @Override
   public double evaluate(DefectiveAutomaton<T> x) throws InterruptedException {
     UniversalCodeForIntegers uic = UniversalCodeForIntegers.getSingleton();
@@ -39,24 +40,24 @@ public class NaiveDefectiveAutomaton<T> implements Evaluator<DefectiveAutomaton<
     double result = uic.evaluate(states_count);
     int steps_count = 0;
     for (State<T> state : x.getDelta().keySet()) {
-      result+= uic.evaluate(state.getFinalCount());
-      result+= uic.evaluate(x.getDelta().get(state).size());
+      result += uic.evaluate(state.getFinalCount());
+      result += uic.evaluate(x.getDelta().get(state).size());
       for (Step<T> step : x.getDelta().get(state)) {
         if (alphabet.containsKey(step.getAcceptSymbol())) {
-          alphabet.put(step.getAcceptSymbol(),  1+ alphabet.get(step.getAcceptSymbol()));
+          alphabet.put(step.getAcceptSymbol(), 1 + alphabet.get(step.getAcceptSymbol()));
         } else {
           alphabet.put(step.getAcceptSymbol(), 1);
         }
-        steps_count+= 1;
-        result+= uic.evaluate(step.getUseCount());
+        steps_count += 1;
+        result += uic.evaluate(step.getUseCount());
       }
     }
-    result+= uic.evaluate(states_count)*steps_count;
-    
-    for (List<T> string: x.getRemovedInputStrings()) {
+    result += uic.evaluate(states_count) * steps_count;
+
+    for (List<T> string : x.getRemovedInputStrings()) {
       for (T symbol : string) {
         if (alphabet.containsKey(symbol)) {
-          alphabet.put(symbol,  1+ alphabet.get(symbol));
+          alphabet.put(symbol, 1 + alphabet.get(symbol));
         } else {
           alphabet.put(symbol, 1);
         }
@@ -64,19 +65,18 @@ public class NaiveDefectiveAutomaton<T> implements Evaluator<DefectiveAutomaton<
     }
     double unity = 0;
     for (T symbol : alphabet.keySet()) {
-      result+= UniversalCodeForIntegers.log2( 1 + alphabet.size() ) + uic.evaluate(alphabet.get(symbol));
-      unity+= alphabet.get(symbol);
+      result += UniversalCodeForIntegers.log2(1 + alphabet.size()) + uic.evaluate(alphabet.get(symbol));
+      unity += alphabet.get(symbol);
     }
     for (T symbol : alphabet.keySet()) {
-      result+= alphabet.get(symbol) * -UniversalCodeForIntegers.log2(alphabet.get(symbol) / unity);
+      result += alphabet.get(symbol) * -UniversalCodeForIntegers.log2(alphabet.get(symbol) / unity);
     }
     for (List<T> string : x.getRemovedInputStrings()) {
-      result+= uic.evaluate(string.size());
+      result += uic.evaluate(string.size());
       for (T symbol : string) {
-        result+= -UniversalCodeForIntegers.log2(alphabet.get(symbol) / unity);
+        result += -UniversalCodeForIntegers.log2(alphabet.get(symbol) / unity);
       }
     }
     return result;
   }
-  
 }

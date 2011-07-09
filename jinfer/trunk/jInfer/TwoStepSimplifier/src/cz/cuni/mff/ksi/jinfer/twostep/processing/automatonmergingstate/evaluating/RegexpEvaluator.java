@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author anti
  */
-public interface RegexpEvaluator<T> extends Evaluator<Regexp<T>>{
+public interface RegexpEvaluator<T> extends Evaluator<Regexp<T>> {
+
   void setInputStrings(List<List<T>> inputStrings);
-  
 }

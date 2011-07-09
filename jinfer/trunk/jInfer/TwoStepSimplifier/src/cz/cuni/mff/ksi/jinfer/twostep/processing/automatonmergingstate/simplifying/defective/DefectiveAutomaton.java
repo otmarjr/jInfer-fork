@@ -30,22 +30,23 @@ import java.util.Set;
  * @author anti
  */
 public class DefectiveAutomaton<T> extends Automaton<T> {
+
   private List<List<T>> removedInputStrings;
 
   public DefectiveAutomaton(boolean createInitialState) {
     super(createInitialState);
-    this.removedInputStrings= new LinkedList<List<T>>();
+    this.removedInputStrings = new LinkedList<List<T>>();
   }
 
   public DefectiveAutomaton() {
-    this.removedInputStrings= new LinkedList<List<T>>();
+    this.removedInputStrings = new LinkedList<List<T>>();
   }
-  
+
   public DefectiveAutomaton(Automaton<T> anotherAutomaton) {
     super(anotherAutomaton);
-    this.removedInputStrings= new LinkedList<List<T>>();
+    this.removedInputStrings = new LinkedList<List<T>>();
   }
-  
+
   public List<List<T>> getRemovedInputStrings() {
     return this.removedInputStrings;
   }
@@ -94,7 +95,7 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
       }
     }
     for (Step<T> step : toremovestep) {
-      removeStep(step);      
+      removeStep(step);
     }
     for (State<T> state : this.delta.keySet()) {
       if (shouldBeRemoved(state)) {
@@ -114,13 +115,13 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
       assert toTake.getUseCount() > 0;
       toTake.setUseCount(toTake.getUseCount() - 1);
       toTake.removeInputString(string);
-      actual= toTake.getDestination();
+      actual = toTake.getDestination();
     }
     assert actual.getFinalCount() > 0;
     actual.setFinalCount(actual.getFinalCount() - 1);
     this.removedInputStrings.add(string);
   }
-  
+
   public void undoRemoveInputString(List<T> string) {
     State<T> actual = this.initialState;
     for (T symbol : string) {
@@ -129,7 +130,7 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
       assert toTake.getUseCount() >= 0;
       toTake.setUseCount(toTake.getUseCount() + 1);
       toTake.addInputString(string);
-      actual= toTake.getDestination();
+      actual = toTake.getDestination();
     }
     assert actual.getFinalCount() >= 0;
     actual.setFinalCount(actual.getFinalCount() + 1);

@@ -29,11 +29,12 @@ import org.apache.log4j.Logger;
  * @author anti
  */
 public class ToStringSize<T> implements RegexpEvaluator<T> {
+
   private static final Logger LOG = Logger.getLogger(ToStringSize.class);
+
   @Override
   public void setInputStrings(List<List<T>> inputStrings) {
   }
-  
 
   private static String getDelimiter(final RegexpType t) {
     switch (t) {
@@ -46,7 +47,7 @@ public class ToStringSize<T> implements RegexpEvaluator<T> {
       default:
         throw new IllegalStateException("Invalid regexp type at this point: " + t);
     }
-  }  
+  }
 
   private String rToString(Regexp<T> x) {
     if (x.getType() != null) {

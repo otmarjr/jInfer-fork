@@ -118,6 +118,7 @@ public class KHContextPropertiesPanel extends AbstractPropertiesPanel {
     txtK.setText(properties.getProperty(KHContextFactory.PROPERTIES_K, KHContextFactory.PROPERTIES_K_DEFAULT));
     txtH.setText(properties.getProperty(KHContextFactory.PROPERTIES_H, KHContextFactory.PROPERTIES_H_DEFAULT));
     txtK.setInputVerifier(new InputVerifier() {
+
       @Override
       public boolean verify(JComponent input) {
         JTextField x = (JTextField) input;
@@ -130,6 +131,7 @@ public class KHContextPropertiesPanel extends AbstractPropertiesPanel {
       }
     });
     txtH.setInputVerifier(new InputVerifier() {
+
       @Override
       public boolean verify(JComponent input) {
         JTextField x = (JTextField) input;

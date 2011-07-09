@@ -125,9 +125,8 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
     this.elementSymbolToString = new AbstractStructuralNodeSymbolToString();
     this.regexpAbstractToString = new RegexpAbstractSymbolToString();
   }
-  
-  
-  private Regexp<AbstractStructuralNode> convertRegexpToRepresentant(Clusterer<AbstractStructuralNode> clusterer, Regexp<AbstractStructuralNode>  regexp) {
+
+  private Regexp<AbstractStructuralNode> convertRegexpToRepresentant(Clusterer<AbstractStructuralNode> clusterer, Regexp<AbstractStructuralNode> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
         throw new IllegalArgumentException("Lambda lambada");
@@ -135,14 +134,14 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
         return Regexp.<AbstractStructuralNode>getToken(clusterer.getRepresentantForItem(regexp.getContent()), regexp.getInterval());
       case CONCATENATION:
       case ALTERNATION:
-        List<Regexp<AbstractStructuralNode>> newCh = new ArrayList<Regexp<AbstractStructuralNode>> (regexp.getChildren().size());
+        List<Regexp<AbstractStructuralNode>> newCh = new ArrayList<Regexp<AbstractStructuralNode>>(regexp.getChildren().size());
         for (Regexp<AbstractStructuralNode> ch : regexp.getChildren()) {
           newCh.add(convertRegexpToRepresentant(clusterer, ch));
         }
-        return new Regexp<AbstractStructuralNode>(null, 
+        return new Regexp<AbstractStructuralNode>(null,
                 newCh,
                 regexp.getType(), regexp.getInterval());
-      case PERMUTATION: 
+      case PERMUTATION:
         throw new IllegalArgumentException("Can't handle permutation input.");
       default:
         throw new IllegalArgumentException("Unknown regexp type.");
@@ -161,12 +160,12 @@ public class AutomatonMergingState implements ClusterProcessor<AbstractStructura
 
     List<List<AbstractStructuralNode>> inputStrings = new LinkedList<List<AbstractStructuralNode>>();
     for (final AbstractStructuralNode instance : rules) {
-      if (instance.getMetadata().containsKey(IGGUtils.IS_SENTINEL)){
+      if (instance.getMetadata().containsKey(IGGUtils.IS_SENTINEL)) {
         continue;
       }
       final Element element = (Element) instance;
       final Regexp<AbstractStructuralNode> rightSide = element.getSubnodes();
-      
+
       if (element.getMetadata().containsKey("from.schema")) {
         Regexp<AbstractStructuralNode> representantRegexp = convertRegexpToRepresentant(clusterer, rightSide);
         automaton.buildPTAOnRegexp(representantRegexp);

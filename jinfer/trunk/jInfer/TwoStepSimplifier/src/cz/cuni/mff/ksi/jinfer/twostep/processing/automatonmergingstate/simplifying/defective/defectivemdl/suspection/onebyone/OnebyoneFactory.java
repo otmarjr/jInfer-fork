@@ -28,13 +28,14 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = SuspectionFactory.class)
-public class OnebyoneFactory implements SuspectionFactory{
+public class OnebyoneFactory implements SuspectionFactory {
+
   public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveDefectiveMDLSuspectionOnebyone";
   /**
    * Name presented to user.
    */
   public static final String DISPLAY_NAME = "One by one";
-  
+
   @Override
   public <T> Suspection<T> create() {
     return new Onebyone<T>();
@@ -57,12 +58,11 @@ public class OnebyoneFactory implements SuspectionFactory{
 
   @Override
   public List<String> getCapabilities() {
-   return Collections.<String>emptyList();
+    return Collections.<String>emptyList();
   }
 
   @Override
   public String getUserModuleDescription() {
     return "TODO anti write sth";
   }
-  
 }

@@ -104,7 +104,6 @@ public class TwoStepSimplifierFactory implements Simplifier {
     return sb.toString();
   }
 
-
   @Override
   public List<String> getCapabilities() {
     LinkedList<String> ab = new LinkedList<String>();
@@ -136,15 +135,14 @@ public class TwoStepSimplifierFactory implements Simplifier {
 
     return ModuleSelectionHelper.lookupImpl(ContentInferrerFactory.class, p.getProperty(PROPERTIES_CONTENT_INFERRER, PROPERTIES_CONTENT_INFERRER_DEFAULT));
   }
-  
+
   @Override
   public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
     final TwoStepSimplifier simplifier = new TwoStepSimplifier(
-            getClustererFactory(), 
-            getClusterProcessorFactory(), 
+            getClustererFactory(),
+            getClusterProcessorFactory(),
             getRegularExpressionCleanerFactory(),
-            getContentInferrerFactory()
-            );
+            getContentInferrerFactory());
     callback.finished(
             simplifier.simplify(initialGrammar));
   }

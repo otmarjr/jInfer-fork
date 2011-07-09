@@ -58,8 +58,7 @@ public class GreedyFactory implements AutomatonSimplifierFactory {
   public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
     return new Greedy<T>(
-            getMergeConditionTesterFactory(),
-            RunningProject.getActiveProjectProps(getName()));
+            getMergeConditionTesterFactory());
   }
 
   @Override

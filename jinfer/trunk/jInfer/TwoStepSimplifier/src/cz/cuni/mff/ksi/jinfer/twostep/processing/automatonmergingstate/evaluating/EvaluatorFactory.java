@@ -26,5 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.UserModuleDescription;
  * @author anti
  */
 public interface EvaluatorFactory extends NamedModule, Capabilities, UserModuleDescription {
-  <T> Evaluator<T> create();
+
+   <T> Evaluator<T> create();
 }

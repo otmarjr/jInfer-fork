@@ -62,8 +62,7 @@ public class GreedyMDLFactory implements AutomatonSimplifierFactory {
     LOG.debug("Creating new " + NAME);
     return new GreedyMDL<T>(
             getMergeConditionTesterFactory(),
-            getAutomatonEvaluatorFactory(),
-            RunningProject.getActiveProjectProps(getName()));
+            getAutomatonEvaluatorFactory());
   }
 
   @Override

@@ -135,8 +135,9 @@ public class SKStringsPropertiesPanel extends AbstractPropertiesPanel {
   public final void load() {
     txtS.setText(properties.getProperty(SKStringsFactory.PROPERTIES_S, SKStringsFactory.PROPERTIES_S_DEFAULT));
     txtK.setText(properties.getProperty(SKStringsFactory.PROPERTIES_K, SKStringsFactory.PROPERTIES_K_DEFAULT));
-    txtStrategy.setText(properties.getProperty(SKStringsFactory.PROPERTIES_STRATEGY , SKStringsFactory.PROPERTIES_STRATEGY_DEFAULT));
+    txtStrategy.setText(properties.getProperty(SKStringsFactory.PROPERTIES_STRATEGY, SKStringsFactory.PROPERTIES_STRATEGY_DEFAULT));
     txtS.setInputVerifier(new InputVerifier() {
+
       @Override
       public boolean verify(JComponent input) {
         JTextField x = (JTextField) input;
@@ -149,6 +150,7 @@ public class SKStringsPropertiesPanel extends AbstractPropertiesPanel {
       }
     });
     txtK.setInputVerifier(new InputVerifier() {
+
       @Override
       public boolean verify(JComponent input) {
         JTextField x = (JTextField) input;

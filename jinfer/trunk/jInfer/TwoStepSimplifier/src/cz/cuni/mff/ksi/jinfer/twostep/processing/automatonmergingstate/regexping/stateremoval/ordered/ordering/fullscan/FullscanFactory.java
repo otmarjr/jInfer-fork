@@ -87,7 +87,6 @@ public class FullscanFactory implements OrdererFactory {
 
     return ModuleSelectionHelper.lookupImpl(RegexpEvaluatorFactory.class,
             p.getProperty(PROPERTIES_REVAL, PROPERTIES_REVAL_DEFAULT));
-    
+
   }
-  
 }

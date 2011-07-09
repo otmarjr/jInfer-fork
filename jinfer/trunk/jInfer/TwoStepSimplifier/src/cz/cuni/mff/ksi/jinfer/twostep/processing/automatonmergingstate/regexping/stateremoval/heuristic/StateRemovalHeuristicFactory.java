@@ -14,7 +14,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.heuristic;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
@@ -22,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.RegexpEvaluatorFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.stateremoval.ordered.ordering.OrdererFactory;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -36,8 +34,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = RegexpAutomatonSimplifierFactory.class)
 public class StateRemovalHeuristicFactory implements RegexpAutomatonSimplifierFactory {
-  private static final Logger LOG = Logger.getLogger(StateRemovalHeuristicFactory.class);
 
+  private static final Logger LOG = Logger.getLogger(StateRemovalHeuristicFactory.class);
   /**
    * Canonical name.
    */
@@ -95,5 +93,4 @@ public class StateRemovalHeuristicFactory implements RegexpAutomatonSimplifierFa
   public String getDisplayName() {
     return DISPLAY_NAME;
   }
-
 }

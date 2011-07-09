@@ -24,29 +24,31 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluatin
  * @author anti
  */
 public class UniversalCodeForIntegers implements Evaluator<Integer> {
-  private static double log2constant = Math.log(2.0);;
+
+  private static double log2constant = Math.log(2.0);
+  ;
   private static double log2c0 = log2(2.865);
   private static UniversalCodeForIntegers instance = new UniversalCodeForIntegers();
 
   public static double log2(double x) {
     return Math.log(x) / log2constant;
   }
-  
+
   private UniversalCodeForIntegers() {
   }
-  
+
   public static UniversalCodeForIntegers getSingleton() {
     return instance;
   }
-  
+
   @Override
   public double evaluate(Integer x) throws InterruptedException {
     double result = 0;
     double intermediate = x;
-    while ((intermediate= log2(intermediate)) > 0) {
-      result+= intermediate;
+    while ((intermediate = log2(intermediate)) > 0) {
+      result += intermediate;
     }
-    result+= log2c0;
+    result += log2c0;
     return result;
   }
 }

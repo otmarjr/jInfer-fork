@@ -42,6 +42,8 @@
 \usepackage{algorithmic}
 \usepackage[chapter]{algorithm}
 
+\newcommand{\myscale}{0.74}
+
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
@@ -258,7 +260,7 @@ Keywords:
 
 \newtheorem{theorem}{Theorem}
 \theoremstyle{definition}
-\newtheorem*{define}{Definition}	% Definice nečíslujeme, proto "*"
+\newtheorem{define}{Definition}[chapter]	% Definice nečíslujeme, proto "*"
 \newtheorem{example}{Example}
 
 
@@ -267,6 +269,10 @@ Keywords:
 \include{kap1}
 \include{kap2}
 \include{kap3}
+\include{kap4}
+\include{kap5}
+\include{kap6}
+\include{kap7}
 
 % Ukázka pouľití některých konstrukcí LateXu (odkomentujte, chcete-li)
 %\include{ukazka}

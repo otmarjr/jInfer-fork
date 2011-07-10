@@ -82,6 +82,10 @@ public class DefectiveAutomaton<T> extends Automaton<T> {
     }
     this.delta.remove(state);
     this.reverseDelta.remove(state);
+    if (state.equals(this.initialState)) {
+      this.initialState = this.createNewState();
+      this.initialState.incFinalCount();
+    }
   }
 
   public void minimize() {

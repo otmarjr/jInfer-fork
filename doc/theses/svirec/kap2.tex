@@ -80,33 +80,33 @@ attribute, then $XT.p = \{\delta_T(x)|x \in p(XT)\}$.
 
 \section{Integrity Constraints}
 
-Before defining of XML integrity constaint, let us introduce some notation used in the definition. A \emph{path atom} is an expression of the form $[x_1]p[x_2]$, where $p$ is a path expression, $x_1$ and $x_2$ are terms, and $x_1 \not \in Str$.\\
+Before defining of XML integrity constraint, let us introduce some notation used in the definition. A \emph{path atom} is an expression of the form $[x_1]p[x_2]$, where $p$ is a path expression, $x_1$ and $x_2$ are terms, and $x_1 \not \in Str$.\\
 A conjunction of path and built-in atoms $C = [X_1]p_1[Y_1] \cap \dots \cap [X_n]p_n[Y_n] \cap U_1\theta_1 V_1 \cap \dots \cap U_k \theta_k V_k$ is said to be safe if all variables in $C$ are \emph{range restricted}, i.e. if
 \begin{itemize}
  	\item for every $[X_i]p_i[Y_i]$, either $X_i$ is a constant (node identifier of a string), or there is some $[X_j]p_j[Y_j]$ in $C$ where $X_j$ is range restricted;
-    \item for every built-in term $U_i\theta_i V_i$ occuring in $C$, if $\theta_i$ is equal to $"="$ then at least one of the two terms is range restricted; otherwise both $U_i$ and $V_i$ must be range restricted.
+    \item for every built-in term $U_i\theta_i V_i$ occurring in $C$, if $\theta_i$ is equal to $"="$ then at least one of the two terms is range restricted; otherwise both $U_i$ and $V_i$ must be range restricted.
  \end{itemize}
 A rootless tree formula is an expression of the form $p(\Phi_1 \land \dots \land \Phi_k)$ where $\Phi_i$ is a rootless path formula (expression of the form $p[y]$ where $p$ is a path expression and $y$ is a term) or a rootless tree formula and $p$ is a path expression. A tree atom is an expression of the form $[x]T$ where $T$ is a rootless tree formula and $x$ is a term.
 
 \begin{define}[XML Integrity Constraint]\label{integConstr}
 An XML constraint is a formula of the form: $$(\forall X)[\Phi(X)\supset (\exists Y_1)\Psi_1(X,Y_1) \lor \dots \lor (\exists Y_k)(X,Y_k)]$$
-where $X,Y_1,\dots, Y_k$ denote distinct sets of universally and existentially quantified variables, $\Phi(X)$ and $\Phi(X) \land \Psi_i(X, Y_i) (\forall i \in [1..k])$ are safe conjuctions of built-in and tree atoms.\qed
+where $X,Y_1,\dots, Y_k$ denote distinct sets of universally and existentially quantified variables, $\Phi(X)$ and $\Phi(X) \land \Psi_i(X, Y_i) (\forall i \in [1..k])$ are safe conjunctions of built-in and tree atoms.\qed
 \end{define}
 
 \section{Functional Dependencies}
 
-Since different approaches uses slighty different representation of an XML document, also definition of functional dependencies differs. This is reason we introduce in this section two different definitions.
+Since different approaches uses slightly different representation of an XML document, also definition of functional dependencies differs. This is reason we introduce in this section two different definitions.
 
 \subsection{Functional Dependency 1}
 
 In a relational database $DB$, a correspondence between values $A$ and $B$ in the tuple of $D$, models the functional dependency denoted as $A \rightarrow B$. Since in XML there is not such a standard tuple concept, the concept of XML tree tuples is introduced, corresponding to relational databases concept of tuples.
 
 \begin{define}[Tree Tuple]\label{treeTuple}
-Given an XML tree XT conforming the DTD $D$, a tree tuple $t$ of $XT$ is a maximal sub-tree of $XT$ such that, for every path $p \in paths(D)$, $t.p$ contains at most one element.\qed
+Given an XML tree $XT$ conforming the DTD $D$, a tree tuple $t$ of $XT$ is a maximal sub-tree of $XT$ such that, for every path $p \in paths(D)$, $t.p$ contains at most one element.\qed
 \end{define}
 
 \begin{define}[Functional Dependency]\label{fd1}
-Given a DTD D, a functional dependency on D is an expression of the form $S \rightarrow p$, where S is a finite non empty subset of $paths(D)$ and $p \in paths(D)$.\qed
+Given a DTD $D$, a functional dependency on $D$ is an expression of the form $S \rightarrow p$, where S is a finite non empty subset of $paths(D)$ and $p \in paths(D)$.\qed
 \end{define}
 
 \begin{example}

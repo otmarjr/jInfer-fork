@@ -10,7 +10,7 @@ A technique for computing repairs which solves the problem of XML data inconsist
 
 \subsection{XML Tree and Functional Dependency}
 
-To be able to resolve problem of functional dependency violations in XML document, the authors try to introduce the concept of functional dependendenies based on those defined for relational databases. Concept of a tree tuple and functional dependency is defined in Definition \ref{treeTuple} and \ref{fd1}.
+To be able to resolve problem of functional dependency violations in XML document, the authors try to introduce the concept of functional dependencies based on those defined for relational databases. Concept of a tree tuple and functional dependency is defined in Definition \ref{treeTuple} and \ref{fd1}.
 
 Given an XML tree $XT$ conforming a DTD $D$ and a functional dependency $F : S_1 \rightarrow S_2$ , we say that $XT$ satisfies $F (XT \models F )$ if for each pair of tree tuples $t_1, t_2$ of $XT$, $t_1.S_1 = t_2.S_1 \land t_1.S_1 = \emptyset \Rightarrow t_1.S_2 = t_2.S_2$ . Given a set of functional dependencies $\mathcal{FD} = \{F_1 , \dots, F_n\}$ over $D$, we say that $XT$ satisfies $\cal FD$ if it satisfies $F_i$ for every $i \in 1..n$.
 
@@ -66,7 +66,7 @@ With a repair $\langle \delta, \varrho \rangle$ of R-XML tree and a set of label
 Let $RXT = \langle T, \delta, \varrho \rangle$ be an R-XML tree conforming DTD $D$, $\mathcal{FD}$ a set of functional dependencies and $R_1 = \langle \delta_1, \varrho_1 \rangle$, $R_2 = \langle \delta_2, \varrho_2 \rangle$ two repairs for $RXT$. We say that $R_1$ is smaller than $R_2$ ($R_1 \preceq R_2$) if $Updated_{\delta_1}(N_T)\ \cup\ False_{\delta_1}(N_T) \subseteq Updated_{\delta_2}(N_T)\ \cup\ False_{\delta_2}(N_T)$ and $False_{\delta_1}(N_T) \subseteq False_{\delta_2}(N_T)$. Repair $R$ is minimal if there is no repair $R' \neq R$ such that $R' \preceq R$.\qed
 \end{define}
 
-An R-XML tree is used as an input for the main algorithm computing repaired R-XML tree described in Algorithm \ref{repAlgo}. First the algorithm computes all the possible repairs of tuples which not satisfy a functional dependecy using the function \texttt{computeRepairs} (lines 2-6). Next all non-minimal repairs are removed from all possible repairs (line 7). In the last step, all the repairs are merged and a unique repaired R-XML tree is returned.
+An R-XML tree is used as an input for the main algorithm computing repaired R-XML tree described in Algorithm \ref{repAlgo}. First the algorithm computes all the possible repairs of tuples which not satisfy a functional dependency using the function \texttt{computeRepairs} (lines 2-6). Next all non-minimal repairs are removed from all possible repairs (line 7). In the last step, all the repairs are merged and a unique repaired R-XML tree is returned.
 
 \begin{algorithm}[H]
 \caption{XML Repair}
@@ -200,7 +200,7 @@ The algorithm fixing initial FD violations is shown in Algorithm \ref{fixInit}. 
 \REQUIRE An XML document T, a set $\Sigma$ of FDs.
 \ENSURE A modified document T.
 \STATE Create the initial conflict hypergraph $g$ of $T$ w.r.t $\Sigma$
-\STATE Use a known algorithm to find an approxiamtion $VC$ for the minimum weighted vertex cover of $g$
+\STATE Use a known algorithm to find an approximation $VC$ for the minimum weighted vertex cover of $g$
 \STATE $remaining$ := VC
 \WHILE{There are two target nodes $v_1, v_2 \in T$ violating a FD $\sigma \in \Sigma$, and $v_1[\![P_{n+1}]\!]$ or $v_2[\![P_{n+1}]\!]$ is the only node in VC from the set of nodes $\{v_1[\![P_i]\!](i \in [1, n+1])\} \cup \{v_2[\![P_i]\!](i \in [1, n+1])\}$. (W.l.o.g assume the violation is as follows: $\sigma = (P,P',(P_1,\dots,P_n \rightarrow P_{n+1}))$, $v \in \{[\![P]\!]\}$, $v_1, v_2 \in \{v[\![P']\!]\}$, $v_1[\![P_i]\!] \equiv v_2[\![P_i]\!]$ for all $i \in [1,n]$, and $v_1[\![P_{n+1}]\!] \not \equiv v_2[\![P_{n+1}]\!]$.)}
 \STATE $val(v_1[\![P_{n+1}]\!])$ := $val(v_2[\![P_{n+1}]\!])$ \COMMENT W.l.o.g, we assume $v_1[\![P_{n+1}]\!]$ is in VC
@@ -241,4 +241,4 @@ We say that a set $C_u$ of nodes is a core determinant of $u$, if (a) for every 
 
 \subsection{Conclusion}
 
-The authors introduced effective two-step heuristic method to solve a problem of finding optimal repair of XML violations against functional dependencies, which is $\mathcal{NP}$-complete. Moreover, they experimentally verified the efectivity and scalability of their approach using real-life and synthetic data.
+The authors introduced effective two-step heuristic method to solve a problem of finding optimal repair of XML violations against functional dependencies, which is $\mathcal{NP}$-complete. Moreover, they experimentally verified the effectivity and scalability of their approach using real-life and synthetic data.

@@ -81,26 +81,6 @@ public class GreedyTest {
       public String getUserModuleDescription() {
         throw new UnsupportedOperationException("Not supported yet.");
       }
-
-      @Override
-      public List<String> getParameterNames() {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
-
-      @Override
-      public String getParameterDisplayDescription(String parameterName) {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
-
-      @Override
-      public String getParameterDefaultValue(String parameterName) {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
-
-      @Override
-      public void setParameter(String parameterName, String newValue) {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
     });
     Automaton<String> result = instance.simplify(automaton, new SymbolToString<String>() {
 

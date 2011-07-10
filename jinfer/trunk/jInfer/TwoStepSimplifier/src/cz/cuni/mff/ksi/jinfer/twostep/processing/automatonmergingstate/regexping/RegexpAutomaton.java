@@ -20,6 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonCloner;
 import cz.cuni.mff.ksi.jinfer.base.automaton.AutomatonClonerSymbolConverter;
+import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 
 /**
  * Automaton with Regexp<T> on transitions
@@ -66,6 +68,11 @@ public class RegexpAutomaton<T> extends Automaton<Regexp<T>> {
                 return Regexp.<T>getToken(symbol);
               }
             });
+    for (State<Regexp<T>> state : this.delta.keySet()) {
+      for (Step<Regexp<T>> step : this.delta.get(state)) {
+        step.setMinUseCount(step.getUseCount());
+      }
+    }
   }
 
   /**

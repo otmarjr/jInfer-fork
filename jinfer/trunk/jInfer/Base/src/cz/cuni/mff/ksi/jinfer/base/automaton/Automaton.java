@@ -266,6 +266,7 @@ public class Automaton<T> {
   public void buildPTAOnRegexp(final Regexp<T> regexp) {
     switch (regexp.getType()) {
       case LAMBDA:
+        this.initialState.incFinalCount();
         return;
       case TOKEN:
       case CONCATENATION:

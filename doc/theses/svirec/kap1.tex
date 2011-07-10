@@ -1,5 +1,13 @@
 \chapter{Introduction}
 
+Nowadays, one of the most largely used standard for an information representation and a data exchange on the internet is eXtensible Markup Language (XML) \cite{xml}. While XML as a markup language provides syntactic flexibility, the structure of an XML document is described with a so-called XML schema language. The two most popular XML schema languages proposed by W3C are Document Type Definition (DTD) \cite{xml} and XML Schema Definition (XSD) \cite{xsd1,xsd2,xsd3}. They support some kind of semantic content (e.g., keys and foreign keys), but for improvement of semantic expressiveness of XML integrity constraints for XML \cite{ic} have been defined. Several different classes of integrity constraints have been defined for XML, however one most common semantic constraint used in relational databases is functional dependency (FD) \cite{fd}.
+
+With defined set of functional dependencies over an XML document, you can check if an XML document satisfies defined functional dependencies \cite{satifFD}. However, data in a real world is typically dirty and often violates (not satisfies) the set of functional dependencies and hence are inconsistent. This observation leads to finding an algorithm to compute a repair applied to an XML document such that functional dependencies will be satisfied \cite{RepAndConsistentAnswer, QueryXML, ImprovingXML}.
+
 \section{Aim of the Thesis}
 
+The aim of the thesis is to propose an algorithm repairing XML functional dependency violations for given XML document and set of functional dependencies. This thesis analyses recent approaches and discuss their advantages and disadvantages. The focus of the thesis is to involve user into process of finding and applying repair and how this interaction helps. Part of this thesis is an experimental implementation of the proposed algorithm and its experimental evaluation.
+
 \section{Structure of the Thesis}
+
+Chapter 2 introduces basic definitions which are necessary for further chapters. Third Chapter presents recent approaches of repairing XML functional dependency violations. In the Chapter 4 is proposed the main algorithm of this thesis. Next Chapter contains some details of the experimental implementation. Experimental result are shown in Chapter 6. Finally, Chapter 7 contains a conclusion and several suggestions for the future work.

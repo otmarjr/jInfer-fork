@@ -21,10 +21,11 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluatorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomaton;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.Suspection;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.SuspectionFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.determinist.Determinist;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -41,7 +42,7 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class DefectiveMDL<T> implements DefectiveAutomatonSimplifier<T> {
+public class DefectiveMDL<T> implements AutomatonSimplifier<T> {
 
   private static final Logger LOG = Logger.getLogger(DefectiveMDL.class);
   private final DefectiveAutomatonEvaluator<T> evaluator;
@@ -70,10 +71,11 @@ public class DefectiveMDL<T> implements DefectiveAutomatonSimplifier<T> {
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
-    DefectiveAutomaton<T> stepAutomaton = new DefectiveAutomaton<T>(inputAutomaton);
+    Determinist<T> dt = new Determinist<T>();
+    DefectiveAutomaton<T> stepAutomaton = new DefectiveAutomaton<T>(dt.simplify(inputAutomaton, symbolToString));
     this.suspection.setInputStrings(inputStrings);
     this.suspection.setSymbolToString(symbolToString);
-    this.suspection.setInputAutomaton(inputAutomaton);
+    this.suspection.setInputAutomaton(stepAutomaton);
 
     List<List<T>> suspected;
     while (null != (suspected = this.suspection.getNextSuspectedInputStrings())) {

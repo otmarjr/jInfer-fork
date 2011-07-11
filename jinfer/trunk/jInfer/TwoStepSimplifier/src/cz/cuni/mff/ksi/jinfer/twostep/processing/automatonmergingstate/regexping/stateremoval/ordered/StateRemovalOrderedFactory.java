@@ -39,7 +39,7 @@ public class StateRemovalOrderedFactory implements RegexpAutomatonSimplifierFact
   /**
    * Canonical name.
    */
-  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemoval";
+  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdered";
   /**
    * Name presented to user.
    */

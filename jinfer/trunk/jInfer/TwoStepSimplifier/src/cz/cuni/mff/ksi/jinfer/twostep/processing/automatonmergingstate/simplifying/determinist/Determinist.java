@@ -14,7 +14,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedy;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.determinist;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.Deterministic;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.DeterministicFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * Greedy simplifier, given {@link MergeContitionTester}, will merge all states
+ * Determinist simplifier, given {@link MergeContitionTester}, will merge all states
  * that tester returns as equivalent.
  *
  * It will ask the tester for capability "parameters".
@@ -41,21 +42,9 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class Greedy<T> implements AutomatonSimplifier<T> {
+public class Determinist<T> implements AutomatonSimplifier<T> {
 
-  private static final Logger LOG = Logger.getLogger(Greedy.class);
-  private final MergeConditionTester<T> mergeConditionTester;
-
-  /**
-   * Create with factory of {@link MergeConditionTester} selected.
-   * Without parameters capability!
-   *
-   * @param mergeConditionTesterFactory factory for {link MergeConditionTester} to use in simplifying.
-   */
-  public Greedy(final MergeConditionTesterFactory mergeConditionTesterFactory) {
-    this.mergeConditionTester = mergeConditionTesterFactory.<T>create();
-  }
-
+  private static final Logger LOG = Logger.getLogger(Determinist.class);
   /**
    * Simplify by merging states greedily.
    *
@@ -69,6 +58,7 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString) throws InterruptedException {
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
+    MergeConditionTester<T> mergeConditionTester= new Deterministic<T>();
     do {
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -84,7 +74,6 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
             }
             final String st = CollectionToString.<State<T>>colToString(mergeSeq, " + ",
                     new CollectionToString.ToString<State<T>>() {
-
                       @Override
                       public String toString(final State<T> t) {
                         return t.toString();

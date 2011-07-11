@@ -58,7 +58,7 @@ public class DefectiveMDLPropertiesPanelProviderImpl implements PropertiesPanelP
 
   @Override
   public String getParent() {
-    return "DefectiveAutomatonSimplifier";
+    return "AutomatonSimplifier";
   }
 
   @Override

@@ -14,15 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.properties;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.PropertiesPanelProvider;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.VirtualCategoryPanel;
-import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomatonSimplifierFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveFactory;
-import java.util.ArrayList;
+import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.ChainedFactory;
 import java.util.List;
 import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
@@ -32,23 +29,23 @@ import org.openide.util.lookup.ServiceProvider;
  * @author anti
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)
-public class DefectivePropertiesPanelProviderImpl implements PropertiesPanelProvider {
+public class AutomatonSimplifierChainedPropertiesPanelProviderImpl implements PropertiesPanelProvider {
 
   private static final int PANEL_PRIORITY = 400000;
 
   @Override
   public AbstractPropertiesPanel getPanel(final Properties properties) {
-    return new DefectivePropertiesPanel(properties);
+    return new AutomatonSimplifierChainedPropertiesPanel(properties);
   }
 
   @Override
   public String getName() {
-    return DefectiveFactory.NAME;
+    return ChainedFactory.NAME;
   }
 
   @Override
   public String getDisplayName() {
-    return DefectiveFactory.DISPLAY_NAME;
+    return ChainedFactory.DISPLAY_NAME;
   }
 
   @Override
@@ -63,9 +60,6 @@ public class DefectivePropertiesPanelProviderImpl implements PropertiesPanelProv
 
   @Override
   public List<VirtualCategoryPanel> getSubCategories() {
-    final List<VirtualCategoryPanel> result = new ArrayList<VirtualCategoryPanel>();
-    result.add(new VirtualCategoryPanel("DefectiveAutomatonSimplifier", "Defective automaton simplifier", ModuleSelectionHelper.lookupImpls(DefectiveAutomatonSimplifierFactory.class)));
-
-    return result;
+    return null;
   }
 }

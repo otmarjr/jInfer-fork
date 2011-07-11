@@ -14,18 +14,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.minimize;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained;
 
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.SymbolToString;
-import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomaton;
+import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 /**
- * Minimize simplifier, given {@link MergeContitionTester}, will merge all states
+ * Chained simplifier, given {@link MergeContitionTester}, will merge all states
  * that tester returns as equivalent.
  *
  * It will ask the tester for capability "parameters".
@@ -36,9 +37,17 @@ import org.apache.log4j.Logger;
  *
  * @author anti
  */
-public class Minimize<T> implements AutomatonSimplifier<T> {
+public class Chained<T> implements AutomatonSimplifier<T> {
 
-  private static final Logger LOG = Logger.getLogger(Minimize.class);
+  private List<AutomatonSimplifier<T>> simplifiers;
+  private static final Logger LOG = Logger.getLogger(Chained.class);
+
+  public Chained(List<AutomatonSimplifierFactory> factories) {
+    this.simplifiers = new LinkedList<AutomatonSimplifier<T>>();
+    for (AutomatonSimplifierFactory factory : factories) {
+      this.simplifiers.add(factory.<T>create());
+    }
+  }
 
   /**
    * Simplify by merging states greedily.
@@ -51,10 +60,12 @@ public class Minimize<T> implements AutomatonSimplifier<T> {
    */
   @Override
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
-          final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
-    DefectiveAutomaton<T> stepAutomaton = new DefectiveAutomaton<T>(inputAutomaton);
-    stepAutomaton.minimize();
-    return stepAutomaton;
+          final SymbolToString<T> symbolToString) throws InterruptedException {
+    Automaton<T> aut = inputAutomaton;
+    for (AutomatonSimplifier<T> simplifier : simplifiers) {
+      aut = simplifier.simplify(aut, symbolToString);
+    }
+    return aut;
   }
 
   /**
@@ -70,17 +81,30 @@ public class Minimize<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(
           final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString,
-          final String elementName, List<List<T>> inputStrings) throws InterruptedException {
-    return simplify(inputAutomaton, symbolToString, inputStrings);
+          final String elementName) throws InterruptedException {
+    Automaton<T> aut = inputAutomaton;
+    for (AutomatonSimplifier<T> simplifier : simplifiers) {
+      aut = simplifier.simplify(aut, symbolToString, elementName);
+    }
+    return aut;
   }
 
   @Override
-  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString) throws InterruptedException {
-    throw new UnsupportedOperationException("Needs input strings to do evaluation.");
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
+    Automaton<T> aut = inputAutomaton;
+    for (AutomatonSimplifier<T> simplifier : simplifiers) {
+      aut = simplifier.simplify(aut, symbolToString, inputStrings);
+
+    }
+    return aut;
   }
 
   @Override
-  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName) throws InterruptedException {
-    throw new UnsupportedOperationException("Needs input strings to do evaluation.");
+  public Automaton<T> simplify(Automaton<T> inputAutomaton, SymbolToString<T> symbolToString, String elementName, List<List<T>> inputStrings) throws InterruptedException {
+    Automaton<T> aut = inputAutomaton;
+    for (AutomatonSimplifier<T> simplifier : simplifiers) {
+      aut = simplifier.simplify(aut, symbolToString, elementName, inputStrings);
+    }
+    return aut;
   }
 }

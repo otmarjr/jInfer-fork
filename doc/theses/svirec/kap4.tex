@@ -1,1 +1,19 @@
 \chapter{Proposed Algorithm}
+
+\todo[inline]{sem treba dat nejaky zaciatocny obkec}
+The main goal of this thesis is to propose an algorithm repairing XML document violating functional dependencies defined for this document. We use an XML tree and tree tuples to represent XML data. To each node of an XML tree is assigned a weight, which is used to measure the cost of a repair.
+
+
+\section{Repairing Algorithm}
+
+The proposed algorithm is based on the algorithm described in Section \ref{RepConstAnswers} presented in \cite{RepAndConsistentAnswer}. This algorithm was chosen beacause of simple representation of the XML data using a concept which corresponds with concept used in relational databases. Another reason is using besides modification of node value as an update operation also marking particular node information as unreliable, which can reveal forgotten inconsistencies in the data.
+
+The algorithm is splitted into three steps, where second and third step are repeated until all violations are repaired. In the first step, XML document and FDs are loaded, and XML tree with corresponding tree tuples are created. Next step of the algorithm computes the repair candidates for FD violations. In the third step chosen repair candidate is applied to an XML tree.
+
+\subsection{Initial data model}
+
+To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of an node indicates correctness of the data the particular node holds, that means the higher the weight is, more correct particular node is. The weights are used to measure cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. It is important to say that by default to each leaf node is assigned lower weigt than to inner nodes. It is because we prefer the node value modification repair primitive over marking node as unreliable. A definition of an RW-XML tree follows:
+
+\begin{define}[RW-XML tree]
+A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $\mathbb{R}^+_0$.\qed
+\end{define}

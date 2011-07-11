@@ -34,4 +34,16 @@ public interface AttributeStatistics extends NamedModule {
    */
   void showStatistics(final String panelName, final List<Element> grammar);
 
+  /**
+   * Returns a graph representation of the specified grammar in GraphViz language.
+   *
+   * Please see
+   * {@link cz.cuni.mff.ksi.jinfer.attrstats.utils.GraphUtils#getGraphVizInput(AMModel)}
+   * for details.
+   *
+   * @param grammar Grammar to create GraphViz input from.
+   * @return String representation of the GraphViz input.
+   */
+  String getGraphVizInput(final List<Element> grammar);
+
 }

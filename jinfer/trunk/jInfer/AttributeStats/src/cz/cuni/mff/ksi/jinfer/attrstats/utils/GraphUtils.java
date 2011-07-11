@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.utils;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
@@ -56,5 +57,50 @@ public final class GraphUtils {
     return new Pair<Integer, Integer>(Integer.valueOf(candidates.size()), Integer.valueOf(edgeCount));
   }
 
+  /**
+   * Returns a graph representation of the specified model in GraphViz language.
+   *
+   * The GraphViz input generated will be as follows:
+   * <ul>
+   *   <li>Every candidate mapping will be represent as a vertex.</li>
+   *   <li>Every pair of candidate mappings that collide
+   *     ({@see MappingUtils#mappingsCollide()}) will be represented as an
+   *     edge connecting these two vertices.</li>
+   * </ul>
+   *
+   * @param model AM model to create GraphViz input from.
+   *
+   * @return String representation of the GraphViz input.
+   */
+  public static String getGraphVizInput(final AMModel model) {
+    final StringBuilder ret = new StringBuilder("graph {\n\n");
+
+    final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
+
+    for (final AttributeMappingId mapping : candidates) {
+      ret.append("  ")
+          .append(GlpkUtils.getName(mapping, '_'))
+          .append(";\n");
+    }
+
+    ret.append('\n');
+
+    for (final AttributeMappingId mapping1 : candidates) {
+      for (final AttributeMappingId mapping2 : candidates) {
+
+        if (MappingUtils.mappingsCollide(mapping1, mapping2, model)
+                && mapping1.compareTo(mapping2) < 0) {
+          ret.append("  ")
+              .append(GlpkUtils.getName(mapping1, '_'))
+              .append(" -- ")
+              .append(GlpkUtils.getName(mapping2, '_'))
+              .append(";\n");
+        }
+      }
+    }
+
+    ret.append("\n}\n");
+    return ret.toString();
+  }
 
 }

@@ -18,6 +18,8 @@ package cz.cuni.mff.ksi.jinfer.attrstats;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.gui.StatisticsPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.gui.AttrStatsTopComponent;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.GraphUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
@@ -42,6 +44,11 @@ public class AttributeStatisticsImpl implements AttributeStatistics {
     }
     final StatisticsPanel panel = topComponent.createNewPanel(panelName);
     panel.setModel(grammar);
+  }
+
+  @Override
+  public String getGraphVizInput(final List<Element> grammar) {
+    return GraphUtils.getGraphVizInput(new AMModel(grammar));
   }
 
   @Override

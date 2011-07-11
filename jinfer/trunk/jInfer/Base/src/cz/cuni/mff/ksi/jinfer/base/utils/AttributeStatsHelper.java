@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.openide.util.NbPreferences;
 import org.openide.windows.WindowManager;
 
@@ -29,6 +30,8 @@ import org.openide.windows.WindowManager;
  * @author vektor
  */
 public final class AttributeStatsHelper {
+
+  private static final Logger LOG = Logger.getLogger(AttributeStatsHelper.class);
 
   private AttributeStatsHelper() {
   }
@@ -51,6 +54,22 @@ public final class AttributeStatsHelper {
       @Override
       public void run() {
         ModuleSelectionHelper.lookupImpls(AttributeStatistics.class).get(0).showStatistics(panelName, grammar);
+      }
+    });
+  }
+
+  /**
+   * Generates a graph representation of the specified grammar in GraphViz
+   * language and writes it to the log.
+   *
+   * @param grammar Grammar to create graph representation from.
+   */
+  public static void generateGraphVizInput(final List<Element> grammar) {
+    WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+      @Override
+      public void run() {
+        LOG.info(ModuleSelectionHelper.lookupImpls(AttributeStatistics.class).get(0).getGraphVizInput(grammar));
       }
     });
   }

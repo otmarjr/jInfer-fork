@@ -96,12 +96,30 @@ public final class GlpkUtils {
    * Returns a "name" for the provided attribute mapping.
    *
    * @param mapping Mapping to get a name for.
+   *
    * @return Name of the provided mapping constructed in the following fashion:
    * <code>element name-attribute name</code>
    */
   public static String getName(final AttributeMappingId mapping) {
-    final String name = mapping.getElement() + "-" +mapping.getAttribute();
-    return name.replace(':', '-');
+    return getName(mapping, '-');
+  }
+
+  /**
+   * Returns a "name" for the provided attribute mapping, using the provided
+   * separator character.
+   *
+   * @param mapping Mapping to get a name for.
+   * @param separator Separator to use.
+   *
+   * @return Name of the provided mapping constructed in the following fashion:
+   * <code>element name{separator}attribute name</code>
+   */
+  public static String getName(final AttributeMappingId mapping,
+          final char separator) {
+    final String name = mapping.getElement() + separator + mapping.getAttribute();
+    return name
+            .replace(':', separator)
+            .replace('-', separator);
   }
 
   /**

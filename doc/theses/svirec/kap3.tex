@@ -4,7 +4,7 @@ This chapter introduces description and categorization of recent approaches of r
 
 All approaches dealing with the problem of finding optimal repair can be divided into categories according to usage of elementary repair primitives. This repair primitives are: inserting node, deleting node, updating node and marking node as unreliable of XML document.
 
-\section[Repairs and Consistent Answers for XML Data]{Repairs and Consistent Answers for XML Data with Functional Dependencies}
+\section[Repairs and Consistent Answers for XML Data]{Repairs and Consistent Answers for XML Data with Functional Dependencies}\label{RepConstAnswers}
 
 A technique for computing repairs which solves the problem of XML data inconsistency with respect to a set of functional dependencies was proposed in \cite{RepAndConsistentAnswer}. In this approach, the authors are trying to find a minimal set of update operations which makes XML data consistent. These update operations can be divided into two categories i) replacing a value associated with an element or an attribute, and ii) marking a particular node information as unreliable.
 
@@ -40,7 +40,7 @@ The functional dependency defined above requires that for each book, there is on
 
 Before introducing the algorithm to repair inconsistent XML document, let us define reliability of elements in XML tree:
 
-\begin{define}[R-XML Tree]
+\begin{define}[R-XML Tree]\label{rxmlTree}
 A R-XML $tree$ is a triplet $RXT = \langle T, \delta, \varrho \rangle$, where $\langle T, \delta \rangle$ is an XML tree and $\varrho$ is a reliability function from $N_T$ to \texttt{\{true, false\}}, such that, for each pair of nodes $n_1 , n_2 \in N_T$ with $n_2$ descendant of $n_1$, it holds that $\varrho(n_1) = false \Rightarrow \varrho(n_2) = false$.\qed
 \end{define}
 

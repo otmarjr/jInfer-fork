@@ -55,7 +55,7 @@ public class HeuristicMDLFactory implements AutomatonSimplifierFactory {
    */
   public static final String PROPERTIES_CONDITION_TESTER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterCombined";
   public static final String PROPERTIES_EVALUATOR = "evaluator";
-  public static final String PROPERTIES_EVALUATOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaive";
+  public static final String PROPERTIES_EVALUATOR_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonEvaluatorNaiveAlphabet";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {

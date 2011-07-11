@@ -227,6 +227,7 @@ public class Automaton<T> {
           newState = this.createNewState();
           Step<T> newStep = this.createNewStep(regexp.getContent(), fromState, newState);
           newStep.setUseCount(0);
+          newStep.setMinUseCount(0);
         } else {
           newState = outStep.getDestination();
         }

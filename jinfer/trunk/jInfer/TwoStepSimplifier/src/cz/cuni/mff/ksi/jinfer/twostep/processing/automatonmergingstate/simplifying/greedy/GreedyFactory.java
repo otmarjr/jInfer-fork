@@ -52,7 +52,7 @@ public class GreedyFactory implements AutomatonSimplifierFactory {
   /**
    * Default tester used when none is selected.
    */
-  public static final String PROPERTIES_CONDITION_TESTER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterKHContext";
+  public static final String PROPERTIES_CONDITION_TESTER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateMergeConditionTesterCombined";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {

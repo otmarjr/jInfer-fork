@@ -19,8 +19,8 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplify
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.DefectiveAutomatonEvaluatorFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomatonSimplifier;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.SuspectionFactory;
 import java.util.Collections;
 import java.util.List;
@@ -33,8 +33,8 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author anti
  */
-@ServiceProvider(service = DefectiveAutomatonSimplifierFactory.class)
-public class DefectiveMDLFactory implements DefectiveAutomatonSimplifierFactory {
+@ServiceProvider(service = AutomatonSimplifierFactory.class)
+public class DefectiveMDLFactory implements AutomatonSimplifierFactory {
 
   private static final Logger LOG = Logger.getLogger(DefectiveMDLFactory.class);
   /**
@@ -51,7 +51,7 @@ public class DefectiveMDLFactory implements DefectiveAutomatonSimplifierFactory 
   public static final String PROPERTIES_SUSPECTION_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveDefectiveMDLSuspectionStepSuspect";
 
   @Override
-  public <T> DefectiveAutomatonSimplifier<T> create() {
+  public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
     return new DefectiveMDL<T>(
             getAutomatonEvaluatorFactory(),

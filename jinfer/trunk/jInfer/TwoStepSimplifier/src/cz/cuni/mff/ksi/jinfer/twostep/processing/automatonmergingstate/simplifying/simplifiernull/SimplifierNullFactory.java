@@ -14,37 +14,42 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.minimize;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.simplifiernull;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Factory for {@link Minimize}.
+ * Factory for {@link SimplifierNull}.
  *
  * @author anti
  */
 @ServiceProvider(service = AutomatonSimplifierFactory.class)
-public class MinimizeFactory implements AutomatonSimplifierFactory {
+public class SimplifierNullFactory implements AutomatonSimplifierFactory {
 
-  private static final Logger LOG = Logger.getLogger(MinimizeFactory.class);
+  private static final Logger LOG = Logger.getLogger(SimplifierNullFactory.class);
   /**
    * Canonical name.
    */
-  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierDefectiveMinimize";
+  public static final String NAME = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierNull";
   /**
    * Name presented to user.
    */
-  public static final String DISPLAY_NAME = "Minimize only";
+  public static final String DISPLAY_NAME = "Null";
 
   @Override
   public <T> AutomatonSimplifier<T> create() {
     LOG.debug("Creating new " + NAME);
-    return new Minimize<T>();
+    return new SimplifierNull<T>();
   }
 
   @Override
@@ -60,9 +65,7 @@ public class MinimizeFactory implements AutomatonSimplifierFactory {
   @Override
   public String getUserModuleDescription() {
     final StringBuilder sb = new StringBuilder(getDisplayName());
-    sb.append(" takes one <tt><i>MergeConditionTester</i></tt> and merges all states"
-            + " that can be merged. E.g. with <i>k,h</i>-context condition tester"
-            + " it defacto creates <i>k,h</i>-context automaton.");
+    sb.append(" does nothing.");
     return sb.toString();
   }
 

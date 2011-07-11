@@ -99,7 +99,6 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     SortedMap<Double, Automaton<T>> solutions = new TreeMap<Double, Automaton<T>>();
-    MergeConditionTester<T> dt = (new DeterministicFactory()).<T>create();
     this.evaluator.setInputStrings(inputStrings);
     solutions.put(this.evaluator.evaluate(inputAutomaton), inputAutomaton);
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
@@ -121,11 +120,6 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
               throw new InterruptedException();
             }
             newAutomaton.mergeStates(mergeChain);
-          }
-          for (List<List<State<T>>> mA : dt.getMergableStates(newAutomaton)) {
-            for (List<State<T>> mS : mA) {
-              newAutomaton.mergeStates(mS);
-            }
           }
 
           double thisD = this.evaluator.evaluate(newAutomaton);

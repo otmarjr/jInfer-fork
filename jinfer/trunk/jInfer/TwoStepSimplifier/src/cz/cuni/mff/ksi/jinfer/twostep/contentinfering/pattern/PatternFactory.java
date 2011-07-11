@@ -55,7 +55,7 @@ public class PatternFactory implements ContentInferrerFactory {
   /**
    * Default {@link AutomatonSimplifier} implementation if none is set.
    */
-  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierGreedy";
+  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierGreedyMDL";
   /**
    * Property name (in configuration file) of second submodule - {@link RegexpAutomatonSimplifier}
    */
@@ -63,7 +63,7 @@ public class PatternFactory implements ContentInferrerFactory {
   /**
    * Default {@link RegexpAutomatonSimplifier} implementation if none is set.
    */
-  public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemoval";
+  public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdered";
 
   private AutomatonSimplifierFactory getAutomatonSimplifierFactory() {
     final Properties p = RunningProject.getActiveProjectProps("TwoStepClusterProcessorAutomatonMergingState");

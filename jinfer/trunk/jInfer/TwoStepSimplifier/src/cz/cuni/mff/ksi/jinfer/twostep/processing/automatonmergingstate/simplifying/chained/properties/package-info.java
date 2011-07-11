@@ -15,6 +15,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Properties panel for {@link Defective} module.
+ * Properties for {@link Chained} cleaner.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.properties;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained.properties;

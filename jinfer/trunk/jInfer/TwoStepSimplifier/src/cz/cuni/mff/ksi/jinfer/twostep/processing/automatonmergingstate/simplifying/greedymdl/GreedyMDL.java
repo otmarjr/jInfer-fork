@@ -99,12 +99,6 @@ public class GreedyMDL<T> implements AutomatonSimplifier<T> {
         }
       }
     } while (!stagger);
-    MergeConditionTester<T> dt = (new DeterministicFactory()).<T>create();
-    for (List<List<State<T>>> mergAlt : dt.getMergableStates(oldAut)) {
-      for (List<State<T>> mergSeq : mergAlt) {
-        oldAut.mergeStates(mergSeq);
-      }
-    }
     return oldAut;
   }
 

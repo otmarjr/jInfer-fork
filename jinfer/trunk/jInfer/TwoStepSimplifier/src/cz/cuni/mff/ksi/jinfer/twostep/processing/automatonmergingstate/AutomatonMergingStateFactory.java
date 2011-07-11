@@ -55,7 +55,7 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
   /**
    * Default {@link AutomatonSimplifier} implementation if none is set.
    */
-  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierKHgrams";
+  public static final String PROPERTIES_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateAutomatonSimplifierChained";
   /**
    * Property name (in configuration file) of second submodule - {@link RegexpAutomatonSimplifier}
    */
@@ -63,7 +63,7 @@ public class AutomatonMergingStateFactory implements ClusterProcessorFactory {
   /**
    * Default {@link RegexpAutomatonSimplifier} implementation if none is set.
    */
-  public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemoval";
+  public static final String PROPERTIES_REGEXP_AUTOMATON_SIMPLIFIER_DEFAULT = "TwoStepClusterProcessorAutomatonMergingStateRegexpAutomatonSimplifierStateRemovalOrdered";
 
   @Override
   public ClusterProcessor<AbstractStructuralNode> create() {

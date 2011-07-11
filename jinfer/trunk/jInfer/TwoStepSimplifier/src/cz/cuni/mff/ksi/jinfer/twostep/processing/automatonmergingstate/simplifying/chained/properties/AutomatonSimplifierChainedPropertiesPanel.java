@@ -14,17 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.properties;
+package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained.properties;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.AbstractPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
-import cz.cuni.mff.ksi.jinfer.twostep.cleaning.RegularExpressionCleanerFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.Chained;
-import cz.cuni.mff.ksi.jinfer.twostep.cleaning.chained.ChainedFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren.EmptyChildrenFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation.NestedConcatenationFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained.Chained;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained.ChainedFactory;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -46,13 +46,13 @@ import javax.swing.JTextPane;
  * 
  * @author anti
  */
-public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
+public class AutomatonSimplifierChainedPropertiesPanel extends AbstractPropertiesPanel {
 
-  private static final long serialVersionUID = 7844643433L;
+  private static final long serialVersionUID = 74463433L;
   private final Map<Integer, JComboBox> dynamicComponents;
 
   /** Creates new form ModuleSelectionJPanel */
-  public CleanerChainedPropertiesPanel(final Properties properties) {
+  public AutomatonSimplifierChainedPropertiesPanel(final Properties properties) {
     super(properties);
     initComponents();
     dynamicComponents = new HashMap<Integer, JComboBox>();
@@ -78,7 +78,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
   public final void load() {
     GridBagConstraints gridBagConstraints;
     setLayout(new GridBagLayout());
-    final List<? extends NamedModule> cleanerNames = ModuleSelectionHelper.lookupImpls(RegularExpressionCleanerFactory.class);
+    final List<? extends NamedModule> cleanerNames = ModuleSelectionHelper.lookupImpls(AutomatonSimplifierFactory.class);
     final List<NamedModule> modelStrings = new ArrayList<NamedModule>();
     for (NamedModule name : cleanerNames) {
       if (!name.getName().equals(ChainedFactory.NAME)) {
@@ -115,7 +115,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
         @Override
         public void actionPerformed(final ActionEvent evt) {
           desc.setText(htmlize(
-                  ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
+                  ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
                   ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
         }
       });
@@ -142,7 +142,7 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       add(scr, gridBagConstraints);
 
       desc.setText(htmlize(
-              ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class,
+              ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class,
               ((NamedModule) cmb.getSelectedItem()).getName()).getUserModuleDescription()));
     }
     if (i == 0) {
@@ -151,16 +151,16 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       noImplInfo.setFocusable(false);
       noImplInfo.setOpaque(false);
 
-      noImplInfo.setText("No implementation, other than myself, of RegularExpressionCleanerFactory found.");
+      noImplInfo.setText("No implementation, other than myself, of AutomatonSimplifierFactory found.");
       add(noImplInfo);
     }
     for (i = 0; i < dynamicComponents.keySet().size(); ++i) {
-      dynamicComponents.get(i).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, ChainedFactory.PROPERTIES_CLEANER_DEFAULT));
+      dynamicComponents.get(i).setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, ChainedFactory.PROPERTIES_SIMPLIFIER_DEFAULT));
     }
     final String _count = properties.getProperty(ChainedFactory.PROPERTIES_COUNT, "notJebHojid4");
     if ("notJebHojid4".equals(_count)) {
-      dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, EmptyChildrenFactory.NAME));
-      dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(RegularExpressionCleanerFactory.class, NestedConcatenationFactory.NAME));
+      dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, EmptyChildrenFactory.NAME));
+      dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, NestedConcatenationFactory.NAME));
     } else {
       int count;
       try {
@@ -171,8 +171,8 @@ public class CleanerChainedPropertiesPanel extends AbstractPropertiesPanel {
       for (i = 0; i < count; i++) {
         dynamicComponents.get(i).setSelectedItem(
                 ModuleSelectionHelper.lookupImpl(
-                RegularExpressionCleanerFactory.class,
-                properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + i, ChainedFactory.PROPERTIES_CLEANER_DEFAULT)));
+                AutomatonSimplifierFactory.class,
+                properties.getProperty(ChainedFactory.PROPERTIES_PREFIX + i, ChainedFactory.PROPERTIES_SIMPLIFIER_DEFAULT)));
       }
     }
   }

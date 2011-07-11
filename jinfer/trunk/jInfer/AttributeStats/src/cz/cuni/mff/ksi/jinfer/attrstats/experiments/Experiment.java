@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.GraphUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
@@ -45,7 +46,6 @@ public class Experiment implements IGGeneratorCallback {
 
   // TODO vektor Write output - AMs of the best solution
   // TODO vektor Solve interruptibility - is it broken now?
-  // TODO vektor Get graph representation in here somehow
   // TODO vektor Tell GLPK what the optimum is - add constraint?
 
   private final ExperimentParameters params;
@@ -76,9 +76,11 @@ public class Experiment implements IGGeneratorCallback {
    */
   public String getReport() {
     final StringBuilder ret = new StringBuilder();
+    final Pair<Integer, Integer> graph = GraphUtils.getGraphRepresentation(model);
     ret.append(SystemInfo.getInfo())
         .append("\n\nConfiguration:")
         .append("\nFile name: ").append(params.getFile().getName()).append(" (").append(params.getFile().getSize()).append(" b)")
+        .append("\n  Graph representation: ").append(graph.getFirst()).append(" vertices, ").append(graph.getSecond()).append(" edges")
         .append("\nalpha: ").append(params.getAlpha()).append(", beta: ").append(params.getBeta())
         .append("\n\nResults:")
         .append("\nStart time: ").append(new Date(startTime))

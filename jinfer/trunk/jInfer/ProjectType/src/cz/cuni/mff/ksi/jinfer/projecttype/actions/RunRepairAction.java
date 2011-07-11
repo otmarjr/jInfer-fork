@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.RepairRunner;
 import cz.cuni.mff.ksi.jinfer.projecttype.JInferProject;
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.ProjectPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.projecttype.properties.ProjectPropertiesPanelProvider;
-import cz.cuni.mff.ksi.jinfer.runner.Runner;
 import java.awt.event.ActionEvent;
 import java.util.Properties;
 import javax.swing.AbstractAction;
@@ -34,7 +33,7 @@ import org.openide.NotifyDescriptor;
  * @author sviro
  */
 public class RunRepairAction extends AbstractAction {
-  
+
   private static final long serialVersionUID = 135854187L;
   private final JInferProject project;
 
@@ -59,5 +58,5 @@ public class RunRepairAction extends AbstractAction {
               NotifyDescriptor.INFORMATION_MESSAGE));
     }
   }
-  
+
 }

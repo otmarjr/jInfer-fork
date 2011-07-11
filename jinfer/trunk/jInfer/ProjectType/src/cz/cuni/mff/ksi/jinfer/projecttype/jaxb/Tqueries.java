@@ -16,17 +16,16 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.jaxb;
 
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for Tqueries complex type.
- * 
+ *
  * @author sviro
- * 
- * 
+ *
+ *
  */
 @SuppressWarnings("PMD")
 @XmlAccessorType(XmlAccessType.FIELD)

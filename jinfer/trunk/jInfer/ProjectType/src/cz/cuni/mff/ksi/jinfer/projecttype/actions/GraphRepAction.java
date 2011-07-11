@@ -37,25 +37,26 @@ import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
 /**
- * Action on a XML file node to run attribute statistics on this one file.
+ * Action on a XML file node to create GraphViz layout showing the graph
+ * representation of the file..
  *
  * @author vektor
  */
-public class AttrStatsAction extends NodeAction {
+public class GraphRepAction extends NodeAction {
 
   private static final long serialVersionUID = 1562121212L;
 
-  private static final Logger LOG = Logger.getLogger(AttrStatsAction.class);
+  private static final Logger LOG = Logger.getLogger(GraphRepAction.class);
 
-  private AttrStatsAction() {
+  private GraphRepAction() {
 
   }
 
-  private static AttrStatsAction action = null;
+  private static GraphRepAction action = null;
 
-  public static synchronized AttrStatsAction getInstance() {
+  public static synchronized GraphRepAction getInstance() {
     if (action == null) {
-      action = new AttrStatsAction();
+      action = new GraphRepAction();
     }
     return action;
   }
@@ -98,14 +99,14 @@ public class AttrStatsAction extends NodeAction {
 
                     @Override
                     public void finished(final List<Element> grammar) {
-                      AttributeStatsHelper.showStatisticsAsync("Attribute stats", grammar, true);
+                      AttributeStatsHelper.generateGraphVizInput(grammar);
                     }
                   });
         } catch (final InterruptedException e) {
           LOG.error("User interrupted the inference.", e);
         }
       }
-    }, "Retrieving attribute statistics");
+    }, "Generating GraphViz input");
   }
 
   @Override
@@ -118,7 +119,7 @@ public class AttrStatsAction extends NodeAction {
 
   @Override
   public String getName() {
-    return "Attribute statistics...";
+    return "GraphViz Graph Representation";
   }
 
   @Override

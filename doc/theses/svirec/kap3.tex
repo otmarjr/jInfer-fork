@@ -46,7 +46,7 @@ A R-XML $tree$ is a triplet $RXT = \langle T, \delta, \varrho \rangle$, where $\
 
 To be able to create a repair, R-XML Tree must not satisfy FD according to definition of weak satisfiability:
 
-\begin{define}[Weak satisfiability]
+\begin{define}[Weak satisfiability]\label{weakSatisf}
 Let $RXT = \langle T, \delta, \varrho \rangle$ be an R-XML tree conforming a DTD $D$, and $f: S \rightarrow p$ be a functional dependency. We say that $RXT$ weakly satisfies $f$ ($RXT \models_w f$) if one of the following conditions holds:
 \begin{enumerate}
 	\item $\langle T, \delta \rangle \models f$;

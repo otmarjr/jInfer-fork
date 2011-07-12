@@ -14,6 +14,8 @@
 % \openright zařídí, aby následující text začínal na pravé straně knihy
 \let\openright=\clearpage
 
+\renewcommand\baselinestretch{1.3} % riadkovanie jeden a pol
+
 %% Pokud tiskneme oboustranně:
 % \documentclass[12pt,a4paper,twoside,openright]{report}
 % \setlength\textwidth{145mm}
@@ -255,8 +257,15 @@ Keywords:
 
 \openright
 \pagestyle{plain}
+
+\renewcommand\thepage{}
+\tableofcontents
+\newpage
+\renewcommand\thepage{\arabic{page}}
+
 \setcounter{page}{1}
-\tableofcontents\thispagestyle{empty}
+
+
 
 \newtheorem{theorem}{Theorem}
 \theoremstyle{definition}

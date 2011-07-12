@@ -1,19 +1,93 @@
 \chapter{Proposed Algorithm}
 
-\todo[inline]{sem treba dat nejaky zaciatocny obkec}
-The main goal of this thesis is to propose an algorithm repairing XML document violating functional dependencies defined for this document. We use an XML tree and tree tuples to represent XML data. To each node of an XML tree is assigned a weight, which is used to measure the cost of a repair.
+The main goal of this thesis is to propose an algorithm repairing XML document violating functional dependencies defined for this document. We use an XML tree and tree tuples to represent XML data. To each node of an XML tree is assigned a weight, which is used to measure the cost of a repair. The paths which creates a functional dependency are described with XPath language \cite{xpath}, where only paths with basic construction are allowed (only path constructed with "/", "//" or "@", no wildcards, "[]" or another constructs are allowed). We introduce a new concept of the so-called repair group, which clusters repair candidates (repair repairing one FD violation) repairing the same violation, or modifying the same part of the XML tree.
 
 
 \section{Repairing Algorithm}
 
 The proposed algorithm is based on the algorithm described in Section \ref{RepConstAnswers} presented in \cite{RepAndConsistentAnswer}. This algorithm was chosen beacause of simple representation of the XML data using a concept which corresponds with concept used in relational databases. Another reason is using besides modification of node value as an update operation also marking particular node information as unreliable, which can reveal forgotten inconsistencies in the data.
 
-The algorithm is splitted into three steps, where second and third step are repeated until all violations are repaired. In the first step, XML document and FDs are loaded, and XML tree with corresponding tree tuples are created. Next step of the algorithm computes the repair candidates for FD violations. In the third step chosen repair candidate is applied to an XML tree.
+\begin{algorithm}
+\caption{Repair RW-XML tree}
+\label{propAlgo}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+$RXT = \langle RT, \omega \rangle$: RW-XML tree conforming a DTD $D$\\
+$\mathcal{FD} = {F_1, \dots, F_m}$: Set of functional dependencies}
+\ENSURE a unique repaired RW-XML tree
+
+\STATE $resultRXT = RXT$
+\WHILE{$resultRXT \not \models_w \mathcal{FD}$}
+    \STATE $S = \emptyset$ \COMMENT Set of repair groups
+    \FORALL{$(F: S \rightarrow p) \in \mathcal{FD}$ s.t. $RXT \not \models_w F$}
+    	\FORALL{$t_1, t_2$ tuples of $RXT$ s.t. $t_1, t_2$ do not weakly satisfy $F$}
+		    \STATE $S = S \cup computeRepairGroup(F, t_1, t_2, RXT, S)$
+	    \ENDFOR
+    \ENDFOR
+
+    \STATE $R = getRepair(S, RXT)$
+    \STATE $resultRXT = applyRepair(R, resultRXT)$
+\ENDWHILE
+
+\end{algorithmic}
+\end{algorithm}
+
+The algorithm is splitted into three steps, where second and third step are repeated until all violations are repaired. In the first step, XML document and FDs are loaded, and XML tree with corresponding tree tuples are created. Next step of the algorithm computes repair groups containting repair candidates for FD violations. In the third step chosen repair candidate is applied to an XML tree. In Algorithm \ref{propAlgo} we can see the simplified process of repairing XML FD violations, which covers second and third step of the whole algorithm.
 
 \subsection{Initial data model}
 
-To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of an node indicates correctness of the data the particular node holds, that means the higher the weight is, more correct particular node is. The weights are used to measure cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. It is important to say that by default to each leaf node is assigned lower weigt than to inner nodes. It is because we prefer the node value modification repair primitive over marking node as unreliable. A definition of an RW-XML tree follows:
+To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of an node indicates correctness of the data the particular node holds, that means the higher the weight is, more correct particular node is. The weights are used to measure cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This also first place where interaction of the user can be applied. The user could assign weights to the nodes manually (described in \todo{sem doplnit odkaz do implementacnej sekcie}) or can use some sort of statistical methods to generate them automatically. It is important to say that by default to each leaf node is assigned lower weigt than to inner nodes. It is because we prefer the node value modification repair primitive over marking node as unreliable. A definition of an RW-XML tree follows:
 
 \begin{define}[RW-XML tree]
 A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $\mathbb{R}^+_0$.\qed
 \end{define}
+
+After creating RW-XML tree from input XML data, set of tree tuples (defined in Definition \ref{treeTuple}) are constucted. Since a set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer of the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on costructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
+
+Functional dependencies as defined in Definition \ref{fd1} consists of paths described with XPath. As was described before, these paths can only have basic construction shown in Example \ref{pathsExample}.
+
+\begin{example}\label{pathsExample}
+Example of paths that can be used in functional dependencies:
+\begin{verbatim}
+//bib/book/author
+/bib/book/author/@ano
+/bib/book/author/name/text()
+\end{verbatim}
+\end{example}
+
+\subsection{Computing Repair Groups}
+
+With created RW-XML tree $RWXT$ and corresponding tree tuples from an input data, we can now procceed to compute repair groups. First, we need to decide for which FDs violates $RWXT$. This can be achieved by finding all tree tuple pairs that not weakly satisfies particular FD (Definition \ref{weakSatisf}). For each tuple pair is then computed repair group (line 6 in Algorithm \ref{propAlgo}). The function \texttt{computeRepairGroup} is shown in Algorithm \ref{repairGroupAlgo}. The function gets RW-XML tree, a functional dependency $F$, tuples $t_1$, $t_2$ and set of repair groups $RGS$ and computes repair group containig repair candidates as follows:
+
+\begin{enumerate}
+	\item First repair candidates are created using function $computeRepairs$ from Algorithm \ref{repAlgo} (line 1).Since R-XML tree is a special case of RW-XML tree where all weights are equal to zero, we can pass RW-XML tree as a parameter to this function.
+    \item Next is checked if repair candidates intersect another candidades from existing repair groups (line 2)
+    \begin{itemize}
+    	\item If the candidates intersect with some group, they are added to this group (line 3)
+        \item Otherwise new repair group containing repair candidates is created (line 5)
+    \end{itemize}
+\end{enumerate}
+
+\begin{algorithm}
+\floatname{algorithm}{Function}
+\caption{$computeRepairGroup(F, t_1, t_2, RXT, RGS)$}
+\label{repairGroupAlgo}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+$RXT = \langle T, \omega \rangle$: RW-XML tree conforming a DTD $D$\\
+$F: X \rightarrow p$ functional dependency\\
+$t_1, t_2$ tuples of $RXT$\\
+$RGS$ set of repair groups}
+\ENSURE $RG$: repair group
+
+\STATE $S = computeRepairs(F, t_1, t_2, RXT)$ \COMMENT set of repair candidates
+
+\IF{$candidatesIntersectRepairGroups(S, RGS)$}
+\STATE $RG = getIntersectingRepairGroup(S, RGS)$
+\ELSE
+\STATE $RG = createNewRepairGroup(S)$
+\ENDIF
+
+\RETURN $RG$
+\end{algorithmic}
+\end{algorithm}

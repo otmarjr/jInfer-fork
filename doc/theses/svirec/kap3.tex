@@ -20,7 +20,7 @@ Authors of this approach chose two kinds of actions to repair inconsistent XML d
 
 Depending on XML data and defined functional dependencies, each inconsistency could have many possible strategies to repair it. From all the possible repair strategies, the authors prefer those, for which smaller changes are made to the original document.
 
-\begin{example}
+\begin{example}\label{fdrepairExample}
 Consider XML tree $XT$ from Example \ref{example1ref} conforming the DTD $D$ defined below, which is representing collection of books and the following functional dependency:\\ $\{bib.book, bib.book.written\_by.author.@ano\} \rightarrow bib.book.written\_by.author$.
 \begin{verbatim}
 <!ELEMENT bib (book+)>

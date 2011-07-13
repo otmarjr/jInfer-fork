@@ -1,0 +1,29 @@
+digraph xml_tree_example {
+	rankdir = TB;
+    nodesep = 2;
+	node [shape = circle, fixedsize = true, width = 0.2, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+{
+	Root1[label = "<bib> (v1)"];
+}
+
+{
+	book1[label = "<book> (v2)"];
+}
+
+	Root1 -> book1;
+{
+    rank = same;
+    written_by[label = "<written_by> (v3)"]
+    title1[label = "<title> (v12)"];
+
+}
+    book1 -> title1;
+    book1 -> written_by;
+
+{
+    titleValue1[label = "\"Some title\" (v13)"];
+
+}
+    title1 -> titleValue1;

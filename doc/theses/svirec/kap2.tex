@@ -10,7 +10,7 @@ Given an alphabet of nodes $\mathbb{N}$ and an alphabet of node labels $\Sigma$,
 
 \noindent Let also denote the set of leaf nodes as $Leaves(T)$ and the set of trees defined over an alphabet of node labels $\Sigma$ as $T_\Sigma$.
 
-\begin{define}[XML Tree]
+\begin{define}[XML Tree]\label{xmlTree}
 {\sl XML tree} is a pair $XT=\langle T,\delta \rangle$, where:
 	\begin{enumerate}
 		\item $T = (r, N, E, \lambda)$ is a tree in $T_{\tau\cup\alpha\cup\{S\}}$, where $\tau$ is a tag alphabet, $\alpha$ is an attribute name alphabet and $S$ is a symbol not belonging to $\tau\cup\alpha$ (representing \texttt{\#PCDATA} content of elements)$;$
@@ -49,7 +49,7 @@ The nodes of an XML tree have a label denoting the tag name of the element and u
 \end{example}
 
 \begin{figure}[h]
-    \centering\includegraphics[scale=\myscale]{example1-new}
+    \centering\includegraphics[width=\textwidth]{example1-new}
 	\caption{An XML Tree} \label{example1}
 \end{figure}
 
@@ -104,6 +104,26 @@ In a relational database $DB$, a correspondence between values $A$ and $B$ in th
 \begin{define}[Tree Tuple]\label{treeTuple}
 Given an XML tree $XT$ conforming the DTD $D$, a tree tuple $t$ of $XT$ is a maximal sub-tree of $XT$ such that, for every path $p \in paths(D)$, $t.p$ contains at most one element.\qed
 \end{define}
+
+\begin{example}
+Consider the XML tree $XT$ of Fig. \ref{example1}. The subtrees of $XT$ shown in Fig. \ref{tuples} are tree tuples, and the subrees in Fig. \ref{nottuples} are not.
+
+\begin{figure}[h]
+    \centering\includegraphics[width=\textwidth]{tuples}
+	\caption{Two tree tuples of the XML tree of Fig. \ref{example1}} \label{tuples}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \subfloat[]{\label{nottuple1}\includegraphics[scale=0.6]{nottuples1}}
+    \subfloat[]{\label{nottuple2}\includegraphics[scale=0.6]{nottuples2}}
+	\caption{Two subtrees of the XML tree of Fig. \ref{example1} which are not tree tuples}
+    \label{nottuples}
+\end{figure}
+
+In the Fig. \ref{nottuple1}, the subtree is not a tree tuple, because the answer of the path $/bib/book/written_by/author$ contains two distinct nodes (i.e. $v4$ and $v8$). The subtree in the Fig. \ref{nottuple2} is not a tree tuble because it is not a maximal subtree (it is a subtree of a tuple from Fig. \ref{tuples}).\qed
+
+\end{example}
 
 \begin{define}[Functional Dependency]\label{fd1}
 Given a DTD $D$, a functional dependency on $D$ is an expression of the form $S \rightarrow p$, where S is a finite non empty subset of $paths(D)$ and $p \in paths(D)$.\qed

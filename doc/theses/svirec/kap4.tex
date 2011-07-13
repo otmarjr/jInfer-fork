@@ -1,6 +1,13 @@
 \chapter{Proposed Algorithm}
 
-The main goal of this thesis is to propose an algorithm repairing XML document violating functional dependencies defined for this document. We use an XML tree and tree tuples to represent XML data. To each node of an XML tree is assigned a weight, which is used to measure the cost of a repair. The paths which creates a functional dependency are described with XPath language \cite{xpath}, where only paths with basic construction are allowed (only path constructed with "/", "//" or "@", no wildcards, "[]" or another constructs are allowed). We introduce a new concept of the so-called repair group, which clusters repair candidates (repair repairing one FD violation) repairing the same violation, or modifying the same part of the XML tree.
+The main goal of this thesis is to propose an algorithm repairing XML document violating functional dependencies defined for this document. We use an XML tree and tree tuples to represent XML data. Next follows features we want to introduce in our algorithm:
+
+\begin{itemize}
+	\item Incorporation of weight model into the XML data representation to provide the selection of repair candidates with lowest modification cost.
+    \item Involvement of user in the process of finding and applying repair candidates.
+    \item The paths which creates a functional dependency are described with XPath language \cite{xpath}, where only paths with basic construction are allowed (only path constructed with "/", "//" or "@", no wildcards, "[]" or another constructs are allowed).
+    \item We introduce a new concept of the so-called repair group, which clusters repair candidates (repair repairing one FD violation) repairing the same violation, or modifying the same part of the XML tree.
+\end{itemize}
 
 
 \section{Repairing Algorithm}
@@ -36,10 +43,10 @@ The algorithm is splitted into three steps, where second and third step are repe
 
 \subsection{Initial data model}
 
-To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of an node indicates correctness of the data the particular node holds, that means the higher the weight is, more correct particular node is. The weights are used to measure cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This also first place where interaction of the user can be applied. The user could assign weights to the nodes manually (described in \todo{sem doplnit odkaz do implementacnej sekcie}) or can use some sort of statistical methods to generate them automatically. It is important to say that by default to each leaf node is assigned lower weigt than to inner nodes. It is because we prefer the node value modification repair primitive over marking node as unreliable. A definition of an RW-XML tree follows:
+To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of an node is from interval $[0,1]$ and indicates correctness of the data the particular node holds, that means the higher the weight is, more correct particular node is. The weights are used to measure cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This is also a first place where interaction of the user can be applied. The user could assign weights to the nodes manually (described in \todo{sem doplnit odkaz do implementacnej sekcie}) or can use some sort of statistical methods to generate them automatically. If the user not assign weights nor use statistical methods, default weight is assigned to all nodes. A definition of an RW-XML tree follows:
 
 \begin{define}[RW-XML tree]
-A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $\mathbb{R}^+_0$.\qed
+A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $[0,1]$.\qed
 \end{define}
 
 After creating RW-XML tree from input XML data, set of tree tuples (defined in Definition \ref{treeTuple}) are constucted. Since a set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer of the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on costructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
@@ -57,7 +64,11 @@ Example of paths that can be used in functional dependencies:
 
 \subsection{Computing Repair Groups}
 
-With created RW-XML tree $RWXT$ and corresponding tree tuples from an input data, we can now procceed to compute repair groups. First, we need to decide for which FDs violates $RWXT$. This can be achieved by finding all tree tuple pairs that not weakly satisfies particular FD (Definition \ref{weakSatisf}). For each tuple pair is then computed repair group (line 6 in Algorithm \ref{propAlgo}). The function \texttt{computeRepairGroup} is shown in Algorithm \ref{repairGroupAlgo}. The function gets RW-XML tree, a functional dependency $F$, tuples $t_1$, $t_2$ and set of repair groups $RGS$ and computes repair group containig repair candidates as follows:
+With created RW-XML tree $RWXT$ and corresponding tree tuples from an input data, we can now procceed to compute repair groups. Repair group is a set of repair candidates, which repairs the same FD or modifies the same part of $RWXT$. Each repair candidate is a pair of functions $\delta$ and $\varrho$ ($\langle \delta, \varrho \rangle$), where either modifies value of an RW-XML tree node ($\delta$ is defined) or marking a node as unreliable ($\varrho$ is definded). The $\delta$ function of repair candidate is defined same as in the XML tree (Definition \ref{xmlTree}) and defines new value of the RW-XML tree node. Similarly, $\varrho$ function defines the node which is marked as unreliable.
+
+To be able to compute repair groups, we need to decide for which FDs violates $RWXT$. This can be achieved by finding all tree tuple pairs that not weakly satisfies particular FD (Definition \ref{weakSatisf}). For each tuple pair is then computed repair group (line 6 in Algorithm \ref{propAlgo}).
+
+The function \texttt{computeRepairGroup}, responsible for creating the repair group, is shown in Algorithm \ref{repairGroupAlgo}. The function gets RW-XML tree, a functional dependency $F$, tuples $t_1$, $t_2$ and a set of repair groups $RGS$ and computes the repair group containig repair candidates as follows:
 
 \begin{enumerate}
 	\item First repair candidates are created using function $computeRepairs$ from Algorithm \ref{repAlgo} (line 1).Since R-XML tree is a special case of RW-XML tree where all weights are equal to zero, we can pass RW-XML tree as a parameter to this function.
@@ -91,3 +102,45 @@ $RGS$ set of repair groups}
 \RETURN $RG$
 \end{algorithmic}
 \end{algorithm}
+
+In Example \ref{repairExample} are shown repair candidates of one repair group modifying node values and marking nodes as unreliable.
+
+\begin{example}\label{repairExample}
+Consider XML data and functional dependency from Example \ref{fdrepairExample}, where XML data is graphically represented as XML tree $XT$ in Fig \ref{example1}. The $XT$ violates FD $$\{/bib/book, /bib/book/written\_by/author/@ano\} \rightarrow /bib/book/written\_by/author$$ because two authors of the same book have the same value of attribute $@ano$. One repair group with these repair candidates is created: $R_1 = \langle \{\delta(v5) = \perp\},\varrho_{\{\}}(v) \rangle$, $R_2 = \langle \{\delta(v9) = \perp\},\varrho_{\{\}}(v) \rangle$, $R_3 = \langle \{\},\varrho_{\{v4,v5,v6,v7\}}(v) \rangle$, $R_4 = \langle \{\},\varrho_{\{v8,v9,v10,v11\}}(v) \rangle$, $R_5 = \langle \{\},\varrho_{\{v2,v3,\dots,v13\}}(v) \rangle$.
+
+First two repair candidates modifies the value of an attribute $@ano$ by assigning new generated value ($\perp$). Next two repair candidates mark each author node with its children nodes that has the same $@ano$ attribute respectively. The last candidate marks as unreliable whole subtree with the book node holding authors with the same attribute as root node.\qed
+\end{example}
+
+\subsubsection{Weight model of a Repair Group}
+
+In this section, we introduce a weight model of a repair group, which will be used in the next step of our repair algorithm. Before we define a weight of repair group, let us denote some important notations.
+
+Given a repair candidate $R$, we denote with $Modified_\delta(R)$ the set of nodes modified by $\delta$ function from $R$. Analogously, we denote $Modified_\varrho(R)$ the set of nodes modified by $\varrho$ function.
+
+
+Since each repair candidate consists of a set of nodes which are modified (marked as unreliable or has modified value), we can compute cost of each candidate. It is important to say, that in out approach, we prefer repair candidates that modify value of the nodes before those marking nodes as unreliable. Therefore we added the koeficient $k$ to the calculation of the repair candidate cost, so that the repair candidate modifying node value will have lower cost. The definition of repair candidate cost follows:
+
+\begin{define}[Repair Candidate Cost]
+Given an RW-XML tree $RXT$ and a repair candidate $R$, we define the cost of $R$ as:
+$$cost(R) = \sum_{u \in Modified_\delta(R)} \omega(u) + \sum_{v \in Modified_\varrho(R)} \omega(v) \times k,$$
+where $k$ is koeficient determining a priority of the repair candidate modifying value of node before that  marking node as unreliable.\qed
+\end{define}
+
+By default is $k$ set to value that cost of repair candidate marking unreliable node will be higher than the one that modifies node value. However this is another place, where can user intervene and change the priority of repair candidates. We show in Example \ref{koefK}, how $k$ can change costs of repair candidates.
+
+\begin{example}\label{koefK}
+Consider XML tree $XT$ and repair candidates from Example \ref{repairExample}. A default weight of all nodes $v$ of $XT$ is $\omega(v) = 0.5$. If the koeficient $k = 1$, cost of repair candidates would be as follows: $cost(R_1) = 0.5$, $cost(R_2) = 0.5$, $cost(R_3) = 2$, $cost(R_4) = 2$ and $cost(R_5) = 6$.
+Let us assume, that a repair candidate with the lowest repair cost will be applied to $XT$. If we order costs of repair candidates from the lowest to the highest, you can see that candidates which have marked unreliable nodes are at the end (and will not be applied to $XT$).
+
+Howerver, if we set the koeficient $k = 0.1$, costs of candidates would be sorted as follows: $cost(R_3) = 0.2$, $cost(R_4) = 0.2$, $cost(R_1) = 0.5$, $cost(R_2)  = 0.5$ and $cost(R_5) = 0.6$. You can see that order of costs has significantly changed and the cadidate which will be applied is $R_3$ (is marking nodes as unreliable).\qed
+\end{example}
+
+And finally, since a repair group is a set of repair candidates, its weight can be defined as follows:
+
+\begin{define}[Repair Group weight]
+Given an RW-XML tree $RXT$ and a repair group $RG$, we define the weight of $RG$ as the sum of costs of all repair candidates in the $RG$.
+\end{define}
+
+\subsection{Repair Candidate Selection and Application}
+
+The last step of our algorithm can be divided into two steps, namely selection of the repair candidate and subsequent application of the candidate to RW-XML tree.

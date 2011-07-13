@@ -1,0 +1,66 @@
+digraph xml_tree_example {
+	rankdir = TB;
+    nodesep = 2;
+	node [shape = circle, fixedsize = true, width = 0.2, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+{
+    rank = same;
+	Root1[label = "<bib> (v1)"];
+	Root2[label = "<bib> (v1)"];
+}
+
+{
+	rank = same;
+	book1[label = "<book> (v2)"];
+	book2[label = "<book> (v2)"];
+}
+
+	Root1 -> book1;
+	Root2 -> book2;
+{
+    rank = same;
+	writtenby1[label = "<written_by> (v3)"];
+	writtenby2[label = "<written_by> (v3)"];
+    title1[label = "<title> (v12)"];
+    title2[label = "<title> (v12)"];
+
+}
+    book1 -> writtenby1;
+    book1 -> title1;
+
+    book2 -> writtenby2;
+    book2 -> title2;
+
+{
+    rank = same;
+	author1[label = "<author> (v4)"];
+    author2[label = "<author> (v8)"];
+    titleValue1[label = "\"Some title\" (v13)"];
+    titleValue2[label = "\"Some title\" (v13)"];
+
+}
+    writtenby1 -> author1;
+    writtenby2 -> author2;
+    title1 -> titleValue1;
+    title2 -> titleValue2;
+
+{
+    rank = same;
+    ano1[label = "@ano \"A1\" (v5)"];
+    name1[label = "name (v6)"];
+    ano2[label = "@ano \"A1\" (v9)"];
+    name2[label = "name (v10)"];
+
+}
+    author1 -> ano1;
+    author1 -> name1;
+    author2 -> ano2;
+    author2 -> name2;
+
+    nameValue1[label = "\"John Writer\" (v7)"];
+    nameValue2[label = "\"Eric Seller\" (v11)"];
+
+    name1 -> nameValue1;
+    name2 -> nameValue2;
+}

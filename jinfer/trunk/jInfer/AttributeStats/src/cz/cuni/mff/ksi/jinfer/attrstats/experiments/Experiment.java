@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuris
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
+import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.GraphUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
@@ -32,6 +33,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -44,7 +46,6 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
-  // TODO vektor Write output - AMs of the best solution
   // TODO vektor Solve interruptibility - is it broken now?
   // TODO vektor Tell GLPK what the optimum is - add constraint?
 
@@ -123,6 +124,42 @@ public class Experiment implements IGGeneratorCallback {
           .append(result.getQuality().getScalar()).append(',')
           .append(result.getQuality().getAmCount());
     }
+    return ret.toString();
+  }
+
+  /**
+   * Writes the best ID set.
+   *
+   * @return String representation of the best ID set in CSV format.
+   */
+  public String getWinner() {
+    Quality bestQuality = constructionResult.getQuality();
+    IdSet bestSolution = constructionResult.getIncumbent();
+
+    for (final HeuristicResult ih : improvementResults) {
+      if (ih.getQuality().getScalar() > bestQuality.getScalar()) {
+        bestQuality = ih.getQuality();
+        bestSolution = ih.getIncumbent();
+      }
+    }
+
+    final List<AttributeMappingId> mappings = new ArrayList<AttributeMappingId>(bestSolution.getMappings());
+
+    Collections.sort(mappings);
+
+    final StringBuilder ret = new StringBuilder();
+
+    ret.append("\nElement,Attribute,Weight");
+
+    for (final AttributeMappingId mapping : mappings) {
+      ret.append('\n')
+          .append(mapping.getElement())
+          .append(',')
+          .append(mapping.getAttribute())
+          .append(',')
+          .append(model.weight(mapping, getAlpha(), getBeta()));
+    }
+
     return ret.toString();
   }
 

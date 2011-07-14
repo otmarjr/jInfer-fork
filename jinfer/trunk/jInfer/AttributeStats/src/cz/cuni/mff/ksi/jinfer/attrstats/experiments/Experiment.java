@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.HeuristicCallback
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.QualityMeasurement;
+import cz.cuni.mff.ksi.jinfer.attrstats.idref.IdRefSearch;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
@@ -144,12 +145,10 @@ public class Experiment implements IGGeneratorCallback {
     }
 
     final List<AttributeMappingId> mappings = new ArrayList<AttributeMappingId>(bestSolution.getMappings());
-
     Collections.sort(mappings);
 
     final StringBuilder ret = new StringBuilder();
-
-    ret.append("\nElement,Attribute,Weight");
+    ret.append("\nID\nElement,Attribute,Weight");
 
     for (final AttributeMappingId mapping : mappings) {
       ret.append('\n')
@@ -158,6 +157,16 @@ public class Experiment implements IGGeneratorCallback {
           .append(mapping.getAttribute())
           .append(',')
           .append(model.weight(mapping, getAlpha(), getBeta()));
+    }
+
+    final List<AttributeMappingId> idRefList = IdRefSearch.getIdRefList(model, bestSolution);
+    ret.append("\nIDREF\nElement,Attribute");
+
+    for (final AttributeMappingId mapping : idRefList) {
+      ret.append('\n')
+          .append(mapping.getElement())
+          .append(',')
+          .append(mapping.getAttribute());
     }
 
     return ret.toString();

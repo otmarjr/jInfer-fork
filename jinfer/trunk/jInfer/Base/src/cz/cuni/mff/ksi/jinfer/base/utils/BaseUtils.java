@@ -205,4 +205,9 @@ public final class BaseUtils {
 
     return ret;
   }
+
+  // TODO vektor Comment, JUnit test!
+  public static <T> boolean isSubset(final Collection<T> l1, final Collection<T> l2) {
+    return l2.containsAll(l1);
+  }
 }

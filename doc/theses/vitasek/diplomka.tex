@@ -217,7 +217,7 @@ Keywords: XML, ID attributes, inference
 
 TODO why is this important - XMLs are extensively used but lack schemas (link Vosta's Even ant can create...).
 We already have tools to infer the structure (see jInfer), now we would like to go a bit further - to find some integrity constraints to impose on these schemas.
-Integrity schemas can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro?), etc.
+Integrity schemas can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro), etc.
 We will focus on the first kind - ID and IDREF attributes.
 
 \section{Structure of the thesis}
@@ -246,6 +246,7 @@ An extension to jInfer for finding ID attributes using MIP solver and a combinat
 	\item Key according to Keys for XML \cite{keX}
 	\item Attribute mapping
 	\item ID set
+  \item Weight: support, coverage
 \end{itemize}
 
 \chapter{Research}
@@ -260,7 +261,7 @@ TODO add citation for Fajt
 
 \section{Independent Set}
 
-TODO define IS rigorously
+TODO define IS + MIS rigorously
 
 TODO other approaches to max IS
 
@@ -272,7 +273,7 @@ TODO FIDAX is cool, but their heuristic might not be the best. It is a IS proble
 
 \section{Finding ID sets with GLPK}
 
-TODO how GLPK works, how to construct a problem, how output looks, how to interpret it, limit time-> limit quality, ...
+TODO how GLPK works (branch&bound), how to construct a problem, how output looks, how to interpret it, limit time-> limit quality, ...
  
  -> wow, GLPK works. However, it takes too long to get to optimum (link experiments), so let's try other heuristics.
  
@@ -353,30 +354,36 @@ TODO explain how this translates to GLPK input
 
 \chapter{Experiments}
 
-TODO describe all the inputs (take it from the mindmap), describe how the output looks (sample trace)
+TODO describe all the inputs (take it from the mindmap), describe how the output looks (sample trace - link to appendix)
 
 \section{Experimental Data}
 
 TODO types of data:
 \begin{itemize}
 	\item Realistic 
+  \item Realistic with artificial attributes
 	\item Artificial
 \end{itemize}
+
+TODO for all types, show GraphViz pictures.
 
 \subsection{Realistic data}
 
 TODO talk about all that are used - mention the dataset name, some characteristics (excel sheet)
+
+\subsection{Realistic data with artificial attributes}
+
+TODO we have taken some of the text data and converted it to attributes like this, A B C
 
 \subsection{Artificial data}
 
 TODO these are random graphs.
 TODO talk about how they are created, about their structure.
 TODO talk about some "density".
-TODO show a picture, possibly from GraphViz.
 
 \section{Experimental Setup}
 
-TODO we will be using jInfer, see \ref{jInfer}.
+TODO we will be using jInfer and its module AttributeStats see \ref{jInfer} and \ref{attrstats}.
 
 \section{Experimental Results}
 
@@ -390,7 +397,8 @@ TODO following experiments + more
 	\item GLPK: Time limit -> Quality
 	\item Structure of the data -> Which algorithms perform the best
 	\item Alpha, Beta -> Quality
-	\item Which GLPK -> *
+  \item Alpha, Beta -> How does the solution work?
+	\item Which GLPK -> How does (time->quality) look, how does (input->time) look
 	\item Do I beat FIDAX with Random?
 	\item Does Fuzzy beat Random? (Seems that Random is better and even has smaller variance)
 \end{itemize}
@@ -405,11 +413,17 @@ And for many purposes, this is just fine - we need to infer something about the 
 
 Second: if we don't have enough time, we should do XYZ but it might depend on the characteristics of the data.
 For realistic (looks like THIS in graph representation) it is best to do A B C.
-Whereas, for artificial data (having IJK as their representation) it is best to just do 1 2 3.  
+Whereas, for artificial data (having IJK as their representation) it is best to just do 1 2 3.
+
+\chapter{Future work}
+
+TODO extension to more documents, IDREFs, ...  
 
 \chapwithtoc{Conclusion}
 
-TODO conclusion
+TODO conclusion: From all integrity constraints in XML we chose the ID attributes and decided to improve the search for them. We discussed the approach chosen in FIDAX. Based on this article we introduced the MIP approach and demonstrated how to find the optimal (w.r.t. weight) ID set.
+
+However, this approach takes too long for some inputs, so we introduced a whole spectrum of construction as well as improvement heuristics. By combining these algorithms and tuning their parameters we were able to find very good solutions while maintaining low running times.
 
 %%% Seznam použité literatury
 \newpage
@@ -443,7 +457,13 @@ TODO conclusion
 TODO what it is, who created it and why, what it can do, where to get it.
 
 \chapter{AttributeStats}
+\label{attrstats}
 
 TODO talk a bit about the structure of AttributeStats module.
+
+\chapter{Traces}
+\label{traces}
+
+TODO a few (commented!) traces from experiment runs
 
 \end{document}

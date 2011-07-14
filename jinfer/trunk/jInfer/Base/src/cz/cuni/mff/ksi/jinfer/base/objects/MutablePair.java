@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+
 /**
  * Class representing a generic 2-tuple. Mutable class (contrast {@link Pair}).
  *
@@ -24,7 +27,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
  *
  * @author vektor
  */
-public class MutablePair<S, T> {
+public class MutablePair<S, T> implements Pair<S, T> {
 
   private S first;
   private T second;
@@ -40,11 +43,7 @@ public class MutablePair<S, T> {
     this.second = second;
   }
 
-  /**
-   * Returns the first member of this pair.
-   *
-   * @return First member of this pair.
-   */
+  @Override
   public S getFirst() {
     return first;
   }
@@ -58,11 +57,7 @@ public class MutablePair<S, T> {
     this.first = first;
   }
 
-  /**
-   * Returns the second member of this pair.
-   *
-   * @return Second member of this pair.
-   */
+  @Override
   public T getSecond() {
     return second;
   }
@@ -83,13 +78,13 @@ public class MutablePair<S, T> {
 
   @Override
   public boolean equals(final Object obj) {
-    if (!(obj instanceof MutablePair)) {
+    if (!(obj instanceof Pair)) {
       return false;
     }
     @SuppressWarnings("unchecked")
-    final MutablePair<S, T> other = (MutablePair) obj;
-    final boolean firstEqual = equal(first, other.getFirst());
-    final boolean secondEqual = equal(second, other.getSecond());
+    final Pair<S, T> other = (Pair) obj;
+    final boolean firstEqual = BaseUtils.equal(first, other.getFirst());
+    final boolean secondEqual = BaseUtils.equal(second, other.getSecond());
     return firstEqual && secondEqual;
   }
 
@@ -100,15 +95,4 @@ public class MutablePair<S, T> {
     hash = 97 * hash + (this.second != null ? this.second.hashCode() : 0);
     return hash;
   }
-
-  private static <X> boolean equal(final X arg1, final X arg2) {
-    if (arg1 == null && arg1 == null) {
-      return true;
-    }
-    if (arg2 == null) {
-      return false;
-    }
-    return arg1.equals(arg2);
-  }
-
 }

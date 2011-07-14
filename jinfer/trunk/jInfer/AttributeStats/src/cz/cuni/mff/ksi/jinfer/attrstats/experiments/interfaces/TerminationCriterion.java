@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import java.util.List;
 
 /**

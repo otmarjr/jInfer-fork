@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
@@ -29,11 +30,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 /**
  *
@@ -43,19 +42,19 @@ public final class TupleFactory {
 
   public static boolean isTuple(RXMLTree tree, Tuple tuple) {
     List<Tuple> allTuples = tree.getTuples();
-    
+
     for (Tuple tuple1 : allTuples) {
       if (!tuple1.equals(tuple) && tuple1.contains(tuple)) {
         return false;
       }
     }
-    
+
     return true;
   }
 
   public static void removeTuple(RXMLTree tree, Tuple tuple) {
     unmarkNodesFromTuple(tree, tuple);
-    
+
     tree.removeTuple(tuple);
   }
 
@@ -114,19 +113,19 @@ public final class TupleFactory {
     List<Pair<Tuple, Tuple>> result = new ArrayList<Pair<Tuple, Tuple>>();
     for (Tuple tuple : tuples) {
       for (Tuple tuple1 : tuples) {
-        if (!tuple.equals(tuple1) && !result.contains(new Pair<Tuple, Tuple>(tuple1, tuple))) {
-          result.add(new Pair<Tuple, Tuple>(tuple, tuple1));
+        if (!tuple.equals(tuple1) && !result.contains(new ImmutablePair<Tuple, Tuple>(tuple1, tuple))) {
+          result.add(new ImmutablePair<Tuple, Tuple>(tuple, tuple1));
         }
       }
     }
 
     return result;
   }
-  
+
   public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDThesis(final RXMLTree tree, final FD fd) {
     return getTuplePairNotSatisfyingFDGeneral(tree, fd, true);
   }
-  
+
   public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(RXMLTree tree, FD fd) {
     return getTuplePairNotSatisfyingFDGeneral(tree, fd, false);
   }
@@ -185,24 +184,24 @@ public final class TupleFactory {
   private static void unmarkNodesFromTuple(RXMLTree tree, Tuple lastTuple) {
     traverseTree(tree.getDocument().getDocumentElement(), tree.getNodesMap(), null, null, lastTuple, null, true);
   }
-  
+
   public static Collection<Tuple> unmarkNodeFromAllTuples(RXMLTree tree, Node node) {
     NodeAttribute nodeAttribute = tree.getNodesMap().get(node);
     Set<Tuple> result = new HashSet<Tuple>(nodeAttribute.getTuples());
-    
+
     nodeAttribute.removeFromAllTuples();
-    
+
     return result;
   }
 
   /**
    * Traverse the XML tree tuple and add or remove node into/form {@code currentTuple}. If the {@code currentTuple} is added,
    * this means that {@code actualTuple} will be divided into new tuples where each new tuple is represented
-   * by one node of {@code tupleCut}(the {@code cuttingNode} is representative for this tuple). 
+   * by one node of {@code tupleCut}(the {@code cuttingNode} is representative for this tuple).
    * @param node Node to be added into {@code currentTuple}
    * @param nodesMap Map holding information for each Node to which tuple belongs to.
    * @param cuttingNode Representative for tuple division. If it is {@code null}, there is no dividing of tuple.
-   * @param actualTuple The tuple which is actually traversed. If it is {@code null}, whole xml tree is traversed. 
+   * @param actualTuple The tuple which is actually traversed. If it is {@code null}, whole xml tree is traversed.
    * @param currentTuple Tuple to which are nodes added or removed from.
    * @param tupleCut List of nodes for which dividing of node is provided.
    * @param remove Flag indicationg if {@code currentTuple} is added or removed.

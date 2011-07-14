@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.attrstats.options.AttrStatsPanel;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.FlatModel;
@@ -24,7 +25,7 @@ import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.attrstats.tables.MappingsModel;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,7 +134,7 @@ public class TableViewPanel extends JPanel {
       value = cache.get(targetMapping);
     }
     else {
-      value = new Pair<Double, Double>(
+      value = new ImmutablePair<Double, Double>(
               Double.valueOf(model.support(targetMapping)),
               Double.valueOf(model.coverage(targetMapping)));
       cache.put(targetMapping, value);

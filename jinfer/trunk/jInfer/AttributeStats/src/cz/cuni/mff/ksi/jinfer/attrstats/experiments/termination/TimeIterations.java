@@ -21,7 +21,8 @@ import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.TerminationCriterion;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import java.util.List;
 
 /**
@@ -63,23 +64,23 @@ public class TimeIterations implements TerminationCriterion {
     this.maxTime = maxTime;
   }
 
-  private static final Pair<Boolean, String> FALSE = new Pair<Boolean, String>(Boolean.FALSE, null);
+  private static final Pair<Boolean, String> FALSE = new ImmutablePair<Boolean, String>(Boolean.FALSE, null);
 
   @Override
   public Pair<Boolean, String> terminate(final Experiment experiment,
         final long time, final List<IdSet> solutions) {
     iterations++;
     if (iterations > maxIterations) {
-      return new Pair<Boolean, String>(Boolean.TRUE, "Maximum iterations exceeded.");
+      return new ImmutablePair<Boolean, String>(Boolean.TRUE, "Maximum iterations exceeded.");
     }
     if (time > maxTime) {
-      return new Pair<Boolean, String>(Boolean.TRUE, "Maximum time exceeded.");
+      return new ImmutablePair<Boolean, String>(Boolean.TRUE, "Maximum time exceeded.");
     }
 
     if (experiment.getKnownOptimum() != null) {
       final Pair<IdSet, Quality> best = Utils.getBest(experiment, solutions);
       if (Math.abs(experiment.getKnownOptimum().doubleValue() - best.getSecond().getScalar()) < THRESHOLD) {
-        return new Pair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
+        return new ImmutablePair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
       }
     }
 

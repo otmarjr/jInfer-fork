@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
@@ -94,12 +94,12 @@ public class NewRepairerImpl implements Repairer {
 
     if (!repairs.isEmpty()) {
       Repair minimalRepair = getRepairFromPicker(rXMLTree);
-      
+
       rXMLTree.applyRepair(minimalRepair);
       rXMLTree.clearRepairs(minimalRepair);
     }
   }
-  
+
   private Repair getRepairFromPicker(final RXMLTree tree) throws InterruptedException {
     final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
     RepairPicker repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));

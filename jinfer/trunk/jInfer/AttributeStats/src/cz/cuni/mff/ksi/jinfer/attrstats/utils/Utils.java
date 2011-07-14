@@ -19,7 +19,8 @@ package cz.cuni.mff.ksi.jinfer.attrstats.utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.IdSet;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public final class Utils {
         bestSolution = solution;
       }
     }
-    return new Pair<IdSet, Quality>(bestSolution, maxQuality);
+    return new ImmutablePair<IdSet, Quality>(bestSolution, maxQuality);
   }
 
   /**

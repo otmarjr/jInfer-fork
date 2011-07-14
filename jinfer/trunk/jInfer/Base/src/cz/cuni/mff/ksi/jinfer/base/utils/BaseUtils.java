@@ -223,4 +223,15 @@ public final class BaseUtils {
   public static <T> boolean isSubset(final Collection<T> l1, final Collection<T> l2) {
     return l2.containsAll(l1);
   }
+
+  // TODO vektor Comment, JUnit test!
+  public static <X> boolean equal(final X arg1, final X arg2) {
+    if (arg1 == null && arg1 == null) {
+      return true;
+    }
+    if (arg2 == null) {
+      return false;
+    }
+    return arg1.equals(arg2);
+  }
 }

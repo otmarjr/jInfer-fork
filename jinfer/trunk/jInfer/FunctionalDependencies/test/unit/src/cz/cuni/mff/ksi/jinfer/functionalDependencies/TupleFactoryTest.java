@@ -16,19 +16,16 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.ObjectFactory;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.TleftSidePaths;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.w3c.dom.Document;
@@ -40,7 +37,7 @@ import org.w3c.dom.Node;
  * @author sviro
  */
 public class TupleFactoryTest {
-  
+
   public TupleFactoryTest() {
   }
 
@@ -54,7 +51,7 @@ public class TupleFactoryTest {
     List result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
-  
+
   /**
    * Test of getTuplePairs method, of class TupleFactory.
    */
@@ -65,7 +62,7 @@ public class TupleFactoryTest {
     List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
-    
+
   /**
    * Test of getTuplePairs method, of class TupleFactory.
    */
@@ -73,13 +70,13 @@ public class TupleFactoryTest {
   public void testGetTuplePairs() {
     List<Tuple> tuples = new ArrayList<Tuple>();
     tuples.add(new Tuple(null, 0));
-    
-    
+
+
     List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
     List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
-      
+
   /**
    * Test of getTuplePairs method, of class TupleFactory.
    */
@@ -87,16 +84,16 @@ public class TupleFactoryTest {
   public void testGetTuplePairs2() {
     List<Tuple> tuples = new ArrayList<Tuple>();
     Tuple tuple1 = new Tuple(null, 0);
-    
+
     tuples.add(tuple1);
     tuples.add(tuple1);
-    
+
     List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
     List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
-  
-        
+
+
   /**
    * Test of getTuplePairs method, of class TupleFactory.
    */
@@ -106,15 +103,15 @@ public class TupleFactoryTest {
     Tuple tuple1 = new Tuple(null, 0);
     Tuple tuple2 = new Tuple(null, 1);
     Tuple tuple3 = new Tuple(null, 2);
-    
+
     tuples.add(tuple1);
     tuples.add(tuple2);
     tuples.add(tuple3);
-    
+
     List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
-    expResult.add(new Pair<Tuple, Tuple>(tuple1, tuple2));
-    expResult.add(new Pair<Tuple, Tuple>(tuple1, tuple3));
-    expResult.add(new Pair<Tuple, Tuple>(tuple2, tuple3));
+    expResult.add(new ImmutablePair<Tuple, Tuple>(tuple1, tuple2));
+    expResult.add(new ImmutablePair<Tuple, Tuple>(tuple1, tuple3));
+    expResult.add(new ImmutablePair<Tuple, Tuple>(tuple2, tuple3));
     List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }
@@ -128,14 +125,14 @@ public class TupleFactoryTest {
     Document document = builder.newDocument();
     Element element = document.createElement("test");
     document.appendChild(element);
-    
+
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = null;
     SidePaths sidePaths = null;
     List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
   }
-  
-  
+
+
   /**
    * Test of getFDSidePathAnswers method, of class TupleFactory.
    */
@@ -145,14 +142,14 @@ public class TupleFactoryTest {
     Document document = builder.newDocument();
     Element element = document.createElement("test");
     document.appendChild(element);
-    
+
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(null, 0);
     SidePaths sidePaths = null;
     List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
   }
-  
-    
+
+
   /**
    * Test of getFDSidePathAnswers method, of class TupleFactory.
    */
@@ -162,7 +159,7 @@ public class TupleFactoryTest {
     Document document = builder.newDocument();
     Element element = document.createElement("test");
     document.appendChild(element);
-    
+
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(null, 0);
     SidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
@@ -170,7 +167,7 @@ public class TupleFactoryTest {
     List<PathAnswer> expected = new ArrayList<PathAnswer>();
     assertEquals(expected, result);
   }
-      
+
   /**
    * Test of getFDSidePathAnswers method, of class TupleFactory.
    */
@@ -180,7 +177,7 @@ public class TupleFactoryTest {
     Document document = builder.newDocument();
     Element element = document.createElement("test");
     document.appendChild(element);
-    
+
     RXMLTree tree = new RXMLTree(document);
     Tuple tuple = new Tuple(null, 0);
     tree.getNodesMap().put(element, new NodeAttribute());
@@ -188,7 +185,7 @@ public class TupleFactoryTest {
     TleftSidePaths sidePaths = new ObjectFactory().createTleftSidePaths();
     sidePaths.getPath().add("//bib");
     List<PathAnswer> result = TupleFactory.getFDSidePathAnswers(tree, tuple, sidePaths, false);
-    
+
     List<PathAnswer> expected = new ArrayList<PathAnswer>();
     List<Node> nodes = new ArrayList<Node>();
     expected.add(new PathAnswer(nodes, false));

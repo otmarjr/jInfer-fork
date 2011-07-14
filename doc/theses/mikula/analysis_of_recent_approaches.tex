@@ -1,0 +1,130 @@
+\chapter{Analysis of Recent Approaches}
+\todo[inline]{Translate.}
+Existuje mnoho prístupov generovania XML schém. Väčšina z nich spracováva XML data \todo{spomenúť alebo rozpísať tieto prístupy, ako napríklad EXTRACT?}. Podľa mojej znalosti v dobe písania práce existuje len jediný \todo{je pravda?} prístup využívajúci XML operácie\todo{ref do literatury}. Ten sa snaží hľadať keys a foreign keys za pomoci XQuery dotazov.
+
+\section{Discovering XML Keys and Foreign Keys in Queries}
+Táto metóda sa snaží vylepšiť automatické odvodzovanie XML schém hľadaním keys a foreign keys zo sady XQuery dotazov. Pre toto hľadanie sú použité len tieto dotazy, nie samotné XML data. Výsledkom je zoznam keys a foreign keys, ktoré môžu byť zachytené pomocou \textbf{key}, \textbf{keyref} \todo{aj unique?} konštrukcií jazyka XML Schema.
+
+\subsection{Keys and foreign keys}
+Autori si zavádzajú definíciu pre key a foreign key:
+
+\begin{define}[Key]
+Key je trojica $$(C, P, \{L\})$$ kde $C$, $P$, $L$ sú XPath cesty bez predikátov a používajú len osi \texttt{child} a \texttt{descendant}.
+$C$ môže byť vynechané. $(P, \{L\})$ je v takom prípade to isté ako $(/, P, \{L\})$ a nazýva sa \emph{global key}, inak sa nazýva \emph{local key}.
+\end{define}
+
+The key specifies the following condition. Let $c$ be an element targeted by $C$ and $p$ and $p’$ be two elements targeted by $P$ from $c$. If the value targeted by $L$ from $p$ equals to the value targeted by $L$ from $p’$, then $p$ and $p’$ are the same elements. In other words, no two different elements targeted by $P$ from $c$ can have the same value of $L$.
+
+\begin{define}[Foreign key]
+Foreign key je konštrukcia $$(C, (P_1, \{L_1\}) \Rightarrow (P_2, \{L_2\}))$$ kde $(C, P_2, \{L_2\})$ je key, $P_1$, $L_1$ sú XPath cesty bez predikátov a používajú len osi \texttt{child} a \texttt{descendant}.
+$C$ môže byť vynechané podobne ako v prípade key.
+\end{define}
+
+Let $c$ be an element targeted by $C$ and $p_1$ be a element targeted by $P_1$ from $c$. The foreign key specifies that there is an element $p_2$ targeted by $P_2$ from $c$ such that the value targeted by $L_1$ from $p_1$ equals to the value targeted by $L_2$ from $p_2$. In other words, each element targeted by $P_1$ from $c$ refers to an element targeted by $P_2$ from $c$ via the pair $L_1$ and $L_2$.
+
+\subsection{Key and foreign key discovery}
+\subsubsection{Joins in queries}
+Na hľadanie využíva metóda element/element joins v dotazoch.
+
+Assume a query $Q$ that joins a sequence of elements $S_1$ targeted by a path $P_1$ with a sequence of elements $S_2$ targeted by a path $P_2$ on a condition $L_1 = L_2$. It means that $Q$ joins an element $e_1$ from $S_1$ with an element $e_2$ from $S_2$ if $e_1/L_1$ equals to $e_2/L_2$.
+
+\todo[inline]{priklad?}
+
+Metóda predpokladá, že každý join je robený cez pár key/foreign key. On the base of this assumption, it can be inferred from $Q$ that $L_1$ is a key for elements in $S_1$ or $L_2$ is a key for elements in $S_2$ and the other is a foreign key referencing the key.
+
+Autori uvádzajú dve pozorovania:
+\begin{enumerate}
+\renewcommand{\theenumi}{(O\arabic{enumi})}
+\renewcommand{\labelenumi}{\theenumi}
+\item Assume that an element $e_1$ from $S_1$ can be joined with more elements from $S_2$. It means that there can be more different elements in $S_2$ having their value of $L_2$ equal to $e_1/L_1$. In other words, there can be more different elements in $S_2$ having the same value of $L_2$. Therefore, we infer that $L_2$ can not be a key of the elements in $S_2$. Moreover, because we suppose that one of $L_1$ and $L_2$ is a key and $L_2$ can not be a key, we infer that $L_1$ is a key of the elements in $S_1$. Consequently, we infer that $L_2$ is a foreign key referring $L_1$.
+\item Vice versa, assume that $e_1$ can be joined with maximally one element from $S_2$. It means that there is maximally one element in $S_2$ having its value of $L_2$ equal to $e_1/L_1$. In that case we suppose that each element in $S_2$ has a unique value of $L_2$. Therefore, we infer that $L_2$ is a key of the elements in $S_2$ and consequently that $L_1$ is a foreign key referring $L_2$. We cannot infer whether $L_1$ is a key or not.
+\end{enumerate}
+
+\subsubsection{Join patterns}
+Rozhodnutie pre jeden z prípadov (O1) a (O2) pre konrétny join je robené podľa tvaru tohto joinu. V dotaze sa hľadajú takzvané \emph{join patters}. Tie sú dva, \texttt{for} \emph{join pattern} a \texttt{let} \emph{join pattern} a vyzerajú takto (prvý je \texttt{for} \emph{join pattern}, druhý \texttt{let} \emph{join pattern}):
+\todo[inline]{spravne kreslit indexy pri pismenkach}
+\begin{verbatim}
+01  for e1 in P1               for $e1 in P1
+02  return                     return
+03    for $e2 in                 let $e2 :=
+        P2[L2 = $e1/L1]            P2[L2 = $e1/L1]
+04    return CR                  return CR
+\end{verbatim}
+
+$P_1$, $P_2$, $L_1$ and $L_2$ in the patterns are XPath paths without predicates. Both patterns differ only at line \texttt{03} where the former applies \texttt{for} while the other applies \texttt{let}. Line \texttt{01} is called \emph{declaration clause}. Line \texttt{03} is called \emph{join clause}. The path $P_1$ is called source path, $P_2$ \emph{target path}, and the condition $L_2 = \$e_1/L_1$ \emph{join condition}. $C_R$ is called \emph{return clause}. All paths $P_1^R$, ..., $P_k^R$ in $C_R$
+starting with $\$e2$ are called \emph{target return paths}.
+
+Each pattern occurrence is marked as \emph{repeating} or \emph{non-repeating}. An occurrence marked as \emph{repeating} means that each element targeted by $P_1$ can be joined with more than one elements targeted by $P_2$. In contrary, a pattern occurrence marked as \emph{non-repeating} means that each element targeted by $P_1$ can be joined with zero or one element targeted by $P_2$. In other words, the former means that the observation (O1) can be applied while the other means that (O2) can be applied to infer keys and foreign keys.
+
+Assume a pattern occurrence $\pi$. The decision is made on the base of the following rules (R1) - (R5). Only one rule can be applied. Process of decision starts with (R1). If (Ri) can not be applied, it tries (Ri+1). If any of the following rules (R1) - (R3) can be applied, $\pi$ is marked as \emph{repeating}. Each pattern occurence has also assigned its weight determining how sure the method is about the inferred statement.
+
+\begin{enumerate}
+\renewcommand{\theenumi}{(R\arabic{enumi})}
+\renewcommand{\labelenumi}{\theenumi}
+\item $\pi$ is an occurrence of the \texttt{for} pattern (weight: 1).
+\item Aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a return path $P_i^R$ in $\pi$ (weight: 1).
+\item Aggregation function \texttt{count} is applied on a \emph{return path} $P_i^R$ in $\pi$ (weight: 0.75).
+\end{enumerate}
+
+If (R1) - (R3) can not be applied, $\pi$ is marked as \emph{non-repeating}. The weight is assigned according to (R4) and (R5) listed bellow where $k$ denotes the number of target \emph{return paths} in $\pi$.
+
+\begin{enumerate}
+\renewcommand{\theenumi}{(R\arabic{enumi})}
+\renewcommand{\labelenumi}{\theenumi}
+\setcounter{enumi}{4}
+\item $k > 1$ (weight: 1)
+\item$ k <= 1$ (weight 0.5)
+\end{enumerate}
+
+\subsubsection{Key and foreign key inference}
+Let $w$ be the weight assigned to a pattern occurrence $\pi$. If $\pi$ is marked as \emph{repeating}, (O1) is applied and the following statements with weight $w$ are inferred:
+\begin{itemize}
+\item $(P_2^{\downarrow}, \{L_2\})$ is not satisfied
+\item $(P_1^{\downarrow}, \{L_1\})$ is satisfied
+\item $(P_2^{\downarrow}, \{L_2\}) \Rightarrow (P_1^{\downarrow}, \{L_1\})$ is satisfied
+\end{itemize}
+where for a path $P$, $P^{\downarrow}$ denotes:
+\begin{itemize}
+\item $P$, if $P$ does not start with a variable
+\item $P^{\$e\downarrow}/P'$ (or $P^{\$e\downarrow}//P'$), if $P$ is $\$e/P'$ (or $\$e//P'$, respectively) where $P^{\$e}$ is a path used for the declaration of the variable $\$e$ in the query
+\end{itemize}
+
+If $\pi$ is marked as \emph{non-repeating}, (O2) is applied and the following statements with weight $w$ are inferred:
+\begin{itemize}
+\item $(P_2^{\downarrow}, \{L_2\})$ is satisfied
+\item $(P_1^{\downarrow}, \{L_1\}) \Rightarrow (P_2^{\downarrow}, \{L_2\})$ is satisfied
+\end{itemize}
+
+If the \emph{source} and \emph{target path} in $\pi$ have a common context determined by a path $C$, keys and foreign keys are inferred as follows. If $\pi$ is marked as \emph{repeating}, the following statements with weight $w$ are inferred:
+\begin{itemize}
+\item $(C^{\downarrow}, P_2^{\downarrow C}, \{L_2\})$ is not satisfied
+\item $(C^{\downarrow}, P_1^{\downarrow C}, \{L_1\})$ is satisfied
+\item $(C^{\downarrow}, (P_2^{\downarrow C}, \{L_2\}) \Rightarrow (P_1^{\downarrow C}, \{L_1\}))$ is satisfied
+\end{itemize}
+where for paths $C$ and $P$, $P^{\downarrow C}$ denotes:
+\begin{itemize}
+\item $P$, if $P$ does not start with a variable
+\item $P'$ (or $.//P'$), if $P$ is $\$e/P'$ (or $\$e//P'$, respectively) and $\$e$ is declared by $C$
+\item $P^{\$e\downarrow C}/P'$ (or $P^{\$e\downarrow C}//P'$), if $P$ is $\$e/P'$ (or $\$e//P'$, respectively) and $\$e$ is not declared by $C$
+\end{itemize}
+
+If $\pi$ is marked as \emph{non-repeating}, the following statements with weight $w$ are inferred:
+\begin{itemize}
+\item $(C^{\downarrow}, P_2^{\downarrow C}, \{L_2\})$ is satisfied
+\item $(C^{\downarrow}, (P_1^{\downarrow C}, \{L_1\}) \Rightarrow (P_2^{\downarrow C}, \{L_2\}))$ is satisfied
+\end{itemize}
+
+\section{Scoring function}
+Môže nastať situácia, že nie je splnený nejaký z predpokladov, z ktorých metóda vychádza. Predpokladajme nejakú množinu dotazov. Môže sa stať, že z nejakého dotazu z tejto množiny metóda odvodí key $K$ a z nejakého iného dotazu, že $K$ nie je key. \todo[inline]{priklad?}
+
+Autori preto zavádzajú key scoring function. If a new key $K$ is going to be inferred, it has assigned an initial score 0. Each inferred positive statement about $K$ increases the score of $K$ by the weight of the statement. Respectively, each negative statement about $K$ decreases the score by the respective weight. The resulting score therefore summarizes the weights of all inferred statements about $K$. A positive score means that $K$ is probably satisfied while negative means that $K$ is probably not satisfied. The higher the absolute value of the score is the higher the probability is.
+
+Let $K_1$, ..., $K_n$ be the inferred keys. Let $S_i$ be the score of $K_i$ and $N_i$ be the number of the inferred statements about $K_i$. The precision of the scoring is further enhanced on the base of the following observation. Assume a key $K_i = (C, P, \{L\})$ and $K_j = (C' , P, \{L\})$ where the path $C$ targets ancestors of the elements targeted by $C'$, i.e. the context specified by $C$ covers the context specified by $C'$. In that case it is also said that $K_i$ \emph{covers} $K_j$. It can be easily seen that if $K_i$ is satisfied, $K_j$ must be satisfied as well. On the other hand, if $K_j$ is not satisfied, $K_i$ can not be satisfied too. Therefore, if the score $S_i$ of $K_i$ is positive (i.e. $K_i$ is satisfied), $S_j$ is incremented with $S_i$ and $N_j$ with $N_i$ (i.e. $K_j$ is satisfied as well). Conversely, if the score $S_j$ of $K_j$ is negative (i.e. $K_j$ is not satisfied), $S_i$ is incremented with $S_j$ and $N_i$ with $N_j$ (i.e. $K_i$ can not be satisfied too).
+
+Finally, the scores of the inferred keys are normalized to be comparable with each other. The normalized scores are from the range $\langle -1, 1\rangle$. The normalization takes into account not only the scores summarizing the weights of the statements about keys but also the number of the statements. The normalized score is computed as follows. Let $S^{max}$ be the maximum from $|S_1|$, ..., $|S_n|$ and $N^{max}$ be the maximum from $N_1$, ..., $N_n$. The normalized score $S_i^{norm}$ of $K_i$ is computed as follows:
+$$S_i^{norm} = {S_i \over S^{max}} * (1 - {N^{max} - N_i \over \sum _{i=1}^n N_i})$$
+
+\section{Conclusion}
+The output of our method is a list of scored keys and for each key a list foreign keys referencing the key. The score of a key can be negative or positive. A negative score means that the key is not specified by the XML documents while positive means that it is satisfied. The absolute value of the score means how sure the method are about it.
+
+Because the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.

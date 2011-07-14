@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.Collections;
 import java.util.Arrays;
@@ -201,6 +202,68 @@ public class BaseUtilsTest {
 
     final Set<String> ret = BaseUtils.intersect(arg1, arg2);
     assertEquals(expected, ret);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testRndSubsetEmpty() {
+    System.out.println("rndSubsetEmpty");
+    BaseUtils.rndSubset(null, 0);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testRndSubsetNegative() {
+    System.out.println("rndSubsetNegative");
+    BaseUtils.rndSubset(Arrays.asList(1, 2, 3), -1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testRndSubsetTooMuch() {
+    System.out.println("rndSubsetTooMuch");
+    BaseUtils.rndSubset(Arrays.asList(1, 2, 3), 4);
+  }
+
+  @Test
+  public void testRndSubsetAll1() {
+    System.out.println("rndSubsetAll1");
+    final List<String> ret = BaseUtils.rndSubset(Collections.<String>emptyList(), 0);
+    assertEquals(Collections.<String>emptyList(), ret);
+  }
+
+  @Test
+  public void testRndSubsetAll2() {
+    System.out.println("rndSubsetAll2");
+    final List<String> parameter = Arrays.asList("1", "2", "3");
+    final List<String> ret = BaseUtils.rndSubset(parameter, 3);
+    assertTrue(ret.containsAll(parameter));
+    assertTrue(parameter.containsAll(ret));
+  }
+
+  @Test
+  public void testRndSubsetSome() {
+    System.out.println("rndSubsetSome");
+    final List<String> parameter = Arrays.asList("1", "2", "3", "4", "5");
+    for (int i = 0; i < 6; i++) {
+      final List<String> ret = BaseUtils.rndSubset(parameter, i);
+      assertEquals(i, ret.size());
+      assertTrue(parameter.containsAll(ret));
+    }
+  }
+
+  @Test
+  public void testIsSubset() {
+    System.out.println("isSubset");
+    final Collection<String> set1 = Arrays.asList("a", "b", "c", "d", "e");
+    final Collection<String> set2 = Arrays.asList("a", "b", "c");
+    final Collection<String> set3 = Collections.emptyList();
+
+    assertTrue(BaseUtils.isSubset(set1, set1));
+    assertTrue(BaseUtils.isSubset(set2, set2));
+    assertTrue(BaseUtils.isSubset(set3, set3));
+
+    assertTrue(BaseUtils.isSubset(set2, set1));
+    assertFalse(BaseUtils.isSubset(set1, set2));
+    assertTrue(BaseUtils.isSubset(set3, set1));
+    assertTrue(BaseUtils.isSubset(set3, set2));
   }
 
 }

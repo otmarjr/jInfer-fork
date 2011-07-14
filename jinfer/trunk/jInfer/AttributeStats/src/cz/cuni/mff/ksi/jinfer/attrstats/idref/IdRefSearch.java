@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * TODO vektor Comment!
+ * Utility class to find IDREF attributes in a AM model with known ID set.
  *
  * @author vektor
  */
@@ -37,11 +37,16 @@ public final class IdRefSearch {
   }
 
   /**
-   * TODO vektor Comment!
-   * 
-   * @param model
-   * @param idSet
-   * @return
+   * For a provided AM model and known ID set returns a list of attribute
+   * mapping IDs that can be declared IDREF.
+   *
+   * An attribute mapping can be declared IDREF, if its image is a subset
+   * of the combined image of all AMs in the ID set.
+   *
+   * @param model AM model in context of which the search is performed.
+   * @param idSet ID set for which to find the IDREF AMs.
+   *
+   * @return List of potential IDREF AMs.
    */
   public static List<AttributeMappingId> getIdRefList(final AMModel model, final IdSet idSet) {
     final List<AttributeMappingId> ret = new ArrayList<AttributeMappingId>();

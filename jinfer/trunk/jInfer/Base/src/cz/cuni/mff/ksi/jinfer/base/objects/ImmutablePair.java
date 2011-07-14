@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+
 /**
  * Class representing a generic 2-tuple. Immutable class.
  *
@@ -24,8 +27,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects;
  *
  * @author vektor
  */
-// TODO vektor Rename to ImmutablePair and hide under a Pair interface
-public class Pair<S, T> {
+public class ImmutablePair<S, T> implements Pair<S, T> {
 
   private final S first;
   private final T second;
@@ -35,25 +37,17 @@ public class Pair<S, T> {
    * @param first First member of this pair.
    * @param second Second member of this pair.
    */
-  public Pair(final S first, final T second) {
+  public ImmutablePair(final S first, final T second) {
     this.first = first;
     this.second = second;
   }
 
-  /**
-   * Returns the first member of this pair.
-   *
-   * @return First member of this pair.
-   */
+  @Override
   public S getFirst() {
     return first;
   }
 
-  /**
-   * Returns the second member of this pair.
-   *
-   * @return Second member of this pair.
-   */
+  @Override
   public T getSecond() {
     return second;
   }
@@ -70,8 +64,8 @@ public class Pair<S, T> {
     }
     @SuppressWarnings("unchecked")
     final Pair<S, T> other = (Pair) obj;
-    final boolean firstEqual = equal(first, other.getFirst());
-    final boolean secondEqual = equal(second, other.getSecond());
+    final boolean firstEqual = BaseUtils.equal(first, other.getFirst());
+    final boolean secondEqual = BaseUtils.equal(second, other.getSecond());
     return firstEqual && secondEqual;
   }
 
@@ -82,15 +76,4 @@ public class Pair<S, T> {
     hash = 97 * hash + (this.second != null ? this.second.hashCode() : 0);
     return hash;
   }
-
-  private static <X> boolean equal(final X arg1, final X arg2) {
-    if (arg1 == null && arg2 == null) {
-      return true;
-    }
-    if (arg2 == null) {
-      return false;
-    }
-    return arg1.equals(arg2);
-  }
-
 }

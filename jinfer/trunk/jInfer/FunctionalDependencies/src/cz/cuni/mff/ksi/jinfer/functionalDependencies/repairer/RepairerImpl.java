@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.PathAnswer;
@@ -74,7 +74,7 @@ public class RepairerImpl implements Repairer {
         }
       }
     }
-    
+
     if (!repairs.isEmpty()) {
       List<Repair> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
       Repair repair = mergeRepairs(minimalRepairs);

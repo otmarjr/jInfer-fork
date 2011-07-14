@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.objects;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.MutablePair;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -125,7 +126,7 @@ public class DeletableList<T> {
   public List<T> getLive() {
     final List<T> ret = new ArrayList<T>();
 
-    for (final MutablePair<T, Boolean> p : model) {
+    for (final Pair<T, Boolean> p : model) {
       if (p.getSecond().booleanValue()) {
         ret.add(p.getFirst());
       }

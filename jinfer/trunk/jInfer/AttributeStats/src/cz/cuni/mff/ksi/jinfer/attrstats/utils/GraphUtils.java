@@ -19,7 +19,8 @@ package cz.cuni.mff.ksi.jinfer.attrstats.utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public final class GraphUtils {
       }
     }
 
-    return new Pair<Integer, Integer>(Integer.valueOf(candidates.size()), Integer.valueOf(edgeCount));
+    return new ImmutablePair<Integer, Integer>(Integer.valueOf(candidates.size()), Integer.valueOf(edgeCount));
   }
 
   /**

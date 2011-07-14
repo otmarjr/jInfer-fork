@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimportdom;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -214,7 +215,7 @@ public class DOMHandler {
     // inspect self
     final Element self = inspectSelf(currentNode, tag, ret, context, visited, newContext, newVisited, interval);
     if (self != null) {
-      return new Pair<Element, RegexpInterval>(self, interval);
+      return new ImmutablePair<Element, RegexpInterval>(self, interval);
     } // else the ret element has all the changes needed
 
     // inspect children
@@ -224,7 +225,7 @@ public class DOMHandler {
     if (XSDTag.ELEMENT.equals(tag)) {
       DOMHelper.finalizeElement(ret, newContext);
     }
-    return new Pair<Element, RegexpInterval>(ret, interval);
+    return new ImmutablePair<Element, RegexpInterval>(ret, interval);
   }
 
   private Element inspectSelf(final org.w3c.dom.Element currentNode,

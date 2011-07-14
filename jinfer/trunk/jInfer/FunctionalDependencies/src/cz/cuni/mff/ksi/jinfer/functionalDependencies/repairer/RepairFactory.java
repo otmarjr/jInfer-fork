@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +37,8 @@ public final class RepairFactory {
     for (Repair repair : repairs) {
       if (repair.hasValueRepair()) {
         for (Repair repair1 : repairs) {
-          if (repair1.hasValueRepair() && !repair.equals(repair) && !result.contains(new Pair<Repair, Repair>(repair1, repair))) {
-            result.add(new Pair<Repair, Repair>(repair, repair1));
+          if (repair1.hasValueRepair() && !repair.equals(repair) && !result.contains(new ImmutablePair<Repair, Repair>(repair1, repair))) {
+            result.add(new ImmutablePair<Repair, Repair>(repair, repair1));
           }
         }
       }

@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xsdimportsax;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -347,7 +348,7 @@ public class SAXHandler extends DefaultHandler {
         // can be declared later in the schema than this element
         resolved = tryResolveElementType(TYPE, rule);
         if (!resolved) {
-          unresolved.add(new Pair<String, Element>(TYPE, rule));
+          unresolved.add(new ImmutablePair<String, Element>(TYPE, rule));
           LOG.debug("Can't resolve the type of element '" + rule.getName() + "' on first try.");
         }
       }

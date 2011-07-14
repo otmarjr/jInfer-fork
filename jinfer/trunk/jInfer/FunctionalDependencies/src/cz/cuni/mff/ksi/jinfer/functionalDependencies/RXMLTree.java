@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.Pair;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
@@ -43,7 +43,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
-import org.openide.util.Exceptions;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -245,7 +244,7 @@ public class RXMLTree {
   }
 
   /**
-   * 
+   *
    * @param path
    * @param tuple
    * @param isCreatingTuple
@@ -458,7 +457,7 @@ public class RXMLTree {
       try {
         xPathExpression = xPath.compile(weight.getPath());
         NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
-        
+
         for (int i = 0; i < nodeList.getLength(); i++) {
           Node node = nodeList.item(i);
           nodesMap.get(node).setWeight(weight.getValue().doubleValue());

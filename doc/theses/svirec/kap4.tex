@@ -5,6 +5,7 @@ The main goal of this thesis is to propose an algorithm repairing XML document v
 \begin{itemize}
 	\item Incorporation of weight model into the XML data representation to provide the selection of repair candidates with lowest modification cost.
     \item Involvement of user in the process of finding and applying repair candidates.
+    \item Apply one repair candidate at the time and recalculate repair candidates again to prevent using unnecessary repairs to repair one violation and also to prevent of introducing new violations, which will not be repaired.
     \item The paths which creates a functional dependency are described with XPath language \cite{xpath}, where only paths with basic construction are allowed (only path constructed with "/", "//" or "@", no wildcards, "[]" or another constructs are allowed).
     \item We introduce a new concept of the so-called repair group, which clusters repair candidates (repair repairing one FD violation) repairing the same violation, or modifying the same part of the XML tree.
 \end{itemize}
@@ -115,7 +116,15 @@ First two repair candidates modifies the value of an attribute $@ano$ by assigni
 
 In this section, we introduce a weight model of a repair group, which will be used in the next step of our repair algorithm. Before we define a weight of repair group, let us denote some important notations.
 
-Given a repair candidate $R$, we denote with $Modified_\delta(R)$ the set of nodes modified by $\delta$ function from $R$. Analogously, we denote $Modified_\varrho(R)$ the set of nodes modified by $\varrho$ function.
+Given a repair candidate $R$, we denote with $Modified_\delta(R)$ the set of nodes modified by $\delta$ function from $R$. Analogously, we denote $Modified_\varrho(R)$ the set of nodes modified by $\varrho$ function. The count of nodes modified by repair candidate $R$ is denoted with $\lambda(R)$. At last, we denote $PS(R)$ a set of paths defining all nodes modified by $R$ (example of the set $PS(R)$ is shown in Example \ref{PSExample}).
+
+\begin{example}\label{PSExample}
+Consider XML tree from Fig. \ref{example1} and a repair candidate, which marks nodes $v12$ and $v13$ as unreliable. Then the set $PS(R)$ contains following paths:
+\begin{verbatim}
+/bib/book/title
+/bib/book/title/text()
+\end{verbatim}\qed
+\end{example}
 
 
 Since each repair candidate consists of a set of nodes which are modified (marked as unreliable or has modified value), we can compute cost of each candidate. It is important to say, that in out approach, we prefer repair candidates that modify value of the nodes before those marking nodes as unreliable. Therefore we added the koeficient $k$ to the calculation of the repair candidate cost, so that the repair candidate modifying node value will have lower cost. The definition of repair candidate cost follows:
@@ -144,3 +153,83 @@ Given an RW-XML tree $RXT$ and a repair group $RG$, we define the weight of $RG$
 \subsection{Repair Candidate Selection and Application}
 
 The last step of our algorithm can be divided into two steps, namely selection of the repair candidate and subsequent application of the candidate to RW-XML tree.
+
+\subsubsection{Selection of Repair Candidate}
+
+The previous part of the algorithm computes repair groups containing repair candidates, which can repair violations of provided FDs. From this candidates, we must choose one that will be applied on RW-XML tree. Since we introduced a weight model to the repair group, we can use the weight of repair groups and the cost of repair candidates to choose suitable candidate. In our approach, we introduce two distinct algorithms: first that not involve the user to process of selection and the second one that use the user interaction.
+
+The first algorithm simply selects the first repair group with the lowest weight, and from it the repair candidate with lowest cost is selected.
+
+The latter algorithm allows user to choose the repair candidate which is most suitable for his needs. Very important aspect of all user interactions in this kind of algorithm is that the user will not be willing to select more than ten repairs. We could simply allow user to switch to the first selection algorithm, but that not take in account previous user selections of repair candidates. Therefore we introduce in this algorithm a functionality, that is able from selection done by the user before, guess his next selection.
+
+The function $selectRepairByUser(RGS, SR, t)$, responsible for selection of repair candidate involving user interactivity is shown in Algorithm \ref{selectUser}.
+
+First is decided, if the algorithm is in a state that the user is selecting repair candidates (user selection mode), or the user leaves decision making on the algorithm using his previous selections (guess mode) (line 2). If we are still in user selection mode, the user choose from repair groups sorted by the weight the most convenient repair group, and from this group the user choose the repair candidate that will be applied on RW-XML tree (line 4). Repair candidates in each repair group are also sorted by the cost, working as a hint for the user which repair would be chosen by previous automatic method of selection. Last step of user selection mode is saving the information from selected repair candidate (line 5). This information consists of the FD which this candidate repairs, nodes the repair changes (their paths) and also if the change was a value modification or marking node as unreliable.
+
+If the user has decided not to selecting repair candidates by himself, the algorithm goes into guess mode (staring on line 6). In this mode the algorithm checks all repair groups if some of it containts the repair candidate, that is sufficiently similar with some previously selected repair candidate (line 7-10). This similarity is checked by function \texttt{canBeUsedUserSelection} shown in Algorithm \ref{canUserSel}. If neither of candidates is sufficiently similar, the algorithm choose repair candidate with the lowest cost from the repair group with the lowest weight (line 15-16).
+
+\begin{algorithm}[H]
+\floatname{algorithm}{Function}
+\caption{$selectRepairByUser(RGS, SR, t)$}
+\label{selectUser}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+$RGS$ set of repair groups\\
+$SR$: set of previously selected repair candidates by the user\\
+$t$: modified nodes count treshold of previously selected repair candidates\\}
+\ENSURE $R$: repair candidate
+
+\STATE $R = \emptyset$
+\IF{$isUserSelection()$}
+    \STATE \COMMENT repair candidate selected by user
+    \STATE $R = getRepairFromUser()$
+    \STATE $saveSelectedRepair(SR, R)$
+\ELSE
+    \FORALL{$RG$ in $RGS$}
+        \STATE \COMMENT for all repair candidates in the repair group
+        \FORALL{$RC$ in $RG$}
+            \IF{$canBeUsedUserSelection(SR, t, RC)$}
+                \RETURN $RC$
+            \ENDIF
+        \ENDFOR
+    \ENDFOR
+    \STATE $RG = getFirstRG(RGS)$ \COMMENT get the repair group with smallest weight
+    \STATE $R = getFirstRepairCandidate(RG)$ \COMMENT get the repair candidate with the lowest cost
+\ENDIF
+
+\RETURN $R$
+\end{algorithmic}
+\end{algorithm}
+
+The function \texttt{canBeUsedUserSelection} gets actual repair candidate $RC$, set of all previously selected repair candidates $SR$, modified nodes count treshold $t$ from interval $(0,1]$ of previously selected repair candidate and determine if $RC$ is sufficiently similar as some repair candidate from $SR$. To be similar with some previously selected repair candidate $S$, $RC$ must repair the same $FD$ as $S$, it must use the same update operation as $S$ and $\lambda(RC) \geq \lceil\lambda(S) \times t\rceil$ (line 2). Furthermore, if $\lambda(RC) = \lceil\lambda(S) \times t\rceil$, set of paths $PS(RC)$ must be a subset of $PS(S)$ (line 3). Otherwise, if $\lambda(RC) > \lceil\lambda(S) \times t\rceil$, there must exists a subset of $PS(S)$ with $\lceil\lambda(S) \times t\rceil$ elements that is subset of $PS(RC)$. In other words, without taking into account the treshold $t$, if a repair candidate $R_1$ modifies some nodes, the sufficiently similar repair candidate $R_2$ is such that modifies at least the same nodes as $R_1$ (when we say the same nodes we mean same paths representing those nodes). The treshold $t$ can reduce count of modified nodes of some previously selected repair candidate $R_1$, which means that sufficiently similar repair candidate needs to modify fewer nodes that are similar with nodes modified by $R_1$. In Example \ref{tresholdExample} is shown the usage of the treshold $t$.
+
+
+\begin{algorithm}
+\floatname{algorithm}{Function}
+\caption{$canBeUsedUserSelection(SR, t, RC)$}
+\label{canUserSel}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+$SR$: set of previously selected repair candidates by the user\\
+$t$: suitability treshold $(0,1]$ of previously selected repair candidates\\
+$RC$: actual repair candidate}
+\ENSURE \TRUE\ if actual repair candidate is similar to some previous one.
+\FORALL{$S$ in $SR$}
+    \IF{$S$ repairs the same FD as $RC$ \AND $S$ use the same update operation as $RC$ \AND $\lceil\lambda(SC) \times t\rceil \leq \lambda(RC)$}
+        \IF{$\lceil\lambda(SC) \times t\rceil = \lambda(RC)$ \AND $PS(RC) \subseteq PS(SC)$}
+            \RETURN \TRUE
+        \ENDIF
+        \IF{$\lceil\lambda(SC) \times t\rceil < \lambda(RC)$ \AND there exists a subset $s$ of $PS(SC)$ with $\lceil\lambda(SC) \times t\rceil$ elements, that $s \subseteq$ $PS(RC)$}
+            \RETURN \TRUE
+        \ENDIF
+   \ENDIF
+\ENDFOR
+\RETURN \FALSE
+\end{algorithmic}
+\end{algorithm}
+
+\begin{example}\label{tresholdExample}
+Consider repair candidate $R_1$ selected by user, that marks as unreliable two nodes and $PS(R_1) = \{/bib/book/title, /bib/book/title/text()\}$. Next consider repair candidate $R_2$ with $PS(R_2) = \{/bib/book/title/text()\}$, that the modified node is marked as unreliable and both $R_1$ and $R_2$ repairs the same $FD$. If treshold $t=1$, $R_2$ is not considered as sufficiently similar to $R_1$, because $\lceil\lambda(R_1) \times t\rceil > \lambda(R_2)$. However, if treshold is $t=0.5$, $\lceil\lambda(R_1) \times t\rceil = \lambda(R_2)$ and $PS(R_2) \subseteq PS(R_1)$, then $R_2$ is sufficiently similar to $R_1$.\qed
+\end{example}
+
+\subsubsection{Application of Repair Candidate}

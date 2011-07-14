@@ -26,8 +26,8 @@ import java.util.List;
  */
 public interface RuleDisplayer extends NamedModule {
 
-  public static final String RULE_DISPLAYER_PROP = "rule.displayer";
-  public static final String RULE_DISPLAYER_DEFAULT = "TreeRuleDisplayer";
+  String RULE_DISPLAYER_PROP = "rule.displayer";
+  String RULE_DISPLAYER_DEFAULT = "TreeRuleDisplayer";
 
   /**
    * Creates rule displayer window in which rules are displayed.

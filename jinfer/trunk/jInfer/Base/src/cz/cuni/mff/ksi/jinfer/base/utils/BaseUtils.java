@@ -185,8 +185,10 @@ public final class BaseUtils {
    * @param count Requested size of the subset.
    * @return List of randomly picked elements of the collection.
    */
-  // TODO vektor JUnit test
   public static <T> List<T> rndSubset(final Collection<T> c, final int count) {
+    if (c == null) {
+      throw new IllegalArgumentException("Expecting non-null parameter");
+    }
     if (count < 0) {
       throw new IllegalArgumentException("Size of the subset cannot be negative: " + count);
     }
@@ -206,7 +208,18 @@ public final class BaseUtils {
     return ret;
   }
 
-  // TODO vektor Comment, JUnit test!
+  /**
+   * Checks whether the first collection provided is a subset of the second
+   * collection provided.
+   *
+   * @param <T> Type of the collections.
+   * @param l1 First collection.
+   * @param l2 Second collection.
+   *
+   * @return <code>true</code> if the first collection is a subset of the second
+   *   (every item of the first is contained in the second), <code>false</code>
+   *   otherwise.
+   */
   public static <T> boolean isSubset(final Collection<T> l1, final Collection<T> l2) {
     return l2.containsAll(l1);
   }

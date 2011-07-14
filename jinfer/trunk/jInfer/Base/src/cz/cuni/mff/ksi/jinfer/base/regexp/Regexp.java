@@ -56,7 +56,7 @@ public class Regexp<T> {
 
   /**
    * Creates immutable regexp. This is the default.
-   * 
+   *
    * @param content content of token regexp or null for not-tokens
    * @param children children of concatenations, alternation and permutation regexps
    * @param type type of regexp
@@ -71,7 +71,7 @@ public class Regexp<T> {
 
   /**
    * Create new regexp given all fields.
-   * 
+   *
    * @param content content of token regexp or null for not-tokens
    * @param children children of concatenations, alternation and permutation regexps
    * @param type type of regexp
@@ -130,7 +130,7 @@ public class Regexp<T> {
 
   /**
    * Get immutable lambda regexp.
-   * 
+   *
    * @param <T>
    * @return
    */
@@ -140,7 +140,7 @@ public class Regexp<T> {
 
   /**
    * Get immutable token regexp.
-   * 
+   *
    * @param <T>
    * @param content symbol of regexp
    * @param interval associated interval, e.g. {3,7}
@@ -152,7 +152,7 @@ public class Regexp<T> {
 
   /**
    * Get immutable token regexp with interval set to {1, 1}.
-   * 
+   *
    * @param <T>
    * @param content symbol of regexp
    * @return
@@ -175,7 +175,7 @@ public class Regexp<T> {
 
   /**
    * Get immutable concatenation regexp with interval set to {1, 1}.
-   * 
+   *
    * @param <T>
    * @param children of this regexp, that are subregexps.
    * @return
@@ -228,7 +228,7 @@ public class Regexp<T> {
 
   /**
    * Set content of the regexp if it is mutable.
-   * 
+   *
    * Throws exception when regexp is immutable.
    * @param content
    */
@@ -263,7 +263,7 @@ public class Regexp<T> {
 
   /**
    * Set type of regexp when it is mutable, throws exception when regexp is immutable.
-   * 
+   *
    * @param type desired type
    */
   public void setType(final RegexpType type) {
@@ -284,7 +284,7 @@ public class Regexp<T> {
 
   /**
    * Set interval of regexp when it is mutable, throws exception when regexp is immutable.
-   * 
+   *
    * @param interval desired interval
    */
   public void setInterval(final RegexpInterval interval) {
@@ -318,7 +318,7 @@ public class Regexp<T> {
 
   /**
    * Shorthand for getChildren().get().
-   * 
+   *
    * @param i Which child to fetch.
    * @return I-th child.
    */
@@ -343,7 +343,7 @@ public class Regexp<T> {
   /**
    * Returns all tokens contained in this regular expression, inorder from
    * the left to the right.
-   * 
+   *
    * @return All tokens of this regexp.
    */
   @SuppressWarnings({"unchecked", "PMD.MissingBreakInSwitch"})
@@ -368,7 +368,7 @@ public class Regexp<T> {
 
   /**
    * If it is token type.
-   * 
+   *
    * @return true iff type of this regexp equals RegexpType.TOKEN
    */
   public boolean isToken() {
@@ -377,7 +377,7 @@ public class Regexp<T> {
 
   /**
    * If it is concatenation type.
-   * 
+   *
    * @return true iff type of this regexp equals RegexpType.CONCATENATION
    */
   public boolean isConcatenation() {
@@ -386,7 +386,7 @@ public class Regexp<T> {
 
   /**
    * If it is alternation.
-   * 
+   *
    * @return true iff type of this regexp equals RegexpType.ALTERNATION
    */
   public boolean isAlternation() {
@@ -395,7 +395,7 @@ public class Regexp<T> {
 
   /**
    * If it is permutation.
-   * 
+   *
    * @return true iff type of this regexp equals RegexpType.PERMUTATION
    */
   public boolean isPermutation() {
@@ -471,7 +471,7 @@ public class Regexp<T> {
 
   /**
    * Returns the suffix of this concatenation, from parameter <code>from</code> to the end.
-   * 
+   *
    * @param from
    * @return TODO vektor Comment
    */

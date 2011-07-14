@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 anti
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -67,7 +67,7 @@ public class Step<T> {
    * And destination, simple.
    */
   private State<T> destination;
-  private List<List<T>> inputStrings;
+  private final List<List<T>> inputStrings;
 
   /**
    * All settings at one constructor. In time of creating step, states from and to
@@ -77,7 +77,7 @@ public class Step<T> {
    * @param source
    * @param destination
    * @param useCount
-   * @param minUseCount  
+   * @param minUseCount
    */
   public Step(final T acceptSymbol, final State<T> source, final State<T> destination, final int useCount, final int minUseCount) {
     this.acceptSymbol= acceptSymbol;
@@ -117,20 +117,20 @@ public class Step<T> {
   }
 
   /**
-   * @return 
+   * @return
    */
   public int getMinUseCount() {
     return minUseCount;
   }
 
   /**
-   * 
-   * @param minUseCount 
+   *
+   * @param minUseCount
    */
-  public void setMinUseCount(int minUseCount) {
+  public void setMinUseCount(final int minUseCount) {
     this.minUseCount = minUseCount;
   }
-  
+
   /**
    * Increment useCount by one, useful in PTA build procedure
    */
@@ -144,7 +144,7 @@ public class Step<T> {
    * A -5-> B
    * to one step
    * A -7-> B
-   * 
+   *
    * @param i
    */
   public void incUseCount(final Integer i) {
@@ -153,9 +153,9 @@ public class Step<T> {
 
   /**
    * TODO anti comment
-   * @param anotherMinUseCount 
+   * @param anotherMinUseCount
    */
-  public void incMinUseCount(int anotherMinUseCount) {
+  public void incMinUseCount(final int anotherMinUseCount) {
     this.setMinUseCount(anotherMinUseCount + this.minUseCount);
   }
 
@@ -165,7 +165,7 @@ public class Step<T> {
   public void incMinUseCount() {
     this.incMinUseCount(1);
   }
-  
+
   /**
    * @return the source
    */
@@ -194,18 +194,18 @@ public class Step<T> {
     this.destination = destination;
   }
 
-  public void removeInputString(List<T> inputString) {
+  public void removeInputString(final List<T> inputString) {
     this.inputStrings.remove(inputString);
   }
-  
-  public void addInputString(List<T> inputString) {
+
+  public void addInputString(final List<T> inputString) {
     this.inputStrings.add(inputString);
   }
-  
-  public void addAllInputStrings(Collection<List<T>> inputStrings) {
+
+  public void addAllInputStrings(final Collection<List<T>> inputStrings) {
     this.inputStrings.addAll(inputStrings);
   }
-  
+
   public List<List<T>> getInputStrings() {
     return this.inputStrings;
   }

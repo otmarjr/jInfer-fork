@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2011 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,11 +33,11 @@ import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
  * <code>
  * EqualityUtils.sameElements(e1, e2, EqualityUtils.IGNORE_METADATA | EqualityUtils.IGNORE_NAME)
  * </code>
- * 
+ *
  * <p>
  *   to ignore metadata and names of provided elements.
  * </p>
- * 
+ *
  * @author vektor
  */
 public final class EqualityUtils {
@@ -62,7 +62,7 @@ public final class EqualityUtils {
 
   /**
    * Compares two elements, ignoring specified features.
-   * 
+   *
    * @param e1 Element 1 to compare.
    * @param e2 Element 2 to compare.
    * @param ignore Bitmap of flags to compare. Combine multiple flags with a
@@ -94,7 +94,7 @@ public final class EqualityUtils {
 
   /**
    * Compares two simple data, ignoring specified features.
-   * 
+   *
    * @param sd1 Simple data 1 to compare.
    * @param sd2 Simple data 2 to compare.
    * @param ignore Bitmap of flags to compare. Combine multiple flags with a
@@ -186,12 +186,10 @@ public final class EqualityUtils {
       return false;
     } else if (!i1.isUnbounded() && i2.isUnbounded()) {
       return false;
-    } else if (!i1.isUnbounded() && !i2.isUnbounded()) {
-      if (i1.getMax() != i2.getMax()) {
-        return false;
-      }
+    } else if (!i1.isUnbounded() && !i2.isUnbounded() && i1.getMax() != i2.getMax()) {
+      return false;
     }
-    
+
     if (i1.getMin() != i2.getMin()) {
       return false;
     }

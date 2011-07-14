@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 anti
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
  * Non-deterministic form is not solved by automaton itself. The merging algorithm
  * has to deal with this opportunity is it gives bad order of merging states.
  * But it can let it non-deterministic by design.
- * 
+ *
  * @author anti
  */
 public class Automaton<T> {
@@ -94,7 +94,7 @@ public class Automaton<T> {
    * As in mergedStates, but in opposing direction. Holds information about
    * all the states, that merged to "key" in map. When X merges into Y,
    * this is done: reverseMergedStates.get(Y).add(X)
-   * 
+   *
    */
   protected final Map<State<T>, Set<State<T>>> reverseMergedStates;
   /** TODO anti comment */
@@ -196,7 +196,7 @@ public class Automaton<T> {
   /**
    * Given symbolString, iterates through it and follows steps in automaton. When there
    * isn't a step to follow, new state and step is created. Resulting in tree-formed automaton.
-   * 
+   *
    * @param symbolString - list of symbols (one word from accepting language)
    */
   public void buildPTAOnSymbol(final List<T> symbolString) {
@@ -218,14 +218,14 @@ public class Automaton<T> {
     xState.incFinalCount();
   }
 
-  private State<T> buildPTAOnRegexpExpandStep(State<T> fromState, Regexp<T> regexp) {
+  private State<T> buildPTAOnRegexpExpandStep(final State<T> fromState, final Regexp<T> regexp) {
     switch (regexp.getType()) {
       case TOKEN:
-        Step<T> outStep = this.getOutStepOnSymbol(fromState, regexp.getContent());
+        final Step<T> outStep = this.getOutStepOnSymbol(fromState, regexp.getContent());
         State<T> newState;
         if (outStep == null) {
           newState = this.createNewState();
-          Step<T> newStep = this.createNewStep(regexp.getContent(), fromState, newState);
+          final Step<T> newStep = this.createNewStep(regexp.getContent(), fromState, newState);
           newStep.setUseCount(0);
           newStep.setMinUseCount(0);
         } else {
@@ -247,7 +247,7 @@ public class Automaton<T> {
         }
         return prevState;
       case ALTERNATION:
-        List<State<T>> endStates = new LinkedList<State<T>>();
+        final List<State<T>> endStates = new LinkedList<State<T>>();
         for (Regexp<T> ch : regexp.getChildren()) {
           endStates.add(buildPTAOnRegexpExpandStep(fromState, ch));
         }
@@ -272,8 +272,8 @@ public class Automaton<T> {
       case TOKEN:
       case CONCATENATION:
       case ALTERNATION:
-        Regexp<T> nR = AutomatonRegexpIntervalExpander.expandIntervalsRegexp(regexp);
-        State<T> fS = buildPTAOnRegexpExpandStep(initialState, nR);
+        final Regexp<T> nR = AutomatonRegexpIntervalExpander.expandIntervalsRegexp(regexp);
+        final State<T> fS = buildPTAOnRegexpExpandStep(initialState, nR);
         fS.incFinalCount();
         break;
       default:
@@ -484,7 +484,7 @@ public class Automaton<T> {
 
   /**
    * @return the delta
-   * 
+   *
    */
   public Map<State<T>, Set<Step<T>>> getDelta() {
     return delta;

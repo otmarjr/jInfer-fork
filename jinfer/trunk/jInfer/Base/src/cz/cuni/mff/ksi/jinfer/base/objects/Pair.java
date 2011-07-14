@@ -64,8 +64,8 @@ public class Pair<S, T> {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof Pair)) {
+  public boolean equals(final Object obj) {
+    if (!(obj instanceof Pair)) {
       return false;
     }
     @SuppressWarnings("unchecked")

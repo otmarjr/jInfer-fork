@@ -17,11 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.openide.util.NbPreferences;
 import org.openide.windows.WindowManager;
 
 /**

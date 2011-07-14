@@ -82,8 +82,8 @@ public class MutablePair<S, T> {
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof MutablePair)) {
+  public boolean equals(final Object obj) {
+    if (!(obj instanceof MutablePair)) {
       return false;
     }
     @SuppressWarnings("unchecked")

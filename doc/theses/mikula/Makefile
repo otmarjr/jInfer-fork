@@ -1,29 +1,25 @@
-default: all
-
-%.dvi: %.tex literature.bib Makefile
-	rm -f *.toc
-	latex -interaction=nonstopmode $< 
-	bibtex $(<:.tex=.aux)
-	latex -interaction=nonstopmode $<
-	latex -interaction=nonstopmode $< 
-
-%.pdf: %.dvi
-	dvipdfmx $<
-
-%.html: %.tex literature.bib Makefile
-	rm -f *.toc
-	hevea -O -pedantic $<
-	bibtex $(<:.tex=.aux)
-	hevea -O -pedantic $<
-	hevea -O -pedantic $<
-
-%.eps: %.gv Makefile
-	dot -Teps $< > $@
-	dot -Tpng $< > $(@:.eps=.png)
-
 all: diplomka.pdf
 
+# Vyroba PDF primo z DVI by byla prijemnejsi, ale vetsina verzi dvipdfm nici obrazky
+# prace.pdf: prace.dvi
+#	dvipdfm -o $@ -p a4 -r 600 $<
+
+diplomka.pdf: diplomka.ps
+	ps2pdf $< $@
+
+diplomka.ps: diplomka.dvi
+	dvips -o $@ -D600 -t a4 $<
+
+# LaTeX je potreba spustit dvakrat, aby spravne spocital odkazy
+diplomka.dvi: diplomka.tex *.bib $(wildcard *.tex)
+	rm -f *.toc
+	latex diplomka
+	bibtex diplomka
+	latex diplomka
+	latex diplomka
+
 clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux *.pdf
+	rm -f *.{log,out,aux,toc,bbl,blg,slo,srs}
+
 dist-clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf 
+	rm -f *.{log,dvi,aux,toc,lot,out,bbl,blg,slo,srs} diplomka.ps diplomka.pdf

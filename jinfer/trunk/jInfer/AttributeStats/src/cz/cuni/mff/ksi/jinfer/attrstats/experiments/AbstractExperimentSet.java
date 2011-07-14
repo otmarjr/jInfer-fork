@@ -42,7 +42,8 @@ public abstract class AbstractExperimentSet {
 
         @Override
         public void experimentFinished(final Experiment e) {
-          LOG.info(e.getReport());
+          LOG.info(e.getCsv());
+          LOG.info(e.getWinner());
           synchronized (monitor) {
             monitor.notifyAll();
           }

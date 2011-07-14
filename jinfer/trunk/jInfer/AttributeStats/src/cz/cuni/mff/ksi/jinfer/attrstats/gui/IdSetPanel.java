@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats.gui;
 
+import cz.cuni.mff.ksi.jinfer.attrstats.idref.IdRefSearch;
+import java.util.List;
 import cz.cuni.mff.ksi.jinfer.attrstats.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.attrstats.objects.AttributeMappingId;
@@ -36,7 +38,9 @@ public class IdSetPanel extends JPanel {
 
   private static final long serialVersionUID = 187541L;
 
+  private AMModel model;
   private IdSet idSet;
+  private List<AttributeMappingId> idRefCache;
 
   public IdSetPanel() {
     super();
@@ -56,12 +60,20 @@ public class IdSetPanel extends JPanel {
    */
   public void setModel(final IdSet idSet, final AMModel model,
           final double alpha, final double beta) {
+    this.model = model;
     this.idSet = idSet;
     Collections.sort(this.idSet.getMappings());
 
     table.setModel(new MappingsModel(idSet.getMappings()));
     weight.setText(Utils.FORMAT.format(model.weight(idSet.getMappings(), alpha, beta)));
     optimal.setText(Utils.boolToString(idSet.isOptimal()));
+  }
+
+  private List<AttributeMappingId> getIdRef() {
+    if (idRefCache == null) {
+      idRefCache = IdRefSearch.getIdRefList(model, idSet);
+    }
+    return idRefCache;
   }
 
   @SuppressWarnings({"unchecked", "PMD"})
@@ -75,6 +87,7 @@ public class IdSetPanel extends JPanel {
     labelOptimal = new javax.swing.JLabel();
     weight = new javax.swing.JTextField();
     optimal = new javax.swing.JTextField();
+    idRef = new javax.swing.JCheckBox();
 
     setPreferredSize(new java.awt.Dimension(300, 200));
     setLayout(new java.awt.GridBagLayout());
@@ -97,7 +110,7 @@ public class IdSetPanel extends JPanel {
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridwidth = 5;
+    gridBagConstraints.gridwidth = 6;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
@@ -137,8 +150,32 @@ public class IdSetPanel extends JPanel {
     gridBagConstraints.gridy = 1;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(optimal, gridBagConstraints);
+
+    idRef.setText("Show IDREF attributes"); // NOI18N
+    idRef.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        idRefActionPerformed(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 5;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(idRef, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
+
+  private void idRefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idRefActionPerformed
+    if (idRef.isSelected()) {
+      table.setModel(new MappingsModel(getIdRef()));
+    }
+    else {
+      table.setModel(new MappingsModel(idSet.getMappings()));
+    }
+  }//GEN-LAST:event_idRefActionPerformed
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JCheckBox idRef;
   private javax.swing.JLabel labelOptimal;
   private javax.swing.JLabel labelWeight;
   private javax.swing.JTextField optimal;

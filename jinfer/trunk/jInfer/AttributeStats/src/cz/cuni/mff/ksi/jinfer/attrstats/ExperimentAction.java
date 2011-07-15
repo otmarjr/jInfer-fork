@@ -26,10 +26,12 @@ import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionID;
 import org.openide.util.NbBundle.Messages;
 
-@ActionID(category = "Build",
-id = "cz.cuni.mff.ksi.jinfer.attrstats.ExperimentAction")
-@ActionRegistration(iconBase = "cz/cuni/mff/ksi/jinfer/attrstats/graphics/attr-icon-16.png",
-displayName = "#CTL_ExperimentAction")
+@ActionID(
+        category = "Build",
+        id = "cz.cuni.mff.ksi.jinfer.attrstats.ExperimentAction")
+@ActionRegistration(
+        iconBase = "cz/cuni/mff/ksi/jinfer/attrstats/graphics/experiment.png",
+        displayName = "#CTL_ExperimentAction")
 @ActionReferences({
   @ActionReference(path = "Toolbars/Build", position = 500)
 })

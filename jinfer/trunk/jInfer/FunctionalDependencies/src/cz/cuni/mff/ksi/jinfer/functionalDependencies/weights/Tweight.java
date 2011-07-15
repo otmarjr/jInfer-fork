@@ -97,6 +97,10 @@ public class Tweight {
     
     return this.getPath().equals(weight.getPath()) && this.getValue().equals(weight.getValue());
   }
+  
+  public boolean isInInterval() {
+    return value.doubleValue() >= 0 && value.doubleValue() <= 1;
+  }
     
     
 

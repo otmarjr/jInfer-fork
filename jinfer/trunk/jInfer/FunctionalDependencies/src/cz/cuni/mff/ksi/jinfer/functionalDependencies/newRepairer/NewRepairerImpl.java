@@ -56,11 +56,14 @@ public class NewRepairerImpl implements Repairer {
   public void start(InitialModel model, RepairerCallback callback) throws InterruptedException {
     LOG.info("This is NEW repairer");
     List<RXMLTree> result = new ArrayList<RXMLTree>();
+    
+    final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
+    double coeffK = Double.parseDouble(prop.getProperty(RepairerPropertiesPanel.COEFF_K_PROP, RepairerPropertiesPanel.COEFF_K_DEFAULT));
 
     List<FD> functionalDependencies = model.getFunctionalDependencies();
     for (RXMLTree rXMLTree : model.getTrees()) {
 //      if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
-        RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies);
+        RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies, coeffK);
         if (repairedTree != null) {
           result.add(repairedTree);
         }
@@ -72,22 +75,22 @@ public class NewRepairerImpl implements Repairer {
     return;
   }
 
-  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) throws InterruptedException {
+  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
     while (rXMLTree.isInconsistent(functionalDependencies)) {
-      repairRXMLTree2(rXMLTree, functionalDependencies);
+      repairRXMLTree2(rXMLTree, functionalDependencies, coeffK);
     }
 
     return rXMLTree;
   }
 
-  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies) throws InterruptedException {
+  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
     List<Repair> repairs = new ArrayList<Repair>();
     for (FD fd : functionalDependencies) {
       if (!rXMLTree.isSatisfyingFDThesis(fd)) {
         LOG.debug("XML is inconsistent to FD " + fd.toString());
         List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFDThesis(rXMLTree, fd);
         for (Pair<Tuple, Tuple> tuplePair : tuplePairNotSatisfyingFD) {
-          repairs.addAll(computeRepairs(rXMLTree, tuplePair, fd));
+          repairs.addAll(computeRepairs(rXMLTree, tuplePair, fd, coeffK));
         }
       }
     }
@@ -106,7 +109,7 @@ public class NewRepairerImpl implements Repairer {
     return repairPicker.getRepair(tree);
   }
 
-  private Collection<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {
+  private Collection<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd, final double coeffK) {
     Set<Repair> result = new HashSet<Repair>();
     RepairGroup repairGroup = new RepairGroup(fd);
 
@@ -116,17 +119,17 @@ public class NewRepairerImpl implements Repairer {
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK));
       }
     } else {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK));
       }
     }
 
@@ -135,11 +138,11 @@ public class NewRepairerImpl implements Repairer {
       t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue(), tree));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue(), tree));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK));
       } else {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK));
       }
     }
 

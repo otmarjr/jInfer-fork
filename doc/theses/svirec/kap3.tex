@@ -59,7 +59,25 @@ $(\varrho(p_i(t_1)) = false) \lor (\varrho(p_i(t_2)) = false)$;
 \end{enumerate}
 \end{define}
 
-The repair of an R-XML tree which not satisfies $\mathcal{FD}$ set of functional dependencies is a pair of functions $\delta'$ and $\varrho'$ such that $RXT'$ tree composed of the original tree and the repair ($RXT' = \langle T, \delta' \cdot \delta, \varrho' \cdot \varrho \rangle$) weakly satisfies FD ($RXT' \models_w \mathcal{FD}$).\\
+The repair of an R-XML tree which not satisfies $\mathcal{FD}$ set of functional dependencies is a pair of functions $\delta'$ and $\varrho'$ such that $RXT'$ tree composed of the original tree and the repair ($RXT' = \langle T, \delta' \cdot \delta, \varrho' \cdot \varrho \rangle$) weakly satisfies FD ($RXT' \models_w \mathcal{FD}$). The composition of the R-XML tree and the repair (i.e. composition of their $\delta$ and $\varrho$ functions) is defined as follows:
+
+\begin{define}[Composition of $\delta$ functions]\label{compDelta}
+The composition of two functions $\delta_1$ and $\delta_2$ asssociating values to leaf nodes is
+\begin{displaymath}
+    \delta_1 \cdot \delta_2(n) =
+        \begin{cases}
+            \delta_1(n) & \text{if $\delta_1(n)$ is defined over $n$,}\\
+            \delta_2(n) & \text{otherwise (i.e. $\delta_1(n)$ is not defined over $n$).}
+        \end{cases}
+\end{displaymath}\qed
+\end{define}
+
+\begin{define}[Composition of $\varrho$ functions]\label{compVarrho}
+The composition of two reliability functions $\varrho_1$ and $\varrho_2$ asssociating boolean value to nodes is $$\varrho_1 \cdot \varrho_2(n) = min(\varrho_1(n), \varrho_2(n)),$$ where to the boolean value $true$ (resp. $false$) is associated value 1 (resp. 0).
+\qed
+\end{define}
+
+
 With a repair $\langle \delta, \varrho \rangle$ of R-XML tree and a set of labelled nodes $N$ of this tree, we denote with $Update_{\delta}(N)$ the set of nodes modified by $\delta$. Analogously, we denote $True_{\varrho}(N) = \{n \in N| \varrho(n) = true\}$ and $False_{\varrho}(N) =\{n \in N | \varrho(n) = false\}$.
 
 \begin{define}[Minimal Repair]

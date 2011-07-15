@@ -13,7 +13,7 @@ The main goal of this thesis is to propose an algorithm repairing XML document v
 
 \section{Repairing Algorithm}
 
-The proposed algorithm is based on the algorithm described in Section \ref{RepConstAnswers} presented in \cite{RepAndConsistentAnswer}. This algorithm was chosen beacause of simple representation of the XML data using a concept which corresponds with concept used in relational databases. Another reason is using besides modification of node value as an update operation also marking particular node information as unreliable, which can reveal forgotten inconsistencies in the data.
+The proposed algorithm is based on the algorithm described in Section \ref{RepConstAnswers} presented in \cite{RepAndConsistentAnswer}. This algorithm was chosen because of simple representation of the XML data using a concept which corresponds with concept used in relational databases. Another reason is using besides modification of node value as an update operation also marking particular node information as unreliable, which can reveal forgotten inconsistencies in the data.
 
 \begin{algorithm}
 \caption{Repair RW-XML tree}
@@ -40,7 +40,7 @@ $\mathcal{FD} = {F_1, \dots, F_m}$: Set of functional dependencies}
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm is splitted into three steps, where second and third step are repeated until all violations are repaired. In the first step, XML document and FDs are loaded, and XML tree with corresponding tree tuples are created. Next step of the algorithm computes repair groups containting repair candidates for FD violations. In the third step chosen repair candidate is applied to an XML tree. In Algorithm \ref{propAlgo} we can see the simplified process of repairing XML FD violations, which covers second and third step of the whole algorithm.
+The algorithm is split into three steps, where second and third step are repeated until all violations are repaired. In the first step, XML document and FDs are loaded, and XML tree with corresponding tree tuples are created. Next step of the algorithm computes repair groups containing repair candidates for FD violations. In the third step chosen repair candidate is applied to an XML tree. In Algorithm \ref{propAlgo} we can see the simplified process of repairing XML FD violations, which covers second and third step of the whole algorithm.
 
 \subsection{Initial data model}
 
@@ -50,7 +50,7 @@ To represent an XML document we use an extended R-XML tree (Definition \ref{rxml
 A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $[0,1]$.\qed
 \end{define}
 
-After creating RW-XML tree from input XML data, set of tree tuples (defined in Definition \ref{treeTuple}) are constucted. Since a set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer of the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on costructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
+After creating RW-XML tree from input XML data, set of tree tuples (defined in Definition \ref{treeTuple}) are constructed. Since a set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer of the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on constructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
 
 Functional dependencies as defined in Definition \ref{fd1} consists of paths described with XPath. As was described before, these paths can only have basic construction shown in Example \ref{pathsExample}.
 
@@ -65,15 +65,15 @@ Example of paths that can be used in functional dependencies:
 
 \subsection{Computing Repair Groups}
 
-With created RW-XML tree $RWXT$ and corresponding tree tuples from an input data, we can now procceed to compute repair groups. Repair group is a set of repair candidates, which repairs the same FD or modifies the same part of $RWXT$. Each repair candidate is a pair of functions $\delta$ and $\varrho$ ($\langle \delta, \varrho \rangle$), where either modifies value of an RW-XML tree node ($\delta$ is defined) or marking a node as unreliable ($\varrho$ is definded). The $\delta$ function of repair candidate is defined same as in the XML tree (Definition \ref{xmlTree}) and defines new value of the RW-XML tree node. Similarly, $\varrho$ function defines the node which is marked as unreliable.
+With created RW-XML tree $RWXT$ and corresponding tree tuples from an input data, we can now proceed to compute repair groups. Repair group is a set of repair candidates, which repairs the same FD or modifies the same part of $RWXT$. Each repair candidate is a pair of functions $\delta$ and $\varrho$ ($\langle \delta, \varrho \rangle$), where either modifies value of an RW-XML tree node ($\delta$ is defined) or marking a node as unreliable ($\varrho$ is defined). The $\delta$ function of repair candidate is defined same as in the XML tree (Definition \ref{xmlTree}) and defines new value of the RW-XML tree node. Similarly, $\varrho$ function defines the node which is marked as unreliable.
 
 To be able to compute repair groups, we need to decide for which FDs violates $RWXT$. This can be achieved by finding all tree tuple pairs that not weakly satisfies particular FD (Definition \ref{weakSatisf}). For each tuple pair is then computed repair group (line 6 in Algorithm \ref{propAlgo}).
 
-The function \texttt{computeRepairGroup}, responsible for creating the repair group, is shown in Algorithm \ref{repairGroupAlgo}. The function gets RW-XML tree, a functional dependency $F$, tuples $t_1$, $t_2$ and a set of repair groups $RGS$ and computes the repair group containig repair candidates as follows:
+The function \texttt{computeRepairGroup}, responsible for creating the repair group, is shown in Algorithm \ref{repairGroupAlgo}. The function gets RW-XML tree, a functional dependency $F$, tuples $t_1$, $t_2$ and a set of repair groups $RGS$ and computes the repair group containing repair candidates as follows:
 
 \begin{enumerate}
 	\item First repair candidates are created using function $computeRepairs$ from Algorithm \ref{repAlgo} (line 1).Since R-XML tree is a special case of RW-XML tree where all weights are equal to zero, we can pass RW-XML tree as a parameter to this function.
-    \item Next is checked if repair candidates intersect another candidades from existing repair groups (line 2)
+    \item Next is checked if repair candidates intersect another candidates from existing repair groups (line 2)
     \begin{itemize}
     	\item If the candidates intersect with some group, they are added to this group (line 3)
         \item Otherwise new repair group containing repair candidates is created (line 5)
@@ -127,21 +127,21 @@ Consider XML tree from Fig. \ref{example1} and a repair candidate, which marks n
 \end{example}
 
 
-Since each repair candidate consists of a set of nodes which are modified (marked as unreliable or has modified value), we can compute cost of each candidate. It is important to say, that in out approach, we prefer repair candidates that modify value of the nodes before those marking nodes as unreliable. Therefore we added the koeficient $k$ to the calculation of the repair candidate cost, so that the repair candidate modifying node value will have lower cost. The definition of repair candidate cost follows:
+Since each repair candidate consists of a set of nodes which are modified (marked as unreliable or has modified value), we can compute cost of each candidate. It is important to say, that in out approach, we prefer repair candidates that modify value of the nodes before those marking nodes as unreliable. Therefore we added the coefficient $k$ to the calculation of the repair candidate cost, so that the repair candidate modifying node value will have lower cost. The definition of repair candidate cost follows:
 
 \begin{define}[Repair Candidate Cost]
 Given an RW-XML tree $RXT$ and a repair candidate $R$, we define the cost of $R$ as:
 $$cost(R) = \sum_{u \in Modified_\delta(R)} \omega(u) + \sum_{v \in Modified_\varrho(R)} \omega(v) \times k,$$
-where $k$ is koeficient determining a priority of the repair candidate modifying value of node before that  marking node as unreliable.\qed
+where $k$ is coefficient determining a priority of the repair candidate modifying value of node before that  marking node as unreliable.\qed
 \end{define}
 
 By default is $k$ set to value that cost of repair candidate marking unreliable node will be higher than the one that modifies node value. However this is another place, where can user intervene and change the priority of repair candidates. We show in Example \ref{koefK}, how $k$ can change costs of repair candidates.
 
 \begin{example}\label{koefK}
-Consider XML tree $XT$ and repair candidates from Example \ref{repairExample}. A default weight of all nodes $v$ of $XT$ is $\omega(v) = 0.5$. If the koeficient $k = 1$, cost of repair candidates would be as follows: $cost(R_1) = 0.5$, $cost(R_2) = 0.5$, $cost(R_3) = 2$, $cost(R_4) = 2$ and $cost(R_5) = 6$.
+Consider XML tree $XT$ and repair candidates from Example \ref{repairExample}. A default weight of all nodes $v$ of $XT$ is $\omega(v) = 0.5$. If the coefficient $k = 1$, cost of repair candidates would be as follows: $cost(R_1) = 0.5$, $cost(R_2) = 0.5$, $cost(R_3) = 2$, $cost(R_4) = 2$ and $cost(R_5) = 6$.
 Let us assume, that a repair candidate with the lowest repair cost will be applied to $XT$. If we order costs of repair candidates from the lowest to the highest, you can see that candidates which have marked unreliable nodes are at the end (and will not be applied to $XT$).
 
-Howerver, if we set the koeficient $k = 0.1$, costs of candidates would be sorted as follows: $cost(R_3) = 0.2$, $cost(R_4) = 0.2$, $cost(R_1) = 0.5$, $cost(R_2)  = 0.5$ and $cost(R_5) = 0.6$. You can see that order of costs has significantly changed and the cadidate which will be applied is $R_3$ (is marking nodes as unreliable).\qed
+However, if we set the coefficient $k = 0.1$, costs of candidates would be sorted as follows: $cost(R_3) = 0.2$, $cost(R_4) = 0.2$, $cost(R_1) = 0.5$, $cost(R_2)  = 0.5$ and $cost(R_5) = 0.6$. You can see that order of costs has significantly changed and the candidate which will be applied is $R_3$ (is marking nodes as unreliable).\qed
 \end{example}
 
 And finally, since a repair group is a set of repair candidates, its weight can be defined as follows:
@@ -152,11 +152,11 @@ Given an RW-XML tree $RXT$ and a repair group $RG$, we define the weight of $RG$
 
 \subsection{Repair Candidate Selection and Application}
 
-The last step of our algorithm can be divided into two steps, namely selection of the repair candidate and subsequent application of the candidate to RW-XML tree.
+The last step of our algorithm can be divided into two parts, namely selection of the repair candidate and subsequent application of the candidate to RW-XML tree.
 
-\subsubsection{Selection of Repair Candidate}
+\subsubsection{Selection of the Repair Candidate}
 
-The previous part of the algorithm computes repair groups containing repair candidates, which can repair violations of provided FDs. From this candidates, we must choose one that will be applied on RW-XML tree. Since we introduced a weight model to the repair group, we can use the weight of repair groups and the cost of repair candidates to choose suitable candidate. In our approach, we introduce two distinct algorithms: first that not involve the user to process of selection and the second one that use the user interaction.
+The previous step of the algorithm computes repair groups containing repair candidates, which can repair violations of provided FDs. From this candidates, we must choose one that is applied on RW-XML tree. Since we introduced a weight model to the repair group, we can use the weight of repair groups and the cost of repair candidates to choose suitable candidate. In our approach, we introduce two distinct algorithms: first that not involve the user to process of selection and the second one that use the user interaction.
 
 The first algorithm simply selects the first repair group with the lowest weight, and from it the repair candidate with lowest cost is selected.
 
@@ -166,7 +166,7 @@ The function $selectRepairByUser(RGS, SR, t)$, responsible for selection of repa
 
 First is decided, if the algorithm is in a state that the user is selecting repair candidates (user selection mode), or the user leaves decision making on the algorithm using his previous selections (guess mode) (line 2). If we are still in user selection mode, the user choose from repair groups sorted by the weight the most convenient repair group, and from this group the user choose the repair candidate that will be applied on RW-XML tree (line 4). Repair candidates in each repair group are also sorted by the cost, working as a hint for the user which repair would be chosen by previous automatic method of selection. Last step of user selection mode is saving the information from selected repair candidate (line 5). This information consists of the FD which this candidate repairs, nodes the repair changes (their paths) and also if the change was a value modification or marking node as unreliable.
 
-If the user has decided not to selecting repair candidates by himself, the algorithm goes into guess mode (staring on line 6). In this mode the algorithm checks all repair groups if some of it containts the repair candidate, that is sufficiently similar with some previously selected repair candidate (line 7-10). This similarity is checked by function \texttt{canBeUsedUserSelection} shown in Algorithm \ref{canUserSel}. If neither of candidates is sufficiently similar, the algorithm choose repair candidate with the lowest cost from the repair group with the lowest weight (line 15-16).
+If the user has decided not to selecting repair candidates by himself, the algorithm goes into guess mode (staring on line 6). In this mode the algorithm checks all repair groups if some of it contains the repair candidate, that is sufficiently similar with some previously selected repair candidate (line 7-10). This similarity is checked by function \texttt{canBeUsedUserSelection} shown in Algorithm \ref{canUserSel}. If neither of candidates is sufficiently similar, the algorithm choose repair candidate with the lowest cost from the repair group with the lowest weight (line 15-16).
 
 \begin{algorithm}[H]
 \floatname{algorithm}{Function}
@@ -176,7 +176,7 @@ If the user has decided not to selecting repair candidates by himself, the algor
 \REQUIRE{\ \\
 $RGS$ set of repair groups\\
 $SR$: set of previously selected repair candidates by the user\\
-$t$: modified nodes count treshold of previously selected repair candidates\\}
+$t$: modified nodes count threshold of previously selected repair candidates\\}
 \ENSURE $R$: repair candidate
 
 \STATE $R = \emptyset$
@@ -201,7 +201,7 @@ $t$: modified nodes count treshold of previously selected repair candidates\\}
 \end{algorithmic}
 \end{algorithm}
 
-The function \texttt{canBeUsedUserSelection} gets actual repair candidate $RC$, set of all previously selected repair candidates $SR$, modified nodes count treshold $t$ from interval $(0,1]$ of previously selected repair candidate and determine if $RC$ is sufficiently similar as some repair candidate from $SR$. To be similar with some previously selected repair candidate $S$, $RC$ must repair the same $FD$ as $S$, it must use the same update operation as $S$ and $\lambda(RC) \geq \lceil\lambda(S) \times t\rceil$ (line 2). Furthermore, if $\lambda(RC) = \lceil\lambda(S) \times t\rceil$, set of paths $PS(RC)$ must be a subset of $PS(S)$ (line 3). Otherwise, if $\lambda(RC) > \lceil\lambda(S) \times t\rceil$, there must exists a subset of $PS(S)$ with $\lceil\lambda(S) \times t\rceil$ elements that is subset of $PS(RC)$. In other words, without taking into account the treshold $t$, if a repair candidate $R_1$ modifies some nodes, the sufficiently similar repair candidate $R_2$ is such that modifies at least the same nodes as $R_1$ (when we say the same nodes we mean same paths representing those nodes). The treshold $t$ can reduce count of modified nodes of some previously selected repair candidate $R_1$, which means that sufficiently similar repair candidate needs to modify fewer nodes that are similar with nodes modified by $R_1$. In Example \ref{tresholdExample} is shown the usage of the treshold $t$.
+The function \texttt{canBeUsedUserSelection} gets actual repair candidate $RC$, set of all previously selected repair candidates $SR$, modified nodes count threshold $t$ from interval $(0,1]$ of previously selected repair candidate and determine if $RC$ is sufficiently similar as some repair candidate from $SR$. To be similar with some previously selected repair candidate $S$, $RC$ must repair the same $FD$ as $S$, it must use the same update operation as $S$ and $\lambda(RC) \geq \lceil\lambda(S) \times t\rceil$ (line 2). Furthermore, if $\lambda(RC) = \lceil\lambda(S) \times t\rceil$, set of paths $PS(RC)$ must be a subset of $PS(S)$ (line 3). Otherwise, if $\lambda(RC) > \lceil\lambda(S) \times t\rceil$, there must exists a subset of $PS(S)$ with $\lceil\lambda(S) \times t\rceil$ elements that is subset of $PS(RC)$. In other words, without taking into account the threshold $t$, if a repair candidate $R_1$ modifies some nodes, the sufficiently similar repair candidate $R_2$ is such that modifies at least the same nodes as $R_1$ (when we say the same nodes we mean same paths representing those nodes). The threshold $t$ can reduce count of modified nodes of some previously selected repair candidate $R_1$, which means that sufficiently similar repair candidate needs to modify fewer nodes that are similar with nodes modified by $R_1$. In Example \ref{tresholdExample} is shown the usage of the threshold $t$.
 
 
 \begin{algorithm}
@@ -211,7 +211,7 @@ The function \texttt{canBeUsedUserSelection} gets actual repair candidate $RC$, 
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
 $SR$: set of previously selected repair candidates by the user\\
-$t$: suitability treshold $(0,1]$ of previously selected repair candidates\\
+$t$: suitability threshold $(0,1]$ of previously selected repair candidates\\
 $RC$: actual repair candidate}
 \ENSURE \TRUE\ if actual repair candidate is similar to some previous one.
 \FORALL{$S$ in $SR$}
@@ -229,7 +229,13 @@ $RC$: actual repair candidate}
 \end{algorithm}
 
 \begin{example}\label{tresholdExample}
-Consider repair candidate $R_1$ selected by user, that marks as unreliable two nodes and $PS(R_1) = \{/bib/book/title, /bib/book/title/text()\}$. Next consider repair candidate $R_2$ with $PS(R_2) = \{/bib/book/title/text()\}$, that the modified node is marked as unreliable and both $R_1$ and $R_2$ repairs the same $FD$. If treshold $t=1$, $R_2$ is not considered as sufficiently similar to $R_1$, because $\lceil\lambda(R_1) \times t\rceil > \lambda(R_2)$. However, if treshold is $t=0.5$, $\lceil\lambda(R_1) \times t\rceil = \lambda(R_2)$ and $PS(R_2) \subseteq PS(R_1)$, then $R_2$ is sufficiently similar to $R_1$.\qed
+Consider repair candidate $R_1$ selected by user, that marks as unreliable two nodes and $PS(R_1) = \{/bib/book/title, /bib/book/title/text()\}$. Next consider repair candidate $R_2$ with $PS(R_2) = \{/bib/book/title/text()\}$, that the modified node is marked as unreliable and both $R_1$ and $R_2$ repairs the same $FD$. If threshold $t=1$, $R_2$ is not considered as sufficiently similar to $R_1$, because $\lceil\lambda(R_1) \times t\rceil > \lambda(R_2)$. However, if threshold is $t=0.5$, $\lceil\lambda(R_1) \times t\rceil = \lambda(R_2)$ and $PS(R_2) \subseteq PS(R_1)$, then $R_2$ is sufficiently similar to $R_1$.\qed
 \end{example}
 
-\subsubsection{Application of Repair Candidate}
+\subsubsection{Application of the Repair Candidate}
+
+In this part, the selected repair candidate is finally applied to the RW-XML tree. If after this part the RW-XML tree not violates any of FDs, the whole repair algorithm ends at this point, otherwise repair groups are regenerated and the selection of the repair candidate part take place.
+
+To apply the selected repair candidate $R$ to the RW-XML tree $RXT$ means, that we compose $\delta$ and $\varrho$ functions of $R$ with the corresponding functions of R-XML tree contained in $RXT$. This compositions are defined in Definition \ref{compDelta} and \ref{compVarrho}.
+
+After application of the repair candidate, some of RW-XML tree nodes could become unreliable, which can lead to the situation that some of tree tuples are not anymore considered as a tuple (is no longer a maximal subtree). Therefore, we need before regeneration of repair groups also check all tree tuples, if they satisfies definition of tree tuple.

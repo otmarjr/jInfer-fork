@@ -38,6 +38,8 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
   public static final String REPAIR_PICKER_PROP = "repair_picker_prop";
   public static final String REPAIRER_DEFAULT = "old_repairer";
   public static final String REPAIR_PICKER_DEFAULT = RepairPickerImpl.NAME;
+  public static final String COEFF_K_PROP = "coeff_k_prop";
+  public static final String COEFF_K_DEFAULT = "1.5";
 
   /** Creates new form RepairerPropertiesPanel */
   public RepairerPropertiesPanel(final Properties properties) {
@@ -49,6 +51,7 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
   public void store() {
     properties.setProperty(REPAIRER_PROP, ((NamedModule) repairer.getSelectedItem()).getName());
     properties.setProperty(REPAIR_PICKER_PROP, ((NamedModule) repairPicker.getSelectedItem()).getName());
+    properties.setProperty(COEFF_K_PROP, coefficientK.getText());
   }
 
   @Override
@@ -58,6 +61,8 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     
     repairer.setSelectedItem(ModuleSelectionHelper.lookupImpl(Repairer.class, properties.getProperty(REPAIRER_PROP, REPAIRER_DEFAULT)));
     repairPicker.setSelectedItem(ModuleSelectionHelper.lookupImpl(RepairPicker.class, properties.getProperty(REPAIR_PICKER_PROP, REPAIR_PICKER_DEFAULT)));
+    
+    coefficientK.setText(properties.getProperty(COEFF_K_PROP, COEFF_K_DEFAULT));
   }
   
   
@@ -78,6 +83,8 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     jPanel2 = new javax.swing.JPanel();
     jLabel2 = new javax.swing.JLabel();
     repairPicker = new javax.swing.JComboBox();
+    jLabel3 = new javax.swing.JLabel();
+    coefficientK = new javax.swing.JTextField();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -104,17 +111,17 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 110, Short.MAX_VALUE)
+      .addGap(0, 112, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 52, Short.MAX_VALUE)
+      .addGap(0, 82, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 2;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.gridheight = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 0.5;
     add(jPanel1, gridBagConstraints);
@@ -127,12 +134,12 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     );
     jPanel2Layout.setVerticalGroup(
       jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 248, Short.MAX_VALUE)
+      .addGap(0, 218, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.gridwidth = 3;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
@@ -156,10 +163,31 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.weightx = 0.5;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(repairPicker, gridBagConstraints);
+
+    jLabel3.setText(org.openide.util.NbBundle.getMessage(RepairerPropertiesPanel.class, "RepairerPropertiesPanel.jLabel3.text")); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    add(jLabel3, gridBagConstraints);
+
+    coefficientK.setText(org.openide.util.NbBundle.getMessage(RepairerPropertiesPanel.class, "RepairerPropertiesPanel.coefficientK.text")); // NOI18N
+    coefficientK.setMinimumSize(new java.awt.Dimension(50, 26));
+    coefficientK.setPreferredSize(new java.awt.Dimension(50, 26));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.weightx = 0.5;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(coefficientK, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JTextField coefficientK;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JLabel jLabel2;
+  private javax.swing.JLabel jLabel3;
   private javax.swing.JPanel jPanel1;
   private javax.swing.JPanel jPanel2;
   private javax.swing.JComboBox repairPicker;

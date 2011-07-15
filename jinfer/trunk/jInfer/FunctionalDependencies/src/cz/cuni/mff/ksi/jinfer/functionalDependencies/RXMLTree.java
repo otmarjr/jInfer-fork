@@ -57,7 +57,7 @@ import org.w3c.dom.Text;
  */
 public class RXMLTree {
 
-  private static final double LEAF_WEIGHT = 0.2d;
+//  private static final double LEAF_WEIGHT = 0.2d;
   private static final double NODE_WEIGHT = 0.4d;
   private static final Logger LOG = Logger.getLogger(RXMLTree.class);
   private final Document document;
@@ -342,11 +342,12 @@ public class RXMLTree {
     }
     NodeAttribute nodeAttribute = nodesMap.get(node);
     short nodeType = node.getNodeType();
-    if (nodeType == Node.ATTRIBUTE_NODE || nodeType == Node.TEXT_NODE) {
-      nodeAttribute.setWeight(LEAF_WEIGHT);
-    } else {
-      nodeAttribute.setWeight(NODE_WEIGHT);
-    }
+//    if (nodeType == Node.ATTRIBUTE_NODE || nodeType == Node.TEXT_NODE) {
+//      nodeAttribute.setWeight(LEAF_WEIGHT);
+//    } else {
+//      nodeAttribute.setWeight(NODE_WEIGHT);
+//    }
+    nodeAttribute.setWeight(NODE_WEIGHT);
 
     //check attributes
     NamedNodeMap attributes = node.getAttributes();
@@ -454,6 +455,10 @@ public class RXMLTree {
     XPathExpression xPathExpression;
 
     for (Tweight weight : weights) {
+      if (!weight.isInInterval()) {
+        LOG.warn("The weight " + weight.getValue().doubleValue() + " is not in a range [0,1]. It will be ignored.");
+        continue;
+      }
       try {
         xPathExpression = xPath.compile(weight.getPath());
         NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);

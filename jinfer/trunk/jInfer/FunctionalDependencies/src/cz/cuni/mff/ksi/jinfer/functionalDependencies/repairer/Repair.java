@@ -16,8 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.properties.RepairerPropertiesPanel;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,13 +58,13 @@ public class Repair implements Comparable<Repair> {
   public static final int COMPARE_EQUAL = 0;
   public static final int COMPARE_GREATER = 1;
   public static final int COMPARE_UNAVAILABLE = 2;
-  private static final double UNRELIABLE_KOEF = 1.5d;
   private Node unreliableNode = null;
   private Set<Node> unreliableNodes = null;
   private Map<Node, String> valueNodes;
   private double weight = -1;
   private List<RepairGroup> repairGroups;
   private RXMLTree tree;
+  private double coeffK;
 
   public Repair() {
     this.valueNodes = new HashMap<Node, String>();
@@ -80,14 +83,16 @@ public class Repair implements Comparable<Repair> {
     valueNodes.put(valueNode, changedValue);
   }
 
-  public Repair(final Node unreliableNode, final RXMLTree tree) {
+  public Repair(final Node unreliableNode, final RXMLTree tree, final double coeffK) {
     this(unreliableNode);
     this.tree = tree;
+    this.coeffK = coeffK;
   }
 
-  public Repair(final Node valueNode, final String changedValue, final RXMLTree tree) {
+  public Repair(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK) {
     this(valueNode, changedValue);
     this.tree = tree;
+    this.coeffK = coeffK;
   }
 
   public boolean hasReliabilityRepair() {
@@ -269,7 +274,7 @@ public class Repair implements Comparable<Repair> {
   private double computeWeight() {
     double result = 0d;
     for (Node node : getUnreliableNodes()) {
-      result += tree.getNodesMap().get(node).getWeight() * UNRELIABLE_KOEF;
+      result += tree.getNodesMap().get(node).getWeight() * coeffK;
     }
 
     for (Node node : valueNodes.keySet()) {

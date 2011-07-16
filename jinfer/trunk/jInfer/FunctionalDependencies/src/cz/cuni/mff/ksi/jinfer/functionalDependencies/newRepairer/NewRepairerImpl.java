@@ -51,25 +51,28 @@ public class NewRepairerImpl implements Repairer {
 
   private static final Logger LOG = Logger.getLogger(NewRepairerImpl.class);
   private int newValueID = 0;
+  private RepairPicker repairPicker = null;
 
   @Override
   public void start(InitialModel model, RepairerCallback callback) throws InterruptedException {
     LOG.info("This is NEW repairer");
     List<RXMLTree> result = new ArrayList<RXMLTree>();
-    
+
     final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
     double coeffK = Double.parseDouble(prop.getProperty(RepairerPropertiesPanel.COEFF_K_PROP, RepairerPropertiesPanel.COEFF_K_DEFAULT));
+    double thresholdT = getThreshold(prop);
 
     List<FD> functionalDependencies = model.getFunctionalDependencies();
     for (RXMLTree rXMLTree : model.getTrees()) {
-//      if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
+      if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
+        rXMLTree.setThresholdT(thresholdT);
         RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies, coeffK);
         if (repairedTree != null) {
           result.add(repairedTree);
         }
-//      } else {
-//        LOG.error("Some of the functional dependencies is not defined for XML tree.");
-//      }
+      } else {
+        LOG.error("Some of the functional dependencies is not defined for XML tree.");
+      }
     }
     callback.finished(result);
     return;
@@ -104,8 +107,10 @@ public class NewRepairerImpl implements Repairer {
   }
 
   private Repair getRepairFromPicker(final RXMLTree tree) throws InterruptedException {
-    final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
-    RepairPicker repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));
+    if (repairPicker == null) {
+      final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
+      repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));
+    }
     return repairPicker.getRepair(tree);
   }
 
@@ -119,17 +124,17 @@ public class NewRepairerImpl implements Repairer {
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
     } else {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
     }
 
@@ -138,11 +143,11 @@ public class NewRepairerImpl implements Repairer {
       t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
       } else {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK));
+        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
+        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
       }
     }
 
@@ -272,5 +277,15 @@ public class NewRepairerImpl implements Repairer {
   @Override
   public String getModuleDescription() {
     return "This repairer is an implementation from thesis.";
+  }
+
+  private static double getThreshold(Properties prop) {
+    double result = Double.parseDouble(prop.getProperty(RepairerPropertiesPanel.THRESHOLD_T_PROP, RepairerPropertiesPanel.THRESHOLD_T_DEFAULT));
+    if (!(result > 0) || !(result <= 1)) {
+      LOG.warn("The value " + result + " of the threshold t is out of range (0,1], will be used default value 1.");
+      result = Double.parseDouble(RepairerPropertiesPanel.THRESHOLD_T_DEFAULT);
+    }
+
+    return result;
   }
 }

@@ -1,0 +1,68 @@
+\chapwithtoc{Attachments}
+
+\begin{figure}[h]
+\caption{XML Schema for weights}
+\label{weightschema}
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:complexType name="Tweight">
+  <xs:sequence>
+    <xs:element name="path" type="xs:string"/>
+    <xs:element name="value" type="xs:decimal"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tweights">
+  <xs:sequence>
+    <xs:element name="weight" type="Tweight"
+        minOccurs="1" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:element name="weights" type="Tweights"/>
+</xs:schema>
+\end{verbatim}
+\end{figure}
+
+\begin{figure}[h]
+\caption{XML Schema for functional dependencies}
+\label{fdschema}
+
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:complexType name="TleftSidePaths">
+  <xs:sequence>
+    <xs:element name="path" type="xs:string"
+        minOccurs="1" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="TrightSidePaths">
+  <xs:sequence>
+    <xs:element name="path" type="xs:string"
+        minOccurs="1" maxOccurs="1"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tdependency">
+  <xs:sequence>
+    <xs:element name="leftSidePaths" type="TleftSidePaths"/>
+    <xs:element name="rightSidePaths" type="TrightSidePaths"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tdependencies">
+  <xs:sequence>
+    <xs:element name="dependency" type="Tdependency"
+        minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:element name="dependencies" type="Tdependencies"/>
+</xs:schema>
+\end{verbatim}
+\end{figure}

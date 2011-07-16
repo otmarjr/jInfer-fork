@@ -45,6 +45,7 @@
 \usepackage{algorithmic}
 \usepackage[chapter]{algorithm}
 \usepackage{subfig}
+\usepackage{url}
 
 \newcommand{\myscale}{0.5}
 
@@ -58,10 +59,12 @@
 
 % pekne pokope definujeme potrebne udaje
 \def\mftitle{Efficient Detection of XML Integrity Constraints}
-\def\mfthesistype{Master Thesis}
+\def\mfthesistype{MASTER THESIS}
+\def\mfkatedra{Department of Software Engineering}
+\def\mfpracoviste{}
 \def\mfauthor{Michal Švirec}
 \def\mfadvisor{RNDr. Irena Mlýnková, Ph.D.}
-\def\mfplacedate{Praha, 2010}
+\def\mfplacedate{Praha, 2011}
 
 %% Balíček hyperref, kterým jdou vyrábět klikací odkazy v PDF,
 %% ale hlavně ho pouľíváme k uloľení metadat do PDF (včetně obsahu).
@@ -136,7 +139,7 @@ Faculty of Mathematics and Physics
 
 % Název katedry nebo ústavu, kde byla práce oficiálně zadána
 % (dle Organizační struktury MFF UK)
-Název katedry nebo ústavu
+\mfkatedra
 
 \vfill
 
@@ -144,9 +147,9 @@ Název katedry nebo ústavu
 
 Supervisor of the master thesis: & \mfadvisor \\
 \noalign{\vspace{2mm}}
-Study programme: & program \\
+Study programme: & Informatika \\
 \noalign{\vspace{2mm}}
-Specialization: & obor \\
+Specialization: & ISS \\
 \end{tabular}
 
 \vfill
@@ -210,11 +213,12 @@ Autor:
 \mfauthor
 
 Katedra:  % Případně Ústav:
-Název katedry či ústavu, kde byla práce oficiálně zadána
+Katedra softwarového inženýrství
 % dle Organizační struktury MFF UK
 
 Vedoucí diplomové práce:
-\mfadvisor, pracoviště
+\mfadvisor, Katedra softwarového inženýrství
+
 % dle Organizační struktury MFF UK, případně plný název pracoviątě mimo MFF UK
 
 Abstrakt:
@@ -234,11 +238,11 @@ Author:
 \mfauthor
 
 Department:
-Název katedry či ústavu, kde byla práce oficiálně zadána
+\mfkatedra
 % dle Organizační struktury MFF UK v angličtině
 
 Supervisor:
-\mfadvisor, pracoviště
+\mfadvisor, \mfkatedra
 % dle Organizační struktury MFF UK, případně plný název pracoviątě
 % mimo MFF UK v angličtině
 
@@ -288,24 +292,21 @@ Keywords:
 % Ukázka pouľití některých konstrukcí LateXu (odkomentujte, chcete-li)
 %\include{ukazka}
 
-\include{zaver}
+%\include{zaver}
 
 
 %%% Seznam pouľité literatury
 \nocite{*}
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 \bibliography{literatura}
 
 %%% Tabulky v diplomové práci, existují-li.
 \chapwithtoc{List of Tables}
 
-%%% Pouľité zkratky v diplomové práci, existují-li, včetně jejich vysvětlení.
-\chapwithtoc{List of Abbreviations}
-
 %%% Přílohy k diplomové práci, existují-li (různé dodatky jako výpisy programů,
 %%% diagramy apod.). Kaľdá příloha musí být alespoň jednou odkazována z vlastního
 %%% textu práce. Přílohy se číslují.
-\chapwithtoc{Attachments}
+\include{attachments}
 
 \openright
 \end{document}

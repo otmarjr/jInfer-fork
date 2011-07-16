@@ -1,4 +1,4 @@
-\chapter{Proposed Algorithm}
+\chapter{Proposed Algorithm}\label{kap4}
 
 The main goal of this thesis is to propose an algorithm repairing XML document violating functional dependencies defined for this document. We use an XML tree and tree tuples to represent XML data. Next follows features we want to introduce in our algorithm:
 
@@ -44,7 +44,7 @@ The algorithm is split into three steps, where second and third step are repeate
 
 \subsection{Initial data model}
 
-To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of an node is from interval $[0,1]$ and indicates correctness of the data the particular node holds, that means the higher the weight is, more correct particular node is. The weights are used to measure cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This is also a first place where interaction of the user can be applied. The user could assign weights to the nodes manually (described in \todo{sem doplnit odkaz do implementacnej sekcie}) or can use some sort of statistical methods to generate them automatically. If the user not assign weights nor use statistical methods, default weight is assigned to all nodes. A definition of an RW-XML tree follows:
+To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of an node is from interval $[0,1]$ and indicates correctness of the data the particular node holds, that means the higher the weight is, more correct particular node is. The weights are used to measure cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This is also a first place where interaction of the user can be applied. The user could assign weights to the nodes manually or can use some sort of statistical methods to generate them automatically. If the user not assign weights nor use statistical methods, default weight is assigned to all nodes. A definition of an RW-XML tree follows:
 
 \begin{define}[RW-XML tree]
 A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $[0,1]$.\qed

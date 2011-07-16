@@ -18,8 +18,10 @@ package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
-import org.apache.log4j.Logger;
 import org.openide.windows.WindowManager;
 
 /**
@@ -28,8 +30,6 @@ import org.openide.windows.WindowManager;
  * @author vektor
  */
 public final class AttributeStatsHelper {
-
-  private static final Logger LOG = Logger.getLogger(AttributeStatsHelper.class);
 
   private AttributeStatsHelper() {
   }
@@ -58,16 +58,27 @@ public final class AttributeStatsHelper {
 
   /**
    * Generates a graph representation of the specified grammar in GraphViz
-   * language and writes it to the log.
+   * language and writes it to the specified file.
    *
    * @param grammar Grammar to create graph representation from.
+   * @param file File to write GV representation to.
    */
-  public static void generateGraphVizInput(final List<Element> grammar) {
+  public static void generateGraphVizInput(final List<Element> grammar, final File file) {
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override
       public void run() {
-        LOG.info(ModuleSelectionHelper.lookupImpls(AttributeStatistics.class).get(0).getGraphVizInput(grammar));
+        final String gvInput = ModuleSelectionHelper.lookupImpls(AttributeStatistics.class).get(0).getGraphVizInput(grammar);
+        PrintWriter pw = null;
+        try {
+          pw = new PrintWriter(file);
+          pw.write(gvInput);
+        } catch (final IOException e) {
+          throw new RuntimeException(e);
+        } finally {
+          pw.close();
+        }
+
       }
     });
   }

@@ -92,4 +92,10 @@ public class RepairGroup {
     
     return null;
   }
+
+  public FD getFunctionalDependency() {
+    return functionalDependency;
+  }
+  
+  
 }

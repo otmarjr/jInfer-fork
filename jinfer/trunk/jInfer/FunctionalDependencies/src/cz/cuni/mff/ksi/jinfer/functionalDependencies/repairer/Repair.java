@@ -16,18 +16,16 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
-import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.properties.RepairerPropertiesPanel;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.UserNodeSelection;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -62,13 +60,14 @@ public class Repair implements Comparable<Repair> {
   private Set<Node> unreliableNodes = null;
   private Map<Node, String> valueNodes;
   private double weight = -1;
-  private List<RepairGroup> repairGroups;
+  private RepairGroup repairGroup;
   private RXMLTree tree;
   private double coeffK;
+  private Set<String> nodePaths;
 
   public Repair() {
     this.valueNodes = new HashMap<Node, String>();
-    this.repairGroups = new ArrayList<RepairGroup>();
+    this.nodePaths = new HashSet<String>();
   }
 
   public Repair(final Node unreliableNode) {
@@ -83,16 +82,18 @@ public class Repair implements Comparable<Repair> {
     valueNodes.put(valueNode, changedValue);
   }
 
-  public Repair(final Node unreliableNode, final RXMLTree tree, final double coeffK) {
+  public Repair(final Node unreliableNode, final RXMLTree tree, final double coeffK, final String path) {
     this(unreliableNode);
     this.tree = tree;
     this.coeffK = coeffK;
+    nodePaths.add(path);
   }
 
-  public Repair(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK) {
+  public Repair(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path) {
     this(valueNode, changedValue);
     this.tree = tree;
     this.coeffK = coeffK;
+    nodePaths.add(path);
   }
 
   public boolean hasReliabilityRepair() {
@@ -102,7 +103,7 @@ public class Repair implements Comparable<Repair> {
   public Set<Node> getUnreliableNodes() {
     if (unreliableNodes == null) {
       unreliableNodes = new HashSet<Node>();
-      addUnreliableChildren(unreliableNode);
+      addUnreliableChildren(unreliableNode, nodePaths, nodePaths.iterator().next());
     }
     return unreliableNodes;
   }
@@ -150,21 +151,35 @@ public class Repair implements Comparable<Repair> {
     valueNodes.put(node, value);
   }
 
-  private void addUnreliableChildren(Node unreliableNode) {
+  private void addUnreliableChildren(Node unreliableNode, Set<String> paths, String parentPath) {
     if (unreliableNode != null) {
       unreliableNodes.add(unreliableNode);
+      String newParentPath = parentPath;
+      
+      if (this.unreliableNode != unreliableNode) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(parentPath).append("/");
+        if (unreliableNode.getNodeType() == Node.ATTRIBUTE_NODE) {
+          builder.append("@");
+        }
+
+        builder.append(unreliableNode.getNodeName());
+
+        newParentPath = builder.toString();
+        paths.add(newParentPath);
+      }
 
       NamedNodeMap attributes = unreliableNode.getAttributes();
       if (attributes != null) {
         for (int i = 0; i < attributes.getLength(); i++) {
-          addUnreliableChildren(attributes.item(i));
+          addUnreliableChildren(attributes.item(i), paths, newParentPath);
         }
       }
       if (unreliableNode.getNodeType() != Node.ATTRIBUTE_NODE) {
         NodeList childNodes = unreliableNode.getChildNodes();
         if (childNodes != null) {
           for (int i = 0; i < childNodes.getLength(); i++) {
-            addUnreliableChildren(childNodes.item(i));
+            addUnreliableChildren(childNodes.item(i), paths, newParentPath);
           }
         }
       }
@@ -268,7 +283,7 @@ public class Repair implements Comparable<Repair> {
   }
 
   public void addToRepairGroup(final RepairGroup repairGroup) {
-    repairGroups.add(repairGroup);
+    this.repairGroup = repairGroup;
   }
 
   private double computeWeight() {
@@ -375,4 +390,22 @@ public class Repair implements Comparable<Repair> {
       }
     }
   }
+
+  public Collection<String> getNodePaths() {
+    return nodePaths;
+  }
+
+  public FD getFD() {
+    return repairGroup.getFunctionalDependency();
+  }
+
+  public int getNodeSize() {
+    return nodePaths.size();
+  }
+
+  public boolean hasSubsetPaths(UserNodeSelection userSelection) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  
 }

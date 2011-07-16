@@ -36,6 +36,7 @@ public class RepairPickerComponent extends javax.swing.JPanel {
   private RepairGroupModel model;
   private XMLShower xmlShower;
   private boolean isGUIDone = false;
+  private boolean askUser = true;
 
   /** Creates new form NewJPanel */
   public RepairPickerComponent() {
@@ -61,6 +62,7 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     xmlTreePlaceholder = new javax.swing.JPanel();
     jLabel1 = new javax.swing.JLabel();
     jButton1 = new javax.swing.JButton();
+    jCheckBox1 = new javax.swing.JCheckBox();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -87,6 +89,9 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     repairTreePane.setRightComponent(xmlTreePlaceholder);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridwidth = 2;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
@@ -105,6 +110,19 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     add(jButton1, gridBagConstraints);
+
+    jCheckBox1.setText(org.openide.util.NbBundle.getMessage(RepairPickerComponent.class, "RepairPickerComponent.jCheckBox1.text")); // NOI18N
+    jCheckBox1.addChangeListener(new javax.swing.event.ChangeListener() {
+      public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        jCheckBox1StateChanged(evt);
+      }
+    });
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    add(jCheckBox1, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -131,8 +149,13 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     jButton1.setEnabled(true);
   }//GEN-LAST:event_repairTreeValueChanged
 
+  private void jCheckBox1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox1StateChanged
+    askUser = !jCheckBox1.isSelected();
+  }//GEN-LAST:event_jCheckBox1StateChanged
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JButton jButton1;
+  private javax.swing.JCheckBox jCheckBox1;
   private javax.swing.JLabel jLabel1;
   private javax.swing.JScrollPane jScrollPane1;
   private javax.swing.JTree repairTree;
@@ -192,5 +215,9 @@ public class RepairPickerComponent extends javax.swing.JPanel {
   public void setModel(final List<RepairGroup> repairGroups) {
     model = new RepairGroupModel(repairGroups);
     repairTree.setModel(new DefaultTreeModel(model.getTree()));
+  }
+
+  boolean shallAskUser() {
+    return askUser;
   }
 }

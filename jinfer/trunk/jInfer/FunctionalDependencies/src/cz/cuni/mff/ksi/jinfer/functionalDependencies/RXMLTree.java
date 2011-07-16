@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.UserNodeSelection;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.weights.Tweight;
 import java.io.StringWriter;
@@ -66,10 +67,13 @@ public class RXMLTree {
   private List<Tuple> tuples;
   private int tupleID;
   private List<RepairGroup> repairGroups;
+  private List<UserNodeSelection> savedUserSelections;
+  private double thresholdT;
 
   public RXMLTree(final Document document) {
     this.document = document;
     this.repairGroups = new ArrayList<RepairGroup>();
+    this.savedUserSelections = new ArrayList<UserNodeSelection>();
     tupleID = 0;
     nodesMap = createNodesMap(document);
   }
@@ -473,5 +477,21 @@ public class RXMLTree {
 
     }
 
+  }
+
+  public void saveUserSelection(Repair pickedRepair) {
+    savedUserSelections.add(new UserNodeSelection(pickedRepair));
+  }
+
+  public List<UserNodeSelection> getSavedUserSelections() {
+    return savedUserSelections;
+  }
+
+  public double getThresholdT() {
+    return thresholdT;
+  }
+
+  public void setThresholdT(double thresholdT) {
+    this.thresholdT = thresholdT;
   }
 }

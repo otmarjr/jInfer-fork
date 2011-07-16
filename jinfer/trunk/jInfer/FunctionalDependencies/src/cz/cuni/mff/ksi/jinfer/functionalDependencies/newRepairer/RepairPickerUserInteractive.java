@@ -30,15 +30,26 @@ import org.openide.windows.WindowManager;
 public class RepairPickerUserInteractive implements RepairPicker {
 
   public static final String NAME = "repair_picker_UI";
+  private boolean askUser = true;
 
   @Override
   public Repair getRepair(final RXMLTree tree) throws InterruptedException {
-    RepairPickerComponent component = new RepairPickerComponent();
-    component.setModel(tree.getRepairGroups());
-    
-    drawComponentAndWaitForGUI(component);
-    
-    return component.getPickedRepair();
+    if (askUser) {
+      RepairPickerComponent component = new RepairPickerComponent();
+      component.setModel(tree.getRepairGroups());
+
+      drawComponentAndWaitForGUI(component);
+
+      if (!component.shallAskUser()) {
+        askUser = false;
+      }
+      Repair pickedRepair = component.getPickedRepair();
+      tree.saveUserSelection(pickedRepair);
+
+      return pickedRepair;
+    }
+
+    return guessRepairFromUserSelection(tree);
   }
 
   @Override
@@ -100,5 +111,35 @@ public class RepairPickerUserInteractive implements RepairPicker {
     }
 
     return true;
+  }
+
+  private Repair guessRepairFromUserSelection(RXMLTree tree) {
+    for (RepairGroup repairGroup : tree.getRepairGroups()) {
+      for (Repair repair : repairGroup.getRepairs()) {
+        if (canBeUsedUserSelection(tree, repair)) {
+          return repair;
+        }
+      }
+    }
+
+    return tree.getMinimalRepairGroup().getMinimalRepair();
+  }
+
+  private boolean canBeUsedUserSelection(RXMLTree tree, Repair repair) {
+    double thresholdT = tree.getThresholdT();
+    for (UserNodeSelection userSelection : tree.getSavedUserSelections()) {
+      if (userSelection.repairsSameFD(repair) && userSelection.isUsingSameOperation(repair)
+              && (Math.ceil(userSelection.getNodeSize() * thresholdT) <= repair.getNodeSize())) {
+        if (Math.ceil(userSelection.getNodeSize() * thresholdT) == repair.getNodeSize()
+                && userSelection.getNodePaths().containsAll(repair.getNodePaths())) {
+          return true;
+        }
+        if (Math.ceil(userSelection.getNodeSize() * thresholdT) < repair.getNodeSize() 
+                && userSelection.existSubset(repair, thresholdT)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

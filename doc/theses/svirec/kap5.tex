@@ -1,1 +1,26 @@
 \chapter{Implementation}
+
+A part of this work is experimental implementation of our proposed algorithm. Besides our approach, we have also implementened algorithm proposed in \cite{RepAndConsistentAnswer}, to be able to compare it with our algorithm. Our algorithm has been implemented in the JAVA language in the JDK version 6.0 as a part of the schema inference framework for XML, called jInfer \cite{jinfer}, developed as a part of a Software Project subject.
+
+\section{Architecture}
+
+The main part of our algorithm is implemented as the \texttt{FDRepairer} extension of the jInfer framework. The core package of the extension is \texttt{cz.cuni.mff.\discretionary{}{}{}ksi.jinfer.functionalDependencies} and contains classes representing base object important for repairing (Tuple, RW-XML tree, Path etc.). This package is further divided into the following subpackages:
+
+\begin{description}
+	\item[fd] contains data structure of functional dependencies used as an input to the algorithm.
+    \item [interfaces] contains JAVA interfaces necessery for integration to the jInfer framework.
+    \item [modelGenerator] contains classes responsible for creating data structures from loaded input files.
+    \item [newRepairer] contains class \texttt{NewRepairerImpl}, the class that implements proposed algorithm. Also contains other data structures introduced in our approach
+    \item [propeties] contains classes reponsible for showing properties of this extension if the jInfer.
+    \item [repairer] contains classes implementing the original algorithm our algorithm is based on.
+    \item [weights] contains data structure of node weights used as an input to the algorithm.
+\end{description}
+
+\subsection{Input Files Processing}
+
+Files that can be added as an input to our algorithm are of three kind. The XML data, file containing functional dependencies and file containing weights. First, the XML is processed by build-in Java DOM parster. Files with FDs and weights both contains XML data with specific structure defined as XML Schema in Fig. \ref{fdschema} and \ref{weightschema} and are both processed with JAXB \cite{JAXB}.
+
+
+\section{Restriction of Implementation}
+
+The \texttt{FDRepairer} extension of the jInfer framework is an implementation of our proposed algorithm presented in Chapter \ref{kap4}. However, one part of the algorithm have not been implemented yet, namely the intersection of repair candidates with existing repair group.

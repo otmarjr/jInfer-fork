@@ -77,7 +77,7 @@ public class GraphRepAction extends NodeAction {
 
     final Input input = new Input();
     input.getDocuments().add(f);
-    start(input, igg);
+    start(f, input, igg);
   }
 
   private static File getFileForNode(final Node node) {
@@ -88,7 +88,7 @@ public class GraphRepAction extends NodeAction {
     return node.getParentNode().getLookup().lookup(Project.class).getLookup().lookup(Properties.class);
   }
 
-  private static void start(final Input input, final IGGenerator igg) {
+  private static void start(final File file, final Input input, final IGGenerator igg) {
     AsynchronousUtils.runAsync(new Runnable() {
 
       @Override
@@ -99,7 +99,7 @@ public class GraphRepAction extends NodeAction {
 
                     @Override
                     public void finished(final List<Element> grammar) {
-                      AttributeStatsHelper.generateGraphVizInput(grammar);
+                      AttributeStatsHelper.generateGraphVizInput(grammar, new File(file.getAbsolutePath() + ".gv"));
                     }
                   });
         } catch (final InterruptedException e) {

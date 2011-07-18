@@ -27,18 +27,23 @@ import java.util.List;
  */
 public final class RepairFactory {
 
-  public static List<Pair<Repair, Repair>> getValuePairs(List<Repair> repairs) {
+  public static List<Pair<RepairImpl, RepairImpl>> getValuePairs(List<RepairImpl> repairs) throws InterruptedException {
     if (repairs == null) {
       return null;
     }
 
-    List<Pair<Repair, Repair>> result = new ArrayList<Pair<Repair, Repair>>();
+    List<Pair<RepairImpl, RepairImpl>> result = new ArrayList<Pair<RepairImpl, RepairImpl>>();
 
-    for (Repair repair : repairs) {
+    for (int i = 0; i < repairs.size() - 1; i++) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      RepairImpl repair = repairs.get(i);
       if (repair.hasValueRepair()) {
-        for (Repair repair1 : repairs) {
-          if (repair1.hasValueRepair() && !repair.equals(repair) && !result.contains(new ImmutablePair<Repair, Repair>(repair1, repair))) {
-            result.add(new ImmutablePair<Repair, Repair>(repair, repair1));
+        for (int j = 1 + i; j < repairs.size(); j++) {
+          RepairImpl repair1 = repairs.get(j);
+          if (repair1.hasValueRepair()) {
+            result.add(new ImmutablePair<RepairImpl, RepairImpl>(repair, repair1));
           }
         }
       }
@@ -50,14 +55,14 @@ public final class RepairFactory {
   private RepairFactory() {
   }
 
-  public static List<Repair> getReliabilityRepairs(final List<Repair> repairs) {
+  public static List<RepairImpl> getReliabilityRepairs(final List<RepairImpl> repairs) {
     if (repairs == null) {
       return null;
     }
 
-    List<Repair> result = new ArrayList<Repair>();
+    List<RepairImpl> result = new ArrayList<RepairImpl>();
 
-    for (Repair repair : repairs) {
+    for (RepairImpl repair : repairs) {
       if (repair.hasReliabilityRepair()) {
         result.add(repair);
       }
@@ -65,14 +70,14 @@ public final class RepairFactory {
     return result;
   }
 
-  public static List<Repair> getValueRepairs(final List<Repair> repairs) {
+  public static List<RepairImpl> getValueRepairs(final List<RepairImpl> repairs) {
     if (repairs == null) {
       return null;
     }
 
-    List<Repair> result = new ArrayList<Repair>();
+    List<RepairImpl> result = new ArrayList<RepairImpl>();
 
-    for (Repair repair : repairs) {
+    for (RepairImpl repair : repairs) {
       if (repair.hasValueRepair()) {
         result.add(repair);
       }

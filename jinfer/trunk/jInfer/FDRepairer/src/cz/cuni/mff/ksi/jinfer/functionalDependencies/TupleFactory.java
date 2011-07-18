@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import org.apache.log4j.Logger;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -39,6 +40,8 @@ import org.w3c.dom.NodeList;
  * @author sviro
  */
 public final class TupleFactory {
+
+  private static final Logger LOG = Logger.getLogger(TupleFactory.class);
 
   public static boolean isTuple(RXMLTree tree, Tuple tuple) {
     List<Tuple> allTuples = tree.getTuples();
@@ -67,9 +70,11 @@ public final class TupleFactory {
   private TupleFactory() {
   }
 
-  public static List<Tuple> createTuples(RXMLTree tree) {
+  public static List<Tuple> createTuples(RXMLTree tree) throws InterruptedException {
+    LOG.info("Starting creation of Tree Tuples");
     List<Tuple> result = new ArrayList<Tuple>();
     List<Path> paths = tree.getPaths();
+    LOG.debug("Paths from tree retreived.");
     Queue<Tuple> lastAddedTuples = new ArrayDeque<Tuple>();
 
     int firstTupleId = tree.getNewTupleID();
@@ -78,8 +83,15 @@ public final class TupleFactory {
     lastAddedTuples.add(firstTuple);
 
     for (Path path : paths) {
+      if (path.isStringPath()) {
+        continue;
+      }
+      LOG.debug("Creating tuples from path " + path);
       Queue<Tuple> newAddedTuples = new ArrayDeque<Tuple>();
       while (!lastAddedTuples.isEmpty()) {
+        if (Thread.interrupted()) {
+          throw new InterruptedException();
+        }
         Tuple lastTuple = lastAddedTuples.poll();
 
         PathAnswer pathAnswer = tree.getPathAnswerForCreatingTuple(path, lastTuple);
@@ -90,9 +102,11 @@ public final class TupleFactory {
           for (Node node : pathAnswer.getNodeAnswers()) {
             int newTupleID = tree.getNewTupleID();
             Tuple tuple = markNodesToTuple(tree, node, newTupleID, lastTuple, pathAnswer.getNodeAnswers());
+            LOG.debug("New tuple " + tuple + " has been created.");
             newAddedTuples.add(tuple);
           }
           unmarkNodesFromTuple(tree, lastTuple);
+          LOG.debug("Tuple " + lastTuple + " has been removed.");
         } else {
           newAddedTuples.add(lastTuple);
         }
@@ -101,39 +115,44 @@ public final class TupleFactory {
     }
 
     result.addAll(lastAddedTuples);
-
+    LOG.debug("Tree Tuples created.");
     return result;
   }
 
-  public static List<Pair<Tuple, Tuple>> getTuplePairs(List<Tuple> tuples) {
+  public static List<Pair<Tuple, Tuple>> getTuplePairs(List<Tuple> tuples) throws InterruptedException {
+    LOG.debug("Starting creating tuple pairs");
     if (tuples == null) {
       return null;
     }
 
     List<Pair<Tuple, Tuple>> result = new ArrayList<Pair<Tuple, Tuple>>();
-    for (Tuple tuple : tuples) {
-      for (Tuple tuple1 : tuples) {
-        if (!tuple.equals(tuple1) && !result.contains(new ImmutablePair<Tuple, Tuple>(tuple1, tuple))) {
-          result.add(new ImmutablePair<Tuple, Tuple>(tuple, tuple1));
-        }
+    for (int i = 0; i < tuples.size() - 1; i++) {
+      Tuple tuple = tuples.get(i);
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      for (int j = 1 + i; j < tuples.size(); j++) {
+        Tuple tuple1 = tuples.get(j);
+        result.add(new ImmutablePair<Tuple, Tuple>(tuple, tuple1));
       }
     }
-
+    
+    LOG.debug("Tuple pairs created");
     return result;
   }
 
-  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDThesis(final RXMLTree tree, final FD fd) {
+  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDThesis(final RXMLTree tree, final FD fd) throws InterruptedException {
     return getTuplePairNotSatisfyingFDGeneral(tree, fd, true);
   }
 
-  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(RXMLTree tree, FD fd) {
+  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(RXMLTree tree, FD fd) throws InterruptedException {
     return getTuplePairNotSatisfyingFDGeneral(tree, fd, false);
   }
 
-  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDGeneral(final RXMLTree tree, final FD fd, final boolean isThesis) {
+  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDGeneral(final RXMLTree tree, final FD fd, final boolean isThesis) throws InterruptedException {
     List<Pair<Tuple, Tuple>> notSatisfyingTuples = new ArrayList<Pair<Tuple, Tuple>>();
 
-    List<Pair<Tuple, Tuple>> tuplePairs = getTuplePairs(tree.getTuples());
+    List<Pair<Tuple, Tuple>> tuplePairs = tree.getTuplePairs();
     if (tuplePairs == null || tuplePairs.isEmpty()) {
       throw new RuntimeException("List of tuple pairs can't be null or empty.");
     }
@@ -148,6 +167,7 @@ public final class TupleFactory {
   }
 
   public static List<PathAnswer> getFDSidePathAnswers(final RXMLTree tree, final Tuple tuple, final SidePaths sidePaths, final boolean isThesis) {
+    LOG.debug("Creating side path answers for tuple " + tuple);
     if (tuple == null) {
       throw new RuntimeException("Tuple can't be null.");
     }

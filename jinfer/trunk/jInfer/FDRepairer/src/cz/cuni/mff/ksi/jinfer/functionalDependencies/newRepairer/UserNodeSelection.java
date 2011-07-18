@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.util.Collection;
 
 /**
@@ -30,17 +29,17 @@ public class UserNodeSelection {
   private final boolean isValueRepair;
   private final FD fD;
 
-  public UserNodeSelection(Repair pickedRepair) {
+  public UserNodeSelection(RepairCandidate pickedRepair) {
     this.fD = pickedRepair.getFD();
     this.nodePaths = pickedRepair.getNodePaths();
     this.isValueRepair = pickedRepair.hasValueRepair();
   }
 
-  public boolean repairsSameFD(Repair repair) {
+  public boolean repairsSameFD(RepairCandidate repair) {
     return fD.equals(repair.getFD());
   }
 
-  public boolean isUsingSameOperation(final Repair repair) {
+  public boolean isUsingSameOperation(final RepairCandidate repair) {
     return isValueRepair == repair.hasValueRepair();
   }
   
@@ -52,7 +51,7 @@ public class UserNodeSelection {
     return nodePaths;
   }
 
-  public boolean existSubset(Repair repair, double thresholdT) {
+  public boolean existSubset(RepairCandidate repair, double thresholdT) {
     int elementsSize = (int) Math.ceil(getNodeSize() * thresholdT);
     int containingPathsCount = 0; 
     for (String path : repair.getNodePaths()) {

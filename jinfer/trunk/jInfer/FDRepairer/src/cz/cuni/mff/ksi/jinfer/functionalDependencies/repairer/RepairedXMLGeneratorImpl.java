@@ -45,6 +45,9 @@ public class RepairedXMLGeneratorImpl implements RepairedXMLGenerator {
     List<String> result = new ArrayList<String>();
     
     for (RXMLTree rXMLTree : repairedTrees) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       result.add(transformTreeToXML(rXMLTree));
     }
     

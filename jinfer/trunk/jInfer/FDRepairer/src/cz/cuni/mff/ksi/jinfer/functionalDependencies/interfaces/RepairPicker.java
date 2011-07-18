@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairCandidate;
 
 /**
  *
@@ -26,5 +26,5 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
  */
 public interface RepairPicker extends NamedModule {
   
-  Repair getRepair(RXMLTree tree) throws InterruptedException;
+  RepairCandidate getRepair(RXMLTree tree) throws InterruptedException;
 }

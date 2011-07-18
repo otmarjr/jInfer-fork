@@ -18,7 +18,6 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
 
@@ -33,7 +32,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
   private boolean askUser = true;
 
   @Override
-  public Repair getRepair(final RXMLTree tree) throws InterruptedException {
+  public RepairCandidate getRepair(final RXMLTree tree) throws InterruptedException {
     if (askUser) {
       RepairPickerComponent component = new RepairPickerComponent();
       component.setModel(tree.getRepairGroups());
@@ -43,7 +42,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
       if (!component.shallAskUser()) {
         askUser = false;
       }
-      Repair pickedRepair = component.getPickedRepair();
+      RepairCandidate pickedRepair = component.getPickedRepair();
       tree.saveUserSelection(pickedRepair);
 
       return pickedRepair;
@@ -113,9 +112,9 @@ public class RepairPickerUserInteractive implements RepairPicker {
     return true;
   }
 
-  private Repair guessRepairFromUserSelection(RXMLTree tree) {
+  private RepairCandidate guessRepairFromUserSelection(RXMLTree tree) {
     for (RepairGroup repairGroup : tree.getRepairGroups()) {
-      for (Repair repair : repairGroup.getRepairs()) {
+      for (RepairCandidate repair : repairGroup.getRepairs()) {
         if (canBeUsedUserSelection(tree, repair)) {
           return repair;
         }
@@ -125,7 +124,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
     return tree.getMinimalRepairGroup().getMinimalRepair();
   }
 
-  private boolean canBeUsedUserSelection(RXMLTree tree, Repair repair) {
+  private boolean canBeUsedUserSelection(RXMLTree tree, RepairCandidate repair) {
     double thresholdT = tree.getThresholdT();
     for (UserNodeSelection userSelection : tree.getSavedUserSelections()) {
       if (userSelection.repairsSameFD(repair) && userSelection.isUsingSameOperation(repair)

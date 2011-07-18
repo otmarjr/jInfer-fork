@@ -19,9 +19,10 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.SidePaths;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repair;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairCandidate;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.UserNodeSelection;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.weights.Tweight;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -65,10 +66,13 @@ public class RXMLTree {
   private List<Path> paths = null;
   private Map<Node, NodeAttribute> nodesMap;
   private List<Tuple> tuples;
+  private Map<Tuple, SideAnswers> tupleSideAnswers;
   private int tupleID;
   private List<RepairGroup> repairGroups;
   private List<UserNodeSelection> savedUserSelections;
+  private List<Pair<Tuple, Tuple>> tuplePairs = null;
   private double thresholdT;
+  private XPathFactory xpathFactory;
 
   public RXMLTree(final Document document) {
     this.document = document;
@@ -76,6 +80,8 @@ public class RXMLTree {
     this.savedUserSelections = new ArrayList<UserNodeSelection>();
     tupleID = 0;
     nodesMap = createNodesMap(document);
+    xpathFactory = XPathFactory.newInstance();
+    this.tupleSideAnswers = new HashMap<Tuple, SideAnswers>();
   }
 
   public boolean isSatisfyingFD(final FD fd) throws InterruptedException {
@@ -91,12 +97,16 @@ public class RXMLTree {
   }
 
   private boolean isTreeSatisfyingFD(final FD fd, final boolean isThesis) throws InterruptedException {
+    LOG.info("Start checking tree satisfaction");
     if (tuples == null) {
       tuples = TupleFactory.createTuples(this);
     }
 
-    List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(tuples);
+    if (tuplePairs == null) {
+      tuplePairs = TupleFactory.getTuplePairs(tuples);
+    }
 
+    LOG.debug("Start checking pairs for satisfiability");
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
       if (!isTuplePairSatisfyingFDGeneral(tuplePair, fd, isThesis)) {
         return false;
@@ -118,10 +128,10 @@ public class RXMLTree {
     Tuple tuple1 = tuplePair.getFirst();
     Tuple tuple2 = tuplePair.getSecond();
 
-    List<PathAnswer> tuple1LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getLeftSidePaths(), isThesis);
-    List<PathAnswer> tuple2LeftSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getLeftSidePaths(), isThesis);
-    List<PathAnswer> tuple1RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple1, fd.getRightSidePaths(), isThesis);
-    List<PathAnswer> tuple2RightSideAnswers = TupleFactory.getFDSidePathAnswers(this, tuple2, fd.getRightSidePaths(), isThesis);
+    List<PathAnswer> tuple1LeftSideAnswers = getTupleSideAnswer(tuple1, true, fd.getLeftSidePaths(), isThesis);
+    List<PathAnswer> tuple2LeftSideAnswers = getTupleSideAnswer(tuple2, true, fd.getLeftSidePaths(), isThesis);
+    List<PathAnswer> tuple1RightSideAnswers = getTupleSideAnswer(tuple1, false, fd.getRightSidePaths(), isThesis);
+    List<PathAnswer> tuple2RightSideAnswers = getTupleSideAnswer(tuple2, false, fd.getRightSidePaths(), isThesis);
 
     boolean leftSideEqual = areTuplePathAnswersEqual(tuple1LeftSideAnswers, tuple2LeftSideAnswers);
     boolean tuple1PathAnswersNotEmpty = isTuplePathAnswersNotEmpty(tuple1LeftSideAnswers);
@@ -159,12 +169,15 @@ public class RXMLTree {
     return true;
   }
 
-  private boolean isReliabilitySatisfyFD(FD fd) {
+  private boolean isReliabilitySatisfyFD(FD fd) throws InterruptedException {
     if (tuples == null) {
       tuples = TupleFactory.createTuples(this);
     }
 
-    List<Pair<Tuple, Tuple>> tuplePairs = TupleFactory.getTuplePairs(tuples);
+    if (tuplePairs == null) {
+      tuplePairs = TupleFactory.getTuplePairs(tuples);
+    }
+
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
       boolean isUnreliable = isUnreliableSide(tuplePair, fd.getLeftSidePaths()) || isUnreliableSide(tuplePair, fd.getRightSidePaths());
       if (!isUnreliable) {
@@ -256,7 +269,6 @@ public class RXMLTree {
    */
   public PathAnswer getGenericPathAnswerForTuple(final Path path, final Tuple tuple, final boolean isCreatingTuple, boolean isThesis) {
     if (path != null) {
-      XPathFactory xpathFactory = XPathFactory.newInstance();
       XPath xPath = xpathFactory.newXPath();
       XPathExpression xPathExpression;
 
@@ -305,6 +317,7 @@ public class RXMLTree {
   }
 
   public void applyRepair(Repair repair) {
+    LOG.debug("Applying repair:");
     LOG.debug(repair.toString());
 
     for (Node node : repair.getUnreliableNodes()) {
@@ -430,7 +443,7 @@ public class RXMLTree {
     return null;
   }
 
-  public void clearRepairs(final Repair repair) {
+  public void clearRepairs(final RepairCandidate repair) {
     Set<Tuple> tuplesToCheck = new HashSet<Tuple>();
 
     for (Node node : repair.getUnreliableNodes()) {
@@ -447,6 +460,7 @@ public class RXMLTree {
     TupleFactory.removeTuples(this, tuplesToRemove);
 
     repairGroups.clear();
+    tupleSideAnswers.clear();
   }
 
   void removeTuple(final Tuple tuple) {
@@ -479,7 +493,7 @@ public class RXMLTree {
 
   }
 
-  public void saveUserSelection(Repair pickedRepair) {
+  public void saveUserSelection(RepairCandidate pickedRepair) {
     savedUserSelections.add(new UserNodeSelection(pickedRepair));
   }
 
@@ -493,5 +507,31 @@ public class RXMLTree {
 
   public void setThresholdT(double thresholdT) {
     this.thresholdT = thresholdT;
+  }
+
+  public List<Pair<Tuple, Tuple>> getTuplePairs() throws InterruptedException {
+    if (tuplePairs == null) {
+      tuplePairs = TupleFactory.getTuplePairs(tuples);
+    }
+
+    return tuplePairs;
+  }
+
+  private List<PathAnswer> getTupleSideAnswer(Tuple tuple, boolean isLeft, SidePaths sidePaths, boolean isThesis) {
+    if (tupleSideAnswers.containsKey(tuple)) {
+      if (tupleSideAnswers.get(tuple).getSide(isLeft) == null) {
+        List<PathAnswer> fDSidePathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, sidePaths, isThesis);
+        tupleSideAnswers.get(tuple).setSide(fDSidePathAnswers, isLeft);
+      }
+    } else {
+      List<PathAnswer> fDSidePathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, sidePaths, isThesis);
+      
+      SideAnswers sideAnswers = new SideAnswers();
+      sideAnswers.setSide(fDSidePathAnswers, isLeft);
+
+      tupleSideAnswers.put(tuple, sideAnswers);
+    }
+
+    return tupleSideAnswers.get(tuple).getSide(isLeft);
   }
 }

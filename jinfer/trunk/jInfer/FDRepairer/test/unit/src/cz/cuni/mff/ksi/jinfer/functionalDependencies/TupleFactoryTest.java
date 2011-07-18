@@ -45,7 +45,7 @@ public class TupleFactoryTest {
    * Test of getTuplePairs method, of class TupleFactory.
    */
   @Test
-  public void testGetTuplePairsNull() {
+  public void testGetTuplePairsNull() throws InterruptedException {
     List<Tuple> tuples = null;
     List expResult = null;
     List result = TupleFactory.getTuplePairs(tuples);
@@ -56,7 +56,7 @@ public class TupleFactoryTest {
    * Test of getTuplePairs method, of class TupleFactory.
    */
   @Test
-  public void testGetTuplePairsEmpty() {
+  public void testGetTuplePairsEmpty() throws InterruptedException {
     List<Tuple> tuples = new ArrayList<Tuple>();
     List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
     List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
@@ -67,7 +67,7 @@ public class TupleFactoryTest {
    * Test of getTuplePairs method, of class TupleFactory.
    */
   @Test
-  public void testGetTuplePairs() {
+  public void testGetTuplePairs() throws InterruptedException {
     List<Tuple> tuples = new ArrayList<Tuple>();
     tuples.add(new Tuple(null, 0));
 
@@ -81,7 +81,7 @@ public class TupleFactoryTest {
    * Test of getTuplePairs method, of class TupleFactory.
    */
   @Test
-  public void testGetTuplePairs2() {
+  public void testGetTuplePairs2() throws InterruptedException {
     List<Tuple> tuples = new ArrayList<Tuple>();
     Tuple tuple1 = new Tuple(null, 0);
 
@@ -98,7 +98,7 @@ public class TupleFactoryTest {
    * Test of getTuplePairs method, of class TupleFactory.
    */
   @Test
-  public void testGetTuplePairs3() {
+  public void testGetTuplePairs3() throws InterruptedException {
     List<Tuple> tuples = new ArrayList<Tuple>();
     Tuple tuple1 = new Tuple(null, 0);
     Tuple tuple2 = new Tuple(null, 1);

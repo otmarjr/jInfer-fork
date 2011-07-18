@@ -41,8 +41,8 @@ import org.w3c.dom.Node;
 @ServiceProvider(service = Repairer.class)
 public class RepairerImpl implements Repairer {
 
+  private static final String NEW_VALUE = "newValue";
   private static final Logger LOG = Logger.getLogger(RepairerImpl.class);
-  private int newValueID = 0;
 
   @Override
   public void start(InitialModel model, RepairerCallback callback) throws InterruptedException {
@@ -102,11 +102,11 @@ public class RepairerImpl implements Repairer {
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty() && !t2Answer.isEmpty()) {
-        result.add(new RepairImpl(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer()));
+        result.add(new RepairImpl(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), false));
       } else if (!t1Answer.isEmpty()) {
-        result.add(new RepairImpl(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer()));
+        result.add(new RepairImpl(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), false));
       } else if (!t2Answer.isEmpty()) {
-        result.add(new RepairImpl(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer()));
+        result.add(new RepairImpl(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), false));
       }
     } else {
       if (!t1Answer.isEmpty() && !t2Answer.isEmpty()) {
@@ -123,7 +123,7 @@ public class RepairerImpl implements Repairer {
       t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
-        result.add(new RepairImpl(t1Answer.getTupleNodeAnswer(), getNewValue()));
+        result.add(new RepairImpl(t1Answer.getTupleNodeAnswer(), NEW_VALUE, true));
 //        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue()));
       } else {
         result.add(new RepairImpl(t1Answer.getTupleNodeAnswer()));
@@ -196,10 +196,6 @@ public class RepairerImpl implements Repairer {
         }
       }
     }
-  }
-
-  private String getNewValue() {
-    return "newValue" + newValueID++;
   }
 
   private List<String> getValuesFromRepairs(List<RepairImpl> minimalRepairs, Node node) {

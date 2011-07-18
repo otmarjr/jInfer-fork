@@ -74,6 +74,7 @@ public class RXMLTree {
   private List<Pair<Tuple, Tuple>> tuplePairs = null;
   private double thresholdT;
   private XPathFactory xpathFactory;
+  private int newValueId = 0;
 
   public RXMLTree(final Document document) {
     this.document = document;
@@ -324,6 +325,10 @@ public class RXMLTree {
 
     for (Node node : repair.getValueNodes().keySet()) {
       String newValue = repair.getValueNodes().get(node);
+      if (repair.isNewValue()) {
+        newValue += newValueId++;
+      }
+      
       if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
         Attr attribute = (Attr) node;
         attribute.setValue(newValue);

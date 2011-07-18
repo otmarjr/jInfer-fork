@@ -36,4 +36,6 @@ public interface Repair {
   void addUnreliableNode(Node node);
   void addUnreliableNodes(Set<Node> nodes);
   void addValueNode(Node node, String value);
+  
+  boolean isNewValue();
 }

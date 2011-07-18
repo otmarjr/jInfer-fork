@@ -96,6 +96,7 @@ public class NewRepairerImpl implements Repairer {
     }
 
     if (!repairs.isEmpty()) {
+      LOG.debug("Repair groups: " + rXMLTree.getRepairGroups().size());
       RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
 
       rXMLTree.applyRepair(minimalRepair);

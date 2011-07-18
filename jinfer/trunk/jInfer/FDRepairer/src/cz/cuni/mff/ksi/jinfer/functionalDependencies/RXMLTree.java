@@ -67,6 +67,7 @@ public class RXMLTree {
   private Map<Node, NodeAttribute> nodesMap;
   private List<Tuple> tuples;
   private Map<Tuple, SideAnswers> tupleSideAnswers;
+  private Map<Path, NodeList> pathNodeListResults;
   private int tupleID;
   private List<RepairGroup> repairGroups;
   private List<UserNodeSelection> savedUserSelections;
@@ -82,6 +83,7 @@ public class RXMLTree {
     nodesMap = createNodesMap(document);
     xpathFactory = XPathFactory.newInstance();
     this.tupleSideAnswers = new HashMap<Tuple, SideAnswers>();
+    this.pathNodeListResults = new HashMap<Path, NodeList>();
   }
 
   public boolean isSatisfyingFD(final FD fd) throws InterruptedException {
@@ -269,13 +271,9 @@ public class RXMLTree {
    */
   public PathAnswer getGenericPathAnswerForTuple(final Path path, final Tuple tuple, final boolean isCreatingTuple, boolean isThesis) {
     if (path != null) {
-      XPath xPath = xpathFactory.newXPath();
-      XPathExpression xPathExpression;
-
       List<Node> result = new ArrayList<Node>();
       try {
-        xPathExpression = xPath.compile(path.getPathValue());
-        NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
+        NodeList nodeList = getNodeListForPath(path);
 
         if (tuple != null) {
           for (int i = 0; i < nodeList.getLength(); i++) {
@@ -452,6 +450,7 @@ public class RXMLTree {
 
     Set<Tuple> tuplesToRemove = new HashSet<Tuple>();
     for (Tuple tuple : tuplesToCheck) {
+      tupleSideAnswers.remove(tuple);
       if (!TupleFactory.isTuple(this, tuple)) {
         tuplesToRemove.add(tuple);
       }
@@ -460,7 +459,6 @@ public class RXMLTree {
     TupleFactory.removeTuples(this, tuplesToRemove);
 
     repairGroups.clear();
-    tupleSideAnswers.clear();
   }
 
   void removeTuple(final Tuple tuple) {
@@ -468,7 +466,6 @@ public class RXMLTree {
   }
 
   public void setWeights(List<Tweight> weights) {
-    XPathFactory xpathFactory = XPathFactory.newInstance();
     XPath xPath = xpathFactory.newXPath();
     XPathExpression xPathExpression;
 
@@ -525,7 +522,7 @@ public class RXMLTree {
       }
     } else {
       List<PathAnswer> fDSidePathAnswers = TupleFactory.getFDSidePathAnswers(this, tuple, sidePaths, isThesis);
-      
+
       SideAnswers sideAnswers = new SideAnswers();
       sideAnswers.setSide(fDSidePathAnswers, isLeft);
 
@@ -533,5 +530,19 @@ public class RXMLTree {
     }
 
     return tupleSideAnswers.get(tuple).getSide(isLeft);
+  }
+
+  private NodeList getNodeListForPath(final Path path) throws XPathExpressionException {
+    if (!pathNodeListResults.containsKey(path)) {
+      XPath xPath = xpathFactory.newXPath();
+      XPathExpression xPathExpression;
+
+      xPathExpression = xPath.compile(path.getPathValue());
+      NodeList nodeList = (NodeList) xPathExpression.evaluate(document, XPathConstants.NODESET);
+
+      pathNodeListResults.put(path, nodeList);
+    }
+
+    return pathNodeListResults.get(path);
   }
 }

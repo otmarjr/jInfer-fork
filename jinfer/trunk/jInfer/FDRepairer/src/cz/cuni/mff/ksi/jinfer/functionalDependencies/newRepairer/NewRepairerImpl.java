@@ -58,6 +58,7 @@ public class NewRepairerImpl implements Repairer {
     final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
     double coeffK = Double.parseDouble(prop.getProperty(RepairerPropertiesPanel.COEFF_K_PROP, RepairerPropertiesPanel.COEFF_K_DEFAULT));
     double thresholdT = getThreshold(prop);
+    repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));
 
     List<FD> functionalDependencies = model.getFunctionalDependencies();
     for (RXMLTree rXMLTree : model.getTrees()) {
@@ -111,10 +112,6 @@ public class NewRepairerImpl implements Repairer {
   }
 
   private RepairCandidate getRepairFromPicker(final RXMLTree tree) throws InterruptedException {
-    if (repairPicker == null) {
-      final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
-      repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));
-    }
     return repairPicker.getRepair(tree);
   }
 
@@ -164,7 +161,6 @@ public class NewRepairerImpl implements Repairer {
   private String getNewValue() {
     return "newValue" + newValueID++;
   }
-
 
   @Override
   public String getName() {

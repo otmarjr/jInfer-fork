@@ -43,6 +43,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   private Set<Node> unreliableNodes = null;
   private Map<Node, String> valueNodes;
   private Collection<Node> modifiedNodes = null;
+  private boolean isNewValue;
 
   public RepairImpl() {
     this.valueNodes = new HashMap<Node, String>();
@@ -54,9 +55,10 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
     this.unreliableNode = unreliableNode;
   }
 
-  public RepairImpl(final Node valueNode, final String changedValue) {
+  public RepairImpl(final Node valueNode, final String changedValue, boolean isNewValue) {
     this();
     //TODO sviro check for null
+    this.isNewValue = isNewValue;
     valueNodes.put(valueNode, changedValue);
   }
 
@@ -229,4 +231,11 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
 
     return builder.toString();
   }
+
+  @Override
+  public boolean isNewValue() {
+    return isNewValue;
+  }
+  
+  
 }

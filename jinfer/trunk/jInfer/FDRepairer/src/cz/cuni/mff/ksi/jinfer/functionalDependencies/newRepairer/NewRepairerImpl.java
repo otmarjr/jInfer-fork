@@ -46,8 +46,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = Repairer.class)
 public class NewRepairerImpl implements Repairer {
 
+  private static final String NEW_VALUE = "newValue";
   private static final Logger LOG = Logger.getLogger(NewRepairerImpl.class);
-  private int newValueID = 0;
   private RepairPicker repairPicker = null;
 
   @Override
@@ -125,10 +125,10 @@ public class NewRepairerImpl implements Repairer {
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty()) {
-        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue(), false));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue(), false));
       }
     } else {
       if (!t1Answer.isEmpty()) {
@@ -144,8 +144,8 @@ public class NewRepairerImpl implements Repairer {
       t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
-        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
-        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
+        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), NEW_VALUE, tree, coeffK, path.getPathValue(), true));
+        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), NEW_VALUE, tree, coeffK, path.getPathValue(), true));
       } else {
         result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
         result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
@@ -156,10 +156,6 @@ public class NewRepairerImpl implements Repairer {
     tree.addRepairGroup(repairGroup);
 
     return result;
-  }
-
-  private String getNewValue() {
-    return "newValue" + newValueID++;
   }
 
   @Override

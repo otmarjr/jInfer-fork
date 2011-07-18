@@ -58,6 +58,7 @@ public class RepairCandidate implements Repair {
   private RXMLTree tree;
   private double coeffK;
   private Set<String> nodePaths;
+  private boolean isNewValue;
 
   public RepairCandidate() {
     this.valueNodes = new HashMap<Node, String>();
@@ -72,11 +73,12 @@ public class RepairCandidate implements Repair {
     nodePaths.add(path);
   }
 
-  public RepairCandidate(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path) {
+  public RepairCandidate(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path, boolean isNewValue) {
     this();
     valueNodes.put(valueNode, changedValue);
     this.tree = tree;
     this.coeffK = coeffK;
+    this.isNewValue = isNewValue;
     nodePaths.add(path);
   }
 
@@ -327,4 +329,11 @@ public class RepairCandidate implements Repair {
   public int getNodeSize() {
     return nodePaths.size();
   }
+
+  @Override
+  public boolean isNewValue() {
+    return isNewValue;
+  }
+  
+  
 }

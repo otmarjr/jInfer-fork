@@ -89,6 +89,7 @@ public class TupleFactoryTest {
     tuples.add(tuple1);
 
     List<Pair<Tuple, Tuple>> expResult = new ArrayList<Pair<Tuple, Tuple>>();
+    expResult.add(new ImmutablePair<Tuple, Tuple>(tuple1, tuple1));
     List<Pair<Tuple, Tuple>> result = TupleFactory.getTuplePairs(tuples);
     assertEquals(expResult, result);
   }

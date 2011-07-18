@@ -42,6 +42,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   private Node unreliableNode = null;
   private Set<Node> unreliableNodes = null;
   private Map<Node, String> valueNodes;
+  private Collection<Node> modifiedNodes = null;
 
   public RepairImpl() {
     this.valueNodes = new HashMap<Node, String>();
@@ -202,12 +203,13 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   }
 
   public Collection<Node> getModifiedNodes() {
-    Collection<Node> result = new ArrayList<Node>(getUpdatedNodes().size() + getFalseNodes().size());
+    if (modifiedNodes == null) {
+      modifiedNodes = new ArrayList<Node>(getUpdatedNodes().size() + getFalseNodes().size());
+      modifiedNodes.addAll(getUpdatedNodes());
+      modifiedNodes.addAll(getFalseNodes());
+    }
 
-    result.addAll(getUpdatedNodes());
-    result.addAll(getFalseNodes());
-
-    return result;
+    return modifiedNodes;
   }
 
   @Override

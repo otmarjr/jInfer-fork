@@ -231,13 +231,14 @@ public class RepairerImpl implements Repairer {
     result.add(repair);
 
     for (RepairImpl repair1 : repairs) {
-      if (RepairImpl.COMPARE_EQUAL == repair1.compareTo(result.get(0))) {
+      int compared = repair1.compareTo(result.get(0));
+      if (RepairImpl.COMPARE_EQUAL == compared) {
         result.add(repair1);
-      } else if (RepairImpl.COMPARE_SMALLER == repair1.compareTo(result.get(0))) {
+      } else if (RepairImpl.COMPARE_SMALLER ==  compared) {
         repairsToRemove.addAll(result);
         result.clear();
         result.add(repair1);
-      } else if (RepairImpl.COMPARE_GREATER == repair1.compareTo(result.get(0))) {
+      } else if (RepairImpl.COMPARE_GREATER == compared) {
         repairsToRemove.add(repair1);
       }
     }

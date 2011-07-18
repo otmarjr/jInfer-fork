@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.RepairImpl;
 import java.awt.Color;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;

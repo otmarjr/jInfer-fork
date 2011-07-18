@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.util.List;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -203,7 +202,7 @@ public class RepairPickerComponent extends javax.swing.JPanel {
     return interrupted;
   }
 
-  public Repair getPickedRepair() {
+  public RepairCandidate getPickedRepair() {
     Object lastPathComponent = repairTree.getLastSelectedPathComponent();
     if (lastPathComponent instanceof RepairTreeNode) {
       return ((RepairTreeNode) lastPathComponent).getRepair();

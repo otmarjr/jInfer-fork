@@ -14,24 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
+package cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces;
 
-import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.Map;
+import java.util.Set;
+import org.w3c.dom.Node;
 
 /**
  *
  * @author sviro
  */
-public class RepairTreeNode extends DefaultMutableTreeNode {
-
-  private final RepairCandidate repair;
+public interface Repair {
   
-  RepairTreeNode(final RepairCandidate repair) {
-    super("Repair - " + repair.getWeight());
-    this.repair = repair;
-  }
-
-  public RepairCandidate getRepair() {
-    return repair;
-  }
+  boolean hasReliabilityRepair();
+  boolean hasValueRepair();
+  
+  Node getUnreliableNode();
+  Set<Node> getUnreliableNodes();
+  Map<Node, String> getValueNodes();
+  
+  void addUnreliableNode(Node node);
+  void addUnreliableNodes(Set<Node> nodes);
+  void addValueNode(Node node, String value);
 }

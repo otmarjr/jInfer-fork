@@ -78,6 +78,11 @@ public class Tuple {
     
     return this.getId() == tuple.getId();
   }
+
+  @Override
+  public String toString() {
+    return "Tuple:" + tupleId;
+  }
   
   
   

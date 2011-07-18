@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,33 +29,33 @@ import java.util.List;
  */
 public class RepairGroup {
   
-  private final List<Repair> repairs;
+  private final List<RepairCandidate> repairs;
   private final FD functionalDependency;
   private double weight = -1;
   
   public RepairGroup(final FD functionalDependency) {
-    repairs = new ArrayList<Repair>();
+    repairs = new ArrayList<RepairCandidate>();
     this.functionalDependency = functionalDependency;
   }
   
-  public void addRepair(final Repair repair) {
+  public void addRepair(final RepairCandidate repair) {
     repairs.add(repair);
   }
   
-  public void addRepairs(final Collection<Repair> repairs) {
+  public void addRepairs(final Collection<RepairCandidate> repairs) {
     this.repairs.addAll(repairs);
     
-    for (Repair repair : repairs) {
+    for (RepairCandidate repair : repairs) {
       repair.addToRepairGroup(this);
     }
   }
 
-  public List<Repair> getRepairs() {
+  public List<RepairCandidate> getRepairs() {
     if (!repairs.isEmpty()) {
-      Collections.sort(repairs, new Comparator<Repair>() {
+      Collections.sort(repairs, new Comparator<RepairCandidate>() {
 
         @Override
-        public int compare(Repair o1, Repair o2) {
+        public int compare(RepairCandidate o1, RepairCandidate o2) {
           return (int) (o1.getWeight() - o2.getWeight());
         }
       });
@@ -78,14 +77,14 @@ public class RepairGroup {
   private double computeWeight() {
     double result = 0d;
     
-    for (Repair repair : repairs) {
+    for (RepairCandidate repair : repairs) {
       result += repair.getWeight();
     }
     
     return result;     
   }
   
-  public Repair getMinimalRepair() {
+  public RepairCandidate getMinimalRepair() {
     if (!repairs.isEmpty()) {
       return getRepairs().get(0);
     }

@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
+package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairGroup;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.UserNodeSelection;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repair;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,13 +47,9 @@ import org.w3c.dom.Text;
  *
  * @author sviro
  */
-public class Repair implements Comparable<Repair> {
+public class RepairCandidate implements Repair {
 
-  private static final Logger LOG = Logger.getLogger(Repair.class);
-  public static final int COMPARE_SMALLER = -1;
-  public static final int COMPARE_EQUAL = 0;
-  public static final int COMPARE_GREATER = 1;
-  public static final int COMPARE_UNAVAILABLE = 2;
+  private static final Logger LOG = Logger.getLogger(RepairCandidate.class);
   private Node unreliableNode = null;
   private Set<Node> unreliableNodes = null;
   private Map<Node, String> valueNodes;
@@ -65,41 +59,33 @@ public class Repair implements Comparable<Repair> {
   private double coeffK;
   private Set<String> nodePaths;
 
-  public Repair() {
+  public RepairCandidate() {
     this.valueNodes = new HashMap<Node, String>();
     this.nodePaths = new HashSet<String>();
   }
 
-  public Repair(final Node unreliableNode) {
+  public RepairCandidate(final Node unreliableNode, final RXMLTree tree, final double coeffK, final String path) {
     this();
-    //TODO sviro check for null
     this.unreliableNode = unreliableNode;
+    this.tree = tree;
+    this.coeffK = coeffK;
+    nodePaths.add(path);
   }
 
-  public Repair(final Node valueNode, final String changedValue) {
+  public RepairCandidate(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path) {
     this();
-    //TODO sviro check for null
     valueNodes.put(valueNode, changedValue);
-  }
-
-  public Repair(final Node unreliableNode, final RXMLTree tree, final double coeffK, final String path) {
-    this(unreliableNode);
     this.tree = tree;
     this.coeffK = coeffK;
     nodePaths.add(path);
   }
 
-  public Repair(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path) {
-    this(valueNode, changedValue);
-    this.tree = tree;
-    this.coeffK = coeffK;
-    nodePaths.add(path);
-  }
-
+  @Override
   public boolean hasReliabilityRepair() {
-    return unreliableNode != null;
+    return !hasValueRepair();
   }
 
+  @Override
   public Set<Node> getUnreliableNodes() {
     if (unreliableNodes == null) {
       unreliableNodes = new HashSet<Node>();
@@ -108,18 +94,22 @@ public class Repair implements Comparable<Repair> {
     return unreliableNodes;
   }
 
+  @Override
   public Node getUnreliableNode() {
     return unreliableNode;
   }
 
+  @Override
   public Map<Node, String> getValueNodes() {
     return valueNodes;
   }
 
+  @Override
   public void addUnreliableNodes(Set<Node> nodes) {
     getUnreliableNodes().addAll(nodes);
   }
 
+  @Override
   public boolean hasValueRepair() {
     return !valueNodes.isEmpty();
   }
@@ -130,7 +120,7 @@ public class Repair implements Comparable<Repair> {
       return false;
     }
 
-    Repair repair = (Repair) obj;
+    RepairCandidate repair = (RepairCandidate) obj;
 
     return this.getUnreliableNodes().equals(repair.getUnreliableNodes()) && this.getValueNodes().equals(repair.getValueNodes());
   }
@@ -143,10 +133,12 @@ public class Repair implements Comparable<Repair> {
     return hash;
   }
 
+  @Override
   public void addUnreliableNode(Node node) {
     getUnreliableNodes().add(node);
   }
 
+  @Override
   public void addValueNode(Node node, String value) {
     valueNodes.put(node, value);
   }
@@ -155,7 +147,7 @@ public class Repair implements Comparable<Repair> {
     if (unreliableNode != null) {
       unreliableNodes.add(unreliableNode);
       String newParentPath = parentPath;
-      
+
       if (this.unreliableNode != unreliableNode) {
         StringBuilder builder = new StringBuilder();
         builder.append(parentPath).append("/");
@@ -184,73 +176,6 @@ public class Repair implements Comparable<Repair> {
         }
       }
     }
-  }
-
-  /**
-   * Compare this Repair with repair in parameter and returns -1, 0, 1 or 2 if
-   * this repair is smaller, equal, greater or unable to comapre with another repair.
-   * @param repair The repair with compare to.
-   * @return 
-   */
-  @Override
-  public int compareTo(Repair repair) {
-    if (isSmaller(this, repair) && isSmaller(repair, this)) {
-      return 0;
-    }
-
-    if (isSmaller(this, repair)) {
-      return -1;
-    }
-
-    if (isSmaller(repair, this)) {
-      return 1;
-    }
-
-    return 2;
-  }
-
-  /**
-   * 
-   * @param modified1
-   * @param modified2
-   * @param false1
-   * @param false2
-   * @return 
-   */
-  private static boolean isSmaller(Repair repair1, Repair repair2) {
-    Collection<Node> modifiedNodes1 = repair1.getModifiedNodes();
-    Collection<Node> modifiedNodes2 = repair2.getModifiedNodes();
-    Collection<Node> falseNodes1 = repair1.getFalseNodes();
-    Collection<Node> falseNodes2 = repair2.getFalseNodes();
-
-    return isSubset(modifiedNodes1, modifiedNodes2) && isSubset(falseNodes1, falseNodes2);
-  }
-
-  /**
-   * Determines if set1 is subset of set2.
-   * @param set1
-   * @param set2
-   * @return true if set1 is subset of set2, otherwise return false.
-   */
-  private static boolean isSubset(Collection<Node> set1, Collection<Node> set2) {
-    return set2.containsAll(set1);
-  }
-
-  public Collection<Node> getUpdatedNodes() {
-    return valueNodes.keySet();
-  }
-
-  public Collection<Node> getFalseNodes() {
-    return getUnreliableNodes();
-  }
-
-  public Collection<Node> getModifiedNodes() {
-    Collection<Node> result = new ArrayList<Node>(getUpdatedNodes().size() + getFalseNodes().size());
-
-    result.addAll(getUpdatedNodes());
-    result.addAll(getFalseNodes());
-
-    return result;
   }
 
   @Override
@@ -402,10 +327,4 @@ public class Repair implements Comparable<Repair> {
   public int getNodeSize() {
     return nodePaths.size();
   }
-
-  public boolean hasSubsetPaths(UserNodeSelection userSelection) {
-    throw new UnsupportedOperationException("Not yet implemented");
-  }
-
-  
 }

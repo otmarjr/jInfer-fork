@@ -30,8 +30,6 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairerCallback;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.properties.RepairerPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.RepairFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,7 +38,6 @@ import java.util.Properties;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
-import org.w3c.dom.Node;
 
 /**
  *
@@ -87,7 +84,7 @@ public class NewRepairerImpl implements Repairer {
   }
 
   private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
-    List<Repair> repairs = new ArrayList<Repair>();
+    List<RepairCandidate> repairs = new ArrayList<RepairCandidate>();
     for (FD fd : functionalDependencies) {
       if (!rXMLTree.isSatisfyingFDThesis(fd)) {
         LOG.debug("XML is inconsistent to FD " + fd.toString());
@@ -99,14 +96,14 @@ public class NewRepairerImpl implements Repairer {
     }
 
     if (!repairs.isEmpty()) {
-      Repair minimalRepair = getRepairFromPicker(rXMLTree);
+      RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
 
       rXMLTree.applyRepair(minimalRepair);
       rXMLTree.clearRepairs(minimalRepair);
     }
   }
 
-  private Repair getRepairFromPicker(final RXMLTree tree) throws InterruptedException {
+  private RepairCandidate getRepairFromPicker(final RXMLTree tree) throws InterruptedException {
     if (repairPicker == null) {
       final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
       repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));
@@ -114,8 +111,8 @@ public class NewRepairerImpl implements Repairer {
     return repairPicker.getRepair(tree);
   }
 
-  private Collection<Repair> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd, final double coeffK) {
-    Set<Repair> result = new HashSet<Repair>();
+  private Collection<RepairCandidate> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd, final double coeffK) {
+    Set<RepairCandidate> result = new HashSet<RepairCandidate>();
     RepairGroup repairGroup = new RepairGroup(fd);
 
     Path rightPath = fd.getRightSidePaths().getPathObj();
@@ -124,17 +121,17 @@ public class NewRepairerImpl implements Repairer {
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
     } else {
       if (!t1Answer.isEmpty()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
     }
 
@@ -143,11 +140,11 @@ public class NewRepairerImpl implements Repairer {
       t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
+        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
+        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), getNewValue(), tree, coeffK, path.getPathValue()));
       } else {
-        result.add(new Repair(t1Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
-        result.add(new Repair(t2Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
+        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
+        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
       }
     }
 
@@ -157,112 +154,10 @@ public class NewRepairerImpl implements Repairer {
     return result;
   }
 
-  private List<Repair> removeNonMinimalRepairs(RXMLTree rXMLTree, List<Repair> repairs) {
-    List<Repair> result = new ArrayList<Repair>();
-
-    while (!repairs.isEmpty()) {
-      Repair repair = repairs.get(0);
-
-      List<Repair> minRepairs = getMinimalRepairs(repairs, repair);
-      result.addAll(minRepairs);
-    }
-
-    return result;
-  }
-
-  private Repair mergeRepairs(List<Repair> minimalRepairs) {
-    Repair result = new Repair();
-
-    //value merge
-    for (Repair repair : minimalRepairs) {
-      for (Node node : repair.getValueNodes().keySet()) {
-        if (!result.getValueNodes().containsKey(node)) {
-          String value = repair.getValueNodes().get(node);
-          List<String> nodeValues = getValuesFromRepairs(minimalRepairs, node);
-          if (nodeValues.size() == 1 || allValuesEquals(nodeValues, value)) {
-            result.addValueNode(node, value);
-          }
-        }
-      }
-    }
-
-    //reliability merge
-    List<Repair> reliabilityRepairs = RepairFactory.getReliabilityRepairs(minimalRepairs);
-    for (Repair repair : reliabilityRepairs) {
-      result.addUnreliableNodes(repair.getUnreliableNodes());
-    }
-
-    List<Pair<Repair, Repair>> valuePairs = RepairFactory.getValuePairs(minimalRepairs);
-    for (Pair<Repair, Repair> valuePair : valuePairs) {
-      Repair firstRepair = valuePair.getFirst();
-      Repair secondRepair = valuePair.getSecond();
-      addUnreliableNodesFromValues(firstRepair, secondRepair, result);
-      addUnreliableNodesFromValues(secondRepair, firstRepair, result);
-    }
-
-    return result;
-  }
-
-  private void addUnreliableNodesFromValues(Repair firstRepair, Repair secondRepair, Repair result) {
-    for (Node node : firstRepair.getValueNodes().keySet()) {
-      if (!result.getUnreliableNodes().contains(node)) {
-        String firstValue = firstRepair.getValueNodes().get(node);
-        if (secondRepair.getValueNodes().containsKey(node) && firstValue.equals(secondRepair.getValueNodes().get(node))) {
-          result.addUnreliableNode(node);
-        }
-      }
-    }
-  }
-
   private String getNewValue() {
     return "newValue" + newValueID++;
   }
 
-  private List<String> getValuesFromRepairs(List<Repair> minimalRepairs, Node node) {
-    List<String> result = new ArrayList<String>();
-
-    for (Repair repair : minimalRepairs) {
-      if (repair.getValueNodes().containsKey(node)) {
-        result.add(repair.getValueNodes().get(node));
-      }
-    }
-
-    return result;
-  }
-
-  private boolean allValuesEquals(List<String> nodeValues, String value) {
-    for (String nodeValue : nodeValues) {
-      if (!value.equals(nodeValue)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private List<Repair> getMinimalRepairs(List<Repair> repairs, Repair repair) {
-    List<Repair> result = new ArrayList<Repair>();
-    Set<Repair> repairsToRemove = new HashSet<Repair>();
-
-    result.add(repair);
-
-    for (Repair repair1 : repairs) {
-      if (Repair.COMPARE_EQUAL == repair1.compareTo(result.get(0))) {
-        result.add(repair1);
-      } else if (Repair.COMPARE_SMALLER == repair1.compareTo(result.get(0))) {
-        repairsToRemove.addAll(result);
-        result.clear();
-        result.add(repair1);
-      } else if (Repair.COMPARE_GREATER == repair1.compareTo(result.get(0))) {
-        repairsToRemove.add(repair1);
-      }
-    }
-
-    repairsToRemove.addAll(result);
-    repairs.removeAll(repairsToRemove);
-
-    return result;
-  }
 
   @Override
   public String getName() {

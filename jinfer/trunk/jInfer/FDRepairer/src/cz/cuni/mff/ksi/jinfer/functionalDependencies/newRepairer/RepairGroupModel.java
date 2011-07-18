@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.Repair;
 import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -46,7 +45,7 @@ public class RepairGroupModel {
       for (RepairGroup repairGroup : repairGroups) {
         final DefaultMutableTreeNode repairGroupNode = new DefaultMutableTreeNode("repairGroup - " + repairGroup.getWeight());
         
-        for (Repair repair : repairGroup.getRepairs()) {
+        for (RepairCandidate repair : repairGroup.getRepairs()) {
           final RepairTreeNode repairNode = new RepairTreeNode(repair);
           repairGroupNode.add(repairNode);
         }

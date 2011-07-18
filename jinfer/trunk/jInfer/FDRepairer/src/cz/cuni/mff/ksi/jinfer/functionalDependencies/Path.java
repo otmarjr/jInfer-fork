@@ -63,6 +63,11 @@ public class Path {
     hash = 97 * hash + (this.path != null ? this.path.hashCode() : 0);
     return hash;
   }
+
+  @Override
+  public String toString() {
+    return path;
+  }
   
   
 }

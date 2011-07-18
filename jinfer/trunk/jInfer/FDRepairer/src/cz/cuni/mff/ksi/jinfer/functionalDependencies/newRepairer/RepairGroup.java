@@ -56,7 +56,15 @@ public class RepairGroup {
 
         @Override
         public int compare(RepairCandidate o1, RepairCandidate o2) {
-          return (int) (o1.getWeight() - o2.getWeight());
+          double result = o1.getWeight() - o2.getWeight();
+          if (result < 0) {
+            return -1;
+          }
+          
+          if (result > 0) {
+            return 1;
+          }
+          return 0;
         }
       });
     }

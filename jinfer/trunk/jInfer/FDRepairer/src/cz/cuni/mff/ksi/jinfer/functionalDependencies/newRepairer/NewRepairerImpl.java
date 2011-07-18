@@ -77,6 +77,9 @@ public class NewRepairerImpl implements Repairer {
 
   private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
     while (rXMLTree.isInconsistent(functionalDependencies)) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       repairRXMLTree2(rXMLTree, functionalDependencies, coeffK);
     }
 
@@ -86,6 +89,9 @@ public class NewRepairerImpl implements Repairer {
   private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
     List<RepairCandidate> repairs = new ArrayList<RepairCandidate>();
     for (FD fd : functionalDependencies) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
       if (!rXMLTree.isSatisfyingFDThesis(fd)) {
         LOG.debug("XML is inconsistent to FD " + fd.toString());
         List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFDThesis(rXMLTree, fd);

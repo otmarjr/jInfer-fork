@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.PathAnswer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.RepairStatistics;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Tuple;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.TupleFactory;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
@@ -77,17 +78,21 @@ public class NewRepairerImpl implements Repairer {
   }
 
   private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
+    RepairStatistics repairStats = new RepairStatistics();
+    
     while (rXMLTree.isInconsistent(functionalDependencies)) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      repairRXMLTree2(rXMLTree, functionalDependencies, coeffK);
+      repairRXMLTree2(rXMLTree, functionalDependencies, coeffK, repairStats);
     }
-
+    
+    
+    printStatistics(repairStats);
     return rXMLTree;
   }
 
-  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
+  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK, final RepairStatistics repairStats) throws InterruptedException {
     List<RepairCandidate> repairs = new ArrayList<RepairCandidate>();
     for (FD fd : functionalDependencies) {
       if (Thread.interrupted()) {
@@ -103,9 +108,13 @@ public class NewRepairerImpl implements Repairer {
     }
 
     if (!repairs.isEmpty()) {
+      repairStats.setRepairGroup(rXMLTree.getRepairGroups().size());
+      
+      
       LOG.debug("Repair groups: " + rXMLTree.getRepairGroups().size());
       RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
-
+      repairStats.collectData(minimalRepair);
+      
       rXMLTree.applyRepair(minimalRepair);
       rXMLTree.clearRepairs(minimalRepair);
     }
@@ -181,5 +190,18 @@ public class NewRepairerImpl implements Repairer {
     }
 
     return result;
+  }
+  
+  private void printStatistics(RepairStatistics repairStats) {
+    LOG.info("Repair Statistics:");
+    
+    LOG.info("Starting RG #: " + repairStats.getStartingRG());
+    LOG.info("Repaired RG #: " + repairStats.getRGCount());
+    
+    LOG.info("Unreliable nodes #: " + repairStats.getUnreliableCount());
+    LOG.info("Value nodes - new values #: " + repairStats.getNewValueCount());
+    LOG.info("Value nodes - changed values #: " + repairStats.getValueChangesCount());
+    
+    LOG.info("---------- End of Statistics. ----------");
   }
 }

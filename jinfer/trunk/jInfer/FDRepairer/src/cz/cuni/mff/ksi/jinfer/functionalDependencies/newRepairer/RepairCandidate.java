@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.NodeValue;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repair;
@@ -52,7 +53,7 @@ public class RepairCandidate implements Repair {
   private static final Logger LOG = Logger.getLogger(RepairCandidate.class);
   private Node unreliableNode = null;
   private Set<Node> unreliableNodes = null;
-  private Map<Node, String> valueNodes;
+  private Map<Node, NodeValue> valueNodes;
   private double weight = -1;
   private RepairGroup repairGroup;
   private RXMLTree tree;
@@ -61,7 +62,7 @@ public class RepairCandidate implements Repair {
   private boolean isNewValue;
 
   public RepairCandidate() {
-    this.valueNodes = new HashMap<Node, String>();
+    this.valueNodes = new HashMap<Node, NodeValue>();
     this.nodePaths = new HashSet<String>();
   }
 
@@ -75,7 +76,7 @@ public class RepairCandidate implements Repair {
 
   public RepairCandidate(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path, boolean isNewValue) {
     this();
-    valueNodes.put(valueNode, changedValue);
+    valueNodes.put(valueNode, new NodeValue(changedValue, isNewValue));
     this.tree = tree;
     this.coeffK = coeffK;
     this.isNewValue = isNewValue;
@@ -102,7 +103,7 @@ public class RepairCandidate implements Repair {
   }
 
   @Override
-  public Map<Node, String> getValueNodes() {
+  public Map<Node, NodeValue> getValueNodes() {
     return valueNodes;
   }
 
@@ -141,7 +142,7 @@ public class RepairCandidate implements Repair {
   }
 
   @Override
-  public void addValueNode(Node node, String value) {
+  public void addValueNode(Node node, NodeValue value) {
     valueNodes.put(node, value);
   }
 
@@ -191,7 +192,7 @@ public class RepairCandidate implements Repair {
     }
     builder.append("\t").append("Value nodes:\n");
     for (Node node : valueNodes.keySet()) {
-      builder.append("\t\t").append("node: ").append(node.toString()).append(" value: ").append(valueNodes.get(node)).append("\n");
+      builder.append("\t\t").append("node: ").append(node.toString()).append(" value: ").append(valueNodes.get(node).getChangedValue()).append("\n");
 
     }
 
@@ -238,13 +239,13 @@ public class RepairCandidate implements Repair {
         if (node instanceof Attr) {
           Node cloneNode = ((Attr) node).getOwnerElement().cloneNode(true);
           builder.append(transformNodeToXML(cloneNode)).append(" -> ");
-          setNewValue(cloneNode, valueNodes.get(node), true, node.getNodeName());
+          setNewValue(cloneNode, valueNodes.get(node).getChangedValue(), true, node.getNodeName());
           builder.append(transformNodeToXML(cloneNode)).append("\n");
         } else {
           Node cloneNode = ((Text) node).getParentNode().cloneNode(true);
 
           builder.append(transformNodeToXML(cloneNode)).append(" -> ");
-          setNewValue(cloneNode, valueNodes.get(node), false, null);
+          setNewValue(cloneNode, valueNodes.get(node).getChangedValue(), false, null);
           builder.append(transformNodeToXML(cloneNode)).append("\n");
         }
       }
@@ -334,6 +335,15 @@ public class RepairCandidate implements Repair {
   public boolean isNewValue() {
     return isNewValue;
   }
+
+  @Override
+  public boolean isNewValue(Node node) {
+    if (!valueNodes.containsKey(node)) {
+      throw new IllegalArgumentException("The node " + node + "is not associated any value");
+    }
+    return valueNodes.get(node).isNewValue();
+  }
+  
   
   
 }

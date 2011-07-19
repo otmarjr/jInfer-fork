@@ -108,19 +108,20 @@ public class NewRepairerImpl implements Repairer {
     }
 
     if (!repairs.isEmpty()) {
-      repairStats.setRepairGroup(rXMLTree.getRepairGroups().size());
-      
+
       if (repairPicker instanceof RepairPickerImpl) {
         while (!rXMLTree.getRepairGroups().isEmpty()) {
           RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
           rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getFirst());
           rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getSecond());
           if (!rXMLTree.isTuplePairSatisfyingFDThesis(minimalRepair.getTuplePair(), minimalRepair.getFD())) {
+            repairStats.setRepairGroup(rXMLTree.getRepairGroups().size());
             repairStats.collectData(minimalRepair);
             rXMLTree.applyRepair(minimalRepair);
           }
         }
       } else {
+        repairStats.setRepairGroup(rXMLTree.getRepairGroups().size());
         LOG.debug("Repair groups: " + rXMLTree.getRepairGroups().size());
         RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
         repairStats.collectData(minimalRepair);

@@ -329,7 +329,7 @@ public class RXMLTree {
       if (nodeValue.isNewValue()) {
         newValue += newValueId++;
       }
-      
+
       if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
         Attr attribute = (Attr) node;
         attribute.setValue(newValue);
@@ -425,8 +425,8 @@ public class RXMLTree {
           if (result < 0) {
             return -1;
           }
-          
-          if (result >0) {
+
+          if (result > 0) {
             return 1;
           }
           return 0;
@@ -455,7 +455,7 @@ public class RXMLTree {
     return null;
   }
 
-  public void clearRepairs(final RepairCandidate repair) {
+  public void clearRepairs(final RepairCandidate repair, final boolean clearRG) {
     Set<Tuple> tuplesToCheck = new HashSet<Tuple>();
 
     for (Node node : repair.getUnreliableNodes()) {
@@ -471,8 +471,9 @@ public class RXMLTree {
     }
 
     TupleFactory.removeTuples(this, tuplesToRemove);
-
-    repairGroups.clear();
+    if (clearRG) {
+      repairGroups.clear();
+    }
   }
 
   void removeTuple(final Tuple tuple) {
@@ -559,16 +560,15 @@ public class RXMLTree {
 
     return pathNodeListResults.get(path);
   }
-  
+
   public void invalidateSidePathAnswers(final Tuple tuple) {
     tupleSideAnswers.remove(tuple);
   }
-  
-  
+
   public void removeRG(RepairGroup minimalRepairGroup) {
     repairGroups.remove(minimalRepairGroup);
   }
-  
+
   public boolean isRGEmpty() {
     return repairGroups.isEmpty();
   }

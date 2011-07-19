@@ -324,8 +324,9 @@ public class RXMLTree {
     }
 
     for (Node node : repair.getValueNodes().keySet()) {
-      String newValue = repair.getValueNodes().get(node);
-      if (repair.isNewValue()) {
+      NodeValue nodeValue = repair.getValueNodes().get(node);
+      String newValue = nodeValue.getChangedValue();
+      if (nodeValue.isNewValue()) {
         newValue += newValueId++;
       }
       

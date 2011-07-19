@@ -18,9 +18,11 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.NodeValue;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.PathAnswer;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.RepairStatistics;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Tuple;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.TupleFactory;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
@@ -68,6 +70,7 @@ public class RepairerImpl implements Repairer {
 
   private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) throws InterruptedException {
     List<RepairImpl> repairs = new ArrayList<RepairImpl>();
+    RepairStatistics repairStats = new RepairStatistics();
     for (FD fd : functionalDependencies) {
       LOG.info("Start checking inconsistency of FD: " + fd);
       if (!rXMLTree.isSatisfyingFD(fd)) {
@@ -86,8 +89,11 @@ public class RepairerImpl implements Repairer {
       List<RepairImpl> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
       RepairImpl repair = mergeRepairs(minimalRepairs);
 
+      repairStats.collectData(repair);
+      
       rXMLTree.applyRepair(repair);
     }
+    printStatistics(repairStats);
 
     return rXMLTree;
   }
@@ -160,8 +166,8 @@ public class RepairerImpl implements Repairer {
     for (RepairImpl repair : minimalRepairs) {
       for (Node node : repair.getValueNodes().keySet()) {
         if (!result.getValueNodes().containsKey(node)) {
-          String value = repair.getValueNodes().get(node);
-          List<String> nodeValues = getValuesFromRepairs(minimalRepairs, node);
+          NodeValue value = repair.getValueNodes().get(node);
+          List<NodeValue> nodeValues = getValuesFromRepairs(minimalRepairs, node);
           if (nodeValues.size() == 1 || allValuesEquals(nodeValues, value)) {
             result.addValueNode(node, value);
           }
@@ -190,7 +196,7 @@ public class RepairerImpl implements Repairer {
   private void addUnreliableNodesFromValues(RepairImpl firstRepair, RepairImpl secondRepair, RepairImpl result) {
     for (Node node : firstRepair.getValueNodes().keySet()) {
       if (!result.getUnreliableNodes().contains(node)) {
-        String firstValue = firstRepair.getValueNodes().get(node);
+        NodeValue firstValue = firstRepair.getValueNodes().get(node);
         if (secondRepair.getValueNodes().containsKey(node) && firstValue.equals(secondRepair.getValueNodes().get(node))) {
           result.addUnreliableNode(node);
         }
@@ -198,8 +204,8 @@ public class RepairerImpl implements Repairer {
     }
   }
 
-  private List<String> getValuesFromRepairs(List<RepairImpl> minimalRepairs, Node node) {
-    List<String> result = new ArrayList<String>();
+  private List<NodeValue> getValuesFromRepairs(List<RepairImpl> minimalRepairs, Node node) {
+    List<NodeValue> result = new ArrayList<NodeValue>();
 
     for (RepairImpl repair : minimalRepairs) {
       if (repair.getValueNodes().containsKey(node)) {
@@ -210,8 +216,8 @@ public class RepairerImpl implements Repairer {
     return result;
   }
 
-  private boolean allValuesEquals(List<String> nodeValues, String value) {
-    for (String nodeValue : nodeValues) {
+  private boolean allValuesEquals(List<NodeValue> nodeValues, NodeValue value) {
+    for (NodeValue nodeValue : nodeValues) {
       if (!value.equals(nodeValue)) {
         return false;
       }
@@ -258,5 +264,15 @@ public class RepairerImpl implements Repairer {
   @Override
   public String getModuleDescription() {
     return "This repairer is implemented from the paper.";
+  }
+
+  private void printStatistics(RepairStatistics repairStats) {
+    LOG.info("Repair Statistics:");
+    
+    LOG.info("Unreliable nodes #: " + repairStats.getUnreliableCount());
+    LOG.info("Value nodes - new values #: " + repairStats.getNewValueCount());
+    LOG.info("Value nodes - changed values #: " + repairStats.getValueChangesCount());
+    
+    LOG.info("---------- End of Statistics. ----------");
   }
 }

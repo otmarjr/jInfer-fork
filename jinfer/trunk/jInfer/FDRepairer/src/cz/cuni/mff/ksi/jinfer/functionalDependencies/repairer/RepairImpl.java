@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer;
 
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.NodeValue;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repair;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,12 +42,12 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   public static final int COMPARE_UNAVAILABLE = 2;
   private Node unreliableNode = null;
   private Set<Node> unreliableNodes = null;
-  private Map<Node, String> valueNodes;
+  private Map<Node, NodeValue> valueNodes;
   private Collection<Node> modifiedNodes = null;
   private boolean isNewValue;
 
   public RepairImpl() {
-    this.valueNodes = new HashMap<Node, String>();
+    this.valueNodes = new HashMap<Node, NodeValue>();
   }
 
   public RepairImpl(final Node unreliableNode) {
@@ -59,7 +60,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
     this();
     //TODO sviro check for null
     this.isNewValue = isNewValue;
-    valueNodes.put(valueNode, changedValue);
+    valueNodes.put(valueNode, new NodeValue(changedValue, isNewValue));
   }
 
   @Override
@@ -82,7 +83,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   }
 
   @Override
-  public Map<Node, String> getValueNodes() {
+  public Map<Node, NodeValue> getValueNodes() {
     return valueNodes;
   }
 
@@ -121,7 +122,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   }
 
   @Override
-  public void addValueNode(Node node, String value) {
+  public void addValueNode(Node node, NodeValue value) {
     valueNodes.put(node, value);
   }
 
@@ -225,7 +226,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
     }
     builder.append("\t").append("Value nodes:\n");
     for (Node node : valueNodes.keySet()) {
-      builder.append("\t\t").append("node: ").append(node.toString()).append(" value: ").append(valueNodes.get(node)).append("\n");
+      builder.append("\t\t").append("node: ").append(node.toString()).append(" value: ").append(valueNodes.get(node).getChangedValue()).append("\n");
 
     }
 
@@ -236,6 +237,15 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   public boolean isNewValue() {
     return isNewValue;
   }
+
+  @Override
+  public boolean isNewValue(Node node) {
+    if (!valueNodes.containsKey(node)) {
+      throw new IllegalArgumentException("The node " + node + "is not associated any value");
+    }
+    return valueNodes.get(node).isNewValue();
+  }
+  
   
   
 }

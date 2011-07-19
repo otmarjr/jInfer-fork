@@ -14,30 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces;
-
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.NodeValue;
-import java.util.Map;
-import java.util.Set;
-import org.w3c.dom.Node;
+package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 /**
  *
  * @author sviro
  */
-public interface Repair {
+public class NodeValue {
+  private final String changedValue;
+  private final boolean newValue;
+
+  public NodeValue(String changedValue, boolean newValue) {
+    this.changedValue = changedValue;
+    this.newValue = newValue;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof NodeValue)) {
+      return false;
+    }
+
+    NodeValue nodeValue = (NodeValue) obj;
+    return this.newValue == nodeValue.isNewValue() || this.getChangedValue().equals(nodeValue.getChangedValue());
+  }
+
+  public boolean isNewValue() {
+    return newValue;
+  }
+
+  public String getChangedValue() {
+    return changedValue;
+  }
   
-  boolean hasReliabilityRepair();
-  boolean hasValueRepair();
   
-  Node getUnreliableNode();
-  Set<Node> getUnreliableNodes();
-  Map<Node, NodeValue> getValueNodes();
   
-  void addUnreliableNode(Node node);
-  void addUnreliableNodes(Set<Node> nodes);
-  void addValueNode(Node node, NodeValue value);
-  
-  boolean isNewValue();
-  boolean isNewValue(Node node);
 }

@@ -118,6 +118,7 @@ public class NewRepairerImpl implements Repairer {
             repairStats.setRepairGroup(rXMLTree.getRepairGroups().size());
             repairStats.collectData(minimalRepair);
             rXMLTree.applyRepair(minimalRepair);
+            rXMLTree.clearRepairs(minimalRepair);
           }
         }
       } else {

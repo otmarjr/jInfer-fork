@@ -16,8 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.NodeValue;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.Tuple;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repair;
 import java.io.StringWriter;
@@ -60,22 +62,24 @@ public class RepairCandidate implements Repair {
   private double coeffK;
   private Set<String> nodePaths;
   private boolean isNewValue;
+  private Pair<Tuple, Tuple> tuplePair;
 
-  public RepairCandidate() {
+  public RepairCandidate(final Pair<Tuple, Tuple> tuplePair) {
+    this.tuplePair = tuplePair;
     this.valueNodes = new HashMap<Node, NodeValue>();
     this.nodePaths = new HashSet<String>();
   }
 
-  public RepairCandidate(final Node unreliableNode, final RXMLTree tree, final double coeffK, final String path) {
-    this();
+  public RepairCandidate(final Pair<Tuple, Tuple> tuplePair, final Node unreliableNode, final RXMLTree tree, final double coeffK, final String path) {
+    this(tuplePair);
     this.unreliableNode = unreliableNode;
     this.tree = tree;
     this.coeffK = coeffK;
     nodePaths.add(path);
   }
 
-  public RepairCandidate(final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path, boolean isNewValue) {
-    this();
+  public RepairCandidate(final Pair<Tuple, Tuple> tuplePair, final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path, boolean isNewValue) {
+    this(tuplePair);
     valueNodes.put(valueNode, new NodeValue(changedValue, isNewValue));
     this.tree = tree;
     this.coeffK = coeffK;
@@ -343,7 +347,9 @@ public class RepairCandidate implements Repair {
     }
     return valueNodes.get(node).isNewValue();
   }
-  
-  
+
+  public Pair<Tuple, Tuple> getTuplePair() {
+    return tuplePair;
+  }
   
 }

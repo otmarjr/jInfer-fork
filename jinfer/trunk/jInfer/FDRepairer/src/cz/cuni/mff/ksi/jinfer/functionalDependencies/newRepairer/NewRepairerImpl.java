@@ -79,15 +79,15 @@ public class NewRepairerImpl implements Repairer {
 
   private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
     RepairStatistics repairStats = new RepairStatistics();
-    
+
     while (rXMLTree.isInconsistent(functionalDependencies)) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
       repairRXMLTree2(rXMLTree, functionalDependencies, coeffK, repairStats);
     }
-    
-    
+
+
     printStatistics(repairStats);
     return rXMLTree;
   }
@@ -110,13 +110,24 @@ public class NewRepairerImpl implements Repairer {
     if (!repairs.isEmpty()) {
       repairStats.setRepairGroup(rXMLTree.getRepairGroups().size());
       
-      
-      LOG.debug("Repair groups: " + rXMLTree.getRepairGroups().size());
-      RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
-      repairStats.collectData(minimalRepair);
-      
-      rXMLTree.applyRepair(minimalRepair);
-      rXMLTree.clearRepairs(minimalRepair);
+      if (repairPicker instanceof RepairPickerImpl) {
+        while (!rXMLTree.getRepairGroups().isEmpty()) {
+          RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
+          rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getFirst());
+          rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getSecond());
+          if (!rXMLTree.isTuplePairSatisfyingFDThesis(minimalRepair.getTuplePair(), minimalRepair.getFD())) {
+            repairStats.collectData(minimalRepair);
+            rXMLTree.applyRepair(minimalRepair);
+          }
+        }
+      } else {
+        LOG.debug("Repair groups: " + rXMLTree.getRepairGroups().size());
+        RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
+        repairStats.collectData(minimalRepair);
+
+        rXMLTree.applyRepair(minimalRepair);
+        rXMLTree.clearRepairs(minimalRepair);
+      }
     }
   }
 
@@ -134,17 +145,17 @@ public class NewRepairerImpl implements Repairer {
 
     if (rightPath.isStringPath()) {
       if (!t1Answer.isEmpty()) {
-        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue(), false));
+        result.add(new RepairCandidate(tuplePair, t1Answer.getTupleNodeAnswer(), t2Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue(), false));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue(), false));
+        result.add(new RepairCandidate(tuplePair, t2Answer.getTupleNodeAnswer(), t1Answer.getTupleValueAnswer(), tree, coeffK, rightPath.getPathValue(), false));
       }
     } else {
       if (!t1Answer.isEmpty()) {
-        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(tuplePair, t1Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
       if (!t2Answer.isEmpty()) {
-        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
+        result.add(new RepairCandidate(tuplePair, t2Answer.getTupleNodeAnswer(), tree, coeffK, rightPath.getPathValue()));
       }
     }
 
@@ -153,11 +164,11 @@ public class NewRepairerImpl implements Repairer {
       t2Answer = tree.getPathAnswerForTuple(path, tuplePair.getSecond(), false);
 
       if (path.isStringPath()) {
-        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), NEW_VALUE, tree, coeffK, path.getPathValue(), true));
-        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), NEW_VALUE, tree, coeffK, path.getPathValue(), true));
+        result.add(new RepairCandidate(tuplePair, t1Answer.getTupleNodeAnswer(), NEW_VALUE, tree, coeffK, path.getPathValue(), true));
+        result.add(new RepairCandidate(tuplePair, t2Answer.getTupleNodeAnswer(), NEW_VALUE, tree, coeffK, path.getPathValue(), true));
       } else {
-        result.add(new RepairCandidate(t1Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
-        result.add(new RepairCandidate(t2Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
+        result.add(new RepairCandidate(tuplePair, t1Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
+        result.add(new RepairCandidate(tuplePair, t2Answer.getTupleNodeAnswer(), tree, coeffK, path.getPathValue()));
       }
     }
 
@@ -191,17 +202,17 @@ public class NewRepairerImpl implements Repairer {
 
     return result;
   }
-  
+
   private void printStatistics(RepairStatistics repairStats) {
     LOG.info("Repair Statistics:");
-    
+
     LOG.info("Starting RG #: " + repairStats.getStartingRG());
     LOG.info("Repaired RG #: " + repairStats.getRGCount());
-    
+
     LOG.info("Unreliable nodes #: " + repairStats.getUnreliableCount());
     LOG.info("Value nodes - new values #: " + repairStats.getNewValueCount());
     LOG.info("Value nodes - changed values #: " + repairStats.getValueChangesCount());
-    
+
     LOG.info("---------- End of Statistics. ----------");
   }
 }

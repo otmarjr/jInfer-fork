@@ -568,4 +568,8 @@ public class RXMLTree {
   public void removeRG(RepairGroup minimalRepairGroup) {
     repairGroups.remove(minimalRepairGroup);
   }
+  
+  public boolean isRGEmpty() {
+    return repairGroups.isEmpty();
+  }
 }

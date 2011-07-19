@@ -110,7 +110,7 @@ public class NewRepairerImpl implements Repairer {
     if (!repairs.isEmpty()) {
 
       if (repairPicker instanceof RepairPickerImpl) {
-        while (!rXMLTree.getRepairGroups().isEmpty()) {
+        while (!rXMLTree.isRGEmpty()) {
           RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
           rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getFirst());
           rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getSecond());

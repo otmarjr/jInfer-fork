@@ -90,7 +90,7 @@ public class RepairerImpl implements Repairer {
       RepairImpl repair = mergeRepairs(minimalRepairs);
 
       repairStats.collectData(repair);
-      
+
       rXMLTree.applyRepair(repair);
     }
     printStatistics(repairStats);
@@ -181,13 +181,33 @@ public class RepairerImpl implements Repairer {
       result.addUnreliableNodes(repair.getUnreliableNodes());
     }
 
-    List<Pair<RepairImpl, RepairImpl>> valuePairs = RepairFactory.getValuePairs(minimalRepairs);
-    for (Pair<RepairImpl, RepairImpl> valuePair : valuePairs) {
-      RepairImpl firstRepair = valuePair.getFirst();
-      RepairImpl secondRepair = valuePair.getSecond();
-      addUnreliableNodesFromValues(firstRepair, secondRepair, result);
-      addUnreliableNodesFromValues(secondRepair, firstRepair, result);
+    for (int i = 0; i < minimalRepairs.size() - 1; i++) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      RepairImpl firstRepair = minimalRepairs.get(i);
+      if (firstRepair.hasValueRepair()) {
+        for (int j = 1 + i; j < minimalRepairs.size(); j++) {
+          RepairImpl secondRepair = minimalRepairs.get(j);
+          if (secondRepair.hasValueRepair()) {
+            addUnreliableNodesFromValues(firstRepair, secondRepair, result);
+            addUnreliableNodesFromValues(secondRepair, firstRepair, result);
+          }
+        }
+      }
     }
+
+
+
+
+
+//    List<Pair<RepairImpl, RepairImpl>> valuePairs = RepairFactory.getValuePairs(minimalRepairs);
+//    for (Pair<RepairImpl, RepairImpl> valuePair : valuePairs) {
+//      RepairImpl firstRepair = valuePair.getFirst();
+//      RepairImpl secondRepair = valuePair.getSecond();
+//      addUnreliableNodesFromValues(firstRepair, secondRepair, result);
+//      addUnreliableNodesFromValues(secondRepair, firstRepair, result);
+//    }
 
     LOG.debug("Repairs have been merged.");
     return result;
@@ -197,7 +217,7 @@ public class RepairerImpl implements Repairer {
     for (Node node : firstRepair.getValueNodes().keySet()) {
       if (!result.getUnreliableNodes().contains(node)) {
         NodeValue firstValue = firstRepair.getValueNodes().get(node);
-        if (secondRepair.getValueNodes().containsKey(node) && firstValue.equals(secondRepair.getValueNodes().get(node))) {
+        if (secondRepair.getValueNodes().containsKey(node) && !firstValue.equals(secondRepair.getValueNodes().get(node))) {
           result.addUnreliableNode(node);
         }
       }
@@ -236,7 +256,7 @@ public class RepairerImpl implements Repairer {
       int compared = repair1.compareTo(result.get(0));
       if (RepairImpl.COMPARE_EQUAL == compared) {
         result.add(repair1);
-      } else if (RepairImpl.COMPARE_SMALLER ==  compared) {
+      } else if (RepairImpl.COMPARE_SMALLER == compared) {
         repairsToRemove.addAll(result);
         result.clear();
         result.add(repair1);
@@ -268,11 +288,11 @@ public class RepairerImpl implements Repairer {
 
   private void printStatistics(RepairStatistics repairStats) {
     LOG.info("Repair Statistics:");
-    
+
     LOG.info("Unreliable nodes #: " + repairStats.getUnreliableCount());
     LOG.info("Value nodes - new values #: " + repairStats.getNewValueCount());
     LOG.info("Value nodes - changed values #: " + repairStats.getValueChangesCount());
-    
+
     LOG.info("---------- End of Statistics. ----------");
   }
 }

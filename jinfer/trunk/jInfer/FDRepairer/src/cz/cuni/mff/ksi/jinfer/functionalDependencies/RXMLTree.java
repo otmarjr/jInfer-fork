@@ -559,4 +559,13 @@ public class RXMLTree {
 
     return pathNodeListResults.get(path);
   }
+  
+  public void invalidateSidePathAnswers(final Tuple tuple) {
+    tupleSideAnswers.remove(tuple);
+  }
+  
+  
+  public void removeRG(RepairGroup minimalRepairGroup) {
+    repairGroups.remove(minimalRepairGroup);
+  }
 }

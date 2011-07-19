@@ -31,7 +31,10 @@ public class RepairPickerImpl implements RepairPicker {
   
   @Override
   public RepairCandidate getRepair(final RXMLTree tree) {
-    return tree.getMinimalRepairGroup().getMinimalRepair();
+    RepairGroup minimalRepairGroup = tree.getMinimalRepairGroup();
+    tree.removeRG(minimalRepairGroup);
+    
+    return minimalRepairGroup.getMinimalRepair();
   }
 
   @Override

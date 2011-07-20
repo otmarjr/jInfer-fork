@@ -212,12 +212,15 @@ Keywords: XML, ID attributes, inference
 \newpage
 
 % TODO what style of quotation marks to use? 
+% TODO how to format text? is textit / texttt / ... OK?
 
 \chapwithtoc{Preface}
 
-TODO why is this important - XMLs are extensively used but lack schemas (link Vosta's Even ant can create...).
-We already have tools to infer the structure (see jInfer), now we would like to go a bit further - to find some integrity constraints to impose on these schemas.
-Integrity schemas can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro), etc.
+Along with technologies like JSON, SQL/noSQL databases and bla, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema to describe XML structure already exist since a long time, most of the documents use outdated or no schema at all (link Vosta's Even ant can create...). To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in A, B, C, jInfer. But the schema is not the only constraint that can be imposed on an XML document: the concept of \textit{keys} and \textit{foreign keys}, well known from the relational database world, applies here as well. One could go even further and try to find even more sophisticated relations in the data, such as \textit{functional dependencies} (link Sviro).
+
+This work will be building upon the achievements of jInfer schema inference framework, expanding its possibilities in the field of search for \textit{key-} and \textit{foreign key-}like structures in existing XML documents.
+
+TODO Integrity constraints can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro), etc.
 We will focus on the first kind - ID and IDREF attributes.
 
 TODO argument: test data with DTD (and thus possibly ID/IDREF) is more common, we can have better test sets.

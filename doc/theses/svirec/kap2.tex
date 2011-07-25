@@ -108,12 +108,12 @@ Given an XML tree $XT$ conforming the DTD $D$, a tree tuple $t$ of $XT$ is a max
 \begin{example}
 Consider the XML tree $XT$ of Fig. \ref{example1}. The subtrees of $XT$ shown in Fig. \ref{tuples} are tree tuples, and the subrees in Fig. \ref{nottuples} are not.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering\includegraphics[width=\textwidth]{tuples}
 	\caption{Two tree tuples of the XML tree of Fig. \ref{example1}} \label{tuples}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \subfloat[]{\label{nottuple1}\includegraphics[scale=0.6]{nottuples1}}
     \subfloat[]{\label{nottuple2}\includegraphics[scale=0.6]{nottuples2}}
@@ -129,7 +129,7 @@ In the Fig. \ref{nottuple1}, the subtree is not a tree tuple, because the answer
 Given a DTD $D$, a functional dependency on $D$ is an expression of the form $S \rightarrow p$, where S is a finite non empty subset of $paths(D)$ and $p \in paths(D)$.\qed
 \end{define}
 
-\begin{example}
+\begin{example}\label{fdExample}
 Consider the XML tree of Fig \ref{example1}. The following functional dependency express the constraint that two distinct authors of the same book cannot have the same value of attribute \texttt{ano}:$$\{/bib/book, /bib/book/written\_by/author/@ano\} \rightarrow /bib/book/written\_by/author$$\qed
 \end{example}
 

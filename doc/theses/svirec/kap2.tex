@@ -88,6 +88,29 @@ As we have defined a \emph{path} on a DTD $D$, let us denote $paths(D)$ as the s
 attribute, then $XT.p = \{\delta_T(x)|x \in p(XT)\}$.
 \end{itemize}
 
+\begin{example}\label{pathExample}
+Consider the XML tree $XT$ from Example \ref{example1ref} conforming the DTD $D$ defined below, which is representing a collection of books.
+\begin{verbatim}
+<!ELEMENT bib (book+)>
+<!ELEMENT book (written_by, title)>
+<!ELEMENT written_by (author+)>
+<!ELEMENT author (name)>
+<!ATTLIST author ano CDATA>
+<!ELEMENT name PCDATA>
+<!ELEMENT title PCDATA>
+\end{verbatim}
+
+The set $paths(D)$ contains the following paths:
+\begin{align}
+paths(D) &= \left\{/bib, /bib/book, /bib/book/written\_by,\right.\nonumber\\
+&\qquad \left. /bib/book/written\_by/author, \right.\nonumber\\
+&\qquad \left. /bib/book/written\_by/author/name, \right.\nonumber\\
+&\qquad \left. /bib/book/written\_by/author/name/S, \right.\nonumber\\
+&\qquad \left. /bib/book/written\_by/author/@ano, \right.\nonumber\\
+&\qquad \left. /bib/book/title\nonumber\right\}
+\end{align}\qed
+\end{example}
+
 \section{Integrity Constraints}
 
 Before defining of the XML integrity constraint, let us introduce some notation used in the definition. A \emph{path atom} is an expression of the form $[x_1]p[x_2]$, where $p$ is a path expression, $x_1$ and $x_2$ are terms, and $x_1 \not \in Str$.\\
@@ -96,12 +119,22 @@ A conjunction of path and built-in atoms $C = [X_1]p_1[Y_1] \cap \dots \cap [X_n
  	\item for every $[X_i]p_i[Y_i]$, either $X_i$ is a constant (node identifier of a string), or there is some $[X_j]p_j[Y_j]$ in $C$ where $X_j$ is range restricted;
     \item for every built-in term $U_i\theta_i V_i$ occurring in $C$, if $\theta_i$ is equal to $"="$ then at least one of the two terms is range restricted; otherwise both $U_i$ and $V_i$ must be range restricted.
  \end{itemize}
+
 A rootless tree formula is an expression of the form $p(\Phi_1 \land \dots \land \Phi_k)$ where $\Phi_i$ is a rootless path formula (expression of the form $p[y]$ where $p$ is a path expression and $y$ is a term) or a rootless tree formula and $p$ is a path expression. A tree atom is an expression of the form $[x]T$ where $T$ is a rootless tree formula and $x$ is a term.
 
 \begin{define}[XML Integrity Constraint]\label{integConstr}
 An XML constraint is a formula of the form: $$(\forall X)[\Phi(X)\supset (\exists Y_1)\Psi_1(X,Y_1) \lor \dots \lor (\exists Y_k)(X,Y_k)]$$
 where $X,Y_1,\dots, Y_k$ denote distinct sets of universally and existentially quantified variables, $\Phi(X)$ and $\Phi(X) \land \Psi_i(X, Y_i) (\forall i \in [1..k])$ are safe conjunctions of built-in and tree atoms.\qed
 \end{define}
+
+\begin{example}
+Consider the XML tree $XT$ from Example \ref{example1ref}. Thereafter the integrity constraint that there must exist at least two books differents titles is expressed as
+
+\begin{align*}
+\forall(X)&[[root]/bib[X] \supset\\
+&\exists(Z_1, Z_2)([X]/book/title/S[Z_1] \land [X]/book/title/S[Z_2] \land Z_1 \not = Z_2)]
+\end{align*}\qed
+\end{example}
 
 \section{Functional Dependencies}
 
@@ -136,7 +169,7 @@ In Fig. \ref{nottuple1}, the subtree is not a tree tuple, because the answer of 
 \end{example}
 
 \begin{define}[Functional Dependency]\label{fd1}
-Being given a DTD $D$, a {\sl functional dependency} on $D$ is an expression of the form $S \rightarrow p$, where S is a finite non empty subset of $paths(D)$ and $p \in paths(D)$.\qed
+Being given a DTD $D$, a {\sl functional dependency} on $D$ is an expression of the form $S \rightarrow p$, where $S$ is a finite non empty subset of $paths(D)$ and $p \in paths(D)$.\qed
 \end{define}
 
 \begin{example}\label{fdExample}
@@ -148,3 +181,11 @@ Consider the XML tree in Fig \ref{example1}. The following functional dependency
 \begin{define}[Functional Dependency]\label{fd2}
 With a given DTD $D$, a {\sl functional dependency} is of the form $\sigma = (P, P', (P_1, \dots, P_n \rightarrow P_{n+1}))$. Here $P$ is a  root path (path where the first element is a root element of an XML document), or $P = \epsilon$ (empty path). Each $P_i (i \in [1,n])$ is a singleton leaf path, and there is a no non-empty common prefix for $P_1, \dots, P_{n+1}$. Being given an XML document $T$ conforming to $D$, we say $T$ satisfies $\sigma$:iff $\forall v \in \{[\![P]\!]\}, \forall v_1, v_2 \in \{v[\![P']\!]\}$, if $v_1[\![P_i]\!] \equiv v_2[\![P_i]\!]$ for all $i \in [1,n]$, then $v_1[\![P_{n+1}]\!] \equiv v_2[\![p_{n+1}]\!]$.\qed
 \end{define}
+
+The main difference between two definitions of the functional dependency is that the former definition can use any path from $paths(D)$, whereas the latter considers that each $P_i (i \in [1,n])$ is from $StrPaths(D)$. That means the constraint from Example \ref{fdExample} cannot be expressed by functional dependency defined in \ref{fd2}, because of $/bib/book/written\_by/author$ path. Nevertheless, modified constraint from Example \ref{fdExample} expressed by FD defined in \ref{fd2} is shown in Example \ref{fd2Example}.
+
+\begin{example}\label{fd2Example}
+Consider the constraint $C$ saying that two distinct authors with different names of the same book cannot have the same value of attribute \texttt{ano}. The functional dependency expressing $C$ is defined as follows:
+
+$$(bib/book, written\_by/author, (@ano \rightarrow name))$$\qed
+\end{example}

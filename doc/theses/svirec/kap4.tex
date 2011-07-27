@@ -44,7 +44,16 @@ The algorithm is split into three steps, where the second and the third step are
 
 \subsection{Initial data model}
 
-To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of a node is from interval $[0,1]$ and indicates correctness of the data the particular node holds, meaning the higher the weight is, the more correct that particular node is. The weights are used to measure the cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This is also the first place where some kind of user interaction can be implemented. The user could assign the weights to nodes manually or could use some sort of statistical methods to generate them automatically. If the user does not assign weights nor does he use statistical methods, a default weight is assigned to all nodes. A definition of an RW-XML tree follows:
+To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of a node is from interval $[0,1]$ and indicates correctness of the data the particular node holds, meaning the higher the weight is, the more correct that particular node is. The weights are used to measure the cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This is also the first place where some kind of user interaction can be implemented. The user could assign the weights to nodes manually or could use some sort of statistical methods to generate them automatically. If the user does not assign weights nor does he use statistical methods, a default weight is assigned to all nodes.
+
+\begin{example}
+\todo[inline]{tu bude priklad pridania weights nodom z examplu 1}
+
+default node weight 0.4
+\end{example}
+
+
+A definition of an RW-XML tree follows:
 
 \begin{define}[RW-XML tree]
 A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $[0,1]$.\qed

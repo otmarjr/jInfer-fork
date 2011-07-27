@@ -22,16 +22,8 @@ The authors of this approach choose two kinds of actions to repair inconsistent 
 Depending on XML data and defined functional dependencies, each inconsistency could have many possible strategies to repair it. From all the possible repair strategies the authors prefer those for which smaller changes are made to the original document.
 
 \begin{example}\label{fdrepairExample}
-Consider the XML tree $XT$ from Example \ref{example1ref} conforming the DTD $D$ defined below, which is representing a collection of books and the following functional dependency:\\ $\{bib.book, bib.book.written\_by.author.@ano\} \rightarrow bib.book.written\_by.author$ ($@$ denotes the attribute of an element).
-\begin{verbatim}
-<!ELEMENT bib (book+)>
-<!ELEMENT book (written_by, title)>
-<!ELEMENT written_by (author+)>
-<!ELEMENT author (name)>
-<!ATTLIST author ano CDATA>
-<!ELEMENT name PCDATA>
-<!ELEMENT title PCDATA>
-\end{verbatim}
+Consider the XML tree $XT$ conforming the DTD $D$ from Example \ref{pathExample}, which is representing a collection of books and the following functional dependency:\\ $\{bib.book, bib.book.written\_by.author.@ano\} \rightarrow bib.book.written\_by.author$ ($@$ denotes the attribute of an element).
+
 The functional dependency defined above requires that for each book there is only one element author having a given $@ano$ value. Therefore $XT$ does not satisfy the given functional dependency, because two author elements of the same book have the same value of attribute $@ano$. To resolve this data inconsistency, we can use two different repair strategies: 1) changing one of the value of attribute $@ano$; 2) marking one of the elements author as unreliable. Since the first strategy changes only attribute $@ano$, it is preferred to the second strategy, which changes a larger portion of document, since it marks a whole author element as unreliable.
 \qed
 \end{example}

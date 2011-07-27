@@ -1,6 +1,6 @@
 \chapter{Implementation}
 
-A part of this work is experimental implementation of our proposed algorithm. Besides our approach, we have also implementened algorithm proposed in \cite{RepAndConsistentAnswer}, to be able to compare it with our algorithm. Our algorithm has been implemented in the JAVA language in the JDK version 6.0 as a part of the schema inference framework for XML, called jInfer \cite{jinfer}, developed as a part of a Software Project subject.
+A part of this work is experimental implementation of our proposed algorithm. Besides our approach, we have also implementened the algorithm proposed in \cite{RepAndConsistentAnswer}, to be able to compare it with our algorithm. Our algorithm has been implemented in the Java language in the version 6.0 as a part of the schema inference framework for XML jInfer \cite{jinfer}.
 
 \section{Architecture}
 
@@ -8,17 +8,17 @@ The main part of our algorithm is implemented as the \texttt{FDRepairer} extensi
 
 \begin{description}
 	\item[fd] contains data structure of functional dependencies used as an input to the algorithm.
-    \item [interfaces] contains JAVA interfaces necessery for integration to the jInfer framework.
+    \item [interfaces] contains Java interfaces necessery for integration in the jInfer framework.
     \item [modelGenerator] contains classes responsible for creating data structures from loaded input files.
-    \item [newRepairer] contains class \texttt{NewRepairerImpl}, the class that implements proposed algorithm. Also contains other data structures introduced in our approach
-    \item [propeties] contains classes reponsible for showing properties of this extension if the jInfer.
-    \item [repairer] contains classes implementing the original algorithm our algorithm is based on.
-    \item [weights] contains data structure of node weights used as an input to the algorithm.
+    \item [newRepairer] contains class \texttt{NewRepairerImpl}, the class that implements our proposed algorithm. Also it contains other data structures introduced in our approach
+    \item [properties] contains classes reponsible for showing properties of this extension in the jInfer.
+    \item [repairer] contains classes implementing the original algorithm from \cite{RepAndConsistentAnswer}.
+    \item [weights] contains data structure for node weights used as an input to the algorithm.
 \end{description}
 
 \subsection{Input Files Processing}
 
-Files that can be added as an input to our algorithm are of three kind. The XML data, file containing functional dependencies and file containing weights. First, the XML is processed by build-in Java DOM parster. Files with FDs and weights both contains XML data with specific structure defined as XML Schema in Fig. \ref{fdschema} and \ref{weightschema} and are both processed with JAXB \cite{JAXB}.
+Files that can be added as an input to our algorithm are of three types. The XML data, file containing functional dependencies and file containing weights. First, the XML is processed with build-in Java DOM parster. Files with FDs and weights both contain XML data with specific structure defined as XML Schema in Fig. \ref{fdschema} and \ref{weightschema} and are both processed with JAXB \cite{JAXB}.
 
 
 \section{Restriction of Implementation}

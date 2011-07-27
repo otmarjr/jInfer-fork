@@ -1,8 +1,8 @@
 \chapter{Analysis of Recent Approaches}
 
-This chapter introduces description and categorization of recent approaches of repairing XML documents with usage of functional dependencies.
+This chapter introduces the description and categorization of recent approaches to repairing XML documents that violate functional dependencies defined in these documents.
 
-All approaches dealing with the problem of finding optimal repair can be divided into categories according to usage of elementary repair primitives. This repair primitives are: inserting node, deleting node, updating node and marking node as unreliable of XML document.
+All approaches dealing with the problem of finding optimal repair can be divided into categories according to the usage of elementary repair primitives. This repair primitives are: inserting node, deleting node, updating node and marking node as unreliable in XML document.
 
 \section[Repairs and Consistent Answers for XML Data]{Repairs and Consistent Answers for XML Data with Functional Dependencies}\label{RepConstAnswers}
 
@@ -10,18 +10,19 @@ A technique for computing repairs which solves the problem of XML data inconsist
 
 \subsection{XML Tree and Functional Dependency}
 
-To be able to resolve problem of functional dependency violations in XML document, the authors try to introduce the concept of functional dependencies based on those defined for relational databases. Concept of a tree tuple and functional dependency is defined in Definition \ref{treeTuple} and \ref{fd1}.
+To be able to resolve the problem of functional dependency violations in XML document, the authors try to introduce the concept of functional dependencies based on those defined for relational databases. The concept of a tree tuple and functional dependency was introduced in definition \ref{treeTuple} and \ref{fd1}.
 
-Given an XML tree $XT$ conforming a DTD $D$ and a functional dependency $F : S_1 \rightarrow S_2$ , we say that $XT$ satisfies $F (XT \models F )$ if for each pair of tree tuples $t_1, t_2$ of $XT$, $t_1.S_1 = t_2.S_1 \land t_1.S_1 = \emptyset \Rightarrow t_1.S_2 = t_2.S_2$ . Given a set of functional dependencies $\mathcal{FD} = \{F_1 , \dots, F_n\}$ over $D$, we say that $XT$ satisfies $\cal FD$ if it satisfies $F_i$ for every $i \in 1..n$.
+Being given an XML tree $XT$ conforming a DTD $D$ and a functional dependency $F : S_1 \rightarrow S_2$ , we say that $XT$ satisfies $F (XT \models F )$ if for each pair of tree tuples $t_1, t_2$ of $XT$, $$t_1.S_1 = t_2.S_1 \land t_1.S_1 = \emptyset \Rightarrow t_1.S_2 = t_2.S_2$$
+Being given a set of functional dependencies $\mathcal{FD} = \{F_1 , \dots, F_n\}$ over $D$, we say that $XT$ satisfies $\cal FD$ if it satisfies $F_i$ for every $i \in 1..n$.
 
 \subsection{Repairing inconsistent XML data}
 
-Authors of this approach chose two kinds of actions to repair inconsistent XML data with regard to functional dependencies. The first action is updating the value of an attribute or content of an element. As the second action authors choose marking inconsistent element as "unreliable" rather than deleting it, because removing elements from an XML document leads to some undesired drawbacks: it does not always suffice to remove inconsistency and deleting a node can lead to a new document not valid against the given schema.
+The authors of this approach choose two kinds of actions to repair inconsistent XML data with regard to functional dependencies. The first action is updating the value of an attribute or the content of an element. As the second action the authors choose marking inconsistent element as ``unreliable" rather than deleting it, because removing elements from an XML document leads to some undesired drawbacks: it does not always suffice to remove inconsistency and deleting a node can lead to a new document not valid against the original schema.
 
-Depending on XML data and defined functional dependencies, each inconsistency could have many possible strategies to repair it. From all the possible repair strategies, the authors prefer those, for which smaller changes are made to the original document.
+Depending on XML data and defined functional dependencies, each inconsistency could have many possible strategies to repair it. From all the possible repair strategies the authors prefer those for which smaller changes are made to the original document.
 
 \begin{example}\label{fdrepairExample}
-Consider XML tree $XT$ from Example \ref{example1ref} conforming the DTD $D$ defined below, which is representing collection of books and the following functional dependency:\\ $\{bib.book, bib.book.written\_by.author.@ano\} \rightarrow bib.book.written\_by.author$.
+Consider the XML tree $XT$ from Example \ref{example1ref} conforming the DTD $D$ defined below, which is representing a collection of books and the following functional dependency:\\ $\{bib.book, bib.book.written\_by.author.@ano\} \rightarrow bib.book.written\_by.author$ ($@$ denotes the attribute of an element).
 \begin{verbatim}
 <!ELEMENT bib (book+)>
 <!ELEMENT book (written_by, title)>
@@ -31,17 +32,17 @@ Consider XML tree $XT$ from Example \ref{example1ref} conforming the DTD $D$ def
 <!ELEMENT name PCDATA>
 <!ELEMENT title PCDATA>
 \end{verbatim}
-The functional dependency defined above requires that for each book, there is only one element author having a given $@ano$ value. Therefore $XT$ does not satisfy the given functional dependency, because two author elements of the same book have the same value of attribute $@ano$. To resolve this data inconsistency, we can use two different repair strategies: 1) changing one of the value of attribute $@ano$; 2) marking one of the element author as unreliable. Since the first strategy changes only attribute $@ano$, it is preferred to second strategy, which changes a larger portion of document, since it marks whole author element as unreliable.
+The functional dependency defined above requires that for each book there is only one element author having a given $@ano$ value. Therefore $XT$ does not satisfy the given functional dependency, because two author elements of the same book have the same value of attribute $@ano$. To resolve this data inconsistency, we can use two different repair strategies: 1) changing one of the value of attribute $@ano$; 2) marking one of the elements author as unreliable. Since the first strategy changes only attribute $@ano$, it is preferred to the second strategy, which changes a larger portion of document, since it marks a whole author element as unreliable.
 \qed
 \end{example}
 
 
 \subsection{Repair Algorithm}
 
-Before introducing the algorithm to repair inconsistent XML document, let us define reliability of elements in XML tree:
+Before introducing the algorithm to repair an inconsistent XML document, let us define the notion of reliability of elements in an XML tree:
 
 \begin{define}[R-XML Tree]\label{rxmlTree}
-A R-XML $tree$ is a triplet $RXT = \langle T, \delta, \varrho \rangle$, where $\langle T, \delta \rangle$ is an XML tree and $\varrho$ is a reliability function from $N_T$ to \texttt{\{true, false\}}, such that, for each pair of nodes $n_1 , n_2 \in N_T$ with $n_2$ descendant of $n_1$, it holds that $\varrho(n_1) = false \Rightarrow \varrho(n_2) = false$.\qed
+A R-XML $tree$ is a triplet $RXT = \langle T, \delta, \varrho \rangle$, where $\langle T, \delta \rangle$ is an XML tree and $\varrho$ is a reliability function from $N_T$ to \texttt{\{true, false\}}, such that for each pair of nodes $n_1 , n_2 \in N_T$ with $n_2$ descendant of $n_1$, it holds that $\varrho(n_1) = false \Rightarrow \varrho(n_2) = false$.\qed
 \end{define}
 
 To be able to create a repair, R-XML Tree must not satisfy FD according to definition of weak satisfiability:
@@ -59,7 +60,7 @@ $(\varrho(p_i(t_1)) = false) \lor (\varrho(p_i(t_2)) = false)$;
 \end{enumerate}
 \end{define}
 
-The repair of an R-XML tree which not satisfies $\mathcal{FD}$ set of functional dependencies is a pair of functions $\delta'$ and $\varrho'$ such that $RXT'$ tree composed of the original tree and the repair ($RXT' = \langle T, \delta' \cdot \delta, \varrho' \cdot \varrho \rangle$) weakly satisfies FD ($RXT' \models_w \mathcal{FD}$). The composition of the R-XML tree and the repair (i.e. composition of their $\delta$ and $\varrho$ functions) is defined as follows:
+The repair of an R-XML tree which does not satisfy $\mathcal{FD}$ set of functional dependencies is a pair of functions $\delta'$ and $\varrho'$ such that $RXT'$ tree composed of the original tree and the repair ($RXT' = \langle T, \delta' \cdot \delta, \varrho' \cdot \varrho \rangle$) weakly satisfies FD ($RXT' \models_w \mathcal{FD}$). The composition of the R-XML tree and the repair (i.e. composition of their $\delta$ and $\varrho$ functions) is defined as follows:
 
 \begin{define}[Composition of $\delta$ functions]\label{compDelta}
 The composition of two functions $\delta_1$ and $\delta_2$ asssociating values to leaf nodes is
@@ -73,18 +74,17 @@ The composition of two functions $\delta_1$ and $\delta_2$ asssociating values t
 \end{define}
 
 \begin{define}[Composition of $\varrho$ functions]\label{compVarrho}
-The composition of two reliability functions $\varrho_1$ and $\varrho_2$ asssociating boolean value to nodes is $$\varrho_1 \cdot \varrho_2(n) = min(\varrho_1(n), \varrho_2(n)),$$ where to the boolean value $true$ (resp. $false$) is associated value 1 (resp. 0).
-\qed
+The composition of two reliability functions $\varrho_1$ and $\varrho_2$ asssociating a boolean value to nodes is $$\varrho_1 \cdot \varrho_2(n) = \varrho_1(n)\ AND\ \varrho_2(n).$$\qed
 \end{define}
 
 
-With a repair $\langle \delta, \varrho \rangle$ of R-XML tree and a set of labelled nodes $N$ of this tree, we denote with $Update_{\delta}(N)$ the set of nodes modified by $\delta$. Analogously, we denote $True_{\varrho}(N) = \{n \in N| \varrho(n) = true\}$ and $False_{\varrho}(N) =\{n \in N | \varrho(n) = false\}$.
+With a repair $\langle \delta, \varrho \rangle$ of R-XML tree and a set of labelled nodes $N$ of this tree, we denote  $Updated_{\delta}(N)$ the set of nodes modified by $\delta$. Analogously, we denote $True_{\varrho}(N) = \{n \in N| \varrho(n) = true\}$ and $False_{\varrho}(N) =\{n \in N | \varrho(n) = false\}$.
 
 \begin{define}[Minimal Repair]
 Let $RXT = \langle T, \delta, \varrho \rangle$ be an R-XML tree conforming DTD $D$, $\mathcal{FD}$ a set of functional dependencies and $R_1 = \langle \delta_1, \varrho_1 \rangle$, $R_2 = \langle \delta_2, \varrho_2 \rangle$ two repairs for $RXT$. We say that $R_1$ is smaller than $R_2$ ($R_1 \preceq R_2$) if $Updated_{\delta_1}(N_T)\ \cup\ False_{\delta_1}(N_T) \subseteq Updated_{\delta_2}(N_T)\ \cup\ False_{\delta_2}(N_T)$ and $False_{\delta_1}(N_T) \subseteq False_{\delta_2}(N_T)$. Repair $R$ is minimal if there is no repair $R' \neq R$ such that $R' \preceq R$.\qed
 \end{define}
 
-An R-XML tree is used as an input for the main algorithm computing repaired R-XML tree described in Algorithm \ref{repAlgo}. First the algorithm computes all the possible repairs of tuples which not satisfy a functional dependency using the function \texttt{computeRepairs} (lines 2-6). Next all non-minimal repairs are removed from all possible repairs (line 7). In the last step, all the repairs are merged and a unique repaired R-XML tree is returned.
+An R-XML tree is used as an input for the main algorithm computing repaired R-XML tree described in Algorithm \ref{repAlgo}. First, the algorithm computes all the possible repairs of tuples which do not satisfy a functional dependency using the function \texttt{computeRepairs()} (lines 2-6). Next, all non-minimal repairs are removed from all possible repairs (line 7). In the last step, all the repairs are merged and a unique repaired R-XML tree is returned.
 
 \begin{algorithm}[H]
 \caption{XML Repair}
@@ -107,14 +107,14 @@ $\mathcal{FD} = {F_1, \dots, F_m}$: Set of functional dependencies}
 \end{algorithmic}
 \end{algorithm}
 
-Function \texttt{computeRepairs}(in algorithm \ref{computeRepairs}) gets R-XML tree, a functional dependency $F$ and a tuples $t_1, t_2$ of R-XML tree as input and computes the repair as follows:
+Function \texttt{computeRepairs()} (in Algorithm \ref{computeRepairs}) gets an R-XML tree, a functional dependency $F$ and tuples $t_1, t_2$ of the R-XML tree as input and computes the repair as follows:
 \begin{itemize}
 	\item If path $p$ denotes a textual element, one of the two terminal values of $t_1.p$ or $t_2.p$ is changed, so that they become equal (line 3).
 	\item Otherwise $p$ denotes a node, so either the node $t_1.p$ or $t_2.p$ is marked as unreliable (line 5).
-	\item For each path $p_i$ of the left side of a functional dependency $F$
+	\item For each path $p_i$ on the left side of a functional dependency $F$
 	\begin{itemize}
-		\item If path $p_i$ denotes a textual element, then one of the two terminal values $t_1.p_i$ or $t_2.p_i$ is changed to the new generated value ($\perp$) (line 9).
-		\item Otherwise $p_i$ denotes a node, so one of the nodes $t_1.p_i$ or $t_2.p_i$ is marked as unreliable (line 11).
+		\item If path $p_i$ denotes a textual element, then one of the two terminal values $t_1.p_i$ or $t_2.p_i$ is changed to the newly generated value ($\perp$) (line 9).
+		\item Otherwise $p_i$ denotes a node, therefore one of the nodes $t_1.p_i$ or $t_2.p_i$ is marked as unreliable (line 11).
 	\end{itemize}
 \end{itemize}
 
@@ -123,7 +123,7 @@ Function \texttt{computeRepairs}(in algorithm \ref{computeRepairs}) gets R-XML t
 \caption{$computeRepairs(F, t_1, t_2, RXT)$}
 \begin{algorithmic}[1]\label{computeRepairs}
 \REQUIRE{\ \\
-$RXT = \langle T, \delta \varrho \rangle$: R-XML tree conforming a DTD $D$\\
+$RXT = \langle T, \delta \varrho \rangle$: R-XML tree conforming to DTD $D$\\
 $F: X \rightarrow p$ functional dependency\\
 $t_1, t_2$ tuples of $RXT$}
 \ENSURE $S$: Set of repairs
@@ -147,11 +147,11 @@ $t_1, t_2$ tuples of $RXT$}
 
 \subsection{Conclusion}
 
-The authors proposed a technique for repairing XML documents violating functional dependencies based on approaches proposed for relational database repairing. The algorithm introduces two possible repair primitives, which creates many possible result from which those with minimal impact on document are chosen. However the authors not consider creation of new violations after repairing the initial violations as it is in \cite{ImprovingXML}. Another disadvantage of this approach is that a unnecessary repair of some particular violation could be applied to an XML document because another repair could repair that violation before.
+The authors proposed a technique for repairing XML documents violating functional dependencies based on approaches proposed for relational database repairing. The algorithm introduces two possible repair primitives, which create many possible results from which those with minimal impact on the document are chosen. However the authors do not consider creation of new violations after repairing the initial violations as it is in \cite{ImprovingXML}. Another disadvantage of this approach is that an unnecessary repair of some particular violation could be applied to an XML document because another repair could repair that violation before.
 
 \section{Querying and Repairing Inconsistent XML Data}
 
-Studying the problem of repairing inconsistent XML documents with respect to a set of functional dependencies and investigating the existence of repairs has been introduced in \cite{QueryXML}. Authors introduce two kind of repair primitives. The first is deleting "unreliable" nodes of document and the second is inserting a new nodes. Similarly to another approaches, authors prefer minimal set of repair primitives applied to the XML document to form a repair.
+Studying the problem of repairing inconsistent XML documents with respect to a set of functional dependencies and investigating the existence of repairs has been introduced in \cite{QueryXML}. The authors introduce two kinds of repair primitives. The first one is deleting ``unreliable" nodes of document, the second one is inserting new nodes. Similarly to other approaches, authors prefer minimal set of repair primitives applied to the XML document to form a repair.
 
 The introduced repair primitives the authors use in three different repair strategies consisting of:
 \begin{enumerate}
@@ -162,41 +162,50 @@ The introduced repair primitives the authors use in three different repair strat
 
 \subsection{General Repair}
 
-With the insert and delete operations as repair primitives, is updated the structure of the XML document which conforms DTD $D$ (defined in Definition \ref{dtdDef}) and violated functional dependency. The insert operation is represented as $\langle  + [x]a[y], z\rangle$, where i) $x$ is a node identifier, ii) $a$ is a label, iii) $y$ is either a node identifier or a value ($y$ is a value, if $a \in \alpha \cup \{S\}$; otherwise it is a node identifier), and iv) $z$ denotes the child of $x$ which must immediately precede $y$ ($\perp$ if $y$ is inserted as the first or a single child of $x$). The deletion is represented as $-[x]a[y]$, where $x$ is a node identifier, $a \in \alpha \cup \tau \cup \{S\}$, and $y$ is either a node $id$ or a string value, denoting the node to be deleted.\\
-The set $R$ of update operations can be divide into two subsets: $R^+$ is a the subset of all the insertion operations in $R$; $R^-$ is the subset of all the deletion operations. A set $R$ is said to be consistent if the following conditions are hold:
+With the insert and delete operations as repair primitives, the structure of the XML document which conforms DTD $D$ (defined in Definition \ref{dtdDef}) and violated functional dependency is updated. The insert operation is denoted as $\langle  + [x]a[y], z\rangle$, where:
+\begin{enumerate}
+\renewcommand{\labelenumi}{\roman{enumi})}
+	\item $x$ is a node identifier
+    \item $a$ is a label
+    \item $y$ is either a node identifier or a value ($y$ is a value, if $a \in \alpha \cup \{S\}$; otherwise it is a node identifier)
+    \item $z$ denotes the child of $x$ which must immediately precede $y$ ($\perp$ if $y$ is inserted as the first or a single child of $x$).
+\end{enumerate}
+
+The deletion is represented as $-[x]a[y]$, where $x$ is a node identifier, $a \in \alpha \cup \tau \cup \{S\}$, and $y$ is either a node $id$ or a string value, denoting the node to be deleted.\\
+The set $R$ of update operations can be divided into two subsets: $R^+$ is the subset of all the insertion operations in $R$; $R^-$ is the subset of all the deletion operations. A set $R$ is said to be consistent if the following conditions hold:
 \begin{enumerate}
 	\item the deletion of node implies the deletion of all descendant nodes;
     \item insertions cannot refer to deleted nodes.
 \end{enumerate}
 We say that two sets of update operations $R_1$ and $R_2$ are equivalent ($R_1 \equiv R_2$) if $R_1$ is equal to $R_2$ up to an injective renaming of node identifiers. Moreover, we say that $R_1 \preceq R_2$ if $R_1^- \subseteq R_2^- \lor R_1^- = R_2^-$ and $R_1^+ \subseteq R_2^+$. We say that $R_1 \sqsubseteq R_2$ if there exists a $R_2' \equiv R_2$ such that  $R_1 \preceq R_2'$. At last $R_1 \sqsubset R_2$ if $R_1 \sqsubseteq R_2$ and $R_1 \not \equiv R_2$.\\
 
-With defined basic repair operations for general repair of inconsistent XML document let us define a repair as follows:
+With basic repair operations for general repair of inconsistent XML document defined let us define a repair as follows:
 
 \begin{define}[Repair]
-Given an XML tree $T$, a DTD $D$ and a set of integrity constraints $IC$(definition \ref{integConstr}), a set of update operations $R$ is said to be a repair of $T$ (with respect to $D$ and $IC$) if $R(T) \models IC$, where $R(T)$ is application of consistent set of updates $R$ to $T$, $R(T)$ conforms $D$ and $\not \exists R' \sqsubset R$ such that $R'(T) \models IC$ and $R'(T)$ conforms $D$.
+Given an XML tree $T$, a DTD $D$ and a set of integrity constraints $IC$ (Definition \ref{integConstr}), a set of update operations $R$ is said to be a repair of $T$ (with respect to $D$ and $IC$) if $R(T) \models IC$, where $R(T)$ is application of consistent set of updates $R$ to $T$, $R(T)$ conforms $D$ and $\not \exists R' \sqsubset R$ such that $R'(T) \models IC$ and $R'(T)$ conforms $D$.
 \end{define}
 
 With further investigation, the authors discover that the problem of deciding whether there exists a repair for a XML document in the presence of DTD with functional dependencies is undecidable. Therefore they consider restricted forms of repairs, more specifically cleaning and completing repairs.
 
 \subsection{Conclusion}
 
-In this approach the authors introduce different types of repairs (general, cleaning and completing) and focus on checking whether exists a repair for many classes of integrity constraints (general integrity constraints, inclusion dependencies, functional dependencies, etc.). For the functional dependencies the authors found out that the problem of checking whether there exists a general repair for an XML document is $\mathcal{NP}$-complete.
+In this approach the authors introduce different types of repairs (general, cleaning and completing) and focus on checking whether there exists a repair for many classes of integrity constraints (general integrity constraints, inclusion dependencies, functional dependencies, etc.). For the functional dependencies the authors found out that the problem of checking whether there exists a general repair for an XML document is $\mathcal{NP}$-complete.
 
 
 \section{Improving XML Data Quality with Functional Dependencies}
 
-The algorithm for repairing XML functional dependency violations which uses modification of node value as the repair primitive has been proposed in \cite{ImprovingXML}. For finding the optimal repair of an XML document, the authors introduce a cost model, which assign a weight to each leaf node in an XML document. The optimal repair is the one with the lowest repair cost which is measured by the total weight of the modified nodes.
+The algorithm for repairing XML functional dependency violations which uses a modification of node value as the repair primitive has been proposed in \cite{ImprovingXML}. To find the optimal repair of an XML document, the authors introduce a cost model, which assigns a weight to each leaf node in an XML document. The optimal repair is the one with the lowest repair cost which is measured by the total weight of the modified nodes.
 
-The authors of the approach found out that repairing one functional dependency violation can violate another. Therefore they divide the main algorithm into two phases. In the first phase, the conflict hypergraph capturing the initial functional dependency violations is constructed, and all the violations are fixed by modifying the values of all the nodes on a vertex cover of the conflict hypergraph. In the second phase, remaining violations are resolved by modifying the violating nodes and their core determinants to prevent of introducing new conflicts.
+The authors of this approach found out that repairing one functional dependency violation can violate another. Therefore they divide the main algorithm into two phases. In the first phase, the conflict hypergraph capturing the initial functional dependency violations is constructed and all the violations are fixed by modifying the values of all the nodes on a vertex cover of the conflict hypergraph. In the second phase, remaining violations are resolved by modifying the violating nodes and their core determinants to prevent of introducing new conflicts.
 
 \subsection{Cost Model and Repairing Primitive}
 
-Each leaf node $v$ of XML tree is associated a weight from range $[0,1]$, which is denoted $W(v)$. Let us assume that the larger the weight of the leaf the more reliable it is. The weight may be automatically generated by statistical methods or it can be assigned by a user.
+Each leaf node $v$ of XML tree is associated with a weight from range $[0,1]$, which is denoted $W(v)$. Let us assume that the larger the weight of the leaf, the more reliable it is. The weight may be automatically generated by statistical methods or it can be assigned by the user.
 
-As was mentioned earlier, a repairing primitive is a node value modification, where for repairing algorithm a combination of two rules to resolve violation is used. Let us have a $FD$ $\sigma = (P, P', (P_1, \dots, P_n \rightarrow P_{n+1}))$ (from Definition \ref{fd2}) and consider two nodes $v_1$ and $v_2$ matching path $P'$ in a subtree rooted at a node in $\{[\![p]\!]\}$. If the child nodes of $v_1$ and $v_2$ qualified by paths $P_i$ have equal values for all $i \in [1,n]$ and their child nodes qualified by $P_{n+1}$ have different values, then $v_1$ and $v_2$ violates $\sigma$. The first rule used to repair this violation is to change the value of the node qualified by $P_{n+1}$ from $v_1$ to the value of $v_2$'s child node that matches $P_{n+1}$(or reversely). The second rule is to choose an arbitrary $P_i (i \in [1,n])$, and introduce a new value to the node qualified by $P_i$ from $v_1$ (or $v_2$).
+As was mentioned earlier, a repairing primitive is a node value modification, where for repairing algorithm a combination of two rules to resolve violation is used. Let us have an $FD$ $\sigma = (P, P', (P_1, \dots, P_n \rightarrow P_{n+1}))$ (from definition \ref{fd2}) and consider two nodes $v_1$ and $v_2$ matching path $P'$ in a subtree rooted at a node in $\{[\![p]\!]\}$. If the child nodes of $v_1$ and $v_2$ qualified by paths $P_i$ have equal values for all $i \in [1,n]$ and their child nodes qualified by $P_{n+1}$ have different values, then $v_1$ and $v_2$ violates $\sigma$. The first rule used to repair this violation is to change the value of the node qualified by $P_{n+1}$ from $v_1$ to the value of $v_2$'s child node that matches $P_{n+1}$ (or reversely). The second rule is to choose an arbitrary $P_i (i \in [1,n])$ and introduce a new value to the node qualified by $P_i$ from $v_1$ (or $v_2$).
 
 \begin{define}[Optimal repair]
-Given an inconsistent XML document $T$ violating a set $\Sigma$ of $FD$s, the repair $T_R$ of $T$ is called optimal repair, if $T_R$ has the minimum cost among all repairs of $T$. The cost $cost(T_R)$ is defined as:
+Being given an inconsistent XML document $T$ violating a set $\Sigma$ of $FD$s, the repair $T_R$ of $T$ is called {\sl optimal repair}, if $T_R$ has the minimum cost among all repairs of $T$. The cost $cost(T_R)$ is defined as:
 \begin{displaymath}
 cost(T_R) = \sum_{v \in T} w(v) \times dist(v, v_R),
 \end{displaymath}
@@ -205,22 +214,20 @@ where $dist(v, v_R)=1$ if $val(v) \neq val(v_R)$, otherwise $dist(v, v_R)=0$.\qe
 
 \subsection{Initial Conflicts Hypergraph}
 
-A weighted hypergraph is used in the first part of repair algorithm as a tool modeling initial functional dependency violations in an XML document. Hypergraph $g$ of XML document $T$ can be defined as a pair $g = (V,E)$, where $V$ stands for a set of elements (called nodes), and $E$ is a set of non-empty subset of $V$ called hyperedges, more accurately each hyperedge indicates a set of value nodes violating FDs. Since hypergraph is weighted and a cost model is used in this approach, each node $v \in V$ of the hypergraph is assigned with a weight $w(v)$, which is the same as the weight of $v$ in $T$.\\
+A weighted hypergraph is used in the first part of the repair algorithm as a tool modeling initial functional dependency violations in an XML document. Hypergraph $g$ of XML document $T$ can be defined as a pair $g = (V,E)$, where $V$ stands for a set of elements (called nodes), and $E$ is a set of non-empty subset of $V$ called hyperedges, more accurately each hyperedge indicates a set of value nodes violating FDs. Since hypergraph is weighted and a cost model is used in this approach, each node $v \in V$ of the hypergraph is assigned with a weight $w(v)$, which is the same as the weight of $v$ in $T$.\\
 
 To actually resolve the problem of repairing FD violations in an XML document, the authors convert this problem into well-known problem of weighted vertex cover for hypergraph \cite{ApproxAlgo}. Let us have hypergraph $g = (V,E)$, where each hyperedge $e \in E$ is a set of value nodes which violate some FD. In a repair of an inconsistent XML document, for each hyperedge at least one value node is modified, therefore it is essential to find a vertex cover (VC) for $g$, which is a set $S \subseteq V$, such that for all edges $e \in E$, $S \cap e \neq \emptyset$. Since the hypergraph is weighted, we can define weight of VC as the total weight of all vertices in $S$.\\
 
-The algorithm fixing initial FD violations is shown in Algorithm \ref{fixInit}. The algorithm uses approximation algorithm to find VC for the minimum weighted vertex cover proposed in \cite{ApproxAlgo}.
-
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Fix-Initial-Conflicts}
 \label{fixInit}
 \begin{algorithmic}[1]
 \REQUIRE An XML document T, a set $\Sigma$ of FDs.
 \ENSURE A modified document T.
-\STATE Create the initial conflict hypergraph $g$ of $T$ w.r.t $\Sigma$
-\STATE Use a known algorithm to find an approximation $VC$ for the minimum weighted vertex cover of $g$
+\STATE \COMMENT Create the initial conflict hypergraph $g$ of $T$ w.r.t $\Sigma$
+\STATE \COMMENT Use a known algorithm to find an approximation $VC$ for the minimum weighted vertex cover of $g$
 \STATE $remaining$ := VC
-\WHILE{There are two target nodes $v_1, v_2 \in T$ violating a FD $\sigma \in \Sigma$, and $v_1[\![P_{n+1}]\!]$ or $v_2[\![P_{n+1}]\!]$ is the only node in VC from the set of nodes $\{v_1[\![P_i]\!](i \in [1, n+1])\} \cup \{v_2[\![P_i]\!](i \in [1, n+1])\}$. (W.l.o.g assume the violation is as follows: $\sigma = (P,P',(P_1,\dots,P_n \rightarrow P_{n+1}))$, $v \in \{[\![P]\!]\}$, $v_1, v_2 \in \{v[\![P']\!]\}$, $v_1[\![P_i]\!] \equiv v_2[\![P_i]\!]$ for all $i \in [1,n]$, and $v_1[\![P_{n+1}]\!] \not \equiv v_2[\![P_{n+1}]\!]$.)}
+\WHILE{there are two target nodes $v_1, v_2 \in T$ violating a FD $\sigma \in \Sigma$, and $v_1[\![P_{n+1}]\!]$ or $v_2[\![P_{n+1}]\!]$ is the only node in VC from the set of nodes $\{v_1[\![P_i]\!](i \in [1, n+1])\} \cup \{v_2[\![P_i]\!](i \in [1, n+1])\}$. (W.l.o.g assume the violation is as follows: $\sigma = (P,P',(P_1,\dots,P_n \rightarrow P_{n+1}))$, $v \in \{[\![P]\!]\}$, $v_1, v_2 \in \{v[\![P']\!]\}$, $v_1[\![P_i]\!] \equiv v_2[\![P_i]\!]$ for all $i \in [1,n]$, and $v_1[\![P_{n+1}]\!] \not \equiv v_2[\![P_{n+1}]\!]$.)}
 \STATE $val(v_1[\![P_{n+1}]\!])$ := $val(v_2[\![P_{n+1}]\!])$ \COMMENT W.l.o.g, we assume $v_1[\![P_{n+1}]\!]$ is in VC
 \ENDWHILE
 \FORALL{node $u \in remaining$}
@@ -230,16 +237,18 @@ The algorithm fixing initial FD violations is shown in Algorithm \ref{fixInit}. 
 \end{algorithmic}
 \end{algorithm}
 
+The algorithm fixing initial FD violations is shown in Algorithm \ref{fixInit}. The algorithm uses an approximation algorithm to find VC for the minimum weighted vertex cover proposed in \cite{ApproxAlgo}.
+
 \subsection{Resolving Violations Thoroughly}
 
 After repairing initial FD violations, there is a chance that new violations may be introduced, therefore the authors provided a method to do modifications on value nodes without incurring new conflicts (Algorithm \ref{fixRest}). This method uses core determinant $C_u$ of value node $u$ defined as follows:
 
 \begin{define}[Core Determinant]
-Given an XML document $T$, a set $\Sigma$ of FDs and a node $u$ in $T$, we say that a set of nodes $\{u_1, u_2, \dots, u_n\}$ is a $\sigma\!-\!determinant$ of $u$, if there exists a nontrivial FD $\sigma = (P, P', (P_1, \dots, P_n \rightarrow P_{n+1}))$ logical implied by $\Sigma$, such that $\exists v \in \{[\![P]\!]\}, \exists v_1 \in \{[\![P']\!]\}, v_1[\![P]\!] = u_i$ for $i \in [1,n]$, and $v_1[\![P_{n+1}]\!] = u$.\\
-We say that a set $C_u$ of nodes is a core determinant of $u$, if (a) for every nontrivial FD $\sigma$ implied by $\Sigma$ and every set $W$ that is $\sigma\!-\!determinant$ of $u$, $C_u \cap W \neq \emptyset$; and (b) for any proper subset $C_u'$ of $C_u$, there exists a nontrivial FD $\sigma$ implied by $\Sigma$, and a set $W$ that is $\sigma\!-\!determinant$ of $u$, $C_u' \cap W = \emptyset$.\qed
+Being given an XML document $T$, a set $\Sigma$ of FDs and a node $u$ in $T$, we say that a set of nodes $\{u_1, u_2, \dots, u_n\}$ is a $\sigma\!-\!determinant$ of $u$, if there exists a nontrivial FD $\sigma = (P, P', (P_1, \dots, P_n \rightarrow P_{n+1}))$ logicaly implied by $\Sigma$, such that $\exists v \in \{[\![P]\!]\}, \exists v_1 \in \{[\![P']\!]\}, v_1[\![P]\!] = u_i$ for $i \in [1,n]$, and $v_1[\![P_{n+1}]\!] = u$.\\
+We say that a set $C_u$ of nodes is a {\sl core determinant} of $u$, if (a) for every nontrivial FD $\sigma$ implied by $\Sigma$ and every set $W$ that is $\sigma\!-\!determinant$ of $u$, $C_u \cap W \neq \emptyset$; and (b) for any proper subset $C_u'$ of $C_u$, there exists a nontrivial FD $\sigma$ implied by $\Sigma$, and a set $W$ that is $\sigma\!-\!determinant$ of $u$, $C_u' \cap W = \emptyset$.\qed
 \end{define}
 
-\begin{algorithm}[H]
+\begin{algorithm}
 \caption{Resolve-Remaining-Violations}
 \label{fixRest}
 \begin{algorithmic}[1]
@@ -259,4 +268,4 @@ We say that a set $C_u$ of nodes is a core determinant of $u$, if (a) for every 
 
 \subsection{Conclusion}
 
-The authors introduced effective two-step heuristic method to solve a problem of finding optimal repair of XML violations against functional dependencies, which is $\mathcal{NP}$-complete. Moreover, they experimentally verified the effectivity and scalability of their approach using real-life and synthetic data.
+The authors introduced an effective two-step heuristic method to solve a problem of finding optimal repair of XML violations against functional dependencies, which is $\mathcal{NP}$-complete. Moreover, they experimentally verified the effectivity and scalability of their approach using real-life and synthetic data.

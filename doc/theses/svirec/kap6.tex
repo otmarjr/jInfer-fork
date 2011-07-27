@@ -4,39 +4,39 @@ In this chapter, experimental results of the \texttt{FDRepairer} extension of th
 
 \section{Datasets}
 
-All provided documents with functional dependencies and also repaired documents are placed on CD in the directory \texttt{/datasets/}.
+All provided documents with functional dependencies and also repaired documents are placed on the enclosed CD in the directory \texttt{/datasets/}.
 
 \subsection{Real-World Data}
 
-The first real-world dataset originate from the XML data repository \\(\url{http://www.cs.washington.edu/research/xmldatasets/}), concretely Course data derived from university websites. The course data consists, beside of other information, of day of the week, time and place (building and room), where each course is situated. The consistency of data is evaluated against FD defined as: Two courses starting at the same date and time are each situated in a different place.\\
+The first real-world dataset originates from the XML data repository \\(\url{http://www.cs.washington.edu/research/xmldatasets/}), specifically the Course data derived from university websites. The course data consist, along with other information, of day of the week, time and place (building and room), where each course is situated. The consistency of data is evaluated against FD defined as: \emph{Two courses starting at the same date and time are each situated in a different place}.\\
 
-The second dataset is a set of actors of IMDB database obtained from the Niagara data source (\url{http://www.cs.wisc.edu/niagara/data.html}). The dataset consists of a set of authors, where for each author is listed a set of movies he played in. For this dataset, we defined FD as follows: For each two authors, which played in the movie with the same name, the year of release of this movie must be the same.
+The second dataset is a set of actors of IMDB database obtained from the Niagara data source (\url{http://www.cs.wisc.edu/niagara/data.html}). The dataset consists of a set of authors, where for each author a set of movies he played in is listed. For this dataset, we defined FD as follows: For each two authors, which played in the movie with the same name, the year of release of this movie must be the same.
 
 \subsection{Synthetic Data}
 
-Two synthetic data sets have been constructed, the first represents data introduced in Example \ref{example1} with FD presented in Example \ref{fdExample}. The latter one is created according to Example 1 introduced in \cite{ImprovingXML}.
+Two synthetic data sets have been constructed, the former represents data introduced in Example \ref{example1} with FD presented in Example \ref{fdExample}. The latter is created according to Example 1 introduced in \cite{ImprovingXML}.
 
 \section{Algorithms Comparison}
 
-For each datasets, we first run the former algorithm and collect from a repaired document informations about how many nodes have been modified with particular update operation (we split value modification operation into changing value to new one and copying one value from one node to another).
+For each dataset, we first run the original algorithm and collect from a repaired document informations about how many nodes have been modified with particular update operation (we split value modification operation into changing value to new one and copying one value from one node to another).
 
-Thereafter we use our proposed algorithm with minimal repair candidate selection mode, and besides the data we collect for former algorithm, we also gather informations about how many repair groups have been created before first application of repair candidate and the total count of picked repair groups. We run our algorithm multiple times with different value of the coefficient $k$ and assigning of node weights $w$.\\
+After that, we use our proposed algorithm with minimal repair candidate selection mode, and along with the data we collect for original algorithm, we also gather information on how many repair groups have been created before the first application of repair candidate and the total number of picked repair groups. We run our algorithm multiple times with different value of the coefficient $k$ and assignment of node weights $w$.\\
 
-The first real-world data (course data) is represented by \texttt{reed.xml} and \texttt{wsu.xml}. For each document, we execute our algorithm with three different settings. First two uses default value of $k$ ($k=1.5$) and for the last one, we set $k=0.005$. For the second (resp. third) execution, we set a weight $w$ of nodes represented by XPath \texttt{/root/course/time/start\_time/text()} (resp. \texttt{/root/course/time/\discretionary{}{}{}start/text()}) to 0.1.
+The first real-world data (course data) is represented by \texttt{reed.xml} and \texttt{wsu.xml}. For each document, we execute our algorithm with three different settings. First two use the default value of $k$ ($k=1.5$), for the last one, we set $k=0.005$. For the second (third) execution, we set the weight $w$ of nodes represented by XPath \texttt{/root/course/time/start\_time/text()} (resp. \texttt{/root/course/time/\discretionary{}{}{}start/text()}) to 0.1.
 
-The document \texttt{actors.xml} represents the second real-world dataset. Our algorithm is executed two times, where for both executions have been set $k=1.5$. Moreover, the second has weights of nodes represented by XPath \texttt{/W4F\_DOC/\discretionary{}{}{}Actor/Filmography/Movie/Year/text()} set to $w=0.2$.\\
+The document \texttt{actors.xml} represents the second real-world dataset. Our algorithm is executed two times, where for both executions $k=1.5$ is set. Moreover, the second has weights of nodes represented by XPath \texttt{/W4F\_DOC/\discretionary{}{}{}Actor/Filmography/Movie/Year/text()} set to $w=0.2$.\\
 
-Generated datasets represented by \texttt{bib.xml} and \texttt{customers.xml} documents have been both used as a input for our algorithm two times, where first execution was done with default value of $k$. The second execution on \texttt{bib.xml} uses $k=0.1$ and on \texttt{customers.xml} uses $k=1.5$ and $w=0.2$ is set to all nodes represented by \texttt{/customers/country/c\_list/customer/city/text()}.
+Generated datasets represented by \texttt{bib.xml} and \texttt{customers.xml} documents have been both used as a input for our algorithm two times, where first execution was done with the default value of $k$. The second execution on \texttt{bib.xml} uses $k=0.1$ and on \texttt{customers.xml} uses $k=1.5$ and $w=0.2$ is set to all nodes represented by \texttt{/customers/country/c\_list/customer/city/text()}.
 
 \section{Results}
 
-All gathered informations from real-world and synthetic datasets are shown in Tables \ref{realWorldTable} and \ref{syntheticTable}. The columns of both tables are defined as follows: RG is count of repair groups created before application of repair candidate, RG total is total count of picked repair groups, U specifies number of nodes marked as unreliable, NV defines number of nodes changing value to a new one and finally ChV specifies number of nodes with value copied from another node.\\
+All information gathered from real-world and synthetic datasets is shown in Tables \ref{realWorldTable} and \ref{syntheticTable}. The columns of both tables are defined as follows: \emph{RG} is the count of repair groups created before application of repair candidate, \emph{RG total} is the total count of picked repair groups, \emph{U} specifies the number of nodes marked as unreliable, \emph{NV} defines the number of nodes changing value to a new one and finally \emph{ChV} specifies the number of nodes with value copied from another node.\\
 
 
 \begin{table}
     \begin{tabular}{| l | r | *{7}{c|}}
     \hline
-    & repairer & $k$ & $w$ & RG & RG total & U & NV & ChV\\ \hline
+    dataset & repairer & $k$ & $w$ & RG & RG total & U & NV & ChV\\ \hline
     \multirow{4}{*}{reed.xml} & old repairer & - & - & - & - & 0 & 780 & 0\\
     & \texttt{FDRepairer} & 1.5 & - & 218 & 195 & 0 & 195 & 0\\
     & \texttt{FDRepairer} & 1.5 & 0.1 & 218 & 195 & 0 & 195 & 0\\
@@ -53,12 +53,12 @@ All gathered informations from real-world and synthetic datasets are shown in Ta
 \label{realWorldTable}
 \end{table}
 
-From the informations in tables is visible, that our approach found for each dataset the repair, which modifies less nodes than old repair algorithm. One exception, where our algorithm modifies more nodes is the case, when we set value of $k$ near 0, which marks nodes as unreliable. With this setting, we want to demonstrate, that with our approach is possible to choose instead of modifying node values, marking nodes as unreliable. This is not possible with old repairer, since it prefers node value modification before marking node as unreliable.
+From the information presented in these tables is apparent that our approach found for each dataset a repair that modifies less nodes than the original repair algorithm. One exception where our algorithm modifies more nodes is the case when we set value of $k$ near 0, which marks nodes as unreliable. With this setting we want to demonstrate that with our approach it is possible to choose instead of modifying node values, marking nodes as unreliable. This is not possible with the original repairer, since it prefers node value modification to marking node as unreliable.
 
 \begin{table}
     \begin{tabular}{| l | r | *{7}{c|}}
     \hline
-    & repairer & $k$ & $w$ & RG & RG total & U & NV & ChV\\ \hline
+    dataset & repairer & $k$ & $w$ & RG & RG total & U & NV & ChV\\ \hline
     \multirow{3}{*}{bib.xml} & old repairer & - & - & - & - & 0 & 913 & 0\\
     & \texttt{FDRepairer} & 1.5 & - & 1444 & 913 & 0 & 913 & 0\\
     & \texttt{FDRepairer} & 0.1 & - & 1444 & 913 & 5478 & 0 & 0\\ \hline
@@ -70,6 +70,6 @@ From the informations in tables is visible, that our approach found for each dat
 \label{syntheticTable}
 \end{table}
 
-With setting the weight to particular nodes, we want to show that our algorithm is capable of choosing the priority of nodes, which values are modified (\texttt{reed.xml} and \texttt{wsu.xml}), or if the value is changed to new value (\texttt{actors.xml} and \texttt{customers.xml}).
+With setting the weight to particular nodes we want to show that our algorithm is capable of choosing the priority of nodes, which values are modified (\texttt{reed.xml} and \texttt{wsu.xml}), or if the value is changed to new value (\texttt{actors.xml} and \texttt{customers.xml}).
 
-Another interesting observation is that for almost all datasets, our algorithm picks less repair groups (from which picks repair candidate to apply to document) than were created before first pick. It means that some repair candidate repairs more than one FD violation and therefore less value modifications were needed. In the case, where the number of picked repair groups outreach the firstly created ones, is visible that some repair candidate introduces new violation which was consequently repaired in the next iteration of our algorithm.
+Another interesting observation is that for almost all datasets, our algorithm picks less repair groups (from which picks repair candidate to apply to document) than were created before first pick. It means that one of the repair candidate repairs more than one FD violation and therefore less value modifications are needed. In the case where the number of picked repair groups outreach the firstly created ones, is visible that some repair candidate introduces new violation which was consequently repaired in the next iteration of our algorithm.

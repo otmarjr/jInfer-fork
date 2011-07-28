@@ -40,6 +40,11 @@ import java.util.List;
 public class RandomVsFuzzy extends AbstractExperimentSet {
 
   @Override
+  public String getName() {
+    return "Random vs Fuzzy";
+  }
+
+  @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
             new RandomRemove(0.2),

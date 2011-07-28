@@ -38,16 +38,21 @@ import java.util.List;
 public class RandomVsFuzzyStart extends AbstractExperimentSet {
 
   @Override
+  public String getName() {
+    return "Random vs Fuzzy first step only";
+  }
+
+  @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 20; i++) {
       ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(0)));
     }
 
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 20; i++) {
       ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Fuzzy(), improvement, new Weight(), new TimeIterations(0)));
     }
 

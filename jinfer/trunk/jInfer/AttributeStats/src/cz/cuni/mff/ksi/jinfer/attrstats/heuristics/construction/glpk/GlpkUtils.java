@@ -186,6 +186,7 @@ public final class GlpkUtils {
     };
   }
 
+  // TODO vektor Comment, move from here
   public static void writeInput(final File input, final String inputString) {
     PrintWriter pw = null;
     try {

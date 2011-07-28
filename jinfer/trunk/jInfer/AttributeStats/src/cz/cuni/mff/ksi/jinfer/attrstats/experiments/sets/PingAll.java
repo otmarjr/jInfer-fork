@@ -35,6 +35,11 @@ import java.util.List;
 public class PingAll extends AbstractExperimentSet {
 
   @Override
+  public String getName() {
+    return "Ping all";
+  }
+
+  @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
 

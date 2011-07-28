@@ -42,6 +42,11 @@ public class VariousBetas extends AbstractExperimentSet {
   private static final double[] betas = new double[] {0.1, 0.5, 1.0};
 
   @Override
+  public String getName() {
+    return "Various Betas";
+  }
+
+  @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
             new RandomRemove(0.1),

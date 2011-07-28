@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.PingAll;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.RandomVsFuzzyStart;
 import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -46,7 +46,7 @@ public final class ExperimentAction implements ActionListener {
       @Override
       public void run() {
         try {
-          new PingAll().run();
+          new RandomVsFuzzyStart().run();
         }
         catch (final InterruptedException e) {
           Logger.getLogger(ExperimentAction.class).error("Interrupted", e);

@@ -39,6 +39,11 @@ import java.util.List;
 public class TenIterations extends AbstractExperimentSet {
 
   @Override
+  public String getName() {
+    return "Ten Iteration";
+  }
+
+  @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
             new RandomRemove(0.2),

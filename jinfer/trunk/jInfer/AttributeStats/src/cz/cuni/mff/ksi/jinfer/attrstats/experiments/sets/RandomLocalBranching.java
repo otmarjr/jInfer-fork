@@ -34,6 +34,11 @@ import java.util.List;
 public class RandomLocalBranching extends AbstractExperimentSet {
 
   @Override
+  public String getName() {
+    return "Random and Local Branching";
+  }
+
+  @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
             new LocalBranching(0.1, 0));

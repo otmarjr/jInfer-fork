@@ -36,7 +36,12 @@ import java.util.List;
  */
 public class TimeQuality extends AbstractExperimentSet {
 
-   @Override
+  @Override
+  public String getName() {
+    return "Time versus quality";
+  }
+
+  @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
 

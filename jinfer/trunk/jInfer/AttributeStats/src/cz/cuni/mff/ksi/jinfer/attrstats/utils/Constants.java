@@ -36,4 +36,6 @@ public final class Constants {
   
   public static final String TEST_DATA_ROOT = "C:\\Users\\vitasek\\Documents\\Soukrome\\test-data-official";
 
+  public static final String TEST_OUTPUT_ROOT = "C:\\Users\\vitasek\\Documents\\Soukrome\\test-output";
+
 }

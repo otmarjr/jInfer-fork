@@ -17,6 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 
 import cz.cuni.mff.ksi.jinfer.attrstats.experiments.interfaces.ExperimentListener;
+import cz.cuni.mff.ksi.jinfer.attrstats.heuristics.construction.glpk.GlpkUtils;
+import cz.cuni.mff.ksi.jinfer.attrstats.utils.Constants;
+import java.io.File;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -31,20 +34,33 @@ public abstract class AbstractExperimentSet {
 
   private final Object monitor = new Object();
 
+  /**
+   * Should return the name of this experimental set.
+   *
+   * @return Name of this set.
+   */
+  public abstract String getName();
+
+  /**
+   * Should return the list of experiment parameters to be run in this set.
+   *
+   * @return List of experiment parameters that will be sequentially run in this
+   * experimental set.
+   */
   protected abstract List<ExperimentParameters> getExperiments();
 
   private static final Logger LOG = Logger.getLogger(AbstractExperimentSet.class);
 
   public void run() throws InterruptedException {
+    int i = 0;
     for (final ExperimentParameters params : getExperiments()) {
       final Experiment e = new Experiment(params);
+      final int index = i++;
       e.addListener(new ExperimentListener() {
 
         @Override
         public void experimentFinished(final Experiment e) {
-          LOG.info(e.getReport());
-          // LOG.info(e.getCsv());
-          // LOG.info(e.getWinner());
+          logResults(e, index);
           synchronized (monitor) {
             monitor.notifyAll();
           }
@@ -68,5 +84,18 @@ public abstract class AbstractExperimentSet {
         monitor.wait();
       }
     }
+  }
+
+  private void logResults(final Experiment e, final int index) {
+    final File rootDir = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName());
+    if (!rootDir.exists()) {
+      rootDir.mkdirs();
+    }
+
+    final File output = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/" + index + ".txt");
+
+    final StringBuilder ret = new StringBuilder();
+    ret.append(e.getReport()).append('\n').append(e.getCsv()).append('\n').append(e.getWinner());
+    GlpkUtils.writeInput(output, ret.toString());
   }
 }

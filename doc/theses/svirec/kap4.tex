@@ -47,19 +47,32 @@ The algorithm is split into three steps, where the second and the third step are
 To represent an XML document we use an extended R-XML tree (Definition \ref{rxmlTree}), called RW-XML tree, which has weights assigned to each node of the tree. The weight of a node is from interval $[0,1]$ and indicates correctness of the data the particular node holds, meaning the higher the weight is, the more correct that particular node is. The weights are used to measure the cost of repair candidates, where candidate with the lowest cost is picked to be applied to the XML tree. This is also the first place where some kind of user interaction can be implemented. The user could assign the weights to nodes manually or could use some sort of statistical methods to generate them automatically. If the user does not assign weights nor does he use statistical methods, a default weight is assigned to all nodes.
 
 \begin{example}
-\todo[inline]{tu bude priklad pridania weights nodom z examplu 1}
+Consider the XML document and corresponding XML tree from Example \ref{example1}. Let us assign weights to nodes defined by XPath constructs shown in Table \ref{weightTab}. The XML tree with assigned custom and also default weights is shown in Fig. \ref{weightsFig}.
 
-default node weight 0.4
+\begin{table}[h]
+\begin{tabular}{r | c}
+XPath & weight\\\hline
+$/bib/book/title/text()$ & 0.8\\
+$/bib/book/written\_by/author$ & 0.6\\
+$/bib/book/written\_by/author/@ano$ & 0.1\\
+\end{tabular}
+\caption{Table of custom weights assigned to the XML tree.}
+\label{weightTab}
+\end{table}
+
+\begin{figure}[H]
+    \centering\includegraphics[width=\textwidth]{weights}
+	\caption{The XML tree with assigned weights to the nodes.} \label{weightsFig}
+\end{figure}
+\qed
 \end{example}
 
 
-A definition of an RW-XML tree follows:
-
 \begin{define}[RW-XML tree]
-A RW-XML tree is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $[0,1]$.\qed
+A {\sl RW-XML tree} is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $[0,1]$.\qed
 \end{define}
 
-After creating the RW-XML tree from input XML data, a set of tree tuples (defined in \ref{treeTuple}) is constructed. Since the set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer to the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on constructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
+After creating the RW-XML tree from input XML data, a set of tree tuples (defined in Definition r\ref{treeTuple}) is constructed. Since the set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer to the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on constructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
 
 Functional dependencies as defined in Definition \ref{fd1} consist of paths described with XPath. As was described before, these paths can only have basic structure shown in Example \ref{pathsExample}.
 
@@ -143,12 +156,12 @@ Consider the XML tree from Fig. \ref{example1} and a repair candidate, which mar
 \end{example}
 
 
-Since each repair candidate consists of a set of nodes which are modified (marked as unreliable or having a modified value), we can compute the cost of each candidate. It is important to say that in our approach we prefer repair candidates that modify the value of the nodes to those marking nodes as unreliable. Therefore we added a coefficient $k$ to the calculation of the repair candidate cost, so that the repair candidate modifying the node value will have lower cost. The definition of repair candidate cost is as follows:
+Since each repair candidate consists of a set of nodes which are modified (marked as unreliable or having a modified value), we can compute the cost of each candidate. It is important to say that unlike in original approach, we do not prefer repair candidates that modify the value of the nodes to those marking nodes as unreliable. Therefore we added a coefficient $k$ to the calculation of the repair candidate cost, so that the priority of repair candidate marking node as unreliable can be achieved. The definition of repair candidate cost is as follows:
 
 \begin{define}[Repair Candidate Cost]
 Being given an RW-XML tree $RXT$ and a repair candidate $R$, we define the cost of $R$ as:
 $$cost(R) = \sum_{u \in Modified_\delta(R)} \omega(u) + \sum_{v \in Modified_\varrho(R)} \omega(v) \cdot k,$$
-where $k$ is the coefficient determining the priority of the repair candidate modifying value of node before that  marking node as unreliable.\qed
+where $k$ is the priority of repairing the candidate by modifying the node value in constrast to marking it unreliable.\qed
 \end{define}
 
 By default, $k$ is set to such value that the cost of repair candidate marking as an unreliable node will be higher than the one that modifies node value. However, this is another place where user can intervene and change the priority of repair candidates. We show in Example \ref{koefK} how $k$ can change the costs of repair candidates.
@@ -163,7 +176,7 @@ However, if we set the coefficient $k = 0.1$, costs of candidates would be sorte
 And, finally, since a repair group is a set of repair candidates, its weight can be defined as follows:
 
 \begin{define}[Repair Group weight]
-Being given an RW-XML tree $RXT$ and a repair group $RG$, we define the weight of $RG$ as the sum of costs of all repair candidates in the $RG$.
+Being given an RW-XML tree $RXT$ and a repair group $RG$, we define the {\sl weight} of $RG$ as the sum of costs of all repair candidates in the $RG$.
 \end{define}
 
 \subsection{Repair Candidate Selection and Application}
@@ -180,9 +193,9 @@ The latter algorithm allows the user to choose the repair candidate which is the
 
 The function \texttt{selectRepairByUser()} responsible for selection of repair candidate involving user interactivity is shown in Algorithm \ref{selectUser}.
 
-First it decides, whether the algorithm is in a state where the user is selecting repair candidates (the user selection mode), or the user leaves decision making on the algorithm using his previous selections (the guess mode) (line 2). If we are still in user selection mode, the user chooses from repair groups sorted by the weight the most convenient one, and from this group the user chooses the repair candidate that will be applied on RW-XML tree (line 4). Repair candidates in each repair group are also sorted by the cost, working as a hint for the user which repair would be chosen by the previous automatic method of selection. The last step of user selection mode is saving the information from selected repair candidate (line 5). This information consists of the FD which this candidate repairs, nodes the repair changes (their paths) and also whether the change was a value modification or marking a node as unreliable.
+First it decides, whether the algorithm is in a state where the user is selecting repair candidates (the user selection mode), or the user leaves decision making on the algorithm using his previous selections (the guess mode) (line 2). If we are still in user selection mode, the user chooses from repair groups sorted by the weight the most convenient one, and from this group the user chooses the repair candidate that will be applied on RW-XML tree (line 3). Repair candidates in each repair group are also sorted by the cost, working as a hint for the user which repair would be chosen by the previous automatic method of selection. The last step of user selection mode is saving the information from selected repair candidate (line 4). This information consists of the FD which this candidate repairs, nodes the repair changes (their paths) and also whether the change was a value modification or marking a node as unreliable.
 
-If the user has decided not to select repair candidates by himself anymore, the algorithm goes into the guess mode (starting at line 6). In this mode the algorithm checks all repair groups whether one of them contains a repair candidate that is sufficiently similar to some previously selected repair candidate (line 7-10). This similarity is checked by function \texttt{canBeUsedUserSelection()} shown in Algorithm \ref{canUserSel}. If neither of the candidates is sufficiently similar, the algorithm chooses the repair candidate with the lowest cost from the repair group with the lowest weight (line 15-16).
+If the user has decided not to select repair candidates by himself anymore, the algorithm goes into the guess mode (starting at line 5). In this mode the algorithm checks all repair groups whether one of them contains a repair candidate that is sufficiently similar to some previously selected repair candidate (line 6-12). This similarity is checked by function \texttt{canBeUsedUserSelection()} shown in Algorithm \ref{canUserSel}. If neither of the candidates is sufficiently similar, the algorithm chooses the repair candidate with the lowest cost from the repair group with the lowest weight (line 13-14).
 
 \begin{algorithm}[H]
 \floatname{algorithm}{Function}
@@ -196,14 +209,12 @@ $t$: modified nodes count threshold of previously selected repair candidates\\}
 \ENSURE $R$: repair candidate
 
 \STATE $R = \emptyset$
-\IF{$isUserSelection()$}
-    \STATE \COMMENT repair candidate selected by user
-    \STATE $R = getRepairFromUser()$
+\IF[the user selection mode]{$isUserSelection()$}
+    \STATE $R = getRepairFromUser()$ \COMMENT{repair candidate selected by user}
     \STATE $saveSelectedRepair(SR, R)$
-\ELSE
+\ELSE[the guess mode]
     \FORALL{$RG$ in $RGS$}
-        \STATE \COMMENT for all repair candidates in the repair group
-        \FORALL{$RC$ in $RG$}
+        \FORALL[for all repair candidates in the repair group]{$RC$ in $RG$}
             \IF{$canBeUsedUserSelection(SR, t, RC)$}
                 \RETURN $RC$
             \ENDIF

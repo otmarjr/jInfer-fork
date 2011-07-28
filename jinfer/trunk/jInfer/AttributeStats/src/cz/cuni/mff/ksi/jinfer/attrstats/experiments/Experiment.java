@@ -32,6 +32,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,16 +80,21 @@ public class Experiment implements IGGeneratorCallback {
   public String getReport() {
     final StringBuilder ret = new StringBuilder();
     final Pair<Integer, Integer> graph = GraphUtils.getGraphRepresentation(model);
-    ret.append(SystemInfo.getInfo())
-        .append("\n\nConfiguration:")
+    ret.append("Configuration:")
         .append("\nFile name: ").append(params.getFile().getName()).append(" (").append(params.getFile().getSize()).append(" b)")
         .append("\n  Graph representation: ").append(graph.getFirst()).append(" vertices, ").append(graph.getSecond()).append(" edges")
         .append("\nalpha: ").append(params.getAlpha()).append(", beta: ").append(params.getBeta())
         .append("\n\nResults:")
         .append("\nStart time: ").append(new Date(startTime))
         .append("\nTotal time spent: ").append(totalTime).append(" ms")
-        .append("\nFinal quality: ").append(improvementResults.get(improvementResults.size() - 1).getQuality().getText())
-        .append("\nHighest quality: ").append(highestQuality.getText())
+        .append("\nFinal quality: ");
+    if (BaseUtils.isEmpty(improvementResults)) {
+      ret.append(constructionResult.getQuality().getText());
+    }
+    else {
+      ret.append(improvementResults.get(improvementResults.size() - 1).getQuality().getText());
+    }
+    ret.append("\nHighest quality: ").append(highestQuality.getText())
         .append("\nConstruction phase: ")
         .append("\n  Algorithm: ").append(params.getConstructionHeuristic().getModuleDescription())
         .append("\n    Time taken: ").append(constructionResult.getTime()).append(" ms")
@@ -108,7 +114,7 @@ public class Experiment implements IGGeneratorCallback {
       i++;
     }
 
-    ret.append("\nTermination reason: ").append(terminationReason.getSecond());
+    ret.append("\nTermination reason: ").append(terminationReason.getSecond()).append('\n');
 
     return ret.toString();
   }

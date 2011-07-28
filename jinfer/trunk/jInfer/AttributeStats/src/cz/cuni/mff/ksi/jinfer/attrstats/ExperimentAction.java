@@ -16,10 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.attrstats;
 
-import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.TenIterations;
+import cz.cuni.mff.ksi.jinfer.attrstats.experiments.sets.PingAll;
 import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import org.apache.log4j.Logger;
 import org.openide.awt.ActionRegistration;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -45,10 +46,10 @@ public final class ExperimentAction implements ActionListener {
       @Override
       public void run() {
         try {
-          new TenIterations().run();
+          new PingAll().run();
         }
         catch (final InterruptedException e) {
-
+          Logger.getLogger(ExperimentAction.class).error("Interrupted", e);
         }
       }
     }, "Experimenting");

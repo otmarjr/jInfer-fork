@@ -69,19 +69,20 @@ public class TimeIterations implements TerminationCriterion {
   @Override
   public Pair<Boolean, String> terminate(final Experiment experiment,
         final long time, final List<IdSet> solutions) {
+    // since this is the most relevant and interesting criterion, we test for it first
+    if (experiment.getKnownOptimum() != null) {
+      final Pair<IdSet, Quality> best = Utils.getBest(experiment, solutions);
+      if (Math.abs(experiment.getKnownOptimum().doubleValue() - best.getSecond().getScalar()) < THRESHOLD) {
+        return new ImmutablePair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
+      }
+    }
+
     iterations++;
     if (iterations > maxIterations) {
       return new ImmutablePair<Boolean, String>(Boolean.TRUE, "Maximum iterations exceeded.");
     }
     if (time > maxTime) {
       return new ImmutablePair<Boolean, String>(Boolean.TRUE, "Maximum time exceeded.");
-    }
-
-    if (experiment.getKnownOptimum() != null) {
-      final Pair<IdSet, Quality> best = Utils.getBest(experiment, solutions);
-      if (Math.abs(experiment.getKnownOptimum().doubleValue() - best.getSecond().getScalar()) < THRESHOLD) {
-        return new ImmutablePair<Boolean, String>(Boolean.TRUE, "Known optimum reached.");
-      }
     }
 
     return FALSE;

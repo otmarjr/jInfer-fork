@@ -32,4 +32,8 @@ public final class Constants {
 
   public static final InputFile GRAPH = new InputFile("C:\\Users\\vektor\\Dropbox\\school\\jInfer\\example-data\\keys\\graph.xml", FileCharacteristics.ARTIFICIAL);
 
+  // public static final InputFile GRAPH = new InputFile("C:\\Users\\vitasek\\Documents\\Soukrome\\test-xml\\graph.xml", FileCharacteristics.ARTIFICIAL);
+  
+  public static final String TEST_DATA_ROOT = "C:\\Users\\vitasek\\Documents\\Soukrome\\test-data-official";
+
 }

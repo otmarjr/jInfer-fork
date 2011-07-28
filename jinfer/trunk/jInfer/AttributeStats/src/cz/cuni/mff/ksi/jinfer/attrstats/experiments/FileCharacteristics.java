@@ -24,11 +24,21 @@ package cz.cuni.mff.ksi.jinfer.attrstats.experiments;
 public enum FileCharacteristics {
 
   /** Realistic, real-life data, no changes. */
-  REALISTIC,
+  REALISTIC("realistic"),
   /** Realistic data with some text content converted to attributes. */
-  CONVERTED,
+  CONVERTED("converted"),
   /** Artificially generated data. */
-  ARTIFICIAL,
-  UNKNOWN;
+  ARTIFICIAL("artificial"),
+  UNKNOWN(null);
+
+  private final String folder;
+
+  private FileCharacteristics(final String folder) {
+    this.folder = folder;
+  }
+
+  public String getFolder() {
+    return folder;
+  }
 
 }

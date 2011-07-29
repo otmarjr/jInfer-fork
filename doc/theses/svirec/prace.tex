@@ -20,7 +20,7 @@
 \let\openright=\clearpage
 
 
-\linespread{1.3}
+%\linespread{1.3}
 %\renewcommand\baselinestretch{1.3} % riadkovanie jeden a pol
 
 %% Pokud tiskneme oboustranně:
@@ -54,6 +54,9 @@
 \usepackage{subfig}
 \usepackage{url}
 \usepackage{multirow}
+\usepackage{setspace}
+
+\onehalfspacing
 
 \newcommand{\myscale}{0.5}
 
@@ -310,6 +313,9 @@ Keywords:
 
 %%% Tabulky v diplomové práci, existují-li.
 \chapwithtoc{List of Tables}
+
+\appendix
+\include{appendixA}
 
 %%% Přílohy k diplomové práci, existují-li (různé dodatky jako výpisy programů,
 %%% diagramy apod.). Kaľdá příloha musí být alespoň jednou odkazována z vlastního

@@ -22,7 +22,7 @@ import java.util.Map;
 import org.w3c.dom.Node;
 
 /**
- *
+ * Class representing tree tuple.
  * @author sviro
  */
 public class Tuple {
@@ -30,17 +30,31 @@ public class Tuple {
   private final RXMLTree tree;
   private List<Node> nodes = null;
 
-  public Tuple(RXMLTree tree, final int tupleId) {
+  /**
+   * Constructor of tuple for particular tree, with provided ID.
+   * @param tree Tree for which is tuple created.
+   * @param tupleId Tuple ID.
+   */
+  public Tuple(final RXMLTree tree, final int tupleId) {
     this.tree = tree;
     this.tupleId = tupleId;
   }
 
+  /**
+   * Get ID of this tuple.
+   * @return ID of this tuple.
+   */
   public int getId() {
     return tupleId;
   }
 
-  public boolean contains(Tuple tuple) {
-    List<Node> tupleNodes = tuple.getNodes();
+  /**
+   * Check if this tuple contains all nodes from provided tuple.
+   * @param tuple Tuple to be check if is subset of this tuple.
+   * @return true if this tuple contains all nodes from provided tuple.
+   */
+  public boolean contains(final Tuple tuple) {
+    final List<Node> tupleNodes = tuple.getNodes();
     if (this.getNodes().containsAll(tupleNodes)) {
       return true;
     }
@@ -48,6 +62,10 @@ public class Tuple {
     return false;
   }
 
+  /**
+   * Get list of all nodes contained in this tuple.
+   * @return List of all nodes contained in this tuple. 
+   */
   public List<Node> getNodes() {
     if (nodes == null) {
       nodes = computeNodes();
@@ -56,9 +74,9 @@ public class Tuple {
   }
 
   private List<Node> computeNodes() {
-    List<Node> result = new ArrayList<Node>();
+    final List<Node> result = new ArrayList<Node>();
     
-    Map<Node, NodeAttribute> nodesMap = tree.getNodesMap();
+    final Map<Node, NodeAttribute> nodesMap = tree.getNodesMap();
     for (Node node : nodesMap.keySet()) {
       if (nodesMap.get(node).isInTuple(this)) {
         result.add(node);
@@ -69,21 +87,26 @@ public class Tuple {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == null || !(obj instanceof Tuple)) {
       return false;
     }
     
-    Tuple tuple = (Tuple) obj;
+    final Tuple tuple = (Tuple) obj;
     
     return this.getId() == tuple.getId();
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 89 * hash + this.tupleId;
+    hash = 89 * hash + (this.tree != null ? this.tree.hashCode() : 0);
+    return hash;
   }
 
   @Override
   public String toString() {
     return "Tuple:" + tupleId;
   }
-  
-  
-  
 }

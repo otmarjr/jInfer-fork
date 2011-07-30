@@ -17,42 +17,57 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 /**
- *
+ * Class representing path.
  * @author sviro
  */
 public class Path {
   
-  private String path;
-  
-  public Path() {}
+  final private String pathValue;
 
+  /**
+   * Constructor which gets {@link String} representation of the path.
+   * @param path String representation of the path.
+   */
   public Path(final String path) {
     if (path == null || path.isEmpty()) {
       throw new IllegalArgumentException("Path has to be non-null and not empty.");
     }
-    this.path = path;
+    this.pathValue = path;
     
   }
   
+  /**
+   * Check if this path is a leaf path, i.e. it points to the string value 
+   * of the element of attribute.
+   * @return true if this path represents string value.
+   */
   public boolean isStringPath() {
-    return path.endsWith("text()") || path.contains("@");
+    return pathValue.endsWith("text()") || pathValue.contains("@");
   }
   
+  /**
+   * Chesk if this path point to the element, i.e. is not a string path.
+   * @return true if this path represents element.
+   */
   public boolean isElementPath() {
     return !isStringPath();
   }
 
+  /**
+   * Get the string representation of this path.
+   * @return String representation of this path.
+   */
   public String getPathValue() {
-    return path;
+    return pathValue;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == null || !(obj instanceof Path)) {
       return false;
     }
     
-    Path path1 = (Path) obj;
+    final Path path1 = (Path) obj;
     
     return this.getPathValue().equals(path1.getPathValue());
   }
@@ -60,14 +75,12 @@ public class Path {
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = 97 * hash + (this.path != null ? this.path.hashCode() : 0);
+    hash = 97 * hash + (this.pathValue != null ? this.pathValue.hashCode() : 0);
     return hash;
   }
 
   @Override
   public String toString() {
-    return path;
+    return pathValue;
   }
-  
-  
 }

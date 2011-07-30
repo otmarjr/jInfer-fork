@@ -23,7 +23,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Class representing answer of the path, i.e. it contains list of nodes that 
+ * satisfies this path.
  * @author sviro
  */
 public class PathAnswer {
@@ -31,10 +32,17 @@ public class PathAnswer {
   private List<Node> nodeAnswers;
   private boolean isValue = false;
 
+  /**
+   * Constructor creating the PathAnswer. It gets as parameters {@link NodeList}
+   * containing nodes satisfying path and flag describing if the nodes are value
+   * nodes (text values of elements or attributes).
+   * @param nodeList NodeList of nodes that satisfies path.
+   * @param isValue flag representing if the answer point to value nodes.
+   */
   public PathAnswer(final NodeList nodeList, final boolean isValue) {
     if (nodeList != null && nodeList.getLength() > 0) {
       final short nodeType = nodeList.item(0).getNodeType();
-      boolean isValueNode = nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE;
+      final boolean isValueNode = nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE;
       if (isValueNode != isValue) {
         throw new RuntimeException("isValue not match actual content of a node list.");
       }
@@ -48,10 +56,17 @@ public class PathAnswer {
     }
   }
 
+  /**
+   * Constructor creating the PathAnswer. It gets as parameters {@link List}
+   * containing nodes satisfying path and flag describing if the nodes are value
+   * nodes (text values of elements or attributes).
+   * @param nodeList List of nodes that satisfies path.
+   * @param isValue flag representing if the answer point to value nodes.
+   */
   public PathAnswer(final List<Node> nodeList, final boolean isValue) {
-    if (nodeList != null && nodeList.size() > 0) {
+    if (nodeList != null && !nodeList.isEmpty()) {
       final short nodeType = nodeList.get(0).getNodeType();
-      boolean isValueNode = nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE;
+      final boolean isValueNode = nodeType == Node.TEXT_NODE || nodeType == Node.ATTRIBUTE_NODE;
       if (isValueNode != isValue) {
         throw new RuntimeException("isValue not match actual content of a node list.");
       }
@@ -63,25 +78,37 @@ public class PathAnswer {
     }
   }
 
+  /**
+   * Check if the answer is empty, i.e. number of nodes satisfying path is equal to zero.
+   * @return true if answer contains zero nodes.
+   */
   public boolean isEmpty() {
     return nodeAnswers == null;
   }
 
+  /**
+   * Check if answer contains one or zero nodes.
+   * @return true if answer contains one or zero nodes.
+   */
   public boolean hasMaxOneElement() {
     return isEmpty() || hasOneElement();
   }
 
+  /**
+   * Check if answer contains exactly one node.
+   * @return true if answer contains exactly one node.
+   */
   public boolean hasOneElement() {
     return nodeAnswers != null && nodeAnswers.size() == 1;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == null || !(obj instanceof PathAnswer)) {
       return false;
     }
 
-    PathAnswer pathAnswer = (PathAnswer) obj;
+    final PathAnswer pathAnswer = (PathAnswer) obj;
     if (this.isEmpty() && pathAnswer.isEmpty()) {
       return true;
     }
@@ -109,6 +136,10 @@ public class PathAnswer {
     return hash;
   }
 
+  /**
+   * Get list of all nodes that satisfies the path.
+   * @return List of nodes that satisfies the path.
+   */
   public List<Node> getNodeAnswers() {
     if (isEmpty()) {
       return new ArrayList<Node>();
@@ -117,6 +148,11 @@ public class PathAnswer {
     return nodeAnswers;
   }
 
+  /**
+   * Get list of string values of all nodes that satisfies the path. This method is valid only
+   * if this path answer is a value answer, otherwise throws {@link UnsupportedOperationException}
+   * @return List of string values of all nodes that satisfies the path.
+   */
   public List<String> getValueAnswers() {
     if (isEmpty()) {
       return new ArrayList<String>();
@@ -125,7 +161,7 @@ public class PathAnswer {
     if (!isValueAnswer()) {
       throw new UnsupportedOperationException(NbBundle.getMessage(PathAnswer.class, "pathAnswer.wrongAnswerType.retreive"));
     }
-    List<String> result = new ArrayList<String>();
+    final List<String> result = new ArrayList<String>();
     for (Node node : nodeAnswers) {
       result.add(node.getNodeValue());
     }
@@ -133,10 +169,18 @@ public class PathAnswer {
     return result;
   }
 
+  /**
+   * Check if this answer is node answer, i.e. is not a value answer.
+   * @return true if this answer is a node answer.
+   */
   public boolean isNodeAnswer() {
     return !isValueAnswer();
   }
 
+  /**
+   * Check if this answer is a value answer.
+   * @return true if this answer is a value answer.
+   */
   public boolean isValueAnswer() {
     if (isEmpty()) {
       throw new UnsupportedOperationException("The PathAnswer is empty, cannot recognize correct answer type.");
@@ -144,10 +188,21 @@ public class PathAnswer {
     return isValue;
   }
 
-  private boolean isSameType(PathAnswer pathAnswer) {
+  /**
+   * Check if provided pathAnswer is the same type as this answer, i.e. if both answers are 
+   * value answers or node answers.
+   * @param pathAnswer Path answer to be check against.
+   * @return true if both answers have the same type.
+   */
+  private boolean isSameType(final PathAnswer pathAnswer) {
     return (this.isNodeAnswer() && pathAnswer.isNodeAnswer()) || (this.isValueAnswer() && pathAnswer.isValueAnswer());
   }
 
+  /**
+   * Get node this answer contains. If answer contains more then one node it throws {@link UnsupportedOperationException}.
+   * If this answer is empty return null.
+   * @return Node this answer contains.
+   */
   public Node getTupleNodeAnswer() {
     if (!hasMaxOneElement()) {
       throw new UnsupportedOperationException("PathAnswer is not an answer for a tuple.");
@@ -160,6 +215,12 @@ public class PathAnswer {
     return null;
   }
 
+  /**
+   * Get value of tje node this answer contains. This answer must be value type. 
+   * If answer contains more then one node it throws {@link UnsupportedOperationException}.
+   * If this answer is empty return null.
+   * @return Value of the node this answer contains.
+   */
   public String getTupleValueAnswer() {
     if (!hasMaxOneElement()) {
       throw new UnsupportedOperationException("PathAnswer is not an answer for a tuple.");

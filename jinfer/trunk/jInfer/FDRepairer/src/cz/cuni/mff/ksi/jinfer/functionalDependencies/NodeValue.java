@@ -17,36 +17,55 @@
 package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 /**
- *
+ * Class representing value modification of the {@link RXMLTree} node.
  * @author sviro
  */
 public class NodeValue {
   private final String changedValue;
   private final boolean newValue;
 
-  public NodeValue(String changedValue, boolean newValue) {
+  /**
+   * Default constructor. As a parameter gets new value of the node and a flag describing if
+   * this value is newly generated.
+   * @param changedValue New value of the node.
+   * @param newValue flag representing newly generated value.
+   */
+  public NodeValue(final String changedValue, final boolean newValue) {
     this.changedValue = changedValue;
     this.newValue = newValue;
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == null || !(obj instanceof NodeValue)) {
       return false;
     }
 
-    NodeValue nodeValue = (NodeValue) obj;
+    final NodeValue nodeValue = (NodeValue) obj;
     return this.newValue == nodeValue.isNewValue() || this.getChangedValue().equals(nodeValue.getChangedValue());
   }
 
+  @Override
+  public int hashCode() {
+    int hash = 11;
+    hash = 41 * hash + (this.changedValue != null ? this.changedValue.hashCode() : 0);
+    hash = 41 * hash + (this.newValue ? 1 : 0);
+    return hash;
+  }
+
+  /**
+   * Check if the changed node value is newly generated.
+   * @return true if the value is newly generated, otherwise return false.
+   */
   public boolean isNewValue() {
     return newValue;
   }
 
+  /**
+   * Get changed value of the node.
+   * @return Changed value of the node.
+   */
   public String getChangedValue() {
     return changedValue;
   }
-  
-  
-  
 }

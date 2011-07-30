@@ -18,11 +18,11 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies;
 
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
- *
+ * Model for initial data needed for repairing. 
+ * This model contains list of {@link RXMLTree} and functional dependencies.
  * @author sviro
  */
 public class InitialModel {
@@ -30,38 +30,58 @@ public class InitialModel {
   private final List<FD> functionalDependencies;
   private final List<RXMLTree> trees;
 
+  /**
+   * Default constructor of initial model.
+   */
   public InitialModel() {
     functionalDependencies = new ArrayList<FD>();
     trees = new ArrayList<RXMLTree>();
   }
   
-  public void addFD(List<FD> fDs) {
+  /**
+   * Add list of functional dependencies into the model.
+   * @param fDs List to be added to initial model.
+   */
+  public void addFD(final List<FD> fDs) {
     functionalDependencies.addAll(fDs);
   }
 
+  /**
+   * Get list of functional dependencies contained in this model.
+   * @return List of functional dependencies.
+   */
   public List<FD> getFunctionalDependencies() {
     return functionalDependencies;
   }
 
+  /**
+   * Get list of trees contained in this model.
+   * @return List of trees.
+   */
   public List<RXMLTree> getTrees() {
     return trees;
   }
-  
-  
 
-  public void addTree(List<RXMLTree> xmlTrees) {
+  /**
+   * Add list of {@link RXMLTree} into the model.
+   * @param xmlTrees List of trees to be added to the model.
+   */
+  public void addTree(final List<RXMLTree> xmlTrees) {
     trees.addAll(xmlTrees);
   }
   
-  public List<Path> getPaths(final RXMLTree rXmlTree) {
-    int treeIndex = trees.indexOf(rXmlTree);
-    return trees.get(treeIndex).getPaths();
-  }
-  
+  /**
+   * Get number of functional dependencies contained in this model.
+   * @return Number of functional dependencies.
+   */
   public int getFDsCount() {
     return functionalDependencies.size();
   }
   
+  /**
+   * Get number of {@link RXMLTree} contained in this model.
+   * @return Number of {@link RXMLTree}.
+   */
   public int getTreesCount() {
     return trees.size();
   }

@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.modelGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
@@ -34,7 +35,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -53,11 +53,11 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
     result.addFD(getFDFromInput(input.getFunctionalDependencies()));
     result.addTree(getDataFromInput(input.getDocuments()));
-    getWeightsFromInput(input.getQueries(), result.getTrees());
+    getWeightsFromInput(input.getFunctionalDependencies(), result.getTrees());
     callback.finished(result);
     return;
   }
-  
+
   private List<FD> getFDFromInput(final Collection<File> files) throws InterruptedException {
     if (BaseUtils.isEmpty(files)) {
       return Collections.<FD>emptyList();
@@ -71,10 +71,13 @@ public class ModelGeneratorImpl implements ModelGenerator {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        try {
-          result.addAll(processor.process(new FileInputStream(file)));
-        } catch (FileNotFoundException ex) {
-          throw new RuntimeException("File not found: " + file.getAbsolutePath(), ex);
+
+        if (FileUtils.getExtension(file.getName()).equals(processor.getExtension())) {
+          try {
+            result.addAll(processor.process(new FileInputStream(file)));
+          } catch (FileNotFoundException ex) {
+            throw new RuntimeException("File not found: " + file.getAbsolutePath(), ex);
+          }
         }
       }
     } else {
@@ -114,7 +117,7 @@ public class ModelGeneratorImpl implements ModelGenerator {
     }
     return result;
   }
-  
+
   @SuppressWarnings("unchecked")
   private static <T> Processor<T> getProcessor(Class<?> clazz) {
     for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
@@ -130,22 +133,25 @@ public class ModelGeneratorImpl implements ModelGenerator {
     if (BaseUtils.isEmpty(queries) || BaseUtils.isEmpty(trees)) {
       return;
     }
-    
+
     Processor<Tweight> weightProcessor = ModelGeneratorImpl.<Tweight>getProcessor(Tweight.class);
     if (weightProcessor != null) {
       for (File file : queries) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        try {
-          List<Tweight> weights = weightProcessor.process(new FileInputStream(file));
-          
-          for (RXMLTree tree : trees) {
-            tree.setWeights(weights);
+
+        if (FileUtils.getExtension(file.getName()).equals(weightProcessor.getExtension())) {
+          try {
+            List<Tweight> weights = weightProcessor.process(new FileInputStream(file));
+
+            for (RXMLTree tree : trees) {
+              tree.setWeights(weights);
+            }
+          } catch (FileNotFoundException ex) {
+            LOG.error(ex);
+            throw new InterruptedException("File not found: " + file.getAbsolutePath());
           }
-        } catch (FileNotFoundException ex) {
-          LOG.error(ex);
-          throw new InterruptedException("File not found: " + file.getAbsolutePath());
         }
       }
     } else {

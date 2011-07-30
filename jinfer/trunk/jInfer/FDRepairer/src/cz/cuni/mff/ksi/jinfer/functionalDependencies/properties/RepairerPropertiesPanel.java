@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.Repairer;
+import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.NewRepairerImpl;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairPickerImpl;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
@@ -105,6 +106,11 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     repairer.setRenderer(new ProjectPropsComboRenderer(repairer.getRenderer()));
     repairer.setMinimumSize(new java.awt.Dimension(180, 22));
     repairer.setPreferredSize(new java.awt.Dimension(180, 22));
+    repairer.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        repairerActionPerformed(evt);
+      }
+    });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;
     gridBagConstraints.gridy = 0;
@@ -208,6 +214,22 @@ public class RepairerPropertiesPanel extends AbstractPropertiesPanel {
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
     add(threshlodT, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
+
+  private void repairerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repairerActionPerformed
+    Repairer selectedRepairer = (Repairer) repairer.getSelectedItem();
+    if (selectedRepairer.getName().equals(NewRepairerImpl.NAME)) {
+      setEditableNewRepairer(true);
+    } else {
+      setEditableNewRepairer(false);
+    }
+  }//GEN-LAST:event_repairerActionPerformed
+
+  private void setEditableNewRepairer(final boolean editable) {
+    repairPicker.setEnabled(editable);
+      coefficientK.setEnabled(editable);
+      threshlodT.setEnabled(editable);
+  }
+  
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTextField coefficientK;
   private javax.swing.JLabel jLabel1;

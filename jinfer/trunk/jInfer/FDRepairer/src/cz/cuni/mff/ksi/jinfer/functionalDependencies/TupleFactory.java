@@ -36,15 +36,21 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Support class responsible for creating and checking tree tuples.
  * @author sviro
  */
 public final class TupleFactory {
 
   private static final Logger LOG = Logger.getLogger(TupleFactory.class);
 
-  public static boolean isTuple(RXMLTree tree, Tuple tuple) {
-    List<Tuple> allTuples = tree.getTuples();
+  /**
+   * Check if provided tuple is a tree tuple.
+   * @param tree Tree over which is tuple defined.
+   * @param tuple Tuple to be checked.
+   * @return true if tuple is tree tuple.
+   */
+  public static boolean isTuple(final RXMLTree tree, final Tuple tuple) {
+    final List<Tuple> allTuples = tree.getTuples();
 
     for (Tuple tuple1 : allTuples) {
       if (!tuple1.equals(tuple) && tuple1.contains(tuple)) {
@@ -55,13 +61,23 @@ public final class TupleFactory {
     return true;
   }
 
-  public static void removeTuple(RXMLTree tree, Tuple tuple) {
+  /**
+   * Removes tuple from tree. Also unmark nodes from tuple.
+   * @param tree Tree from which is tuple removed.
+   * @param tuple Tuple to be removed.
+   */
+  public static void removeTuple(final RXMLTree tree, final Tuple tuple) {
     unmarkNodesFromTuple(tree, tuple);
 
     tree.removeTuple(tuple);
   }
 
-  public static void removeTuples(RXMLTree tree, Set<Tuple> tuplesToRemove) {
+  /**
+   * Remove all tuples provided in a set from tree.
+   * @param tree Tree from which are tuples removed.
+   * @param tuplesToRemove Set of tuples to be removed.
+   */
+  public static void removeTuples(final RXMLTree tree, final Set<Tuple> tuplesToRemove) {
     for (Tuple tuple : tuplesToRemove) {
       removeTuple(tree, tuple);
     }
@@ -70,16 +86,22 @@ public final class TupleFactory {
   private TupleFactory() {
   }
 
-  public static List<Tuple> createTuples(RXMLTree tree) throws InterruptedException {
+  /**
+   * Create all tuples for particular tree.
+   * @param tree Tree for which to create tuples.
+   * @return List of all created tuples.
+   * @throws InterruptedException if user interrupted repairing.
+   */
+  public static List<Tuple> createTuples(final RXMLTree tree) throws InterruptedException {
     LOG.info("Starting creation of Tree Tuples");
-    List<Tuple> result = new ArrayList<Tuple>();
-    List<Path> paths = tree.getPaths();
+    final List<Tuple> result = new ArrayList<Tuple>();
+    final List<Path> paths = tree.getPaths();
     LOG.debug("Paths from tree retreived.");
-    Queue<Tuple> lastAddedTuples = new ArrayDeque<Tuple>();
+    final Queue<Tuple> lastAddedTuples = new ArrayDeque<Tuple>();
 
-    int firstTupleId = tree.getNewTupleID();
+    final int firstTupleId = tree.getNewTupleID();
     //this is first "tuple" which is whole tree
-    Tuple firstTuple = markNodesToTuple(tree, null, firstTupleId, null, null);
+    final Tuple firstTuple = markNodesToTuple(tree, null, firstTupleId, null, null);
     lastAddedTuples.add(firstTuple);
 
     for (Path path : paths) {
@@ -87,21 +109,21 @@ public final class TupleFactory {
         continue;
       }
       LOG.debug("Creating tuples from path " + path);
-      Queue<Tuple> newAddedTuples = new ArrayDeque<Tuple>();
+      final Queue<Tuple> newAddedTuples = new ArrayDeque<Tuple>();
       while (!lastAddedTuples.isEmpty()) {
         if (Thread.interrupted()) {
           throw new InterruptedException();
         }
-        Tuple lastTuple = lastAddedTuples.poll();
+        final Tuple lastTuple = lastAddedTuples.poll();
 
-        PathAnswer pathAnswer = tree.getPathAnswerForCreatingTuple(path, lastTuple);
+        final PathAnswer pathAnswer = tree.getPathAnswerForCreatingTuple(path, lastTuple);
         if (pathAnswer == null) {
           throw new RuntimeException("PathAnswer can't be null.");
         }
         if (!pathAnswer.hasMaxOneElement()) {
           for (Node node : pathAnswer.getNodeAnswers()) {
-            int newTupleID = tree.getNewTupleID();
-            Tuple tuple = markNodesToTuple(tree, node, newTupleID, lastTuple, pathAnswer.getNodeAnswers());
+            final int newTupleID = tree.getNewTupleID();
+            final Tuple tuple = markNodesToTuple(tree, node, newTupleID, lastTuple, pathAnswer.getNodeAnswers());
             LOG.debug("New tuple " + tuple + " has been created.");
             newAddedTuples.add(tuple);
           }
@@ -119,20 +141,26 @@ public final class TupleFactory {
     return result;
   }
 
-  public static List<Pair<Tuple, Tuple>> getTuplePairs(List<Tuple> tuples) throws InterruptedException {
+  /**
+   * Get all possible pair of provided tuples.
+   * @param tuples List of tuples from which are pairs created.
+   * @return List of pairs of tuples.
+   * @throws InterruptedException if user interrupted repairing.
+   */
+  public static List<Pair<Tuple, Tuple>> getTuplePairs(final List<Tuple> tuples) throws InterruptedException {
     LOG.debug("Starting creating tuple pairs");
     if (tuples == null) {
       return null;
     }
 
-    List<Pair<Tuple, Tuple>> result = new ArrayList<Pair<Tuple, Tuple>>();
+    final List<Pair<Tuple, Tuple>> result = new ArrayList<Pair<Tuple, Tuple>>();
     for (int i = 0; i < tuples.size() - 1; i++) {
-      Tuple tuple = tuples.get(i);
+      final Tuple tuple = tuples.get(i);
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
       for (int j = 1 + i; j < tuples.size(); j++) {
-        Tuple tuple1 = tuples.get(j);
+        final Tuple tuple1 = tuples.get(j);
         result.add(new ImmutablePair<Tuple, Tuple>(tuple, tuple1));
       }
     }
@@ -141,24 +169,46 @@ public final class TupleFactory {
     return result;
   }
 
+  /**
+   * Get all tuple pairs which not satisfies provided functional dependency. This
+   * method is suitable for thesis algorithm.
+   * @param tree Tree over which are tuples defined.
+   * @param fd Functional dependency for which is checking satisfaction.
+   * @return List of all pairs that do not satisfy functional dependency.
+   * @throws InterruptedException if user interrupted repairing.
+   */
   public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDThesis(final RXMLTree tree, final FD fd) throws InterruptedException {
     return getTuplePairNotSatisfyingFDGeneral(tree, fd, true);
   }
 
-  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(RXMLTree tree, FD fd) throws InterruptedException {
+  /**
+   * Get all tuple pairs which not satisfies provided functional dependency.
+   * @param tree Tree over which are tuples defined.
+   * @param fd Functional dependency for which is checking satisfaction.
+   * @return List of all pairs that do not satisfy functional dependency.
+   * @throws InterruptedException if user interrupted repairing.
+   */
+  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFD(final RXMLTree tree, final FD fd) throws InterruptedException {
     return getTuplePairNotSatisfyingFDGeneral(tree, fd, false);
   }
 
-  public static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDGeneral(final RXMLTree tree, final FD fd, final boolean isThesis) throws InterruptedException {
-    List<Pair<Tuple, Tuple>> notSatisfyingTuples = new ArrayList<Pair<Tuple, Tuple>>();
+  private static List<Pair<Tuple, Tuple>> getTuplePairNotSatisfyingFDGeneral(final RXMLTree tree, final FD fd, final boolean isThesis) throws InterruptedException {
+    final List<Pair<Tuple, Tuple>> notSatisfyingTuples = new ArrayList<Pair<Tuple, Tuple>>();
 
-    List<Pair<Tuple, Tuple>> tuplePairs = tree.getTuplePairs();
+    final List<Pair<Tuple, Tuple>> tuplePairs = tree.getTuplePairs();
     if (tuplePairs == null || tuplePairs.isEmpty()) {
       throw new RuntimeException("List of tuple pairs can't be null or empty.");
     }
 
     for (Pair<Tuple, Tuple> tuplePair : tuplePairs) {
-      if (!tree.isTuplePairSatisfyingFDGeneral(tuplePair, fd, isThesis)) {
+      boolean tuplePairSatisfy;
+      if (isThesis) {
+        tuplePairSatisfy = tree.isTuplePairSatisfyingFDThesis(tuplePair, fd);
+      } else {
+        tuplePairSatisfy = tree.isTuplePairSatisfyingFD(tuplePair, fd);
+      }
+      
+      if (!tuplePairSatisfy) {
         notSatisfyingTuples.add(tuplePair);
       }
     }
@@ -166,6 +216,14 @@ public final class TupleFactory {
     return notSatisfyingTuples;
   }
 
+  /**
+   * Get list of path answers of particular side of functional dependency of particular tuple.
+   * @param tree Tree over which is tuple defined.
+   * @param tuple Tuple for which is get answers.
+   * @param sidePaths Side of functional dependency for which is get answers.
+   * @param isThesis flag indicating if thesis algorithm is used.
+   * @return List of path answers of particular side.
+   */
   public static List<PathAnswer> getFDSidePathAnswers(final RXMLTree tree, final Tuple tuple, final SidePaths sidePaths, final boolean isThesis) {
     LOG.debug("Creating side path answers for tuple " + tuple);
     if (tuple == null) {
@@ -176,17 +234,17 @@ public final class TupleFactory {
       throw new RuntimeException("Side paths can't be null.");
     }
 
-    List<PathAnswer> result = new ArrayList<PathAnswer>();
+    final List<PathAnswer> result = new ArrayList<PathAnswer>();
     if (sidePaths instanceof TleftSidePaths) {
-      TleftSidePaths leftSide = (TleftSidePaths) sidePaths;
+      final TleftSidePaths leftSide = (TleftSidePaths) sidePaths;
 
       for (Path path : leftSide.getPaths()) {
-        PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, tuple, isThesis);
+        final PathAnswer pathAnswer = tree.getPathAnswerForTuple(path, tuple, isThesis);
         result.add(pathAnswer);
       }
     } else if (sidePaths instanceof TrightSidePaths) {
-      TrightSidePaths rightSide = (TrightSidePaths) sidePaths;
-      PathAnswer pathAnswer = tree.getPathAnswerForTuple(rightSide.getPathObj(), tuple, isThesis);
+      final TrightSidePaths rightSide = (TrightSidePaths) sidePaths;
+      final PathAnswer pathAnswer = tree.getPathAnswerForTuple(rightSide.getPathObj(), tuple, isThesis);
       result.add(pathAnswer);
     }
 
@@ -194,20 +252,26 @@ public final class TupleFactory {
   }
 
   private static Tuple markNodesToTuple(final RXMLTree tree, final Node cuttingNode, final int tupleId, final Tuple actualTuple, final List<Node> tupleCut) {
-    Tuple result = new Tuple(tree, tupleId);
+    final Tuple result = new Tuple(tree, tupleId);
 
     traverseTree(tree.getDocument().getDocumentElement(), tree.getNodesMap(), cuttingNode, actualTuple, result, tupleCut, false);
 
     return result;
   }
 
-  private static void unmarkNodesFromTuple(RXMLTree tree, Tuple lastTuple) {
+  private static void unmarkNodesFromTuple(final RXMLTree tree, final Tuple lastTuple) {
     traverseTree(tree.getDocument().getDocumentElement(), tree.getNodesMap(), null, null, lastTuple, null, true);
   }
 
-  public static Collection<Tuple> unmarkNodeFromAllTuples(RXMLTree tree, Node node) {
-    NodeAttribute nodeAttribute = tree.getNodesMap().get(node);
-    Set<Tuple> result = new HashSet<Tuple>(nodeAttribute.getTuples());
+  /**
+   * Unmark particular node from all tuples it is part of.
+   * @param tree Tree from which node is.
+   * @param node Node wich is removed from all tuples.
+   * @return Collection of tuples which the node was associated with.
+   */
+  public static Collection<Tuple> unmarkNodeFromAllTuples(final RXMLTree tree, final Node node) {
+    final NodeAttribute nodeAttribute = tree.getNodesMap().get(node);
+    final Set<Tuple> result = new HashSet<Tuple>(nodeAttribute.getTuples());
 
     nodeAttribute.removeFromAllTuples();
 
@@ -226,7 +290,7 @@ public final class TupleFactory {
    * @param tupleCut List of nodes for which dividing of node is provided.
    * @param remove Flag indicationg if {@code currentTuple} is added or removed.
    */
-  private static void traverseTree(Node node, Map<Node, NodeAttribute> nodesMap, Node cuttingNode, Tuple actualTuple, Tuple currentTuple, List<Node> tupleCut, boolean remove) {
+  private static void traverseTree(final Node node, final Map<Node, NodeAttribute> nodesMap, final Node cuttingNode, final Tuple actualTuple, final Tuple currentTuple, final List<Node> tupleCut, final boolean remove) {
     if (!nodesMap.containsKey(node)) {
       throw new RuntimeException("There must be a reference for all nodes in a tree.");
     }
@@ -246,7 +310,7 @@ public final class TupleFactory {
         return;
       }
       //check attributes
-      NamedNodeMap attributes = node.getAttributes();
+      final NamedNodeMap attributes = node.getAttributes();
       if (attributes != null) {
         for (int j = 0; j < attributes.getLength(); j++) {
           traverseTree(attributes.item(j), nodesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
@@ -254,9 +318,9 @@ public final class TupleFactory {
       }
 
       if (node.getNodeType() != Node.ATTRIBUTE_NODE) {
-        NodeList childNodes = node.getChildNodes();
+        final NodeList childNodes = node.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
-          Node child = childNodes.item(i);
+          final Node child = childNodes.item(i);
           traverseTree(child, nodesMap, cuttingNode, actualTuple, currentTuple, tupleCut, remove);
         }
       }

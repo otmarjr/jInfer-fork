@@ -21,7 +21,7 @@ import java.util.Map;
 import org.w3c.dom.Node;
 
 /**
- *
+ * Class gathering all information from repairing for statistical purpose.
  * @author sviro
  */
 public class RepairStatistics {
@@ -30,24 +30,40 @@ public class RepairStatistics {
   private int valueChangesSize;
   
   private int startingRG = -1;
-  private int RGCount;
+  private int rGCount;
 
+  /**
+   * Get number of nodes that were marked as unreliable.
+   * @return Number of nodes that were marked as unreliable.
+   */
   public int getUnreliableCount() {
     return unreliableSize;
   }
 
+  /**
+   * Get number of nodes that value was changed to newly generated one.
+   * @return Number of nodes that value was changed to newly generated one. 
+   */
   public int getNewValueCount() {
     return newValueSize;
   }
 
+  /**
+   * Get number of nodes that value was changed to value of another node.
+   * @return Number of nodes that value was changed to value of another node.
+   */
   public int getValueChangesCount() {
     return valueChangesSize;
   }
 
-  public void collectData(Repair repair) {
+  /**
+   * Collect data for statistics from repair.
+   * @param repair Repair from which is data collected.
+   */
+  public void collectData(final Repair repair) {
     unreliableSize += repair.getUnreliableNodes().size();
     
-    Map<Node, NodeValue> valueNodes = repair.getValueNodes();
+    final Map<Node, NodeValue> valueNodes = repair.getValueNodes();
     for (Node node : valueNodes.keySet()) {
       if (repair.isNewValue(node)) {
         newValueSize++;
@@ -57,20 +73,32 @@ public class RepairStatistics {
     }
   }
 
-  public void setRepairGroup(int repairGroupsSize) {
+  /**
+   * Set the initial number of repair groups. 
+   * @param repairGroupsSize Number of repair groups to be set.
+   */
+  public void setRepairGroup(final int repairGroupsSize) {
     if (startingRG == -1) {
       startingRG = repairGroupsSize;
     }
     
-    RGCount++;
+    rGCount++;
   }
 
+  /**
+   * Get initial number of repair groups.
+   * @return Initial number of repair groups. 
+   */
   public int getStartingRG() {
     return startingRG;
   }
 
+  /**
+   * Get numer of repair groups used in repair.
+   * @return Numer of repair groups used in repair. 
+   */
   public int getRGCount() {
-    return RGCount;
+    return rGCount;
   }
   
 }

@@ -20,7 +20,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * Class representing attributes of {@link RXMLTree} nodes. This attributes
+ * contains weight of node, reliability and set of {@link Tuple tuples} the node 
+ * belongs to.
  * @author sviro
  */
 public class NodeAttribute {
@@ -29,48 +31,92 @@ public class NodeAttribute {
   private boolean reliability;
   private double weight;
   
+  /**
+   * Constructor setting reliability of the node.
+   * @param reliability Reliability to be set.
+   */
   public NodeAttribute(final boolean reliability) {
     this.reliability = reliability;
     this.tuples = new HashSet<Tuple>();
   }
   
+  /**
+   * Default constructor.
+   */
   public NodeAttribute() {
     this(true);
   }
 
+  /**
+   * Get set of tuples the node belongs to.
+   * @return Set of tuples.
+   */
   public Set<Tuple> getTuples() {
     return tuples;
   }
 
+  /**
+   * Get reliability of the node.
+   * @return true if node is reliable, otherwise return false.
+   */
   public boolean isReliable() {
     return reliability;
   }
 
-  boolean isInTuple(Tuple tuple) {
+  /**
+   * Check if node is part of the provided tuple.
+   * @param tuple Tuple to be checked that the node is part of.
+   * @return true if node is part of tuple, otherwise return false.
+   */
+  public boolean isInTuple(final Tuple tuple) {
     return tuples.contains(tuple);
   }
 
-  boolean removeFromTuple(Tuple tuple) {
+  /**
+   * Remove this node from provided tuple.
+   * @param tuple Tuple to be node removed from. 
+   * @return true if the node was part fo the provided tuple.
+   */
+  public boolean removeFromTuple(final Tuple tuple) {
     return tuples.remove(tuple);
   }
 
-  void addToTuple(Tuple tuple) {
+  /**
+   * Add this node to the provided tuple
+   * @param tuple Tuple to be node added to.
+   */
+  public void addToTuple(final Tuple tuple) {
     tuples.add(tuple);
   }
 
-  public void setWeight(double weight) {
+  /**
+   * Set the weight of the node.
+   * @param weight Weight to be set to the node.
+   */
+  public void setWeight(final double weight) {
     this.weight = weight;
   }
 
+  /**
+   * Get weight of the node.
+   * @return weight of the node.
+   */
   public double getWeight() {
     return weight;
   }
 
-  void setReliability(boolean reliability) {
+  /**
+   * Set the reliability of the node.
+   * @param reliability Reliability to be set to node.
+   */
+  public void setReliability(final boolean reliability) {
     this.reliability = reliability;
   }
 
-  void removeFromAllTuples() {
+  /**
+   * Remove node from all tuples it belongs to.
+   */
+  public void removeFromAllTuples() {
     tuples.clear();
   }
 }

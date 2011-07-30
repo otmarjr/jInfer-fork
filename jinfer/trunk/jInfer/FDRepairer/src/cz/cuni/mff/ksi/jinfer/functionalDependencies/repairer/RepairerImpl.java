@@ -278,7 +278,7 @@ public class RepairerImpl implements Repairer {
 
   @Override
   public String getDisplayName() {
-    return "Generic repairer";
+    return "Original repairer";
   }
 
   @Override

@@ -66,7 +66,7 @@ public class WeightsProcessor implements Processor<Tweight> {
   
   @Override
   public FolderType getFolder() {
-    return FolderType.QUERY;
+    return FolderType.FD;
   }
 
   @Override

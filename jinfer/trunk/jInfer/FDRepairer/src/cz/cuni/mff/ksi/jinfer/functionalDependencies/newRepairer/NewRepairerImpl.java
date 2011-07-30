@@ -46,6 +46,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = Repairer.class)
 public class NewRepairerImpl implements Repairer {
+  
+  public static final String NAME = "new_repairer";
 
   private static final String NEW_VALUE = "newValue";
   private static final Logger LOG = Logger.getLogger(NewRepairerImpl.class);
@@ -182,7 +184,7 @@ public class NewRepairerImpl implements Repairer {
 
   @Override
   public String getName() {
-    return "new_repairer";
+    return NAME;
   }
 
   @Override

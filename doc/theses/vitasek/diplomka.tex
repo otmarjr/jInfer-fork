@@ -10,13 +10,21 @@
 \usepackage{wrapfig}
 \usepackage{appendix}
 \usepackage{nomencl}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
 \newcommand{\code}[1]{\texttt{\StrSubstitute{#1}{.}{.\.}}}
 \def\.{\discretionary{}{}{}}
+\newcommand{\heu}[1]{\texttt{\textit{#1}}}
 \newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
 \linespread{1.5}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\renewcommand{\algorithmicforall}{\textbf{for each}}
+\renewcommand{\algorithmiccomment}[1]{\textit{// #1}}
 
 \setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
 \setlength{\voffset}{-1in} %analogous voffset
@@ -278,7 +286,7 @@ TODO FIDAX is cool, but their heuristic might not be the best. It is a IS proble
 
 \section{Finding ID sets with GLPK}
 
-TODO how GLPK works (branch&bound), how to construct a problem, how output looks, how to interpret it, limit time-> limit quality, ...
+TODO how GLPK works (branch \& bound), how to construct a problem, how output looks, how to interpret it, limit time-> limit quality, ...
  
  -> wow, GLPK works. However, it takes too long to get to optimum (link experiments), so let's try other heuristics.
  
@@ -290,8 +298,10 @@ TODO mention things like Taboo search and Genetic Algorithms (we can emulate the
 
 TODO we will be working with heuristics striving to do the following: input is a list of AMs, they have their weight, we try to find a non-conflicting subset which maximizes the weight
 
-\subsection{Constructions Heuristics}
+TODO we will be using a pool - what is a pool
 
+\subsection{Constructions Heuristics}
+1
 % TODO can I format things in nomenclature?
 \nomenclature{CH}{Construction Heuristic} %TODO decide on how to format CH/IH 
 
@@ -305,17 +315,113 @@ TODO this is a heuristic too! We can start with it!
 
 TODO this is trivial, but works - link experiments where it bashes FIDAX
 
+See listing \ref{ch-random}.
+
+\begin{algorithm}
+\caption{Random CH}
+\label{ch-random}
+\begin{algorithmic}
+\REQUIRE $N$ required size of pool
+\REQUIRE $C$ list of candidate AMs
+\ENSURE pool of $N$ feasible solutions
+\STATE $r \gets $ empty pool
+\FOR{$i = 1 \to N$} 
+\STATE \COMMENT{create 1 solution}
+\STATE $s \gets $ empty solution
+\WHILE{$s$ is a feasible ID set}
+\STATE $a \gets $ pick at random from $C \textbackslash S$
+\STATE $s \gets s \cup a$
+\ENDWHILE
+\STATE $r \gets r \cup s$
+\ENDFOR
+\RETURN $r$
+\end{algorithmic}
+\end{algorithm}
+
 \subsubsection{Fuzzy}
 
 TODO kind of trivial
 
+See listing \ref{ch-fuzzy}.
+
+\begin{algorithm}
+\caption{Fuzzy CH}
+\label{ch-fuzzy}
+\begin{algorithmic}
+\REQUIRE $N$ required size of pool
+\REQUIRE $C$ list of candidate AMs
+\ENSURE pool of $N$ feasible solutions
+\STATE $r \gets $ empty pool
+\FOR{$i = 1 \to N$} 
+\STATE \COMMENT{create 1 solution}
+\STATE $s \gets $ empty solution
+\STATE $C' \gets C$
+
+\WHILE{$C' $ not empty}
+\STATE $a \gets $ pick at weighted random from $C'$
+\IF{$s \cup a$ is a feasible ID set}
+\STATE $s \gets s \cup a$
+\STATE $C' \gets C' \textbackslash a$
+\ENDIF
+\FORALL{$c \in C'$}
+\IF{$s \cup c $ is \textbf{not} a feasible ID set} 
+\STATE \COMMENT {if $c$ cannot be possibly added anymore}
+\STATE $C' \gets C' \textbackslash c$
+\ENDIF
+\ENDFOR
+\ENDWHILE
+
+\STATE $r \gets r + s$
+\ENDFOR
+\RETURN $r$
+\end{algorithmic}
+\end{algorithm}
+
 \subsubsection{Incremental}
 
-TODO trivial, hungry
+TODO trivial, hungry, always 1 solution
+
+See listing \ref{ch-incremental}.
+
+\begin{algorithm}
+\caption{Incremental CH}
+\label{ch-incremental}
+\begin{algorithmic}
+\REQUIRE $C$ list of candidate AMs
+\ENSURE a feasible solution
+\STATE $C' \gets $ sort $C$ by decreasing weight
+\STATE $s \gets $ empty solution
+\FORALL{$c \in C'$}
+\IF{$s \cup c$ is a feasible ID set}
+\STATE $s \gets s + c$
+\ENDIF
+\ENDFOR
+\RETURN $s$
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Removal}
 
-TODO trivial, "hungry"
+TODO trivial, "hungry", always 1 solution
+
+See listing \ref{ch-removal}.
+
+\begin{algorithm}
+\caption{Removal CH}
+\label{ch-removal}
+\begin{algorithmic}
+\REQUIRE $C$ list of candidate AMs
+\ENSURE a feasible solution
+\STATE $C' \gets $ sort $C$ by increasing weight
+\STATE $s \gets C'$
+\FORALL{$c \in s$}
+  \IF{$s$ is a feasible ID set}
+    \RETURN $s$
+  \ENDIF
+  \STATE $s \gets s \textbackslash c$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Truncated Branch \& Bound}
 
@@ -325,37 +431,152 @@ TODO if we limit GLPK's runtime, we get this
 
 \nomenclature{IH}{Improvement Heuristic}
 
-TODO what they are, that they need a pool sometimes, how do we give them pool, ...
+TODO what they are, that they need a pool sometimes, their input and output is a pool, ...
 
 TODO mention intensification, diversification
 
 \subsubsection{Identity}
 
-TODO trivial trivial
+This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its listing \ref{ih-identity}.
+
+\begin{algorithm}
+\caption{Identity IH}
+\label{ih-identity}
+\begin{algorithmic}
+\REQUIRE $FP$ pool of feasible solutions
+\ENSURE the same pool of feasible solutions
+\RETURN $FP$
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Remove Worst}
 
 TODO trivial
 
+See listing \ref{ih-removeworst}.
+
+\begin{algorithm}
+\caption{Remove Worst IH}
+\label{ih-removeworst}
+\begin{algorithmic}
+\REQUIRE $FP$ pool of feasible solutions
+\ENSURE pool of feasible solutions
+\STATE $s_{min} \gets $ solution with the lowest weight $\in FP$
+\RETURN $FP \textbackslash s_{min}$
+\end{algorithmic}
+\end{algorithm}
+
 \subsubsection{Random Remove}
 
 TODO trivial, perturbation
 
+See listing \ref{ih-randomremove}.
+
+\begin{algorithm}
+\caption{Random Remove IH}
+\label{ih-randomremove}
+\begin{algorithmic}
+\REQUIRE $FP$ pool of feasible solutions
+\REQUIRE $k \in (0,1)$ ratio of AMs to remove from each $s \in FP$
+\ENSURE pool of feasible solutions
+\FORALL{$s \in FP$}
+  \STATE $K \gets k * |s|$
+  \STATE remove $K$ random AMs from $s$
+\ENDFOR
+\RETURN $FP$
+\end{algorithmic}
+\end{algorithm}
+
 \subsubsection{Hungry}
 
-TODO trivial
+This simple improvement heuristic assumes that the solutions in the pool are not ``complete", i.e. there are AMs that could be added to them without violating the ID set condition.
+
+\heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. Listing \ref{ih-hungry} captures this process.
+
+\begin{algorithm}
+\caption{Hungry IH}
+\label{ih-hungry}
+\begin{algorithmic}
+\REQUIRE $FP$ pool of feasible solutions
+\REQUIRE $C$ list of candidate AMs
+\ENSURE pool of feasible solutions
+\FORALL{$s \in FP$}
+  \STATE \COMMENT {improve a single solution}
+  \STATE $C' \gets C \textbackslash s$
+  \STATE $C' \gets C'$ sorted by decreasing weight
+  \FORALL{$c \in C'$}
+    \IF{$s \cup c$ is a feasible ID set}
+      \STATE $s \gets s \cup c$
+    \ENDIF
+  \ENDFOR
+\ENDFOR
+\RETURN $FP$
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Mutation}
 
-TODO
+TODO explain how this translates to GLPK input
+
+See listing \ref{ih-mutation}.
+
+\begin{algorithm}
+\caption{Mutation IH}
+\label{ih-mutation}
+\begin{algorithmic}
+\REQUIRE $FP$ pool of feasible solutions
+\REQUIRE $k$ ratio of AMs to fix
+\ENSURE pool of feasible solutions
+\STATE $incumbent \gets $ best solution in $FP$ \COMMENT {best = highest weight}
+\STATE $K \gets k * |incumbent|$
+\STATE fix $K$ random AMs from $incumbent$ in GLPK problem formulation
+\STATE $improved \gets $ run GLPK
+\RETURN $FP \cup improved$
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Crossover}
 
-TODO
+TODO explain how this translates to GLPK input
+
+See listing \ref{ih-crossover}.
+
+\begin{algorithm}
+\caption{Crossover IH}
+\label{ih-crossover}
+\begin{algorithmic}
+\REQUIRE $FP$ pool of feasible solutions
+\REQUIRE $k$ ratio of solutions to look for commonalities in
+\ENSURE pool of feasible solutions
+\STATE $K \gets k * |FP|$
+\STATE $FP' \gets K$ random solutions $\in FP$
+\STATE $am \gets$ AMs found in all solutions $\in FP'$
+\STATE fix $am$ in GLPK problem formulation
+\STATE $improved \gets $ run GLPK
+\RETURN $FP \cup improved$
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Local Branching}
 
 TODO explain how this translates to GLPK input
+
+See listing \ref{ih-localbranching}.
+
+\begin{algorithm}
+\caption{Local Branching IH}
+\label{ih-localbranching}
+\begin{algorithmic}
+\REQUIRE $FP$ pool of feasible solutions
+\REQUIRE $k$ ratio of total AM count to bound the Hamming distance to
+\ENSURE pool of feasible solutions
+\STATE $K \gets k * |$total AM count$|$
+\STATE $incumbent \gets $ best solution in $FP$ \COMMENT {best = highest weight}
+\STATE add max Hamming distance requirement to GLPK problem formulation
+\STATE $improved \gets $ run GLPK
+\RETURN $FP \cup improved$
+\end{algorithmic}
+\end{algorithm}
 
 \chapter{Experiments}
 
@@ -398,7 +619,7 @@ TODO following experiments + more
   \item Which construction heuristic is the best - limit GLPK to like 1 second
   \item With the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
   \item With the best IH from the previous step, how about using Random as CH?
-	\item GLPK: Input -> How long the search for optimum lasts
+	\item GLPK: Input -> How long the search for optimum lasts - this shows we cannot rely on GLPK alone! it just takes too long.
 	\item GLPK: Time limit -> Quality
 	\item Structure of the data -> Which algorithms perform the best
 	\item Alpha, Beta -> Quality

@@ -29,13 +29,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * providing logic for initial model retrieval from XML documents.
+ * 
  * @author sviro
  */
 @ServiceProvider(service = Processor.class)
@@ -59,16 +58,16 @@ public class XMLProcessor implements Processor<RXMLTree> {
   }
 
   @Override
-  public List<RXMLTree> process(InputStream s) throws InterruptedException {
-    ArrayList<RXMLTree> result = new ArrayList<RXMLTree>();
+  public List<RXMLTree> process(final InputStream s) throws InterruptedException {
+    final ArrayList<RXMLTree> result = new ArrayList<RXMLTree>();
 
 
-    DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+    final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
     builderFactory.setNamespaceAware(true);
     builderFactory.setIgnoringElementContentWhitespace(true);
     try {
-      DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-      Document document = documentBuilder.parse(s);
+      final DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+      final Document document = documentBuilder.parse(s);
       
       result.add(new RXMLTree(document));
 

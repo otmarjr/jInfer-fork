@@ -37,7 +37,8 @@ import org.openide.util.lookup.ServiceProvider;
 import org.w3c.dom.Node;
 
 /**
- *
+ * Implementation of the Repairer module for the original algorithm.
+ * 
  * @author sviro
  */
 @ServiceProvider(service = Repairer.class)
@@ -47,16 +48,16 @@ public class RepairerImpl implements Repairer {
   private static final Logger LOG = Logger.getLogger(RepairerImpl.class);
 
   @Override
-  public void start(InitialModel model, RepairerCallback callback) throws InterruptedException {
-    List<RXMLTree> result = new ArrayList<RXMLTree>();
+  public void start(final InitialModel model, final RepairerCallback callback) throws InterruptedException {
+    final List<RXMLTree> result = new ArrayList<RXMLTree>();
 
-    List<FD> functionalDependencies = model.getFunctionalDependencies();
+    final List<FD> functionalDependencies = model.getFunctionalDependencies();
     for (RXMLTree rXMLTree : model.getTrees()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
       if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
-        RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies);
+        final RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies);
         if (repairedTree != null) {
           result.add(repairedTree);
         }
@@ -65,17 +66,16 @@ public class RepairerImpl implements Repairer {
       }
     }
     callback.finished(result);
-    return;
   }
 
-  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies) throws InterruptedException {
-    List<RepairImpl> repairs = new ArrayList<RepairImpl>();
-    RepairStatistics repairStats = new RepairStatistics();
+  private RXMLTree repairRXMLTree(final RXMLTree rXMLTree, final List<FD> functionalDependencies) throws InterruptedException {
+    final List<RepairImpl> repairs = new ArrayList<RepairImpl>();
+    final RepairStatistics repairStats = new RepairStatistics();
     for (FD fd : functionalDependencies) {
       LOG.info("Start checking inconsistency of FD: " + fd);
       if (!rXMLTree.isSatisfyingFD(fd)) {
         LOG.info("XML is inconsistent to FD.");
-        List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFD(rXMLTree, fd);
+        final List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFD(rXMLTree, fd);
         for (Pair<Tuple, Tuple> tuplePair : tuplePairNotSatisfyingFD) {
           if (Thread.interrupted()) {
             throw new InterruptedException();
@@ -86,8 +86,8 @@ public class RepairerImpl implements Repairer {
     }
 
     if (!repairs.isEmpty()) {
-      List<RepairImpl> minimalRepairs = removeNonMinimalRepairs(rXMLTree, repairs);
-      RepairImpl repair = mergeRepairs(minimalRepairs);
+      final List<RepairImpl> minimalRepairs = removeNonMinimalRepairs(repairs);
+      final RepairImpl repair = mergeRepairs(minimalRepairs);
 
       repairStats.collectData(repair);
 
@@ -98,11 +98,11 @@ public class RepairerImpl implements Repairer {
     return rXMLTree;
   }
 
-  private List<RepairImpl> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd) {
+  private List<RepairImpl> computeRepairs(final RXMLTree tree, final Pair<Tuple, Tuple> tuplePair, final FD fd) {
     LOG.debug("Starting computing repairs.");
-    List<RepairImpl> result = new ArrayList<RepairImpl>();
+    final List<RepairImpl> result = new ArrayList<RepairImpl>();
 
-    Path rightPath = fd.getRightSidePaths().getPathObj();
+    final Path rightPath = fd.getRightSidePaths().getPathObj();
     PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst(), false);
     PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond(), false);
 
@@ -140,17 +140,17 @@ public class RepairerImpl implements Repairer {
     return result;
   }
 
-  private List<RepairImpl> removeNonMinimalRepairs(RXMLTree rXMLTree, List<RepairImpl> repairs) throws InterruptedException {
+  private List<RepairImpl> removeNonMinimalRepairs(final List<RepairImpl> repairs) throws InterruptedException {
     LOG.debug("Starting removing non minimal repairs.");
-    List<RepairImpl> result = new ArrayList<RepairImpl>();
+    final List<RepairImpl> result = new ArrayList<RepairImpl>();
 
     while (!repairs.isEmpty()) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      RepairImpl repair = repairs.get(0);
+      final RepairImpl repair = repairs.get(0);
 
-      List<RepairImpl> minRepairs = getMinimalRepairs(repairs, repair);
+      final List<RepairImpl> minRepairs = getMinimalRepairs(repairs, repair);
       result.addAll(minRepairs);
     }
 
@@ -158,16 +158,16 @@ public class RepairerImpl implements Repairer {
     return result;
   }
 
-  private RepairImpl mergeRepairs(List<RepairImpl> minimalRepairs) throws InterruptedException {
+  private RepairImpl mergeRepairs(final List<RepairImpl> minimalRepairs) throws InterruptedException {
     LOG.debug("Starting merging repairs.");
-    RepairImpl result = new RepairImpl();
+    final RepairImpl result = new RepairImpl();
 
     //value merge
     for (RepairImpl repair : minimalRepairs) {
       for (Node node : repair.getValueNodes().keySet()) {
         if (!result.getValueNodes().containsKey(node)) {
-          NodeValue value = repair.getValueNodes().get(node);
-          List<NodeValue> nodeValues = getValuesFromRepairs(minimalRepairs, node);
+          final NodeValue value = repair.getValueNodes().get(node);
+          final List<NodeValue> nodeValues = getValuesFromRepairs(minimalRepairs, node);
           if (nodeValues.size() == 1 || allValuesEquals(nodeValues, value)) {
             result.addValueNode(node, value);
           }
@@ -176,7 +176,7 @@ public class RepairerImpl implements Repairer {
     }
 
     //reliability merge
-    List<RepairImpl> reliabilityRepairs = RepairFactory.getReliabilityRepairs(minimalRepairs);
+    final List<RepairImpl> reliabilityRepairs = RepairFactory.getReliabilityRepairs(minimalRepairs);
     for (RepairImpl repair : reliabilityRepairs) {
       result.addUnreliableNodes(repair.getUnreliableNodes());
     }
@@ -185,10 +185,10 @@ public class RepairerImpl implements Repairer {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      RepairImpl firstRepair = minimalRepairs.get(i);
+      final RepairImpl firstRepair = minimalRepairs.get(i);
       if (firstRepair.hasValueRepair()) {
         for (int j = 1 + i; j < minimalRepairs.size(); j++) {
-          RepairImpl secondRepair = minimalRepairs.get(j);
+          final RepairImpl secondRepair = minimalRepairs.get(j);
           if (secondRepair.hasValueRepair()) {
             addUnreliableNodesFromValues(firstRepair, secondRepair, result);
             addUnreliableNodesFromValues(secondRepair, firstRepair, result);
@@ -213,10 +213,10 @@ public class RepairerImpl implements Repairer {
     return result;
   }
 
-  private void addUnreliableNodesFromValues(RepairImpl firstRepair, RepairImpl secondRepair, RepairImpl result) {
+  private void addUnreliableNodesFromValues(final RepairImpl firstRepair, final RepairImpl secondRepair, final RepairImpl result) {
     for (Node node : firstRepair.getValueNodes().keySet()) {
       if (!result.getUnreliableNodes().contains(node)) {
-        NodeValue firstValue = firstRepair.getValueNodes().get(node);
+        final NodeValue firstValue = firstRepair.getValueNodes().get(node);
         if (secondRepair.getValueNodes().containsKey(node) && !firstValue.equals(secondRepair.getValueNodes().get(node))) {
           result.addUnreliableNode(node);
         }
@@ -224,8 +224,8 @@ public class RepairerImpl implements Repairer {
     }
   }
 
-  private List<NodeValue> getValuesFromRepairs(List<RepairImpl> minimalRepairs, Node node) {
-    List<NodeValue> result = new ArrayList<NodeValue>();
+  private List<NodeValue> getValuesFromRepairs(final List<RepairImpl> minimalRepairs, final Node node) {
+    final List<NodeValue> result = new ArrayList<NodeValue>();
 
     for (RepairImpl repair : minimalRepairs) {
       if (repair.getValueNodes().containsKey(node)) {
@@ -236,7 +236,7 @@ public class RepairerImpl implements Repairer {
     return result;
   }
 
-  private boolean allValuesEquals(List<NodeValue> nodeValues, NodeValue value) {
+  private boolean allValuesEquals(final List<NodeValue> nodeValues, final NodeValue value) {
     for (NodeValue nodeValue : nodeValues) {
       if (!value.equals(nodeValue)) {
         return false;
@@ -246,14 +246,14 @@ public class RepairerImpl implements Repairer {
     return true;
   }
 
-  private List<RepairImpl> getMinimalRepairs(List<RepairImpl> repairs, RepairImpl repair) {
-    List<RepairImpl> result = new ArrayList<RepairImpl>();
-    Set<RepairImpl> repairsToRemove = new HashSet<RepairImpl>();
+  private List<RepairImpl> getMinimalRepairs(final List<RepairImpl> repairs, final RepairImpl repair) {
+    final List<RepairImpl> result = new ArrayList<RepairImpl>();
+    final Set<RepairImpl> repairsToRemove = new HashSet<RepairImpl>();
 
     result.add(repair);
 
     for (RepairImpl repair1 : repairs) {
-      int compared = repair1.compareTo(result.get(0));
+      final int compared = repair1.compareTo(result.get(0));
       if (RepairImpl.COMPARE_EQUAL == compared) {
         result.add(repair1);
       } else if (RepairImpl.COMPARE_SMALLER == compared) {
@@ -286,7 +286,7 @@ public class RepairerImpl implements Repairer {
     return "This repairer is implemented from the paper.";
   }
 
-  private void printStatistics(RepairStatistics repairStats) {
+  private void printStatistics(final RepairStatistics repairStats) {
     LOG.info("Repair Statistics:");
 
     LOG.info("Unreliable nodes #: " + repairStats.getUnreliableCount());

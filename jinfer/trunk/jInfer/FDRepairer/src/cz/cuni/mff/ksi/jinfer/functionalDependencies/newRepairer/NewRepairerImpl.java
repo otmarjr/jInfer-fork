@@ -41,7 +41,8 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Implementation of the Repairer module for the thesis algorithm.
+ * 
  * @author sviro
  */
 @ServiceProvider(service = Repairer.class)
@@ -54,20 +55,20 @@ public class NewRepairerImpl implements Repairer {
   private RepairPicker repairPicker = null;
 
   @Override
-  public void start(InitialModel model, RepairerCallback callback) throws InterruptedException {
+  public void start(final InitialModel model, final RepairerCallback callback) throws InterruptedException {
     LOG.info("This is NEW repairer");
-    List<RXMLTree> result = new ArrayList<RXMLTree>();
+    final List<RXMLTree> result = new ArrayList<RXMLTree>();
 
     final Properties prop = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
-    double coeffK = Double.parseDouble(prop.getProperty(RepairerPropertiesPanel.COEFF_K_PROP, RepairerPropertiesPanel.COEFF_K_DEFAULT));
-    double thresholdT = getThreshold(prop);
+    final double coeffK = Double.parseDouble(prop.getProperty(RepairerPropertiesPanel.COEFF_K_PROP, RepairerPropertiesPanel.COEFF_K_DEFAULT));
+    final double thresholdT = getThreshold(prop);
     repairPicker = ModuleSelectionHelper.lookupImpl(RepairPicker.class, prop.getProperty(RepairerPropertiesPanel.REPAIR_PICKER_PROP, RepairerPropertiesPanel.REPAIR_PICKER_DEFAULT));
 
-    List<FD> functionalDependencies = model.getFunctionalDependencies();
+    final List<FD> functionalDependencies = model.getFunctionalDependencies();
     for (RXMLTree rXMLTree : model.getTrees()) {
       if (rXMLTree.isFDDefinedForTree(functionalDependencies)) {
         rXMLTree.setThresholdT(thresholdT);
-        RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies, coeffK);
+        final RXMLTree repairedTree = repairRXMLTree(rXMLTree, functionalDependencies, coeffK);
         if (repairedTree != null) {
           result.add(repairedTree);
         }
@@ -76,11 +77,10 @@ public class NewRepairerImpl implements Repairer {
       }
     }
     callback.finished(result);
-    return;
   }
 
-  private RXMLTree repairRXMLTree(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
-    RepairStatistics repairStats = new RepairStatistics();
+  private RXMLTree repairRXMLTree(final RXMLTree rXMLTree, final List<FD> functionalDependencies, final double coeffK) throws InterruptedException {
+    final RepairStatistics repairStats = new RepairStatistics();
 
     while (rXMLTree.isInconsistent(functionalDependencies)) {
       if (Thread.interrupted()) {
@@ -94,15 +94,15 @@ public class NewRepairerImpl implements Repairer {
     return rXMLTree;
   }
 
-  private void repairRXMLTree2(RXMLTree rXMLTree, List<FD> functionalDependencies, final double coeffK, final RepairStatistics repairStats) throws InterruptedException {
-    List<RepairCandidate> repairs = new ArrayList<RepairCandidate>();
+  private void repairRXMLTree2(final RXMLTree rXMLTree, final List<FD> functionalDependencies, final double coeffK, final RepairStatistics repairStats) throws InterruptedException {
+    final List<RepairCandidate> repairs = new ArrayList<RepairCandidate>();
     for (FD fd : functionalDependencies) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
       if (!rXMLTree.isSatisfyingFDThesis(fd)) {
         LOG.debug("XML is inconsistent to FD " + fd.toString());
-        List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFDThesis(rXMLTree, fd);
+        final List<Pair<Tuple, Tuple>> tuplePairNotSatisfyingFD = TupleFactory.getTuplePairNotSatisfyingFDThesis(rXMLTree, fd);
         for (Pair<Tuple, Tuple> tuplePair : tuplePairNotSatisfyingFD) {
           repairs.addAll(computeRepairs(rXMLTree, tuplePair, fd, coeffK));
         }
@@ -113,7 +113,7 @@ public class NewRepairerImpl implements Repairer {
 
       if (repairPicker instanceof RepairPickerImpl) {
         while (!rXMLTree.isRGEmpty()) {
-          RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
+          final RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
           rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getFirst());
           rXMLTree.invalidateSidePathAnswers(minimalRepair.getTuplePair().getSecond());
           if (!rXMLTree.isTuplePairSatisfyingFDThesis(minimalRepair.getTuplePair(), minimalRepair.getFD())) {
@@ -126,7 +126,7 @@ public class NewRepairerImpl implements Repairer {
       } else {
         repairStats.setRepairGroup(rXMLTree.getRepairGroups().size());
         LOG.debug("Repair groups: " + rXMLTree.getRepairGroups().size());
-        RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
+        final RepairCandidate minimalRepair = getRepairFromPicker(rXMLTree);
         repairStats.collectData(minimalRepair);
 
         rXMLTree.applyRepair(minimalRepair);
@@ -139,11 +139,11 @@ public class NewRepairerImpl implements Repairer {
     return repairPicker.getRepair(tree);
   }
 
-  private Collection<RepairCandidate> computeRepairs(RXMLTree tree, Pair<Tuple, Tuple> tuplePair, FD fd, final double coeffK) {
-    Set<RepairCandidate> result = new HashSet<RepairCandidate>();
-    RepairGroup repairGroup = new RepairGroup(fd);
+  private Collection<RepairCandidate> computeRepairs(final RXMLTree tree, final Pair<Tuple, Tuple> tuplePair, final FD fd, final double coeffK) {
+    final Set<RepairCandidate> result = new HashSet<RepairCandidate>();
+    final RepairGroup repairGroup = new RepairGroup(fd);
 
-    Path rightPath = fd.getRightSidePaths().getPathObj();
+    final Path rightPath = fd.getRightSidePaths().getPathObj();
     PathAnswer t1Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getFirst(), false);
     PathAnswer t2Answer = tree.getPathAnswerForTuple(rightPath, tuplePair.getSecond(), false);
 
@@ -197,7 +197,7 @@ public class NewRepairerImpl implements Repairer {
     return "This repairer is an implementation from thesis.";
   }
 
-  private static double getThreshold(Properties prop) {
+  private static double getThreshold(final Properties prop) {
     double result = Double.parseDouble(prop.getProperty(RepairerPropertiesPanel.THRESHOLD_T_PROP, RepairerPropertiesPanel.THRESHOLD_T_DEFAULT));
     if (!(result > 0) || !(result <= 1)) {
       LOG.warn("The value " + result + " of the threshold t is out of range (0,1], will be used default value 1.");
@@ -207,7 +207,7 @@ public class NewRepairerImpl implements Repairer {
     return result;
   }
 
-  private void printStatistics(RepairStatistics repairStats) {
+  private void printStatistics(final RepairStatistics repairStats) {
     LOG.info("Repair Statistics:");
 
     LOG.info("Starting RG #: " + repairStats.getStartingRG());

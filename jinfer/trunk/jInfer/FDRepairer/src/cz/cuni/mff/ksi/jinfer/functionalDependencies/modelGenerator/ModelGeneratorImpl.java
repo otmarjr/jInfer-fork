@@ -39,7 +39,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Implementation of the Model generator module.
  * @author sviro
  */
 @ServiceProvider(service = ModelGenerator.class)

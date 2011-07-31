@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- *
+ * Handler responsible for creation of paths defined for XML tree.
  * @author sviro
  */
 public class PathsContentHandler extends DefaultHandler {
@@ -123,6 +123,10 @@ public class PathsContentHandler extends DefaultHandler {
     lastClosedTag = localName;
   }
 
+  /**
+   * Get list of paths defined fo the tree.
+   * @return List of paths defined for the tree.
+   */
   List<Path> getPaths() {
     List<Path> result = new ArrayList<Path>(paths);
     Collections.sort(result, pathComparator);

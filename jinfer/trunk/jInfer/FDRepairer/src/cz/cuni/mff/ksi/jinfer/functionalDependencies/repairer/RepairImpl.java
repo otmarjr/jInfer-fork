@@ -24,18 +24,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.log4j.Logger;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Implementation of the Repair interface for the original algorithm.
  * @author sviro
  */
 public class RepairImpl implements Repair, Comparable<RepairImpl> {
 
-  private static final Logger LOG = Logger.getLogger(RepairImpl.class);
   public static final int COMPARE_SMALLER = -1;
   public static final int COMPARE_EQUAL = 0;
   public static final int COMPARE_GREATER = 1;
@@ -44,22 +42,33 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   private Set<Node> unreliableNodes = null;
   private Map<Node, NodeValue> valueNodes;
   private Collection<Node> modifiedNodes = null;
-  private boolean isNewValue;
 
+  /**
+   * Default constructor.
+   */
   public RepairImpl() {
     this.valueNodes = new HashMap<Node, NodeValue>();
   }
 
+  /**
+   * Constructor creating repair that mark node as unreliable.
+   * @param unreliableNode Node to be marked as unreliable.
+   */
   public RepairImpl(final Node unreliableNode) {
     this();
     //TODO sviro check for null
     this.unreliableNode = unreliableNode;
   }
 
-  public RepairImpl(final Node valueNode, final String changedValue, boolean isNewValue) {
+  /**
+   * Constructor creating a repair that modifies node value.
+   * @param valueNode Node to be modified.
+   * @param changedValue New value of the node.
+   * @param isNewValue flag indicating that the value is newly generated.
+   */
+  public RepairImpl(final Node valueNode, final String changedValue, final boolean isNewValue) {
     this();
     //TODO sviro check for null
-    this.isNewValue = isNewValue;
     valueNodes.put(valueNode, new NodeValue(changedValue, isNewValue));
   }
 
@@ -88,7 +97,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   }
 
   @Override
-  public void addUnreliableNodes(Set<Node> nodes) {
+  public void addUnreliableNodes(final Set<Node> nodes) {
     getUnreliableNodes().addAll(nodes);
   }
 
@@ -98,12 +107,12 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == null || !(obj instanceof RepairImpl)) {
       return false;
     }
 
-    RepairImpl repair = (RepairImpl) obj;
+    final RepairImpl repair = (RepairImpl) obj;
 
     return this.getUnreliableNodes().equals(repair.getUnreliableNodes()) && this.getValueNodes().equals(repair.getValueNodes());
   }
@@ -117,27 +126,27 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   }
 
   @Override
-  public void addUnreliableNode(Node node) {
+  public void addUnreliableNode(final Node node) {
     getUnreliableNodes().add(node);
   }
 
   @Override
-  public void addValueNode(Node node, NodeValue value) {
+  public void addValueNode(final Node node, final NodeValue value) {
     valueNodes.put(node, value);
   }
 
-  private void addUnreliableChildren(Node unreliableNode) {
+  private void addUnreliableChildren(final Node unreliableNode) {
     if (unreliableNode != null) {
       unreliableNodes.add(unreliableNode);
 
-      NamedNodeMap attributes = unreliableNode.getAttributes();
+      final NamedNodeMap attributes = unreliableNode.getAttributes();
       if (attributes != null) {
         for (int i = 0; i < attributes.getLength(); i++) {
           addUnreliableChildren(attributes.item(i));
         }
       }
       if (unreliableNode.getNodeType() != Node.ATTRIBUTE_NODE) {
-        NodeList childNodes = unreliableNode.getChildNodes();
+        final NodeList childNodes = unreliableNode.getChildNodes();
         if (childNodes != null) {
           for (int i = 0; i < childNodes.getLength(); i++) {
             addUnreliableChildren(childNodes.item(i));
@@ -154,7 +163,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
    * @return 
    */
   @Override
-  public int compareTo(RepairImpl repair) {
+  public int compareTo(final RepairImpl repair) {
     if (isSmaller(this, repair) && isSmaller(repair, this)) {
       return 0;
     }
@@ -178,11 +187,11 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
    * @param false2
    * @return 
    */
-  private static boolean isSmaller(RepairImpl repair1, RepairImpl repair2) {
-    Collection<Node> modifiedNodes1 = repair1.getModifiedNodes();
-    Collection<Node> modifiedNodes2 = repair2.getModifiedNodes();
-    Collection<Node> falseNodes1 = repair1.getFalseNodes();
-    Collection<Node> falseNodes2 = repair2.getFalseNodes();
+  private static boolean isSmaller(final RepairImpl repair1, final RepairImpl repair2) {
+    final Collection<Node> modifiedNodes1 = repair1.getModifiedNodes();
+    final Collection<Node> modifiedNodes2 = repair2.getModifiedNodes();
+    final Collection<Node> falseNodes1 = repair1.getFalseNodes();
+    final Collection<Node> falseNodes2 = repair2.getFalseNodes();
 
     return isSubset(modifiedNodes1, modifiedNodes2) && isSubset(falseNodes1, falseNodes2);
   }
@@ -193,18 +202,30 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
    * @param set2
    * @return true if set1 is subset of set2, otherwise return false.
    */
-  private static boolean isSubset(Collection<Node> set1, Collection<Node> set2) {
+  private static boolean isSubset(final Collection<Node> set1, final Collection<Node> set2) {
     return set2.containsAll(set1);
   }
 
+  /**
+   * Get all nodes that the value is changed.
+   * @return Collection of all nodes that the value is changed. 
+   */
   public Collection<Node> getUpdatedNodes() {
     return valueNodes.keySet();
   }
 
+  /**
+   * Get all nodes that have been marked as unreliable.
+   * @return Collection of all nodes that have been marked as unreliable. 
+   */
   public Collection<Node> getFalseNodes() {
     return getUnreliableNodes();
   }
 
+  /**
+   * Get all nodes that have been marked as unreliable and the value have been changed.
+   * @return Collection of all nodes that have been marked as unreliable and the value have been changed. 
+   */
   public Collection<Node> getModifiedNodes() {
     if (modifiedNodes == null) {
       modifiedNodes = new ArrayList<Node>(getUpdatedNodes().size() + getFalseNodes().size());
@@ -217,7 +238,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
 
     builder.append("Repair:\n");
     builder.append("\t").append("Unreliable nodes:\n");
@@ -234,12 +255,7 @@ public class RepairImpl implements Repair, Comparable<RepairImpl> {
   }
 
   @Override
-  public boolean isNewValue() {
-    return isNewValue;
-  }
-
-  @Override
-  public boolean isNewValue(Node node) {
+  public boolean isNewValue(final Node node) {
     if (!valueNodes.containsKey(node)) {
       throw new IllegalArgumentException("The node " + node + "is not associated any value");
     }

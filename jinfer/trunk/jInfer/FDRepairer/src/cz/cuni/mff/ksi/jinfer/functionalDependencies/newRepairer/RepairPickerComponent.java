@@ -23,7 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * Main component of the repair picker window.
  * @author sviro
  */
 public class RepairPickerComponent extends javax.swing.JPanel {

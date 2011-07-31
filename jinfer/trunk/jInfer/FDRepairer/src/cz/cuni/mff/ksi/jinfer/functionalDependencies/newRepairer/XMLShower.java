@@ -16,15 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.repairer.RepairImpl;
-import java.awt.Color;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-import org.w3c.dom.Node;
-
 /**
- *
+ * Component of the repair picker window showing part of the XML tree modified by
+ * the selected repair candidate.
  * @author sviro
  */
 public class XMLShower extends javax.swing.JPanel {
@@ -34,6 +28,10 @@ public class XMLShower extends javax.swing.JPanel {
     initComponents();
   }
   
+  /**
+   * Set the string content to show.
+   * @param content String content to show. 
+   */
   public void setContent(final String content) {
     contentArea.setText(content);
   }

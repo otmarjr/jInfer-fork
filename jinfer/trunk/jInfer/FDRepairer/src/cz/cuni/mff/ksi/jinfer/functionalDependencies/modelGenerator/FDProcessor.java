@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.Tdependencies;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -33,7 +32,8 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * 
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * providing logic for initial model retrieval from functional dependencies.
  * @author sviro
  */
 @ServiceProvider(service = Processor.class)
@@ -57,7 +57,7 @@ public class FDProcessor implements Processor<FD> {
   }
 
   @Override
-  public List<FD> process(InputStream inputStream) throws InterruptedException {
+  public List<FD> process(final InputStream inputStream) throws InterruptedException {
     final ClassLoader orig = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(Tdependencies.class.getClassLoader()); //NOPMD
     try {

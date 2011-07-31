@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- *
+ * Class representing repair group from the thesis algorithm.
  * @author sviro
  */
 public class RepairGroup {
@@ -33,15 +33,28 @@ public class RepairGroup {
   private final FD functionalDependency;
   private double weight = -1;
   
+  /**
+   * Constructor of repair group. The parameter defines functional dependency for 
+   * which is this group defines.
+   * @param functionalDependency Functional dependency for which is this group defined.
+   */
   public RepairGroup(final FD functionalDependency) {
     repairs = new ArrayList<RepairCandidate>();
     this.functionalDependency = functionalDependency;
   }
   
+  /**
+   * Add repair candidate to this group.
+   * @param repair Repair candidates to this group.
+   */
   public void addRepair(final RepairCandidate repair) {
     repairs.add(repair);
   }
   
+  /**
+   * Add repair candidates to this group.
+   * @param repairs Collection of repair candidates to this group. 
+   */
   public void addRepairs(final Collection<RepairCandidate> repairs) {
     this.repairs.addAll(repairs);
     
@@ -50,13 +63,17 @@ public class RepairGroup {
     }
   }
 
+  /**
+   * Get list of all repair candidates contained in this group.
+   * @return List of all repair candidates contained in this group. 
+   */
   public List<RepairCandidate> getRepairs() {
     if (!repairs.isEmpty()) {
       Collections.sort(repairs, new Comparator<RepairCandidate>() {
 
         @Override
-        public int compare(RepairCandidate o1, RepairCandidate o2) {
-          double result = o1.getWeight() - o2.getWeight();
+        public int compare(final RepairCandidate o1, final RepairCandidate o2) {
+          final double result = o1.getWeight() - o2.getWeight();
           if (result < 0) {
             return -1;
           }
@@ -71,10 +88,18 @@ public class RepairGroup {
     return repairs;
   }
 
-  public void setWeight(double weight) {
+  /**
+   * Set weight of this repair group.
+   * @param weight Weight to be set. 
+   */
+  public void setWeight(final double weight) {
     this.weight = weight;
   }
 
+  /**
+   * Get weight of this repair group.
+   * @return Weight of this repair group 
+   */
   public double getWeight() {
     if (weight == -1) {
       weight = computeWeight();
@@ -92,6 +117,10 @@ public class RepairGroup {
     return result;     
   }
   
+  /**
+   * Get repair candidate with the lowest weight.
+   * @return Repair candidate with the lowest weight. 
+   */
   public RepairCandidate getMinimalRepair() {
     if (!repairs.isEmpty()) {
       return getRepairs().get(0);
@@ -100,6 +129,10 @@ public class RepairGroup {
     return null;
   }
 
+  /**
+   * Get functional dependency this repair groups is defined for.
+   * @return Functional dependency this repair groups is defined for. 
+   */
   public FD getFunctionalDependency() {
     return functionalDependency;
   }

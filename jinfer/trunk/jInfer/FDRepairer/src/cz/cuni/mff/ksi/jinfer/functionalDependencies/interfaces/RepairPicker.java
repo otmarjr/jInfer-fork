@@ -21,10 +21,18 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer.RepairCandidate;
 
 /**
- *
+ * Interface of Repair picker responsible for picking repair candidate that 
+ * will be applied to the XML tree.
+ * 
  * @author sviro
  */
 public interface RepairPicker extends NamedModule {
   
+  /**
+   * Get the repair candidate that will be applied to the XML tree.
+   * @param tree Tree to be the repair candidate applied.
+   * @return RepairCandidate to be applied.
+   * @throws InterruptedException 
+   */
   RepairCandidate getRepair(RXMLTree tree) throws InterruptedException;
 }

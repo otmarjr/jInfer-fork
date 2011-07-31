@@ -19,11 +19,17 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces;
 import java.util.List;
 
 /**
- *
+ * Interface defining a response to RepairedXMLGenerator finishing its work.
+ * 
  * @author sviro
  */
 public interface RepairedXMLGeneratorCallback {
   
+  /**
+   * This method is called by a RepairedXMLGenerator implementation, after it has
+   * finished its work.
+   * @param xmls List of String representations of the generated XML data.
+   */
   void finished(final List<String> xmls);
   
 }

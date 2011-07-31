@@ -20,9 +20,17 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import java.util.List;
 
 /**
- *
+ * Repair defining a response to Repairer finishing its work.
+ * 
  * @author sviro
  */
 public interface RepairerCallback {
+  
+  /**
+   * This method is called by a Repairer implementation, after it has
+   * finished its work.
+   * 
+   * @param repairedTrees Repaired XML tree.
+   */
   void finished(final List<RXMLTree> repairedTrees);
 }

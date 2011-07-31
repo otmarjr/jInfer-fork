@@ -32,7 +32,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- *
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * providing logic for paths retrieval from XML documents.
+ * 
  * @author sviro
  */
 @ServiceProvider(service = Processor.class)
@@ -56,15 +58,15 @@ public class PathsProcessor implements Processor<Path> {
   }
 
   @Override
-  public List<Path> process(InputStream s) throws InterruptedException {
-    SAXParserFactory saxFactory = SAXParserFactory.newInstance();
+  public List<Path> process(final InputStream s) throws InterruptedException {
+    final SAXParserFactory saxFactory = SAXParserFactory.newInstance();
     saxFactory.setNamespaceAware(true);
     saxFactory.setValidating(false);
-    PathsContentHandler pathsContentHandler = new PathsContentHandler();
+    final PathsContentHandler pathsContentHandler = new PathsContentHandler();
 
     try {
-      SAXParser saxParser = saxFactory.newSAXParser();
-      XMLReader xmlReader = saxParser.getXMLReader();
+      final SAXParser saxParser = saxFactory.newSAXParser();
+      final XMLReader xmlReader = saxParser.getXMLReader();
       xmlReader.setContentHandler(pathsContentHandler);
       xmlReader.parse(new InputSource(s));
     } catch (ParserConfigurationException ex) {

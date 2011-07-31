@@ -5,13 +5,13 @@
 \usepackage{subfigure}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-%\usepackage{tgpagella}
 \usepackage{xstring}
 \usepackage{wrapfig}
 \usepackage{appendix}
 \usepackage{nomencl}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{multicol}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -257,7 +257,7 @@ An extension to jInfer for finding ID attributes using MIP solver and a combinat
 	\item ID, IDREF, IDREFS attribute according to specification
 	\item XSD keys (compare them to ID attributes)
 	\item Key according to Keys for XML \cite{keX}
-	\item Attribute mapping
+	\item Attribute mapping \nomenclature{AM}{Attribute Mapping}
 	\item ID set
   \item Weight: support, coverage
 \end{itemize}
@@ -663,7 +663,6 @@ However, this approach takes too long for some inputs, so we introduced a whole 
 \addcontentsline{toc}{chapter}{List of Tables}
 
 %%% Použité zkratky v diplomové práci, existují-li, včetně jejich vysvětlení.
-%\chapwithtoc{List of Abbreviations}
 
 \printnomenclature[2cm]
 \addcontentsline{toc}{chapter}{List of Abbreviations}
@@ -690,6 +689,178 @@ TODO talk a bit about the structure of AttributeStats module.
 \chapter{Traces}
 \label{traces}
 
-TODO a few (commented!) traces from experiment runs
+Following is a trace logged from a sample experiment run. It shows all the relevant information related to this instance, any and every piece of information we might be interested in.
+
+To save space, 2-column layout is used. Commentary on the particulars follows right after its end.
+
+\begin{multicols}{2}
+\begin{scriptsize}
+\begin{verbatim}
+CPU info
+  Intel(R) Core(TM)2 Quad CPU Q9550 @ 2.83GHz
+  Cores: 4
+  Clock speed: 2983 MHz
+Memory info
+  Size: 8192 MB
+OS info
+  Name: Windows 7
+  Version: 6.1
+  Architecture: amd64
+Java info
+  Version: 1.6.0_26
+  VM: Java HotSpot(TM) 64-Bit Server VM
+GLPK info
+  GLPSOL: GLPK LP/MIP Solver 4.34
+
+Configuration:
+File name: graph.xml (101599 b)
+  Graph representation: 82 vertices, 1101 edges
+alpha: 1.0, beta: 1.0
+
+Results:
+Start time: Thu Jan 01 01:22:17 CET 1970
+Total time spent: 7754 ms
+Final quality: 0.19951219512195123 (10 AMs)
+Highest quality: 0.23463414634146343 (12 AMs)
+Construction phase: 
+  Algorithm: Random
+    Time taken: 248 ms
+    Time since start: 248 ms
+    Pool size: 10
+    Quality: 0.19975609756097568 (11 AMs)
+Improvement phase: 
+  pass #1: 
+  Algorithm: RandomRemove, ratio = 0.2
+    Time taken: 0 ms
+    Time since start: 841 ms
+    Pool size: 10
+    Quality: 0.15878048780487808 (9 AMs)
+  pass #2: 
+  Algorithm: Mutation, ratio = 0.1, limit = 1 s
+    Time taken: 1512 ms
+    Time since start: 2710 ms
+    Pool size: 11
+    Quality: 0.21975609756097558 (11 AMs)
+
+  <... 7 more passes removed ...>
+
+  pass #10: 
+  Algorithm: Remove Worst
+    Time taken: 80 ms
+    Time since start: 7676 ms
+    Pool size: 12
+    Quality: 0.19951219512195123 (10 AMs)
+Termination reason: Maximum iterations exceeded.
+
+Time,Quality,AMs
+248,0.19975609756097568,11
+841,0.15878048780487808,9
+2710,0.21975609756097558,11
+2927,0.1890243902439024,9
+4421,0.23463414634146343,12
+4703,0.23463414634146343,12
+4896,0.1960975609756098,10
+5793,0.23463414634146337,12
+5972,0.19951219512195123,10
+7433,0.19951219512195123,10
+7676,0.19951219512195123,10
+
+ID
+Element,Attribute,Weight
+vertex0,attr,0.024146341463414635
+vertex2,attr,0.01975609756097561
+vertex33,attr,0.016829268292682928
+vertex34,attr,0.02219512195121951
+vertex4,attr,0.022682926829268292
+vertex41,attr,0.014878048780487804
+vertex7,attr,0.02170731707317073
+vertex70,attr,0.018780487804878048
+vertex76,attr,0.01780487804878049
+vertex8,attr,0.02170731707317073
+vertex80,attr,0.01780487804878049
+vertex97,attr,0.016341463414634147
+
+IDREF
+Element,Attribute
+\end{verbatim}
+\end{scriptsize}
+\end{multicols}
+
+The first section deals with system information. Please note that some of these characteristics cannot be easily obtained programmatically and are thus stored in the source code as constants.\\
+To obtain GLPK information, the program parses the first line of standard output produced by running \code{glpsol -v}. It tries to guess whether it's the Cygwin version by looking at the path to the binary.
+
+% TODO make sure G.R. was introduced before! and LINK IT! swedish style!
+The second section states the input file along with its size and graph representation.\\
+Alpha and beta parameters for this instance belong here too.
+
+\begin{footnotesize}
+\begin{verbatim}
+Configuration:
+File name: graph.xml (101599 b)
+  Graph representation: 82 vertices, 1101 edges
+alpha: 1.0, beta: 1.0
+\end{verbatim}
+\end{footnotesize}
+
+Results section opens stating the most important information first: how long did the experiment run and what was the highest and final quality (these two are potentially different). Numbers of attribute mappings in the best and final solution respectively are stated as well.
+
+\begin{footnotesize}
+\begin{verbatim}
+Total time spent: 7754 ms
+Final quality: 0.19951219512195123 (10 AMs)
+Highest quality: 0.23463414634146343 (12 AMs)
+\end{verbatim}
+\end{footnotesize}
+
+Construction phase results go next. Among reported information are the full identification of the heuristic (possibly along with its parameters), time taken, size of the pool created and the quality of the incumbent solution (again, with the number of its AMs).
+
+\begin{footnotesize}
+\begin{verbatim}
+Algorithm: Random
+  Time taken: 248 ms
+  Time since start: 248 ms
+  Pool size: 10
+  Quality: 0.19975609756097568 (11 AMs)
+\end{verbatim}
+\end{footnotesize}
+
+Now for each of the improvement phases there is one section in output log. Information presented here has the same structure as with the construction phase. Please note that the \code{Pool size} is always measured \textit{after} the improvement run.
+
+\begin{footnotesize}
+\begin{verbatim}
+Algorithm: Mutation, ratio = 0.1, limit = 1 s
+  Time taken: 1512 ms
+  Time since start: 2710 ms
+  Pool size: 11
+  Quality: 0.21975609756097558 (11 AMs)
+\end{verbatim}
+\end{footnotesize}
+
+After the last improvement phase, the reason why the metaheuristic terminated is stated. Possible causes are exceeding the maximum time available, maximum iterations or reaching the known optimum for this file and alpha/beta settings.
+\\
+
+To be able to reconstruct the progress of the metaheuristic, the next section contains CSV \nomenclature{CSV}{Comma Separated Values} formatted data for each iteration. Each row contains the time in milliseconds, quality of the incumbent solution and the number of its AMs.
+
+\begin{footnotesize}
+\begin{verbatim}
+Time,Quality,AMs
+...
+841,0.15878048780487808,9
+2710,0.21975609756097558,11
+...
+\end{verbatim}
+\end{footnotesize}
+
+And finally, it is important to know what is the ID/IDREF set recommended by this experiment run - the reason why we do all this! Thus the log is concluded by a CSV formatted list of element - attribute name pairs to be included in the ID and IDREF set, respectively.
+
+\begin{footnotesize}
+\begin{verbatim}
+Element,Attribute,Weight
+vertex0,attr,0.024146341463414635
+...
+\end{verbatim}
+\end{footnotesize}
+
+Note that in this example trace there were no IDREF AMs found.
 
 \end{document}

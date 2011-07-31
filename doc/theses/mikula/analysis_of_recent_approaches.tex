@@ -1,38 +1,40 @@
 \chapter{Analysis of Recent Approaches}
 \todo[inline]{Translate.}
-Existuje mnoho prístupov generovania XML schém. Väčšina z nich spracováva XML data \todo{spomenúť alebo rozpísať tieto prístupy, ako napríklad EXTRACT?}. Podľa mojej znalosti v dobe písania práce existuje len jediný \todo{je pravda?} prístup využívajúci XML operácie\todo{ref do literatury}. Ten sa snaží hľadať keys a foreign keys za pomoci XQuery dotazov.
+Many approaches of XML Schema inference have been proposed. Most of them process XML data as an input for inference. Some of these methods are mentioned in this chapter.
+
+Besides approaches exploiting XML data, approaches that utilize operations over XML data may be developed and they are of the most interest in terms of this work. According to my best knowledge at the time of writing there is just one approach of this category. It utilizes a set of XQuery queries to discover keys and foreign keys\todo{ref do literatury?}.
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
-Táto metóda sa snaží vylepšiť automatické odvodzovanie XML schém hľadaním keys a foreign keys zo sady XQuery dotazov. Pre toto hľadanie sú použité len tieto dotazy, nie samotné XML data. Výsledkom je zoznam keys a foreign keys, ktoré môžu byť zachytené pomocou \textbf{key}, \textbf{keyref} \todo{aj unique?} konštrukcií jazyka XML Schema.
+This methods tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just these queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.
 
 \subsection{Keys and foreign keys}
-Autori si zavádzajú definíciu pre key a foreign key:
+Authors introduce formalism that formalizes XML Schema keys.
 
 \begin{define}[Key]
-Key je trojica $$(C, P, \{L\})$$ kde $C$, $P$, $L$ sú XPath cesty bez predikátov a používajú len osi \texttt{child} a \texttt{descendant}.
-$C$ môže byť vynechané. $(P, \{L\})$ je v takom prípade to isté ako $(/, P, \{L\})$ a nazýva sa \emph{global key}, inak sa nazýva \emph{local key}.
+A key is a construct $$(C, P, \{L\})$$ where $C$, $P$, $L$ are XPath paths without predicates thet use only \texttt{child} and \texttt{descendant} axes.
+$C$ can be omitted. $(P, \{L\})$ is then equivalent to $(/, P, \{L\})$ and is called \emph{global key}.Otherwise it is called \emph{local key}.
 \end{define}
 
 The key specifies the following condition. Let $c$ be an element targeted by $C$ and $p$ and $p’$ be two elements targeted by $P$ from $c$. If the value targeted by $L$ from $p$ equals to the value targeted by $L$ from $p’$, then $p$ and $p’$ are the same elements. In other words, no two different elements targeted by $P$ from $c$ can have the same value of $L$.
 
 \begin{define}[Foreign key]
-Foreign key je konštrukcia $$(C, (P_1, \{L_1\}) \Rightarrow (P_2, \{L_2\}))$$ kde $(C, P_2, \{L_2\})$ je key, $P_1$, $L_1$ sú XPath cesty bez predikátov a používajú len osi \texttt{child} a \texttt{descendant}.
-$C$ môže byť vynechané podobne ako v prípade key.
+A foreign key is a construct $$(C, (P_1, \{L_1\}) \Rightarrow (P_2, \{L_2\}))$$ where $(C, P_2, \{L_2\})$ is a key, $P_1$, $L_1$ are XPath paths without predicates thet use only \texttt{child} and \texttt{descendant} axes.
+$C$ can be omitted as in the case of keys.
 \end{define}
 
 Let $c$ be an element targeted by $C$ and $p_1$ be a element targeted by $P_1$ from $c$. The foreign key specifies that there is an element $p_2$ targeted by $P_2$ from $c$ such that the value targeted by $L_1$ from $p_1$ equals to the value targeted by $L_2$ from $p_2$. In other words, each element targeted by $P_1$ from $c$ refers to an element targeted by $P_2$ from $c$ via the pair $L_1$ and $L_2$.
 
 \subsection{Key and foreign key discovery}
 \subsubsection{Joins in queries}
-Na hľadanie využíva metóda element/element joins v dotazoch.
+To discover keys and foreign keys, method utilizes element/element joins.
 
 Assume a query $Q$ that joins a sequence of elements $S_1$ targeted by a path $P_1$ with a sequence of elements $S_2$ targeted by a path $P_2$ on a condition $L_1 = L_2$. It means that $Q$ joins an element $e_1$ from $S_1$ with an element $e_2$ from $S_2$ if $e_1/L_1$ equals to $e_2/L_2$.
 
 \todo[inline]{priklad?}
 
-Metóda predpokladá, že každý join je robený cez pár key/foreign key. On the base of this assumption, it can be inferred from $Q$ that $L_1$ is a key for elements in $S_1$ or $L_2$ is a key for elements in $S_2$ and the other is a foreign key referencing the key.
+Assuming that each join is done via a key/foreign key pair, it can be inferred from $Q$ that $L_1$ is a key for elements in $S_1$ or $L_2$ is a key for elements in $S_2$ and the other is a foreign key referencing the key.
 
-Autori uvádzajú dve pozorovania:
+Authors introduces two observations:
 \begin{enumerate}
 \renewcommand{\theenumi}{(O\arabic{enumi})}
 \renewcommand{\labelenumi}{\theenumi}
@@ -41,7 +43,7 @@ Autori uvádzajú dve pozorovania:
 \end{enumerate}
 
 \subsubsection{Join patterns}
-Rozhodnutie pre jeden z prípadov (O1) a (O2) pre konrétny join je robené podľa tvaru tohto joinu. V dotaze sa hľadajú takzvané \emph{join patters}. Tie sú dva, \texttt{for} \emph{join pattern} a \texttt{let} \emph{join pattern} a vyzerajú takto (prvý je \texttt{for} \emph{join pattern}, druhý \texttt{let} \emph{join pattern}):
+For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \texttt{for} \emph{join pattern} and \texttt{let} \emph{join pattern} and look like the following (the first is \texttt{for} \emph{join pattern}, the second is \texttt{let} \emph{join pattern}):
 \todo[inline]{spravne kreslit indexy pri pismenkach}
 \begin{verbatim}
 01  for e1 in P1               for $e1 in P1
@@ -115,9 +117,9 @@ If $\pi$ is marked as \emph{non-repeating}, the following statements with weight
 \end{itemize}
 
 \section{Scoring function}
-Môže nastať situácia, že nie je splnený nejaký z predpokladov, z ktorých metóda vychádza. Predpokladajme nejakú množinu dotazov. Môže sa stať, že z nejakého dotazu z tejto množiny metóda odvodí key $K$ a z nejakého iného dotazu, že $K$ nie je key. \todo[inline]{priklad?}
+It can happen that some of the assumptions the method is based on are not met. Assuming a set of queries, a key $K$ may be inferred from some query and processing of another query may result to denial of $K$ as a key. \todo[inline]{priklad?}
 
-Autori preto zavádzajú key scoring function. If a new key $K$ is going to be inferred, it has assigned an initial score 0. Each inferred positive statement about $K$ increases the score of $K$ by the weight of the statement. Respectively, each negative statement about $K$ decreases the score by the respective weight. The resulting score therefore summarizes the weights of all inferred statements about $K$. A positive score means that $K$ is probably satisfied while negative means that $K$ is probably not satisfied. The higher the absolute value of the score is the higher the probability is.
+Therefore, authors introduce a scoring function. If a new key $K$ is going to be inferred, it has assigned an initial score 0. Each inferred positive statement about $K$ increases the score of $K$ by the weight of the statement. Respectively, each negative statement about $K$ decreases the score by the respective weight. The resulting score therefore summarizes the weights of all inferred statements about $K$. A positive score means that $K$ is probably satisfied while negative means that $K$ is probably not satisfied. The higher the absolute value of the score is the higher the probability is.
 
 Let $K_1$, ..., $K_n$ be the inferred keys. Let $S_i$ be the score of $K_i$ and $N_i$ be the number of the inferred statements about $K_i$. The precision of the scoring is further enhanced on the base of the following observation. Assume a key $K_i = (C, P, \{L\})$ and $K_j = (C' , P, \{L\})$ where the path $C$ targets ancestors of the elements targeted by $C'$, i.e. the context specified by $C$ covers the context specified by $C'$. In that case it is also said that $K_i$ \emph{covers} $K_j$. It can be easily seen that if $K_i$ is satisfied, $K_j$ must be satisfied as well. On the other hand, if $K_j$ is not satisfied, $K_i$ can not be satisfied too. Therefore, if the score $S_i$ of $K_i$ is positive (i.e. $K_i$ is satisfied), $S_j$ is incremented with $S_i$ and $N_j$ with $N_i$ (i.e. $K_j$ is satisfied as well). Conversely, if the score $S_j$ of $K_j$ is negative (i.e. $K_j$ is not satisfied), $S_i$ is incremented with $S_j$ and $N_i$ with $N_j$ (i.e. $K_i$ can not be satisfied too).
 
@@ -125,6 +127,6 @@ Finally, the scores of the inferred keys are normalized to be comparable with ea
 $$S_i^{norm} = {S_i \over S^{max}} * (1 - {N^{max} - N_i \over \sum _{i=1}^n N_i})$$
 
 \section{Conclusion}
-The output of our method is a list of scored keys and for each key a list foreign keys referencing the key. The score of a key can be negative or positive. A negative score means that the key is not specified by the XML documents while positive means that it is satisfied. The absolute value of the score means how sure the method are about it.
+The output of our method is a list of scored keys and for each key a list foreign keys referencing the key. The score of a key can be negative or positive. A negative score means that the key is not specified by the XML documents while positive means that it is satisfied. The absolute value of the score means how sure the method is about it.
 
 Because the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.

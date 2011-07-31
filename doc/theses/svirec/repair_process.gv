@@ -1,0 +1,21 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	input_xml [label = "XML"];
+	input_fd [label = "Functional Dependencies"];
+	input_weight [label = "weights"];
+	input_xml -> 1;
+	input_fd -> 1;
+	input_weight -> 1;
+	1 [label = "Initial Model Generator" style = "filled" fillcolor = "grey"];
+	1 -> 2 [label = "Initial Model"];
+	user_input [label = "User input"];
+	user_input -> 2;
+	2 [label = "Repairer" style = "filled" fillcolor = "grey"];
+	2 -> 3 [label = "Repaired R-XML tree"];
+	3 [label = "Repaired XML Generator" style = "filled" fillcolor = "grey"];
+	output_xml [label = "XML"];
+	3 -> output_xml;
+}

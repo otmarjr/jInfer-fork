@@ -2,9 +2,27 @@
 
 A part of this work is experimental implementation of our proposed algorithm. Besides our approach, we have also implementened the algorithm proposed in \cite{RepAndConsistentAnswer}, to be able to compare it with our algorithm. Our algorithm has been implemented in the Java language in the version 6.0 as a part of the schema inference framework for XML jInfer \cite{jinfer}.
 
+\section{jInfer Framework}
+
+jInfer framework was developed as a Software Project at the Faculty of Mathematics and Physics, Charles University at Prague. The framework is based on NetBeans platform and is mainly used for XML schema inference. Although our proposed algorithm is not dealing with the schema inference, jInfer is designed to be extensible and is suitable for incorporation our algorithm into it.
+
+The whole process of repairing inconsistent XML data is divided three steps (illustrated in Fig. \ref{repairProcess}):
+
+\begin{enumerate}
+	\item Import of input data (XML, functional dependencies, weights) into an internal representation - \emph{Initial Model}.
+    \item Repairing of \emph{Initial Model} with optional help of user interaction.
+    \item Export back the repaired data into XML format.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering\includegraphics[width=0.6\textwidth]{repair_process}
+    \caption{High-level view of the repair process}
+    \label{repairProcess}
+\end{figure}
+
 \section{Architecture}
 
-The main part of our algorithm is implemented as the \texttt{FDRepairer} extension of the jInfer framework. The core package of the extension is \texttt{cz.cuni.mff.\discretionary{}{}{}ksi.jinfer.functionalDependencies} and contains classes representing base object important for repairing (Tuple, RW-XML tree, Path etc.). This package is further divided into the following subpackages:
+The main part of our algorithm is implemented as the \texttt{FDRepairer} module of the jInfer framework. The core package of the module is \texttt{cz.cuni.mff.\discretionary{}{}{}ksi.jinfer.functionalDependencies} and contains classes representing base object important for repairing (Tuple, RW-XML tree, Path etc.). This package is further divided into the following subpackages:
 
 \begin{description}
 	\item[fd] contains data structure of functional dependencies used as an input to the algorithm.
@@ -23,7 +41,7 @@ Files that can be added as an input to our algorithm are of three types. The XML
 
 \section{Restriction of Implementation}
 
-The \texttt{FDRepairer} extension of the jInfer framework is an implementation of our proposed algorithm presented in Chapter \ref{kap4}. However, one part of the algorithm have not been implemented yet, namely the intersection of repair candidates with existing repair group.
+The \texttt{FDRepairer} module of the jInfer framework is an implementation of our proposed algorithm presented in Chapter \ref{kap4}. However, one part of the algorithm have not been implemented yet, namely the intersection of repair candidates with existing repair group.
 
 \section{Building and Executing}
 

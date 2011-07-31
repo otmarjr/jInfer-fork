@@ -22,15 +22,19 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 /**
- *
+ * Class representing repair group in the repair picker.
  * @author sviro
  */
 public class RepairGroupModel {
   
   private TreeNode tree = null;
-  private List<RepairGroup> repairGroups;
+  final private List<RepairGroup> repairGroups;
 
-  public RepairGroupModel(List<RepairGroup> repairGroups) {
+  /**
+   * Constructor creating model of the repair groups for repair picker.
+   * @param repairGroups Repair groups this model represent.
+   */
+  public RepairGroupModel(final List<RepairGroup> repairGroups) {
     if (BaseUtils.isEmpty(repairGroups)) {
       throw new IllegalArgumentException("Repair groups must not be empyt.");
     }
@@ -38,7 +42,11 @@ public class RepairGroupModel {
     this.repairGroups = repairGroups;
   }
 
-  TreeNode getTree() {
+  /**
+   * Get node tree representing repair groups in the repair picker.
+   * @return Node tree representing repair groups in the repair picker. 
+   */
+  public TreeNode getTree() {
     if (tree == null) {
       tree = new DefaultMutableTreeNode("");
       

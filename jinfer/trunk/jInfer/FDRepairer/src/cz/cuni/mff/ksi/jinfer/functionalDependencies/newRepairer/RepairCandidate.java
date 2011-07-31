@@ -47,7 +47,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
- *
+ * Implementation of the Repair interface for the thesis algorithm. This class
+ * represents repair candidate.
+ * 
  * @author sviro
  */
 public class RepairCandidate implements Repair {
@@ -61,15 +63,28 @@ public class RepairCandidate implements Repair {
   private RXMLTree tree;
   private double coeffK;
   private Set<String> nodePaths;
-  private boolean isNewValue;
   private Pair<Tuple, Tuple> tuplePair;
 
+  /**
+   * Constructor of the repair candidate. Provided argument represents tuple pair
+   * for which is this candidate created.
+   * @param tuplePair Tuple pair for which is this candidate created.
+   */
   public RepairCandidate(final Pair<Tuple, Tuple> tuplePair) {
     this.tuplePair = tuplePair;
     this.valueNodes = new HashMap<Node, NodeValue>();
     this.nodePaths = new HashSet<String>();
   }
 
+  /**
+   * This constructor creates a repair candidate which marks provided node as unreliable. 
+   * 
+   * @param tuplePair Tuple pair for which is this candidate created.
+   * @param unreliableNode Node to be marked as unreliable.
+   * @param tree Tree for which is candidate created.
+   * @param coeffK coefficient k from thesis algorithm.
+   * @param path Path of the modified node for user selection purpose.
+   */
   public RepairCandidate(final Pair<Tuple, Tuple> tuplePair, final Node unreliableNode, final RXMLTree tree, final double coeffK, final String path) {
     this(tuplePair);
     this.unreliableNode = unreliableNode;
@@ -78,12 +93,21 @@ public class RepairCandidate implements Repair {
     nodePaths.add(path);
   }
 
-  public RepairCandidate(final Pair<Tuple, Tuple> tuplePair, final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path, boolean isNewValue) {
+  /**
+   * This constructor creates a repair candidate which modifies node value. 
+   * @param tuplePair Tuple pair for which is this candidate created.
+   * @param valueNode Node to be modified.
+   * @param changedValue New value of the modified node.
+   * @param tree Tree for which is candidate created.
+   * @param coeffK coefficient k from thesis algorithm.
+   * @param path Path of the modified node for user selection purpose.
+   * @param isNewValue flag indicating if the new value is generated.
+   */
+  public RepairCandidate(final Pair<Tuple, Tuple> tuplePair, final Node valueNode, final String changedValue, final RXMLTree tree, final double coeffK, final String path, final boolean isNewValue) {
     this(tuplePair);
     valueNodes.put(valueNode, new NodeValue(changedValue, isNewValue));
     this.tree = tree;
     this.coeffK = coeffK;
-    this.isNewValue = isNewValue;
     nodePaths.add(path);
   }
 
@@ -112,7 +136,7 @@ public class RepairCandidate implements Repair {
   }
 
   @Override
-  public void addUnreliableNodes(Set<Node> nodes) {
+  public void addUnreliableNodes(final Set<Node> nodes) {
     getUnreliableNodes().addAll(nodes);
   }
 
@@ -122,12 +146,12 @@ public class RepairCandidate implements Repair {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (obj == null || !(obj instanceof Repair)) {
       return false;
     }
 
-    RepairCandidate repair = (RepairCandidate) obj;
+    final RepairCandidate repair = (RepairCandidate) obj;
 
     return this.getUnreliableNodes().equals(repair.getUnreliableNodes()) && this.getValueNodes().equals(repair.getValueNodes());
   }
@@ -141,22 +165,22 @@ public class RepairCandidate implements Repair {
   }
 
   @Override
-  public void addUnreliableNode(Node node) {
+  public void addUnreliableNode(final Node node) {
     getUnreliableNodes().add(node);
   }
 
   @Override
-  public void addValueNode(Node node, NodeValue value) {
+  public void addValueNode(final Node node, final NodeValue value) {
     valueNodes.put(node, value);
   }
 
-  private void addUnreliableChildren(Node unreliableNode, Set<String> paths, String parentPath) {
+  private void addUnreliableChildren(final Node unreliableNode, final Set<String> paths, final String parentPath) {
     if (unreliableNode != null) {
       unreliableNodes.add(unreliableNode);
       String newParentPath = parentPath;
 
       if (this.unreliableNode != unreliableNode) {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append(parentPath).append("/");
         if (unreliableNode.getNodeType() == Node.ATTRIBUTE_NODE) {
           builder.append("@");
@@ -168,14 +192,14 @@ public class RepairCandidate implements Repair {
         paths.add(newParentPath);
       }
 
-      NamedNodeMap attributes = unreliableNode.getAttributes();
+      final NamedNodeMap attributes = unreliableNode.getAttributes();
       if (attributes != null) {
         for (int i = 0; i < attributes.getLength(); i++) {
           addUnreliableChildren(attributes.item(i), paths, newParentPath);
         }
       }
       if (unreliableNode.getNodeType() != Node.ATTRIBUTE_NODE) {
-        NodeList childNodes = unreliableNode.getChildNodes();
+        final NodeList childNodes = unreliableNode.getChildNodes();
         if (childNodes != null) {
           for (int i = 0; i < childNodes.getLength(); i++) {
             addUnreliableChildren(childNodes.item(i), paths, newParentPath);
@@ -187,7 +211,7 @@ public class RepairCandidate implements Repair {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
+    final StringBuilder builder = new StringBuilder();
 
     builder.append("Repair:\n");
     builder.append("\t").append("Unreliable nodes:\n");
@@ -203,10 +227,18 @@ public class RepairCandidate implements Repair {
     return builder.toString();
   }
 
-  public void setWeight(double weight) {
+  /**
+   * Set weight of the repair candidate.
+   * @param weight Weight to be set.
+   */
+  public void setWeight(final double weight) {
     this.weight = weight;
   }
 
+  /**
+   * Get weight of the repair candidate.
+   * @return Weight of the repair candidate.
+   */
   public double getWeight() {
     if (weight == -1) {
       weight = computeWeight();
@@ -214,6 +246,10 @@ public class RepairCandidate implements Repair {
     return weight;
   }
 
+  /**
+   * Adds this candidate to the provided repair group.
+   * @param repairGroup Repair group to be added this candidate.
+   */
   public void addToRepairGroup(final RepairGroup repairGroup) {
     this.repairGroup = repairGroup;
   }
@@ -231,22 +267,27 @@ public class RepairCandidate implements Repair {
     return result;
   }
 
+  /**
+   * Get the string representation of the modified part of the tree by this repair.
+   * @return String representation of the modified part.
+   * @throws InterruptedException 
+   */
   public String getContentAfterRepair() throws InterruptedException {
     if (hasReliabilityRepair()) {
-      Node cloneNode = getUnreliableNode().cloneNode(true);
+      final Node cloneNode = getUnreliableNode().cloneNode(true);
       setNodeUnreliable(cloneNode);
 
       return transformNodeToXML(cloneNode);
     } else {
-      StringBuilder builder = new StringBuilder();
+      final StringBuilder builder = new StringBuilder();
       for (Node node : valueNodes.keySet()) {
         if (node instanceof Attr) {
-          Node cloneNode = ((Attr) node).getOwnerElement().cloneNode(true);
+          final Node cloneNode = ((Attr) node).getOwnerElement().cloneNode(true);
           builder.append(transformNodeToXML(cloneNode)).append(" -> ");
           setNewValue(cloneNode, valueNodes.get(node).getChangedValue(), true, node.getNodeName());
           builder.append(transformNodeToXML(cloneNode)).append("\n");
         } else {
-          Node cloneNode = ((Text) node).getParentNode().cloneNode(true);
+          final Node cloneNode = ((Text) node).getParentNode().cloneNode(true);
 
           builder.append(transformNodeToXML(cloneNode)).append(" -> ");
           setNewValue(cloneNode, valueNodes.get(node).getChangedValue(), false, null);
@@ -258,12 +299,12 @@ public class RepairCandidate implements Repair {
     }
   }
 
-  private void setNodeUnreliable(Node node) {
+  private void setNodeUnreliable(final Node node) {
     if (node instanceof Element) {
-      Element element = (Element) node;
+      final Element element = (Element) node;
       element.setAttribute("unreliable", "true");
 
-      NodeList childNodes = element.getChildNodes();
+      final NodeList childNodes = element.getChildNodes();
       for (int i = 0; i < childNodes.getLength(); i++) {
         setNodeUnreliable(childNodes.item(i));
       }
@@ -272,24 +313,24 @@ public class RepairCandidate implements Repair {
 
   private String transformNodeToXML(final Node node) {
     try {
-      DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      Document document = builder.newDocument();
+      final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      final Document document = builder.newDocument();
       document.adoptNode(node);
 
 
       document.appendChild(node);
 
-      TransformerFactory transfac = TransformerFactory.newInstance();
-      transfac.setAttribute("indent-number", new Integer(4));
-      Transformer trans = transfac.newTransformer();
+      final TransformerFactory transfac = TransformerFactory.newInstance();
+      transfac.setAttribute("indent-number", Integer.valueOf(4));
+      final Transformer trans = transfac.newTransformer();
       trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
       trans.setOutputProperty(OutputKeys.INDENT, "yes");
       trans.setOutputProperty(OutputKeys.METHOD, "xml");
 
       //create string from xml tree
-      StringWriter sw = new StringWriter();
-      StreamResult result = new StreamResult(sw);
-      DOMSource source = new DOMSource(document);
+      final StringWriter sw = new StringWriter();
+      final StreamResult result = new StreamResult(sw);
+      final DOMSource source = new DOMSource(document);
       trans.transform(source, result);
       return sw.toString();
     } catch (ParserConfigurationException ex) {
@@ -301,21 +342,21 @@ public class RepairCandidate implements Repair {
     }
   }
 
-  private void setNewValue(Node node, String newValue, boolean isAttr, String attributeName) throws InterruptedException {
+  private void setNewValue(final Node node, final String newValue, final boolean isAttr, final String attributeName) throws InterruptedException {
     if (!(node instanceof Element)) {
       LOG.error("Node must be element.");
       throw new InterruptedException("node must be element.");
     }
 
     if (isAttr) {
-      Attr attribute = ((Element) node).getAttributeNode(attributeName);
+      final Attr attribute = ((Element) node).getAttributeNode(attributeName);
       attribute.setValue(newValue);
     } else {
-      NodeList childNodes = node.getChildNodes();
+      final NodeList childNodes = node.getChildNodes();
       for (int i = 0; i < childNodes.getLength(); i++) {
-        Node child = childNodes.item(i);
+        final Node child = childNodes.item(i);
         if (child.getNodeType() == Node.TEXT_NODE) {
-          Text textnode = (Text) child;
+          final Text textnode = (Text) child;
           textnode.setNodeValue(newValue);
           return;
         }
@@ -323,31 +364,42 @@ public class RepairCandidate implements Repair {
     }
   }
 
+  /**
+   * Get paths of all nodes that are modified by this candidate.
+   * @return Collection of paths of all nodes modified by this candidate.
+   */
   public Collection<String> getNodePaths() {
     return nodePaths;
   }
 
+  /**
+   * Get functional dependency this candidate is repairing validation for.
+   * @return Functional dependency this candidate is repairing validation for.
+   */
   public FD getFD() {
     return repairGroup.getFunctionalDependency();
   }
 
+  /**
+   * Get number of nodes this repair is modifying.
+   * @return Number of nodes this repair is modifying.
+   */
   public int getNodeSize() {
     return nodePaths.size();
   }
 
   @Override
-  public boolean isNewValue() {
-    return isNewValue;
-  }
-
-  @Override
-  public boolean isNewValue(Node node) {
+  public boolean isNewValue(final Node node) {
     if (!valueNodes.containsKey(node)) {
       throw new IllegalArgumentException("The node " + node + "is not associated any value");
     }
     return valueNodes.get(node).isNewValue();
   }
 
+  /**
+   * Get tuple pair this candidate is defined for.
+   * @return Tuple pair this candidate is defined for.
+   */
   public Pair<Tuple, Tuple> getTuplePair() {
     return tuplePair;
   }

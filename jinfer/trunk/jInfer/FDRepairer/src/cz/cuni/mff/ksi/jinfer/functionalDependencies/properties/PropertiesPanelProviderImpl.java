@@ -24,7 +24,7 @@ import java.util.Properties;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * PropertiesPanelProvider for Repairer category.
  * @author sviro
  */
 @ServiceProvider(service = PropertiesPanelProvider.class)

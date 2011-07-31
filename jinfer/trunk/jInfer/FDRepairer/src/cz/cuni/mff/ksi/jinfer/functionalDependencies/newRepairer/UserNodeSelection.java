@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.fd.FD;
 import java.util.Collection;
 
 /**
- *
+ * Class representing the previous repair candidate selected by the user.
  * @author sviro
  */
 public class UserNodeSelection {
@@ -29,30 +29,60 @@ public class UserNodeSelection {
   private final boolean isValueRepair;
   private final FD fD;
 
-  public UserNodeSelection(RepairCandidate pickedRepair) {
+  /**
+   * Constructor creating previous selection.
+   * @param pickedRepair Repair candidate that was picked by the user.
+   */
+  public UserNodeSelection(final RepairCandidate pickedRepair) {
     this.fD = pickedRepair.getFD();
     this.nodePaths = pickedRepair.getNodePaths();
     this.isValueRepair = pickedRepair.hasValueRepair();
   }
 
-  public boolean repairsSameFD(RepairCandidate repair) {
+  /**
+   * Check if the canidate pick by this selection repairs the same functional dependency
+   * as provided candidate.
+   * @param repair Repair candidate to be checked.
+   * @return true if this selection repairs the same functional dependency as provided candidate.
+   */
+  public boolean repairsSameFD(final RepairCandidate repair) {
     return fD.equals(repair.getFD());
   }
 
+  /**
+   * Check if the canidate pick by this selection use the same repair operation
+   * as provided candidate.
+   * @param repair Repair candidate to be checked.
+   * @return true if this selection repairs use the same repair operation as provided candidate.
+   */
   public boolean isUsingSameOperation(final RepairCandidate repair) {
     return isValueRepair == repair.hasValueRepair();
   }
   
+  /**
+   * Get number of nodes this selection modifies.
+   * @return Number of nodes this selection modifies. 
+   */
   public int getNodeSize() {
     return nodePaths.size();
   }
 
+  /**
+   * Get paths of all nodes modified by this selection.
+   * @return Collection of paths of all nodes modified by this selection. 
+   */
   public Collection<String> getNodePaths() {
     return nodePaths;
   }
 
-  public boolean existSubset(RepairCandidate repair, double thresholdT) {
-    int elementsSize = (int) Math.ceil(getNodeSize() * thresholdT);
+  /**
+   * Check if this selection contains subset of paths modifying the same nodes as provided candidate.
+   * @param repair Repair candidate to be checked.
+   * @param thresholdT Threshold t modifying required amount of the size of subset.
+   * @return true if if this selection contains subset of paths modifying the same nodes as provided candidate.
+   */
+  public boolean existSubset(final RepairCandidate repair, final double thresholdT) {
+    final int elementsSize = (int) Math.ceil(getNodeSize() * thresholdT);
     int containingPathsCount = 0; 
     for (String path : repair.getNodePaths()) {
       if (containingPathsCount == elementsSize) {

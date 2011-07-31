@@ -20,10 +20,26 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.RXMLTree;
 import java.util.List;
 
 /**
+ * Interface of a RepairedXMLGenerator module.
  *
+ * <p>Repaired XML Generator is the last module in the repair process. Its task is
+ * to transform the repaired XML tree into a textual XML representation. 
+ * After the XML is created, it is sent to the RepairRunner module
+ * via the callback.</p>
+ * 
  * @author sviro
  */
 public interface RepairedXMLGenerator {
   
+  /**
+   * Start the XML export process. This method is called by the RepairRunner module
+   * as the last stage of repair.
+   * 
+   * @param repairedTrees Repaired XML trees to be exported as XML data.
+   * @param callback A callback object. After the XML data is created, it must be
+   *  returned to the caller by invoking the <code>finished()</code>
+   *  method on this object.
+   * @throws InterruptedException 
+   */
   void start(final List<RXMLTree> repairedTrees, final RepairedXMLGeneratorCallback callback) throws InterruptedException;
 }

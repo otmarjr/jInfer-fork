@@ -20,10 +20,24 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
 
 /**
+ * Interface of a Repairer module.
  *
+ * <p>Repairer is the second, middle module in the repair process. It
+ * receives a initial model and should output a repaired XML tree.</p>
+ * 
  * @author sviro
  */
 public interface Repairer extends NamedModule {
   
+  /**
+   * Start the initial model repairing process. This method is called by the
+   * RepairRunner module as the second stage of repair.
+   * 
+   * @param model Initial model to be repaired.
+   * @param callback A callback object. When the initial model is repaired,
+   *  the resulting XML tree must be sent to the last stage by calling
+   *  the <code>finished()</code> method of this object.
+   * @throws InterruptedException 
+   */
   void start(final InitialModel model, RepairerCallback callback) throws InterruptedException;
 }

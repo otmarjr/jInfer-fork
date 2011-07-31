@@ -22,7 +22,8 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.WindowManager;
 
 /**
- *
+ * Implementation of the {@link RepairPicker} representing user selection picker.
+ * 
  * @author sviro
  */
 @ServiceProvider(service = RepairPicker.class)
@@ -34,7 +35,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
   @Override
   public RepairCandidate getRepair(final RXMLTree tree) throws InterruptedException {
     if (askUser) {
-      RepairPickerComponent component = new RepairPickerComponent();
+      final RepairPickerComponent component = new RepairPickerComponent();
       component.setModel(tree.getRepairGroups());
 
       drawComponentAndWaitForGUI(component);
@@ -42,7 +43,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
       if (!component.shallAskUser()) {
         askUser = false;
       }
-      RepairCandidate pickedRepair = component.getPickedRepair();
+      final RepairCandidate pickedRepair = component.getPickedRepair();
       tree.saveUserSelection(pickedRepair);
 
       return pickedRepair;
@@ -79,20 +80,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
   }
 
   /**
-   * Asynchronously draws component in the AutoEditor tab.
-   *
-   * This function is asynchronous, which means that the drawing is not done
-   * in a thread which this function is executed in. So this function can return
-   * before the drawing is done.
-   *
-   * @param component Component with initialized instance of {@link Visualizer}.
-   */
-  public static void drawComponentAsync(final RepairPickerComponent component) {
-    drawInGUI(component);
-  }
-
-  /**
-   * Draws component in the AutoEditor tab.
+   * Draws component in the Repair picker window.
    *
    * This function is synchronous. It returns when drawn component signals it.
    *
@@ -102,7 +90,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
    * @throws InterruptedException If the AutoEditor tab was closed.
    */
   public static boolean drawComponentAndWaitForGUI(final RepairPickerComponent component) throws InterruptedException {
-    drawComponentAsync(component);
+    drawInGUI(component);
     component.waitForGuiDone();
 
     if (component.guiInterrupted()) {
@@ -112,7 +100,7 @@ public class RepairPickerUserInteractive implements RepairPicker {
     return true;
   }
 
-  private RepairCandidate guessRepairFromUserSelection(RXMLTree tree) {
+  private RepairCandidate guessRepairFromUserSelection(final RXMLTree tree) {
     for (RepairGroup repairGroup : tree.getRepairGroups()) {
       for (RepairCandidate repair : repairGroup.getRepairs()) {
         if (canBeUsedUserSelection(tree, repair)) {
@@ -124,8 +112,8 @@ public class RepairPickerUserInteractive implements RepairPicker {
     return tree.getMinimalRepairGroup().getMinimalRepair();
   }
 
-  private boolean canBeUsedUserSelection(RXMLTree tree, RepairCandidate repair) {
-    double thresholdT = tree.getThresholdT();
+  private boolean canBeUsedUserSelection(final RXMLTree tree, final RepairCandidate repair) {
+    final double thresholdT = tree.getThresholdT();
     for (UserNodeSelection userSelection : tree.getSavedUserSelections()) {
       if (userSelection.repairsSameFD(repair) && userSelection.isUsingSameOperation(repair)
               && (Math.ceil(userSelection.getNodeSize() * thresholdT) <= repair.getNodeSize())) {

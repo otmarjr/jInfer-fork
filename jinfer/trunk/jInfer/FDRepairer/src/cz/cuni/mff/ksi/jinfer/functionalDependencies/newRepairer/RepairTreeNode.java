@@ -19,18 +19,26 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
- *
+ * Class representing repair candidate as a tree node in the repair picker.
  * @author sviro
  */
 public class RepairTreeNode extends DefaultMutableTreeNode {
 
   private final RepairCandidate repair;
   
+  /**
+   * Constructor of the tree node representation of repair candidate.
+   * @param repair Repair candidate that is represented by this node.
+   */
   RepairTreeNode(final RepairCandidate repair) {
     super("Repair - " + repair.getWeight());
     this.repair = repair;
   }
 
+  /**
+   * Get repair candidate this tree node is representing.
+   * @return Repair candidate this tree node is representing. 
+   */
   public RepairCandidate getRepair() {
     return repair;
   }

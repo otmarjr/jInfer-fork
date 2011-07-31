@@ -22,26 +22,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Support class for Repair implementations.
  * @author sviro
  */
 public final class RepairFactory {
 
-  public static List<Pair<RepairImpl, RepairImpl>> getValuePairs(List<RepairImpl> repairs) throws InterruptedException {
+  /**
+   * Get pairs of all value repairs.
+   * @param repairs List of repairs from which are pairs created.
+   * @return List of pairs of all value repairs.
+   * @throws InterruptedException 
+   */
+  public static List<Pair<RepairImpl, RepairImpl>> getValuePairs(final List<RepairImpl> repairs) throws InterruptedException {
     if (repairs == null) {
       return null;
     }
 
-    List<Pair<RepairImpl, RepairImpl>> result = new ArrayList<Pair<RepairImpl, RepairImpl>>();
+    final List<Pair<RepairImpl, RepairImpl>> result = new ArrayList<Pair<RepairImpl, RepairImpl>>();
 
     for (int i = 0; i < repairs.size() - 1; i++) {
       if (Thread.interrupted()) {
         throw new InterruptedException();
       }
-      RepairImpl repair = repairs.get(i);
+      final RepairImpl repair = repairs.get(i);
       if (repair.hasValueRepair()) {
         for (int j = 1 + i; j < repairs.size(); j++) {
-          RepairImpl repair1 = repairs.get(j);
+          final RepairImpl repair1 = repairs.get(j);
           if (repair1.hasValueRepair()) {
             result.add(new ImmutablePair<RepairImpl, RepairImpl>(repair, repair1));
           }
@@ -55,12 +61,17 @@ public final class RepairFactory {
   private RepairFactory() {
   }
 
+  /**
+   * Get all repairs that are marking nodes as unreliable.
+   * @param repairs Repairs from which are selected.
+   * @return List of all repairs that are marking nodes as unreliable.
+   */
   public static List<RepairImpl> getReliabilityRepairs(final List<RepairImpl> repairs) {
     if (repairs == null) {
       return null;
     }
 
-    List<RepairImpl> result = new ArrayList<RepairImpl>();
+    final List<RepairImpl> result = new ArrayList<RepairImpl>();
 
     for (RepairImpl repair : repairs) {
       if (repair.hasReliabilityRepair()) {
@@ -70,12 +81,17 @@ public final class RepairFactory {
     return result;
   }
 
+  /**
+   * Get all repairs that modifies node values.
+   * @param repairs Repairs from which are selected.
+   * @return List of all repairs that modifies node values.
+   */
   public static List<RepairImpl> getValueRepairs(final List<RepairImpl> repairs) {
     if (repairs == null) {
       return null;
     }
 
-    List<RepairImpl> result = new ArrayList<RepairImpl>();
+    final List<RepairImpl> result = new ArrayList<RepairImpl>();
 
     for (RepairImpl repair : repairs) {
       if (repair.hasValueRepair()) {

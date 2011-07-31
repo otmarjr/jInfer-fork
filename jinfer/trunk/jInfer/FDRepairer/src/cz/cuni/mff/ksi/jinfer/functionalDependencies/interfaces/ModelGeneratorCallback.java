@@ -19,10 +19,17 @@ package cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces;
 import cz.cuni.mff.ksi.jinfer.functionalDependencies.InitialModel;
 
 /**
- *
+ * Interface defining a response to ModelGenerator finishing its work.
+ * 
  * @author sviro
  */
 public interface ModelGeneratorCallback {
   
+  /**
+   * This method is called by a ModelGenerator implementation, after it has
+   * finished its work.
+   * 
+   * @param model Initial model as retrieved from input files.
+   */
   void finished(final InitialModel model);
 }

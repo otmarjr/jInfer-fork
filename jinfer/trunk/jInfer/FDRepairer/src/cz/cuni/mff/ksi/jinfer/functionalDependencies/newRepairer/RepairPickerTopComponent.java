@@ -29,7 +29,7 @@ import org.openide.awt.ActionReference;
 import org.openide.windows.WindowManager;
 
 /**
- * Top component which displays something.
+ * Top component which displays repair picker window.
  */
 @ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.functionalDependencies.newRepairer//RepairPicker//EN",
 autostore = false)

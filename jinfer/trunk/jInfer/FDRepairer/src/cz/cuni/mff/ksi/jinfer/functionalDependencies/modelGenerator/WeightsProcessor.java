@@ -23,24 +23,22 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.weights.Tweights;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.helpers.DefaultValidationEventHandler;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.apache.log4j.Logger;
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * providing logic for weights retrieval from weights files.
  * @author sviro
  */
 @ServiceProvider(service = Processor.class)
@@ -80,7 +78,7 @@ public class WeightsProcessor implements Processor<Tweight> {
   }
 
   @Override
-  public List<Tweight> process(InputStream inputStream) throws InterruptedException {
+  public List<Tweight> process(final InputStream inputStream) throws InterruptedException {
     final ClassLoader orig = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(Tweights.class.getClassLoader()); //NOPMD
 
@@ -88,15 +86,15 @@ public class WeightsProcessor implements Processor<Tweight> {
       final JAXBContext context = JAXBContext.newInstance(Tweights.class.getPackage().getName());
       final Unmarshaller unmarshaller = context.createUnmarshaller();
       
-      SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-      Schema schema = sf.newSchema(new StreamSource(new ByteArrayInputStream(SCHEMA.getBytes())));
+      final SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+      final Schema schema = sf.newSchema(new StreamSource(new ByteArrayInputStream(SCHEMA.getBytes())));
       
       unmarshaller.setSchema(schema);
       @SuppressWarnings("unchecked")
       final JAXBElement<Tweights> weightsElement = (JAXBElement<Tweights>) unmarshaller.unmarshal(
               inputStream);
 
-      Tweights weights = weightsElement.getValue();
+      final Tweights weights = weightsElement.getValue();
       return weights.getWeight();
     } catch (SAXException ex) {
       LOG.error(ex);

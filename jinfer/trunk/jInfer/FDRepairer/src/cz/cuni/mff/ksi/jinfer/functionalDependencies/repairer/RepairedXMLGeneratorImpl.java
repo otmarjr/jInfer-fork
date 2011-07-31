@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Implementation of RepairedXMLGenerator interface.
  * @author sviro
  */
 @ServiceProvider(service = RepairedXMLGenerator.class)
@@ -42,7 +42,7 @@ public class RepairedXMLGeneratorImpl implements RepairedXMLGenerator {
 
   @Override
   public void start(final List<RXMLTree> repairedTrees, final RepairedXMLGeneratorCallback callback) throws InterruptedException {
-    List<String> result = new ArrayList<String>();
+    final List<String> result = new ArrayList<String>();
     
     for (RXMLTree rXMLTree : repairedTrees) {
       if (Thread.interrupted()) {
@@ -56,16 +56,16 @@ public class RepairedXMLGeneratorImpl implements RepairedXMLGenerator {
   
   private String transformTreeToXML(final RXMLTree tree) {
     try {
-      TransformerFactory transfac = TransformerFactory.newInstance();
-      transfac.setAttribute("indent-number", new Integer(4));
-      Transformer trans = transfac.newTransformer();
+      final TransformerFactory transfac = TransformerFactory.newInstance();
+      transfac.setAttribute("indent-number", Integer.valueOf(4));
+      final Transformer trans = transfac.newTransformer();
       trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
       trans.setOutputProperty(OutputKeys.INDENT, "yes");
       
       //create string from xml tree
-      StringWriter sw = new StringWriter();
-      StreamResult result = new StreamResult(sw);
-      DOMSource source = new DOMSource(tree.getDocument());
+      final StringWriter sw = new StringWriter();
+      final StreamResult result = new StreamResult(sw);
+      final DOMSource source = new DOMSource(tree.getDocument());
       trans.transform(source, result);
       return sw.toString();
     } catch (TransformerException ex) {

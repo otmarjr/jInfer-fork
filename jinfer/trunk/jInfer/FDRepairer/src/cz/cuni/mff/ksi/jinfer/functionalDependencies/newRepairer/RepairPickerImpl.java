@@ -21,7 +21,8 @@ import cz.cuni.mff.ksi.jinfer.functionalDependencies.interfaces.RepairPicker;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Implementation of the {@link RepairPicker} representing picker which choose 
+ * repair candidate with the lowest weight.
  * @author sviro
  */
 @ServiceProvider(service = RepairPicker.class)
@@ -31,7 +32,7 @@ public class RepairPickerImpl implements RepairPicker {
   
   @Override
   public RepairCandidate getRepair(final RXMLTree tree) {
-    RepairGroup minimalRepairGroup = tree.getMinimalRepairGroup();
+    final RepairGroup minimalRepairGroup = tree.getMinimalRepairGroup();
     tree.removeRG(minimalRepairGroup);
     
     return minimalRepairGroup.getMinimalRepair();

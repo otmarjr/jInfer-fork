@@ -1,0 +1,37 @@
+digraph metaheuristic {
+ 
+  /* rankdir = LR; */
+  ranksep = 1;
+
+  input[label="Input\nCandidate AMs"];
+  ch[label="Construction\nHeuristic", shape=box];
+
+  subgraph a {
+    label = "Improvement"
+    style = filled;
+    color = lightgrey;
+    ih1[label="Improvement\nHeuristic 1", shape=box];
+    ih2[label="Improvement\nHeuristic 2", shape=box];
+    ihX[label="Improvement\nHeuristic ...", shape=box];
+    ihN[label="Improvement\nHeuristic N", shape=box];
+  }
+
+  termination[label="Termination\nCriteria", shape=diamond];
+  output[label="Output\nID Set"];
+
+  { rank = same; input; ch; }
+  { rank = same; ih1; ih2; ihX; ihN; }
+  { rank = same; termination; output; }
+
+  input -> ch;
+  ch -> ih1 [style=bold];
+  ih1 -> ih2 [style=bold];
+  ih2 -> ihX [style=bold];
+  ihX -> ihN [style=bold];
+  ihN -> ih1 [style=bold];
+  ih1 -> termination [style=dotted];
+  ih2 -> termination [style=dotted];
+  ihX -> termination [style=dotted];
+  ihN -> termination [style=dotted];
+  termination -> output [style=bold];
+}

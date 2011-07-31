@@ -300,8 +300,11 @@ TODO we will be working with heuristics striving to do the following: input is a
 
 TODO we will be using a pool - what is a pool
 
+\begin{center}
+  \includegraphics[width=\textwidth]{images/metaheuristic.eps}
+\end{center}
+
 \subsection{Constructions Heuristics}
-1
 % TODO can I format things in nomenclature?
 \nomenclature{CH}{Construction Heuristic} %TODO decide on how to format CH/IH 
 
@@ -310,6 +313,31 @@ TODO construction heuristics are heus that provide us with at least some solutio
 \subsubsection{FIDAX}
 
 TODO this is a heuristic too! We can start with it!
+
+The pseudocode is listed (cited from \cite{fidax} with trivial modifications) in \ref{ch-fidax}.
+
+\begin{algorithm}
+\caption{FIDAX CH}
+\label{ch-fidax}
+\begin{algorithmic}
+\REQUIRE $C$ list of candidate AMs
+\STATE $C' \gets C$ sorted by decreasing size
+\STATE Compute the weight $w(m)$ of each $m$ in $C$
+\FORALL{$t$ in $\Sigma^E$}
+  \STATE Let $m$ be a \textbf{highest-weight} mapping of type $t$ in $C'$
+  \STATE Remove from $C'$ all mappings of type $t$ except $m$
+\ENDFOR
+\FORALL{$m$ in $C'$}
+  \STATE $S \gets$ all mappings in $C$ whose images intersect $\iota(m)$
+  \IF{$w(m) > \sum_{p \in S} w(p)$}
+    \STATE remove all $p \in S$ from $C'$
+  \ELSE
+  	\STATE remove $m$ from $C'$
+  \ENDIF
+\ENDFOR
+\RETURN $C'$
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Random}
 

@@ -8,13 +8,69 @@ All provided documents with functional dependencies and also repaired documents 
 
 \subsection{Real-World Data}
 
-The first real-world dataset originates from the XML data repository \\(\url{http://www.cs.washington.edu/research/xmldatasets/}), specifically the Course data derived from university websites. The course data consist, along with other information, of day of the week, time and place (building and room), where each course is situated. The consistency of data is evaluated against FD defined as: \emph{Two courses starting at the same date and time are each situated in a different place}.\\
+The first real-world dataset originates from the XML data repository \\(\url{http://www.cs.washington.edu/research/xmldatasets/}), specifically the Course data derived from university websites. The course data consist, along with other information, of day of the week, time and place (building and room), where each course is situated. DTD of one of the dataset file is shown in Fig. \ref{courseDTD}. The consistency of data is evaluated against FD defined as: \emph{Two courses starting at the same date and time are each situated in a different place}.\\
 
-The second dataset is a set of actors of IMDB database obtained from the Niagara data source (\url{http://www.cs.wisc.edu/niagara/data.html}). The dataset consists of a set of authors, where for each author a set of movies he played in is listed. For this dataset, we defined FD as follows: For each two authors, which played in the movie with the same name, the year of release of this movie must be the same.
+\begin{figure}
+    \begin{verbatim}
+        <!ELEMENT root (course*)>
+        <!ELEMENT course (reg_num,subj,crse,sect,title,units,
+                            instructor,days,time,place)>
+        <!ELEMENT reg_num (#PCDATA)>
+        <!ELEMENT subj (#PCDATA)>
+        <!ELEMENT crse (#PCDATA)>
+        <!ELEMENT sect (#PCDATA)>
+        <!ELEMENT title (#PCDATA)>
+        <!ELEMENT units (#PCDATA)>
+        <!ELEMENT instructor (#PCDATA)>
+        <!ELEMENT days (#PCDATA)>
+        <!ELEMENT time (start_time,end_time)>
+        <!ELEMENT start_time (#PCDATA)>
+        <!ELEMENT end_time (#PCDATA)>
+        <!ELEMENT place (building,room)>
+        <!ELEMENT building (#PCDATA)>
+        <!ELEMENT room (#PCDATA)>
+    \end{verbatim}
+    \caption{DTD of reed.xml from course dataset}
+    \label{courseDTD}
+\end{figure}
+
+The second dataset is a set of actors of IMDB database obtained from the Niagara data source (\url{http://www.cs.wisc.edu/niagara/data.html}). The dataset consists of a set of authors, where for each author a set of movies he played in is listed. DTD of this dataset is shown in Fig. \ref{actorsDTD}. For this dataset, we defined FD as follows: For each two authors, which played in the movie with the same name, the year of release of this movie must be the same.
+
+\begin{figure}[H]
+    \begin{verbatim}
+        <!ELEMENT W4F_DOC (Actor)>
+        <!ELEMENT Actor (Name,Filmography)>
+        <!ELEMENT Name (FirstName, LastName)>
+        <!ELEMENT FirstName (#PCDATA)>
+        <!ELEMENT LastName (#PCDATA)>
+        <!ELEMENT Filmography (Movie)*>
+        <!ELEMENT Movie (Title,Year)>
+        <!ELEMENT Title (#PCDATA)>
+        <!ELEMENT Year (#PCDATA)>
+    \end{verbatim}
+    \caption{DTD of actors.xml}
+    \label{actorsDTD}
+\end{figure}
 
 \subsection{Synthetic Data}
 
-Two synthetic data sets have been constructed, the former represents data introduced in Example \ref{example1} with FD presented in Example \ref{fdExample}. The latter is created according to Example 1 introduced in \cite{ImprovingXML}.
+Two synthetic datasets have been constructed, the former represents data introduced in Example \ref{example1} with FD presented in Example \ref{fdExample}. The latter is created according to Example 1 introduced in \cite{ImprovingXML}. DTD of the former dataset is identical with DTD defined in Example \ref{pathExample}. The latter datasets DTD is shown in Fig. \ref{synthDTD}.
+
+\begin{figure}[H]
+    \begin{verbatim}
+        <!ELEMENT customers (country)>
+        <!ELEMENT country (name,c_list)>
+        <!ELEMENT name (#PCDATA)>
+        <!ELEMENT c_list (customer)*>
+        <!ELEMENT customer (no,phone,zip,city)>
+        <!ELEMENT no (#PCDATA)>
+        <!ELEMENT phone (#PCDATA)>
+        <!ELEMENT zip (#PCDATA)>
+        <!ELEMENT city (#PCDATA)>
+    \end{verbatim}
+    \caption{DTD of actors.xml}
+    \label{synthDTD}
+\end{figure}
 
 \section{Algorithms Comparison}
 

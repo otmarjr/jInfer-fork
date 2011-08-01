@@ -10,7 +10,7 @@ A technique for computing repairs which solves the problem of XML data inconsist
 
 \subsection{XML Tree and Functional Dependency}
 
-To be able to resolve the problem of functional dependency violations in XML document, the authors try to introduce the concept of functional dependencies based on those defined for relational databases. The concept of a tree tuple and functional dependency was introduced in definition \ref{treeTuple} and \ref{fd1}.
+To be able to resolve the problem of functional dependency violations in XML document, the authors try to introduce the concept of functional dependencies based on those defined for relational databases. The concept of a tree tuple and functional dependency was introduced in Definition \ref{treeTuple} and \ref{fd1}.
 
 Being given an XML tree $XT$ conforming a DTD $D$ and a functional dependency $F : S_1 \rightarrow S_2$ , we say that $XT$ satisfies $F (XT \models F )$ if for each pair of tree tuples $t_1, t_2$ of $XT$, $$t_1.S_1 = t_2.S_1 \land t_1.S_1 = \emptyset \Rightarrow t_1.S_2 = t_2.S_2$$
 Being given a set of functional dependencies $\mathcal{FD} = \{F_1 , \dots, F_n\}$ over $D$, we say that $XT$ satisfies $\cal FD$ if it satisfies $F_i$ for every $i \in 1..n$.
@@ -40,7 +40,7 @@ A R-XML $tree$ is a triplet $RXT = \langle T, \delta, \varrho \rangle$, where $\
 To be able to create a repair, R-XML Tree must not satisfy FD according to definition of weak satisfiability:
 
 \begin{define}[Weak satisfiability]\label{weakSatisf}
-Let $RXT = \langle T, \delta, \varrho \rangle$ be an R-XML tree conforming a DTD $D$, and $f: S \rightarrow p$ be a functional dependency. We say that $RXT$ weakly satisfies $f$ ($RXT \models_w f$) if one of the following conditions holds:
+Let $RXT = \langle T, \delta, \varrho \rangle$ be an R-XML tree conforming a DTD $D$, and $f: S \rightarrow p$ be a functional dependency. We say that $RXT$ {\sl weakly satisfies} $f$ ($RXT \models_w f$) if one of the following conditions holds:
 \begin{enumerate}
 	\item $\langle T, \delta \rangle \models f$;
     \item for each pair of tuples $t_1$, $t_2$ of $RXT$ one of the following holds:
@@ -55,7 +55,7 @@ $(\varrho(p_i(t_1)) = false) \lor (\varrho(p_i(t_2)) = false)$;
 The repair of an R-XML tree which does not satisfy $\mathcal{FD}$ set of functional dependencies is a pair of functions $\delta'$ and $\varrho'$ such that $RXT'$ tree composed of the original tree and the repair ($RXT' = \langle T, \delta' \cdot \delta, \varrho' \cdot \varrho \rangle$) weakly satisfies FD ($RXT' \models_w \mathcal{FD}$). The composition of the R-XML tree and the repair (i.e. composition of their $\delta$ and $\varrho$ functions) is defined as follows:
 
 \begin{define}[Composition of $\delta$ functions]\label{compDelta}
-The composition of two functions $\delta_1$ and $\delta_2$ asssociating values to leaf nodes is
+The {\sl composition} of two functions $\delta_1$ and $\delta_2$ asssociating values to leaf nodes is
 \begin{displaymath}
     \delta_1 \cdot \delta_2(n) =
         \begin{cases}
@@ -66,14 +66,14 @@ The composition of two functions $\delta_1$ and $\delta_2$ asssociating values t
 \end{define}
 
 \begin{define}[Composition of $\varrho$ functions]\label{compVarrho}
-The composition of two reliability functions $\varrho_1$ and $\varrho_2$ asssociating a boolean value to nodes is $$\varrho_1 \cdot \varrho_2(n) = \varrho_1(n)\ AND\ \varrho_2(n).$$\qed
+The {\sl composition} of two reliability functions $\varrho_1$ and $\varrho_2$ asssociating a boolean value to nodes is $$\varrho_1 \cdot \varrho_2(n) = \varrho_1(n)\ AND\ \varrho_2(n).$$\qed
 \end{define}
 
 
 With a repair $\langle \delta, \varrho \rangle$ of R-XML tree and a set of labelled nodes $N$ of this tree, we denote  $Updated_{\delta}(N)$ the set of nodes modified by $\delta$. Analogously, we denote $True_{\varrho}(N) = \{n \in N| \varrho(n) = true\}$ and $False_{\varrho}(N) =\{n \in N | \varrho(n) = false\}$.
 
 \begin{define}[Minimal Repair]
-Let $RXT = \langle T, \delta, \varrho \rangle$ be an R-XML tree conforming DTD $D$, $\mathcal{FD}$ a set of functional dependencies and $R_1 = \langle \delta_1, \varrho_1 \rangle$, $R_2 = \langle \delta_2, \varrho_2 \rangle$ two repairs for $RXT$. We say that $R_1$ is smaller than $R_2$ ($R_1 \preceq R_2$) if $Updated_{\delta_1}(N_T)\ \cup\ False_{\delta_1}(N_T) \subseteq Updated_{\delta_2}(N_T)\ \cup\ False_{\delta_2}(N_T)$ and $False_{\delta_1}(N_T) \subseteq False_{\delta_2}(N_T)$. Repair $R$ is minimal if there is no repair $R' \neq R$ such that $R' \preceq R$.\qed
+Let $RXT = \langle T, \delta, \varrho \rangle$ be an R-XML tree conforming DTD $D$, $\mathcal{FD}$ a set of functional dependencies and $R_1 = \langle \delta_1, \varrho_1 \rangle$, $R_2 = \langle \delta_2, \varrho_2 \rangle$ two repairs for $RXT$. We say that $R_1$ is smaller than $R_2$ ($R_1 \preceq R_2$) if $Updated_{\delta_1}(N_T)\ \cup\ False_{\delta_1}(N_T) \subseteq Updated_{\delta_2}(N_T)\ \cup\ False_{\delta_2}(N_T)$ and $False_{\delta_1}(N_T) \subseteq False_{\delta_2}(N_T)$. Repair $R$ is {\sl minimal} if there is no repair $R' \neq R$ such that $R' \preceq R$.\qed
 \end{define}
 
 An R-XML tree is used as an input for the main algorithm computing repaired R-XML tree described in Algorithm \ref{repAlgo}. First, the algorithm computes all the possible repairs of tuples which do not satisfy a functional dependency using the function \texttt{computeRepairs()} (lines 2-6). Next, all non-minimal repairs are removed from all possible repairs (line 7). In the last step, all the repairs are merged and a unique repaired R-XML tree is returned.
@@ -174,7 +174,7 @@ We say that two sets of update operations $R_1$ and $R_2$ are equivalent ($R_1 \
 With basic repair operations for general repair of inconsistent XML document defined let us define a repair as follows:
 
 \begin{define}[Repair]
-Given an XML tree $T$, a DTD $D$ and a set of integrity constraints $IC$ (Definition \ref{integConstr}), a set of update operations $R$ is said to be a repair of $T$ (with respect to $D$ and $IC$) if $R(T) \models IC$, where $R(T)$ is application of consistent set of updates $R$ to $T$, $R(T)$ conforms $D$ and $\not \exists R' \sqsubset R$ such that $R'(T) \models IC$ and $R'(T)$ conforms $D$.
+Given an XML tree $T$, a DTD $D$ and a set of integrity constraints $IC$ (Definition \ref{integConstr}), a set of update operations $R$ is said to be a {\sl repair} of $T$ (with respect to $D$ and $IC$) if $R(T) \models IC$, where $R(T)$ is application of consistent set of updates $R$ to $T$, $R(T)$ conforms $D$ and $\not \exists R' \sqsubset R$ such that $R'(T) \models IC$ and $R'(T)$ conforms $D$.
 \end{define}
 
 With further investigation, the authors discover that the problem of deciding whether there exists a repair for a XML document in the presence of DTD with functional dependencies is undecidable. Therefore they consider restricted forms of repairs, more specifically cleaning and completing repairs.

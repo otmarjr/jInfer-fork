@@ -5,7 +5,7 @@ In this chapter basic definitions necessary in the following chapters are placed
 
 \section{XML Trees and DTDs}
 \begin{define}[Tree]
-Being given an alphabet of nodes $\mathbb{N}$ and an alphabet of node labels $\Sigma$, a {\sl tree} $T$ over $\mathbb{N}$ and $\Sigma$ is a tuple $(r_T, N_T, E_T, \lambda_T)$, where $N_T \subseteq \mathbb{N}$ is the set of nodes, $\lambda_T : N_T \to \Sigma$ is a node labelling function, $r_T \in N_T$ is the distinguished root of $T$, and $E_T \subseteq N_T \times N_T$ is a set of edges such that starting from any node $n_i \in N_T$ it is possible to reach any other node $n_j \in N_T$, walking through a sequence of edges $e_1,\dots,e_k$ which are connected and acyclic.
+Being given an alphabet of nodes $\mathbb{N}$ and an alphabet of node labels $\Sigma$, a {\sl tree} $T$ over $\mathbb{N}$ and $\Sigma$ is a tuple $(r_T, N_T, E_T, \lambda_T)$, where $N_T \subseteq \mathbb{N}$ is the set of nodes, $\lambda_T : N_T \to \Sigma$ is a node labelling function, $r_T \in N_T$ is the distinguished root of $T$, and $E_T \subseteq N_T \times N_T$ is a set of edges such that starting from any node $n_i \in N_T$ it is possible to reach any other node $n_j \in N_T$, walking through a sequence of edges $e_1,\dots,e_k$ which are connected and acyclic.\qed
 \end{define}
 
 \noindent Let us also denote the set of leaf nodes as $Leaves(T)$ and the set of trees defined over an alphabet of node labels $\Sigma$ as $T_\Sigma$.
@@ -123,7 +123,7 @@ A conjunction of path and built-in atoms $C = [X_1]p_1[Y_1] \cap \dots \cap [X_n
 A rootless tree formula is an expression of the form $p(\Phi_1 \land \dots \land \Phi_k)$ where $\Phi_i$ is a rootless path formula (expression of the form $p[y]$ where $p$ is a path expression and $y$ is a term) or a rootless tree formula and $p$ is a path expression. A tree atom is an expression of the form $[x]T$ where $T$ is a rootless tree formula and $x$ is a term.
 
 \begin{define}[XML Integrity Constraint]\label{integConstr}
-An XML constraint is a formula of the form: $$(\forall X)[\Phi(X)\supset (\exists Y_1)\Psi_1(X,Y_1) \lor \dots \lor (\exists Y_k)(X,Y_k)]$$
+An {\sl XML constraint} is a formula of the form: $$(\forall X)[\Phi(X)\supset (\exists Y_1)\Psi_1(X,Y_1) \lor \dots \lor (\exists Y_k)(X,Y_k)]$$
 where $X,Y_1,\dots, Y_k$ denote distinct sets of universally and existentially quantified variables, $\Phi(X)$ and $\Phi(X) \land \Psi_i(X, Y_i) (\forall i \in [1..k])$ are safe conjunctions of built-in and tree atoms.\qed
 \end{define}
 
@@ -153,14 +153,14 @@ Consider the XML tree $XT$ in Fig. \ref{example1}. The subtrees of $XT$ shown in
 
 \begin{figure}[H]
     \centering\includegraphics[width=\textwidth]{tuples}
-	\caption{Two tree tuples of the XML tree in Fig. \ref{example1}} \label{tuples}
+	\caption[Two tree tuples of the XML tree]{Two tree tuples of the XML tree in Fig. \ref{example1}} \label{tuples}
 \end{figure}
 
 \begin{figure}[H]
     \centering
     \subfloat[]{\label{nottuple1}\includegraphics[scale=0.6]{nottuples1}}
     \subfloat[]{\label{nottuple2}\includegraphics[scale=0.6]{nottuples2}}
-	\caption{Two subtrees of the XML tree in Fig. \ref{example1} which are not tree tuples}
+	\caption[Two subtrees of the XML tree]{Two subtrees of the XML tree in Fig. \ref{example1} which are not tree tuples}
     \label{nottuples}
 \end{figure}
 

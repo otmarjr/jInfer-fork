@@ -72,7 +72,7 @@ $/bib/book/written\_by/author/@ano$ & 0.1\\
 A {\sl RW-XML tree} is a pair $RWXT = \langle RXT, \omega \rangle$, where $RXT$ is an R-XML tree and $\omega$ is a weight function from $N_T$ to $[0,1]$.\qed
 \end{define}
 
-After creating the RW-XML tree from input XML data, a set of tree tuples (defined in Definition r\ref{treeTuple}) is constructed. Since the set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer to the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on constructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
+After creating the RW-XML tree from input XML data, a set of tree tuples (defined in Definition \ref{treeTuple}) is constructed. Since the set $paths(D)$, containing all possible paths defined in DTD $D$, can be infinite (DTD can define recursive structure of elements), the actual content of $paths(D)$ is modified to reflect the current structure of the RW-XML tree. Since definition of a tree tuple says that answer to the path $p$ contains at most one element, our modification of $paths(D)$ has no effect on constructing tree tuples if a DTD defines some optional path which is not defined for the RW-XML tree $RWXT$ (the set $p(RWXT)$ is empty).
 
 Functional dependencies as defined in Definition \ref{fd1} consist of paths described with XPath. As was described before, these paths can only have basic structure shown in Example \ref{pathsExample}.
 
@@ -159,7 +159,7 @@ Consider the XML tree from Fig. \ref{example1} and a repair candidate, which mar
 Since each repair candidate consists of a set of nodes which are modified (marked as unreliable or having a modified value), we can compute the cost of each candidate. It is important to say that unlike in original approach, we do not prefer repair candidates that modify the value of the nodes to those marking nodes as unreliable. Therefore we added a coefficient $k$ to the calculation of the repair candidate cost, so that the priority of repair candidate marking node as unreliable can be achieved. The definition of repair candidate cost is as follows:
 
 \begin{define}[Repair Candidate Cost]
-Being given an RW-XML tree $RXT$ and a repair candidate $R$, we define the cost of $R$ as:
+Being given an RW-XML tree $RXT$ and a repair candidate $R$, we define the {\sl cost} of $R$ as:
 $$cost(R) = \sum_{u \in Modified_\delta(R)} \omega(u) + \sum_{v \in Modified_\varrho(R)} \omega(v) \cdot k,$$
 where $k$ is the priority of repairing the candidate by modifying the node value in constrast to marking it unreliable.\qed
 \end{define}

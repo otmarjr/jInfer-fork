@@ -76,7 +76,7 @@
 \def\mfpracoviste{}
 \def\mfauthor{Michal Švirec}
 \def\mfadvisor{RNDr. Irena Mlýnková, Ph.D.}
-\def\mfplacedate{Praha, 2011}
+\def\mfplacedate{Prague, 2011}
 
 %% Balíček hyperref, kterým jdou vyrábět klikací odkazy v PDF,
 %% ale hlavně ho pouľíváme k uloľení metadat do PDF (včetně obsahu).
@@ -325,7 +325,17 @@ Keywords: XML, functional dependency, functional dependencies violations, violat
 \bibliography{literatura}
 
 %%% Tabulky v diplomové práci, existují-li.
-\chapwithtoc{List of Tables}
+%\chapwithtoc{List of Tables}
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
 
 \appendix
 \include{appendixA}

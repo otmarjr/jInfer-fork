@@ -23,7 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.DeterministicFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomaton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +96,9 @@ public class Greedy<T> implements AutomatonSimplifier<T> {
         }
       }
     } while (!mergableStates.isEmpty());
-    return inputAutomaton;
+    DefectiveAutomaton<T> a = (new DefectiveAutomaton<T>(inputAutomaton));
+    a.minimize();
+    return a;
   }
 
   /**

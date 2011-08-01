@@ -42,6 +42,7 @@
 
 %% Pouľité kódování znaků: obvykle latin2, cp1250 nebo utf8:
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
 %% Ostatní balíčky
 \usepackage{graphicx}
@@ -181,7 +182,7 @@ Specialization: & Software Systems \\
 \openright
 
 \noindent
-Podakovanie.
+I would like to thank my supervisor RNDr. Irena Mlýnková, Ph.D., for her helpful advices, corrections and suggestions.
 
 \newpage
 
@@ -217,7 +218,7 @@ Signature
 \setlength\parskip{5mm}
 
 Název práce:
-\mftitle
+Efektívna detekcia integritných obmedzení v XML
 % přesně dle zadání
 
 Autor:
@@ -228,18 +229,25 @@ Katedra softwarového inženýrství
 % dle Organizační struktury MFF UK
 
 Vedoucí diplomové práce:
-\mfadvisor, Katedra softwarového inženýrství
+\mfadvisor
 
 % dle Organizační struktury MFF UK, případně plný název pracoviątě mimo MFF UK
 
 Abstrakt:
-Najviac používanými integritnými obmedzeniami v XML sú primárne a cudzie kľúče. Okrem nich však poznáme aj iný typ integritných obmedzení, a to funkčné závislosti. Tak ako pre relačné databázy,
+Znalosť integritných obmedzení v XML dátach je jeden z dôležitých aspektov ich spracovania. Avšak aj keď tieto integritné obmedzenia pre dané dáta poznáme, je častým javom, že dané dáta sú voči ním nekonzistentné. Z tohto dôvodu vznikla snaha detekovať tieto nekonzistentosti dát a následne ich opravovať. Táto práca rozširuje a zdokonaľuje doterajšie prístupy opráv XML dokumentov porušujúcich definované integritné obmedzenia, konkrétne takzvané funkčné závislosti. Práca prináša algoritmus začleňujúci váhový model a taktiež zapája užívateľa do procesu hľadania a následného aplikovania vhodnej opravy nekonzistentných XML dokumentov. Súčasťou práce sú experimentálne výsledky.
+
 % abstrakt v rozsahu 80-200 slov; nejedná se vąak o opis zadání diplomové práce
 
 Klíčová slova: XML, funkčná závislosť, porušenie funkčných závislostí, oprava porušení
 % 3 aľ 5 klíčových slov
 
-\vss}\nobreak\vbox to 0.49\vsize{
+
+\vss}
+
+
+\newpage
+
+\vbox to 0.5\vsize{
 \setlength\parindent{0mm}
 \setlength\parskip{5mm}
 
@@ -255,12 +263,12 @@ Department:
 % dle Organizační struktury MFF UK v angličtině
 
 Supervisor:
-\mfadvisor, \mfkatedra
+\mfadvisor
 % dle Organizační struktury MFF UK, případně plný název pracoviątě
 % mimo MFF UK v angličtině
 
 Abstract:
-
+Knowledge of integrity constraints covered in the XML data is an important aspect of efficient data processing. However, although the integrity constraints are defined for the given data, it is a common phenomenon that data violate the predefined set of constraints. Therefore detection of these inconsistencies and consecutive repair has emerged. This work extends and refines recent approaches to repairing XML documents violating defined set of integrity constraints, specifically so-called functional dependencies. The work propose the repair algorithm incorporating the weight model and also involve user into the process of detection and subsequent application of appropriate repair of inconsistent XML documents. Experimental results are part of the work.
 % abstrakt v rozsahu 80-200 slov v angličtině; nejedná se vąak o překlad
 % zadání diplomové práce
 

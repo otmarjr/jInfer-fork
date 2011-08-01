@@ -25,6 +25,8 @@ import cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation.NestedConcate
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained.Chained;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.chained.ChainedFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.DefectiveMDLFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.greedymdl.GreedyMDLFactory;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -159,8 +161,8 @@ public class AutomatonSimplifierChainedPropertiesPanel extends AbstractPropertie
     }
     final String _count = properties.getProperty(ChainedFactory.PROPERTIES_COUNT, "notJebHojid4");
     if ("notJebHojid4".equals(_count)) {
-      dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, EmptyChildrenFactory.NAME));
-      dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, NestedConcatenationFactory.NAME));
+      dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, GreedyMDLFactory.NAME));
+      dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(AutomatonSimplifierFactory.class, DefectiveMDLFactory.NAME));
     } else {
       int count;
       try {

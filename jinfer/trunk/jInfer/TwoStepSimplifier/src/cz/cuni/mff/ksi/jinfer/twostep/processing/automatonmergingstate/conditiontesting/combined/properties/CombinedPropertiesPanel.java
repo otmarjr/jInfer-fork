@@ -25,6 +25,8 @@ import cz.cuni.mff.ksi.jinfer.twostep.cleaning.emptychildren.EmptyChildrenFactor
 import cz.cuni.mff.ksi.jinfer.twostep.cleaning.nestedconcatenation.NestedConcatenationFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.combined.CombinedFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.khcontext.KHContextFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings.SKStringsFactory;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -159,8 +161,8 @@ public class CombinedPropertiesPanel extends AbstractPropertiesPanel {
     }
     final String _count = properties.getProperty(CombinedFactory.PROPERTIES_COUNT, "notJebHojid4");
     if ("notJebHojid4".equals(_count)) {
-      dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, EmptyChildrenFactory.NAME));
-      dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, NestedConcatenationFactory.NAME));
+      dynamicComponents.get(0).setSelectedItem(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, KHContextFactory.NAME));
+      dynamicComponents.get(1).setSelectedItem(ModuleSelectionHelper.lookupImpl(MergeConditionTesterFactory.class, SKStringsFactory.NAME));
     } else {
       int count;
       try {

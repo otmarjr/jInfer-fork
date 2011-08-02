@@ -22,9 +22,9 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTesterFactory;
-import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.deterministic.DeterministicFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluator;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.evaluating.AutomatonEvaluatorFactory;
+import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.DefectiveAutomaton;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -99,14 +99,17 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
   public Automaton<T> simplify(final Automaton<T> inputAutomaton,
           final SymbolToString<T> symbolToString, List<List<T>> inputStrings) throws InterruptedException {
     SortedMap<Double, Automaton<T>> solutions = new TreeMap<Double, Automaton<T>>();
+    SortedMap<Double, Automaton<T>> solutions2 = new TreeMap<Double, Automaton<T>>();
     this.evaluator.setInputStrings(inputStrings);
     solutions.put(this.evaluator.evaluate(inputAutomaton), inputAutomaton);
     final List<List<List<State<T>>>> mergableStates = new ArrayList<List<List<State<T>>>>();
 
     int stagger = 0;
-    double oldBest = solutions.firstKey();
     do {
-      Automaton<T> actual = solutions.get(myRandom(solutions.keySet()));
+      Double aKey = solutions.lastKey();// myRandom(solutions.keySet());
+      Automaton<T> actual = solutions.get(aKey);
+      solutions.remove(aKey);
+      solutions2.put(aKey, actual);
       mergableStates.clear();
       if (Thread.interrupted()) {
         throw new InterruptedException();
@@ -123,20 +126,20 @@ public class HeuristicMDL<T> implements AutomatonSimplifier<T> {
           }
 
           double thisD = this.evaluator.evaluate(newAutomaton);
-          if (thisD < solutions.lastKey()) {
-            solutions.put(thisD, newAutomaton);
-          }
+          solutions.put(thisD, newAutomaton);
           if (solutions.size() > 10) {
             solutions.remove(solutions.lastKey());
           }
         }
       }
-      if (!(solutions.firstKey() < oldBest)) {
+      if (solutions.isEmpty()||(!(solutions.firstKey() < solutions2.firstKey()))) {
         stagger++;
       }
-      oldBest = solutions.firstKey();
-    } while (stagger < 10);
-    return solutions.get(solutions.firstKey());
+    } while ((stagger < 10)&&(!solutions.isEmpty()));
+    solutions2.putAll(solutions);
+    DefectiveAutomaton<T> a = (new DefectiveAutomaton<T>(solutions2.get(solutions2.firstKey())));
+    a.minimize();
+    return a;
   }
 
   private Double myRandom(Set<Double> srt) {

@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifyi
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.Suspection;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.defective.defectivemdl.suspection.SuspectionFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.determinist.Determinist;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -80,20 +81,22 @@ public class DefectiveMDL<T> implements AutomatonSimplifier<T> {
     List<List<T>> suspected;
     while (null != (suspected = this.suspection.getNextSuspectedInputStrings())) {
       double mdl = evaluator.evaluate(stepAutomaton);
-      for (List<T> inputString : suspected) {
+      List<List<T>> sspected = new ArrayList<List<T>>(suspected.size());
+      sspected.addAll(suspected);
+      for (List<T> inputString : sspected) {
         stepAutomaton.tryRemoveInputString(inputString);
       }
       double mdl2 = evaluator.evaluate(stepAutomaton);
-      for (List<T> inputString : suspected) {
+      for (List<T> inputString : sspected) {
         LOG.error("string: " + inputString.toString());
       }
       LOG.error(" mdl:" + String.valueOf(mdl) + " mdl2: " + String.valueOf(mdl2));
       if (mdl2 >= mdl) {
-        for (List<T> inputString : suspected) {
+        for (List<T> inputString : sspected) {
           stepAutomaton.undoRemoveInputString(inputString);
         }
       } else {
-        LOG.error("Removed strings");
+        LOG.fatal("Removed strings");
       }
     }
     stepAutomaton.minimize();

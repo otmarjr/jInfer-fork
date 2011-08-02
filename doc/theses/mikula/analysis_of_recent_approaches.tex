@@ -14,12 +14,20 @@ The process of inference commonly used by a significant number of approaches can
 \subsection{XTRACT}
 The XTRACT \todo{bibref} system is an example of \emph{heuristic} \emph{merging state algorithm} creating the result in DTD. Its process of inference consists of three steps:
 \begin{enumerate}
-\item Generalization - Generates a set of DTD candidates by searching the input for certain patterns and generalising corresponding parts using regular expressions.
+\item Generalization - Generates a set of DTD candidates by searching the input for certain patterns and generalising corresponding fragments using regular expressions.
 \item Factoring - Groups of generalized candidate DTDs are factorized to a new ones by finding common sub-expressions to make them more concise.
-\item Minimum Description Length (MDL) Principle - Selecting a near-optimal generalized DTD from the set of all generalized candidate DTDs.
+\item Minimum Description Length (MDL) Principle - Composing a near-optimal DTD schema from the set of all generalized candidate DTDs.
 \end{enumerate}
 
-\todo[inline]{TODO}
+MDL is the most important step. It ranks each DTD candidate using two aspects - conciseness and preciseness. Conciseness of a DTD is expressed using the number of bits required to describe the DTD (the smaller, the better). Preciseness of a DTD is expressed using the number of bits required for description of the input data using the DTD. In other words, the more accurately the structure is described, the fewer bits are required. Since the two conditions are contradictory, their balancing brings reasonable and realistic results.
+
+\subsection{SchemaMiner}
+The SchemaMiner system \todo{bibref} is an example of \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focusses on inferring elements with the same name but different structure and unordered sequences.
+
+The elements with the same name but different content are supported only in XSDs and their inference requires exploitation of more sophisticated approaches than combining productions with the same element
+type. On the other hand, although the unordered sequences are a classical example of XSD “syntactic sugar”, their exploitation enables to define simple and, hence, realistic and usable schemas.
+
+\todo[inline]{Moze byt takto? Nejake dalsie pristupy?}
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
 This methods tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just these queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.

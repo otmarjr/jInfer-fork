@@ -174,7 +174,7 @@ We say that two sets of update operations $R_1$ and $R_2$ are equivalent ($R_1 \
 With basic repair operations for general repair of inconsistent XML document defined let us define a repair as follows:
 
 \begin{define}[Repair]
-Given an XML tree $T$, a DTD $D$ and a set of integrity constraints $IC$ (Definition \ref{integConstr}), a set of update operations $R$ is said to be a {\sl repair} of $T$ (with respect to $D$ and $IC$) if $R(T) \models IC$, where $R(T)$ is application of consistent set of updates $R$ to $T$, $R(T)$ conforms $D$ and $\not \exists R' \sqsubset R$ such that $R'(T) \models IC$ and $R'(T)$ conforms $D$.
+Given an XML tree $T$, a DTD $D$ and a set of integrity constraints $IC$ (Definition \ref{integConstr}), a set of update operations $R$ is said to be a {\sl repair} of $T$ (with respect to $D$ and $IC$) if $R(T) \models IC$, where $R(T)$ is application of consistent set of updates $R$ to $T$, $R(T)$ conforms $D$ and $\not \exists R' \sqsubset R$ such that $R'(T) \models IC$ and $R'(T)$ conforms $D$.\qed
 \end{define}
 
 With further investigation, the authors discover that the problem of deciding whether there exists a repair for a XML document in the presence of DTD with functional dependencies is undecidable. Therefore they consider restricted forms of repairs, more specifically cleaning and completing repairs.
@@ -210,7 +210,7 @@ A weighted hypergraph is used in the first part of the repair algorithm as a too
 
 To actually resolve the problem of repairing FD violations in an XML document, the authors convert this problem into well-known problem of weighted vertex cover for hypergraph \cite{ApproxAlgo}. Let us have hypergraph $g = (V,E)$, where each hyperedge $e \in E$ is a set of value nodes which violate some FD. In a repair of an inconsistent XML document, for each hyperedge at least one value node is modified, therefore it is essential to find a vertex cover (VC) for $g$, which is a set $S \subseteq V$, such that for all edges $e \in E$, $S \cap e \neq \emptyset$. Since the hypergraph is weighted, we can define weight of VC as the total weight of all vertices in $S$.\\
 
-\begin{algorithm}[H]
+\begin{algorithm}
 \caption{Fix-Initial-Conflicts}
 \label{fixInit}
 \begin{algorithmic}[1]

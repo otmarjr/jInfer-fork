@@ -1,6 +1,6 @@
 \chapter{Experimental Results}
 
-In this chapter, experimental results of the \texttt{FDRepairer} extension of the jInfer framework are presented. Set of documents and functional dependencies have been provided as an input and results from the former algorithm have been compared with results from \texttt{FDRepairer}. Documents in provided datasets are split into real-world and synthetic XML documents.
+In this chapter, experimental results of the \texttt{FDRepairer} module of the jInfer framework are presented. Set of documents and functional dependencies have been provided as an input and results from the former algorithm have been compared with results from \texttt{FDRepairer}. Documents in provided datasets are split into real-world and synthetic XML documents.
 
 \section{Datasets}
 
@@ -34,7 +34,7 @@ The first real-world dataset originates from the XML data repository \\(\url{htt
     \label{courseDTD}
 \end{figure}
 
-The second dataset is a set of actors of IMDB database obtained from the Niagara data source (\url{http://www.cs.wisc.edu/niagara/data.html}). The dataset consists of a set of authors, where for each author a set of movies he played in is listed. DTD of this dataset is shown in Fig. \ref{actorsDTD}. For this dataset, we defined FD as follows: For each two authors, which played in the movie with the same name, the year of release of this movie must be the same.
+The second dataset is a set of actors of IMDB database obtained from the Niagara data source (\url{http://www.cs.wisc.edu/niagara/data.html}). The dataset consists of a set of authors, where for each author a set of movies he played in is listed. DTD of this dataset is shown in Fig. \ref{actorsDTD}. For this dataset, we defined FD as follows: \emph{For each two authors, which played in the movie with the same name, the year of release of this movie must be the same}.
 
 \begin{figure}[H]
     \begin{verbatim}

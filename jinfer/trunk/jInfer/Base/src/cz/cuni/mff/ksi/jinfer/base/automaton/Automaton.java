@@ -212,6 +212,7 @@ public class Automaton<T> {
         final State<T> newState = this.createNewState();
         final Step<T> newStep = this.createNewStep(symbol, xState, newState);
         assert newStep.getDestination().equals(newState);
+        newStep.addInputString(symbolString);
         xState = newStep.getDestination();
       }
     }

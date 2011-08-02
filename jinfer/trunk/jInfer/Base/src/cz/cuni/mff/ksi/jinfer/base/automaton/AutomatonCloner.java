@@ -17,8 +17,10 @@
 
 package cz.cuni.mff.ksi.jinfer.base.automaton;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -86,6 +88,13 @@ public class AutomatonCloner<A, B> {
                 anotherStep.getUseCount(),
                 anotherStep.getMinUseCount()
                 );
+        for (List<A> str : anotherStep.getInputStrings()) {
+          List<B> j = new ArrayList<B>(str.size());
+          for (A i : str) {
+            j.add(symbolConverter.convertSymbol(i));
+          }
+          newStep.addInputString(j);
+        }
 
         newAutomaton.delta.get(myState).add(newStep);
         newAutomaton.reverseDelta.get(newStep.getDestination()).add(newStep);

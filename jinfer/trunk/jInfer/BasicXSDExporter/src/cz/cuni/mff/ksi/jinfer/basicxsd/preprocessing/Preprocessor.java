@@ -135,7 +135,7 @@ public final class Preprocessor {
 
     // initialize counts to 0s
     for (Element e : toposortedElements) {
-      occurrenceCounts.put(e.getName(), 0);
+      occurrenceCounts.put(e.getName(), 1);
     }
 
     // run recursion from the top element

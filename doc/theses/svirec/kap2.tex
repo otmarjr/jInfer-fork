@@ -107,7 +107,7 @@ paths(D) &= \left\{/bib, /bib/book, /bib/book/written\_by,\right.\nonumber\\
 &\qquad \left. /bib/book/written\_by/author/name, \right.\nonumber\\
 &\qquad \left. /bib/book/written\_by/author/name/S, \right.\nonumber\\
 &\qquad \left. /bib/book/written\_by/author/@ano, \right.\nonumber\\
-&\qquad \left. /bib/book/title\nonumber\right\}
+&\qquad \left. /bib/book/title, /bib/book/title/S\nonumber\right\}
 \end{align}\qed
 \end{example}
 
@@ -133,7 +133,7 @@ Consider the XML tree $XT$ from Example \ref{example1ref}. Thereafter the integr
 \begin{align*}
 \forall(X)&[[root]/bib[X] \supset\\
 &\exists(Z_1, Z_2)([X]/book/title/S[Z_1] \land [X]/book/title/S[Z_2] \land Z_1 \not = Z_2)]
-\end{align*}\qed
+\end{align*}
 \end{example}
 
 \section{Functional Dependencies}

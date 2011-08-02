@@ -39,6 +39,8 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.filesystems.FileUtil;
+import org.openide.util.Exceptions;
 
 /**
  * Class for storing and loading {@link Input} into/from project folder.
@@ -57,7 +59,7 @@ public final class InputFiles {
    * @param outputStream The Output Stream.
    * @param input Input to store into provided Output Stream.
    */
-  public static void store(final OutputStream outputStream, final Input input) {
+  public static void store(final OutputStream outputStream, final Input input, final File projectDir) {
     final ObjectFactory objFactory = new ObjectFactory();
 
     final Tjinfer jinfer = objFactory.createTjinfer();
@@ -73,11 +75,11 @@ public final class InputFiles {
 
     final Tfds fds = objFactory.createTfds();
     jinfer.setFds(fds);
-    
-    writeCollection(objFactory, input.getDocuments(), xml.getFile());
-    writeCollection(objFactory, input.getSchemas(), schemas.getFile());
-    writeCollection(objFactory, input.getQueries(), queries.getFile());
-    writeCollection(objFactory, input.getFunctionalDependencies(), fds.getFile());
+
+    writeCollection(objFactory, input.getDocuments(), xml.getFile(), projectDir);
+    writeCollection(objFactory, input.getSchemas(), schemas.getFile(), projectDir);
+    writeCollection(objFactory, input.getQueries(), queries.getFile(), projectDir);
+    writeCollection(objFactory, input.getFunctionalDependencies(), fds.getFile(), projectDir);
 
     final JAXBElement<Tjinfer> jinferInput = objFactory.createJinferinput(jinfer);
 
@@ -110,9 +112,14 @@ public final class InputFiles {
    * @param inputFiles to be added to collection.
    * @param collection to add files to.
    */
-  private static void readCollection(final List<Tfile> inputFiles, final Collection<File> collection) {
+  private static void readCollection(final List<Tfile> inputFiles, final Collection<File> collection, final File projectDir) {
     for (Tfile tfile : inputFiles) {
-      final File file = new File(tfile.getLoc());
+      File file = new File(tfile.getLoc());
+      if (!file.isAbsolute()) {
+        file = new File(projectDir, file.getPath());
+        file = FileUtil.normalizeFile(file);
+      }
+
       if (file.exists()) {
         collection.add(file);
       }
@@ -127,10 +134,26 @@ public final class InputFiles {
    * @param OutputFiles list to add file type.
    */
   private static void writeCollection(final ObjectFactory objFactory, final Collection<File> collection,
-          final List<Tfile> OutputFiles) {
+          final List<Tfile> OutputFiles, final File projectDir) {
     for (File file : collection) {
       final Tfile fileType = objFactory.createTfile();
-      fileType.setLoc(file.getAbsolutePath());
+      boolean isRelative = false;
+      try {
+        String canonicalPath = file.getCanonicalPath();
+        String canonicalDirPath = projectDir.getCanonicalPath();
+        if (file.exists() && canonicalPath.startsWith(canonicalDirPath)) {
+          file = new File("./" + canonicalPath.substring(canonicalDirPath.length()));
+          isRelative = true;
+        }
+      } catch (IOException ex) {
+        Exceptions.printStackTrace(ex);
+      }
+
+      if (isRelative) {
+        fileType.setLoc(file.getPath());
+      } else {
+        fileType.setLoc(file.getAbsolutePath());
+      }
       OutputFiles.add(fileType);
     }
   }
@@ -142,7 +165,7 @@ public final class InputFiles {
    * @param input Input to store data.
    * @throws IOException if an error occurred when reading from the Input Stream.
    */
-  public static void load(final InputStream inputStream, final Input input) throws IOException {
+  public static void load(final InputStream inputStream, final Input input, final File projectDir) throws IOException {
     final ClassLoader orig = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(Tjinfer.class.getClassLoader()); //NOPMD
     try {
@@ -153,11 +176,11 @@ public final class InputFiles {
               inputStream);
       final Tjinfer jinfer = jinferElement.getValue();
 
-      readCollection(jinfer.getXml().getFile(), input.getDocuments());
-      readCollection(jinfer.getSchemas().getFile(), input.getSchemas());
-      readCollection(jinfer.getQueries().getFile(), input.getQueries());
+      readCollection(jinfer.getXml().getFile(), input.getDocuments(), projectDir);
+      readCollection(jinfer.getSchemas().getFile(), input.getSchemas(), projectDir);
+      readCollection(jinfer.getQueries().getFile(), input.getQueries(), projectDir);
       if (jinfer.getFds() != null) {
-        readCollection(jinfer.getFds().getFile(), input.getFunctionalDependencies());
+        readCollection(jinfer.getFds().getFile(), input.getFunctionalDependencies(), projectDir);
       }
 
       if (inputStream != null) {

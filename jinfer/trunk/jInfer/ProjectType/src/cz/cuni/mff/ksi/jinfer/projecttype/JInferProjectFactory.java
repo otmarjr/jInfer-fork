@@ -97,6 +97,6 @@ public class JInferProjectFactory implements ProjectFactory {
 
     final Input input = project.getLookup().lookup(Input.class);
     f = FileUtil.toFile(inputFilesFile);
-    InputFiles.store(new FileOutputStream(f), input);
+    InputFiles.store(new FileOutputStream(f), input, FileUtil.toFile(projectRoot));
   }
 }

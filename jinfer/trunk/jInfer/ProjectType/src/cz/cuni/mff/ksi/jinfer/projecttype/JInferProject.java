@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ProjectState;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.Lookups;
 
@@ -149,7 +150,7 @@ public class JInferProject implements Project {
       input = new Input(new InputFilesList(), new InputFilesList(), new InputFilesList(), new InputFilesList());
       if (inputFilesFileOb != null && inputFilesFileOb.isData()) {
         try {
-          InputFiles.load(inputFilesFileOb.getInputStream(), input);
+          InputFiles.load(inputFilesFileOb.getInputStream(), input, FileUtil.toFile(getProjectDirectory()));
         } catch (IOException ex) {
           LOG.error(ex);
         }

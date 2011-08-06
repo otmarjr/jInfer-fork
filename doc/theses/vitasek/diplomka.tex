@@ -332,7 +332,7 @@ The pseudocode is listed (cited from \cite{fidax} with trivial modifications wit
   \IF{$w(m) > \sum_{p \in S} w(p)$}
     \STATE remove all $p \in S$ from $C'$
   \ELSE
-  	\STATE remove $m$ from $C'$
+    \STATE remove $m$ from $C'$
   \ENDIF
 \ENDFOR
 \RETURN $C'$
@@ -354,13 +354,13 @@ See listing \ref{ch-random}.
 \ENSURE pool of $N$ feasible solutions
 \STATE $r \gets $ empty pool
 \FOR{$i = 1 \to N$} 
-\STATE \COMMENT{create 1 solution}
-\STATE $s \gets $ empty solution
-\WHILE{$s$ is a feasible ID set}
-\STATE $a \gets $ pick at random from $C \textbackslash S$
-\STATE $s \gets s \cup a$
-\ENDWHILE
-\STATE $r \gets r \cup s$
+  \STATE \COMMENT{create 1 solution}
+  \STATE $s \gets $ empty solution
+  \WHILE{$s$ is a feasible ID set}
+    \STATE $a \gets $ pick at random from $C \textbackslash S$
+    \STATE $s \gets s \cup a$
+  \ENDWHILE
+  \STATE $r \gets r \cup s$
 \ENDFOR
 \RETURN $r$
 \end{algorithmic}
@@ -381,25 +381,25 @@ See listing \ref{ch-fuzzy}.
 \ENSURE pool of $N$ feasible solutions
 \STATE $r \gets $ empty pool
 \FOR{$i = 1 \to N$} 
-\STATE \COMMENT{create 1 solution}
-\STATE $s \gets $ empty solution
-\STATE $C' \gets C$
+  \STATE \COMMENT{create 1 solution}
+  \STATE $s \gets $ empty solution
+  \STATE $C' \gets C$
 
-\WHILE{$C' $ not empty}
-\STATE $a \gets $ pick at weighted random from $C'$
-\IF{$s \cup a$ is a feasible ID set}
-\STATE $s \gets s \cup a$
-\STATE $C' \gets C' \textbackslash a$
-\ENDIF
-\FORALL{$c \in C'$}
-\IF{$s \cup c $ is \textbf{not} a feasible ID set} 
-\STATE \COMMENT {if $c$ cannot be possibly added anymore}
-\STATE $C' \gets C' \textbackslash c$
-\ENDIF
-\ENDFOR
-\ENDWHILE
+  \WHILE{$C' $ not empty}
+    \STATE $a \gets $ pick at weighted random from $C'$
+    \IF{$s \cup a$ is a feasible ID set}
+      \STATE $s \gets s \cup a$
+      \STATE $C' \gets C' \textbackslash a$
+    \ENDIF
+    \FORALL{$c \in C'$}
+      \IF{$s \cup c $ is \textbf{not} a feasible ID set}
+        \STATE \COMMENT {if $c$ cannot be possibly added anymore}
+        \STATE $C' \gets C' \textbackslash c$
+      \ENDIF
+    \ENDFOR
+  \ENDWHILE
 
-\STATE $r \gets r + s$
+  \STATE $r \gets r + s$
 \ENDFOR
 \RETURN $r$
 \end{algorithmic}
@@ -420,9 +420,9 @@ See listing \ref{ch-incremental}.
 \STATE $C' \gets $ sort $C$ by decreasing weight
 \STATE $s \gets $ empty solution
 \FORALL{$c \in C'$}
-\IF{$s \cup c$ is a feasible ID set}
-\STATE $s \gets s + c$
-\ENDIF
+  \IF{$s \cup c$ is a feasible ID set}
+    \STATE $s \gets s + c$
+  \ENDIF
 \ENDFOR
 \RETURN $s$
 \end{algorithmic}
@@ -619,7 +619,7 @@ TODO describe all the inputs (take it from the mindmap), describe how the output
 TODO types of data:
 \begin{itemize}
 	\item Realistic 
-  \item Realistic with artificial attributes
+	\item Realistic with artificial attributes
 	\item Artificial
 \end{itemize}
 

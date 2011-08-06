@@ -226,7 +226,7 @@ Keywords: XML, ID attributes, inference
 
 Along with technologies like JSON, SQL/noSQL databases and bla, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema to describe XML structure already exist since a long time, most of the documents use outdated or no schema at all (link Vosta's Even ant can create...). To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in A, B, C, jInfer. But the schema is not the only constraint that can be imposed on an XML document: the concept of \textit{keys} and \textit{foreign keys}, well known from the relational database world, applies here as well. One could go even further and try to find even more sophisticated relations in the data, such as \textit{functional dependencies} (link Sviro).
 
-This work will be building upon the achievements of jInfer schema inference framework, expanding its possibilities in the field of search for \textit{key-} and \textit{foreign key-}like structures in existing XML documents.
+This work will be building upon the achievements of jInfer schema inference framework (TODO link Anti's improvements in schema inference), expanding its possibilities in the field of search for \textit{key-} and \textit{foreign key-}like structures in existing XML documents.
 
 TODO Integrity constraints can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro), etc.
 We will focus on the first kind - ID and IDREF attributes.
@@ -314,7 +314,7 @@ TODO construction heuristics are heus that provide us with at least some solutio
 
 TODO this is a heuristic too! We can start with it!
 
-The pseudocode is listed (cited from \cite{fidax} with trivial modifications) in \ref{ch-fidax}.
+The pseudocode is listed (cited from \cite{fidax} with trivial modifications without changing the logic) in \ref{ch-fidax}.
 
 \begin{algorithm}
 \caption{FIDAX CH}
@@ -606,6 +606,10 @@ See listing \ref{ih-localbranching}.
 \end{algorithmic}
 \end{algorithm}
 
+\section{IDREF}
+
+TODO describe the (rather trivial) algorithm of finding IDREF attributes once we have the ID set
+
 \chapter{Experiments}
 
 TODO describe all the inputs (take it from the mindmap), describe how the output looks (sample trace - link to appendix)
@@ -638,20 +642,23 @@ TODO talk about some "density".
 \section{Experimental Setup}
 
 TODO we will be using jInfer and its module AttributeStats see \ref{jInfer} and \ref{attrstats}.
+TODO describe how to create a model, describe how we get IGG, link BasicIGG
 
 \section{Experimental Results}
 
 TODO following experiments + more
 
 \begin{itemize}
-  \item Which construction heuristic is the best - limit GLPK to like 1 second
-  \item With the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
-  \item With the best IH from the previous step, how about using Random as CH?
+	\item For each input file: how long does model creation take?
+	\item How long does it take to communicate with GLPK? Creating the input/parsing the output.
+	\item Which construction heuristic is the best - limit GLPK to like 1 second
+	\item With the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
+	\item With the best IH from the previous step, how about using Random as CH?
 	\item GLPK: Input -> How long the search for optimum lasts - this shows we cannot rely on GLPK alone! it just takes too long.
 	\item GLPK: Time limit -> Quality
 	\item Structure of the data -> Which algorithms perform the best
 	\item Alpha, Beta -> Quality
-  \item Alpha, Beta -> How does the solution work?
+	\item Alpha, Beta -> How does the solution work?
 	\item Which GLPK -> How does (time->quality) look, how does (input->time) look
 	\item Do I beat FIDAX with Random?
 	\item Does Fuzzy beat Random? (Seems that Random is better and even has smaller variance)

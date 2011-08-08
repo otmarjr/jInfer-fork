@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+  <folder name="Actions">
+    <folder name="Window">
+      <file name="cz-cuni-mff-ksi-jinfer-basicruledisplayer-BasicRuleDisplayerAction.instance">
+        <attr name="iconBase" stringvalue="cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/icon16.png"/>
+        <attr name="component" methodvalue="cz.cuni.mff.ksi.jinfer.basicruledisplayer.BasicRuleDisplayerTopComponent.findInstance"/>
+        <attr name="displayName" bundlevalue="cz.cuni.mff.ksi.jinfer.basicruledisplayer.Bundle#CTL_BasicRuleDisplayerAction"/>
+        <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
+      </file>
+    </folder>
+  </folder>
+  <folder name="Menu">
+    <folder name="Window">
+      <folder name="jInfer">
+        <attr name="position" intvalue="0"/>
+        <file name="BasicRuleDisplayerAction.shadow">
+          <attr name="originalFile" stringvalue="Actions/Window/cz-cuni-mff-ksi-jinfer-basicruledisplayer-BasicRuleDisplayerAction.instance"/>
+        </file>
+      </folder>
+    </folder>
+  </folder>
+  <folder name="Windows2">
+    <folder name="Components">
+      <file name="BasicRuleDisplayerTopComponent.settings" url="BasicRuleDisplayerTopComponentSettings.xml"/>
+    </folder>
+    <folder name="Modes">
+      <folder name="editor">
+        <file name="BasicRuleDisplayerTopComponent.wstcref" url="BasicRuleDisplayerTopComponentWstcref.xml"/>
+      </folder>
+    </folder>
+  </folder>
+</filesystem>

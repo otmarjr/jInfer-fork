@@ -40,6 +40,15 @@ public final class SystemInfo {
   /** RAM size in MB. */
   private static final int RAM_SIZE = 8192;
 
+  /** Number of processor cores. */
+  //private static final int PROCESSOR_CORES = 2;
+  /** Clock speed in MHz. */
+  //private static final int PROCESSOR_CLOCK_SPEED = 2330;
+  /** Processor architecture/family. */
+  //private static final String PROCESSOR_ARCH = "Intel(R) Core(TM)2 Duo CPU     E6550  @ 2.33GHz";
+  /** RAM size in MB. */
+  //private static final int RAM_SIZE = 4096;
+
   /** OS name. */
   private static final String OS_NAME = System.getProperty("os.name");
   /** OS architecture. */

@@ -37,25 +37,25 @@ import org.openide.util.HelpCtx;
 import org.openide.util.actions.NodeAction;
 
 /**
- * Action on a XML file node to run attribute statistics on this one file.
+ * Action on a XML file node to open ISS panel for this one file.
  *
  * @author vektor
  */
-public class AttrStatsAction extends NodeAction {
+public class IDSetSearchAction extends NodeAction {
 
   private static final long serialVersionUID = 1562121212L;
 
-  private static final Logger LOG = Logger.getLogger(AttrStatsAction.class);
+  private static final Logger LOG = Logger.getLogger(IDSetSearchAction.class);
 
-  private AttrStatsAction() {
+  private IDSetSearchAction() {
 
   }
 
-  private static AttrStatsAction action = null;
+  private static IDSetSearchAction action = null;
 
-  public static synchronized AttrStatsAction getInstance() {
+  public static synchronized IDSetSearchAction getInstance() {
     if (action == null) {
-      action = new AttrStatsAction();
+      action = new IDSetSearchAction();
     }
     return action;
   }
@@ -118,12 +118,17 @@ public class AttrStatsAction extends NodeAction {
 
   @Override
   public String getName() {
-    return "Attribute statistics...";
+    return "ID Set Search...";
   }
 
   @Override
   public HelpCtx getHelpCtx() {
     return null;
+  }
+
+  @Override
+  protected boolean asynchronous() {
+    return false;
   }
 
 }

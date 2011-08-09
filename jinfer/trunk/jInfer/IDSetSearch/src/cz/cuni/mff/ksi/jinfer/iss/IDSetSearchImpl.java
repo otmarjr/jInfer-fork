@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.iss;
 
 import cz.cuni.mff.ksi.jinfer.iss.gui.StatisticsPanel;
-import cz.cuni.mff.ksi.jinfer.iss.gui.AttrStatsTopComponent;
+import cz.cuni.mff.ksi.jinfer.iss.gui.ISSTopComponent;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.utils.GraphUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.IDSetSearch;
@@ -38,7 +38,7 @@ public class IDSetSearchImpl implements IDSetSearch {
 
   @Override
   public void showIDSetPanel(final String panelName, final List<Element> grammar) {
-    final AttrStatsTopComponent topComponent = AttrStatsTopComponent.findInstance();
+    final ISSTopComponent topComponent = ISSTopComponent.findInstance();
     if (!topComponent.isOpened()) {
       topComponent.open();
     }

@@ -40,7 +40,7 @@ public interface IDSetSearch extends NamedModule {
    * Returns a graph representation of the specified grammar in GraphViz language.
    *
    * Please see
-   * {@link cz.cuni.mff.ksi.jinfer.attrstats.utils.GraphUtils#getGraphVizInput(AMModel)}
+   * {@link cz.cuni.mff.ksi.jinfer.iss.utils.GraphUtils#getGraphVizInput(AMModel)}
    * for details.
    *
    * @param grammar Grammar to create GraphViz input from.

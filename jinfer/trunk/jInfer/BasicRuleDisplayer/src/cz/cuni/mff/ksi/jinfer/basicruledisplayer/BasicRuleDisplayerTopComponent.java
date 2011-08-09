@@ -57,7 +57,7 @@ public final class BasicRuleDisplayerTopComponent extends TopComponent {
   public BasicRuleDisplayerTopComponent() {
     super();
     initComponents();
-    // TODO vektor Convert these into annotations - check out AttrStats as the newest module
+    // TODO vektor Convert these into annotations - check out ISS as the newest module
     setName(NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "CTL_BasicRuleDisplayerTopComponent"));
     setToolTipText(NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "HINT_BasicRuleDisplayerTopComponent"));
     setIcon(ImageUtilities.loadImage(ICON_PATH, true));

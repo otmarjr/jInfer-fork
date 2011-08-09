@@ -3,7 +3,7 @@
 <filesystem>
     <folder name="OptionsDialog">
         <folder name="jInfer">
-            <file name="cz-cuni-mff-ksi-jinfer-iss-options-ISSController.instance" url="cz-cuni-mff-ksi-jinfer-iss-options-AttrStatsController.instance">
+            <file name="cz-cuni-mff-ksi-jinfer-iss-options-ISSController.instance" url="cz-cuni-mff-ksi-jinfer-iss-options-ISSController.instance">
                 <attr name="keywordsCategory" stringvalue="jInfer/IDSetSearch"/>
             </file>
         </folder>

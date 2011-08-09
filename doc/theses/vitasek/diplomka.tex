@@ -13,6 +13,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multicol}
+\usepackage[pdfborder=0 0 0]{hyperref}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -301,9 +302,12 @@ TODO we will be working with heuristics striving to do the following: input is a
 
 TODO we will be using a pool - what is a pool
 
-\begin{center}
-  \includegraphics[width=\textwidth]{images/metaheuristic.eps}
-\end{center}
+\begin{figure}
+  \caption{Metaheuristic schema}
+  \label{image-metaheuristic}
+  \centering
+    \includegraphics[width=\textwidth]{images/metaheuristic.eps}
+\end{figure}
 
 \subsection{Constructions Heuristics}
 % TODO can I format things in nomenclature?
@@ -358,7 +362,7 @@ See listing \ref{ch-random}.
   \STATE \COMMENT{create 1 solution}
   \STATE $s \gets $ empty solution
   \WHILE{$s$ is a feasible ID set}
-    \STATE $a \gets $ pick at random from $C \textbackslash S$
+    \STATE $a \gets $ pick at random from $C \backslash S$
     \STATE $s \gets s \cup a$
   \ENDWHILE
   \STATE $r \gets r \cup s$
@@ -390,12 +394,12 @@ See listing \ref{ch-fuzzy}.
     \STATE $a \gets $ pick at weighted random from $C'$
     \IF{$s \cup a$ is a feasible ID set}
       \STATE $s \gets s \cup a$
-      \STATE $C' \gets C' \textbackslash a$
+      \STATE $C' \gets C' \backslash a$
     \ENDIF
     \FORALL{$c \in C'$}
       \IF{$s \cup c $ is \textbf{not} a feasible ID set}
         \STATE \COMMENT {if $c$ cannot be possibly added anymore}
-        \STATE $C' \gets C' \textbackslash c$
+        \STATE $C' \gets C' \backslash c$
       \ENDIF
     \ENDFOR
   \ENDWHILE
@@ -447,7 +451,7 @@ See listing \ref{ch-removal}.
   \IF{$s$ is a feasible ID set}
     \RETURN $s$
   \ENDIF
-  \STATE $s \gets s \textbackslash c$
+  \STATE $s \gets s \backslash c$
 \ENDFOR
 \end{algorithmic}
 \end{algorithm}
@@ -491,7 +495,7 @@ See listing \ref{ih-removeworst}.
 \REQUIRE $FP$ pool of feasible solutions
 \ENSURE pool of feasible solutions
 \STATE $s_{min} \gets $ solution with the lowest weight $\in FP$
-\RETURN $FP \textbackslash s_{min}$
+\RETURN $FP \backslash s_{min}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -531,7 +535,7 @@ This simple improvement heuristic assumes that the solutions in the pool are not
 \ENSURE pool of feasible solutions
 \FORALL{$s \in FP$}
   \STATE \COMMENT {improve a single solution}
-  \STATE $C' \gets C \textbackslash s$
+  \STATE $C' \gets C \backslash s$
   \STATE $C' \gets C'$ sorted by decreasing weight
   \FORALL{$c \in C'$}
     \IF{$s \cup c$ is a feasible ID set}
@@ -693,6 +697,12 @@ However, this approach takes too long for some inputs, so we introduced a whole 
 \bibliographystyle{alpha}
 \bibliography{literature}
 
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+
+\listofalgorithms
+\addcontentsline{toc}{chapter}{List of Algorithms}
+
 %%% Tabulky v diplomové práci, existují-li.
 %\chapwithtoc{List of Tables}
 \listoftables
@@ -719,7 +729,14 @@ This appendix will try to describe shortly yet comprehensively \textbf{jInfer} -
 
 jInfer was developed between 2009 and 2011 at Charles University in Prague as a Software Project by team consisting of Michal Klempa, Mario Mikula, Robert Smetana, Michal Svirec and Matej Vitasek. The main idea was to create a structure in which all aspects of XML schema inference can be easily implemented and evaluated. The goal was apparently achieved: the SW project was successfuly defended when jInfer was inferring DTD and XSD schemas based on XML documents, old DTD and XSD schemas and XPath queries. Since then, Michal Klempa has successfuly defended his own thesis improving on the grammar simplification process (see below), Michal Svirec has extended the framework with capabilities to detect and repair functional dependencies violation and defended his thesis as well. This thesis is the third based on this framework, and Mario Mikula's is on its way, too.
 
-At heart of jInfer inference process is a modular system provided by NetBeans Platform allowing to define services (interfaces), implement them in any number of ways and then let the user choose which implementation to use. Most importantly, the whole process consists of 3 consecutive steps (see TODO link picture - inference process), responsibility of 3 different services - interchangeable modules.
+At heart of jInfer inference process is a modular system provided by NetBeans Platform allowing to define services (interfaces), implement them in any number of ways and then let the user choose which implementation to use. Most importantly, the whole process consists of 3 consecutive steps (see \ref{image-inference-process}), responsibility of 3 different services - interchangeable modules.
+
+\begin{figure}
+  \caption{Inference process in jInfer}
+  \label{image-inference-process}
+  \centering
+    \includegraphics[width=0.5\textwidth]{images/inference-process.eps}
+\end{figure}
 
 The responsibility of the first module, the \jmodule{Initial Grammar Generator}, is to parse all input files (documents, schemas and queries) and create a so-called \textit{initial grammar} (IG, TODO nomenclature). This is the representation in which will the structure live until it is used to create the final product - the schema. As the name suggests, IG is a grammar - an \textit{extended context-free grammar}, to be more precise (TODO link CFGs). As such, its left hand side is an element, its right hand side is a regular expression representing its content model. (TODO picture?) IG is used to create the AM model used in this thesis, too. jInfer contains one such module, the \jmodule{BasicIGG}, which is described in detail in (TODO link BasicIGG documentation).
 

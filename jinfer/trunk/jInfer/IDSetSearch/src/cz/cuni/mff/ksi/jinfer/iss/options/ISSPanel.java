@@ -32,10 +32,10 @@ import org.openide.util.NbPreferences;
  * @author vektor
  */
 @SuppressWarnings("PMD.SingularField")
-public final class AttrStatsPanel extends JPanel {
+public final class ISSPanel extends JPanel {
 
   private static final long serialVersionUID = 1875412L;
-  private static final Logger LOG = Logger.getLogger(AttrStatsPanel.class);
+  private static final Logger LOG = Logger.getLogger(ISSPanel.class);
 
   public static final String BINARY_PATH_PROP = "glpk.binary";
   public static final String BINARY_PATH_DEFAULT = "";
@@ -46,7 +46,7 @@ public final class AttrStatsPanel extends JPanel {
   public static final String BETA_PROP = "weight.beta";
   public static final float BETA_DEFAULT = 1.0f;
 
-  public AttrStatsPanel() {
+  public ISSPanel() {
     super();
     initComponents();
   }
@@ -289,7 +289,7 @@ public final class AttrStatsPanel extends JPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void browseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseActionPerformed
-    final FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(AttrStatsPanel.class).setTitle("Select GLPK binary").setFilesOnly(true);
+    final FileChooserBuilder fileChooserBuilder = new FileChooserBuilder(ISSPanel.class).setTitle("Select GLPK binary").setFilesOnly(true);
     final File selectedFile = fileChooserBuilder.showOpenDialog();
     if (selectedFile != null) {
       try {
@@ -308,7 +308,7 @@ public final class AttrStatsPanel extends JPanel {
   }//GEN-LAST:event_browseActionPerformed
 
   public void load() {
-    final Preferences p = NbPreferences.forModule(AttrStatsPanel.class);
+    final Preferences p = NbPreferences.forModule(ISSPanel.class);
     binaryPath.setText(GlpkUtils.getPath());
     timeLimit.setValue(p.getInt(TIME_LIMIT_PROP, TIME_LIMIT_DEFAULT));
     alpha.setValue(p.getFloat(ALPHA_PROP, ALPHA_DEFAULT));
@@ -316,7 +316,7 @@ public final class AttrStatsPanel extends JPanel {
   }
 
   public void store() {
-    final Preferences p = NbPreferences.forModule(AttrStatsPanel.class);
+    final Preferences p = NbPreferences.forModule(ISSPanel.class);
     p.put(BINARY_PATH_PROP, binaryPath.getText());
     p.putInt(TIME_LIMIT_PROP, ((Integer)timeLimit.getValue()).intValue());
     p.putFloat(ALPHA_PROP, ((Number)alpha.getValue()).floatValue());

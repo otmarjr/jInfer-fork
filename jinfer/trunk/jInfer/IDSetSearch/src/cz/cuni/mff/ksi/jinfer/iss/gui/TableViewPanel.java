@@ -17,7 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.iss.gui;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
-import cz.cuni.mff.ksi.jinfer.iss.options.AttrStatsPanel;
+import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.iss.tables.FlatModel;
 import cz.cuni.mff.ksi.jinfer.iss.utils.MappingUtils;
@@ -116,8 +116,8 @@ public class TableViewPanel extends JPanel {
     }
 
     if (!BaseUtils.isEmpty(ids)) {
-      final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
-      final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
+      final double alpha = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.ALPHA_PROP, ISSPanel.ALPHA_DEFAULT);
+      final double beta = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.BETA_PROP, ISSPanel.BETA_DEFAULT);
 
       idSet.setText(Utils.boolToString(MappingUtils.isIDset(ids, model)));
       weight.setText(Utils.FORMAT.format(model.weight(ids, alpha, beta)));

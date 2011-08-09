@@ -98,7 +98,7 @@ public class IDSetSearchAction extends NodeAction {
 
                     @Override
                     public void finished(final List<Element> grammar) {
-                      IDSetSearchHelper.showISSPanelAsync("Attribute stats", grammar);
+                      IDSetSearchHelper.showISSPanelAsync("ID Set Search", grammar);
                     }
                   });
         } catch (final InterruptedException e) {

@@ -20,19 +20,21 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
 /**
- * Interface of a module providing attribute statistics computation and display.
+ * Interface of a module providing search for ID/IDREF attributes, as well as
+ * attribute statistics computation and display.
  *
  * @author vektor
  */
-public interface AttributeStatistics extends NamedModule {
+public interface IDSetSearch extends NamedModule {
 
   /**
-   * Computes and displays attribute statistics for the provided grammar.
+   * Shows a panel with tools to search for ID/IDREF attributes in the provided
+   * grammar.
    *
-   * @param panelName Title of the panel where this statistics will be displayed.
-   * @param grammar Grammar to calculate statistics from.
+   * @param panelName Title of the panel that will be displayed.
+   * @param grammar Grammar to work on.
    */
-  void showStatistics(final String panelName, final List<Element> grammar);
+  void showIDSetPanel(final String panelName, final List<Element> grammar);
 
   /**
    * Returns a graph representation of the specified grammar in GraphViz language.

@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.IDSetSearch;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.io.File;
 import java.io.IOException;
@@ -25,33 +25,31 @@ import java.util.List;
 import org.openide.windows.WindowManager;
 
 /**
- * Logic for displaying attribute statistics window.
+ * Logic for displaying panel for ID/IDREF attributes search.
  *
  * @author vektor
  */
-public final class AttributeStatsHelper {
+public final class IDSetSearchHelper {
 
-  private AttributeStatsHelper() {
+  private IDSetSearchHelper() {
   }
 
   /**
-   * Calculates and displays attribute statistics for the provided grammar in
-   * a panel with provided title.
+   * Shows an ISS panel of provided name, based on the provided grammar.
    *
-   * @param panelName Title of the panel where this statistics will be displayed.
-   * @param grammar Grammar to calculate statistics from.
-   * @param render Flag whether to do anything at all.
+   * @param panelName Title of the panel.
+   * @param grammar Grammar to work on.
    */
-  public static void showStatisticsAsync(final String panelName,
-          final List<Element> grammar, final boolean render) {
-    if (!render || BaseUtils.isEmpty(grammar)) {
+  public static void showISSPanelAsync(final String panelName,
+          final List<Element> grammar) {
+    if (BaseUtils.isEmpty(grammar)) {
       return;
     }
     WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
       @Override
       public void run() {
-        ModuleSelectionHelper.lookupImpls(AttributeStatistics.class).get(0).showStatistics(panelName, grammar);
+        ModuleSelectionHelper.lookupImpls(IDSetSearch.class).get(0).showIDSetPanel(panelName, grammar);
       }
     });
   }
@@ -68,7 +66,7 @@ public final class AttributeStatsHelper {
 
       @Override
       public void run() {
-        final String gvInput = ModuleSelectionHelper.lookupImpls(AttributeStatistics.class).get(0).getGraphVizInput(grammar);
+        final String gvInput = ModuleSelectionHelper.lookupImpls(IDSetSearch.class).get(0).getGraphVizInput(grammar);
         PrintWriter pw = null;
         try {
           pw = new PrintWriter(file);

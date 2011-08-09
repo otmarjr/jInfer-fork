@@ -22,7 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
-import cz.cuni.mff.ksi.jinfer.base.utils.AttributeStatsHelper;
+import cz.cuni.mff.ksi.jinfer.base.utils.IDSetSearchHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.runner.properties.ModuleSelectionPropertiesPanel;
 import java.io.File;
@@ -98,7 +98,7 @@ public class AttrStatsAction extends NodeAction {
 
                     @Override
                     public void finished(final List<Element> grammar) {
-                      AttributeStatsHelper.showStatisticsAsync("Attribute stats", grammar, true);
+                      IDSetSearchHelper.showISSPanelAsync("Attribute stats", grammar);
                     }
                   });
         } catch (final InterruptedException e) {

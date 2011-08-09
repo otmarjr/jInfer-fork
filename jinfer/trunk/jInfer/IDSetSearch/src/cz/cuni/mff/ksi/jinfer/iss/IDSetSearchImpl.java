@@ -20,25 +20,24 @@ import cz.cuni.mff.ksi.jinfer.iss.gui.StatisticsPanel;
 import cz.cuni.mff.ksi.jinfer.iss.gui.AttrStatsTopComponent;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.utils.GraphUtils;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.AttributeStatistics;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.IDSetSearch;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Implementation of the Attribute Statistics service.
+ * Implementation of the ID Set Search service.
  *
  * @author vektor
  */
-@ServiceProvider(service = AttributeStatistics.class)
-// TODO vektor Rename!
-public class AttributeStatisticsImpl implements AttributeStatistics {
+@ServiceProvider(service = IDSetSearch.class)
+public class IDSetSearchImpl implements IDSetSearch {
 
-  private static final String NAME = "AttributeStatistics";
-  private static final String DISPLAY_NAME = "Attribute Statistics";
+  private static final String NAME = "IDSetSearch";
+  private static final String DISPLAY_NAME = "ID Set Search";
 
   @Override
-  public void showStatistics(final String panelName, final List<Element> grammar) {
+  public void showIDSetPanel(final String panelName, final List<Element> grammar) {
     final AttrStatsTopComponent topComponent = AttrStatsTopComponent.findInstance();
     if (!topComponent.isOpened()) {
       topComponent.open();

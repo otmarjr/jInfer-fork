@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk;
 
-import cz.cuni.mff.ksi.jinfer.iss.options.AttrStatsPanel;
+import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import java.io.BufferedReader;
@@ -54,7 +54,7 @@ public final class GlpkUtils {
    * @return Full path to the GLPK Solver binary.
    */
   public static String getPath() {
-    return NbPreferences.forModule(AttrStatsPanel.class).get(AttrStatsPanel.BINARY_PATH_PROP, AttrStatsPanel.BINARY_PATH_DEFAULT);
+    return NbPreferences.forModule(ISSPanel.class).get(ISSPanel.BINARY_PATH_PROP, ISSPanel.BINARY_PATH_DEFAULT);
   }
 
   /**

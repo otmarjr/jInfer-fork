@@ -28,14 +28,14 @@ import org.openide.util.Lookup;
  */
 @OptionsPanelController.SubRegistration(
     location = "jInfer",
-    displayName = "#AdvancedOption_DisplayName_AttrStats",
-    keywords = "#AdvancedOption_Keywords_AttrStats",
+    displayName = "#AdvancedOption_DisplayName_ISS",
+    keywords = "#AdvancedOption_Keywords_ISS",
     keywordsCategory = "jInfer/IDSetSearch",
     position = 100,
     id = "IDSetSearch")
-public final class AttrStatsController extends OptionsPanelController {
+public final class ISSController extends OptionsPanelController {
 
-  private AttrStatsPanel panel;
+  private ISSPanel panel;
   private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
   private boolean changed;
 
@@ -68,7 +68,7 @@ public final class AttrStatsController extends OptionsPanelController {
 
   @Override
   public HelpCtx getHelpCtx() {
-    return null; // new HelpCtx("...ID") if you have a help set
+    return null;
   }
 
   @Override
@@ -86,9 +86,9 @@ public final class AttrStatsController extends OptionsPanelController {
     pcs.removePropertyChangeListener(l);
   }
 
-  private AttrStatsPanel getPanel() {
+  private ISSPanel getPanel() {
     if (panel == null) {
-      panel = new AttrStatsPanel();
+      panel = new ISSPanel();
     }
     return panel;
   }

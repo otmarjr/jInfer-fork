@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.gui;
 
-import cz.cuni.mff.ksi.jinfer.iss.options.AttrStatsPanel;
+import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import org.openide.util.NbPreferences;
 import org.netbeans.api.options.OptionsDisplayer;
 import cz.cuni.mff.ksi.jinfer.iss.objects.IdSet;
@@ -291,8 +291,8 @@ public class StatisticsPanel extends JPanel {
   }//GEN-LAST:event_nodeTreeValueChanged
 
   private void runActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runActionPerformed
-    final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
-    final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
+    final double alpha = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.ALPHA_PROP, ISSPanel.ALPHA_DEFAULT);
+    final double beta = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.BETA_PROP, ISSPanel.BETA_DEFAULT);
 
     final IdSet resultingSet = FidaxAlgorithm.findIDSet(model, alpha, beta);
     if (!resultingSet.isValid(model)) {
@@ -307,8 +307,8 @@ public class StatisticsPanel extends JPanel {
       @Override
       public void run() {
         try {
-          final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
-          final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
+          final double alpha = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.ALPHA_PROP, ISSPanel.ALPHA_DEFAULT);
+          final double beta = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.BETA_PROP, ISSPanel.BETA_DEFAULT);
           glpkInput.setText(GlpkInputGenerator.generateGlpkInput(model, alpha, beta));
         }
         catch (final InterruptedException e) {
@@ -331,9 +331,9 @@ public class StatisticsPanel extends JPanel {
       @Override
       public void run() {
         try {
-          final double alpha = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.ALPHA_PROP, AttrStatsPanel.ALPHA_DEFAULT);
-          final double beta = NbPreferences.forModule(AttrStatsPanel.class).getFloat(AttrStatsPanel.BETA_PROP, AttrStatsPanel.BETA_DEFAULT);
-          final int timeLimit = NbPreferences.forModule(AttrStatsPanel.class).getInt(AttrStatsPanel.TIME_LIMIT_PROP, AttrStatsPanel.TIME_LIMIT_DEFAULT);
+          final double alpha = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.ALPHA_PROP, ISSPanel.ALPHA_DEFAULT);
+          final double beta = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.BETA_PROP, ISSPanel.BETA_DEFAULT);
+          final int timeLimit = NbPreferences.forModule(ISSPanel.class).getInt(ISSPanel.TIME_LIMIT_PROP, ISSPanel.TIME_LIMIT_DEFAULT);
           final String glpkOut = GlpkRunner.run(model, alpha, beta, timeLimit);
           glpkInput.setText(glpkOut);
 

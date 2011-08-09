@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.projecttype.nodes;
 
-import cz.cuni.mff.ksi.jinfer.projecttype.actions.AttrStatsAction;
+import cz.cuni.mff.ksi.jinfer.projecttype.actions.IDSetSearchAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.GraphRepAction;
 import cz.cuni.mff.ksi.jinfer.projecttype.actions.ValidateAction;
 import java.io.File;
@@ -82,7 +82,7 @@ public class FileNode extends FilterNode {
     Action[] result = new Action[actions.length + 3];
 
     System.arraycopy(actions, 0, result, 0, actions.length);
-    result[result.length - 3] = AttrStatsAction.getInstance();
+    result[result.length - 3] = IDSetSearchAction.getInstance();
     result[result.length - 2] = GraphRepAction.getInstance();
     result[result.length - 1] = ValidateAction.getInstance();
     return result;

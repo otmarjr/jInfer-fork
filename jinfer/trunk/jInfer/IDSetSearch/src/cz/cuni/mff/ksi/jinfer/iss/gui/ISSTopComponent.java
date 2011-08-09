@@ -34,29 +34,37 @@ import org.openide.windows.WindowManager;
  *
  * @author vektor
  */
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.iss//IDSetSearch//EN",
-autostore = false)
-@TopComponent.Description(preferredID = "AttrStatsTopComponent",
-iconBase = "cz/cuni/mff/ksi/jinfer/iss/graphics/attr-icon-16.png",
-persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "editor", openAtStartup = false)
-@ActionID(category = "Window",
-id = "cz.cuni.mff.ksi.jinfer.iss.AttrStatsTopComponent")
-@ActionReference(path = "Menu/Window/jInfer" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_AttrStatsAction",
-preferredID = AttrStatsTopComponent.PREFERRED_ID)
-public final class AttrStatsTopComponent extends TopComponent {
+@ConvertAsProperties(
+        dtd = "-//cz.cuni.mff.ksi.jinfer.iss//IDSetSearch//EN",
+        autostore = false)
+@TopComponent.Description(
+        preferredID = "ISSTopComponent",
+        iconBase = "cz/cuni/mff/ksi/jinfer/iss/graphics/experiment.png",
+        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@TopComponent.Registration(
+        mode = "editor",
+        openAtStartup = false)
+@ActionID(
+        category = "Window",
+        id = "cz.cuni.mff.ksi.jinfer.iss.ISSTopComponent")
+@ActionReference(
+        path = "Menu/Window/jInfer",
+        position = 300)
+@TopComponent.OpenActionRegistration(
+        displayName = "#CTL_ISSAction",
+        preferredID = ISSTopComponent.PREFERRED_ID)
+public final class ISSTopComponent extends TopComponent {
 
   private static final long serialVersionUID = -541163454643l;
   private int panelSequence = 0;
-  private static AttrStatsTopComponent instance;
-  public static final String PREFERRED_ID = "AttrStatsTopComponent";
+  private static ISSTopComponent instance;
+  public static final String PREFERRED_ID = "ISSTopComponent";
 
-  public AttrStatsTopComponent() {
+  public ISSTopComponent() {
     super();
     initComponents();
-    setName(NbBundle.getMessage(AttrStatsTopComponent.class, "CTL_AttrStatsTopComponent"));
-    setToolTipText(NbBundle.getMessage(AttrStatsTopComponent.class, "HINT_AttrStatsTopComponent"));
+    setName(NbBundle.getMessage(ISSTopComponent.class, "CTL_ISSTopComponent"));
+    setToolTipText(NbBundle.getMessage(ISSTopComponent.class, "HINT_ISSTopComponent"));
 
     panels.addMouseListener(new MouseAdapter() {
 
@@ -89,22 +97,22 @@ public final class AttrStatsTopComponent extends TopComponent {
   }
 
   // TODO vektor This is obviously wrong in NBP 7.0, rewrite
-  public static synchronized AttrStatsTopComponent getDefault() {
+  public static synchronized ISSTopComponent getDefault() {
     if (instance == null) {
-      instance = new AttrStatsTopComponent();
+      instance = new ISSTopComponent();
     }
     return instance;
   }
 
-  public static synchronized AttrStatsTopComponent findInstance() {
+  public static synchronized ISSTopComponent findInstance() {
     final TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
     if (win == null) {
       getDefault().open();
       return getDefault();
     }
-    if (win instanceof AttrStatsTopComponent) {
+    if (win instanceof ISSTopComponent) {
       win.open();
-      return (AttrStatsTopComponent) win;
+      return (ISSTopComponent) win;
     }
     return getDefault();
   }

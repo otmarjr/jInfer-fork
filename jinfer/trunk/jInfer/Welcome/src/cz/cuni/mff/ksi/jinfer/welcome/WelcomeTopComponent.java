@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.projecttype.actions.FilesAddAction;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Properties;
 import java.util.prefs.Preferences;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -36,7 +35,6 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.netbeans.api.settings.ConvertAsProperties;
 import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ui.support.CommonProjectActions;
 import org.netbeans.spi.project.ui.support.ProjectChooser;
@@ -53,9 +51,6 @@ import org.openide.util.lookup.Lookups;
  *
  * @author vektor
  */
-@ConvertAsProperties(
-  dtd = "-//cz.cuni.mff.ksi.jinfer.welcome//Welcome//EN",
-  autostore = false)
 @SuppressWarnings({"PMD.SingularField", "PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
 public final class WelcomeTopComponent extends TopComponent {
 
@@ -510,21 +505,6 @@ public final class WelcomeTopComponent extends TopComponent {
   @Override
   public void componentClosed() {
     prefs().putBoolean(SHOW_ON_STARTUP, showOnStartup.isSelected());
-  }
-
-  // TODO vektor perhaps these 3 may be removed?
-  private void writeProperties(final Properties p) {
-  }
-
-  private Object readProperties(final Properties p) {
-    if (instance == null) {
-      instance = this;
-    }
-    instance.readPropertiesImpl(p);
-    return instance;
-  }
-
-  private void readPropertiesImpl(final Properties p) {
   }
 
   @Override

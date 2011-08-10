@@ -19,11 +19,9 @@ package cz.cuni.mff.ksi.jinfer.iss.gui;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Properties;
 import javax.swing.JScrollPane;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.windows.WindowManager;
@@ -34,9 +32,6 @@ import org.openide.windows.WindowManager;
  *
  * @author vektor
  */
-@ConvertAsProperties(
-        dtd = "-//cz.cuni.mff.ksi.jinfer.iss//IDSetSearch//EN",
-        autostore = false)
 @TopComponent.Description(
         preferredID = "ISSTopComponent",
         iconBase = "cz/cuni/mff/ksi/jinfer/iss/graphics/experiment.png",
@@ -152,15 +147,5 @@ public final class ISSTopComponent extends TopComponent {
   @Override
   public void componentClosed() {
     // TODO vektor add custom code on component closing
-  }
-
-  private void writeProperties(final Properties p) {
-    // better to version settings since initial version as advocated at
-    // http://wiki.apidesign.org/wiki/PropertyFiles
-    // TODO vektor store your settings
-  }
-
-  private void readProperties(final Properties p) {
-    // TODO vektor read your settings according to their version
   }
 }

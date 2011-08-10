@@ -24,51 +24,50 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Experiment comparing Random and Fuzzy construction heuristics.
+ * Experiment comparing Random and Fuzzy construction heuristics, only their
+ * first steps.
  *
  * @author vektor
  */
-public class RandomVsFuzzy extends AbstractExperimentSet {
+public class RandomVsFuzzyVsFidaxStart extends AbstractExperimentSet {
 
   @Override
   public String getName() {
-    return "Random vs Fuzzy";
+    return "RandomVFuzzyVFidax first step only";
   }
-
-  // TODO vektor Update according to the "Start" version
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
-    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
-            new RandomRemove(0.2),
-            new Mutation(0.1, 1),
-            new RandomRemove(0.2),
-            new Crossover(0.2, 1),
-            new RemoveWorst());
+    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
     for (final OfficialTestData data : OfficialTestData.values()) {
       for (int i = 0; i < Constants.ITERATIONS; i++) {
         ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
-                data.getKnownOptimum(), new Random(), improvement, new Weight(), new TimeIterations(10, 10000)));
+                data.getKnownOptimum(), new Random(), improvement, new Weight(), TimeIterations.NULL));
       }
     }
 
     for (final OfficialTestData data : OfficialTestData.values()) {
       for (int i = 0; i < Constants.ITERATIONS; i++) {
         ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
-                data.getKnownOptimum(), new Fuzzy(), improvement, new Weight(), new TimeIterations(10, 10000)));
+                data.getKnownOptimum(), new Fuzzy(), improvement, new Weight(), TimeIterations.NULL));
+      }
+    }
+
+    for (final OfficialTestData data : OfficialTestData.values()) {
+      for (int i = 0; i < Constants.ITERATIONS; i++) {
+        ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
+                data.getKnownOptimum(), new Fidax(), improvement, new Weight(), TimeIterations.NULL));
       }
     }
 

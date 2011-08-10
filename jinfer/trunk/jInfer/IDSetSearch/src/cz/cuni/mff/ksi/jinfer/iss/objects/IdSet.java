@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.iss.objects;
 
 import cz.cuni.mff.ksi.jinfer.iss.utils.MappingUtils;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,6 +31,9 @@ public class IdSet {
   private final List<AttributeMappingId> mappings;
 
   private final boolean optimal;
+
+  // TODO vektor Comment!
+  public static final IdSet EMPTY = new IdSet(Collections.<AttributeMappingId>emptyList());
 
   /**
    * Full constructor.

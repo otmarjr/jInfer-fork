@@ -48,7 +48,6 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
-  // TODO vektor Solve interruptibility - is it broken now?
   // TODO vektor Tell GLPK what the optimum is - add constraint?
 
   private final ExperimentParameters params;
@@ -57,6 +56,11 @@ public class Experiment implements IGGeneratorCallback {
   private long startTime;
   /** Total time of the experiment run, in ms. */
   private long totalTime;
+  // TODO vektor Comment these
+  private long grammarStartTime;
+  private long grammarTime;
+  private long modelStartTime;
+  private long modelTime;
   private Quality highestQuality = Quality.ZERO;
   private Pair<Boolean, String> terminationReason;
   private AMModel model;
@@ -85,8 +89,9 @@ public class Experiment implements IGGeneratorCallback {
         .append("\n  Graph representation: ").append(graph.getFirst()).append(" vertices, ").append(graph.getSecond()).append(" edges")
         .append("\nalpha: ").append(params.getAlpha()).append(", beta: ").append(params.getBeta())
         .append("\n\nResults:")
-        .append("\nStart time: ").append(new Date(startTime))
-        .append("\nTotal time spent: ").append(totalTime).append(" ms")
+        .append("\n  Time spent extracting the grammar: ").append(grammarTime).append(" ms")
+        .append("\n  Time spent building the model: ").append(modelTime).append(" ms")
+        .append("\n  Time spent running the heuristic: ").append(totalTime).append(" ms")
         .append("\nFinal quality: ");
     if (BaseUtils.isEmpty(improvementResults)) {
       ret.append(constructionResult.getQuality().getText());
@@ -199,12 +204,21 @@ public class Experiment implements IGGeneratorCallback {
     final IGGenerator igg = ModuleSelectionHelper.lookupImpl(IGGenerator.class, "Basic_IG_Generator");
     final Input input = new Input();
     input.getDocuments().add(params.getFile().getFile());
+    grammarStartTime = time();
     igg.start(input, this);
   }
 
   @Override
   public void finished(final List<Element> grammar) {
+    grammarTime = delta(grammarStartTime);
+    modelStartTime = time();
     model = new AMModel(grammar);
+    // this triggers all the lazy operations in model to see how long it takes to build it fully
+    model.getFlat();
+    model.getTree();
+    model.getAMs();
+    model.getTypes();
+    modelTime = delta(modelStartTime);
     startTime = time();
     try {
       params.getConstructionHeuristic().start(Experiment.this, new Callback(-1, startTime));

@@ -24,22 +24,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * Abstract class representing an experiment set. After it gets the list of
+ * Abstract implementation of an experiment set. After it gets the list of
  * experiments (via {@link ExperimentParameters}) to run, it starts to execute
  * them sequentially.
  *
  * @author vektor
  */
-public abstract class AbstractExperimentSet {
+public abstract class AbstractExperimentSet implements ExperimentSet {
 
   private final Object monitor = new Object();
-
-  /**
-   * Should return the name of this experimental set.
-   *
-   * @return Name of this set.
-   */
-  public abstract String getName();
 
   /**
    * Should return the list of experiment parameters to be run in this set.
@@ -51,6 +44,7 @@ public abstract class AbstractExperimentSet {
 
   private static final Logger LOG = Logger.getLogger(AbstractExperimentSet.class);
 
+  @Override
   public void run() throws InterruptedException {
     int i = 0;
     for (final ExperimentParameters params : getExperiments()) {
@@ -100,5 +94,15 @@ public abstract class AbstractExperimentSet {
         .append(e.getCsv()).append('\n')
         .append(e.getWinner());
     GlpkUtils.writeInput(output, ret.toString());
+  }
+
+  @Override
+  public String getDisplayName() {
+    return getName();
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getName();
   }
 }

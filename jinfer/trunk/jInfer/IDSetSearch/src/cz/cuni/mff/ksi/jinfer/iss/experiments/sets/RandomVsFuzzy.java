@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.OfficialTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
@@ -32,12 +33,14 @@ import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Experiment comparing Random and Fuzzy construction heuristics.
  *
  * @author vektor
  */
+@ServiceProvider(service = ExperimentSet.class)
 public class RandomVsFuzzy extends AbstractExperimentSet {
 
   @Override

@@ -21,6 +21,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -30,13 +32,31 @@ import org.openide.util.ImageUtilities;
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
  * @author sviro
  */
+@TopComponent.Description(
+        preferredID = TreeRuleDisplayerTopComponent.PREFERRED_ID,
+        iconBase = TreeRuleDisplayerTopComponent.ICON_PATH,
+        persistenceType = TopComponent.PERSISTENCE_NEVER)
+@TopComponent.Registration(
+        mode = "editor",
+        openAtStartup = false)
+@ActionID(
+        category = "Window",
+        id = "cz.cuni.mff.ksi.jinfer.treeruledisplayer.TreeRuleDisplayerTopComponent")
+@ActionReference(
+        path = "Menu/Window/jInfer",
+        position = 100)
+@TopComponent.OpenActionRegistration(
+        displayName = "#CTL_TreeRuleDisplayerAction",
+        preferredID = TreeRuleDisplayerTopComponent.PREFERRED_ID)
 public final class TreeRuleDisplayerTopComponent extends TopComponent {
 
   private static final long serialVersionUID = 435252345l;
 
   private static TreeRuleDisplayerTopComponent instance;
-  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/treeruledisplayer/graphics/icon16.png";
-  private static final String PREFERRED_ID = "TreeRuleDisplayerTopComponent";
+
+  public static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/treeruledisplayer/graphics/icon16.png";
+  public static final String PREFERRED_ID = "TreeRuleDisplayerTopComponent";
+
   private int panelSequence = 0;
 
   public TreeRuleDisplayerTopComponent() {
@@ -44,7 +64,6 @@ public final class TreeRuleDisplayerTopComponent extends TopComponent {
     initComponents();
     setName(NbBundle.getMessage(TreeRuleDisplayerTopComponent.class, "CTL_TreeRuleDisplayerTopComponent"));
     setToolTipText(NbBundle.getMessage(TreeRuleDisplayerTopComponent.class, "HINT_TreeRuleDisplayerTopComponent"));
-    setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
     panels.addMouseListener(new MouseAdapter() {
 
@@ -130,25 +149,5 @@ public final class TreeRuleDisplayerTopComponent extends TopComponent {
             "There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();
-  }
-
-  @Override
-  public int getPersistenceType() {
-    return TopComponent.PERSISTENCE_ALWAYS;
-  }
-
-  @Override
-  public void componentOpened() {
-    //do nothing
-  }
-
-  @Override
-  public void componentClosed() {
-    //do nothing
-  }
-
-  @Override
-  protected String preferredID() {
-    return PREFERRED_ID;
   }
 }

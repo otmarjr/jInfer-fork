@@ -41,15 +41,23 @@ import org.openide.windows.WindowManager;
  *
  * @author vektor
  */
-// TODO rio Clean this class - too many NB warnings, dead code...
+@TopComponent.Description(
+        preferredID = AutoEditorTopComponent.PREFERRED_ID,
+        persistenceType = TopComponent.PERSISTENCE_NEVER)
+@TopComponent.Registration(
+        mode = "editor",
+        openAtStartup = false)
+@TopComponent.OpenActionRegistration(
+        displayName = "#CTL_AutoEditorAction",
+        preferredID = AutoEditorTopComponent.PREFERRED_ID)
 @SuppressWarnings("PMD.SingularField")
 public final class AutoEditorTopComponent extends TopComponent {
 
-  private static AutoEditorTopComponent instance;
-  /** path to the icon used by the component and its open action */
-//    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
-  private static final String PREFERRED_ID = "AutoEditorTopComponent";
   private static final long serialVersionUID = 87543L;
+
+  private static AutoEditorTopComponent instance;
+
+  public static final String PREFERRED_ID = "AutoEditorTopComponent";
 
   private AbstractComponent component;
   private final JFileChooser fileChooser;
@@ -59,7 +67,6 @@ public final class AutoEditorTopComponent extends TopComponent {
     initComponents();
     setName(NbBundle.getMessage(AutoEditorTopComponent.class, "CTL_AutoEditorTopComponent"));
     setToolTipText(NbBundle.getMessage(AutoEditorTopComponent.class, "HINT_AutoEditorTopComponent"));
-//        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
     // Initialize FileChooser.
     // Get all supported image format names.
@@ -289,19 +296,6 @@ public final class AutoEditorTopComponent extends TopComponent {
   }
 
   @Override
-  public int getPersistenceType() {
-    return TopComponent.PERSISTENCE_ALWAYS;
-  }
-
-  @Override
-  public void componentOpened() {
-  }
-
-  @Override
-  public void componentClosed() {
-  }
-
-  @Override
   public boolean canClose() {
     if (RunningProject.isActiveProject()) {
       final NotifyDescriptor notifyDescriptor = new NotifyDescriptor.Confirmation("Closing this window will stop the inference. Proceed?", "Stop inferrence", NotifyDescriptor.OK_CANCEL_OPTION);
@@ -313,10 +307,5 @@ public final class AutoEditorTopComponent extends TopComponent {
       }
     }
     return true;
-  }
-
-  @Override
-  protected String preferredID() {
-    return PREFERRED_ID;
   }
 }

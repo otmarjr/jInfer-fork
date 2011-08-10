@@ -51,25 +51,36 @@ import org.openide.util.lookup.Lookups;
  *
  * @author vektor
  */
+@TopComponent.Description(
+        preferredID = WelcomeTopComponent.PREFERRED_ID,
+        iconBase = WelcomeTopComponent.ICON_PATH,
+        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@TopComponent.Registration(
+        mode = "editor",
+        openAtStartup = true)
+@TopComponent.OpenActionRegistration(
+        displayName = "#CTL_WelcomeAction",
+        preferredID = WelcomeTopComponent.PREFERRED_ID)
 @SuppressWarnings({"PMD.SingularField", "PMD.MethodArgumentCouldBeFinal", "PMD.UnusedFormalParameter"})
 public final class WelcomeTopComponent extends TopComponent {
 
+  private static final long serialVersionUID = 789451321321l;
+  private static final Logger LOG = Logger.getLogger(WelcomeTopComponent.class);
+
   public static final String SHOW_ON_STARTUP = "show.startup";
+  public static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/welcome/graphics/jinfer-icon16.png";
+  public static final String PREFERRED_ID = "WelcomeTopComponent";
+
   private static final String CHECK_FOR_UPDATES_ACTION_FOLDER = "Actions/System/";
   private static final String CHECK_FOR_UPDATES_ACTION_INSTANCE = "org-netbeans-modules-autoupdate-ui-actions-CheckForUpdatesAction";
-  private static final long serialVersionUID = 789451321321l;
+
   private static WelcomeTopComponent instance;
-  /** path to the icon used by the component and its open action */
-  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/welcome/graphics/jinfer-icon16.png";
-  private static final String PREFERRED_ID = "WelcomeTopComponent";
-  private static final Logger LOG = Logger.getLogger(WelcomeTopComponent.class);
 
   public WelcomeTopComponent() {
     initComponents();
     OpenProjects.getDefault().addPropertyChangeListener(new MainProjectListener(this));
     setName(NbBundle.getMessage(WelcomeTopComponent.class, "CTL_WelcomeTopComponent"));
     setToolTipText(NbBundle.getMessage(WelcomeTopComponent.class, "HINT_WelcomeTopComponent"));
-    setIcon(ImageUtilities.loadImage(ICON_PATH, true));
   }
 
   @SuppressWarnings("PMD")
@@ -470,11 +481,6 @@ public final class WelcomeTopComponent extends TopComponent {
     LOG.warn("There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();
-  }
-
-  @Override
-  public int getPersistenceType() {
-    return TopComponent.PERSISTENCE_ALWAYS;
   }
 
   @Override

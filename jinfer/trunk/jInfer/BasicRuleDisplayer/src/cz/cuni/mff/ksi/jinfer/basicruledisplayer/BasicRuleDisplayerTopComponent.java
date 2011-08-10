@@ -27,10 +27,11 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
+import org.openide.awt.ActionID;
+import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.openide.util.ImageUtilities;
 import org.openide.util.NbPreferences;
 
 /**
@@ -38,24 +39,40 @@ import org.openide.util.NbPreferences;
  *
  * @author vektor
  */
+@TopComponent.Description(
+        preferredID = BasicRuleDisplayerTopComponent.PREFERRED_ID,
+        iconBase = BasicRuleDisplayerTopComponent.ICON_PATH,
+        persistenceType = TopComponent.PERSISTENCE_NEVER)
+@TopComponent.Registration(
+        mode = "editor",
+        openAtStartup = false)
+@ActionID(
+        category = "Window",
+        id = "cz.cuni.mff.ksi.jinfer.basicruledisplayer.BasicRuleDisplayerTopComponent")
+@ActionReference(
+        path = "Menu/Window/jInfer",
+        position = 101)
+@TopComponent.OpenActionRegistration(
+        displayName = "#CTL_BasicRuleDisplayerAction",
+        preferredID = BasicRuleDisplayerTopComponent.PREFERRED_ID)
 @SuppressWarnings("PMD.SingularField")
 public final class BasicRuleDisplayerTopComponent extends TopComponent {
 
   private static final long serialVersionUID = 5123131;
-  private static BasicRuleDisplayerTopComponent instance;
-  private static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/icon16.png";
-  private static final String PREFERRED_ID = "BasicRuleDisplayerTopComponent";
   private static final Logger LOG = Logger.getLogger(BasicRuleDisplayerTopComponent.class);
+
+  private static BasicRuleDisplayerTopComponent instance;
+
+  public static final String ICON_PATH = "cz/cuni/mff/ksi/jinfer/basicruledisplayer/graphics/icon16.png";
+  public static final String PREFERRED_ID = "BasicRuleDisplayerTopComponent";
 
   private int panelSequence = 0;
 
   public BasicRuleDisplayerTopComponent() {
     super();
     initComponents();
-    // TODO vektor Convert these into annotations - check out ISS as the newest module
     setName(NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "CTL_BasicRuleDisplayerTopComponent"));
     setToolTipText(NbBundle.getMessage(BasicRuleDisplayerTopComponent.class, "HINT_BasicRuleDisplayerTopComponent"));
-    setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
     panels.addMouseListener(new MouseAdapter() {
 
@@ -240,23 +257,5 @@ public final class BasicRuleDisplayerTopComponent extends TopComponent {
     LOG.warn("There seem to be multiple components with the '" + PREFERRED_ID
             + "' ID. That is a potential source of errors and unexpected behavior.");
     return getDefault();
-  }
-
-  @Override
-  public int getPersistenceType() {
-    return TopComponent.PERSISTENCE_ALWAYS;
-  }
-
-  @Override
-  public void componentOpened() {
-  }
-
-  @Override
-  public void componentClosed() {
-  }
-
-  @Override
-  protected String preferredID() {
-    return PREFERRED_ID;
   }
 }

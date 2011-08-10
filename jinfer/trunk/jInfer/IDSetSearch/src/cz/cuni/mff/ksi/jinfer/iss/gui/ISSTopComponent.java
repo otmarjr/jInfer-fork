@@ -33,8 +33,8 @@ import org.openide.windows.WindowManager;
  * @author vektor
  */
 @TopComponent.Description(
-        preferredID = "ISSTopComponent",
-        iconBase = "cz/cuni/mff/ksi/jinfer/iss/graphics/experiment.png",
+        preferredID = ISSTopComponent.PREFERRED_ID,
+        iconBase = ISSTopComponent.ICON_BASE,
         persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(
         mode = "editor",
@@ -51,9 +51,13 @@ import org.openide.windows.WindowManager;
 public final class ISSTopComponent extends TopComponent {
 
   private static final long serialVersionUID = -541163454643l;
-  private int panelSequence = 0;
+
   private static ISSTopComponent instance;
+
+  public static final String ICON_BASE = "cz/cuni/mff/ksi/jinfer/iss/graphics/experiment.png";
   public static final String PREFERRED_ID = "ISSTopComponent";
+
+  private int panelSequence = 0;
 
   public ISSTopComponent() {
     super();
@@ -91,7 +95,6 @@ public final class ISSTopComponent extends TopComponent {
     return panel;
   }
 
-  // TODO vektor This is obviously wrong in NBP 7.0, rewrite
   public static synchronized ISSTopComponent getDefault() {
     if (instance == null) {
       instance = new ISSTopComponent();
@@ -138,14 +141,4 @@ public final class ISSTopComponent extends TopComponent {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JTabbedPane panels;
   // End of variables declaration//GEN-END:variables
-
-  @Override
-  public void componentOpened() {
-    // TODO add custom code on component opening
-  }
-
-  @Override
-  public void componentClosed() {
-    // TODO vektor add custom code on component closing
-  }
 }

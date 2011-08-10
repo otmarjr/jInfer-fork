@@ -16,9 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.utils;
 
-import cz.cuni.mff.ksi.jinfer.iss.experiments.FileCharacteristics;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.InputFile;
-
 /**
  * A few constants used throughout the project.
  *
@@ -32,10 +29,8 @@ public final class Constants {
 
   public static final int ITERATIONS = 10;
 
-  public static final InputFile GRAPH = new InputFile("C:\\Users\\vitasek\\Documents\\Soukrome\\test-xml\\graph.xml", FileCharacteristics.ARTIFICIAL);
+  public static final String TEST_DATA_ROOT = System.getProperty("user.home") + "/test-data-official";
 
-  public static final String TEST_DATA_ROOT = "C:\\Users\\vitasek\\Documents\\Soukrome\\test-data-official";
-
-  public static final String TEST_OUTPUT_ROOT = "C:\\Users\\vitasek\\Documents\\Soukrome\\test-output";
+  public static final String TEST_OUTPUT_ROOT = System.getProperty("user.home") + "/test-output";
 
 }

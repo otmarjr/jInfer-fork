@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.OfficialTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
@@ -26,7 +27,6 @@ import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
-import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +59,9 @@ public class VariousBetas extends AbstractExperimentSet {
 
     for (final double alpha : alphas) {
       for (final double beta : betas) {
-        ret.add(new ExperimentParameters(Constants.GRAPH, 10, alpha, beta, new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
+        ret.add(new ExperimentParameters(OfficialTestData.GRAPH_100_200.getFile(),
+                10, alpha, beta,
+                new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
       }
     }
 

@@ -18,12 +18,12 @@ package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.OfficialTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.LocalBranching;
-import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +46,9 @@ public class RandomLocalBranching extends AbstractExperimentSet {
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
     for (int i = 0; i < 3; i++) {
-      ret.add(new ExperimentParameters(Constants.GRAPH, 10, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(1, 10000)));
+      ret.add(new ExperimentParameters(OfficialTestData.GRAPH_100_200.getFile(),
+              10, 1, 1, OfficialTestData.GRAPH_100_200.getKnownOptimum(),
+              new Random(), improvement, new Weight(), new TimeIterations(1, 10000)));
     }
 
     return ret;

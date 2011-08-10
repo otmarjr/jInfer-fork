@@ -66,7 +66,7 @@ public final class Utils {
    */
   public static Pair<IdSet, Quality> getBest(final Experiment experiment,
           final List<IdSet> solutions) {
-    IdSet bestSolution = null;
+    IdSet bestSolution = IdSet.EMPTY;
     Quality maxQuality = Quality.ZERO;
     for (final IdSet solution : solutions) {
       final Quality quality = experiment.getQualityMeasurement().measure(experiment, solution);

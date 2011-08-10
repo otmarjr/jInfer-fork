@@ -18,11 +18,12 @@ package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.OfficialTestData;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.SizeTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Null;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.util.ArrayList;
@@ -30,16 +31,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Experiment comparing Random and Fuzzy construction heuristics, only their
- * first steps.
+ * Runs all the official test data to see how long it takes them to extract
+ * grammar and create model. No actual heuristic is employed thereafter.
  *
  * @author vektor
  */
-public class RandomVsFuzzyStart extends AbstractExperimentSet {
+public class GrammarModelTiming extends AbstractExperimentSet {
 
   @Override
   public String getName() {
-    return "Random vs Fuzzy first step only";
+    return "Grammar and Model Timing";
   }
 
   @Override
@@ -48,12 +49,18 @@ public class RandomVsFuzzyStart extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 0; i < 20; i++) {
-      ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Random(), improvement, new Weight(), new TimeIterations(0)));
+    for (final OfficialTestData data : OfficialTestData.values()) {
+      for (int i = 0; i < Constants.ITERATIONS; i++) {
+        ret.add(new ExperimentParameters(data.getFile(), 1, 1, 1, data.getKnownOptimum(),
+                new Null(), improvement, new Weight(), TimeIterations.NULL));
+      }
     }
 
-    for (int i = 0; i < 20; i++) {
-      ret.add(new ExperimentParameters(Constants.GRAPH, 1, 1, 1, 0.2429268293, new Fuzzy(), improvement, new Weight(), new TimeIterations(0)));
+    for (final SizeTestData data : SizeTestData.values()) {
+      for (int i = 0; i < Constants.ITERATIONS; i++) {
+        ret.add(new ExperimentParameters(data.getFile(), 1, 1, 1, data.getKnownOptimum(),
+                new Null(), improvement, new Weight(), TimeIterations.NULL));
+      }
     }
 
     return ret;

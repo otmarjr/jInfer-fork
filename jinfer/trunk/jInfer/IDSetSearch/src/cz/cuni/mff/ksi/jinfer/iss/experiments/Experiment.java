@@ -36,7 +36,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,7 +58,6 @@ public class Experiment implements IGGeneratorCallback {
   // TODO vektor Comment these
   private long grammarStartTime;
   private long grammarTime;
-  private long modelStartTime;
   private long modelTime;
   private Quality highestQuality = Quality.ZERO;
   private Pair<Boolean, String> terminationReason;
@@ -211,7 +209,7 @@ public class Experiment implements IGGeneratorCallback {
   @Override
   public void finished(final List<Element> grammar) {
     grammarTime = delta(grammarStartTime);
-    modelStartTime = time();
+    final long modelStartTime = time();
     model = new AMModel(grammar);
     // this triggers all the lazy operations in model to see how long it takes to build it fully
     model.getFlat();

@@ -26,7 +26,6 @@ import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.regexping.RegexpAutomatonSimplifierFactory;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifier;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.simplifying.AutomatonSimplifierFactory;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -45,7 +44,7 @@ public class Pattern implements ContentInferrer {
     this.automatonSimplifier = automatonSimplifierFactory.<String>create();
     this.regexpAutomatonSimplifier = regexpAutomatonSimplifierFactory.<String>create();
   }
-  
+
   @Override
   public String inferContentType(List<ContentNode> nodes) throws InterruptedException {
     Automaton<String> pta = new Automaton<String>(true);
@@ -60,7 +59,7 @@ public class Pattern implements ContentInferrer {
       }
     }
     LOG.fatal(pta);
-    
+
     Automaton<String> simplified = automatonSimplifier.simplify(pta, new SymbolToString<String>() {
       @Override
       public String toString(String symbol) {
@@ -68,9 +67,9 @@ public class Pattern implements ContentInferrer {
       }
     });
     LOG.fatal(simplified);
-    
+
     RegexpAutomaton<String> regexpAutomaton = new RegexpAutomaton<String>(simplified);
-    Regexp<String> regexp = regexpAutomatonSimplifier.simplify(regexpAutomaton, 
+    Regexp<String> regexp = regexpAutomatonSimplifier.simplify(regexpAutomaton,
             new SymbolToString<Regexp<String>>() {
               @Override
               public String toString(Regexp<String> symbol) {
@@ -79,7 +78,7 @@ public class Pattern implements ContentInferrer {
             });
     return regexp.toString();
   }
-  
+
   private List<String> stringToListOfChars(String S) {
     List<String> result = new ArrayList<String>(S.length());
     for (int i = 0; i < S.length(); i++) {

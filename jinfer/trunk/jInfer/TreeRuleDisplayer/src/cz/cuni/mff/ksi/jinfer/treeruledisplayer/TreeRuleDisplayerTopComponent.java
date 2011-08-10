@@ -26,7 +26,6 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.openide.util.ImageUtilities;
 
 /**
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.

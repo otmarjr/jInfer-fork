@@ -16,9 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.functionalDependencies.fd;
 
-import cz.cuni.mff.ksi.jinfer.functionalDependencies.Path;
-import java.util.List;
-
 /**
  *
  * @author sviro

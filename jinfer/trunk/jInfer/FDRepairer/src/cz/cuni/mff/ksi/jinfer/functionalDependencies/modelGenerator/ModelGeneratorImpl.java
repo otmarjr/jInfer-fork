@@ -55,7 +55,6 @@ public class ModelGeneratorImpl implements ModelGenerator {
     result.addTree(getDataFromInput(input.getDocuments()));
     getWeightsFromInput(input.getFunctionalDependencies(), result.getTrees());
     callback.finished(result);
-    return;
   }
 
   private List<FD> getFDFromInput(final Collection<File> files) throws InterruptedException {
@@ -120,9 +119,9 @@ public class ModelGeneratorImpl implements ModelGenerator {
 
   @SuppressWarnings("unchecked")
   private static <T> Processor<T> getProcessor(Class<?> clazz) {
-    for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
+    for (final Processor<?> p : Lookup.getDefault().lookupAll(Processor.class)) {
       if (p.getResultType().equals(clazz)) {
-        return (Processor<T>) p;
+        return (Processor<T>)p;
       }
     }
 

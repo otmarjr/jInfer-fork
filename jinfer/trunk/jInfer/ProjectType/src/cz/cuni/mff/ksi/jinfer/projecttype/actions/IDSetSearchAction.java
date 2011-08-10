@@ -41,7 +41,7 @@ import org.openide.util.actions.NodeAction;
  *
  * @author vektor
  */
-public class IDSetSearchAction extends NodeAction {
+public final class IDSetSearchAction extends NodeAction {
 
   private static final long serialVersionUID = 1562121212L;
 

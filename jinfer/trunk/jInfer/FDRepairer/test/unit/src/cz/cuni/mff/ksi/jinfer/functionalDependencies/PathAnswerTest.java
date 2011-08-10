@@ -21,8 +21,6 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -232,7 +230,7 @@ public class PathAnswerTest {
     Document document = newDocumentBuilder.newDocument();
     Element root = document.createElement("root");
     document.appendChild(root);
-    
+
     Element element = document.createElement("test");
     root.appendChild(element);
     Text textNode1 = document.createTextNode("testing");
@@ -299,11 +297,11 @@ public class PathAnswerTest {
     Element element = document.createElement("element");
     List<Node> list = new ArrayList<Node>();
     list.add(element);
-    
+
     PathAnswer instance = new PathAnswer(list, false);
     List<Node> result = instance.getNodeAnswers();
     List<Node> exptected = list;
-    
+
     assertEquals(exptected, result);
   }
 
@@ -315,7 +313,7 @@ public class PathAnswerTest {
     PathAnswer instance = new PathAnswer(new ArrayList<Node>(), false);
     List<String> valueAnswers = instance.getValueAnswers();
     List<String> expected = new ArrayList<String>();
-    
+
     assertEquals(expected, valueAnswers);
   }
 

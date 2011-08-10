@@ -40,7 +40,7 @@ import org.openide.windows.WindowManager;
 @TopComponent.Description(
         preferredID = "ISSTopComponent",
         iconBase = "cz/cuni/mff/ksi/jinfer/iss/graphics/experiment.png",
-        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+        persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(
         mode = "editor",
         openAtStartup = false)

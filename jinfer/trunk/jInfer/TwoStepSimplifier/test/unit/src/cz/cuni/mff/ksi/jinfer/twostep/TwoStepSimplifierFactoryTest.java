@@ -16,13 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -32,7 +26,7 @@ import static org.junit.Assert.*;
  * @author anti
  */
 public class TwoStepSimplifierFactoryTest {
-  
+
 
   /**
    * Test of getCapabilities method, of class TwoStepSimplifierFactory.

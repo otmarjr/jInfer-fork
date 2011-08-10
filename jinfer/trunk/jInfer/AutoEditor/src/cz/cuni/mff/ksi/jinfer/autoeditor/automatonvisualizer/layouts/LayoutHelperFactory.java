@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts;
 
 import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.properties.LayoutPropertiesPanel;
-import cz.cuni.mff.ksi.jinfer.autoeditor.automatonvisualizer.layouts.vyhnanovska.VyhnanovskaLayoutFactory;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;

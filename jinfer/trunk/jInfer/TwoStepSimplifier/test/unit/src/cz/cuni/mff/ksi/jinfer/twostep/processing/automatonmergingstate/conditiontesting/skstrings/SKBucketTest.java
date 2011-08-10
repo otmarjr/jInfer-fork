@@ -17,11 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings;
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
-import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -31,7 +26,7 @@ import static org.junit.Assert.*;
  * @author anti
  */
 public class SKBucketTest {
-  
+
   public SKBucketTest() {
   }
 
@@ -127,6 +122,6 @@ public class SKBucketTest {
     assertEquals(4, anotherBucket.getSKStrings().size());
     anotherBucket.add(new Step<String>("a", null, null, 15,15), 0.55);
     assertFalse(anotherBucket.areSubset(instance));
-    
+
   }
 }

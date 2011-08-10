@@ -42,7 +42,7 @@ import org.openide.util.actions.NodeAction;
  *
  * @author vektor
  */
-public class GraphRepAction extends NodeAction {
+public final class GraphRepAction extends NodeAction {
 
   private static final long serialVersionUID = 1562121212L;
 

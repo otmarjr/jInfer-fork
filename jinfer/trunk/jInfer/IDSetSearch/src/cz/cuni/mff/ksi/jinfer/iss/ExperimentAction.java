@@ -16,11 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss;
 
-import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.sets.GrammarModelTiming;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentChooser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import org.apache.log4j.Logger;
 import org.openide.awt.ActionRegistration;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -39,21 +37,9 @@ import org.openide.util.NbBundle.Messages;
 @Messages("CTL_ExperimentAction=Experiment now")
 public final class ExperimentAction implements ActionListener {
 
-  // TODO vektor Allow the user to choose!
-
   @Override
   public void actionPerformed(final ActionEvent e) {
-    AsynchronousUtils.runAsync(new Runnable() {
-
-      @Override
-      public void run() {
-        try {
-          new GrammarModelTiming().run();
-        }
-        catch (final InterruptedException e) {
-          Logger.getLogger(ExperimentAction.class).error("Interrupted", e);
-        }
-      }
-    }, "Experimenting");
+    final ExperimentChooser chooser = new ExperimentChooser();
+    chooser.setVisible(true);
   }
 }

@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2011 sviro
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,22 +19,17 @@ package cz.cuni.mff.ksi.jinfer.treeruledisplayer;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Properties;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.util.ImageUtilities;
 
 /**
  * Rule display component. Acts as a tabbed pane, each tab showing one ruleset.
  * @author sviro
  */
-@ConvertAsProperties(
-  dtd = "-//cz.cuni.mff.ksi.jinfer.treeruledisplayer//TreeRuleDisplayer//EN",
-  autostore = false)
 public final class TreeRuleDisplayerTopComponent extends TopComponent {
 
   private static final long serialVersionUID = 435252345l;
@@ -149,22 +144,6 @@ public final class TreeRuleDisplayerTopComponent extends TopComponent {
 
   @Override
   public void componentClosed() {
-    //do nothing
-  }
-
-  public void writeProperties(final Properties p) {
-    //do nothing
-  }
-
-  public Object readProperties(final Properties p) {
-    if (instance == null) {
-      instance = this;
-    }
-    instance.readPropertiesImpl(p);
-    return instance;
-  }
-
-  private void readPropertiesImpl(final Properties p) {
     //do nothing
   }
 

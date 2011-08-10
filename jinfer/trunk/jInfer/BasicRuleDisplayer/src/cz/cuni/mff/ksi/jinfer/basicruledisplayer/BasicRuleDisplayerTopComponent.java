@@ -24,14 +24,12 @@ import java.awt.Graphics2D;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Properties;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbPreferences;
 
@@ -40,9 +38,6 @@ import org.openide.util.NbPreferences;
  *
  * @author vektor
  */
-@ConvertAsProperties(
-  dtd = "-//cz.cuni.mff.ksi.jinfer.basicruledisplayer.display//BasicRuleDisplayer//EN",
-  autostore = false)
 @SuppressWarnings("PMD.SingularField")
 public final class BasicRuleDisplayerTopComponent extends TopComponent {
 
@@ -258,20 +253,6 @@ public final class BasicRuleDisplayerTopComponent extends TopComponent {
 
   @Override
   public void componentClosed() {
-  }
-
-  private void writeProperties(final Properties p) {
-  }
-
-  private Object readProperties(final Properties p) {
-    if (instance == null) {
-      instance = this;
-    }
-    instance.readPropertiesImpl(p);
-    return instance;
-  }
-
-  private void readPropertiesImpl(final Properties p) {
   }
 
   @Override

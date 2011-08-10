@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 vektor
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -32,7 +31,6 @@ import org.apache.log4j.Logger;
 import org.netbeans.api.options.OptionsDisplayer;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.windows.WindowManager;
@@ -44,8 +42,6 @@ import org.openide.windows.WindowManager;
  * @author vektor
  */
 // TODO rio Clean this class - too many NB warnings, dead code...
-@ConvertAsProperties(dtd = "-//cz.cuni.mff.ksi.jinfer.autoeditor.gui.topcomponent//AutoEditor//EN",
-autostore = false)
 @SuppressWarnings("PMD.SingularField")
 public final class AutoEditorTopComponent extends TopComponent {
 
@@ -64,7 +60,7 @@ public final class AutoEditorTopComponent extends TopComponent {
     setName(NbBundle.getMessage(AutoEditorTopComponent.class, "CTL_AutoEditorTopComponent"));
     setToolTipText(NbBundle.getMessage(AutoEditorTopComponent.class, "HINT_AutoEditorTopComponent"));
 //        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
-    
+
     // Initialize FileChooser.
     // Get all supported image format names.
     final String[] supportedFormatNames = ImageIO.getWriterFormatNames();
@@ -317,20 +313,6 @@ public final class AutoEditorTopComponent extends TopComponent {
       }
     }
     return true;
-  }
-
-  private void writeProperties(final Properties p) {
-  }
-
-  private Object readProperties(final Properties p) {
-    if (instance == null) {
-      instance = this;
-    }
-    instance.readPropertiesImpl(p);
-    return instance;
-  }
-
-  private void readPropertiesImpl(final Properties p) {
   }
 
   @Override

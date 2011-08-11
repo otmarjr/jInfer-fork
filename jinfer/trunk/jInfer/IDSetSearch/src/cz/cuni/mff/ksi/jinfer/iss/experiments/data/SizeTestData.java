@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.iss.experiments;
+package cz.cuni.mff.ksi.jinfer.iss.experiments.data;
 
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
-import static cz.cuni.mff.ksi.jinfer.iss.experiments.FileCharacteristics.*;
+import static cz.cuni.mff.ksi.jinfer.iss.experiments.data.FileCharacteristics.*;
 
 /**
  * A set of artificial data, random graphs. They should have approximately the

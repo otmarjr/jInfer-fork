@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments;
 
+import cz.cuni.mff.ksi.jinfer.iss.experiments.data.InputFile;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ConstructionHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.QualityMeasurement;

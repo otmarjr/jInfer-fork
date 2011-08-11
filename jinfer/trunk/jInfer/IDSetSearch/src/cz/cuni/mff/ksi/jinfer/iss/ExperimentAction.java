@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss;
 
-import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentChooser;
+import cz.cuni.mff.ksi.jinfer.iss.gui.ExperimentChooser;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.openide.awt.ActionRegistration;

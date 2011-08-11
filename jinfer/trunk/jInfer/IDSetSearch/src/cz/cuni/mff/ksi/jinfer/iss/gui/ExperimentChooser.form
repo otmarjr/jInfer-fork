@@ -28,7 +28,7 @@
     <Component class="javax.swing.JLabel" name="label">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/iss/experiments/Bundle.properties" key="ExperimentChooser.label.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/iss/gui/Bundle.properties" key="ExperimentChooser.label.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Constraints>
@@ -58,7 +58,7 @@
     <Component class="javax.swing.JButton" name="ok">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/iss/experiments/Bundle.properties" key="ExperimentChooser.ok.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="cz/cuni/mff/ksi/jinfer/iss/gui/Bundle.properties" key="ExperimentChooser.ok.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>

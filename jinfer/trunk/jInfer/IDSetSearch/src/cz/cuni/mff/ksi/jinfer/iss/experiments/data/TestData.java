@@ -14,22 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.iss.experiments;
-
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
+package cz.cuni.mff.ksi.jinfer.iss.experiments.data;
 
 /**
- * Mostly marker interface of an experiment set. Other than extending a named
- * module (in order to use the lookup capabilities from Base) it only declares
- * the run method.
+ * Encapsulation of a test data file.
  *
  * @author vektor
  */
-public interface ExperimentSet extends NamedModule {
+public interface TestData {
 
   /**
-   * Run the experiment set, whatever that means.
+   * Returns the input file represented.
+   *
+   * @return Test data file.
    */
-  void run() throws InterruptedException;
+  InputFile getFile();
+
+  /**
+   * Returns the known optimum for alpha = beta = 1, if available.
+   *
+   * @return Known optimum for this file or <code>null</code> if unknown.
+   */
+  Double getKnownOptimum();
+
+  /**
+   * Returns the number of vertices in the graph representation of this file.
+   */
+  int getVertices();
+
+  /**
+   * Returns the number of edges in the graph representation of this file.
+   */
+  int getEdges();
 
 }

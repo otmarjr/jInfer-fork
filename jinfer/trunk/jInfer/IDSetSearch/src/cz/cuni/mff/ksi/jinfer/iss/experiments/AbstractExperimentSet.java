@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments;
 
+import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentListener;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;

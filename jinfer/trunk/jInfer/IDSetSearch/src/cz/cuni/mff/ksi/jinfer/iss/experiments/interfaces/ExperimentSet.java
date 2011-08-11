@@ -14,31 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.iss.experiments;
+package cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces;
+
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 
 /**
- * Enum representing the characteristics of the experiment input file.
+ * Mostly marker interface of an experiment set. Other than extending a named
+ * module (in order to use the lookup capabilities from Base) it only declares
+ * the run method.
  *
  * @author vektor
  */
-public enum FileCharacteristics {
+public interface ExperimentSet extends NamedModule {
 
-  /** Realistic, real-life data, no changes. */
-  REALISTIC("realistic"),
-  /** Realistic data with some text content converted to attributes. */
-  CONVERTED("converted"),
-  /** Artificially generated data. */
-  ARTIFICIAL("artificial"),
-  UNKNOWN(null);
-
-  private final String folder;
-
-  private FileCharacteristics(final String folder) {
-    this.folder = folder;
-  }
-
-  public String getFolder() {
-    return folder;
-  }
+  /**
+   * Run the experiment set, whatever that means.
+   */
+  void run() throws InterruptedException;
 
 }

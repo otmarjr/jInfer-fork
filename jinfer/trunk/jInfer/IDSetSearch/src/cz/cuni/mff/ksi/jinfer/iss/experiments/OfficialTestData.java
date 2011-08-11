@@ -23,7 +23,7 @@ import static cz.cuni.mff.ksi.jinfer.iss.experiments.FileCharacteristics.*;
  *
  * @author vitasek
  */
-public enum OfficialTestData {
+public enum OfficialTestData implements TestData {
 
   OVA1           ("OVA1.xml",     REALISTIC, 29, 43,   0.45588235294117635),
   OVA2           ("OVA2.xml",     REALISTIC, 23, 36,   0.1634615384615385),
@@ -70,15 +70,6 @@ public enum OfficialTestData {
 
   public Double getKnownOptimum() {
     return optimum;
-  }
-
-  public static boolean filesExist() {
-    for (final OfficialTestData td : values()) {
-      if (!td.getFile().getFile().exists()) {
-        return false;
-      }
-    }
-    return true;
   }
 
 }

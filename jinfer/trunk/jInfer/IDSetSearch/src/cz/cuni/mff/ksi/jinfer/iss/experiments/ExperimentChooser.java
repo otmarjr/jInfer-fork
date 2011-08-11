@@ -69,8 +69,8 @@ public class ExperimentChooser extends JDialog {
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
     getContentPane().add(label, gridBagConstraints);
 
-    experiments.setMinimumSize(new java.awt.Dimension(100, 26));
-    experiments.setPreferredSize(new java.awt.Dimension(100, 26));
+    experiments.setMinimumSize(new java.awt.Dimension(250, 26));
+    experiments.setPreferredSize(new java.awt.Dimension(250, 26));
     experiments.setRenderer(new ProjectPropsComboRenderer(experiments.getRenderer()));
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 1;

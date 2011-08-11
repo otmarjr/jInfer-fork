@@ -25,7 +25,7 @@ import static cz.cuni.mff.ksi.jinfer.iss.experiments.FileCharacteristics.*;
  *
  * @author vektor
  */
-public enum SizeTestData {
+public enum SizeTestData implements TestData {
 
   GRAPH_0_0      ("0-0.xml",     0, 0,    0d),
   GRAPH_10_5     ("10-5.xml",    10, 5,   0.8500000000000002),
@@ -56,29 +56,24 @@ public enum SizeTestData {
     this.optimum = optimum;
   }
 
+  @Override
   public InputFile getFile() {
     return file;
   }
 
+  @Override
   public int getVertices() {
     return vertices;
   }
 
+  @Override
   public int getEdges() {
     return edges;
   }
 
+  @Override
   public Double getKnownOptimum() {
     return optimum;
-  }
-
-  public static boolean filesExist() {
-    for (final SizeTestData td : values()) {
-      if (!td.getFile().getFile().exists()) {
-        return false;
-      }
-    }
-    return true;
   }
 
 }

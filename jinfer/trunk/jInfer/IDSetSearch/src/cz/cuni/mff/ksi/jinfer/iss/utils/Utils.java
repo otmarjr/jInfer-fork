@@ -116,4 +116,25 @@ public final class Utils {
     return ret;
   }
 
+  /**
+   * Returns the current time in milliseconds. Useless in absolute context, only
+   * in relative, when measuring time spent in some operation.
+   *
+   * @return Current time in milliseconds.
+   */
+  public static long time() {
+    return System.nanoTime() / 1000000;
+  }
+
+  /**
+   * Returns the number of milliseconds passed since the specified time (again
+   * in milliseconds).
+   *
+   * @param from Time from which to calculate the difference.
+   * @return How many milliseconds have passed since the specified time.
+   */
+  public static long delta(final long from) {
+    return time() - from;
+  }
+
 }

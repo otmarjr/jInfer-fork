@@ -14,37 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.iss.experiments;
+package cz.cuni.mff.ksi.jinfer.iss.experiments.data;
 
 /**
- * Encapsulation of a test data file.
+ * Enum representing the characteristics of the experiment input file.
  *
  * @author vektor
  */
-public interface TestData {
+public enum FileCharacteristics {
 
-  /**
-   * Returns the input file represented.
-   *
-   * @return Test data file.
-   */
-  InputFile getFile();
+  /** Realistic, real-life data, no changes. */
+  REALISTIC("realistic"),
+  /** Realistic data with some text content converted to attributes. */
+  CONVERTED("converted"),
+  /** Artificially generated data. */
+  ARTIFICIAL("artificial"),
+  UNKNOWN(null);
 
-  /**
-   * Returns the known optimum for alpha = beta = 1, if available.
-   *
-   * @return Known optimum for this file or <code>null</code> if unknown.
-   */
-  Double getKnownOptimum();
+  private final String folder;
 
-  /**
-   * Returns the number of vertices in the graph representation of this file.
-   */
-  int getVertices();
+  private FileCharacteristics(final String folder) {
+    this.folder = folder;
+  }
 
-  /**
-   * Returns the number of edges in the graph representation of this file.
-   */
-  int getEdges();
+  public String getFolder() {
+    return folder;
+  }
 
 }

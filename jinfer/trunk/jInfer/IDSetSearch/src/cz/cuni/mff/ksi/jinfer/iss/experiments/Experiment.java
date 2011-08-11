@@ -37,6 +37,8 @@ import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import static cz.cuni.mff.ksi.jinfer.iss.utils.Utils.time;
+import static cz.cuni.mff.ksi.jinfer.iss.utils.Utils.delta;
 
 /**
  * Class encapsulating an ID set search experiment. After all the input
@@ -45,20 +47,19 @@ import java.util.List;
  *
  * @author vektor
  */
-public class Experiment implements IGGeneratorCallback {
+public class Experiment {
 
-  // TODO vektor In DIRE need of refactoring!
   // TODO vektor Tell GLPK what the optimum is - add constraint?
 
   private final ExperimentParameters params;
 
-  /** Time of the experiment start, absolute, in ms. */
+  /** Time of the heuristic run start, absolute, in ms. */
   private long startTime;
-  /** Total time of the experiment run, in ms. */
+  /** Total time of the heuristic run, in ms. */
   private long totalTime;
-  // TODO vektor Comment these
-  private long grammarStartTime;
+  /** Time it took to extract the grammar, in ms. */
   private long grammarTime;
+  /** Time it took to build the AM model, in ms. */
   private long modelTime;
   private Quality highestQuality = Quality.ZERO;
   private Pair<Boolean, String> terminationReason;
@@ -203,26 +204,27 @@ public class Experiment implements IGGeneratorCallback {
     final IGGenerator igg = ModuleSelectionHelper.lookupImpl(IGGenerator.class, "Basic_IG_Generator");
     final Input input = new Input();
     input.getDocuments().add(params.getFile().getFile());
-    grammarStartTime = time();
-    igg.start(input, this);
-  }
+    final long grammarStartTime = time();
+    igg.start(input, new IGGeneratorCallback() {
 
-  @Override
-  public void finished(final List<Element> grammar) {
-    grammarTime = delta(grammarStartTime);
-    final long modelStartTime = time();
-    model = new AMModel(grammar);
-    // this triggers all the lazy operations in model to see how long it takes to build it fully
-    model.getFlat();
-    model.getTree();
-    model.getAMs();
-    model.getTypes();
-    modelTime = delta(modelStartTime);
-    startTime = time();
-    try {
-      params.getConstructionHeuristic().start(Experiment.this, new Callback(-1, startTime));
-    } catch (final InterruptedException e) {
-    }
+      @Override
+      public void finished(List<Element> grammar) {
+        grammarTime = delta(grammarStartTime);
+        final long modelStartTime = time();
+        model = new AMModel(grammar);
+        // this triggers all the lazy operations in model to see how long it takes to build it fully
+        model.getFlat();
+        model.getTree();
+        model.getAMs();
+        model.getTypes();
+        modelTime = delta(modelStartTime);
+        startTime = time();
+        try {
+          params.getConstructionHeuristic().start(Experiment.this, new Callback(-1, startTime));
+        } catch (final InterruptedException e) {
+        }
+      }
+    });
   }
 
   private void runImprovement(final List<IdSet> feasiblePool, final int iteration) {
@@ -285,17 +287,7 @@ public class Experiment implements IGGeneratorCallback {
     }
   }
 
-  // --- TIMING ----------------------------------------------------------------
-
-  private static long time() {
-    return System.nanoTime() / 1000000;
-  }
-
-  private static long delta(final long from) {
-    return time() - from;
-  }
-
-  // --- GETTERS / SETTERS -----------------------------------------------------
+  // --- GETTERS ---------------------------------------------------------------
 
   public int getPoolSize() {
     return params.getPoolSize();

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AttributeMappingId;
 import java.io.File;
@@ -91,7 +92,7 @@ public final class GlpkRunner {
     inputFile.delete();
     outputFile.delete();
 
-    GlpkUtils.writeInput(inputFile, inputString);
+    FileUtils.writeString(inputString, inputFile);
 
     final StringBuilder ret = new StringBuilder();
     try {

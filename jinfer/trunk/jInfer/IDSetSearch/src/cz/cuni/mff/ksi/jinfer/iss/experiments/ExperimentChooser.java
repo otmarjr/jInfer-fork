@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
  *
  * @author vektor
  */
+@SuppressWarnings("PMD.SingularField")
 public class ExperimentChooser extends JDialog {
 
   private static final long serialVersionUID = 87465123L;

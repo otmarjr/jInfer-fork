@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import org.apache.log4j.Logger;
 
 /**
@@ -121,6 +122,29 @@ public final class FileUtils {
     } catch (final IOException ex) {
       LOG.error("An exception occured while running the file " + pathToBinary, ex);
       return null;
+    }
+  }
+
+  /**
+   * Writes the specified string to the specified file. It tries to create all
+   * the necessary folders on the way to the file.
+   *
+   * @param s String to be written.
+   * @param f File to be written to.
+   */
+  public static void writeString(final String s, final File f) {
+    final File parentDir = f.getParentFile();
+    if (!parentDir.exists() || !parentDir.isDirectory()) {
+      parentDir.mkdirs();
+    }
+    PrintWriter pw = null;
+    try {
+      pw = new PrintWriter(f);
+      pw.write(s);
+    } catch (final IOException e) {
+      throw new RuntimeException(e);
+    } finally {
+      pw.close();
     }
   }
 

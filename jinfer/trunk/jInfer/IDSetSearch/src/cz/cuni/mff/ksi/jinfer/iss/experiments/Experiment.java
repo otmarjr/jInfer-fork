@@ -47,6 +47,7 @@ import java.util.List;
  */
 public class Experiment implements IGGeneratorCallback {
 
+  // TODO vektor In DIRE need of refactoring!
   // TODO vektor Tell GLPK what the optimum is - add constraint?
 
   private final ExperimentParameters params;
@@ -317,5 +318,17 @@ public class Experiment implements IGGeneratorCallback {
 
   public Double getKnownOptimum() {
     return params.getKnownOptimum();
+  }
+
+  public Quality getHighestQuality() {
+    return highestQuality;
+  }
+
+  public long getGrammarTime() {
+    return grammarTime;
+  }
+
+  public long getModelTime() {
+    return modelTime;
   }
 }

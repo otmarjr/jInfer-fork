@@ -17,17 +17,21 @@
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.OfficialTestData;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.TestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,9 +46,25 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class RandomVsFuzzyVsFidaxStart extends AbstractExperimentSet {
 
+  private final StringBuilder sb = new StringBuilder();
+
+  public RandomVsFuzzyVsFidaxStart() {
+    for (final TestData data : OfficialTestData.values()) {
+      sb.append("r-")
+        .append(data.getFile().getName())
+        .append('\t')
+        .append("f-")
+        .append(data.getFile().getName())
+        .append('\t')
+        .append("F-")
+        .append(data.getFile().getName())
+        .append('\t');
+    }
+  }
+
   @Override
   public String getName() {
-    return "RandomVFuzzyVFidax first step only";
+    return "Random vs Fuzzy vs Fidax first step only";
   }
 
   @Override
@@ -53,28 +73,34 @@ public class RandomVsFuzzyVsFidaxStart extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (final OfficialTestData data : OfficialTestData.values()) {
-      for (int i = 0; i < Constants.ITERATIONS; i++) {
+    for (int i = 0; i < Constants.ITERATIONS; i++) {
+      for (final TestData data : OfficialTestData.values()) {
         ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
                 data.getKnownOptimum(), new Random(), improvement, new Weight(), TimeIterations.NULL));
-      }
-    }
-
-    for (final OfficialTestData data : OfficialTestData.values()) {
-      for (int i = 0; i < Constants.ITERATIONS; i++) {
         ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
                 data.getKnownOptimum(), new Fuzzy(), improvement, new Weight(), TimeIterations.NULL));
-      }
-    }
-
-    for (final OfficialTestData data : OfficialTestData.values()) {
-      for (int i = 0; i < Constants.ITERATIONS; i++) {
         ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
                 data.getKnownOptimum(), new Fidax(), improvement, new Weight(), TimeIterations.NULL));
       }
     }
 
     return ret;
+  }
+
+  @Override
+  protected void notifyFinished(final Experiment e, final int iteration) {
+    sb.append((iteration % (3 * OfficialTestData.values().length)) == 0 ? '\n': '\t')
+      .append(e.getHighestQuality().getScalar());
+  }
+
+  @Override
+  protected void notifyFinishedAll() {
+    final File rootDir = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName());
+    if (!rootDir.exists()) {
+      rootDir.mkdirs();
+    }
+    final File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
+    GlpkUtils.writeInput(finalCsv, sb.toString());
   }
 
 }

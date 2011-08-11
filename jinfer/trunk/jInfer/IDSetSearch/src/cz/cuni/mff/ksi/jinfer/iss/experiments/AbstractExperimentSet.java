@@ -47,14 +47,17 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
   @Override
   public void run() throws InterruptedException {
     int i = 0;
-    for (final ExperimentParameters params : getExperiments()) {
+    final List<ExperimentParameters> experiments = getExperiments();
+    LOG.info("Got " + experiments.size() + " experiment parameter sets");
+    for (final ExperimentParameters params : experiments) {
       final Experiment e = new Experiment(params);
-      final int index = i++;
+      final int iteration = i++;
       e.addListener(new ExperimentListener() {
 
         @Override
         public void experimentFinished(final Experiment e) {
-          logResults(e, index);
+          LOG.debug("Iteration #" + iteration + " finished");
+          notifyFinished(e, iteration);
           synchronized (monitor) {
             monitor.notifyAll();
           }
@@ -72,21 +75,24 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
           }
         }
       }, "Experiment Runner");
+      LOG.debug("Running iteration #" + iteration);
       t.start();
 
       synchronized (monitor) {
         monitor.wait();
       }
     }
+
+    notifyFinishedAll();
   }
 
-  private void logResults(final Experiment e, final int index) {
+  protected void notifyFinished(final Experiment e, final int iteration) {
     final File rootDir = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName());
     if (!rootDir.exists()) {
       rootDir.mkdirs();
     }
 
-    final File output = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/" + index + ".txt");
+    final File output = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/" + iteration + ".txt");
 
     final StringBuilder ret = new StringBuilder();
     ret.append(SystemInfo.getInfo()).append('\n')
@@ -94,6 +100,10 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
         .append(e.getCsv()).append('\n')
         .append(e.getWinner());
     GlpkUtils.writeInput(output, ret.toString());
+  }
+
+  protected void notifyFinishedAll() {
+
   }
 
   @Override

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
@@ -28,7 +29,6 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.io.File;
@@ -95,12 +95,8 @@ public class RandomVsFuzzyVsFidaxStart extends AbstractExperimentSet {
 
   @Override
   protected void notifyFinishedAll() {
-    final File rootDir = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName());
-    if (!rootDir.exists()) {
-      rootDir.mkdirs();
-    }
     final File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
-    GlpkUtils.writeInput(finalCsv, sb.toString());
+    FileUtils.writeString(sb.toString(), finalCsv);
   }
 
 }

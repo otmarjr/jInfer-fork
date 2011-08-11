@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentListener;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.GlpkUtils;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.io.File;
 import java.util.List;
@@ -87,11 +87,6 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
   }
 
   protected void notifyFinished(final Experiment e, final int iteration) {
-    final File rootDir = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName());
-    if (!rootDir.exists()) {
-      rootDir.mkdirs();
-    }
-
     final File output = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/" + iteration + ".txt");
 
     final StringBuilder ret = new StringBuilder();
@@ -99,9 +94,13 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
         .append(e.getReport()).append('\n')
         .append(e.getCsv()).append('\n')
         .append(e.getWinner());
-    GlpkUtils.writeInput(output, ret.toString());
+    FileUtils.writeString(ret.toString(), output);
   }
 
+  /**
+   * Notification that the experiment set has finished. We do not want to
+   * force descendants to override this, thus it is not abstract.
+   */
   protected void notifyFinishedAll() {
 
   }

@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.utils;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import java.io.File;
+
 /**
  * A few constants used throughout the project.
  *
@@ -26,6 +29,8 @@ public final class Constants {
   private Constants() {
 
   }
+
+  public static final File RESTART = new File(FileUtils.JINFER_DIR + "/experiment-restart.txt");
 
   public static final int ITERATIONS = 10;
 

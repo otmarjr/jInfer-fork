@@ -129,6 +129,7 @@ public final class GlpkUtils {
    * @throws InterruptedException If the thread is interrupted.
    * @throws IOException If there is a problem with reading.
    */
+  // TODO vektor Move to file utils
   public static void readerToBuilder(final Reader r, final StringBuilder sb)
           throws InterruptedException, IOException {
     final BufferedReader reader = new BufferedReader(r);

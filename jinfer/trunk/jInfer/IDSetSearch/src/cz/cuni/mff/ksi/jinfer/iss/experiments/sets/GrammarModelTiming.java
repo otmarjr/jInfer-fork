@@ -45,26 +45,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class GrammarModelTiming extends AbstractExperimentSet {
 
-  private final StringBuilder sb = new StringBuilder();
-
-  public GrammarModelTiming() {
-    for (final TestData data : OfficialTestData.values()) {
-      sb.append("gt-")
-        .append(data.getFile().getName())
-        .append('\t')
-        .append("mt-")
-        .append(data.getFile().getName())
-        .append('\t');
-    }
-    for (final TestData data : SizeTestData.values()) {
-      sb.append("gt-")
-        .append(data.getFile().getName())
-        .append('\t')
-        .append("mt-")
-        .append(data.getFile().getName())
-        .append('\t');
-    }
-  }
+  private final File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
 
   @Override
   public String getName() {
@@ -93,17 +74,35 @@ public class GrammarModelTiming extends AbstractExperimentSet {
   }
 
   @Override
+  protected void notifyStart() {
+    final StringBuilder sb = new StringBuilder();
+    for (final TestData data : OfficialTestData.values()) {
+      sb.append("gt-")
+        .append(data.getFile().getName())
+        .append('\t')
+        .append("mt-")
+        .append(data.getFile().getName())
+        .append('\t');
+    }
+    for (final TestData data : SizeTestData.values()) {
+      sb.append("gt-")
+        .append(data.getFile().getName())
+        .append('\t')
+        .append("mt-")
+        .append(data.getFile().getName())
+        .append('\t');
+    }
+    FileUtils.writeString(sb.toString(), finalCsv);
+  }
+
+  @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
     final int numColumns = OfficialTestData.values().length + SizeTestData.values().length;
+    final StringBuilder sb = new StringBuilder();
     sb.append((iteration % numColumns) == 0 ? '\n': '\t')
       .append(e.getGrammarTime())
       .append('\t')
       .append(e.getModelTime());
-  }
-
-  @Override
-  protected void notifyFinishedAll() {
-    final File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
-    FileUtils.writeString(sb.toString(), finalCsv);
+    FileUtils.appendString(sb.toString(), finalCsv);
   }
 }

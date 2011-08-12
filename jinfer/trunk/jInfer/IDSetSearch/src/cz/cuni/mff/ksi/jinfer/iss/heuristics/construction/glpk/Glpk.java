@@ -37,6 +37,13 @@ public class Glpk implements ConstructionHeuristic {
   private final int timeLimit;
 
   /**
+   * Constructs a new instance of this heuristic with unlimited run time.
+   */
+  public Glpk() {
+    this(0);
+  }
+
+  /**
    * Constructs a new instance of this heuristic and sets the time limit.
    *
    * @param timeLimit Time limit (in seconds) of the GLPK run.

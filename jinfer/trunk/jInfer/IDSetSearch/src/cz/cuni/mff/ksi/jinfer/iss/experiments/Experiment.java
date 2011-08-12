@@ -323,4 +323,8 @@ public class Experiment {
   public long getModelTime() {
     return modelTime;
   }
+
+  public HeuristicResult getConstructionResult() {
+    return constructionResult;
+  }
 }

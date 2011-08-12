@@ -32,10 +32,10 @@ public final class Constants {
 
   public static final File RESTART = new File(FileUtils.JINFER_DIR + "/experiment-restart.txt");
 
-  public static final int ITERATIONS = 10;
+  public static final int ITERATIONS = 20;
 
-  public static final String TEST_DATA_ROOT = System.getProperty("user.home") + "/test-data-official";
+  public static final String TEST_DATA_ROOT = "C:/Users/vitasek/Documents/Soukrome/test-data-official";
 
-  public static final String TEST_OUTPUT_ROOT = System.getProperty("user.home") + "/test-output";
+  public static final String TEST_OUTPUT_ROOT = "C:/Users/vitasek/Documents/Soukrome/test-output";
 
 }

@@ -32,13 +32,13 @@ public final class SystemInfo {
   }
 
   /** Number of processor cores. */
-  private static final int PROCESSOR_CORES = 4;
+  private static final int PROCESSOR_CORES = 2;
   /** Clock speed in MHz. */
-  private static final int PROCESSOR_CLOCK_SPEED = 2983;
+  private static final int PROCESSOR_CLOCK_SPEED = 2330;
   /** Processor architecture/family. */
-  private static final String PROCESSOR_ARCH = "Intel(R) Core(TM)2 Quad  CPU   Q9550  @ 2.83GHz";
+  private static final String PROCESSOR_ARCH = "Intel(R) Core(TM)2 Duo CPU     E6550  @ 2.33GHz";
   /** RAM size in MB. */
-  private static final int RAM_SIZE = 8192;
+  private static final int RAM_SIZE = 4096;
 
   /** Number of processor cores. */
   //private static final int PROCESSOR_CORES = 2;

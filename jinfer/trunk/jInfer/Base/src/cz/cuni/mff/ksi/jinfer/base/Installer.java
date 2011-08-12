@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.LogLevelUtils;
 import java.awt.Color;
 import java.io.IOException;
@@ -133,7 +134,7 @@ public class Installer extends ModuleInstall {
     final EnhancedPatternLayout fileLayout = new EnhancedPatternLayout(
             "(%d{dd MMM yyyy HH:mm:ss,SSS}) %p [%t] %c (%F:%L) - %m%n");
     try {
-      final String logfileName = System.getProperty("user.home") + "/.jinfer/jinfer.errors.log";
+      final String logfileName = FileUtils.JINFER_DIR + "/jinfer.errors.log";
       final RollingFileAppender logfileAppender = new RollingFileAppender(fileLayout, logfileName);
       // keep max 1 old logfile
       logfileAppender.setMaxBackupIndex(1);

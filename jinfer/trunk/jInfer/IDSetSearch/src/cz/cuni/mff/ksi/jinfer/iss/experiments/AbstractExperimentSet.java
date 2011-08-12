@@ -46,18 +46,22 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
   private static final Logger LOG = Logger.getLogger(AbstractExperimentSet.class);
 
   @Override
-  public void run() throws InterruptedException {
-    int i = 0;
+  public void run(final int from) throws InterruptedException {
+    LOG.info("Running from index " + from);
+    if (from == 0) {
+      notifyStart();
+    }
     final List<ExperimentParameters> experiments = getExperiments();
     LOG.info("Got " + experiments.size() + " experiment parameter sets");
-    for (final ExperimentParameters params : experiments) {
-      final Experiment e = new Experiment(params);
-      final int iteration = i++;
+    for (int i = from; i < experiments.size(); i++) {
+      final Experiment e = new Experiment(experiments.get(i));
+      final int iteration = i;
       e.addListener(new ExperimentListener() {
 
         @Override
         public void experimentFinished(final Experiment e) {
           LOG.debug("Iteration #" + iteration + " finished");
+          FileUtils.appendString("\n" + iteration, Constants.RESTART);
           notifyFinished(e, iteration);
           synchronized (monitor) {
             monitor.notifyAll();
@@ -84,6 +88,7 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
       }
     }
 
+    Constants.RESTART.delete();
     notifyFinishedAll();
   }
 
@@ -96,6 +101,15 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
         .append(e.getCsv()).append('\n')
         .append(e.getWinner());
     FileUtils.writeString(ret.toString(), output);
+  }
+
+  /**
+   * Notification that the experiment set run is starting (this does not happen
+   * if we start from index higher than 0). We do not want to force descendants
+   * to override this, thus it is not abstract.
+   */
+  protected void notifyStart() {
+
   }
 
   /**

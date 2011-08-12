@@ -14,11 +14,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package cz.cuni.mff.ksi.jinfer.base.utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -33,8 +34,10 @@ public final class FileUtils {
 
   private FileUtils() {
   }
-
+  
   private static final Logger LOG = Logger.getLogger(FileUtils.class);
+
+  public static final String JINFER_DIR = System.getProperty("user.home") + "/.jinfer";
 
   /**
    * Returns the extension of the provided file.
@@ -85,8 +88,7 @@ public final class FileUtils {
       final String stdOut = inputReader.readLine();
       final String errOut = errorReader.readLine();
       if ((stdOut != null && stdOut.startsWith(expectedFirstLine))
-              ||
-              (errOut != null && errOut.startsWith(expectedFirstLine))) {
+              || (errOut != null && errOut.startsWith(expectedFirstLine))) {
         inputReader.close();
         errorReader.close();
         return true;
@@ -133,10 +135,7 @@ public final class FileUtils {
    * @param f File to be written to.
    */
   public static void writeString(final String s, final File f) {
-    final File parentDir = f.getParentFile();
-    if (!parentDir.exists() || !parentDir.isDirectory()) {
-      parentDir.mkdirs();
-    }
+    assureParentsExist(f);
     PrintWriter pw = null;
     try {
       pw = new PrintWriter(f);
@@ -148,4 +147,28 @@ public final class FileUtils {
     }
   }
 
+  /**
+   * Appends the specified string to the specified file. It tries to create all
+   * the necessary folders on the way to the file.
+   *
+   * @param s String to be appended.
+   * @param f File to be written to.
+   */
+  public static void appendString(final String s, final File f) {
+    assureParentsExist(f);
+    try {
+      final BufferedWriter out = new BufferedWriter(new FileWriter(f, true));
+      out.write(s);
+      out.close();
+    } catch (final IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private static void assureParentsExist(final File f) {
+    final File parentDir = f.getParentFile();
+    if (!parentDir.exists() || !parentDir.isDirectory()) {
+      parentDir.mkdirs();
+    }
+  }
 }

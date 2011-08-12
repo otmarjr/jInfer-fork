@@ -28,8 +28,8 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 public interface ExperimentSet extends NamedModule {
 
   /**
-   * Run the experiment set, whatever that means.
+   * Run the experiment set from the specified index (first is 0), whatever that means.
    */
-  void run() throws InterruptedException;
+  void run(final int from) throws InterruptedException;
 
 }

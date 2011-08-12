@@ -18,14 +18,12 @@ package cz.cuni.mff.ksi.jinfer.iss.gui;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
 import cz.cuni.mff.ksi.jinfer.base.objects.ProjectPropsComboRenderer;
-import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.iss.ExperimentAction;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -100,20 +98,8 @@ public class ExperimentChooser extends JDialog {
   }// </editor-fold>//GEN-END:initComponents
 
 private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
-  final ExperimentSet set = ModuleSelectionHelper.lookupImpl(ExperimentSet.class, ((NamedModule) experiments.getSelectedItem()).getName());
   dispose();
-  AsynchronousUtils.runAsync(new Runnable() {
-
-    @Override
-    public void run() {
-      try {
-        set.run();
-      } catch (final InterruptedException e) {
-        Logger.getLogger(ExperimentAction.class).error("Interrupted", e);
-      }
-    }
-  }, "Experimenting");
-
+  ExperimentAction.runExperiment(((NamedModule) experiments.getSelectedItem()).getName(), 0);
 }//GEN-LAST:event_okActionPerformed
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JComboBox experiments;

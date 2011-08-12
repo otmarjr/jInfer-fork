@@ -85,10 +85,12 @@ public final class ExperimentAction implements ActionListener {
   }
 
   /**
-   * TODO vektor Comment!
+   * Asynchronously runs the chosen experimental set (identified by its name),
+   * from the specified index.
    *
-   * @param experimentName
-   * @param from
+   * @param experimentName Name of the experimental set (see {@link ExperimentSet#getName()}).
+   * @param from Index to start running the set from. Note that 0 means "run
+   * from" beginning.
    */
   public static void runExperiment(final String experimentName, final int from) {
     final ExperimentSet set = ModuleSelectionHelper.lookupImpl(ExperimentSet.class, experimentName);

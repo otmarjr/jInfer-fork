@@ -55,19 +55,7 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
     LOG.info("Got " + experiments.size() + " experiment parameter sets");
     for (int i = from; i < experiments.size(); i++) {
       final Experiment e = new Experiment(experiments.get(i));
-      final int iteration = i;
-      e.addListener(new ExperimentListener() {
-
-        @Override
-        public void experimentFinished(final Experiment e) {
-          LOG.debug("Iteration #" + iteration + " finished");
-          FileUtils.appendString("\n" + iteration, Constants.RESTART);
-          notifyFinished(e, iteration);
-          synchronized (monitor) {
-            monitor.notifyAll();
-          }
-        }
-      });
+      e.addListener(new Listener(i));
       final Thread t = new Thread(new Runnable() {
 
         @Override
@@ -80,7 +68,8 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
           }
         }
       }, "Experiment Runner");
-      LOG.debug("Running iteration #" + iteration);
+
+      LOG.debug("Running iteration #" + i);
       t.start();
 
       synchronized (monitor) {
@@ -92,6 +81,46 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
     notifyFinishedAll();
   }
 
+  private class Listener implements ExperimentListener {
+
+    private final int iteration;
+
+    public Listener(final int iteration) {
+      this.iteration = iteration;
+    }
+
+    @Override
+    public void experimentFinished(final Experiment e) {
+      LOG.debug("Iteration #" + iteration + " finished");
+      FileUtils.appendString("\n" + iteration, Constants.RESTART);
+      notifyFinished(e, iteration);
+      synchronized (monitor) {
+        monitor.notifyAll();
+      }
+    }
+  }
+
+  // --- Lifecycle -------------------------------------------------------------
+
+  /**
+   * Notification that the experiment set run is starting (this does not happen
+   * if we start from index higher than 0). We do not want to force descendants
+   * to override this, thus it is not abstract.
+   */
+  protected void notifyStart() {
+
+  }
+
+  /**
+   * Notification that the current iteration has finished. This implementation
+   * writes the full report providied by the experiment that has finished in
+   * a file named with the iteration (123.txt). It is OK to override this method
+   * and not call super, if this logic is unnecessary.
+   *
+   * @param e Object representing the experiment that has currently finished running.
+   * @param iteration Iteration - index in the list of all the experiments in
+   * this set - that was just finished. Note that the numbering starts from 0.
+   */
   protected void notifyFinished(final Experiment e, final int iteration) {
     final File output = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/" + iteration + ".txt");
 
@@ -101,15 +130,6 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
         .append(e.getCsv()).append('\n')
         .append(e.getWinner());
     FileUtils.writeString(ret.toString(), output);
-  }
-
-  /**
-   * Notification that the experiment set run is starting (this does not happen
-   * if we start from index higher than 0). We do not want to force descendants
-   * to override this, thus it is not abstract.
-   */
-  protected void notifyStart() {
-
   }
 
   /**

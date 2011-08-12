@@ -13,7 +13,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multicol}
-\usepackage[pdfborder=0 0 0]{hyperref}
+\usepackage[dvipdfmx,pdfborder=0 0 0]{hyperref}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -250,6 +250,10 @@ We will discuss a closely related Mixed Integer Problem (MIP)\nomenclature{MIP}{
 Afterwards, we will show how to use an external MIP solver and various heuristics to tackle this problem.
 
 An extension to jInfer for finding ID attributes using MIP solver and a combination of heuristics will be presented and experimentally evaluated in the closing chapters.
+
+\section{Conventions}
+
+TODO list conventions - how we write code related stuff, module names, heu names, etc
 
 \chapter{Definitions}
 
@@ -655,7 +659,7 @@ TODO following experiments + more
 
 \begin{itemize}
 	\item For each input file: how long does model creation take?
-	\item How long does it take to communicate with GLPK? Creating the input/parsing the output.
+	\item How long does it take to communicate with GLPK? Creating the input / parsing the output.
 	\item Which construction heuristic is the best - limit GLPK to like 1 second
 	\item With the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
 	\item With the best IH from the previous step, how about using Random as CH?
@@ -738,7 +742,7 @@ TODO to the best of our knowledge, this framework is one-of-a-kind
 
 This appendix will try to describe shortly yet comprehensively \textbf{jInfer} - the Java framework for XML schema inference. Please see TODO link jInfer project web for complete information, documentation and download options.
 
-jInfer was developed between 2009 and 2011 at Charles University in Prague as a Software Project by team consisting of Michal Klempa, Mario Mikula, Robert Smetana, Michal Svirec and Matej Vitasek. The main idea was to create a structure in which all aspects of XML schema inference can be easily implemented and evaluated. The goal was apparently achieved: the SW project was successfuly defended when jInfer was inferring DTD and XSD schemas based on XML documents, old DTD and XSD schemas and XPath queries. Since then, Michal Klempa has successfuly defended his own thesis improving on the grammar simplification process (see below), Michal Svirec has extended the framework with capabilities to detect and repair functional dependencies violation and defended his thesis as well. This thesis is the third based on this framework, and Mario Mikula's is on its way, too.
+jInfer was developed between 2009 and 2011 at Charles University in Prague as a Software Project by team consisting of Michal Klempa, Mario Mikula, Ro\-bert Sme\-ta\-na, Michal Svirec and Matej Vitasek. The main idea was to create a structure in which all aspects of XML schema inference can be easily implemented and evaluated. The goal was apparently achieved: the SW project was successfuly defended when jInfer was inferring DTD and XSD schemas based on XML documents, old DTD and XSD schemas and XPath queries. Since then, Michal Klempa has successfuly defended his own thesis improving on the grammar simplification process (see below), Michal Svirec has extended the framework with capabilities to detect and repair functional dependencies violation and defended his thesis as well. This thesis is the third based on this framework, and Mario Mikula's is on its way, too.
 
 At heart of jInfer inference process is a modular system provided by NetBeans Platform allowing to define services (interfaces), implement them in any number of ways and then let the user choose which implementation to use. Most importantly, the whole process consists of 3 consecutive steps (see \ref{image-inference-process}), responsibility of 3 different services - interchangeable modules.
 
@@ -761,6 +765,16 @@ TODO elaborate more, if too short:)
 \label{iss}
 
 TODO talk a bit about the structure of ISS module.
+
+TODO name of the module, its place in jInfer, interface with the framework (service providing)
+
+TODO package name root
+
+TODO "Attribute Stats"
+
+TODO heuristics - interfaces, construction, improvement
+
+TODO experiments - quality, termination, parameters, experiment sets
 
 \chapter{Traces}
 \label{traces}
@@ -825,7 +839,7 @@ Improvement phase:
     Time since start: 7676 ms
     Pool size: 12
     Quality: 0.19951219512195123 (10 AMs)
-Termination reason: Maximum iterations exceeded.
+Termination reason: Max\-imum ite\-rat\-ions ex\-cee\-ded.
 
 Time,Quality,AMs
 248,0.19975609756097568,11
@@ -911,7 +925,7 @@ Algorithm: Mutation, ratio = 0.1, limit = 1 s
 \end{verbatim}
 \end{footnotesize}
 
-After the last improvement phase, the reason why the metaheuristic terminated is stated. Possible causes are exceeding the maximum time available, maximum iterations or reaching the known optimum for this file and alpha/beta settings.
+After the last improvement phase, the reason why the metaheuristic terminated is stated. Possible causes are exceeding the maximum time available, maximum iterations or reaching the known optimum for this file and alpha / beta settings.
 \\
 
 To be able to reconstruct the progress of the metaheuristic, the next section contains CSV \nomenclature{CSV}{Comma Separated Values} formatted data for each iteration. Each row contains the time in milliseconds, quality of the incumbent solution and the number of its AMs.

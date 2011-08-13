@@ -24,6 +24,6 @@ default: all
 all: diplomka.pdf
 
 clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux *.pdf
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux *.pdf *.lot *.loa *.nlo *.out *.ps
 dist-clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf 
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf *.lot *.loa *.nlo *.out *.ps

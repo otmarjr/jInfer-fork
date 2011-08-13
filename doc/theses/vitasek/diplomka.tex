@@ -621,36 +621,87 @@ TODO describe the (rather trivial) algorithm of finding IDREF attributes once we
 
 \chapter{Experiments}
 
+TODO what are trying to establish? What is our aim here? To get an understanding how the system and its components behave. What do the parameters affect. To see which types of data are best handled by specific algorithms. To see what are the time scales involved in ID search and how various parameters affect the run times of the heuristics.
+
 TODO describe all the inputs (take it from the mindmap), describe how the output looks (sample trace - link to appendix)
 
 \section{Experimental Data}
 
-TODO types of data:
+Let us now talk about the XML data we will be using to conduct out experiments. We are using XML documents of three categories:
+
 \begin{itemize}
 	\item Realistic 
-	\item Realistic with artificial attributes
+	\item Realistic with artificial (converted) attributes
 	\item Artificial
 \end{itemize}
 
-TODO for all types, show GraphViz pictures.
+A short reasoning for this choice: realistic - of course, we want to see the performance in cases taken from the real world. The problem with realistic data is that sometimes, interesting values (that might or might not contain IDs) are stored as text nodes % TODO is this name consistent with what I've been defining?
+instead of attributes. We might try to look at such data, convert some of these ``suspicious" values to attributes (e.g. using a smart XSL transformation), let our heuristics find the ID sets, and then translate them back to XML keys (see \ref{realistic-converted} for details).
+And finally, we create completely artificial data to create inputs that will really put our heuristics to the test. This is because the realistic data often prove to be quite easy to solve - the list of candidate AMs is usually too short to be hard to solved to optimality.
 
 \subsection{Realistic data}
 
 TODO talk about all that are used - mention the dataset name, some characteristics (excel sheet)
 
-\subsection{Realistic data with artificial attributes}
+\begin{figure}
+  \caption{Realistic data - first part}
+  \label{image-experiments-data-realistic-1}
+  \centering
+    \subfigure[OVA1]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1.eps}}
+    \subfigure[OVA2]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA2.eps}}
+    \subfigure[OVA3]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA3.eps}}
+\end{figure}
 
-TODO we have taken some of the text data and converted it to attributes like this, A B C
+\begin{figure}
+  \caption{Realistic data - second part}
+  \label{image-experiments-data-realistic-2}
+  \centering
+    \subfigure[XMA-c]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMA-c.eps}}
+    \subfigure[XMA-p]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMA-p.eps}}
+    \subfigure[XMD]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD.eps}}
+\end{figure}
+
+
+\subsection{Realistic data with artificial attributes}
+\label{realistic-converted}
+
+TODO we have taken some of the text data and converted it to attributes like this, A B C.
+
+TODO we can convert it back to keys!
+
+\begin{figure}
+  \caption{Realistic data with converted attributes}
+  \label{image-experiments-data-converted}
+  \centering
+    \subfigure[MSH]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/MSH.eps}}
+    \subfigure[NTH]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH.eps}}
+\end{figure}
 
 \subsection{Artificial data}
 
 TODO these are random graphs.
+
 TODO talk about how they are created, about their structure.
+
 TODO talk about some "density".
+
+TODO talk about the "size" test data
+
+\begin{figure}
+  \caption{Artificial data}
+  \label{image-experiments-data-artificial}
+  \centering
+%  	\subfigure[100-100]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/100-100.eps}}
+%	\subfigure[100-200]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/100-200.eps}}
+%    \subfigure[100-1000]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/100-1000.eps}}    
+\end{figure}
 
 \section{Experimental Setup}
 
+TODO describe the actual HW/SW setup: two computers, Windows/Linux, versions etc. What is running when experimenting, that we are always using more runs to counter for effects like caches and stuff that happens. Say many things actually depend on the order in which we run the experiments in one set, and if it is relevant we will talk about it in that particular experiment.
+
 TODO we will be using jInfer and its module AttributeStats see \ref{jInfer} and \ref{attrstats}.
+
 TODO describe how to create a model, describe how we get IGG, link BasicIGG
 
 \section{Experimental Results}
@@ -738,11 +789,11 @@ However, this approach takes too long for some inputs, so we introduced a whole 
 \chapter{jInfer}
 \label{jInfer}
 
-TODO to the best of our knowledge, this framework is one-of-a-kind
-
 This appendix will try to describe shortly yet comprehensively \textbf{jInfer} - the Java framework for XML schema inference. Please see TODO link jInfer project web for complete information, documentation and download options.
 
 jInfer was developed between 2009 and 2011 at Charles University in Prague as a Software Project by team consisting of Michal Klempa, Mario Mikula, Ro\-bert Sme\-ta\-na, Michal Svirec and Matej Vitasek. The main idea was to create a structure in which all aspects of XML schema inference can be easily implemented and evaluated. The goal was apparently achieved: the SW project was successfuly defended when jInfer was inferring DTD and XSD schemas based on XML documents, old DTD and XSD schemas and XPath queries. Since then, Michal Klempa has successfuly defended his own thesis improving on the grammar simplification process (see below), Michal Svirec has extended the framework with capabilities to detect and repair functional dependencies violation and defended his thesis as well. This thesis is the third based on this framework, and Mario Mikula's is on its way, too.
+
+To the best of our knowledge, at the time of writing this thesis is jInfer the only public, open source and actually working solution for XML schema inference-related tasks.
 
 At heart of jInfer inference process is a modular system provided by NetBeans Platform allowing to define services (interfaces), implement them in any number of ways and then let the user choose which implementation to use. Most importantly, the whole process consists of 3 consecutive steps (see \ref{image-inference-process}), responsibility of 3 different services - interchangeable modules.
 
@@ -759,8 +810,6 @@ After leaving the \jmodule{Initial Grammar Generator}, the IG needs to be made m
 
 The last module, \jmodule{Schema Generator} takes the simplified grammar and creates the resulting schema from it. This process is not too interesting, but anyone wishing to find out all about it is invited to read the documentation to the two \jmodule{Schema Generator}s bundled with jInfer - the BasicDTD and BasicXSD modules.
 
-TODO elaborate more, if too short:)
-
 \chapter{IDSetSearch}
 \label{iss}
 
@@ -776,7 +825,7 @@ TODO heuristics - interfaces, construction, improvement
 
 TODO experiments - quality, termination, parameters, experiment sets
 
-\chapter{Traces}
+\chapter{Experimental Trace}
 \label{traces}
 
 Following is a trace logged from a sample experiment run. It shows all the relevant information related to this instance, any and every piece of information we might be interested in.

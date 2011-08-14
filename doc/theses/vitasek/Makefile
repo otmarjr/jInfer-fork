@@ -1,5 +1,7 @@
 default: all
 
+IMAGESTOCONVERT=$(shell cat diplomka.tex | grep includegraphics | sed -e "s/.*includegraphics\[.*\]{\([^}]*\)}.*/\1\.pdf/")
+
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc
 	latex -interaction=nonstopmode $< 
@@ -7,23 +9,17 @@ default: all
 	latex -interaction=nonstopmode $<
 	latex -interaction=nonstopmode $< 
 
-%.pdf: %.dvi
-	dvipdfmx $<
+%.pdf: %.eps
+	epstopdf $<
 
-%.html: %.tex literature.bib Makefile
+all: ${IMAGESTOCONVERT} literature.bib Makefile diplomka.tex
 	rm -f *.toc
-	hevea -O -pedantic $<
-	bibtex $(<:.tex=.aux)
-	hevea -O -pedantic $<
-	hevea -O -pedantic $<
-
-%.eps: %.gv Makefile
-	dot -Teps $< > $@
-	dot -Tpng $< > $(@:.eps=.png)
-
-all: diplomka.pdf
+	pdflatex -interaction=nonstopmode diplomka
+	pdflatex -interaction=nonstopmode diplomka
+	bibtex diplomka
+	pdflatex -interaction=nonstopmode diplomka
 
 clean:
-	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux *.pdf *.lot *.loa *.nlo *.out *.ps
+	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.lof *.haux *.pdf *.lot *.loa *.nlo *.out *.ps ${IMAGESTOCONVERT}
 dist-clean:
 	rm -f *.blg *.log *.aux *.dvi *.toc *.bbl .*blg *.slo *.srs *.html *.lof *.haux *.pdf *.lot *.loa *.nlo *.out *.ps

@@ -13,7 +13,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multicol}
-\usepackage[dvipdfmx,pdfborder=0 0 0]{hyperref}
+\usepackage[pdfborder=0 0 0]{hyperref}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -94,7 +94,7 @@ Faculty of Mathematics and Physics
 
 \vfill
 
-\centerline{\mbox{\includegraphics[width=60mm]{logo.eps}}}
+\centerline{\mbox{\includegraphics[width=60mm]{logo}}}
 
 \vfill
 \vspace{5mm}
@@ -310,7 +310,7 @@ TODO we will be using a pool - what is a pool
   \caption{Metaheuristic schema}
   \label{image-metaheuristic}
   \centering
-    \includegraphics[width=\textwidth]{images/metaheuristic.eps}
+    \includegraphics[width=\textwidth]{images/metaheuristic}
 \end{figure}
 
 \subsection{Constructions Heuristics}
@@ -674,12 +674,12 @@ TODO their DTD/XSD - do we have ID attributes?
   \caption{Realistic data}
   \label{image-experiments-data-realistic}
   \centering
-    \subfigure[OVA1]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1.eps}}
-    \subfigure[OVA2]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA2.eps}}
-    \subfigure[OVA3]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA3.eps}}
-    \subfigure[XMA-c]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-c.eps}}
-    \subfigure[XMA-p]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-p.eps}}
-    \subfigure[XMD]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD.eps}}
+    \subfigure[OVA1]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1}}
+    \subfigure[OVA2]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA2}}
+    \subfigure[OVA3]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA3}}
+    \subfigure[XMA-c]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-c}}
+    \subfigure[XMA-p]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-p}}
+    \subfigure[XMD]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD}}
 \end{figure}
 
 To interpret the data a little: \jmodule{OVA*} sets have quite interesting and perhaps a bit challenging graphs, but are not too big. We can consider them to be the ``typical" representants.
@@ -716,8 +716,8 @@ Why is this useful at all? Recall TODO link, where we said that ID attributes ar
   \caption{Realistic data with converted attributes}
   \label{image-experiments-data-converted}
   \centering
-    \subfigure[MSH]{\includegraphics[width=0.08\textwidth]{images/experiments/data/converted/MSH.eps}}
-    \subfigure[NTH]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH.eps}}
+    \subfigure[MSH]{\includegraphics[width=0.08\textwidth]{images/experiments/data/converted/MSH}}
+    \subfigure[NTH]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH}}
 \end{figure}
 
 Again to do a little interpretation: in the case of \jmodule{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \jmodule{XMA-*} sets: quite large data, yet only one trivial ID attribute to be found.
@@ -831,8 +831,8 @@ this will happen more with higher $e$.
   \label{image-experiments-data-artificial}
   \centering
     % TODO fix cropping
-  	\subfigure[48-80]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/40-80.eps}}
-	\subfigure[70-245]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/70-245-fixed.eps}}
+  	\subfigure[48-80]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/40-80}}
+	\subfigure[70-245]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
 \end{figure}
 
 To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one, which should work very nice with our heuristics. The $|V|$ and $|E|$ numbers are orders of magnitude higher than with any realistic (or converted) data set we are using, and this will put real stress on the heuristics, as we shall see in the next section.
@@ -944,7 +944,7 @@ At heart of jInfer inference process is a modular system provided by NetBeans Pl
   \caption{Inference process in jInfer}
   \label{image-inference-process}
   \centering
-    \includegraphics[width=0.5\textwidth]{images/inference-process.eps}
+    \includegraphics[width=0.5\textwidth]{images/inference-process}
 \end{figure}
 
 The responsibility of the first module, the \jmodule{Initial Grammar Generator}, is to parse all input files (documents, schemas and queries) and create a so-called \textit{initial grammar} (IG, TODO nomenclature). This is the representation in which will the structure live until it is used to create the final product - the schema. As the name suggests, IG is a grammar - an \textit{extended context-free grammar}, to be more precise (TODO link CFGs). As such, its left hand side is an element, its right hand side is a regular expression representing its content model. (TODO picture?) IG is used to create the AM model used in this thesis, too. jInfer contains one such module, the \jmodule{BasicIGG}, which is described in detail in (TODO link BasicIGG documentation).

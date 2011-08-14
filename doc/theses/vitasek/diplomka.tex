@@ -15,6 +15,7 @@
 \usepackage{multicol}
 \usepackage[pdfborder=0 0 0]{hyperref}
 \usepackage{amssymb}
+\usepackage{amsthm}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -71,6 +72,9 @@
 
 \renewcommand{\nomname}{List of Abbreviations}
 \makenomenclature
+
+\theoremstyle{definition}
+\newtheorem{define}{Definition}[chapter]
 
 \begin{document}
 
@@ -634,7 +638,7 @@ Also, we will try to evaluate the system performance in terms of the speed of fi
 
 And in the end, we should be able to formulate some kind of general recommendation in form ``if you see this kind of data, do that".\\
 
-This chapter will be structured in the following way: first we will discuss the experimental data we used, then the methodology used in conducting the experiments, followed by the actual list of experiments with their full descriptions and results, and in the end we shall draw some final conclusions.
+This chapter will be structured in the following way: first we will discuss the experimental data we used, then the methodology used in conducting the experiments, followed by the actual list of experiments with their full description and results, and in the end we shall draw some final conclusions.
 
 \section{Experimental Data}
 
@@ -841,7 +845,6 @@ this will happen more with higher $e$.
   \caption{Artificial data}
   \label{image-experiments-data-artificial}
   \centering
-    % TODO fix cropping
   	\subfigure[48-80]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/40-80}}
 	\subfigure[70-245]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
 \end{figure}
@@ -852,7 +855,33 @@ In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\
 
 \section{Experimental Setup}
 
-As was mentioned before, we will be using an extension to the jInfer framework called \jmodule{IDSetSearch}. Please see appendices \ref{appendix-jInfer} and \ref{appendix-iss} for more detailed information on these two pieces of software.
+As was mentioned before, we will be using an extension to the jInfer framework called \jmodule{IDSetSearch}. Please see appendices \ref{appendix-jInfer} and \ref{appendix-iss} for more detailed information on these two pieces of software.\\
+
+We now have to define a few notions before moving forward to the description of our experiments.
+
+\begin{define}[Experiment parameters]
+	\label{define-experiment-params}
+	\textit{Experiment parameters} are the following.
+	\begin{itemize}
+		\item All the parameters in all the heuristics.
+		\item The specific way in which the heuristics are chained.
+		\item Parameters $\alpha$ and $\beta$ in the weight (quality) measurement.
+		\item Initial pool size.
+		\item The termination criteria.
+		\item The input XML file.
+		\item Known optimum for this file and $\alpha$, $\beta$.
+	\end{itemize}
+\end{define}
+
+\begin{define}[Experiment(al) configuration]
+	\label{define-experiment-config}
+	An \textit{experiment instance}, or \textit{configuration}, is one specific setting of all (experiment) parameters.
+\end{define}
+
+\begin{define}[Experiment(al) set]
+	\label{define-experiment-set}
+	One or more experiment configurations, regardless whether their parameters differ, constitute an \textit{experimental set}.
+\end{define}
 
 \subsection{Grammar and Model Creation}
 
@@ -862,15 +891,37 @@ TODO describe how we get the model
 
 \subsection{Hardware and Software}
 
-TODO describe the actual HW/SW setup: two computers, Windows/Linux, versions etc.
+We will be using two different machines to run the experiments. Every experimental result will have explicitly stated the machine it was performed on, and we shall make sure to run different experiments that can benefit from side-by-side comparison on the same machine.
+
+\subsubsection{Linux Machine}
+
+\begin{verbatim}
+Intel Core 2 Quad processor @ 2.83 GHz
+8 GB DDR2 RAM
+x86_64 GNU/Linux 2.6.32-33-generic Ubuntu 10.04
+Java HotSpot 64-Bit Server VM (build 20.1-b02)
+GLPK version 4.38
+\end{verbatim}
+
+\subsubsection{Windows Machine}
+
+\begin{verbatim}
+Intel Core 2 Duo processor @ 2.33 GHz
+4 GB DDR2 RAM
+Windows 7 SP1 64bit
+Java HotSpot TODO
+GLPK version TODO
+\end{verbatim}
 
 \subsection{Methodology}
 
-What is running when experimenting, that we are always using more runs to counter for effects like caches and stuff that happens. Say many things actually depend on the order in which we run the experiments in one set, and if it is relevant we will talk about it in that particular experiment.
+It is impossible to completely shield an experiment from the influence of the environment, but we should try our best. First of all, NetBeans running the experiments is the only relevant program running in the system at that time, as far as this is possible. Unfortunately, the NetBeans itself is quite a large environment with a life on its own, and we would most certainly get more reliable results, if we could run our experiments outside it. This improvement is left for the future work.
+
+Also, every experimental configuration is run 20 times in hope that the effects of any events adversely affecting our results (e.g. OS deciding to run some house cleaning) will be averaged out. Whenever possible, we will always be using boxplots instead of a simple average (or average and variance) to present results of these multiple runs. % TODO discuss caches and the order in which we run the experiments in one set?
 
 \subsection{Obtaining the results}
 
-TODO we are logging (link to trace appendix) and creating CSVs.
+Every run of an experiment produces a trace such as the one presented and commented on in Appendix \ref{appendix-trace}. We can get all the information relevant to that experiment run from this trace alone. An experimental set will produce a number of these traces and store them in plain text files in a folder. Parsing these files to aggregate and collate them might be a tedious task even using tools like \texttt{sed} and \texttt{grep}, so some of the experiment sets directly output tabular data in format recognized by GnuPlot, which we use to plot charts found in this work.
 
 \section{Experimental Results}
 
@@ -997,7 +1048,7 @@ TODO experiments - quality, termination, parameters, experiment sets
 TODO make sure there was a place where we described the model data model:)
 
 \chapter{Experimental Trace}
-\label{traces}
+\label{appendix-trace}
 
 Following is a trace logged from a sample experiment run. It shows all the relevant information related to this instance, any and every piece of information we might be interested in.
 

@@ -14,6 +14,7 @@
 \usepackage{algorithmic}
 \usepackage{multicol}
 \usepackage[pdfborder=0 0 0]{hyperref}
+\usepackage{amssymb}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -621,9 +622,19 @@ TODO describe the (rather trivial) algorithm of finding IDREF attributes once we
 
 \chapter{Experiments}
 
-TODO what are trying to establish? What is our aim here? To get an understanding how the system and its components behave. What do the parameters affect. To see which types of data are best handled by specific algorithms. To see what are the time scales involved in ID search and how various parameters affect the run times of the heuristics.
+At this point of the thesis the reader should be already familiar with the notions we have introduced: the problem of finding the optimal ID set (with respect to some \textit{weight}), that it is directly related to the NP-complete problem of finding the maximal weighted independent set, that this can be solved using the MIP approach, and that we can try to do better than just let the solver work: by employing various heuristics.
 
-TODO describe all the inputs (take it from the mindmap), describe how the output looks (sample trace - link to appendix)
+Now it is the time to move our ideas into reality and test their feasibility. But before we start talking about the experiments themselves, we should try to formulate our aim, what we will be trying to establish.\\
+
+First of all, we would like to get an idea of how the whole system and its components behave. We would like to see the changes introduced by modifying some of the key parameters, while keeping the others fixed. Even though we shan't hope for them to be orthogonal, we might at least isolate some of the parameters that are less important to the overall behavior. Preferably, in the end we should have at least some intuition into what will happen if we try X Y Z, before trying it.
+
+Second, as we will be introducing a few broad classes of XML data to run ID set search on, we would like to find out which types are best handled by which configurations and settings. This will allow us to pick the right heuristic once we see new data.
+
+Also, we will try to evaluate the system performance in terms of the speed of finding good heuristic results. We will try to find tweaks to make the whole process as fast as reasonably possible.
+
+And in the end, we should be able to formulate some kind of general recommendation in form ``if you see this kind of data, do that".\\
+
+This chapter will be structured in the following way: first we will discuss the experimental data we used, then the methodology used in conducting the experiments, followed by the actual list of experiments with their full descriptions and results, and in the end we shall draw some final conclusions.
 
 \section{Experimental Data}
 
@@ -637,9 +648,9 @@ Let us now talk about the XML data we will be using to conduct out experiments. 
 
 A short reasoning for this choice: realistic - of course, we want to see the performance in cases taken from the real world. The problem with realistic data is that sometimes, interesting values (that might or might not contain IDs) are stored as text nodes % TODO is this name consistent with what I've been defining?
 instead of attributes. We might try to look at such data, convert some of these ``suspicious" values to attributes (e.g. using a smart XSL transformation), let our heuristics find the ID sets, and then translate them back to XML keys (see \ref{realistic-converted} for details).
-And finally, we create completely artificial data to create inputs that will really put our heuristics to the test. This is because the realistic data often prove to be quite easy to solve - the list of candidate AMs is usually too short to be hard to solved to optimality.
+And finally, we create completely artificial data to create inputs that will really put our heuristics to the test. This is because the realistic data often prove to be quite easy to solve - the list of candidate AMs is usually too short to be hard to solved to optimality.\\
 
-To understand these data sets, we will talk a little about heir origin, and a little more about their \textit{graph representation}. As mentioned earlier, % TODO link
+To understand these data sets, we will talk a little about their origin and \textit{graph representation}. As mentioned earlier, % TODO link
 the problem of finding the optimal ID set is in fact the problem of finding the maximum weighted independent set on a graph. Therefore, it might be interesting to actually see the graphs of these data sets and have some kind of numbers associated with them.
 
 The former will be achieved with the help of GraphViz tool, % TODO link
@@ -841,11 +852,25 @@ In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\
 
 \section{Experimental Setup}
 
-TODO describe the actual HW/SW setup: two computers, Windows/Linux, versions etc. What is running when experimenting, that we are always using more runs to counter for effects like caches and stuff that happens. Say many things actually depend on the order in which we run the experiments in one set, and if it is relevant we will talk about it in that particular experiment.
+As was mentioned before, we will be using an extension to the jInfer framework called \jmodule{IDSetSearch}. Please see appendices \ref{appendix-jInfer} and \ref{appendix-iss} for more detailed information on these two pieces of software.
 
-TODO we will be using jInfer and its module AttributeStats see \ref{jInfer} and \ref{attrstats}.
+\subsection{Grammar and Model Creation}
 
-TODO describe how to create a model, describe how we get IGG, link BasicIGG
+TODO link BasicIGG to see how we get IG
+
+TODO describe how we get the model
+
+\subsection{Hardware and Software}
+
+TODO describe the actual HW/SW setup: two computers, Windows/Linux, versions etc.
+
+\subsection{Methodology}
+
+What is running when experimenting, that we are always using more runs to counter for effects like caches and stuff that happens. Say many things actually depend on the order in which we run the experiments in one set, and if it is relevant we will talk about it in that particular experiment.
+
+\subsection{Obtaining the results}
+
+TODO we are logging (link to trace appendix) and creating CSVs.
 
 \section{Experimental Results}
 
@@ -866,6 +891,7 @@ TODO following experiments + more
 	\item Do I beat FIDAX with Random?
 	\item Does Fuzzy beat Random? (Fuzzy wins in every single case) - take note of quality (mean, variance) but also time (again, mean)
   \item Can FIDAX be improved by Hungry?
+  \item Can we improve performance on huge data by ignoring textual content? Check for building as well as actual heu times.
 \end{itemize}
 
 \section{The "Best" Algorithm}
@@ -930,7 +956,7 @@ However, this approach takes too long for some inputs, so we introduced a whole 
 \addcontentsline{toc}{chapter}{Appendices}
 
 \chapter{jInfer}
-\label{jInfer}
+\label{appendix-jInfer}
 
 This appendix will try to describe shortly yet comprehensively \textbf{jInfer} - the Java framework for XML schema inference. Please see TODO link jInfer project web for complete information, documentation and download options.
 
@@ -954,7 +980,7 @@ After leaving the \jmodule{Initial Grammar Generator}, the IG needs to be made m
 The last module, \jmodule{Schema Generator} takes the simplified grammar and creates the resulting schema from it. This process is not too interesting, but anyone wishing to find out all about it is invited to read the documentation to the two \jmodule{Schema Generator}s bundled with jInfer - the BasicDTD and BasicXSD modules.
 
 \chapter{IDSetSearch}
-\label{iss}
+\label{appendix-iss}
 
 TODO talk a bit about the structure of ISS module.
 
@@ -967,6 +993,8 @@ TODO "Attribute Stats"
 TODO heuristics - interfaces, construction, improvement
 
 TODO experiments - quality, termination, parameters, experiment sets
+
+TODO make sure there was a place where we described the model data model:)
 
 \chapter{Experimental Trace}
 \label{traces}
@@ -1143,5 +1171,8 @@ vertex0,attr,0.024146341463414635
 \end{footnotesize}
 
 Note that in this example trace there were no IDREF AMs found.
+
+\flushright
+$\square$
 
 \end{document}

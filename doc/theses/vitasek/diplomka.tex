@@ -959,8 +959,8 @@ Our experimental set will contain 500 experimental configurations for each of th
 \ENSURE experimental set $ES$
 \STATE $ES \gets \emptyset$
 \FOR{$i = 1 \to 20$}
-	\FOR{$time = 1 \to 49 step 2$}
-    \STATE $ES \gets IH = $ \jmodule{Glpk} $, limit = time, IH = \emptyset$  
+	\FOR{$time = 1 \to 49$ step $2$}
+    \STATE $ES \gets ES \cup {IH = \jmodule{Glpk}(limit = time), IH = \emptyset}$  
   \ENDFOR
 \ENDFOR
 \RETURN $ES$

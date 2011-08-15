@@ -929,8 +929,6 @@ Every run of an experiment produces a trace such as the one presented and commen
 
 \section{Experimental Results}
 
-TODO following experiments + more
-
 \subsection{GLPK: native vs. Cygwin}
 
 In this experiment we will try to remove one of the variables out of the equation: that is the effect of different versions of GLPK on the overall results. The rationale is this: on Windows systems, the two most accessible ways to install GLPK are via a binary distribution TODO link, or via Cygwin as one of its packages.
@@ -941,12 +939,22 @@ If we find out which of these Cygwin version is better, we will be using it excl
   \centering
   \begin{tabular}{| l | l |}
   \hline
-  Machine & Windows \\
-  Input data set & \texttt{100-500} \\
-  Iterations & 20 \\
+  Machine           & Windows \\
+  Input data set    & \texttt{100-500} \\
+  Iterations        & 20 \\
+  Pool size         & 1 \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
   \hline
   \end{tabular}
 \end{table}
+
+Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \jmodule{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2 (25 settings * 20 iterations = 500 configurations in total). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).\\
+
+TODO input -> time dependency too
+
+\subsection{Still to do}
+
+TODO following experiments + more
 
 \begin{itemize}
 	\item For each input file: how long does model creation take?
@@ -959,7 +967,6 @@ If we find out which of these Cygwin version is better, we will be using it excl
 	\item Structure of the data -> Which algorithms perform the best
 	\item Alpha, Beta -> Quality
 	\item Alpha, Beta -> How does the solution work?
-	\item Which GLPK -> How does (time->quality) look, how does (input->time) look
 	\item Do I beat FIDAX with Random?
 	\item Does Fuzzy beat Random? (Fuzzy wins in every single case) - take note of quality (mean, variance) but also time (again, mean)
   \item Can FIDAX be improved by Hungry?

@@ -668,6 +668,8 @@ From 3 different sources we collected 6 different data sets, called \jmodule{OVA
 
 TODO their DTD/XSD - do we have ID attributes?
 
+TODO verify they satisfy their schemas. Converted too.
+
 \begin{table}
   \caption{List of realistic test data files}
   \bigskip
@@ -829,8 +831,8 @@ this will happen more with higher $e$.
 	\hline
 	0-0     & 0.2  & 0  & 0   & -    & -    & 0.0                \\
 	10-5    & 0.6  & 10 & 5   & 0.50 & 0.11 & 0.8500000000000002 \\ 
-    20-20   & 1.7  & 18 & 13  & 0.72 & 0.08 & 0.7166666666666669 \\
-   	30-45   & 3.1  & 29 & 43  & 1.48 & 0.11 & 0.7083333333333334 \\ 
+  20-20   & 1.7  & 18 & 13  & 0.72 & 0.08 & 0.7166666666666669 \\
+  30-45   & 3.1  & 29 & 43  & 1.48 & 0.11 & 0.7083333333333334 \\ 
 	40-80   & 5.1  & 39 & 72  & 1.85 & 0.10 & 0.6950000000000002 \\
 	50-125  & 7.5  & 48 & 111 & 2.31 & 0.10 & 0.6566666666666666 \\
 	60-180  & 10.4 & 58 & 157 & 2.71 & 0.09 & 0.6214285714285716 \\
@@ -899,6 +901,7 @@ We will be using two different machines to run the experiments. Every experiment
 Intel Core 2 Quad processor @ 2.83 GHz
 8 GB DDR2 RAM
 x86_64 GNU/Linux 2.6.32-33-generic Ubuntu 10.04
+Java SE Runtime Environment (build 1.6.0_26-b03)
 Java HotSpot 64-Bit Server VM (build 20.1-b02)
 GLPK version 4.38
 \end{verbatim}
@@ -909,8 +912,10 @@ GLPK version 4.38
 Intel Core 2 Duo processor @ 2.33 GHz
 4 GB DDR2 RAM
 Windows 7 SP1 64bit
-Java HotSpot TODO
-GLPK version TODO
+Java SE Runtime Environment (build 1.6.0_26-b03)
+Java HotSpot 32-Bit Client VM (build 20.1-b02)
+GLPK version 4.45 (Cygwin)
+GLPK version 4.34 (native)
 \end{verbatim}
 
 \subsection{Methodology}
@@ -936,8 +941,8 @@ In this experiment we will try to remove one of the variables out of the equatio
 If we find out which of these Cygwin version is better, we will be using it exclusively without very much fear that this could affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be good, too.
 
 \begin{table}
-  \caption{GLPK: native vs. Cygwin summary}
-  \label{experiment-glpk-native-vs-cygwin-summary}
+  \caption{GLPK: native vs. Cygwin summary 1}
+  \label{experiment-glpk-native-vs-cygwin-summary-1}
   \centering
   \begin{tabular}{| l | l |}
   \hline
@@ -950,24 +955,58 @@ If we find out which of these Cygwin version is better, we will be using it excl
   \end{tabular}
 \end{table}
 
-Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \jmodule{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2, meaning 25 settings * 20 iterations = 500 configurations in total (pseudocode to be found in \ref{listing-experiment-glpk-native-vs-cygwin}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
+Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \jmodule{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2, meaning 25 settings * 20 iterations = 500 configurations in total (see listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
 
 \begin{algorithm}
-\caption{GLPK: native vs. Cygwin generation}
-\label{listing-experiment-glpk-native-vs-cygwin}
+\caption{GLPK: native vs. Cygwin set generation 1}
+\label{listing-experiment-glpk-native-vs-cygwin-1}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
 \STATE $ES \gets \emptyset$
 \FOR{$i = 1 \to 20$}
 	\FOR{$time = 1 \to 49$ step $2$}
-    \STATE $ES \gets ES \cup {IH = \jmodule{Glpk}(limit = time), IH = \emptyset}$  
+    \STATE $ES \gets ES \cup {CH = \jmodule{Glpk}(limit = time), IH = \emptyset}$  
   \ENDFOR
 \ENDFOR
 \RETURN $ES$
 \end{algorithmic}
 \end{algorithm}
 
-TODO input -> time dependency too
+TODO graph + interpretation
+
+\begin{table}
+  \caption{GLPK: native vs. Cygwin summary 2}
+  \label{experiment-glpk-native-vs-cygwin-summary-2}
+  \centering
+  \begin{tabular}{| l | l |}
+  \hline
+  Machine           & Windows \\
+  Input data set    & sized artificial data \\
+  Iterations        & 20 \\
+  Pool size         & 1 \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
+  \hline
+  \end{tabular}
+\end{table}
+
+Another way to compare the performance of these two GLPK versions is to see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 220 configurations for each version. Every configuration will let \jmodule{Glpk} CH run for unlimited time, until it finds the optimum. This will be repeated in 20 iterations for each of the 11 files from the sized artificial data set (TODO link) (see listing \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.
+
+\begin{algorithm}
+\caption{GLPK: native vs. Cygwin set generation 2}
+\label{listing-experiment-glpk-native-vs-cygwin-2}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+\FOR{$i = 1 \to 20$}
+	\FOR{$file \in $ sized artificial data}
+    \STATE $ES \gets ES \cup {file, CH = \jmodule{Glpk}(no limit), IH = \emptyset}$  
+  \ENDFOR
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
+
+TODO graph + interpretation
 
 \subsection{Still to do}
 

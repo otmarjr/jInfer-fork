@@ -936,6 +936,8 @@ In this experiment we will try to remove one of the variables out of the equatio
 If we find out which of these Cygwin version is better, we will be using it exclusively without very much fear that this could affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be good, too.
 
 \begin{table}
+  \caption{GLPK: native vs. Cygwin summary}
+  \label{experiment-glpk-native-vs-cygwin-summary}
   \centering
   \begin{tabular}{| l | l |}
   \hline
@@ -948,7 +950,22 @@ If we find out which of these Cygwin version is better, we will be using it excl
   \end{tabular}
 \end{table}
 
-Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \jmodule{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2 (25 settings * 20 iterations = 500 configurations in total). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).\\
+Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \jmodule{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2, meaning 25 settings * 20 iterations = 500 configurations in total (pseudocode to be found in \ref{listing-experiment-glpk-native-vs-cygwin}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
+
+\begin{algorithm}
+\caption{GLPK: native vs. Cygwin generation}
+\label{listing-experiment-glpk-native-vs-cygwin}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+\FOR{$i = 1 \to 20$}
+	\FOR{$time = 1 \to 49 step 2$}
+    \STATE $ES \gets IH = $ \jmodule{Glpk} $, limit = time, IH = \emptyset$  
+  \ENDFOR
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
 
 TODO input -> time dependency too
 

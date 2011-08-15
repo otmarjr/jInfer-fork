@@ -324,17 +324,18 @@ TODO we will be using a pool - what is a pool
 
 TODO construction heuristics are heus that provide us with at least some solution.
 
-\subsubsection{FIDAX}
+\subsubsection{\jmodule{FIDAX}}
 
-TODO this is a heuristic too! We can start with it!
+It should be obvious by now that the algorithm described in \cite{fidax} (we shall call it \jmodule{FIDAX} from now on) can trivially be used as a construction heuristic that will give us one feasible solution.
 
-The pseudocode is listed (cited from \cite{fidax} with trivial modifications without changing the logic) in \ref{ch-fidax}.
+The pseudocode of this CH (taken from the original article with trivial modifications without changing the logic) is in Listing \ref{ch-fidax}.
 
 \begin{algorithm}
 \caption{FIDAX CH}
 \label{ch-fidax}
 \begin{algorithmic}
 \REQUIRE $C$ list of candidate AMs
+\ENSURE a feasible solution
 \STATE $C' \gets C$ sorted by decreasing size
 \STATE Compute the weight $w(m)$ of each $m$ in $C$
 \FORALL{$t$ in $\Sigma^E$}
@@ -353,11 +354,14 @@ The pseudocode is listed (cited from \cite{fidax} with trivial modifications wit
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Random}
+\subsubsection{\jmodule{Random}}
+\label{heu-ch-random}
 
-TODO this is trivial, but works - link experiments where it bashes FIDAX
+One of the most natural heuristics when dealing with the IS problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is obviously a hungry heuristic. %TODO have I defined ID set condition yet?? 
 
-See listing \ref{ch-random}.
+The advantages of this trivial heuristic are simplicity, speed and ease with which it can create a pool of variable solutions, almost for free. As we will see later in the experiments (TODO link the Random/Fuzzy/FIDAX fight), it performs surprisingly well.
+
+See the Listing \ref{ch-random} for its pseudocode.
 
 \begin{algorithm}
 \caption{Random CH}
@@ -380,11 +384,14 @@ See listing \ref{ch-random}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Fuzzy}
+\subsubsection{\jmodule{Fuzzy}}
+\label{heu-ch-fuzzy}
 
-TODO kind of trivial
+\jmodule{Fuzzy} is an improvement over the \jmodule{Random} CH: it picks the next AM to try to add based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in TODO. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way. 
 
-See listing \ref{ch-fuzzy}.
+Again, this is a hungry heuristic, the Listing \ref{ch-fuzzy} contains its pseudocode.
+
+% TODO od I need to specify which are my own idea? I guess so, I should link any heu that is not mine. But do I need to stress that for example Fuzzy is mine? 
 
 \begin{algorithm}
 \caption{Fuzzy CH}
@@ -419,9 +426,9 @@ See listing \ref{ch-fuzzy}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Incremental}
+\subsubsection{\jmodule{Incremental}}
 
-TODO trivial, hungry, always 1 solution
+This trivial heuristics sorts all candidate AMs by their decreasing weights (TODO link definition of weight) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
 
 See listing \ref{ch-incremental}.
 
@@ -442,9 +449,9 @@ See listing \ref{ch-incremental}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Removal}
+\subsubsection{\jmodule{Removal}}
 
-TODO trivial, "hungry", always 1 solution
+This is basically a reversal of the idea from the \jmodule{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, order them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a hungry heuristic returning only one solution.
 
 See listing \ref{ch-removal}.
 
@@ -467,6 +474,8 @@ See listing \ref{ch-removal}.
 
 \subsubsection{Truncated Branch \& Bound}
 
+This CH will be called \jmodule{Glpk} from now on, for it is basically a time-constrained run of GLPK.
+
 TODO if we limit GLPK's runtime, we get this 
 
 \subsection{Improvement Heuristics}
@@ -477,7 +486,7 @@ TODO what they are, that they need a pool sometimes, their input and output is a
 
 TODO mention intensification, diversification
 
-\subsubsection{Identity}
+\subsubsection{\jmodule{Identity}}
 
 This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its listing \ref{ih-identity}.
 
@@ -491,9 +500,9 @@ This ultimately trivial improvement heuristics does nothing. It simply returns t
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Remove Worst}
+\subsubsection{\jmodule{Remove Worst}}
 
-TODO trivial
+This trivial IH tries to improve the solution pool by removing the worst solution (i.e. the one with the lowest quality). This might be interesting in cooperation with other improvement heuristics that increase the solution pool size, to keep it from growing by pruning inferior solutions.
 
 See listing \ref{ih-removeworst}.
 
@@ -508,9 +517,15 @@ See listing \ref{ih-removeworst}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Random Remove}
+\subsubsection{\jmodule{Random Remove}}
 
-TODO trivial, perturbation
+This is again a rather trivial IH, something which is usually referred to as a \textit{perturbation} function. % TODO link the notion
+By removing a random subset of specified size from each solution in the pool, it provides variability needed to escape from local optima. % TODO make sure we have talked about local optima before
+
+The number of AMs to remove from each solution is specified as ratio (from the interval $(0, 1)$) of the solution size. % TODO have we defined what a solution size is?
+For example, \jmodule{Random Remove} with $ratio = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
+
+This heuristic returns a pool of solutions of the same size as it got on its input. 
 
 See listing \ref{ih-randomremove}.
 
@@ -529,7 +544,7 @@ See listing \ref{ih-randomremove}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Hungry}
+\subsubsection{\jmodule{Hungry}}
 
 This simple improvement heuristic assumes that the solutions in the pool are not ``complete", i.e. there are AMs that could be added to them without violating the ID set condition.
 
@@ -556,7 +571,7 @@ This simple improvement heuristic assumes that the solutions in the pool are not
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Mutation}
+\subsubsection{\jmodule{Mutation}}
 
 TODO explain how this translates to GLPK input
 
@@ -577,7 +592,7 @@ See listing \ref{ih-mutation}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Crossover}
+\subsubsection{\jmodule{Crossover}}
 
 TODO explain how this translates to GLPK input
 
@@ -599,7 +614,7 @@ See listing \ref{ih-crossover}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Local Branching}
+\subsubsection{\jmodule{Local Branching}}
 
 TODO explain how this translates to GLPK input
 
@@ -954,13 +969,18 @@ from the input XML file and how long does it take to create the AM model from th
   \hline
 \end{tabular}  
 
-The experimental set will contain $20 * (11 + 11) = 440$ configurations - 20 iterations for 11 test data sets plus 11 sized test data sets. There won't be any CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
+The experimental set will contain $20 * (11 + 11) = 440$ configurations: 20 iterations for 11 test data sets plus 11 sized test data sets. There won't be any CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
 
 TODO graph + interpretation
+
+\subsubsection{GLPK interface}
+
+TODO how long it takes to create GLPK input and parse its output
 
 \subsection{GLPK: native vs. Cygwin}
 
 %         NB class TimeQuality
+%         NB class TimeTillOptimum
 
 In this experiment we will try to remove one of the variables out of the equation: that is the effect of different versions of GLPK on the overall results. The rationale is this: on Windows systems, the two most accessible ways to install GLPK are via a binary distribution TODO link, or via Cygwin as one of its packages.
 
@@ -1026,30 +1046,51 @@ Another way to compare the performance of these two GLPK versions is to see how 
 
 TODO graph + interpretation
 
-\subsection{Still to do}
+TODO mention that these times show we cannot rely on GLPK alone! It just takes too long.
 
-TODO following experiments + more
+\subsection{\jmodule{Random} vs. \jmodule{Fuzzy} vs. \jmodule{FIDAX}}
 
-\begin{itemize}
-  \item How long does it take to communicate with GLPK? Creating the input / parsing the output.
-  \item Big fight Fuzzy vs. Random vs. FIDAX take note of quality (mean, variance) but also time (again, mean)
-  \item Can FIDAX be improved by Hungry?
-	
-	\item Which construction heuristic is the best - limit GLPK to like 1 second
-  
-	\item With the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
-	\item With the best IH from the previous step, how about using Random as CH?
-	
-  \item this can be done inside the GLPK version comparison! GLPK: Input -> How long the search for optimum lasts - this shows we cannot rely on GLPK alone! it just takes too long.
-	\item this can be done inside the GLPK version comparison! GLPK: Time limit -> Quality
-  
-	\item Structure of the data -> Which algorithms perform the best
-	
-  \item Alpha, Beta -> Quality
-	\item Alpha, Beta -> How does the solution work?
-	
-  \item Can we improve performance on huge data by ignoring textual content? Check for building as well as actual heu times.
-\end{itemize}
+TODO take note of quality and time too
+
+\subsubsection{Improving \jmodule{FIDAX} with \jmodule{Hungry}}
+
+TODO
+
+\subsection{Best standalone CH}
+
+TODO compare all CHs - limit GLPK to ~ 1 second
+
+\subsection{Best IH for the best CH}
+
+TODO with the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
+
+\subsubsection{\jmodule{Random} as CH}
+
+TODO with the best IH from the previous step, how about using Random as CH?
+
+\subsection{Various $\alpha$, $\beta$}
+
+TODO remind what these parameters mean
+
+\subsubsection{Effects on performance}
+
+TODO
+
+\subsubsection{Effects on the ID set}
+
+TODO
+
+\subsection{Ignoring text data}
+
+TODO can we improve performance on huge data by ignoring textual content? Check for building as well as actual heu times.
+
+\subsection{Chaining the IHs}
+
+TODO finally we got to the most interesting part, unfortunately this is basically guesswork and intuition.
+
+\subsection{Algorithms for various data characteristics}
+
+TODO
 
 \section{The "Best" Algorithm}
 

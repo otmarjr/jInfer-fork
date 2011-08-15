@@ -30,6 +30,12 @@
 \renewcommand{\algorithmicforall}{\textbf{for each}}
 \renewcommand{\algorithmiccomment}[1]{\textit{// #1}}
 
+\renewcommand{\nomname}{List of Abbreviations}
+\makenomenclature
+
+\theoremstyle{definition}
+\newtheorem{define}{Definition}[chapter]
+
 \setlength{\hoffset}{-1in} %left margin will be 0, as hoffset is by default 1inch
 \setlength{\voffset}{-1in} %analogous voffset
 \setlength{\oddsidemargin}{4cm}
@@ -69,12 +75,6 @@
 \chapter*{#1}
 \addcontentsline{toc}{chapter}{#1}
 }
-
-\renewcommand{\nomname}{List of Abbreviations}
-\makenomenclature
-
-\theoremstyle{definition}
-\newtheorem{define}{Definition}[chapter]
 
 \begin{document}
 
@@ -919,6 +919,10 @@ It is impossible to completely shield an experiment from the influence of the en
 
 Also, every experimental configuration is run 20 times in hope that the effects of any events adversely affecting our results (e.g. OS deciding to run some house cleaning) will be averaged out. Whenever possible, we will always be using boxplots instead of a simple average (or average and variance) to present results of these multiple runs. % TODO discuss caches and the order in which we run the experiments in one set?
 
+\subsection{Measuring the time}
+
+TODO
+
 \subsection{Obtaining the results}
 
 Every run of an experiment produces a trace such as the one presented and commented on in Appendix \ref{appendix-trace}. We can get all the information relevant to that experiment run from this trace alone. An experimental set will produce a number of these traces and store them in plain text files in a folder. Parsing these files to aggregate and collate them might be a tedious task even using tools like \texttt{sed} and \texttt{grep}, so some of the experiment sets directly output tabular data in format recognized by GnuPlot, which we use to plot charts found in this work.
@@ -926,6 +930,23 @@ Every run of an experiment produces a trace such as the one presented and commen
 \section{Experimental Results}
 
 TODO following experiments + more
+
+\subsection{GLPK: native vs. Cygwin}
+
+In this experiment we will try to remove one of the variables out of the equation: that is the effect of different versions of GLPK on the overall results. The rationale is this: on Windows systems, the two most accessible ways to install GLPK are via a binary distribution TODO link, or via Cygwin as one of its packages.
+
+If we find out which of these Cygwin version is better, we will be using it exclusively without very much fear that this could affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be good, too.
+
+\begin{table}
+  \centering
+  \begin{tabular}{| l | l |}
+  \hline
+  Machine & Windows \\
+  Input data set & \texttt{100-500} \\
+  Iterations & 20 \\
+  \hline
+  \end{tabular}
+\end{table}
 
 \begin{itemize}
 	\item For each input file: how long does model creation take?

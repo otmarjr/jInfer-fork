@@ -936,12 +936,15 @@ Every run of an experiment produces a trace such as the one presented and commen
 
 \subsection{GLPK: native vs. Cygwin}
 
+%         NB class TimeQuality
+
 In this experiment we will try to remove one of the variables out of the equation: that is the effect of different versions of GLPK on the overall results. The rationale is this: on Windows systems, the two most accessible ways to install GLPK are via a binary distribution TODO link, or via Cygwin as one of its packages.
 
 If we find out which of these Cygwin version is better, we will be using it exclusively without very much fear that this could affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be good, too.
 
 \begin{table}
   \caption{GLPK: native vs. Cygwin summary 1}
+  \bigskip
   \label{experiment-glpk-native-vs-cygwin-summary-1}
   \centering
   \begin{tabular}{| l | l |}
@@ -976,6 +979,7 @@ TODO graph + interpretation
 
 \begin{table}
   \caption{GLPK: native vs. Cygwin summary 2}
+  \bigskip
   \label{experiment-glpk-native-vs-cygwin-summary-2}
   \centering
   \begin{tabular}{| l | l |}
@@ -999,7 +1003,7 @@ Another way to compare the performance of these two GLPK versions is to see how 
 \STATE $ES \gets \emptyset$
 \FOR{$i = 1 \to 20$}
 	\FOR{$file \in $ sized artificial data}
-    \STATE $ES \gets ES \cup {file, CH = \jmodule{Glpk}(no limit), IH = \emptyset}$  
+    \STATE $ES \gets ES \cup {file, CH = \jmodule{Glpk}($no limit$), IH = \emptyset}$  
   \ENDFOR
 \ENDFOR
 \RETURN $ES$

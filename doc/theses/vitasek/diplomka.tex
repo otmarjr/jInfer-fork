@@ -934,6 +934,30 @@ Every run of an experiment produces a trace such as the one presented and commen
 
 \section{Experimental Results}
 
+\subsection{Grammar and model generation}
+
+%         NB class GrammarModelTiming
+
+TODO in this experiment we shall see how long it takes to create the IG and the model. So far, this is isolated from heus themselves.
+
+The first experiment set will try to establish how long it takes to extract the IG % TODO IG -> nomenclature
+from the input XML file and how long does it take to create the AM model from this IG. For now, we will not be running or measuring any heuristics.
+
+\begin{tabular}{| l | l |}
+  \hline
+  \hline
+  Machine           & TODO \\
+  Input data set    & all test data sets \\
+  Iterations        & 20 \\
+  Pool size         & not applicable \\
+  $\alpha$, $\beta$ & not applicable \\
+  \hline
+\end{tabular}  
+
+The experimental set will contain $20 * (11 + 11) = 440$ configurations - 20 iterations for 11 test data sets plus 11 sized test data sets. There won't be any CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
+
+TODO graph + interpretation
+
 \subsection{GLPK: native vs. Cygwin}
 
 %         NB class TimeQuality
@@ -942,12 +966,8 @@ In this experiment we will try to remove one of the variables out of the equatio
 
 If we find out which of these Cygwin version is better, we will be using it exclusively without very much fear that this could affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be good, too.
 
-\begin{table}
-  \caption{GLPK: native vs. Cygwin summary 1}
-  \bigskip
-  \label{experiment-glpk-native-vs-cygwin-summary-1}
-  \centering
-  \begin{tabular}{| l | l |}
+\begin{tabular}{| l | l |}
+  \hline
   \hline
   Machine           & Windows \\
   Input data set    & \texttt{100-500} \\
@@ -955,8 +975,7 @@ If we find out which of these Cygwin version is better, we will be using it excl
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
   \hline
-  \end{tabular}
-\end{table}
+\end{tabular}
 
 Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \jmodule{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2, meaning 25 settings * 20 iterations = 500 configurations in total (see listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
 
@@ -977,12 +996,8 @@ Our experimental set will contain 500 experimental configurations for each of th
 
 TODO graph + interpretation
 
-\begin{table}
-  \caption{GLPK: native vs. Cygwin summary 2}
-  \bigskip
-  \label{experiment-glpk-native-vs-cygwin-summary-2}
-  \centering
-  \begin{tabular}{| l | l |}
+\begin{tabular}{| l | l |}
+  \hline
   \hline
   Machine           & Windows \\
   Input data set    & sized artificial data \\
@@ -990,8 +1005,7 @@ TODO graph + interpretation
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
   \hline
-  \end{tabular}
-\end{table}
+\end{tabular}
 
 Another way to compare the performance of these two GLPK versions is to see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 220 configurations for each version. Every configuration will let \jmodule{Glpk} CH run for unlimited time, until it finds the optimum. This will be repeated in 20 iterations for each of the 11 files from the sized artificial data set (TODO link) (see listing \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.
 
@@ -1003,7 +1017,7 @@ Another way to compare the performance of these two GLPK versions is to see how 
 \STATE $ES \gets \emptyset$
 \FOR{$i = 1 \to 20$}
 	\FOR{$file \in $ sized artificial data}
-    \STATE $ES \gets ES \cup {file, CH = \jmodule{Glpk}($no limit$), IH = \emptyset}$  
+    \STATE $ES \gets ES \cup \{file, CH = \jmodule{Glpk}(no\:limit), IH = \emptyset\}$  
   \ENDFOR
 \ENDFOR
 \RETURN $ES$
@@ -1017,19 +1031,23 @@ TODO graph + interpretation
 TODO following experiments + more
 
 \begin{itemize}
-	\item For each input file: how long does model creation take?
-	\item How long does it take to communicate with GLPK? Creating the input / parsing the output.
+  \item How long does it take to communicate with GLPK? Creating the input / parsing the output.
+  \item Big fight Fuzzy vs. Random vs. FIDAX take note of quality (mean, variance) but also time (again, mean)
+  \item Can FIDAX be improved by Hungry?
+	
 	\item Which construction heuristic is the best - limit GLPK to like 1 second
+  
 	\item With the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
 	\item With the best IH from the previous step, how about using Random as CH?
-	\item GLPK: Input -> How long the search for optimum lasts - this shows we cannot rely on GLPK alone! it just takes too long.
-	\item GLPK: Time limit -> Quality
+	
+  \item this can be done inside the GLPK version comparison! GLPK: Input -> How long the search for optimum lasts - this shows we cannot rely on GLPK alone! it just takes too long.
+	\item this can be done inside the GLPK version comparison! GLPK: Time limit -> Quality
+  
 	\item Structure of the data -> Which algorithms perform the best
-	\item Alpha, Beta -> Quality
+	
+  \item Alpha, Beta -> Quality
 	\item Alpha, Beta -> How does the solution work?
-	\item Do I beat FIDAX with Random?
-	\item Does Fuzzy beat Random? (Fuzzy wins in every single case) - take note of quality (mean, variance) but also time (again, mean)
-  \item Can FIDAX be improved by Hungry?
+	
   \item Can we improve performance on huge data by ignoring textual content? Check for building as well as actual heu times.
 \end{itemize}
 

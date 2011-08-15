@@ -328,11 +328,11 @@ TODO construction heuristics are heus that provide us with at least some solutio
 
 It should be obvious by now that the algorithm described in \cite{fidax} (we shall call it \jmodule{FIDAX} from now on) can trivially be used as a construction heuristic that will give us one feasible solution.
 
-The pseudocode of this CH (taken from the original article with trivial modifications without changing the logic) is in Listing \ref{ch-fidax}.
+The pseudocode of this CH (taken from the original article with trivial modifications without changing the logic) is in Listing \ref{listing-ch-fidax}.
 
 \begin{algorithm}
 \caption{FIDAX CH}
-\label{ch-fidax}
+\label{listing-ch-fidax}
 \begin{algorithmic}
 \REQUIRE $C$ list of candidate AMs
 \ENSURE a feasible solution
@@ -361,11 +361,11 @@ One of the most natural heuristics when dealing with the IS problem can be descr
 
 The advantages of this trivial heuristic are simplicity, speed and ease with which it can create a pool of variable solutions, almost for free. As we will see later in the experiments (TODO link the Random/Fuzzy/FIDAX fight), it performs surprisingly well.
 
-See the Listing \ref{ch-random} for its pseudocode.
+See the Listing \ref{listing-ch-random} for its pseudocode.
 
 \begin{algorithm}
 \caption{Random CH}
-\label{ch-random}
+\label{listing-ch-random}
 \begin{algorithmic}
 \REQUIRE $N$ required size of pool
 \REQUIRE $C$ list of candidate AMs
@@ -389,13 +389,13 @@ See the Listing \ref{ch-random} for its pseudocode.
 
 \jmodule{Fuzzy} is an improvement over the \jmodule{Random} CH: it picks the next AM to try to add based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in TODO. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way. 
 
-Again, this is a hungry heuristic, the Listing \ref{ch-fuzzy} contains its pseudocode.
+Again, this is a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
 
 % TODO od I need to specify which are my own idea? I guess so, I should link any heu that is not mine. But do I need to stress that for example Fuzzy is mine? 
 
 \begin{algorithm}
 \caption{Fuzzy CH}
-\label{ch-fuzzy}
+\label{listing-ch-fuzzy}
 \begin{algorithmic}
 \REQUIRE $N$ required size of pool
 \REQUIRE $C$ list of candidate AMs
@@ -430,11 +430,11 @@ Again, this is a hungry heuristic, the Listing \ref{ch-fuzzy} contains its pseud
 
 This trivial heuristics sorts all candidate AMs by their decreasing weights (TODO link definition of weight) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
 
-See listing \ref{ch-incremental}.
+See listing \ref{listing-ch-incremental}.
 
 \begin{algorithm}
 \caption{Incremental CH}
-\label{ch-incremental}
+\label{listing-ch-incremental}
 \begin{algorithmic}
 \REQUIRE $C$ list of candidate AMs
 \ENSURE a feasible solution
@@ -453,11 +453,11 @@ See listing \ref{ch-incremental}.
 
 This is basically a reversal of the idea from the \jmodule{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, order them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a hungry heuristic returning only one solution.
 
-See listing \ref{ch-removal}.
+See listing \ref{listing-ch-removal}.
 
 \begin{algorithm}
 \caption{Removal CH}
-\label{ch-removal}
+\label{listing-ch-removal}
 \begin{algorithmic}
 \REQUIRE $C$ list of candidate AMs
 \ENSURE a feasible solution
@@ -488,11 +488,11 @@ TODO mention intensification, diversification
 
 \subsubsection{\jmodule{Identity}}
 
-This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its listing \ref{ih-identity}.
+This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its listing \ref{listing-ih-identity}.
 
 \begin{algorithm}
 \caption{Identity IH}
-\label{ih-identity}
+\label{listing-ih-identity}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
 \ENSURE the same pool of feasible solutions
@@ -504,11 +504,11 @@ This ultimately trivial improvement heuristics does nothing. It simply returns t
 
 This trivial IH tries to improve the solution pool by removing the worst solution (i.e. the one with the lowest quality). This might be interesting in cooperation with other improvement heuristics that increase the solution pool size, to keep it from growing by pruning inferior solutions.
 
-See listing \ref{ih-removeworst}.
+See listing \ref{listing-ih-removeworst}.
 
 \begin{algorithm}
 \caption{Remove Worst IH}
-\label{ih-removeworst}
+\label{listing-ih-removeworst}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
 \ENSURE pool of feasible solutions
@@ -527,11 +527,11 @@ For example, \jmodule{Random Remove} with $ratio = 0.1$ would remove 1 random AM
 
 This heuristic returns a pool of solutions of the same size as it got on its input. 
 
-See listing \ref{ih-randomremove}.
+See listing \ref{listing-ih-randomremove}.
 
 \begin{algorithm}
 \caption{Random Remove IH}
-\label{ih-randomremove}
+\label{listing-ih-randomremove}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
 \REQUIRE $k \in (0,1)$ ratio of AMs to remove from each $s \in FP$
@@ -548,11 +548,11 @@ See listing \ref{ih-randomremove}.
 
 This simple improvement heuristic assumes that the solutions in the pool are not ``complete", i.e. there are AMs that could be added to them without violating the ID set condition.
 
-\heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. Listing \ref{ih-hungry} captures this process.
+\heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. Listing \ref{listing-ih-hungry} captures this process.
 
 \begin{algorithm}
 \caption{Hungry IH}
-\label{ih-hungry}
+\label{listing-ih-hungry}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
 \REQUIRE $C$ list of candidate AMs
@@ -575,11 +575,11 @@ This simple improvement heuristic assumes that the solutions in the pool are not
 
 TODO explain how this translates to GLPK input
 
-See listing \ref{ih-mutation}.
+See listing \ref{listing-ih-mutation}.
 
 \begin{algorithm}
 \caption{Mutation IH}
-\label{ih-mutation}
+\label{listing-ih-mutation}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
 \REQUIRE $k$ ratio of AMs to fix
@@ -596,11 +596,11 @@ See listing \ref{ih-mutation}.
 
 TODO explain how this translates to GLPK input
 
-See listing \ref{ih-crossover}.
+See listing \ref{listing-ih-crossover}.
 
 \begin{algorithm}
 \caption{Crossover IH}
-\label{ih-crossover}
+\label{listing-ih-crossover}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
 \REQUIRE $k$ ratio of solutions to look for commonalities in
@@ -618,11 +618,11 @@ See listing \ref{ih-crossover}.
 
 TODO explain how this translates to GLPK input
 
-See listing \ref{ih-localbranching}.
+See listing \ref{listing-ih-localbranching}.
 
 \begin{algorithm}
 \caption{Local Branching IH}
-\label{ih-localbranching}
+\label{listing-ih-localbranching}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
 \REQUIRE $k$ ratio of total AM count to bound the Hamming distance to

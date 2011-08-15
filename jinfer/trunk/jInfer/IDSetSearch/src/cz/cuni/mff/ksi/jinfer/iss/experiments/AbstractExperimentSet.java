@@ -52,8 +52,9 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
       notifyStart();
     }
     final List<ExperimentParameters> experiments = getExperiments();
-    LOG.info("Got " + experiments.size() + " experiment parameter sets");
-    for (int i = from; i < experiments.size(); i++) {
+    final int totalCount = experiments.size();
+    LOG.info("Got " + totalCount + " experiment parameter sets");
+    for (int i = from; i < totalCount; i++) {
       final Experiment e = new Experiment(experiments.get(i));
       e.addListener(new Listener(i));
       final Thread t = new Thread(new Runnable() {
@@ -69,7 +70,7 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
         }
       }, "Experiment Runner");
 
-      LOG.debug("Running iteration #" + i);
+      LOG.debug("Running iteration #" + i + "/" + totalCount);
       t.start();
 
       synchronized (monitor) {

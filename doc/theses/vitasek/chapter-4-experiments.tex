@@ -39,7 +39,7 @@ for $\alpha = \beta = 1$ and the numbers of vertices and edges in aforementioned
 
 \subsection{Realistic data}
 
-From 3 different sources we collected 6 different data sets, called \jmodule{OVA1} - \jmodule{OVA3}, \jmodule{XMA-c}, \jmodule{XMA-p} and \jmodule{XMD}. Their summary is the Table \ref{table-experiments-data-realistic}, their graphs can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. Neither will they be included on the DVD distributed with this thesis.
+From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is the Table \ref{table-experiments-data-realistic}, their graphs can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. Neither will they be included on the DVD distributed with this thesis.
 
 TODO their DTD/XSD - do we have ID attributes?
 
@@ -53,12 +53,12 @@ TODO verify they satisfy their schemas. Converted too.
   \begin{tabular}{l | r | c | c | l}
   	Name  & Size [kb] & $|V|$ & $|E|$ & Optimum \\
   	\hline
-  	\jmodule{OVA1}  & 4.5      & 29 & 43 & 0.45588235294117635 \\
-  	\jmodule{OVA2}  & 11.9     & 23 & 36 & 0.1634615384615385  \\
-  	\jmodule{OVA3}  & 237.6    & 31 & 47 & 0.25537156151635415 \\
-  	\jmodule{XMA-c} & 1 807.7  & 1  & 0  & 0.7546666666666667  \\
-  	\jmodule{XMA-p} & 13 748.3 & 1  & 0  & 0.2019306150568969  \\
-  	\jmodule{XMD}   & 1 743.0  & 17 & 15 & 0.09786094165493507 \\
+  	\dataset{OVA1}  & 4.5      & 29 & 43 & 0.45588235294117635 \\
+  	\dataset{OVA2}  & 11.9     & 23 & 36 & 0.1634615384615385  \\
+  	\dataset{OVA3}  & 237.6    & 31 & 47 & 0.25537156151635415 \\
+  	\dataset{XMA-c} & 1 807.7  & 1  & 0  & 0.7546666666666667  \\
+  	\dataset{XMA-p} & 13 748.3 & 1  & 0  & 0.2019306150568969  \\
+  	\dataset{XMD}   & 1 743.0  & 17 & 15 & 0.09786094165493507 \\
   \end{tabular}
 \end{table}
 
@@ -66,28 +66,28 @@ TODO verify they satisfy their schemas. Converted too.
   \caption{Realistic data}
   \label{image-experiments-data-realistic}
   \centering
-    \subfigure[\jmodule{OVA1}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1}}
-    \subfigure[\jmodule{OVA2}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA2}}
-    \subfigure[\jmodule{OVA3}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA3}}
-    \subfigure[\jmodule{XMA-c}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-c}}
-    \subfigure[\jmodule{XMA-p}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-p}}
-    \subfigure[\jmodule{XMD}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD}}
+    \subfigure[\dataset{OVA1}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1}}
+    \subfigure[\dataset{OVA2}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA2}}
+    \subfigure[\dataset{OVA3}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA3}}
+    \subfigure[\dataset{XMA-c}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-c}}
+    \subfigure[\dataset{XMA-p}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-p}}
+    \subfigure[\dataset{XMD}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD}}
 \end{figure}
 
-To interpret the data a little: \jmodule{OVA*} sets have quite interesting and perhaps a bit challenging graphs, but are not too big. We can consider them to be the ``typical" representants.
+To interpret the data a little: \dataset{OVA*} sets have quite interesting and perhaps a bit challenging graphs, but are not too big. We can consider them to be the ``typical" representants.
 
-On the other hand, the \jmodule{XMA-*} sets are quite huge, but trivial: their only candidate AM will just get picked and that will be the end of the heuristic. We will see the performance of the other components of the whole system, dealing with huge data that are rather simple in the end.
+On the other hand, the \dataset{XMA-*} sets are quite huge, but trivial: their only candidate AM will just get picked and that will be the end of the heuristic. We will see the performance of the other components of the whole system, dealing with huge data that are rather simple in the end.
 
-Finally, the \jmodule{XMD} set is quite big and at the same time has non-trivial graph representation. We should see a performance more balanced between processing and finding the ID set here.
+Finally, the \dataset{XMD} set is quite big and at the same time has non-trivial graph representation. We should see a performance more balanced between processing and finding the ID set here.
 
 \subsection{Realistic data with artificial attributes}
 \label{realistic-converted}
 
-We found 2 data sets to convert, \jmodule{MSH} and \jmodule{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here. None of these sets had any attributes before the conversion. Their summary is the Table \ref{table-experiments-data-converted}, their graphs can be seen in Figure \ref{image-experiments-data-converted}.
+We found 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here. None of these sets had any attributes before the conversion. Their summary is the Table \ref{table-experiments-data-converted}, their graphs can be seen in Figure \ref{image-experiments-data-converted}.
 
 TODO schemas?
 
-To address the conversion: in the case of \jmodule{MSH} we found 2 elements with values looking suspiciously like a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \jmodule{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
+To address the conversion: in the case of \dataset{MSH} we found 2 elements with values looking suspiciously like a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
 Why is this useful at all? Recall TODO link, where we said that ID attributes are a special case of XML keys. We can use this approach then to find XML keys: convert some suspicious data into attributes, find the optimal ID set and then create XML key based on this ID set.
 
@@ -99,8 +99,8 @@ Why is this useful at all? Recall TODO link, where we said that ID attributes ar
   \begin{tabular}{l | r | c | c | l}
   	Name  & Size [kb] & $|V|$ & $|E|$ & Optimum \\
   	\hline
-  	\jmodule{MSH}  & 3 100.5 & 1 & 0 & 0.5416472778036296 \\
-  	\jmodule{NTH}  & 2 523.5 & 5 & 7 & 0.057918595422124436 \\
+  	\dataset{MSH}  & 3 100.5 & 1 & 0 & 0.5416472778036296 \\
+  	\dataset{NTH}  & 2 523.5 & 5 & 7 & 0.057918595422124436 \\
   \end{tabular}
 \end{table}
 
@@ -108,13 +108,13 @@ Why is this useful at all? Recall TODO link, where we said that ID attributes ar
   \caption{Realistic data with converted attributes}
   \label{image-experiments-data-converted}
   \centering
-    \subfigure[\jmodule{MSH}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/converted/MSH}}
-    \subfigure[\jmodule{NTH}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH}}
+    \subfigure[\dataset{MSH}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/converted/MSH}}
+    \subfigure[\dataset{NTH}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH}}
 \end{figure}
 
-Again to do a little interpretation: in the case of \jmodule{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \jmodule{XMA-*} sets: quite large data, yet only one trivial ID attribute to be found.
+Again to do a little interpretation: in the case of \dataset{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \dataset{XMA-*} sets: quite large data, yet only one trivial ID attribute to be found.
 
-In the case of \jmodule{NTH} we introduced more attributes, 8 to be precise. Out of them 5 proved to be candidate AMs, with 7 edges constraining them. This means we have quite a big set with relatively simple work to be done by the heuristics. This is about the change.
+In the case of \dataset{NTH} we introduced more attributes, 8 to be precise. Out of them 5 proved to be candidate AMs, with 7 edges constraining them. This means we have quite a big set with relatively simple work to be done by the heuristics. This is about the change.
 
 \subsection{Artificial data}
 
@@ -142,7 +142,7 @@ This is actually simple. Consider the following excerpt from an XML file:
 
 We want to create a graph with around $v$ vertices and $e$ edges. First, we introduce $v$ elements with names \texttt{vertex0} - \texttt{vertex\{V-1\}}. To constitute an AM, they need an attribute \texttt{attr}, but with large enough random values, so that these values won't conflict with any others. Second, for each of the $e$ edges we pick two \texttt{vertex*} elements at random, and give them the same value of their \texttt{attr}. This will ensure they cannot share the same ID set, thus effectively creating the edge in the graph representation.
 
-The pseudocode for this is in listing \ref{listing-random-data}.
+The pseudocode for this is in Listing \ref{listing-random-data}.
 
 \begin{algorithm}
 \caption{Random XML data creation}
@@ -170,11 +170,11 @@ With this process in place we can create as much data as we wish with any combin
 
 There is one interesting characteristic that can describe random graphs like this, and that is the \textit{density}. This can be defined in various ways, we will use two different interpretations for a while. The first is $\frac{|E|}{|V|}$, that is, how many edges are there for one vertex (multiplied by 2 we'd get the average degree of the vertices). The second, perhaps more interesting is $\frac{|E|}{E_{max}}$, where $E_{max} = \frac{|V|.(|V|-1)}{2}$. This is the density as the ratio of edges that are to all edges that could be in a complete graph with $|V|$ vertices.
 
-We have created 3 sets to use in experiments along with the realistic and converted sets, these are called \jmodule{100-100}, \jmodule{100-200} and \jmodule{100-1000}. Note that the name is always in the form $v-e$.\\
+We have created 3 sets to use in experiments along with the realistic and converted sets, these are called \dataset{100-100}, \dataset{100-200} and \dataset{100-1000}. Note that the name is always in the form $v-e$.\\
 
 All of the experimental data sets mentioned so far, realistic, converted and artificial alike will be referred to as \textit{official test data (sets)}.\\
 
-Also, we will need data of comparably similar characteristics but varying size, to study the effects of size on the run times of experiments. For this reason we created 11 more sets, from \jmodule{0-0} as the trivial one to \jmodule{100-500} as the biggest one. From now on, these will be referred to as \textit{sized test data (sets)}. We wanted to keep density the same among these sets, and we picked the $\frac{|E|}{E_{max}}$ density interpretation for this.
+Also, we will need data of comparably similar characteristics but varying size, to study the effects of size on the run times of experiments. For this reason we created 11 more sets, from \dataset{0-0} as the trivial one to \dataset{100-500} as the biggest one. From now on, these will be referred to as \textit{sized test data (sets)}. We wanted to keep density the same among these sets, and we picked the $\frac{|E|}{E_{max}}$ density interpretation for this.
 
 TODO this is on the DVD.
 
@@ -192,9 +192,9 @@ this will happen more with higher $e$.
   \begin{tabular}{l | r | c | c | c | c | l}
   	Name  & Size [kb] & $|V|$ & $|E|$ & $\frac{|E|}{|V|}$ & $\frac{|E|}{E_{max}}$ & Optimum \\
   	\hline
-  	\jmodule{100-100}  & 8.4  & 99 & 95  & 0.95 & 0.02 & 0.836666666666667 \\
-  	\jmodule{100-200}  & 13.0 & 96 & 174 & 1.81 & 0.04 & 0.726000000000000 \\
-    \jmodule{100-1000} & 49.5 & 93 & 754 & 8.11 & 0.16 & 0.380952380952381 \\
+  	\dataset{100-100}  & 8.4  & 99 & 95  & 0.95 & 0.02 & 0.836666666666667 \\
+  	\dataset{100-200}  & 13.0 & 96 & 174 & 1.81 & 0.04 & 0.726000000000000 \\
+    \dataset{100-1000} & 49.5 & 93 & 754 & 8.11 & 0.16 & 0.380952380952381 \\
   \end{tabular}
 \end{table}
 
@@ -206,17 +206,17 @@ this will happen more with higher $e$.
   \begin{tabular}{l | r | c | c | c | c | l}
 	  Name  & Size [kb] & $|V|$ & $|E|$ & $\frac{|E|}{|V|}$ & $\frac{|E|}{E_{max}}$ & Optimum \\
   	\hline
-  	\jmodule{0-0}     & 0.2  & 0  & 0   & -    & -    & 0.0                \\
-  	\jmodule{10-5}    & 0.6  & 10 & 5   & 0.50 & 0.11 & 0.8500000000000002 \\
-    \jmodule{20-20}   & 1.7  & 18 & 13  & 0.72 & 0.08 & 0.7166666666666669 \\
-    \jmodule{30-45}   & 3.1  & 29 & 43  & 1.48 & 0.11 & 0.7083333333333334 \\
-  	\jmodule{40-80}   & 5.1  & 39 & 72  & 1.85 & 0.10 & 0.6950000000000002 \\
-  	\jmodule{50-125}  & 7.5  & 48 & 111 & 2.31 & 0.10 & 0.6566666666666666 \\
-  	\jmodule{60-180}  & 10.4 & 58 & 157 & 2.71 & 0.09 & 0.6214285714285716 \\
-  	\jmodule{70-245}  & 13.8 & 67 & 205 & 3.06 & 0.09 & 0.5982142857142856 \\
-  	\jmodule{80-320}  & 17.6 & 76 & 261 & 3.43 & 0.09 & 0.5791666666666667 \\
-  	\jmodule{90-405}  & 21.9 & 86 & 352 & 4.09 & 0.10 & 0.528888888888889  \\
-  	\jmodule{100-500} & 26.7 & 91 & 388 & 4.26 & 0.09 & 0.4981818181818182 \\
+  	\dataset{0-0}     & 0.2  & 0  & 0   & -    & -    & 0.0                \\
+  	\dataset{10-5}    & 0.6  & 10 & 5   & 0.50 & 0.11 & 0.8500000000000002 \\
+    \dataset{20-20}   & 1.7  & 18 & 13  & 0.72 & 0.08 & 0.7166666666666669 \\
+    \dataset{30-45}   & 3.1  & 29 & 43  & 1.48 & 0.11 & 0.7083333333333334 \\
+  	\dataset{40-80}   & 5.1  & 39 & 72  & 1.85 & 0.10 & 0.6950000000000002 \\
+  	\dataset{50-125}  & 7.5  & 48 & 111 & 2.31 & 0.10 & 0.6566666666666666 \\
+  	\dataset{60-180}  & 10.4 & 58 & 157 & 2.71 & 0.09 & 0.6214285714285716 \\
+  	\dataset{70-245}  & 13.8 & 67 & 205 & 3.06 & 0.09 & 0.5982142857142856 \\
+  	\dataset{80-320}  & 17.6 & 76 & 261 & 3.43 & 0.09 & 0.5791666666666667 \\
+  	\dataset{90-405}  & 21.9 & 86 & 352 & 4.09 & 0.10 & 0.528888888888889  \\
+  	\dataset{100-500} & 26.7 & 91 & 388 & 4.26 & 0.09 & 0.4981818181818182 \\
   \end{tabular}
 \end{table}
 
@@ -224,8 +224,8 @@ this will happen more with higher $e$.
   \caption{Artificial data}
   \label{image-experiments-data-artificial}
   \centering
-  	\subfigure[\jmodule{48-80}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/40-80}}
-	\subfigure[\jmodule{70-245}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
+  	\subfigure[\dataset{48-80}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/40-80}}
+	\subfigure[\dataset{70-245}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
 \end{figure}
 
 To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one, which should work very nice with our heuristics. The $|V|$ and $|E|$ numbers are orders of magnitude higher than with any realistic (or converted) data set we are using, and this will put real stress on the heuristics, as we shall see in the next section.
@@ -375,7 +375,7 @@ Apart from comparing different versions, we shall see how the pure GLPK approach
 \bigskip
 \end{center}
 
-Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \jmodule{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2, meaning 25 settings * 20 iterations = 500 configurations in total (see listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
+Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2, meaning 25 settings * 20 iterations = 500 configurations in total (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
 
 \begin{algorithm}
 \caption{GLPK: native vs. Cygwin set generation 1}
@@ -385,7 +385,7 @@ Our experimental set will contain 500 experimental configurations for each of th
 \STATE $ES \gets \emptyset$
 \FOR{$i = 1 \to 20$}
 	\FOR{$time = 1 \to 49$ step $2$}
-    \STATE $ES \gets ES \cup {CH = \jmodule{Glpk}(limit = time), IH = \emptyset}$
+    \STATE $ES \gets ES \cup {CH = \heu{Glpk}(limit = time), IH = \emptyset}$
   \ENDFOR
 \ENDFOR
 \RETURN $ES$
@@ -411,7 +411,7 @@ TODO graph + interpretation
 \bigskip
 \end{center}
 
-Another way to compare the performance of these two GLPK versions is to see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 220 configurations for each version. Every configuration will let \jmodule{Glpk} CH run for unlimited time, until it finds the optimum. This will be repeated in 20 iterations for each of the 11 files from the sized test data set (see listing \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.
+Another way to compare the performance of these two GLPK versions is to see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 220 configurations for each version. Every configuration will let \heu{Glpk} CH run for unlimited time, until it finds the optimum. This will be repeated in 20 iterations for each of the 11 files from the sized test data set (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.
 
 \begin{algorithm}
 \caption{GLPK: native vs. Cygwin set generation 2}
@@ -421,7 +421,7 @@ Another way to compare the performance of these two GLPK versions is to see how 
 \STATE $ES \gets \emptyset$
 \FOR{$i = 1 \to 20$}
 	\FOR{$file \in $ sized test data}
-    \STATE $ES \gets ES \cup \{file, CH = \jmodule{Glpk}(no\:limit), IH = \emptyset\}$
+    \STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(no\:limit), IH = \emptyset\}$
   \ENDFOR
 \ENDFOR
 \RETURN $ES$
@@ -434,11 +434,11 @@ TODO graph + interpretation. Graph should have its Y axis in log, stress this fa
 
 TODO mention that these times show we cannot rely on GLPK alone! It just takes too long.
 
-\subsection{\jmodule{Random} vs. \jmodule{Fuzzy} vs. \jmodule{FIDAX}}
+\subsection{\heu{Random} vs. \heu{Fuzzy} vs. \heu{FIDAX}}
 
 %         NB class RandomVsFuzzyVsFidaxStart
 
-Our investigation into various CH will start by comparing \jmodule{FIDAX} from the original article \cite{fidax} to 2 of our trivial randomized hungry heuristics, \jmodule{Random} and \jmodule{Fuzzy}.
+Our investigation into various CH will start by comparing \heu{FIDAX} from the original article \cite{fidax} to 2 of our trivial randomized hungry heuristics, \heu{Random} and \heu{Fuzzy}.
 
 \begin{center}
 \bigskip
@@ -455,7 +455,7 @@ Our investigation into various CH will start by comparing \jmodule{FIDAX} from t
 \bigskip
 \end{center}
 
-The experimental set will contain 660 configurations in total: 3 different CHs * 11 official test data sets * 20 iterations. There will be no improvement heuristics. The pool size will be set to 10, even though \jmodule{FIDAX} cannot not profit from this. Listing for this can be found in \ref{listing-experiment-random-fuzzy-fidax}.
+The experimental set will contain 660 configurations in total: 3 different CHs * 11 official test data sets * 20 iterations. There will be no improvement heuristics. The pool size will be set to 10, even though \heu{FIDAX} cannot not profit from this. Listing for this can be found in \ref{listing-experiment-random-fuzzy-fidax}.
 
 We will be gathering the running time of the CH itself and incumbent qualities (best in the pool) for GnuPlot.
 
@@ -467,7 +467,7 @@ We will be gathering the running time of the CH itself and incumbent qualities (
 \STATE $ES \gets \emptyset$
 \FOR{$i = 1 \to 20$}
 	\FOR{$file \in $ official test data}
-    \STATE $ES \gets ES \cup \{file, CH = \jmodule{Random}(pool = 10), IH = \emptyset\} \cup \{file, CH = \jmodule{Fuzzy}(pool = 10), IH = \emptyset\} \cup \{file, CH = \jmodule{FIDAX}, IH = \emptyset\}$
+    \STATE $ES \gets ES \cup \{file, CH = \heu{Random}(pool = 10), IH = \emptyset\} \cup \{file, CH = \heu{Fuzzy}(pool = 10), IH = \emptyset\} \cup \{file, CH = \heu{FIDAX}, IH = \emptyset\}$
   \ENDFOR
 \ENDFOR
 \RETURN $ES$
@@ -478,11 +478,11 @@ We will be gathering the running time of the CH itself and incumbent qualities (
 
 TODO graphs (files with similar behavior together) + interpretation.
 
-\subsubsection{Improving \jmodule{FIDAX} with \jmodule{Hungry}}
+\subsubsection{Improving \heu{FIDAX} with \heu{Hungry}}
 
 %         NB class FidaxWithHungry
 
-There is a minor question to be answered easily: is \jmodule{FIDAX} ``hungry enough"? Could we improve it using \jmodule{Hungry} as IH? Let us design a short experiment.
+There is a minor question to be answered easily: is \heu{FIDAX} ``hungry enough"? Could we improve it using \heu{Hungry} as IH? Let us design a short experiment.
 
 \begin{center}
 \bigskip
@@ -499,42 +499,42 @@ There is a minor question to be answered easily: is \jmodule{FIDAX} ``hungry eno
 \bigskip
 \end{center}
 
-We won't be needing pool bigger than one, nor more iterations - both \jmodule{FIDAX} and \jmodule{Hungry} are deterministic. We will try all official data sets, first with empty IH, second with \jmodule{Hungry} as IH. We will gather the qualities in each case and see whether there is any improvement.
+We won't be needing pool bigger than one, nor more iterations - both \heu{FIDAX} and \heu{Hungry} are deterministic. We will try all official data sets, first with empty IH, second with \heu{Hungry} as IH. We will gather the qualities in each case and see whether there is any improvement.
 
-The experimental results are summarized in the Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. As trivial a heuristic \jmodule{Hungry} is, it is still able to improve the ID set found by \jmodule{FIDAX} by as much as almost 50\% (the last row, \jmodule{100-1000}).
+The experimental results are summarized in the Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. As trivial a heuristic \heu{Hungry} is, it is still able to improve the ID set found by \heu{FIDAX} by as much as almost 50\% (the last row, \dataset{100-1000}).
 
-Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes found in both cases for this most extreme input, \jmodule{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as ID attribute".
+Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes found in both cases for this most extreme input, \dataset{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as ID attribute".
 
 \begin{table}
-  \caption{Results of adding \jmodule{Hungry} after \jmodule{FIDAX}}
+  \caption{Results of adding \heu{Hungry} after \heu{FIDAX}}
   \bigskip
   \label{table-experiments-fidax-and-hungry}
   \centering
   \begin{tabular}{l | l | l}
-    Data set & Quality - \jmodule{FIDAX} & Quality - \jmodule{FIDAX} + \jmodule{Hungry} \\
+    Data set & Quality - \heu{FIDAX} & Quality - \heu{FIDAX} + \heu{Hungry} \\
     \hline
-    \jmodule{OVA1}     & 0.4411764705882353  & 0.4411764705882353   \\
-    \jmodule{OVA2}     & 0.16346153846153846 & 0.16346153846153846  \\
-    \jmodule{OVA3}     & 0.25482414123443264 & \textbf{0.2553715615163541}   \\
-    \jmodule{XMA-c}    & 0.7546666666666666	 & 0.7546666666666666   \\
-    \jmodule{XMA-p}    & 0.2019306150568969	 & 0.2019306150568969   \\
-    \jmodule{XMD}      & 0.09786094165493509 & 0.09786094165493509  \\
-    \jmodule{MSH}      & 0.5416472778036296	 & 0.5416472778036296   \\
-    \jmodule{NTH}      & 0.05259709474828076 & \textbf{0.057918595422124436} \\
-    \jmodule{100-100}  & 0.56	               & \textbf{0.6766666666666669}   \\
-    \jmodule{100-200}  & 0.44200000000000017 & \textbf{0.5980000000000003}   \\
-    \jmodule{100-1000} & 0.19952380952380955 & \textbf{0.29619047619047617}  \\
+    \dataset{OVA1}     & 0.4411764705882353  & 0.4411764705882353   \\
+    \dataset{OVA2}     & 0.16346153846153846 & 0.16346153846153846  \\
+    \dataset{OVA3}     & 0.25482414123443264 & \textbf{0.2553715615163541}   \\
+    \dataset{XMA-c}    & 0.7546666666666666	 & 0.7546666666666666   \\
+    \dataset{XMA-p}    & 0.2019306150568969	 & 0.2019306150568969   \\
+    \dataset{XMD}      & 0.09786094165493509 & 0.09786094165493509  \\
+    \dataset{MSH}      & 0.5416472778036296	 & 0.5416472778036296   \\
+    \dataset{NTH}      & 0.05259709474828076 & \textbf{0.057918595422124436} \\
+    \dataset{100-100}  & 0.56	               & \textbf{0.6766666666666669}   \\
+    \dataset{100-200}  & 0.44200000000000017 & \textbf{0.5980000000000003}   \\
+    \dataset{100-1000} & 0.19952380952380955 & \textbf{0.29619047619047617}  \\
   \end{tabular}
 \end{table}
 
 % TODO for some reason \texttt{\textbf{vertex5}} looks only like \texttt{vertex5}
 \begin{table}
-  \caption{ID sets in \jmodule{FIDAX} versus \jmodule{FIDAX} + \jmodule{Hungry}}
+  \caption{ID sets in \heu{FIDAX} versus \heu{FIDAX} + \heu{Hungry}}
   \bigskip
   \label{table-experiments-fidax-and-hungry-idsets}
   \centering
   \begin{tabular}{l | l}
-  \jmodule{FIDAX} & \jmodule{FIDAX} + \jmodule{Hungry} \\
+  \heu{FIDAX} & \heu{FIDAX} + \heu{Hungry} \\
   \hline
                     & \texttt{\textbf{vertex5}}  \\
                     & \texttt{\textbf{vertex26}} \\
@@ -589,7 +589,7 @@ TODO chart for each file: CHs on the X axis, quality Y axis, boxplots
 
 TODO with the best construction heuristic, which IH is the best? Note that this needn't be the best combination!
 
-\subsubsection{\jmodule{Random} as CH}
+\subsubsection{\heu{Random} as CH}
 
 TODO with the best IH from the previous step, how about using Random as CH?
 

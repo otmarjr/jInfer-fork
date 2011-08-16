@@ -47,9 +47,11 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
 
   @Override
   public void run(final int from) throws InterruptedException {
-    LOG.info("Running from index " + from);
     if (from == 0) {
       notifyStart();
+    }
+    else {
+      LOG.info("Running from index " + from);
     }
     final List<ExperimentParameters> experiments = getExperiments();
     final int totalCount = experiments.size();
@@ -70,7 +72,7 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
         }
       }, "Experiment Runner");
 
-      LOG.debug("Running iteration #" + i + "/" + totalCount);
+      LOG.debug("Running iteration #" + (i + 1) + "/" + totalCount);
       t.start();
 
       synchronized (monitor) {
@@ -92,7 +94,7 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
 
     @Override
     public void experimentFinished(final Experiment e) {
-      LOG.debug("Iteration #" + iteration + " finished");
+      LOG.debug("Iteration #" + (iteration + 1) + " finished");
       FileUtils.appendString("\n" + iteration, Constants.RESTART);
       notifyFinished(e, iteration);
       synchronized (monitor) {

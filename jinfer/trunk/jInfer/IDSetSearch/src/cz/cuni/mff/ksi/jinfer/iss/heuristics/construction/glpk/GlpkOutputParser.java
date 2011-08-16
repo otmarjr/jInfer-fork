@@ -19,10 +19,12 @@ package cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.iss.objects.IdSet;
+import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+import org.apache.log4j.Logger;
 
 /**
  * Utility class for parsing the GLPK optimization result into a set of attribute
@@ -31,6 +33,8 @@ import java.util.Set;
  * @author vektor
  */
 public final class GlpkOutputParser {
+
+  private static final Logger LOG = Logger.getLogger(GlpkOutputParser.class);
 
   private GlpkOutputParser() {
   }
@@ -63,6 +67,8 @@ public final class GlpkOutputParser {
    */
   public static IdSet getIDSet(final String output, final AMModel model,
           final boolean isFixed) {
+    final long start = Utils.time();
+
     final Set<AttributeMappingId> ret = new HashSet<AttributeMappingId>();
 
     final Scanner s = new Scanner(output);
@@ -85,9 +91,13 @@ public final class GlpkOutputParser {
       }
     }
 
-    return new IdSet(
+    final IdSet result = new IdSet(
             new ArrayList<AttributeMappingId>(ret),
             !isFixed && output.contains("INTEGER OPTIMAL SOLUTION FOUND"));
+
+    LOG.debug("GLPK output parsing took " + Utils.delta(start) + " ms.");
+
+    return result;
   }
 
 }

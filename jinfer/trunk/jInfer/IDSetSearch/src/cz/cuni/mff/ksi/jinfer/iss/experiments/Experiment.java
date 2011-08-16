@@ -34,6 +34,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
+import cz.cuni.mff.ksi.jinfer.iss.utils.MappingUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -208,7 +209,7 @@ public class Experiment {
     igg.start(input, new IGGeneratorCallback() {
 
       @Override
-      public void finished(List<Element> grammar) {
+      public void finished(final List<Element> grammar) {
         grammarTime = delta(grammarStartTime);
         final long modelStartTime = time();
         model = new AMModel(grammar);
@@ -266,6 +267,8 @@ public class Experiment {
       else {
         improvementResults.add(result);
       }
+
+      assert(MappingUtils.isIDset(incumbent.getFirst().getMappings(), model));
 
       final long totTime = delta(startTime);
       final Pair<Boolean, String> termination = params.getTerminationCriterion().terminate(Experiment.this, totTime, feasiblePool);

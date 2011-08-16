@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.iss.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -78,6 +79,8 @@ public final class GlpkInputGenerator {
           final double alpha, final double beta,
           final List<AttributeMappingId> incumbentAMs, final long k)
           throws InterruptedException {
+    final long start = Utils.time();
+
     final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
     Collections.shuffle(candidates);
 
@@ -104,13 +107,17 @@ public final class GlpkInputGenerator {
       }
     }
 
-    return GlpkUtils.loadTemplate(TEMPLATE_LB).toString()
+    final String ret = GlpkUtils.loadTemplate(TEMPLATE_LB).toString()
             .replace("{constraints}", getConstraints(candidates, Collections.<AttributeMappingId>emptyList(), model))
             .replace("{mappings}", mappings)
             .replace("{weights}", weights)
             .replace("{k}", String.valueOf(k))
             .replace("{incumbent}", incumbent)
             .replace("{remaining}", remaining);
+
+    LOG.debug("GLPK input generation took " + Utils.delta(start) + " ms.");
+
+    return ret;
   }
 
   /**
@@ -155,6 +162,8 @@ public final class GlpkInputGenerator {
   public static String generateGlpkInput(final AMModel model,
           final List<AttributeMappingId> fixed,
           final double alpha, final double beta) throws InterruptedException {
+    final long start = Utils.time();
+
     final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
     Collections.shuffle(candidates);
 
@@ -173,7 +182,7 @@ public final class GlpkInputGenerator {
               .append('\n');
     }
 
-    final String result = GlpkUtils.loadTemplate(TEMPLATE).toString()
+    final String ret = GlpkUtils.loadTemplate(TEMPLATE).toString()
             .replace("{constraints}", getConstraints(candidates, fixed, model))
             .replace("{mappings}", mappings)
             .replace("{weights}", weights);
@@ -182,7 +191,9 @@ public final class GlpkInputGenerator {
       LOG.info("Fixed to 1: " + fixed.size());
     }
 
-    return result;
+    LOG.debug("GLPK input generation took " + Utils.delta(start) + " ms.");
+
+    return ret;
   }
 
   private static String getConstraints(

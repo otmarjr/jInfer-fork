@@ -28,15 +28,17 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.ConstructionHeuristics;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Incremental;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Removal;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.Glpk;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -47,9 +49,9 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class BestStandaloneCH extends AbstractExperimentSet {
 
-  private File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
-
   private static final int POOL_SIZE = 10;
+
+  private File file;
 
   @Override
   public String getName() {
@@ -64,11 +66,24 @@ public class BestStandaloneCH extends AbstractExperimentSet {
 
     for (final TestData data : OfficialTestData.values()) {
       for (int i = 0; i < Constants.ITERATIONS; i++) {
-        for (final ConstructionHeuristics heu : ConstructionHeuristics.values()) {
-          ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
-                  data.getKnownOptimum(), new Random(),
-                  improvement, new Weight(), TimeIterations.NULL));
-        }
+        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
+                data.getKnownOptimum(),
+                new Random(), improvement, new Weight(), TimeIterations.NULL));
+        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
+                data.getKnownOptimum(),
+                new Fuzzy(), improvement, new Weight(), TimeIterations.NULL));
+        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
+                data.getKnownOptimum(),
+                new Incremental(), improvement, new Weight(), TimeIterations.NULL));
+        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
+                data.getKnownOptimum(),
+                new Removal(), improvement, new Weight(), TimeIterations.NULL));
+        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
+                data.getKnownOptimum(),
+                new Fidax(), improvement, new Weight(), TimeIterations.NULL));
+        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
+                data.getKnownOptimum(),
+                new Glpk(1), improvement, new Weight(), TimeIterations.NULL));
       }
     }
 
@@ -76,32 +91,23 @@ public class BestStandaloneCH extends AbstractExperimentSet {
   }
 
   private void writeHeader() {
-    final StringBuilder sb = new StringBuilder();
-    for (final ConstructionHeuristics heu : ConstructionHeuristics.values()) {
-      try {
-        // TODO this won't work, not everybody has a non-parametric constructor
-        sb.append(heu.getClazz().newInstance().getName())
-          .append('\t');
-      } catch (final InstantiationException ex) {
-        Exceptions.printStackTrace(ex);
-      } catch (final IllegalAccessException ex) {
-        Exceptions.printStackTrace(ex);
-      }
-    }
-    FileUtils.writeString(sb.toString(), finalCsv);
-  }
-
-  @Override
-  protected void notifyStart() {
-    writeHeader();
+    FileUtils.writeString("Random\tFuzzy\tIncremental\tRemoval\tFIDAX\tGlpk", file);
   }
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
-    final int numColumns = OfficialTestData.values().length * 3;
+    final int numColumns = ConstructionHeuristics.values().length - 1; // we don't want Null
+
+    file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
+           OfficialTestData.values()[iteration / (Constants.ITERATIONS * numColumns)].getFile().getName() + ".txt");
+
+    if ((iteration % (Constants.ITERATIONS * numColumns)) == 0) {
+      writeHeader();
+    }
+
     final StringBuilder sbQuality = new StringBuilder();
     sbQuality.append((iteration % numColumns) == 0 ? '\n': '\t')
       .append(e.getHighestQuality().getScalar());
-    FileUtils.appendString(sbQuality.toString(), finalCsv);
+    FileUtils.appendString(sbQuality.toString(), file);
   }
 }

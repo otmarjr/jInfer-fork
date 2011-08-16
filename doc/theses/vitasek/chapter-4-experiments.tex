@@ -51,14 +51,14 @@ TODO verify they satisfy their schemas. Converted too.
   \label{table-experiments-data-realistic}
   \centering
   \begin{tabular}{l | r | c | c | l}
-	Name  & Size [kb] & $|V|$ & $|E|$ & Optimum \\
-	\hline
-	OVA1  & 4.5      & 29 & 43 & 0.45588235294117635 \\
-	OVA2  & 11.9     & 23 & 36 & 0.1634615384615385  \\
-	OVA3  & 237.6    & 31 & 47 & 0.25537156151635415 \\
-	XMA-c & 1 807.7  & 1  & 0  & 0.7546666666666667  \\
-	XMA-p & 13 748.3 & 1  & 0  & 0.2019306150568969  \\
-	XMD   & 1 743.0  & 17 & 15 & 0.09786094165493507 \\
+  	Name  & Size [kb] & $|V|$ & $|E|$ & Optimum \\
+  	\hline
+  	\jmodule{OVA1}  & 4.5      & 29 & 43 & 0.45588235294117635 \\
+  	\jmodule{OVA2}  & 11.9     & 23 & 36 & 0.1634615384615385  \\
+  	\jmodule{OVA3}  & 237.6    & 31 & 47 & 0.25537156151635415 \\
+  	\jmodule{XMA-c} & 1 807.7  & 1  & 0  & 0.7546666666666667  \\
+  	\jmodule{XMA-p} & 13 748.3 & 1  & 0  & 0.2019306150568969  \\
+  	\jmodule{XMD}   & 1 743.0  & 17 & 15 & 0.09786094165493507 \\
   \end{tabular}
 \end{table}
 
@@ -66,12 +66,12 @@ TODO verify they satisfy their schemas. Converted too.
   \caption{Realistic data}
   \label{image-experiments-data-realistic}
   \centering
-    \subfigure[OVA1]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1}}
-    \subfigure[OVA2]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA2}}
-    \subfigure[OVA3]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA3}}
-    \subfigure[XMA-c]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-c}}
-    \subfigure[XMA-p]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-p}}
-    \subfigure[XMD]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD}}
+    \subfigure[\jmodule{OVA1}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1}}
+    \subfigure[\jmodule{OVA2}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA2}}
+    \subfigure[\jmodule{OVA3}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA3}}
+    \subfigure[\jmodule{XMA-c}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-c}}
+    \subfigure[\jmodule{XMA-p}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/realistic/XMA-p}}
+    \subfigure[\jmodule{XMD}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD}}
 \end{figure}
 
 To interpret the data a little: \jmodule{OVA*} sets have quite interesting and perhaps a bit challenging graphs, but are not too big. We can consider them to be the ``typical" representants.
@@ -97,10 +97,10 @@ Why is this useful at all? Recall TODO link, where we said that ID attributes ar
   \label{table-experiments-data-converted}
   \centering
   \begin{tabular}{l | r | c | c | l}
-	Name  & Size [kb] & $|V|$ & $|E|$ & Optimum \\
-	\hline
-	MSH  & 3 100.5 & 1 & 0 & 0.5416472778036296 \\
-	NTH  & 2 523.5 & 5 & 7 & 0.057918595422124436 \\
+  	Name  & Size [kb] & $|V|$ & $|E|$ & Optimum \\
+  	\hline
+  	\jmodule{MSH}  & 3 100.5 & 1 & 0 & 0.5416472778036296 \\
+  	\jmodule{NTH}  & 2 523.5 & 5 & 7 & 0.057918595422124436 \\
   \end{tabular}
 \end{table}
 
@@ -108,8 +108,8 @@ Why is this useful at all? Recall TODO link, where we said that ID attributes ar
   \caption{Realistic data with converted attributes}
   \label{image-experiments-data-converted}
   \centering
-    \subfigure[MSH]{\includegraphics[width=0.08\textwidth]{images/experiments/data/converted/MSH}}
-    \subfigure[NTH]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH}}
+    \subfigure[\jmodule{MSH}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/converted/MSH}}
+    \subfigure[\jmodule{NTH}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH}}
 \end{figure}
 
 Again to do a little interpretation: in the case of \jmodule{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \jmodule{XMA-*} sets: quite large data, yet only one trivial ID attribute to be found.
@@ -190,11 +190,11 @@ this will happen more with higher $e$.
   \label{table-experiments-data-artificial}
   \centering
   \begin{tabular}{l | r | c | c | c | c | l}
-	Name  & Size [kb] & $|V|$ & $|E|$ & $\frac{|E|}{|V|}$ & $\frac{|E|}{E_{max}}$ & Optimum \\
-	\hline
-	100-100  & 8.4  & 99 & 95  & 0.95 & 0.02 & 0.836666666666667 \\
-	100-200  & 13.0 & 96 & 174 & 1.81 & 0.04 & 0.726000000000000 \\
-    100-1000 & 49.5 & 93 & 754 & 8.11 & 0.16 & 0.380952380952381 \\
+  	Name  & Size [kb] & $|V|$ & $|E|$ & $\frac{|E|}{|V|}$ & $\frac{|E|}{E_{max}}$ & Optimum \\
+  	\hline
+  	\jmodule{100-100}  & 8.4  & 99 & 95  & 0.95 & 0.02 & 0.836666666666667 \\
+  	\jmodule{100-200}  & 13.0 & 96 & 174 & 1.81 & 0.04 & 0.726000000000000 \\
+    \jmodule{100-1000} & 49.5 & 93 & 754 & 8.11 & 0.16 & 0.380952380952381 \\
   \end{tabular}
 \end{table}
 
@@ -204,19 +204,19 @@ this will happen more with higher $e$.
   \label{table-experiments-data-artificial-size}
   \centering
   \begin{tabular}{l | r | c | c | c | c | l}
-	Name  & Size [kb] & $|V|$ & $|E|$ & $\frac{|E|}{|V|}$ & $\frac{|E|}{E_{max}}$ & Optimum \\
-	\hline
-	0-0     & 0.2  & 0  & 0   & -    & -    & 0.0                \\
-	10-5    & 0.6  & 10 & 5   & 0.50 & 0.11 & 0.8500000000000002 \\
-  20-20   & 1.7  & 18 & 13  & 0.72 & 0.08 & 0.7166666666666669 \\
-  30-45   & 3.1  & 29 & 43  & 1.48 & 0.11 & 0.7083333333333334 \\
-	40-80   & 5.1  & 39 & 72  & 1.85 & 0.10 & 0.6950000000000002 \\
-	50-125  & 7.5  & 48 & 111 & 2.31 & 0.10 & 0.6566666666666666 \\
-	60-180  & 10.4 & 58 & 157 & 2.71 & 0.09 & 0.6214285714285716 \\
-	70-245  & 13.8 & 67 & 205 & 3.06 & 0.09 & 0.5982142857142856 \\
-	80-320  & 17.6 & 76 & 261 & 3.43 & 0.09 & 0.5791666666666667 \\
-	90-405  & 21.9 & 86 & 352 & 4.09 & 0.10 & 0.528888888888889  \\
-	100-500 & 26.7 & 91 & 388 & 4.26 & 0.09 & 0.4981818181818182 \\
+	  Name  & Size [kb] & $|V|$ & $|E|$ & $\frac{|E|}{|V|}$ & $\frac{|E|}{E_{max}}$ & Optimum \\
+  	\hline
+  	\jmodule{0-0}     & 0.2  & 0  & 0   & -    & -    & 0.0                \\
+  	\jmodule{10-5}    & 0.6  & 10 & 5   & 0.50 & 0.11 & 0.8500000000000002 \\
+    \jmodule{20-20}   & 1.7  & 18 & 13  & 0.72 & 0.08 & 0.7166666666666669 \\
+    \jmodule{30-45}   & 3.1  & 29 & 43  & 1.48 & 0.11 & 0.7083333333333334 \\
+  	\jmodule{40-80}   & 5.1  & 39 & 72  & 1.85 & 0.10 & 0.6950000000000002 \\
+  	\jmodule{50-125}  & 7.5  & 48 & 111 & 2.31 & 0.10 & 0.6566666666666666 \\
+  	\jmodule{60-180}  & 10.4 & 58 & 157 & 2.71 & 0.09 & 0.6214285714285716 \\
+  	\jmodule{70-245}  & 13.8 & 67 & 205 & 3.06 & 0.09 & 0.5982142857142856 \\
+  	\jmodule{80-320}  & 17.6 & 76 & 261 & 3.43 & 0.09 & 0.5791666666666667 \\
+  	\jmodule{90-405}  & 21.9 & 86 & 352 & 4.09 & 0.10 & 0.528888888888889  \\
+  	\jmodule{100-500} & 26.7 & 91 & 388 & 4.26 & 0.09 & 0.4981818181818182 \\
   \end{tabular}
 \end{table}
 
@@ -224,8 +224,8 @@ this will happen more with higher $e$.
   \caption{Artificial data}
   \label{image-experiments-data-artificial}
   \centering
-  	\subfigure[48-80]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/40-80}}
-	\subfigure[70-245]{\includegraphics[width=0.45\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
+  	\subfigure[\jmodule{48-80}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/40-80}}
+	\subfigure[\jmodule{70-245}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
 \end{figure}
 
 To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one, which should work very nice with our heuristics. The $|V|$ and $|E|$ numbers are orders of magnitude higher than with any realistic (or converted) data set we are using, and this will put real stress on the heuristics, as we shall see in the next section.
@@ -338,6 +338,8 @@ The experimental set will contain $20 * (11 + 11) = 440$ configurations: 20 iter
 TODO graph + interpretation
 
 \subsubsection{GLPK interface timing}
+
+%         NB class GlpkInterfaceTiming
 
 A related problem is how long it takes to create input for GLPK and then parse its results. We will use the same test data sets as in the previous case, but now we will gather times needed to communicate with GLPK.
 
@@ -468,6 +470,8 @@ TODO graphs (files with similar behavior together) + interpretation.
 
 \subsubsection{Improving \jmodule{FIDAX} with \jmodule{Hungry}}
 
+%         NB class FidaxWithHungry
+
 There is a minor question to be answered easily: is \jmodule{FIDAX} ``hungry enough"? Could we improve it using \jmodule{Hungry} as IH? Let us design a short experiment.
 
 \begin{center}
@@ -487,7 +491,59 @@ There is a minor question to be answered easily: is \jmodule{FIDAX} ``hungry eno
 
 We won't be needing pool bigger than one, nor more iterations - both \jmodule{FIDAX} and \jmodule{Hungry} are deterministic. We will try all official data sets, first with empty IH, second with \jmodule{Hungry} as IH. We will gather the qualities in each case and see whether there is any improvement.
 
-TODO table + interpretation
+The experimental results are summarized in the Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. As trivial a heuristic \jmodule{Hungry} is, it is still able to improve the ID set found by \jmodule{FIDAX} by as much as almost 50\% (the last row, \jmodule{100-1000}).
+
+Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes found in both cases for this most extreme input, \jmodule{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as ID attribute".
+
+\begin{table}
+  \caption{Results of adding \jmodule{Hungry} after \jmodule{FIDAX}}
+  \bigskip
+  \label{table-experiments-fidax-and-hungry}
+  \centering
+  \begin{tabular}{l | l | l}
+    Data set & Quality - \jmodule{FIDAX} & Quality - \jmodule{FIDAX} + \jmodule{Hungry} \\
+    \hline
+    \jmodule{OVA1}     & 0.4411764705882353  & 0.4411764705882353   \\
+    \jmodule{OVA2}     & 0.16346153846153846 & 0.16346153846153846  \\
+    \jmodule{OVA3}     & 0.25482414123443264 & \textbf{0.2553715615163541}   \\
+    \jmodule{XMA-c}    & 0.7546666666666666	 & 0.7546666666666666   \\
+    \jmodule{XMA-p}    & 0.2019306150568969	 & 0.2019306150568969   \\
+    \jmodule{XMD}      & 0.09786094165493509 & 0.09786094165493509  \\
+    \jmodule{MSH}      & 0.5416472778036296	 & 0.5416472778036296   \\
+    \jmodule{NTH}      & 0.05259709474828076 & \textbf{0.057918595422124436} \\
+    \jmodule{100-100}  & 0.56	               & \textbf{0.6766666666666669}   \\
+    \jmodule{100-200}  & 0.44200000000000017 & \textbf{0.5980000000000003}   \\
+    \jmodule{100-1000} & 0.19952380952380955 & \textbf{0.29619047619047617}  \\
+  \end{tabular}
+\end{table}
+
+% TODO for some reason \texttt{\textbf{vertex5}} looks only like \texttt{vertex5}
+\begin{table}
+  \caption{ID sets in \jmodule{FIDAX} versus \jmodule{FIDAX} + \jmodule{Hungry}}
+  \bigskip
+  \label{table-experiments-fidax-and-hungry-idsets}
+  \centering
+  \begin{tabular}{l | l}
+  \jmodule{FIDAX} & \jmodule{FIDAX} + \jmodule{Hungry} \\
+  \hline
+                    & \texttt{\textbf{vertex5}}  \\
+                    & \texttt{\textbf{vertex26}} \\
+  \texttt{vertex30} & \texttt{vertex30} \\
+  \texttt{vertex31} & \texttt{vertex31} \\
+  \texttt{vertex32} & \texttt{vertex32} \\
+  \texttt{vertex34} & \texttt{vertex34} \\
+  \texttt{vertex35} & \texttt{vertex35} \\
+  \texttt{vertex36} & \texttt{vertex36} \\
+  \texttt{vertex37} & \texttt{vertex37} \\
+  \texttt{vertex39} & \texttt{vertex39} \\
+                    & \texttt{\textbf{vertex60}} \\
+                    & \texttt{\textbf{vertex69}} \\
+                    & \texttt{\textbf{vertex70}} \\
+  \texttt{vertex74} & \texttt{vertex74} \\
+  \texttt{vertex75} & \texttt{vertex75} \\
+  \texttt{vertex80} & \texttt{vertex80} \\
+  \end{tabular}
+\end{table}
 
 \subsection{Best standalone CH}
 

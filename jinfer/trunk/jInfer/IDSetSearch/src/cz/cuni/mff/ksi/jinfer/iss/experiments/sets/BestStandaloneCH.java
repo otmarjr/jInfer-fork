@@ -38,13 +38,12 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Experiment comparing Random, Fuzzy and FIDAX construction heuristics, only
- * their first steps.
+ * Experiment comparing all the CHs, without any IHs.
  *
  * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
-public class RandomVsFuzzyVsFidaxStart extends AbstractExperimentSet {
+public class BestStandaloneCH extends AbstractExperimentSet {
 
   private File finalCsvQuality = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-quality.txt");
   private File finalCsvTime = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-time.txt");

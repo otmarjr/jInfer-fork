@@ -20,55 +20,49 @@ import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.data.SizeTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.data.OfficialTestData;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.data.TestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.Glpk;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Hungry;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
-import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.log4j.Logger;
-import org.openide.util.NbPreferences;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Experiment measuring quality depending on how long we let the GLPK
- * construction run. This can also be used to compare different versions of GLPK.
+ * Experiment determining whether FIDAX can be improved with Hungry.
  *
  * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
-public class TimeQuality extends AbstractExperimentSet {
+public class FidaxWithHungry extends AbstractExperimentSet {
 
-  private static final int BEGIN = 1;
-  private static final int END = 50;
-  private static final int STEP = 2;
-
-  private File finalCsv;
+  private File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
 
   @Override
   public String getName() {
-    return "Time vs. Quality";
+    return "FIDAX with Hungry";
   }
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
-    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
+    final List<ImprovementHeuristic> empty = Arrays.<ImprovementHeuristic>asList(new Identity());
+    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Hungry());
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int j = 0; j < Constants.ITERATIONS * 2; j++) {
-      for (int time = BEGIN; time < END; time += STEP) {
-          ret.add(new ExperimentParameters(SizeTestData.GRAPH_100_500.getFile(),
-                  1, 1, 1, SizeTestData.GRAPH_100_500.getKnownOptimum(),
-                  new Glpk(time), improvement, new Weight(), TimeIterations.NULL));
-      }
+    for (final TestData data : OfficialTestData.values()) {
+      ret.add(new ExperimentParameters(data.getFile(), 1, 1, 1,
+              data.getKnownOptimum(), new Fidax(), empty, new Weight(), TimeIterations.NULL));
+      ret.add(new ExperimentParameters(data.getFile(), 1, 1, 1,
+              data.getKnownOptimum(), new Fidax(), improvement, new Weight(), new TimeIterations(1)));
     }
 
     return ret;
@@ -76,9 +70,12 @@ public class TimeQuality extends AbstractExperimentSet {
 
   private void writeHeader() {
     final StringBuilder sb = new StringBuilder();
-    for (int time = BEGIN; time < END; time += STEP) {
-      sb.append("t-")
-        .append(time)
+    for (final TestData data : OfficialTestData.values()) {
+      sb.append("FI-")
+        .append(data.getFile().getName())
+        .append('\t')
+        .append("FH-")
+        .append(data.getFile().getName())
         .append('\t');
     }
     FileUtils.writeString(sb.toString(), finalCsv);
@@ -86,26 +83,16 @@ public class TimeQuality extends AbstractExperimentSet {
 
   @Override
   protected void notifyStart() {
-    finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-cygwin.txt");
     writeHeader();
-    NbPreferences.forModule(ISSPanel.class).put(ISSPanel.BINARY_PATH_PROP, "C:/cygwin/bin/glpsol.exe");
   }
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
     super.notifyFinished(e, iteration);
-
-    final int numColumns = Math.round((END - BEGIN) / (float)STEP);
+    final int numColumns = OfficialTestData.values().length * 2;
     final StringBuilder sb = new StringBuilder();
     sb.append((iteration % numColumns) == 0 ? '\n': '\t')
-      .append(e.getConstructionResult().getQuality().getScalar());
+      .append(e.getHighestQuality().getScalar());
     FileUtils.appendString(sb.toString(), finalCsv);
-
-    if (iteration == numColumns * Constants.ITERATIONS - 1) {
-      Logger.getLogger(TimeQuality.class).debug("Switching GLPK");
-      finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-native.txt");
-      writeHeader();
-      NbPreferences.forModule(ISSPanel.class).put(ISSPanel.BINARY_PATH_PROP, "C:/Program Files (x86)/GnuWin32/bin/glpsol.exe");
-    }
   }
 }

@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.data.TestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.ConstructionHeuristics;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
@@ -35,6 +36,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -45,14 +47,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class BestStandaloneCH extends AbstractExperimentSet {
 
-  private File finalCsvQuality = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-quality.txt");
-  private File finalCsvTime = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-time.txt");
+  private File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
 
   private static final int POOL_SIZE = 10;
 
   @Override
   public String getName() {
-    return "Random vs Fuzzy vs Fidax first step only";
+    return "Best Standalone CH";
   }
 
   @Override
@@ -61,14 +62,13 @@ public class BestStandaloneCH extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 0; i < Constants.ITERATIONS; i++) {
-      for (final TestData data : OfficialTestData.values()) {
-        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
-                data.getKnownOptimum(), new Random(), improvement, new Weight(), TimeIterations.NULL));
-        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
-                data.getKnownOptimum(), new Fuzzy(), improvement, new Weight(), TimeIterations.NULL));
-        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
-                data.getKnownOptimum(), new Fidax(), improvement, new Weight(), TimeIterations.NULL));
+    for (final TestData data : OfficialTestData.values()) {
+      for (int i = 0; i < Constants.ITERATIONS; i++) {
+        for (final ConstructionHeuristics heu : ConstructionHeuristics.values()) {
+          ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
+                  data.getKnownOptimum(), new Random(),
+                  improvement, new Weight(), TimeIterations.NULL));
+        }
       }
     }
 
@@ -77,19 +77,18 @@ public class BestStandaloneCH extends AbstractExperimentSet {
 
   private void writeHeader() {
     final StringBuilder sb = new StringBuilder();
-    for (final TestData data : OfficialTestData.values()) {
-      sb.append("r-")
-        .append(data.getFile().getName())
-        .append('\t')
-        .append("f-")
-        .append(data.getFile().getName())
-        .append('\t')
-        .append("F-")
-        .append(data.getFile().getName())
-        .append('\t');
+    for (final ConstructionHeuristics heu : ConstructionHeuristics.values()) {
+      try {
+        // TODO this won't work, not everybody has a non-parametric constructor
+        sb.append(heu.getClazz().newInstance().getName())
+          .append('\t');
+      } catch (final InstantiationException ex) {
+        Exceptions.printStackTrace(ex);
+      } catch (final IllegalAccessException ex) {
+        Exceptions.printStackTrace(ex);
+      }
     }
-    FileUtils.writeString(sb.toString(), finalCsvQuality);
-    FileUtils.writeString(sb.toString(), finalCsvTime);
+    FileUtils.writeString(sb.toString(), finalCsv);
   }
 
   @Override
@@ -103,11 +102,6 @@ public class BestStandaloneCH extends AbstractExperimentSet {
     final StringBuilder sbQuality = new StringBuilder();
     sbQuality.append((iteration % numColumns) == 0 ? '\n': '\t')
       .append(e.getHighestQuality().getScalar());
-    FileUtils.appendString(sbQuality.toString(), finalCsvQuality);
-
-    final StringBuilder sbTime = new StringBuilder();
-    sbTime.append((iteration % numColumns) == 0 ? '\n': '\t')
-      .append(e.getConstructionResult().getTime());
-    FileUtils.appendString(sbTime.toString(), finalCsvTime);
+    FileUtils.appendString(sbQuality.toString(), finalCsv);
   }
 }

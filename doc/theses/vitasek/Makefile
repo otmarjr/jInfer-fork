@@ -1,6 +1,6 @@
 default: all
 
-IMAGESTOCONVERT=$(shell cat diplomka.tex | grep includegraphics | sed -e "s/.*includegraphics\[.*\]{\([^}]*\)}.*/\1\.pdf/")
+IMAGESTOCONVERT=$(shell cat *.tex | grep includegraphics | sed -e "s/.*includegraphics\[.*\]{\([^}]*\)}.*/\1\.pdf/")
 
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc

@@ -1,0 +1,71 @@
+\chapter{Analysis of XQuery}
+\todo[inline]{bibref na knihu, a W3C XQuery usecases}
+This chapter discusses selected constructs of XQuery language and denotes how they could be exploited in the XML schema inference process. It is divided into sections by particular domains of the inference.
+
+\section{Structure of XML documents}
+The most queries can be exploited to obtain some information about a structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What are the outermost elements in these document, which elements can be contained inside a certain element, whether are they optional or mandatory, etc.
+
+Path expressions without predicates which use only child axis are the simpliest example of such queries. Path expression \texttt{/bib/book/author} indicates element \texttt{bib} is the outermost element and contains one or more elements \texttt{book} and these contains one or more elements \texttt{author}.
+
+Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} indicate that element \texttt{book} also contains element \texttt{title} and element \texttt{author} contains element \texttt{name}. The latter one uses also descendant axis.
+
+Besides elements, attributes could be processed exactly the same way. Path expression \texttt{/bib/book/@ISBN} indicates that element \texttt{book} has attribute \texttt{@ISBN}.
+
+However statemets of this kind are necessary for the XML schema inference, their obtaining from queries it not significant because of the following reason. These statement could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some element may not be queried at all, therefore they mat not be mentioned in any query. In addition, these statements do not express any obligation of occurrence of elements and attributes or possible multiple occurence of elements. At last, we cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In opposite, even basic methods of XML documents analyzis do not have these inadequacies.
+
+On the other hand, the structure inference could be useful when the whole set of all XML documents is not available and provided XML documents do not cover the structure completly.
+
+\section{Occurrence Count of Elements}
+Some XQuery constructs indicate multiplicity of a particular element or limit the element to occur at most once. Consider the following query assuming variable \texttt{\$book1} is bound to a certain \texttt{book} element.
+
+\begin{verbatim}
+for $a in $book1/author 
+order by $a/last, $a/first
+return $a
+\end{verbatim}
+
+Apparently, this query expects more than one element \texttt{author} to be children of the element variable \texttt{\$book1} is bound to. Otherwise, any sorting would lack a reason. Although, we cannot be absolutely sure about it again, assuming common sense usage of XQuery it is very likely that element \texttt{author} can occur multiple times as a subelement of element from variable \texttt{\$book1}.
+
+\subsection{Multiple Occurrence}
+Similar approach could be applied in many other situations. Another examples are particular usages of function \texttt{count()}, indexation, usage of set operators (\texttt{union}, \texttt{intersect}, \texttt{except}) and usage of function \texttt{one-or-more()}. Queries with description follows.
+
+\begin{verbatim}
+<section_count>{ count(/book/section) }</section_count>
+\end{verbatim}
+
+Function \texttt{count()} returns number of items in a provided sequence. If the sequence is sequence of elements the count of these elements will probably not be limited to one. The example query indicates that the outermost element \texttt{book} can contain more than one element \texttt{section}.
+An exception is usage of function \texttt{count()} in a predicate in expressions where it is used to determine if count of some nodes is greater than zero. Often, this form is used to test presence of a certain node instead of actual counting of its occurrences. In this case, the node could be still limited to occur at most once.
+
+\begin{verbatim}
+($s/incision)[2]/instrument
+($s/instrument)[position()>=2]
+\end{verbatim}
+
+Indexation of nodes and common usage of function \texttt{position()} suggest that writer of such query assumes sequence of respective nodes.
+
+\begin{verbatim}
+one-or-more(/catalog/product[@id = 5]/color)
+\end{verbatim}
+
+In this query, number of elements \texttt{color} in element \texttt{product} with attribute \texttt{id} equal to 5 has to be at least one otherwise an error is raised upon execution. If we assume that this query is written correctly, with common sense and should not raise the error, we can infer that element \texttt{product} has to containt one or more elements \texttt{color}
+
+\subsection{Occurrence Limited to One}
+In opposite to the multiple occurrence, numerous XQuery constructs limit number of occurrences of an element to at most one or exactly one. Some example queries with description follows.
+
+\begin{verbatim}
+/catalog/product[1]/number lt 10
+\end{verbatim}
+
+\texttt{lt} is a representant of so called \emph{value comparison operators} which operate two sequences of zero or one item. If an operand of a \emph{value comparison operand} is sequence of more than one item \emph{type error} is raised.
+
+\begin{verbatim}
+for $item in //item 
+order by $item/num 
+return $item
+\end{verbatim}
+
+Alike the previous example, expression in \texttt{order by} clause can be evaluated to at most one item or the \emph{type error} is raised. Therefore, every element \texttt{item} contains zero or one element \texttt{num} but no more.
+
+Another similar examples are arithmetic expressions and functions accepting a sequence of at most one item. Functions \texttt{zero-or-one()} will raise the \emph{type error} when supplied with an sequence of more than one item.
+
+Those are constructs indicating limitation to zero or one occurrence. Function \texttt{exactly-one} works similar to the function \texttt{zero-or-one} but accepts only sequences of exactly one item (which are in XQuery equal to this item itself).

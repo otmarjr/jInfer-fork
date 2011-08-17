@@ -30,6 +30,7 @@ import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.Glpk;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
+import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +61,7 @@ public class TimeTillOptimum extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 0; i < Constants.ITERATIONS * 2; i++) {
+    for (int i = 0; i < Utils.getIterations() * 2; i++) {
       for (final TestData data : SizeTestData.values()) {
         ret.add(new ExperimentParameters(data.getFile(),
                 1, 1, 1, data.getKnownOptimum(),
@@ -97,7 +98,7 @@ public class TimeTillOptimum extends AbstractExperimentSet {
       .append(e.getConstructionResult().getTime());
     FileUtils.appendString(sb.toString(), finalCsv);
 
-    if (iteration == numColumns * Constants.ITERATIONS - 1) {
+    if (iteration == numColumns * Utils.getIterations() - 1) {
       Logger.getLogger(TimeTillOptimum.class).debug("Switching GLPK");
       finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-native.txt");
       writeHeader();

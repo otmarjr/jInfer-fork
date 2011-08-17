@@ -46,6 +46,12 @@ public final class ISSPanel extends JPanel {
   public static final String BETA_PROP = "weight.beta";
   public static final float BETA_DEFAULT = 1.0f;
 
+  public static final String ITERATIONS_PROP = "experiments.iterations";
+  public static final int ITERATIONS_DEFAULT = 20;
+
+  public static final String POOL_SIZE_PROP = "experiments.pool.size";
+  public static final int POOL_SIZE_DEFAULT = 10;
+
   public ISSPanel() {
     super();
     initComponents();
@@ -58,14 +64,11 @@ public final class ISSPanel extends JPanel {
 
     fillV = new javax.swing.JPanel();
     panelGlpk = new javax.swing.JPanel();
-    labelTimeLimitExplain = new javax.swing.JLabel();
-    timeLimit = new javax.swing.JSpinner();
-    labelTimeLimit = new javax.swing.JLabel();
     browse = new javax.swing.JButton();
     binaryPath = new javax.swing.JTextField();
     label = new javax.swing.JLabel();
     fillH1 = new javax.swing.JPanel();
-    panelMisc = new javax.swing.JPanel();
+    panelIss = new javax.swing.JPanel();
     labelWeight = new javax.swing.JLabel();
     labelAlpha = new javax.swing.JLabel();
     labelBeta = new javax.swing.JLabel();
@@ -74,6 +77,15 @@ public final class ISSPanel extends JPanel {
     fillH2 = new javax.swing.JPanel();
     labelAlphaExplain = new javax.swing.JLabel();
     labelBetaExplain = new javax.swing.JLabel();
+    labelTimeLimit = new javax.swing.JLabel();
+    timeLimit = new javax.swing.JSpinner();
+    labelTimeLimitExplain = new javax.swing.JLabel();
+    panelExperiments = new javax.swing.JPanel();
+    labelIterations = new javax.swing.JLabel();
+    labelPoolSize = new javax.swing.JLabel();
+    fillH3 = new javax.swing.JPanel();
+    iterations = new javax.swing.JSpinner();
+    poolSize = new javax.swing.JSpinner();
 
     setLayout(new java.awt.GridBagLayout());
 
@@ -88,12 +100,12 @@ public final class ISSPanel extends JPanel {
     );
     fillVLayout.setVerticalGroup(
       fillVLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 59, Short.MAX_VALUE)
+      .addGap(0, 68, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 2;
+    gridBagConstraints.gridy = 3;
     gridBagConstraints.gridwidth = 4;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weighty = 1.0;
@@ -101,36 +113,6 @@ public final class ISSPanel extends JPanel {
 
     panelGlpk.setBorder(javax.swing.BorderFactory.createTitledBorder("GLPK"));
     panelGlpk.setLayout(new java.awt.GridBagLayout());
-
-    labelTimeLimitExplain.setFont(labelTimeLimitExplain.getFont().deriveFont((labelTimeLimitExplain.getFont().getStyle() | java.awt.Font.ITALIC)));
-    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimitExplain, "<html>\nHow long will be GLPK allowed to run.<br/>\nIf it needs to run longer, it will return<br/>\nthe best solution found so far.<br/>\n0 - no limit.\n</html>"); // NOI18N
-    labelTimeLimitExplain.setMaximumSize(new java.awt.Dimension(0, 0));
-    labelTimeLimitExplain.setMinimumSize(new java.awt.Dimension(0, 0));
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.weightx = 1.0;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    panelGlpk.add(labelTimeLimitExplain, gridBagConstraints);
-
-    timeLimit.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(60), Integer.valueOf(0), null, Integer.valueOf(1)));
-    timeLimit.setMinimumSize(new java.awt.Dimension(60, 20));
-    timeLimit.setPreferredSize(new java.awt.Dimension(60, 20));
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    panelGlpk.add(timeLimit, gridBagConstraints);
-
-    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimit, "Time Limit [s]"); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
-    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    panelGlpk.add(labelTimeLimit, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(browse, "Browse..."); // NOI18N
     browse.addActionListener(new java.awt.event.ActionListener() {
@@ -171,11 +153,11 @@ public final class ISSPanel extends JPanel {
     fillH1.setLayout(fillH1Layout);
     fillH1Layout.setHorizontalGroup(
       fillH1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 14, Short.MAX_VALUE)
+      .addGap(0, 136, Short.MAX_VALUE)
     );
     fillH1Layout.setVerticalGroup(
       fillH1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 91, Short.MAX_VALUE)
+      .addGap(0, 31, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -191,8 +173,8 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.weightx = 1.0;
     add(panelGlpk, gridBagConstraints);
 
-    panelMisc.setBorder(javax.swing.BorderFactory.createTitledBorder("Miscellaneous"));
-    panelMisc.setLayout(new java.awt.GridBagLayout());
+    panelIss.setBorder(javax.swing.BorderFactory.createTitledBorder("ID Set Search from GUI")); // NOI18N
+    panelIss.setLayout(new java.awt.GridBagLayout());
 
     org.openide.awt.Mnemonics.setLocalizedText(labelWeight, "<html><code>weight</code> function setup</html>"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -201,7 +183,7 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.gridwidth = 3;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    panelMisc.add(labelWeight, gridBagConstraints);
+    panelIss.add(labelWeight, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(labelAlpha, "Alpha"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -209,7 +191,7 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    panelMisc.add(labelAlpha, gridBagConstraints);
+    panelIss.add(labelAlpha, gridBagConstraints);
 
     org.openide.awt.Mnemonics.setLocalizedText(labelBeta, "Beta"); // NOI18N
     gridBagConstraints = new java.awt.GridBagConstraints();
@@ -217,7 +199,7 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
     gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
-    panelMisc.add(labelBeta, gridBagConstraints);
+    panelIss.add(labelBeta, gridBagConstraints);
 
     alpha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.####"))));
     alpha.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -228,7 +210,7 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    panelMisc.add(alpha, gridBagConstraints);
+    panelIss.add(alpha, gridBagConstraints);
 
     beta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0.####"))));
     beta.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
@@ -239,7 +221,7 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
-    panelMisc.add(beta, gridBagConstraints);
+    panelIss.add(beta, gridBagConstraints);
 
     fillH2.setPreferredSize(new java.awt.Dimension(0, 0));
 
@@ -247,20 +229,20 @@ public final class ISSPanel extends JPanel {
     fillH2.setLayout(fillH2Layout);
     fillH2Layout.setHorizontalGroup(
       fillH2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 262, Short.MAX_VALUE)
+      .addGap(0, 227, Short.MAX_VALUE)
     );
     fillH2Layout.setVerticalGroup(
       fillH2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 69, Short.MAX_VALUE)
+      .addGap(0, 129, Short.MAX_VALUE)
     );
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 3;
     gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridheight = 3;
+    gridBagConstraints.gridheight = 4;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
-    panelMisc.add(fillH2, gridBagConstraints);
+    panelIss.add(fillH2, gridBagConstraints);
 
     labelAlphaExplain.setFont(labelAlphaExplain.getFont().deriveFont((labelAlphaExplain.getFont().getStyle() | java.awt.Font.ITALIC)));
     org.openide.awt.Mnemonics.setLocalizedText(labelAlphaExplain, "<html>Weight of attribute mapping <code>coverage</code>.</html>"); // NOI18N
@@ -269,7 +251,7 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.gridy = 1;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 8, 2, 8);
-    panelMisc.add(labelAlphaExplain, gridBagConstraints);
+    panelIss.add(labelAlphaExplain, gridBagConstraints);
 
     labelBetaExplain.setFont(labelBetaExplain.getFont().deriveFont((labelBetaExplain.getFont().getStyle() | java.awt.Font.ITALIC)));
     org.openide.awt.Mnemonics.setLocalizedText(labelBetaExplain, "<html>Weight of attribute mapping <code>support</code>.</html>"); // NOI18N
@@ -278,14 +260,102 @@ public final class ISSPanel extends JPanel {
     gridBagConstraints.gridy = 2;
     gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
     gridBagConstraints.insets = new java.awt.Insets(2, 8, 2, 8);
-    panelMisc.add(labelBetaExplain, gridBagConstraints);
+    panelIss.add(labelBetaExplain, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimit, "Time Limit [s]"); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    panelIss.add(labelTimeLimit, gridBagConstraints);
+
+    timeLimit.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(60), Integer.valueOf(0), null, Integer.valueOf(1)));
+    timeLimit.setMinimumSize(new java.awt.Dimension(60, 20));
+    timeLimit.setPreferredSize(new java.awt.Dimension(60, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelIss.add(timeLimit, gridBagConstraints);
+
+    labelTimeLimitExplain.setFont(labelTimeLimitExplain.getFont().deriveFont((labelTimeLimitExplain.getFont().getStyle() | java.awt.Font.ITALIC)));
+    org.openide.awt.Mnemonics.setLocalizedText(labelTimeLimitExplain, "<html>\nHow long will be GLPK allowed to run.<br/>\nIf it needs to run longer, it will return<br/>\nthe best solution found so far.<br/>\n0 - no limit.\n</html>"); // NOI18N
+    labelTimeLimitExplain.setMaximumSize(new java.awt.Dimension(0, 0));
+    labelTimeLimitExplain.setMinimumSize(new java.awt.Dimension(0, 0));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridy = 3;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 8, 2, 8);
+    panelIss.add(labelTimeLimitExplain, gridBagConstraints);
 
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
     gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
     gridBagConstraints.weightx = 1.0;
-    add(panelMisc, gridBagConstraints);
+    add(panelIss, gridBagConstraints);
+
+    panelExperiments.setBorder(javax.swing.BorderFactory.createTitledBorder("Experiments")); // NOI18N
+    panelExperiments.setLayout(new java.awt.GridBagLayout());
+
+    org.openide.awt.Mnemonics.setLocalizedText(labelIterations, "Iterations"); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    panelExperiments.add(labelIterations, gridBagConstraints);
+
+    org.openide.awt.Mnemonics.setLocalizedText(labelPoolSize, "Pool Size"); // NOI18N
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+    gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
+    panelExperiments.add(labelPoolSize, gridBagConstraints);
+
+    javax.swing.GroupLayout fillH3Layout = new javax.swing.GroupLayout(fillH3);
+    fillH3.setLayout(fillH3Layout);
+    fillH3Layout.setHorizontalGroup(
+      fillH3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+    fillH3Layout.setVerticalGroup(
+      fillH3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      .addGap(0, 0, Short.MAX_VALUE)
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 2;
+    gridBagConstraints.gridheight = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    panelExperiments.add(fillH3, gridBagConstraints);
+
+    iterations.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(20), Integer.valueOf(1), null, Integer.valueOf(1)));
+    iterations.setMinimumSize(new java.awt.Dimension(60, 20));
+    iterations.setPreferredSize(new java.awt.Dimension(60, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelExperiments.add(iterations, gridBagConstraints);
+
+    poolSize.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(10), Integer.valueOf(1), null, Integer.valueOf(1)));
+    poolSize.setMinimumSize(new java.awt.Dimension(60, 20));
+    poolSize.setPreferredSize(new java.awt.Dimension(60, 20));
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 1;
+    gridBagConstraints.gridy = 1;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    panelExperiments.add(poolSize, gridBagConstraints);
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.gridx = 0;
+    gridBagConstraints.gridy = 2;
+    gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+    gridBagConstraints.weightx = 1.0;
+    add(panelExperiments, gridBagConstraints);
   }// </editor-fold>//GEN-END:initComponents
 
   private void browseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseActionPerformed
@@ -313,6 +383,8 @@ public final class ISSPanel extends JPanel {
     timeLimit.setValue(p.getInt(TIME_LIMIT_PROP, TIME_LIMIT_DEFAULT));
     alpha.setValue(p.getFloat(ALPHA_PROP, ALPHA_DEFAULT));
     beta.setValue(p.getFloat(BETA_PROP, BETA_DEFAULT));
+    iterations.setValue(p.getInt(ITERATIONS_PROP, ITERATIONS_DEFAULT));
+    poolSize.setValue(p.getInt(POOL_SIZE_PROP, POOL_SIZE_DEFAULT));
   }
 
   public void store() {
@@ -321,6 +393,8 @@ public final class ISSPanel extends JPanel {
     p.putInt(TIME_LIMIT_PROP, ((Integer)timeLimit.getValue()).intValue());
     p.putFloat(ALPHA_PROP, ((Number)alpha.getValue()).floatValue());
     p.putFloat(BETA_PROP, ((Number)beta.getValue()).floatValue());
+    p.putInt(ITERATIONS_PROP, ((Integer)iterations.getValue()).intValue());
+    p.putInt(POOL_SIZE_PROP, ((Integer)poolSize.getValue()).intValue());
   }
 
   public boolean valid() {
@@ -335,17 +409,23 @@ public final class ISSPanel extends JPanel {
   private javax.swing.JButton browse;
   private javax.swing.JPanel fillH1;
   private javax.swing.JPanel fillH2;
+  private javax.swing.JPanel fillH3;
   private javax.swing.JPanel fillV;
+  private javax.swing.JSpinner iterations;
   private javax.swing.JLabel label;
   private javax.swing.JLabel labelAlpha;
   private javax.swing.JLabel labelAlphaExplain;
   private javax.swing.JLabel labelBeta;
   private javax.swing.JLabel labelBetaExplain;
+  private javax.swing.JLabel labelIterations;
+  private javax.swing.JLabel labelPoolSize;
   private javax.swing.JLabel labelTimeLimit;
   private javax.swing.JLabel labelTimeLimitExplain;
   private javax.swing.JLabel labelWeight;
+  private javax.swing.JPanel panelExperiments;
   private javax.swing.JPanel panelGlpk;
-  private javax.swing.JPanel panelMisc;
+  private javax.swing.JPanel panelIss;
+  private javax.swing.JSpinner poolSize;
   private javax.swing.JSpinner timeLimit;
   // End of variables declaration//GEN-END:variables
 }

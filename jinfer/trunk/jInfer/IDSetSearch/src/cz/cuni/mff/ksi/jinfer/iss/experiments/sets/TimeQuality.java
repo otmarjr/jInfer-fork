@@ -29,6 +29,7 @@ import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.Glpk;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
+import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class TimeQuality extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int j = 0; j < Constants.ITERATIONS * 2; j++) {
+    for (int j = 0; j < Utils.getIterations() * 2; j++) {
       for (int time = BEGIN; time < END; time += STEP) {
           ret.add(new ExperimentParameters(SizeTestData.GRAPH_100_500.getFile(),
                   1, 1, 1, SizeTestData.GRAPH_100_500.getKnownOptimum(),
@@ -101,7 +102,7 @@ public class TimeQuality extends AbstractExperimentSet {
       .append(e.getConstructionResult().getQuality().getScalar());
     FileUtils.appendString(sb.toString(), finalCsv);
 
-    if (iteration == numColumns * Constants.ITERATIONS - 1) {
+    if (iteration == numColumns * Utils.getIterations() - 1) {
       Logger.getLogger(TimeQuality.class).debug("Switching GLPK");
       finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-native.txt");
       writeHeader();

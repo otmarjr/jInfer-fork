@@ -29,7 +29,7 @@ import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
-import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
+import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,14 +62,14 @@ public class RandomVsFuzzy extends AbstractExperimentSet {
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
     for (final OfficialTestData data : OfficialTestData.values()) {
-      for (int i = 0; i < Constants.ITERATIONS; i++) {
+      for (int i = 0; i < Utils.getIterations(); i++) {
         ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
                 data.getKnownOptimum(), new Random(), improvement, new Weight(), new TimeIterations(10, 10000)));
       }
     }
 
     for (final OfficialTestData data : OfficialTestData.values()) {
-      for (int i = 0; i < Constants.ITERATIONS; i++) {
+      for (int i = 0; i < Utils.getIterations(); i++) {
         ret.add(new ExperimentParameters(data.getFile(), 10, 1, 1,
                 data.getKnownOptimum(), new Fuzzy(), improvement, new Weight(), new TimeIterations(10, 10000)));
       }

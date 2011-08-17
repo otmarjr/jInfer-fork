@@ -35,6 +35,8 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
 
   private final Object monitor = new Object();
 
+  private boolean abort;
+
   /**
    * Should return the list of experiment parameters to be run in this set.
    *
@@ -53,10 +55,14 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
     else {
       LOG.info("Running from index " + from);
     }
+    abort = false;
     final List<ExperimentParameters> experiments = getExperiments();
     final int totalCount = experiments.size();
     LOG.info("Got " + totalCount + " experiment parameter sets");
     for (int i = from; i < totalCount; i++) {
+      if (abort) {
+        return;
+      }
       final Experiment e = new Experiment(experiments.get(i));
       e.addListener(new Listener(i));
       final Thread t = new Thread(new Runnable() {
@@ -68,6 +74,13 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
           }
           catch (final InterruptedException ex) {
             LOG.error("Interrupted", ex);
+          }
+          catch (final Exception ex) {
+            LOG.error("Exception while running the experiment, details in the log gile", ex);
+            abort = true;
+            synchronized (monitor) {
+              monitor.notifyAll();
+            }
           }
         }
       }, "Experiment Runner");
@@ -81,6 +94,9 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
     }
 
     Constants.RESTART.delete();
+
+    LOG.debug("Experiment set finished.");
+
     notifyFinishedAll();
   }
 

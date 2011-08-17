@@ -50,7 +50,7 @@ one-or-more(/catalog/product[@id = 5]/color)
 In this query, number of elements \texttt{color} in element \texttt{product} with attribute \texttt{id} equal to 5 has to be at least one otherwise an error is raised upon execution. If we assume that this query is written correctly, with common sense and should not raise the error, we can infer that element \texttt{product} has to containt one or more elements \texttt{color}
 
 \subsection{Occurrence Limited to One}
-In opposite to the multiple occurrence, numerous XQuery constructs limit number of occurrences of an element to at most one or exactly one. Some example queries with description follows.
+In opposite to the multiple occurrence, numerous XQuery constructs limit number of occurrences of an element to at most one or exactly one. Some example queries with description follow.
 
 \begin{verbatim}
 /catalog/product[1]/number lt 10
@@ -69,3 +69,69 @@ Alike the previous example, expression in \texttt{order by} clause can be evalua
 Another similar examples are arithmetic expressions and functions accepting a sequence of at most one item. Functions \texttt{zero-or-one()} will raise the \emph{type error} when supplied with an sequence of more than one item.
 
 Those are constructs indicating limitation to zero or one occurrence. Function \texttt{exactly-one} works similar to the function \texttt{zero-or-one} but accepts only sequences of exactly one item (which are in XQuery equal to this item itself).
+
+\section{Element and Attribute Types}
+
+\subsection{XML Schema Built-in Types}
+XML Schema built-in types of elements and attributes can be inferred from the XML documents by analysing their content. Since the count of built-in types is 44 and inheritance is involved, such analysis may be imprecise especially when a large enough set of XML documents is not available. \todo[inline]{priklad?} This is when a set of XQuery queries may be handy.
+
+If a value of an element or attribute is used in an expression then this expression could be often exploited to determine a type of the value. Comparing the value to another value of a known type and supplying the value to a function call as an argument of particular type are examples of these expressions as shown below.
+
+\begin{verbatim}
+\\event\date = current-date()
+
+\catalog\product\price < 24.5
+
+declare function local:byteFunction($arg as xs:byte) as xs:byte
+{...};
+\catalog\product\local:byteFunction(@id)
+\end{verbatim}
+\todo[inline]{overit, ci su priklady OK}
+
+Determined types are \texttt{xs:date} for element \texttt{date}, \texttt{xs:decimal} for element \texttt{price} and \texttt{xs:byte} for attribute \texttt{id}.
+
+Alongside common expressions, there are other XQuery constructs indicating types as \emph{type casting}, \emph{constructors} and so called \emph{type declarations}.
+
+Assuming variable \texttt{\$var} bound to a value of some element or attribute, following two fractions of queries indicate its type to be \emph{xs:integer}.
+
+\begin{verbatim}
+$var cast as xs:integer
+xs:integer($var)
+\end{verbatim}
+
+The latter one is usage of \emph{type casting}, the former one is \emph{type constructor}.
+
+Alike, following two examples of \emph{type declarations}. Value of element \texttt{number} is declared to be of type \texttt{xs:integer}.
+
+\begin{verbatim}
+every $number as element(*,xs:integer) in //number satisfies ($number > 0) 
+
+declare variable $firstNumber as xs:integer 
+:= data(//product/number[1]); 
+\end{verbatim}
+
+Although, determining built-in types of elements and attributes in simple queries may seem quite straightforward, reliable method would face some issues. More complex queries are commonly branched by \emph{if-then-else} construct. These branches can contain several contradictionary fragments from the view of type inference. Therefore, the reliable method would take the query structure into consideration and futher research would be needed.
+
+\subsection{Enumeration}
+In several cases, XQuery construct \emph{if-then-else} may be used to branch the execution of query by all posible values of a certain variable. This is equivalent of \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
+
+\begin{verbatim}
+Query
+let $cat := doc("catalog.xml")/catalog 
+for $dept in distinct-values($cat/product/@dept) 
+return <li>Department: {if ($dept = "ACC") 
+                        then "Accessories" 
+                        else if ($dept = "MEN") 
+                             then "Menswear" 
+                             else if ($dept = "WMN") 
+                                  then "Womens" 
+                                  else () 
+  } ({$dept})</li> 
+
+Results 
+<li>Department: Womens (WMN)</li> 
+<li>Department: Accessories (ACC)</li> 
+<li>Department: Menswear (MEN)</li> 
+\end{verbatim}
+
+Finding such patterns in queries could be useful in combination with analysis of XML data this queries are executed upon. XML data could help to confirm or disprove this assumption based on the query analysis of vice-versa.

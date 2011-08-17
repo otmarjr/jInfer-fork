@@ -21,10 +21,12 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Quality;
 import cz.cuni.mff.ksi.jinfer.iss.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.base.objects.ImmutablePair;
+import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import org.openide.util.NbPreferences;
 
 /**
  * Attribute statistics module utils.
@@ -135,6 +137,13 @@ public final class Utils {
    */
   public static long delta(final long from) {
     return time() - from;
+  }
+
+  /**
+   * TODO vektor Comment!
+   */
+  public static int getIterations() {
+    return NbPreferences.forModule(ISSPanel.class).getInt(ISSPanel.ITERATIONS_PROP, ISSPanel.ITERATIONS_DEFAULT);
   }
 
 }

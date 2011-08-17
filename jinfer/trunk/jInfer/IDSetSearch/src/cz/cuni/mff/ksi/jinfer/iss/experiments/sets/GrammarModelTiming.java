@@ -30,6 +30,7 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Null;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
+import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +59,7 @@ public class GrammarModelTiming extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (int i = 0; i < Constants.ITERATIONS; i++) {
+    for (int i = 0; i < Utils.getIterations(); i++) {
       for (final TestData data : OfficialTestData.values()) {
         ret.add(new ExperimentParameters(data.getFile(), 1, 1, 1, data.getKnownOptimum(),
                 new Null(), improvement, new Weight(), TimeIterations.NULL));

@@ -35,6 +35,7 @@ import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.Glpk;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
+import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class BestStandaloneCH extends AbstractExperimentSet {
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
     for (final TestData data : OfficialTestData.values()) {
-      for (int i = 0; i < Constants.ITERATIONS; i++) {
+      for (int i = 0; i < Utils.getIterations(); i++) {
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(),
                 new Random(), improvement, new Weight(), TimeIterations.NULL));
@@ -99,9 +100,9 @@ public class BestStandaloneCH extends AbstractExperimentSet {
     final int numColumns = ConstructionHeuristics.values().length - 1; // we don't want Null
 
     file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
-           OfficialTestData.values()[iteration / (Constants.ITERATIONS * numColumns)].getFile().getName() + ".txt");
+           OfficialTestData.values()[iteration / (Utils.getIterations() * numColumns)].getFile().getName() + ".txt");
 
-    if ((iteration % (Constants.ITERATIONS * numColumns)) == 0) {
+    if ((iteration % (Utils.getIterations() * numColumns)) == 0) {
       writeHeader();
     }
 

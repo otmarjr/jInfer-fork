@@ -325,7 +325,7 @@ from the input XML file and how long does it take to create the AM model from th
   \hline
   Machine           & TODO \\
   Input data        & all official and sized test data sets \\
-  Iterations        & 20 \\
+  Iterations        & 50 \\
   Pool size         & not applicable \\
   $\alpha$, $\beta$ & not applicable \\
   \hline
@@ -333,11 +333,9 @@ from the input XML file and how long does it take to create the AM model from th
 \bigskip
 \end{center}
 
-The experimental set will contain $20 * (11 + 11) = 440$ configurations: 20 iterations for 11 test data sets plus 11 sized test data sets. There will be no CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
+The experimental set will contain $50 * (11 + 11) = 1100$ configurations: 20 iterations for 11 test data sets plus 11 sized test data sets. There will be no CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
 
-\placeholder
-
-TODO graph + interpretation
+TODO just table (mean, variance), no chart + interpretation
 
 \subsubsection{GLPK interface timing}
 
@@ -366,8 +364,8 @@ Apart from comparing different versions, we shall see how the pure GLPK approach
   \hline
   \hline
   Machine           & Dual Core \\
-  Input data        & \texttt{100-500} \\
-  Iterations        & 20 \\
+  Input data        & \dataset{100-500} \\
+  Iterations        & 50 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
   \hline
@@ -375,7 +373,7 @@ Apart from comparing different versions, we shall see how the pure GLPK approach
 \bigskip
 \end{center}
 
-Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 49 seconds with increments of 2, meaning 25 settings * 20 iterations = 500 configurations in total (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
+Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 46 seconds with increments of 5, meaning 10 settings * 50 iterations = 500 configurations in total (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights).
 
 \begin{algorithm}
 \caption{GLPK: native vs. Cygwin set generation 1}
@@ -608,6 +606,8 @@ TODO
 \subsection{Ignoring text data}
 
 TODO can we improve performance on huge data by ignoring textual content? Check for building as well as actual heu times.
+
+TODO try this on XMA-p
 
 \subsection{Chaining the IHs}
 

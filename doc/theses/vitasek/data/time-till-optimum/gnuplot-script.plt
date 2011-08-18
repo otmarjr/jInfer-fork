@@ -3,7 +3,7 @@ set title 'Time until Optimum'
 set style data boxplot
 set boxwidth 4 absolute
 
-set xlabel 'TODO'
+set xlabel 'Input graph: vertex count'
 set ylabel 'Time [ms]'
 
 set yrange [ 1 : 100000 ]
@@ -22,4 +22,4 @@ set ytics border in scale 1, 0.5 nomirror norotate offset character 0, 0, 0
 
 set logscale y 10
 
-plot for [i = 1 : 22] 'result.txt' using ((i / 2.0 - 1) * 10 + 5):i lt (i % 2 == 0 ? 1 : 2)
+plot for [i = 1 : 22] 'result.txt' using ((i / 2.0 - 1) * 10 + 2.5):i lt (i % 2 == 0 ? 1 : 2)

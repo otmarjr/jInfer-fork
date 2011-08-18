@@ -113,7 +113,7 @@ declare variable $firstNumber as xs:integer
 Although, determining built-in types of elements and attributes in simple queries may seem quite straightforward, reliable method would face some issues. More complex queries are commonly branched by \emph{if-then-else} construct. These branches can contain several contradictionary fragments from the view of type inference. Therefore, the reliable method would take the query structure into consideration and futher research would be needed.
 
 \subsection{Enumeration}
-In several cases, XQuery construct \emph{if-then-else} may be used to branch the execution of query by all posible values of a certain variable. This is equivalent of \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
+In several cases, XQuery \emph{if-then-else} construct may be used to branch the execution of query by all posible values of a certain variable. This is equivalent of \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
 
 \begin{verbatim}
 Query
@@ -134,4 +134,143 @@ Results
 <li>Department: Menswear (MEN)</li> 
 \end{verbatim}
 
-Finding such patterns in queries could be useful in combination with analysis of XML data this queries are executed upon. XML data could help to confirm or disprove this assumption based on the query analysis of vice-versa.
+Finding such patterns in queries could be useful in combination with analysis of XML data this queries are executed upon. XML data could help to confirm or disprove this assumption based on the query analysis or vice-versa.
+
+\section{Keys}
+
+\subsection{Approach from Paper Discovering XML Keys and Foreign Keys in Queries}
+Paper \todo{link} introduces a method of discovering keys and foreign keys by investigation of joins in queries. Basis of this discovery is a search for particular forms of joins, so called \emph{join patterns} \todo{uviest ich sem?}, but the joins are processed only if they are found in a particular syntactic form. Therefore joins with the same semantics written in different syntax are not taken into consideration.
+
+The following examples are queries that could be processed by a similar method but the actual method will not use them.
+
+\begin{verbatim}
+<result>
+  {
+    for $u in doc("users.xml")//user_tuple
+    for $i in doc("items.xml")//item_tuple
+    where $u/rating > "C" 
+       and $i/reserve_price > 1000 
+       and $i/offered_by = $u/userid
+    return
+        <warning>
+            { $u/name }
+            { $u/rating }
+            { $i/description }
+            { $i/reserve_price }
+        </warning>
+  }
+</result>
+\end{verbatim}
+
+Clause \texttt{where} is used for the join condition \texttt{\$i/offered\_by = \$u/userid instead} of the join condition in predicate of the second \texttt{for} expression.
+
+\begin{verbatim}
+<result>
+  {
+    for $i in doc("items.xml")//item_tuple
+    where empty(doc("bids.xml")//bid_tuple[itemno = $i/itemno])
+    return
+        <no_bid_item>
+            { $i/itemno }
+            { $i/description }
+        </no_bid_item>
+  }
+</result>
+\end{verbatim}
+
+This query illustrates a join where the value of one of the joined elements is not required, the knowledge of its existence is sufficient. Therefore the query has not to contain the second \texttt{for} or \texttt{let} keyword and its expression can be moved to \texttt{where} clause.
+
+\begin{verbatim}
+for $item in doc("order.xml")//item, 
+    $product in doc("catalog.xml")//product, 
+    $price in doc("prices.xml")//prices/priceList/prod 
+where $item/@num = $product/number and $product/number = $price/@num 
+return <item num="{$item/@num}" 
+         name="{$product/name}" 
+         price="{$price/price}"/>
+\end{verbatim}
+
+A common three-way join.
+
+\subsection{Join of Recursive Data}
+By the term "recursive data" are meant XML data, for example elements, that somehow reference items from the same set. Example of query that operates upon such data follows.
+
+\begin{verbatim}
+declare function local:one_level($p as element()) as element()
+{
+  <part partid="{ $p/@partid }" name="{ $p/@name }" >
+    {
+      for $s in doc("partlist.xml")//part
+      where $s/@partof = $p/@partid
+      return local:one_level($s)
+    }
+  </part>
+};
+
+<parttree>
+  {
+    for $p in doc("partlist.xml")//part[empty(@partof)]
+    return local:one_level($p)
+  }
+</parttree>
+\end{verbatim}
+
+Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with not specified attribute \texttt{partof} are at the top of the recursive hierarchy while in elements with this attribute specified it makes a reference to an element with attribute \texttt{partid} of the same value.
+
+By using similar approach as described in the paper \todo{ref} attribute \texttt{partid} can be marked as a key and attribute \texttt{partof} as its foreign key.
+
+\subsection{Negative Statements about Uniqueness}
+In many cases it could be inferred a statement that refuses uniqueness of element's or attribute's values. Such statements may prove helpful in combination with other methods in its process of decision making whether a particular element or attribute is unique or not.
+
+Basic representant is a common \emph{FLWOR} query.
+
+\begin{verbatim}
+<bib>
+  {
+    for $b in doc("http://bstore.example.com/bib.xml")//book
+    where $b/publisher = "abcde" and $b/@year > 2000
+    order by $b/title
+    return
+        <book>
+            { $b/@year }
+            { $b/title }
+        </book>
+  }
+</bib>
+\end{verbatim}
+
+Usage of \texttt{for} construct indicates that it is expected a sequence of \texttt{book} elements which satisfy the condition if \emph{where} clause. It is a condition composed of two single conditions joined by \emph{and} logical operator. Therefore in order to satisfy the whole condition, both two single conditions must be satisfied as well. Thus, it is expected that several elements satisfy each of the single conditions.
+
+The first of them is test of equality of book's subelement \texttt{publisher} to a string literal. Based on the expectation, element \texttt{publisher} cannot be unique. However, the second condition is greater-than comparison of \texttt{year} attribute to an integer literal, it cannot be inferred whether this attribute is unique or not. It is because even if it was unique there still might be more than one \texttt{book} element meeting this condition, thus the expectation was fullfiled too. Also, any statement, positive nor negative, cannot be inferred about \texttt{title} subelement.
+
+Another simple examples are passing a result of basic path expression to a call of \texttt{distinct-values()} function and usage of \emph{aggregation} functions.
+
+\begin{verbatim}
+<results>
+  {
+    let $doc := doc("prices.xml")
+    for $t in distinct-values($doc//book/title)
+    let $p := $doc//book[title = $t]/price
+    return
+      <minprice title="{ $t }">
+        <price>{ min($p) }</price>
+      </minprice>
+  }
+</results>
+\end{verbatim}
+
+According to the use of \texttt{distinct-values()} function, it can be easily seen that writter of this query assumes possible occurrence of more than one \texttt{book} elements with the same value of their \texttt{title} subelement. Thus, \texttt{title} element is not unique.
+
+Alike, variable \texttt{\$p} is bound to a price of each title and then passed to \texttt{min()} function call. That indicates that one book title is supposed to have several prices, however, it cannot be said if a certain occurrence of element \emph{book} can contain more than one \texttt{price} subelement.
+
+Also, many other types of queries could be exploited to obtain negative uniqueness statemens like occurrence of element or attribute in \texttt{stable order by} clause or selection of an element set based on a value of particular attribute and consecutive treatment of this set as a sequence of elements.
+
+\begin{verbatim}
+let $prods := doc("catalog.xml")//product 
+for $prod in $prods 
+where $prod << $prods[@dept = $prod/@dept][last( )] 
+return $prod 
+\end{verbatim}
+
+\subsection{Uniqueness}
+TODO

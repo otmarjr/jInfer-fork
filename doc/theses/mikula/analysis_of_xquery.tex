@@ -273,4 +273,49 @@ return $prod
 \end{verbatim}
 
 \subsection{Uniqueness}
-TODO
+In opposite of non-uniqueness discovery, some XQuery constructs can indicate uniqueness of elements or attributes, however, it seems to be more difficult. One of approaches of uniqueness discovery could be an investigation of what does the query return. Consider the following query.
+
+\begin{verbatim}
+for $product in /catalog/product
+let $number := $product/number
+return <prod xml:id="{concat('prod', number)}"/>
+\end{verbatim}
+
+For each \texttt{product} element, new element \texttt{prod} with attribute \texttt{xml:id} is created. Since attribute \texttt{xml:id} is supposed to be unique and there is direct transformation of the values of \texttt{number} elements to the values of attribute \texttt{xml:id}, it is very likely that element \texttt{number} is unique in the source data.
+
+\section{Other}
+
+\subsection{XML Schema \texttt{xs:sequence} and \texttt{xs:all} constructs}
+If an order of appearance of some element set, for example subelements of a certain element, is important this is can be expressed by XML Schema construct \texttt{xs:sequence}. On the other hand, \texttt{xs:all} is involved when the elements may occur in any order.
+
+If there is a large enough set of XML documents available it should be possible to correctly detect where to use \texttt{xs:sequence} and \texttt{xs:all} constructs. However, if the inference is made using a smaller set of XML documents, it may happen that every occurrence of some element set is in the same order but the input data are not representative enough to be sure. There comes in handy a comparison of element order in queries, which could help to decide for the use of \texttt{xs:sequence}.
+
+Every two elements in a XML document that are not siblings with the same name and none of them is the outermost element have the nearest common ancestor determining their relative order. If there is a lack of evidence to choose between the two constructs in the ancestor queries could be searched for an order comparison of these two elements like in the following query.
+
+\begin{verbatim}
+let $i := //incision)[2]
+for $a in //action)[. >> $i]
+return $a//instrument
+\end{verbatim}
+
+Apparently, the relative order of elements \texttt{incistion} and \texttt{action} is somehow important because the query composes the result using only those \texttt{action} elements that succeed the second \texttt{incision} element. Therefore, in a respective type definition part of the their nearest common ancestor it should be used \texttt{xs:sequence} prefered to \texttt{xs:all}.
+
+\subsection{Intermediate XML structure}
+Intermediate XML structure are XML data that are not read from input XML documents nor created as an output of queries but they are used by the queries somehow. Objective of this section is intermediate XML structure created directly in the queries. It may serve to various purposes a can be created in various ways, hard-coded in queries, computed from the input XML documents to simplify their structure. The former is demostrated in the following example.
+
+\begin{verbatim}
+let $deptNames := <deptNames> 
+                    <dept code="ACC" name="Accessories"/> 
+                    <dept code="MEN" name="Menswear"/> 
+                    <dept code="WMN" name="Womens"/> 
+                  </deptNames> 
+let $catalog := doc("catalog.xml")/catalog 
+for $dept in distinct-values($catalog/product/@dept) 
+return <li>Department:
+         {data($deptNames/dept[@code = $dept]/@name)} ({$dept})
+       </li> 
+\end{verbatim}
+
+Intermediate XML structure in this query could be used to identify possible values of attribute \texttt{dept} in \texttt{product} element and thereby determine its type as enumeration.
+
+That is a very simple example of intermediate structure. Since there many admittedly many means of utilization of intermediate structure, further reasearch would be needed.

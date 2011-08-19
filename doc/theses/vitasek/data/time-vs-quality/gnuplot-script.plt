@@ -1,13 +1,13 @@
 set title 'Time limit vs. Quality'
 
 set style data boxplot
-set boxwidth 0.4 absolute
+set boxwidth 1.5 absolute
 
 set xlabel 'Time limit [s]'
 set ylabel 'Quality'
 
-set yrange [ .44 : .5 ]
-set xrange [ 0 : 26 ]
+set yrange [ .43 : .5 ]
+set xrange [ 0 : 47 ]
 
 unset key
 
@@ -22,4 +22,4 @@ set ytics border in scale 1, 0.5 nomirror norotate offset character 0, 0, 0
 
 
 
-plot for [i = 1 : 50] 'result.txt' using (i / 2.0) : i lt (i % 2 == 0 ? 1 : 2)
+plot for [i = 1 : 20] 'result.txt' using ((i / 2) * 5 + 1 + (i % 2) * 2.5) : i lt (i % 2 == 0 ? 1 : 2)

@@ -3,17 +3,17 @@
 This chapter discusses selected constructs of XQuery language and denotes how they could be exploited in the XML schema inference process. It is divided into sections by particular domains of the inference.
 
 \section{Structure of XML documents}
-The most queries can be exploited to obtain some information about a structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What are the outermost elements in these document, which elements can be contained inside a certain element, whether are they optional or mandatory, etc.
+Most of queries can be exploited to obtain some information about a structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What the outermost elements in these documents are, which elements can be contained within a certain element, whether they are optional or mandatory, etc.
 
-Path expressions without predicates which use only child axis are the simpliest example of such queries. Path expression \texttt{/bib/book/author} indicates element \texttt{bib} is the outermost element and contains one or more elements \texttt{book} and these contains one or more elements \texttt{author}.
+Path expressions without predicates which use only child axis are the simpliest example of such queries. Path expression \texttt{/bib/book/author} indicates that element \texttt{bib} is the outermost element and it contains one or more elements \texttt{book} and these contain one or more elements \texttt{author}.
 
 Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} indicate that element \texttt{book} also contains element \texttt{title} and element \texttt{author} contains element \texttt{name}. The latter one uses also descendant axis.
 
-Besides elements, attributes could be processed exactly the same way. Path expression \texttt{/bib/book/@ISBN} indicates that element \texttt{book} has attribute \texttt{@ISBN}.
+Besides elements, attributes could be processed exactly in the same way. Path expression \texttt{/bib/book/@ISBN} indicates that element \texttt{book} has attribute \texttt{ISBN}.
 
-However statemets of this kind are necessary for the XML schema inference, their obtaining from queries it not significant because of the following reason. These statement could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some element may not be queried at all, therefore they mat not be mentioned in any query. In addition, these statements do not express any obligation of occurrence of elements and attributes or possible multiple occurence of elements. At last, we cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In opposite, even basic methods of XML documents analyzis do not have these inadequacies.
+However, statements of this kind are necessary for the XML schema inference, their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some element may not be queried at all, therefore they may not be mentioned in any query. In addition, these statements do not express any obligation of occurrence of elements and attributes or possible multiple occurrence of elements. At last, we cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In opposite, even basic methods of XML documents analysis do not have these inadequacies.
 
-On the other hand, the structure inference could be useful when the whole set of all XML documents is not available and provided XML documents do not cover the structure completly.
+On the other hand, the structure inference could be useful when the entire set of all XML documents is not available and provided XML documents do not cover the structure completely.
 
 \section{Occurrence Count of Elements}
 Some XQuery constructs indicate multiplicity of a particular element or limit the element to occur at most once. Consider the following query assuming variable \texttt{\$book1} is bound to a certain \texttt{book} element.
@@ -24,16 +24,16 @@ order by $a/last, $a/first
 return $a
 \end{verbatim}
 
-Apparently, this query expects more than one element \texttt{author} to be children of the element variable \texttt{\$book1} is bound to. Otherwise, any sorting would lack a reason. Although, we cannot be absolutely sure about it again, assuming common sense usage of XQuery it is very likely that element \texttt{author} can occur multiple times as a subelement of element from variable \texttt{\$book1}.
+Apparently, this query expects more than one \texttt{author} element to be a child of the element the variable \texttt{\$book1} is bound to. Otherwise, any sorting would lack a reason. Although we cannot be absolutely sure about it again, assuming common-sense usage of XQuery, it is very likely that \texttt{author} element can occur multiple times as a subelement of element from variable \texttt{\$book1}.
 
 \subsection{Multiple Occurrence}
-Similar approach could be applied in many other situations. Another examples are particular usages of function \texttt{count()}, indexation, usage of set operators (\texttt{union}, \texttt{intersect}, \texttt{except}) and usage of function \texttt{one-or-more()}. Queries with description follows.
+A similar approach could be applied in many other situations. Another examples are particular usages of function \texttt{count()}, indexation, usage of set operators (\texttt{union}, \texttt{intersect}, \texttt{except}) and usage of function \texttt{one-or-more()}. Queries with description follow.
 
 \begin{verbatim}
 <section_count>{ count(/book/section) }</section_count>
 \end{verbatim}
 
-Function \texttt{count()} returns number of items in a provided sequence. If the sequence is sequence of elements the count of these elements will probably not be limited to one. The example query indicates that the outermost element \texttt{book} can contain more than one element \texttt{section}.
+Function \texttt{count()} returns number of items in a provided sequence. If the sequence is a sequence of elements the count of these elements will probably not be limited to one. The example query indicates that the outermost element \texttt{book} can contain more than one element \texttt{section}.
 An exception is usage of function \texttt{count()} in a predicate in expressions where it is used to determine if count of some nodes is greater than zero. Often, this form is used to test presence of a certain node instead of actual counting of its occurrences. In this case, the node could be still limited to occur at most once.
 
 \begin{verbatim}
@@ -47,7 +47,7 @@ Indexation of nodes and common usage of function \texttt{position()} suggest tha
 one-or-more(/catalog/product[@id = 5]/color)
 \end{verbatim}
 
-In this query, number of elements \texttt{color} in element \texttt{product} with attribute \texttt{id} equal to 5 has to be at least one otherwise an error is raised upon execution. If we assume that this query is written correctly, with common sense and should not raise the error, we can infer that element \texttt{product} has to containt one or more elements \texttt{color}
+In this query, number of elements \texttt{color} in element \texttt{product} with attribute \texttt{id} equal to 5 has to be at least one otherwise an error is raised upon execution. If we assume that this query is written correctly, with common sense and it should not raise the error, we can infer that element \texttt{product} has to contain one or more elements \texttt{color}.
 
 \subsection{Occurrence Limited to One}
 In opposite to the multiple occurrence, numerous XQuery constructs limit number of occurrences of an element to at most one or exactly one. Some example queries with description follow.
@@ -56,7 +56,7 @@ In opposite to the multiple occurrence, numerous XQuery constructs limit number 
 /catalog/product[1]/number lt 10
 \end{verbatim}
 
-\texttt{lt} is a representant of so called \emph{value comparison operators} which operate two sequences of zero or one item. If an operand of a \emph{value comparison operand} is sequence of more than one item \emph{type error} is raised.
+\texttt{lt} is a representant of so called \emph{value comparison operators} which operate two sequences of zero or one item. If an operand of a \emph{value comparison operator} is a sequence of more than one item then \emph{type error} is raised.
 
 \begin{verbatim}
 for $item in //item 
@@ -66,14 +66,14 @@ return $item
 
 Alike the previous example, expression in \texttt{order by} clause can be evaluated to at most one item or the \emph{type error} is raised. Therefore, every element \texttt{item} contains zero or one element \texttt{num} but no more.
 
-Another similar examples are arithmetic expressions and functions accepting a sequence of at most one item. Functions \texttt{zero-or-one()} will raise the \emph{type error} when supplied with an sequence of more than one item.
+Another similar examples are arithmetic expressions and functions accepting a sequence of at most one item. Function \texttt{zero-or-one()} will raise the \emph{type error} when supplied with a sequence of more than one item.
 
-Those are constructs indicating limitation to zero or one occurrence. Function \texttt{exactly-one} works similar to the function \texttt{zero-or-one} but accepts only sequences of exactly one item (which are in XQuery equal to this item itself).
+Those are constructs indicating limitation to zero or one occurrence. Function \texttt{exactly-one()} works similar to the function \texttt{zero-or-one()} but accepts only sequences of exactly one item (which are in XQuery equal to this item itself).
 
 \section{Element and Attribute Types}
 
 \subsection{XML Schema Built-in Types}
-XML Schema built-in types of elements and attributes can be inferred from the XML documents by analysing their content. Since the count of built-in types is 44 and inheritance is involved, such analysis may be imprecise especially when a large enough set of XML documents is not available. \todo[inline]{priklad?} This is when a set of XQuery queries may be handy.
+XML Schema built-in types of elements and attributes can be inferred from the XML documents by analysing their content. Since the count of built-in types is 44 and inheritance is involved, such analysis may be imprecise especially when a large enough set of XML documents is not available. \todo[inline]{priklad?} This is when a set of XQuery queries may come in handy.
 
 If a value of an element or attribute is used in an expression then this expression could be often exploited to determine a type of the value. Comparing the value to another value of a known type and supplying the value to a function call as an argument of particular type are examples of these expressions as shown below.
 
@@ -110,10 +110,10 @@ declare variable $firstNumber as xs:integer
 := data(//product/number[1]); 
 \end{verbatim}
 
-Although, determining built-in types of elements and attributes in simple queries may seem quite straightforward, reliable method would face some issues. More complex queries are commonly branched by \emph{if-then-else} construct. These branches can contain several contradictionary fragments from the view of type inference. Therefore, the reliable method would take the query structure into consideration and futher research would be needed.
+Although determining built-in types of elements and attributes in simple queries may seem quite straightforward, reliable method would face some issues. More complex queries are commonly branched by \emph{if-then-else} construct. These branches can contain several contradictionary fragments from the view of type inference. Therefore, the reliable method would take the query structure into consideration and further research would be needed.
 
 \subsection{Enumeration}
-In several cases, XQuery \emph{if-then-else} construct may be used to branch the execution of query by all posible values of a certain variable. This is equivalent of \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
+In several cases, XQuery \emph{if-then-else} construct may be used to branch the execution of query by all possible values of a certain variable. This is equivalent of \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
 
 \begin{verbatim}
 Query
@@ -134,7 +134,7 @@ Results
 <li>Department: Menswear (MEN)</li> 
 \end{verbatim}
 
-Finding such patterns in queries could be useful in combination with analysis of XML data this queries are executed upon. XML data could help to confirm or disprove this assumption based on the query analysis or vice-versa.
+Finding such patterns in queries could be useful in combination with analysis of XML data these queries are executed upon. XML data could help to confirm or disprove this assumption based on the query analysis or vice-versa.
 
 \section{Keys}
 
@@ -178,7 +178,7 @@ Clause \texttt{where} is used for the join condition \texttt{\$i/offered\_by = \
 </result>
 \end{verbatim}
 
-This query illustrates a join where the value of one of the joined elements is not required, the knowledge of its existence is sufficient. Therefore the query has not to contain the second \texttt{for} or \texttt{let} keyword and its expression can be moved to \texttt{where} clause.
+This query illustrates a join where the value of one of the joined elements is not required thus the knowledge of its existence is sufficient. Therefore the query has not to contain the second \texttt{for} or \texttt{let} keyword and its expression can be moved to \texttt{where} clause.
 
 \begin{verbatim}
 for $item in doc("order.xml")//item, 
@@ -193,7 +193,7 @@ return <item num="{$item/@num}"
 A common three-way join.
 
 \subsection{Join of Recursive Data}
-By the term "recursive data" are meant XML data, for example elements, that somehow reference items from the same set. Example of query that operates upon such data follows.
+By the term "recursive data" are meant XML data, for example elements that somehow reference items from the same set. Example of a query that operates upon such data follows.
 
 \begin{verbatim}
 declare function local:one_level($p as element()) as element()
@@ -215,12 +215,12 @@ declare function local:one_level($p as element()) as element()
 </parttree>
 \end{verbatim}
 
-Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with not specified attribute \texttt{partof} are at the top of the recursive hierarchy while in elements with this attribute specified it makes a reference to an element with attribute \texttt{partid} of the same value.
+Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with not specified attribute \texttt{partof} are at the top of the recursive hierarchy while, in elements with this attribute specified it makes a reference to an element with attribute \texttt{partid} of the same value.
 
-By using similar approach as described in the paper \todo{ref} attribute \texttt{partid} can be marked as a key and attribute \texttt{partof} as its foreign key.
+By using a similar approach as described in the paper \todo{ref} attribute \texttt{partid} can be marked as a key and attribute \texttt{partof} as its foreign key.
 
 \subsection{Negative Statements about Uniqueness}
-In many cases it could be inferred a statement that refuses uniqueness of element's or attribute's values. Such statements may prove helpful in combination with other methods in its process of decision making whether a particular element or attribute is unique or not.
+In many cases a statement refusing uniqueness of element's or attribute's values could be inferred. Such statements may prove helpful in combination with other methods in its process of decision making whether a particular element or attribute is unique or not.
 
 Basic representant is a common \emph{FLWOR} query.
 
@@ -239,9 +239,9 @@ Basic representant is a common \emph{FLWOR} query.
 </bib>
 \end{verbatim}
 
-Usage of \texttt{for} construct indicates that it is expected a sequence of \texttt{book} elements which satisfy the condition if \emph{where} clause. It is a condition composed of two single conditions joined by \emph{and} logical operator. Therefore in order to satisfy the whole condition, both two single conditions must be satisfied as well. Thus, it is expected that several elements satisfy each of the single conditions.
+Usage of \texttt{for} construct indicates that it is expected a sequence of \texttt{book} elements which satisfy the condition if \emph{where} clause. It is a condition composed of two single conditions joined by \emph{and} logical operator. Therefore in order to satisfy the whole condition, both single conditions must be satisfied as well. Thus, it is expected that several elements satisfy each of the single conditions.
 
-The first of them is test of equality of book's subelement \texttt{publisher} to a string literal. Based on the expectation, element \texttt{publisher} cannot be unique. However, the second condition is greater-than comparison of \texttt{year} attribute to an integer literal, it cannot be inferred whether this attribute is unique or not. It is because even if it was unique there still might be more than one \texttt{book} element meeting this condition, thus the expectation was fullfiled too. Also, any statement, positive nor negative, cannot be inferred about \texttt{title} subelement.
+The first of them is test of equality of book's subelement \texttt{publisher} to a string literal. Based on the expectation, element \texttt{publisher} cannot be unique. However, the second condition is greater-than comparison of \texttt{year} attribute to an integer literal, it cannot be inferred whether this attribute is unique or not. The reason is that even if it was unique there still might be more than one \texttt{book} element meeting this condition. Also, any statement, positive nor negative, cannot be inferred about \texttt{title} subelement.
 
 Another simple examples are passing a result of basic path expression to a call of \texttt{distinct-values()} function and usage of \emph{aggregation} functions.
 
@@ -263,7 +263,7 @@ According to the use of \texttt{distinct-values()} function, it can be easily se
 
 Alike, variable \texttt{\$p} is bound to a price of each title and then passed to \texttt{min()} function call. That indicates that one book title is supposed to have several prices, however, it cannot be said if a certain occurrence of element \emph{book} can contain more than one \texttt{price} subelement.
 
-Also, many other types of queries could be exploited to obtain negative uniqueness statemens like occurrence of element or attribute in \texttt{stable order by} clause or selection of an element set based on a value of particular attribute and consecutive treatment of this set as a sequence of elements.
+Also, many other types of queries could be exploited to obtain negative uniqueness statements like occurrence of element or attribute in \texttt{stable order by} clause or selection of an element set based on a value of particular attribute and consecutive treatment of this set as a sequence of elements.
 
 \begin{verbatim}
 let $prods := doc("catalog.xml")//product 
@@ -273,7 +273,7 @@ return $prod
 \end{verbatim}
 
 \subsection{Uniqueness}
-In opposite of non-uniqueness discovery, some XQuery constructs can indicate uniqueness of elements or attributes, however, it seems to be more difficult. One of approaches of uniqueness discovery could be an investigation of what does the query return. Consider the following query.
+In opposite to non-uniqueness discovery, some XQuery constructs can indicate uniqueness of elements or attributes, however, it seems to be more difficult. One of approaches of uniqueness discovery could be an investigation of what the query does return. Consider the following query.
 
 \begin{verbatim}
 for $product in /catalog/product
@@ -286,11 +286,11 @@ For each \texttt{product} element, new element \texttt{prod} with attribute \tex
 \section{Other}
 
 \subsection{XML Schema \texttt{xs:sequence} and \texttt{xs:all} constructs}
-If an order of appearance of some element set, for example subelements of a certain element, is important this is can be expressed by XML Schema construct \texttt{xs:sequence}. On the other hand, \texttt{xs:all} is involved when the elements may occur in any order.
+If an order of appearance of some element set, for example subelements of a certain element, is important this can be expressed by XML Schema construct \texttt{xs:sequence}. On the other hand, \texttt{xs:all} is involved when the elements may occur in any order.
 
 If there is a large enough set of XML documents available it should be possible to correctly detect where to use \texttt{xs:sequence} and \texttt{xs:all} constructs. However, if the inference is made using a smaller set of XML documents, it may happen that every occurrence of some element set is in the same order but the input data are not representative enough to be sure. There comes in handy a comparison of element order in queries, which could help to decide for the use of \texttt{xs:sequence}.
 
-Every two elements in a XML document that are not siblings with the same name and none of them is the outermost element have the nearest common ancestor determining their relative order. If there is a lack of evidence to choose between the two constructs in the ancestor queries could be searched for an order comparison of these two elements like in the following query.
+Every two elements in a XML document that are not siblings with the same name and none of them is the outermost element have the nearest common ancestor determining their relative order. If there is a lack of evidence to choose between the two constructs in the ancestor than available queries could be searched for an order comparison of these two elements like in the following query.
 
 \begin{verbatim}
 let $i := //incision)[2]
@@ -298,10 +298,10 @@ for $a in //action)[. >> $i]
 return $a//instrument
 \end{verbatim}
 
-Apparently, the relative order of elements \texttt{incistion} and \texttt{action} is somehow important because the query composes the result using only those \texttt{action} elements that succeed the second \texttt{incision} element. Therefore, in a respective type definition part of the their nearest common ancestor it should be used \texttt{xs:sequence} prefered to \texttt{xs:all}.
+Apparently, the relative order of elements \texttt{incision} and \texttt{action} is somehow important because the query composes the result using only those \texttt{action} elements that succeed the second \texttt{incision} element. Therefore, in a respective type definition part of their nearest common ancestor \texttt{xs:sequence} should be used in favour of \texttt{xs:all}.
 
 \subsection{Intermediate XML structure}
-Intermediate XML structure are XML data that are not read from input XML documents nor created as an output of queries but they are used by the queries somehow. Objective of this section is intermediate XML structure created directly in the queries. It may serve to various purposes a can be created in various ways, hard-coded in queries, computed from the input XML documents to simplify their structure. The former is demostrated in the following example.
+Intermediate XML structure are XML data that are not read from input XML documents nor created as an output of queries but they are somehow used by the queries. Objective of this section is intermediate XML structure created directly in the queries. It may serve to various purposes and it can be created in various ways, hard-coded in queries, computed from the input XML documents to simplify their structure. The former is demonstrated in the following example.
 
 \begin{verbatim}
 let $deptNames := <deptNames> 
@@ -318,4 +318,4 @@ return <li>Department:
 
 Intermediate XML structure in this query could be used to identify possible values of attribute \texttt{dept} in \texttt{product} element and thereby determine its type as enumeration.
 
-That is a very simple example of intermediate structure. Since there many admittedly many means of utilization of intermediate structure, further reasearch would be needed.
+That is a very simple example of intermediate structure. Since there are admittedly many means of utilization of intermediate structure, further research would be needed.

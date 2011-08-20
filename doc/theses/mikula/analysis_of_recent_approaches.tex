@@ -19,10 +19,10 @@ The XTRACT \todo{bibref} system is an example of \emph{heuristic} \emph{merging 
 \item Minimum Description Length (MDL) Principle - Composing a near-optimal DTD schema from the set of all generalized candidate DTDs.
 \end{enumerate}
 
-MDL is the most important step. It ranks each DTD candidate using two aspects - conciseness and preciseness. Conciseness of a DTD is expressed using the number of bits required to describe the DTD (the smaller, the better). Preciseness of a DTD is expressed using the number of bits required for description of the input data using the DTD. In other words, the more accurately the structure is described, the fewer bits are required. Since the two conditions are contradictory, their balancing brings reasonable and realistic results.
+MDL is the most important step. It ranks each DTD candidate using two aspects - conciseness and preciseness. Conciseness of a DTD is expressed by using the number of bits required to describe the DTD (the smaller, the better). Preciseness of a DTD is expressed using the number of bits required for description of the input data using the DTD. In other words, the more accurately the structure is described, the fewer bits are required. Since the two conditions are contradictory, their balancing brings reasonable and realistic results.
 
 \subsection{SchemaMiner}
-The SchemaMiner system \todo{bibref} is an example of \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focusses on inferring elements with the same name but different structure and unordered sequences.
+The SchemaMiner system \todo{bibref} is an example of \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.
 
 The elements with the same name but different content are supported only in XSDs and their inference requires exploitation of more sophisticated approaches than combining productions with the same element
 type. On the other hand, although the unordered sequences are a classical example of XSD “syntactic sugar”, their exploitation enables to define simple and, hence, realistic and usable schemas.
@@ -30,20 +30,20 @@ type. On the other hand, although the unordered sequences are a classical exampl
 \todo[inline]{Moze byt takto? Nejake dalsie pristupy?}
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
-This methods tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just these queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.
+This method tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just these queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.
 
 \subsection{Keys and foreign keys}
 Authors introduce formalism that formalizes XML Schema keys.
 
 \begin{define}[Key]
-A key is a construct $$(C, P, \{L\})$$ where $C$, $P$, $L$ are XPath paths without predicates thet use only \texttt{child} and \texttt{descendant} axes.
-$C$ can be omitted. $(P, \{L\})$ is then equivalent to $(/, P, \{L\})$ and is called \emph{global key}.Otherwise it is called \emph{local key}.
+A key is a construct $$(C, P, \{L\})$$ where $C$, $P$, $L$ are XPath paths without predicates that use only \texttt{child} and \texttt{descendant} axes.
+$C$ can be omitted. $(P, \{L\})$ is then equivalent to $(/, P, \{L\})$ and is called \emph{global key}. Otherwise it is called \emph{local key}.
 \end{define}
 
 The key specifies the following condition. Let $c$ be an element targeted by $C$ and $p$ and $p’$ be two elements targeted by $P$ from $c$. If the value targeted by $L$ from $p$ equals to the value targeted by $L$ from $p’$, then $p$ and $p’$ are the same elements. In other words, no two different elements targeted by $P$ from $c$ can have the same value of $L$.
 
 \begin{define}[Foreign key]
-A foreign key is a construct $$(C, (P_1, \{L_1\}) \Rightarrow (P_2, \{L_2\}))$$ where $(C, P_2, \{L_2\})$ is a key, $P_1$, $L_1$ are XPath paths without predicates thet use only \texttt{child} and \texttt{descendant} axes.
+A foreign key is a construct $$(C, (P_1, \{L_1\}) \Rightarrow (P_2, \{L_2\}))$$ where $(C, P_2, \{L_2\})$ is a key, $P_1$, $L_1$ are XPath paths without predicates that use only \texttt{child} and \texttt{descendant} axes.
 $C$ can be omitted as in the case of keys.
 \end{define}
 
@@ -51,7 +51,7 @@ Let $c$ be an element targeted by $C$ and $p_1$ be a element targeted by $P_1$ f
 
 \subsection{Key and foreign key discovery}
 \subsubsection{Joins in queries}
-To discover keys and foreign keys, method utilizes element/element joins.
+To discover keys and foreign keys, the described method utilizes element/element joins.
 
 Assume a query $Q$ that joins a sequence of elements $S_1$ targeted by a path $P_1$ with a sequence of elements $S_2$ targeted by a path $P_2$ on a condition $L_1 = L_2$. It means that $Q$ joins an element $e_1$ from $S_1$ with an element $e_2$ from $S_2$ if $e_1/L_1$ equals to $e_2/L_2$.
 
@@ -68,7 +68,7 @@ Authors introduces two observations:
 \end{enumerate}
 
 \subsubsection{Join patterns}
-For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \texttt{for} \emph{join pattern} and \texttt{let} \emph{join pattern} and look like the following (the first is \texttt{for} \emph{join pattern}, the second is \texttt{let} \emph{join pattern}):
+For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \texttt{for} \emph{join pattern} and \texttt{let} \emph{join pattern} and look as following (the first is \texttt{for} \emph{join pattern}, the second is \texttt{let} \emph{join pattern}):
 \todo[inline]{spravne kreslit indexy pri pismenkach}
 \begin{verbatim}
 01  for e1 in P1               for $e1 in P1
@@ -152,6 +152,6 @@ Finally, the scores of the inferred keys are normalized to be comparable with ea
 $$S_i^{norm} = {S_i \over S^{max}} * (1 - {N^{max} - N_i \over \sum _{i=1}^n N_i})$$
 
 \section{Conclusion}
-The output of our method is a list of scored keys and for each key a list foreign keys referencing the key. The score of a key can be negative or positive. A negative score means that the key is not specified by the XML documents while positive means that it is satisfied. The absolute value of the score means how sure the method is about it.
+The output of the method is a list of scored keys and for each key a list foreign keys referencing the key. The score of a key can be negative or positive. A negative score means that the key is not specified by the XML documents while positive means that it is satisfied. The absolute value of the score means how sure the method is about it.
 
 Because the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.

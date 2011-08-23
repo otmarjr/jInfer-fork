@@ -20,20 +20,20 @@ import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.data.OfficialTestData;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.data.SizeTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.data.TestData;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.ConstructionHeuristics;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Incremental;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Removal;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.Glpk;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Hungry;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.LocalBranching;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.io.File;
@@ -43,12 +43,17 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Experiment comparing all the CHs, without any IHs.
+ * TODO vektor Comment!
  *
  * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
-public class BestStandaloneCH extends AbstractExperimentSet {
+public class BestIHForGlpk extends AbstractExperimentSet {
+
+  private static final List<TestData> TEST_DATA = Arrays.<TestData>asList(
+          SizeTestData.GRAPH_80_320, SizeTestData.GRAPH_90_405,
+          SizeTestData.GRAPH_100_500, OfficialTestData.GRAPH_100_100,
+          OfficialTestData.GRAPH_100_200, OfficialTestData.GRAPH_100_1000);
 
   private static final int POOL_SIZE = 10;
 
@@ -56,35 +61,39 @@ public class BestStandaloneCH extends AbstractExperimentSet {
 
   @Override
   public String getName() {
-    return "Best Standalone CH";
+    return "Best IH for GLPK";
   }
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
-    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
-
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
-    for (final TestData data : OfficialTestData.values()) {
+    for (final TestData data : TEST_DATA) {
       for (int i = 0; i < Utils.getIterations(); i++) {
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(),
-                new Random(), improvement, new Weight(), TimeIterations.NULL));
+                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new Crossover(0.1, 1)),
+                new Weight(), new TimeIterations(1)));
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(),
-                new Fuzzy(), improvement, new Weight(), TimeIterations.NULL));
+                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new Hungry()),
+                new Weight(), new TimeIterations(1)));
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(),
-                new Incremental(), improvement, new Weight(), TimeIterations.NULL));
+                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new LocalBranching(0.1, 1)),
+                new Weight(), new TimeIterations(1)));
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(),
-                new Removal(), improvement, new Weight(), TimeIterations.NULL));
+                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new Mutation(0.1, 1)),
+                new Weight(), new TimeIterations(1)));
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(),
-                new Fidax(), improvement, new Weight(), TimeIterations.NULL));
+                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new RandomRemove(0.1)),
+                new Weight(), new TimeIterations(1)));
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(),
-                new Glpk(1), improvement, new Weight(), TimeIterations.NULL));
+                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new RemoveWorst()),
+                new Weight(), new TimeIterations(1)));
       }
     }
 
@@ -92,15 +101,15 @@ public class BestStandaloneCH extends AbstractExperimentSet {
   }
 
   private void writeHeader() {
-    FileUtils.writeString("Random\tFuzzy\tIncremental\tRemoval\tFIDAX\tGlpk", file);
+    FileUtils.writeString("Crossover-b\tCrossover-a\tHungry-b\tHungry-a\tLocalBranching-b\tLocalBranching-a\tMutation-b\tMutation-a\tRandomRemove-b\tRandomRemove-a\tRemoveWorst-b\tRemoveWorst-a", file);
   }
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
-    final int numColumns = ConstructionHeuristics.values().length - 1; // we don't want Null
+    final int numColumns = 6;
 
     file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
-           OfficialTestData.values()[iteration / (Utils.getIterations() * numColumns)].getFile().getName() + ".txt");
+           TEST_DATA.get(iteration / (Utils.getIterations() * numColumns)).getFile().getName() + ".txt");
 
     if ((iteration % (Utils.getIterations() * numColumns)) == 0) {
       writeHeader();
@@ -108,7 +117,10 @@ public class BestStandaloneCH extends AbstractExperimentSet {
 
     final StringBuilder sb = new StringBuilder();
     sb.append((iteration % numColumns) == 0 ? '\n': '\t')
+      .append(e.getConstructionResult().getQuality().getScalar())
+      .append('\t')
       .append(e.getHighestQuality().getScalar());
     FileUtils.appendString(sb.toString(), file);
   }
+
 }

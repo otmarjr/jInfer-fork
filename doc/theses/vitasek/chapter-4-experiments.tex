@@ -684,15 +684,57 @@ TODO XMA-c, XMA-p, MSH and NTH are uninteresting - every CH found the optimum ev
   	\subfigure[\dataset{100-1000}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-100-1000}}
 \end{figure}
 
+TODO interpretation - GLPK wins all the time, takes 1 second, which is OK.
+
 \subsection{Best IH for the best CH}
 
 %         NB class BestIHForGlpk
 
 TODO with the best construction heuristic (GLPK), which IH is the best? Note that this needn't be the best combination!
 
+TODO count improvement, from there count average + stdev of improvement for every (data set, IH)
+
+TODO we will ignore RandomRemove and RemoveWorst, they cannot help us
+
+\begin{table}
+  \caption{Best IH for \heu{Glpk}}
+  \bigskip
+  \label{table-experiments-best-ih-for-glpk}
+  \centering
+  \begin{tabular}{l || l | l || l | l}
+    Data set & \heu{Hungry} & \heu{Hungry} & \heu{Crossover} & \heu{Crossover} \\
+     & improvement & improvement & improvement & improvement \\
+     & avg & stdev & avg & stdev \\
+    \hline
+    \dataset{80-320} & 0.00017 & 0.00118 & 0.00017 & 0.00118 \\
+    \dataset{90-405} & 0.00502 & 0.00618 & 0.00033 & 0.00165 \\
+    \dataset{100-500} & 0.00664 & 0.00667 & 0.00016 & 0.00081 \\
+    \hline
+    \dataset{100-100} & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\
+    \dataset{100-200} & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\
+    \dataset{100-1000} & 0.01630 & 0.01294 & 0.00180 & 0.00506 \\
+  \end{tabular}    
+	% TODO separate somehow
+  \begin{tabular}{l || l | l || l | l}
+    Data set & \heu{LB} & \heu{LB} & \heu{Mutation} & \heu{Mutation} \\
+     & improvement & improvement & improvement & improvement \\
+     & avg & stdev & avg & stdev \\
+    \hline
+    \dataset{80-320} & \textbf{0.00072} & 0.00223 & 0.00064 & 0.00218 \\
+    \dataset{90-405} & 0.00698 & 0.00616 & \textbf{0.00851} & 0.00659 \\
+    \dataset{100-500} & 0.00796 & 0.00797 & \textbf{0.00964} & 0.00804 \\
+    \hline
+    \dataset{100-100} & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\
+    \dataset{100-200} & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\
+    \dataset{100-1000} & 0.01710 & 0.01188 & \textbf{0.02337} & 0.01558 \\
+  \end{tabular}
+\end{table}
+
+TODO interpretation: \heu{Mutation} wins.
+
 \subsubsection{\heu{Random} as CH}
 
-TODO with the best IH from the previous step, how about using Random as CH?
+TODO with \heu{Mutation} from the previous step, how about using Random as CH? Do we get an improvement?
 
 \subsection{Various $\alpha$, $\beta$}
 

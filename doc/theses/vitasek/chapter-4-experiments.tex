@@ -338,12 +338,13 @@ from the input XML file and how long does it take to create the AM model from th
 The experimental set will contain $50 * (11 + 11) = 1100$ configurations: 20 iterations for 11 test data sets plus 11 sized test data sets. There will be no CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
 
 \begin{table}
-  \caption{Grammar and Model Creation Times}
+  \caption{Grammar Extraction and Model Creation Times}
   \bigskip
   \label{table-experiments-grammar-model-timing}
   \centering
   \begin{tabular}{l || l | l || l | l || l | l}
-    Data set & GE avg [ms] & GE stdev & MC avg [ms] & MC stdev & Tot avg [ms] & Tot stdev \\
+    Data set & GE & GE & MC & MC & Tot & Tot \\
+     & avg [ms] & stdev & avg [ms] & stdev & avg [ms] & stdev \\
     \hline
     \dataset{OVA1}     & < 10 & - & < 10 & - < 10 & - \\
     \dataset{OVA2}     & < 10 & - & < 10 & - < 10 & - \\
@@ -384,7 +385,8 @@ A related problem is how long it takes to create input for GLPK and then parse i
   \label{table-experiments-glpk-timing}
   \centering
   \begin{tabular}{l || l | l || l | l || l | l}
-	Data set & IC avg [ms] & IC stdev & OP avg [ms] & OP stdev & Tot avg [ms] & Tot stdev \\
+	Data set & IC & IC & OP & OP & Tot & Tot \\
+     & avg [ms] & stdev & avg [ms] & stdev & avg [ms] & stdev \\
 	\hline
 	\dataset{OVA1} & 36.46 & 66.8517 & 49.8 & 114.0687 & 86.26 & 150.1044 \\
 	\dataset{OVA2} & 39.52 & 75.8210 & 48.8 & 102.4484 & 88.32 & 154.9596 \\
@@ -498,8 +500,8 @@ Another way to compare the performance of these two GLPK versions is to see how 
 \end{algorithm}
 
 \begin{figure}
-  \caption{Time vs. Quality}
-  \label{image-experiment-time-vs-quality}
+  \caption{Time Until Optimum}
+  \label{image-experiment-time-until-optimum}
   \centering
     \includegraphics[angle=-90, width=\textwidth]{images/experiments/time-till-optimum}
 \end{figure}
@@ -508,7 +510,14 @@ TODO interpretation. Graph has its Y axis in log, stress this fact in the text t
 
 TODO mention that these times show we cannot rely on GLPK alone! It just takes too long.
 
-TODO pie chart of all relevant times: grammar, model, GLPK in, GLPK, GLPK out
+\begin{figure}
+  \caption{Timing Summary}
+  \label{image-experiment-timing-summary}
+  \centering
+    \includegraphics[width=.6\textwidth]{images/experiments/timing-pie}
+\end{figure}
+
+TODO interpret
 
 \subsection{\heu{Random} vs. \heu{Fuzzy} vs. \heu{FIDAX}}
 
@@ -692,9 +701,25 @@ TODO interpretation - GLPK wins all the time, takes 1 second, which is OK.
 
 TODO with the best construction heuristic (GLPK), which IH is the best? Note that this needn't be the best combination!
 
-TODO count improvement, from there count average + stdev of improvement for every (data set, IH)
-
 TODO we will ignore RandomRemove and RemoveWorst, they cannot help us
+
+TODO we will be using only a few sets where we can observe improvement
+
+\begin{center}
+\bigskip
+\begin{tabular}{| l | l |}
+  \hline
+  \hline
+  Machine           & Dual Core \\
+  Input data        & \dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \\
+                    & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000} \\
+  Iterations        & 50 \\
+  Pool size         & 10 \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
+  \hline
+\end{tabular}
+\bigskip
+\end{center}
 
 \begin{table}
   \caption{Best IH for \heu{Glpk}}
@@ -733,6 +758,8 @@ TODO we will ignore RandomRemove and RemoveWorst, they cannot help us
 TODO interpretation: \heu{Mutation} wins.
 
 \subsubsection{\heu{Random} as CH}
+
+%         NB class CHForMutation
 
 TODO with \heu{Mutation} from the previous step, how about using Random as CH? Do we get an improvement?
 

@@ -1,5 +1,3 @@
-set title 'Best Construction Heuristic - OVA1'
-
 set style data boxplot
 
 set xlabel 'Construction Heuristic'

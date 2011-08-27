@@ -1,5 +1,3 @@
-set title 'Random vs. Fuzzy vs. FIDAX - Quality'
-
 set style data boxplot
 
 set xlabel 'Data set'

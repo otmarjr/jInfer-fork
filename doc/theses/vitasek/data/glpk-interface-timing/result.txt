@@ -1,0 +1,6603 @@
+Got 1100 experiment parameter sets
+Running iteration #1/1100
+GLPK input generation took 10 ms.
+Run time not limited.
+GLPK run took 157 ms.
+GLPK output parsing took 21 ms.
+Iteration #1 finished
+Running iteration #2/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 19 ms.
+GLPK output parsing took 1 ms.
+Iteration #2 finished
+Running iteration #3/1100
+GLPK input generation took 88 ms.
+Run time not limited.
+GLPK run took 20 ms.
+GLPK output parsing took 2 ms.
+Iteration #3 finished
+Running iteration #4/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #4 finished
+Running iteration #5/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #5 finished
+Running iteration #6/1100
+GLPK input generation took 330 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #6 finished
+Running iteration #7/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #7 finished
+Running iteration #8/1100
+GLPK input generation took 232 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #8 finished
+Running iteration #9/1100
+GLPK input generation took 58 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 5 ms.
+Iteration #9 finished
+Running iteration #10/1100
+GLPK input generation took 73 ms.
+Run time not limited.
+GLPK run took 187 ms.
+GLPK output parsing took 118 ms.
+Iteration #10 finished
+Running iteration #11/1100
+GLPK input generation took 207 ms.
+Run time not limited.
+GLPK run took 95196 ms.
+GLPK output parsing took 19 ms.
+Iteration #11 finished
+Running iteration #12/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #12 finished
+Running iteration #13/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #13 finished
+Running iteration #14/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #14 finished
+Running iteration #15/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #15 finished
+Running iteration #16/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 2 ms.
+Iteration #16 finished
+Running iteration #17/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 93 ms.
+GLPK output parsing took 1 ms.
+Iteration #17 finished
+Running iteration #18/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 374 ms.
+GLPK output parsing took 4 ms.
+Iteration #18 finished
+Running iteration #19/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 952 ms.
+GLPK output parsing took 4 ms.
+Iteration #19 finished
+Running iteration #20/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 3104 ms.
+GLPK output parsing took 7 ms.
+Iteration #20 finished
+Running iteration #21/1100
+GLPK input generation took 95 ms.
+Run time not limited.
+GLPK run took 19314 ms.
+GLPK output parsing took 9 ms.
+Iteration #21 finished
+Running iteration #22/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 50765 ms.
+GLPK output parsing took 9 ms.
+Iteration #22 finished
+Running iteration #23/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #23 finished
+Running iteration #24/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #24 finished
+Running iteration #25/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #25 finished
+Running iteration #26/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #26 finished
+Running iteration #27/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #27 finished
+Running iteration #28/1100
+GLPK input generation took 506 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #28 finished
+Running iteration #29/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #29 finished
+Running iteration #30/1100
+GLPK input generation took 296 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #30 finished
+Running iteration #31/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #31 finished
+Running iteration #32/1100
+GLPK input generation took 71 ms.
+Run time not limited.
+GLPK run took 250 ms.
+GLPK output parsing took 5 ms.
+Iteration #32 finished
+Running iteration #33/1100
+GLPK input generation took 207 ms.
+Run time not limited.
+GLPK run took 66192 ms.
+GLPK output parsing took 17 ms.
+Iteration #33 finished
+Running iteration #34/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #34 finished
+Running iteration #35/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #35 finished
+Running iteration #36/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #36 finished
+Running iteration #37/1100
+GLPK input generation took 7 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #37 finished
+Running iteration #38/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 2 ms.
+Iteration #38 finished
+Running iteration #39/1100
+GLPK input generation took 25 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 2 ms.
+Iteration #39 finished
+Running iteration #40/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 344 ms.
+GLPK output parsing took 3 ms.
+Iteration #40 finished
+Running iteration #41/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 1076 ms.
+GLPK output parsing took 3 ms.
+Iteration #41 finished
+Running iteration #42/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2714 ms.
+GLPK output parsing took 6 ms.
+Iteration #42 finished
+Running iteration #43/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 17145 ms.
+GLPK output parsing took 9 ms.
+Iteration #43 finished
+Running iteration #44/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 50701 ms.
+GLPK output parsing took 9 ms.
+Iteration #44 finished
+Running iteration #45/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #45 finished
+Running iteration #46/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #46 finished
+Running iteration #47/1100
+GLPK input generation took 95 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #47 finished
+Running iteration #48/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #48 finished
+Running iteration #49/1100
+GLPK input generation took 133 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 1 ms.
+Iteration #49 finished
+Running iteration #50/1100
+GLPK input generation took 548 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #50 finished
+Running iteration #51/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #51 finished
+Running iteration #52/1100
+GLPK input generation took 294 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #52 finished
+Running iteration #53/1100
+GLPK input generation took 122 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #53 finished
+Running iteration #54/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 390 ms.
+GLPK output parsing took 5 ms.
+Iteration #54 finished
+Running iteration #55/1100
+GLPK input generation took 207 ms.
+Run time not limited.
+GLPK run took 99141 ms.
+GLPK output parsing took 17 ms.
+Iteration #55 finished
+Running iteration #56/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #56 finished
+Running iteration #57/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #57 finished
+Running iteration #58/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #58 finished
+Running iteration #59/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 0 ms.
+Iteration #59 finished
+Running iteration #60/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 2 ms.
+Iteration #60 finished
+Running iteration #61/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 1 ms.
+Iteration #61 finished
+Running iteration #62/1100
+GLPK input generation took 34 ms.
+Run time not limited.
+GLPK run took 327 ms.
+GLPK output parsing took 4 ms.
+Iteration #62 finished
+Running iteration #63/1100
+GLPK input generation took 50 ms.
+Run time not limited.
+GLPK run took 780 ms.
+GLPK output parsing took 3 ms.
+Iteration #63 finished
+Running iteration #64/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 1747 ms.
+GLPK output parsing took 6 ms.
+Iteration #64 finished
+Running iteration #65/1100
+GLPK input generation took 96 ms.
+Run time not limited.
+GLPK run took 26708 ms.
+GLPK output parsing took 9 ms.
+Iteration #65 finished
+Running iteration #66/1100
+GLPK input generation took 124 ms.
+Run time not limited.
+GLPK run took 94598 ms.
+GLPK output parsing took 9 ms.
+Iteration #66 finished
+Running iteration #67/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #67 finished
+Running iteration #68/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #68 finished
+Running iteration #69/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #69 finished
+Running iteration #70/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #70 finished
+Running iteration #71/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #71 finished
+Running iteration #72/1100
+GLPK input generation took 324 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #72 finished
+Running iteration #73/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #73 finished
+Running iteration #74/1100
+GLPK input generation took 229 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #74 finished
+Running iteration #75/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #75 finished
+Running iteration #76/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 296 ms.
+GLPK output parsing took 4 ms.
+Iteration #76 finished
+Running iteration #77/1100
+GLPK input generation took 312 ms.
+Run time not limited.
+GLPK run took 66700 ms.
+GLPK output parsing took 18 ms.
+Iteration #77 finished
+Running iteration #78/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #78 finished
+Running iteration #79/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #79 finished
+Running iteration #80/1100
+GLPK input generation took 3 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #80 finished
+Running iteration #81/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #81 finished
+Running iteration #82/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 1 ms.
+Iteration #82 finished
+Running iteration #83/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 93 ms.
+GLPK output parsing took 1 ms.
+Iteration #83 finished
+Running iteration #84/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 281 ms.
+GLPK output parsing took 4 ms.
+Iteration #84 finished
+Running iteration #85/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 905 ms.
+GLPK output parsing took 3 ms.
+Iteration #85 finished
+Running iteration #86/1100
+GLPK input generation took 87 ms.
+Run time not limited.
+GLPK run took 2589 ms.
+GLPK output parsing took 7 ms.
+Iteration #86 finished
+Running iteration #87/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 18484 ms.
+GLPK output parsing took 8 ms.
+Iteration #87 finished
+Running iteration #88/1100
+GLPK input generation took 117 ms.
+Run time not limited.
+GLPK run took 59151 ms.
+GLPK output parsing took 9 ms.
+Iteration #88 finished
+Running iteration #89/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #89 finished
+Running iteration #90/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #90 finished
+Running iteration #91/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #91 finished
+Running iteration #92/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #92 finished
+Running iteration #93/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #93 finished
+Running iteration #94/1100
+GLPK input generation took 518 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #94 finished
+Running iteration #95/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #95 finished
+Running iteration #96/1100
+GLPK input generation took 297 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #96 finished
+Running iteration #97/1100
+GLPK input generation took 63 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 73 ms.
+Iteration #97 finished
+Running iteration #98/1100
+GLPK input generation took 77 ms.
+Run time not limited.
+GLPK run took 453 ms.
+GLPK output parsing took 4 ms.
+Iteration #98 finished
+Running iteration #99/1100
+GLPK input generation took 329 ms.
+Run time not limited.
+GLPK run took 119598 ms.
+GLPK output parsing took 18 ms.
+Iteration #99 finished
+Running iteration #100/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #100 finished
+Running iteration #101/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #101 finished
+Running iteration #102/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #102 finished
+Running iteration #103/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #103 finished
+Running iteration #104/1100
+GLPK input generation took 13 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 2 ms.
+Iteration #104 finished
+Running iteration #105/1100
+GLPK input generation took 23 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 2 ms.
+Iteration #105 finished
+Running iteration #106/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 265 ms.
+GLPK output parsing took 3 ms.
+Iteration #106 finished
+Running iteration #107/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 1716 ms.
+GLPK output parsing took 3 ms.
+Iteration #107 finished
+Running iteration #108/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2746 ms.
+GLPK output parsing took 7 ms.
+Iteration #108 finished
+Running iteration #109/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 25428 ms.
+GLPK output parsing took 9 ms.
+Iteration #109 finished
+Running iteration #110/1100
+GLPK input generation took 123 ms.
+Run time not limited.
+GLPK run took 110290 ms.
+GLPK output parsing took 9 ms.
+Iteration #110 finished
+Running iteration #111/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #111 finished
+Running iteration #112/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #112 finished
+Running iteration #113/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #113 finished
+Running iteration #114/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #114 finished
+Running iteration #115/1100
+GLPK input generation took 88 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #115 finished
+Running iteration #116/1100
+GLPK input generation took 325 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #116 finished
+Running iteration #117/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #117 finished
+Running iteration #118/1100
+GLPK input generation took 288 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #118 finished
+Running iteration #119/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #119 finished
+Running iteration #120/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 359 ms.
+GLPK output parsing took 4 ms.
+Iteration #120 finished
+Running iteration #121/1100
+GLPK input generation took 286 ms.
+Run time not limited.
+GLPK run took 99683 ms.
+GLPK output parsing took 17 ms.
+Iteration #121 finished
+Running iteration #122/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #122 finished
+Running iteration #123/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #123 finished
+Running iteration #124/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #124 finished
+Running iteration #125/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #125 finished
+Running iteration #126/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #126 finished
+Running iteration #127/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 125 ms.
+GLPK output parsing took 1 ms.
+Iteration #127 finished
+Running iteration #128/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 374 ms.
+GLPK output parsing took 4 ms.
+Iteration #128 finished
+Running iteration #129/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 1201 ms.
+GLPK output parsing took 3 ms.
+Iteration #129 finished
+Running iteration #130/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2715 ms.
+GLPK output parsing took 17 ms.
+Iteration #130 finished
+Running iteration #131/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 24695 ms.
+GLPK output parsing took 9 ms.
+Iteration #131 finished
+Running iteration #132/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 48999 ms.
+GLPK output parsing took 10 ms.
+Iteration #132 finished
+Running iteration #133/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #133 finished
+Running iteration #134/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #134 finished
+Running iteration #135/1100
+GLPK input generation took 135 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #135 finished
+Running iteration #136/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #136 finished
+Running iteration #137/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #137 finished
+Running iteration #138/1100
+GLPK input generation took 519 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #138 finished
+Running iteration #139/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #139 finished
+Running iteration #140/1100
+GLPK input generation took 296 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #140 finished
+Running iteration #141/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #141 finished
+Running iteration #142/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 390 ms.
+GLPK output parsing took 4 ms.
+Iteration #142 finished
+Running iteration #143/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 83350 ms.
+GLPK output parsing took 18 ms.
+Iteration #143 finished
+Running iteration #144/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #144 finished
+Running iteration #145/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #145 finished
+Running iteration #146/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #146 finished
+Running iteration #147/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #147 finished
+Running iteration #148/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 2 ms.
+Iteration #148 finished
+Running iteration #149/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 62 ms.
+GLPK output parsing took 2 ms.
+Iteration #149 finished
+Running iteration #150/1100
+GLPK input generation took 32 ms.
+Run time not limited.
+GLPK run took 577 ms.
+GLPK output parsing took 3 ms.
+Iteration #150 finished
+Running iteration #151/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 1092 ms.
+GLPK output parsing took 4 ms.
+Iteration #151 finished
+Running iteration #152/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 2527 ms.
+GLPK output parsing took 6 ms.
+Iteration #152 finished
+Running iteration #153/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 29734 ms.
+GLPK output parsing took 10 ms.
+Iteration #153 finished
+Running iteration #154/1100
+GLPK input generation took 123 ms.
+Run time not limited.
+GLPK run took 53976 ms.
+GLPK output parsing took 10 ms.
+Iteration #154 finished
+Running iteration #155/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #155 finished
+Running iteration #156/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #156 finished
+Running iteration #157/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #157 finished
+Running iteration #158/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #158 finished
+Running iteration #159/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #159 finished
+Running iteration #160/1100
+GLPK input generation took 515 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #160 finished
+Running iteration #161/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #161 finished
+Running iteration #162/1100
+GLPK input generation took 298 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #162 finished
+Running iteration #163/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 4 ms.
+Iteration #163 finished
+Running iteration #164/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 375 ms.
+GLPK output parsing took 4 ms.
+Iteration #164 finished
+Running iteration #165/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 90589 ms.
+GLPK output parsing took 17 ms.
+Iteration #165 finished
+Running iteration #166/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #166 finished
+Running iteration #167/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #167 finished
+Running iteration #168/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #168 finished
+Running iteration #169/1100
+GLPK input generation took 7 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #169 finished
+Running iteration #170/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #170 finished
+Running iteration #171/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 140 ms.
+GLPK output parsing took 1 ms.
+Iteration #171 finished
+Running iteration #172/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 406 ms.
+GLPK output parsing took 4 ms.
+Iteration #172 finished
+Running iteration #173/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1498 ms.
+GLPK output parsing took 3 ms.
+Iteration #173 finished
+Running iteration #174/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2278 ms.
+GLPK output parsing took 6 ms.
+Iteration #174 finished
+Running iteration #175/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 36161 ms.
+GLPK output parsing took 17 ms.
+Iteration #175 finished
+Running iteration #176/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 29204 ms.
+GLPK output parsing took 9 ms.
+Iteration #176 finished
+Running iteration #177/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #177 finished
+Running iteration #178/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #178 finished
+Running iteration #179/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #179 finished
+Running iteration #180/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #180 finished
+Running iteration #181/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #181 finished
+Running iteration #182/1100
+GLPK input generation took 324 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #182 finished
+Running iteration #183/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #183 finished
+Running iteration #184/1100
+GLPK input generation took 230 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #184 finished
+Running iteration #185/1100
+GLPK input generation took 56 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #185 finished
+Running iteration #186/1100
+GLPK input generation took 72 ms.
+Run time not limited.
+GLPK run took 624 ms.
+GLPK output parsing took 4 ms.
+Iteration #186 finished
+Running iteration #187/1100
+GLPK input generation took 201 ms.
+Run time not limited.
+GLPK run took 123272 ms.
+GLPK output parsing took 18 ms.
+Iteration #187 finished
+Running iteration #188/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #188 finished
+Running iteration #189/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #189 finished
+Running iteration #190/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #190 finished
+Running iteration #191/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #191 finished
+Running iteration #192/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #192 finished
+Running iteration #193/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 93 ms.
+GLPK output parsing took 2 ms.
+Iteration #193 finished
+Running iteration #194/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 390 ms.
+GLPK output parsing took 3 ms.
+Iteration #194 finished
+Running iteration #195/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1170 ms.
+GLPK output parsing took 3 ms.
+Iteration #195 finished
+Running iteration #196/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2152 ms.
+GLPK output parsing took 8 ms.
+Iteration #196 finished
+Running iteration #197/1100
+GLPK input generation took 100 ms.
+Run time not limited.
+GLPK run took 26208 ms.
+GLPK output parsing took 9 ms.
+Iteration #197 finished
+Running iteration #198/1100
+GLPK input generation took 119 ms.
+Run time not limited.
+GLPK run took 47659 ms.
+GLPK output parsing took 9 ms.
+Iteration #198 finished
+Running iteration #199/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #199 finished
+Running iteration #200/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 2 ms.
+Iteration #200 finished
+Running iteration #201/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #201 finished
+Running iteration #202/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #202 finished
+Running iteration #203/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #203 finished
+Running iteration #204/1100
+GLPK input generation took 327 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #204 finished
+Running iteration #205/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 1 ms.
+Iteration #205 finished
+Running iteration #206/1100
+GLPK input generation took 295 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #206 finished
+Running iteration #207/1100
+GLPK input generation took 56 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #207 finished
+Running iteration #208/1100
+GLPK input generation took 71 ms.
+Run time not limited.
+GLPK run took 390 ms.
+GLPK output parsing took 5 ms.
+Iteration #208 finished
+Running iteration #209/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 91011 ms.
+GLPK output parsing took 17 ms.
+Iteration #209 finished
+Running iteration #210/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #210 finished
+Running iteration #211/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #211 finished
+Running iteration #212/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #212 finished
+Running iteration #213/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #213 finished
+Running iteration #214/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #214 finished
+Running iteration #215/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 156 ms.
+GLPK output parsing took 11 ms.
+Iteration #215 finished
+Running iteration #216/1100
+GLPK input generation took 34 ms.
+Run time not limited.
+GLPK run took 531 ms.
+GLPK output parsing took 3 ms.
+Iteration #216 finished
+Running iteration #217/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 905 ms.
+GLPK output parsing took 3 ms.
+Iteration #217 finished
+Running iteration #218/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 1669 ms.
+GLPK output parsing took 7 ms.
+Iteration #218 finished
+Running iteration #219/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 13666 ms.
+GLPK output parsing took 9 ms.
+Iteration #219 finished
+Running iteration #220/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 50934 ms.
+GLPK output parsing took 10 ms.
+Iteration #220 finished
+Running iteration #221/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #221 finished
+Running iteration #222/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #222 finished
+Running iteration #223/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #223 finished
+Running iteration #224/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #224 finished
+Running iteration #225/1100
+GLPK input generation took 105 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #225 finished
+Running iteration #226/1100
+GLPK input generation took 261 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #226 finished
+Running iteration #227/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #227 finished
+Running iteration #228/1100
+GLPK input generation took 299 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #228 finished
+Running iteration #229/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 6 ms.
+Iteration #229 finished
+Running iteration #230/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 453 ms.
+GLPK output parsing took 5 ms.
+Iteration #230 finished
+Running iteration #231/1100
+GLPK input generation took 206 ms.
+Run time not limited.
+GLPK run took 82790 ms.
+GLPK output parsing took 102 ms.
+Iteration #231 finished
+Running iteration #232/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #232 finished
+Running iteration #233/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #233 finished
+Running iteration #234/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #234 finished
+Running iteration #235/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #235 finished
+Running iteration #236/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #236 finished
+Running iteration #237/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 171 ms.
+GLPK output parsing took 2 ms.
+Iteration #237 finished
+Running iteration #238/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 436 ms.
+GLPK output parsing took 4 ms.
+Iteration #238 finished
+Running iteration #239/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 982 ms.
+GLPK output parsing took 3 ms.
+Iteration #239 finished
+Running iteration #240/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 2044 ms.
+GLPK output parsing took 6 ms.
+Iteration #240 finished
+Running iteration #241/1100
+GLPK input generation took 101 ms.
+Run time not limited.
+GLPK run took 19094 ms.
+GLPK output parsing took 9 ms.
+Iteration #241 finished
+Running iteration #242/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 39375 ms.
+GLPK output parsing took 10 ms.
+Iteration #242 finished
+Running iteration #243/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #243 finished
+Running iteration #244/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #244 finished
+Running iteration #245/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #245 finished
+Running iteration #246/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #246 finished
+Running iteration #247/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #247 finished
+Running iteration #248/1100
+GLPK input generation took 517 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #248 finished
+Running iteration #249/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #249 finished
+Running iteration #250/1100
+GLPK input generation took 297 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #250 finished
+Running iteration #251/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #251 finished
+Running iteration #252/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 328 ms.
+GLPK output parsing took 4 ms.
+Iteration #252 finished
+Running iteration #253/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 65988 ms.
+GLPK output parsing took 17 ms.
+Iteration #253 finished
+Running iteration #254/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #254 finished
+Running iteration #255/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #255 finished
+Running iteration #256/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #256 finished
+Running iteration #257/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #257 finished
+Running iteration #258/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #258 finished
+Running iteration #259/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 1 ms.
+Iteration #259 finished
+Running iteration #260/1100
+GLPK input generation took 38 ms.
+Run time not limited.
+GLPK run took 328 ms.
+GLPK output parsing took 3 ms.
+Iteration #260 finished
+Running iteration #261/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 905 ms.
+GLPK output parsing took 2 ms.
+Iteration #261 finished
+Running iteration #262/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2496 ms.
+GLPK output parsing took 7 ms.
+Iteration #262 finished
+Running iteration #263/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 27940 ms.
+GLPK output parsing took 8 ms.
+Iteration #263 finished
+Running iteration #264/1100
+GLPK input generation took 114 ms.
+Run time not limited.
+GLPK run took 51652 ms.
+GLPK output parsing took 10 ms.
+Iteration #264 finished
+Running iteration #265/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #265 finished
+Running iteration #266/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #266 finished
+Running iteration #267/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #267 finished
+Running iteration #268/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #268 finished
+Running iteration #269/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #269 finished
+Running iteration #270/1100
+GLPK input generation took 329 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #270 finished
+Running iteration #271/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #271 finished
+Running iteration #272/1100
+GLPK input generation took 229 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 0 ms.
+Iteration #272 finished
+Running iteration #273/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 4 ms.
+Iteration #273 finished
+Running iteration #274/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 437 ms.
+GLPK output parsing took 4 ms.
+Iteration #274 finished
+Running iteration #275/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 75941 ms.
+GLPK output parsing took 18 ms.
+Iteration #275 finished
+Running iteration #276/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #276 finished
+Running iteration #277/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #277 finished
+Running iteration #278/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #278 finished
+Running iteration #279/1100
+GLPK input generation took 7 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #279 finished
+Running iteration #280/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #280 finished
+Running iteration #281/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 1 ms.
+Iteration #281 finished
+Running iteration #282/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 375 ms.
+GLPK output parsing took 3 ms.
+Iteration #282 finished
+Running iteration #283/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1373 ms.
+GLPK output parsing took 28 ms.
+Iteration #283 finished
+Running iteration #284/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 3401 ms.
+GLPK output parsing took 7 ms.
+Iteration #284 finished
+Running iteration #285/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 21263 ms.
+GLPK output parsing took 8 ms.
+Iteration #285 finished
+Running iteration #286/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 61511 ms.
+GLPK output parsing took 9 ms.
+Iteration #286 finished
+Running iteration #287/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #287 finished
+Running iteration #288/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #288 finished
+Running iteration #289/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #289 finished
+Running iteration #290/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #290 finished
+Running iteration #291/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #291 finished
+Running iteration #292/1100
+GLPK input generation took 332 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #292 finished
+Running iteration #293/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #293 finished
+Running iteration #294/1100
+GLPK input generation took 295 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #294 finished
+Running iteration #295/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #295 finished
+Running iteration #296/1100
+GLPK input generation took 71 ms.
+Run time not limited.
+GLPK run took 609 ms.
+GLPK output parsing took 5 ms.
+Iteration #296 finished
+Running iteration #297/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 86021 ms.
+GLPK output parsing took 17 ms.
+Iteration #297 finished
+Running iteration #298/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #298 finished
+Running iteration #299/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #299 finished
+Running iteration #300/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #300 finished
+Running iteration #301/1100
+GLPK input generation took 7 ms.
+Run time not limited.
+GLPK run took 63 ms.
+GLPK output parsing took 1 ms.
+Iteration #301 finished
+Running iteration #302/1100
+GLPK input generation took 13 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #302 finished
+Running iteration #303/1100
+GLPK input generation took 24 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 1 ms.
+Iteration #303 finished
+Running iteration #304/1100
+GLPK input generation took 37 ms.
+Run time not limited.
+GLPK run took 655 ms.
+GLPK output parsing took 4 ms.
+Iteration #304 finished
+Running iteration #305/1100
+GLPK input generation took 63 ms.
+Run time not limited.
+GLPK run took 936 ms.
+GLPK output parsing took 4 ms.
+Iteration #305 finished
+Running iteration #306/1100
+GLPK input generation took 84 ms.
+Run time not limited.
+GLPK run took 1997 ms.
+GLPK output parsing took 6 ms.
+Iteration #306 finished
+Running iteration #307/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 27691 ms.
+GLPK output parsing took 9 ms.
+Iteration #307 finished
+Running iteration #308/1100
+GLPK input generation took 114 ms.
+Run time not limited.
+GLPK run took 53104 ms.
+GLPK output parsing took 10 ms.
+Iteration #308 finished
+Running iteration #309/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #309 finished
+Running iteration #310/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #310 finished
+Running iteration #311/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #311 finished
+Running iteration #312/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #312 finished
+Running iteration #313/1100
+GLPK input generation took 126 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #313 finished
+Running iteration #314/1100
+GLPK input generation took 537 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #314 finished
+Running iteration #315/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #315 finished
+Running iteration #316/1100
+GLPK input generation took 299 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #316 finished
+Running iteration #317/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #317 finished
+Running iteration #318/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 234 ms.
+GLPK output parsing took 5 ms.
+Iteration #318 finished
+Running iteration #319/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 98142 ms.
+GLPK output parsing took 94 ms.
+Iteration #319 finished
+Running iteration #320/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #320 finished
+Running iteration #321/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #321 finished
+Running iteration #322/1100
+GLPK input generation took 3 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #322 finished
+Running iteration #323/1100
+GLPK input generation took 7 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #323 finished
+Running iteration #324/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #324 finished
+Running iteration #325/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 1 ms.
+Iteration #325 finished
+Running iteration #326/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 577 ms.
+GLPK output parsing took 4 ms.
+Iteration #326 finished
+Running iteration #327/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 843 ms.
+GLPK output parsing took 3 ms.
+Iteration #327 finished
+Running iteration #328/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2215 ms.
+GLPK output parsing took 8 ms.
+Iteration #328 finished
+Running iteration #329/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 23400 ms.
+GLPK output parsing took 18 ms.
+Iteration #329 finished
+Running iteration #330/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 38594 ms.
+GLPK output parsing took 10 ms.
+Iteration #330 finished
+Running iteration #331/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #331 finished
+Running iteration #332/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #332 finished
+Running iteration #333/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #333 finished
+Running iteration #334/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #334 finished
+Running iteration #335/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #335 finished
+Running iteration #336/1100
+GLPK input generation took 325 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #336 finished
+Running iteration #337/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #337 finished
+Running iteration #338/1100
+GLPK input generation took 232 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #338 finished
+Running iteration #339/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #339 finished
+Running iteration #340/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 249 ms.
+GLPK output parsing took 5 ms.
+Iteration #340 finished
+Running iteration #341/1100
+GLPK input generation took 313 ms.
+Run time not limited.
+GLPK run took 108234 ms.
+GLPK output parsing took 18 ms.
+Iteration #341 finished
+Running iteration #342/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #342 finished
+Running iteration #343/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #343 finished
+Running iteration #344/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #344 finished
+Running iteration #345/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #345 finished
+Running iteration #346/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #346 finished
+Running iteration #347/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 1 ms.
+Iteration #347 finished
+Running iteration #348/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 452 ms.
+GLPK output parsing took 3 ms.
+Iteration #348 finished
+Running iteration #349/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 812 ms.
+GLPK output parsing took 3 ms.
+Iteration #349 finished
+Running iteration #350/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2402 ms.
+GLPK output parsing took 7 ms.
+Iteration #350 finished
+Running iteration #351/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 25273 ms.
+GLPK output parsing took 8 ms.
+Iteration #351 finished
+Running iteration #352/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 49312 ms.
+GLPK output parsing took 9 ms.
+Iteration #352 finished
+Running iteration #353/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #353 finished
+Running iteration #354/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #354 finished
+Running iteration #355/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #355 finished
+Running iteration #356/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #356 finished
+Running iteration #357/1100
+GLPK input generation took 88 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 1 ms.
+Iteration #357 finished
+Running iteration #358/1100
+GLPK input generation took 323 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #358 finished
+Running iteration #359/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #359 finished
+Running iteration #360/1100
+GLPK input generation took 230 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #360 finished
+Running iteration #361/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #361 finished
+Running iteration #362/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 296 ms.
+GLPK output parsing took 5 ms.
+Iteration #362 finished
+Running iteration #363/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 80076 ms.
+GLPK output parsing took 17 ms.
+Iteration #363 finished
+Running iteration #364/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #364 finished
+Running iteration #365/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #365 finished
+Running iteration #366/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #366 finished
+Running iteration #367/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #367 finished
+Running iteration #368/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 2 ms.
+Iteration #368 finished
+Running iteration #369/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 2 ms.
+Iteration #369 finished
+Running iteration #370/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 374 ms.
+GLPK output parsing took 3 ms.
+Iteration #370 finished
+Running iteration #371/1100
+GLPK input generation took 77 ms.
+Run time not limited.
+GLPK run took 1232 ms.
+GLPK output parsing took 3 ms.
+Iteration #371 finished
+Running iteration #372/1100
+GLPK input generation took 66 ms.
+Run time not limited.
+GLPK run took 3276 ms.
+GLPK output parsing took 6 ms.
+Iteration #372 finished
+Running iteration #373/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 34212 ms.
+GLPK output parsing took 10 ms.
+Iteration #373 finished
+Running iteration #374/1100
+GLPK input generation took 121 ms.
+Run time not limited.
+GLPK run took 47518 ms.
+GLPK output parsing took 9 ms.
+Iteration #374 finished
+Running iteration #375/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #375 finished
+Running iteration #376/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #376 finished
+Running iteration #377/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #377 finished
+Running iteration #378/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #378 finished
+Running iteration #379/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #379 finished
+Running iteration #380/1100
+GLPK input generation took 515 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #380 finished
+Running iteration #381/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #381 finished
+Running iteration #382/1100
+GLPK input generation took 296 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #382 finished
+Running iteration #383/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #383 finished
+Running iteration #384/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 422 ms.
+GLPK output parsing took 5 ms.
+Iteration #384 finished
+Running iteration #385/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 71761 ms.
+GLPK output parsing took 18 ms.
+Iteration #385 finished
+Running iteration #386/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #386 finished
+Running iteration #387/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #387 finished
+Running iteration #388/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #388 finished
+Running iteration #389/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #389 finished
+Running iteration #390/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #390 finished
+Running iteration #391/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 1 ms.
+Iteration #391 finished
+Running iteration #392/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 327 ms.
+GLPK output parsing took 4 ms.
+Iteration #392 finished
+Running iteration #393/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 655 ms.
+GLPK output parsing took 3 ms.
+Iteration #393 finished
+Running iteration #394/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2247 ms.
+GLPK output parsing took 7 ms.
+Iteration #394 finished
+Running iteration #395/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 28111 ms.
+GLPK output parsing took 8 ms.
+Iteration #395 finished
+Running iteration #396/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 45693 ms.
+GLPK output parsing took 9 ms.
+Iteration #396 finished
+Running iteration #397/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #397 finished
+Running iteration #398/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #398 finished
+Running iteration #399/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #399 finished
+Running iteration #400/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #400 finished
+Running iteration #401/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #401 finished
+Running iteration #402/1100
+GLPK input generation took 326 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #402 finished
+Running iteration #403/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #403 finished
+Running iteration #404/1100
+GLPK input generation took 287 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #404 finished
+Running iteration #405/1100
+GLPK input generation took 56 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #405 finished
+Running iteration #406/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 249 ms.
+GLPK output parsing took 5 ms.
+Iteration #406 finished
+Running iteration #407/1100
+GLPK input generation took 285 ms.
+Run time not limited.
+GLPK run took 102789 ms.
+GLPK output parsing took 17 ms.
+Iteration #407 finished
+Running iteration #408/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #408 finished
+Running iteration #409/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #409 finished
+Running iteration #410/1100
+GLPK input generation took 3 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #410 finished
+Running iteration #411/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #411 finished
+Running iteration #412/1100
+GLPK input generation took 13 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 2 ms.
+Iteration #412 finished
+Running iteration #413/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 93 ms.
+GLPK output parsing took 1 ms.
+Iteration #413 finished
+Running iteration #414/1100
+GLPK input generation took 34 ms.
+Run time not limited.
+GLPK run took 562 ms.
+GLPK output parsing took 3 ms.
+Iteration #414 finished
+Running iteration #415/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 780 ms.
+GLPK output parsing took 3 ms.
+Iteration #415 finished
+Running iteration #416/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2278 ms.
+GLPK output parsing took 7 ms.
+Iteration #416 finished
+Running iteration #417/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 24570 ms.
+GLPK output parsing took 8 ms.
+Iteration #417 finished
+Running iteration #418/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 38096 ms.
+GLPK output parsing took 10 ms.
+Iteration #418 finished
+Running iteration #419/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #419 finished
+Running iteration #420/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #420 finished
+Running iteration #421/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #421 finished
+Running iteration #422/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #422 finished
+Running iteration #423/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #423 finished
+Running iteration #424/1100
+GLPK input generation took 546 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #424 finished
+Running iteration #425/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #425 finished
+Running iteration #426/1100
+GLPK input generation took 296 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #426 finished
+Running iteration #427/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #427 finished
+Running iteration #428/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 390 ms.
+GLPK output parsing took 4 ms.
+Iteration #428 finished
+Running iteration #429/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 90979 ms.
+GLPK output parsing took 16 ms.
+Iteration #429 finished
+Running iteration #430/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #430 finished
+Running iteration #431/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #431 finished
+Running iteration #432/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #432 finished
+Running iteration #433/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #433 finished
+Running iteration #434/1100
+GLPK input generation took 15 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #434 finished
+Running iteration #435/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 125 ms.
+GLPK output parsing took 1 ms.
+Iteration #435 finished
+Running iteration #436/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 483 ms.
+GLPK output parsing took 3 ms.
+Iteration #436 finished
+Running iteration #437/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 874 ms.
+GLPK output parsing took 4 ms.
+Iteration #437 finished
+Running iteration #438/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 1810 ms.
+GLPK output parsing took 6 ms.
+Iteration #438 finished
+Running iteration #439/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 17113 ms.
+GLPK output parsing took 9 ms.
+Iteration #439 finished
+Running iteration #440/1100
+GLPK input generation took 123 ms.
+Run time not limited.
+GLPK run took 51215 ms.
+GLPK output parsing took 10 ms.
+Iteration #440 finished
+Running iteration #441/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #441 finished
+Running iteration #442/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #442 finished
+Running iteration #443/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #443 finished
+Running iteration #444/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #444 finished
+Running iteration #445/1100
+GLPK input generation took 177 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #445 finished
+Running iteration #446/1100
+GLPK input generation took 377 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 0 ms.
+Iteration #446 finished
+Running iteration #447/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 62 ms.
+GLPK output parsing took 0 ms.
+Iteration #447 finished
+Running iteration #448/1100
+GLPK input generation took 357 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #448 finished
+Running iteration #449/1100
+GLPK input generation took 134 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 6 ms.
+Iteration #449 finished
+Running iteration #450/1100
+GLPK input generation took 82 ms.
+Run time not limited.
+GLPK run took 640 ms.
+GLPK output parsing took 7 ms.
+Iteration #450 finished
+Running iteration #451/1100
+GLPK input generation took 251 ms.
+Run time not limited.
+GLPK run took 75161 ms.
+GLPK output parsing took 18 ms.
+Iteration #451 finished
+Running iteration #452/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #452 finished
+Running iteration #453/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #453 finished
+Running iteration #454/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #454 finished
+Running iteration #455/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #455 finished
+Running iteration #456/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 1 ms.
+Iteration #456 finished
+Running iteration #457/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 124 ms.
+GLPK output parsing took 1 ms.
+Iteration #457 finished
+Running iteration #458/1100
+GLPK input generation took 32 ms.
+Run time not limited.
+GLPK run took 530 ms.
+GLPK output parsing took 3 ms.
+Iteration #458 finished
+Running iteration #459/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1216 ms.
+GLPK output parsing took 4 ms.
+Iteration #459 finished
+Running iteration #460/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 1872 ms.
+GLPK output parsing took 7 ms.
+Iteration #460 finished
+Running iteration #461/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 16598 ms.
+GLPK output parsing took 8 ms.
+Iteration #461 finished
+Running iteration #462/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 27113 ms.
+GLPK output parsing took 19 ms.
+Iteration #462 finished
+Running iteration #463/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #463 finished
+Running iteration #464/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #464 finished
+Running iteration #465/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #465 finished
+Running iteration #466/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #466 finished
+Running iteration #467/1100
+GLPK input generation took 98 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #467 finished
+Running iteration #468/1100
+GLPK input generation took 541 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #468 finished
+Running iteration #469/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #469 finished
+Running iteration #470/1100
+GLPK input generation took 294 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #470 finished
+Running iteration #471/1100
+GLPK input generation took 58 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 5 ms.
+Iteration #471 finished
+Running iteration #472/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 375 ms.
+GLPK output parsing took 4 ms.
+Iteration #472 finished
+Running iteration #473/1100
+GLPK input generation took 205 ms.
+Run time not limited.
+GLPK run took 101682 ms.
+GLPK output parsing took 17 ms.
+Iteration #473 finished
+Running iteration #474/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #474 finished
+Running iteration #475/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #475 finished
+Running iteration #476/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #476 finished
+Running iteration #477/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #477 finished
+Running iteration #478/1100
+GLPK input generation took 16 ms.
+Run time not limited.
+GLPK run took 46 ms.
+GLPK output parsing took 1 ms.
+Iteration #478 finished
+Running iteration #479/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 156 ms.
+GLPK output parsing took 2 ms.
+Iteration #479 finished
+Running iteration #480/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 265 ms.
+GLPK output parsing took 3 ms.
+Iteration #480 finished
+Running iteration #481/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1061 ms.
+GLPK output parsing took 3 ms.
+Iteration #481 finished
+Running iteration #482/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2637 ms.
+GLPK output parsing took 7 ms.
+Iteration #482 finished
+Running iteration #483/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 20108 ms.
+GLPK output parsing took 8 ms.
+Iteration #483 finished
+Running iteration #484/1100
+GLPK input generation took 124 ms.
+Run time not limited.
+GLPK run took 63789 ms.
+GLPK output parsing took 10 ms.
+Iteration #484 finished
+Running iteration #485/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #485 finished
+Running iteration #486/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #486 finished
+Running iteration #487/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #487 finished
+Running iteration #488/1100
+GLPK input generation took 3 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #488 finished
+Running iteration #489/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #489 finished
+Running iteration #490/1100
+GLPK input generation took 522 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #490 finished
+Running iteration #491/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #491 finished
+Running iteration #492/1100
+GLPK input generation took 294 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #492 finished
+Running iteration #493/1100
+GLPK input generation took 123 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #493 finished
+Running iteration #494/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 374 ms.
+GLPK output parsing took 5 ms.
+Iteration #494 finished
+Running iteration #495/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 107376 ms.
+GLPK output parsing took 17 ms.
+Iteration #495 finished
+Running iteration #496/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #496 finished
+Running iteration #497/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #497 finished
+Running iteration #498/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #498 finished
+Running iteration #499/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #499 finished
+Running iteration #500/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #500 finished
+Running iteration #501/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 141 ms.
+GLPK output parsing took 1 ms.
+Iteration #501 finished
+Running iteration #502/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 327 ms.
+GLPK output parsing took 3 ms.
+Iteration #502 finished
+Running iteration #503/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1248 ms.
+GLPK output parsing took 3 ms.
+Iteration #503 finished
+Running iteration #504/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 1966 ms.
+GLPK output parsing took 7 ms.
+Iteration #504 finished
+Running iteration #505/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 23805 ms.
+GLPK output parsing took 9 ms.
+Iteration #505 finished
+Running iteration #506/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 70949 ms.
+GLPK output parsing took 9 ms.
+Iteration #506 finished
+Running iteration #507/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #507 finished
+Running iteration #508/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #508 finished
+Running iteration #509/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #509 finished
+Running iteration #510/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #510 finished
+Running iteration #511/1100
+GLPK input generation took 88 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #511 finished
+Running iteration #512/1100
+GLPK input generation took 323 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #512 finished
+Running iteration #513/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #513 finished
+Running iteration #514/1100
+GLPK input generation took 228 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #514 finished
+Running iteration #515/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 4 ms.
+Iteration #515 finished
+Running iteration #516/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 530 ms.
+GLPK output parsing took 4 ms.
+Iteration #516 finished
+Running iteration #517/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 102056 ms.
+GLPK output parsing took 18 ms.
+Iteration #517 finished
+Running iteration #518/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #518 finished
+Running iteration #519/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #519 finished
+Running iteration #520/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #520 finished
+Running iteration #521/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #521 finished
+Running iteration #522/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #522 finished
+Running iteration #523/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 93 ms.
+GLPK output parsing took 1 ms.
+Iteration #523 finished
+Running iteration #524/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 421 ms.
+GLPK output parsing took 3 ms.
+Iteration #524 finished
+Running iteration #525/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 1373 ms.
+GLPK output parsing took 3 ms.
+Iteration #525 finished
+Running iteration #526/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2012 ms.
+GLPK output parsing took 7 ms.
+Iteration #526 finished
+Running iteration #527/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 23214 ms.
+GLPK output parsing took 8 ms.
+Iteration #527 finished
+Running iteration #528/1100
+GLPK input generation took 114 ms.
+Run time not limited.
+GLPK run took 32122 ms.
+GLPK output parsing took 9 ms.
+Iteration #528 finished
+Running iteration #529/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #529 finished
+Running iteration #530/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #530 finished
+Running iteration #531/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #531 finished
+Running iteration #532/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #532 finished
+Running iteration #533/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #533 finished
+Running iteration #534/1100
+GLPK input generation took 518 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #534 finished
+Running iteration #535/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #535 finished
+Running iteration #536/1100
+GLPK input generation took 298 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #536 finished
+Running iteration #537/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 4 ms.
+Iteration #537 finished
+Running iteration #538/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 531 ms.
+GLPK output parsing took 5 ms.
+Iteration #538 finished
+Running iteration #539/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 79331 ms.
+GLPK output parsing took 18 ms.
+Iteration #539 finished
+Running iteration #540/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #540 finished
+Running iteration #541/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #541 finished
+Running iteration #542/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #542 finished
+Running iteration #543/1100
+GLPK input generation took 7 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #543 finished
+Running iteration #544/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 2 ms.
+Iteration #544 finished
+Running iteration #545/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 110 ms.
+GLPK output parsing took 1 ms.
+Iteration #545 finished
+Running iteration #546/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 562 ms.
+GLPK output parsing took 3 ms.
+Iteration #546 finished
+Running iteration #547/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1185 ms.
+GLPK output parsing took 3 ms.
+Iteration #547 finished
+Running iteration #548/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2075 ms.
+GLPK output parsing took 7 ms.
+Iteration #548 finished
+Running iteration #549/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 16022 ms.
+GLPK output parsing took 9 ms.
+Iteration #549 finished
+Running iteration #550/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 33947 ms.
+GLPK output parsing took 10 ms.
+Iteration #550 finished
+Running iteration #551/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #551 finished
+Running iteration #552/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #552 finished
+Running iteration #553/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #553 finished
+Running iteration #554/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #554 finished
+Running iteration #555/1100
+GLPK input generation took 95 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #555 finished
+Running iteration #556/1100
+GLPK input generation took 632 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #556 finished
+Running iteration #557/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #557 finished
+Running iteration #558/1100
+GLPK input generation took 583 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #558 finished
+Running iteration #559/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #559 finished
+Running iteration #560/1100
+GLPK input generation took 75 ms.
+Run time not limited.
+GLPK run took 343 ms.
+GLPK output parsing took 5 ms.
+Iteration #560 finished
+Running iteration #561/1100
+GLPK input generation took 227 ms.
+Run time not limited.
+GLPK run took 95007 ms.
+GLPK output parsing took 17 ms.
+Iteration #561 finished
+Running iteration #562/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #562 finished
+Running iteration #563/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #563 finished
+Running iteration #564/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #564 finished
+Running iteration #565/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #565 finished
+Running iteration #566/1100
+GLPK input generation took 11 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #566 finished
+Running iteration #567/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 2 ms.
+Iteration #567 finished
+Running iteration #568/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 655 ms.
+GLPK output parsing took 3 ms.
+Iteration #568 finished
+Running iteration #569/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1139 ms.
+GLPK output parsing took 3 ms.
+Iteration #569 finished
+Running iteration #570/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2216 ms.
+GLPK output parsing took 6 ms.
+Iteration #570 finished
+Running iteration #571/1100
+GLPK input generation took 96 ms.
+Run time not limited.
+GLPK run took 18253 ms.
+GLPK output parsing took 8 ms.
+Iteration #571 finished
+Running iteration #572/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 93820 ms.
+GLPK output parsing took 10 ms.
+Iteration #572 finished
+Running iteration #573/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #573 finished
+Running iteration #574/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #574 finished
+Running iteration #575/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #575 finished
+Running iteration #576/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #576 finished
+Running iteration #577/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #577 finished
+Running iteration #578/1100
+GLPK input generation took 551 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #578 finished
+Running iteration #579/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #579 finished
+Running iteration #580/1100
+GLPK input generation took 297 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #580 finished
+Running iteration #581/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 4 ms.
+Iteration #581 finished
+Running iteration #582/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 608 ms.
+GLPK output parsing took 4 ms.
+Iteration #582 finished
+Running iteration #583/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 64289 ms.
+GLPK output parsing took 17 ms.
+Iteration #583 finished
+Running iteration #584/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #584 finished
+Running iteration #585/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #585 finished
+Running iteration #586/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #586 finished
+Running iteration #587/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 0 ms.
+Iteration #587 finished
+Running iteration #588/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 5 ms.
+Iteration #588 finished
+Running iteration #589/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 1 ms.
+Iteration #589 finished
+Running iteration #590/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 359 ms.
+GLPK output parsing took 4 ms.
+Iteration #590 finished
+Running iteration #591/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 889 ms.
+GLPK output parsing took 2 ms.
+Iteration #591 finished
+Running iteration #592/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2387 ms.
+GLPK output parsing took 7 ms.
+Iteration #592 finished
+Running iteration #593/1100
+GLPK input generation took 117 ms.
+Run time not limited.
+GLPK run took 26676 ms.
+GLPK output parsing took 8 ms.
+Iteration #593 finished
+Running iteration #594/1100
+GLPK input generation took 126 ms.
+Run time not limited.
+GLPK run took 47753 ms.
+GLPK output parsing took 10 ms.
+Iteration #594 finished
+Running iteration #595/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #595 finished
+Running iteration #596/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #596 finished
+Running iteration #597/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #597 finished
+Running iteration #598/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #598 finished
+Running iteration #599/1100
+GLPK input generation took 151 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #599 finished
+Running iteration #600/1100
+GLPK input generation took 321 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #600 finished
+Running iteration #601/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #601 finished
+Running iteration #602/1100
+GLPK input generation took 301 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #602 finished
+Running iteration #603/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #603 finished
+Running iteration #604/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 530 ms.
+GLPK output parsing took 5 ms.
+Iteration #604 finished
+Running iteration #605/1100
+GLPK input generation took 207 ms.
+Run time not limited.
+GLPK run took 104817 ms.
+GLPK output parsing took 98 ms.
+Iteration #605 finished
+Running iteration #606/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #606 finished
+Running iteration #607/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #607 finished
+Running iteration #608/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #608 finished
+Running iteration #609/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #609 finished
+Running iteration #610/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #610 finished
+Running iteration #611/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 110 ms.
+GLPK output parsing took 2 ms.
+Iteration #611 finished
+Running iteration #612/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 530 ms.
+GLPK output parsing took 4 ms.
+Iteration #612 finished
+Running iteration #613/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 765 ms.
+GLPK output parsing took 3 ms.
+Iteration #613 finished
+Running iteration #614/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2839 ms.
+GLPK output parsing took 6 ms.
+Iteration #614 finished
+Running iteration #615/1100
+GLPK input generation took 102 ms.
+Run time not limited.
+GLPK run took 26021 ms.
+GLPK output parsing took 9 ms.
+Iteration #615 finished
+Running iteration #616/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 48408 ms.
+GLPK output parsing took 9 ms.
+Iteration #616 finished
+Running iteration #617/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #617 finished
+Running iteration #618/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #618 finished
+Running iteration #619/1100
+GLPK input generation took 98 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #619 finished
+Running iteration #620/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #620 finished
+Running iteration #621/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #621 finished
+Running iteration #622/1100
+GLPK input generation took 325 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #622 finished
+Running iteration #623/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #623 finished
+Running iteration #624/1100
+GLPK input generation took 227 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #624 finished
+Running iteration #625/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #625 finished
+Running iteration #626/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 406 ms.
+GLPK output parsing took 5 ms.
+Iteration #626 finished
+Running iteration #627/1100
+GLPK input generation took 209 ms.
+Run time not limited.
+GLPK run took 115285 ms.
+GLPK output parsing took 16 ms.
+Iteration #627 finished
+Running iteration #628/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #628 finished
+Running iteration #629/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #629 finished
+Running iteration #630/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #630 finished
+Running iteration #631/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #631 finished
+Running iteration #632/1100
+GLPK input generation took 13 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #632 finished
+Running iteration #633/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 1 ms.
+Iteration #633 finished
+Running iteration #634/1100
+GLPK input generation took 34 ms.
+Run time not limited.
+GLPK run took 312 ms.
+GLPK output parsing took 3 ms.
+Iteration #634 finished
+Running iteration #635/1100
+GLPK input generation took 75 ms.
+Run time not limited.
+GLPK run took 765 ms.
+GLPK output parsing took 3 ms.
+Iteration #635 finished
+Running iteration #636/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2745 ms.
+GLPK output parsing took 6 ms.
+Iteration #636 finished
+Running iteration #637/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 20936 ms.
+GLPK output parsing took 9 ms.
+Iteration #637 finished
+Running iteration #638/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 56394 ms.
+GLPK output parsing took 9 ms.
+Iteration #638 finished
+Running iteration #639/1100
+GLPK input generation took 26 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #639 finished
+Running iteration #640/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #640 finished
+Running iteration #641/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #641 finished
+Running iteration #642/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #642 finished
+Running iteration #643/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #643 finished
+Running iteration #644/1100
+GLPK input generation took 326 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #644 finished
+Running iteration #645/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #645 finished
+Running iteration #646/1100
+GLPK input generation took 228 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #646 finished
+Running iteration #647/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 4 ms.
+Iteration #647 finished
+Running iteration #648/1100
+GLPK input generation took 188 ms.
+Run time not limited.
+GLPK run took 359 ms.
+GLPK output parsing took 5 ms.
+Iteration #648 finished
+Running iteration #649/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 90543 ms.
+GLPK output parsing took 17 ms.
+Iteration #649 finished
+Running iteration #650/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #650 finished
+Running iteration #651/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #651 finished
+Running iteration #652/1100
+GLPK input generation took 3 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 0 ms.
+Iteration #652 finished
+Running iteration #653/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #653 finished
+Running iteration #654/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #654 finished
+Running iteration #655/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 1 ms.
+Iteration #655 finished
+Running iteration #656/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 312 ms.
+GLPK output parsing took 3 ms.
+Iteration #656 finished
+Running iteration #657/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 874 ms.
+GLPK output parsing took 3 ms.
+Iteration #657 finished
+Running iteration #658/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2387 ms.
+GLPK output parsing took 7 ms.
+Iteration #658 finished
+Running iteration #659/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 32698 ms.
+GLPK output parsing took 9 ms.
+Iteration #659 finished
+Running iteration #660/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 79545 ms.
+GLPK output parsing took 19 ms.
+Iteration #660 finished
+Running iteration #661/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #661 finished
+Running iteration #662/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #662 finished
+Running iteration #663/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #663 finished
+Running iteration #664/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #664 finished
+Running iteration #665/1100
+GLPK input generation took 95 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #665 finished
+Running iteration #666/1100
+GLPK input generation took 328 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #666 finished
+Running iteration #667/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #667 finished
+Running iteration #668/1100
+GLPK input generation took 303 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #668 finished
+Running iteration #669/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 5 ms.
+Iteration #669 finished
+Running iteration #670/1100
+GLPK input generation took 71 ms.
+Run time not limited.
+GLPK run took 265 ms.
+GLPK output parsing took 4 ms.
+Iteration #670 finished
+Running iteration #671/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 100496 ms.
+GLPK output parsing took 17 ms.
+Iteration #671 finished
+Running iteration #672/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #672 finished
+Running iteration #673/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #673 finished
+Running iteration #674/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #674 finished
+Running iteration #675/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #675 finished
+Running iteration #676/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #676 finished
+Running iteration #677/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 6 ms.
+Iteration #677 finished
+Running iteration #678/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 499 ms.
+GLPK output parsing took 4 ms.
+Iteration #678 finished
+Running iteration #679/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 811 ms.
+GLPK output parsing took 3 ms.
+Iteration #679 finished
+Running iteration #680/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 3900 ms.
+GLPK output parsing took 7 ms.
+Iteration #680 finished
+Running iteration #681/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 17550 ms.
+GLPK output parsing took 9 ms.
+Iteration #681 finished
+Running iteration #682/1100
+GLPK input generation took 117 ms.
+Run time not limited.
+GLPK run took 58843 ms.
+GLPK output parsing took 9 ms.
+Iteration #682 finished
+Running iteration #683/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #683 finished
+Running iteration #684/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #684 finished
+Running iteration #685/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #685 finished
+Running iteration #686/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #686 finished
+Running iteration #687/1100
+GLPK input generation took 176 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #687 finished
+Running iteration #688/1100
+GLPK input generation took 247 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #688 finished
+Running iteration #689/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #689 finished
+Running iteration #690/1100
+GLPK input generation took 299 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #690 finished
+Running iteration #691/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 4 ms.
+Iteration #691 finished
+Running iteration #692/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 234 ms.
+GLPK output parsing took 5 ms.
+Iteration #692 finished
+Running iteration #693/1100
+GLPK input generation took 205 ms.
+Run time not limited.
+GLPK run took 72478 ms.
+GLPK output parsing took 18 ms.
+Iteration #693 finished
+Running iteration #694/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #694 finished
+Running iteration #695/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #695 finished
+Running iteration #696/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #696 finished
+Running iteration #697/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #697 finished
+Running iteration #698/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 2 ms.
+Iteration #698 finished
+Running iteration #699/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 1 ms.
+Iteration #699 finished
+Running iteration #700/1100
+GLPK input generation took 32 ms.
+Run time not limited.
+GLPK run took 359 ms.
+GLPK output parsing took 3 ms.
+Iteration #700 finished
+Running iteration #701/1100
+GLPK input generation took 47 ms.
+Run time not limited.
+GLPK run took 921 ms.
+GLPK output parsing took 3 ms.
+Iteration #701 finished
+Running iteration #702/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 3728 ms.
+GLPK output parsing took 7 ms.
+Iteration #702 finished
+Running iteration #703/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 23135 ms.
+GLPK output parsing took 8 ms.
+Iteration #703 finished
+Running iteration #704/1100
+GLPK input generation took 123 ms.
+Run time not limited.
+GLPK run took 58875 ms.
+GLPK output parsing took 9 ms.
+Iteration #704 finished
+Running iteration #705/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #705 finished
+Running iteration #706/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #706 finished
+Running iteration #707/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #707 finished
+Running iteration #708/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #708 finished
+Running iteration #709/1100
+GLPK input generation took 149 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #709 finished
+Running iteration #710/1100
+GLPK input generation took 324 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #710 finished
+Running iteration #711/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #711 finished
+Running iteration #712/1100
+GLPK input generation took 302 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #712 finished
+Running iteration #713/1100
+GLPK input generation took 58 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 5 ms.
+Iteration #713 finished
+Running iteration #714/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 297 ms.
+GLPK output parsing took 5 ms.
+Iteration #714 finished
+Running iteration #715/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 137328 ms.
+GLPK output parsing took 17 ms.
+Iteration #715 finished
+Running iteration #716/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #716 finished
+Running iteration #717/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #717 finished
+Running iteration #718/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #718 finished
+Running iteration #719/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #719 finished
+Running iteration #720/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #720 finished
+Running iteration #721/1100
+GLPK input generation took 25 ms.
+Run time not limited.
+GLPK run took 125 ms.
+GLPK output parsing took 2 ms.
+Iteration #721 finished
+Running iteration #722/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 499 ms.
+GLPK output parsing took 3 ms.
+Iteration #722 finished
+Running iteration #723/1100
+GLPK input generation took 50 ms.
+Run time not limited.
+GLPK run took 1591 ms.
+GLPK output parsing took 3 ms.
+Iteration #723 finished
+Running iteration #724/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 3089 ms.
+GLPK output parsing took 7 ms.
+Iteration #724 finished
+Running iteration #725/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 25974 ms.
+GLPK output parsing took 8 ms.
+Iteration #725 finished
+Running iteration #726/1100
+GLPK input generation took 123 ms.
+Run time not limited.
+GLPK run took 55927 ms.
+GLPK output parsing took 10 ms.
+Iteration #726 finished
+Running iteration #727/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #727 finished
+Running iteration #728/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #728 finished
+Running iteration #729/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #729 finished
+Running iteration #730/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #730 finished
+Running iteration #731/1100
+GLPK input generation took 133 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #731 finished
+Running iteration #732/1100
+GLPK input generation took 528 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #732 finished
+Running iteration #733/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #733 finished
+Running iteration #734/1100
+GLPK input generation took 509 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #734 finished
+Running iteration #735/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #735 finished
+Running iteration #736/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 218 ms.
+GLPK output parsing took 5 ms.
+Iteration #736 finished
+Running iteration #737/1100
+GLPK input generation took 284 ms.
+Run time not limited.
+GLPK run took 130339 ms.
+GLPK output parsing took 17 ms.
+Iteration #737 finished
+Running iteration #738/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #738 finished
+Running iteration #739/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #739 finished
+Running iteration #740/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #740 finished
+Running iteration #741/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #741 finished
+Running iteration #742/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #742 finished
+Running iteration #743/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 125 ms.
+GLPK output parsing took 1 ms.
+Iteration #743 finished
+Running iteration #744/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 561 ms.
+GLPK output parsing took 4 ms.
+Iteration #744 finished
+Running iteration #745/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1419 ms.
+GLPK output parsing took 3 ms.
+Iteration #745 finished
+Running iteration #746/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 1731 ms.
+GLPK output parsing took 7 ms.
+Iteration #746 finished
+Running iteration #747/1100
+GLPK input generation took 95 ms.
+Run time not limited.
+GLPK run took 25148 ms.
+GLPK output parsing took 8 ms.
+Iteration #747 finished
+Running iteration #748/1100
+GLPK input generation took 117 ms.
+Run time not limited.
+GLPK run took 63759 ms.
+GLPK output parsing took 9 ms.
+Iteration #748 finished
+Running iteration #749/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #749 finished
+Running iteration #750/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #750 finished
+Running iteration #751/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #751 finished
+Running iteration #752/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #752 finished
+Running iteration #753/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #753 finished
+Running iteration #754/1100
+GLPK input generation took 325 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #754 finished
+Running iteration #755/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #755 finished
+Running iteration #756/1100
+GLPK input generation took 229 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #756 finished
+Running iteration #757/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 4 ms.
+Iteration #757 finished
+Running iteration #758/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 530 ms.
+GLPK output parsing took 118 ms.
+Iteration #758 finished
+Running iteration #759/1100
+GLPK input generation took 207 ms.
+Run time not limited.
+GLPK run took 65038 ms.
+GLPK output parsing took 16 ms.
+Iteration #759 finished
+Running iteration #760/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #760 finished
+Running iteration #761/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #761 finished
+Running iteration #762/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #762 finished
+Running iteration #763/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #763 finished
+Running iteration #764/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #764 finished
+Running iteration #765/1100
+GLPK input generation took 22 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 2 ms.
+Iteration #765 finished
+Running iteration #766/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 374 ms.
+GLPK output parsing took 3 ms.
+Iteration #766 finished
+Running iteration #767/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 702 ms.
+GLPK output parsing took 3 ms.
+Iteration #767 finished
+Running iteration #768/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2527 ms.
+GLPK output parsing took 7 ms.
+Iteration #768 finished
+Running iteration #769/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 22667 ms.
+GLPK output parsing took 8 ms.
+Iteration #769 finished
+Running iteration #770/1100
+GLPK input generation took 116 ms.
+Run time not limited.
+GLPK run took 68236 ms.
+GLPK output parsing took 10 ms.
+Iteration #770 finished
+Running iteration #771/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #771 finished
+Running iteration #772/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #772 finished
+Running iteration #773/1100
+GLPK input generation took 99 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #773 finished
+Running iteration #774/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #774 finished
+Running iteration #775/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #775 finished
+Running iteration #776/1100
+GLPK input generation took 564 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #776 finished
+Running iteration #777/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #777 finished
+Running iteration #778/1100
+GLPK input generation took 294 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #778 finished
+Running iteration #779/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #779 finished
+Running iteration #780/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 343 ms.
+GLPK output parsing took 4 ms.
+Iteration #780 finished
+Running iteration #781/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 111088 ms.
+GLPK output parsing took 17 ms.
+Iteration #781 finished
+Running iteration #782/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #782 finished
+Running iteration #783/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #783 finished
+Running iteration #784/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #784 finished
+Running iteration #785/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #785 finished
+Running iteration #786/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 1 ms.
+Iteration #786 finished
+Running iteration #787/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 1 ms.
+Iteration #787 finished
+Running iteration #788/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 484 ms.
+GLPK output parsing took 3 ms.
+Iteration #788 finished
+Running iteration #789/1100
+GLPK input generation took 47 ms.
+Run time not limited.
+GLPK run took 1139 ms.
+GLPK output parsing took 3 ms.
+Iteration #789 finished
+Running iteration #790/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2434 ms.
+GLPK output parsing took 7 ms.
+Iteration #790 finished
+Running iteration #791/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 24118 ms.
+GLPK output parsing took 8 ms.
+Iteration #791 finished
+Running iteration #792/1100
+GLPK input generation took 124 ms.
+Run time not limited.
+GLPK run took 46754 ms.
+GLPK output parsing took 9 ms.
+Iteration #792 finished
+Running iteration #793/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #793 finished
+Running iteration #794/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #794 finished
+Running iteration #795/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #795 finished
+Running iteration #796/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #796 finished
+Running iteration #797/1100
+GLPK input generation took 152 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #797 finished
+Running iteration #798/1100
+GLPK input generation took 323 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #798 finished
+Running iteration #799/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #799 finished
+Running iteration #800/1100
+GLPK input generation took 229 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #800 finished
+Running iteration #801/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 4 ms.
+Iteration #801 finished
+Running iteration #802/1100
+GLPK input generation took 188 ms.
+Run time not limited.
+GLPK run took 344 ms.
+GLPK output parsing took 5 ms.
+Iteration #802 finished
+Running iteration #803/1100
+GLPK input generation took 205 ms.
+Run time not limited.
+GLPK run took 87641 ms.
+GLPK output parsing took 17 ms.
+Iteration #803 finished
+Running iteration #804/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #804 finished
+Running iteration #805/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #805 finished
+Running iteration #806/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #806 finished
+Running iteration #807/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #807 finished
+Running iteration #808/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #808 finished
+Running iteration #809/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 93 ms.
+GLPK output parsing took 1 ms.
+Iteration #809 finished
+Running iteration #810/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 344 ms.
+GLPK output parsing took 4 ms.
+Iteration #810 finished
+Running iteration #811/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1638 ms.
+GLPK output parsing took 3 ms.
+Iteration #811 finished
+Running iteration #812/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 3027 ms.
+GLPK output parsing took 7 ms.
+Iteration #812 finished
+Running iteration #813/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 20420 ms.
+GLPK output parsing took 9 ms.
+Iteration #813 finished
+Running iteration #814/1100
+GLPK input generation took 114 ms.
+Run time not limited.
+GLPK run took 37534 ms.
+GLPK output parsing took 10 ms.
+Iteration #814 finished
+Running iteration #815/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #815 finished
+Running iteration #816/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #816 finished
+Running iteration #817/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #817 finished
+Running iteration #818/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #818 finished
+Running iteration #819/1100
+GLPK input generation took 98 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #819 finished
+Running iteration #820/1100
+GLPK input generation took 545 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #820 finished
+Running iteration #821/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #821 finished
+Running iteration #822/1100
+GLPK input generation took 349 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #822 finished
+Running iteration #823/1100
+GLPK input generation took 128 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #823 finished
+Running iteration #824/1100
+GLPK input generation took 73 ms.
+Run time not limited.
+GLPK run took 515 ms.
+GLPK output parsing took 6 ms.
+Iteration #824 finished
+Running iteration #825/1100
+GLPK input generation took 250 ms.
+Run time not limited.
+GLPK run took 98577 ms.
+GLPK output parsing took 17 ms.
+Iteration #825 finished
+Running iteration #826/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #826 finished
+Running iteration #827/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 1 ms.
+Iteration #827 finished
+Running iteration #828/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #828 finished
+Running iteration #829/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #829 finished
+Running iteration #830/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #830 finished
+Running iteration #831/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 1 ms.
+Iteration #831 finished
+Running iteration #832/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 296 ms.
+GLPK output parsing took 3 ms.
+Iteration #832 finished
+Running iteration #833/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1498 ms.
+GLPK output parsing took 3 ms.
+Iteration #833 finished
+Running iteration #834/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2855 ms.
+GLPK output parsing took 6 ms.
+Iteration #834 finished
+Running iteration #835/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 25569 ms.
+GLPK output parsing took 9 ms.
+Iteration #835 finished
+Running iteration #836/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 64039 ms.
+GLPK output parsing took 12 ms.
+Iteration #836 finished
+Running iteration #837/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 0 ms.
+Iteration #837 finished
+Running iteration #838/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #838 finished
+Running iteration #839/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #839 finished
+Running iteration #840/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #840 finished
+Running iteration #841/1100
+GLPK input generation took 2540 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #841 finished
+Running iteration #842/1100
+GLPK input generation took 497 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #842 finished
+Running iteration #843/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #843 finished
+Running iteration #844/1100
+GLPK input generation took 300 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #844 finished
+Running iteration #845/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 4 ms.
+Iteration #845 finished
+Running iteration #846/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 656 ms.
+GLPK output parsing took 5 ms.
+Iteration #846 finished
+Running iteration #847/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 75348 ms.
+GLPK output parsing took 17 ms.
+Iteration #847 finished
+Running iteration #848/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #848 finished
+Running iteration #849/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #849 finished
+Running iteration #850/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #850 finished
+Running iteration #851/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #851 finished
+Running iteration #852/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 1 ms.
+Iteration #852 finished
+Running iteration #853/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 125 ms.
+GLPK output parsing took 1 ms.
+Iteration #853 finished
+Running iteration #854/1100
+GLPK input generation took 32 ms.
+Run time not limited.
+GLPK run took 405 ms.
+GLPK output parsing took 3 ms.
+Iteration #854 finished
+Running iteration #855/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 920 ms.
+GLPK output parsing took 4 ms.
+Iteration #855 finished
+Running iteration #856/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2699 ms.
+GLPK output parsing took 7 ms.
+Iteration #856 finished
+Running iteration #857/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 31949 ms.
+GLPK output parsing took 17 ms.
+Iteration #857 finished
+Running iteration #858/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 88265 ms.
+GLPK output parsing took 9 ms.
+Iteration #858 finished
+Running iteration #859/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #859 finished
+Running iteration #860/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #860 finished
+Running iteration #861/1100
+GLPK input generation took 91 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #861 finished
+Running iteration #862/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #862 finished
+Running iteration #863/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #863 finished
+Running iteration #864/1100
+GLPK input generation took 515 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #864 finished
+Running iteration #865/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #865 finished
+Running iteration #866/1100
+GLPK input generation took 300 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #866 finished
+Running iteration #867/1100
+GLPK input generation took 121 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #867 finished
+Running iteration #868/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 421 ms.
+GLPK output parsing took 5 ms.
+Iteration #868 finished
+Running iteration #869/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 67111 ms.
+GLPK output parsing took 16 ms.
+Iteration #869 finished
+Running iteration #870/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #870 finished
+Running iteration #871/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #871 finished
+Running iteration #872/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #872 finished
+Running iteration #873/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #873 finished
+Running iteration #874/1100
+GLPK input generation took 13 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #874 finished
+Running iteration #875/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 1 ms.
+Iteration #875 finished
+Running iteration #876/1100
+GLPK input generation took 34 ms.
+Run time not limited.
+GLPK run took 328 ms.
+GLPK output parsing took 4 ms.
+Iteration #876 finished
+Running iteration #877/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1279 ms.
+GLPK output parsing took 3 ms.
+Iteration #877 finished
+Running iteration #878/1100
+GLPK input generation took 66 ms.
+Run time not limited.
+GLPK run took 2184 ms.
+GLPK output parsing took 6 ms.
+Iteration #878 finished
+Running iteration #879/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 22308 ms.
+GLPK output parsing took 8 ms.
+Iteration #879 finished
+Running iteration #880/1100
+GLPK input generation took 122 ms.
+Run time not limited.
+GLPK run took 42854 ms.
+GLPK output parsing took 9 ms.
+Iteration #880 finished
+Running iteration #881/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #881 finished
+Running iteration #882/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #882 finished
+Running iteration #883/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #883 finished
+Running iteration #884/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #884 finished
+Running iteration #885/1100
+GLPK input generation took 146 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #885 finished
+Running iteration #886/1100
+GLPK input generation took 324 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #886 finished
+Running iteration #887/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #887 finished
+Running iteration #888/1100
+GLPK input generation took 511 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #888 finished
+Running iteration #889/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #889 finished
+Running iteration #890/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 312 ms.
+GLPK output parsing took 5 ms.
+Iteration #890 finished
+Running iteration #891/1100
+GLPK input generation took 287 ms.
+Run time not limited.
+GLPK run took 76191 ms.
+GLPK output parsing took 18 ms.
+Iteration #891 finished
+Running iteration #892/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #892 finished
+Running iteration #893/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 1 ms.
+Iteration #893 finished
+Running iteration #894/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #894 finished
+Running iteration #895/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #895 finished
+Running iteration #896/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #896 finished
+Running iteration #897/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 2 ms.
+Iteration #897 finished
+Running iteration #898/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 406 ms.
+GLPK output parsing took 3 ms.
+Iteration #898 finished
+Running iteration #899/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 733 ms.
+GLPK output parsing took 3 ms.
+Iteration #899 finished
+Running iteration #900/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 4337 ms.
+GLPK output parsing took 6 ms.
+Iteration #900 finished
+Running iteration #901/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 17503 ms.
+GLPK output parsing took 9 ms.
+Iteration #901 finished
+Running iteration #902/1100
+GLPK input generation took 114 ms.
+Run time not limited.
+GLPK run took 52744 ms.
+GLPK output parsing took 9 ms.
+Iteration #902 finished
+Running iteration #903/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #903 finished
+Running iteration #904/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 0 ms.
+Iteration #904 finished
+Running iteration #905/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #905 finished
+Running iteration #906/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #906 finished
+Running iteration #907/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #907 finished
+Running iteration #908/1100
+GLPK input generation took 552 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #908 finished
+Running iteration #909/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #909 finished
+Running iteration #910/1100
+GLPK input generation took 295 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #910 finished
+Running iteration #911/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 3 ms.
+Iteration #911 finished
+Running iteration #912/1100
+GLPK input generation took 71 ms.
+Run time not limited.
+GLPK run took 468 ms.
+GLPK output parsing took 5 ms.
+Iteration #912 finished
+Running iteration #913/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 92057 ms.
+GLPK output parsing took 17 ms.
+Iteration #913 finished
+Running iteration #914/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #914 finished
+Running iteration #915/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #915 finished
+Running iteration #916/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #916 finished
+Running iteration #917/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #917 finished
+Running iteration #918/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 1 ms.
+Iteration #918 finished
+Running iteration #919/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 140 ms.
+GLPK output parsing took 2 ms.
+Iteration #919 finished
+Running iteration #920/1100
+GLPK input generation took 34 ms.
+Run time not limited.
+GLPK run took 406 ms.
+GLPK output parsing took 3 ms.
+Iteration #920 finished
+Running iteration #921/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1061 ms.
+GLPK output parsing took 3 ms.
+Iteration #921 finished
+Running iteration #922/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 5991 ms.
+GLPK output parsing took 6 ms.
+Iteration #922 finished
+Running iteration #923/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 24289 ms.
+GLPK output parsing took 9 ms.
+Iteration #923 finished
+Running iteration #924/1100
+GLPK input generation took 124 ms.
+Run time not limited.
+GLPK run took 54616 ms.
+GLPK output parsing took 9 ms.
+Iteration #924 finished
+Running iteration #925/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #925 finished
+Running iteration #926/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #926 finished
+Running iteration #927/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #927 finished
+Running iteration #928/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #928 finished
+Running iteration #929/1100
+GLPK input generation took 147 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #929 finished
+Running iteration #930/1100
+GLPK input generation took 329 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #930 finished
+Running iteration #931/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #931 finished
+Running iteration #932/1100
+GLPK input generation took 529 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #932 finished
+Running iteration #933/1100
+GLPK input generation took 56 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #933 finished
+Running iteration #934/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 203 ms.
+GLPK output parsing took 5 ms.
+Iteration #934 finished
+Running iteration #935/1100
+GLPK input generation took 205 ms.
+Run time not limited.
+GLPK run took 103569 ms.
+GLPK output parsing took 17 ms.
+Iteration #935 finished
+Running iteration #936/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #936 finished
+Running iteration #937/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #937 finished
+Running iteration #938/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #938 finished
+Running iteration #939/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #939 finished
+Running iteration #940/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #940 finished
+Running iteration #941/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 46 ms.
+GLPK output parsing took 1 ms.
+Iteration #941 finished
+Running iteration #942/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 328 ms.
+GLPK output parsing took 3 ms.
+Iteration #942 finished
+Running iteration #943/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 1467 ms.
+GLPK output parsing took 3 ms.
+Iteration #943 finished
+Running iteration #944/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2371 ms.
+GLPK output parsing took 7 ms.
+Iteration #944 finished
+Running iteration #945/1100
+GLPK input generation took 101 ms.
+Run time not limited.
+GLPK run took 20093 ms.
+GLPK output parsing took 10 ms.
+Iteration #945 finished
+Running iteration #946/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 62821 ms.
+GLPK output parsing took 10 ms.
+Iteration #946 finished
+Running iteration #947/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #947 finished
+Running iteration #948/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #948 finished
+Running iteration #949/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #949 finished
+Running iteration #950/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #950 finished
+Running iteration #951/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #951 finished
+Running iteration #952/1100
+GLPK input generation took 560 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #952 finished
+Running iteration #953/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #953 finished
+Running iteration #954/1100
+GLPK input generation took 297 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #954 finished
+Running iteration #955/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 4 ms.
+Iteration #955 finished
+Running iteration #956/1100
+GLPK input generation took 134 ms.
+Run time not limited.
+GLPK run took 499 ms.
+GLPK output parsing took 4 ms.
+Iteration #956 finished
+Running iteration #957/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 114506 ms.
+GLPK output parsing took 17 ms.
+Iteration #957 finished
+Running iteration #958/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #958 finished
+Running iteration #959/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #959 finished
+Running iteration #960/1100
+GLPK input generation took 3 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #960 finished
+Running iteration #961/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #961 finished
+Running iteration #962/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 47 ms.
+GLPK output parsing took 2 ms.
+Iteration #962 finished
+Running iteration #963/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 1 ms.
+Iteration #963 finished
+Running iteration #964/1100
+GLPK input generation took 34 ms.
+Run time not limited.
+GLPK run took 390 ms.
+GLPK output parsing took 3 ms.
+Iteration #964 finished
+Running iteration #965/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1232 ms.
+GLPK output parsing took 3 ms.
+Iteration #965 finished
+Running iteration #966/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2870 ms.
+GLPK output parsing took 7 ms.
+Iteration #966 finished
+Running iteration #967/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 28987 ms.
+GLPK output parsing took 8 ms.
+Iteration #967 finished
+Running iteration #968/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 48208 ms.
+GLPK output parsing took 9 ms.
+Iteration #968 finished
+Running iteration #969/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #969 finished
+Running iteration #970/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #970 finished
+Running iteration #971/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #971 finished
+Running iteration #972/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #972 finished
+Running iteration #973/1100
+GLPK input generation took 101 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #973 finished
+Running iteration #974/1100
+GLPK input generation took 585 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #974 finished
+Running iteration #975/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #975 finished
+Running iteration #976/1100
+GLPK input generation took 295 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #976 finished
+Running iteration #977/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 4 ms.
+Iteration #977 finished
+Running iteration #978/1100
+GLPK input generation took 71 ms.
+Run time not limited.
+GLPK run took 297 ms.
+GLPK output parsing took 4 ms.
+Iteration #978 finished
+Running iteration #979/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 138118 ms.
+GLPK output parsing took 19 ms.
+Iteration #979 finished
+Running iteration #980/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #980 finished
+Running iteration #981/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 0 ms.
+Iteration #981 finished
+Running iteration #982/1100
+GLPK input generation took 4 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 0 ms.
+Iteration #982 finished
+Running iteration #983/1100
+GLPK input generation took 10 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #983 finished
+Running iteration #984/1100
+GLPK input generation took 19 ms.
+Run time not limited.
+GLPK run took 46 ms.
+GLPK output parsing took 1 ms.
+Iteration #984 finished
+Running iteration #985/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 2 ms.
+Iteration #985 finished
+Running iteration #986/1100
+GLPK input generation took 44 ms.
+Run time not limited.
+GLPK run took 656 ms.
+GLPK output parsing took 4 ms.
+Iteration #986 finished
+Running iteration #987/1100
+GLPK input generation took 131 ms.
+Run time not limited.
+GLPK run took 1389 ms.
+GLPK output parsing took 3 ms.
+Iteration #987 finished
+Running iteration #988/1100
+GLPK input generation took 73 ms.
+Run time not limited.
+GLPK run took 3495 ms.
+GLPK output parsing took 9 ms.
+Iteration #988 finished
+Running iteration #989/1100
+GLPK input generation took 107 ms.
+Run time not limited.
+GLPK run took 35852 ms.
+GLPK output parsing took 17 ms.
+Iteration #989 finished
+Running iteration #990/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 120716 ms.
+GLPK output parsing took 10 ms.
+Iteration #990 finished
+Running iteration #991/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #991 finished
+Running iteration #992/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #992 finished
+Running iteration #993/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #993 finished
+Running iteration #994/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #994 finished
+Running iteration #995/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #995 finished
+Running iteration #996/1100
+GLPK input generation took 516 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #996 finished
+Running iteration #997/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #997 finished
+Running iteration #998/1100
+GLPK input generation took 295 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #998 finished
+Running iteration #999/1100
+GLPK input generation took 57 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #999 finished
+Running iteration #1000/1100
+GLPK input generation took 69 ms.
+Run time not limited.
+GLPK run took 374 ms.
+GLPK output parsing took 4 ms.
+Iteration #1000 finished
+Running iteration #1001/1100
+GLPK input generation took 206 ms.
+Run time not limited.
+GLPK run took 98455 ms.
+GLPK output parsing took 17 ms.
+Iteration #1001 finished
+Running iteration #1002/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1002 finished
+Running iteration #1003/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1003 finished
+Running iteration #1004/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1004 finished
+Running iteration #1005/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1005 finished
+Running iteration #1006/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #1006 finished
+Running iteration #1007/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 2 ms.
+Iteration #1007 finished
+Running iteration #1008/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 687 ms.
+GLPK output parsing took 4 ms.
+Iteration #1008 finished
+Running iteration #1009/1100
+GLPK input generation took 49 ms.
+Run time not limited.
+GLPK run took 1108 ms.
+GLPK output parsing took 3 ms.
+Iteration #1009 finished
+Running iteration #1010/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2481 ms.
+GLPK output parsing took 7 ms.
+Iteration #1010 finished
+Running iteration #1011/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 15866 ms.
+GLPK output parsing took 9 ms.
+Iteration #1011 finished
+Running iteration #1012/1100
+GLPK input generation took 115 ms.
+Run time not limited.
+GLPK run took 52964 ms.
+GLPK output parsing took 10 ms.
+Iteration #1012 finished
+Running iteration #1013/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1013 finished
+Running iteration #1014/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 0 ms.
+Iteration #1014 finished
+Running iteration #1015/1100
+GLPK input generation took 90 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 1 ms.
+Iteration #1015 finished
+Running iteration #1016/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1016 finished
+Running iteration #1017/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1017 finished
+Running iteration #1018/1100
+GLPK input generation took 514 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1018 finished
+Running iteration #1019/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1019 finished
+Running iteration #1020/1100
+GLPK input generation took 298 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1020 finished
+Running iteration #1021/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 4 ms.
+Iteration #1021 finished
+Running iteration #1022/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 452 ms.
+GLPK output parsing took 5 ms.
+Iteration #1022 finished
+Running iteration #1023/1100
+GLPK input generation took 204 ms.
+Run time not limited.
+GLPK run took 75411 ms.
+GLPK output parsing took 18 ms.
+Iteration #1023 finished
+Running iteration #1024/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1024 finished
+Running iteration #1025/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 0 ms.
+GLPK output parsing took 0 ms.
+Iteration #1025 finished
+Running iteration #1026/1100
+GLPK input generation took 3 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1026 finished
+Running iteration #1027/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 0 ms.
+Iteration #1027 finished
+Running iteration #1028/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 2 ms.
+Iteration #1028 finished
+Running iteration #1029/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 94 ms.
+GLPK output parsing took 2 ms.
+Iteration #1029 finished
+Running iteration #1030/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 530 ms.
+GLPK output parsing took 3 ms.
+Iteration #1030 finished
+Running iteration #1031/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1186 ms.
+GLPK output parsing took 3 ms.
+Iteration #1031 finished
+Running iteration #1032/1100
+GLPK input generation took 66 ms.
+Run time not limited.
+GLPK run took 2106 ms.
+GLPK output parsing took 6 ms.
+Iteration #1032 finished
+Running iteration #1033/1100
+GLPK input generation took 95 ms.
+Run time not limited.
+GLPK run took 22948 ms.
+GLPK output parsing took 9 ms.
+Iteration #1033 finished
+Running iteration #1034/1100
+GLPK input generation took 114 ms.
+Run time not limited.
+GLPK run took 104350 ms.
+GLPK output parsing took 10 ms.
+Iteration #1034 finished
+Running iteration #1035/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #1035 finished
+Running iteration #1036/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1036 finished
+Running iteration #1037/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #1037 finished
+Running iteration #1038/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1038 finished
+Running iteration #1039/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1039 finished
+Running iteration #1040/1100
+GLPK input generation took 514 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1040 finished
+Running iteration #1041/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1041 finished
+Running iteration #1042/1100
+GLPK input generation took 295 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1042 finished
+Running iteration #1043/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 4 ms.
+Iteration #1043 finished
+Running iteration #1044/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 421 ms.
+GLPK output parsing took 5 ms.
+Iteration #1044 finished
+Running iteration #1045/1100
+GLPK input generation took 209 ms.
+Run time not limited.
+GLPK run took 76176 ms.
+GLPK output parsing took 17 ms.
+Iteration #1045 finished
+Running iteration #1046/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1046 finished
+Running iteration #1047/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1047 finished
+Running iteration #1048/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1048 finished
+Running iteration #1049/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #1049 finished
+Running iteration #1050/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #1050 finished
+Running iteration #1051/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 109 ms.
+GLPK output parsing took 2 ms.
+Iteration #1051 finished
+Running iteration #1052/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 546 ms.
+GLPK output parsing took 3 ms.
+Iteration #1052 finished
+Running iteration #1053/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1700 ms.
+GLPK output parsing took 3 ms.
+Iteration #1053 finished
+Running iteration #1054/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 3136 ms.
+GLPK output parsing took 7 ms.
+Iteration #1054 finished
+Running iteration #1055/1100
+GLPK input generation took 100 ms.
+Run time not limited.
+GLPK run took 28626 ms.
+GLPK output parsing took 8 ms.
+Iteration #1055 finished
+Running iteration #1056/1100
+GLPK input generation took 117 ms.
+Run time not limited.
+GLPK run took 55115 ms.
+GLPK output parsing took 9 ms.
+Iteration #1056 finished
+Running iteration #1057/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1057 finished
+Running iteration #1058/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1058 finished
+Running iteration #1059/1100
+GLPK input generation took 92 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1059 finished
+Running iteration #1060/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1060 finished
+Running iteration #1061/1100
+GLPK input generation took 89 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1061 finished
+Running iteration #1062/1100
+GLPK input generation took 492 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1062 finished
+Running iteration #1063/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1063 finished
+Running iteration #1064/1100
+GLPK input generation took 296 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1064 finished
+Running iteration #1065/1100
+GLPK input generation took 54 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 4 ms.
+Iteration #1065 finished
+Running iteration #1066/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 514 ms.
+GLPK output parsing took 5 ms.
+Iteration #1066 finished
+Running iteration #1067/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 76019 ms.
+GLPK output parsing took 18 ms.
+Iteration #1067 finished
+Running iteration #1068/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1068 finished
+Running iteration #1069/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #1069 finished
+Running iteration #1070/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1070 finished
+Running iteration #1071/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #1071 finished
+Running iteration #1072/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 31 ms.
+GLPK output parsing took 1 ms.
+Iteration #1072 finished
+Running iteration #1073/1100
+GLPK input generation took 20 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 1 ms.
+Iteration #1073 finished
+Running iteration #1074/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 624 ms.
+GLPK output parsing took 3 ms.
+Iteration #1074 finished
+Running iteration #1075/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 1061 ms.
+GLPK output parsing took 3 ms.
+Iteration #1075 finished
+Running iteration #1076/1100
+GLPK input generation took 68 ms.
+Run time not limited.
+GLPK run took 2450 ms.
+GLPK output parsing took 6 ms.
+Iteration #1076 finished
+Running iteration #1077/1100
+GLPK input generation took 94 ms.
+Run time not limited.
+GLPK run took 26458 ms.
+GLPK output parsing took 8 ms.
+Iteration #1077 finished
+Running iteration #1078/1100
+GLPK input generation took 118 ms.
+Run time not limited.
+GLPK run took 82165 ms.
+GLPK output parsing took 10 ms.
+Iteration #1078 finished
+Running iteration #1079/1100
+GLPK input generation took 6 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #1079 finished
+Running iteration #1080/1100
+GLPK input generation took 5 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1080 finished
+Running iteration #1081/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #1081 finished
+Running iteration #1082/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1082 finished
+Running iteration #1083/1100
+GLPK input generation took 145 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1083 finished
+Running iteration #1084/1100
+GLPK input generation took 518 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 1 ms.
+Iteration #1084 finished
+Running iteration #1085/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1085 finished
+Running iteration #1086/1100
+GLPK input generation took 297 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1086 finished
+Running iteration #1087/1100
+GLPK input generation took 55 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 4 ms.
+Iteration #1087 finished
+Running iteration #1088/1100
+GLPK input generation took 70 ms.
+Run time not limited.
+GLPK run took 609 ms.
+GLPK output parsing took 5 ms.
+Iteration #1088 finished
+Running iteration #1089/1100
+GLPK input generation took 203 ms.
+Run time not limited.
+GLPK run took 79795 ms.
+GLPK output parsing took 18 ms.
+Iteration #1089 finished
+Running iteration #1090/1100
+GLPK input generation took 0 ms.
+Run time not limited.
+GLPK run took 15 ms.
+GLPK output parsing took 0 ms.
+Iteration #1090 finished
+Running iteration #1091/1100
+GLPK input generation took 1 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 1 ms.
+Iteration #1091 finished
+Running iteration #1092/1100
+GLPK input generation took 2 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1092 finished
+Running iteration #1093/1100
+GLPK input generation took 7 ms.
+Run time not limited.
+GLPK run took 16 ms.
+GLPK output parsing took 0 ms.
+Iteration #1093 finished
+Running iteration #1094/1100
+GLPK input generation took 12 ms.
+Run time not limited.
+GLPK run took 32 ms.
+GLPK output parsing took 2 ms.
+Iteration #1094 finished
+Running iteration #1095/1100
+GLPK input generation took 21 ms.
+Run time not limited.
+GLPK run took 78 ms.
+GLPK output parsing took 2 ms.
+Iteration #1095 finished
+Running iteration #1096/1100
+GLPK input generation took 33 ms.
+Run time not limited.
+GLPK run took 328 ms.
+GLPK output parsing took 3 ms.
+Iteration #1096 finished
+Running iteration #1097/1100
+GLPK input generation took 48 ms.
+Run time not limited.
+GLPK run took 811 ms.
+GLPK output parsing took 3 ms.
+Iteration #1097 finished
+Running iteration #1098/1100
+GLPK input generation took 67 ms.
+Run time not limited.
+GLPK run took 2496 ms.
+GLPK output parsing took 6 ms.
+Iteration #1098 finished
+Running iteration #1099/1100
+GLPK input generation took 93 ms.
+Run time not limited.
+GLPK run took 30670 ms.
+GLPK output parsing took 17 ms.
+Iteration #1099 finished
+Running iteration #1100/1100
+GLPK input generation took 114 ms.
+Run time not limited.
+GLPK run took 70918 ms.
+GLPK output parsing took 9 ms.
+Iteration #1100 finished
+Experiment set finished.
+Closing Base module.

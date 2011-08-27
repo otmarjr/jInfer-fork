@@ -378,9 +378,40 @@ TODO interpretation
 
 A related problem is how long it takes to create input for GLPK and then parse its results. We will use the same test data sets as in the previous case, but now we will gather times needed to communicate with GLPK.
 
-\placeholder
+\begin{table}
+  \caption{GLPK Interface Times}
+  \bigskip
+  \label{table-experiments-glpk-timing}
+  \centering
+  \begin{tabular}{l || l | l || l | l || l | l}
+	Data set & IC avg [ms] & IC stdev & OP avg [ms] & OP stdev & Tot avg [ms] & Tot stdev \\
+	\hline
+	\dataset{OVA1} & 36.46 & 66.8517 & 49.8 & 114.0687 & 86.26 & 150.1044 \\
+	\dataset{OVA2} & 39.52 & 75.8210 & 48.8 & 102.4484 & 88.32 & 154.9596 \\
+	\dataset{OVA3} & 34.1 & 74.1838 & 38.62 & 89.3772 & 72.72 & 134.7295 \\
+	\dataset{XMA-c} & 40.88 & 88.6632 & 33.84 & 65.8636 & 74.72 & 127.7338 \\
+	\dataset{XMA-p} & 36.54 & 70.7436 & 49.24 & 101.2412 & 85.78 & 145.2092 \\
+	\dataset{XMD} & 37.98 & 69.2719 & 32.88 & 70.2173 & 70.86 & 114.6692 \\
+	\dataset{MSH} & 40.42 & 91.9885 & 36.52 & 72.1018 & 76.94 & 138.6198 \\
+	\dataset{NTH} & 36.02 & 66.3403 & 38.06 & 88.8244 & 74.08 & 128.9974 \\
+	\dataset{100-100} & 46.5 & 103.3929 & 46.92 & 89.7049 & 93.42 & 158.7267 \\
+	\dataset{100-200} & 42.34 & 96.1204 & 38.22 & 90.0284 & 80.56 & 152.6534 \\
+	\dataset{100-1000} & 32.92 & 64.4534 & 42.1 & 89.4546 & 75.02 & 127.8541 \\
+	\dataset{0-0} & 46.8 & 123.5183 & 46.92 & 102.2601 & 93.72 & 181.5228 \\
+	\dataset{10-5} & 40.06 & 75.7370 & 40.1 & 72.4851 & 80.16 & 126.7135 \\
+	\dataset{20-20} & 33.72 & 70.7263 & 34.1 & 66.2781 & 67.82 & 116.3783 \\
+	\dataset{30-45} & 38.26 & 71.7549 & 45.94 & 110.1284 & 84.2 & 155.7594 \\
+	\dataset{40-80} & 37.06 & 67.0024 & 49.26 & 106.3185 & 86.32 & 144.9918 \\
+	\dataset{50-125} & 50.44 & 101.9162 & 84.76 & 364.7350 & 135.2 & 378.7835 \\
+	\dataset{60-180} & 38.38 & 89.3379 & 42.54 & 94.3742 & 80.92 & 149.6049 \\
+	\dataset{70-245} & 41.5 & 93.2951 & 40.3 & 93.4858 & 81.8 & 149.6797 \\
+	\dataset{80-320} & 51.92 & 121.9812 & 47.98 & 96.0904 & 99.9 & 171.4617 \\
+	\dataset{90-405} & 40.5 & 91.5373 & 36.46 & 88.5099 & 76.96 & 144.2890 \\
+	\dataset{100-500} & 37.82 & 85.7571 & 43.4 & 90.3257 & 81.22 & 141.9103 \\
+  \end{tabular}
+\end{table}
 
-TODO graph + interpretation
+TODO interpretation: it is interesting that even though $|V|$ and $|E|$ are increasing, the times remain almost the same. This probably means that the most of the time is spent in I/O.
 
 \subsection{GLPK: native vs. Cygwin}
 
@@ -473,9 +504,11 @@ Another way to compare the performance of these two GLPK versions is to see how 
     \includegraphics[angle=-90, width=\textwidth]{images/experiments/time-till-optimum}
 \end{figure}
 
-TODO interpretation. Graph should has its Y axis in log, stress this fact in the text too
+TODO interpretation. Graph has its Y axis in log, stress this fact in the text too
 
 TODO mention that these times show we cannot rely on GLPK alone! It just takes too long.
+
+TODO pie chart of all relevant times: grammar, model, GLPK in, GLPK, GLPK out
 
 \subsection{\heu{Random} vs. \heu{Fuzzy} vs. \heu{FIDAX}}
 
@@ -517,9 +550,23 @@ We will be gathering the running time of the CH itself and incumbent qualities (
 \end{algorithmic}
 \end{algorithm}
 
-\placeholder
+TODO repair outliers in these 2 graphs
 
-TODO graphs (files with similar behavior together) + interpretation.
+\begin{figure}
+  \caption{Random vs. Fuzzy vs. FIDAX - Quality}
+  \label{image-experiment-random-fuzzy-fidax-quality}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/random-fuzzy-fidax-quality}
+\end{figure}
+
+\begin{figure}
+  \caption{Random vs. Fuzzy vs. FIDAX - Time}
+  \label{image-experiment-random-fuzzy-fidax-time}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/random-fuzzy-fidax-time}
+\end{figure}
+
+TODO interpretation - Fuzzy consistently wins, but takes the longest time by far. Random is better than FIDAX in artificial as well as some real data.
 
 \subsubsection{Improving \heu{FIDAX} with \heu{Hungry}}
 
@@ -602,7 +649,7 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
 
 %         NB class BestStandaloneCH
 
-TODO compare all CHs - limit GLPK to ~ 1 second
+TODO compare all CHs - limit GLPK to 1 second
 TODO pool size 10 where applicable
 
 TODO chart for each file: CHs on the X axis, quality Y axis, boxplots
@@ -614,7 +661,7 @@ TODO chart for each file: CHs on the X axis, quality Y axis, boxplots
   \hline
   Machine           & Quad Core \\
   Input data        & all official test data sets \\
-  Iterations        & 20 \\
+  Iterations        & 50 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
   \hline

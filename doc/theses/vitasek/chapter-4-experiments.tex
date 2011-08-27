@@ -337,7 +337,40 @@ from the input XML file and how long does it take to create the AM model from th
 
 The experimental set will contain $50 * (11 + 11) = 1100$ configurations: 20 iterations for 11 test data sets plus 11 sized test data sets. There will be no CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
 
-TODO just table (mean, variance), no chart + interpretation
+\begin{table}
+  \caption{Grammar and Model Creation Times}
+  \bigskip
+  \label{table-experiments-grammar-model-timing}
+  \centering
+  \begin{tabular}{l || l | l || l | l || l | l}
+    Data set & GE avg [ms] & GE stdev & MC avg [ms] & MC stdev & Tot avg [ms] & Tot stdev \\
+    \hline
+    \dataset{OVA1}     & < 10 & - & < 10 & - < 10 & - \\
+    \dataset{OVA2}     & < 10 & - & < 10 & - < 10 & - \\
+    \dataset{OVA3}     & 42.94 & 19.8509 & 60.92 & 27.0848 & 103.86	& 31.6911 \\
+    \dataset{XMA-c}    & 140.32 &	33.2618 &	90.24 &	45.8803 & 230.56 & 56.2633 \\
+	\dataset{XMA-p}    & 7518.82 &	922.8882 &	10135.46 &	502.8997 & 17654.28	& 1353.8794 \\
+	\dataset{XMD}      & 979.18 &	307.1760 &	563.04 & 341.4697 & 1542.22	& 134.6883 \\
+	\dataset{MSH}      & 570.24 &	167.1119 &	225.48 &	90.6775 & 795.72 & 161.8340 \\ 
+	\dataset{NTH}      & 328.36 & 118.3766 &	1074.9 &	155.5604 & 1403.26 & 137.8695 \\
+	\dataset{100-100}  & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{100-200}  & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{100-1000} & 18.34 & 10.2372 & 18.84 & 1.0373 & 37.18 & 9.9338 \\
+	\dataset{0-0}      & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{10-5}     & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{20-20}    & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{30-45}    & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{40-80}    & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{50-125}   & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{60-180}   & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{70-245}   & < 10 & - & < 10 & - & < 10 & - \\
+	\dataset{80-320}   & < 10 & - & < 10 & - & 12.48 & 8.3574 \\
+	\dataset{90-405}   & < 10 & - & < 10 & - & 15.88 & 10.3778 \\
+	\dataset{100-500}  & < 10 & - & < 10 & - & 18.74 &	8.8889 \\
+  \end{tabular}
+\end{table}
+
+TODO interpretation
 
 \subsubsection{GLPK interface timing}
 

@@ -1,5 +1,3 @@
-set title 'Time limit vs. Quality'
-
 set style data boxplot
 set boxwidth 1.5 absolute
 

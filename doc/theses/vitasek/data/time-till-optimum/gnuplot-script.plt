@@ -1,5 +1,3 @@
-set title 'Time until Optimum'
-
 set style data boxplot
 set boxwidth 4 absolute
 

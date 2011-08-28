@@ -44,8 +44,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class FidaxWithHungry extends AbstractExperimentSet {
 
-  private File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
-
   @Override
   public String getName() {
     return "FIDAX with Hungry";
@@ -78,7 +76,7 @@ public class FidaxWithHungry extends AbstractExperimentSet {
         .append(data.getFile().getName())
         .append('\t');
     }
-    FileUtils.writeString(sb.toString(), finalCsv);
+    FileUtils.writeString(sb.toString(), resultCsv);
   }
 
   @Override
@@ -93,6 +91,6 @@ public class FidaxWithHungry extends AbstractExperimentSet {
     final StringBuilder sb = new StringBuilder();
     sb.append((iteration % numColumns) == 0 ? '\n': '\t')
       .append(e.getHighestQuality().getScalar());
-    FileUtils.appendString(sb.toString(), finalCsv);
+    FileUtils.appendString(sb.toString(), resultCsv);
   }
 }

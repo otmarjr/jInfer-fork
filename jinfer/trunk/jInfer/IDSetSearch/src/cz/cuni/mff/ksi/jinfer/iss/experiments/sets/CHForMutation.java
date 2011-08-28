@@ -20,8 +20,6 @@ import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.data.OfficialTestData;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.data.SizeTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.data.TestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
@@ -44,11 +42,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class CHForMutation extends AbstractExperimentSet {
 
-  private static final List<TestData> TEST_DATA = Arrays.<TestData>asList(
-          SizeTestData.GRAPH_80_320, SizeTestData.GRAPH_90_405,
-          SizeTestData.GRAPH_100_500, OfficialTestData.GRAPH_100_100,
-          OfficialTestData.GRAPH_100_200, OfficialTestData.GRAPH_100_1000);
-
   private static final int POOL_SIZE = 10;
 
   @Override
@@ -63,7 +56,7 @@ public class CHForMutation extends AbstractExperimentSet {
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
 
     for (int i = 0; i < Utils.getIterations(); i++) {
-      for (final TestData data : TEST_DATA) {
+      for (final TestData data : BestIHForGlpk.TEST_DATA) {
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
                 data.getKnownOptimum(), new Random(), improvement, new Weight(), new TimeIterations(1)));
         ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
@@ -77,7 +70,7 @@ public class CHForMutation extends AbstractExperimentSet {
   @Override
   protected void notifyStart() {
     final StringBuilder sb = new StringBuilder();
-    for (final TestData data : TEST_DATA) {
+    for (final TestData data : BestIHForGlpk.TEST_DATA) {
       sb.append("random-")
         .append(data.getFile().getName())
         .append('\t')
@@ -90,7 +83,7 @@ public class CHForMutation extends AbstractExperimentSet {
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
-    final int numColumns = TEST_DATA.size() * 2;
+    final int numColumns = BestIHForGlpk.TEST_DATA.size() * 2;
     final StringBuilder sb = new StringBuilder();
     sb.append((iteration % numColumns) == 0 ? '\n': '\t')
       .append(e.getHighestQuality().getScalar());

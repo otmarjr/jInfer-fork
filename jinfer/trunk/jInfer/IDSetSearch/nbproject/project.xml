@@ -16,6 +16,15 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>cz.cuni.mff.ksi.jinfer.basicigg</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>5</release-version>
+                        <specification-version>5.0</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>cz.cuni.mff.ksi.jinfer.jfreechart</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>

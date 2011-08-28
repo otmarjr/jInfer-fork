@@ -1,16 +1,16 @@
 /*
  *  Copyright (C) 2010 sviro
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,6 +32,8 @@ public final class RunningProject {
   private static Project project = null;
 
   private static Capabilities nextModuleCaps = null;
+
+  private static Properties defaultProperties = new Properties();
 
   private RunningProject() {
   }
@@ -77,16 +79,18 @@ public final class RunningProject {
   }
 
   /**
-   * Gets Properties of active project.
+   * Gets Properties of active project. If there is no project running, default
+   * properties will be returned.
    *
-   * @return propeties of active project.
+   * @return Properties of active project or default properties, if no project
+   * is running.
    */
   public static Properties getActiveProjectProps(final String moduleName) {
     if (isActiveProject()) {
       return new ModuleProperties(moduleName, project.getLookup().lookup(Properties.class));
     }
 
-    return new Properties();
+    return defaultProperties;
   }
 
   /**
@@ -115,5 +119,15 @@ public final class RunningProject {
    */
   public static void setNextModuleCaps(final Capabilities aNextModuleCaps) {
     nextModuleCaps = aNextModuleCaps;
+  }
+
+  /**
+   * Sets the default properties - those will be returned if there is no running
+   * project.
+   *
+   * @param p Properties to be set as default.
+   */
+  public static void setDefaultProperties(final Properties p) {
+    defaultProperties = p;
   }
 }

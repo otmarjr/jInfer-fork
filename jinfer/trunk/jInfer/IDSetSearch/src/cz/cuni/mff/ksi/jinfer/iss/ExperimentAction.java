@@ -69,7 +69,7 @@ public final class ExperimentAction implements ActionListener {
             }
           }
           s.close();
-          final int highestNumber = Integer.valueOf(number).intValue();
+          final int highestNumber = number == null ? -1 : Integer.valueOf(number).intValue();
           LOG.info("Restart file: experiment name: " + experimentName + ", highest number: " + highestNumber);
           runExperiment(experimentName, highestNumber + 1);
           return;

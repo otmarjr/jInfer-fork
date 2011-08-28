@@ -45,6 +45,8 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
    */
   protected abstract List<ExperimentParameters> getExperiments();
 
+  protected final File resultCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
+
   private static final Logger LOG = Logger.getLogger(AbstractExperimentSet.class);
 
   @Override

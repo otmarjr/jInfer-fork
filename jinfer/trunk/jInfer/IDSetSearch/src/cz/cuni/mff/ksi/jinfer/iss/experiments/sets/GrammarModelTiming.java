@@ -46,8 +46,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class GrammarModelTiming extends AbstractExperimentSet {
 
-  private final File finalCsv = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result.txt");
-
   @Override
   public String getName() {
     return "Grammar and Model Timing";
@@ -93,7 +91,7 @@ public class GrammarModelTiming extends AbstractExperimentSet {
         .append(data.getFile().getName())
         .append('\t');
     }
-    FileUtils.writeString(sb.toString(), finalCsv);
+    FileUtils.writeString(sb.toString(), resultCsv);
   }
 
   @Override
@@ -104,6 +102,6 @@ public class GrammarModelTiming extends AbstractExperimentSet {
       .append(e.getGrammarTime())
       .append('\t')
       .append(e.getModelTime());
-    FileUtils.appendString(sb.toString(), finalCsv);
+    FileUtils.appendString(sb.toString(), resultCsv);
   }
 }

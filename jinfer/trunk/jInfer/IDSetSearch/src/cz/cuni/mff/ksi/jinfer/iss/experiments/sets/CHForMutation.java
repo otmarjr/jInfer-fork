@@ -16,7 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.data.OfficialTestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.data.SizeTestData;
@@ -54,7 +56,6 @@ public class CHForMutation extends AbstractExperimentSet {
     return "CH for Mutation";
   }
 
-
   @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Mutation(0.1, 1));
@@ -73,5 +74,27 @@ public class CHForMutation extends AbstractExperimentSet {
     return ret;
   }
 
+  @Override
+  protected void notifyStart() {
+    final StringBuilder sb = new StringBuilder();
+    for (final TestData data : TEST_DATA) {
+      sb.append("random-")
+        .append(data.getFile().getName())
+        .append('\t')
+        .append("glpk-")
+        .append(data.getFile().getName())
+        .append('\t');
+    }
+    FileUtils.writeString(sb.toString(), resultCsv);
+  }
+
+  @Override
+  protected void notifyFinished(final Experiment e, final int iteration) {
+    final int numColumns = TEST_DATA.size() * 2;
+    final StringBuilder sb = new StringBuilder();
+    sb.append((iteration % numColumns) == 0 ? '\n': '\t')
+      .append(e.getHighestQuality().getScalar());
+    FileUtils.appendString(sb.toString(), resultCsv);
+  }
 
 }

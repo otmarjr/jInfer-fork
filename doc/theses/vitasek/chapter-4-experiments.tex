@@ -449,7 +449,7 @@ Our experimental set will contain 500 experimental configurations for each of th
 \begin{algorithmic}
 \ENSURE experimental set $ES$
 \STATE $ES \gets \emptyset$
-\FOR{$i = 1 \to 20$}
+\FOR{$i = 1 \to 50$}
 	\FOR{$time = 1 \to 49$ step $2$}
     \STATE $ES \gets ES \cup {CH = \heu{Glpk}(limit = time), IH = \emptyset}$
   \ENDFOR
@@ -462,7 +462,7 @@ Our experimental set will contain 500 experimental configurations for each of th
   \caption{Time vs. Quality}
   \label{image-experiment-time-vs-quality}
   \centering
-    \includegraphics[angle=-90, width=\textwidth]{images/experiments/time-vs-quality}
+    \includegraphics[width=\textwidth]{images/experiments/time-vs-quality}
 \end{figure}
 
 TODO interpretation
@@ -474,7 +474,7 @@ TODO interpretation
   \hline
   Machine           & Dual Core \\
   Input data        & all sized test data sets \\
-  Iterations        & 20 \\
+  Iterations        & 50 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
   \hline
@@ -545,12 +545,12 @@ The experimental set will contain 660 configurations in total: 3 different CHs *
 We will be gathering the running time of the CH itself and incumbent qualities (best in the pool) for GnuPlot.
 
 \begin{algorithm}
-\caption{Random vs. Fuzzy vs. FIDAX set generation}
+\caption{\heu{Random} vs. \heu{Fuzzy} vs. \heu{FIDAX} set generation}
 \label{listing-experiment-random-fuzzy-fidax}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
 \STATE $ES \gets \emptyset$
-\FOR{$i = 1 \to 20$}
+\FOR{$i = 1 \to 50$}
 	\FOR{$file \in $ official test data}
     \STATE $ES \gets ES \cup \{file, CH = \heu{Random}(pool = 10), IH = \emptyset\} \cup \{file, CH = \heu{Fuzzy}(pool = 10), IH = \emptyset\} \cup \{file, CH = \heu{FIDAX}, IH = \emptyset\}$
   \ENDFOR
@@ -678,6 +678,26 @@ TODO chart for each file: CHs on the X axis, quality Y axis, boxplots
 \bigskip
 \end{center}
 
+\begin{algorithm}
+\caption{Best Standalone CH set generation}
+\label{listing-experiment-best-standalone-ch}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+\FOR{$file \in $ official test data}
+	\FOR{$i = 1 \to 50$}
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = \emptyset\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Fuzzy}, IH = \emptyset\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Incremental}, IH = \emptyset\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Removal}, IH = \emptyset\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{FIDAX}, IH = \emptyset\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \emptyset\}$
+  \ENDFOR
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
+
 TODO XMA-c, XMA-p, MSH and NTH are uninteresting - every CH found the optimum every time
 
 \begin{figure}
@@ -695,11 +715,11 @@ TODO XMA-c, XMA-p, MSH and NTH are uninteresting - every CH found the optimum ev
 
 TODO interpretation - GLPK wins all the time, takes 1 second, which is OK.
 
-\subsection{Best IH for the best CH}
+\subsection{Best IH for Glpk}
 
 %         NB class BestIHForGlpk
 
-TODO with the best construction heuristic (GLPK), which IH is the best? Note that this needn't be the best combination!
+TODO with the best construction heuristic (Glpk), which IH is the best? Note that this needn't be the best combination!
 
 TODO we will ignore RandomRemove and RemoveWorst, they cannot help us
 
@@ -720,6 +740,24 @@ TODO we will be using only a few sets where we can observe improvement
 \end{tabular}
 \bigskip
 \end{center}
+
+\begin{algorithm}
+\caption{Best IH for \heu{Glpk} set generation}
+\label{listing-experiment-best-ih-for-glpk}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+\FOR{$file \in \{\dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
+	\FOR{$i = 1 \to 50$}
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Crossover}(ratio = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Hungry}\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Local Branching}(ratio = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Mutation}(ratio = 0.1, limit = 1)\}$
+  \ENDFOR
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
 
 \begin{table}
   \caption{Best IH for \heu{Glpk}}
@@ -763,6 +801,42 @@ TODO interpretation: \heu{Mutation} wins.
 
 TODO with \heu{Mutation} from the previous step, how about using Random as CH? Do we get an improvement?
 
+\begin{center}
+\bigskip
+\begin{tabular}{| l | l |}
+  \hline
+  \hline
+  Machine           & Dual Core \\
+  Input data        & \dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \\
+                    & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000} \\
+  Iterations        & 50 \\
+  Pool size         & 10 \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
+  \hline
+\end{tabular}
+\bigskip
+\end{center}
+
+\begin{algorithm}
+\caption{\heu{Random} as CH set generation}
+\label{listing-experiment-ch-for-mutation}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+\FOR{$file \in \{\dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
+	\FOR{$i = 1 \to 50$}
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = \heu{Mutation}(ratio = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Mutation}(ratio = 0.1, limit = 1)\}$
+  \ENDFOR
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
+
+TODO results
+
+TODO interpretation
+
 \subsection{Various $\alpha$, $\beta$}
 
 TODO remind what these parameters mean
@@ -771,13 +845,37 @@ TODO remind what these parameters mean
 
 TODO, we are expecting no influence
 
+TODO summary table
+
+TODO pseudocode
+
+TODO results
+
+TODO interpretation
+
 \subsubsection{Effects on the ID set}
 
 TODO
 
+TODO summary table
+
+TODO pseudocode
+
+TODO results
+
+TODO interpretation
+
 \subsection{Various Ratios in IHs}
 
 TODO
+
+TODO summary table
+
+TODO pseudocode
+
+TODO results
+
+TODO interpretation
 
 \subsection{Ignoring text data}
 
@@ -785,7 +883,26 @@ TODO
 
 TODO can we improve performance on huge data by ignoring textual content? Check for building as well as actual heu times.
 
-TODO try this on XMA-p
+\begin{center}
+\bigskip
+\begin{tabular}{| l | l |}
+  \hline
+  \hline
+  Machine           & Dual Core \\
+  Input data        & \dataset{XMA-p} \\
+  Iterations        & 50 \\
+  Pool size         & TODO \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
+  \hline
+\end{tabular}
+\bigskip
+\end{center}
+
+TODO pseudocode
+
+TODO results
+
+TODO interpretation
 
 \subsection{Chaining the IHs}
 

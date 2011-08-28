@@ -32,8 +32,6 @@ import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Hungry;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.LocalBranching;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import java.io.File;
@@ -50,7 +48,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class BestIHForGlpk extends AbstractExperimentSet {
 
-  private static final List<TestData> TEST_DATA = Arrays.<TestData>asList(
+  public static final List<TestData> TEST_DATA = Arrays.<TestData>asList(
           SizeTestData.GRAPH_80_320, SizeTestData.GRAPH_90_405,
           SizeTestData.GRAPH_100_500, OfficialTestData.GRAPH_100_100,
           OfficialTestData.GRAPH_100_200, OfficialTestData.GRAPH_100_1000);
@@ -86,14 +84,6 @@ public class BestIHForGlpk extends AbstractExperimentSet {
                 data.getKnownOptimum(),
                 new Glpk(1), Arrays.<ImprovementHeuristic>asList(new Mutation(0.1, 1)),
                 new Weight(), new TimeIterations(1)));
-        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
-                data.getKnownOptimum(),
-                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new RandomRemove(0.1)),
-                new Weight(), new TimeIterations(1)));
-        ret.add(new ExperimentParameters(data.getFile(), POOL_SIZE, 1, 1,
-                data.getKnownOptimum(),
-                new Glpk(1), Arrays.<ImprovementHeuristic>asList(new RemoveWorst()),
-                new Weight(), new TimeIterations(1)));
       }
     }
 
@@ -101,12 +91,12 @@ public class BestIHForGlpk extends AbstractExperimentSet {
   }
 
   private void writeHeader() {
-    FileUtils.writeString("Crossover-b\tCrossover-a\tHungry-b\tHungry-a\tLocalBranching-b\tLocalBranching-a\tMutation-b\tMutation-a\tRandomRemove-b\tRandomRemove-a\tRemoveWorst-b\tRemoveWorst-a", file);
+    FileUtils.writeString("Crossover-b\tCrossover-a\tHungry-b\tHungry-a\tLocalBranching-b\tLocalBranching-a\tMutation-b\tMutation-a", file);
   }
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
-    final int numColumns = 6;
+    final int numColumns = 4;
 
     file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
            TEST_DATA.get(iteration / (Utils.getIterations() * numColumns)).getFile().getName() + ".txt");

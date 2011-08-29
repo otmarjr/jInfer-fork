@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicigg.properties.BasicIGGPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
@@ -64,12 +65,33 @@ public class IgnoreTextData extends AbstractExperimentSet {
   }
 
   @Override
+  protected void notifyStart() {
+    final Properties p = new Properties();
+    p.setProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES_PROP, Boolean.TRUE.toString());
+    RunningProject.setDefaultProperties(p);
+  }
+
+  @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
+    final StringBuilder sb = new StringBuilder();
+    sb.append(e.getGrammarTime())
+      .append('\t')
+      .append(e.getModelTime())
+      .append('\n');
+    FileUtils.appendString(sb.toString(), resultCsv);
+
     if (iteration == Utils.getIterations() - 1) {
       final Properties p = new Properties();
       p.setProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES_PROP, Boolean.FALSE.toString());
       RunningProject.setDefaultProperties(p);
     }
+  }
+
+  @Override
+  protected void notifyFinishedAll() {
+    final Properties p = new Properties();
+    p.setProperty(BasicIGGPropertiesPanel.KEEP_ATTRIBUTES_PROP, Boolean.TRUE.toString());
+    RunningProject.setDefaultProperties(p);
   }
 
 }

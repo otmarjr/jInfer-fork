@@ -78,7 +78,7 @@ public abstract class AbstractExperimentSet implements ExperimentSet {
             LOG.error("Interrupted", ex);
           }
           catch (final Exception ex) {
-            LOG.error("Exception while running the experiment, details in the log gile", ex);
+            LOG.error("Exception while running the experiment, details in the log file", ex);
             abort = true;
             synchronized (monitor) {
               monitor.notifyAll();

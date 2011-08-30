@@ -16,18 +16,18 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.data.OfficialTestData;
+import cz.cuni.mff.ksi.jinfer.iss.experiments.data.TestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk.Glpk;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,8 +41,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class VariousBetas extends AbstractExperimentSet {
 
-  private static final double[] alphas = new double[] {0.1, 0.5, 1.0};
-  private static final double[] betas = new double[] {0.1, 0.5, 1.0};
+  private static final double[] alphas = new double[]{0.1, 0.25, 0.5, 0.75, 1.0};
+  private static final double[] betas = new double[]{0.1, 0.25, 0.5, 0.75, 1.0};
 
   @Override
   public String getName() {
@@ -51,24 +51,25 @@ public class VariousBetas extends AbstractExperimentSet {
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
-    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
-            new RandomRemove(0.1),
-            new Mutation(0.1, 1),
-            new RandomRemove(0.4),
-            new Crossover(0.3, 1),
-            new RemoveWorst());
+    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(new Identity());
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(alphas.length * betas.length);
 
     for (final double alpha : alphas) {
       for (final double beta : betas) {
-        ret.add(new ExperimentParameters(OfficialTestData.GRAPH_100_200.getFile(),
-                10, alpha, beta,
-                new Random(), improvement, new Weight(), new TimeIterations(100, 10000)));
+        for (final TestData data : OfficialTestData.values()) {
+          ret.add(new ExperimentParameters(data.getFile(),
+                  1, alpha, beta, data.getKnownOptimum(),
+                  new Glpk(), improvement, new Weight(), TimeIterations.NULL));
+        }
       }
     }
 
     return ret;
   }
 
+  @Override
+  protected void notifyFinished(Experiment e, int iteration) {
+    FileUtils.appendString(e.getWinner(), resultCsv);
+  }
 }

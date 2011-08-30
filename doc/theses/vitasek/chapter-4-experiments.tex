@@ -833,9 +833,16 @@ TODO with \heu{Mutation} from the previous step, how about using Random as CH? D
 \end{algorithmic}
 \end{algorithm}
 
-TODO results
+\begin{figure}
+  \caption{CH for \heu{Mutation}}
+  \label{image-experiment-ch-for-mutation}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/ch-for-mutation}
+\end{figure}
 
-TODO interpretation
+TODO odd are random, even are Glpk
+
+TODO interpretation - Glpk as CH takes always one second, with simpler inputs almost always finds the optimum (thus the capping), with more complex is Random not that bad in the end
 
 \subsection{Various $\alpha$, $\beta$}
 
@@ -900,7 +907,12 @@ TODO can we improve performance on huge data by ignoring textual content? Check 
 
 TODO pseudocode
 
-TODO results
+\begin{figure}
+  \caption{Ignoring Text Data}
+  \label{image-experiment-ignore-text-data}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/ignore-text-data}
+\end{figure}
 
 TODO interpretation
 

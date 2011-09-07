@@ -266,9 +266,16 @@ Keywords:
 \newtheorem*{define}{Definition}	% Definice nečíslujeme, proto "*"
 \newtheorem{example}{Example}
 
+%%% Tabulky v diplomové práci, existují-li.
+\chapwithtoc{List of Tables}
 
 %%% Jednotlivé kapitoly práce jsou pro přehlednost uloľeny v samostatných souborech
-%\include{uvod}
+\chapter{Úvod}
+\todo[inline]{TODO}
+\chapter{Použité technologie/pojmy}
+\todo[inline]{TODO}
+Krátce popsat co je XML Schema, DTD, XPath, XQuery, možná ňejaký automat apod. Prostě co budete dále v textu potřebovat. Skratky: XSD, ...
+
 \include{analysis_of_recent_approaches}
 \include{analysis_of_xquery}
 %\include{kap2}
@@ -285,11 +292,9 @@ Keywords:
 \bibliographystyle{plain}
 \bibliography{literature}
 
-%%% Tabulky v diplomové práci, existují-li.
-\chapwithtoc{List of Tables}
-
 %%% Pouľité zkratky v diplomové práci, existují-li, včetně jejich vysvětlení.
 \chapwithtoc{List of Abbreviations}
+\todo[inline]{Není nutno.}
 
 %%% Přílohy k diplomové práci, existují-li (různé dodatky jako výpisy programů,
 %%% diagramy apod.). Kaľdá příloha musí být alespoň jednou odkazována z vlastního

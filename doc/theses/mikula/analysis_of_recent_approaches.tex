@@ -1,39 +1,44 @@
 \chapter{Analysis of Recent Approaches}
 \todo[inline]{bibref na prehladovy clanok?}
-Approaches of XML Schema inference can be divided by several criteria. Basic division is by language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
+Approaches of XML schema inference can be divided by several criteria. A basic division is by the language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
 
-The type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods are based on experience with manual construction of schemas and their result commonly does not belong to any class of grammar. On the contrary, result of the grammar-inferring methods belongs to a particular class of languages with specific characteristics.
+According to \cite{Mlynkova:2008:AAX:1494650.1495496} The type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods are based on experience with manual construction of schemas and their result commonly does not belong to any class of grammar. On the contrary, result of the grammar-inferring methods belongs to a particular class of languages with specific characteristics.
 
-Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize operations over XML data may be developed and they are the most significant approaches in terms of this work.
+Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize operations over XML data may be developed and they are the most significant approaches in terms of this work.
 
-According to my best knowledge at the time of writing there is just one approach of this category. It utilizes a set of XQuery queries to discover keys and foreign keys\todo{ref do literatury?}.
+According to my best knowledge at the time of writing there is just one approach of this category. It utilizes a set of XQuery queries to discover keys and foreign keys\todo{ref do literatury? Ty by tady něškodily všude, u každé té kategorie.}.
 
-\section{XML-Documents-utilizing Approaches}
-The process of inference commonly used by a significant number of approaches can be summarized as the following: For each occurrence of element $e$ from the input XML documents and its subelements $e_1, e_2, ..., e_k$ a production $e \rightarrow e_1 e_2 ... e_k$ is constructed. The productions form so-called \emph{initial grammar} (IG). For each element type the productions are then merged, simplified and generalized using various methods and criteria. A common approach is so-called \emph{merging state algorithm}, where a \emph{prefix tree automaton} (PTA) is built from the productions of the same element type and the automaton is generalized via merging of its states. Finally, the generalized automaton/grammar is expressed in syntax of the respective XML schema language.
+\section{Approaches that Utilize XML Documents}
+The process of inference commonly used by a significant number of approaches is summarized in \cite{Mlynkova:2008:AAX:1494650.1495496} as the following one: For each occurrence of element $e$ from the input XML documents and its subelements $e_1, e_2, ..., e_k$ a production $e \rightarrow e_1 e_2 ... e_k$ is constructed. The productions form so-called \emph{initial grammar} (IG). For each element type the productions are then merged, simplified and generalized using various methods and criteria. A common approach is so-called \emph{merging state algorithm}, where a \emph{prefix tree automaton} (PTA) is built from the productions of the same element type and the automaton is generalized via merging of its states. Finally, the generalized automaton/grammar is expressed in syntax of the respective XML schema language.
+
+\todo[inline]{Tady by neškodilo dát odkazy na všechny ex. přístupy a říct, že popíšeme detailněji aspoň dva.}
 
 \subsection{XTRACT}
-The XTRACT \todo{bibref} system is an example of \emph{heuristic} \emph{merging state algorithm} creating the result in DTD. Its process of inference consists of three steps:
+The XTRACT \todo{bibref} system is an example of a \emph{heuristic} \emph{merging state algorithm} creating the result in DTD. Its process of inference consists of three steps:
 \begin{enumerate}
 \item Generalization - Generates a set of DTD candidates by searching the input for certain patterns and generalising corresponding fragments using regular expressions.
-\item Factoring - Groups of generalized candidate DTDs are factorized to a new ones by finding common sub-expressions to make them more concise.
+\item Factoring - Groups of generalized candidate DTDs are factorized to a new ones by finding common sub-expressions to make them more concise. \todo[inline]{priklad}
 \item Minimum Description Length (MDL) Principle - Composing a near-optimal DTD schema from the set of all generalized candidate DTDs.
 \end{enumerate}
 
 MDL is the most important step. It ranks each DTD candidate using two aspects - conciseness and preciseness. Conciseness of a DTD is expressed by using the number of bits required to describe the DTD (the smaller, the better). Preciseness of a DTD is expressed using the number of bits required for description of the input data using the DTD. In other words, the more accurately the structure is described, the fewer bits are required. Since the two conditions are contradictory, their balancing brings reasonable and realistic results.
 
 \subsection{SchemaMiner}
-The SchemaMiner system \todo{bibref} is an example of \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.
+The SchemaMiner system \todo{bibref} is another example of a \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.is another example of a \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.
 
 The elements with the same name but different content are supported only in XSDs and their inference requires exploitation of more sophisticated approaches than combining productions with the same element
 type. On the other hand, although the unordered sequences are a classical example of XSD “syntactic sugar”, their exploitation enables to define simple and, hence, realistic and usable schemas.
 
 \todo[inline]{Moze byt takto? Nejake dalsie pristupy?}
+\todo[inline]{U obou by neškodil příklad - tohle je velmi povrchní, pokud někde nečetl i ty články, nepochopí nic.}
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
-This method tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just these queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.
+This method is described in paper \cite{Necasky:2009:DXK:1529282.1529414}. It tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just these queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.
 
 \subsection{Keys and foreign keys}
-Authors introduce formalism that formalizes XML Schema keys.
+The authors introduce a formalism that formalizes XML Schema keys.
+
+\todo[inline]{Definovat, co pouzivame: XPath (aj s verziou), prikady, osy, lomitko, ...}
 
 \begin{define}[Key]
 A key is a construct $$(C, P, \{L\})$$ where $C$, $P$, $L$ are XPath paths without predicates that use only \texttt{child} and \texttt{descendant} axes.
@@ -47,19 +52,22 @@ A foreign key is a construct $$(C, (P_1, \{L_1\}) \Rightarrow (P_2, \{L_2\}))$$ 
 $C$ can be omitted as in the case of keys.
 \end{define}
 
+\todo[inline]{Potřebujeme tyto definice k něčemu dále?}
+
 Let $c$ be an element targeted by $C$ and $p_1$ be a element targeted by $P_1$ from $c$. The foreign key specifies that there is an element $p_2$ targeted by $P_2$ from $c$ such that the value targeted by $L_1$ from $p_1$ equals to the value targeted by $L_2$ from $p_2$. In other words, each element targeted by $P_1$ from $c$ refers to an element targeted by $P_2$ from $c$ via the pair $L_1$ and $L_2$.
 
-\subsection{Key and foreign key discovery}
+\subsection{Key and Foreign Key Discovery}
 \subsubsection{Joins in queries}
 To discover keys and foreign keys, the described method utilizes element/element joins.
 
 Assume a query $Q$ that joins a sequence of elements $S_1$ targeted by a path $P_1$ with a sequence of elements $S_2$ targeted by a path $P_2$ on a condition $L_1 = L_2$. It means that $Q$ joins an element $e_1$ from $S_1$ with an element $e_2$ from $S_2$ if $e_1/L_1$ equals to $e_2/L_2$.
 
 \todo[inline]{priklad?}
+\todo[inline]{Určitě. A hlavně je tento popis mnohem detailnější, přesnější a formaálnější než ty předchozí. Mělo by to být všechno v jednodném stylu.}
 
 Assuming that each join is done via a key/foreign key pair, it can be inferred from $Q$ that $L_1$ is a key for elements in $S_1$ or $L_2$ is a key for elements in $S_2$ and the other is a foreign key referencing the key.
 
-Authors introduces two observations:
+The authors introduce two following observations:
 \begin{enumerate}
 \renewcommand{\theenumi}{(O\arabic{enumi})}
 \renewcommand{\labelenumi}{\theenumi}
@@ -68,7 +76,8 @@ Authors introduces two observations:
 \end{enumerate}
 
 \subsubsection{Join patterns}
-For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \texttt{for} \emph{join pattern} and \texttt{let} \emph{join pattern} and look as following (the first is \texttt{for} \emph{join pattern}, the second is \texttt{let} \emph{join pattern}):
+For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \texttt{for} \emph{join pattern} and \texttt{let} \emph{join pattern} and they look as follow (the first is \texttt{for} \emph{join pattern}, the second is \texttt{let} \emph{join pattern}):
+
 \todo[inline]{spravne kreslit indexy pri pismenkach}
 \begin{verbatim}
 01  for e1 in P1               for $e1 in P1
@@ -81,9 +90,9 @@ For a certain join, the decision for one of the cases (O1) and (O2) is made by t
 $P_1$, $P_2$, $L_1$ and $L_2$ in the patterns are XPath paths without predicates. Both patterns differ only at line \texttt{03} where the former applies \texttt{for} while the other applies \texttt{let}. Line \texttt{01} is called \emph{declaration clause}. Line \texttt{03} is called \emph{join clause}. The path $P_1$ is called source path, $P_2$ \emph{target path}, and the condition $L_2 = \$e_1/L_1$ \emph{join condition}. $C_R$ is called \emph{return clause}. All paths $P_1^R$, ..., $P_k^R$ in $C_R$
 starting with $\$e2$ are called \emph{target return paths}.
 
-Each pattern occurrence is marked as \emph{repeating} or \emph{non-repeating}. An occurrence marked as \emph{repeating} means that each element targeted by $P_1$ can be joined with more than one elements targeted by $P_2$. In contrary, a pattern occurrence marked as \emph{non-repeating} means that each element targeted by $P_1$ can be joined with zero or one element targeted by $P_2$. In other words, the former means that the observation (O1) can be applied while the other means that (O2) can be applied to infer keys and foreign keys.
+Each pattern occurrence is marked as \emph{repeating} or \emph{non-repeating}. An occurrence marked as \emph{repeating} means that each element targeted by $P_1$ can be joined with more than one elements targeted by $P_2$. In contrast, a pattern occurrence marked as \emph{non-repeating} means that each element targeted by $P_1$ can be joined with zero or one element targeted by $P_2$. In other words, the former means that the observation (O1) can be applied while the latter means that (O2) can be applied to infer keys and foreign keys.
 
-Assume a pattern occurrence $\pi$. The decision is made on the base of the following rules (R1) - (R5). Only one rule can be applied. Process of decision starts with (R1). If (Ri) can not be applied, it tries (Ri+1). If any of the following rules (R1) - (R3) can be applied, $\pi$ is marked as \emph{repeating}. Each pattern occurence has also assigned its weight determining how sure the method is about the inferred statement.
+Assume a pattern occurrence $\pi$. The decision is made on the basis of the following rules (R1) - (R5). Only one rule can be applied. Process of decision starts with (R1). If (Ri) can not be applied, it tries (Ri+1). If any of the following rules (R1) - (R3) can be applied, $\pi$ is marked as \emph{repeating}. Each pattern occurence is also assigned with its weight determining how sure the method is about the inferred statement.
 
 \begin{enumerate}
 \renewcommand{\theenumi}{(R\arabic{enumi})}
@@ -144,7 +153,7 @@ If $\pi$ is marked as \emph{non-repeating}, the following statements with weight
 \section{Scoring function}
 It can happen that some of the assumptions the method is based on are not met. Assuming a set of queries, a key $K$ may be inferred from some query and processing of another query may result to denial of $K$ as a key. \todo[inline]{priklad?}
 
-Therefore, authors introduce a scoring function. If a new key $K$ is going to be inferred, it has assigned an initial score 0. Each inferred positive statement about $K$ increases the score of $K$ by the weight of the statement. Respectively, each negative statement about $K$ decreases the score by the respective weight. The resulting score therefore summarizes the weights of all inferred statements about $K$. A positive score means that $K$ is probably satisfied while negative means that $K$ is probably not satisfied. The higher the absolute value of the score is the higher the probability is.
+Therefore, the authors introduce a scoring function. If a new key $K$ is going to be inferred, it is assigned with an initial score 0. Each inferred positive statement about $K$ increases the score of $K$ by the weight of the statement. Respectively, each negative statement about $K$ decreases the score by the respective weight. The resulting score therefore summarizes the weights of all inferred statements about $K$. A positive score means that $K$ is probably satisfied while negative means that $K$ is probably not satisfied. The higher the absolute value of the score is, the higher the probability is.
 
 Let $K_1$, ..., $K_n$ be the inferred keys. Let $S_i$ be the score of $K_i$ and $N_i$ be the number of the inferred statements about $K_i$. The precision of the scoring is further enhanced on the base of the following observation. Assume a key $K_i = (C, P, \{L\})$ and $K_j = (C' , P, \{L\})$ where the path $C$ targets ancestors of the elements targeted by $C'$, i.e. the context specified by $C$ covers the context specified by $C'$. In that case it is also said that $K_i$ \emph{covers} $K_j$. It can be easily seen that if $K_i$ is satisfied, $K_j$ must be satisfied as well. On the other hand, if $K_j$ is not satisfied, $K_i$ can not be satisfied too. Therefore, if the score $S_i$ of $K_i$ is positive (i.e. $K_i$ is satisfied), $S_j$ is incremented with $S_i$ and $N_j$ with $N_i$ (i.e. $K_j$ is satisfied as well). Conversely, if the score $S_j$ of $K_j$ is negative (i.e. $K_j$ is not satisfied), $S_i$ is incremented with $S_j$ and $N_i$ with $N_j$ (i.e. $K_i$ can not be satisfied too).
 
@@ -154,4 +163,4 @@ $$S_i^{norm} = {S_i \over S^{max}} * (1 - {N^{max} - N_i \over \sum _{i=1}^n N_i
 \section{Conclusion}
 The output of the method is a list of scored keys and for each key a list foreign keys referencing the key. The score of a key can be negative or positive. A negative score means that the key is not specified by the XML documents while positive means that it is satisfied. The absolute value of the score means how sure the method is about it.
 
-Because the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.
+Since the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.

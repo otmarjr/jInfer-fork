@@ -25,6 +25,7 @@ MDL is the most important step. It ranks each DTD candidate using two aspects - 
 
 \subsection{SchemaMiner}
 The SchemaMiner system \todo{bibref} is another example of a \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.is another example of a \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.
+\todo[inline]{Definovat skratku XSD a co to je element type.}
 
 The elements with the same name but different content are supported only in XSDs and their inference requires exploitation of more sophisticated approaches than combining productions with the same element
 type. On the other hand, although the unordered sequences are a classical example of XSD “syntactic sugar”, their exploitation enables to define simple and, hence, realistic and usable schemas.
@@ -33,7 +34,7 @@ type. On the other hand, although the unordered sequences are a classical exampl
 \todo[inline]{U obou by neškodil příklad - tohle je velmi povrchní, pokud někde nečetl i ty články, nepochopí nic.}
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
-This method is described in paper \cite{Necasky:2009:DXK:1529282.1529414}. It tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just these queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.
+This method is described in paper \cite{Necasky:2009:DXK:1529282.1529414}. It tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} \todo{aj unique?} constructs.
 
 \subsection{Keys and foreign keys}
 The authors introduce a formalism that formalizes XML Schema keys.
@@ -76,7 +77,7 @@ The authors introduce two following observations:
 \end{enumerate}
 
 \subsubsection{Join patterns}
-For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \texttt{for} \emph{join pattern} and \texttt{let} \emph{join pattern} and they look as follow (the first is \texttt{for} \emph{join pattern}, the second is \texttt{let} \emph{join pattern}):
+For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \texttt{for} \emph{join pattern} and \texttt{let} \emph{join pattern} and they look as follows (the first is \texttt{for} \emph{join pattern}, the second is \texttt{let} \emph{join pattern}):
 
 \todo[inline]{spravne kreslit indexy pri pismenkach}
 \begin{verbatim}
@@ -150,6 +151,8 @@ If $\pi$ is marked as \emph{non-repeating}, the following statements with weight
 \item $(C^{\downarrow}, (P_1^{\downarrow C}, \{L_1\}) \Rightarrow (P_2^{\downarrow C}, \{L_2\}))$ is satisfied
 \end{itemize}
 
+\todo[inline]{Problém je, že tady ste v podstatě opsal ten článek. To je špatně. Analýza ex. přístupů by měla podat přehled toho, co se dnes v dané oblasti umí. Každý přístup by měl být popsán zhruba stejným stylem, stejně podrobně a s jednotným značením. Tj. ne zkopírovat různé odstavce z různých článků, z něčeho 20 řádků a z něčeho 6 stran. To není analýza ale plagiátorství.}
+
 \section{Scoring function}
 It can happen that some of the assumptions the method is based on are not met. Assuming a set of queries, a key $K$ may be inferred from some query and processing of another query may result to denial of $K$ as a key. \todo[inline]{priklad?}
 
@@ -164,3 +167,5 @@ $$S_i^{norm} = {S_i \over S^{max}} * (1 - {N^{max} - N_i \over \sum _{i=1}^n N_i
 The output of the method is a list of scored keys and for each key a list foreign keys referencing the key. The score of a key can be negative or positive. A negative score means that the key is not specified by the XML documents while positive means that it is satisfied. The absolute value of the score means how sure the method is about it.
 
 Since the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.
+
+\todo[inline]{Tady by se hodila nějaká srovnávací tabulka metod z různách pohledů (metoda, vstupy, výstupy). Dále pak kapitola na téma co dnešní metody neumí a čím se tedy v práci budeme zbývat. Tj. Nějaká návaznost k další kapitole.}

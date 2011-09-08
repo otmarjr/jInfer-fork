@@ -6,15 +6,18 @@ Most of sample queries in this chapter are taken from \cite{Walmsley:2007:XQU:12
 \todo[inline]{Overit si, ze mozem pouzivat tieto prevzate priklady.}
 
 \section{Structure of XML documents}
-Most of queries can be exploited to obtain some information about a structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What the outermost elements in these documents are, which elements can be contained within a certain element, whether they are optional or mandatory, etc.
+Most of queries can be exploited to obtain some information about a structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What the \todo{Co to znamená? Root element?}outermost elements in these documents are, which elements can be contained within a certain element, whether they are optional or mandatory, etc.
 
 Path expressions without predicates which use only child axis are the simpliest example of such queries. Path expression \texttt{/bib/book/author} indicates that element \texttt{bib} is the outermost element and it contains one or more elements \texttt{book} and these contain one or more elements \texttt{author}.
 
-Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} indicate that element \texttt{book} also contains element \texttt{title} and element \texttt{author} contains element \texttt{name}. The latter one uses also descendant axis.
+Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} indicate that element \texttt{book} also contains element \texttt{title} and element \texttt{author} contains element \texttt{name}. The latter one uses also descendant axis. \todo{A k čemu je tato informace při odvozování?}
 
 Besides elements, attributes can be processed exactly in the same way. Path expression \texttt{/bib/book/@ISBN} indicates that element \texttt{book} has attribute \texttt{ISBN}.
 
-However, statements of this kind are necessary for the XML schema inference, their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some element may not be queried at all, therefore they may not be mentioned in any query. In addition, these statements do not express any obligation of occurrence of elements and attributes or possible multiple occurrence of elements. We cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML documents analysis do not have these inadequacies.
+However, statements of this kind are necessary for the XML schema inference, their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some element may not be queried at all, therefore they may not be mentioned in any query \todo[inline]{Tady je ale několik případů - chtělo by popsat.
+1) Element není zapsaný v dotazu, ale dostanu ho výsledku - např. rok anrození autora, ptám-li se na autory.
+2) Element není zapsaný v dotazu, ale procházím ho při vyhodnocování -  např. to //autor
+3) Element je v části dokumentu, která se dotazu vlbec netýká.}. In addition, these statements do not express any obligation of occurrence of elements and attributes or possible multiple occurrence of elements \todo{Tak toto je asi taky diskutabilní, např. // by mohlo naznačovat více výskytů.}. We cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
 
 On the other hand, the structural inference could be useful when the entire set of all XML documents is not available and provided XML documents do not cover the structure completely.
 
@@ -119,6 +122,8 @@ Although determining built-in types of elements and attributes in simple queries
 \subsection{Enumeration}
 In several cases, XQuery \emph{if-then-else} construct may be used to branch the execution of query by all possible values of a certain variable. This is equivalent of \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
 
+\todo[inline]{Tady by to chtělo příklad. nebo to budeme řešit dál v navrženém algoritmu a toto je pouze diskuse případů?}
+
 \begin{verbatim}
 Query
 let $cat := doc("catalog.xml")/catalog 
@@ -197,7 +202,7 @@ return <item num="{$item/@num}"
 A common three-way join.
 
 \subsection{Join of Recursive Data}
-By the term 'recursive data' are meant XML elements that somehow reference items from the same set. Example of a query that operates upon such data follows.
+By the term ``recursive data'' are meant XML elements that somehow reference items from the same set. \todo[inline]{Tohle je velmi nepřesné. Tady asi myslíte reference, ale rekurzivní element je obecně element, kteý obsahuje sám sebe - např. kapitola má kapitoly.} Example of a query that operates upon such data follows.
 
 \begin{verbatim}
 declare function local:one_level($p as element()) as element()
@@ -219,7 +224,7 @@ declare function local:one_level($p as element()) as element()
 </parttree>
 \end{verbatim}
 
-Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with unspecified attribute \texttt{partof} are at the top of the recursive hierarchy while, in elements with this attribute specified it makes a reference to an element with attribute \texttt{partid} of the same value.
+Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with unspecified attribute \texttt{partof} are at the top of the recursive hierarchy while, in elements with this attribute specified it makes a reference to an element with attribute \texttt{partid} of the same value. \todo{Tahle věta je nějaká divná.}
 
 By using a similar approach as described in the paper \todo{ref} attribute \texttt{partid} can be marked as a key and attribute \texttt{partof} as its foreign key.
 

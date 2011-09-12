@@ -1,9 +1,11 @@
 TODO: anonymize!
 
+TODO: 2 values are totally unnecessary in fact, normalize all the results so that the sum of alpha and beta is 1!
+
 in artificial data there is the problem of elements having only one attribute
 
 100-100
-100-1000
+100-1000 - N/A
 100-200
 MSH - N/A
 NTH - N/A
@@ -125,6 +127,15 @@ submitter,organization
 subtest,test_ref
 uname_test,comment
 version,operator
+
+          Beta
+		      0,1	0,25	0,5	0,75	1
+Alpha	0,1	C	C	I	I	C
+	    0,25	I	C	C	C	I
+	    0,5	I	C	C	C	I
+	    0,75	I	I	I	C	C
+	    1	C	C	C	C	C
+
 
 XMA-c - N/A
 XMA-p - N/A

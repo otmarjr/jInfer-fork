@@ -330,4 +330,8 @@ public class Experiment {
   public HeuristicResult getConstructionResult() {
     return constructionResult;
   }
+
+  public Pair<Boolean, String> getTerminationReason() {
+    return terminationReason;
+  }
 }

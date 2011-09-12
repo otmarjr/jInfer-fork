@@ -1,0 +1,100 @@
+set=NTH.xml, alpha=0.1, beta=0.1
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.1, beta=0.25
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.1, beta=0.5
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.1, beta=0.75
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.1, beta=1.0
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.25, beta=0.1
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.25, beta=0.25
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.25, beta=0.5
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.25, beta=0.75
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.25, beta=1.0
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.5, beta=0.1
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.5, beta=0.25
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.5, beta=0.5
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.5, beta=0.75
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.5, beta=1.0
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.75, beta=0.1
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.75, beta=0.25
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.75, beta=0.5
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.75, beta=0.75
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=0.75, beta=1.0
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=1.0, beta=0.1
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=1.0, beta=0.25
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=1.0, beta=0.5
+CUSTOMER,NAME
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=1.0, beta=0.75
+CUSTOMER,ACCTBAL
+ORDERS,ORDERKEY
+
+set=NTH.xml, alpha=1.0, beta=1.0
+CUSTOMER,PHONE
+ORDERS,ORDERKEY
+

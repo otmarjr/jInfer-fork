@@ -1,0 +1,166 @@
+TODO: anonymize!
+
+in artificial data there is the problem of elements having only one attribute
+
+100-100
+100-1000
+100-200
+MSH - N/A
+NTH - N/A
+OVA1 - found 2 ID sets:
+
+affected,family
+component,type
+created,date
+criterion,test_ref
+cveid,status
+definition,id <- change
+file_test,comment
+modified,date
+oval,xsi:schemaLocation
+path,operator
+software,operation
+status_change,date
+submitter,organization
+subtest,test_ref
+
+and
+
+affected,family
+component,type
+created,date
+criterion,test_ref
+cveid,status
+definition,class <- change
+file_test,comment
+modified,date
+oval,xsi:schemaLocation
+path,operator
+software,operation
+status_change,date
+submitter,organization
+subtest,test_ref
+
+       		0,1	0,25	0,5	0,75	1
+alpha	0,1	I	C	C	I	I
+	    0,25	C	C	C	I	C
+	    0,5	C	I	I	I	C
+	    0,75	I	C	I	C	I
+	    1	I	C	I	I	C
+
+RE-RUN to confirm!!
+
+OVA2 - found 2 ID sets
+
+affected,family
+created,date
+criterion,test_ref
+cveid,status
+definition,class <- change
+modified,date
+oval,xsi:schemaLocation
+registry_test,comment
+software,operation
+status_change,date
+submitter,organization
+value,operator
+
+and
+
+affected,family
+created,date
+criterion,test_ref
+cveid,status
+definition,id <- change
+modified,date
+oval,xsi:schemaLocation
+registry_test,comment
+software,operation
+status_change,date
+submitter,organization
+value,operator
+
+		Beta
+     		  0,1	0,25	0,5	0,75	1
+Alpha	0,1	I	C	I	I	I
+	    0,25	I	I	C	I	I
+	    0,5	C	C	I	I	C
+	    0,75	C	I	C	I	I
+	    1	I	I	I	C	I
+
+RE-RUN to confirm!!
+
+OVA3 - found 2 ID sets:
+
+affected,family
+created,date
+criterion,test_ref
+cveid,status
+definition,class <- change
+machine_class,operator
+modified,date
+oval,xsi:schemaLocation
+rpminfo_test,comment
+software,operation
+status_change,date
+submitter,organization
+subtest,test_ref
+uname_test,comment
+version,operator
+
+and
+
+affected,family
+created,date
+criterion,test_ref
+cveid,status
+definition,id <- change
+machine_class,operator
+modified,date
+oval,xsi:schemaLocation
+rpminfo_test,comment
+software,operation
+status_change,date
+submitter,organization
+subtest,test_ref
+uname_test,comment
+version,operator
+
+XMA-c - N/A
+XMA-p - N/A
+
+XMD - found 2 ID sets:
+
+continent,name <- change
+country,id
+desert,id
+island,id
+lake,id
+mountain,height
+organization,abbrev
+province,id
+river,id
+sea,id
+
+and
+
+continent,id <- change
+country,id
+desert,id
+island,id
+lake,id
+mountain,height
+organization,abbrev
+province,id
+river,id
+sea,id
+
+		              Beta
+      		0,1	0,25	0,5	0,75	1
+Alpha	0,1	N	I	I	N	I
+	    0,25	N	N	N	I	I
+	    0,5	I	I	N	N	I
+	    0,75	N	N	N	N	N
+	    1	N	I	I	N	N
+
+RE-RUN to confirm!!

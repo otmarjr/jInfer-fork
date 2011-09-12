@@ -1,0 +1,75 @@
+set=XMA-p.xml, alpha=0.1, beta=0.1
+person,id
+
+set=XMA-p.xml, alpha=0.1, beta=0.25
+person,id
+
+set=XMA-p.xml, alpha=0.1, beta=0.5
+person,id
+
+set=XMA-p.xml, alpha=0.1, beta=0.75
+person,id
+
+set=XMA-p.xml, alpha=0.1, beta=1.0
+person,id
+
+set=XMA-p.xml, alpha=0.25, beta=0.1
+person,id
+
+set=XMA-p.xml, alpha=0.25, beta=0.25
+person,id
+
+set=XMA-p.xml, alpha=0.25, beta=0.5
+person,id
+
+set=XMA-p.xml, alpha=0.25, beta=0.75
+person,id
+
+set=XMA-p.xml, alpha=0.25, beta=1.0
+person,id
+
+set=XMA-p.xml, alpha=0.5, beta=0.1
+person,id
+
+set=XMA-p.xml, alpha=0.5, beta=0.25
+person,id
+
+set=XMA-p.xml, alpha=0.5, beta=0.5
+person,id
+
+set=XMA-p.xml, alpha=0.5, beta=0.75
+person,id
+
+set=XMA-p.xml, alpha=0.5, beta=1.0
+person,id
+
+set=XMA-p.xml, alpha=0.75, beta=0.1
+person,id
+
+set=XMA-p.xml, alpha=0.75, beta=0.25
+person,id
+
+set=XMA-p.xml, alpha=0.75, beta=0.5
+person,id
+
+set=XMA-p.xml, alpha=0.75, beta=0.75
+person,id
+
+set=XMA-p.xml, alpha=0.75, beta=1.0
+person,id
+
+set=XMA-p.xml, alpha=1.0, beta=0.1
+person,id
+
+set=XMA-p.xml, alpha=1.0, beta=0.25
+person,id
+
+set=XMA-p.xml, alpha=1.0, beta=0.5
+person,id
+
+set=XMA-p.xml, alpha=1.0, beta=0.75
+person,id
+
+set=XMA-p.xml, alpha=1.0, beta=1.0
+person,id
+

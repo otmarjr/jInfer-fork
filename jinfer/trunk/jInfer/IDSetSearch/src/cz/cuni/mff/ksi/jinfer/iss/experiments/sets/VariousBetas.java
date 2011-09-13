@@ -43,6 +43,7 @@ public class VariousBetas extends AbstractExperimentSet {
 
   private static final double[] alphas = new double[]{0.1, 0.25, 0.5, 0.75, 1.0};
   private static final double[] betas = new double[]{0.1, 0.25, 0.5, 0.75, 1.0};
+  private static final List<String> experimentNames = new ArrayList<String>();
 
   @Override
   public String getName() {
@@ -55,12 +56,14 @@ public class VariousBetas extends AbstractExperimentSet {
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(alphas.length * betas.length);
 
+    experimentNames.clear();
     for (final double alpha : alphas) {
       for (final double beta : betas) {
         for (final TestData data : OfficialTestData.values()) {
           ret.add(new ExperimentParameters(data.getFile(),
                   1, alpha, beta, data.getKnownOptimum(),
                   new Glpk(), improvement, new Weight(), TimeIterations.NULL));
+          experimentNames.add("set=" + data.getFile().getName() + ", alpha=" + alpha + ", beta=" + beta);
         }
       }
     }
@@ -69,7 +72,7 @@ public class VariousBetas extends AbstractExperimentSet {
   }
 
   @Override
-  protected void notifyFinished(Experiment e, int iteration) {
-    FileUtils.appendString(e.getWinner(), resultCsv);
+  protected void notifyFinished(final Experiment e, final int iteration) {
+    FileUtils.appendString("\n" + experimentNames.get(iteration) + e.getWinner(), resultCsv);
   }
 }

@@ -50,7 +50,7 @@ public class RandomLocalBranching extends AbstractExperimentSet {
 
     for (int i = 0; i < 3; i++) {
       ret.add(new ExperimentParameters(OfficialTestData.GRAPH_100_200.getFile(),
-              10, 1, 1, OfficialTestData.GRAPH_100_200.getKnownOptimum(),
+              POOL_SIZE, 1, 1, OfficialTestData.GRAPH_100_200.getKnownOptimum(),
               new Random(), improvement, new Weight(), new TimeIterations(1, 10000)));
     }
 

@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
+import cz.cuni.mff.ksi.jinfer.iss.ExperimentAction;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
@@ -45,24 +46,22 @@ import org.openide.util.lookup.ServiceProvider;
  * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
-public class ChainedIHs extends AbstractExperimentSet {
-
-  private static final int POOL_SIZE = 10;
+public class ChainedIHs1 extends AbstractExperimentSet {
 
   private File file;
 
   @Override
   public String getName() {
-    return "Chained IHs";
+    return "Chained IHs 1";
   }
 
   @Override
   protected List<ExperimentParameters> getExperiments() {
     final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
-            new RandomRemove(0.2),
+            new RandomRemove(0.1),
             new Mutation(0.1, 1),
-            new RandomRemove(0.2),
-            new Crossover(0.2, 1),
+            new RandomRemove(0.1),
+            new Crossover(0.1, 1),
             new RemoveWorst());
 
     final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
@@ -79,12 +78,17 @@ public class ChainedIHs extends AbstractExperimentSet {
     return ret;
   }
 
-    @Override
+  @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
     file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
            OfficialTestData.values()[iteration / Utils.getIterations()].getFile().getName() + ".txt");
 
     FileUtils.appendString(e.getTerminationReason().getSecond() + e.getCsv() + "\n", file);
+  }
+
+  @Override
+  protected void notifyFinishedAll() {
+    ExperimentAction.runExperiment(new ChainedIHs2().getName(), 0);
   }
 
 }

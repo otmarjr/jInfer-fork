@@ -50,8 +50,6 @@ public class RandomVsFuzzyVsFidaxStart extends AbstractExperimentSet {
   private File finalCsvQuality = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-quality.txt");
   private File finalCsvTime = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-time.txt");
 
-  private static final int POOL_SIZE = 10;
-
   @Override
   public String getName() {
     return "Random vs Fuzzy vs Fidax first step only";

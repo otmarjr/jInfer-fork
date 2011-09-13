@@ -16,24 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
-import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.ExperimentParameters;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.AbstractExperimentSet;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.Experiment;
+import cz.cuni.mff.ksi.jinfer.iss.ExperimentAction;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.data.OfficialTestData;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.data.TestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
-import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
-import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
-import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
@@ -44,9 +32,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
-public class ChainedIHs2 extends AbstractExperimentSet {
-
-  private File file;
+public class ChainedIHs2 extends ChainedIHs {
 
   @Override
   public String getName() {
@@ -54,32 +40,15 @@ public class ChainedIHs2 extends AbstractExperimentSet {
   }
 
   @Override
-  protected List<ExperimentParameters> getExperiments() {
-    final List<ImprovementHeuristic> improvement = Arrays.<ImprovementHeuristic>asList(
+  protected List<ImprovementHeuristic> getIHs() {
+    return Arrays.<ImprovementHeuristic>asList(
             new Crossover(0.1, 1),
             new RemoveWorst(),
             new Mutation(0.1, 1));
-
-    final List<ExperimentParameters> ret = new ArrayList<ExperimentParameters>(10);
-
-    for (final TestData data : OfficialTestData.values()) {
-      for (int i = 0; i < Utils.getIterations(); i++) {
-        ret.add(new ExperimentParameters(data.getFile(),
-                POOL_SIZE, 1, 1, data.getKnownOptimum(),
-                new Random(), improvement, new Weight(),
-                new TimeIterations(10000, 10000)));
-      }
-    }
-
-    return ret;
   }
 
-    @Override
-  protected void notifyFinished(final Experiment e, final int iteration) {
-    file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
-           OfficialTestData.values()[iteration / Utils.getIterations()].getFile().getName() + ".txt");
-
-    FileUtils.appendString(e.getTerminationReason().getSecond() + e.getCsv() + "\n", file);
+  @Override
+  protected void notifyFinishedAll() {
+    ExperimentAction.runExperiment(new ChainedIHs3().getName(), 0);
   }
-
 }

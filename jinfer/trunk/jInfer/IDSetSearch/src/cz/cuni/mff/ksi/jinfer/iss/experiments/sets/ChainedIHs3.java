@@ -16,10 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments.sets;
 
-import cz.cuni.mff.ksi.jinfer.iss.ExperimentAction;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentSet;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Hungry;
+import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.LocalBranching;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
@@ -33,26 +34,23 @@ import org.openide.util.lookup.ServiceProvider;
  * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
-public class ChainedIHs1 extends ChainedIHs {
+public class ChainedIHs3 extends ChainedIHs {
 
   @Override
   public String getName() {
-    return "Chained IHs 1";
+    return "Chained IHs 3";
   }
 
   @Override
   protected List<ImprovementHeuristic> getIHs() {
     return Arrays.<ImprovementHeuristic>asList(
+            new Crossover(0.1, 1),
             new RandomRemove(0.1),
             new Mutation(0.1, 1),
-            new RandomRemove(0.1),
-            new Crossover(0.1, 1),
-            new RemoveWorst());
+            new RemoveWorst(),
+            new LocalBranching(0.1, 1),
+            new RemoveWorst(),
+            new Hungry());
   }
 
-
-  @Override
-  protected void notifyFinishedAll() {
-    ExperimentAction.runExperiment(new ChainedIHs2().getName(), 0);
-  }
 }

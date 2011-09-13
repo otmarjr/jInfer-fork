@@ -53,8 +53,6 @@ public class BestIHForGlpk extends AbstractExperimentSet {
           SizeTestData.GRAPH_100_500, OfficialTestData.GRAPH_100_100,
           OfficialTestData.GRAPH_100_200, OfficialTestData.GRAPH_100_1000);
 
-  private static final int POOL_SIZE = 10;
-
   private File file;
 
   @Override

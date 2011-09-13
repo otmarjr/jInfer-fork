@@ -42,8 +42,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ExperimentSet.class)
 public class CHForMutation extends AbstractExperimentSet {
 
-  private static final int POOL_SIZE = 10;
-
   @Override
   public String getName() {
     return "CH for Mutation";

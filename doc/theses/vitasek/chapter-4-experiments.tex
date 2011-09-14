@@ -971,18 +971,6 @@ TODO we just note that there are differences, but will not investigate any furth
 
 TODO artificial data always has only one attribute
 
-\subsection{Various Ratios in IHs}
-
-TODO play around with ratio in Mutation, but perhaps this is not enough - in that case move this after chained IHs, and try to tweak the best one by fiddling around with ratios.
-
-TODO summary table
-
-TODO pseudocode
-
-TODO results
-
-TODO interpretation
-
 \subsection{Ignoring text data}
 
 %         NB class IgnoreTextData
@@ -1017,13 +1005,67 @@ TODO interpretation
 
 \subsection{Chaining the IHs}
 
+%         NB class ChainedIHsX
+
 TODO finally we got to the most interesting part, unfortunately this is basically guesswork and intuition.
 
 TODO we will try 3 different scenarios, see which performs the best on the data and then try to tweak it a bit.
 
-\subsection{Algorithms for various data characteristics}
+\begin{center}
+\bigskip
+\begin{tabular}{| l | l |}
+  \hline
+  \hline
+  Machine           & Dual Core \\
+  Input data        & all official test data sets \\
+  Iterations        & 20 \\
+  Pool size         & 10 \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
+  \hline
+\end{tabular}
+\bigskip
+\end{center}
 
-TODO
+\begin{algorithm}
+\caption{Chaining IHs}
+\label{listing-experiment-chaining-ihs}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+\STATE $\heu{MUT} \gets \heu{Mutation}(ratio = 0.1, limit = 1)$
+\STATE $\heu{CX} \gets \heu{Crossover}(ratio = 0.1, limit = 1)$
+\STATE $\heu{LB} \gets \heu{LocalBranching}(ratio = 0.1, limit = 1)$
+\STATE $\heu{RR} \gets \heu{RandomRemove}(ratio = 0.1)$
+\STATE $\heu{H} \gets \heu{Hungry}$
+\STATE $\heu{RW} \gets \heu{RemoveWorst}$
+\STATE $IHs \gets \emptyset$
+
+\STATE $IHs \gets IHs \cup (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW})$
+
+\STATE $IHs \gets IHs \cup (\heu{CX}, \heu{RW}, \heu{MUT})$
+
+\STATE $IHs \gets IHs \cup (\heu{CX}, \heu{RR}, \heu{MUT}, \heu{RW}, \heu{LB}, \heu{RW}, \heu{H})$
+
+\FOR{$ih \in IHs$}
+  \FOR{$file \in $ official test data}
+    \FOR{$i = 1 \to 20$}
+      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = ih\}$
+    \ENDFOR
+  \ENDFOR
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
+
+TODO result graphs
+
+MSH, NTH, XMA-c, XMA-p boring - finds the optimum in the first step
+
+TODO interpret
+
+TODO choose the best
+
+TODO experiment to try to improve the best
 
 \section{The "Best" Algorithm}
 

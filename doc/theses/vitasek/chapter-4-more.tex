@@ -1,0 +1,127 @@
+\subsubsection{Results for \dataset{OVA2}}
+
+found 2 ID sets
+
+affected,family
+created,date
+criterion,testref
+cveid,status
+\textbf{definition,class}
+modified,date
+oval,xsi:schemaLocation
+registrytest,comment
+software,operation
+statuschange,date
+submitter,organization
+value,operator
+
+and
+
+affected,family
+created,date
+criterion,test\_ref
+cveid,status
+\textbf{definition,id}
+modified,date
+oval,xsi:schemaLocation
+registrytest,comment
+software,operation
+statuschange,date
+submitter,organization
+value,operator
+
+		Beta
+     		  0,1	0,25	0,5	0,75	1
+Alpha	0,1	I	C	I	I	I
+	    0,25	I	I	C	I	I
+	    0,5	C	C	I	I	C
+	    0,75	C	I	C	I	I
+	    1	I	I	I	C	I
+
+no clear separation
+
+\subsubsection{Results for \dataset{OVA3}}
+
+found 2 ID sets:
+
+affected,family
+created,date
+criterion,testref
+cveid,status
+\textbf{definition,class}
+machineclass,operator
+modified,date
+oval,xsi:schemaLocation
+rpminfotest,comment
+software,operation
+statuschange,date
+submitter,organization
+subtest,testref
+unametest,comment
+version,operator
+
+and
+
+affected,family
+created,date
+criterion,testref
+cveid,status
+\textbf{definition,id}
+machineclass,operator
+modified,date
+oval,xsi:schemaLocation
+rpminfotest,comment
+software,operation
+statuschange,date
+submitter,organization
+subtest,testref
+unametest,comment
+version,operator
+
+          Beta
+		      0,1	0,25	0,5	0,75	1
+Alpha	0,1	C	C	I	I	C
+	    0,25	I	C	C	C	I
+	    0,5	I	C	C	C	I
+	    0,75	I	I	I	C	C
+	    1	C	C	C	C	C
+
+no clear separation
+
+\subsubsection{Results for \dataset{XMD}}
+
+found 2 ID sets:
+
+\textbf{continent,name}
+country,id
+desert,id
+island,id
+lake,id
+mountain,height
+organization,abbrev
+province,id
+river,id
+sea,id
+
+and
+
+\textbf{continent,id}
+country,id
+desert,id
+island,id
+lake,id
+mountain,height
+organization,abbrev
+province,id
+river,id
+sea,id
+
+		              Beta
+      		0,1	0,25	0,5	0,75	1
+Alpha	0,1	N	I	I	N	I
+	    0,25	N	N	N	I	I
+	    0,5	I	I	N	N	I
+	    0,75	N	N	N	N	N
+	    1	N	I	I	N	N
+
+TODO separation for XMD

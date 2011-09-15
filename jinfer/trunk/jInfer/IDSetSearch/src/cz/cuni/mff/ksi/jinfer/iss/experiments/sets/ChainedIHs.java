@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simply runs the same experiment ten times.
+ * TODO vektor Comment!
  *
  * @author vektor
  */

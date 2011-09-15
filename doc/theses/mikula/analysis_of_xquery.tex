@@ -6,18 +6,18 @@ Most of sample queries in this chapter are taken from \cite{Walmsley:2007:XQU:12
 \todo[inline]{Overit si, ze mozem pouzivat tieto prevzate priklady.}
 
 \section{Structure of XML documents}
-Most of queries can be exploited to obtain some information about a structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What the \todo{Co to znamená? Root element?}outermost elements in these documents are, which elements can be contained within a certain element, whether they are optional or mandatory, etc.
+Most of queries can be exploited to obtain some information about a structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What the root elements in these documents are, which elements can be contained within a certain element, whether they are optional or mandatory, etc.
 
 Path expressions without predicates which use only child axis are the simpliest example of such queries. Path expression \texttt{/bib/book/author} indicates that element \texttt{bib} is the outermost element and it contains one or more elements \texttt{book} and these contain one or more elements \texttt{author}.
 
-Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} indicate that element \texttt{book} also contains element \texttt{title} and element \texttt{author} contains element \texttt{name}. The latter one uses also descendant axis. \todo{A k čemu je tato informace při odvozování?}
+Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} indicate that element \texttt{book} also contains element \texttt{title} and element \texttt{author} contains element \texttt{name}. The latter one uses also descendant axis. That means the query considers all elements \texttt{author} in the document, thus it is a hint that maybe there are several elements named \texttt{author} but with different absolute paths and all of them contain an element \texttt{name}.
 
 Besides elements, attributes can be processed exactly in the same way. Path expression \texttt{/bib/book/@ISBN} indicates that element \texttt{book} has attribute \texttt{ISBN}.
 
-However, statements of this kind are necessary for the XML schema inference, their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some element may not be queried at all, therefore they may not be mentioned in any query \todo[inline]{Tady je ale několik případů - chtělo by popsat.
+However, statements of this kind are necessary for the XML schema inference, their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some elements may not be queried at all, therefore they may not be mentioned in any query \todo[inline]{Tady je ale několik případů - chtělo by popsat.
 1) Element není zapsaný v dotazu, ale dostanu ho výsledku - např. rok anrození autora, ptám-li se na autory.
 2) Element není zapsaný v dotazu, ale procházím ho při vyhodnocování -  např. to //autor
-3) Element je v části dokumentu, která se dotazu vlbec netýká.}. In addition, these statements do not express any obligation of occurrence of elements and attributes or possible multiple occurrence of elements \todo{Tak toto je asi taky diskutabilní, např. // by mohlo naznačovat více výskytů.}. We cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
+3) Element je v části dokumentu, která se dotazu vlbec netýká.}. In addition, these statements do not express any obligation of occurrence of elements and attributes nor clearly determine multiple occurrence of elements. We cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
 
 On the other hand, the structural inference could be useful when the entire set of all XML documents is not available and provided XML documents do not cover the structure completely.
 
@@ -62,7 +62,7 @@ Contrary to the multiple occurrence, numerous XQuery constructs limit number of 
 /catalog/product[1]/number lt 10
 \end{verbatim}
 
-\texttt{lt} is a representant of so called \emph{value comparison operators} \todo{referencia} which operate two sequences of zero or one item. If an operand of a value comparison operator is a sequence of more than one item, then a \emph{type error} \todo{referencia} is raised.
+\texttt{lt} is a representant of so called \emph{value comparison operators} \todo{referencia na def} which operate two sequences of zero or one item. If an operand of a value comparison operator is a sequence of more than one item, then a \emph{type error} \todo{referencia na def} is raised.
 
 \begin{verbatim}
 for $item in //item 
@@ -79,7 +79,15 @@ Those are constructs indicating limitation to zero or one occurrence. Function \
 \section{Element and Attribute Types}
 
 \subsection{XML Schema Built-in Types}
-XML Schema built-in types of elements and attributes can be inferred from the XML documents by analysing their content. Since the count of built-in types is 44 and inheritance is involved, such analysis may be imprecise, especially when a large enough set of XML documents is not available. \todo[inline]{urcite priklad} This is when a set of XQuery queries may come in handy.
+XML Schema built-in types of elements and attributes can be inferred from the XML documents by analysing their content. Since the count of built-in types is 44 and inheritance is involved, such analysis may be imprecise, especially when a large enough set of XML documents is not available. This is when a set of XQuery queries may come in handy. For example, consider the following occurrences of element \texttt{a}.
+
+\begin{verbatim}
+<a>1</a>
+<a>6</a>
+<a>18</a>
+\end{verbatim}
+
+These three occurrences are not sufficient enough to determine the accurate type of element \texttt{a}, because values \texttt{1}, \texttt{6}, \texttt{18} are valid values of several types: \texttt{decimal}, \texttt{integer}, \texttt{byte}, \texttt{short}, \texttt{unsignedInt}, \texttt{positiveInteger} and many others. The following text introduces some possibilities of a type inference from queries.
 
 If a value of an element or attribute is used in an expression, then this expression could be often exploited to determine a type of the value. Comparing the value to another value of a known type and supplying the value to a function call as an argument of particular type are examples of these expressions as shown below.
 
@@ -118,11 +126,10 @@ declare variable $firstNumber as xs:integer
 \end{verbatim}
 
 Although determining built-in types of elements and attributes in simple queries may seem quite straightforward, reliable method would face some issues. More complex queries are commonly branched by \emph{if-then-else} construct. These branches can contain several contradictionary fragments from the view of type inference. Therefore, the reliable method would take the query structure into consideration and further research would be needed.
+\todo[inline]{Tady by to chtělo příklad. nebo to budeme řešit dál v navrženém algoritmu a toto je pouze diskuse případů?}
 
 \subsection{Enumeration}
 In several cases, XQuery \emph{if-then-else} construct may be used to branch the execution of query by all possible values of a certain variable. This is equivalent of \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
-
-\todo[inline]{Tady by to chtělo příklad. nebo to budeme řešit dál v navrženém algoritmu a toto je pouze diskuse případů?}
 
 \begin{verbatim}
 Query
@@ -147,7 +154,7 @@ Finding such patterns in queries could be useful in combination with analysis of
 
 \section{Keys}
 
-\subsection{Approach from [TODO citace]}
+\subsection{Approach from \cite{Necasky:2009:DXK:1529282.1529414}}
 Paper \todo{link} introduces a method of discovering keys and foreign keys by investigation of joins in queries. The basis of this discovery is a search for particular forms of joins, so called \emph{join patterns} \todo{uviest ich sem?}, but the joins are processed only if they are found in a particular syntactic form. Therefore joins with the same semantics written in different syntax are not taken into consideration.
 
 The following examples are queries that could be processed by a similar method but the actual method will not use them.
@@ -224,9 +231,9 @@ declare function local:one_level($p as element()) as element()
 </parttree>
 \end{verbatim}
 
-Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with unspecified attribute \texttt{partof} are at the top of the recursive hierarchy while, in elements with this attribute specified it makes a reference to an element with attribute \texttt{partid} of the same value. \todo{Tahle věta je nějaká divná.}
+Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with unspecified attribute \texttt{partof} are at the top of the recursive hierarchy while, each element with this attribute specified references an element with attribute \texttt{partid} of the same value.
 
-By using a similar approach as described in the paper \todo{ref} attribute \texttt{partid} can be marked as a key and attribute \texttt{partof} as its foreign key.
+By using a similar approach as described in \cite{Necasky:2009:DXK:1529282.1529414} attribute \texttt{partid} can be marked as a key and attribute \texttt{partof} as its foreign key.
 
 \subsection{Negative Statements about Uniqueness}
 In many cases a statement refusing uniqueness of element or attribute values could be inferred. Such statements may be helpful in combination with other methods in its process of making a decision whether a particular element or attribute is unique or not.

@@ -29,7 +29,7 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Simply runs the same experiment ten times.
+ * TODO vektor Comment!
  *
  * @author vektor
  */

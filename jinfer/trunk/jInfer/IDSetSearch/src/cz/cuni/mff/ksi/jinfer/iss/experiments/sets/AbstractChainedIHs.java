@@ -33,13 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO vektor Comment!
+ * Base class for experiments testing the performance of a chain of IHs.
  *
  * @author vektor
  */
-public abstract class ChainedIHs extends AbstractExperimentSet {
-
-  private File file;
+public abstract class AbstractChainedIHs extends AbstractExperimentSet {
 
   protected abstract List<ImprovementHeuristic> getIHs();
 
@@ -63,7 +61,7 @@ public abstract class ChainedIHs extends AbstractExperimentSet {
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
-    file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
+    final File file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
            OfficialTestData.values()[iteration / Utils.getIterations()].getFile().getName() + ".txt");
 
     FileUtils.appendString(e.getTerminationReason().getSecond() + e.getCsv() + "\n", file);

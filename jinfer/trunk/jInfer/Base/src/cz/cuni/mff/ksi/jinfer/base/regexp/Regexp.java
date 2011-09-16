@@ -470,10 +470,12 @@ public class Regexp<T> {
   }
 
   /**
-   * Returns the suffix of this concatenation, from parameter <code>from</code> to the end.
+   * Returns a new concatenation containing the suffix of the specified
+   * concatenation, that is children from index specified by parameter
+   * <code>from</code> up to the end.
    *
-   * @param from
-   * @return TODO vektor Comment
+   * @param from Index from which to start taking the suffix.
+   * @return New concatenation containing the suffix.
    */
   public Regexp<T> getEnd(final int from) {
     if (!isConcatenation()) {

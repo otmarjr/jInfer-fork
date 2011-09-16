@@ -224,12 +224,26 @@ public final class BaseUtils {
     return l2.containsAll(l1);
   }
 
-  // TODO vektor Comment, JUnit test!
+  /**
+   * Checks whether two objects are equal in the following sense.
+   * <ul>
+   *   <li>If both are <code>null</code>, they are <strong>equal</strong>.</li>
+   *   <li>If one of them is <code>null</code> and the other is not, they are
+   *       <strong>not equal</strong>.</li>
+   *   <li>If both are not <code>null</code>, their equality is decided by the
+   *       call to their usual {@link Object#equals(Object)}.</li>
+   * </ul>
+   * @param <X> Type of both objects to be checked.
+   * @param arg1 First object to be checked.
+   * @param arg2 Second object to be checked.
+   * @return <code>True</code> if the specified objects are equal in the sense
+   * described above, <code>false</code> otherwise.
+   */
   public static <X> boolean equal(final X arg1, final X arg2) {
-    if (arg1 == null && arg1 == null) {
+    if (arg1 == null && arg2 == null) {
       return true;
     }
-    if (arg2 == null) {
+    if (arg1 == null) {
       return false;
     }
     return arg1.equals(arg2);

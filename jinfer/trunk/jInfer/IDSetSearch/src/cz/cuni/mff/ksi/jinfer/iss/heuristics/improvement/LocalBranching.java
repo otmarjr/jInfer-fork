@@ -27,8 +27,11 @@ import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.IdSet;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * This heuristic works by creating a constrained sub-problem and then solving
@@ -49,6 +52,8 @@ import java.util.List;
  * @author vektor
  */
 public class LocalBranching implements ImprovementHeuristic {
+
+  private static final Logger LOG = Logger.getLogger(LocalBranching.class);
 
   private final double ratio;
   private final int timeLimit;
@@ -78,13 +83,19 @@ public class LocalBranching implements ImprovementHeuristic {
 
     final long k = Math.round(model.getAMs().size() * ratio);
 
-    final String glpkInput = GlpkInputGenerator.generateGlpkInput(model, experiment.getAlpha(), experiment.getBeta(), incumbent.getFirst().getMappings(), k);
+    try {
+      final String glpkInput = GlpkInputGenerator.generateGlpkInput(
+              model, experiment.getAlpha(), experiment.getBeta(), incumbent.getFirst().getMappings(), k);
+      final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(glpkInput, timeLimit), model, true);
 
-    final IdSet improved = GlpkOutputParser.getIDSet(GlpkRunner.run(glpkInput, timeLimit), model, true);
-
-    final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);
-    ret.add(improved);
-    callback.finished(ret);
+      final List<IdSet> ret = new ArrayList<IdSet>(feasiblePool);
+      ret.add(improved);
+      callback.finished(ret);
+    }
+    catch (final IOException e) {
+      LOG.error("Problem creating GLPK input.", e);
+      callback.finished(Collections.<IdSet>emptyList());
+    }
   }
 
   @Override

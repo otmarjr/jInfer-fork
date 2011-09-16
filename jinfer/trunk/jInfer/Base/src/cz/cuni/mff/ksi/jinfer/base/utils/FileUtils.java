@@ -21,8 +21,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import org.apache.log4j.Logger;
 
 /**
@@ -34,7 +36,7 @@ public final class FileUtils {
 
   private FileUtils() {
   }
-  
+
   private static final Logger LOG = Logger.getLogger(FileUtils.class);
 
   public static final String JINFER_DIR = System.getProperty("user.home") + "/.jinfer";
@@ -170,5 +172,47 @@ public final class FileUtils {
     if (!parentDir.exists() || !parentDir.isDirectory()) {
       parentDir.mkdirs();
     }
+  }
+
+
+  /**
+   * Reads the specified {@link Reader} and writes its content to the specified
+   * {@link StringBuilder}.
+   *
+   * @param r Reader to read from.
+   * @param sb String buffer to write to.
+   * 
+   * @throws InterruptedException If the thread is interrupted.
+   * @throws IOException If there is a problem with reading.
+   */
+  public static void readerToBuilder(final Reader r, final StringBuilder sb)
+          throws InterruptedException, IOException {
+    final BufferedReader reader = new BufferedReader(r);
+
+    String line = reader.readLine();
+    while (line != null) {
+      sb.append(line).append('\n');
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      line = reader.readLine();
+    }
+  }
+
+  /**
+   * Loads the specified resource file and returns it as String.
+   *
+   * @param resource Path to the Java resource.
+   * @return String content of the resource file.
+   *
+   * @throws InterruptedException If the thread is interrupted.
+   * @throws IOException If there is a problem with reading.
+   */
+  public static String loadTemplate(final String resource)
+          throws IOException, InterruptedException {
+    final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+    final StringBuilder ret = new StringBuilder();
+    readerToBuilder(new InputStreamReader(is), ret);
+    return ret.toString();
   }
 }

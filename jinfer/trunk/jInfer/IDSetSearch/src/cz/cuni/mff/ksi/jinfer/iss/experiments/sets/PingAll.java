@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 vitasek
+ * Copyright (C) 2011 vektor
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,9 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Test experiment to touch all the official test data files.
  *
- * @author vitasek
+ * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
 public class PingAll extends AbstractExperimentSet {

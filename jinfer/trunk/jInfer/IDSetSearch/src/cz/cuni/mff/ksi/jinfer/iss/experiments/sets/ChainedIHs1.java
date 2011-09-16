@@ -28,12 +28,12 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO vektor Comment!
+ * Experiment testing the performance of Scenario 1: RR, MUT, RR, CX, RW.
  *
  * @author vektor
  */
 @ServiceProvider(service = ExperimentSet.class)
-public class ChainedIHs1 extends ChainedIHs {
+public class ChainedIHs1 extends AbstractChainedIHs {
 
   @Override
   public String getName() {

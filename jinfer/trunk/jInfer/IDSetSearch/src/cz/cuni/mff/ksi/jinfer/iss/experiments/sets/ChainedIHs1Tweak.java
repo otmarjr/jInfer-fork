@@ -31,9 +31,7 @@ import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Crossover;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Mutation;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RandomRemove;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.RemoveWorst;
-import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,6 +95,7 @@ public class ChainedIHs1Tweak extends AbstractExperimentSet {
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
+    // TODO vektor Better approach to this is the list of experiment names, see VariousBetas
     final int iter1 = iteration / Utils.getIterations(); // get rid of the innermost loop
     final TestData data = TEST_DATA.get(iter1 % TEST_DATA.size());
     final int iter2 = iter1 / TEST_DATA.size(); // get rid of the data loop

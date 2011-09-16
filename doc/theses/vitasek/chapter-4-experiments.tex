@@ -1,5 +1,7 @@
 \chapter{Experiments}
 
+% TODO I cannot stress this enough times: make sure there is an explanation of heuristics notation used in pseudocode listing, SOMEWHERE
+
 At this point of the thesis the reader should be already familiar with the notions we have introduced: the problem of finding the optimal ID set (with respect to some \textit{weight}), that it is directly related to the NP-complete problem of finding the maximal weighted independent set, that this can be solved using the MIP approach, and that we can try to do better than just let the solver work: by employing various heuristics.
 
 Now it is the time to move our ideas into reality and test their feasibility. But before we start talking about the experiments themselves, we should try to formulate our aim, what we will be trying to establish.\\
@@ -1009,7 +1011,7 @@ TODO interpretation
 
 TODO finally we got to the most interesting part, unfortunately this is basically guesswork and intuition.
 
-TODO we will try 3 different scenarios, see which performs the best on the data and then try to tweak it a bit.
+TODO we will try 3 different scenarios, see which performs the best on the data and then try to tweak it a bit. First we set all ratios to 0.1, as soon as we find the best scenario, we will tweak it.
 
 \begin{center}
 \bigskip
@@ -1057,15 +1059,35 @@ TODO we will try 3 different scenarios, see which performs the best on the data 
 \end{algorithmic}
 \end{algorithm}
 
-TODO result graphs
+TODO result graphs - just a \textbf{commented} sample
 
 MSH, NTH, XMA-c, XMA-p boring - finds the optimum in the first step
 
-TODO interpret
+TODO choose the best - see how many times in the 20 runs did they find optimum
 
-TODO choose the best
+             1       2      3
+100-100      20      19     20
+100-200      19      18     17
+100-1000     4       1      5
+OVA1         20      20     20
+OVA2         19      13     18
+OVA3         17      18     20
 
-TODO experiment to try to improve the best
+Strategies 1 and 3 are very similar, we shall choose \textbf{1} for its simplicity to tune the parameters.
+
+\subsubsection{Improving Strategy 1}
+
+TODO remind what Strategy 1 is, list all ratios we will be using, list files we will be using.
+
+TODO we will be gathering for each run the following: what were the parameters, how long did it take and whether it found optimum
+
+TODO summary table
+
+TODO pseudocode
+
+TODO results and interpretation
+
+RR = 0.5 (strong diversification), MUT = 0.05 (only a few fixed), CX = 0.2 (looking for commonalities among 1/5th of the pool)
 
 \section{The "Best" Algorithm}
 

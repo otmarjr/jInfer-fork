@@ -29,8 +29,6 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.fidax.Fidax;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Hungry;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.improvement.Identity;
-import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

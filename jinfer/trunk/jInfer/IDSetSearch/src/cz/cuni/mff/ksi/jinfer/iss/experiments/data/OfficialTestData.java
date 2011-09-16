@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 vitasek
+ * Copyright (C) 2011 vektor
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,9 @@ import cz.cuni.mff.ksi.jinfer.iss.utils.Constants;
 import static cz.cuni.mff.ksi.jinfer.iss.experiments.data.FileCharacteristics.*;
 
 /**
+ * Enum listing all the official test data files.
  *
- * @author vitasek
+ * @author vektor
  */
 public enum OfficialTestData implements TestData {
 

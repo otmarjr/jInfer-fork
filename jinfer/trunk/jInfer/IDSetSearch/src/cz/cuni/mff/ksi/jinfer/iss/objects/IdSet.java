@@ -32,7 +32,7 @@ public class IdSet {
 
   private final boolean optimal;
 
-  // TODO vektor Comment!
+  /** An empty ID set. */
   public static final IdSet EMPTY = new IdSet(Collections.<AttributeMappingId>emptyList());
 
   /**

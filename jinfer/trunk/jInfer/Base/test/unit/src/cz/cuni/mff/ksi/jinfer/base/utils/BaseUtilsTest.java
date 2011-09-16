@@ -266,4 +266,13 @@ public class BaseUtilsTest {
     assertTrue(BaseUtils.isSubset(set3, set2));
   }
 
+  @Test
+  public void testEquals() {
+    assertTrue(BaseUtils.equal(null, null));
+    assertFalse(BaseUtils.equal("a", null));
+    assertFalse(BaseUtils.equal(null, "a"));
+    assertTrue(BaseUtils.equal("a", "a"));
+    assertFalse(BaseUtils.equal("a", "b"));
+  }
+
 }

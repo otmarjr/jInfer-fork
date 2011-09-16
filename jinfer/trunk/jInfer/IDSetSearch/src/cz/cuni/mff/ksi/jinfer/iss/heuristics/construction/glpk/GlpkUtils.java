@@ -19,11 +19,6 @@ package cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.glpk;
 import cz.cuni.mff.ksi.jinfer.iss.options.ISSPanel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import org.apache.log4j.Logger;
 import org.openide.util.NbPreferences;
 
@@ -118,48 +113,6 @@ public final class GlpkUtils {
     return name
             .replace(':', separator)
             .replace('-', separator);
-  }
-
-  /**
-   * Reads the specified {@link Reader} and writes its content to the specified
-   * {@link StringBuilder}.
-   *
-   * @param r Reader to read from.
-   * @param sb String buffer to write to.
-   * @throws InterruptedException If the thread is interrupted.
-   * @throws IOException If there is a problem with reading.
-   */
-  // TODO vektor Move to file utils
-  public static void readerToBuilder(final Reader r, final StringBuilder sb)
-          throws InterruptedException, IOException {
-    final BufferedReader reader = new BufferedReader(r);
-
-    String line = reader.readLine();
-    while (line != null) {
-      sb.append(line).append('\n');
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      line = reader.readLine();
-    }
-  }
-
-  /**
-   * Loads the specified resource file and returns it as String.
-   *
-   * @param resource Path to the Java resource.
-   * @return String content of the resource file.
-   */
-  public static String loadTemplate(final String resource) {
-    try {
-      final InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
-      final StringBuilder ret = new StringBuilder();
-      readerToBuilder(new InputStreamReader(is), ret);
-      return ret.toString();
-    } catch (final Exception ex) {
-      LOG.error("Exception occured while creating GLPK input.", ex);
-      return null;
-    }
   }
 
   public static String[] getParameters(final int timeLimit) {

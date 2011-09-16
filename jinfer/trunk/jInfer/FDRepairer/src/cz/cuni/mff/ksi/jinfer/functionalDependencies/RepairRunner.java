@@ -49,7 +49,7 @@ import static cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils.runAsync;
  *  for that specific inference run: every Runner should be used for one
  *  inference only!
  * </p>
- * 
+ *
  * @author sviro
  */
 public class RepairRunner {
@@ -90,7 +90,7 @@ public class RepairRunner {
    */
   public RepairRunner() {
     final Properties projectProperties = RunningProject.getActiveProjectProps(RepairerPropertiesPanel.NAME);
-    
+
     modelGenerator = Lookup.getDefault().lookup(ModelGenerator.class);
     repairer = ModuleSelectionHelper.lookupImpl(Repairer.class, projectProperties.getProperty(RepairerPropertiesPanel.REPAIRER_PROP));
     repairedXMLGenerator = Lookup.getDefault().lookup(RepairedXMLGenerator.class);
@@ -162,7 +162,7 @@ public class RepairRunner {
     for (String xml : xmls) {
       RunningProject.getActiveProject().getLookup().lookup(OutputHandler.class).addOutput(
               "repaired-xml{n}", xml, "xml", true);
-      
+
       ioResult.getOut().println(xml);
       ioResult.getOut().println();
     }
@@ -175,7 +175,6 @@ public class RepairRunner {
   }
 
   private static void interrupted() {
-    // TODO vektor Perhaps a message box?
     LOG.error("User interrupted the inference.");
     RunningProject.removeActiveProject();
     RunningProject.setNextModuleCaps(null);

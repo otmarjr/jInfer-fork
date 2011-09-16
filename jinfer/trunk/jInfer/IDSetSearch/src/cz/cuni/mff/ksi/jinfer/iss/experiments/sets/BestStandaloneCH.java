@@ -26,7 +26,6 @@ import cz.cuni.mff.ksi.jinfer.iss.experiments.data.TestData;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.quality.Weight;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.termination.TimeIterations;
-import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.ConstructionHeuristics;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Fuzzy;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Incremental;
 import cz.cuni.mff.ksi.jinfer.iss.heuristics.construction.Random;
@@ -95,7 +94,7 @@ public class BestStandaloneCH extends AbstractExperimentSet {
 
   @Override
   protected void notifyFinished(final Experiment e, final int iteration) {
-    final int numColumns = ConstructionHeuristics.values().length - 1; // we don't want Null
+    final int numColumns = 6; // we don't want Null
 
     file = new File(Constants.TEST_OUTPUT_ROOT + "/" + getName() + "/result-" +
            OfficialTestData.values()[iteration / (Utils.getIterations() * numColumns)].getFile().getName() + ".txt");

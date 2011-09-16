@@ -50,8 +50,6 @@ import static cz.cuni.mff.ksi.jinfer.iss.utils.Utils.delta;
  */
 public class Experiment {
 
-  // TODO vektor Tell GLPK what the optimum is - add constraint?
-
   private final ExperimentParameters params;
 
   /** Time of the heuristic run start, absolute, in ms. */

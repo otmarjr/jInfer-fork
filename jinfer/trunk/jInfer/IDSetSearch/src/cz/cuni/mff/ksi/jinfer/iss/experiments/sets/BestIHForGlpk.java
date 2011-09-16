@@ -41,7 +41,7 @@ import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO vektor Comment!
+ * Experiment finding the best IH for GLPK as CH.
  *
  * @author vektor
  */

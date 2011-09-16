@@ -64,7 +64,7 @@ public class TimeIterations implements TerminationCriterion {
     this.maxTime = maxTime;
   }
 
-  // TODO vektor Comment!
+  /** Instance terminating immediately, without running any IHs. */
   public static final TimeIterations NULL = new TimeIterations(0);
 
   private static final Pair<Boolean, String> FALSE = new ImmutablePair<Boolean, String>(Boolean.FALSE, null);

@@ -140,7 +140,7 @@ public final class Utils {
   }
 
   /**
-   * TODO vektor Comment!
+   * Gets the number of iterations from NB options.
    */
   public static int getIterations() {
     return NbPreferences.forModule(ISSPanel.class).getInt(ISSPanel.ITERATIONS_PROP, ISSPanel.ITERATIONS_DEFAULT);

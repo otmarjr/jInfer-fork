@@ -30,6 +30,7 @@ import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AttributeTreeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -310,6 +311,9 @@ public class StatisticsPanel extends JPanel {
           final double alpha = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.ALPHA_PROP, ISSPanel.ALPHA_DEFAULT);
           final double beta = NbPreferences.forModule(ISSPanel.class).getFloat(ISSPanel.BETA_PROP, ISSPanel.BETA_DEFAULT);
           glpkInput.setText(GlpkInputGenerator.generateGlpkInput(model, alpha, beta));
+        }
+        catch (final IOException e) {
+          LOG.error("There was a problem creating GLPK input.", e);
         }
         catch (final InterruptedException e) {
           LOG.error("User interrupted GLPK input generation.");

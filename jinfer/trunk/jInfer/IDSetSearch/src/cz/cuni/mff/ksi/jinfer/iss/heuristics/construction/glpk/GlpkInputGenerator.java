@@ -21,7 +21,9 @@ import cz.cuni.mff.ksi.jinfer.iss.utils.MappingUtils;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AMModel;
 import cz.cuni.mff.ksi.jinfer.iss.objects.AttributeMappingId;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -78,7 +80,7 @@ public final class GlpkInputGenerator {
   public static String generateGlpkInput(final AMModel model,
           final double alpha, final double beta,
           final List<AttributeMappingId> incumbentAMs, final long k)
-          throws InterruptedException {
+          throws IOException, InterruptedException {
     final long start = Utils.time();
 
     final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
@@ -107,7 +109,7 @@ public final class GlpkInputGenerator {
       }
     }
 
-    final String ret = GlpkUtils.loadTemplate(TEMPLATE_LB).toString()
+    final String ret = FileUtils.loadTemplate(TEMPLATE_LB).toString()
             .replace("{constraints}", getConstraints(candidates, Collections.<AttributeMappingId>emptyList(), model))
             .replace("{mappings}", mappings)
             .replace("{weights}", weights)
@@ -124,7 +126,8 @@ public final class GlpkInputGenerator {
    * @see GlpkInputGenerator#generateGlpkInput(cz.cuni.mff.ksi.jinfer.iss.objects.AMModel, java.util.List, double, double)
    */
   public static String generateGlpkInput(final AMModel model,
-          final double alpha, final double beta) throws InterruptedException {
+          final double alpha, final double beta)
+          throws IOException, InterruptedException {
     return generateGlpkInput(model, Collections.<AttributeMappingId>emptyList(), alpha, beta);
   }
 
@@ -161,7 +164,8 @@ public final class GlpkInputGenerator {
    */
   public static String generateGlpkInput(final AMModel model,
           final List<AttributeMappingId> fixed,
-          final double alpha, final double beta) throws InterruptedException {
+          final double alpha, final double beta)
+          throws IOException, InterruptedException {
     final long start = Utils.time();
 
     final List<AttributeMappingId> candidates = MappingUtils.getCandidates(model);
@@ -182,7 +186,7 @@ public final class GlpkInputGenerator {
               .append('\n');
     }
 
-    final String ret = GlpkUtils.loadTemplate(TEMPLATE).toString()
+    final String ret = FileUtils.loadTemplate(TEMPLATE).toString()
             .replace("{constraints}", getConstraints(candidates, fixed, model))
             .replace("{mappings}", mappings)
             .replace("{weights}", weights);

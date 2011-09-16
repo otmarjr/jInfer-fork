@@ -69,7 +69,13 @@ public final class GlpkRunner {
           final List<AttributeMappingId> fixed,
           final double alpha, final double beta, final int timeLimit)
           throws InterruptedException {
-    return run(GlpkInputGenerator.generateGlpkInput(model, fixed, alpha, beta), timeLimit);
+    try {
+      return run(GlpkInputGenerator.generateGlpkInput(model, fixed, alpha, beta), timeLimit);
+    }
+    catch (final IOException e) {
+      LOG.error("Error creating GLPK input.", e);
+      return "Creating GLPK input encountered an error, check log for details.";
+    }
   }
 
   /**
@@ -100,9 +106,9 @@ public final class GlpkRunner {
 
       final ProcessBuilder processBuilder = new ProcessBuilder(GlpkUtils.getParameters(timeLimit));
       final Process process = processBuilder.start();
-      GlpkUtils.readerToBuilder(new InputStreamReader(process.getInputStream()), ret);
+      FileUtils.readerToBuilder(new InputStreamReader(process.getInputStream()), ret);
       process.getOutputStream().close();
-      GlpkUtils.readerToBuilder(new FileReader(outputFile), ret);
+      FileUtils.readerToBuilder(new FileReader(outputFile), ret);
 
       inputFile.delete();
       outputFile.delete();

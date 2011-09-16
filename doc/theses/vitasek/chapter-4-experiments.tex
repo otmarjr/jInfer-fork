@@ -1173,7 +1173,9 @@ TODO interpretation - we calculated average runtimes for each combination of rat
 
 RR = 0.5 (strong diversification), MUT = 0.05 (only a few fixed), CX = 0.2 (looking for commonalities among 1/5th of the pool)
 
-TODO compare this to pure GLPK run - for example for 100-200, we got from TODO seconds to on average 1.3 seconds.
+TODO compare this to pure GLPK run - for example for \dataset{100-1000}, we got from TODO (90+ on average) seconds to on average TODO seconds (when the 10 second limit is lifted).
+
+TODO this will need 2 boxplots again...
 
 \section{The "Best" Algorithm}
 
@@ -1183,6 +1185,9 @@ First of all: if we have the time, it is best to just let the GLPK run.
 We will find the optimum in this way.
 And for many purposes, this is just fine - we need to infer something about the schema, we do it only once, so it doesn't matter that much how long it takes.
 
-Second: if we don't have enough time, we should do XYZ but it might depend on the characteristics of the data.
-For realistic (looks like THIS in graph representation) it is best to do A B C.
-Whereas, for artificial data (having IJK as their representation) it is best to just do 1 2 3.
+Second: if we don't have enough time, we should do Strategy 1. In under 10 seconds we will have very good results (often the optimum).
+
+% TODO if possible, write down in lessons learned:
+% - always allow for interruptions
+% - in experiments, iterations should be the outermost loop
+% - when representing an object, don't be lazy and create a class for it (don't use pairs, lists with specific data at specific locations, etc)

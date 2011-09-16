@@ -987,14 +987,29 @@ TODO can we improve performance on huge data by ignoring textual content? Check 
   Machine           & Dual Core \\
   Input data        & \dataset{XMA-p} \\
   Iterations        & 50 \\
-  Pool size         & TODO \\
+  Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
   \hline
 \end{tabular}
 \bigskip
 \end{center}
 
-TODO pseudocode
+\begin{algorithm}
+\caption{Ignoring text data}
+\label{listing-experiment-ignore-text-data}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+\FOR{$i \in 1 \to 50 $}
+  \STATE $ES \gets ES \cup \{\dataset{XMA-p}, CH = \heu{Glpk}(limit = 1), IH = \emptyset\}$
+\ENDFOR
+\STATE \textbf{set} ``ignore text data"
+\FOR{$i \in 1 \to 50 $}
+  \STATE $ES \gets ES \cup \{\dataset{XMA-p}, CH = \heu{Glpk}(limit = 1), IH = \emptyset\}$
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
 
 \begin{figure}
   \caption{Ignoring Text Data}
@@ -1003,7 +1018,7 @@ TODO pseudocode
     \includegraphics[width=\textwidth]{images/experiments/ignore-text-data}
 \end{figure}
 
-TODO interpretation
+TODO interpretation - grammar extraction is very similar if not a bit worse, model creation is about 50\% faster.
 
 \subsection{Chaining the IHs}
 
@@ -1051,7 +1066,7 @@ TODO we will try 3 different scenarios, see which performs the best on the data 
 \FOR{$ih \in IHs$}
   \FOR{$file \in $ official test data}
     \FOR{$i = 1 \to 20$}
-      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = ih\}$
+      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = ih, limit = 10\}$
     \ENDFOR
   \ENDFOR
 \ENDFOR
@@ -1061,33 +1076,104 @@ TODO we will try 3 different scenarios, see which performs the best on the data 
 
 TODO result graphs - just a \textbf{commented} sample
 
-MSH, NTH, XMA-c, XMA-p boring - finds the optimum in the first step
+\dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p} boring - finds the optimum in the first step
 
 TODO choose the best - see how many times in the 20 runs did they find optimum
 
-             1       2      3
-100-100      20      19     20
-100-200      19      18     17
-100-1000     4       1      5
-OVA1         20      20     20
-OVA2         19      13     18
-OVA3         17      18     20
+\begin{table}
+  \caption{Performance of various IH chains}
+  \bigskip
+  \label{table-experiments-chained-ihs-tweaking}
+  \centering
+  \begin{tabular}{l || c | c | c}
+    Dataset & Strategy 1 & Strategy 2 & Strategy 3 \\
+    \hline
+    \dataset{100-100}  & \textbf{20} & 19 & \textbf{20} \\
+    \dataset{100-200}  & \textbf{19} & 18 & 17 \\
+    \dataset{100-1000} & 4  & 1  & \textbf{5}  \\
+    \dataset{OVA1}     & \textbf{20} & \textbf{20} & \textbf{20} \\
+    \dataset{OVA2}     & \textbf{19} & 13 & 18 \\
+    \dataset{OVA3}     & 17 & 18 & \textbf{20} \\
+    \end{tabular}
+  \bigskip
+  Each cell represents the number of times (out of 20) the strategy found the optimum - more is better.
+\end{table}
 
 Strategies 1 and 3 are very similar, we shall choose \textbf{1} for its simplicity to tune the parameters.
 
 \subsubsection{Improving Strategy 1}
 
-TODO remind what Strategy 1 is, list all ratios we will be using, list files we will be using.
+%         NB class ChainedIHs1Tweak
+
+TODO remind what Strategy 1 is, list all ratios we will be using
 
 TODO we will be gathering for each run the following: what were the parameters, how long did it take and whether it found optimum
 
-TODO summary table
+\begin{center}
+\bigskip
+\begin{tabular}{| l | l |}
+  \hline
+  \hline
+  Machine           & Dual Core \\
+  Input data        & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}, \dataset{OVA1}, \dataset{OVA2}, \dataset{OVA3} \\
+  Iterations        & 50 \\
+  Pool size         & 10 \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
+  \hline
+\end{tabular}
+\bigskip
+\end{center}
 
-TODO pseudocode
+\begin{algorithm}
+\caption{Chained IHs - Tuning}
+\label{listing-experiment-chained-ihs-tuning}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
 
-TODO results and interpretation
+\STATE $RW \gets \heu{RemoveWorst}$
+
+\FOR{$rrRatio \in \{0, 0.05, 0.1, 0.2, 0.5\}$}
+\FOR{$mutRatio \in \{0.05, 0.1, 0.2\}$}
+\FOR{$cxRatio \in \{0.05, 0.1, 0.2\}$}
+  \STATE $RR \gets \heu{RandomRemoval}(ratio = rrRatio)$
+  \STATE $MUT \gets \heu{Mutation}(ratio = mutRatio, limit = 1)$
+  \STATE $CX \gets \heu{Crossover}(ratio = cxRatio, limit = 1)$
+  \FOR{$file \in \{\dataset{100-100}, \dataset{100-200}, \dataset{100-1000}, \dataset{OVA1}, \dataset{OVA2}, \dataset{OVA3}\}$}
+    \FOR{$i = 1 \to 50$}
+      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW})\}$
+    \ENDFOR
+  \ENDFOR
+\ENDFOR
+\ENDFOR
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{table}
+  \caption{Performance of Strategy 1 depending on parameters - excerpt}
+  \bigskip
+  \label{table-experiments-chained-ihs-tweaking}
+  \centering
+  \begin{tabular}{c | c | c || c | c | c | c | c | c}
+    \heu{RR} & \heu{MUT} & \heu{CX} & \dataset{100-100} & \dataset{100-1000} & \dataset{100-200} & \dataset{OVA1} & \dataset{OVA2} & \dataset{OVA3} \\
+    \hline
+    0.2	& 0.2	& 0.2	   & 2749.58	& \textbf{8633.76}	  & 3029.82	& 110.82	& 98.68	& 2413.86 \\
+    0.5	& 0.05	& 0.05 & 1031.24	& 10324.46	& 1371.08	& \textbf{71.88}	  & 63.86	& 1282.94 \\
+    0.5	& 0.05	& 0.2	 & \textbf{919.74}	  & 10978.58	& 1322.02	& 74.46	  & 62.42	& \textbf{1217.00} \\
+    0.5	& 0.1	& 0.2	   & 1002.20	& 11030.64	& \textbf{1288.06}	& 85.22	  & 80.96	& 1480.90 \\
+    0.5	& 0.2	& 0.1	   & 1674.78	& 9779.82	  & 2007.42	& 108.14	& \textbf{58.56}	& 1827.46 \\
+    \end{tabular}
+  \bigskip
+  First 3 columns are ratios for specified heuristics. Remaining columns are average run times in ms. Bold are the best times in that column.
+\end{table}
+
+TODO interpretation - we calculated average runtimes for each combination of ratios and each file. Then we picked the ratio combination that yielded the lowest average runtimes.
 
 RR = 0.5 (strong diversification), MUT = 0.05 (only a few fixed), CX = 0.2 (looking for commonalities among 1/5th of the pool)
+
+TODO compare this to pure GLPK run - for example for 100-200, we got from TODO seconds to on average 1.3 seconds.
 
 \section{The "Best" Algorithm}
 

@@ -13,11 +13,12 @@ from the input XML file and how long does it take to create the AM model from th
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & all official and sized test data sets \\
   Iterations        & 50 \\
   Pool size         & not applicable \\
   $\alpha$, $\beta$ & not applicable \\
+  CH                & not applicable \\
+  IHs               & not applicable \\
   \hline
 \end{tabular}
 \bigskip
@@ -124,11 +125,12 @@ Apart from comparing different versions, we shall see how the pure GLPK approach
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & \dataset{100-500} \\
   Iterations        & 50 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Glpk} \\
+  IHs               & $\emptyset$ \\
   \hline
 \end{tabular}
 \bigskip
@@ -167,11 +169,12 @@ We can see from the graph that even though for smaller times (1 and 6 seconds, r
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & all sized test data sets \\
   Iterations        & 50 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Glpk} \\
+  IHs               & $\emptyset$ \\
   \hline
 \end{tabular}
 \bigskip
@@ -228,11 +231,12 @@ Our investigation into various CHs will start by comparing \heu{FIDAX} from the 
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data set    & all official test data sets \\
   Iterations        & 50 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Random}, \heu{Fuzzy}, \heu{FIDAX} \\
+  IHs               & $\emptyset$ \\
   \hline
 \end{tabular}
 \bigskip
@@ -286,11 +290,12 @@ Now we shall try to answer a minor question, whether it is possible to improve \
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data set    & all official test data sets \\
   Iterations        & 1 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{FIDAX} \\
+  IHs               & \heu{Hungry} or $\emptyset$ \\
   \hline
 \end{tabular}
 \bigskip
@@ -356,6 +361,8 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
 
 %         NB class BestStandaloneCH
 
+% TODO re-run on Dual Core!
+
 We shall now try to find the best standalone CH, that is the CH that finds on average the best solutions when run without any IHs. We need to set a time limit for \heu{Glpk} to make it an instance of \heu{Truncated Branch \& Bound}, and we shall use 1 second. This is the smallest time limit possible for GLPK and it is still a reasonably short time, fair to other CHs.
 
 \begin{center}
@@ -363,11 +370,12 @@ We shall now try to find the best standalone CH, that is the CH that finds on av
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Quad Core \\
   Input data        & all official test data sets \\
   Iterations        & 50 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & various \\
+  IHs               & $\emptyset$ \\
   \hline
 \end{tabular}
 \bigskip
@@ -425,12 +433,13 @@ We should note that the combination best CH - best IH found this way does not ne
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & \dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \\
                     & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000} \\
   Iterations        & 50 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Glpk} \\
+  IHs               & \heu{Crossover}, \heu{Hungry}, \heu{Local Branching}, \heu{Mutation} \\
   \hline
 \end{tabular}
 \bigskip
@@ -501,12 +510,13 @@ As we mentioned before, we chose the combination \heu{Glpk} and \heu{Mutation} i
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & \dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \\
                     & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000} \\
   Iterations        & 50 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Random} or \heu{Glpk} \\
+  IHs               & \heu{Mutation} \\
   \hline
 \end{tabular}
 \bigskip
@@ -539,6 +549,7 @@ Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, 
     \includegraphics[width=\textwidth]{images/experiments/ch-for-mutation}
 \end{figure}
 
+% TODO this subsection does not play well with the ToC - how to put something else in the ToC than is here?
 \subsection{Various $\alpha$, $\beta$}
 
 After finding the best combination of a CH and IH we turn our attention to some of the parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function. % TODO link
@@ -551,11 +562,12 @@ It is worthy noting that we do not expect any changes in performance of heuristi
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & realistic + converted official test data sets \\
   Iterations        & 1 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $\{0.1, 0.25, 0.5, 0.75, 1\} \times \{0.1, 0.25, 0.5, 0.75, 1\}$ \\ % TODO this is not the best way to write it
+  CH                & \heu{Glpk} \\
+  IHs               & $\emptyset$ \\
   \hline
 \end{tabular}
 \bigskip
@@ -668,11 +680,12 @@ We shall now investigate this matter by taking the biggest data set \dataset{XMA
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & \dataset{XMA-p} \\
   Iterations        & 50 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Glpk} \\
+  IHs               & not applicable \\
   \hline
 \end{tabular}
 \bigskip
@@ -740,11 +753,12 @@ The scenarios themselves shall be the following:
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & all official test data sets \\
   Iterations        & 20 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Random} \\
+  IHs               & various \\
   \hline
 \end{tabular}
 \bigskip
@@ -858,11 +872,12 @@ The parameters we can tune in this scenario are the ratios in \heu{RandomRemove}
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Machine           & Dual Core \\
   Input data        & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}, \dataset{OVA1}, \dataset{OVA2}, \dataset{OVA3} \\
   Iterations        & 50 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Random} \\
+  IHs               & \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots $ \\
   \hline
 \end{tabular}
 \bigskip

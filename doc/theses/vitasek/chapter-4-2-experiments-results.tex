@@ -463,9 +463,8 @@ The results are listed in Table \ref{table-experiments-best-ih-for-glpk}. We sha
   \label{table-experiments-best-ih-for-glpk}
   \centering
   \begin{tabular}{l || l | l || l | l}
-    Data set & \heu{Hungry} & \heu{Hungry} & \heu{Crossover} & \heu{Crossover} \\
-     & improvement & improvement & improvement & improvement \\
-     & avg & stdev & avg & stdev \\
+             & \heu{Hungry} & \heu{Hungry} & \heu{Crossover} & \heu{Crossover} \\
+    Data set & improv - avg & improv - stdev & improv - avg & improv - stdev \\
     \hline
     \dataset{80-320} & 0.00017 & 0.00118 & 0.00017 & 0.00118 \\
     \dataset{90-405} & 0.00502 & 0.00618 & 0.00033 & 0.00165 \\
@@ -477,9 +476,8 @@ The results are listed in Table \ref{table-experiments-best-ih-for-glpk}. We sha
   \end{tabular}    
 	% TODO separate somehow
   \begin{tabular}{l || l | l || l | l}
-    Data set & \heu{LB} & \heu{LB} & \heu{Mutation} & \heu{Mutation} \\
-     & improvement & improvement & improvement & improvement \\
-     & avg & stdev & avg & stdev \\
+             & \heu{LB} & \heu{LB} & \heu{Mutation} & \heu{Mutation} \\
+    Data set & improv - avg & improv - stdev & improv - avg & improv - stdev \\
     \hline
     \dataset{80-320} & \textbf{0.00072} & 0.00223 & 0.00064 & 0.00218 \\
     \dataset{90-405} & 0.00698 & 0.00616 & \textbf{0.00851} & 0.00659 \\
@@ -495,7 +493,7 @@ The results are listed in Table \ref{table-experiments-best-ih-for-glpk}. We sha
 
 %         NB class CHForMutation
 
-TODO with \heu{Mutation} from the previous step, how about using Random as CH? Do we get an improvement?
+As we mentioned before, we chose the combination \heu{Glpk} and \heu{Mutation} in a hungry manner. We will now try to take a step back and attempt to replace \heu{Glpk} with \heu{Random}, hoping to get similar qualities in much shorter time (a reminder: \heu{Glpk} always takes 1 second).
 
 \begin{center}
 \bigskip
@@ -513,6 +511,8 @@ TODO with \heu{Mutation} from the previous step, how about using Random as CH? D
 \bigskip
 \end{center}
 
+Setup used will be almost identical to that from the previous experiment. Experimental set will consist of 6 data sets * 50 iterations * 2 CHs = 600 experimental configurations, see Listing \ref{listing-experiment-ch-for-mutation}. We shall collect the eventual quality after running both the CH and the IH in format suited for GnuPlot.
+
 \begin{algorithm}
 \caption{\heu{Random} as CH set generation}
 \label{listing-experiment-ch-for-mutation}
@@ -529,6 +529,8 @@ TODO with \heu{Mutation} from the previous step, how about using Random as CH? D
 \end{algorithmic}
 \end{algorithm}
 
+Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, for each data set there are two boxplots representing \heu{Random} (left one) and \heu{Glpk} (right one). The combination \heu{Glpk} + \heu{Mutation} always finds the optimum for the simpler data sets, thus the collapsed boxplots. Moreover, it achieves higher quality in each data set. On the other hand, combination \heu{Random} + \heu{Mutation} has much shorter running times and in the biggest (and hardest) data set \dataset{100-1000} has almost comparable results. This makes it a reasonable choice for big inputs where short time is more important than optimal quality.
+
 \begin{figure}
   \caption{CH for \heu{Mutation}}
   \label{image-experiment-ch-for-mutation}
@@ -536,15 +538,12 @@ TODO with \heu{Mutation} from the previous step, how about using Random as CH? D
     \includegraphics[width=\textwidth]{images/experiments/ch-for-mutation}
 \end{figure}
 
-TODO odd are random, even are Glpk
-
-TODO interpretation - Glpk as CH takes always one second, with simpler inputs almost always finds the optimum (thus the capping), with more complex is Random not that bad in the end
-
 \subsection{Various $\alpha$, $\beta$}
 
-TODO remind what these parameters mean, remind that because these are weights, only their ratio matters. We have thus a 1-dimensional problem. However, for simplicity's sake we will use 25 combinations of alpha and beta and normalize them only during evaluation.
+After finding the best combination of a CH and IH we turn our attention to some of the parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function. % TODO link
+A short reminder: the weight is defined as TODO copy formula. It is thus obvious that only the \textit{ratio} between $\alpha$ and $\beta$ matters, not their actual values. This means that investigating effects of these parameters is in fact a 1-dimensional problem. However, for simplicity's sake we will use 25 combinations of various $\alpha$ and $\beta$ and normalize them only during evaluation.
 
-TODO we do not expect any changes in performance and will limit the inquiry to different ID sets produced under different settings
+It is worthy noting that we do not expect any changes in performance of heuristics and we will limit the inquiry to different ID sets produced under different settings.
 
 \begin{center}
 \bigskip
@@ -552,7 +551,7 @@ TODO we do not expect any changes in performance and will limit the inquiry to d
   \hline
   \hline
   Machine           & Dual Core \\
-  Input data        & all official test data sets \\
+  Input data        & realistic + converted official test data sets \\
   Iterations        & 1 \\
   Pool size         & 1 \\
   $\alpha$, $\beta$ & $\{0.1, 0.25, 0.5, 0.75, 1\} \times \{0.1, 0.25, 0.5, 0.75, 1\}$ \\ % TODO this is not the best way to write it
@@ -560,6 +559,8 @@ TODO we do not expect any changes in performance and will limit the inquiry to d
 \end{tabular}
 \bigskip
 \end{center}
+
+This experimental set will contain 5 different $\alpha$ settings * 5 $\beta$ settings * 8 data sets = 200 experimental configurations. We are not using the artificial data sets, because the way they are generated (attribute values are random numbers) they cannot possibly create different optimal ID sets. The pseudocode capturing this is in Listing \ref{listing-experiment-various-betas}. We will use \heu{Glpk} constrained to 1 second (thus making it an instance of \heu{Truncated Branch \& Bound}) and no IHs. Pool size as well as iteration count will be 1. We are noting the actual ID set found by the run of the heuristic.
 
 \begin{algorithm}
 \caption{Various values of $\alpha$ and $\beta$ set generation}
@@ -569,7 +570,7 @@ TODO we do not expect any changes in performance and will limit the inquiry to d
 \STATE $ES \gets \emptyset$
 \FOR{$\alpha \in \{0.1, 0.25, 0.5, 0.75, 1\}$}
   \FOR{$\beta \in \{0.1, 0.25, 0.5, 0.75, 1\}$}
-    \FOR{$file \in $ official test data}
+    \FOR{$file \in $ realistic of converted official test data}
     	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1, alpha = \alpha, beta = \beta), IH = \emptyset\}$
     \ENDFOR
   \ENDFOR
@@ -578,19 +579,11 @@ TODO we do not expect any changes in performance and will limit the inquiry to d
 \end{algorithmic}
 \end{algorithm}
 
-Following data sets have the same optimal ID sets regardless of the setting of $\alpha$ and $\beta$: \dataset{100-1000}, \dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p}.
-
-TODO remaining datasets showed various dependencies on alpha and beta, because this question is not central to our interest we shall mention only 2 examples
-
-TODO in 100-200 we have a clear boundary, in OVA1 (representative of OVAs in general) we have unclear boundary
-
-\subsubsection{Results for \dataset{100-200}}
-
-2 different sets (too long to list here), very nice boundary when we normalize alpha and beta
+Following data sets have the same optimal ID sets regardless of the setting of $\alpha$ and $\beta$: \dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p}. The \dataset{OVA*} data sets showed various dependencies on $\alpha$ and $\beta$, we shall now describe one representative example.
 
 \subsubsection{Results for \dataset{OVA1}}
 
-TODO found 2 ID sets:
+The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1} are listed in Table \ref{table-experiments-various-betas-ova1} (note that the actual names had to be anonymized for reasons discussed in Section \ref{section-realistic-data}). The differing attribute mapping is highlited.
 
 \begin{table}
   \caption{Different ID sets found for \dataset{OVA1}}
@@ -598,14 +591,14 @@ TODO found 2 ID sets:
   \label{table-experiments-various-betas-ova1}
   \centering
   \begin{tabular}{c || c}
-    ID set 1: element@attribute & ID set 2: element@attribute \\
+    ID set \textbf{1}: element@attribute & ID set \textbf{2}: element@attribute \\
     \hline
     \texttt{aff@fa} & \texttt{aff@fa} \\
     \texttt{com@ty} & \texttt{com@ty} \\
     \texttt{cre@da} & \texttt{cre@da} \\
     \texttt{cri@te} & \texttt{cri@te} \\
     \texttt{cve@st} & \texttt{cve@st} \\
-    \texttt{\textbf{def@id}} & \texttt{\textbf{def@cl}} \\ % TODO again, my bold typewriter does not work
+    \texttt{\textbf{def@id}} & \texttt{\textbf{def@cl}} <- \\ % TODO again, my bold typewriter does not work
     \texttt{fil@co} & \texttt{fil@co} \\
     \texttt{mod@da} & \texttt{mod@da} \\
     \texttt{ova@xs} & \texttt{ova@xs} \\
@@ -616,6 +609,8 @@ TODO found 2 ID sets:
     \texttt{sbt@te} & \texttt{sbt@te} \\
   \end{tabular}
 \end{table}
+
+Table \ref{table-experiments-various-betas-ova1-effect} summarizes the dependency of the ID set found on various values of $\alpha$, $\beta$. We than define the $\alpha-ratio$ as $ \dfrac{\alpha}{\alpha + \beta} $ and summarize the findings in a linear manner, sorted by increasing $\alpha-ratio$ in Table \ref{table-experiments-various-betas-ova1-ratio-effect}. Note that the $\alpha-ratio$s are not unique due to the way we constructed the experimental configurations here.
 
 \begin{table}
   \caption{Effect of $\alpha$, $\beta$ on ID set found for \dataset{OVA1}}
@@ -633,15 +628,13 @@ TODO found 2 ID sets:
   \end{tabular}
 \end{table}
 
-TODO linear - we have more than 1 combination that has the same ratio (explain what this ratio is)
-
 \begin{table}
-  \caption{Effect of $\alpha$\ ratio on ID set found for \dataset{OVA1}}
+  \caption{Effect of $\alpha-ratio$ on ID set found for \dataset{OVA1}}
   \bigskip
   \label{table-experiments-various-betas-ova1-ratio-effect}
   \centering
   \begin{tabular}{c | c || c |  c}
-    $\alpha$ ratio & ID set & $\alpha$ ratio & ID set \\
+    $\alpha-ratio$ & ID set & $\alpha-ratio$ & ID set \\
     \hline
     0,091	& 1 & 0,500	& 2 \\
     0,118	& 1 & 0,500	& 2 \\
@@ -659,13 +652,7 @@ TODO linear - we have more than 1 combination that has the same ratio (explain w
   \end{tabular}
 \end{table}
 
-TODO no clear separation, same ratio producing different sets? Randomness in GLPK input.
-
-\subsubsection{Interpretation}
-
-TODO we just note that there are differences, but will not investigate any further
-
-TODO artificial data always has only one attribute
+Interestingly enough, there is no clear separation between the two ID sets depending on the $\alpha-ratio$ to be found. The very existence of the two sets might be due to the fact that \heu{Glpk} randomizes the order in which AMs are presented to the external GLPK solver. However, this question is outside of the scope of this work, and shall be left for future work.
 
 \subsection{Ignoring text data}
 

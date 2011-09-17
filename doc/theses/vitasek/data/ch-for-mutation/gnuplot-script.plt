@@ -1,6 +1,7 @@
 set style data boxplot
 
 set ylabel 'Quality'
+set xlabel 'Data set'
 
 set yrange [ .3 : .9 ]
 set xrange [ 0 : 13 ]

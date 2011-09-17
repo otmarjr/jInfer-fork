@@ -2,23 +2,21 @@
 
 % TODO I cannot stress this enough times: make sure there is an explanation of heuristics notation used in pseudocode listing, SOMEWHERE
 
-At this point of the thesis the reader should be already familiar with the notions we have introduced: the problem of finding the optimal ID set (with respect to some \textit{weight}), that it is directly related to the NP-complete problem of finding the maximal weighted independent set, that this can be solved using the MIP approach, and that we can try to do better than just let the solver work: by employing various heuristics.
+At this point of the thesis the reader should be already familiar with the notions we have introduced: the problem of finding the optimal ID set (with respect to some \textit{weight}), that it is directly related to the NP-complete problem of finding the maximal weighted independent set, that this can be solved using the MIP approach, and that we can try to do more than just let the solver work: by employing various heuristics.
 
-Now it is the time to move our ideas into reality and test their feasibility. But before we start talking about the experiments themselves, we should try to formulate our aim, what we will be trying to establish.\\
+Now we shall attempt to implement these ideas. But before we describe the experiments themselves, we should try to formulate our aim.\\
 
-First of all, we would like to get an idea of how the whole system and its components behave. We would like to see the changes introduced by modifying some of the key parameters, while keeping the others fixed. Even though we shan't hope for them to be orthogonal, we might at least isolate some of the parameters that are less important to the overall behavior. Preferably, in the end we should have at least some intuition into what will happen if we try X Y Z, before trying it.
+First of all, we will try to get understanding of how the whole system and its components behave. We would like to see the changes introduced by modifying some of the key parameters, while keeping the others fixed. They probably will not be orthogonal, we might at least isolate some of the parameters that are less important to the overall behavior. In the end we should have at some intuition about the system.
 
-Second, as we will be introducing a few broad classes of XML data to run ID set search on, we would like to find out which types are best handled by which configurations and settings. This will allow us to pick the right heuristic once we see new data.
+Second, we will try to evaluate the system performance in terms of the speed of finding good heuristic results. We will try to find tweaks to make the whole process as fast as reasonably possible.
 
-Also, we will try to evaluate the system performance in terms of the speed of finding good heuristic results. We will try to find tweaks to make the whole process as fast as reasonably possible.
-
-And in the end, we should be able to formulate some kind of general recommendation in form ``if you see this kind of data, do that".\\
+And in the end, we should be able to formulate some kind of general recommendations regarding the problem of finding ID sets.\\
 
 This chapter will be structured in the following way: first we will discuss the experimental data we used, then the methodology used in conducting the experiments, followed by the actual list of experiments with their full description and results, and in the end we shall draw some final conclusions.
 
 \section{Experimental Data}
 
-Let us now talk about the XML data we will be using to conduct out experiments. We are using XML documents of three categories:
+The first section will discuss the XML data we will be using to conduct out experiments. We are using XML documents of three categories:
 
 \begin{itemize}
 	\item Realistic
@@ -26,27 +24,23 @@ Let us now talk about the XML data we will be using to conduct out experiments. 
 	\item Artificial
 \end{itemize}
 
-A short reasoning for this choice: realistic - of course, we want to see the performance in cases taken from the real world. The problem with realistic data is that sometimes, interesting values (that might or might not contain IDs) are stored as text nodes % TODO is this name consistent with what I've been defining?
-instead of attributes. We might try to look at such data, convert some of these ``suspicious" values to attributes (e.g. using a smart XSL transformation), let our heuristics find the ID sets, and then translate them back to XML keys (see \ref{realistic-converted} for details).
-And finally, we create completely artificial data to create inputs that will really put our heuristics to the test. This is because the realistic data often prove to be quite easy to solve - the list of candidate AMs is usually too short to be hard to solved to optimality.\\
+A short reasoning for this choice: realistic - we want to see the performance in cases taken from the real world. The problem with realistic data is that sometimes, interesting values (that might or might not contain IDs) are stored as simple text nodes instead of attributes. We will try to convert some of these values to attributes (e.g. using a smart XSL transformation), let our heuristics find the ID sets, and then translate them back to XML keys (see \ref{realistic-converted} for details).
+And finally, we create completely artificial data to create inputs that will put our heuristics in stress. This is because the realistic data often prove to be too easy to solve - the list of candidate AMs is usually too short to be hard to be solved to optimality.\\
 
-To understand these data sets, we will talk a little about their origin and \textit{graph representation}. As mentioned earlier, % TODO link
-the problem of finding the optimal ID set is in fact the problem of finding the maximum weighted independent set on a graph. Therefore, it might be interesting to actually see the graphs of these data sets and have some kind of numbers associated with them.
+To understand these data sets we will discuss their origin and \textit{graph representation}. As mentioned earlier, % TODO link
+the problem of finding the optimal ID set is in fact the problem of finding the maximum weighted independent set in a graph. Therefore it is interesting to actually see the graphs of these data sets and understand some related metrics.
 
 The former will be achieved with the help of GraphViz tool, % TODO link
 where we will draw the graphs so that all the vertices represent the \textit{candidate AMs}, and the edges represent pairs of AMs that have nonempty intersection of their images (and thus cannot be in the same ID set together). Thus solving the maximal weighted IS on these graphs will be equivalent to solving our problem of optimal ID set.
 
-The latter will come in form of tables containing information regarding the data sets, such their size, known optimum % TODO footnote explaining that we got the optimum by running GLPK w/o time limit
-for $\alpha = \beta = 1$ and the numbers of vertices and edges in aforementioned graphs.
+The latter will come in form of tables containing information regarding the data sets, such their size, known optimum for $\alpha = \beta = 1$ (found by running the \heu{Glpk} heuristic without a time limit) and the numbers of vertices and edges in aforementioned graphs.
 
 \subsection{Realistic data}
 \label{section-realistic-data}
 
-From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is the Table \ref{table-experiments-data-realistic}, their graphs can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. Neither will they be included on the DVD distributed with this thesis.
+From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is the Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. Neither will they be included on the DVD distributed with this thesis.
 
-TODO their DTD/XSD - do we have ID attributes?
-
-TODO verify they satisfy their schemas. Converted too.
+% TODO their DTD/XSD - do we have ID attributes?
 
 \begin{table}
   \caption{List of realistic test data files}
@@ -77,22 +71,20 @@ TODO verify they satisfy their schemas. Converted too.
     \subfigure[\dataset{XMD}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD}}
 \end{figure}
 
-To interpret the data a little: \dataset{OVA*} sets have quite interesting and perhaps a bit challenging graphs, but are not too big. We can consider them to be the ``typical" representants.
+To interpret the data: \dataset{OVA*} sets have quite interesting and challenging graphs, but are relatively small. We can consider them to be the ``typical" representants.
 
-On the other hand, the \dataset{XMA-*} sets are quite huge, but trivial: their only candidate AM will just get picked and that will be the end of the heuristic. We will see the performance of the other components of the whole system, dealing with huge data that are rather simple in the end.
+On the other hand, the \dataset{XMA-*} sets are relatively huge, but trivial: their only candidate AM will just get picked and that the heuristic will end. We will see the performance of the other components of the whole system, such as loading the data sets into memory representations.
 
-Finally, the \dataset{XMD} set is quite big and at the same time has non-trivial graph representation. We should see a performance more balanced between processing and finding the ID set here.
+Finally, the \dataset{XMD} set is relatively big and at the same time has non-trivial graph representation. In this case we should see a performance more balanced between processing and finding the ID set.
 
 \subsection{Realistic data with artificial attributes}
 \label{realistic-converted}
 
-We found 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here. None of these sets had any attributes before the conversion. Their summary is the Table \ref{table-experiments-data-converted}, their graphs can be seen in Figure \ref{image-experiments-data-converted}.
+We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here. None of these sets had any attributes before the conversion. Their summary is the Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
 
-TODO schemas?
+To address the conversion: in the case of \dataset{MSH} we found 2 elements with values resembling a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
-To address the conversion: in the case of \dataset{MSH} we found 2 elements with values looking suspiciously like a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
-
-Why is this useful at all? Recall TODO link, where we said that ID attributes are a special case of XML keys. We can use this approach then to find XML keys: convert some suspicious data into attributes, find the optimal ID set and then create XML key based on this ID set.
+This approach is useful, because as stated in TODO link, ID attributes are a special case of XML keys. We can use this approach to find XML keys: convert some suspicious data into attributes, find the optimal ID set and then create XML key based on this ID set.
 
 \begin{table}
   \caption{List of realistic test data files with converted attributes}
@@ -115,15 +107,15 @@ Why is this useful at all? Recall TODO link, where we said that ID attributes ar
     \subfigure[\dataset{NTH}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH}}
 \end{figure}
 
-Again to do a little interpretation: in the case of \dataset{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \dataset{XMA-*} sets: quite large data, yet only one trivial ID attribute to be found.
+Again interpretation: in the case of \dataset{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \dataset{XMA-*} sets: quite large data, yet only one trivial ID attribute to be found.
 
-In the case of \dataset{NTH} we introduced more attributes, 8 to be precise. Out of them 5 proved to be candidate AMs, with 7 edges constraining them. This means we have quite a big set with relatively simple work to be done by the heuristics. This is about the change.
+In the case of \dataset{NTH} we introduced more attributes, 8 to be precise. Out of them 5 proved to be candidate AMs, with 7 edges constraining them. This means we have a relatively large set with considerably simple work to be done by the heuristics.
 
 \subsection{Artificial data}
 
-As soon as we started experimenting with the data coming from the real world, it was obvious that they present no real challenge to our heuristics. After we build the model, we get the most complex graphs of some 31 vertices and 47 edges (see Table \ref{table-experiments-data-realistic}). We needed to create data that would really put pressure on our heuristics, put them to a real test. Our solutions is to approach from the other side: in the end, we will be solving the equivalent of IS problem on a graph created from XML data. Why not create the XML data to contain a more complex graph in the first place? What if we could specify how many vertices and edges we want, and get the according XML?
+As soon as we started experimenting with the data coming from the real world, it was obvious that they are not complex enough. After we build the model, we get the most complex graphs of 31 vertices and 47 edges (see Table \ref{table-experiments-data-realistic}). Our solution is to approach the problem from the other side: in the end, we will be solving the equivalent of IS problem on a graph created from XML data. We will create the XML data to contain a more complex graph with a specific number of vertices and edges.
 
-This is actually simple. Consider the following excerpt from an XML file:
+Consider the following excerpt from an XML file:
 
 \begin{scriptsize}
 \begin{verbatim}
@@ -143,7 +135,7 @@ This is actually simple. Consider the following excerpt from an XML file:
 \end{verbatim}
 \end{scriptsize}
 
-We want to create a graph with around $v$ vertices and $e$ edges. First, we introduce $v$ elements with names \texttt{vertex0} - \texttt{vertex\{V-1\}}. To constitute an AM, they need an attribute \texttt{attr}, but with large enough random values, so that these values won't conflict with any others. Second, for each of the $e$ edges we pick two \texttt{vertex*} elements at random, and give them the same value of their \texttt{attr}. This will ensure they cannot share the same ID set, thus effectively creating the edge in the graph representation.
+Our aim is to create a graph with around $v$ vertices and $e$ edges. First, we introduce $v$ elements with names \texttt{vertex0} - \texttt{vertex\{V-1\}}. To constitute an AM, they need an attribute \texttt{attr}, but with large enough random values, so that these values will not conflict with any others. Second, for each of the $e$ edges we choose two \texttt{vertex*} elements at random, and give them the same value of their \texttt{attr}. This will ensure they cannot share the same ID set, thus effectively creating the edge in the graph representation.
 
 The pseudocode for this is in Listing \ref{listing-random-data}.
 
@@ -169,22 +161,21 @@ The pseudocode for this is in Listing \ref{listing-random-data}.
 \end{algorithmic}
 \end{algorithm}
 
-With this process in place we can create as much data as we wish with any combination of $v$ and $e$ we want.
+With this process it is possible to create as much data as needed, with any combination of $v$ and $e$ requested.
 
-There is one interesting characteristic that can describe random graphs like this, and that is the \textit{density}. This can be defined in various ways, we will use two different interpretations for a while. The first is $\frac{|E|}{|V|}$, that is, how many edges are there for one vertex (multiplied by 2 we'd get the average degree of the vertices). The second, perhaps more interesting is $\frac{|E|}{E_{max}}$, where $E_{max} = \frac{|V|.(|V|-1)}{2}$. This is the density as the ratio of edges that are to all edges that could be in a complete graph with $|V|$ vertices.
+There is one characteristic that can describe random graphs like this, and that is the \textit{density}. This can be defined in various ways, we will use two different interpretations. The first is $\frac{|E|}{|V|}$, that is, how many edges are there for one vertex (multiplied by 2 we would get the average degree of the vertices).
+
+The second, perhaps more interesting is $\frac{|E|}{E_{max}}$, where $E_{max} = \frac{|V|.(|V|-1)}{2}$. This is the density as the ratio of edges that are to all edges that could be in a complete graph with $|V|$ vertices.
 
 We have created 3 sets to use in experiments along with the realistic and converted sets, these are called \dataset{100-100}, \dataset{100-200} and \dataset{100-1000}. Note that the name is always in the form $v-e$.\\
 
 All of the experimental data sets mentioned so far, realistic, converted and artificial alike will be referred to as \textit{official test data (sets)}.\\
 
-Also, we will need data of comparably similar characteristics but varying size, to study the effects of size on the run times of experiments. For this reason we created 11 more sets, from \dataset{0-0} as the trivial one to \dataset{100-500} as the biggest one. From now on, these will be referred to as \textit{sized test data (sets)}. We wanted to keep density the same among these sets, and we picked the $\frac{|E|}{E_{max}}$ density interpretation for this.
+Also, we will need data of comparably similar characteristics but varying size to study the effects of size on the run times of experiments. For this reason we created 11 more sets, from \dataset{0-0} as the trivial one to \dataset{100-500} as the largest one. From now on, these will be referred to as \textit{sized test data (sets)}. We wanted to keep density the same among these sets, and we picked the $\frac{|E|}{E_{max}}$ density interpretation for this.
 
-TODO this is on the DVD.
+The summary is the Table \ref{table-experiments-data-artificial} and Table \ref{table-experiments-data-artificial-size}, these tables contain 2 new columns: values of density in both interpretations we introduced. Some of the graph representations can be seen in Figure \ref{image-experiments-data-artificial}.
 
-The summary is the Table \ref{table-experiments-data-artificial} and Table \ref{table-experiments-data-artificial-size}, these tables contain 2 new columns: values of density in both interpretations we introduced. Some graphs can be seen in Figure \ref{image-experiments-data-artificial}.
-
-While studying the tables you might notice that the actual numbers $|V|$ and $|E|$ do not match to the $v$ and $e$ in the names of the sets. This is because how the random generation algorithm works: it might pick the same edge twice, which will automatically render it unsuitable for the ID set (proof is homework). % TODO too much?:)
-Because of the so-called Birthday paradox, % TODO link
+While studying the tables it becomes obvious that the actual numbers $|V|$ and $|E|$ do not match to the $v$ and $e$ in the names of the sets. This is because how the random generation algorithm works: it might pick the same edge twice, which will automatically render it unsuitable for the ID set. Because of the so-called Birthday paradox, % TODO link
 this will happen more with higher $e$.
 
 \begin{table}
@@ -231,9 +222,11 @@ this will happen more with higher $e$.
 	\subfigure[\dataset{70-245}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
 \end{figure}
 
-To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one, which should work very nice with our heuristics. The $|V|$ and $|E|$ numbers are orders of magnitude higher than with any realistic (or converted) data set we are using, and this will put real stress on the heuristics, as we shall see in the next section.
+To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one. The $|V|$ and $|E|$ numbers are orders of magnitude higher than in any realistic (or converted) data set we are using.
 
-In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\%$, and we can see that this was quite nicely achieved. There is an interesting observation to be made here: the optimum is steadily decreasing with the increasing overall graph size. This intuitively suggests that the maximal quality theoretically achievable has to do with the $\frac{|E|}{|V|}$ density, not with the one we fixed. Exploration of this phenomenon is among the possibilities of future work of this thesis.
+In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\%$, and we can see that this was indeed achieved. There is an interesting observation to be made here: the optimum is steadily decreasing with the increasing overall graph size. This intuitively suggests that the maximal quality theoretically achievable has to do with the $\frac{|E|}{|V|}$ density, not with the one we fixed. Exploration of this phenomenon is among the possibilities of future work of this thesis.
+
+On a final note, the artificial data we used in experiments can be found on the DVD enclosed with this work.
 
 \section{Experimental Setup}
 
@@ -273,20 +266,7 @@ TODO describe how we get the model
 
 \subsection{Hardware and Software}
 
-We will be using two different machines to run the experiments. Every experimental result will have explicitly stated the machine it was performed on, and we shall make sure to run different experiments that can benefit from side-by-side comparison on the same machine.
-
-\subsubsection{Quad Core Machine}
-
-\begin{verbatim}
-Intel Core 2 Quad processor @ 2.83 GHz
-8 GB DDR2 RAM
-Windows 7 SP1 64bit
-TODO
-TODO
-GLPK version TODO
-\end{verbatim}
-
-\subsubsection{Dual Core Machine}
+We will be using the following machine when conducting our experiments.
 
 \begin{verbatim}
 Intel Core 2 Duo processor @ 2.33 GHz
@@ -300,13 +280,13 @@ GLPK version 4.34 (native)
 
 \subsection{Methodology}
 
-It is impossible to completely shield an experiment from the influence of the environment, but we should try our best. First of all, NetBeans running the experiments is the only relevant program running in the system at that time, as far as this is possible. Unfortunately, the NetBeans itself is quite a large environment with a life on its own, and we would most certainly get more reliable results, if we could run our experiments outside it. This improvement is left for the future work.
+We will attempt to shield our experiment from the influence of the environment as much as reasonably possible. First of all, NetBeans running the experiments is the only relevant program running in the system while the experiments are performed. Unfortunately, NetBeans itself is quite a large environment with a life of its own, and we would most certainly get more reliable results if we could run our experiments outside of it. This improvement is left for the future work.
 
-Also, every experimental configuration is run 50 times in hope that the effects of any events adversely affecting our results (e.g. OS deciding to run some house cleaning) will be averaged out. Whenever possible, we will always be using boxplots instead of a simple average (or average and variance) to present results of these multiple runs. % TODO discuss caches and the order in which we run the experiments in one set?
+Also, every experimental configuration is run 50 times in hope that the effects of any events adversely affecting our results (e.g. OS deciding to run some house cleaning) will be averaged out. Whenever possible, we will always be using boxplots instead of a simple average (or average and variance) to present results of these multiple runs.
 
 \subsection{Measuring the time}
 
-TODO
+Whenever it is necessary to measure the duration of an operation, we will use the \texttt{System.nanoTime()} built-in function. The result cannot be interpreted in an absolute manner, but by subtracting the time at the start from the time at the end, we can get a reasonably reliable measurement. We then have to divide it by one million to obtain the number of milliseconds passed.
 
 \subsection{Obtaining the results}
 

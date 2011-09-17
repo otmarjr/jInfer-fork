@@ -1,6 +1,7 @@
 \section{Experimental Results}
 
 \subsection{Grammar and model generation}
+\label{section-grammar-model-timing}
 
 %         NB class GrammarModelTiming
 
@@ -658,7 +659,9 @@ Interestingly enough, there is no clear separation between the two ID sets depen
 
 %         NB class IgnoreTextData
 
-TODO can we improve performance on huge data by ignoring textual content? Check for building as well as actual heu times.
+When considering data sets such as \dataset{XMA-p}, we notice that they contain a lot of simple text nodes that do not contribute to our search, but possibly slow it down. Precisely for this reason the \jmodule{BasicIGG} module in jInfer contains an option to turn off processing of such nodes. (It also allows to ignore the content of attributes, but this would be devastating to our cause.) Ignoring the content of text nodes means internally that these are created, but their actual string content is skipped and not saved in the memory structures. This means that the whole data model occupies less space on the heap, which can possibly lead to better performance.
+
+We shall now investigate this matter by taking the biggest data set \dataset{XMA-p} containing a lot of text data.
 
 \begin{center}
 \bigskip
@@ -674,6 +677,8 @@ TODO can we improve performance on huge data by ignoring textual content? Check 
 \end{tabular}
 \bigskip
 \end{center}
+
+Our experimental set will contain 50 iterations * 2 = 100 experimental configurations as described in Listing \ref{listing-experiment-ignore-text-data}. We will be using \heu{Glpk} limited to 1 second with no additional IH and pool size set to 1. After the first 50 iterations we will turn on the option to ignore the simple text node data and run the same 50 iterations again. We will be collecting the grammar extraction (GE) and model creation (MC) times as in the experiment in Section \ref{section-grammar-model-timing}.
 
 \begin{algorithm}
 \caption{Ignoring text data set generation}
@@ -692,6 +697,10 @@ TODO can we improve performance on huge data by ignoring textual content? Check 
 \end{algorithmic}
 \end{algorithm}
 
+Results are summarized in Figure \ref{image-experiment-ignore-text-data}. Boxplots drawn in dashed lines represent the original case, not ignoring the text data. Solid lines represent the case where we ignore the text data.
+
+Interestingly, the grammar extraction times tend to be shorter in the case when text data is not ignored, although this is inconclusive. However, there is a clear improvement of about 50 \% in the case of model creation times. The conclusion then is to ignore the simple text node content whenever possible when finding ID attributes.
+
 \begin{figure}
   \caption{Ignoring Text Data}
   \label{image-experiment-ignore-text-data}
@@ -699,15 +708,32 @@ TODO can we improve performance on huge data by ignoring textual content? Check 
     \includegraphics[width=\textwidth]{images/experiments/ignore-text-data}
 \end{figure}
 
-TODO interpretation - grammar extraction is very similar if not a bit worse, model creation is about 50\% faster.
-
 \subsection{Chaining the IHs}
 
 %         NB class ChainedIHsX
 
-TODO finally we got to the most interesting part, unfortunately this is basically guesswork and intuition.
+In this section we will describe the most interesting experimental area, that is chaining more than one improvement heuristics and running them in a loop. Unfortunately, the sheer number of possible combinations in which IHs can be ordered (as well as the number of ways to set their parameters) prohibits us from investigating this in depth.
 
-TODO we will try 3 different scenarios, see which performs the best on the data and then try to tweak it a bit. First we set all ratios to 0.1, as soon as we find the best scenario, we will tweak it.
+We shall then employ a higher-level heuristic: we will choose 3 scenarios (lists of IHs, or metaheuristics), assess their performance to find the best one and then tune its parameters. This approach is by no means exhaustive, it is just a probe in the problem space.
+
+The 3 scenarios we will be assessing will be constructed from the following instances of improvement heuristics:
+
+\begin{itemize}
+	\item \heu{RR} is \heu{RandomRemove} with $ratio$ set to $0.1$.
+	\item \heu{MUT} is \heu{Mutation} with $ratio$ set to $0.1$ and time limit set to 1 second.
+	\item \heu{CX} is \heu{Crossover} with $ratio$ set to $0.1$ and time limit set to 1 second.
+	\item \heu{LB} is \heu{LocalBranching} with $ratio$ set to $0.1$ and time limit set to 1 second.
+	\item \heu{RW} is \heu{RemoveWorst}.
+	\item \heu{H} is \heu{Hungry}.
+\end{itemize}
+
+The scenarios themselves shall be the following:
+
+\begin{itemize}
+	\item \textit{\textbf{Scenario 1}}. \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
+	\item \textit{\textbf{Scenario 2}}. \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow$ \heu{MUT} $\rightarrow \ldots$
+	\item \textit{\textbf{Scenario 3}}. \heu{CX} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RW} $\rightarrow$ \heu{LB} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
+\end{itemize}
 
 \begin{center}
 \bigskip
@@ -723,6 +749,10 @@ TODO we will try 3 different scenarios, see which performs the best on the data 
 \end{tabular}
 \bigskip
 \end{center}
+
+The experimental set will consist of 3 scenarios * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Listing \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the ratios are set to $0.1$ for the time being. The termination criterion is set to limit the total runtime to 10 seconds and (potentialy) infinite iterations.
+
+Data gathered will be traces like the one in Appendix \ref{appendix-trace} - after each iteration, the time taken so far and the quality of incumbent solution is noted.
 
 \begin{algorithm}
 \caption{Chaining IHs set generation}
@@ -747,7 +777,7 @@ TODO we will try 3 different scenarios, see which performs the best on the data 
 \FOR{$ih \in IHs$}
   \FOR{$file \in $ official test data}
     \FOR{$i = 1 \to 20$}
-      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = ih, limit = 10\}$
+      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = ih, limit = 10 seconds\}$
     \ENDFOR
   \ENDFOR
 \ENDFOR
@@ -755,11 +785,44 @@ TODO we will try 3 different scenarios, see which performs the best on the data 
 \end{algorithmic}
 \end{algorithm}
 
-TODO result graphs - just a \textbf{commented} sample
+Resulting traces for each data set can be summarized in graphs like the one for \heu{100-100} in Figure \ref{image-experiment-chained-ihs-s1}. This one deserves more explanation than usual.
 
-\dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p} boring - finds the optimum in the first step
+\begin{figure}
+  \caption{Chained IHs - \dataset{100-100} results for Strategy 1}
+  \label{image-experiment-chained-ihs-s1}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s1}
+\end{figure}
 
-TODO choose the best - see how many times in the 20 runs did they find optimum
+X and Y axes represent the time and quality, as usual. Each line represents one run of the scenario (metaheuristic) in the following way: the N\textsuperscript{th} break in the line (i.e. the N\textsuperscript{th} data point) is the partial result after the N\textsuperscript{th} step of the scenario. Its X position denotes the absolute time in which this step finished, and its Y position represents the incumbent solution quality after this step. Every time a line disappears before reaching 10 seconds it means that this metaheuristic run found the optimum before the 10 second mark. There is an obvious repetitive regularity in the shape of each line, this corresponds to the fact that there is a finite number of IHs in this scenario (5 of them in Scenario 1) which repeat over time. The obvious similarity between different lines corresponds to the fact that each run is from the same scenario, and over time, they do the same steps. 
+
+We can see effects of different IHs from this graph:
+\begin{itemize}
+	\item Every $(1 + 5k)$\textsuperscript{th} and $(3 + 5k)$\textsuperscript{th} step is a \heu{RandomRemove}, and each time this happens there is a rather sharp drop in quality
+	\item Every $(2 + 5k)$\textsuperscript{th} step is a \heu{Mutation}, and there is a consistent increase in quality each time.
+	\item Every $(4 + 5k)$\textsuperscript{th} step is a \heu{Crossover}, and each time it happens there is a consistent increase, yet smaller than with \heu{Mutation}.
+	\item Every $5k$\textsuperscript{th} step is a \heu{RemoveWorst}, and as expected, this removes the worst solution not touching the best ones that decide the incumbent quality. The line thus stays flat every time it happens.
+\end{itemize}
+
+In this particular example there is only 1 run out of 10 that does not finish (find optimum) under the 10 second mark. 
+
+There are two more graphs like this in Figures \ref{image-experiment-chained-ihs-s2} and \ref{image-experiment-chained-ihs-s3} for comparison, capturing Strategy 2 and Strategy 3 respectively working on the same data set, \dataset{100-100}. Describing them in detail is unfortunately outside of the scope of this work.
+
+\begin{figure}
+  \caption{Chained IHs - \dataset{100-100} results for Strategy 2}
+  \label{image-experiment-chained-ihs-s2}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s2}
+\end{figure}
+
+\begin{figure}
+  \caption{Chained IHs - \dataset{100-100} results for Strategy 3}
+  \label{image-experiment-chained-ihs-s3}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s3}
+\end{figure}
+
+It is now necessary to assess which of the strategies perform the best. We shall take a look at the different data sets. Easily we can discard \dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p}, because the optimum is found in the very first step. Let us now introduce a metric for assessment of a strategy: namely, how many times of the 20 runs did it find the optimum. Results of this are summarized in Table \ref{table-experiments-chained-ihs-tweaking}.
 
 \begin{table}
   \caption{Performance of various IH chains}
@@ -780,7 +843,7 @@ TODO choose the best - see how many times in the 20 runs did they find optimum
   Each cell represents the number of times (out of 20) the strategy found the optimum - more is better.
 \end{table}
 
-Strategies 1 and 3 are very similar, we shall choose \textbf{1} for its simplicity to tune the parameters.
+Each cell contains the number of times the strategy found optimum in the data set, out of 20 runs. Highlighted are the strategies that performed best on that data set. We see that Strategy 1 and 3 are very similar in performance. We shall nonetheless choose Strategy \textbf{1} as the winner for its simplicity. Now we can tune its parameters.
 
 \subsubsection{Improving Strategy 1}
 

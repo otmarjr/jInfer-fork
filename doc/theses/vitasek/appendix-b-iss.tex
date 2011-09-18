@@ -1,16 +1,32 @@
-\chapter{IDSetSearch}
+\chapter{\jmodule{IDSetSearch}}
 \label{appendix-iss}
 
-TODO talk a bit about the structure of ISS module.
+This appendix will shortly describe the \jmodule{IDSetSearch} jInfer module. As the name suggests, its main purpose is to find ID and IDREF sets and provide attribute statistics in general for grammars originating from any stage of XML schema inference. Virtually every piece of code that was added to jInfer in the course of creating this thesis is contained in this module.\\
 
-TODO name of the module, its place in jInfer, interface with the framework (service providing)
+From jInfer's point of view, this module resides in codebase \texttt{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.iss} and is a service provider for \texttt{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.base.\.inter\.faces.\.ID\.Set\.Search} interface. Invoking the \texttt{showIDSetPanel()} method displays a fully-featured window containing all the relevant attribute statistics as well as possibility to find the ID and IDREF sets for a specified grammar.\\
 
-TODO package name root
+Most important packages in \jmodule{IDSetSearch} are the following.
 
-TODO "Attribute Stats"
+\begin{itemize}
+	\item \texttt{objects}, containing the object representation of attribute mappings and AM model.
+	\item \texttt{heuristics.construction}, containing all the CHs hidden behind the \texttt{Con\-struc\-tion\-Heu\-ris\-tic} interface, with sub-packages \texttt{fidax} containing the whole implementation of FIDAX heuristic % TODO link
+	and \texttt{glpk} containing the whole interface to an external GLPK solver. % TODO link
+	\item \texttt{heuristics.improvement}, containing all the IH hidden behind the \texttt{Im\-prove\-ment\-Heu\-ris\-tic} interface.
+	\item \texttt{experiments}, containing everything related to experimenting with these heuristics.
+\end{itemize}
 
-TODO heuristics - interfaces (don't forget to explain TerminationCriteria), construction, improvement
+\texttt{Experiment} is a class representing a single experiment with specified input data (encapsulated in \texttt{Test\-Data} interface), settings (encapsulated in \texttt{Ex\-pe\-ri\-ment\-Pa\-ra\-me\-ters}) and a metaheuristic as defined in TODO link. Its method \texttt{run()} will launch the metaheuristic, first executing the construction heuristic and then running the specified improvement heuristics in a loop until termination criteria defined in an implementation of \texttt{Ter\-mi\-na\-tion\-Cri\-ter\-ion} are met. The quality of a single ID set is measured by an instance of \texttt{Quality\-Measurement}. After the experiment finishes, it invokes the \texttt{notify\-Finished()} method.\\
 
-TODO experiments - quality, termination, parameters, experiment sets, how to create an experiment set
+However, experiments are almost never run alone. For the purpose of running a whole experimental set there is the \texttt{Experiment\-Set} interface and its abstract implementation \texttt{Abstract\-Experiment\-Set}. Its descendants need only to provide a list of \texttt{Experiment\-Parameter}s and looping as well as data collection will be handled for them.
 
-TODO make sure there was a place where we described the model data model:)
+\section{How to Create a New Heuristic}
+
+Decide whether it should be a CH or IH and create a class implementing \texttt{Con\-struc\-tion\-Heu\-ris\-tic} or \texttt{Im\-prove\-ment\-Heu\-ris\-tic}, respectively. In each case implement all the \texttt{get*Name()} methods inherited from \texttt{Named\-Module} and then the most important \texttt{start()} method.
+
+In this method use the provided \texttt{Experiment} instance (and \texttt{List<IdSet> feasiblePool} in case of IH) to create a pool of feasible solutions and in the end return it by invoking the \texttt{finished()} method of the provided \texttt{Heuristic\-Callback} parameter.
+
+\section{How to Create a New Experimental Set}
+
+Subclass the \texttt{Abstract\-Experiment\-Set} class, override \texttt{get\-Name()} to provide the name of this set and finally override \texttt{get\-Experiments()} to return the list of \texttt{Experiment\-Parameters} that will constitute this sit.
+
+It is possible to optionaly override any of the following methods: \texttt{notify\-Start()}, \texttt{notify\-Finished()} and \texttt{notify\-Finished\-All()}. They will be invoked before running the first experiment, after each experiment run and after all experiments finished, respectively. Note that \texttt{notify\-Finished()} already contains logic to output some information regarding the currently finished experiment to a file, but it can be safely overriden without a need to call \texttt{super.\.notify\-Finished()}.

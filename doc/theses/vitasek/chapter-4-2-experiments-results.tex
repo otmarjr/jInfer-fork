@@ -1,6 +1,6 @@
 \section{Experimental Results}
 
-\subsection{Grammar and model generation}
+\subsection{Grammar and Model Generation}
 \label{section-grammar-model-timing}
 
 %         NB class GrammarModelTiming
@@ -24,7 +24,7 @@ from the input XML file and how long does it take to create the AM model from th
 \bigskip
 \end{center}
 
-The experimental set will contain $50 * (11 + 11) = 1100$ configurations: 50 iterations for 11 test data sets plus 11 sized test data sets. There will be no CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.
+The experimental set will contain $50 * (11 + 11) = 1100$ configurations: 50 iterations for 11 test data sets plus 11 sized test data sets. There will be no CHs or IHs. We will be gathering the timing data for IG extraction and model generation in GnuPlot format.\\
 
 \begin{table}
   \caption{Grammar Extraction and Model Creation Times}
@@ -64,11 +64,11 @@ Results are in Table \ref{table-experiments-grammar-model-timing}. We are presen
 
 We can see from the results that for most data sets their model can easily be created under around one second, only in case of the biggest set \dataset{XMA-p} (13 MB) this takes some 17 seconds. We can conclude that grammar and model creation times are not a bottleneck for now. Heuristics run times will be order of magnitude higher.
 
-\subsubsection{GLPK interface timing}
+\subsubsection{GLPK Interface Timing}
 
 %         NB class GlpkInterfaceTiming
 
-A related problem is how long it takes to create input for GLPK and then parse its results. We will use the same test data sets as in the previous case, but now we will gather times needed to communicate with GLPK.
+A related problem is how long it takes to create input for GLPK and then parse its results. We will use the same test data sets as in the previous case, but now we will gather times needed to communicate with GLPK.\\
 
 \begin{table}
   \caption{GLPK Interface Times}
@@ -108,7 +108,7 @@ Results are in table \ref{table-experiments-glpk-timing}. For each data set ther
 
 Interestingly enough, in most cases the times to create an input for GLPK and then to parse its output are very similar. Also, for sized test data sets it is interesting to note that even though the $|V|$ and $|E|$ counts are increasing, the times remain almost the same. This probably due to the fact that IC and OP times include the I/O when writing to a file for GLPK or reading the file it produced, and these times are probably the most relevant.
 
-\subsection{GLPK: native vs. Cygwin}
+\subsection{GLPK: Native vs. Cygwin}
 
 %         NB class TimeQuality
 %         NB class TimeTillOptimum
@@ -136,10 +136,10 @@ Apart from comparing different versions, we shall see how the pure GLPK approach
 \bigskip
 \end{center}
 
-Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 46 seconds with increments of 5, meaning 10 settings * 50 iterations = 500 configurations in total (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights). The data set used is \dataset{100-500} as the biggest one in sized test data.
+Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 46 seconds with increments of 5, meaning 10 settings * 50 iterations = 500 configurations in total (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights). The data set used is \dataset{100-500} as the biggest one in sized test data.\\
 
 \begin{algorithm}
-\caption{GLPK: native vs. Cygwin set generation 1}
+\caption{GLPK: Native vs. Cygwin Set Generation 1}
 \label{listing-experiment-glpk-native-vs-cygwin-1}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -180,7 +180,7 @@ We can see from the graph that even though for smaller times (1 and 6 seconds, r
 \bigskip
 \end{center}
 
-The other way to compare the performance of these two GLPK versions is to see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 550 configurations for each version. Every configuration will let \heu{Glpk} CH run for unlimited time, until it finds the optimum. This will be repeated in 50 iterations for each of the 11 files from the sized test data set (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.
+The other way to compare the performance of these two GLPK versions is to see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 550 configurations for each version. Every configuration will let \heu{Glpk} CH run for unlimited time, until it finds the optimum. This will be repeated in 50 iterations for each of the 11 files from the sized test data set (see Listing \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.\\
 
 \begin{algorithm}
 \caption{GLPK: native vs. Cygwin set generation 2}
@@ -221,6 +221,7 @@ These experiments proved that for bigger data sets the times to reach the optimu
 \end{figure}
 
 \subsection{\heu{Random} vs. \heu{Fuzzy} vs. \heu{FIDAX}}
+\label{section-experiments-random-fuzzy-fidax}
 
 %         NB class RandomVsFuzzyVsFidaxStart
 
@@ -244,10 +245,10 @@ Our investigation into various CHs will start by comparing \heu{FIDAX} from the 
 
 The experimental set will contain 1650 configurations in total: 3 different CHs * 11 official test data sets * 50 iterations. There will be no improvement heuristics. The pool size will be set to 10, even though \heu{FIDAX} cannot not profit from this. Listing for this can be found in \ref{listing-experiment-random-fuzzy-fidax}.
 
-We will be gathering the running time of the CH itself and quality of the best solution found for GnuPlot.
+We will be gathering the running time of the CH itself and quality of the best solution found for GnuPlot.\\
 
 \begin{algorithm}
-\caption{\heu{Random} vs. \heu{Fuzzy} vs. \heu{FIDAX} set generation}
+\caption{\heu{Random} vs. \heu{Fuzzy} vs. \heu{FIDAX} Set Generation}
 \label{listing-experiment-random-fuzzy-fidax}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -301,7 +302,7 @@ Now we shall try to answer a minor question, whether it is possible to improve \
 \bigskip
 \end{center}
 
-We need a pool size of one and only a single iteration - both \heu{FIDAX} and \heu{Hungry} are deterministic. We will try all official data sets, first with empty IH, second with \heu{Hungry} as IH. We will gather the qualities in each case and see whether there is any improvement.
+We need a pool size of one and only a single iteration - both \heu{FIDAX} and \heu{Hungry} are deterministic. We will try all official data sets, first with empty IH, second with \heu{Hungry} as IH. We will gather the qualities in each case and see whether there is any improvement.\\
 
 The experimental results are summarized in the Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. As trivial a heuristic \heu{Hungry} is, it is still able to improve the ID set found by \heu{FIDAX} by as much as almost 50\% (the last row, \dataset{100-1000}).
 
@@ -331,7 +332,7 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
 
 % TODO for some reason \texttt{\textbf{vertex5}} looks only like \texttt{vertex5}
 \begin{table}
-  \caption{ID sets in \heu{FIDAX} versus \heu{FIDAX} + \heu{Hungry}}
+  \caption{ID Sets in \heu{FIDAX} Versus \heu{FIDAX} + \heu{Hungry}}
   \bigskip
   \label{table-experiments-fidax-and-hungry-idsets}
   \centering
@@ -357,7 +358,7 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
   \end{tabular}
 \end{table}
 
-\subsection{Best standalone CH}
+\subsection{Best Standalone CH}
 
 %         NB class BestStandaloneCH
 
@@ -381,10 +382,10 @@ We shall now try to find the best standalone CH, that is the CH that finds on av
 \bigskip
 \end{center}
 
-We will use all the official data sets, set the pool size to 10 where applicable, $\alpha$ and $\beta$ to 1. This experiment will consist of 50 iterations * 11 data sets * 6 CHs = 3300 experimental configurations. See the Listing \ref{listing-experiment-best-standalone-ch} for details. This time we are not interested in run times, only in qualities which we shall gather in a format for GnuPlot.
+We will use all the official data sets, set the pool size to 10 where applicable, $\alpha$ and $\beta$ to 1. This experiment will consist of 50 iterations * 11 data sets * 6 CHs = 3300 experimental configurations. See the Listing \ref{listing-experiment-best-standalone-ch} for details. This time we are not interested in run times, only in qualities which we shall gather in a format for GnuPlot.\\
 
 \begin{algorithm}
-\caption{Best Standalone CH set generation}
+\caption{Best Standalone CH Set Generation}
 \label{listing-experiment-best-standalone-ch}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -420,7 +421,7 @@ For data sets \heu{XMA-c}, \heu{XMA-p}, \heu{MSH} and \heu{NTH} every CH found t
 
 We can see that \heu{Glpk} wins in every single case. We will start from there and try to build upon this result.
 
-\subsection{Best IH for Glpk}
+\subsection{Best IH for \heu{Glpk}}
 
 %         NB class BestIHForGlpk
 
@@ -445,10 +446,10 @@ We should note that the combination best CH - best IH found this way does not ne
 \bigskip
 \end{center}
 
-This experimental set will contain 6 data sets * 50 iterations * 4 IHs = 1200 experimental configurations. Note that we are using only the most challenging data sets, as the combination of \heu{Glpk} as CH and any other IH is already an overkill for easier data sets.
+This experimental set will contain 6 data sets * 50 iterations * 4 IHs = 1200 experimental configurations. Note that we are using only the most challenging data sets, as the combination of \heu{Glpk} as CH and any other IH is already an overkill for easier data sets.\\
 
 \begin{algorithm}
-\caption{Best IH for \heu{Glpk} set generation}
+\caption{Best IH for \heu{Glpk} Set Generation}
 \label{listing-experiment-best-ih-for-glpk}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -522,10 +523,10 @@ As we mentioned before, we chose the combination \heu{Glpk} and \heu{Mutation} i
 \bigskip
 \end{center}
 
-Setup used will be almost identical to that from the previous experiment. Experimental set will consist of 6 data sets * 50 iterations * 2 CHs = 600 experimental configurations, see Listing \ref{listing-experiment-ch-for-mutation}. We shall collect the eventual quality after running both the CH and the IH in format suited for GnuPlot.
+Setup used will be almost identical to that from the previous experiment. Experimental set will consist of 6 data sets * 50 iterations * 2 CHs = 600 experimental configurations, see Listing \ref{listing-experiment-ch-for-mutation}. We shall collect the eventual quality after running both the CH and the IH in format suited for GnuPlot.\\
 
 \begin{algorithm}
-\caption{\heu{Random} as CH set generation}
+\caption{\heu{Random} as CH Set Generation}
 \label{listing-experiment-ch-for-mutation}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -573,10 +574,10 @@ It is worthy noting that we do not expect any changes in performance of heuristi
 \bigskip
 \end{center}
 
-This experimental set will contain 5 different $\alpha$ settings * 5 $\beta$ settings * 8 data sets = 200 experimental configurations. We are not using the artificial data sets, because the way they are generated (attribute values are random numbers) they cannot possibly create different optimal ID sets. The pseudocode capturing this is in Listing \ref{listing-experiment-various-betas}. We will use \heu{Glpk} constrained to 1 second (thus making it an instance of \heu{Truncated Branch \& Bound}) and no IHs. Pool size as well as iteration count will be 1. We are noting the actual ID set found by the run of the heuristic.
+This experimental set will contain 5 different $\alpha$ settings * 5 $\beta$ settings * 8 data sets = 200 experimental configurations. We are not using the artificial data sets, because the way they are generated (attribute values are random numbers) they cannot possibly create different optimal ID sets. The pseudocode capturing this is in Listing \ref{listing-experiment-various-betas}. We will use \heu{Glpk} constrained to 1 second (thus making it an instance of \heu{Truncated Branch \& Bound}) and no IHs. Pool size as well as iteration count will be 1. We are noting the actual ID set found by the run of the heuristic.\\
 
 \begin{algorithm}
-\caption{Various values of $\alpha$ and $\beta$ set generation}
+\caption{Various Values of $\alpha$ and $\beta$ Set Generation}
 \label{listing-experiment-various-betas}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -599,7 +600,7 @@ Following data sets have the same optimal ID sets regardless of the setting of $
 The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1} are listed in Table \ref{table-experiments-various-betas-ova1} (note that the actual names had to be anonymized for reasons discussed in Section \ref{section-realistic-data}). The differing attribute mapping is highlited.
 
 \begin{table}
-  \caption{Different ID sets found for \dataset{OVA1}}
+  \caption{Different ID Sets Found for \dataset{OVA1}}
   \bigskip
   \label{table-experiments-various-betas-ova1}
   \centering
@@ -626,7 +627,7 @@ The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1}
 Table \ref{table-experiments-various-betas-ova1-effect} summarizes the dependency of the ID set found on various values of $\alpha$, $\beta$. We than define the $\alpha-ratio$ as $ \dfrac{\alpha}{\alpha + \beta} $ and summarize the findings in a linear manner, sorted by increasing $\alpha-ratio$ in Table \ref{table-experiments-various-betas-ova1-ratio-effect}. Note that the $\alpha-ratio$s are not unique due to the way we constructed the experimental configurations here.
 
 \begin{table}
-  \caption{Effect of $\alpha$, $\beta$ on ID set found for \dataset{OVA1}}
+  \caption{Effect of $\alpha$, $\beta$ on ID Set Found for \dataset{OVA1}}
   \bigskip
   \label{table-experiments-various-betas-ova1-effect}
   \centering
@@ -642,7 +643,7 @@ Table \ref{table-experiments-various-betas-ova1-effect} summarizes the dependenc
 \end{table}
 
 \begin{table}
-  \caption{Effect of $\alpha-ratio$ on ID set found for \dataset{OVA1}}
+  \caption{Effect of $\alpha-ratio$ on ID Set Found for \dataset{OVA1}}
   \bigskip
   \label{table-experiments-various-betas-ova1-ratio-effect}
   \centering
@@ -667,7 +668,7 @@ Table \ref{table-experiments-various-betas-ova1-effect} summarizes the dependenc
 
 Interestingly enough, there is no clear separation between the two ID sets depending on the $\alpha-ratio$ to be found. The very existence of the two sets might be due to the fact that \heu{Glpk} randomizes the order in which AMs are presented to the external GLPK solver. However, this question is outside of the scope of this work, and shall be left for future work.
 
-\subsection{Ignoring text data}
+\subsection{Ignoring Text Data}
 
 %         NB class IgnoreTextData
 
@@ -691,10 +692,10 @@ We shall now investigate this matter by taking the biggest data set \dataset{XMA
 \bigskip
 \end{center}
 
-Our experimental set will contain 50 iterations * 2 = 100 experimental configurations as described in Listing \ref{listing-experiment-ignore-text-data}. We will be using \heu{Glpk} limited to 1 second with no additional IH and pool size set to 1. After the first 50 iterations we will turn on the option to ignore the simple text node data and run the same 50 iterations again. We will be collecting the grammar extraction (GE) and model creation (MC) times as in the experiment in Section \ref{section-grammar-model-timing}.
+Our experimental set will contain 50 iterations * 2 = 100 experimental configurations as described in Listing \ref{listing-experiment-ignore-text-data}. We will be using \heu{Glpk} limited to 1 second with no additional IH and pool size set to 1. After the first 50 iterations we will turn on the option to ignore the simple text node data and run the same 50 iterations again. We will be collecting the grammar extraction (GE) and model creation (MC) times as in the experiment in Section \ref{section-grammar-model-timing}.\\
 
 \begin{algorithm}
-\caption{Ignoring text data set generation}
+\caption{Ignoring Text Data Set Generation}
 \label{listing-experiment-ignore-text-data}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -766,10 +767,10 @@ The scenarios themselves shall be the following:
 
 The experimental set will consist of 3 scenarios * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Listing \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the ratios are set to $0.1$ for the time being. The termination criterion is set to limit the total runtime to 10 seconds and (potentialy) infinite iterations.
 
-Data gathered will be traces like the one in Appendix \ref{appendix-trace} - after each iteration, the time taken so far and the quality of incumbent solution is noted.
+Data gathered will be traces like the one in Appendix \ref{appendix-trace} - after each iteration, the time taken so far and the quality of incumbent solution is noted.\\
 
 \begin{algorithm}
-\caption{Chaining IHs set generation}
+\caption{Chaining IHs Set Generation}
 \label{listing-experiment-chaining-ihs}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -802,7 +803,7 @@ Data gathered will be traces like the one in Appendix \ref{appendix-trace} - aft
 Resulting traces for each data set can be summarized in graphs like the one for \heu{100-100} in Figure \ref{image-experiment-chained-ihs-s1}. This one deserves more explanation than usual.
 
 \begin{figure}
-  \caption{Chained IHs - \dataset{100-100} results for Strategy 1}
+  \caption{Chained IHs - \dataset{100-100} Results for Scenario 1}
   \label{image-experiment-chained-ihs-s1}
   \centering
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s1}
@@ -818,33 +819,33 @@ We can see effects of different IHs from this graph:
 	\item Every $5k$\textsuperscript{th} step is a \heu{RemoveWorst}, and as expected, this removes the worst solution not touching the best ones that decide the incumbent quality. The line thus stays flat every time it happens.
 \end{itemize}
 
-In this particular example there is only 1 run out of 10 that does not finish (find optimum) under the 10 second mark. 
+In this particular example there is only 1 run out of 10 that does not finish (find optimum) under the 10 second mark.\\
 
-There are two more graphs like this in Figures \ref{image-experiment-chained-ihs-s2} and \ref{image-experiment-chained-ihs-s3} for comparison, capturing Strategy 2 and Strategy 3 respectively working on the same data set, \dataset{100-100}. Describing them in detail is unfortunately outside of the scope of this work.
+There are two more graphs like this in Figures \ref{image-experiment-chained-ihs-s2} and \ref{image-experiment-chained-ihs-s3} for comparison, capturing Scenario 2 and Scenario 3 respectively working on the same data set, \dataset{100-100}. Describing them in detail is unfortunately outside of the scope of this work.\\
 
 \begin{figure}
-  \caption{Chained IHs - \dataset{100-100} results for Strategy 2}
+  \caption{Chained IHs - \dataset{100-100} Results for Scenario 2}
   \label{image-experiment-chained-ihs-s2}
   \centering
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s2}
 \end{figure}
 
 \begin{figure}
-  \caption{Chained IHs - \dataset{100-100} results for Strategy 3}
+  \caption{Chained IHs - \dataset{100-100} Results for Scenario 3}
   \label{image-experiment-chained-ihs-s3}
   \centering
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s3}
 \end{figure}
 
-It is now necessary to assess which of the strategies perform the best. We shall take a look at the different data sets. Easily we can discard \dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p}, because the optimum is found in the very first step. Let us now introduce a metric for assessment of a strategy: namely, how many times of the 20 runs did it find the optimum. Results of this are summarized in Table \ref{table-experiments-chained-ihs-tweaking}.
+It is now necessary to assess which of the scenarios perform the best. We shall take a look at the different data sets. Easily we can discard \dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p}, because the optimum is found in the very first step. Let us now introduce a metric for assessment of a scenario: namely, how many times of the 20 runs did it find the optimum. Results of this are summarized in Table \ref{table-experiments-chained-ihs-tweaking}.
 
 \begin{table}
-  \caption{Performance of various IH chains}
+  \caption{Performance of Various IH Chains}
   \bigskip
   \label{table-experiments-chained-ihs-tweaking}
   \centering
   \begin{tabular}{l || c | c | c}
-    Dataset & Strategy 1 & Strategy 2 & Strategy 3 \\
+    Dataset & Scenario 1 & Scenario 2 & Scenario 3 \\
     \hline
     \dataset{100-100}  & \textbf{20} & 19 & \textbf{20} \\
     \dataset{100-200}  & \textbf{19} & 18 & 17 \\
@@ -853,13 +854,11 @@ It is now necessary to assess which of the strategies perform the best. We shall
     \dataset{OVA2}     & \textbf{19} & 13 & 18 \\
     \dataset{OVA3}     & 17 & 18 & \textbf{20} \\
     \end{tabular}
-  \bigskip
-  Each cell represents the number of times (out of 20) the strategy found the optimum - more is better.
 \end{table}
 
-Each cell contains the number of times the strategy found optimum in the data set, out of 20 runs. Highlited are the strategies that performed best on that data set. We see that Strategy 1 and 3 are very similar in performance. We shall nonetheless choose Strategy \textbf{1} as the winner for its simplicity. Now we can tune its parameters.
+Each cell contains the number of times the scenario found optimum in the data set, out of 20 runs. Highlited are the scenarios that performed best on that data set. We see that Scenario 1 and 3 are very similar in performance. We shall nonetheless choose Scenario \textbf{1} as the winner for its simplicity. Now we can tune its parameters.
 
-\subsubsection{Improving Strategy 1}
+\subsubsection{Improving Scenario 1}
 
 %         NB class ChainedIHs1Tweak
 
@@ -889,10 +888,10 @@ This experimental set will consist of 45 ratio combinations * 6 data sets * 50 i
 	\item \heu{Mutatio} ratio will be from $\{0.05, 0.1, 0.2\}$
 	\item \heu{Crossover} ratio will be from $\{0.05, 0.1, 0.2\}$
 \end{itemize}
-The process of creating the configurations is captured in Listing \ref{listing-experiment-chained-ihs-tuning}. We will be gathering the following information for each run: what were the parameters, how long did the run take and whether it found optimum.
+The process of creating the configurations is captured in Listing \ref{listing-experiment-chained-ihs-tuning}. We will be gathering the following information for each run: what were the parameters, how long did the run take and whether it found optimum.\\
 
 \begin{algorithm}
-\caption{Chained IHs - Tuning set generation}
+\caption{Chained IHs - Improving Scenario 1 Set Generation}
 \label{listing-experiment-chained-ihs-tuning}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -918,12 +917,12 @@ The process of creating the configurations is captured in Listing \ref{listing-e
 \end{algorithmic}
 \end{algorithm}
 
-After averaging the data we get a large result table, an excerpt from which is in Table \ref{table-experiments-chained-ihs-tweaking}. In the left part are the ratio values, in the right part averaged running times for each data set. Highlited are the shortest times for each set. Only rows containing at least one such shortest time are presented.
+After averaging the data we get a large result table, an excerpt from which is in Table \ref{table-experiments-chained-ihs-tweaking-s1}. In the left part are the ratio values, in the right part averaged running times for each data set. Highlited are the shortest times for each set. Only rows containing at least one such shortest time are presented.
 
 \begin{table}
-  \caption{Performance of Strategy 1 depending on parameters - excerpt}
+  \caption{Performance of Scenario 1 Depending on Parameters - Excerpt}
   \bigskip
-  \label{table-experiments-chained-ihs-tweaking}
+  \label{table-experiments-chained-ihs-tweaking-s1}
   \centering
   \begin{tabular}{c | c | c || c | c | c | c | c | c}
     \heu{RR} & \heu{MUT} & \heu{CX} & \dataset{100-100} & \dataset{100-1000} & \dataset{100-200} & \dataset{OVA1} & \dataset{OVA2} & \dataset{OVA3} \\
@@ -938,7 +937,7 @@ After averaging the data we get a large result table, an excerpt from which is i
 
 It is now necessary to pick one ratio combination as the best one. It is $(RR = 0.5, MUT = 0.05, CX = 0.2)$ for the following reason: it is the best one for sets \dataset{100-100} and \dataset{OVA3} and second best for \dataset{100-200}, \dataset{OVA1} and \dataset{OVA2}. Only the \dataset{100-1000} does not profit from these settings.
 
-Now to interpret ratios in the best combination. \heu{RandomRemove} ratio of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} ratio of 0.05 means only around 5\% of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} ratio of 0.2 means that around 1/5\textsuperscript{th} of ID sets in the pool (randomly chosen) will be scanned for common AMs.
+Now to interpret ratios in the best combination. \heu{RandomRemove} ratio of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the scenario from stalling in local optima. \heu{Mutation} ratio of 0.05 means only around 5\% of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} ratio of 0.2 means that around 1/5\textsuperscript{th} of ID sets in the pool (randomly chosen) will be scanned for common AMs.
 
 All of the ratios in the best combination are at one end of the range we chose from them. As a future work option it is possible to start moving these ratios even more in their preferred way, possibly removing \heu{Mutation} in the process.
 
@@ -952,7 +951,7 @@ After asking and answering a lot of questions related to the overall system beha
 
 The first fact is that if we have the time available, it is best to just let the GLPK run. It will find the optimum eventually, even though this might take minutes or hours to complete. For many purposes, this is just fine - we need to infer something about the schema, we do it only once, so it doesn't matter how long it takes.
 
-Secondly, if we don't have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Strategy 1. In under 10 seconds we will have very good results, often the optimum.
+Secondly, if we don't have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Scenario 1. In under 10 seconds we will have very good results, often the optimum.
 
 Overall, it is always good to ignore the simple text data nodes, as it will improve the total search time.
 

@@ -1,12 +1,15 @@
 \chapter{Future work}
 
-TODO
+A straightforward extension granting the ability to handle more than one input XML file has already been suggested in \cite{fidax}. However, it wasn't implemented in this work either, so it still remains an obvious first choice of future work.\\
 
-\begin{itemize}
-  \item extension to more documents at once
-  \item more heuristics and their chaining
-  \item ACO, genetic, ...
-  \item Paralelism
-  \item user-friendly experimental interface (choose and setup experiments on the fly in GUI)
-  \item jInfer is opensource, thus easy to extend!
-\end{itemize}
+It is possible (and easy) to add more construction and improvement heuristics, as well as more metaheuristics in which the existing IHs are chained. A starting point is in Section TODO link appendix - how to write...\\
+
+As it was mentioned in TODO link, the combination of \heu{Crossover}, \heu{Mutation} and \heu{RemoveWorst} can be seen as a sort of genetic programming. However some modifications would still be necessary to make it a real instance of genetic algorithm metaheuristic.
+
+Likewise it is possible to create an Ant Colony Optimization metaheuristic solving the same problem. It would be interesting to see all these metaheuristics compared to each other in a set of comprehensive experiments.\\
+
+The approach used in this work was strictly single-threaded, however there are in principle no limitations to extending this to a parallel, multi-threaded environment. For example, creating a pool of initial solutions in \heu{Glpk} construction heuristic can be improved by running several instances of GLPK solver in parallel - as GLPK on its own uses only a single thread to perform the computation.\\
+
+From the point of view of a user - researcher, the current implementation of the experimental framework leaves a lot to be desired. As jInfer already contains support for interchangeable and configurable modules, it is possible to create GUI for experiment and experimental set configuration on the fly.\\
+
+jInfer as well as the \jmodule{IDSetSearch} module are open source projects, meaning that anyone wishing to build upon this work can do so easily.

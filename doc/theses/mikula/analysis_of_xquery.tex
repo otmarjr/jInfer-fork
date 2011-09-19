@@ -14,10 +14,18 @@ Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} ind
 
 Besides elements, attributes can be processed exactly in the same way. Path expression \texttt{/bib/book/@ISBN} indicates that element \texttt{book} has attribute \texttt{ISBN}.
 
-However, statements of this kind are necessary for the XML schema inference, their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. For example some elements may not be queried at all, therefore they may not be mentioned in any query \todo[inline]{Tady je ale několik případů - chtělo by popsat.
-1) Element není zapsaný v dotazu, ale dostanu ho výsledku - např. rok anrození autora, ptám-li se na autory.
-2) Element není zapsaný v dotazu, ale procházím ho při vyhodnocování -  např. to //autor
-3) Element je v části dokumentu, která se dotazu vlbec netýká.}. In addition, these statements do not express any obligation of occurrence of elements and attributes nor clearly determine multiple occurrence of elements. We cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
+However, statements of this kind are necessary for the XML schema inference, their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. Queries may not cover the whole relevant content of the documents. Let \texttt{E} be an element occurring in an XML document and let \texttt{Q} be an XQuery query. Consider the following cases:
+
+\begin{enumerate}[1)]
+\item \texttt{E} is directly mentioned in \texttt{Q}. For example elements \texttt{bib}, \texttt{book} and \texttt{author} are mentioned in path expression \texttt{/bib/book/author}.
+\item \texttt{E} is not mentioned in \texttt{Q} but it does occur in a result of the evaluation of \texttt{Q}. For example path expression \texttt{/bib/book/author} returns elements \texttt{author} along with their subelements \texttt{name}, \texttt{birthdate} and \texttt{nationality}.
+\item \texttt{E} is not mentioned in \texttt{Q} nor it occurs in the result but it is processed by the evaluation of \texttt{Q}. For example the evaluation of path expression \texttt{//author} processes amongst others elements \texttt{bib} and \texttt{book}, in a search for elements \texttt{author}.
+\item \texttt{E} occurs in a part of the XML document not related to a query at all.
+\end{enumerate}
+
+How we can obtain any information about element \texttt{E} from query \texttt{Q}? In case 1), \texttt{Q} can be directly exploited in the inference process. Case 2) requires the result of \texttt{Q} and additional processing of the result. Case 3) requires a step-by-step evaluation of \texttt{Q}, so the XML document is also required. And in case 4), it is not possible to obtain any information. 
+
+In addition, these statements do not express any obligation of occurrence of elements and attributes nor clearly determine multiple occurrence of elements. We also cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
 
 On the other hand, the structural inference could be useful when the entire set of all XML documents is not available and provided XML documents do not cover the structure completely.
 
@@ -155,7 +163,7 @@ Finding such patterns in queries could be useful in combination with analysis of
 \section{Keys}
 
 \subsection{Approach from \cite{Necasky:2009:DXK:1529282.1529414}}
-Paper \todo{link} introduces a method of discovering keys and foreign keys by investigation of joins in queries. The basis of this discovery is a search for particular forms of joins, so called \emph{join patterns} \todo{uviest ich sem?}, but the joins are processed only if they are found in a particular syntactic form. Therefore joins with the same semantics written in different syntax are not taken into consideration.
+Paper \cite{Necasky:2009:DXK:1529282.1529414} introduces a method of discovering keys and foreign keys by investigation of joins in queries. The basis of this discovery is a search for particular forms of joins, so called \emph{join patterns} \todo{uviest ich sem?}, but the joins are processed only if they are found in a particular syntactic form. Therefore joins with the same semantics written in different syntax are not taken into consideration.
 
 The following examples are queries that could be processed by a similar method but the actual method will not use them.
 
@@ -208,8 +216,8 @@ return <item num="{$item/@num}"
 
 A common three-way join.
 
-\subsection{Join of Recursive Data}
-By the term ``recursive data'' are meant XML elements that somehow reference items from the same set. \todo[inline]{Tohle je velmi nepřesné. Tady asi myslíte reference, ale rekurzivní element je obecně element, kteý obsahuje sám sebe - např. kapitola má kapitoly.} Example of a query that operates upon such data follows.
+\subsection{Join of Self-referencing Data}
+By the term ``self-referencing data'' are meant XML elements that somehow reference items from the same set. Example of a query that operates upon such data follows.
 
 \begin{verbatim}
 declare function local:one_level($p as element()) as element()

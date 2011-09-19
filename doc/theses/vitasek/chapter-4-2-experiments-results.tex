@@ -427,7 +427,7 @@ We can see that \heu{Glpk} wins in every single case. We will start from there a
 
 The next logical step will be to try to add one IH after the best CH we have found, \heu{Glpk}. We will investigate all IHs except for \heu{RandomRemove} and \heu{RemoveWorst}, which cannot help us at this time.
 
-We should note that the combination best CH - best IH found this way does not necessarily need to be the best one, because we find it using a hungry approach.
+We should note that the combination \textit{best CH - best IH} found this way does not necessarily need to be the best one overall, because we find it using a hungry approach.
 
 \begin{center}
 \bigskip
@@ -927,11 +927,11 @@ After averaging the data we get a large result table, an excerpt from which is i
   \begin{tabular}{c | c | c || c | c | c | c | c | c}
     \heu{RR} & \heu{MUT} & \heu{CX} & \dataset{100-100} & \dataset{100-1000} & \dataset{100-200} & \dataset{OVA1} & \dataset{OVA2} & \dataset{OVA3} \\
     \hline
-    0.2	& 0.2	& 0.2	   & 2749.58	& \textbf{8633.76}	  & 3029.82	& 110.82	& 98.68	& 2413.86 \\
-    0.5	& 0.05	& 0.05 & 1031.24	& 10324.46	& 1371.08	& \textbf{71.88}	  & 63.86	& 1282.94 \\
-    0.5	& 0.05	& 0.2	 & \textbf{919.74}	  & 10978.58	& 1322.02	& 74.46	  & 62.42	& \textbf{1217.00} \\
-    0.5	& 0.1	& 0.2	   & 1002.20	& 11030.64	& \textbf{1288.06}	& 85.22	  & 80.96	& 1480.90 \\
-    0.5	& 0.2	& 0.1	   & 1674.78	& 9779.82	  & 2007.42	& 108.14	& \textbf{58.56}	& 1827.46 \\
+    0.2	& 0.2	& 0.2	   & 2749.58	       & \textbf{8633.76} & 3029.82	         & 110.82	        & 98.68	         & 2413.86 \\
+    0.5	& 0.05	& 0.05 & 1031.24	       & 10324.46	        & 1371.08	         & \textbf{71.88} & 63.86	         & 1282.94 \\
+    0.5	& 0.05	& 0.2	 & \textbf{919.74} & 10978.58	        & 1322.02	         & 74.46	        & 62.42	         & \textbf{1217.00} \\
+    0.5	& 0.1	& 0.2	   & 1002.20	       & 11030.64	        & \textbf{1288.06} & 85.22	        & 80.96	         & 1480.90 \\
+    0.5	& 0.2	& 0.1	   & 1674.78	       & 9779.82	        & 2007.42	         & 108.14	        & \textbf{58.56} & 1827.46 \\
     \end{tabular}
 \end{table}
 

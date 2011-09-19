@@ -7,6 +7,29 @@ Another important criterion is the type of input data. Most of the approaches pr
 
 According to our best knowledge at the time of writing there is just one approach of this category. It utilizes a set of XQuery queries to discover keys and foreign keys\todo{ref do literatury? Ty by tady něškodily všude, u každé té kategorie.}.
 
+\section{On Inference of XML Schema with the Knowledge of an Obsolete One}
+\todo[inline]{spravne zaradit}
+An aim of approach described in \cite{Mlynkova:2009:IXS:1862681.1862693} is to exploit an obsolete XML schema as an additional input information to infer a new schema more efficiently. A XML schema can become obsolete due to changes in a set of XML documents, without capturing these changes in the schema. Thus, the schema becames outdated and according to the paper, this case is quite common.
+
+On input, the method is given:
+\begin{itemize}
+\item An original XML schema.
+\item A set of XML documents. Not all have to be valid against the original schema.
+\end{itemize}
+
+And the algorithm consists of two independent steps:
+
+\begin{enumerate}
+\item Correction of the input schema.
+\item Specialization of the input schema.
+\end{enumerate}
+
+In the fist step the input schema is corrected to conform to the whole set of input XML documents. This is done by creating a PTA \todo{ref na def} for each production extracted from the input schema and merging it with a respective production from the initial grammar \todo{ref na def}, involving ACO and MDL heuristics.
+
+In the second step, assuming a correct schema it is wanted to specialize the REs involved in the schema with regard to the XML documents, resulting in more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
+
+
+
 \section{Approaches that Utilize XML Documents}
 The process of inference commonly used by a significant number of approaches is summarized in \cite{Mlynkova:2008:AAX:1494650.1495496} as the following one: For each occurrence of element $e$ from the input XML documents and its subelements $e_1, e_2, ..., e_k$ a production $e \rightarrow e_1 e_2 ... e_k$ is constructed. The productions form so-called \emph{initial grammar} (IG). For each element type the productions are then merged, simplified and generalized using various methods and criteria. A common approach is so-called \emph{merging state algorithm}, where a \emph{prefix tree automaton} (PTA) is built from the productions of the same element type and the automaton is generalized via merging of its states. Finally, the generalized automaton/grammar is expressed in syntax of the respective XML schema language.
 

@@ -23,7 +23,7 @@ However, statements of this kind are necessary for the XML schema inference, the
 \item \texttt{E} occurs in a part of the XML document not related to a query at all.
 \end{enumerate}
 
-How we can obtain any information about element \texttt{E} from query \texttt{Q}? In case 1), \texttt{Q} can be directly exploited in the inference process. Case 2) requires the result of \texttt{Q} and additional processing of the result. Case 3) requires a step-by-step evaluation of \texttt{Q}, so the XML document is also required. And in case 4), it is not possible to obtain any information. 
+How we can obtain any information about element \texttt{E} from query \texttt{Q}? In case 1), \texttt{Q} can be directly exploited in the inference process. Case 2) requires the result of \texttt{Q} and additional processing of the result. Case 3) requires a step-by-step evaluation of \texttt{Q}, hence, the XML document is also required. And in case 4), it is not possible to obtain any information. 
 
 In addition, these statements do not express any obligation of occurrence of elements and attributes nor clearly determine multiple occurrence of elements. We also cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
 

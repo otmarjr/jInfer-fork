@@ -135,7 +135,7 @@ Consider the following excerpt from an XML file:
 \end{verbatim}
 \end{scriptsize}
 
-Our aim is to create a graph with around $v$ vertices and $e$ edges. First, we introduce $v$ elements with names \texttt{vertex0} - \texttt{vertex\{V-1\}}. To constitute an AM, they need an attribute \texttt{attr}, but with large enough random values, so that these values will not conflict with any others. Second, for each of the $e$ edges we choose two \texttt{vertex*} elements at random, and give them the same value of their \texttt{attr}. This will ensure they cannot share the same ID set, thus effectively creating the edge in the graph representation.
+Our aim is to create a graph with approximately $v$ vertices and $e$ edges. First, we introduce $v$ elements with names \texttt{vertex0} - \texttt{vertex\{V-1\}}. To constitute an AM, they need an attribute \texttt{attr}, but with large enough random values, so that these values will not conflict with any others. Second, for each of the $e$ edges we choose two \texttt{vertex*} elements at random, and give them the same value of their \texttt{attr}. This will ensure they cannot share the same ID set, thus effectively creating the edge in the graph representation.
 
 The pseudocode for this is in Listing \ref{listing-random-data}.
 

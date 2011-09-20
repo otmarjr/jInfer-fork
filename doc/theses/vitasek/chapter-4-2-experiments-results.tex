@@ -871,8 +871,8 @@ The parameters we can tune in this scenario are the ratios in \heu{RandomRemove}
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Input data        & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}, \dataset{OVA1}, \dataset{OVA2}, \dataset{OVA3} \\
-  Iterations        & 50 \\
+  Input data        & all sized test data sets \\
+  Iterations        & 25 \\
   Pool size         & 10 \\
   $\alpha$, $\beta$ & $1$, $1$ \\
   CH                & \heu{Random} \\
@@ -882,7 +882,7 @@ The parameters we can tune in this scenario are the ratios in \heu{RandomRemove}
 \bigskip
 \end{center}
 
-This experimental set will consist of 45 ratio combinations * 6 data sets * 50 iterations = 13500 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Scenario 1, with their ratios set to one of the 45 combinations produced in the following way.
+This experimental set will consist of 45 ratio combinations * 11 data sets * 25 iterations = 12375 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Scenario 1, with their ratios set to one of the 45 combinations produced in the following way.
 \begin{itemize}
 	\item \heu{RandomRemove} ratio will be from $\{0, 0.05, 0.1, 0.2, 0.5\}$
 	\item \heu{Mutatio} ratio will be from $\{0.05, 0.1, 0.2\}$
@@ -905,7 +905,7 @@ The process of creating the configurations is captured in Listing \ref{listing-e
   \STATE $RR \gets \heu{RandomRemoval}(ratio = rrRatio)$
   \STATE $MUT \gets \heu{Mutation}(ratio = mutRatio, limit = 1)$
   \STATE $CX \gets \heu{Crossover}(ratio = cxRatio, limit = 1)$
-  \FOR{$file \in \{\dataset{100-100}, \dataset{100-200}, \dataset{100-1000}, \dataset{OVA1}, \dataset{OVA2}, \dataset{OVA3}\}$}
+  \FOR{$file \in $ sized test data}
     \FOR{$i = 1 \to 50$}
       \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW})\}$
     \ENDFOR
@@ -917,7 +917,11 @@ The process of creating the configurations is captured in Listing \ref{listing-e
 \end{algorithmic}
 \end{algorithm}
 
+% TODO we ignore the time, instead we use the ratio of successful runs
+
 After averaging the data we get a large result table, an excerpt from which is in Table \ref{table-experiments-chained-ihs-tweaking-s1}. In the left part are the ratio values, in the right part averaged running times for each data set. Highlited are the shortest times for each set. Only rows containing at least one such shortest time are presented.
+
+% TODO replace this table
 
 \begin{table}
   \caption{Performance of Scenario 1 Depending on Parameters - Excerpt}
@@ -934,6 +938,8 @@ After averaging the data we get a large result table, an excerpt from which is i
     0.5	& 0.2	& 0.1	   & 1674.78	       & 9779.82	        & 2007.42	         & 108.14	        & \textbf{58.56} & 1827.46 \\
     \end{tabular}
 \end{table}
+
+% TODO the ratios actually are 0.5, 0.2 and 0.1, consistently across all all data sets
 
 It is now necessary to pick one ratio combination as the best one. It is $(RR = 0.5, MUT = 0.05, CX = 0.2)$ for the following reason: it is the best one for sets \dataset{100-100} and \dataset{OVA3} and second best for \dataset{100-200}, \dataset{OVA1} and \dataset{OVA2}. Only the \dataset{100-1000} does not profit from these settings.
 

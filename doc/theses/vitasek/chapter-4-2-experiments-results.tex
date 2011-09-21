@@ -5,8 +5,7 @@
 
 %         NB class GrammarModelTiming
 
-The first experiment set will try to establish how long it takes to extract the IG % TODO IG -> nomenclature
-from the input XML file and how long does it take to create the AM model from this IG. For now, we will not be running or measuring any heuristics.
+The first experiment set will try to establish how long it takes to extract the IG from the input XML file and how long does it take to create the AM model from this IG. For now, we will not be running or measuring any heuristics.
 
 \begin{center}
 \bigskip
@@ -109,12 +108,12 @@ Results are in table \ref{table-experiments-glpk-timing}. For each data set ther
 Interestingly enough, in most cases the times to create an input for GLPK and then to parse its output are very similar. Also, for sized test data sets it is interesting to note that even though the $|V|$ and $|E|$ counts are increasing, the times remain almost the same. This probably due to the fact that IC and OP times include the I/O when writing to a file for GLPK or reading the file it produced, and these times are probably the most relevant.
 
 \subsection{GLPK: Native vs. Cygwin}
+\label{section-glpk-comparison}
 
 %         NB class TimeQuality
 %         NB class TimeTillOptimum
 
-In this experiment we will try to remove one of the variables out of the equation: that is the effect of different versions of GLPK on the overall results. The rationale is this: on Windows systems, the two most accessible ways to install GLPK are via a binary distribution, % TODO link
-or via Cygwin as one of its packages.
+In this experiment we will try to remove one of the variables out of the equation: that is the effect of different versions of GLPK on the overall results. The rationale is this: on Windows systems, the two most accessible ways to install GLPK are via a binary distribution or via Cygwin as one of its packages.
 
 If we find out which of these Cygwin version is better, we will be using it exclusively knowing this should not affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be and interesting finding, too.
 
@@ -361,8 +360,6 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
 \subsection{Best Standalone CH}
 
 %         NB class BestStandaloneCH
-
-% TODO re-run on Dual Core!
 
 We shall now try to find the best standalone CH, that is the CH that finds on average the best solutions when run without any IHs. We need to set a time limit for \heu{Glpk} to make it an instance of \heu{Truncated Branch \& Bound}, and we shall use 1 second. This is the smallest time limit possible for GLPK and it is still a reasonably short time, fair to other CHs.
 
@@ -858,7 +855,7 @@ It is now necessary to assess which of the strategies perform the best. We shall
 
 Each cell contains the number of times the strategy found optimum in the data set, out of 20 runs. Highlited are the strategies that performed best on that data set. We see that Strategy 1 and 3 are very similar in performance. We shall nonetheless choose Strategy \textbf{1} as the winner for its simplicity. Now we can tune its parameters.
 
-\subsubsection{Improving Strategy 1}
+\subsubsection{Tuning Strategy 1}
 
 %         NB class ChainedIHs1Tweak
 
@@ -888,7 +885,7 @@ This experimental set will consist of 45 ratio combinations * 11 data sets * 25 
 	\item \heu{Mutatio} ratio will be from $\{0.05, 0.1, 0.2\}$
 	\item \heu{Crossover} ratio will be from $\{0.05, 0.1, 0.2\}$
 \end{itemize}
-The process of creating the configurations is captured in Listing \ref{listing-experiment-chained-ihs-tuning}. We will be gathering the following information for each run: what were the parameters, how long did the run take and whether it found optimum.\\
+The total limit will remain at 10 seconds. The process of creating the configurations is captured in Listing \ref{listing-experiment-chained-ihs-tuning}. We will be gathering the following information for each run: what were the parameters, how long did the run take and whether it found optimum.\\
 
 \begin{algorithm}
 \caption{Chained IHs - Improving Strategy 1 Set Generation}
@@ -907,7 +904,7 @@ The process of creating the configurations is captured in Listing \ref{listing-e
   \STATE $CX \gets \heu{Crossover}(ratio = cxRatio, limit = 1)$
   \FOR{$file \in $ sized test data}
     \FOR{$i = 1 \to 50$}
-      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW})\}$
+      \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW}), limit = 10 seconds\}$
     \ENDFOR
   \ENDFOR
 \ENDFOR
@@ -917,39 +914,92 @@ The process of creating the configurations is captured in Listing \ref{listing-e
 \end{algorithmic}
 \end{algorithm}
 
-% TODO we ignore the time, instead we use the ratio of successful runs
+After averaging the data we get a large result table, an excerpt from which is in Table \ref{table-experiments-chained-ihs-tweaking-s1}. Only the results for the biggest data sets and a few combinations of RR, MUT and CX ratios are presented.
 
-After averaging the data we get a large result table, an excerpt from which is in Table \ref{table-experiments-chained-ihs-tweaking-s1}. In the left part are the ratio values, in the right part averaged running times for each data set. Highlited are the shortest times for each set. Only rows containing at least one such shortest time are presented.
-
-% TODO replace this table
+In the left part of the table are the ratio values. In the right part are the averaged running times (AT), success ratios (ratio of runs that found the optimum, SR) and average qualities (AQ) for each data set. Highlited are the highest success ratios and qualities.\\
 
 \begin{table}
   \caption{Performance of Strategy 1 Depending on Parameters - Excerpt}
   \bigskip
   \label{table-experiments-chained-ihs-tweaking-s1}
   \centering
-  \begin{tabular}{c | c | c || c | c | c | c | c | c}
-    \heu{RR} & \heu{MUT} & \heu{CX} & \dataset{100-100} & \dataset{100-1000} & \dataset{100-200} & \dataset{OVA1} & \dataset{OVA2} & \dataset{OVA3} \\
+  \begin{tabular}{c | c | c | l || c | c | c | c | c}
+    \heu{RR} & \heu{MUT} & \heu{CX} & & \dataset{60-180} & \dataset{70-245} & \dataset{80-320} & \dataset{90-405} & \dataset{100-500} \\
     \hline
-    0.2	& 0.2	& 0.2	   & 2749.58	       & \textbf{8633.76} & 3029.82	         & 110.82	        & 98.68	         & 2413.86 \\
-    0.5	& 0.05	& 0.05 & 1031.24	       & 10324.46	        & 1371.08	         & \textbf{71.88} & 63.86	         & 1282.94 \\
-    0.5	& 0.05	& 0.2	 & \textbf{919.74} & 10978.58	        & 1322.02	         & 74.46	        & 62.42	         & \textbf{1217.00} \\
-    0.5	& 0.1	& 0.2	   & 1002.20	       & 11030.64	        & \textbf{1288.06} & 85.22	        & 80.96	         & 1480.90 \\
-    0.5	& 0.2	& 0.1	   & 1674.78	       & 9779.82	        & 2007.42	         & 108.14	        & \textbf{58.56} & 1827.46 \\
+    \hline
+    $ \ldots $ & $ \ldots $ & $ \ldots $ & $ \ldots $ & $ \ldots $ & $ \ldots $ & $ \ldots $ & $ \ldots $ & $ \ldots $ \\
+    \hline
+    0.5	& 0.1	& 0.1	  & AT  & 1049.72	& 1584.72	& 2349.2	& 7408.28	& 9414.28 \\
+    0.5	& 0.1	& 0.1	  & SR	& 1	& 1	& 1	& 0.52	& 0.28 \\
+    0.5	& 0.1	& 0.1	  & AQ	& \textit{opt} & \textit{opt}	& \textit{opt}	& 0.52533	& 0.49196 \\
+    \hline
+    0.5	& 0.1	& 0.2	  & AT	& 763.44	& 1343.08	& 2599.88	& 9448.12	& 10269.76 \\
+    0.5	& 0.1	& 0.2	  & SR	& 1	& 1	& 1	& 0.24	& 0 \\
+    0.5	& 0.1	& 0.2	  & AQ	& \textit{opt}	& \textit{opt}	& \textit{opt}	& 0.52213	& 0.48462 \\
+    \hline
+    0.5	& 0.2	& 0.05	& AT	& 1438.84	& 1608.32	& 2647.4	& 4954.04	& 7784.88 \\
+    0.5	& 0.2	& 0.05	& SR	& 1	& 1	& 1	& 0.8	& 0.4 \\
+    0.5	& 0.2	& 0.05	& AQ	& \textit{opt}	& \textit{opt}	& \textit{opt}	& 0.52693	& 0.49647 \\
+    \hline
+    0.5	& 0.2	& 0.1	  & AT	& 1333.12	& 1741.08	& 2506.84	& 4720.32	& 8150.6 \\
+    0.5	& 0.2	& 0.1	  & SR	& 1	& 1	& 1	& \textbf{0.84}	& \textbf{0.56} \\
+    0.5	& 0.2	& 0.1	  & AQ	& \textit{opt}	& \textit{opt}	& \textit{opt}	& 0.52733	& \textbf{0.49651} \\
+    \hline
+    0.5	& 0.2	& 0.2	  & AT	& 922.16	& 1353.76	& 2394.48	& 4633.12	& 7424.8 \\
+    0.5	& 0.2	& 0.2	  & SR	& 1	& 1	& 1	& \textbf{0.84}	& 0.44 \\
+    0.5	& 0.2	& 0.2	  & AQ	& \textit{opt}	& \textit{opt}	& \textit{opt}	& \textbf{0.52804}	& 0.49495 \\
     \end{tabular}
 \end{table}
 
-% TODO the ratios actually are 0.5, 0.2 and 0.1, consistently across all all data sets
+It is now necessary to pick one ratio combination as the best one, and it is $(RR = 0.5, MUT = 0.2, CX = 0.1)$. Using this combination for all the data sets from \dataset{10-20} up to \dataset{80-320} the optimum was always found and for \dataset{90-405} and \dataset{100-500} the success ratios were the highest.
 
-It is now necessary to pick one ratio combination as the best one. It is $(RR = 0.5, MUT = 0.05, CX = 0.2)$ for the following reason: it is the best one for sets \dataset{100-100} and \dataset{OVA3} and second best for \dataset{100-200}, \dataset{OVA1} and \dataset{OVA2}. Only the \dataset{100-1000} does not profit from these settings.
+Now to interpret the ratios in the best combination. \heu{RandomRemove} ratio of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} ratio of 0.2 means around 1/5\textsuperscript{th} of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} ratio of 0.1 means that around 10\% of ID sets in the pool (randomly chosen) will be scanned for common AMs.
 
-Now to interpret ratios in the best combination. \heu{RandomRemove} ratio of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} ratio of 0.05 means only around 5\% of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} ratio of 0.2 means that around 1/5\textsuperscript{th} of ID sets in the pool (randomly chosen) will be scanned for common AMs.
+\heu{RandomRemove} and \heu{Mutation} ratios in the best combination are at the upper bound of the range we chose for them. As a future work option it is possible to start moving these ratios even more in their preferred way.
 
-All of the ratios in the best combination are at one end of the range we chose from them. As a future work option it is possible to start moving these ratios even more in their preferred way, possibly removing \heu{Mutation} in the process.
+\subsubsection{Final Comparison}
 
-TODO compare this to pure GLPK run - for example for \dataset{100-200}, we got from TODO seconds to on average TODO seconds (when the 10 second limit is lifted).
+Finally we shall compare the performance of Strategy 1 with tuned parameters (ratios) to the approach we started the experiments with: using the \heu{Glpk} CH with no time limit to find the optimum. We will compare them on the biggest of sized test data: \dataset{100-500}.
 
-TODO this will need 2 boxplots again...
+We already have the running times for pure \heu{Glpk} on \dataset{100-500} from the ``Time Until Optimum" experiment in Section \ref{section-glpk-comparison}. The last experiment to find the performance of tuned Strategy 1 without a time limit will have the following parameters.
+
+\begin{center}
+\bigskip
+\begin{tabular}{| l | l |}
+  \hline
+  \hline
+  Input data        & \dataset{100-500} \\
+  Iterations        & 50 \\
+  Pool size         & 10 \\
+  $\alpha$, $\beta$ & $1$, $1$ \\
+  CH                & \heu{Random} \\
+  IHs               & \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots $ \\
+  \hline
+\end{tabular}
+\bigskip
+\end{center}
+
+The last experimental set will consist of 50 iterations = 50 experimental configurations. As with the previous one, \heu{Random} will be the CH, IHs will be from Strategy 1, however this time there will be no time limit. The process of generating the experimental set is in Listing \ref{listing-experiment-chained-ihs-tuned}.
+
+\begin{algorithm}
+\caption{Chained IHs - Tuned Strategy 1 Performance Set Generation}
+\label{listing-experiment-chained-ihs-tuned}
+\begin{algorithmic}
+\ENSURE experimental set $ES$
+\STATE $ES \gets \emptyset$
+
+\STATE $RW \gets \heu{RemoveWorst}$
+\STATE $RR \gets \heu{RandomRemoval}(ratio = 0.5)$
+\STATE $MUT \gets \heu{Mutation}(ratio = 0.2, limit = 1)$
+\STATE $CX \gets \heu{Crossover}(ratio = 0.1, limit = 1)$
+\FOR{$i = 1 \to 50$}
+  \STATE $ES \gets ES \cup \{\dataset{100-500}, CH = \heu{Random}, IH = (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW})\}$
+\ENDFOR
+\RETURN $ES$
+\end{algorithmic}
+\end{algorithm}
+
+Results are summarized in Figure \ref{image-experiment-chained-ihs-tuned}. Both boxplots represent run times until the optimum is found. It is clear that Strategy 1 is an improvement, achieving on average almost 4x shorter times than pure \heu{Glpk} and finding the optimum under 10 seconds in more than a half of the cases.
 
 \begin{figure}
   \caption{Chained IHs - Pure \heu{Glpk} vs. Tuned Strategy 1}
@@ -960,19 +1010,10 @@ TODO this will need 2 boxplots again...
 
 \section{The "Best" Algorithm}
 
-After asking and answering a lot of questions related to the overall system behavior, parameter effects and various heuristic combinations is now the time to summarize our results and draw conclusions.
+After asking and answering a lot of questions related to the overall system behavior, parameter effects and various heuristic combinations is now the time to summarize our results and draw conclusions.\\
 
-The first fact is that if we have the time available, it is best to just let the GLPK run. It will find the optimum eventually, even though this might take minutes or hours to complete. For many purposes, this is just fine - we need to infer something about the schema, we do it only once, so it doesn't matter how long it takes.
+The first fact is that if we have the time available, it is best to just let the GLPK run. It will find the optimum eventually, even though this might take minutes or hours to complete. For many purposes, this is just fine - we need to infer something about the schema, we do it only once, so it doesn't matter how long it takes.\\
 
-Secondly, if we don't have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Strategy 1. In under 10 seconds we will have very good results, often the optimum.
+Secondly, if we don't have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Strategy 1. In all our realistic data sets the optimum was found almost instantly, and the most complex and bigges artificial data sets took only around 1/4 of the time to finish, compared to \heu{Glpk}.\\
 
-Overall, it is always good to ignore the simple text data nodes, as it will improve the total search time.
-
-%\section{Lessons Learned}
-
-%This short section will list a few lessons that were learned during the development of \jmodule{IDSetSearch} module for jInfer and experimenting with it.
-
-%The first lesson is that when there is an experiment being run in a few nested loops (see any experiment set construction listing), one of which is \textit{iterations}, this one should be the outermost one. This is because if the experiment somehow fails, TODO
-
-% - always allow for interruptions
-% - when representing an object, don't be lazy and create a class for it (don't use pairs, lists with specific data at specific locations, etc)
+Furthermore, it is always good to ignore the simple text data nodes, as it will improve the total run time.

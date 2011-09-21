@@ -728,9 +728,9 @@ Interestingly, the grammar extraction times tend to be shorter in the case when 
 
 In this section we will describe the most interesting experimental area, that is chaining more than one improvement heuristics and running them in a loop. Unfortunately, the sheer number of possible combinations in which IHs can be ordered (as well as the number of ways to set their parameters) prohibits us from investigating this in depth.
 
-We shall then employ a higher-level heuristic: we will choose 3 scenarios (lists of IHs, or metaheuristics), assess their performance to find the best one and then tune its parameters. This approach is by no means exhaustive, it is just a probe in the problem space.
+We shall then employ a higher-level heuristic: we will choose 3 strategies (lists of IHs, or metaheuristics), assess their performance to find the best one and then tune its parameters. This approach is by no means exhaustive, it is just a probe in the problem space.
 
-The 3 scenarios we will be assessing will be constructed from the following instances of improvement heuristics:
+The 3 strategies we will be assessing will be constructed from the following instances of improvement heuristics:
 
 \begin{itemize}
 	\item \heu{RR} is \heu{RandomRemove} with $ratio$ set to $0.1$.
@@ -741,12 +741,12 @@ The 3 scenarios we will be assessing will be constructed from the following inst
 	\item \heu{H} is \heu{Hungry}.
 \end{itemize}
 
-The scenarios themselves shall be the following:
+The strategies themselves shall be the following:
 
 \begin{itemize}
-	\item \textit{\textbf{Scenario 1}}. \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
-	\item \textit{\textbf{Scenario 2}}. \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow$ \heu{MUT} $\rightarrow \ldots$
-	\item \textit{\textbf{Scenario 3}}. \heu{CX} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RW} $\rightarrow$ \heu{LB} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
+	\item \textit{\textbf{Strategy 1}}. \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
+	\item \textit{\textbf{Strategy 2}}. \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow$ \heu{MUT} $\rightarrow \ldots$
+	\item \textit{\textbf{Strategy 3}}. \heu{CX} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RW} $\rightarrow$ \heu{LB} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
 \end{itemize}
 
 \begin{center}
@@ -765,7 +765,7 @@ The scenarios themselves shall be the following:
 \bigskip
 \end{center}
 
-The experimental set will consist of 3 scenarios * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Listing \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the ratios are set to $0.1$ for the time being. The termination criterion is set to limit the total runtime to 10 seconds and (potentialy) infinite iterations.
+The experimental set will consist of 3 strategies * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Listing \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the ratios are set to $0.1$ for the time being. The termination criterion is set to limit the total runtime to 10 seconds and (potentialy) infinite iterations.
 
 Data gathered will be traces like the one in Appendix \ref{appendix-trace} - after each iteration, the time taken so far and the quality of incumbent solution is noted.\\
 
@@ -803,13 +803,13 @@ Data gathered will be traces like the one in Appendix \ref{appendix-trace} - aft
 Resulting traces for each data set can be summarized in graphs like the one for \heu{100-100} in Figure \ref{image-experiment-chained-ihs-s1}. This one deserves more explanation than usual.
 
 \begin{figure}
-  \caption{Chained IHs - \dataset{100-100} Results for Scenario 1}
+  \caption{Chained IHs - \dataset{100-100} Results for Strategy 1}
   \label{image-experiment-chained-ihs-s1}
   \centering
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s1}
 \end{figure}
 
-X and Y axes represent the time and quality, as usual. Each line represents one run of the scenario (metaheuristic) in the following way: the N\textsuperscript{th} break in the line (i.e. the N\textsuperscript{th} data point) is the partial result after the N\textsuperscript{th} step of the scenario. Its X position denotes the absolute time in which this step finished, and its Y position represents the incumbent solution quality after this step. Every time a line disappears before reaching 10 seconds it means that this metaheuristic run found the optimum before the 10 second mark. There is an obvious repetitive regularity in the shape of each line, this corresponds to the fact that there is a finite number of IHs in this scenario (5 of them in Scenario 1) which repeat over time. The obvious similarity between different lines corresponds to the fact that each run is from the same scenario, and over time, they do the same steps. 
+X and Y axes represent the time and quality, as usual. Each line represents one run of the strategy (metaheuristic) in the following way: the N\textsuperscript{th} break in the line (i.e. the N\textsuperscript{th} data point) is the partial result after the N\textsuperscript{th} step of the strategy. Its X position denotes the absolute time in which this step finished, and its Y position represents the incumbent solution quality after this step. Every time a line disappears before reaching 10 seconds it means that this metaheuristic run found the optimum before the 10 second mark. There is an obvious repetitive regularity in the shape of each line, this corresponds to the fact that there is a finite number of IHs in this strategy (5 of them in Strategy 1) which repeat over time. The obvious similarity between different lines corresponds to the fact that each run is from the same strategy, and over time, they do the same steps.
 
 We can see effects of different IHs from this graph:
 \begin{itemize}
@@ -821,23 +821,23 @@ We can see effects of different IHs from this graph:
 
 In this particular example there is only 1 run out of 10 that does not finish (find optimum) under the 10 second mark.\\
 
-There are two more graphs like this in Figures \ref{image-experiment-chained-ihs-s2} and \ref{image-experiment-chained-ihs-s3} for comparison, capturing Scenario 2 and Scenario 3 respectively working on the same data set, \dataset{100-100}. Describing them in detail is unfortunately outside of the scope of this work.\\
+There are two more graphs like this in Figures \ref{image-experiment-chained-ihs-s2} and \ref{image-experiment-chained-ihs-s3} for comparison, capturing Strategy 2 and Strategy 3 respectively working on the same data set, \dataset{100-100}. Describing them in detail is unfortunately outside of the scope of this work.\\
 
 \begin{figure}
-  \caption{Chained IHs - \dataset{100-100} Results for Scenario 2}
+  \caption{Chained IHs - \dataset{100-100} Results for Strategy 2}
   \label{image-experiment-chained-ihs-s2}
   \centering
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s2}
 \end{figure}
 
 \begin{figure}
-  \caption{Chained IHs - \dataset{100-100} Results for Scenario 3}
+  \caption{Chained IHs - \dataset{100-100} Results for Strategy 3}
   \label{image-experiment-chained-ihs-s3}
   \centering
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s3}
 \end{figure}
 
-It is now necessary to assess which of the scenarios perform the best. We shall take a look at the different data sets. Easily we can discard \dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p}, because the optimum is found in the very first step. Let us now introduce a metric for assessment of a scenario: namely, how many times of the 20 runs did it find the optimum. Results of this are summarized in Table \ref{table-experiments-chained-ihs-tweaking}.
+It is now necessary to assess which of the strategies perform the best. We shall take a look at the different data sets. Easily we can discard \dataset{MSH}, \dataset{NTH}, \dataset{XMA-c}, \dataset{XMA-p}, because the optimum is found in the very first step. Let us now introduce a metric for assessment of a strategy: namely, how many times of the 20 runs did it find the optimum. Results of this are summarized in Table \ref{table-experiments-chained-ihs-tweaking}.
 
 \begin{table}
   \caption{Performance of Various IH Chains}
@@ -845,7 +845,7 @@ It is now necessary to assess which of the scenarios perform the best. We shall 
   \label{table-experiments-chained-ihs-tweaking}
   \centering
   \begin{tabular}{l || c | c | c}
-    Dataset & Scenario 1 & Scenario 2 & Scenario 3 \\
+    Dataset & Strategy 1 & Strategy 2 & Strategy 3 \\
     \hline
     \dataset{100-100}  & \textbf{20} & 19 & \textbf{20} \\
     \dataset{100-200}  & \textbf{19} & 18 & 17 \\
@@ -856,15 +856,15 @@ It is now necessary to assess which of the scenarios perform the best. We shall 
     \end{tabular}
 \end{table}
 
-Each cell contains the number of times the scenario found optimum in the data set, out of 20 runs. Highlited are the scenarios that performed best on that data set. We see that Scenario 1 and 3 are very similar in performance. We shall nonetheless choose Scenario \textbf{1} as the winner for its simplicity. Now we can tune its parameters.
+Each cell contains the number of times the strategy found optimum in the data set, out of 20 runs. Highlited are the strategies that performed best on that data set. We see that Strategy 1 and 3 are very similar in performance. We shall nonetheless choose Strategy \textbf{1} as the winner for its simplicity. Now we can tune its parameters.
 
-\subsubsection{Improving Scenario 1}
+\subsubsection{Improving Strategy 1}
 
 %         NB class ChainedIHs1Tweak
 
-A short reminder: Scenario 1 consists of \heu{Random} as the CH and the following IHs: \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
+A short reminder: Strategy 1 consists of \heu{Random} as the CH and the following IHs: \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
 
-The parameters we can tune in this scenario are the ratios in \heu{RandomRemove} (possibly 2 of them, as there are 2 instances in use), \heu{Mutation} and \heu{Crossover}. We shall not tune the time limits in \heu{Mutation} and \heu{Crossover} and leave them set to 1 second. This presents us with a 3-dimensional space of parameters, where we want to find a combination best suited for our test data sets. We will sample this space by taking a total of 45 configurations of the aforementioned ratios.
+The parameters we can tune in this strategy are the ratios in \heu{RandomRemove} (possibly 2 of them, as there are 2 instances in use), \heu{Mutation} and \heu{Crossover}. We shall not tune the time limits in \heu{Mutation} and \heu{Crossover} and leave them set to 1 second. This presents us with a 3-dimensional space of parameters, where we want to find a combination best suited for our test data sets. We will sample this space by taking a total of 45 configurations of the aforementioned ratios.
 
 \begin{center}
 \bigskip
@@ -882,7 +882,7 @@ The parameters we can tune in this scenario are the ratios in \heu{RandomRemove}
 \bigskip
 \end{center}
 
-This experimental set will consist of 45 ratio combinations * 11 data sets * 25 iterations = 12375 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Scenario 1, with their ratios set to one of the 45 combinations produced in the following way.
+This experimental set will consist of 45 ratio combinations * 11 data sets * 25 iterations = 12375 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Strategy 1, with their ratios set to one of the 45 combinations produced in the following way.
 \begin{itemize}
 	\item \heu{RandomRemove} ratio will be from $\{0, 0.05, 0.1, 0.2, 0.5\}$
 	\item \heu{Mutatio} ratio will be from $\{0.05, 0.1, 0.2\}$
@@ -891,7 +891,7 @@ This experimental set will consist of 45 ratio combinations * 11 data sets * 25 
 The process of creating the configurations is captured in Listing \ref{listing-experiment-chained-ihs-tuning}. We will be gathering the following information for each run: what were the parameters, how long did the run take and whether it found optimum.\\
 
 \begin{algorithm}
-\caption{Chained IHs - Improving Scenario 1 Set Generation}
+\caption{Chained IHs - Improving Strategy 1 Set Generation}
 \label{listing-experiment-chained-ihs-tuning}
 \begin{algorithmic}
 \ENSURE experimental set $ES$
@@ -924,7 +924,7 @@ After averaging the data we get a large result table, an excerpt from which is i
 % TODO replace this table
 
 \begin{table}
-  \caption{Performance of Scenario 1 Depending on Parameters - Excerpt}
+  \caption{Performance of Strategy 1 Depending on Parameters - Excerpt}
   \bigskip
   \label{table-experiments-chained-ihs-tweaking-s1}
   \centering
@@ -943,7 +943,7 @@ After averaging the data we get a large result table, an excerpt from which is i
 
 It is now necessary to pick one ratio combination as the best one. It is $(RR = 0.5, MUT = 0.05, CX = 0.2)$ for the following reason: it is the best one for sets \dataset{100-100} and \dataset{OVA3} and second best for \dataset{100-200}, \dataset{OVA1} and \dataset{OVA2}. Only the \dataset{100-1000} does not profit from these settings.
 
-Now to interpret ratios in the best combination. \heu{RandomRemove} ratio of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the scenario from stalling in local optima. \heu{Mutation} ratio of 0.05 means only around 5\% of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} ratio of 0.2 means that around 1/5\textsuperscript{th} of ID sets in the pool (randomly chosen) will be scanned for common AMs.
+Now to interpret ratios in the best combination. \heu{RandomRemove} ratio of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} ratio of 0.05 means only around 5\% of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} ratio of 0.2 means that around 1/5\textsuperscript{th} of ID sets in the pool (randomly chosen) will be scanned for common AMs.
 
 All of the ratios in the best combination are at one end of the range we chose from them. As a future work option it is possible to start moving these ratios even more in their preferred way, possibly removing \heu{Mutation} in the process.
 
@@ -951,13 +951,20 @@ TODO compare this to pure GLPK run - for example for \dataset{100-200}, we got f
 
 TODO this will need 2 boxplots again...
 
+\begin{figure}
+  \caption{Chained IHs - Pure \heu{Glpk} vs. Tuned Strategy 1}
+  \label{image-experiment-chained-ihs-tuned}
+  \centering
+    \includegraphics[width=\textwidth]{images/experiments/chained-ihs-tuned}
+\end{figure}
+
 \section{The "Best" Algorithm}
 
 After asking and answering a lot of questions related to the overall system behavior, parameter effects and various heuristic combinations is now the time to summarize our results and draw conclusions.
 
 The first fact is that if we have the time available, it is best to just let the GLPK run. It will find the optimum eventually, even though this might take minutes or hours to complete. For many purposes, this is just fine - we need to infer something about the schema, we do it only once, so it doesn't matter how long it takes.
 
-Secondly, if we don't have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Scenario 1. In under 10 seconds we will have very good results, often the optimum.
+Secondly, if we don't have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Strategy 1. In under 10 seconds we will have very good results, often the optimum.
 
 Overall, it is always good to ignore the simple text data nodes, as it will improve the total search time.
 

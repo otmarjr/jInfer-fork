@@ -25,13 +25,17 @@ The first section will discuss the XML data we will be using to conduct out expe
 \end{itemize}
 
 A short reasoning for this choice: realistic - we want to see the performance in cases taken from the real world. The problem with realistic data is that sometimes, interesting values (that might or might not contain IDs) are stored as simple text nodes instead of attributes. We will try to convert some of these values to attributes (e.g. using a smart XSL transformation), let our heuristics find the ID sets, and then translate them back to XML keys (see \ref{realistic-converted} for details).
-And finally, we create completely artificial data to create inputs that will put our heuristics in stress. This is because the realistic data often prove to be too easy to solve - the list of candidate AMs is usually too short to be hard to be solved to optimality.\\
+And finally, we create completely artificial data to create inputs that will put our heuristics in stress. This is because the realistic data often prove to be too easy to solve - the list of candidate AMs is usually too short to be hard to be solved to optimality.
 
-To understand these data sets we will discuss their origin and \textit{graph representation}. As mentioned earlier, % TODO link
+\begin{define}[Data set]
+	\label{define-data-set}
+	One or more XML files sharing the same schema (even if only an implicit schema) shall be referred to as a \textit{data set}. In the scope of this work this will always mean a \textit{single} XML file. However, this definition of a data \textit{set} covers also the extension to more XML files as described in \cite{fidax}.
+\end{define}
+
+To understand our test data sets we will discuss their origin and \textit{graph representation}. As mentioned earlier, % TODO link
 the problem of finding the optimal ID set is in fact the problem of finding the maximum weighted independent set in a graph. Therefore it is interesting to actually see the graphs of these data sets and understand some related metrics.
 
-The former will be achieved with the help of GraphViz tool, % TODO link
-where we will draw the graphs so that all the vertices represent the \textit{candidate AMs}, and the edges represent pairs of AMs that have nonempty intersection of their images (and thus cannot be in the same ID set together). Thus solving the maximal weighted IS on these graphs will be equivalent to solving our problem of optimal ID set.
+The former will be achieved with the help of GraphViz tool (\cite{graphviz}), where we will draw the graphs so that all the vertices represent the \textit{candidate AMs}, and the edges represent pairs of AMs that have nonempty intersection of their images (and thus cannot be in the same ID set together). Thus solving the maximal weighted IS on these graphs will be equivalent to solving our problem of optimal ID set.
 
 The latter will come in form of tables containing information regarding the data sets, such their size, known optimum for $\alpha = \beta = 1$ (found by running the \heu{Glpk} heuristic without a time limit) and the numbers of vertices and edges in aforementioned graphs.
 
@@ -39,8 +43,6 @@ The latter will come in form of tables containing information regarding the data
 \label{section-realistic-data}
 
 From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is the Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. Neither will they be included on the DVD distributed with this thesis.
-
-% TODO their DTD/XSD - do we have ID attributes?
 
 \begin{table}
   \caption{List of realistic test data files}
@@ -175,8 +177,7 @@ Also, we will need data of comparably similar characteristics but varying size t
 
 The summary is the Table \ref{table-experiments-data-artificial} and Table \ref{table-experiments-data-artificial-size}, these tables contain 2 new columns: values of density in both interpretations we introduced. Some of the graph representations can be seen in Figure \ref{image-experiments-data-artificial}.
 
-While studying the tables it becomes obvious that the actual numbers $|V|$ and $|E|$ do not match to the $v$ and $e$ in the names of the sets. This is because how the random generation algorithm works: it might pick the same edge twice, which will automatically render it unsuitable for the ID set. Because of the so-called Birthday paradox, % TODO link
-this will happen more with higher $e$.
+While studying the tables it becomes obvious that the actual numbers $|V|$ and $|E|$ do not match to the $v$ and $e$ in the names of the sets. This is because how the random generation algorithm works: it might pick the same edge twice, which will automatically render it unsuitable for the ID set. Because of the so-called Birthday paradox (see e.g. \cite{birthday}), this will happen more with higher $e$.
 
 \begin{table}
   \caption{List of artificial test data files}

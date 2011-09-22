@@ -1,12 +1,51 @@
 \chapter{MIP Approach}
+\label{chapter-mip}
 
-TODO rigorously define MIP - optimization problem, some of the variables integral
+TODO rigorously define MIP - optimization problem similar to LP, however some of the variables integral or boolean
 
 TODO FIDAX is cool, but their heuristic might not be the best. It is a IS problem, let's try a multi-purpose solver. Use GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
 
 \section{Finding ID sets with GLPK}
 
 TODO how GLPK works (branch \& bound), how to construct a problem, how output looks, how to interpret it, limit time-> limit quality, ...
+
+TODO define \textit{name(AM)}
+
+\begin{verbatim}
+<x>
+  <y a="1" b="2"/>
+  <y a="3" c="4"/>
+  <y/>
+  <z a="1"/>
+</x>
+\end{verbatim}
+
+TODO equations for the MIP formulation
+
+\begin{scriptsize}
+\begin{verbatim}
+set AMs;
+param Weight {i in AMs};
+var x {i in AMs} binary;
+maximize z: sum {i in AMs} x[i] * Weight[i];
+s.t. c1: x['y-b'] + x['y-c'] <= 1;
+s.t. c2: x['y-a'] + x['y-c'] <= 1;
+s.t. c3: x['y-a'] + x['y-b'] <= 1;
+s.t. c4: x['y-a'] + x['z-a'] <= 1;
+data;
+set AMs :=
+y-c
+y-b
+y-a
+z-a;
+param Weight :=
+y-c 0.2
+y-b 0.2
+y-a 0.6
+z-a 0.4;
+end;
+\end{verbatim}
+\end{scriptsize}
 
  -> wow, GLPK works. However, it takes too long to get to optimum (link experiments), so let's try other heuristics.
 
@@ -33,14 +72,14 @@ TODO we will be using a pool - what is a pool
 
 TODO construction heuristics are heus that provide us with at least some solution.
 
-\subsubsection{\jmodule{FIDAX}}
+\subsubsection{\heu{FIDAX}}
 
-It should be obvious by now that the algorithm described in \cite{fidax} (we shall call it \jmodule{FIDAX} from now on) can trivially be used as a construction heuristic that will give us one feasible solution.
+It should be obvious by now that the algorithm described in \cite{fidax} (we shall call it \heu{FIDAX} from now on) can trivially be used as a construction heuristic that will give us one feasible solution.
 
 The pseudocode of this CH (taken from the original article with trivial modifications without changing the logic) is in Listing \ref{listing-ch-fidax}.
 
 \begin{algorithm}
-\caption{\jmodule{FIDAX} CH}
+\caption{\heu{FIDAX} CH}
 \label{listing-ch-fidax}
 \begin{algorithmic}
 \REQUIRE $C$ list of candidate AMs
@@ -63,7 +102,7 @@ The pseudocode of this CH (taken from the original article with trivial modifica
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Random}}
+\subsubsection{\heu{Random}}
 \label{heu-ch-random}
 
 One of the most natural heuristics when dealing with the IS problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is obviously a hungry heuristic. %TODO have I defined ID set condition yet??
@@ -73,7 +112,7 @@ The advantages of this trivial heuristic are simplicity, speed and ease with whi
 See the Listing \ref{listing-ch-random} for its pseudocode.
 
 \begin{algorithm}
-\caption{\jmodule{Random} CH}
+\caption{\heu{Random} CH}
 \label{listing-ch-random}
 \begin{algorithmic}
 \REQUIRE $N$ required size of pool
@@ -93,17 +132,17 @@ See the Listing \ref{listing-ch-random} for its pseudocode.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Fuzzy}}
+\subsubsection{\heu{Fuzzy}}
 \label{heu-ch-fuzzy}
 
-\jmodule{Fuzzy} is an improvement over the \jmodule{Random} CH: it picks the next AM to try to add based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in TODO. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
+\heu{Fuzzy} is an improvement over the \heu{Random} CH: it picks the next AM to try to add based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in TODO. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
 
 Again, this is a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
 
 % TODO od I need to specify which are my own idea? I guess so, I should link any heu that is not mine. But do I need to stress that for example Fuzzy is mine?
 
 \begin{algorithm}
-\caption{\jmodule{Fuzzy} CH}
+\caption{\heu{Fuzzy} CH}
 \label{listing-ch-fuzzy}
 \begin{algorithmic}
 \REQUIRE $N$ required size of pool
@@ -135,14 +174,14 @@ Again, this is a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains i
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Incremental}}
+\subsubsection{\heu{Incremental}}
 
 This trivial heuristics sorts all candidate AMs by their decreasing weights (TODO link definition of weight) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
 
 See listing \ref{listing-ch-incremental}.
 
 \begin{algorithm}
-\caption{\jmodule{Incremental} CH}
+\caption{\heu{Incremental} CH}
 \label{listing-ch-incremental}
 \begin{algorithmic}
 \REQUIRE $C$ list of candidate AMs
@@ -158,14 +197,14 @@ See listing \ref{listing-ch-incremental}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Removal}}
+\subsubsection{\heu{Removal}}
 
-This is basically a reversal of the idea from the \jmodule{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, order them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a hungry heuristic returning only one solution.
+This is basically a reversal of the idea from the \heu{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, order them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a hungry heuristic returning only one solution.
 
 See listing \ref{listing-ch-removal}.
 
 \begin{algorithm}
-\caption{\jmodule{Removal} CH}
+\caption{\heu{Removal} CH}
 \label{listing-ch-removal}
 \begin{algorithmic}
 \REQUIRE $C$ list of candidate AMs
@@ -183,7 +222,7 @@ See listing \ref{listing-ch-removal}.
 
 \subsubsection{Truncated Branch \& Bound}
 
-This CH will be called \jmodule{Glpk} from now on, for it is basically a time-constrained run of GLPK.
+This CH will be called \heu{Glpk} from now on, for it is basically a time-constrained run of GLPK.
 
 TODO if we limit GLPK's runtime, we get this
 
@@ -197,12 +236,12 @@ TODO what they are, that they need a pool sometimes, their input and output is a
 
 TODO mention intensification, diversification
 
-\subsubsection{\jmodule{Identity}}
+\subsubsection{\heu{Identity}}
 
 This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its listing \ref{listing-ih-identity}.
 
 \begin{algorithm}
-\caption{\jmodule{Identity} IH}
+\caption{\heu{Identity} IH}
 \label{listing-ih-identity}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
@@ -211,14 +250,14 @@ This ultimately trivial improvement heuristics does nothing. It simply returns t
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Remove Worst}}
+\subsubsection{\heu{Remove Worst}}
 
 This trivial IH tries to improve the solution pool by removing the worst solution (i.e. the one with the lowest quality). This might be interesting in cooperation with other improvement heuristics that increase the solution pool size, to keep it from growing by pruning inferior solutions.
 
 See listing \ref{listing-ih-removeworst}.
 
 \begin{algorithm}
-\caption{\jmodule{Remove Worst} IH}
+\caption{\heu{Remove Worst} IH}
 \label{listing-ih-removeworst}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
@@ -228,20 +267,20 @@ See listing \ref{listing-ih-removeworst}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Random Remove}}
+\subsubsection{\heu{Random Remove}}
 
 This is again a rather trivial IH, something which is usually referred to as a \textit{perturbation} function. % TODO link the notion
 By removing a random subset of specified size from each solution in the pool, it provides variability needed to escape from local optima. % TODO make sure we have talked about local optima before
 
 The number of AMs to remove from each solution is specified as ratio (from the interval $(0, 1)$) of the solution size. % TODO have we defined what a solution size is?
-For example, \jmodule{Random Remove} with $ratio = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
+For example, \heu{Random Remove} with $ratio = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
 
 This heuristic returns a pool of solutions of the same size as it got on its input.
 
 See listing \ref{listing-ih-randomremove}.
 
 \begin{algorithm}
-\caption{\jmodule{Random Remove} IH}
+\caption{\heu{Random Remove} IH}
 \label{listing-ih-randomremove}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
@@ -255,14 +294,14 @@ See listing \ref{listing-ih-randomremove}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Hungry}}
+\subsubsection{\heu{Hungry}}
 
 This simple improvement heuristic assumes that the solutions in the pool are not ``complete", i.e. there are AMs that could be added to them without violating the ID set condition.
 
 \heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. Listing \ref{listing-ih-hungry} captures this process.
 
 \begin{algorithm}
-\caption{\jmodule{Hungry} IH}
+\caption{\heu{Hungry} IH}
 \label{listing-ih-hungry}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
@@ -282,14 +321,26 @@ This simple improvement heuristic assumes that the solutions in the pool are not
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Mutation}}
+\subsubsection{\heu{Mutation}}
+
+TODO explain how this works and link wise books
 
 TODO explain how this translates to GLPK input
+
+For every AM $AM_F$ fixed to appear in the solution a following constraint is added to GLPK input:
+\[s.t. f_{index}: x['name(AM_F)'] = 1;\]
+$index$ is a unique integer to number all the constraints.
+
+Additionaly, every other mapping $AM_i$ colliding with $AM_F$ ($\iff \iota(AM_F) \cap \iota(AM_i) \neq \emptyset$) will cause the following constraint to be added:
+\[s.t. f_{index}: x['name(AM_i)'] = 0;\]
+And the original constraint in form:
+\[s.t. c_{index}: x['name(AM_F)'] + x['name(AM_i)'] <= 1;\]
+will not be included.
 
 See listing \ref{listing-ih-mutation}.
 
 \begin{algorithm}
-\caption{\jmodule{Mutation} IH}
+\caption{\heu{Mutation} IH}
 \label{listing-ih-mutation}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
@@ -303,14 +354,16 @@ See listing \ref{listing-ih-mutation}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Crossover}}
+\subsubsection{\heu{Crossover}}
 
-TODO explain how this translates to GLPK input
+TODO explain how this works and link wise books
+
+TODO explain how this translates to GLPK input - it's again simple fixing to 1, but we get the list of AMs in a different manner.
 
 See listing \ref{listing-ih-crossover}.
 
 \begin{algorithm}
-\caption{\jmodule{Crossover} IH}
+\caption{\heu{Crossover} IH}
 \label{listing-ih-crossover}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
@@ -325,14 +378,22 @@ See listing \ref{listing-ih-crossover}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{\jmodule{Local Branching}}
+\subsubsection{\heu{Local Branching}}
+
+TODO explain how this works and link wise books
 
 TODO explain how this translates to GLPK input
+
+A new constrain describing the maximal allowed distance from the incumbent solution is added to GLPK input.
+
+\[s.t. LB: sum\{i\ in\ INCUMBENT\} (1 - x[i]) + sum\{i\ in\ REMAINING\} x[i] \leq k;\]
+
+Where $INCUMBENT$ is a set of names of AMs in the incumbent solution, $REMAINING$ is a set of all the AMs not included in the incumbent solution and $k$ is the requested maximal distance.
 
 See listing \ref{listing-ih-localbranching}.
 
 \begin{algorithm}
-\caption{\jmodule{Local Branching} IH}
+\caption{\heu{Local Branching} IH}
 \label{listing-ih-localbranching}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
@@ -348,4 +409,36 @@ See listing \ref{listing-ih-localbranching}.
 
 \section{IDREF}
 
-TODO describe the (rather trivial) algorithm of finding IDREF attributes once we have the ID set
+Once an ID set is found, regardless of how exactly, it is easy to find the IDREF set, i.e. the attribute mappings that can be declared as IDREF. % TODO link FIDAX, they did it first.
+
+First of all, from the set of all the attribute mappings in the model remove all the AMs contained in the ID set. This is because the specification % TODO link to the specific anchor in the page
+does not allow an attribute to be ID and IDREF (IDREFS) at the same time. Let us denominate these mappings as \textit{IDREF candidates} (obviously different from \textit{candidate AMs}). % TODO link candidate AMs
+
+Second, find the image of the ID set as the union of images of all the AMs in this ID set.
+
+\[\iota(ID) = \bigcup_{am \in ID} \iota(am)\]
+
+Now the IDREF set contains all the AMs whose images are a subset of the ID set image.
+
+\[\iota(c) \subset \iota(ID) \Rightarrow c \in IDREF\]
+
+This can be easily determined in a loop over the list of candidates. The process is captured in Listing \ref{listing-idref}.
+
+\begin{algorithm}
+\caption{IDREF Search}
+\label{listing-idref}
+\begin{algorithmic}
+\REQUIRE $AMs$ list of all AMs
+\REQUIRE $ID$ ID set as a list of AMs
+\ENSURE $IDREF$ set as a list of AMs
+\STATE $IDREF \gets \emptyset$
+\STATE $candidates \gets AMs \backslash ID$
+\STATE $\iota(ID) \gets \bigcup_{am \in ID} \iota(am)$
+\FORALL{$c \in candidates$}
+  \IF{$\iota(c) \subset \iota(ID)$}
+    \STATE $IDREF \gets IDREF \cup c$
+  \ENDIF
+\ENDFOR
+\RETURN $IDREF$
+\end{algorithmic}
+\end{algorithm}

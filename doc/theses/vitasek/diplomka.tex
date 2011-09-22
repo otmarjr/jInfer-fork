@@ -96,6 +96,7 @@
 % - make sure all the heu/data set names are consistent. This holds especially for GLPK (tool) / Glpk (heu) and FIDAX
 % - make sure that when referring to heus in algorithms, e.g. when describing how experimental sets are constructed, we correctly refer to their parameters as described in their pseudocodes
 % - the official name for things like OVA1 and 100-100 is (test) data set. Make sure I am not calling it files or anything else.
+% - make sure labels have consistent names
 
 
 %%% Titulní strana práce ======================================================
@@ -275,11 +276,11 @@ An extension to jInfer for finding ID attributes using MIP solver and a combinat
 
 \section{Conventions}
 
-TODO list conventions - how we write code related stuff, module names, heu names, etc
+As usual, source code excerpts, class, field and method names shall be written in fixed-width font, such as \texttt{getHeuristic()}. Names of specific heuristics will be written like this: \heu{Mutation}. Name of test data sets will be written like this: \dataset{OVA1}.\\
 
-TODO perhaps explain the way we will be writing pseudocode?
+TODO perhaps explain the way we will be writing pseudocode?\\
 
-TODO mention we have a list of abbreviations
+There is a list of abbreviations following the bibliography in Listing \ref{chapter-list-abbreviations}.
 
 \include{chapter-1-definitions}
 
@@ -316,6 +317,7 @@ TODO mention we have a list of abbreviations
 
 \printnomenclature[2cm]
 \addcontentsline{toc}{chapter}{List of Abbreviations}
+\label{chapter-list-abbreviations}
 
 %%% Přílohy k diplomové práci, existují-li (různé dodatky jako výpisy programů,
 %%% diagramy apod.). Každá příloha musí být alespoň jednou odkazována z vlastního

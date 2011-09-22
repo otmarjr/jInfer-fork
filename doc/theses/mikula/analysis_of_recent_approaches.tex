@@ -1,7 +1,7 @@
 \chapter{Analysis of Recent Approaches}
 Approaches of XML schema inference can be divided by several criteria. A basic division is by the language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
 
-According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods are based on experience with manual construction of schemas, motivated by real-life usages of XML schemata, and their result commonly does not belong to any class of grammar. On the contrary, the grammar-inferring methods are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results. \todo[inline]{Tady by neškodilo dát odkazy na všechny ex. přístupy a říct, že popíšeme detailněji aspoň dva.}
+According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. On the contrary, the grammar-inferring methods are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results. \todo[inline]{Tady by neškodilo dát odkazy na všechny ex. přístupy a říct, že popíšeme detailněji aspoň dva.}
 
 Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize other or additional sources may be developed. An approach utilizing XML data along with an obsolete XML schema is described in \cite{Mlynkova:2009:IXS:1862681.1862693}. However, the most significant approaches in terms of this work are those, utilizing operations over XML data. According to our best knowledge at the time of writing, there is just one approach of this category, described in \cite{Necasky:2009:DXK:1529282.1529414}. It utilizes a set of XQuery queries to discover keys and foreign keys\todo{ref do literatury - Ty by tady něškodily všude, u každé té kategorie.}.
 
@@ -39,18 +39,29 @@ Paper \cite{Mlynkova:2008:AAX:1494650.1495496} summarizes this step as follows: 
 
 \todo[inline]{Detailnejsie? Priklad?}
 
-\todo[inline]{Popisat nejaky pristup vyuzivajuci ACO}
+\section{Even an Ant Can Create an XSD}
+This work, described in \cite{Vosta:2008:EAC:1802514.1802522}, combines several previously proposed approaches including the XTRACT system discussed in the previous section. Its improvements of the process of XML schema inference include:
 
-\section{SchemaMiner}
-\todo[inline]{Popisat detailnejsie}
-The SchemaMiner system \todo{bibref} is another example of a \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.is another example of a \emph{heuristic} \emph{merging state algorithm} creating the result in XSD. It focuses on inferring elements with the same name but different structure and unordered sequences.
-\todo[inline]{Definovat skratku XSD a co to je element type.}
+\begin{itemize}
+\item Distinguishing elements with the same name but different semantics.
+\item Improvements of algorithms adopted from the previous works.
+\item Incorporating inference of an unordered sequence.
+\item Creating a result in XML Schema language.
+\end{itemize}
 
-The elements with the same name but different content are supported only in XSDs and their inference requires exploitation of more sophisticated approaches than combining productions with the same element
-type. On the other hand, although the unordered sequences are a classical example of XSD “syntactic sugar”, their exploitation enables to define simple and, hence, realistic and usable schemas.
+\subsection{Clustering of Elements}
+This phase clusters elements on a basis of their context and structure. It is done by creating tree structures for each input XML documents, where vertices represent elements and attributes and an edge between two vertices expresses the their parent-child relation. These trees and their subtrees and then compared, using an imposed tree similarity measure, to find elements with the same semantics.
 
-\todo[inline]{Moze byt takto? Nejake dalsie pristupy?}
-\todo[inline]{U obou by neškodil příklad - tohle je velmi povrchní, pokud někde nečetl i ty články, nepochopí nic.}
+\subsection{Schema Generalization}
+For each cluster, a trivial schema is created, which is then generalized to achieve a reasonable result. In a search for the optimal schema, \emph{Ant Colony Optimization (ACO)} heuristic is incorporated. The idea behind the ACO heuristic is that a set of artifical ants is searching a space of possible solutions, each ant given a subspace of the space to find a local suboptimum. An ant 
+is performing steps (schema modifications), dying after a predifined number of steps and providing an information - positive feedback - on quality of a found solution. The search is performed in a defined count of interations (or it stops if good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
+
+One of the improvements of this heuristic is inclusions of a negative feedback after each step of an ant, visible only in a current iteration. Due to this improvement, a larger subspace of solutions is searched.
+
+Another improvement lies in a way how an ant decides for a particular step to perform. To achieve better results, the authors propose a combinations of several verified approaches. A set of all possible steps is created using \emph{k,h-context} and \emph{s,k-string} \todo{citacie} methods. The optimal step is then selected employing the MDL principle \todo{citacia}.
+
+\subsection{Result in XSD}
+Unlike the majority of recent approaches, this methods creates its result in XML Schema language (XSD). Comparing to DTD, XSD is a newer language and it provides greater expression possibilities. Authors of this method focused on inferring elements with the same name but different context and the unordered sequences which can be in XSD expressed by \texttt{xs:all} construct. Elements with the same name but different context cannot be expressed in DTD and, however, the unordered sequence can be also expressed in DTD as alternations of ordered sequences, such expression in not practical nor well human-readable.
 
 \section{On Inference of XML Schema with the Knowledge of an Obsolete One}
 \todo[inline]{spravne zaradit}

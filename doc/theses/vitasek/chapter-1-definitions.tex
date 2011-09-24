@@ -25,7 +25,8 @@ This example introduces an XML file fragment that will be used for demonstration
   \caption{Example XML Tree}
   \label{image-definitions-example-xml-tree}
   \centering
-    \includegraphics[width=\textwidth]{images/definitions/xml-tree}
+    \subfigure[XML tree]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree}}
+    \subfigure[Attribute mappings]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree-ams}}
 \end{figure}
 
 Furthermore, we denote $I$ % TODO fix the capital I
@@ -41,6 +42,7 @@ the set of all values in the document. We will need two more definitions from th
 \end{define}
 
 \section{ID, IDREF, IDREFS Attributes}
+\label{section-definitions-id-attributes}
 
 According to \cite{Bray:08:EML}, an XML attribute may have the type \textit{ID}, \textit{IDREF} or \textit{IDREFS} (among others). Following constraints are related to these types.
 
@@ -84,17 +86,43 @@ We will use a different definition (without introducing keys from \cite{keX} for
 \end{define}
 
 \begin{define}[Attribute mapping]
-	For $x \in \Sigma^E$ and $y \in \Sigma^A$ we define the attribute mapping of y over x, denoted $M_{x}^{y}$, the $I \times I$ % TODO fix the capital I
+	For $x \in \Sigma^E$ and $y \in \Sigma^A$ we define the \textit{attribute mapping} of y over x, denoted $M_{x}^{y}$, the $I \times I$ % TODO fix the capital I
 	relation defined by
 	\[M_{x}^{y} = \{ (z,w): label(z) = x, label(w) = y, parent(w) = z \}\]
 \end{define}
 
 Thus the relation $M_{x}^{y}$ contains edges in the XML tree connecting element nodes labeled $x$ and attribute nodes labeled $y$.
 
-TODO more from the article?
+We can use projection to retrieve all the unique \textit{ids} of either elements or attributes from the relation, with notation $\pi_E(M_{x}^{y})$ and $\pi_A(M_{x}^{y})$.
+
+\begin{define}[Type of the attribute mapping]
+	Attribute mapping $M_{x}^{y}$ is of the \textit{type} $\tau(M_{x}^{y}) = x$.
+\end{define}
 
 \paragraph{Example}
-The XML tree from Figure \ref{image-definitions-example-xml-tree} has the following non-empty AMs: $M_{y}^{a} = \{(2,6), (3,8)\}$, $M_{y}^{b} = \{(2,7)\}$, $M_{y}^{c} = \{(3,9)\}$ and $M_{z}^{a} = \{(5,10)\}$.
+The XML tree from Figure \ref{image-definitions-example-xml-tree} has the following non-empty AMs drawn in bold lines: $M_{y}^{a} = \{(2,6), (3,8)\}$, $M_{y}^{b} = \{(2,7)\}$, $M_{y}^{c} = \{(3,9)\}$ and $M_{z}^{a} = \{(5,10)\}$.
+
+Following example equations hold.
+\begin{eqnarray*}
+\pi_E(M_{y}^{a}) & = & \{2, 3\} \\
+\pi_A(M_{z}^{a}) & = & \{10\} \\
+\tau(M_{y}^{c}) & = & y
+\end{eqnarray*}
+
+\begin{define}[Image of the attribute mapping]
+	\textit{Image} $\iota$ of the attribute mapping $M_{x}^{y}$ is defined as $\iota(M_{x}^{y}) = \{z: z = value(w), w \in \pi_A(M_{x}^{y})\}$
+\end{define}
+
+So the image of an AM is a set of all the values of all the attribute nodes contained in the mapping.
+
+\paragraph{Example}
+Again referring to the XML tree from \ref{image-definitions-example-xml-tree}, we get the following AM images.
+\begin{eqnarray*}
+\iota(M_{y}^{a}) & = & \{1, 3\} \\
+\iota(M_{y}^{b}) & = & \{2\} \\
+\iota(M_{y}^{c}) & = & \{4\} \\
+\iota(M_{z}^{a}) & = & \{1\} \\
+\end{eqnarray*}
 
 \subsection{Attribute Mapping Model}
 
@@ -102,16 +130,52 @@ TODO
 
 \section{ID Set}
 
+Based on the requirements for an ID attribute from Section \ref{section-definitions-id-attributes} we will define ID set with the help of the following definition.
+
+\begin{define}[Candidate attribute mapping]
+An attribute mapping $m$ is a \textit{candidate attribute mapping} if it is an injective function, that is,
+\[|m| = |\pi_E(m)| = |\pi_A(m)| = |\iota(m)|\]
+\end{define}
+
+\paragraph{Example}
+In our example all the attribute mappings are candidate AMs.
+
+Now we can proceed to define an ID set.
+
+\begin{define}[ID set]
+A set of candidate attribute mappings $I = \{m_1, \ldots m_n\}$ is an ID set iff
+\[\bigcap_{m_i \in I} \tau(m_i) = \emptyset \wedge \bigcap_{m_i \in I} \iota(m_i) = \emptyset\]
+\end{define}
+
+That is, an ID set has images without repeating values and all the types are unique (an element cannot have more than one ID attribute).
+
+\paragraph{Example}
+Returning to our example, the following are all the possible ID sets: $\{ M_{y}^{a} \}, \{ M_{y}^{b} \}, \{ M_{y}^{b}, M_{z}^{a} \}, \{ M_{y}^{c} \}, \{ M_{y}^{c}, M_{z}^{a} \}$. Note that once we select an AM of type $y$ we can never add any other with the same type. Note also that $\{ M_{y}^{c}, M_{z}^{a} \}$ is not an ID set, because $\iota(M_{y}^{c}) \cap \iota(M_{z}^{a}) \neq \emptyset$.
+
+\subsection{IDREF and IDREFS Attributes}
+
 TODO
 
 \section{Attribute Mapping Weight}
 
-TODO
+TODO this is from FIDAX again
+
+$M = \{m_1, \dots m_i\}$ is the set of all non-empty AMs in the document.
 
 \subsection{Support}
 
-TODO
+\begin{define}[Support]
+\textit{Support} of an attribute mapping $m$ is defined as follows.
+\[\phi(m) = \frac{|m|}{\sum_{p \in M}|p|}\]
+\end{define}
+
+TODO example
 
 \subsection{Coverage}
 
-TODO
+\begin{define}[Coverage]
+\textit{Coverage} of an attribute mapping $m$ is defined as follows.
+\[\chi(m) = \left( \sum_{p \in M, p \neq m} |\iota(m) \cap \iota(p)| \right) / \sum_{p \in M} |\iota(p)|\]
+\end{define}
+
+TODO example

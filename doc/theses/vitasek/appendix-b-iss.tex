@@ -20,6 +20,7 @@ Most important packages in \jmodule{IDSetSearch} are the following.
 However, experiments are almost never run alone. For the purpose of running a whole experimental set there is the \texttt{Experiment\-Set} interface and its abstract implementation \texttt{Abstract\-Experiment\-Set}. Its descendants need only to provide a list of \texttt{Experiment\-Parameter}s and looping as well as data collection will be handled for them.
 
 \section{How to Create a New Heuristic}
+\label{section-appendix-iss-howto}
 
 Decide whether it should be a CH or IH and create a class implementing \texttt{Con\-struc\-tion\-Heu\-ris\-tic} or \texttt{Im\-prove\-ment\-Heu\-ris\-tic}, respectively. In each case implement all the \texttt{get*Name()} methods inherited from \texttt{Named\-Module} and then the most important \texttt{start()} method.
 

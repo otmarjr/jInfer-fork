@@ -1,4 +1,4 @@
-graph xmltree {
+digraph xmltree {
 	node [fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
 	
@@ -13,13 +13,13 @@ graph xmltree {
 	c9[shape = rectangle, label = "c:9:4"];
 	a10[shape = rectangle, label = "a:10:1"];
 	
-	x1 -- y2;
-	x1 -- y3;
-	x1 -- y4;
-	x1 -- z5;
-	y2 -- a6;
-	y2 -- b7;
-	y3 -- a8;
-	y3 -- c9;
-	z5 -- a10;
+	x1 -> y2 [arrowhead = none];
+	x1 -> y3 [arrowhead = none];
+	x1 -> y4 [arrowhead = none];
+	x1 -> z5 [arrowhead = none];
+	y2 -> a6 [penwidth = 3];
+	y2 -> b7 [penwidth = 3];
+	y3 -> a8 [penwidth = 3];
+	y3 -> c9 [penwidth = 3];
+	z5 -> a10 [penwidth = 3];
 }

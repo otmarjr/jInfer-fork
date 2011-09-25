@@ -9,7 +9,9 @@ TODO FIDAX is cool, but their heuristic might not be the best. It is a IS proble
 
 TODO how GLPK works (branch \& bound), how to construct a problem, how output looks, how to interpret it, limit time-> limit quality, ...
 
-TODO define \textit{name(AM)}
+\begin{define}[$name()$]
+Given an attribute mapping $m = M_{x}^{y}$, $name(m)$ shall be defined as the string $x\-y$.
+\end{define}
 
 \begin{verbatim}
 <x>
@@ -22,6 +24,54 @@ TODO define \textit{name(AM)}
 
 TODO equations for the MIP formulation
 
+For each AM $m$ there will be one binary variable $x_{name(m)}$. Objective function coefficients in vector $\mathbf{c}$ will be weights of respective mappings. For each pair of AMs $m_1, m_2$ that cannot share the same ID set (because of conflicting type or image) there shall be a row in matrix $A$ representing the inequality $x_{name(m_1)} + x_{name(m_2)} \leqslant 1$. $\mathbf{b}$ will be a vector of ones with corresponding length.
+
+\[
+\mathbf{x} =
+\begin{bmatrix}
+x_{y-a} \\
+x_{y-b} \\
+x_{y-c} \\
+x_{z-a} \\
+\end{bmatrix},
+\mathbf{c} = 
+\begin{bmatrix}
+weight(M_{y}^{a}) \\
+weight(M_{y}^{b}) \\
+weight(M_{y}^{c}) \\
+weight(M_{z}^{a}) \\
+\end{bmatrix} =
+\begin{bmatrix}
+0.2 \\
+0.2 \\
+0.6 \\
+0.4 \\
+\end{bmatrix},
+\mathbf{b} =
+\begin{bmatrix}
+1 \\
+1 \\
+1 \\
+1 \\
+\end{bmatrix},
+A =
+\begin{pmatrix}
+0 & 1 & 1 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 0 & 0 & 1 \\
+\end{pmatrix}
+\]
+
+The problem is, recall, to solve the following.
+
+\begin{eqnarray*}
+\max_{x} z & = & \mathbf{c}^{\mathrm{T}}\mathbf{x} \\
+s.t.\, A\mathbf{x} & \leqslant & \mathbf{b} \\
+\end{eqnarray*}
+
+In GLPK \textit{mathprog} language, it translates to the following formulation. % TODO cite mathprog
+
 \begin{scriptsize}
 \begin{verbatim}
 set AMs;
@@ -33,11 +83,7 @@ s.t. c2: x['y-a'] + x['y-c'] <= 1;
 s.t. c3: x['y-a'] + x['y-b'] <= 1;
 s.t. c4: x['y-a'] + x['z-a'] <= 1;
 data;
-set AMs :=
-y-c
-y-b
-y-a
-z-a;
+set AMs := y-c y-b y-a z-a;
 param Weight :=
 y-c 0.2
 y-b 0.2
@@ -46,6 +92,8 @@ z-a 0.4;
 end;
 \end{verbatim}
 \end{scriptsize}
+
+We can use this as an input for the GLPK solver, and we get the solution: TODO GLPK output.
 
  -> wow, GLPK works. However, it takes too long to get to optimum (link experiments), so let's try other heuristics.
 
@@ -73,6 +121,7 @@ TODO we will be using a pool - what is a pool
 TODO construction heuristics are heus that provide us with at least some solution.
 
 \subsubsection{\heu{FIDAX}}
+\label{section-mip-fidax}
 
 It should be obvious by now that the algorithm described in \cite{fidax} (we shall call it \heu{FIDAX} from now on) can trivially be used as a construction heuristic that will give us one feasible solution.
 

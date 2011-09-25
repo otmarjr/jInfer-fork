@@ -29,9 +29,7 @@ This example introduces an XML file fragment that will be used for demonstration
     \subfigure[Attribute mappings]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree-ams}}
 \end{figure}
 
-Furthermore, we denote $I$ % TODO fix the capital I
-the set of all ids and $V$ % TODO fix the capital V
-the set of all values in the document. We will need two more definitions from the article.
+Furthermore, we denote $\mathcal{I}$ the set of all ids and $\mathcal{V}$ the set of all values in the document. We will need two more definitions from the article.
 
 \begin{define}[Node equality]
 	$v_1$ and $v_2$ are node equal, written $v_1 =_n v_2$ iff $id(v_1) = id(v_2)$.
@@ -64,17 +62,17 @@ An \textbf{ID} attribute \textsc{must} have a declared default of \textbf{\#IMPL
 Values of type \textbf{IDREF} \textsc{must} match the Name production, and values of type \textbf{IDREFS} \textsc{must} match Names; each Name \textsc{must} match the value of an \textbf{ID} attribute on some element in the XML document; i.e. \textbf{IDREF} values \textsc{must} match the value of some ID attribute.
 \end{quote}
 
-\section{XML Keys}
+%\section{XML Keys} - is this necessary at all?
 
-TODO
+%TODO
 
-\subsection{According to Specification}
+%\subsection{According to Specification}
 
-TODO compare them to ID attributes
+%TODO compare them to ID attributes
 
-\subsection{According to \cite{keX}}
+%\subsection{According to \cite{keX}}
 
-TODO show how a XML key is defined using the keX notation % this is a terrible sentence
+%TODO show how a XML key is defined using the keX notation % this is a terrible sentence
 
 \section{Attribute Mappings}
 
@@ -86,8 +84,7 @@ We will use a different definition (without introducing keys from \cite{keX} for
 \end{define}
 
 \begin{define}[Attribute mapping]
-	For $x \in \Sigma^E$ and $y \in \Sigma^A$ we define the \textit{attribute mapping} of y over x, denoted $M_{x}^{y}$, the $I \times I$ % TODO fix the capital I
-	relation defined by
+	For $x \in \Sigma^E$ and $y \in \Sigma^A$ we define the \textit{attribute mapping} of y over x, denoted $M_{x}^{y}$, the $\mathcal{I} \times \mathcal{I}$ relation defined by
 	\[M_{x}^{y} = \{ (z,w): label(z) = x, label(w) = y, parent(w) = z \}\]
 \end{define}
 
@@ -124,11 +121,11 @@ Again referring to the XML tree from \ref{image-definitions-example-xml-tree}, w
 \iota(M_{z}^{a}) & = & \{1\} \\
 \end{eqnarray*}
 
-\subsection{Attribute Mapping Model}
-
-TODO
+\paragraph{Attribute Mapping Model}
+An attribute mapping model is a data structure containing the information about all the AMs in a document, together with their images. We shall use this notion later in experimental part of this work.
 
 \section{ID Set}
+\label{section-definitions-id-set}
 
 Based on the requirements for an ID attribute from Section \ref{section-definitions-id-attributes} we will define ID set with the help of the following definition.
 
@@ -143,7 +140,7 @@ In our example all the attribute mappings are candidate AMs.
 Now we can proceed to define an ID set.
 
 \begin{define}[ID set]
-A set of candidate attribute mappings $I = \{m_1, \ldots m_n\}$ is an ID set iff
+A set of candidate attribute mappings $I = \{m_1, \ldots m_n\}$ is an \textit{ID set} iff
 \[\bigcap_{m_i \in I} \tau(m_i) = \emptyset \wedge \bigcap_{m_i \in I} \iota(m_i) = \emptyset\]
 \end{define}
 
@@ -152,15 +149,18 @@ That is, an ID set has images without repeating values and all the types are uni
 \paragraph{Example}
 Returning to our example, the following are all the possible ID sets: $\{ M_{y}^{a} \}, \{ M_{y}^{b} \}, \{ M_{y}^{b}, M_{z}^{a} \}, \{ M_{y}^{c} \}, \{ M_{y}^{c}, M_{z}^{a} \}$. Note that once we select an AM of type $y$ we can never add any other with the same type. Note also that $\{ M_{y}^{c}, M_{z}^{a} \}$ is not an ID set, because $\iota(M_{y}^{c}) \cap \iota(M_{z}^{a}) \neq \emptyset$.
 
-\subsection{IDREF and IDREFS Attributes}
+\subsection{IDREF and IDREFS Condition}
 
-TODO
+Given an ID set $I$, the requirements from Section \ref{section-definitions-id-attributes} give us the following condition for an attribute mapping $m$ to be marked IDREF.
+\[\iota(m) \subseteq \bigcup_{m_i \in I} \iota(m_i)\]
+Furthermore if $m$ contains multivalued attributes, it is to be marked IDREFS.
 
 \section{Attribute Mapping Weight}
+\label{section-definitions-weight}
 
-TODO this is from FIDAX again
+This definition of weight for AMs or AM sets comes from \cite{fidax} again.
 
-$M = \{m_1, \dots m_i\}$ is the set of all non-empty AMs in the document.
+Let $M = \{m_1, \dots m_i\}$ be the set of all non-empty AMs in the document.
 
 \subsection{Support}
 
@@ -169,7 +169,13 @@ $M = \{m_1, \dots m_i\}$ is the set of all non-empty AMs in the document.
 \[\phi(m) = \frac{|m|}{\sum_{p \in M}|p|}\]
 \end{define}
 
-TODO example
+From the cited article:
+\begin{quote}
+The support of attribute mapping $M_x^y$ is the fraction of edges in the XML tree that connect $x$ elements to $y$ attributes.
+\end{quote}
+
+\paragraph{Example}
+Support of $M_{y}^{a}$ in our example is $2 / (2+1+1+1) = 0.4$. Support of every other mapping is $1 / (2+1+1+1) = 0.2$.
 
 \subsection{Coverage}
 
@@ -178,4 +184,84 @@ TODO example
 \[\chi(m) = \left( \sum_{p \in M, p \neq m} |\iota(m) \cap \iota(p)| \right) / \sum_{p \in M} |\iota(p)|\]
 \end{define}
 
-TODO example
+Again from the article:
+\begin{quote}
+The coverage of an attribute mapping measures how much of the image of that mapping occurs elsewhere, as a fraction of all mappings images in the document.
+\end{quote}
+
+\paragraph{Example}
+Coverage of $M_{y}^{a}$ in our example is $(0+0+1) / (2+1+1+1) = 0.2$. Coverage of $M_{z}^{a}$ is $0.2$ as well, all the other mappings have coverage $0$.
+\\
+
+\textit{Weight} of an attribute mapping is then defined as a linear combination of its support and coverage.
+
+\begin{define}[Weight]
+For $\alpha, \beta \geq 0$ as relative priorities of support and coverage we define the AM \textit{weight} as follows.
+\[weight(m) = \alpha . \phi(m) + \beta . \chi(m)\]
+For a set of AMs (which may or may not be an ID set) $S = \{m_1, \ldots m_i\}$ we define the weight of this set as the sum of the weights of its AMs.
+\[weight(S) = \sum_{m \in S} weight(m)\]
+\end{define}
+
+\section{Independent Set}
+
+We shall need the notion of an indepentent set of vertices in a graph and its weighted variant.
+
+\begin{define}[Independent set]
+Given an undirected graph $G = (V, E)$, a set of vertices $I \subseteq V$ is an \textit{independent set}, iff the following holds.
+\[\forall v_1, v_2 \in I, v_1 \neq v_2: (v_1, v_2) \notin E \]
+\end{define}
+
+\begin{define}[Maximum weighted independent set]
+Given an undirected graph $G = (V, E)$ and a weight function $w: V \rightarrow \mathbb{R}$, an independent set $I_{max}$ is the \textit{maximum weighted independent set}, iff the following is satisfied.
+\[\forall I' \subseteq V, I' \text{is an independent set}: \sum_{v \in I'} w(v) \leqslant \sum_{v in I_{max}} w(v)\]
+\end{define}
+
+TODO finding this is NP-hard - cite
+
+\section{Linear Programming}
+
+TODO define LP rigorously
+
+\begin{eqnarray*}
+\max_{x} z & = & \mathbf{c}^{\mathrm{T}}\mathbf{x} \\
+s.t.\, A\mathbf{x} & \leqslant & \mathbf{b} \\
+\mathbf{x} & \geqslant & 0 \\
+\end{eqnarray*}
+\[
+\mathbf{x} =
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+\ldots \\
+x_n \\
+\end{bmatrix},
+\mathbf{c} = 
+\begin{bmatrix}
+c_1 \\
+c_2 \\
+\ldots \\
+c_n \\
+\end{bmatrix},
+\mathbf{b} =
+\begin{bmatrix}
+b_1 \\
+b_2 \\
+\ldots \\
+b_m \\
+\end{bmatrix}
+\]
+
+Where $\mathbf{x}$ is the vector of variables (to be found by the optimization), $\mathbf{b}$ is the vector and $A$ is the accompanying matrix of constraints and $\mathbf{c}$ is the vector of coefficients for the objective function. $\mathbf{x}$ and $\mathbf{c}$ have length $n$, $\mathbf{b}$ has length $m$ and $A$ has dimensions $m \times n$.
+
+Another way to write this formulation is in the following.
+
+\begin{eqnarray*}
+\max_{x} z = \sum_{i=1}^{n} c_i x_i \\
+s.t.\, a_{11}x_{1} + a_{12}x_{2} + \ldots + a_{1n}x_{n} & \leqslant & b_{1} \\
+	   a_{21}x_{1} + a_{22}x_{2} + \ldots + a_{2n}x_{n} & \leqslant & b_{2} \\
+	   \ldots \\
+	   a_{m1}x_{1} + a_{m2}x_{2} + \ldots + a_{mn}x_{n} & \leqslant & b_{m} \\
+	   x_i \geqslant 0, i = 1, \ldots n \\
+\end{eqnarray*}
+
+TODO it is possible to formulate minimization function

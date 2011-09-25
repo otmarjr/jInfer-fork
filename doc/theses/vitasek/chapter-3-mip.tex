@@ -1,9 +1,15 @@
 \chapter{MIP Approach}
 \label{chapter-mip}
 
-TODO rigorously define MIP - optimization problem similar to LP, however some of the variables integral or boolean
+We have shown that ID set -> IS, now we show the translation to MIP formulation and solve it using GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
 
-TODO FIDAX is cool, but their heuristic might not be the best. It is a IS problem, let's try a multi-purpose solver. Use GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
+TODO MIP formulation: LP is simple using Simplex method, however as soon as we require integrality or boolean values, it is NP-hard.
+
+\begin{define}[Mixed integer problem]
+	MIP, or \textit{mixed integer problem}, is an instance of linear programming in which some variables are limited to integral or boolean (0, 1) values.
+\end{define}
+
+TODO show how to translate IS to MIP
 
 \section{Finding ID sets with GLPK}
 
@@ -93,9 +99,34 @@ end;
 \end{verbatim}
 \end{scriptsize}
 
-We can use this as an input for the GLPK solver, and we get the solution: TODO GLPK output.
+We can use this as an input for the GLPK solver, and we get the solution.
 
- -> wow, GLPK works. However, it takes too long to get to optimum (link experiments), so let's try other heuristics.
+\begin{scriptsize}
+\begin{verbatim}
+...
+Problem:    glpk_input
+Rows:       5
+Columns:    4 (4 integer, 4 binary)
+Non-zeros:  12
+Status:     INTEGER OPTIMAL
+Objective:  z = 0.6 (MAXimum)
+
+...
+
+   No. Column name       Activity     Lower bound   Upper bound
+------ ------------    ------------- ------------- -------------
+     1 x[y-a]       *              1             0             1 
+     2 x[y-b]       *              0             0             1 
+     3 x[y-c]       *              0             0             1 
+     4 x[z-a]       *              0             0             1 
+
+...
+\end{verbatim}
+\end{scriptsize}
+
+This output tells us that the solution is $x_{y-a} = 1$, $x_{y-b} = 0$, $x_{y-c} = 0$ and $x_{z-a} = 0$. This means that the optimal ID set with maximum weight contains only the $M_{y}^{a}$ attribute mapping.\\
+
+It is obvious that this approach works and for any possible input we can let GLPK find the optimal solution. However, sometimes it takes too long to find the optimum (see e.g. Section \ref{section-glpk-comparison}), we should try to improve this process.
 
 \section{Heuristics}
 

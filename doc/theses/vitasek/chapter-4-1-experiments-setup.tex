@@ -15,6 +15,7 @@ And in the end, we should be able to formulate some kind of general recommendati
 This chapter will be structured in the following way: first we will discuss the experimental data we used, then the methodology used in conducting the experiments, followed by the actual list of experiments with their full description and results, and in the end we shall draw some final conclusions.
 
 \section{Experimental Data}
+\label{section-experiments-data}
 
 The first section will discuss the XML data we will be using to conduct out experiments. We are using XML documents of three categories:
 
@@ -280,7 +281,7 @@ The model now has to be able to return the list of all attribute mappings and th
 
 This example will present the whole process, from an input XML file to the model and its AMs and types.
 
-Recall the following XML file fragment from Chapter \ref{chapter-mip}.
+Recall the following XML file fragment from Chapter \ref{chapter-definitions}.
 \begin{verbatim}
 <x>
   <y a="1" b="2"/>
@@ -348,7 +349,7 @@ To present a set of measurements obtained by iteratively running an experiment w
 Quartile boundaries are determined such that 1/4 of the points have a value equal or less than the first quartile boundary, 1/2 of the points have a value equal or less than the second quartile (median) value, etc. A box is drawn around the region between the first and third quartiles, with a horizontal line at the median value. Whiskers extend from the box to user-specified limits. Points that lie outside these limits are drawn individually.
 \end{quote}
 
-The ``user-specified limits" of whiskers are set to default value, let us quote again from the manual.
+The ``user-specified limits" of whiskers are set to default value, let us quote from the manual again.
 
 \begin{quote}
 By default the whiskers extend from the ends of the box to the most distant point whose y value lies within 1.5 times the interquartile range.

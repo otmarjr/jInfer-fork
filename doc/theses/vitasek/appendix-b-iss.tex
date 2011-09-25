@@ -1,6 +1,8 @@
 \chapter{\jmodule{IDSetSearch}}
 \label{appendix-iss}
 
+\nomenclature{ISS}{ID Set Search}
+
 This appendix will shortly describe the \jmodule{IDSetSearch} jInfer module. As the name suggests, its main purpose is to find ID and IDREF sets and provide attribute statistics in general for grammars originating from any stage of XML schema inference. Virtually every piece of code that was added to jInfer in the course of creating this thesis is contained in this module.\\
 
 From jInfer's point of view, this module resides in codebase \texttt{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.iss} and is a service provider for \texttt{cz.\.cuni.\.mff.\.ksi.\.jinfer.\.base.\.inter\.faces.\.ID\.Set\.Search} interface. Invoking the \texttt{showIDSetPanel()} method displays a fully-featured window containing all the relevant attribute statistics as well as possibility to find the ID and IDREF sets for a specified grammar.\\

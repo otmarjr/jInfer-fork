@@ -35,21 +35,18 @@ Final quality: 0.19951219512195123 (10 AMs)
 Highest quality: 0.23463414634146343 (12 AMs)
 Construction phase:
   Algorithm: Random
-    Time taken: 248 ms
-    Time since start: 248 ms
+    Time taken: 248 ms / Time since start: 248 ms
     Pool size: 10
     Quality: 0.19975609756097568 (11 AMs)
 Improvement phase:
   pass #1:
   Algorithm: RandomRemove, ratio = 0.2
-    Time taken: 0 ms
-    Time since start: 841 ms
+    Time taken: 0 ms / Time since start: 841 ms
     Pool size: 10
     Quality: 0.15878048780487808 (9 AMs)
   pass #2:
   Algorithm: Mutation, ratio = 0.1, limit = 1 s
-    Time taken: 1512 ms
-    Time since start: 2710 ms
+    Time taken: 1512 ms / Time since start: 2710 ms
     Pool size: 11
     Quality: 0.21975609756097558 (11 AMs)
 
@@ -57,8 +54,7 @@ Improvement phase:
 
   pass #10:
   Algorithm: Remove Worst
-    Time taken: 80 ms
-    Time since start: 7676 ms
+    Time taken: 80 ms / Time since start: 7676 ms
     Pool size: 12
     Quality: 0.19951219512195123 (10 AMs)
 Termination reason: Maximum iterations exceeded.
@@ -100,9 +96,7 @@ Element,Attribute
 The first section deals with system information. Please note that some of these characteristics cannot be easily obtained programmatically and are thus stored in the source code as constants.\\
 To obtain GLPK information, the program parses the first line of standard output produced by running \code{glpsol -v}. It tries to guess whether it's the Cygwin version by looking at the path to the binary.
 
-% TODO make sure G.R. was introduced before! and LINK IT! swedish style!
-The second section states the input file along with its size and graph representation.\\
-Alpha and beta parameters for this instance belong here too.
+The second section states the input file along with its size and graph representation (Section \ref{section-experiments-data}). Alpha and beta parameters for this instance belong here too.
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -128,8 +122,7 @@ Construction phase results go next. Among reported information are the full iden
 \begin{footnotesize}
 \begin{verbatim}
 Algorithm: Random
-  Time taken: 248 ms
-  Time since start: 248 ms
+  Time taken: 248 ms / Time since start: 248 ms
   Pool size: 10
   Quality: 0.19975609756097568 (11 AMs)
 \end{verbatim}
@@ -140,8 +133,7 @@ Now for each of the improvement phases there is one section in output log. Infor
 \begin{footnotesize}
 \begin{verbatim}
 Algorithm: Mutation, ratio = 0.1, limit = 1 s
-  Time taken: 1512 ms
-  Time since start: 2710 ms
+  Time taken: 1512 ms / Time since start: 2710 ms
   Pool size: 11
   Quality: 0.21975609756097558 (11 AMs)
 \end{verbatim}
@@ -172,4 +164,4 @@ vertex0,attr,0.024146341463414635
 \end{verbatim}
 \end{footnotesize}
 
-Note that in this example trace there were no IDREF AMs found.
+Note that in this example trace there were no IDREF AMs found. \qed

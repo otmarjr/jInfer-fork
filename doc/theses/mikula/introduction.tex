@@ -1,0 +1,15 @@
+\chapter{Introduction}
+Extensible Markup Language (XML) has become a wide-spread standard for data representation and exchange. Its popularity is based on its simplicity and at the same time its flexibility and express power.
+
+With XML used to represent data themselves, it is often needed or convenient to somehow specify a structure of the represented data, their format, internal relations or restrictions, etc. In order to this need, several so-called XML schema languages (XML schemata) have been created. The most used of them are Document Type Definition (DTD) and XML Schema proposed by W3C.
+
+Nevertheless, it is encouraged to use an XML schema along with an XML data representation, in practise it is done sparsely. Commonly, XML documents are not assigned with their respective XML schema at all or the schema is out-dated due to modifications in a structure of data without updating the schema.
+
+Recently in reaction to this situation, significant number of approaches dealing with an automatic construction of an XML schema have been proposed. The aim is that a set of XML documents is available and it is desired to infer a (non-trivial) XML schema, so that the XML documents are valid against it. Most of published approaches are of this type - input is a set of XML documents - and they are based on various ideas and can be classified by several aspects, as discussed in chapter \todo{ref}.
+
+Besides the mentioned type, some approaches that utilize other or additional sources has been developed. If there are available sources like an out-dated XML schema, operations upon the XML data such as a set of XQuery queries, etc, these sources can be exploited to refine the inference process. The refinement can be achieved in various aspects such as decreasing the speed of the process, getting a more precise, more concise or more readable result or inference of some statements about the data which cannot be (easily) extracted from the data themselves.
+
+Recently, the main effort has been focused on a research of the approaches that utilize XML documents, and thus, there are only few approaches of the latter type (also discussed in chapter \todo{ref}), leaving a wide space for a possible future research.
+
+\todo[inline]{aim of this work}
+\todo[inline]{structure of this work}

@@ -157,13 +157,13 @@ It is obvious that this approach works and for any possible input we can let GLP
 
 TODO what is heuristics (link wise books), what is metaheuristics (we will be using them)
 
+TODO define incumbent solution, neighborhood, solution space
+
 TODO mention things like Taboo search and Genetic Algorithms (we can emulate them with Crossover/Mutation) (we won't be using them)
 
 TODO we will be working with heuristics striving to do the following: input is a list of AMs, they have their weight, we try to find a non-conflicting subset which maximizes the weight
 
 TODO we will be using a pool - what is a pool
-
-TODO define incumbent solution
 
 \begin{figure}
   \caption{Metaheuristic schema}
@@ -470,18 +470,18 @@ Listing \ref{listing-ih-mutation} captures the process of randomly selecting a s
 
 \subsubsection{\heu{Crossover}}
 
-TODO explain how this works and link wise books
+This improvement heuristic expands on the idea of \heu{Mutation}. But, instead of randomly selecting AMs in the incumbent solution, it looks for commonalities among the solutions in the pool. This is based on the hope that if more solutions agree on the same AMs, those are probably included in the optimal solution too.
 
-TODO explain how this translates to GLPK input - it's again simple fixing to 1, but we get the list of AMs in a different manner.
+\heu{Crossover} takes a parameter - fraction of solutions in the pool among which to look for commonalities. AMs found in every one of them are fixed in the modified MIP formulation the same way as in \heu{Mutation}. This again amounts to an intensification tendency.
 
-See listing \ref{listing-ih-crossover}.
+Listing \ref{listing-ih-crossover} captures the process. \heu{Crossover} requires at least one solution in the pool, but to work properly, more are needed. Solutions are picked at random from the pool, common AMs found and fixed. GLPK is run again (with a time constraint) and the improved solution is added to the result pool.
 
 \begin{algorithm}
 \caption{\heu{Crossover} IH}
 \label{listing-ih-crossover}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
-\REQUIRE $k$ ratio of solutions to look for commonalities in
+\REQUIRE $k$ fraction of solutions among which to look for commonalities
 \ENSURE pool of feasible solutions
 \STATE $K \gets k * |FP|$
 \STATE $FP' \gets K$ random solutions $\in FP$
@@ -494,34 +494,34 @@ See listing \ref{listing-ih-crossover}.
 
 \subsubsection{\heu{Local Branching}}
 
-TODO explain how this works and link wise books
+\heu{Local Branching} is another intensification heuristic. This time the neighborhood being searched is defined by edit distance.
 
-TODO explain how this translates to GLPK input
+The incumbent solution is represented by a vector $\mathbf{x}_{INCUMBENT}$ of ones and zeroes. Based on it, a new constraint will be added to the MIP formulation. For every other solution $\mathbf{x}_i$ the edit distance, i.e. number of positions in which $\mathbf{x}_{INCUMBENT}$ and $\mathbf{x}_i$ differ, will have to be lower than some threshold $K$. This will be represented in MathProg as follows.
 
-A new constrain describing the maximal allowed distance from the incumbent solution is added to GLPK input.
+\[s.t. LB: sum\{i\ in\ INCUMBENT\} (1 - x[i]) + sum\{i\ in\ REMAINING\} x[i] \leq K;\]
 
-\[s.t. LB: sum\{i\ in\ INCUMBENT\} (1 - x[i]) + sum\{i\ in\ REMAINING\} x[i] \leq k;\]
+Where $INCUMBENT$ is the set of names of AMs in the incumbent solution, $REMAINING$ is the set of all AMs not included in the incumbent solution and $K$ is the maximum edit distance allowed. $K$ is determined as a fraction of the count of all AMs, provided as parameter $k$.
 
-Where $INCUMBENT$ is a set of names of AMs in the incumbent solution, $REMAINING$ is a set of all the AMs not included in the incumbent solution and $k$ is the requested maximal distance.
-
-See Listing \ref{listing-ih-localbranching} for pseudocode.\\
+See Listing \ref{listing-ih-localbranching} for pseudocode. The heuristic requires a pool containing at least one solution, solves the modified MIP formulation using GLPK limited to some time again and adds the improved solution to the result pool.\\
 
 \begin{algorithm}
 \caption{\heu{Local Branching} IH}
 \label{listing-ih-localbranching}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
-\REQUIRE $k$ ratio of total AM count to bound the Hamming distance to
+\REQUIRE $k$ fraction of the total AM count to determine max edit distance
 \ENSURE pool of feasible solutions
 \STATE $K \gets k * |$total AM count$|$
-\STATE $incumbent \gets $ best solution in $FP$ \COMMENT {best = highest weight}
-\STATE add max Hamming distance requirement to GLPK problem formulation
+\STATE $incumbent \gets $ incumbent solution in $FP$
+\STATE add max edit distance requirement to GLPK problem formulation
 \STATE $improved \gets $ run GLPK
 \RETURN $FP \cup improved$
 \end{algorithmic}
 \end{algorithm}
 
-TODO mention that combination of \heu{Crossover}, \heu{Mutation} and \heu{RemoveWorst} is a sort of genetic algorithm
+\paragraph{Genetic algorithms}
+
+It is worth noting that by combining \heu{Mutation}, \heu{Crossover} and \heu{RemoveWorst} we get a very simple genetic algorithm.
 
 \section{IDREF}
 

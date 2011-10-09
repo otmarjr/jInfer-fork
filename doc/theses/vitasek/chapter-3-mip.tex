@@ -163,6 +163,8 @@ TODO we will be working with heuristics striving to do the following: input is a
 
 TODO we will be using a pool - what is a pool
 
+TODO define incumbent solution
+
 \begin{figure}
   \caption{Metaheuristic schema}
   \label{image-metaheuristic}
@@ -170,16 +172,18 @@ TODO we will be using a pool - what is a pool
     \includegraphics[width=\textwidth]{images/metaheuristic}
 \end{figure}
 
+We will now introduce several heurisitics we have implemented to aid us in search for optimal ID set.
+
 \subsection{Constructions Heuristics}
 % TODO can I format things in nomenclature?
-\nomenclature{CH}{Construction Heuristic} %TODO decide on how to format CH/IH
+\nomenclature{CH}{Construction Heuristic} % TODO decide on how to format CH/IH
 
-TODO construction heuristics are heus that provide us with at least some solution.
+When we start to solve a problem using a metaheuristic approach, at first we have no solutions at all. The purpose of a construction heuristic (CH) is then to provide us with at least some solution. This may or may not be already the optimum, in the latter case it will be improved on later using improvement heuristics (IH). Some IHs can profit from a pool of several sub-optimal solutions, and some CHs can produce this pool from them.
 
 \subsubsection{\heu{FIDAX}}
 \label{section-mip-fidax}
 
-It should be obvious by now that the algorithm described in \cite{fidax} (we shall call it \heu{FIDAX} from now on) can trivially be used as a construction heuristic that will give us one feasible solution.
+The first construction heuristic is the algorithm described in \cite{fidax} (we shall call it \heu{FIDAX} from now on). It can trivially be used to give us one feasible solution - it is, after all, a deterministic heuristic algorithm.
 
 The pseudocode of this CH (taken from the original article with trivial modifications without changing the logic) is in Listing \ref{listing-ch-fidax}.
 
@@ -210,7 +214,7 @@ The pseudocode of this CH (taken from the original article with trivial modifica
 \subsubsection{\heu{Random}}
 \label{heu-ch-random}
 
-One of the most natural heuristics when dealing with the IS problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is obviously a hungry heuristic. %TODO have I defined ID set condition yet??
+One of the most natural heuristics when dealing with the ID set problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is obviously a hungry heuristic.
 
 The advantages of this trivial heuristic are simplicity, speed and ease with which it can create a pool of variable solutions, almost for free. As we will see later in the experiments (Section \ref{section-experiments-random-fuzzy-fidax}), it performs surprisingly well.
 
@@ -240,9 +244,9 @@ See the Listing \ref{listing-ch-random} for its pseudocode.
 \subsubsection{\heu{Fuzzy}}
 \label{heu-ch-fuzzy}
 
-\heu{Fuzzy} is an improvement over the \heu{Random} CH: it picks the next AM to try to add based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in TODO. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
+\heu{Fuzzy} is an improvement over the \heu{Random} CH: the next AM to be added is selected based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in Section \ref{section-definitions-weight}. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
 
-Again, this is a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
+This is again a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
 
 % TODO od I need to specify which are my own idea? I guess so, I should link any heu that is not mine. But do I need to stress that for example Fuzzy is mine?
 
@@ -283,7 +287,7 @@ Again, this is a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains i
 
 This trivial heuristics sorts all candidate AMs by their decreasing weights (Section \ref{section-definitions-weight}) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
 
-See listing \ref{listing-ch-incremental}.
+See Listing \ref{listing-ch-incremental} for its pseudocode.
 
 \begin{algorithm}
 \caption{\heu{Incremental} CH}
@@ -304,9 +308,9 @@ See listing \ref{listing-ch-incremental}.
 
 \subsubsection{\heu{Removal}}
 
-This is basically a reversal of the idea from the \heu{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, order them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a hungry heuristic returning only one solution.
+This is basically a reversal of the idea from the \heu{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, sort them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a hungry heuristic returning only one solution.
 
-See listing \ref{listing-ch-removal}.
+See Listing \ref{listing-ch-removal} for its pseudocode.
 
 \begin{algorithm}
 \caption{\heu{Removal} CH}
@@ -325,28 +329,32 @@ See listing \ref{listing-ch-removal}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Truncated Branch \& Bound}
+\subsubsection{Truncated Branch \& Bound - \heu{Glpk}}
 
-This CH will be called \heu{Glpk} from now on, for it is basically a time-constrained run of GLPK.
+This construction heuristic will be called \heu{Glpk} from now on, for it is basically a time-constrained run of GLPK. Recall that GLPK uses a the \textit{Branch \& Bound} algorithm that produces feasible solutions even before the optimum is found. Limiting the run time gives us the best solution found so far, which means this is a construction heuristic.
 
-TODO if we limit GLPK's runtime, we get this
-
-TODO we shuffle AMs - we get different runs - pool is possible
+To be able to create a pool of solutions, the GLPK input in MathProg langauge is always randomly shuffled by changing the order in which variables and constraints appear. This is causes the solver to explore the search tree in various orders, producing different solution in each of the time-constrained runs.
 
 \subsection{Improvement Heuristics}
 \label{section-mip-ihs}
 
 \nomenclature{IH}{Improvement Heuristic}
 
-TODO what they are, that they need a pool sometimes, their input and output is a pool, ...
+Improvement heuristics in general start with a solution pool, attempt to improve one or more solutions in it and then return this improved pool in the end. We will need two notions to describe their behavior.
 
-TODO mention intensification, diversification
+\paragraph{Intensification}
 
-TODO mention that combination of \heu{Crossover}, \heu{Mutation} and \heu{RemoveWorst} is a sort of genetic algorithm
+is the attempt to move the solution towards the nearby local optimum in the solution space.
+
+\paragraph{Diversification}
+
+is the attempt to move the solution away (escape) from from the local optimum, to be able to explore more of the solution space when the metaheuristic starts stagnating.\\
+
+A metaheuristic needs to combine intensification and diversification tendencies to explore the solution space and at the same time arrive at a local optimum.
 
 \subsubsection{\heu{Identity}}
 
-This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its listing \ref{listing-ih-identity}.
+This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its Listing \ref{listing-ih-identity}.
 
 \begin{algorithm}
 \caption{\heu{Identity} IH}
@@ -360,9 +368,9 @@ This ultimately trivial improvement heuristics does nothing. It simply returns t
 
 \subsubsection{\heu{Remove Worst}}
 
-This trivial IH tries to improve the solution pool by removing the worst solution (i.e. the one with the lowest quality). This might be interesting in cooperation with other improvement heuristics that increase the solution pool size, to keep it from growing by pruning inferior solutions.
+This trivial IH tries to improve the solution pool by removing the worst solution (i.e. the one with the lowest quality). This is interesting in cooperation with other improvement heuristics that increase the solution pool size, to keep it from growing by pruning inferior solutions.
 
-See listing \ref{listing-ih-removeworst}.
+See Listing \ref{listing-ih-removeworst} for details.
 
 \begin{algorithm}
 \caption{\heu{Remove Worst} IH}
@@ -377,15 +385,13 @@ See listing \ref{listing-ih-removeworst}.
 
 \subsubsection{\heu{Random Remove}}
 
-This is again a rather trivial IH, something which is usually referred to as a \textit{perturbation} function. % TODO link the notion
-By removing a random subset of specified size from each solution in the pool, it provides variability needed to escape from local optima. % TODO make sure we have talked about local optima before
+This is again a rather trivial diversification improvement heuristic. By removing a random subset of specified size from each solution in the pool, it provides the variability needed to escape from local optima. % TODO make sure we have talked about local optima before
 
-The number of AMs to remove from each solution is specified as ratio (from the interval $(0, 1)$) of the solution size. % TODO have we defined what a solution size is?
-For example, \heu{Random Remove} with $ratio = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
+The number of AMs to remove from each solution is specified as ratio from $(0, 1)$ of the solution size (number of AMs in solution). For example, \heu{Random Remove} with $ratio = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
 
 This heuristic returns a pool of solutions of the same size as it got on its input.
 
-See listing \ref{listing-ih-randomremove}.
+See Listing \ref{listing-ih-randomremove} for pseudocode.
 
 \begin{algorithm}
 \caption{\heu{Random Remove} IH}
@@ -406,7 +412,7 @@ See listing \ref{listing-ih-randomremove}.
 
 This simple improvement heuristic assumes that the solutions in the pool are not ``complete", i.e. there are AMs that could be added to them without violating the ID set condition.
 
-\heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. Listing \ref{listing-ih-hungry} captures this process.
+\heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. This is then intensification, and Listing \ref{listing-ih-hungry} captures the process.
 
 \begin{algorithm}
 \caption{\heu{Hungry} IH}
@@ -431,11 +437,11 @@ This simple improvement heuristic assumes that the solutions in the pool are not
 
 \subsubsection{\heu{Mutation}}
 
-TODO explain how this works and link wise books
+\heu{Mutation} is based on the following idea. We assume that an incumbent solution may already contain some AMs belonging to the optimal solution. We will take a random guess and fix some of these AMs: add new constraints to the MIP formulation fixing values of the respective variables to 1.
 
-TODO explain how this translates to GLPK input
+This new formulation contains less free variables and should be easier to solve, probably even to optimum. We run GLPK again using this constrained formulation, enforcing again a time limit. Solution found this way is a feasible solution of the original problem, however the optimum is not necessarily the same as in unconstrained formulation. It is an intensification approach: we limit the search to the neighborhood of an already found solution.\\
 
-For every AM $AM_F$ fixed to appear in the solution a following constraint is added to GLPK input:
+\heu{Mutation} changes the MIP formulation in following way. For every AM $AM_F$ fixed to appear in the solution a following constraint is added to GLPK input:
 \[s.t. f_{index}: x['name(AM_F)'] = 1;\]
 $index$ is a unique integer to number all the constraints.
 
@@ -443,18 +449,18 @@ Additionaly, every other mapping $AM_i$ colliding with $AM_F$ ($\iff \iota(AM_F)
 \[s.t. f_{index}: x['name(AM_i)'] = 0;\]
 And the original constraint in form:
 \[s.t. c_{index}: x['name(AM_F)'] + x['name(AM_i)'] <= 1;\]
-will not be included.
+will not be included.\\
 
-See listing \ref{listing-ih-mutation}.
+Listing \ref{listing-ih-mutation} captures the process of randomly selecting a specified fraction of AMs of the incumbent solution to fix, then running GLPK again. \heu{Mutation} requires pool of at least one solution as input, and adds the improved solution to the result pool.
 
 \begin{algorithm}
 \caption{\heu{Mutation} IH}
 \label{listing-ih-mutation}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
-\REQUIRE $k$ ratio of AMs to fix
+\REQUIRE $k$ fraction of AMs to fix
 \ENSURE pool of feasible solutions
-\STATE $incumbent \gets $ best solution in $FP$ \COMMENT {best = highest weight}
+\STATE $incumbent \gets $ incumbent solution in $FP$
 \STATE $K \gets k * |incumbent|$
 \STATE fix $K$ random AMs from $incumbent$ in GLPK problem formulation
 \STATE $improved \gets $ run GLPK
@@ -498,7 +504,7 @@ A new constrain describing the maximal allowed distance from the incumbent solut
 
 Where $INCUMBENT$ is a set of names of AMs in the incumbent solution, $REMAINING$ is a set of all the AMs not included in the incumbent solution and $k$ is the requested maximal distance.
 
-See listing \ref{listing-ih-localbranching}.
+See Listing \ref{listing-ih-localbranching} for pseudocode.\\
 
 \begin{algorithm}
 \caption{\heu{Local Branching} IH}
@@ -515,6 +521,8 @@ See listing \ref{listing-ih-localbranching}.
 \end{algorithmic}
 \end{algorithm}
 
+TODO mention that combination of \heu{Crossover}, \heu{Mutation} and \heu{RemoveWorst} is a sort of genetic algorithm
+
 \section{IDREF}
 
 Once an ID set is found, regardless of how exactly, it is easy to find the IDREF set, i.e. the attribute mappings that can be declared as IDREF. % TODO link FIDAX, they did it first.
@@ -524,7 +532,7 @@ does not allow an attribute to be ID and IDREF (IDREFS) at the same time. Let us
 
 Second, find the image of the ID set as the union of images of all the AMs in this ID set.
 
-\[\iota(ID) = \bigcup_{am \in ID} \iota(am)\]
+\[\iota(ID) = \bigcup_{m \in ID} \iota(m)\]
 
 Now the IDREF set contains all the AMs whose images are a subset of the ID set image.
 
@@ -541,7 +549,7 @@ This can be easily determined in a loop over the list of candidates. The process
 \ENSURE $IDREF$ set as a list of AMs
 \STATE $IDREF \gets \emptyset$
 \STATE $candidates \gets AMs \backslash ID$
-\STATE $\iota(ID) \gets \bigcup_{am \in ID} \iota(am)$
+\STATE $\iota(ID) \gets \bigcup_{m \in ID} \iota(m)$
 \FORALL{$c \in candidates$}
   \IF{$\iota(c) \subset \iota(ID)$}
     \STATE $IDREF \gets IDREF \cup c$

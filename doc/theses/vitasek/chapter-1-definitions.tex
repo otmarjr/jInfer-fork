@@ -1,8 +1,6 @@
 \chapter{Definitions}
 \label{chapter-definitions}
 
-TODO we shall introduce a number of definitions, some only auxiliary, some necessary in the whole work
-
 \section{XML Tree}
 
 We shall use the representation introduced in \cite{fidax}, where an XML file is represented by a labeled tree consisting of nodes for elements, attributes and simple text data. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the referenced article does.
@@ -125,6 +123,10 @@ Again referring to the XML tree from \ref{image-definitions-example-xml-tree}, w
 \paragraph{Attribute Mapping Model}
 An attribute mapping model is a data structure containing the information about all the AMs in a document, together with their images. We shall use this notion later in experimental part of this work.
 
+\begin{define}[$name()$]
+	Given an attribute mapping $m = M_{x}^{y}$, $name(m)$ shall be defined as the string $x-y$.
+\end{define}
+
 \section{ID Set}
 \label{section-definitions-id-set}
 
@@ -215,14 +217,14 @@ Given an undirected graph $G = (V, E)$, a set of vertices $I \subseteq V$ is an 
 
 \begin{define}[Maximum weighted independent set]
 Given an undirected graph $G = (V, E)$ and a weight function $w: V \rightarrow \mathbb{R}$, an independent set $I_{max}$ is the \textit{maximum weighted independent set}, iff the following is satisfied.
-\[\forall I' \subseteq V, I' \text{is an independent set}: \sum_{v \in I'} w(v) \leqslant \sum_{v in I_{max}} w(v)\]
+\[\forall I' \subseteq V, I' \text{is an independent set}: \sum_{v \in I'} w(v) \leqslant \sum_{v \in I_{max}} w(v)\]
 \end{define}
 
-TODO finding this is NP-hard - cite
+It is well known that finding the maximum weighted IS is an NP-hard optimization problem, see e.g. \cite{JM1986425}.
 
 \section{Linear Programming}
 
-TODO define LP rigorously
+The problem of \textit{linear programming} is optimization of a linear function under a set of linear constraints. The formulation is usually called a \textit{linear program}. It can be written in the following form (minimization version is possible too).
 
 \begin{eqnarray*}
 \max_{x} z & = & \mathbf{c}^{\mathrm{T}}\mathbf{x} \\
@@ -266,4 +268,12 @@ s.t.\, a_{11}x_{1} + a_{12}x_{2} + \ldots + a_{1n}x_{n} & \leqslant & b_{1} \\
 	   x_i \geqslant 0, i = 1, \ldots n \\
 \end{eqnarray*}
 
-TODO it is possible to formulate minimization function
+Solving a linear program is usually possible in polynomial time using the \textit{simplex algorithm} described for example in \cite{dantzig1998linear}.
+
+\section{Mixed Integer Problem}
+
+\begin{define}[Mixed integer problem]
+	MIP, or \textit{mixed integer problem}, is an instance of linear programming in which some or all variables are limited to integral or boolean (0, 1) values.
+\end{define}
+
+Solving MIP in general is $\NP$-hard.

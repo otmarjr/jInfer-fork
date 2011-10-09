@@ -1,0 +1,13 @@
+graph isrepresentation {
+
+  vza[label="z-a"]  
+  vya[label="y-a"]
+  vyb[label="y-b"]
+  vyc[label="y-c"]
+  
+  vya -- vyb;
+  vya -- vyc;
+  vyc -- vyb;
+  vya -- vza;
+  
+}

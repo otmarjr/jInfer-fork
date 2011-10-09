@@ -1,23 +1,32 @@
 \chapter{MIP Approach}
 \label{chapter-mip}
 
-We have shown that ID set -> IS, now we show the translation to MIP formulation and solve it using GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
+In this chapter we introduce a new approach to finding maximum ID sets. First, we transform the problem formulation to maximum weighted IS problem formulation. Then we transform this into a MIP formulation, and demonstrate how this can be solved using a solver such as GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
+We will continue by applying heuristical approaches to improve the performance of the process.
 
-TODO MIP formulation: LP is simple using Simplex method, however as soon as we require integrality or boolean values, it is NP-hard.
+\section{ID Set to IS Formulation}
 
-\begin{define}[Mixed integer problem]
-	MIP, or \textit{mixed integer problem}, is an instance of linear programming in which some variables are limited to integral or boolean (0, 1) values.
-\end{define}
+Given $C = \{m_1, \ldots, m_n\}$ a set of all AMs in a document, we construct a graph $G = (V,E)$ as follows. For each AM $m_i \in C$ we create a vertex $v_{name(m_i)}$. Two vertices $v_{name(m_i)}$ and $v_{name(m_j)}$ shall be connected by an edge iff they cannot share the same ID set, either because they have the same type ($\tau(m_i) = \tau(m_j)$), or their images intersect ($\iota(m_i) \cap \iota(m_j) \neq \emptyset$). Weight of a vertex $v_{name(m_i)}$ is the weight of the attribute mapping: $w(v_{name(m_i)}) = weight(m_i)$.
 
-TODO show how to translate IS to MIP
+Now finding the maximum weighted IS in $G$ finds the maximum (optimal) ID set in the original document.
 
-\section{Finding ID sets with GLPK}
+\section{IS to MIP Formulation}
 
-TODO how GLPK works (branch \& bound), how to construct a problem, how output looks, how to interpret it, limit time-> limit quality, ...
+Given a graph $G = (V,E)$ with a weight function $w: V \rightarrow \mathbb{R}$, we introduce a binary variable $x_i$ for each vertex $v_i \in V$ and an inequality constraint $x_i + x_j \leq 1$ for each edge $e = (v_i, v_j) \in E$. Furthermore we introduce an objective function in form $\sum_{x_i} x_i w(v_i)$.
 
-\begin{define}[$name()$]
-Given an attribute mapping $m = M_{x}^{y}$, $name(m)$ shall be defined as the string $x\-y$.
-\end{define}
+It is obvious that the objective function and all the constraints consitute a MIP instance, and that solving it finds the maximum weigthed IS in $G$.
+
+\section{Finding ID Sets With GLPK}
+
+By chaining these two translations we can create a MIP formulation for a given set of AMs from a document. Solving this MIP instance will give us the optimal ID set for this document.
+
+GLPK \cite{glpk} is a multi-platform, multi-purpose solver well suited for this task. It uses the Simplex method to solve LP problems and \textit{Branch \& Bound} (see \cite{land60a} for details) for MIP. An advantage of using \textit{Branch \& Bound} is that while traversing the \textit{search tree} it finds intermittent, sub-optimal solutions. It is thus possible to limit the total search time and instead of the optimum take the best solution found so far.\\
+
+We will now demonstrate the full process of finding the optimal ID set of an example XML file using GLPK.
+
+\subsection{Example}
+
+Consider again our XML file fragment.
 
 \begin{verbatim}
 <x>
@@ -28,9 +37,25 @@ Given an attribute mapping $m = M_{x}^{y}$, $name(m)$ shall be defined as the st
 </x>
 \end{verbatim}
 
-TODO equations for the MIP formulation
+Recall that attribute mappings in this example are $C = \{M_{y}^{a}, M_{y}^{b}, M_{y}^{c}, M_{z}^{a}\}$. Corresponding vertices in the IS formulation will be $V = \{v_{y-a}, v_{y-b}, v_{y-c}, v_{z-a}\}$. Edges in the IS formulation will be the following.
 
-For each AM $m$ there will be one binary variable $x_{name(m)}$. Objective function coefficients in vector $\mathbf{c}$ will be weights of respective mappings. For each pair of AMs $m_1, m_2$ that cannot share the same ID set (because of conflicting type or image) there shall be a row in matrix $A$ representing the inequality $x_{name(m_1)} + x_{name(m_2)} \leqslant 1$. $\mathbf{b}$ will be a vector of ones with corresponding length.
+\begin{eqnarray*}
+(v_{y-a},v_{y-b}) \\
+(v_{y-a},v_{y-c}) \\
+(v_{y-b},v_{y-c}) \\
+(v_{y-a},v_{z-a}) \\
+\end{eqnarray*}
+
+First three edges are due to the type collision ($y$), the last one is due to $\iota(M_{y}^{a}) \cap \iota(M_{z}^{a}) = \{1\}$. The graph $G$ constructed in this way is in Figure \ref{image-mip-is-graph}.
+
+\begin{figure}
+  \caption{IS Representation Graph}
+  \label{image-mip-is-graph}
+  \centering
+	\includegraphics[width=.25\textwidth]{images/is-representation}
+\end{figure}
+
+The next step is the MIP formulation. We do not need to translate from the IS formulation, as the translation from ID set formulation is straightforward, too. For each AM $m$ there will be one binary variable $x_{name(m)}$. Objective function coefficients in vector $\mathbf{c}$ will be weights of respective mappings. For each pair of AMs $m_1, m_2$ that cannot share the same ID set there shall be a row in matrix $A$ representing the inequality $x_{name(m_1)} + x_{name(m_2)} \leqslant 1$. $\mathbf{b}$ will be a vector of ones with corresponding length.
 
 \[
 \mathbf{x} =
@@ -69,14 +94,14 @@ A =
 \end{pmatrix}
 \]
 
-The problem is, recall, to solve the following.
+The problem now is, recall, to solve the following.
 
 \begin{eqnarray*}
 \max_{x} z & = & \mathbf{c}^{\mathrm{T}}\mathbf{x} \\
 s.t.\, A\mathbf{x} & \leqslant & \mathbf{b} \\
 \end{eqnarray*}
 
-In GLPK \textit{mathprog} language, it translates to the following formulation. % TODO cite mathprog
+In GLPK \textit{MathProg} language, this translates to the following formulation. % TODO cite mathprog
 
 \begin{scriptsize}
 \begin{verbatim}
@@ -84,16 +109,16 @@ set AMs;
 param Weight {i in AMs};
 var x {i in AMs} binary;
 maximize z: sum {i in AMs} x[i] * Weight[i];
-s.t. c1: x['y-b'] + x['y-c'] <= 1;
+s.t. c1: x['y-a'] + x['y-b'] <= 1;
 s.t. c2: x['y-a'] + x['y-c'] <= 1;
-s.t. c3: x['y-a'] + x['y-b'] <= 1;
+s.t. c3: x['y-b'] + x['y-c'] <= 1;
 s.t. c4: x['y-a'] + x['z-a'] <= 1;
 data;
-set AMs := y-c y-b y-a z-a;
+set AMs := y-a y-b y-c z-a;
 param Weight :=
-y-c 0.2
-y-b 0.2
 y-a 0.6
+y-b 0.2
+y-c 0.2
 z-a 0.4;
 end;
 \end{verbatim}
@@ -256,7 +281,7 @@ Again, this is a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains i
 
 \subsubsection{\heu{Incremental}}
 
-This trivial heuristics sorts all candidate AMs by their decreasing weights (TODO link definition of weight) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
+This trivial heuristics sorts all candidate AMs by their decreasing weights (Section \ref{section-definitions-weight}) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
 
 See listing \ref{listing-ch-incremental}.
 

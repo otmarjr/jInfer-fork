@@ -1,15 +1,17 @@
 \chapter{Analysis of Recent Approaches} \label{chapter_analysis_of_recent_approaches}
-Approaches of XML schema inference can be divided by several criteria. A basic division is by the language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
+Existing approaches of XML schema inference can be classified by several criteria. A basic division is by the language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
 
-According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. On the contrary, the grammar-inferring methods are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results. \todo[inline]{Tady by neškodilo dát odkazy na všechny ex. přístupy a říct, že popíšeme detailněji aspoň dva.}
+According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods (\cite{Chidlovskii:2002:SEX:544220.544288, Garofalakis:2000:XSE:342009.335409, Moh:2000:RSW:336597.336638, Wong03onstructural, Vosta:2008:EAC:1802514.1802522}) are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. Two of these approaches are described in Section \ref{section_xtract} and Section \ref{section_even_an_ant_can_create_an_xsd}.
 
-Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize other or additional sources may be developed. An approach utilizing XML data along with an obsolete XML schema is described in \cite{Mlynkova:2009:IXS:1862681.1862693}. However, the most significant approaches in terms of this work are those, utilizing operations over XML data. According to our best knowledge at the time of writing, there is just one approach of this category, described in \cite{Necasky:2009:DXK:1529282.1529414}. It utilizes a set of XQuery queries to discover keys and foreign keys\todo{ref do literatury - Ty by tady něškodily všude, u každé té kategorie.}.
+On the contrary, the grammar-inferring methods (\cite{Ahonen1996GeneratingGrammars, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475}) are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
+
+Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize other or additional sources may be developed. An approach utilizing XML data along with an obsolete XML schema is described in \cite{Mlynkova:2009:IXS:1862681.1862693}. However, the most significant approaches in terms of this work are those, utilizing operations over XML data. According to our best knowledge at the time of writing, there is just one approach of this category, described in \cite{Necasky:2009:DXK:1529282.1529414}. It utilizes a set of XQuery queries to discover keys and foreign keys.
 
 \section{Common Caracteristics}
 The process of inference commonly used by a significant number of approaches is summarized in \cite{Mlynkova:2008:AAX:1494650.1495496} as the following one: For each occurrence of element $e$ from the input XML documents and its subelements $e_1, e_2, ..., e_k$ a production $e \rightarrow e_1 e_2 ... e_k$ is constructed. The productions form so-called \emph{initial grammar} (IG). For each element type the productions are then merged, simplified and generalized using various methods and criteria. A common approach is so-called \emph{merging state algorithm}, where a \emph{prefix tree automaton} (PTA) is built from the productions of the same element type and the automaton is generalized via merging of its states. Finally, the generalized automaton/grammar is expressed in syntax of the respective XML schema language.
 \todo[inline]{Tento odstavec je doslovne prebraty z uvedeneho clanku. Mozem to takto pouzit?}
 
-\section{XTRACT}
+\section{XTRACT} \label{section_xtract}
 The XTRACT \cite{Garofalakis:2000:XSE:342009.335409} system is an example of a \emph{heuristic} \emph{merging state algorithm} creating the result in DTD. Its process of inference consists of three steps:
 \begin{enumerate}
 \item Generalization - Generates a set of DTD candidates by searching the input for certain patterns and generalising corresponding fragments using regular expressions.
@@ -22,13 +24,13 @@ Purpose of generalization is to create a set of DTD candidates - schemata that c
 
 Generalization is based on replacing fragmets (sequences of subelements of a given element) from the input XML data by regular expressions, thus, using metacharacters like (*, +, ?). To provide a wide set of DTD canditates, each sequence is processed several times using various values of input parameters. Due to the very large number of possible DTD canditates, the authors employ certain real-life motivated heuristics.
 
-For instance, the paper (\cite{Garofalakis:2000:XSE:342009.335409}) introduces the following example: Sequences \texttt{abab} and \texttt{bbbe} are generalized to \texttt{(ab)*}, \texttt{(a|b)*}, \texttt{b*e}.
+For instance, paper \cite{Garofalakis:2000:XSE:342009.335409} introduces the following example: Sequences \texttt{abab} and \texttt{bbbe} are generalized to \texttt{(ab)*}, \texttt{(a|b)*}, \texttt{b*e}.
 \todo[inline]{Mozem takto pouzivat prevzate priklady?}
 
 \subsection{Factoring}
-Factoring is a process of creating a new DTD canditate from two or more DTD canditates, decresing their summed size without modifications in their semantics. An aim of this step is to decrease a MDL cost of DTD candidates calculated in the MDL step and thus refine the process of construction of the resulting DTD.
+Factoring is a process of creating a new DTD canditate from two or more DTD canditates, decresing their summed size without modifications in their semantics. An aim of this step is to decrease an MDL cost of DTD candidates calculated in the MDL step and thus refine the process of construction of the resulting DTD.
 
-An example introduced it the paper (\cite{Garofalakis:2000:XSE:342009.335409}): DTD candidates \texttt{ac}, \texttt{ad}, \texttt{bc} and \texttt{bd} are factored into \texttt{(a|b)(c|d)}.
+An example introduced it paper \cite{Garofalakis:2000:XSE:342009.335409}: DTD candidates \texttt{ac}, \texttt{ad}, \texttt{bc} and \texttt{bd} are factored into \texttt{(a|b)(c|d)}.
 
 Alike the generalization step, also in this step the set of possible factored DTD is huge and the authors propose certain heuristics to make the factorization effective.
 
@@ -39,7 +41,7 @@ Paper \cite{Mlynkova:2008:AAX:1494650.1495496} summarizes this step as follows: 
 
 \todo[inline]{Detailnejsie? Priklad?}
 
-\section{Even an Ant Can Create an XSD}
+\section{Even an Ant Can Create an XSD} \label{section_even_an_ant_can_create_an_xsd}
 This work, described in \cite{Vosta:2008:EAC:1802514.1802522}, combines several previously proposed approaches including the XTRACT system discussed in the previous section. Its improvements of the process of XML schema inference include:
 
 \begin{itemize}
@@ -50,11 +52,11 @@ This work, described in \cite{Vosta:2008:EAC:1802514.1802522}, combines several 
 \end{itemize}
 
 \subsection{Clustering of Elements}
-This phase clusters elements on a basis of their context and structure. It is done by creating tree structures for each input XML documents, where vertices represent elements and attributes and an edge between two vertices expresses the their parent-child relation. These trees and their subtrees and then compared, using an imposed tree similarity measure, to find elements with the same semantics.
+This phase clusters elements on a basis of their context and structure. It is done by creating tree structures for each input XML documents where vertices represent elements and attributes and an edge between two vertices expresses their parent-child relation. These trees are their subtrees and then compared using an imposed tree similarity measure to find elements with the same semantics.
 
 \subsection{Schema Generalization}
 For each cluster, a trivial schema is created, which is then generalized to achieve a reasonable result. In a search for the optimal schema, \emph{Ant Colony Optimization (ACO)} heuristic is incorporated. The idea behind the ACO heuristic is that a set of artifical ants is searching a space of possible solutions, each ant given a subspace of the space to find a local suboptimum. An ant 
-is performing steps (schema modifications), dying after a predifined number of steps and providing an information - positive feedback - on quality of a found solution. The search is performed in a defined count of interations (or it stops if good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
+is performing steps (schema modifications), dying after a predefined number of steps and providing an information - positive feedback - on quality of a solution found. The search is performed in a defined count of interations (or it stops if a good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
 
 One of the improvements of this heuristic is inclusions of a negative feedback after each step of an ant, visible only in a current iteration. Due to this improvement, a larger subspace of solutions is searched.
 

@@ -3,7 +3,7 @@ Existing approaches of XML schema inference can be classified by several criteri
 
 According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods (\cite{Chidlovskii:2002:SEX:544220.544288, Garofalakis:2000:XSE:342009.335409, Moh:2000:RSW:336597.336638, Wong03onstructural, Vosta:2008:EAC:1802514.1802522}) are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. Two of these approaches are described in Section \ref{section_xtract} and Section \ref{section_even_an_ant_can_create_an_xsd}.
 
-On the contrary, the grammar-inferring methods (\cite{Ahonen1996GeneratingGrammars, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475}) are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
+On the contrary, the grammar-inferring methods (\cite{Ahonen1996GeneratingGrammars, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475, Fernau:2001:LXG:645744.667236}) are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
 
 Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize other or additional sources may be developed. An approach utilizing XML data along with an obsolete XML schema is described in \cite{Mlynkova:2009:IXS:1862681.1862693}. However, the most significant approaches in terms of this work are those, utilizing operations over XML data. According to our best knowledge at the time of writing, there is just one approach of this category, described in \cite{Necasky:2009:DXK:1529282.1529414}. It utilizes a set of XQuery queries to discover keys and foreign keys.
 
@@ -52,21 +52,20 @@ This work, described in \cite{Vosta:2008:EAC:1802514.1802522}, combines several 
 \end{itemize}
 
 \subsection{Clustering of Elements}
-This phase clusters elements on a basis of their context and structure. It is done by creating tree structures for each input XML documents where vertices represent elements and attributes and an edge between two vertices expresses their parent-child relation. These trees are their subtrees and then compared using an imposed tree similarity measure to find elements with the same semantics.
+This phase clusters elements on a basis of their context and structure. It is done by creating tree structures for each input XML documents where vertices represent elements and attributes and an edge between two vertices expresses their parent-child relation. These trees and their subtrees are then compared using an imposed tree similarity measure to find elements with the same semantics.
 
 \subsection{Schema Generalization}
 For each cluster, a trivial schema is created, which is then generalized to achieve a reasonable result. In a search for the optimal schema, \emph{Ant Colony Optimization (ACO)} heuristic is incorporated. The idea behind the ACO heuristic is that a set of artifical ants is searching a space of possible solutions, each ant given a subspace of the space to find a local suboptimum. An ant 
 is performing steps (schema modifications), dying after a predefined number of steps and providing an information - positive feedback - on quality of a solution found. The search is performed in a defined count of interations (or it stops if a good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
 
-One of the improvements of this heuristic is inclusions of a negative feedback after each step of an ant, visible only in a current iteration. Due to this improvement, a larger subspace of solutions is searched.
+One of the improvements of this heuristic is an inclusion of a negative feedback after each step of an ant, visible only in a current iteration. Due to this improvement, a larger subspace of solutions is searched.
 
-Another improvement lies in a way how an ant decides for a particular step to perform. To achieve better results, the authors propose a combinations of several verified approaches. A set of all possible steps is created using \emph{k,h-context} and \emph{s,k-string} \todo{citacie} methods. The optimal step is then selected employing the MDL principle \todo{citacia}.
+Another improvement lies in a way how an ant decides for a particular step to perform. To achieve better results, the authors propose a combination of several verified approaches. A set of all possible steps is created using \emph{k,h-context} \cite{Ahonen1996GeneratingGrammars} and \emph{s,k-string} \cite{Raman97thesk-strings, Wong03onstructural} methods. The optimal step is then selected employing the MDL principle \cite{Grünwald05atutorial, Garofalakis:2000:XSE:342009.335409}.
 
 \subsection{Result in XSD}
 Unlike the majority of recent approaches, this methods creates its result in XML Schema language (XSD). Comparing to DTD, XSD is a newer language and it provides greater expression possibilities. Authors of this method focused on inferring elements with the same name but different context and the unordered sequences which can be in XSD expressed by \texttt{xs:all} construct. Elements with the same name but different context cannot be expressed in DTD and, however, the unordered sequence can be also expressed in DTD as alternations of ordered sequences, such expression in not practical nor well human-readable.
 
 \section{On Inference of XML Schema with the Knowledge of an Obsolete One}
-\todo[inline]{spravne zaradit}
 An aim of approach described in \cite{Mlynkova:2009:IXS:1862681.1862693} is to exploit an obsolete XML schema as an additional input information to infer a new schema more efficiently. A XML schema can become obsolete due to changes in a set of XML documents, without capturing these changes in the schema. Thus, the schema becames outdated and according to the paper, this case is quite common.
 
 On input, the method is given:
@@ -84,7 +83,7 @@ And the algorithm consists of two independent steps:
 
 In the fist step the input schema is corrected to conform to the whole set of input XML documents. This is done by creating a PTA \todo{ref na def} for each production extracted from the input schema and merging it with a respective production from the initial grammar \todo{ref na def}, involving ACO and MDL heuristics.
 
-In the second step, assuming a correct schema it is wanted to specialize the REs involved in the schema with regard to the XML documents, resulting in more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
+In the second step, assuming a correct schema it is wanted to specialize the regular expressions involved in the schema with regard to the XML documents, resulting in more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
 This method is described in paper \cite{Necasky:2009:DXK:1529282.1529414}. It tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} and \textbf{unique} constructs.
@@ -104,7 +103,7 @@ The author describe two possible cases:
 \end{enumerate}
 
 \subsection{Join Patterns and Key Inference}
-For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \emph{for join pattern} and \emph{let join pattern} and they are as follows (the first is \emph{for join pattern}, \emph{let join pattern}):
+For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \emph{for join pattern} and \emph{let join pattern} and they are as follows (the first is \emph{for join pattern}, the latter is \emph{let join pattern}):
 
 \todo[inline]{spravne kreslit indexy pri pismenkach}
 \begin{verbatim}
@@ -119,7 +118,7 @@ Each occurrence of a join pattern is classified by application of the following 
 
 The pattern occurrence is considered of case (O1) if it is the for join pattern (weight: 1), if aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a return path (weight: 1) or if aggregation function \texttt{count} is applied on a return path (weight: 0.75). \todo {definovat return path?}
 
-Else, the pattern occurrence is considered of case (O2) and the assigned weight depends on the number of target return paths. If the number is greater than one, the weight is one (weight: 1), else (the number is less or equal one) the weight is one half (weight: 0.5).
+Otherwise, the pattern occurrence is considered of case (O2) and the assigned weight depends on the number of target return paths. If the number is greater than one, the weight is one (weight: 1), else (the number equals zero or one) the weight is one half (weight: 0.5).
 
 \subsection{Summarization of the Results}
 
@@ -133,3 +132,26 @@ The output of the method is a list of scored keys and for each key a list foreig
 Since the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.
 
 \todo[inline]{Tady by se hodila nějaká srovnávací tabulka metod z různách pohledů (metoda, vstupy, výstupy). Dále pak kapitola na téma co dnešní metody neumí a čím se tedy v práci budeme zbývat. Tj. Nějaká návaznost k další kapitole.}
+
+\section{Summary}
+\begin{table}
+  \footnotesize \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Method name and/or paper & Input & Output & Year & Standalone \\ \hline \hline
+    \cite{Ahonen1996GeneratingGrammars} & XML documents & DTD & 1996 & Yes \\ \hline
+    XTRACT \cite{Garofalakis:2000:XSE:342009.335409} & XML documents & DTD & 2000 & Yes \\ \hline
+    DTD-miner \cite{Moh:2000:RSW:336597.336638} & XML documents & DTD & 2000 & Yes \\ \hline
+    \cite{Fernau:2001:LXG:645744.667236} & XML documents & DTD & 2001 & Yes \\ \hline
+    ECFG \cite{Chidlovskii:2002:SEX:544220.544288} & XML documents & XSD & 2002 & Yes \\ \hline
+    sk-ANT \cite{Wong03onstructural} & XML documents & DTD & 2003 & Yes \\ \hline
+    \cite {Min:2003:EES:639473.639475} & XML documents & DTD & 2003 & Yes \\ \hline
+    \cite{Bex:2006:ICD:1182635.1164139} & XML documents & DTD & 2006 & Yes \\ \hline
+    XStruct \cite {Hegewald:2006:XES:1129755.1130124} & XML documents & XSD & 2006 & Yes \\ \hline
+    \cite{Bex:2007:IXS:1325851.1325964} & XML documents & XSD & 2007 & Yes \\ \hline
+    SchemaMiner \cite{Vosta:2008:EAC:1802514.1802522} & XML documents & XSD & 2008 & Yes \\ \hline
+    \cite{Mlynkova:2009:IXS:1862681.1862693} & XML documents, XML schema & DTD, XSD* & 2009 & Yes \\ \hline
+    \cite{Necasky:2009:DXK:1529282.1529414} & XQuery queries & XSD* & 2009 & No \\ \hline    
+  \end{tabular}
+  \caption{Summary of Recent Approaches}
+  \label{table_summary_of_recent_approaches}
+\end{table}

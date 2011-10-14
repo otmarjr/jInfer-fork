@@ -89,8 +89,8 @@ In the second step, assuming a correct schema it is wanted to specialize the reg
 This method is described in paper \cite{Necasky:2009:DXK:1529282.1529414}. It tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} and \textbf{unique} constructs.
 
 \subsection{Assumptions and Observations}
-To discover keys and foreign keys, the method utilizes element/element joins. Assume a query $Q$ that joins a sequence of elements $S_1$ targeted by a path $P_1$ with a sequence of elements $S_2$ targeted by a path $P_2$ on a condition $L_1 = L_2$.
-\todo[inline]{priklad}
+To discover keys and foreign keys, the method utilizes element/element joins. Assume a query $Q$ that joins a sequence of elements $S_1$ targeted by a path $P_1$ with a sequence of elements $S_2$ targeted by a path $P_2$ on a condition $L_1 = L_2$. For instance, see Listing \ref{listing_for_join_pattern} and Listing \ref{listing_let_join_pattern}.
+
 The method is based on assumption that each join is done via key/foreign key pair. It means it is supposed that $L_1$ is a key of the elements $S_1$ and $L_2$ is it's respective foreign key or vice versa.
 
 The author describe two possible cases:
@@ -103,16 +103,23 @@ The author describe two possible cases:
 \end{enumerate}
 
 \subsection{Join Patterns and Key Inference}
-For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \emph{for join pattern} and \emph{let join pattern} and they are as follows (the first is \emph{for join pattern}, the latter is \emph{let join pattern}):
+\begin{lstlisting}[mathescape, float, caption=For join pattern., frame=single, label=listing_for_join_pattern]
+for $\$e_1$ in $P_1$
+return
+  for $\$e_2$ in
+    $P_2[L_2 = \$e_1/L_1]$
+  return $C_R$
+\end{lstlisting}
 
-\todo[inline]{spravne kreslit indexy pri pismenkach}
-\begin{verbatim}
-for $e1 in P1              for $e1 in P1
-return                     return
-    for $e2 in                 let $e2 :=
-        P2[L2 = $e1/L1]            P2[L2 = $e1/L1]
-    return CR                  return CR
-\end{verbatim}
+\begin{lstlisting}[mathescape, float, caption=Let join pattern., frame=single, label=listing_let_join_pattern]
+for $\$e_1$ in $P_1$
+return
+  let $\$e_2$ :=
+    $P_2[L_2 = \$e_1/L_1]$
+  return $C_R$
+\end{lstlisting}
+
+For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \emph{for join pattern} and \emph{let join pattern} and they are proclaimed in Listing \ref{listing_for_join_pattern} and Listing \ref{listing_let_join_pattern}.
 
 Each occurrence of a join pattern is classified by application of the following rules it this specific order. The first satisfied ruled is applied. The occurrence is also assigned with a weight determining how sure the method is about the inferred statement.
 
@@ -131,27 +138,37 @@ The output of the method is a list of scored keys and for each key a list foreig
 
 Since the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.
 
-\todo[inline]{Tady by se hodila nějaká srovnávací tabulka metod z různách pohledů (metoda, vstupy, výstupy). Dále pak kapitola na téma co dnešní metody neumí a čím se tedy v práci budeme zbývat. Tj. Nějaká návaznost k další kapitole.}
-
 \section{Summary}
 \begin{table}
-  \footnotesize \begin{tabular}{|c|c|c|c|c|}
+  \begin{threeparttable}
+  \footnotesize \begin{tabular}{|c|c|c|c|}
     \hline
-    Method name and/or paper & Input & Output & Year & Standalone \\ \hline \hline
-    \cite{Ahonen1996GeneratingGrammars} & XML documents & DTD & 1996 & Yes \\ \hline
-    XTRACT \cite{Garofalakis:2000:XSE:342009.335409} & XML documents & DTD & 2000 & Yes \\ \hline
-    DTD-miner \cite{Moh:2000:RSW:336597.336638} & XML documents & DTD & 2000 & Yes \\ \hline
-    \cite{Fernau:2001:LXG:645744.667236} & XML documents & DTD & 2001 & Yes \\ \hline
-    ECFG \cite{Chidlovskii:2002:SEX:544220.544288} & XML documents & XSD & 2002 & Yes \\ \hline
-    sk-ANT \cite{Wong03onstructural} & XML documents & DTD & 2003 & Yes \\ \hline
-    \cite {Min:2003:EES:639473.639475} & XML documents & DTD & 2003 & Yes \\ \hline
-    \cite{Bex:2006:ICD:1182635.1164139} & XML documents & DTD & 2006 & Yes \\ \hline
-    XStruct \cite {Hegewald:2006:XES:1129755.1130124} & XML documents & XSD & 2006 & Yes \\ \hline
-    \cite{Bex:2007:IXS:1325851.1325964} & XML documents & XSD & 2007 & Yes \\ \hline
-    SchemaMiner \cite{Vosta:2008:EAC:1802514.1802522} & XML documents & XSD & 2008 & Yes \\ \hline
-    \cite{Mlynkova:2009:IXS:1862681.1862693} & XML documents, XML schema & DTD, XSD* & 2009 & Yes \\ \hline
-    \cite{Necasky:2009:DXK:1529282.1529414} & XQuery queries & XSD* & 2009 & No \\ \hline    
+    Method name and/or paper & Input & Output & Year \\ \hline \hline
+    \cite{Ahonen1996GeneratingGrammars} & XML documents & DTD & 1996 \\ \hline
+    XTRACT \cite{Garofalakis:2000:XSE:342009.335409} & XML documents & DTD & 2000 \\ \hline
+    DTD-miner \cite{Moh:2000:RSW:336597.336638} & XML documents & DTD & 2000 \\ \hline
+    \cite{Fernau:2001:LXG:645744.667236} & XML documents & DTD & 2001 \\ \hline
+    ECFG \cite{Chidlovskii:2002:SEX:544220.544288} & XML documents & XSD & 2002 \\ \hline
+    sk-ANT \cite{Wong03onstructural} & XML documents & DTD & 2003 \\ \hline
+    \cite {Min:2003:EES:639473.639475} & XML documents & DTD & 2003 \\ \hline
+    \cite{Bex:2006:ICD:1182635.1164139} & XML documents & DTD & 2006 \\ \hline
+    XStruct \cite {Hegewald:2006:XES:1129755.1130124} & XML documents & XSD & 2006 \\ \hline
+    \cite{Bex:2007:IXS:1325851.1325964} & XML documents & XSD & 2007 \\ \hline
+    SchemaMiner \cite{Vosta:2008:EAC:1802514.1802522} & XML documents & XSD & 2008 \\ \hline
+    \cite{Mlynkova:2009:IXS:1862681.1862693} & XML documents, XML schema & DTD, XSD & 2009 \\ \hline
+    \cite{Necasky:2009:DXK:1529282.1529414} & XQuery queries & --\tnote{1} & 2009 \\ \hline    
   \end{tabular}
+  \todo[inline]{doplnit}
+  \begin{tablenotes}
+	\item [1] Result of this method is a list of discovered keys and foreign keys.
+  \end{tablenotes}
   \caption{Summary of Recent Approaches}
   \label{table_summary_of_recent_approaches}
+  \end{threeparttable}
 \end{table}
+
+As shown in Table \ref{table_summary_of_recent_approaches}, most of the recent approaches of XML schema inference are base on utilization of XML documents. These incorporates various verified methods and the newer approaches often improve the older ones and/or combine them together to achieve better results.
+
+Lately, several approaches that utilize other input sources have been proposed. Paper \cite{Mlynkova:2009:IXS:1862681.1862693} introduces a method that utilizes an XML schema besides XML documents. The method described in \cite{Necasky:2009:DXK:1529282.1529414} utilizes XQuery queries, however, the result of this method is a list of discovered keys and foreign keys, not an XML schema. Also, to our best knowledge, implementation that combines this method with another approach to get the XML schema has not been proposed yet. \todo{Toto je pravda, naozaj ta implementacia neexistuje?}
+
+There are plenty of additional sources that can be exploited in the process of inference such as other XML schema languages, queries, XSLT scripts, negative examples (XML documents that should not conform to the resulting schema). In this work we focus on utilizing XQuery queries.

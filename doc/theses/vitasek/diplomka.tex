@@ -102,7 +102,7 @@
 % - the official name for things like OVA1 and 100-100 is (test) data set. Make sure I am not calling it files or anything else.
 % - make sure labels have consistent names
 % - ratio -> FRACTION of XYZ to fix/remove/...
-
+% - what style of quotation marks to use?
 
 %%% Titulní strana práce ======================================================
 \pagestyle{empty}
@@ -166,11 +166,7 @@ Specialization: & ISS \\
 \openright
 
 \noindent
-[Sample: Here you may thank whoever you wish (the supervisor of the thesis, the consultant,
-the person who lent the software, literature, etc.)]
-
-TODO thank jInfer team, Mlynkova, anyone helping create this, colleagues at work...
-
+I would like to thank everyone participating in the jInfer project for creating a~solid foundation for this work, namely Irena Mlýn\-ko\-vá, Mi\-chal Klem\-pa, Má\-rio Mi\-ku\-la, Ro\-bert Sme\-ta\-na and Mi\-chal Švi\-rec. The thanks goes again to Ms. Mlýn\-ko\-vá for supervising this work, as well as everyone reviewing it, in no~particular order Lý\-dia Šva\-ger\-ko\-vá, Mi\-chal Šva\-ger\-ka, Zu\-za\-na Ma\-sá\-ro\-vá, Mi\-chal Ke\-se\-ly and others.
 
 \newpage % ============================================================
 %%% Strana s čestným prohlášením k diplomové práci
@@ -209,10 +205,9 @@ Autor: \mfauthor
 
 Katedra:  Katedra softwarového inženýrství
 
-Vedoucí diplomové práce: \mfadvisor{}, Ka\-ted\-ra soft\-wa\-ro\-vé\-ho in\-že\-nýr\-ství
+Vedoucí diplomové práce: \mfadvisor{} % TODO does this have to be here?, Ka\-ted\-ra soft\-wa\-ro\-vé\-ho in\-že\-nýr\-ství
 
-Abstrakt: [abstract of 80-200 words in Czech, but not a copy of the assignment of the
-master thesis]
+Abstrakt: Tato práce navazuje na dřívější pokusy odvodit (inferovat) schému existujících XML dokumentů. Jelikož je odvozování \textit{struktury} již relativně dobře popsáno, soustředíme se na integritní omezení. Několik jich popisujeme, pozornost pak soustředíme na ID/\.IDREF/\.IDREFS atributy z DTD. Na bázi článku od Barbosa a Menelzon stavíme heuristický přístup k problému hledání optimální sady ID atributů, jeho funkčnost a vhodnost pak ověřujeme na škále experimentů.
 
 Klíčová slova:  XML, ID atributy, odvozování
 
@@ -226,10 +221,9 @@ Author: \mfauthor
 
 Department: Department of Software Engineering
 
-Supervisor: \mfadvisor{}, Department of Software Engineering
+Supervisor: \mfadvisor{} % TODO does this have to be here?, Department of Software Engineering
 
-Abstract:  [abstract of 80-200 words in English, but not a copy of the assignment of
-the master thesis]
+Abstract: In this work we expand upon the previous efforts to extract (infer) schema information from existing XML documents. We find the inference of \textit{structure} to be sufficiently researched and focus further on integrity constraints. After briefly introducing some of them we turn our attention to ID/\.IDREF/\.IDREFS attributes in DTD. Building on the research by Barbosa and Menelzon we introduce a heuristic approach to the problem of finding optimal ID set. The approach is evaluated and tuned in a wide range of experiments.
 
 Keywords: XML, ID attributes, inference
 
@@ -248,9 +242,6 @@ Keywords: XML, ID attributes, inference
 
 % =============== TEXT ================
 \newpage
-
-% TODO what style of quotation marks to use? 
-% TODO how to format text? is textit / texttt / ... OK?
 
 \chapwithtoc{Preface}
 

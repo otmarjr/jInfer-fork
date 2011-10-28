@@ -1,0 +1,55 @@
+\chapwithtoc{Preface}
+\label{chapter-preface}
+
+Along with technologies like JSON, SQL/noSQL databases and bla, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema to describe XML structure exist for a long time, most of the documents use outdated or no schema at all (\cite{1802522}). To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in A, B, C, jInfer. But the schema is not the only constraint that can be imposed on an XML document: the concept of \textit{keys} and \textit{foreign keys}, well known from the relational database world, applies here as well. One could go even further and try to find even more sophisticated relations in the data, such as \textit{functional dependencies} (link Sviro).
+
+This work will be building upon the achievements of jInfer schema inference framework (TODO link Anti's improvements in schema inference), expanding its possibilities in the field of search for \textit{key-} and \textit{foreign key-}like structures in existing XML documents.
+
+TODO Integrity constraints can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro), etc.
+We will focus on the first kind - ID and IDREF attributes.
+
+TODO argument: test data with DTD (and thus possibly ID/IDREF) is more common, we can have better test sets.
+
+\section{Structure of the thesis}
+
+The thesis will be structured as follows. 
+
+First, we will introduce a few notions required throughout the work, such as XML tree, ID attributes, ID sets and keys for XML. 
+
+Secondly, we will review approaches to ID attribute and XML keys search from previous articles on this topic. 
+
+This will lead us to the NP-complete problem of maximal independent set (IS)\nomenclature{IS}{Independent Set}, where we will inspect approaches for solving it.
+
+We will discuss a closely related Mixed Integer Problem (MIP)\nomenclature{MIP}{Mixed Integer Problem} and prove their "equality".
+
+Afterwards, we will show how to use an external MIP solver and various heuristics to tackle this problem.
+
+An extension to jInfer for finding ID attributes using MIP solver and a combination of heuristics will be presented and experimentally evaluated in the closing chapters.
+
+\section{Conventions}
+
+As usual, source code excerpts, class, field and method names shall be written in fixed-width font, such as \texttt{get\-Heu\-ris\-tic()}. Names of specific heuristics will be written like this: \heu{Mutation}. Name of test data sets will be written like this: \dataset{OVA1}.\\
+
+Pseudocode examples such as the one in Listing \ref{listing-example} will always be presented in a functional way, with inputs and outputs of the function clearly presented in the beginning.
+
+\begin{algorithm}
+\caption{Example Algorithm}
+\label{listing-example}
+\begin{algorithmic}
+\REQUIRE $I$ input data
+\REQUIRE $n$ maximum number of iterations
+\ENSURE results found
+\FOR{$i = 1 \to n$}
+  \STATE \COMMENT{try to find a solution}
+  \STATE $attempt \gets $ calculate possible solution from $I$
+  \IF{$attempt$ is a valid solution}
+    \RETURN $attempt$
+  \ENDIF
+  \RETURN "solution not found"
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+There is a list of abbreviations following the bibliography in Listing \ref{chapter-list-abbreviations}.\\
+
+Please note that throughout this work we will be explicitly ignoring the $\mathcal{O}()$ complexities of algorithms we use. This is because the algorithms we use are by principle strongly stochastic and their performance often depends on behavior of external tools, which we regarded as black boxes and mostly ignored their inner workings.

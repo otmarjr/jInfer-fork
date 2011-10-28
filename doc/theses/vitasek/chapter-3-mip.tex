@@ -155,15 +155,21 @@ It is obvious that this approach works and for any possible input we can let GLP
 
 \section{Heuristics}
 
-TODO what is heuristics (link wise books), what is metaheuristics (we will be using them)
+The definition of \textit{heuristic} or \textit{heuristic algorithm} varies from one source to another. We shall be using it roughly in the following sense.
 
-TODO define incumbent solution, neighborhood, solution space
+\begin{define}[Heuristic]
+	Is an approach to problem solving based on prior experience, educated guess or common knowledge.
+\end{define}
 
-TODO mention things like Taboo search and Genetic Algorithms (we can emulate them with Crossover/Mutation) (we won't be using them)
+\begin{define}[Heuristic Algorithm]
+	Is an algorithm that, in a reasonably short time, will generate a good, maybe even optimal solution to an optimization problem. However, it won’t provide any formal guarantee about its quality.
+\end{define} 
 
-TODO we will be working with heuristics striving to do the following: input is a list of AMs, they have their weight, we try to find a non-conflicting subset which maximizes the weight
+This definion of heuristic algorithm coming from \cite{heu-lecture} is rather vague, however, it will be sufficient for us.
 
-TODO we will be using a pool - what is a pool
+An example of a heuristic is the commonly used approach of \textit{trial and error}: after a failed attempt, change something and try again. We will see many more heuristics later in this chapter.
+
+While a heuristic algorithm can be seen as a tool designed to solve one specific problem, the notion of a \textit{metaheuristic} reminds of a recipy to solve a whole family of problems. We shall be using the metaheuristic presented in Figure \ref{image-metaheuristic} to find optimal ID sets in this work. But before we start describing its structure and components, we need to introduce some more notions.
 
 \begin{figure}
   \caption{Metaheuristic schema}
@@ -172,11 +178,32 @@ TODO we will be using a pool - what is a pool
     \includegraphics[width=\textwidth]{images/metaheuristic}
 \end{figure}
 
-We will now introduce several heurisitics we have implemented to aid us in search for optimal ID set.
+\begin{define}[Solution Space, Solution Quality]
+	Solution space in general is the set of all permissible solutions (not violating any constraints). In the specific case of a MIP formulation it is the set of all $\mathbf{x}$ subject to $A\mathbf{x} \leqslant \mathbf{b}$. Every solution in the solution space has its \textit{quality}, in case of MIP for solution $\mathbf{x}$ it is the value of the objective function in $\mathbf{x}$.
+\end{define}
+
+\begin{define}[Solution Neighborhood]
+	Neighborhood of a solution $\mathbf{x}$ in the solution space are all the other solutions close to $\mathbf{x}$ according to some metric.
+\end{define}
+
+The precise definition of the neighborhood is always adjusted according to specific needs. However, the neighborhood should be defined so that is \textit{continuous} (with respect to quality) to be useful. The exact reasons for this requirement are sketched in Section \ref{section-mip-ihs}.
+
+\begin{define}[Solution Pool, Incumbent Solution]
+	\textit{Solution pool} (sometimes called pool of feasible solutions or feasible pool) is simply a set of solutions of different qualities that were found in one of the stages of the metaheuristic. The solution(s) with the highest quality is (are) called the \textit{incumbent} solution(s).
+\end{define}
+
+A quick reminder of what we are trying to solve using our metaheuristic: given a list of AMs with weights, find a non-conflicting subset maximizing the sum of weights in the subset. We will now describe its structure, please refer again to Figure \ref{image-metaheuristic}.
+
+First we take the list of candidate AMs and ask a \textit{construction heuristic} (see Section \ref{section-mip-chs}) to provide us with a pool of solutions. Then, in a loop, we use this pool as input for \textit{improvement heuristics} (see Section \ref{section-mip-ihs}) and in turns ask them to improve it. All the time we check whether some \textit{termination criteria} are met, and if it is so, we terminate the metaheuristic. The incumbent solution from the last pool is then declared the Output ID set.\\
+
+The notion of metaheuristic covers a wide range of topics in the field of heuristics, such as Tabu Search (see \cite{Glover:1997:TS:549765}), Ant Colony Optimization (see \cite{dorigo2004ant}) or Genetic Algorithms (see e.g. \cite{goldberg1989genetic}), to name a few.\\
+
+We will now introduce the heurisitics we have implemented to use in our metaheuristic for finding optimal ID sets.
 
 \subsection{Constructions Heuristics}
+\label{section-mip-chs}
 % TODO can I format things in nomenclature?
-\nomenclature{CH}{Construction Heuristic} % TODO decide on how to format CH/IH
+\nomenclature{CH}{Construction Heuristic}
 
 When we start to solve a problem using a metaheuristic approach, at first we have no solutions at all. The purpose of a construction heuristic (CH) is then to provide us with at least some solution. This may or may not be already the optimum, in the latter case it will be improved on later using improvement heuristics (IH). Some IHs can profit from a pool of several sub-optimal solutions, and some CHs can produce this pool from them.
 
@@ -350,7 +377,7 @@ is the attempt to move the solution towards the nearby local optimum in the solu
 
 is the attempt to move the solution away (escape) from from the local optimum, to be able to explore more of the solution space when the metaheuristic starts stagnating.\\
 
-A metaheuristic needs to combine intensification and diversification tendencies to explore the solution space and at the same time arrive at a local optimum.
+A metaheuristic needs to combine intensification and diversification tendencies to explore the solution space and at the same time arrive at a local optimum. Recall the requirement for the solution space to be continuous in terms of quality: this guarantees that as we approach a solution $\mathbf{x}$, the quality of solutions we encounter approaches the quality of $\mathbf{x}$.
 
 \subsubsection{\heu{Identity}}
 

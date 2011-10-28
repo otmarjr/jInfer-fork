@@ -179,7 +179,9 @@ The support of attribute mapping $M_x^y$ is the fraction of edges in the XML tre
 \end{quote}
 
 \paragraph{Example}
-Support of $M_{y}^{a}$ in our example is $2 / (2+1+1+1) = 0.4$. Support of every other mapping is $1 / (2+1+1+1) = 0.2$.
+Support of $M_{y}^{a}$ in our example is $2 / (2+1+1+1) = 0.4$. Support of every other mapping is $1 / (2+1+1+1) = 0.2$.\\
+
+Note that this definition of weight is quite arbitrary and all the algorithms mentioned later could easily work with AM weight defined in any other way, even for example defined interactively by the user.
 
 \subsection{Coverage}
 
@@ -209,7 +211,9 @@ For a set of AMs (which may or may not be an ID set) $S = \{m_1, \ldots m_i\}$ w
 \section{Independent Set}
 \label{section-definitions-is}
 
-We shall need the notion of an indepentent set of vertices in a graph and its weighted variant.
+\nomenclature{IS}{Independent Set}
+
+We shall need the notion of an indepentent set (IS) of vertices in a graph and its weighted variant.
 
 \begin{define}[Independent set]
 Given an undirected graph $G = (V, E)$, a set of vertices $I \subseteq V$ is an \textit{independent set}, iff the following holds.
@@ -272,6 +276,8 @@ s.t.\, a_{11}x_{1} + a_{12}x_{2} + \ldots + a_{1n}x_{n} & \leqslant & b_{1} \\
 Solving a linear program is usually possible in polynomial time using the \textit{simplex algorithm} described for example in \cite{dantzig1998linear}.
 
 \section{Mixed Integer Problem}
+
+\nomenclature{MIP}{Mixed Integer Problem}
 
 \begin{define}[Mixed integer problem]
 	MIP, or \textit{mixed integer problem}, is an instance of linear programming in which some or all variables are limited to integral or boolean (0, 1) values.

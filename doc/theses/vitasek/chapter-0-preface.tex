@@ -1,36 +1,35 @@
 \chapwithtoc{Preface}
 \label{chapter-preface}
 
-Along with technologies like JSON, SQL/noSQL databases and bla, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema to describe XML structure exist for a long time, most of the documents use outdated or no schema at all (\cite{1802522}). To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in A, B, C, jInfer. But the schema is not the only constraint that can be imposed on an XML document: the concept of \textit{keys} and \textit{foreign keys}, well known from the relational database world, applies here as well. One could go even further and try to find even more sophisticated relations in the data, such as \textit{functional dependencies} (link Sviro).
+Along with technologies such as SQL/noSQL databases, proprietary binary file formats, plain-text configuration files and JSON, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema to describe XML structure exist for a long time, most of the documents use outdated or no schema at all (\cite{1802522}). To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in \cite{ahonen, bex, vyhnanovska}. In particular, \cite{archdoc} introduces the jInfer schema inference framework, dealing primarily with the structural parts of the schema: how all the elements, attributes and text data are to be organized in an XML document conforming to that schema. Inference of this kind of structural information was greatly improved in \cite{anti}.\\
 
-This work will be building upon the achievements of jInfer schema inference framework (TODO link Anti's improvements in schema inference), expanding its possibilities in the field of search for \textit{key-} and \textit{foreign key-}like structures in existing XML documents.
+But the schema is not the only constraint that can be imposed on an XML document. Any textual or numerical value featured in the document may be subject to type constraints, such as the requirement to conform to a specific regular expression. Furthermore, the concept of \textit{keys} and \textit{foreign keys}, well known from the relational database world, applies to schemas as well and will be the topic of this work. One could go even further and try to find even more sophisticated relations in the data, such as \textit{functional dependencies} well researched in \cite{sviro}.\\
 
-TODO Integrity constraints can be keys (with ID attributes as a "sub-group"), FKs, functional dependencies (quote Sviro), etc.
-We will focus on the first kind - ID and IDREF attributes.
+From all the constraints that can be applied to an XML document by means of its schema, this work will focus on keys and foreign keys. Most important concepts in this field are introduced in \cite{keX} and formalized in the notions of \texttt{ID/IDREF/IDREFS} attributes in DTD and XSD and \texttt{xs:key/xs:keyref} structures in XSD (both in \cite{Bray:08:EML}).\\
 
-TODO argument: test data with DTD (and thus possibly ID/IDREF) is more common, we can have better test sets.
+The scope of this work is finally limited to the inference of \texttt{ID/IDREF/IDREFS} from existing XML documents. ID attributes were chosen over \texttt{xs:key} because the preliminary research found that while it is possible to find real-life XML data with schemas containing \texttt{xs:key} structure, schemas with ID attributes are much more common and it is much easier to obtain large data sets for experiments. % TODO something like even the search for ID sets is interesting enough?
 
 \section{Structure of the thesis}
 
-The thesis will be structured as follows. 
+The thesis will be structured as follows.
 
-First, we will introduce a few notions required throughout the work, such as XML tree, ID attributes, ID sets and keys for XML. 
+First, we will introduce a few notions required throughout the work, such as XML tree, ID attributes, ID sets, linear programming and mixed integer problem. 
 
-Secondly, we will review approaches to ID attribute and XML keys search from previous articles on this topic. 
+We will then review approaches to ID attribute search from previous articles on this topic and formulate the problem of finding the optimal ID set.
 
-This will lead us to the NP-complete problem of maximal independent set (IS)\nomenclature{IS}{Independent Set}, where we will inspect approaches for solving it.
+This will lead us to the NP-complete problem of Maximum Independent Set, where we will inspect the approaches to solving it.
 
-We will discuss a closely related Mixed Integer Problem (MIP)\nomenclature{MIP}{Mixed Integer Problem} and prove their "equality".
+We will discuss a closely related Mixed Integer Problem and show that by solving MIP we can solve the Maximum Independent Set and thus the original problem of optimal ID set.
 
-Afterwards, we will show how to use an external MIP solver and various heuristics to tackle this problem.
+Afterwards, we will show how to use an external MIP solver, demonstrate that this can take too long and how to use a heuristic approach to find good solutions much faster.
 
 An extension to jInfer for finding ID attributes using MIP solver and a combination of heuristics will be presented and experimentally evaluated in the closing chapters.
 
 \section{Conventions}
 
-As usual, source code excerpts, class, field and method names shall be written in fixed-width font, such as \texttt{get\-Heu\-ris\-tic()}. Names of specific heuristics will be written like this: \heu{Mutation}. Name of test data sets will be written like this: \dataset{OVA1}.\\
+As usual, source code excerpts, class, field and method names shall be written in fixed-width font, such as \texttt{get\-Heu\-ris\-tic()}. Names of specific heuristics will be written like \heu{Mutation}. Name of test data sets will be written like \dataset{OVA1}.\\
 
-Pseudocode examples such as the one in Listing \ref{listing-example} will always be presented in a functional way, with inputs and outputs of the function clearly presented in the beginning.
+Pseudocode examples such as the one in Listing \ref{listing-example} will always be presented in a functional way, with inputs and outputs of the function clearly marked in the beginning.
 
 \begin{algorithm}
 \caption{Example Algorithm}

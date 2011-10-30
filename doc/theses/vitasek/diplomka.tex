@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt,oneside]{report}
+\documentclass[a4paper,12pt,twoside]{report}
 \usepackage{graphicx}
 \usepackage{color}
 \usepackage{url}
@@ -8,16 +8,18 @@
 \usepackage{tgpagella}
 \usepackage{xstring}
 \usepackage{wrapfig}
-\usepackage{appendix}
+\usepackage[title,titletoc]{appendix}
+%\usepackage{textgreek}
 \usepackage{nomencl}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{multicol}
-\usepackage[pdfborder=0 0 0]{hyperref}
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{complexity}
+\usepackage[pdfborder=0 0 0,pdftex,unicode]{hyperref}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}{<5><6><7><8><9><10><10.95><12><14.4><17.28><20.74><24.88>cmttb10}{}
 
 \newcommand{\myscale}{0.74}
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -27,6 +29,7 @@
 \newcommand{\dataset}[1]{\texttt{\textit{#1}}}
 \newcommand{\jmodule}[1]{\texttt{\textit{#1}}}
 \linespread{1.5}
+%\onehalfspacing
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -261,40 +264,57 @@ Keywords: XML, ID attributes, inference
 
 %%% Seznam použité literatury
 \newpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
 \nocite{*}
 \bibliographystyle{alpha}
 \bibliography{literature}
 
-\listoffigures
+\clearpage
+\phantomsection
 \addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
 
-\listofalgorithms
+\clearpage
+\phantomsection
 \addcontentsline{toc}{chapter}{List of Algorithms}
+\listofalgorithms
 
 %%% Tabulky v diplomové práci, existují-li.
 %\chapwithtoc{List of Tables}
-\listoftables
+\clearpage
+\phantomsection
 \addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
 
 %%% Použité zkratky v diplomové práci, existují-li, včetně jejich vysvětlení.
 
-\printnomenclature[2cm]
+\clearpage
+\phantomsection
 \addcontentsline{toc}{chapter}{List of Abbreviations}
+\chapter*{List of Abbreviations}
+\printnomenclature[2cm]
 \label{chapter-list-abbreviations}
 
 %%% Přílohy k diplomové práci, existují-li (různé dodatky jako výpisy programů,
 %%% diagramy apod.). Každá příloha musí být alespoň jednou odkazována z vlastního
 %%% textu práce. Přílohy se číslují.
 
-\appendix
+%\appendix
 
 \openright
-\addcontentsline{toc}{chapter}{Appendices}
+\phantomsection
+\addappheadtotoc
+\renewcommand{\appendixname}{Appendix}
+%\addcontentsline{toc}{chapter}{Appendices}
+\begin{appendices}
 
-\include{appendix-a-jinfer}
+\input{appendix-a-jinfer}
 
 \include{appendix-b-iss}
 
 \include{appendix-c-trace}
 
+% TODO a QED square
+\end{appendices}
 \end{document}

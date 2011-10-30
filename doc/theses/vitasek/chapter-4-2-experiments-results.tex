@@ -484,6 +484,7 @@ The results are listed in Table \ref{table-experiments-best-ih-for-glpk}. We sha
     \dataset{100-200} & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\
     \dataset{100-1000} & 0.01630 & 0.01294 & 0.00180 & 0.00506 \\
   \end{tabular}    
+\\\bigskip
 	% TODO separate somehow
   \begin{tabular}{l || l | l || l | l}
              & \heu{LB} & \heu{LB} & \heu{Mutation} & \heu{Mutation} \\
@@ -550,7 +551,7 @@ Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, 
 \end{figure}
 
 % TODO this subsection does not play well with the ToC - how to put something else in the ToC than is here?
-\subsection{Various $\alpha$, $\beta$}
+\subsection{\texorpdfstring{Various $\alpha$, $\beta$}{Various alpha, beta}}
 
 After finding the best combination of a CH and IH we turn our attention to parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function (Section \ref{section-definitions-weight}). A short reminder: the weight is defined as follows. 
 \[weight(m) = \alpha . \phi(m) + \beta . \chi(m)\]

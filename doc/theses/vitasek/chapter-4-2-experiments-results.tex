@@ -552,8 +552,11 @@ Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, 
 % TODO this subsection does not play well with the ToC - how to put something else in the ToC than is here?
 \subsection{Various $\alpha$, $\beta$}
 
-After finding the best combination of a CH and IH we turn our attention to parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function. % TODO link
-A short reminder: the weight is defined as TODO copy formula. It is thus obvious that only the \textit{ratio} between $\alpha$ and $\beta$ matters, not their actual values. This means that investigating effects of these parameters is in fact a 1-dimensional problem. However, for the sake of simplicity we will use 25 combinations of various $\alpha$ and $\beta$ and normalize them only during evaluation.
+After finding the best combination of a CH and IH we turn our attention to parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function (Section \ref{section-definitions-weight}). A short reminder: the weight is defined as follows. 
+\[weight(m) = \alpha . \phi(m) + \beta . \chi(m)\]
+Where $\phi(m)$ is support the attribute mapping $m$ and $\chi(m)$ is its coverage.
+
+It is thus obvious that only the \textit{ratio} between $\alpha$ and $\beta$ matters, not their actual values. This means that investigating effects of these parameters is in fact a 1-dimensional problem. However, for the sake of simplicity we will use 25 combinations of various $\alpha$ and $\beta$ and normalize them only during evaluation.
 
 We do not expect any changes in performance of heuristics and we will limit the inquiry to different ID sets produced under different settings.
 

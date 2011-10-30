@@ -1,7 +1,5 @@
 \chapter{Experiments}
 
-% TODO I cannot stress this enough times: make sure there is an explanation of heuristics notation used in pseudocode listing, SOMEWHERE
-
 At this point of the thesis the reader should be already familiar with the notions we have introduced: the problem of finding the optimal ID set (with respect to a given \textit{weight}), that it is directly related to the NP-complete problem of finding the maximal weighted independent set, that this can be solved using the MIP approach, and that there are several possibilities how to optimize the work of the solver by employing various heuristics.
 
 We have implemented these ideas and incorporated them in the jInfer framework (see Appendix \ref{appedix-jInfer}). But before we describe the experiments themselves, we should try to formulate our aim.\\
@@ -40,7 +38,7 @@ The latter will come in form of tables containing information regarding the data
 \subsection{Realistic data}
 \label{section-realistic-data}
 
-From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. Neither will they be included on the DVD distributed with this thesis.
+From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. The DVD distributed with this thesis will contain their anonymized version.
 
 \begin{table}
   \caption{List of realistic test data files}
@@ -80,7 +78,7 @@ Finally, the \dataset{XMD} set is relatively big and, at the same time, has non-
 \subsection{Realistic data with artificial attributes}
 \label{section-realistic-converted}
 
-We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here. None of these sets had any attributes before the conversion. Their summary is Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
+We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here, the DVD contains the anonymized version again. None of these sets had any attributes before the conversion. Their summary is Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
 
 To address the conversion: in case of \dataset{MSH} we found 2 elements with values resembling a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
@@ -231,7 +229,7 @@ Note that the artificial data we used in experiments can be found on the DVD enc
 
 As was mentioned before, we will use an extension to the jInfer framework called \jmodule{IDSetSearch}. Please see Appendices \ref{appendix-jInfer} and \ref{appendix-iss} for more detailed information on these two pieces of software.\\
 
-We now have to introduce a few notions before moving forward to the description of our experiments.\\
+We now have to introduce a few notions before moving forward to the description of our experiments. In the following text, words \textit{experiment} and \textit{experimental} in various phrases (\textit{experiment X}, \textit{experimental Y}) will be used interchangeably.\\
 
 \textit{Experiment parameters} are the following ones.
 \begin{itemize}

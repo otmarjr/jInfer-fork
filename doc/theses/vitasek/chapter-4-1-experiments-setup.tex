@@ -31,8 +31,7 @@ And finally, we create completely artificial data to create inputs that will put
 	One or more XML files sharing the same schema (even if only an implicit schema) shall be referred to as a \textit{data set}. In the scope of this work this will always mean a \textit{single} XML file. However, this definition of a data \textit{set} covers also the extension to more XML files as described in \cite{fidax}.
 \end{define}
 
-To understand our test data sets we discuss their origin and \textit{graph representation}. As mentioned earlier, % TODO link
-the problem of finding the optimal ID set is in fact the problem of finding the maximum weighted independent set in a graph. Therefore it is interesting to actually see the graphs of these data sets and understand some related metrics.
+To understand our test data sets we discuss their origin and \textit{graph representation}. As mentioned earlier in Chapter \ref{chapter-mip}, the problem of finding the optimal ID set is in fact the problem of finding the maximum weighted independent set in a graph. Therefore it is interesting to actually see the graphs of these data sets and understand some related metrics.
 
 The former will be achieved with the help of the GraphViz tool (\cite{graphviz}), where we will draw the graphs so that all the vertices represent the \textit{candidate AMs}, and the edges represent pairs of AMs that have nonempty intersection of their images (and thus cannot be in the same ID set together). Thus solving the maximal weighted IS on these graphs will be equivalent to solving our problem of optimal ID set.
 
@@ -85,7 +84,7 @@ We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, 
 
 To address the conversion: in case of \dataset{MSH} we found 2 elements with values resembling a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
-This approach is useful, because as stated in TODO link, ID attributes are a special case of XML keys. We can use this approach to find XML keys: convert some ``suspicious" data into attributes, find the optimal ID set and then create XML key based on this ID set.
+This approach is useful, because as mentioned in Chapter \ref{chapter-research}, ID attributes are a special case of XML keys. We can use this approach to find XML keys: convert some ``suspicious" data into attributes, find the optimal ID set and then create XML key based on this ID set.
 
 \begin{table}
   \caption{List of realistic test data files with converted attributes}
@@ -219,7 +218,7 @@ While studying the tables it becomes obvious that the actual numbers $|V|$ and $
   \label{image-experiments-data-artificial}
   \centering
   	\subfigure[\dataset{48-80}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/40-80}}
-	\subfigure[\dataset{70-245}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
+	\subfigure[\dataset{70-245}]{\includegraphics[width=.9\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
 \end{figure}
 
 To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one. The $|V|$ and $|E|$ numbers are orders of magnitude higher than in any realistic (or converted) data set we are using.

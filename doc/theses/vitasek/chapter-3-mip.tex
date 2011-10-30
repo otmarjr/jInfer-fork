@@ -101,7 +101,7 @@ The problem now is, recall, to solve the following.
 s.t.\, A\mathbf{x} & \leqslant & \mathbf{b} \\
 \end{eqnarray*}
 
-In GLPK \textit{MathProg} language, this translates to the following formulation. % TODO cite mathprog
+In GLPK \textit{MathProg} language (see \cite{mathprog}), this translates to the following formulation.
 
 \begin{scriptsize}
 \begin{verbatim}
@@ -154,6 +154,7 @@ This output tells us that the solution is $x_{y-a} = 1$, $x_{y-b} = 0$, $x_{y-c}
 It is obvious that this approach works and for any possible input we can let GLPK find the optimal solution. However, sometimes it takes too long to find the optimum (see e.g. Section \ref{section-glpk-comparison}), we should try to improve this process.
 
 \section{Heuristics}
+\label{section-mip-heuristics}
 
 The definition of \textit{heuristic} or \textit{heuristic algorithm} varies from one source to another. We shall be using it roughly in the following sense.
 
@@ -274,8 +275,6 @@ See the Listing \ref{listing-ch-random} for its pseudocode.
 \heu{Fuzzy} is an improvement over the \heu{Random} CH: the next AM to be added is selected based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in Section \ref{section-definitions-weight}. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
 
 This is again a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
-
-% TODO od I need to specify which are my own idea? I guess so, I should link any heu that is not mine. But do I need to stress that for example Fuzzy is mine?
 
 \begin{algorithm}
 \caption{\heu{Fuzzy} CH}
@@ -412,7 +411,7 @@ See Listing \ref{listing-ih-removeworst} for details.
 
 \subsubsection{\heu{Random Remove}}
 
-This is again a rather trivial diversification improvement heuristic. By removing a random subset of specified size from each solution in the pool, it provides the variability needed to escape from local optima. % TODO make sure we have talked about local optima before
+This is again a rather trivial diversification improvement heuristic. By removing a random subset of specified size from each solution in the pool, it provides the variability needed to escape from local optima in the solution space.
 
 The number of AMs to remove from each solution is specified as ratio from $(0, 1)$ of the solution size (number of AMs in solution). For example, \heu{Random Remove} with $ratio = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
 
@@ -439,7 +438,7 @@ See Listing \ref{listing-ih-randomremove} for pseudocode.
 
 This simple improvement heuristic assumes that the solutions in the pool are not ``complete", i.e. there are AMs that could be added to them without violating the ID set condition.
 
-\heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. This is then intensification, and Listing \ref{listing-ih-hungry} captures the process.
+\heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. This is then intensification, and Listing \ref{listing-ih-hungry} captures the process.\\
 
 \begin{algorithm}
 \caption{\heu{Hungry} IH}
@@ -461,6 +460,8 @@ This simple improvement heuristic assumes that the solutions in the pool are not
 \RETURN $FP$
 \end{algorithmic}
 \end{algorithm}
+
+The following three IHs: \heu{Mutation}, \heu{Crossover} and \heu{Local Branching} are inspired by \cite{heu-lecture}.
 
 \subsubsection{\heu{Mutation}}
 
@@ -552,10 +553,9 @@ It is worth noting that by combining \heu{Mutation}, \heu{Crossover} and \heu{Re
 
 \section{IDREF}
 
-Once an ID set is found, regardless of how exactly, it is easy to find the IDREF set, i.e. the attribute mappings that can be declared as IDREF. % TODO link FIDAX, they did it first.
+Once an ID set is found, regardless of how exactly, it is easy to find the IDREF set, i.e. the attribute mappings that can be declared as IDREF. This algorithm is adopted from \cite{fidax}.
 
-First of all, from the set of all the attribute mappings in the model remove all the AMs contained in the ID set. This is because the specification % TODO link to the specific anchor in the page
-does not allow an attribute to be ID and IDREF (IDREFS) at the same time. Let us denominate these mappings as \textit{IDREF candidates} (obviously different from \textit{candidate AMs}). % TODO link candidate AMs
+First of all, from the set of all the attribute mappings in the model remove all the AMs contained in the ID set. This is because the specification of DTD/XSD does not allow an attribute to be ID and IDREF (IDREFS) at the same time. Let us denominate these mappings as \textit{IDREF candidates} (obviously different from \textit{candidate AMs}).
 
 Second, find the image of the ID set as the union of images of all the AMs in this ID set.
 

@@ -17,6 +17,7 @@ Given a graph $G = (V,E)$ with a weight function $w: V \rightarrow \mathbb{R}$, 
 It is obvious that the objective function and all the constraints consitute a MIP instance, and that solving it finds the maximum weigthed IS in $G$.
 
 \section{Finding ID Sets With GLPK}
+\label{section-mip-glpk}
 
 By chaining these two translations we can create a MIP formulation for a given set of AMs from a document. Solving this MIP instance will give us the optimal ID set for this document.
 

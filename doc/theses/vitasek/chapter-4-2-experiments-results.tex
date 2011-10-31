@@ -137,7 +137,7 @@ Apart from comparing different versions, we shall see how the pure GLPK approach
 \bigskip
 \end{center}
 
-Our experimental set will contain 500 experimental configurations for each of these two GLPK version. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 46 seconds with increments of 5, meaning 10 settings * 50 iterations = 500 configurations in total (see Algorithm \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights). The data set used is \dataset{100-500} as the biggest one in sized test data.\\
+Our experimental set will contain 500 experimental configurations for each of these two GLPK versions. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 46 seconds with increments of 5, meaning 10 settings * 50 iterations = 500 configurations in total (see Algorithm \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights). The data set used is \dataset{100-500} as the biggest one in sized test data.\\
 
 \begin{algorithm}
 \caption{GLPK: Native vs. Cygwin Set Generation 1}
@@ -307,7 +307,7 @@ We need a pool size of one and only a single iteration - both \heu{FIDAX} and \h
 
 The experimental results are summarized in Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. As trivial a heuristic \heu{Hungry} is, it is still able to improve the ID set found by \heu{FIDAX} by as much as almost 50\% (the last row, \dataset{100-1000}).
 
-Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes found in both cases for this most extreme input, \dataset{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as ID attribute".
+Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes found in both cases for this most extreme input, \dataset{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as ID attribute''.
 
 \begin{table}
   \caption{Results of adding \heu{Hungry} after \heu{FIDAX}}
@@ -331,7 +331,6 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
   \end{tabular}
 \end{table}
 
-% TODO for some reason \texttt{\textbf{vertex5}} looks only like \texttt{vertex5}
 \begin{table}
   \caption{ID Sets in \heu{FIDAX} Versus \heu{FIDAX} + \heu{Hungry}}
   \bigskip
@@ -340,8 +339,8 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
   \begin{tabular}{l | l}
   \heu{FIDAX} & \heu{FIDAX} + \heu{Hungry} \\
   \hline
-                    & \texttt{\textbf{vertex5}}  \\
-                    & \texttt{\textbf{vertex26}} \\
+                    & \texttt{vertex5}  \\
+                    & \texttt{vertex26} \\
   \texttt{vertex30} & \texttt{vertex30} \\
   \texttt{vertex31} & \texttt{vertex31} \\
   \texttt{vertex32} & \texttt{vertex32} \\
@@ -350,9 +349,9 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes fo
   \texttt{vertex36} & \texttt{vertex36} \\
   \texttt{vertex37} & \texttt{vertex37} \\
   \texttt{vertex39} & \texttt{vertex39} \\
-                    & \texttt{\textbf{vertex60}} \\
-                    & \texttt{\textbf{vertex69}} \\
-                    & \texttt{\textbf{vertex70}} \\
+                    & \texttt{vertex60} \\
+                    & \texttt{vertex69} \\
+                    & \texttt{vertex70} \\
   \texttt{vertex74} & \texttt{vertex74} \\
   \texttt{vertex75} & \texttt{vertex75} \\
   \texttt{vertex80} & \texttt{vertex80} \\
@@ -409,13 +408,13 @@ For data sets \heu{XMA-c}, \heu{XMA-p}, \heu{MSH} and \heu{NTH} every CH found t
   \caption{Best Standalone CH}
   \label{image-experiments-best-standalone-ch}
   \centering
-  	\subfigure[\dataset{OVA1}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-OVA1}}
-  	\subfigure[\dataset{OVA2}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-OVA2}}
-  	\subfigure[\dataset{OVA3}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-OVA3}}
-  	\subfigure[\dataset{XMD}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-XMD}}
-   	\subfigure[\dataset{100-100}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-100-100}}
-  	\subfigure[\dataset{100-200}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-100-200}}
-  	\subfigure[\dataset{100-1000}]{\includegraphics[width=.45\textwidth]{images/experiments/best-ch-100-1000}}
+  	\subfigure[\dataset{OVA1}]{\includegraphics[width=.44\textwidth]{images/experiments/best-ch-OVA1}}
+  	\subfigure[\dataset{OVA2}]{\includegraphics[width=.44\textwidth]{images/experiments/best-ch-OVA2}}
+  	\subfigure[\dataset{OVA3}]{\includegraphics[width=.44\textwidth]{images/experiments/best-ch-OVA3}}
+  	\subfigure[\dataset{XMD}]{\includegraphics[width=.44\textwidth]{images/experiments/best-ch-XMD}}
+   	\subfigure[\dataset{100-100}]{\includegraphics[width=.44\textwidth]{images/experiments/best-ch-100-100}}
+  	\subfigure[\dataset{100-200}]{\includegraphics[width=.44\textwidth]{images/experiments/best-ch-100-200}}
+  	\subfigure[\dataset{100-1000}]{\includegraphics[width=.44\textwidth]{images/experiments/best-ch-100-1000}}
 \end{figure}
 
 We can see that \heu{Glpk} wins (or is among the best) in every single case. We will start from there and try to build upon this result.
@@ -455,10 +454,10 @@ This experimental set will contain 6 data sets * 50 iterations * 4 IHs = 1200 ex
 \STATE $ES \gets \emptyset$
 \FOR{$file \in \{\dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
 	\FOR{$i = 1 \to 50$}
-    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Crossover}(ratio = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Crossover}(fraction = 0.1, limit = 1)\}$
     	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Hungry}\}$
-    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Local Branching}(ratio = 0.1, limit = 1)\}$
-    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Mutation}(ratio = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Local Branching}(fraction = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Mutation}(fraction = 0.1, limit = 1)\}$
   \ENDFOR
 \ENDFOR
 \RETURN $ES$
@@ -485,7 +484,7 @@ The results are listed in Table \ref{table-experiments-best-ih-for-glpk}. We sha
     \dataset{100-1000} & 0.01630 & 0.01294 & 0.00180 & 0.00506 \\
   \end{tabular}    
 \\\bigskip
-	% TODO separate somehow
+
   \begin{tabular}{l || l | l || l | l}
              & \heu{LB} & \heu{LB} & \heu{Mutation} & \heu{Mutation} \\
     Data set & improv - avg & improv - stdev & improv - avg & improv - stdev \\
@@ -533,8 +532,8 @@ Setup used will be almost identical to that from the previous experiment. Experi
 \STATE $ES \gets \emptyset$
 \FOR{$file \in \{\dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
 	\FOR{$i = 1 \to 50$}
-    	\STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = \heu{Mutation}(ratio = 0.1, limit = 1)\}$
-    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Mutation}(ratio = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = \heu{Mutation}(fraction = 0.1, limit = 1)\}$
+    	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Mutation}(fraction = 0.1, limit = 1)\}$
   \ENDFOR
 \ENDFOR
 \RETURN $ES$
@@ -550,7 +549,6 @@ Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, 
     \includegraphics[width=\textwidth]{images/experiments/ch-for-mutation}
 \end{figure}
 
-% TODO this subsection does not play well with the ToC - how to put something else in the ToC than is here?
 \subsection{\texorpdfstring{Various $\alpha$, $\beta$}{Various alpha, beta}}
 
 After finding the best combination of a CH and IH we turn our attention to parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function (Section \ref{section-definitions-weight}). A short reminder: the weight is defined as follows. 
@@ -600,7 +598,7 @@ The following data sets have the same optimal ID sets regardless of the setting 
 
 \subsubsection{Results for \dataset{OVA1}}
 
-The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1} are listed in Table \ref{table-experiments-various-betas-ova1} (note that the actual names had to be anonymized for reasons discussed in Section \ref{section-realistic-data}). The differing attribute mapping is highlited.
+The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1} are listed in Table \ref{table-experiments-various-betas-ova1} (note that the actual names had to be anonymized for reasons discussed in Section \ref{section-realistic-data}). The differing attribute mapping is marked.
 
 \begin{table}
   \caption{Different ID Sets Found for \dataset{OVA1}}
@@ -615,7 +613,7 @@ The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1}
     \texttt{cre@da} & \texttt{cre@da} \\
     \texttt{cri@te} & \texttt{cri@te} \\
     \texttt{cve@st} & \texttt{cve@st} \\
-    \texttt{\textbf{def@id}} & \texttt{\textbf{def@cl}} <- \\ % TODO again, my bold typewriter does not work
+    \texttt{* def@id} & \texttt{* def@cl} \\
     \texttt{fil@co} & \texttt{fil@co} \\
     \texttt{mod@da} & \texttt{mod@da} \\
     \texttt{ova@xs} & \texttt{ova@xs} \\
@@ -706,7 +704,7 @@ Our experimental set will contain 50 iterations * 2 = 100 experimental configura
 \FOR{$i \in 1 \to 50 $}
   \STATE $ES \gets ES \cup \{\dataset{XMA-p}, CH = \heu{Glpk}(limit = 1), IH = \emptyset\}$
 \ENDFOR
-\STATE \textbf{set} ``ignore text data"
+\STATE \textbf{set} ``ignore text data''
 \FOR{$i \in 1 \to 50 $}
   \STATE $ES \gets ES \cup \{\dataset{XMA-p}, CH = \heu{Glpk}(limit = 1), IH = \emptyset\}$
 \ENDFOR
@@ -736,10 +734,10 @@ We shall then employ a higher-level heuristic: we will choose 3 strategies (list
 The 3 strategies we assess will be constructed from the following instances of improvement heuristics:
 
 \begin{itemize}
-	\item \heu{RR} is \heu{RandomRemove} with $ratio$ set to $0.1$.
-	\item \heu{MUT} is \heu{Mutation} with $ratio$ set to $0.1$ and time limit set to 1 second.
-	\item \heu{CX} is \heu{Crossover} with $ratio$ set to $0.1$ and time limit set to 1 second.
-	\item \heu{LB} is \heu{LocalBranching} with $ratio$ set to $0.1$ and time limit set to 1 second.
+	\item \heu{RR} is \heu{RandomRemove} with $fraction$ set to $0.1$.
+	\item \heu{MUT} is \heu{Mutation} with $fraction$ set to $0.1$ and time limit set to 1 second.
+	\item \heu{CX} is \heu{Crossover} with $fraction$ set to $0.1$ and time limit set to 1 second.
+	\item \heu{LB} is \heu{Local Branching} with $fraction$ set to $0.1$ and time limit set to 1 second.
 	\item \heu{RW} is \heu{RemoveWorst}.
 	\item \heu{H} is \heu{Hungry}.
 \end{itemize}
@@ -768,7 +766,7 @@ The strategies themselves shall be the following:
 \bigskip
 \end{center}
 
-The experimental set will consist of 3 strategies * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Algorithm \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the ratios are set to $0.1$ for the time being. The termination criterion is set to limit the total runtime to 10 seconds and (potentialy) infinite iterations.
+The experimental set will consist of 3 strategies * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Algorithm \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the fractions are set to $0.1$ for the time being. The termination criterion is set to limit the total runtime to 10 seconds and (potentialy) infinite iterations.
 
 Log traces like the one in Appendix \ref{appendix-trace} will be gathered - also, after each iteration, the time taken so far and the quality of incumbent solution is noted.\\
 
@@ -778,10 +776,10 @@ Log traces like the one in Appendix \ref{appendix-trace} will be gathered - also
 \begin{algorithmic}
 \ENSURE experimental set $ES$
 \STATE $ES \gets \emptyset$
-\STATE $\heu{MUT} \gets \heu{Mutation}(ratio = 0.1, limit = 1)$
-\STATE $\heu{CX} \gets \heu{Crossover}(ratio = 0.1, limit = 1)$
-\STATE $\heu{LB} \gets \heu{LocalBranching}(ratio = 0.1, limit = 1)$
-\STATE $\heu{RR} \gets \heu{RandomRemove}(ratio = 0.1)$
+\STATE $\heu{MUT} \gets \heu{Mutation}(fraction = 0.1, limit = 1)$
+\STATE $\heu{CX} \gets \heu{Crossover}(fraction = 0.1, limit = 1)$
+\STATE $\heu{LB} \gets \heu{Local Branching}(fraction = 0.1, limit = 1)$
+\STATE $\heu{RR} \gets \heu{RandomRemove}(fraction = 0.1)$
 \STATE $\heu{H} \gets \heu{Hungry}$
 \STATE $\heu{RW} \gets \heu{RemoveWorst}$
 \STATE $IHs \gets \emptyset$
@@ -812,7 +810,7 @@ Resulting traces for each data set can be summarized in graphs like the one for 
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s1}
 \end{figure}
 
-X and Y axes represent the time and quality, as usual. Each line represents one run of the strategy (metaheuristic) in the following way: the N\textsuperscript{th} break in the line (i.e. the N\textsuperscript{th} data point) is the partial result after the N\textsuperscript{th} step of the strategy. Its X position denotes the absolute time in which this step finished, and its Y position represents the incumbent solution quality after this step. Every time a line ``disappears" before reaching 10 seconds it means that this metaheuristic run found the optimum before the 10 second mark. There is an obvious repetitive regularity in the shape of each line, which corresponds to the fact that there is a finite number of IHs in this strategy (5 of them in Strategy 1) which repeat over time. The obvious similarity between different lines corresponds to the fact that each run is from the same strategy, and over time, they do the same steps.
+X and Y axes represent the time and quality, as usual. Each line represents one run of the strategy (metaheuristic) in the following way: the N\textsuperscript{th} break in the line (i.e. the N\textsuperscript{th} data point) is the partial result after the N\textsuperscript{th} step of the strategy. Its X position denotes the absolute time in which this step finished, and its Y position represents the incumbent solution quality after this step. Every time a line ``disappears'' before reaching 10 seconds it means that this metaheuristic run found the optimum before the 10 second mark. There is an obvious repetitive regularity in the shape of each line, which corresponds to the fact that there is a finite number of IHs in this strategy (5 of them in Strategy 1) which repeat over time. The obvious similarity between different lines corresponds to the fact that each run is from the same strategy, and over time, they do the same steps.
 
 We can see effects of different IHs from this graph:
 \begin{itemize}
@@ -867,7 +865,7 @@ Each cell contains the number of times the strategy found optimum in the data se
 
 A short reminder: Strategy 1 consists of \heu{Random} as the CH and the following IHs: \heu{RR} $\rightarrow$ \heu{MUT} $\rightarrow$ \heu{RR} $\rightarrow$ \heu{CX} $\rightarrow$ \heu{RW} $\rightarrow \ldots$
 
-The parameters we can tune in this strategy are the ratios in \heu{RandomRemove} (possibly 2 of them, as there are 2 instances in use), \heu{Mutation} and \heu{Crossover}. We shall not tune the time limits in \heu{Mutation} and \heu{Crossover} and leave them set to 1 second. This presents us with a 3-dimensional space of parameters, where we want to find a combination best suited for our test data sets. We will sample this space by taking a total of 45 configurations of the aforementioned ratios.
+The parameters we can tune in this strategy are the fractions in \heu{RandomRemove} (possibly 2 of them, as there are 2 instances in use), \heu{Mutation} and \heu{Crossover}. We shall not tune the time limits in \heu{Mutation} and \heu{Crossover} and leave them set to 1 second. This presents us with a 3-dimensional space of parameters, where we want to find a combination best suited for our test data sets. We will sample this space by taking a total of 45 configurations of the aforementioned fractions.
 
 \begin{center}
 \bigskip
@@ -885,11 +883,11 @@ The parameters we can tune in this strategy are the ratios in \heu{RandomRemove}
 \bigskip
 \end{center}
 
-This experimental set will consist of 45 ratio combinations * 11 data sets * 25 iterations = 12375 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Strategy 1, with their ratios set to one of the 45 combinations produced in the following way.
+This experimental set will consist of 45 fraction combinations * 11 data sets * 25 iterations = 12375 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Strategy 1, with their fractions set to one of the 45 combinations produced in the following way.
 \begin{itemize}
-	\item \heu{RandomRemove} ratio will be from $\{0, 0.05, 0.1, 0.2, 0.5\}$
-	\item \heu{Mutatio} ratio will be from $\{0.05, 0.1, 0.2\}$
-	\item \heu{Crossover} ratio will be from $\{0.05, 0.1, 0.2\}$
+	\item \heu{RandomRemove} fraction will be from $\{0, 0.05, 0.1, 0.2, 0.5\}$
+	\item \heu{Mutatio} fraction will be from $\{0.05, 0.1, 0.2\}$
+	\item \heu{Crossover} fraction will be from $\{0.05, 0.1, 0.2\}$
 \end{itemize}
 The total limit will remain at 10 seconds. The process of creating the configurations is captured in Algorithm \ref{listing-experiment-chained-ihs-tuning}. We will be gathering the following information for each run: what were the parameters, how long did the run take and whether it found the optimum.\\
 
@@ -902,12 +900,12 @@ The total limit will remain at 10 seconds. The process of creating the configura
 
 \STATE $RW \gets \heu{RemoveWorst}$
 
-\FOR{$rrRatio \in \{0, 0.05, 0.1, 0.2, 0.5\}$}
-\FOR{$mutRatio \in \{0.05, 0.1, 0.2\}$}
-\FOR{$cxRatio \in \{0.05, 0.1, 0.2\}$}
-  \STATE $RR \gets \heu{RandomRemoval}(ratio = rrRatio)$
-  \STATE $MUT \gets \heu{Mutation}(ratio = mutRatio, limit = 1)$
-  \STATE $CX \gets \heu{Crossover}(ratio = cxRatio, limit = 1)$
+\FOR{$rrFraction \in \{0, 0.05, 0.1, 0.2, 0.5\}$}
+\FOR{$mutFraction \in \{0.05, 0.1, 0.2\}$}
+\FOR{$cxFraction \in \{0.05, 0.1, 0.2\}$}
+  \STATE $RR \gets \heu{RandomRemoval}(fraction = rrFraction)$
+  \STATE $MUT \gets \heu{Mutation}(fraction = mutFraction, limit = 1)$
+  \STATE $CX \gets \heu{Crossover}(fraction = cxFraction, limit = 1)$
   \FOR{$file \in $ sized test data}
     \FOR{$i = 1 \to 50$}
       \STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW}), limit = 10 seconds\}$
@@ -920,9 +918,9 @@ The total limit will remain at 10 seconds. The process of creating the configura
 \end{algorithmic}
 \end{algorithm}
 
-After averaging the data, we get a large result table; an excerpt of it is in Table \ref{table-experiments-chained-ihs-tweaking-s1}. Only the results for the biggest data sets and a few combinations of RR, MUT and CX ratios are presented.
+After averaging the data, we get a large result table; an excerpt of it is in Table \ref{table-experiments-chained-ihs-tweaking-s1}. Only the results for the biggest data sets and a few combinations of RR, MUT and CX fractions are presented.
 
-In the left part of the table are the ratio values. In the right part are the averaged running times (AT), success ratios (ratio of runs that found the optimum, SR) and average qualities (AQ) for each data set. The highest success ratios and qualities are highlited.\\
+In the left part of the table are the fraction values. In the right part are the averaged running times (AT), success ratios (ratio of runs that found the optimum, SR) and average qualities (AQ) for each data set. The highest success ratios and qualities are highlited.\\
 
 \begin{table}
   \caption{Performance of Strategy 1 Depending on Parameters - Excerpt}
@@ -957,17 +955,17 @@ In the left part of the table are the ratio values. In the right part are the av
     \end{tabular}
 \end{table}
 
-It is now necessary to pick one ratio combination as the best one, and it is $(RR = 0.5, MUT = 0.2, CX = 0.1)$. Using this combination for all the data sets from \dataset{10-20} up to \dataset{80-320} the optimum was always found and for \dataset{90-405} and \dataset{100-500} the success ratios were the highest.
+It is now necessary to pick one fraction combination as the best one, and it is $(RR = 0.5, MUT = 0.2, CX = 0.1)$. Using this combination for all the data sets from \dataset{10-20} up to \dataset{80-320} the optimum was always found and for \dataset{90-405} and \dataset{100-500} the success ratios were the highest.
 
-Now to interpret the ratios in the best combination. \heu{RandomRemove} ratio of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} ratio of 0.2 means around 1/5\textsuperscript{th} of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} ratio of 0.1 means that around 10\% of ID sets in the pool (randomly chosen) will be scanned for common AMs.
+Now to interpret the fractions in the best combination. \heu{RandomRemove} fraction of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} fraction of 0.2 means around 1/5\textsuperscript{th} of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} fraction of 0.1 means that around 10\% of ID sets in the pool (randomly chosen) will be scanned for common AMs.
 
-\heu{RandomRemove} and \heu{Mutation} ratios in the best combination are at the upper bound of the range we chose for them. As a future work option it is possible to start moving these ratios even more in their preferred way.
+\heu{RandomRemove} and \heu{Mutation} fractions in the best combination are at the upper bound of the range we chose for them. As a future work option it is possible to start moving these fractions even more in their preferred way.
 
 \subsubsection{Final Comparison}
 
-Finally we shall compare the performance of Strategy 1 with tuned parameters (ratios) to the approach we started the experiments with: using the \heu{Glpk} CH with no time limit to find the optimum. We will compare them on the biggest of sized test data: \dataset{100-500}.
+Finally we shall compare the performance of Strategy 1 with tuned parameters (fractions) to the approach we started the experiments with: using the \heu{Glpk} CH with no time limit to find the optimum. We will compare them on the biggest of sized test data: \dataset{100-500}.
 
-We already have the running times for pure \heu{Glpk} on \dataset{100-500} from the ``Time Until Optimum" experiment in Section \ref{section-glpk-comparison}. The last experiment to find the performance of tuned Strategy 1 without a time limit will have the following parameters.
+We already have the running times for pure \heu{Glpk} on \dataset{100-500} from the ``Time Until Optimum'' experiment in Section \ref{section-glpk-comparison}. The last experiment to find the performance of tuned Strategy 1 without a time limit will have the following parameters.
 
 \begin{center}
 \bigskip
@@ -995,9 +993,9 @@ The last experimental set will consist of 50 iterations = 50 experimental config
 \STATE $ES \gets \emptyset$
 
 \STATE $RW \gets \heu{RemoveWorst}$
-\STATE $RR \gets \heu{RandomRemoval}(ratio = 0.5)$
-\STATE $MUT \gets \heu{Mutation}(ratio = 0.2, limit = 1)$
-\STATE $CX \gets \heu{Crossover}(ratio = 0.1, limit = 1)$
+\STATE $RR \gets \heu{RandomRemoval}(fraction = 0.5)$
+\STATE $MUT \gets \heu{Mutation}(fraction = 0.2, limit = 1)$
+\STATE $CX \gets \heu{Crossover}(fraction = 0.1, limit = 1)$
 \FOR{$i = 1 \to 50$}
   \STATE $ES \gets ES \cup \{\dataset{100-500}, CH = \heu{Random}, IH = (\heu{RR}, \heu{MUT}, \heu{RR}, \heu{CX}, \heu{RW})\}$
 \ENDFOR
@@ -1014,7 +1012,7 @@ Results are summarized in Figure \ref{image-experiment-chained-ihs-tuned}. Both 
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-tuned}
 \end{figure}
 
-\section{The "Best" Algorithm}
+\section{The ``Best'' Algorithm}
 
 After answering a lot of questions related to the overall system behavior, parameter effects and various heuristic combinations we can now summarize our results and draw conclusions.\\
 

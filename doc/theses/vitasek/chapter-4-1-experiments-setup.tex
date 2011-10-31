@@ -69,7 +69,7 @@ From 3 different sources we collected 6 different data sets, called \dataset{OVA
     \subfigure[\dataset{XMD}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/XMD}}
 \end{figure}
 
-To interpret the data: \dataset{OVA*} sets have quite interesting and challenging graphs, but they are relatively small. We can consider them to be the ``typical" representants.
+To interpret the data: \dataset{OVA*} sets have quite interesting and challenging graphs, but they are relatively small. We can consider them to be the ``typical'' representants.
 
 On the other hand, the \dataset{XMA-*} sets are relatively huge, but trivial: their only candidate AM will just get picked and the heuristic will end. Therefore we will see the performance of the other components of the whole system, such as loading the data sets into memory representations.
 
@@ -82,7 +82,7 @@ We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, 
 
 To address the conversion: in case of \dataset{MSH} we found 2 elements with values resembling a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
-This approach is useful, because as mentioned in Chapter \ref{chapter-research}, ID attributes are a special case of XML keys. We can use this approach to find XML keys: convert some ``suspicious" data into attributes, find the optimal ID set and then create XML key based on this ID set.
+This approach is useful, because as mentioned in Chapter \ref{chapter-research}, ID attributes are a special case of XML keys. We can use this approach to find XML keys: convert some ``suspicious'' data into attributes, find the optimal ID set and then create XML key based on this ID set.
 
 \begin{table}
   \caption{List of realistic test data files with converted attributes}
@@ -163,7 +163,7 @@ With this process it is possible to create as much data as needed, with any comb
 
 There is one characteristic that can describe random graphs like this, and that is the \textit{density}. This can be defined in various ways, we will use two different interpretations. The first is $\frac{|E|}{|V|}$, that is, how many edges are there for one vertex (multiplied by 2 we would get the average degree of the vertices).
 
-The second, perhaps more interesting is $\frac{|E|}{E_{max}}$, where $E_{max} = \frac{|V|.(|V|-1)}{2}$. This is the density as the ratio of edges that are to all edges that could be in a complete graph with $|V|$ vertices.
+The second, perhaps more interesting is $\frac{|E|}{E_{max}}$, where $E_{max} = \frac{|V|.(|V|-1)}{2}$. This is the density as the fraction of edges that are to all edges that could be in a complete graph with $|V|$ vertices.
 
 We have created 3 sets to be used in experiments along with the realistic and converted sets, called \dataset{100-100}, \dataset{100-200} and \dataset{100-1000}. Note that the name is always in the form $v-e$.\\
 
@@ -190,7 +190,7 @@ While studying the tables it becomes obvious that the actual numbers $|V|$ and $
 \end{table}
 
 \begin{table}
-  \caption{List of ``sized" artificial test data files}
+  \caption{List of ``sized'' artificial test data files}
   \bigskip
   \label{table-experiments-data-artificial-size}
   \centering
@@ -215,8 +215,8 @@ While studying the tables it becomes obvious that the actual numbers $|V|$ and $
   \caption{Artificial data}
   \label{image-experiments-data-artificial}
   \centering
-  	\subfigure[\dataset{48-80}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/40-80}}
-	\subfigure[\dataset{70-245}]{\includegraphics[width=.9\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
+    \subfigure[\dataset{48-80}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/40-80}}
+    \subfigure[\dataset{70-245}]{\includegraphics[width=.8\textwidth]{images/experiments/data/artificial/size/70-245-fixed}}
 \end{figure}
 
 To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one. The $|V|$ and $|E|$ numbers are orders of magnitude higher than in any realistic (or converted) data set we are using.
@@ -333,7 +333,7 @@ To present a set of measurements obtained by iteratively running an experiment w
 Quartile boundaries are determined such that 1/4 of the points have a value equal or less than the first quartile boundary, 1/2 of the points have a value equal or less than the second quartile (median) value, etc. A box is drawn around the region between the first and third quartiles, with a horizontal line at the median value. Whiskers extend from the box to user-specified limits. Points that lie outside these limits are drawn individually.
 \end{quote}
 
-The ``user-specified limits" of whiskers are set to default value, let us quote from the manual again.
+The ``user-specified limits'' of whiskers are set to default value, let us quote from the manual again.
 
 \begin{quote}
 By default the whiskers extend from the ends of the box to the most distant point whose y value lies within 1.5 times the interquartile range.

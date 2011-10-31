@@ -555,7 +555,7 @@ It is worth noting that by combining \heu{Mutation}, \heu{Crossover} and \heu{Re
 
 Once an ID set is found, regardless of how exactly, it is easy to find the IDREF set, i.e. the attribute mappings that can be declared as IDREF. This algorithm is adopted from \cite{fidax}.
 
-First of all, from the set of all the attribute mappings in the model remove all the AMs contained in the ID set. This is because the specification of DTD/XSD does not allow an attribute to be ID and IDREF (IDREFS) at the same time. Let us denominate these mappings as \textit{IDREF candidates} (obviously different from \textit{candidate AMs}).
+First of all, from the set of all the attribute mappings in the model remove all the AMs contained in the ID set. This is because the specification of DTD/XSD does not allow an attribute to be \texttt{ID} and \texttt{IDREF} (\texttt{IDREFS}) at the same time. Let us denominate these mappings as \textit{IDREF candidates} (obviously different from \textit{candidate AMs}).
 
 Second, find the image of the ID set as the union of images of all the AMs in this ID set.
 

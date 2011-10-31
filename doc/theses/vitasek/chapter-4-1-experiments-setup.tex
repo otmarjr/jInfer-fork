@@ -35,7 +35,7 @@ The former will be achieved with the help of the GraphViz tool (\cite{graphviz})
 
 The latter will come in form of tables containing information regarding the data sets, such their size, known optimum for $\alpha = \beta = 1$ (found by running the \heu{Glpk} heuristic without a time limit) and the numbers of vertices and edges in aforementioned graphs.
 
-\subsection{Realistic data}
+\subsection{Realistic Data}
 \label{section-realistic-data}
 
 From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. The DVD distributed with this thesis will contain their anonymized version.
@@ -75,14 +75,14 @@ On the other hand, the \dataset{XMA-*} sets are relatively huge, but trivial: th
 
 Finally, the \dataset{XMD} set is relatively big and, at the same time, has non-trivial graph representation. In this case we should see a performance more balanced between processing and finding the ID set.
 
-\subsection{Realistic data with artificial attributes}
+\subsection{Realistic Data With Artificial Attributes}
 \label{section-realistic-converted}
 
 We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here, the DVD contains the anonymized version again. None of these sets had any attributes before the conversion. Their summary is Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
 
 To address the conversion: in case of \dataset{MSH} we found 2 elements with values resembling a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
-This approach is useful, because as mentioned in Chapter \ref{chapter-research}, ID attributes are a special case of XML keys. We can use this approach to find XML keys: convert some ``suspicious'' data into attributes, find the optimal ID set and then create XML key based on this ID set.
+This approach is useful, because as mentioned in Chapter \ref{chapter-research}, \texttt{ID} attributes are a special case of XML keys. We can use this approach to find XML keys: convert some ``suspicious'' data into attributes, find the optimal ID set and then create XML key based on this ID set.
 
 \begin{table}
   \caption{List of realistic test data files with converted attributes}
@@ -105,11 +105,11 @@ This approach is useful, because as mentioned in Chapter \ref{chapter-research},
     \subfigure[\dataset{NTH}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/converted/NTH}}
 \end{figure}
 
-In case of \dataset{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \dataset{XMA-*} sets: quite large data, yet only one trivial ID attribute to be found.
+In case of \dataset{MSH} we created 2 attributes, of which only one constituted a candidate AM. This is then the case similar to \dataset{XMA-*} sets: quite large data, yet only one trivial \texttt{ID} attribute to be found.
 
 In case of \dataset{NTH} we introduced 8 attributes. Out of them 5 proved to be candidate AMs, with 7 edges constraining them. This means we have a relatively large set with considerably simple work to be done by the heuristics.
 
-\subsection{Artificial data}
+\subsection{Artificial Data}
 
 As soon as we started experimenting with the data coming from the real world, it was obvious that they are not complex enough. After we built the model, we got the most complex graphs of 31 vertices and 47 edges (see Table \ref{table-experiments-data-realistic}). Our solution is to approach the problem from the other side: in the end, we will be solving the equivalent of IS problem on a graph created from XML data. We will create the XML data to contain a more complex graph with a specific number of vertices and edges.
 
@@ -138,7 +138,7 @@ Our aim is to create a graph with approximately $v$ vertices and $e$ edges. Firs
 The respective pseudocode for this is provided in Algorithm \ref{listing-random-data}.
 
 \begin{algorithm}
-\caption{Random XML data creation}
+\caption{Random XML Data Creation}
 \label{listing-random-data}
 \begin{algorithmic}
 \REQUIRE $v$ requested number of vertices
@@ -259,7 +259,7 @@ The second step is to convert the grammar into the AM model. This is done by a l
 \textit{(element name, attribute name, attribute value)}
 \end{center}
 
-There is a tuple for every attribute node with a value found in the initial grammar. Note that the information about the context in which the element was originally found is lost - but this is not a problem with regard to the definition of XML ID attributes. Furthermore, tuples in flat representation do not need to be unique.\\
+There is a tuple for every attribute node with a value found in the initial grammar. Note that the information about the context in which the element was originally found is lost - but this is not a problem with regard to the definition of XML \texttt{ID} attributes. Furthermore, tuples in flat representation do not need to be unique.\\
 
 The model now has to be able to return the list of all attribute mappings and their respective images. This is achieved by simply grouping the flat representation by the pair \textit{(element name, attribute name)} and aggregating all attribute values for each such pair. Another responsibility of the model is to return the list of \textit{types} - that is simply the list of unique \textit{element name}s.
 

@@ -248,23 +248,15 @@ Keywords: XML, ID attributes, inference
 % =============== TEXT ================
 \newpage
 
-\include{chapter-0-preface}
+  \include{chapter-0-preface}
+  \include{chapter-1-definitions}
+  \include{chapter-2-research}
+  \include{chapter-3-mip}
+  \include{chapter-4-1-experiments-setup}
+  \include{chapter-4-2-experiments-results}
+  \include{chapter-5-future}
+  \include{chapter-6-conclusion}
 
-\include{chapter-1-definitions}
-
-\include{chapter-2-research}
-
-\include{chapter-3-mip}
-
-\include{chapter-4-1-experiments-setup}
-
-\include{chapter-4-2-experiments-results}
-
-\include{chapter-5-future}
-
-\include{chapter-6-conclusion}
-
-%%% Seznam použité literatury
 \newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -272,50 +264,41 @@ Keywords: XML, ID attributes, inference
 \bibliographystyle{alpha}
 \bibliography{literature}
 
+\phantomsection
+\addcontentsline{toc}{chapter}{Lists}
+
 \clearpage
 \phantomsection
-\addcontentsline{toc}{chapter}{List of Figures}
+\addcontentsline{toc}{section}{List of Figures}
 \listoffigures
 
 \clearpage
 \phantomsection
-\addcontentsline{toc}{chapter}{List of Algorithms}
+\addcontentsline{toc}{section}{List of Algorithms}
 \listofalgorithms
 
-%%% Tabulky v diplomové práci, existují-li.
-%\chapwithtoc{List of Tables}
 \clearpage
 \phantomsection
-\addcontentsline{toc}{chapter}{List of Tables}
+\addcontentsline{toc}{section}{List of Tables}
 \listoftables
 
-%%% Použité zkratky v diplomové práci, existují-li, včetně jejich vysvětlení.
-
 \clearpage
 \phantomsection
-\addcontentsline{toc}{chapter}{List of Abbreviations}
-%\chapter*{List of Abbreviations}
-\printnomenclature[2cm]
+\addcontentsline{toc}{section}{List of Abbreviations}
 \label{chapter-list-abbreviations}
+\printnomenclature[2cm]
 
-%%% Přílohy k diplomové práci, existují-li (různé dodatky jako výpisy programů,
-%%% diagramy apod.). Každá příloha musí být alespoň jednou odkazována z vlastního
-%%% textu práce. Přílohy se číslují.
-
-%\appendix
 
 \openright
+\clearpage
 \phantomsection
 \addappheadtotoc
 \renewcommand{\appendixname}{Appendix}
-%\addcontentsline{toc}{chapter}{Appendices}
+
 \begin{appendices}
-
-\input{appendix-a-jinfer}
-
-\include{appendix-b-iss}
-
-\include{appendix-c-trace}
-
+  \input{appendix-a-jinfer} % TODO include?
+  \include{appendix-b-iss}
+  \include{appendix-c-trace}
 \end{appendices}
+
 \end{document}

@@ -413,7 +413,7 @@ See Listing \ref{listing-ih-removeworst} for details.
 
 This is again a rather trivial diversification improvement heuristic. By removing a random subset of specified size from each solution in the pool, it provides the variability needed to escape from local optima in the solution space.
 
-The number of AMs to remove from each solution is specified as ratio from $(0, 1)$ of the solution size (number of AMs in solution). For example, \heu{Random Remove} with $ratio = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
+The number of AMs to remove from each solution is specified as fraction from $(0, 1)$ of the solution size (number of AMs in solution). For example, \heu{Random Remove} with $fraction = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
 
 This heuristic returns a pool of solutions of the same size as it got on its input.
 
@@ -424,7 +424,7 @@ See Listing \ref{listing-ih-randomremove} for pseudocode.
 \label{listing-ih-randomremove}
 \begin{algorithmic}
 \REQUIRE $FP$ pool of feasible solutions
-\REQUIRE $k \in (0,1)$ ratio of AMs to remove from each $s \in FP$
+\REQUIRE $k \in (0,1)$ fraction of AMs to remove from each $s \in FP$
 \ENSURE pool of feasible solutions
 \FORALL{$s \in FP$}
   \STATE $K \gets k * |s|$
@@ -436,7 +436,7 @@ See Listing \ref{listing-ih-randomremove} for pseudocode.
 
 \subsubsection{\heu{Hungry}}
 
-This simple improvement heuristic assumes that the solutions in the pool are not ``complete", i.e. there are AMs that could be added to them without violating the ID set condition.
+This simple improvement heuristic assumes that the solutions in the pool are not ``complete'', i.e. there are AMs that could be added to them without violating the ID set condition.
 
 \heu{Hungry} tries to improve each solution in the feasible pool in the following way. It orders all candidate AMs not present in the solution by decreasing weight. Afterwards, it iteratively tries to extend the solution with these AMs, taking care not to violate the ID set condition. The resulting solution (whether any AMs were added or not) is then returned to the pool. This is then intensification, and Listing \ref{listing-ih-hungry} captures the process.\\
 

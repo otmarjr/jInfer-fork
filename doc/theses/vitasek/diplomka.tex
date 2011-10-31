@@ -18,6 +18,7 @@
 \usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{complexity}
+%\usepackage{refcheck}
 \usepackage[pdfborder=0 0 0,pdftex,unicode]{hyperref}
 \DeclareFontShape{OT1}{cmtt}{bx}{n}{<5><6><7><8><9><10><10.95><12><14.4><17.28><20.74><24.88>cmttb10}{}
 
@@ -81,8 +82,8 @@
 \makeatother
 
 \def\chapwithtoc#1{
-\chapter*{#1}
-\addcontentsline{toc}{chapter}{#1}
+  \chapter*{#1}
+  \addcontentsline{toc}{chapter}{#1}
 }
 
 \begin{document}
@@ -100,12 +101,13 @@
 % - make sure there are no singletons
 % - make sure LaTeX does not complaint much about under/overfullness
 % - make sure everything is defined and referenced
-% - make sure all the heu/data set names are consistent. This holds especially for GLPK (tool) / Glpk (heu) and FIDAX
+% + make sure there is nothing in the bibliography that is unreferenced
+% + make sure all the heu/data set names are consistent. This holds especially for GLPK (tool) / Glpk (heu) and FIDAX
 % - make sure that when referring to heus in algorithms, e.g. when describing how experimental sets are constructed, we correctly refer to their parameters as described in their pseudocodes
 % - the official name for things like OVA1 and 100-100 is (test) data set. Make sure I am not calling it files or anything else.
 % - make sure labels have consistent names
-% - ratio -> FRACTION of XYZ to fix/remove/...
-% - what style of quotation marks to use?
+% + ratio -> FRACTION of XYZ to fix/remove/...
+% + what style of quotation marks to use? (`` and '')
 
 %%% Titulní strana práce ======================================================
 \pagestyle{empty}

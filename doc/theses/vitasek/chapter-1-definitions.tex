@@ -3,7 +3,7 @@
 
 \section{XML Tree}
 
-We shall use the representation introduced in \cite{fidax}, where an XML file is represented by a labeled tree consisting of nodes for elements, attributes and simple text data. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the referenced article does.
+We shall use the representation introduced in \cite{fidax}, where an XML file is represented by a labeled tree consisting of nodes for elements, attributes and simple text data. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the cited article does.
 
 Without a loss of generality we ignore the actual ordering of nodes in the tree.
 
@@ -31,34 +31,34 @@ This example introduces an XML file fragment that will be used for demonstration
 Furthermore, we denote $\mathcal{I}$ the set of all ids and $\mathcal{V}$ the set of all values in the document. We will need two more definitions from the article.
 
 \begin{define}[Node equality]
-	$v_1$ and $v_2$ are node equal, written $v_1 =_n v_2$ iff $id(v_1) = id(v_2)$.
+	$v_1$ and $v_2$ are \textit{node equal}, written $v_1 =_n v_2$ iff $id(v_1) = id(v_2)$.
 \end{define}
 
 \begin{define}[Value equality]
-	$v_1$ and $v_2$ are value equal, written $v_1 =_v v_2$ iff $value(v_1) = value(v_2)$.
+	$v_1$ and $v_2$ are \textit{value equal}, written $v_1 =_v v_2$ iff $value(v_1) = value(v_2)$.
 \end{define}
 
-\section{ID, IDREF, IDREFS Attributes}
+\section{\texttt{ID}, \texttt{IDREF}, \texttt{IDREFS} Attributes}
 \label{section-definitions-id-attributes}
 
-According to \cite{Bray:08:EML}, an XML attribute may have the type \textit{ID}, \textit{IDREF} or \textit{IDREFS} (among others). Following constraints are related to these types.
+According to \cite{Bray:08:EML}, an XML attribute may have the type \texttt{ID}, \texttt{IDREF} or \texttt{IDREFS} (among others). Following constraints are related to these types.
 
 \begin{quote}
-\textbf{Validity constraint: ID}
+\textbf{Validity constraint: \texttt{ID}}
 
-Values of type \textbf{ID} \textsc{must} match the Name production. A name \textsc{must not} appear more than once in an XML document as a value of this type; i.e., \textbf{ID} values \textsc{must} uniquely identify the elements which bear them.
+Values of type \texttt{ID} \textsc{must} match the Name production. A name \textsc{must not} appear more than once in an XML document as a value of this type; i.e., \texttt{ID} values \textsc{must} uniquely identify the elements which bear them.
 
-\textbf{Validity constraint: One ID per Element Type}
+\textbf{Validity constraint: One \texttt{ID} per Element Type}
 
-An element type \textsc{must not} have more than one \textbf{ID} attribute specified.
+An element type \textsc{must not} have more than one \texttt{ID} attribute specified.
 
-\textbf{Validity constraint: ID Attribute Default}
+\textbf{Validity constraint: \texttt{ID} Attribute Default}
 
-An \textbf{ID} attribute \textsc{must} have a declared default of \textbf{\#IMPLIED} or \textbf{\#REQUIRED}.
+An \texttt{ID} attribute \textsc{must} have a declared default of \texttt{\#IMPLIED} or \texttt{\#REQUIRED}.
 
-\textbf{Validity constraint: IDREF}
+\textbf{Validity constraint: \texttt{IDREF}}
 
-Values of type \textbf{IDREF} \textsc{must} match the Name production, and values of type \textbf{IDREFS} \textsc{must} match Names; each Name \textsc{must} match the value of an \textbf{ID} attribute on some element in the XML document; i.e. \textbf{IDREF} values \textsc{must} match the value of some ID attribute.
+Values of type \texttt{IDREF} \textsc{must} match the Name production, and values of type \texttt{IDREFS} \textsc{must} match Names; each Name \textsc{must} match the value of an \texttt{ID} attribute on some element in the XML document; i.e. \texttt{IDREF} values \textsc{must} match the value of some \texttt{ID} attribute.
 \end{quote}
 
 %\section{XML Keys} - is this necessary at all?
@@ -129,7 +129,7 @@ An attribute mapping model is a data structure containing the information about 
 \section{ID Set}
 \label{section-definitions-id-set}
 
-Based on the requirements for an ID attribute from Section \ref{section-definitions-id-attributes} we will define ID set with the help of the following definition.
+Based on the requirements for an \texttt{ID} attribute from Section \ref{section-definitions-id-attributes} we will define ID set with the help of the following definition.
 
 \begin{define}[Candidate attribute mapping]
 An attribute mapping $m$ is a \textit{candidate attribute mapping} if it is an injective function, that is,
@@ -146,16 +146,16 @@ A set of candidate attribute mappings $I = \{m_1, \ldots m_n\}$ is an \textit{ID
 \[\bigcap_{m_i \in I} \tau(m_i) = \emptyset \wedge \bigcap_{m_i \in I} \iota(m_i) = \emptyset\]
 \end{define}
 
-That is, an ID set has images without repeating values and all the types are unique (an element cannot have more than one ID attribute).
+That is, an ID set has images without repeating values and all the types are unique (an element cannot have more than one \texttt{ID} attribute).
 
 \paragraph{Example}
 Returning to our example, the following are all the possible ID sets: $\{ M_{y}^{a} \}, \{ M_{y}^{b} \}, \{ M_{y}^{b}, M_{z}^{a} \}, \{ M_{y}^{c} \}, \{ M_{y}^{c}, M_{z}^{a} \}$. Note that once we select an AM of type $y$ we can never add any other with the same type. Note also that $\{ M_{y}^{c}, M_{z}^{a} \}$ is not an ID set, because $\iota(M_{y}^{c}) \cap \iota(M_{z}^{a}) \neq \emptyset$.
 
-\subsection{IDREF and IDREFS Condition}
+\subsection{\texttt{IDREF} and \texttt{IDREFS} Condition}
 
-Given an ID set $I$, the requirements from Section \ref{section-definitions-id-attributes} give us the following condition for an attribute mapping $m$ to be marked IDREF.
+Given an ID set $I$, the requirements from Section \ref{section-definitions-id-attributes} give us the following condition for an attribute mapping $m$ to be marked \texttt{IDREF}.
 \[\iota(m) \subseteq \bigcup_{m_i \in I} \iota(m_i)\]
-Furthermore if $m$ contains multivalued attributes, it is to be marked IDREFS.
+Furthermore if $m$ contains multivalued attributes, it is to be marked \texttt{IDREFS}.
 
 \section{Attribute Mapping Weight}
 \label{section-definitions-weight}
@@ -178,8 +178,6 @@ The support of attribute mapping $M_x^y$ is the fraction of edges in the XML tre
 
 \paragraph{Example}
 Support of $M_{y}^{a}$ in our example is $2 / (2+1+1+1) = 0.4$. Support of every other mapping is $1 / (2+1+1+1) = 0.2$.\\
-
-Note that this definition of weight is quite arbitrary and all the algorithms mentioned later could easily work with AM weight defined in any other way, even for example defined interactively by the user.
 
 \subsection{Coverage}
 
@@ -205,6 +203,8 @@ For $\alpha, \beta \geq 0$ as relative priorities of support and coverage we def
 For a set of AMs (which may or may not be an ID set) $S = \{m_1, \ldots m_i\}$ we define the weight of this set as the sum of the weights of its AMs.
 \[weight(S) = \sum_{m \in S} weight(m)\]
 \end{define}
+
+Note that this definition of weight is quite arbitrary and all the algorithms mentioned later could easily work with AM weight defined in any other way, even for example defined interactively by the user.
 
 \section{Independent Set}
 \label{section-definitions-is}

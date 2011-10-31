@@ -307,7 +307,7 @@ We need a pool size of one and only a single iteration - both \heu{FIDAX} and \h
 
 The experimental results are summarized in Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. As trivial a heuristic \heu{Hungry} is, it is still able to improve the ID set found by \heu{FIDAX} by as much as almost 50\% (the last row, \dataset{100-1000}).
 
-Table \ref{table-experiments-fidax-and-hungry-idsets} lists the ID attributes found in both cases for this most extreme input, \dataset{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as ID attribute''.
+Table \ref{table-experiments-fidax-and-hungry-idsets} lists the \texttt{ID} attributes found in both cases for this most extreme input, \dataset{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as \texttt{ID} attribute''.
 
 \begin{table}
   \caption{Results of adding \heu{Hungry} after \heu{FIDAX}}
@@ -714,7 +714,7 @@ Our experimental set will contain 50 iterations * 2 = 100 experimental configura
 
 The results are summarized in Figure \ref{image-experiment-ignore-text-data}. Boxplots drawn in dashed lines represent the original case, not ignoring the text data. Solid lines represent the case where we ignore the text data.
 
-Interestingly, the grammar extraction times tend to be shorter in the case when text data is not ignored, although this is inconclusive. However, there is a clear improvement of about 50 \% in case of model creation times. The conclusion then is to ignore the simple text node content whenever possible when finding ID attributes.
+Interestingly, the grammar extraction times tend to be shorter in the case when text data is not ignored, although this is inconclusive. However, there is a clear improvement of about 50 \% in case of model creation times. The conclusion then is to ignore the simple text node content whenever possible when finding \texttt{ID} attributes.
 
 \begin{figure}
   \caption{Ignoring Text Data}

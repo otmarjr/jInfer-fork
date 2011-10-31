@@ -3,17 +3,17 @@
 
 Along with technologies such as SQL/noSQL databases, proprietary binary file formats, plain-text configuration files and JSON, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema to describe XML structure exist for a long time, most of the documents use outdated or no schema at all (\cite{1802522}). To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in \cite{ahonen, bex, vyhnanovska}. In particular, \cite{archdoc} introduces the jInfer schema inference framework, dealing primarily with the structural parts of the schema: how all the elements, attributes and text data are to be organized in an XML document conforming to that schema. Inference of this kind of structural information was greatly improved in \cite{anti}.\\
 
-But the schema is not the only constraint that can be imposed on an XML document. Any textual or numerical value featured in the document may be subject to type constraints, such as the requirement to conform to a specific regular expression. Furthermore, the concept of \textit{keys} and \textit{foreign keys}, well known from the relational database world, applies to schemas as well and will be the topic of this work. One could go even further and try to find even more sophisticated relations in the data, such as \textit{functional dependencies} well researched in \cite{sviro}.\\
+But the schema is not the only constraint that can be imposed on an XML document. Any textual or numerical value featured in the document may be subject to type constraints, such as the requirement to conform to a specific regular expression. Furthermore, the concept of \textit{keys} and \textit{foreign keys}, well known from the relational database world, applies to schemas as well and will be the topic of this work. One could go even further and try to find even more sophisticated relations in the data, such as \textit{functional dependencies} researched in \cite{sviro}.\\
 
-From all the constraints that can be applied to an XML document by means of its schema, this work will focus on keys and foreign keys. Most important concepts in this field are introduced in \cite{keX} and formalized in the notions of \texttt{ID/IDREF/IDREFS} attributes in DTD and XSD and \texttt{xs:key/xs:keyref} structures in XSD (both in \cite{Bray:08:EML}).\\
+From all the constraints that can be applied to an XML document by means of its schema, this work will focus on keys and foreign keys. Most important concepts in this field are introduced in \cite{keX} and formalized in the notions of \texttt{ID}/\.\texttt{IDREF}/\.\texttt{IDREFS} attributes in DTD and XSD and \texttt{xs:key/xs:keyref} structures in XSD (both in \cite{Bray:08:EML}).\\
 
-The scope of this work is finally limited to the inference of \texttt{ID/IDREF/IDREFS} from existing XML documents. ID attributes were chosen over \texttt{xs:key} because the preliminary research found that while it is possible to find real-life XML data with schemas containing \texttt{xs:key} structure, schemas with ID attributes are much more common and it is much easier to obtain large data sets for experiments. % TODO something like even the search for ID sets is interesting enough?
+The scope of this work is finally limited to the inference of \texttt{ID}/\.\texttt{IDREF}/\.\texttt{IDREFS} from existing XML documents. \texttt{ID} attributes were chosen over \texttt{xs:key} because the preliminary research found that while it is possible to find real-life XML data with schemas containing \texttt{xs:key} structure, schemas with \texttt{ID} attributes are much more common and it is much easier to obtain large data sets for experiments. % TODO something like even the search for ID sets is interesting enough?
 
 \section{Structure of the thesis}
 
 The thesis will be structured as follows.
 
-First, we will introduce a few notions required throughout the work, such as XML tree, ID attributes, ID sets, linear programming and mixed integer problem. 
+First, we will introduce a few notions required throughout the work, such as XML tree, \texttt{ID} attributes, ID sets, linear programming and the mixed integer problem.
 
 We will then review approaches to ID attribute search from previous articles on this topic and formulate the problem of finding the optimal ID set.
 
@@ -21,9 +21,9 @@ This will lead us to the NP-complete problem of Maximum Independent Set, where w
 
 We will discuss a closely related Mixed Integer Problem and show that by solving MIP we can solve the Maximum Independent Set and thus the original problem of optimal ID set.
 
-Afterwards, we will show how to use an external MIP solver, demonstrate that this can take too long and how to use a heuristic approach to find good solutions much faster.
+Afterwards, we will show how to use an external MIP solver and demonstrate that this can take too much time. Next we show how to use a heuristic approach to find good solutions much faster.
 
-An extension to jInfer for finding ID attributes using MIP solver and a combination of heuristics will be presented and experimentally evaluated in the closing chapters.
+An extension to jInfer for finding \texttt{ID} attributes using MIP solver and a combination of heuristics will be presented and experimentally evaluated in the closing chapters.
 
 \section{Conventions}
 

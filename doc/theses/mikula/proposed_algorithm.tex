@@ -1,0 +1,57 @@
+\chapter{Proposed Algorithm}
+\todo[inline]{Nejaky uvod}
+\todo[inline]{Lexikalna a syntakticka analyza z diplomky J. Schejbala}
+\todo[inline]{Staticka analyza typov vyrazov}
+
+\section{Inference of Built-in Types}
+Prejst kazdy vyraz a ak z neho vieme nieco odvodit, tak to urobime.
+
+Odvodit nieco vieme ak:
+Nejaky podvyraz je path expression (alebo ine urcenie uzlu alebo hodnot uzlov \todo{toto domysliet}
+a zaroven cely vyraz
+1) je function call a podvyraz je jeho parameter a typ tohoto parametra vieme odvodit z hlavicky funkcie
+2) je aritmeticka operacia a podla typov operandov vieme urcit typ podvyrazu (tj napriklad sa uzly porovnavaju s konstantou 5) \todo{co vsetko?}
+3) dalsie konstrukcie ako cast as, type constructor, ... \todo{potrebuje riesit? princip je uplne rovnaky}
+
+
+
+\begin{algorithm}
+\caption{Repair RW-XML tree}
+\label{propAlgo}
+\begin{algorithmic}[1]
+\REQUIRE $queryTrees$: A list of input query trees
+\ENSURE Uzly a ich typy nejakym sposobom
+
+\STATE initializacia nodeTypes
+\FORALL{$queryTree \in queryTrees$}
+    \STATE $partialNodeTypes = processQueryTree(queryTree)$
+    \STATE $nodeTypes = mergeNodeTypes(nodeTypes, partialNodeTypes)$
+\ENDFOR
+\RETURN $nodeTypes$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Process arithmetic comparison}
+\label{algorithm_process_arithmetic comparison}
+\begin{algorithmic}[1]
+\REQUIRE $expr$: An expression which is an arithmetic comparison
+\ENSURE Uzly a ich typy nejakym sposobom
+
+\STATE initializacia nodeTypes
+\RETURN $nodeTypes$
+
+
+\WHILE{$resultRXT \not \models_w \mathcal{FD}$}
+    \STATE $S = \emptyset$ \COMMENT Set of repair groups
+    \FORALL{$(F: S \rightarrow p) \in \mathcal{FD}$ s.t. $RXT \not \models_w F$}
+    	\FORALL{$t_1, t_2$ tuples of $RXT$ s.t. $t_1, t_2$ do not weakly satisfy $F$}
+		    \STATE $S = S \cup computeRepairGroup(F, t_1, t_2, RXT, S)$
+	    \ENDFOR
+    \ENDFOR
+
+    \STATE $R = getRepair(S, RXT)$
+    \STATE $resultRXT = applyRepair(R, resultRXT)$
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}

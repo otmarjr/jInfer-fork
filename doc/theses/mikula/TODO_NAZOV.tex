@@ -1,29 +1,40 @@
 \chapter{Diskusia k problemom}
 \todo[inline]{Vhodny nazov pre tuto kapitolu}
-Based on the previous chapter, we have quite wide space of possible utilization of XQuery queries. This chapter discusses some of questions and issues that emerged in an early phase of algorithm fabrication.
+According to the analysis in the previous chapter, there is quite a wide range of possible utilization of XQuery queries. Besides analysis of what information can be extracted from queries, it is needed to devise how the queries will be processed. This chapter discusses some questions and issues that emerged in an early phase of the algorithm fabrication.
 
-\section{Possibilities and Forms of Query Exploitation}
-Queries can be exploited in several ways and levels. A basic query utilization can be achieved by analysis of queries without any other input data. A more complex method can utilize queries along with XML data. Another step can be evaluation of the queries using the XML data and consecutive analysis of the results. Even the process of evaluation can be analyzed to obtain some useful information. \todo[inline]{Uviest nejake priklady, co by sa dalo v ktorej faze zistovat?}
+\section{Input Data}
+The first important question is what is the input of the algorithm. A basic query utilization can be achieved by analysis of queries without any other input data. The analysis of XQuery in the previous chapter discusses mostly XQuery constructs which can be utilized without respective XML data, for example the inference of built-it types. This independence is also the main advantage of this approach for if there are no XML data available this approaches can be still used. 
 
-\todo[inline]{Dopisat, ako sme sa rozhodli. Este presne neviem, ale pravdepodobne prva faza bude spracovanie cisto queries a druha by mohla byt kontrola na zaklade XML dat. Na dalsie vstupne data asi nebude kapacita}
+A more complex method can utilize queries along with the respective XML data. As discussed in the previous chapter, an element and attribute structure can be inferred from the XML data in a more convenient way. Also, the XML data can be used to verify information inferred from the queries or vice-versa. For example, utilizing the requeries some attribute is considered as a key of its element. But in the data there are elements with the same value of this attribute, and thus, it cannot be the key. Vice-versa, we have a notion that the attribute might be the key but we are not sure about that. Analysing of the data and finding that values of the attribute are unique can increase our confidence. 
 
-Another important question is how can be the queries processed. Will they be just searched for certain patterns like it is performed in method \cite{Necasky:2009:DXK:1529282.1529414} or will they be processed in a more sophisticated way? That could incorporate lexical and syntactic analyses \todo{referencie?} or even a form of an analysis of semantics \todo{referencia?}.
+Another step can be evaluation of the queries using the XML data and consecutive analysis of the results. And even the process of evaluation can be analyzed to obtain some useful information. \todo[inline]{Toto skusit rozpisat nejak podrobnejsie?}
+
+\todo[inline]{Dopisat, ako sme sa rozhodli - nejaky zaver. Este presne neviem, ale pravdepodobne prva faza bude spracovanie cisto queries a druha by mohla byt kontrola na zaklade XML dat. Na dalsie vstupne data asi nebude kapacita}
+
+\section{Forms of Query Precessing}
+Another important question is how the queries can be processed. Will they be just searched for certain patterns like it is performed in method \cite{Necasky:2009:DXK:1529282.1529414} or will they be processed in a more sophisticated way? That can mean incorporating lexical and syntactic analyses \todo{referencie?} or even a form of an analysis of semantics \todo{referencia?}.
 
 A result of the lexical and syntantic analyses can be some kind of so called syntax tree \todo{referencia}. It is a structure representing a word according to a formal grammar of some language \todo{definovat grammar, tree, language}. In our case, the language is XQuery, its grammar is defined in \todo{ref} and every query is a word of the XQuery language. Leafs of the tree represent terminals of the grammar while inner nodes represent non-terminals. \todo{priklad nejakeho stromu?} From point of view of this work, the syntax tree can be perceived as a preprocessed form of a query keeping its complete meaning and making its further processing more convenient. For instance, the tree can simplify a search for FLWOR statements. It is transitioned and nodes representing FLWORs are found. Then each subtree determined by one of the found nodes represents a FLWOR statement and it can be analyzed further.
 
-The syntax tree can be also extended by additional information. An example is a static analysis of expression types. Types of literal expressions are defined, functions have return types, path expressions return nodes, etc. Applying rules defined in \todo{ref} can be determined types of complex expressions. These can be helpful for example in the analysis of built-in types of nodes.  
-\todo[inline]{priklad}
+The syntax tree can be also extended by additional information. An example is a static analysis of expression types. Types of literal expressions are defined, functions have return types, path expressions return nodes, etc. Applying rules defined in \todo{ref} can be determined types of complex expressions. These can be helpful for example in the analysis of built-in types of nodes as discussed in the previous chapter. 
+
+Following text is an example of inference of a more complex query processing. Consider the following part of a query.
+\begin{verbatim}
+declare function local:getB($id as xs:string) as element() {
+  //A[@id = $id]/B
+}
+... local:getBs("id") > 10 ...
+\end{verbatim}
+The query consists of a function declaration and an arithmetic comparison. The comparison compares a result of the function call and literal value \texttt{10}. For the type of \texttt{10} is \texttt{xs:integer} the type of the function call has to be convertible to \texttt{xs:double}. It has to be some numeric type. The function returns a path expression typed as \texttt{element()}. That means the function returns one element \todo{pravda?}. In the path expression, the argument \texttt{\$id} can be substituted by the real value specified in the call. Thus, the return expression is \texttt{//A[@id = "id"]/B}. Therefore, we can infer that element \texttt{B} in element \texttt{A} with attribute \texttt{id} equaling string value \texttt{"id"}, is of some numeric type. And, for the function is parametrized there is a notion that this statement may be correct also for other elements \texttt{A} and \texttt{B}.
+
+A more complex processing of queries provides a better starting point for consecutive analyses and also for further refinements and additions. But it is also more difficult in terms of implementation. On the other hand, simplier approaches of the query processing such as the pattern finding are easier to implement but they also limit possibilities the whole query utilization.
+
 \todo[inline]{Pre co sme sa rozhodli?}
 
 
-\section{Inference of Structure}
+\section{Inference of XML Structure}
+odvodzovanie struktury z queries
 
-1) odvodzovanie struktury z queries
+\section{Rozsirenie nejakej existujucej metody}
 
-2) pattern searching vs lexical, syntax and semantics analysis
-
-3) vstupne data
-
-4) napojenie na existujucu metodu
-
-5) spravavanie dotazov - len ich analyza VS ich spustanie
+\section{Conclusion}

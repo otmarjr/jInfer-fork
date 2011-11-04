@@ -1,13 +1,13 @@
-\chapter{Diskusia k problemom}
+\chapter{Pre-creation of Algorithm}
 \todo[inline]{Vhodny nazov pre tuto kapitolu}
-According to the analysis in the previous chapter, there is quite a wide range of possible utilization of XQuery queries. Besides analysis of what information can be extracted from queries, it is needed to devise how the queries will be processed. This chapter discusses some questions and issues that emerged in an early phase of the algorithm fabrication.
+According to the analysis in the previous chapter, there is quite wide range of possible utilizations of XQuery queries. Besides analysis of what information can be extracted from queries, it is needed to devise how the queries will be processed. This chapter discusses some questions and issues that emerged in an early phase of the algorithm fabrication.
 
 \section{Input Data}
 The first important question is what is the input of the algorithm. A basic query utilization can be achieved by analysis of queries without any other input data. The analysis of XQuery in the previous chapter discusses mostly XQuery constructs which can be utilized without respective XML data, for example the inference of built-it types. This independence is also the main advantage of this approach for if there are no XML data available this approaches can be still used. 
 
-A more complex method can utilize queries along with the respective XML data. As discussed in the previous chapter, an element and attribute structure can be inferred from the XML data in a more convenient way. Also, the XML data can be used to verify information inferred from the queries or vice-versa. For example, utilizing the requeries some attribute is considered as a key of its element. But in the data there are elements with the same value of this attribute, and thus, it cannot be the key. Vice-versa, we have a notion that the attribute might be the key but we are not sure about that. Analysing of the data and finding that values of the attribute are unique can increase our confidence. 
+A more complex method can utilize queries along with the respective XML data. As discussed in the previous chapter, an element and attribute structure can be inferred from the XML data in a more convenient way. Also, the XML data can be used to verify information inferred from the queries or vice-versa. For example, utilizing the queries, some attribute is considered a key of its element. But in the data there are elements with the same value of this attribute, and thus, it cannot be the key. Vice-versa, we have a notion that the attribute might be the key but we are not sure about that. Analysing of the data and finding that values of the attribute are unique can increase our confidence. 
 
-Another step can be evaluation of the queries using the XML data and consecutive analysis of the results. And even the process of evaluation can be analyzed to obtain some useful information. \todo[inline]{Toto skusit rozpisat nejak podrobnejsie?}
+Another step can be evaluation of the queries using the XML data and consecutive analysis of the results. And even the process of evaluation itself can be analyzed to obtain some useful information. \todo[inline]{Toto skusit rozpisat nejak podrobnejsie?}
 
 \todo[inline]{Dopisat, ako sme sa rozhodli - nejaky zaver. Este presne neviem, ale pravdepodobne prva faza bude spracovanie cisto queries a druha by mohla byt kontrola na zaklade XML dat. Na dalsie vstupne data asi nebude kapacita}
 
@@ -31,10 +31,14 @@ A more complex processing of queries provides a better starting point for consec
 
 \todo[inline]{Pre co sme sa rozhodli?}
 
-
 \section{Inference of XML Structure}
-odvodzovanie struktury z queries
+The question of the inference of XML structure from queries is partially discussed in the previous chapter. We are able to infer XML structure from queries without their evaluation, but in a limited way. This inference is based on an analysis of path expressions. Its limitation involves the following issues. When we infer some subelements of a certain element we often cannot be sure about their number of occurrences. Also, we cannot be sure if every occurrence of the certain element contains these subelements and we even do not know if at least one occurrence of the element contains them. Thus, the inferred statement is more likely an indication than a fact about the structure.
 
-\section{Rozsirenie nejakej existujucej metody}
+If we want to infer the structure more precisely we need to evaluat the queries, and thus, we need the XML data to evaluate the queries upon. But, if we have the XML data we can infer the structure directly from them in an easier and more convenient way.
 
-\section{Conclusion}
+Considering the described issues, we concluded not to deal with the inference of XML structure in this thesis.
+
+\section{Extension of an Existing Approach}
+The existing approaches of XML schema inference deal mainly with the inference of XML structure. As stated in the previous section, this work does not deal with the inference of XML structure, and hence, the extension of an existing approach will probably be some kind of an independent addition instead of modification and refinement of its core algorithm.
+
+The existing approaches take the XML data on their input. Therefore, the basic idea is that the input will be extended also for XQuery queries and the algorithm will consist of three phases. The first phase will be taken from the existing approach and it will process the XML data to infer the XML structure. The second phase will process the XQuery queries and it will infer statements that can be inferred indepedently of the XML data. The third phase will merge the statements inferred in the second phase into the resulting schema. This phase may also infer additional statements from both the XML data and the queries or it may try to verify the statements from the second phase with respect to the XML data.

@@ -3,15 +3,47 @@
 \todo[inline]{Lexikalna a syntakticka analyza z diplomky J. Schejbala}
 \todo[inline]{Staticka analyza typov vyrazov}
 
-\section{Construction of a Syntax Tree}
+\section{Step 1: Construction of a Syntax Tree}
 The first step of the algorithm involves lexical and syntactic analyses and produces a syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are much more an issue of implementation than an issue of principle and they are not directly related to the inference, we will not describe them in this thesis.
 
 The mentioned thesis provides us with a helpful processing of XQuery queries, however, it needs to be slightly modified to suit our case. The processing writes its result to a file in an XML representation. Instead of that, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though, this requirement concerns modifications of implementation while the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
-Since we only modified the implementation of the output representation, the design of the syntax tree remains consequent to the entire design of the processing. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further devided. Examples of such constructs are FLWORs, if-than-else and function calls. Leaf nodes represents elements of XQuery language that can be devided no more. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}.
+Since we only modified the implementation of the output representation, the design of the syntax tree remains consequent to the entire design of the processing. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are FLWORs, if-than-else and function calls. Leaf nodes represents elements of XQuery language that can be devided no more. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
 
 \todo[inline]{priklad stromu}
 \todo[inline]{niekam popisat celu moznu strukturu stromu - najskor do appendixu}
+
+\section{Step 2: Static Analysis of Expression Types}
+In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. This process can be divided into two substeps.
+
+\subsection{Determination of Function Return Types}
+Determination of Return Types of Functions is needed because function calls can appear in expressions. However a return type of a function can be determined when the analysis of expressions encounters a call of the function, it involves multiple number of transitions of the syntax tree in a search for a definition of a particular function.
+
+Instead, the syntax tree can be searched just once, before the analysis of expressions, and return types of all functions found will be stored within an associative array. On request, this array will retrieve the return type of a specified function.
+
+A simple algorithm is presented in \ref{ALG_determination_of_function_return_types} \todo{uvadzat aj taketo jednoduche funkcie?}. It uses \texttt{getFunctionDeclarationNodes()} function, which is not presented due to its simplicity. It returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in query prolog. 
+
+For simplicity, we will focus on locally defined functions. We will not determine types of functions defined in other modules \todo{je to ok?}. Return types of built-in functions are fixed, and thus, there is no need to analyze them.
+
+\begin{algorithm}
+\caption{Determination of Function Return Types}
+\label{ALG_determination_of_function_return_types}
+\begin{algorithmic}[1]
+\ENSURE Associative array of function names with their types.
+
+\STATE $functionTypes$ = empty associative array
+\FORALL{$functionDeclarationNode \in getFunctionDeclarationNodes()$}
+    \STATE $functionName = functionDeclarationNode.getFunctionName()$
+    \STATE $functionTypes[functionName] = functionDeclarationNode.getReturnType()$
+\ENDFOR
+\RETURN $functionTypes$
+\end{algorithmic}
+\end{algorithm}
+
+For the rest of the thesis, we assume function \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
+
+\subsection{Samotna analyza expressions}
+\todo[inline]{Je nutne analyzovat aj typy deklarovanych premennych, kedze tie sa mozu pouzivat vo vyrazoch.}
 
 \section{Inference of Built-in Types}
 Prejst kazdy vyraz a ak z neho vieme nieco odvodit, tak to urobime.

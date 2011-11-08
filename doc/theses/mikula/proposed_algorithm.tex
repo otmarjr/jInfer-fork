@@ -3,6 +3,16 @@
 \todo[inline]{Lexikalna a syntakticka analyza z diplomky J. Schejbala}
 \todo[inline]{Staticka analyza typov vyrazov}
 
+\section{Construction of a Syntax Tree}
+The first step of the algorithm involves lexical and syntactic analyses and produces a syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are much more an issue of implementation than an issue of principle and they are not directly related to the inference, we will not describe them in this thesis.
+
+The mentioned thesis provides us with a helpful processing of XQuery queries, however, it needs to be slightly modified to suit our case. The processing writes its result to a file in an XML representation. Instead of that, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though, this requirement concerns modifications of implementation while the core of the processing remains untouched. Therefore, we also do not describe these modifications.
+
+Since we only modified the implementation of the output representation, the design of the syntax tree remains consequent to the entire design of the processing. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further devided. Examples of such constructs are FLWORs, if-than-else and function calls. Leaf nodes represents elements of XQuery language that can be devided no more. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}.
+
+\todo[inline]{priklad stromu}
+\todo[inline]{niekam popisat celu moznu strukturu stromu - najskor do appendixu}
+
 \section{Inference of Built-in Types}
 Prejst kazdy vyraz a ak z neho vieme nieco odvodit, tak to urobime.
 

@@ -14,7 +14,7 @@ Since we only modified the implementation of the output representation, the desi
 \todo[inline]{niekam popisat celu moznu strukturu stromu - najskor do appendixu}
 
 \section{Step 2: Static Analysis of Expression Types}
-In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. This process can be divided into two substeps.
+In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. This process can be divided into three substeps.
 
 \subsection{Determination of Function Return Types}
 Determination of Return Types of Functions is needed because function calls can appear in expressions. However a return type of a function can be determined when the analysis of expressions encounters a call of the function, it involves multiple number of transitions of the syntax tree in a search for a definition of a particular function.
@@ -29,7 +29,7 @@ For simplicity, we will focus on locally defined functions. We will not determin
 \caption{Determination of Function Return Types}
 \label{ALG_determination_of_function_return_types}
 \begin{algorithmic}[1]
-\ENSURE Associative array of function names with their types.
+\ENSURE An associative array of function names with their types.
 
 \STATE $functionTypes$ = empty associative array
 \FORALL{$functionDeclarationNode \in getFunctionDeclarationNodes()$}
@@ -42,8 +42,61 @@ For simplicity, we will focus on locally defined functions. We will not determin
 
 For the rest of the thesis, we assume function \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
-\subsection{Samotna analyza expressions}
+\subsection{Determination of Global Variable Types}
+A similar approaches as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in the definition \todo{je to tak? priklad}. If it is not it may be often deducible from the binding expression.
+
+\begin{algorithm}
+\caption{Determination of an Expression Type}
+\label{ALG_determination_of_an_expression_type}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $exprNode$: An expression node in the syntax tree. \\
+    $contextVarTypes$: Types of local variables valid in current context.
+}
+\ENSURE The expression type.
+
+\STATE $type = null$
+\IF{$exprNode$ represents a literal value}
+     \STATE $type =$ particular literal value type
+\ELSIF{$exprNode$ represents a call of function $f$}
+     \STATE $type = getFunctionReturnType(f)$
+\ELSIF{$exprNode$ represents variable reference $var$}
+     \STATE $type = getVariableType(contextVarTypes, var)$
+\ELSIF{$exprNode$ represents path expression $path$}
+     \STATE $type = TODO$
+\ELSIF{$exprNode$ represents operator $op$}
+      \STATE TODO
+\ENDIF
+
+\RETURN $type$
+\end{algorithmic}
+\end{algorithm}
+
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type than the type is noted. Otherwise, an attempt of the type deduction the expression is be made. The deduction of type from the expression is presented in \ref{ALG_determination_of_an_expression_type}. On input, it takes an expression node and types of local variables that are valid in the expression. The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the type of the expression, its type can be either determined directly or it depends on its subexpressions which types can be determined recursively. In the case of global variables, the argument $contextVarTypes$ is empty because there are no local variables valid in the prolog section.
+
+The types of processed global variables are available trough function $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in \ref{ALG_determination_of_an_expression_type} is defined in \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
+
+\begin{algorithm}
+\caption{Function getVariableType}
+\label{ALG_function_get_variable_type}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $contextVarTypes$: Types of local variables valid in current context. \\
+    $var$: A variable to determine the type of.
+}
+\ENSURE The type of variable $var$.
+
+\IF{$contextVarTypes[var]$ is defined}
+     \RETURN $contextVarTypes[var]$
+\ELSE
+     \RETURN $getGlobalVariableType(var)$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Analysis of Expressions}
 \todo[inline]{Je nutne analyzovat aj typy deklarovanych premennych, kedze tie sa mozu pouzivat vo vyrazoch.}
+
 
 \section{Inference of Built-in Types}
 Prejst kazdy vyraz a ak z neho vieme nieco odvodit, tak to urobime.

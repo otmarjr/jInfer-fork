@@ -94,8 +94,92 @@ The types of processed global variables are available trough function $getGlobal
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Analysis of Expressions}
-\todo[inline]{Je nutne analyzovat aj typy deklarovanych premennych, kedze tie sa mozu pouzivat vo vyrazoch.}
+\subsection{Determination of Expression Types}
+\todo[inline]{VYRIESIT: external variables, scope and visibility of variables - ako si udrziavat}
+
+\begin{algorithm}
+\caption{Function analysisOfExpressionTypes}
+\label{ALG_func_analysisOfExpressionTypes}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $startingNode$: A node determinig a subtree to perform the analysis on \\
+    $contextVarTypes$: Types of local variables valid in the current subtree.
+}
+
+\FORALL{$subnode \in$ all subnodes of $startingNode$}
+    \STATE $analysisOfExpressionTypes(subnode, contextVarTypes)$ \COMMENT{recursion}
+    \IF{$subnode$ defines new variables valid for following subnodes}
+        \STATE $newVarTypes = subnode.variableTypes$
+        \STATE TODO rozsir context
+    \ENDIF
+\ENDFOR
+\IF{$startingNode$ is expression node}
+    \STATE $startingNode.type = determineExpressionType(startingNode)$
+\ENDIF
+\IF{$startingNode$ defines new variables valid in the supernode}
+    \STATE TODO spracuj variables
+    \STATE memorize their types in $startingNode.variableTypes$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\begin{algorithm}
+\caption{Determination of an Expression Type in Query Body}
+\label{ALG_determination_of_an_expression_type_in_query_body}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $exprNode$: An expression node in the syntax tree. \\
+    $contextVarTypes$: Types of local variables valid in the current context.
+}
+\ENSURE The expression type.
+
+\STATE $type = null$
+\IF{$exprNode$ represents a literal value}
+     \STATE $type =$ particular literal value type
+\ELSIF{$exprNode$ represents a call of function $f$}
+     \STATE $type = getFunctionReturnType(f)$
+\ELSIF{$exprNode$ represents variable reference $var$}
+     \STATE $type = getVariableType(contextVarTypes, var)$
+\ELSIF{$exprNode$ represents path expression $path$}
+     \STATE $type = TODO$
+\ELSIF{$exprNode$ represents operator $op$}
+     \STATE TODO
+\ELSIF{$exprNode$ represents $FLWOR$ construct $flwor$}
+     \STATE $contextVarTypes = contextVarTypes + getFLWORVarTypes(flwor)$
+     \STATE
+\ENDIF
+
+\RETURN $type$
+\end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \section{Inference of Built-in Types}

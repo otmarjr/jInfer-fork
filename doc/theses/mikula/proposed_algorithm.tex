@@ -6,18 +6,21 @@
 \section{Step 1: Construction of a Syntax Tree}
 The first step of the algorithm involves lexical and syntactic analyses and produces a syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are much more an issue of implementation than an issue of principle and they are not directly related to the inference, we will not describe them in this thesis.
 
-The mentioned thesis provides us with a helpful processing of XQuery queries, however, it needs to be slightly modified to suit our case. The processing writes its result to a file in an XML representation. Instead of that, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though, this requirement concerns modifications of implementation while the core of the processing remains untouched. Therefore, we also do not describe these modifications.
+The mentioned thesis provides us with a helpful processing of XQuery queries, however, it needs to be slightly modified to suit our case. The processing writes its result to a file in an XML representation. Instead, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though, this requirement concerns modifications of implementation while the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
-Since we only modified the implementation of the output representation, the design of the syntax tree remains consequent to the entire design of the processing. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are FLWORs, if-than-else and function calls. Leaf nodes represents elements of XQuery language that can be devided no more. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
+Since we modified only the implementation of the output representation, the design of the syntax tree remains consequent to the entire design of the processing. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are FLWORs, if-than-else and function calls. Leaf nodes represents elements of XQuery language that can be devided no more. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
 
-\todo[inline]{priklad stromu}
+\todo[inline]{definicia (n-arny, usporiadany z lava do prava) a priklad stromu}
 \todo[inline]{niekam popisat celu moznu strukturu stromu - najskor do appendixu}
+
+\subsection{Vlastnosti stromu}
+\todo[inline]{Napr to, ze pri ceste z vrchola do listu len cez najlavejsie uzly sa nezvacsuje context premennych}
 
 \section{Step 2: Static Analysis of Expression Types}
 In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. This process can be divided into three substeps.
 
 \subsection{Determination of Function Return Types}
-Determination of Return Types of Functions is needed because function calls can appear in expressions. However a return type of a function can be determined when the analysis of expressions encounters a call of the function, it involves multiple number of transitions of the syntax tree in a search for a definition of a particular function.
+Determination of return types of functions is needed because function calls can appear in expressions. However a return type of a function can be determined at the moment the analysis of expressions encounters a call of the function, it involves multiple number of transitions of the syntax tree in a search for a definition of a particular function.
 
 Instead, the syntax tree can be searched just once, before the analysis of expressions, and return types of all functions found will be stored within an associative array. On request, this array will retrieve the return type of a specified function.
 
@@ -46,12 +49,12 @@ For the rest of the thesis, we assume function \texttt{getFunctionReturnType()} 
 A similar approaches as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in the definition \todo{je to tak? priklad}. If it is not it may be often deducible from the binding expression.
 
 \begin{algorithm}
-\caption{Determination of an Expression Type}
-\label{ALG_determination_of_an_expression_type}
+\caption{Function determineExpressionType}
+\label{ALG_func_determineExpressionType}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
     $exprNode$: An expression node in the syntax tree. \\
-    $contextVarTypes$: Types of local variables valid in current context.
+    $contextVarTypes$: Types of local variables valid in the current subtree.
 }
 \ENSURE The expression type.
 
@@ -65,16 +68,45 @@ A similar approaches as in the case of functions can be applied to determine typ
 \ELSIF{$exprNode$ represents path expression $path$}
      \STATE $type = TODO$
 \ELSIF{$exprNode$ represents operator $op$}
-      \STATE TODO
+     \STATE TODO
+\ELSIF{$exprNode$ represents $FLWOR$ construct $flwor$}
+     \STATE  $type =$ type of an expression in the return clause of $flwor$
 \ENDIF
 
 \RETURN $type$
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type than the type is noted. Otherwise, an attempt of the type deduction the expression is be made. The deduction of type from the expression is presented in \ref{ALG_determination_of_an_expression_type}. On input, it takes an expression node and types of local variables that are valid in the expression. The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the type of the expression, its type can be either determined directly or it depends on its subexpressions which types can be determined recursively. In the case of global variables, the argument $contextVarTypes$ is empty because there are no local variables valid in the prolog section.
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type than the type is noted. Otherwise, an attempt of the type deduction of the expression is made. The deduction of the type from the expression is presented in \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression. The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the type of the expression, its type can be either determined directly or it depends on its subexpressions.
 
-The types of processed global variables are available trough function $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in \ref{ALG_determination_of_an_expression_type} is defined in \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
+\begin{algorithm}
+\caption{Function analysisOfExpressionTypes}
+\label{ALG_func_analysisOfExpressionTypes}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $startingNode$: A node determinig a subtree to perform the analysis on \\
+    $contextVarTypes$: Types of local variables valid in the current subtree.
+}
+
+\FORALL{$subnode \in$ all subnodes of $startingNode$}
+    \STATE $analysisOfExpressionTypes(subnode, contextVarTypes)$ \COMMENT{recursion}
+    \IF{$subnode$ defines new variables valid for following subnodes}
+        \STATE $contextVarTypes = merge(contextVarTypes, subnode.variableTypes)$
+    \ENDIF
+\ENDFOR
+\IF{$startingNode$ is expression node}
+    \STATE $startingNode.type = determineExpressionType(startingNode)$
+\ENDIF
+\IF{$startingNode$ (or the subtree) defines new variables valid in the supernode}
+    \STATE determine types of the variables
+    \STATE memorize their types in $startingNode.variableTypes$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+Function $determineExpressionType()$ is called within another function presented in \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Also, this function handles definitions of local variables, so, on request, their types are provided in the scope of their validity (in the subtree(s) which the variables are valid in). The function relies on the fact that definitions of new local variables can make them valid only in nodes with a higher sequence number when numbered in post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, this information can be processed as the type of the new variables can be directly determined since the binding expressions are already processed. The expressions are processed in post-order because of a possible need of currently processed expresion to know types of its subexpressions to determinde its own type.
+
+Function $analysisOfExpressionTypes$ called upon a binding expression of a global variable determines the type of the binding expression, and hence, the type of the variable. In the case of global variables, the argument $contextVarTypes$ is empty because there are no local variables valid in the prolog section.
 
 \begin{algorithm}
 \caption{Function getVariableType}
@@ -94,66 +126,13 @@ The types of processed global variables are available trough function $getGlobal
 \end{algorithmic}
 \end{algorithm}
 
+The types of processed global variables are available trough function $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in \ref{ALG_func_determineExpressionType} is defined in \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
+
+
+
 \subsection{Determination of Expression Types}
 \todo[inline]{VYRIESIT: external variables, scope and visibility of variables - ako si udrziavat}
 
-\begin{algorithm}
-\caption{Function analysisOfExpressionTypes}
-\label{ALG_func_analysisOfExpressionTypes}
-\begin{algorithmic}[1]
-\REQUIRE{\ \\
-    $startingNode$: A node determinig a subtree to perform the analysis on \\
-    $contextVarTypes$: Types of local variables valid in the current subtree.
-}
-
-\FORALL{$subnode \in$ all subnodes of $startingNode$}
-    \STATE $analysisOfExpressionTypes(subnode, contextVarTypes)$ \COMMENT{recursion}
-    \IF{$subnode$ defines new variables valid for following subnodes}
-        \STATE $newVarTypes = subnode.variableTypes$
-        \STATE TODO rozsir context
-    \ENDIF
-\ENDFOR
-\IF{$startingNode$ is expression node}
-    \STATE $startingNode.type = determineExpressionType(startingNode)$
-\ENDIF
-\IF{$startingNode$ defines new variables valid in the supernode}
-    \STATE TODO spracuj variables
-    \STATE memorize their types in $startingNode.variableTypes$
-\ENDIF
-\end{algorithmic}
-\end{algorithm}
-
-
-
-\begin{algorithm}
-\caption{Determination of an Expression Type in Query Body}
-\label{ALG_determination_of_an_expression_type_in_query_body}
-\begin{algorithmic}[1]
-\REQUIRE{\ \\
-    $exprNode$: An expression node in the syntax tree. \\
-    $contextVarTypes$: Types of local variables valid in the current context.
-}
-\ENSURE The expression type.
-
-\STATE $type = null$
-\IF{$exprNode$ represents a literal value}
-     \STATE $type =$ particular literal value type
-\ELSIF{$exprNode$ represents a call of function $f$}
-     \STATE $type = getFunctionReturnType(f)$
-\ELSIF{$exprNode$ represents variable reference $var$}
-     \STATE $type = getVariableType(contextVarTypes, var)$
-\ELSIF{$exprNode$ represents path expression $path$}
-     \STATE $type = TODO$
-\ELSIF{$exprNode$ represents operator $op$}
-     \STATE TODO
-\ELSIF{$exprNode$ represents $FLWOR$ construct $flwor$}
-     \STATE $contextVarTypes = contextVarTypes + getFLWORVarTypes(flwor)$
-     \STATE
-\ENDIF
-
-\RETURN $type$
-\end{algorithmic}
-\end{algorithm}
 
 
 

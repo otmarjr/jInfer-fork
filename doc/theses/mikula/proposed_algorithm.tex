@@ -17,7 +17,10 @@ Since we modified only the implementation of the output representation, the desi
 \todo[inline]{Napr to, ze pri ceste z vrchola do listu len cez najlavejsie uzly sa nezvacsuje context premennych}
 
 \section{Step 2: Static Analysis of Expression Types}
-In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. This process can be divided into three substeps.
+\todo[inline]{Co su to za typy?}
+\todo[inline]{Preco vlastne tuto analyzu robime?}
+
+In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. This process can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
 
 \subsection{Determination of Function Return Types}
 Determination of return types of functions is needed because function calls can appear in expressions. However a return type of a function can be determined at the moment the analysis of expressions encounters a call of the function, it involves multiple number of transitions of the syntax tree in a search for a definition of a particular function.
@@ -26,7 +29,7 @@ Instead, the syntax tree can be searched just once, before the analysis of expre
 
 A simple algorithm is presented in \ref{ALG_determination_of_function_return_types} \todo{uvadzat aj taketo jednoduche funkcie?}. It uses \texttt{getFunctionDeclarationNodes()} function, which is not presented due to its simplicity. It returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in query prolog. 
 
-For simplicity, we will focus on locally defined functions. We will not determine types of functions defined in other modules \todo{je to ok?}. Return types of built-in functions are fixed, and thus, there is no need to analyze them.
+For simplicity, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is somewhat more difficult to implement \todo{je to ok?}. Return types of built-in functions are fixed, and thus, there is no need to analyze them.
 
 \begin{algorithm}
 \caption{Determination of Function Return Types}
@@ -46,7 +49,7 @@ For simplicity, we will focus on locally defined functions. We will not determin
 For the rest of the thesis, we assume function \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
 \subsection{Determination of Global Variable Types}
-A similar approaches as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in the definition \todo{je to tak? priklad}. If it is not it may be often deducible from the binding expression.
+A similar approaches as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in the definition \todo{je to tak? priklad}. If it is not it may be often deducible from the binding expression. Again, we do not analyse external variables for the same reason of simplicity as the external functions.
 
 \begin{algorithm}
 \caption{Function determineExpressionType}
@@ -79,6 +82,12 @@ A similar approaches as in the case of functions can be applied to determine typ
 
 The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type than the type is noted. Otherwise, an attempt of the type deduction of the expression is made. The deduction of the type from the expression is presented in \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression. The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the type of the expression, its type can be either determined directly or it depends on its subexpressions.
 
+Function $determineExpressionType()$ is called within function $analysisOfExpressionTypes$ presented in \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
+
+The order of the recursion is post-order. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the post-order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion because the types of the subexpressions are already determined.
+
+The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node "knows" wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where it meaning is that every node even "knows" if its particular subnode may define new variables. An example is $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into ist first argument (the variable context). If there records for variables with the same names in the context, they are overwritten to correspond to the variable overlaping. It is important to note that we assume the variable context is not passed by refence but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
+
 \begin{algorithm}
 \caption{Function analysisOfExpressionTypes}
 \label{ALG_func_analysisOfExpressionTypes}
@@ -91,20 +100,35 @@ The algorithm iterates through the variable declaration nodes from the prolog an
 \FORALL{$subnode \in$ all subnodes of $startingNode$}
     \STATE $analysisOfExpressionTypes(subnode, contextVarTypes)$ \COMMENT{recursion}
     \IF{$subnode$ defines new variables valid for following subnodes}
-        \STATE $contextVarTypes = merge(contextVarTypes, subnode.variableTypes)$
+        \STATE $contextVarTypes = mergeContextVarTypes(contextVarTypes, subnode.variableTypes)$
     \ENDIF
 \ENDFOR
 \IF{$startingNode$ is expression node}
     \STATE $startingNode.type = determineExpressionType(startingNode)$
 \ENDIF
-\IF{$startingNode$ (or the subtree) defines new variables valid in the supernode}
+\IF{$startingNode$ defines new variables valid in following nodes}
     \STATE determine types of the variables
     \STATE memorize their types in $startingNode.variableTypes$
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
 
-Function $determineExpressionType()$ is called within another function presented in \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Also, this function handles definitions of local variables, so, on request, their types are provided in the scope of their validity (in the subtree(s) which the variables are valid in). The function relies on the fact that definitions of new local variables can make them valid only in nodes with a higher sequence number when numbered in post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, this information can be processed as the type of the new variables can be directly determined since the binding expressions are already processed. The expressions are processed in post-order because of a possible need of currently processed expresion to know types of its subexpressions to determinde its own type.
+\begin{algorithm}
+\caption{Function mergeContextVarTypes}
+\label{ALG_function_mergeContextVarTypes}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $contextVarTypes$: Types of local variables valid in current context. \\    
+    $extendingVarTypes$: Variable types of the same structure as the first argument and extending it.
+}
+\ENSURE The context variable types extended with the variable types from the second argument.
+
+\FORALL{$varName \in keys(extendingVarTypes)$}
+    \STATE $contextVarTypes[varName] = extendingVarTypes[varName]$
+\ENDFOR
+\RETURN $contextVarTypes$
+\end{algorithmic}
+\end{algorithm}
 
 Function $analysisOfExpressionTypes$ called upon a binding expression of a global variable determines the type of the binding expression, and hence, the type of the variable. In the case of global variables, the argument $contextVarTypes$ is empty because there are no local variables valid in the prolog section.
 
@@ -128,10 +152,12 @@ Function $analysisOfExpressionTypes$ called upon a binding expression of a globa
 
 The types of processed global variables are available trough function $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in \ref{ALG_func_determineExpressionType} is defined in \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
 
-
-
 \subsection{Determination of Expression Types}
-\todo[inline]{VYRIESIT: external variables, scope and visibility of variables - ako si udrziavat}
+To determine types of expressions, we use already introduced function $analysisOfExpressionTypes$. The starting node (its first argument) is the node representing the query body and the variable context is empty as there cannot be any local variable valid in the body node.
+
+We can also determine expression types in functions. To do this for a certain function, $analysisOfExpressionTypes$ function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
+
+
 
 
 

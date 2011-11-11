@@ -4,17 +4,20 @@
 \todo[inline]{Staticka analyza typov vyrazov}
 
 \section{Step 1: Construction of a Syntax Tree}
-The first step of the algorithm involves lexical and syntactic analyses and produces a syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are much more an issue of implementation than an issue of principle and they are not directly related to the inference, we will not describe them in this thesis.
+The first step of the algorithm involves lexical and syntactic analyses known from compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them in this thesis. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
 
-The mentioned thesis provides us with a helpful processing of XQuery queries, however, it needs to be slightly modified to suit our case. The processing writes its result to a file in an XML representation. Instead, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though, this requirement concerns modifications of implementation while the core of the processing remains untouched. Therefore, we also do not describe these modifications.
+The syntactic analysis needs to be slightly modified to suit our case. It writes its result into a file in an XML representation. Instead, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though, this requirement concerns modifications of implementation while the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
-Since we modified only the implementation of the output representation, the design of the syntax tree remains consequent to the entire design of the processing. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are FLWORs, if-than-else and function calls. Leaf nodes represents elements of XQuery language that can be devided no more. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
+\subsection{Description of the Syntax Tree}
+Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are $FLWOR$, $if-than-else$ and function call. Leaf nodes represents elements of XQuery language that can be devided no more. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
 
-\todo[inline]{definicia (n-arny, usporiadany z lava do prava) a priklad stromu}
-\todo[inline]{niekam popisat celu moznu strukturu stromu - najskor do appendixu}
+In detail, the syntax tree is a n-ary tree representing syntactic structure of a given query. Every node represents a certain XQuery construct and that is a type of the node. Some types can be divided into more specific subtypes. This is shown \todo{obrazok typov uzlov}.
 
-\subsection{Vlastnosti stromu}
-\todo[inline]{Napr to, ze pri ceste z vrchola do listu len cez najlavejsie uzly sa nezvacsuje context premennych}
+An important characteric of the syntax tree is related to a definition of local variables and ther scope. The representation of a definition of a local variable is $VariableBinding$ node. Nodes of this type contain only two subnodes; a type of the variable and a binding expression. The node and the entire its subtree representing the type do not contain any expressions. The binding expression node is an expression node but the represented expression cannot use the variable which is just being bound. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ node. Assuming the post-order numbering of the nodes, the new variable may be valid in some nodes with a higher post-order sequence number. Which nodes that are, it depends on the type of the ancestor node(s).
+
+For example, $FLWORExpr$ node contains four subnodes; $TupleStream$, $WhereClause$, $OrderByClause$ and $ReturnClause$. $TupleStream$ node contains a list of $VariableBinding$ node which define variables valid in all other three subnodes of the $FLWORExpr$ node.
+
+\todo[inline]{priklad stromu}
 
 \section{Step 2: Static Analysis of Expression Types}
 \todo[inline]{Co su to za typy?}
@@ -157,37 +160,7 @@ To determine types of expressions, we use already introduced function $analysisO
 
 We can also determine expression types in functions. To do this for a certain function, $analysisOfExpressionTypes$ function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Inference of Built-in Types}
+\section{Step 3: Inference of Built-in Types}
 Prejst kazdy vyraz a ak z neho vieme nieco odvodit, tak to urobime.
 
 Odvodit nieco vieme ak:
@@ -197,45 +170,9 @@ a zaroven cely vyraz
 2) je aritmeticka operacia a podla typov operandov vieme urcit typ podvyrazu (tj napriklad sa uzly porovnavaju s konstantou 5) \todo{co vsetko?}
 3) dalsie konstrukcie ako cast as, type constructor, ... \todo{potrebuje riesit? princip je uplne rovnaky}
 
+In this step, the algorithm transitions through the syntax tree and tries to infer types of elements and attributes from expressions. This step could be merged with the step 2 where the syntax tree is being transitioned but for better comprehension we present it separately.
 
+How are the types inferred from the expressions? Only expressions of a particular type are exploited. Specifically, the expression has to contain a subexpression representing an element or an attribute or a set of elements or attributes. In addition, we have to known what are the elements or the attributes, what their names are, how their were retrieved. Basic example of such expression is a path expression. Besides, the expression has to be either a function call or an arithmetic operation \todo{presnejsie} \todo{Nejake ine?}.
 
-\begin{algorithm}
-\caption{Repair RW-XML tree}
-\label{propAlgo}
-\begin{algorithmic}[1]
-\REQUIRE $queryTrees$: A list of input query trees
-\ENSURE Uzly a ich typy nejakym sposobom
-
-\STATE initializacia nodeTypes
-\FORALL{$queryTree \in queryTrees$}
-    \STATE $partialNodeTypes = processQueryTree(queryTree)$
-    \STATE $nodeTypes = mergeNodeTypes(nodeTypes, partialNodeTypes)$
-\ENDFOR
-\RETURN $nodeTypes$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-\caption{Process arithmetic comparison}
-\label{algorithm_process_arithmetic comparison}
-\begin{algorithmic}[1]
-\REQUIRE $expr$: An expression which is an arithmetic comparison
-\ENSURE Uzly a ich typy nejakym sposobom
-
-\STATE initializacia nodeTypes
-\RETURN $nodeTypes$
-
-
-\WHILE{$resultRXT \not \models_w \mathcal{FD}$}
-    \STATE $S = \emptyset$ \COMMENT Set of repair groups
-    \FORALL{$(F: S \rightarrow p) \in \mathcal{FD}$ s.t. $RXT \not \models_w F$}
-    	\FORALL{$t_1, t_2$ tuples of $RXT$ s.t. $t_1, t_2$ do not weakly satisfy $F$}
-		    \STATE $S = S \cup computeRepairGroup(F, t_1, t_2, RXT, S)$
-	    \ENDFOR
-    \ENDFOR
-
-    \STATE $R = getRepair(S, RXT)$
-    \STATE $resultRXT = applyRepair(R, resultRXT)$
-\ENDWHILE
-\end{algorithmic}
-\end{algorithm}
+\todo[inline]{Popisat odvodzovanie z volania funkcie}
+\todo[inline]{Popisat odvodzovanie z aritmetickej operacie}

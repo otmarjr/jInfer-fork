@@ -1,7 +1,7 @@
 \chapter{MIP Approach}
 \label{chapter-mip}
 
-In this chapter we introduce a new approach to finding maximum ID sets. First, we transform the problem formulation to maximum weighted IS problem formulation. Then we transform this into a MIP formulation, and demonstrate how this can be solved using a solver such as GLPK. \nomenclature{GLPK}{GNU Linear Programming Kit}
+In this chapter we introduce a new approach to finding maximum ID sets. First, we transform the problem formulation to maximum weighted IS problem formulation. Then we transform this into a MIP formulation, and demonstrate how this can be solved using a solver such as GLPK \cite{glpk}. \nomenclature{GLPK}{GNU Linear Programming Kit}
 We will continue by applying heuristical approaches to improve the performance of the process.
 
 \section{ID Set to IS Formulation}
@@ -21,11 +21,15 @@ It is obvious that the objective function and all the constraints consitute a MI
 
 By chaining these two translations we can create a MIP formulation for a given set of AMs from a document. Solving this MIP instance will give us the optimal ID set for this document.
 
-GLPK \cite{glpk} is a multi-platform, multi-purpose solver well suited for this task. It uses the Simplex method to solve LP problems and \textit{Branch \& Bound} (see \cite{land60a} for details) for MIP. An advantage of using \textit{Branch \& Bound} is that while traversing the \textit{search tree} it finds intermittent, sub-optimal solutions. It is thus possible to limit the total search time and instead of the optimum take the best solution found so far.\\
+GLPK is a multi-platform, multi-purpose solver well suited for this task. It uses the Simplex method to solve LP problems and \textit{Branch \& Bound} for MIP. 
+
+\paragraph{\textit{Branch \& Bound}} This is an optimization method where the search space is systematically divided into smaller sub-spaces. This is the \textit{branching} component, and a so-called \textit{search tree} is built this way. Then, the sub-problems are recursively solved and whole branches of the search tree are discarded when it becomes obvious that the solution does not lie there. This is the \textit{bounding} component. See \cite{land60a} for detailed description.\\
+
+An advantage of using \textit{Branch \& Bound} is that while traversing the search tree it finds intermittent, sub-optimal solutions. It is thus possible to limit the total search time and instead of the optimum take the best solution found so far.\\
 
 We will now demonstrate the full process of finding the optimal ID set of an example XML file using GLPK.
 
-\subsection{Example}
+\subsection*{Example}
 
 Consider again our XML file fragment.
 
@@ -47,7 +51,7 @@ Recall that attribute mappings in this example are $C = \{M_{y}^{a}, M_{y}^{b}, 
 (v_{y-a},v_{z-a}) \\
 \end{eqnarray*}
 
-First three edges are due to the type collision ($y$), the last one is due to $\iota(M_{y}^{a}) \cap \iota(M_{z}^{a}) = \{1\}$. The graph $G$ constructed in this way is in Figure \ref{image-mip-is-graph}.
+The first three edges are due to the type collision ($y$), the last one is due to $\iota(M_{y}^{a}) \cap \iota(M_{z}^{a}) = \{1\}$. The graph $G$ constructed in this way is in Figure \ref{image-mip-is-graph}.
 
 \begin{figure}
   \caption{IS Representation Graph}
@@ -152,7 +156,7 @@ Objective:  z = 0.6 (MAXimum)
 
 This output tells us that the solution is $x_{y-a} = 1$, $x_{y-b} = 0$, $x_{y-c} = 0$ and $x_{z-a} = 0$. This means that the optimal ID set with maximum weight contains only the $M_{y}^{a}$ attribute mapping.\\
 
-It is obvious that this approach works and for any possible input we can let GLPK find the optimal solution. However, sometimes it takes too long to find the optimum (see e.g. Section \ref{section-glpk-comparison}), we should try to improve this process.
+It is obvious that this approach works and for any possible input we can let GLPK find the optimal solution. However, sometimes it takes too long to find the optimum (see e.g. Section \ref{section-glpk-comparison}), hence, the aim of this work is to improve this process.
 
 \section{Heuristics}
 \label{section-mip-heuristics}
@@ -160,16 +164,16 @@ It is obvious that this approach works and for any possible input we can let GLP
 The definition of \textit{heuristic} or \textit{heuristic algorithm} varies from one source to another. We shall be using it roughly in the following sense.
 
 \begin{define}[Heuristic]
-	Is an approach to problem solving based on prior experience, educated guess or common knowledge.
+	A \textit{heuristic} is an approach to problem solving based on prior experience, educated guess or common knowledge.
 \end{define}
 
 \begin{define}[Heuristic Algorithm]
-	Is an algorithm that, in a reasonably short time, will generate a good, maybe even optimal solution to an optimization problem. However, it won’t provide any formal guarantee about its quality.
+	A \textit{heuristic algorithm} is one that, in a reasonably short time, generates a good, maybe even optimal solution to an optimization problem. However, it won’t provide any formal guarantee about its quality.
 \end{define} 
 
 This definion of heuristic algorithm coming from \cite{heu-lecture} is rather vague, however, it will be sufficient for us.
 
-An example of a heuristic is the commonly used approach of \textit{trial and error}: after a failed attempt, change something and try again. We will see many more heuristics later in this chapter.
+An example of a heuristic is the commonly used approach of \textit{trial and error}: after a failed attempt, change some parameter and try again. We will see many more heuristics later in this chapter.
 
 While a heuristic algorithm can be seen as a tool designed to solve one specific problem, the notion of a \textit{metaheuristic} reminds of a recipy to solve a whole family of problems. We shall be using the metaheuristic presented in Figure \ref{image-metaheuristic} to find optimal ID sets in this work. But before we start describing its structure and components, we need to introduce some more notions.
 
@@ -191,12 +195,12 @@ While a heuristic algorithm can be seen as a tool designed to solve one specific
 The precise definition of the neighborhood is always adjusted according to specific needs. However, the neighborhood should be defined so that is \textit{continuous} (with respect to quality) to be useful. The exact reasons for this requirement are sketched in Section \ref{section-mip-ihs}.
 
 \begin{define}[Solution Pool, Incumbent Solution]
-	\textit{Solution pool} (sometimes called pool of feasible solutions or feasible pool) is simply a set of solutions of different qualities that were found in one of the stages of the metaheuristic. The solution(s) with the highest quality is (are) called the \textit{incumbent} solution(s).
+	\textit{Solution pool} (sometimes called pool of feasible solutions or feasible pool) is a set of solutions of different qualities that were found in one of the stages of the metaheuristic. The solution(s) with the highest quality is (are) called the \textit{incumbent} solution(s).
 \end{define}
 
 A quick reminder of what we are trying to solve using our metaheuristic: given a list of AMs with weights, find a non-conflicting subset maximizing the sum of weights in the subset. We will now describe its structure, please refer again to Figure \ref{image-metaheuristic}.
 
-First we take the list of candidate AMs and ask a \textit{construction heuristic} (see Section \ref{section-mip-chs}) to provide us with a pool of solutions. Then, in a loop, we use this pool as input for \textit{improvement heuristics} (see Section \ref{section-mip-ihs}) and in turns ask them to improve it. All the time we check whether some \textit{termination criteria} are met, and if it is so, we terminate the metaheuristic. The incumbent solution from the last pool is then declared the Output ID set.\\
+First we take the list of candidate AMs and ask a \textit{construction heuristic} (see Section \ref{section-mip-chs}) to provide us with a pool of solutions. Then, in a loop, we use this pool as input for \textit{improvement heuristics} (see Section \ref{section-mip-ihs}) and in turns ask them to improve it. All the time we check whether \textit{termination criteria} are met, and if so, we terminate the metaheuristic. The incumbent solution from the last pool is then declared the Output ID set.\\
 
 The notion of metaheuristic covers a wide range of topics in the field of heuristics, such as Tabu Search (see \cite{Glover:1997:TS:549765}), Ant Colony Optimization (see \cite{dorigo2004ant}) or Genetic Algorithms (see e.g. \cite{goldberg1989genetic}), to name a few.\\
 
@@ -213,6 +217,8 @@ When we start to solve a problem using a metaheuristic approach, at first we hav
 
 The first construction heuristic is the algorithm described in \cite{fidax} (we shall call it \heu{FIDAX} from now on). It can trivially be used to give us one feasible solution - it is, after all, a deterministic heuristic algorithm.
 
+The algorithm works in two steps. First, all candidate AMs are grouped according to their types, and for each type the AM with the highest weight is selected. Second, all these AMs (now called $C'$) are traversed in order of their decreasing size. For each AM $m$, a set $S$ of all conflicting AMs from $C'$ is found and weights of both $m$ and $S$ are calculated. Then the weights are compared and either $m$ or $S$ is removed from $C'$.
+
 The pseudocode of this CH (taken from the original article with trivial modifications without changing the logic) is in Listing \ref{listing-ch-fidax}.
 
 \begin{algorithm}
@@ -228,7 +234,7 @@ The pseudocode of this CH (taken from the original article with trivial modifica
   \STATE Remove from $C'$ all mappings of type $t$ except $m$
 \ENDFOR
 \FORALL{$m$ in $C'$}
-  \STATE $S \gets$ all mappings in $C$ whose images intersect $\iota(m)$
+  \STATE $S \gets$ all mappings in $C'$ whose images intersect $\iota(m)$
   \IF{$w(m) > \sum_{p \in S} w(p)$}
     \STATE remove all $p \in S$ from $C'$
   \ELSE
@@ -311,7 +317,7 @@ This is again a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains it
 
 \subsubsection{\heu{Incremental}}
 
-This trivial heuristics sorts all candidate AMs by their decreasing weights (Section \ref{section-definitions-weight}) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
+This trivial heuristics sorts all candidate AMs by their decreasing weights (see Section \ref{section-definitions-weight}) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
 
 See Listing \ref{listing-ch-incremental} for its pseudocode.
 
@@ -357,7 +363,7 @@ See Listing \ref{listing-ch-removal} for its pseudocode.
 
 \subsubsection{Truncated Branch \& Bound - \heu{Glpk}}
 
-This construction heuristic will be called \heu{Glpk} from now on, for it is basically a time-constrained run of GLPK. Recall that GLPK uses a the \textit{Branch \& Bound} algorithm that produces feasible solutions even before the optimum is found. Limiting the run time gives us the best solution found so far, which means this is a construction heuristic.
+This construction heuristic will be called \heu{Glpk} from now on. It is basically a time-constrained run of GLPK. Recall that GLPK uses a the \textit{Branch \& Bound} algorithm that produces feasible solutions even before the optimum is found. Limiting the run time gives us the best solution found so far, which means this is a construction heuristic.
 
 To be able to create a pool of solutions, the GLPK input in MathProg langauge is always randomly shuffled by changing the order in which variables and constraints appear. This is causes the solver to explore the search tree in various orders, producing different solution in each of the time-constrained runs.
 
@@ -465,7 +471,7 @@ The following three IHs: \heu{Mutation}, \heu{Crossover} and \heu{Local Branchin
 
 \subsubsection{\heu{Mutation}}
 
-\heu{Mutation} is based on the following idea. We assume that an incumbent solution may already contain some AMs belonging to the optimal solution. We will take a random guess and fix some of these AMs: add new constraints to the MIP formulation fixing values of the respective variables to 1.
+\heu{Mutation} is based on the following idea. We assume that an incumbent solution may already contain some AMs belonging to the optimal solution. We will take a random guess and fix some of these AMs, i.e. we add new constraints to the MIP formulation fixing values of the respective variables to 1.
 
 This new formulation contains less free variables and should be easier to solve, probably even to optimum. We run GLPK again using this constrained formulation, enforcing again a time limit. Solution found this way is a feasible solution of the original problem, however the optimum is not necessarily the same as in unconstrained formulation. It is an intensification approach: we limit the search to the neighborhood of an already found solution.\\
 

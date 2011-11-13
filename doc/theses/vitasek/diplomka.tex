@@ -95,12 +95,12 @@
 
 %                            FINAL CLEANUP
 
-% - make sure all chapter names are in First Caps
-% - make sure all references have a name, like Table 4.3.4 instead of just 4.3.4
-% - get rid of all short forms: won't -> will not
+% + make sure all chapter names are in First Caps
+% + make sure all references have a name, like Table 4.3.4 instead of just 4.3.4
+% + get rid of all short forms: won't -> will not
 % - make sure there are no singletons
 % - make sure LaTeX does not complaint much about under/overfullness
-% - make sure everything is defined and referenced
+% + make sure everything is defined and referenced
 % + make sure there is nothing in the bibliography that is unreferenced
 % + make sure all the heu/data set names are consistent. This holds especially for GLPK (tool) / Glpk (heu) and FIDAX
 % - make sure that when referring to heus in algorithms, e.g. when describing how experimental sets are constructed, we correctly refer to their parameters as described in their pseudocodes
@@ -212,7 +212,7 @@ Katedra:  Katedra softwarového inženýrství
 
 Vedoucí diplomové práce: \mfadvisor{} % TODO does this have to be here?, Ka\-ted\-ra soft\-wa\-ro\-vé\-ho in\-že\-nýr\-ství
 
-Abstrakt: Tato práce navazuje na dřívější pokusy odvodit (inferovat) schému existujících XML dokumentů. Jelikož je odvozování \textit{struktury} již relativně dobře popsáno, soustředíme se na integritní omezení. Několik jich popisujeme, pozornost pak soustředíme na ID/\.IDREF/\.IDREFS atributy z DTD. Na bázi článku od Barbosa a Menelzon stavíme heuristický přístup k problému hledání optimální sady ID atributů, jeho funkčnost a vhodnost pak ověřujeme na škále experimentů.
+Abstrakt: Tato práce navazuje na dřívější pokusy odvodit (inferovat) schéma existujících XML dokumentů. Jelikož je odvozování \textit{struktury} již relativně dobře popsáno, soustředíme se na integritní omezení. Několik jich popisujeme, pozornost pak soustředíme na ID/\.IDREF/\.IDREFS atributy z DTD. Na bázi článku od Barbosa a Menelzon (2003) stavíme heuristický přístup k problému hledání optimální sady ID atributů, jeho funkčnost a vhodnost pak ověřujeme na škále experimentů.
 
 Klíčová slova:  XML, ID atributy, odvozování
 
@@ -228,7 +228,7 @@ Department: Department of Software Engineering
 
 Supervisor: \mfadvisor{} % TODO does this have to be here?, Department of Software Engineering
 
-Abstract: In this work we expand upon the previous efforts to extract (infer) schema information from existing XML documents. We find the inference of \textit{structure} to be sufficiently researched and focus further on integrity constraints. After briefly introducing some of them we turn our attention to ID/\.IDREF/\.IDREFS attributes in DTD. Building on the research by Barbosa and Menelzon we introduce a heuristic approach to the problem of finding optimal ID set. The approach is evaluated and tuned in a wide range of experiments.
+Abstract: In this work we~expand upon the previous efforts to~extract (infer) schema information from existing XML documents. We find the~inference of \textit{structure} to~be~sufficiently researched and focus further on~\textit{integrity constraints}. After briefly introducing some of~them we turn our attention to~ID/\.IDREF/\.IDREFS attributes in~DTD. Building on~the~research by~Barbosa and Menelzon (2003) we~introduce a~heuristic approach to~the~problem of~finding optimal ID set. The approach is~evaluated and tuned in~a~wide range of~experiments.
 
 Keywords: XML, ID attributes, inference
 
@@ -260,10 +260,12 @@ Keywords: XML, ID attributes, inference
 \newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Bibliography}
-\nocite{*}
-\bibliographystyle{alpha}
-\bibliography{literature}
+%\nocite{*}
+%\bibliographystyle{alpha}
+%\bibliography{literature}
+	\include{bibliography}
 
+\newpage
 \phantomsection
 \addcontentsline{toc}{chapter}{Lists}
 

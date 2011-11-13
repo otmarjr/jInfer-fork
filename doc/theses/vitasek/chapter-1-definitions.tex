@@ -3,13 +3,13 @@
 
 \section{XML Tree}
 
-We shall use the representation introduced in \cite{fidax}, where an XML file is represented by a labeled tree consisting of nodes for elements, attributes and simple text data. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the cited article does.
+We shall use the representation introduced in \cite{fidax}, where an XML file is represented by a labeled tree consisting of nodes for elements, attributes and simple text data. Parent nodes are connected to child nodes with the edges. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the cited article does.
 
 Without a loss of generality we ignore the actual ordering of nodes in the tree.
 
 \paragraph{Example}
 
-This example introduces an XML file fragment that will be used for demonstration throughout this work. XML tree representing it is in Figure \ref{image-definitions-example-xml-tree}, where each node is annotated with a triple $label(v) : id(v) : value(v)$.
+This example introduces an XML file fragment that will be used for demonstration throughout this work. An XML tree representing it is in Figure \ref{image-definitions-example-xml-tree}(a), where each node is annotated with a triple $label(v) : id(v) : value(v)$.
 
 \begin{verbatim}
 <x>
@@ -22,10 +22,10 @@ This example introduces an XML file fragment that will be used for demonstration
 
 \begin{figure}
   \caption{Example XML Tree}
-  \label{image-definitions-example-xml-tree}
+  \label{image-definitions-example-xml-tree} 
   \centering
     \subfigure[XML tree]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree}}
-    \subfigure[Attribute mappings]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree-ams}}
+    \subfigure[Attribute Mappings]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree-ams}}
 \end{figure}
 
 Furthermore, we denote $\mathcal{I}$ the set of all ids and $\mathcal{V}$ the set of all values in the document. We will need two more definitions from the article.
@@ -41,7 +41,7 @@ Furthermore, we denote $\mathcal{I}$ the set of all ids and $\mathcal{V}$ the se
 \section{\texttt{ID}, \texttt{IDREF}, \texttt{IDREFS} Attributes}
 \label{section-definitions-id-attributes}
 
-According to \cite{Bray:08:EML}, an XML attribute may have the type \texttt{ID}, \texttt{IDREF} or \texttt{IDREFS} (among others). Following constraints are related to these types.
+According to \cite{Bray:08:EML}, an XML attribute may have the type \texttt{ID}, \texttt{IDREF} or \texttt{IDREFS} (among others). The following constraints are related to these types.
 
 \begin{quote}
 \textbf{Validity constraint: \texttt{ID}}
@@ -54,7 +54,7 @@ An element type \textsc{must not} have more than one \texttt{ID} attribute speci
 
 \textbf{Validity constraint: \texttt{ID} Attribute Default}
 
-An \texttt{ID} attribute \textsc{must} have a declared default of \texttt{\#IMPLIED} or \texttt{\#REQUIRED}.
+An \texttt{ID} attribute \textsc{must} have a declared default of \texttt{\#IMPLIED}\footnote{\texttt{\#IMPLIED} means that the attribute has a specified default value.} or \texttt{\#REQUIRED}\footnote{\texttt{\#REQUIRED} means that the attribute cannot be empty.}.
 
 \textbf{Validity constraint: \texttt{IDREF}}
 
@@ -78,7 +78,7 @@ Now we return to \cite{fidax} to define the notion of an \textit{attribute mappi
 We will use a different definition (without introducing keys from \cite{keX}) that will however give us the same result.
 
 \begin{define}[$\Sigma^E$, $\Sigma^A$, $\Sigma$]
-	$\Sigma^E$ is the set of all element labels, $\Sigma^A$ is the set of all attribute labels. $\Sigma = \Sigma^E \cup \Sigma^A$ is their union and effectively the set of all labels in the document (simple text data nodes do not have a label).
+	$\Sigma^E$ is the set of all element labels, $\Sigma^A$ is the set of all attribute labels. $\Sigma = \Sigma^E \cup \Sigma^A$ is their union and effectively the set of all labels in the document.
 \end{define}
 
 \begin{define}[Attribute mapping]
@@ -95,9 +95,9 @@ We can use projection to retrieve all the unique \textit{ids} of either elements
 \end{define}
 
 \paragraph{Example}
-The XML tree from Figure \ref{image-definitions-example-xml-tree} has the following non-empty AMs drawn in bold lines: $M_{y}^{a} = \{(2,6), (3,8)\}$, $M_{y}^{b} = \{(2,7)\}$, $M_{y}^{c} = \{(3,9)\}$ and $M_{z}^{a} = \{(5,10)\}$.
+The XML tree from Figure \ref{image-definitions-example-xml-tree}(b) has the following non-empty AMs drawn in bold lines: $M_{y}^{a} = \{(2,6), (3,8)\}$, $M_{y}^{b} = \{(2,7)\}$, $M_{y}^{c} = \{(3,9)\}$ and $M_{z}^{a} = \{(5,10)\}$.
 
-Following example equations hold.
+The following example equations hold.
 \begin{eqnarray*}
 \pi_E(M_{y}^{a}) & = & \{2, 3\} \\
 \pi_A(M_{z}^{a}) & = & \{10\} \\
@@ -111,7 +111,7 @@ Following example equations hold.
 So the image of an AM is a set of all the values of all the attribute nodes contained in the mapping.
 
 \paragraph{Example}
-Again referring to the XML tree from \ref{image-definitions-example-xml-tree}, we get the following AM images.
+Again referring to the XML tree from Figure \ref{image-definitions-example-xml-tree}, we get the following AM images.
 \begin{eqnarray*}
 \iota(M_{y}^{a}) & = & \{1, 3\} \\
 \iota(M_{y}^{b}) & = & \{2\} \\
@@ -151,7 +151,7 @@ That is, an ID set has images without repeating values and all the types are uni
 \paragraph{Example}
 Returning to our example, the following are all the possible ID sets: $\{ M_{y}^{a} \}, \{ M_{y}^{b} \}, \{ M_{y}^{b}, M_{z}^{a} \}, \{ M_{y}^{c} \}, \{ M_{y}^{c}, M_{z}^{a} \}$. Note that once we select an AM of type $y$ we can never add any other with the same type. Note also that $\{ M_{y}^{c}, M_{z}^{a} \}$ is not an ID set, because $\iota(M_{y}^{c}) \cap \iota(M_{z}^{a}) \neq \emptyset$.
 
-\subsection{\texttt{IDREF} and \texttt{IDREFS} Condition}
+\subsection*{\texttt{IDREF} and \texttt{IDREFS} Condition}
 
 Given an ID set $I$, the requirements from Section \ref{section-definitions-id-attributes} give us the following condition for an attribute mapping $m$ to be marked \texttt{IDREF}.
 \[\iota(m) \subseteq \bigcup_{m_i \in I} \iota(m_i)\]
@@ -171,7 +171,6 @@ Let $M = \{m_1, \dots m_i\}$ be the set of all non-empty AMs in the document.
 \[\phi(m) = \frac{|m|}{\sum_{p \in M}|p|}\]
 \end{define}
 
-From the cited article:
 \begin{quote}
 The support of attribute mapping $M_x^y$ is the fraction of edges in the XML tree that connect $x$ elements to $y$ attributes.
 \end{quote}
@@ -186,7 +185,6 @@ Support of $M_{y}^{a}$ in our example is $2 / (2+1+1+1) = 0.4$. Support of every
 \[\chi(m) = \left( \sum_{p \in M, p \neq m} |\iota(m) \cap \iota(p)| \right) / \sum_{p \in M} |\iota(p)|\]
 \end{define}
 
-Again from the article:
 \begin{quote}
 The coverage of an attribute mapping measures how much of the image of that mapping occurs elsewhere, as a fraction of all mappings images in the document.
 \end{quote}
@@ -223,11 +221,13 @@ Given an undirected graph $G = (V, E)$ and a weight function $w: V \rightarrow \
 \[\forall I' \subseteq V, I' \text{is an independent set}: \sum_{v \in I'} w(v) \leqslant \sum_{v \in I_{max}} w(v)\]
 \end{define}
 
-It is well known that finding the maximum weighted IS is an NP-hard optimization problem, see e.g. \cite{JM1986425}.
+It is well known that finding the maximum weighted IS is an NP-hard optimization problem, \cite{JM1986425}.
 
 \section{Linear Programming}
 
-The problem of \textit{linear programming} is optimization of a linear function under a set of linear constraints. The formulation is usually called a \textit{linear program}. It can be written in the following form (minimization version is possible too).
+The problem of \textit{linear programming} is optimization of a linear function under a set of linear constraints. The formulation is usually called a \textit{linear program}. 
+
+It can be written in the following form (minimization version is possible too).
 
 \begin{eqnarray*}
 \max_{x} z & = & \mathbf{c}^{\mathrm{T}}\mathbf{x} \\
@@ -258,13 +258,14 @@ b_m \\
 \end{bmatrix}
 \]
 
-Where $\mathbf{x}$ is the vector of variables (to be found by the optimization), $\mathbf{b}$ is the vector and $A$ is the accompanying matrix of constraints and $\mathbf{c}$ is the vector of coefficients for the objective function. $\mathbf{x}$ and $\mathbf{c}$ have length $n$, $\mathbf{b}$ has length $m$ and $A$ has dimensions $m \times n$.
+Where $\mathbf{x}$ is the vector of variables (to be found by the optimization), $\mathbf{b}$ is the vector and $A$ its accompanying matrix of constraints and $\mathbf{c}$ is the vector of coefficients for the objective function. $\mathbf{x}$ and $\mathbf{c}$ have length $n$, $\mathbf{b}$ has length $m$ and $A$ has dimensions $m \times n$. Furthermore, \[\max_{x} f(x)\] means maximize the value of $f(x)$ by changing the value of $x$.\\
 
 Another way to write this formulation is in the following.
 
 \begin{eqnarray*}
 \max_{x} z = \sum_{i=1}^{n} c_i x_i \\
-s.t.\, a_{11}x_{1} + a_{12}x_{2} + \ldots + a_{1n}x_{n} & \leqslant & b_{1} \\
+s.t. & \\
+	   a_{11}x_{1} + a_{12}x_{2} + \ldots + a_{1n}x_{n} & \leqslant & b_{1} \\
 	   a_{21}x_{1} + a_{22}x_{2} + \ldots + a_{2n}x_{n} & \leqslant & b_{2} \\
 	   \ldots \\
 	   a_{m1}x_{1} + a_{m2}x_{2} + \ldots + a_{mn}x_{n} & \leqslant & b_{m} \\

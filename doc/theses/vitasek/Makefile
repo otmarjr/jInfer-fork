@@ -5,7 +5,7 @@ IMAGESTOCONVERT=$(shell cat *.tex | grep includegraphics | sed -e "s/.*includegr
 %.dvi: %.tex literature.bib Makefile
 	rm -f *.toc
 	latex $< 
-	bibtex $(<:.tex=.aux)
+#	bibtex $(<:.tex=.aux)
 	latex  $<
 	latex  $< 
 #	latex -interaction=nonstopmode $< 
@@ -20,7 +20,7 @@ all: ${IMAGESTOCONVERT} literature.bib Makefile diplomka.tex
 	rm -f *.toc
 	pdflatex diplomka
 	pdflatex  diplomka
-	bibtex diplomka
+#	bibtex diplomka
 	pdflatex diplomka
 
 clean:

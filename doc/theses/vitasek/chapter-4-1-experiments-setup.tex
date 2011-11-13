@@ -1,4 +1,5 @@
 \chapter{Experiments}
+\label{chapter-experiments}
 
 At this point of the thesis the reader should be already familiar with the notions we have introduced: the problem of finding the optimal ID set (with respect to a given \textit{weight}), that it is directly related to the NP-complete problem of finding the maximal weighted independent set, that this can be solved using the MIP approach, and that there are several possibilities how to optimize the work of the solver by employing various heuristics.
 
@@ -38,7 +39,7 @@ The latter will come in form of tables containing information regarding the data
 \subsection{Realistic Data}
 \label{section-realistic-data}
 
-From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. The DVD distributed with this thesis will contain their anonymized version.
+From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is in Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. The DVD distributed with this thesis will contain their anonymized version.
 
 \begin{table}
   \caption{List of realistic test data files}
@@ -78,7 +79,7 @@ Finally, the \dataset{XMD} set is relatively big and, at the same time, has non-
 \subsection{Realistic Data With Artificial Attributes}
 \label{section-realistic-converted}
 
-We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here, the DVD contains the anonymized version again. None of these sets had any attributes before the conversion. Their summary is Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
+We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here, the DVD contains the anonymized version again. None of these sets had any attributes before the conversion. Their summary is in Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
 
 To address the conversion: in case of \dataset{MSH} we found 2 elements with values resembling a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
@@ -111,9 +112,11 @@ In case of \dataset{NTH} we introduced 8 attributes. Out of them 5 proved to be 
 
 \subsection{Artificial Data}
 
-As soon as we started experimenting with the data coming from the real world, it was obvious that they are not complex enough. After we built the model, we got the most complex graphs of 31 vertices and 47 edges (see Table \ref{table-experiments-data-realistic}). Our solution is to approach the problem from the other side: in the end, we will be solving the equivalent of IS problem on a graph created from XML data. We will create the XML data to contain a more complex graph with a specific number of vertices and edges.
+As soon as we started experimenting with the data coming from the real world, it was obvious that they are not complex enough. After we built the model, we got the most complex graphs of 31 vertices and 47 edges (see Table \ref{table-experiments-data-realistic}). We approach this problem from the other side: in the end, we will be solving the equivalent of IS problem on a graph created from XML data. We will create the XML data to contain a more complex graph with a specific number of vertices and edges.
 
-To demonstrate this, consider the following excerpt from an XML file:
+This data will represent very complex real world schemas with a lot of various attributes with similar values.
+
+Our artificial test data will look similar to the following excerpt from an XML file:
 
 \begin{scriptsize}
 \begin{verbatim}
@@ -133,7 +136,9 @@ To demonstrate this, consider the following excerpt from an XML file:
 \end{verbatim}
 \end{scriptsize}
 
-Our aim is to create a graph with approximately $v$ vertices and $e$ edges. First, we introduce $v$ elements with names \texttt{vertex0} - \texttt{vertex\{V-1\}}. To constitute an AM, they need an attribute \texttt{attr}, but with large enough random values, so that they do not conflict with others. Second, for each of the $e$ edges we choose two \texttt{vertex*} elements at random, and give them the same value of their \texttt{attr}. This will ensure they cannot share the same ID set, thus effectively creating the edge in the graph representation.
+Our aim is to create a graph with approximately $v$ vertices and $e$ edges. First, we introduce $v$ elements with names \texttt{vertex0} - \texttt{vertex\{V-1\}}. To constitute an AM, they need an attribute \texttt{attr}, but with large enough random values, so that they do not conflict with others. Second, for each of the $e$ edges we choose two \texttt{vertex*} elements at random, and give them the same value of their \texttt{attr}. This will ensure they cannot share the same ID set, thus effectively creating the edge in the graph representation.\\
+
+This way we can generate data more complex than anything found in the real world. It will however serve us to measure the performance of our algorithms in extreme cases.\\
 
 The respective pseudocode for this is provided in Algorithm \ref{listing-random-data}.
 

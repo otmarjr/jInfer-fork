@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.xsdimportsax/2
+OpenIDE-Module-Implementation-Version: 2
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/xsdimportsax/Bundle.properties
+

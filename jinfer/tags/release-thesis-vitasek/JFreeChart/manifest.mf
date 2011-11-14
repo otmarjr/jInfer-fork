@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.jfreechart/1
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/jfreechart/Bundle.properties

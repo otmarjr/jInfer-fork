@@ -1,0 +1,19 @@
+set MAPPINGS;
+
+param Weight {i in MAPPINGS};
+
+var x {i in MAPPINGS} binary;
+
+maximize z: sum {i in MAPPINGS} x[i] * Weight[i];
+
+{constraints}
+
+data;
+
+set MAPPINGS :=
+{mappings};
+
+param Weight :=
+{weights};
+
+end;

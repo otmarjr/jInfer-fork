@@ -39,7 +39,7 @@ The latter will come in form of tables containing information regarding the data
 \subsection{Realistic Data}
 \label{section-realistic-data}
 
-From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is in Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}. Because the legal status of disclosing these data sets is unclear, we will refrain from identifying them beyond these artificial identifiers. The DVD distributed with this thesis will contain their anonymized version.
+From 3 different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is in Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}.
 
 \begin{table}
   \caption{List of realistic test data files}
@@ -79,7 +79,7 @@ Finally, the \dataset{XMD} set is relatively big and, at the same time, has non-
 \subsection{Realistic Data With Artificial Attributes}
 \label{section-realistic-converted}
 
-We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. Unfortunately, the same problem with disclosure as in the previous case applies here, the DVD contains the anonymized version again. None of these sets had any attributes before the conversion. Their summary is in Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
+We used 2 data sets to convert, \dataset{MSH} and \dataset{NTH}. None of these sets had any attributes before the conversion. Their summary is in Table \ref{table-experiments-data-converted}, their graphs are in Figure \ref{image-experiments-data-converted}.
 
 To address the conversion: in case of \dataset{MSH} we found 2 elements with values resembling a key of the records contained in the file, and converted them to be attributes of these records using a simple XSL transformation. In the case of \dataset{NTH} we converted all the values in sub-elements of the record elements to be the attributes of the records.
 
@@ -226,9 +226,9 @@ While studying the tables it becomes obvious that the actual numbers $|V|$ and $
 
 To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one. The $|V|$ and $|E|$ numbers are orders of magnitude higher than in any realistic (or converted) data set we are using.
 
-In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\%$, and we can see that this was indeed achieved. There is an interesting observation to be made here: the optimum is steadily decreasing with the increasing overall graph size. This intuitively suggests that the maximum quality theoretically achievable is related to the $\frac{|E|}{|V|}$ density, not to the one we fixed. Exploration of this phenomenon is beyond the scope of this thesis.
+In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\%$, and we can see that this was indeed achieved. There is an interesting observation to be made here: the optimum is steadily decreasing with the increasing overall graph size. This intuitively suggests that the maximum quality theoretically achievable is related to the $\frac{|E|}{|V|}$ density, not to the one we fixed. Exploration of this phenomenon is beyond the scope of this thesis.\\
 
-Note that the artificial data we used in experiments can be found on the DVD enclosed with this work.
+Note that all the data sets we used in experiments can be found on the DVD enclosed with this work.
 
 \section{Experimental Setup}
 

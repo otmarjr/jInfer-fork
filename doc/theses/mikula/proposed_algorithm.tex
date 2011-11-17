@@ -23,21 +23,33 @@ For example, $FLWORExpr$ node contains four subnodes; $TupleStream$, $WhereClaus
 \section{Step 2: Static Analysis of Expression Types}
 In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. Information on the types of expressions can be used by consecutive steps of the algorithm. The consecutive steps will probably not use the determined types of all expressions, however this step may be useful in a future extending.
 
-Specifically, it is desired to determine the XML Schema built-in types \todo{link do appendixu} of expressions, if it is possible. Also, for each path expression we want to determine if it selects elements or attributes and we want to store the entire path in the type information. This information can be used for example in a $FLWOR$ expression \todo{priklad nejakeho FLWOR a ukazat ako vieme zistit, ktore elementy su prechadzane}. \todo[inline]{Uistit sa, ze takto nam to staci.}
+We want to be able to capture the following types.
 
-To capture sequences, we assign each type with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. The cardinality expresses one of the following five sequence types.
+\begin{itemize}
+\item XML Schema built-in atomic types \todo{link do appendixu}.
+\item Type $xs:untyped$.
+\item Type representing any item. \todo{potrebujeme?}
+\item Type representing an element, attribute, item, node, text node, comment, processing instruction, document node.
+\item Type representing a set of elements or attributes selected by a certain path expression. The path expression is included in this type.
+\end{itemize}
+
+\todo[inline]{Akeho typu je napr //(elementA * 2)?}
+
+To capture sequences, we assign each type with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Every type can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
 
 \begin{itemize}
 \item An empty sequence.
 \item A sequence of exactly one item.
-\item A sequence containing zero or one item.
-\item A sequence containing zero or more items.
-\item A sequence containing one or more items.
+\item A sequence containing zero or one item (modifier $?$).
+\item A sequence containing zero or more items (modifier $*$).
+\item A sequence containing one or more items (modifier $+$).
 \end{itemize}
 
 \todo[inline]{Popisat co robit a uviest priklad, kedy typ nevieme zistit. Napr porovnavanie hodnot elemetov vybranych z dat.}
 
 This process can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
+
+\todo[inline]{Este by sa dala urobit analyza volania funkcii, do ktorych su predavane nejake elementy/atributy o ktorych vieme ich path expression. Vysledkom tejto funkcie by totiz zas mohli byt elementy/atributy o ktorych vieme (pozmenenu) path expression a nie len nezname elementy/atributy.}
 
 \subsection{Determination of Function Return Types}
 Determination of return types of functions is needed because function calls can appear in expressions. However a return type of a function can be determined at the moment the analysis of expressions encounters a call of the function, it involves multiple transitions of the syntax tree in a search for a definition of a particular function.
@@ -65,6 +77,8 @@ For simplicity, we will focus on locally defined functions. We will not determin
 
 For the rest of the thesis, we assume function \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
+\todo[inline]{Udrzat si referencie na definicie funkcii pre dalsie pouzitie.}
+
 \subsection{Determination of Global Variable Types}
 A similar approaches as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason of simplicity as the external functions.
 
@@ -80,7 +94,7 @@ A similar approaches as in the case of functions can be applied to determine typ
 
 \STATE $type = null$
 \IF{$exprNode$ represents a literal value}
-     \STATE $type =$ particular literal value type
+     \STATE $type =$ particular literal value type, exactly-once cardinality
 \ELSIF{$exprNode$ represents a call of function $f$}
      \STATE $type = getFunctionReturnType(f)$
 \ELSIF{$exprNode$ represents variable reference $var$}
@@ -103,7 +117,7 @@ Function $determineExpressionType()$ is called within function $analysisOfExpres
 
 The order of the recursion is post-order. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the post-order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion because the types of the subexpressions are already determined.
 
-The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node "knows" wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where it meaning is that every node even "knows" if its particular subnode may define new variables. An example is $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into ist first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlaping. It is important to note that we assume the variable context is not passed by refence but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
+The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where it meaning is that every node even ''knows'' if its particular subnode may define new variables. An example is $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into ist first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlaping. It is important to note that we assume the variable context is not passed by refence but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
 \begin{algorithm}
 \caption{Function analysisOfExpressionTypes}
@@ -182,7 +196,6 @@ How are the types inferred from the expression types? We do not exploit all expr
 \todo[inline]{Zlucovanie odvodenych tvrdeni}
 \todo[inline]{Co ked mame path expression s predikatmi?}
 
-\todo[inline]{Popisat odvodzovanie z volania funkcie}
 \subsection{Function Calls}
 This case is quite simple. The algorithm encounters a function call and one of the arguments is a known set of elements of attributes (subexpression $E$ representing $S$). To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
 

@@ -1,10 +1,11 @@
 \chapter{Proposed Algorithm}
-\todo[inline]{Nejaky uvod}
+\todo[inline]{Nejaky uvod a zkratke hrnutie}
 \todo[inline]{Lexikalna a syntakticka analyza z diplomky J. Schejbala}
 \todo[inline]{Staticka analyza typov vyrazov}
+\todo[inline]{Predpoklad korektnosti dotazov}
 
 \section{Step 1: Construction of a Syntax Tree}
-The first step of the algorithm involves lexical and syntactic analyses known from compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them in this thesis. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
+The first step of the algorithm involves lexical and syntactic analyses known from compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
 
 The syntactic analysis needs to be slightly modified to suit our case. It writes its result into a file in an XML representation. Instead, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though, this requirement concerns modifications of implementation while the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
@@ -13,24 +14,37 @@ Since we modified only the implementation of the output form, the design of the 
 
 In detail, the syntax tree is a n-ary tree representing syntactic structure of a given query. Every node represents a certain XQuery construct and that is a type of the node. Some types can be divided into more specific subtypes. This is shown \todo{obrazok typov uzlov}.
 
-An important characteric of the syntax tree is related to a definition of local variables and ther scope. The representation of a definition of a local variable is $VariableBinding$ node. Nodes of this type contain only two subnodes; a type of the variable and a binding expression. The node and the entire its subtree representing the type do not contain any expressions. The binding expression node is an expression node but the represented expression cannot use the variable which is just being bound. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ node. Assuming the post-order numbering of the nodes, the new variable may be valid in some nodes with a higher post-order sequence number. Which nodes that are, it depends on the type of the ancestor node(s).
+An important characteric of the syntax tree is related to a definition of local variables and their scope. The representation of a definition of a local variable is $VariableBinding$ node. Nodes of this type contain only two subnodes; a type of the variable and a binding expression. The node and the entire its subtree representing the type do not contain any expressions. The binding expression node is an expression node but the represented expression cannot use the variable which is just being bound. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ node. Assuming the post-order numbering of the nodes, the new variable may be valid in some nodes with a higher post-order sequence number. Which nodes that are, it depends on the type of the ancestor node(s).
 
 For example, $FLWORExpr$ node contains four subnodes; $TupleStream$, $WhereClause$, $OrderByClause$ and $ReturnClause$. $TupleStream$ node contains a list of $VariableBinding$ node which define variables valid in all other three subnodes of the $FLWORExpr$ node.
 
 \todo[inline]{priklad stromu}
 
 \section{Step 2: Static Analysis of Expression Types}
-\todo[inline]{Co su to za typy?}
-\todo[inline]{Preco vlastne tuto analyzu robime?}
+In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. Information on the types of expressions can be used by consecutive steps of the algorithm. The consecutive steps will probably not use the determined types of all expressions, however this step may be useful in a future extending.
 
-In the second step, we try to statically (without evaluation of the queries) determine types of expressions in the syntax tree. This process can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
+Specifically, it is desired to determine the XML Schema built-in types \todo{link do appendixu} of expressions, if it is possible. Also, for each path expression we want to determine if it selects elements or attributes and we want to store the entire path in the type information. This information can be used for example in a $FLWOR$ expression \todo{priklad nejakeho FLWOR a ukazat ako vieme zistit, ktore elementy su prechadzane}. \todo[inline]{Uistit sa, ze takto nam to staci.}
+
+To capture sequences, we assign each type with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. The cardinality expresses one of the following five sequence types.
+
+\begin{itemize}
+\item An empty sequence.
+\item A sequence of exactly one item.
+\item A sequence containing zero or one item.
+\item A sequence containing zero or more items.
+\item A sequence containing one or more items.
+\end{itemize}
+
+\todo[inline]{Popisat co robit a uviest priklad, kedy typ nevieme zistit. Napr porovnavanie hodnot elemetov vybranych z dat.}
+
+This process can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
 
 \subsection{Determination of Function Return Types}
-Determination of return types of functions is needed because function calls can appear in expressions. However a return type of a function can be determined at the moment the analysis of expressions encounters a call of the function, it involves multiple number of transitions of the syntax tree in a search for a definition of a particular function.
+Determination of return types of functions is needed because function calls can appear in expressions. However a return type of a function can be determined at the moment the analysis of expressions encounters a call of the function, it involves multiple transitions of the syntax tree in a search for a definition of a particular function.
 
 Instead, the syntax tree can be searched just once, before the analysis of expressions, and return types of all functions found will be stored within an associative array. On request, this array will retrieve the return type of a specified function.
 
-A simple algorithm is presented in \ref{ALG_determination_of_function_return_types} \todo{uvadzat aj taketo jednoduche funkcie?}. It uses \texttt{getFunctionDeclarationNodes()} function, which is not presented due to its simplicity. It returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in query prolog. 
+A simple algorithm is presented in \ref{ALG_determination_of_function_return_types} \todo{uvadzat aj taketo jednoduche funkcie?}. It uses \texttt{getFunctionDeclarationNodes()} function, which is not presented due to its simplicity. It returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
 
 For simplicity, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is somewhat more difficult to implement \todo{je to ok?}. Return types of built-in functions are fixed, and thus, there is no need to analyze them.
 
@@ -52,7 +66,7 @@ For simplicity, we will focus on locally defined functions. We will not determin
 For the rest of the thesis, we assume function \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
 \subsection{Determination of Global Variable Types}
-A similar approaches as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in the definition \todo{je to tak? priklad}. If it is not it may be often deducible from the binding expression. Again, we do not analyse external variables for the same reason of simplicity as the external functions.
+A similar approaches as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason of simplicity as the external functions.
 
 \begin{algorithm}
 \caption{Function determineExpressionType}
@@ -83,13 +97,13 @@ A similar approaches as in the case of functions can be applied to determine typ
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type than the type is noted. Otherwise, an attempt of the type deduction of the expression is made. The deduction of the type from the expression is presented in \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression. The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the type of the expression, its type can be either determined directly or it depends on its subexpressions.
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type than the type is noted. Otherwise, an attempt of the type deduction of the expression is made. The deduction of the type from the expression is presented in \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression. The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression, its type can be either determined directly or it depends on its subexpressions. \todo{link na mozne triedy vyrazov.}
 
 Function $determineExpressionType()$ is called within function $analysisOfExpressionTypes$ presented in \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
 The order of the recursion is post-order. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the post-order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion because the types of the subexpressions are already determined.
 
-The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node "knows" wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where it meaning is that every node even "knows" if its particular subnode may define new variables. An example is $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into ist first argument (the variable context). If there records for variables with the same names in the context, they are overwritten to correspond to the variable overlaping. It is important to note that we assume the variable context is not passed by refence but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
+The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node "knows" wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where it meaning is that every node even "knows" if its particular subnode may define new variables. An example is $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into ist first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlaping. It is important to note that we assume the variable context is not passed by refence but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
 \begin{algorithm}
 \caption{Function analysisOfExpressionTypes}
@@ -161,18 +175,20 @@ To determine types of expressions, we use already introduced function $analysisO
 We can also determine expression types in functions. To do this for a certain function, $analysisOfExpressionTypes$ function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
 
 \section{Step 3: Inference of Built-in Types}
-Prejst kazdy vyraz a ak z neho vieme nieco odvodit, tak to urobime.
+In this step, the algorithm goes through the syntax tree and tries to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
-Odvodit nieco vieme ak:
-Nejaky podvyraz je path expression (alebo ine urcenie uzlu alebo hodnot uzlov \todo{toto domysliet}
-a zaroven cely vyraz
-1) je function call a podvyraz je jeho parameter a typ tohoto parametra vieme odvodit z hlavicky funkcie
-2) je aritmeticka operacia a podla typov operandov vieme urcit typ podvyrazu (tj napriklad sa uzly porovnavaju s konstantou 5) \todo{co vsetko?}
-3) dalsie konstrukcie ako cast as, type constructor, ... \todo{potrebuje riesit? princip je uplne rovnaky}
+How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain a subexpression representing a certain element or attribute or set of elements or attributes. This set is denoted $S$ in the following text. In other words, the type of the subexpression has to contain a path expression that selects the elements or attributes. This subexpression is denoted $E$. Another requirement is the expression has to be either a function call or an arithmetic operation \todo{Nejake ine ako napr type constructor, cast as? Princip je stale rovnaky}.
 
-In this step, the algorithm transitions through the syntax tree and tries to infer types of elements and attributes from expressions. This step could be merged with the step 2 where the syntax tree is being transitioned but for better comprehension we present it separately.
-
-How are the types inferred from the expressions? Only expressions of a particular type are exploited. Specifically, the expression has to contain a subexpression representing an element or an attribute or a set of elements or attributes. In addition, we have to known what are the elements or the attributes, what their names are, how their were retrieved. Basic example of such expression is a path expression. Besides, the expression has to be either a function call or an arithmetic operation \todo{presnejsie} \todo{Nejake ine?}.
+\todo[inline]{Zlucovanie odvodenych tvrdeni}
+\todo[inline]{Co ked mame path expression s predikatmi?}
 
 \todo[inline]{Popisat odvodzovanie z volania funkcie}
-\todo[inline]{Popisat odvodzovanie z aritmetickej operacie}
+\subsection{Function Calls}
+This case is quite simple. The algorithm encounters a function call and one of the arguments is a known set of elements of attributes (subexpression $E$ representing $S$). To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
+
+If the type $T$ of the formal argument is a built-in type or its sequence then $T$ is also the inferred type of $S$. Otherwise, no statement is inferred.
+
+\subsection{Arithmetic Operations}
+If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression is $Operator$ and the class of the operator is one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ \todo{Niekam napisat mozne triedy operatora}), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
+
+If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression is $Operator$ and the class of the operator is one of $GEN\_LESS\_THAN$, $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$, $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$, $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.

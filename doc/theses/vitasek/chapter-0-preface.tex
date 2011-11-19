@@ -1,7 +1,7 @@
 \chapwithtoc{Preface}
 \label{chapter-preface}
 
-Along with technologies such as SQL/noSQL\footnote{noSQL: collection of non-relational database technologies, \url{http://nosql-database.org/}.} databases, proprietary binary file formats, plain-text configuration files and JSON\footnote{JSON: JavaScript Object Notation, lightweight data format, \url{http://www.json.org/}.}, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema\footnote{DTD and XML Schema: 2 most prominent XML schema languages, \cite{Bray:08:EML}} to describe XML structure exist for a long time, most of the documents use outdated or no schema at all \cite{1802522}. To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in \cite{ahonen, bex, vyhnanovska}. In particular, \cite{archdoc} introduces the jInfer schema inference framework, dealing primarily with the structural parts of the schema: how all the elements, attributes and text data are to be organized in an XML document conforming to that schema. Inference of this kind of structural information was greatly improved in \cite{anti}.\\
+Along with technologies such as SQL/noSQL\footnote{noSQL: collection of non-relational database technologies, \url{http://nosql-database.org/}.} databases, proprietary binary file formats, plain-text configuration files and JSON\footnote{JSON: JavaScript Object Notation, lightweight data format, \url{http://www.json.org/}.}, XML is one of the leading formats for storing structured data. However, even though languages such as DTD and XML Schema\footnote{DTD and XML Schema: 2 most prominent XML schema languages, \cite{Bray:08:EML}} to describe XML structure exist for a long time, most of the documents use outdated or no schema at all \cite{1802522}. To tackle this problem one may employ reverse-engineering techniques to infer the schema from existing documents, such as those described in \cite{ahonen, bex, vyhnanovska}. In particular, \cite{archdoc} introduces the jInfer schema inference framework, dealing primarily with the structural parts of the schema: how all the elements, attributes and text data are to be organized in an XML document conforming to~that schema. Inference of this kind of structural information was greatly improved in \cite{anti}.\\
 
 \nomenclature{DTD}{Document Type Definition}
 
@@ -9,9 +9,9 @@ But the schema is not the only constraint that can be imposed on an XML document
 
 From all the constraints that can be applied to an XML document by means of its schema, this work will focus on keys and foreign keys. Most important concepts in this field are introduced in \cite{keX} and formalized in the notions of \texttt{ID}/\.\texttt{IDREF}/\.\texttt{IDREFS} attributes in DTD and XSD and \texttt{xs:key/xs:keyref} structures in XSD (both in \cite{Bray:08:EML}).\\
 
-The scope of this work is finally limited to the inference of \texttt{ID}/\.\texttt{IDREF}/\.\texttt{IDREFS} from existing XML documents. \texttt{ID} attributes were chosen over \texttt{xs:key} because the preliminary research found that while it is possible to find real-life XML data with schemas containing \texttt{xs:key} structure, schemas with \texttt{ID} attributes are much more common and it is much easier to obtain large data sets for experiments.
+The scope of this work is finally limited to the inference of \texttt{ID}/\.\texttt{IDREF}/\.\texttt{IDREFS} from existing XML documents. \texttt{ID} attributes were chosen over \texttt{xs:key} because the preliminary research found out that while it is possible to find real-life XML data with schemas containing \texttt{xs:key} structure, schemas with \texttt{ID} attributes are much more common and it is much easier to obtain large data sets for experiments.
 
-\section*{Structure of the thesis}
+\section*{Structure of the Thesis}
 
 The thesis will be structured as follows.
 
@@ -21,7 +21,7 @@ Then in Chapter \ref{chapter-research}, we review approaches to ID attribute sea
 
 This will lead us to the NP-complete problem of Maximum Independent Set, where we will inspect the approaches to solving it in Chapter \ref{chapter-mip}.
 
-We will discuss a closely related Mixed Integer Problem and show that by solving MIP we can solve the Maximum Independent Set and thus the original problem of optimal ID set.
+We will discuss a closely related Mixed Integer Problem and show that by~solving MIP we can solve the Maximum Independent Set and thus the original problem of optimal ID set.
 
 Afterwards, we will show how to use an external MIP solver and demonstrate that this can take too much time. Next we show how to use a heuristic approach to find good solutions much faster.
 
@@ -53,4 +53,4 @@ Pseudocode examples such as the one in Listing \ref{listing-example} will always
 
 There is a list of abbreviations following the bibliography in Listing \ref{chapter-list-abbreviations}.\\
 
-Please note that throughout this work we will be explicitly ignoring the $\mathcal{O}()$ complexities of algorithms we use. This is because the algorithms we use are by principle strongly stochastic and their performance often depends on behavior of external tools, which we regarded as black boxes and mostly ignored their inner workings.
+Please note that throughout this work we will disregard the $\mathcal{O}()$ complexities of algorithms we use. This is because the algorithms we use are by principle strongly stochastic and their performance often depends on behavior of external tools, which we regarded as black boxes and mostly ignored their inner workings.

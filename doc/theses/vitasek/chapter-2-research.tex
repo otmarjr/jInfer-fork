@@ -1,10 +1,10 @@
 \chapter{Related Work}
 \label{chapter-research}
 
-According to the article \cite[Chapter~4]{fidax}, the problem of finding an ID set with weight more than some $K$ ($K$-\textsc{IDSet}) is in NP. Furthermore, the independent set (IS) problem can be reduced to $K$-\textsc{IDSet}, meaning $K$-\textsc{IDSet} is NP-hard and thus NP-complete. The transformation from IS problem formulation to~$K$-\textsc{IDSet} problem formulation is as follows.
+According to the article \cite[Chapter~4]{fidax}, the problem of finding an ID set with weight more than some given $K$ ($K$-\textsc{IDSet}) is~in~NP. Furthermore, the independent set (IS) problem can be reduced to $K$-\textsc{IDSet}, meaning $K$-\textsc{IDSet} is~NP-hard and thus NP-complete. The transformation from IS problem formulation to~$K$-\textsc{IDSet} problem formulation is as follows.
 
 \begin{quote}
-Let $G = (V, E)$ be a simple connected graph with vertex set $V = \{v_1, \ldots, v_n\}$, and edge set $E = \{e_1, \ldots, e_m\}$. We define the attribute mappings as follows. Let $ \mathcal{I} = V \cup E$, and define $value(x) = x, x \in \mathcal{I}$. For each vertex $v_i \in V$, we create a mapping $m_i = \{(v_i, e_j): e_j \in E \,\text{is incident on}\, v_i \}$, and define $\tau(m_i) = v_i$; let $C = \{m_1, \ldots, m_n\}$ be set of all such mappings. It is clear that G has an independent set of size $K$ iff $C$ has an ID set of size $K$. Also, $C$ can be constructed in time polynomial on $n+m$.
+Let $G = (V, E)$ be a~simple connected graph with vertex set $V = \{v_1, \ldots, v_n\}$, and edge set $E = \{e_1, \ldots, e_m\}$. We define the~attribute mappings as~follows. Let $ \mathcal{I} = V \cup E$, and define $value(x) = x, x \in \mathcal{I}$. For each vertex $v_i \in V$, we create a~mapping $m_i = \{(v_i, e_j): e_j \in E \,\text{is incident on}\, v_i \}$, and define $\tau(m_i) = v_i$; let $C = \{m_1, \ldots, m_n\}$ be~set of~all such mappings. It~is~clear that G has an~independent set of~size $K$ iff $C$ has an~ID set of~size $K$. Also, $C$ can be~constructed in~time polynomial on~$n+m$.
 \end{quote}
 
 The article continues by proving that finding the maximum weighted IS can be reduced to the problem of finding an ID set with maximum weight (\textsc{Max-IDSet}). This again means that \textsc{Max-IDSet} is NP-complete and, furthermore, unless $\P = \NP$, \textsc{Max-IDSet} has no constant factor approximation algorithm.

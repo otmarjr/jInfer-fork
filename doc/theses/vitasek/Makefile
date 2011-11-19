@@ -20,7 +20,7 @@ all: ${IMAGESTOCONVERT} literature.bib Makefile diplomka.tex
 	rm -f *.toc
 	pdflatex diplomka
 	pdflatex  diplomka
-#	bibtex diplomka
+	bibtex diplomka
 	pdflatex diplomka
 
 clean:

@@ -4,4 +4,6 @@ From all the integrity constraints in XML we chose the \texttt{ID}/\.\texttt{IDR
 
 However, this approach took too long for some inputs, so we introduced a whole range of construction as well as improvement heuristics. We combined these algorithms to create a metaheuristic and performed a number of experiments to understand its behavior. Finally we selected a promising metaheuristic strategy and tuned its parameters to find very good ID sets while maintaining low running times.\\
 
-To the best of our knowledge, at the time of writing this work is our approach to finding \texttt{ID} attributes the best one known.
+To the best of our knowledge, at the time of writing this work is our approach to finding \texttt{ID} attributes the best one known.\\
+
+The wisdom found in the experiments in this work might be the following. While it is important to be able to write a heuristic algorithm tailored to the specific problem being solved, such as the authors of \cite{fidax} did, it should be noted that sometimes it is better to solve a more generalized problem. In this case the transformation to MIP formulation and using a dedicated solver proved to produce better results in shorter time.

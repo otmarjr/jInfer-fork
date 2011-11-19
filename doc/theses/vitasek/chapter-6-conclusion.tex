@@ -2,7 +2,7 @@
 
 From all the integrity constraints in XML we chose the \texttt{ID}/\.\texttt{IDREF}/\.\texttt{IDREFS} attributes and decided to improve upon the search for them. We discussed the approach from \cite{fidax} and the equivalence of ID set search and maximum weighted independent set. Based on this article we introduced the MIP approach and demonstrated how to find the optimal ID set using external GLPK solver in the environment of jInfer framework.\\
 
-However, this approach took too long for some inputs, so we introduced a whole range of construction as well as improvement heuristics. We combined these algorithms to create a metaheuristic and performed a number of experiments to understand its behavior. Finally we selected a promising metaheuristic strategy and tuned its parameters to find very good ID sets while maintaining low running times.\\
+However, this approach took too long for some inputs, so we introduced a~whole range of construction as well as improvement heuristics. We combined these algorithms to create a metaheuristic and performed a number of experiments to understand its behavior. Finally we selected a promising metaheuristic strategy and tuned its parameters to find very good ID sets while maintaining low running times.\\
 
 To the best of our knowledge, at the time of writing this work is our approach to finding \texttt{ID} attributes the best one known.\\
 

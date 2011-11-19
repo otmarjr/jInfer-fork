@@ -1,13 +1,13 @@
 \chapter{Related Work}
 \label{chapter-research}
 
-According to the article \cite[Chapter~4]{fidax}, the problem of finding an ID set with weight more than some $K$ ($K$-\textsc{IDSet}) is in NP. Furthermore, the independent set (IS) problem can be reduced to $K$-\textsc{IDSet}, meaning $K$-\textsc{IDSet} is NP-hard and thus NP-complete. The transformation from IS problem formulation to $K$-\textsc{IDSet} problem formulation is as follows.
+According to the article \cite[Chapter~4]{fidax}, the problem of finding an ID set with weight more than some $K$ ($K$-\textsc{IDSet}) is in NP. Furthermore, the independent set (IS) problem can be reduced to $K$-\textsc{IDSet}, meaning $K$-\textsc{IDSet} is NP-hard and thus NP-complete. The transformation from IS problem formulation to~$K$-\textsc{IDSet} problem formulation is as follows.
 
 \begin{quote}
 Let $G = (V, E)$ be a simple connected graph with vertex set $V = \{v_1, \ldots, v_n\}$, and edge set $E = \{e_1, \ldots, e_m\}$. We define the attribute mappings as follows. Let $ \mathcal{I} = V \cup E$, and define $value(x) = x, x \in \mathcal{I}$. For each vertex $v_i \in V$, we create a mapping $m_i = \{(v_i, e_j): e_j \in E \,\text{is incident on}\, v_i \}$, and define $\tau(m_i) = v_i$; let $C = \{m_1, \ldots, m_n\}$ be set of all such mappings. It is clear that G has an independent set of size $K$ iff $C$ has an ID set of size $K$. Also, $C$ can be constructed in time polynomial on $n+m$.
 \end{quote}
 
-The article continues by proving that the problem of finding maximum weighted IS can be reduced to the problem of finding an ID set with maximum weight (\textsc{Max-IDSet}). This again means that \textsc{Max-IDSet} is NP-complete and, furthermore, unless $\P = \NP$, \textsc{Max-IDSet} has no constant factor approximation algorithm.
+The article continues by proving that finding the maximum weighted IS can be reduced to the problem of finding an ID set with maximum weight (\textsc{Max-IDSet}). This again means that \textsc{Max-IDSet} is NP-complete and, furthermore, unless $\P = \NP$, \textsc{Max-IDSet} has no constant factor approximation algorithm.
 
 The difference in transformation from maximum weighted IS to \textsc{Max-IDSet} is as follows.
 
@@ -25,7 +25,7 @@ To the best of our knowledge, there are no other articles dealing with this prob
 
 XML keys are a structure somewhat similar to \texttt{ID} attributes, but with a much larger expressive strength. They have been introduced in \cite{keX} and implemented in XML Schema\footnote{\url{http://www.w3.org/TR/xmlschema11-1/\#Identity-constraint\_Definition\_details}}.
 
-Fajt in \cite{fajt} summarizes several algorithms to help find XML keys in existing data, namely \textit{Gordian}, \textit{XML Primary Keys}, \textit{SPIDER} and \textit{DBA Companion}. Except for \textit{XML Primary Keys}, they all are originally purposed to find keys in relational databases. We will describe them shortly.
+Fajt in \cite{fajt} summarizes several algorithms to help find XML keys in existing data, namely \textit{Gordian}, \textit{XML Primary Keys}, \textit{SPIDER} and \textit{DBA Companion}. Except for \textit{XML Primary Keys}, they all are originally purposed to find keys in~relational databases. We will describe them shortly.
 
 \subsubsection{\textit{Gordian}}
 
@@ -35,7 +35,7 @@ This algorithm from \cite{fajt-41} extracts composite primary keys (PKs) from re
 The idea behind is an observation that a projection of entities corresponds to a key if each counted aggregation for a projection is equal to 1. Thus, this method searches for all possible projections of a dataset while computing aggregations on the projected part of the set of entities.
 \end{quote}
 
-This is achieved by constructing a prefix tree from the tuples in the original relation, which is then pruned and traversed depth-first to find non-key attributes from which the primary keys are inferred. This algorithm still has to be adapted to search for PKs in XML data.
+This is achieved by constructing a prefix tree from the tuples in the original relation, which is then pruned and traversed depth-first to find non-key attributes from which the primary keys are inferred. This algorithm still has to~be~adapted to~search for PKs in XML data.
 
 \subsubsection{\textit{XML Primary Keys}}
 
@@ -51,11 +51,11 @@ The core of this algorithm from \cite{fajt-51, fajt-53} is the following.
 The process consists of two steps - sets of values are sorted during the first one and then all the candidates are analyzed in parallel. The core of the method is utilizing the data structure called min-heap which synchronizes the processing of all values of all attributes.
 \end{quote}
 
-It is possible to use a number of heuristic pruning strategies to keep the min-heap in a reasonable size. This algorithm performs very well for PKs in relational databases, however, it still has to be adapted for XML keys.
+It is~possible to~use a~number of~heuristic pruning strategies to~keep the~min-heap in~a~reasonable size. This algorithm performs very well for PKs in~relational databases, however, it~still has to~be~adapted for~XML keys.
 
 \subsubsection{\textit{DBA Companion}}
 
-Like \textit{SPIDER}, this method from \cite{fajt-53} is able to find all the INDs in the database in just one pass. However, it uses a different data structure (basically a binary relation between the attributes and their corresponding values) and considers data types. Composite INDs are found using the simple ones and pruning the search space. According to the authors of \textit{SPIDER}, \textit{DBA Companion} is far inferior in performance. This algorithm has yet to be adapted to search for XML keys, too.
+Like \textit{SPIDER}, this method from \cite{fajt-53} is able to find all the~INDs in~the~da\-ta\-base in~just one pass. However, it~uses a~different data structure (basically a~binary relation between the~attributes and~their corresponding values) and~considers data types. Composite INDs are~found using the~simple ones and~pruning the~search space. According to~the~authors of~\textit{SPIDER}, \textit{DBA Companion} is~far inferior in~performance. This algorithm has yet to~be~adapted to~search for XML keys, too.
 
 \subsubsection{Fajt's Approach - \textit{KeyMiner}}
 

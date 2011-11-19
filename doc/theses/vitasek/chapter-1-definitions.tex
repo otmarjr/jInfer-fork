@@ -31,11 +31,11 @@ This example introduces an XML file fragment that will be used for demonstration
 Furthermore, we denote $\mathcal{I}$ the set of all ids and $\mathcal{V}$ the set of all values in the document. We will need two more definitions from the article.
 
 \begin{define}[Node equality]
-	$v_1$ and $v_2$ are \textit{node equal}, written $v_1 =_n v_2$ iff $id(v_1) = id(v_2)$.
+	Nodes $v_1$ and $v_2$ are \textit{node equal}, written $v_1 =_n v_2$ iff $id(v_1) = id(v_2)$.
 \end{define}
 
 \begin{define}[Value equality]
-	$v_1$ and $v_2$ are \textit{value equal}, written $v_1 =_v v_2$ iff $value(v_1) = value(v_2)$.
+	Nodes $v_1$ and $v_2$ are \textit{value equal}, written $v_1 =_v v_2$ iff $value(v_1) = value(v_2)$.
 \end{define}
 
 \section{\texttt{ID}, \texttt{IDREF}, \texttt{IDREFS} Attributes}
@@ -61,16 +61,6 @@ An \texttt{ID} attribute \textsc{must} have a declared default of \texttt{\#IMPL
 Values of type \texttt{IDREF} \textsc{must} match the Name production, and values of type \texttt{IDREFS} \textsc{must} match Names; each Name \textsc{must} match the value of an \texttt{ID} attribute on some element in the XML document; i.e. \texttt{IDREF} values \textsc{must} match the value of some \texttt{ID} attribute.
 \end{quote}
 
-%\section{XML Keys} - is this necessary at all?
-
-%\subsection{According to Specification}
-
-% - compare them to ID attributes
-
-%\subsection{According to \cite{keX}}
-
-% - show how a XML key is defined using the keX notation % this is a terrible sentence
-
 \section{Attribute Mappings}
 \label{section-definitions-ams}
 
@@ -83,7 +73,7 @@ We will use a different definition (without introducing keys from \cite{keX}) th
 
 \begin{define}[Attribute mapping]
 	For $x \in \Sigma^E$ and $y \in \Sigma^A$ we define the \textit{attribute mapping} of y over x, denoted $M_{x}^{y}$, the $\mathcal{I} \times \mathcal{I}$ relation defined by
-	\[M_{x}^{y} = \{ (z,w): label(z) = x, label(w) = y, parent(w) = z \}\]
+	\[M_{x}^{y} = \{ (z,w): label(z) = x, label(w) = y, parent(w) = z \}.\]
 \end{define}
 
 Thus the relation $M_{x}^{y}$ contains edges in the XML tree connecting element nodes labeled $x$ and attribute nodes labeled $y$.
@@ -105,7 +95,7 @@ The following example equations hold.
 \end{eqnarray*}
 
 \begin{define}[Image of the attribute mapping]
-	\textit{Image} $\iota$ of the attribute mapping $M_{x}^{y}$ is defined as $\iota(M_{x}^{y}) = \{z: z = value(w), w \in \pi_A(M_{x}^{y})\}$
+	\textit{Image} $\iota$ of the attribute mapping $M_{x}^{y}$ is defined as $\iota(M_{x}^{y}) = \{z: z = value(w), w \in \pi_A(M_{x}^{y})\}$.
 \end{define}
 
 So the image of an AM is a set of all the values of all the attribute nodes contained in the mapping.
@@ -132,8 +122,8 @@ An attribute mapping model is a data structure containing the information about 
 Based on the requirements for an \texttt{ID} attribute from Section \ref{section-definitions-id-attributes} we will define ID set with the help of the following definition.
 
 \begin{define}[Candidate attribute mapping]
-An attribute mapping $m$ is a \textit{candidate attribute mapping} if it is an injective function, that is,
-\[|m| = |\pi_E(m)| = |\pi_A(m)| = |\iota(m)|\]
+An attribute mapping $m$ is a~\textit{candidate attribute mapping} if it is an injective function, that is,
+\[|m| = |\pi_E(m)| = |\pi_A(m)| = |\iota(m)|.\]
 \end{define}
 
 \paragraph{Example}
@@ -143,7 +133,7 @@ Now we can proceed to define an ID set.
 
 \begin{define}[ID set]
 A set of candidate attribute mappings $I = \{m_1, \ldots m_n\}$ is an \textit{ID set} iff
-\[\bigcap_{m_i \in I} \tau(m_i) = \emptyset \wedge \bigcap_{m_i \in I} \iota(m_i) = \emptyset\]
+\[\bigcap_{m_i \in I} \tau(m_i) = \emptyset \wedge \bigcap_{m_i \in I} \iota(m_i) = \emptyset.\]
 \end{define}
 
 That is, an ID set has images without repeating values and all the types are unique (an element cannot have more than one \texttt{ID} attribute).
@@ -153,22 +143,20 @@ Returning to our example, the following are all the possible ID sets: $\{ M_{y}^
 
 \subsection*{\texttt{IDREF} and \texttt{IDREFS} Condition}
 
-Given an ID set $I$, the requirements from Section \ref{section-definitions-id-attributes} give us the following condition for an attribute mapping $m$ to be marked \texttt{IDREF}.
-\[\iota(m) \subseteq \bigcup_{m_i \in I} \iota(m_i)\]
+Given an ID set $I$, the requirements from Section \ref{section-definitions-id-attributes} give us the following condition for an attribute mapping $m$ to be marked \texttt{IDREF}:
+\[\iota(m) \subseteq \bigcup_{m_i \in I} \iota(m_i).\]
 Furthermore if $m$ contains multivalued attributes, it is to be marked \texttt{IDREFS}.
 
 \section{Attribute Mapping Weight}
 \label{section-definitions-weight}
 
-This definition of weight for AMs or AM sets comes from \cite{fidax} again.
-
-Let $M = \{m_1, \dots m_i\}$ be the set of all non-empty AMs in the document.
+This definition of weight for AMs or AM sets comes from \cite{fidax} again. Let $M = \{m_1, \dots m_i\}$ be the set of all non-empty AMs in the document.
 
 \subsection{Support}
 
 \begin{define}[Support]
-\textit{Support} of an attribute mapping $m$ is defined as follows.
-\[\phi(m) = \frac{|m|}{\sum_{p \in M}|p|}\]
+\textit{Support} of an attribute mapping $m$ is defined as follows:
+\[\phi(m) = \frac{|m|}{\sum_{p \in M}|p|}.\]
 \end{define}
 
 \begin{quote}
@@ -181,8 +169,8 @@ Support of $M_{y}^{a}$ in our example is $2 / (2+1+1+1) = 0.4$. Support of every
 \subsection{Coverage}
 
 \begin{define}[Coverage]
-\textit{Coverage} of an attribute mapping $m$ is defined as follows.
-\[\chi(m) = \left( \sum_{p \in M, p \neq m} |\iota(m) \cap \iota(p)| \right) / \sum_{p \in M} |\iota(p)|\]
+\textit{Coverage} of an attribute mapping $m$ is defined as follows:
+\[\chi(m) = \left( \sum_{p \in M, p \neq m} |\iota(m) \cap \iota(p)| \right) / \sum_{p \in M} |\iota(p)|.\]
 \end{define}
 
 \begin{quote}
@@ -196,10 +184,10 @@ Coverage of $M_{y}^{a}$ in our example is $(0+0+1) / (2+1+1+1) = 0.2$. Coverage 
 \textit{Weight} of an attribute mapping is then defined as a linear combination of its support and coverage.
 
 \begin{define}[Weight]
-For $\alpha, \beta \geq 0$ as relative priorities of support and coverage we define the AM \textit{weight} as follows.
-\[weight(m) = \alpha . \phi(m) + \beta . \chi(m)\]
-For a set of AMs (which may or may not be an ID set) $S = \{m_1, \ldots m_i\}$ we define the weight of this set as the sum of the weights of its AMs.
-\[weight(S) = \sum_{m \in S} weight(m)\]
+For $\alpha, \beta \geq 0$ as relative priorities of support and coverage we define the AM \textit{weight} as follows:
+\[weight(m) = \alpha . \phi(m) + \beta . \chi(m).\]
+For a set of AMs (which may or may not be an ID set) $S = \{m_1, \ldots m_i\}$ we define the weight of this set as the sum of the weights of its AMs:
+\[weight(S) = \sum_{m \in S} weight(m).\]
 \end{define}
 
 Note that this definition of weight is quite arbitrary and all the algorithms mentioned later could easily work with AM weight defined in any other way, even for example defined interactively by the user.
@@ -212,13 +200,13 @@ Note that this definition of weight is quite arbitrary and all the algorithms me
 We shall need the notion of an indepentent set (IS) of vertices in a graph and its weighted variant.
 
 \begin{define}[Independent set]
-Given an undirected graph $G = (V, E)$, a set of vertices $I \subseteq V$ is an \textit{independent set}, iff the following holds.
-\[\forall v_1, v_2 \in I, v_1 \neq v_2: (v_1, v_2) \notin E \]
+Given an undirected graph $G = (V, E)$, a set of vertices $I \subseteq V$ is an \textit{independent set}, iff
+\[\forall v_1, v_2 \in I, v_1 \neq v_2: (v_1, v_2) \notin E.\]
 \end{define}
 
 \begin{define}[Maximum weighted independent set]
-Given an undirected graph $G = (V, E)$ and a weight function $w: V \rightarrow \mathbb{R}$, an independent set $I_{max}$ is the \textit{maximum weighted independent set}, iff the following is satisfied.
-\[\forall I' \subseteq V, I' \text{is an independent set}: \sum_{v \in I'} w(v) \leqslant \sum_{v \in I_{max}} w(v)\]
+Given an undirected graph $G = (V, E)$ and a weight function $w: V \rightarrow \mathbb{R}$, an independent set $I_{max}$ is the \textit{maximum weighted independent set}, iff the following is satisfied:
+\[\forall I' \subseteq V, I' \text{is an independent set}: \sum_{v \in I'} w(v) \leqslant \sum_{v \in I_{max}} w(v).\]
 \end{define}
 
 It is well known that finding the maximum weighted IS is an NP-hard optimization problem, \cite{JM1986425}.
@@ -227,7 +215,7 @@ It is well known that finding the maximum weighted IS is an NP-hard optimization
 
 The problem of \textit{linear programming} is optimization of a linear function under a set of linear constraints. The formulation is usually called a \textit{linear program}. 
 
-It can be written in the following form (minimization version is possible too).
+It can be written in the following form:
 
 \begin{eqnarray*}
 \max_{x} z & = & \mathbf{c}^{\mathrm{T}}\mathbf{x} \\
@@ -255,12 +243,14 @@ b_1 \\
 b_2 \\
 \ldots \\
 b_m \\
-\end{bmatrix}
+\end{bmatrix},
 \]
+
+where a minimization version is possible, too.
 
 Where $\mathbf{x}$ is the vector of variables (to be found by the optimization), $\mathbf{b}$ is the vector and $A$ its accompanying matrix of constraints and $\mathbf{c}$ is the vector of coefficients for the objective function. $\mathbf{x}$ and $\mathbf{c}$ have length $n$, $\mathbf{b}$ has length $m$ and $A$ has dimensions $m \times n$. Furthermore, \[\max_{x} f(x)\] means maximize the value of $f(x)$ by changing the value of $x$.\\
 
-Another way to write this formulation is in the following.
+Another way to write this formulation is this:
 
 \begin{eqnarray*}
 \max_{x} z = \sum_{i=1}^{n} c_i x_i \\
@@ -279,7 +269,7 @@ Solving a linear program is usually possible in polynomial time using the \texti
 \nomenclature{MIP}{Mixed Integer Problem}
 
 \begin{define}[Mixed integer problem]
-	MIP, or \textit{mixed integer problem}, is an instance of linear programming in which some or all variables are limited to integral or boolean (0, 1) values.
+	MIP, or \textit{mixed integer problem}, is an~instance of~linear programming in~which some or~all variables are limited to~integral or~boolean (0, 1) values.
 \end{define}
 
 Solving MIP in general is $\NP$-hard.

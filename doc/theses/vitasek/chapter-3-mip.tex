@@ -12,9 +12,9 @@ Now finding the maximum weighted IS in $G$ finds the maximum (optimal) ID set in
 
 \section{IS to MIP Formulation}
 
-Given a graph $G = (V,E)$ with a weight function $w: V \rightarrow \mathbb{R}$, we introduce a binary variable $x_i$ for each vertex $v_i \in V$ and an inequality constraint $x_i + x_j \leq 1$ for each edge $e = (v_i, v_j) \in E$. Furthermore we introduce an objective function in form $\sum_{x_i} x_i w(v_i)$.
+Given a~graph $G = (V,E)$ with a~weight function $w: V \rightarrow \mathbb{R}$, we introduce a~binary variable $x_i$ for each vertex $v_i \in V$ and an~inequality constraint $x_i + x_j \leq 1$ for each edge $e = (v_i, v_j) \in E$. Furthermore we introduce an~objective function in~form $\sum_{x_i} x_i w(v_i)$.
 
-It is obvious that the objective function and all the constraints consitute a MIP instance, and that solving it finds the maximum weigthed IS in $G$.
+It is obvious that the objective function and all the constraints consitute a~MIP instance, and that solving it finds the maximum weigthed IS in $G$.
 
 \section{Finding ID Sets With GLPK}
 \label{section-mip-glpk}
@@ -42,13 +42,13 @@ Consider again our XML file fragment.
 </x>
 \end{verbatim}
 
-Recall that attribute mappings in this example are $C = \{M_{y}^{a}, M_{y}^{b}, M_{y}^{c}, M_{z}^{a}\}$. Corresponding vertices in the IS formulation will be $V = \{v_{y-a}, v_{y-b}, v_{y-c}, v_{z-a}\}$. Edges in the IS formulation will be the following.
+Recall that attribute mappings in this example are $C = \{M_{y}^{a}, M_{y}^{b}, M_{y}^{c}, M_{z}^{a}\}$. Corresponding vertices in the IS formulation will be $V = \{v_{y-a}, v_{y-b}, v_{y-c}, v_{z-a}\}$. Edges in the IS formulation will be the following ones:
 
 \begin{eqnarray*}
-(v_{y-a},v_{y-b}) \\
-(v_{y-a},v_{y-c}) \\
-(v_{y-b},v_{y-c}) \\
-(v_{y-a},v_{z-a}) \\
+(v_{y-a},v_{y-b}), \\
+(v_{y-a},v_{y-c}), \\
+(v_{y-b},v_{y-c}), \\
+(v_{y-a},v_{z-a}). \\
 \end{eqnarray*}
 
 The first three edges are due to the type collision ($y$), the last one is due to $\iota(M_{y}^{a}) \cap \iota(M_{z}^{a}) = \{1\}$. The graph $G$ constructed in this way is in Figure \ref{image-mip-is-graph}.
@@ -99,14 +99,14 @@ A =
 \end{pmatrix}
 \]
 
-The problem now is, recall, to solve the following.
+The problem now is, recall, to solve the following:
 
 \begin{eqnarray*}
 \max_{x} z & = & \mathbf{c}^{\mathrm{T}}\mathbf{x} \\
-s.t.\, A\mathbf{x} & \leqslant & \mathbf{b} \\
+s.t.\, A\mathbf{x} & \leqslant & \mathbf{b}. \\
 \end{eqnarray*}
 
-In GLPK \textit{MathProg} language (see \cite{mathprog}), this translates to the following formulation.
+In GLPK \textit{MathProg} language \cite{mathprog}, this translates to the following.
 
 \begin{scriptsize}
 \begin{verbatim}
@@ -363,7 +363,7 @@ See Listing \ref{listing-ch-removal} for its pseudocode.
 
 \subsubsection{Truncated Branch \& Bound - \heu{Glpk}}
 
-This construction heuristic will be called \heu{Glpk} from now on. It is basically a time-constrained run of GLPK. Recall that GLPK uses a the \textit{Branch \& Bound} algorithm that produces feasible solutions even before the optimum is found. Limiting the run time gives us the best solution found so far, which means this is a construction heuristic.
+This construction heuristic will be called \heu{Glpk} from now on. It is basically a~time-constrained run of GLPK. Recall that GLPK uses a the \textit{Branch \& Bound} algorithm that produces feasible solutions even before the optimum is found. Limiting the run time gives us the best solution found so far, which means this is a construction heuristic.
 
 To be able to create a pool of solutions, the GLPK input in MathProg langauge is always randomly shuffled by changing the order in which variables and constraints appear. This is causes the solver to explore the search tree in various orders, producing different solution in each of the time-constrained runs.
 

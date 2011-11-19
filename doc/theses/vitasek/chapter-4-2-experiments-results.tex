@@ -137,7 +137,7 @@ Apart from comparing different versions, we shall see how the pure GLPK approach
 \bigskip
 \end{center}
 
-Our experimental set will contain 500 experimental configurations for each of these two GLPK versions. Every configuration will use \heu{Glpk} CH set to a time limit from 1 to 46 seconds with increments of 5, meaning 10 settings * 50 iterations = 500 configurations in total (see Algorithm \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights). The data set used is \dataset{100-500} as the biggest one in sized test data.\\
+Our experimental set will contain 500 experimental configurations for each of these two GLPK versions. Every configuration will use \heu{Glpk} CH set to a~time limit from 1 to 46 seconds with increments of 5, meaning 10 settings * 50 iterations = 500 configurations in total (see Algorithm \ref{listing-experiment-glpk-native-vs-cygwin-1}). There will be no improvement heuristic. The only data we gather in the GnuPlot file are the final qualities (weights). The data set used is \dataset{100-500} as the biggest one in sized test data.\\
 
 \begin{algorithm}
 \caption{GLPK: Native vs. Cygwin Set Generation 1}
@@ -305,9 +305,9 @@ Now we shall try to answer a minor question, whether it is possible to improve \
 
 We need a pool size of one and only a single iteration - both \heu{FIDAX} and \heu{Hungry} are deterministic. We will try all official data sets, first with empty IH, second with \heu{Hungry} as IH. We will gather the qualities in each case and see whether there is any improvement.\\
 
-The experimental results are summarized in Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. As trivial a heuristic \heu{Hungry} is, it is still able to improve the ID set found by \heu{FIDAX} by as much as almost 50\% (the last row, \dataset{100-1000}).
+The experimental results are summarized in Table \ref{table-experiments-fidax-and-hungry} and are quite surprising. Bold cells mean that adding \heu{Hungry} helped achieve a better quality. However trivial \heu{Hungry} is, it is still able to improve the ID set found by \heu{FIDAX} by as much as almost 50\% (the last row, \dataset{100-1000}).
 
-Table \ref{table-experiments-fidax-and-hungry-idsets} lists the \texttt{ID} attributes found in both cases for this most extreme input, \dataset{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in element \texttt{vertexXY} should be marked as \texttt{ID} attribute''.
+Table \ref{table-experiments-fidax-and-hungry-idsets} lists the \texttt{ID} attributes found in both cases for this most extreme input, \dataset{100-1000}. Note that the content of each cell means ``attribute \texttt{attr} in~element \texttt{vertexXY} should be marked as \texttt{ID} attribute''.
 
 \begin{table}
   \caption{Results of adding \heu{Hungry} after \heu{FIDAX}}
@@ -380,7 +380,7 @@ We shall now try to find the best standalone CH, that is the CH that finds on av
 \bigskip
 \end{center}
 
-We will use all the official data sets, set the pool size to 10 where applicable, $\alpha$ and $\beta$ to 1. This experiment will consist of 50 iterations * 11 data sets * 6 CHs = 3300 experimental configurations. See the Algorithm \ref{listing-experiment-best-standalone-ch} for details. This time we are not interested in run times, only in qualities which we shall gather in a format for GnuPlot.\\
+We will use all the official data sets, set the pool size to 10 where applicable, $\alpha$ and $\beta$ to 1. This experiment will consist of 50 iterations * 11 data sets * 6 CHs = 3300 experimental configurations. See the Algorithm \ref{listing-experiment-best-standalone-ch} for details. This time we are not interested in run times, only in qualities which we shall gather in format for GnuPlot.\\
 
 \begin{algorithm}
 \caption{Best Standalone CH Set Generation}
@@ -444,7 +444,7 @@ We should note that the combination \textit{best CH - best IH} found this way do
 \bigskip
 \end{center}
 
-This experimental set will contain 6 data sets * 50 iterations * 4 IHs = 1200 experimental configurations. Note that we are using only the most challenging data sets, as the combination of \heu{Glpk} as CH and any other IH is already an overkill for easier data sets.\\
+This experimental set will contain 6 data sets * 50 iterations * 4 IHs = 1200 experimental configurations. Note that we are using only the most challenging data sets, as the combination of \heu{Glpk} as CH and any other IH is already an~overkill for easier data sets.\\
 
 \begin{algorithm}
 \caption{Best IH for \heu{Glpk} Set Generation}
@@ -814,10 +814,10 @@ X and Y axes represent the time and quality, as usual. Each line represents one 
 
 We can see effects of different IHs from this graph:
 \begin{itemize}
-	\item Every $(1 + 5k)$\textsuperscript{th} and $(3 + 5k)$\textsuperscript{th} step is a \heu{RandomRemove}, and each time this happens there is a rather sharp drop in quality
-	\item Every $(2 + 5k)$\textsuperscript{th} step is a \heu{Mutation}, and there is a consistent increase in quality each time.
-	\item Every $(4 + 5k)$\textsuperscript{th} step is a \heu{Crossover}, and each time it happens there is a consistent increase, yet smaller than with \heu{Mutation}.
-	\item Every $5k$\textsuperscript{th} step is a \heu{RemoveWorst}, and as expected, this removes the worst solution not touching the best ones that decide the incumbent quality. The line thus stays flat every time it happens.
+	\item Every $(1 + 5k)$\textsuperscript{th} and $(3 + 5k)$\textsuperscript{th} step is~a~\heu{RandomRemove}, and each time this happens there is~a~rather sharp drop in~quality.
+	\item Every $(2 + 5k)$\textsuperscript{th} step is a~\heu{Mutation}, and there is~a~consistent increase in~quality each time.
+	\item Every $(4 + 5k)$\textsuperscript{th} step is a~\heu{Crossover}, and each time it~happens there is~a~consistent increase, yet smaller than with \heu{Mutation}.
+	\item Every $5k$\textsuperscript{th} step is~a~\heu{RemoveWorst}, and as~expected, this removes the worst solution not touching the best ones that decide the incumbent quality. The line thus stays flat every time it~happens.
 \end{itemize}
 
 In this particular example there is only 1 run out of 10 that does not finish (find optimum) under the 10 second mark.\\

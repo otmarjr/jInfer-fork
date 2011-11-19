@@ -1,9 +1,7 @@
 \chapter{Related Work}
 \label{chapter-research}
 
-According to the article \cite[Chapter~4]{fidax}, the problem of finding an ID set with weight more than some $K$ ($K$-\textsc{IDSet}) is in NP. Furthermore, the independent set (IS) problem can be reduced to $K$-\textsc{IDSet}, meaning $K$-\textsc{IDSet} is NP-hard and thus NP-complete.
-
-The transformation from IS problem formulation to $K$-\textsc{IDSet} problem formulation is as follows.
+According to the article \cite[Chapter~4]{fidax}, the problem of finding an ID set with weight more than some $K$ ($K$-\textsc{IDSet}) is in NP. Furthermore, the independent set (IS) problem can be reduced to $K$-\textsc{IDSet}, meaning $K$-\textsc{IDSet} is NP-hard and thus NP-complete. The transformation from IS problem formulation to $K$-\textsc{IDSet} problem formulation is as follows.
 
 \begin{quote}
 Let $G = (V, E)$ be a simple connected graph with vertex set $V = \{v_1, \ldots, v_n\}$, and edge set $E = \{e_1, \ldots, e_m\}$. We define the attribute mappings as follows. Let $ \mathcal{I} = V \cup E$, and define $value(x) = x, x \in \mathcal{I}$. For each vertex $v_i \in V$, we create a mapping $m_i = \{(v_i, e_j): e_j \in E \,\text{is incident on}\, v_i \}$, and define $\tau(m_i) = v_i$; let $C = \{m_1, \ldots, m_n\}$ be set of all such mappings. It is clear that G has an independent set of size $K$ iff $C$ has an ID set of size $K$. Also, $C$ can be constructed in time polynomial on $n+m$.
@@ -23,8 +21,52 @@ The article further suggests a heuristic approach described in Section \ref{sect
 
 To the best of our knowledge, there are no other articles dealing with this problem.\\
 
-Fajt in \cite{fajt} lists several algorithms to find XML keys (see \cite{keX}) in existing XML documents and introduces some new ones. XML keys found this way, being quite different from \texttt{ID} attributes, can under some circumstances (they have to be simple) be translated to an equivalent \texttt{ID} attribute definition. The process is described in \cite[Ch.\ 9, s.\ 3]{vlist2002xml}. This opens a new line of possible research: finding XML keys using an algorithm modified to look only for \textit{useful} keys and then converting them to \texttt{ID} attributes. 
+\section{Finding XML Keys}
 
-In our work we find the \texttt{ID} attributes directly. Even though we can convert them to XML keys by the process mentioned above, we are unable to find more complex keys this way.\\
+XML keys are a structure somewhat similar to \texttt{ID} attributes, but with a much larger expressive strength. They have been introduced in \cite{keX} and implemented in XML Schema\footnote{\url{http://www.w3.org/TR/xmlschema11-1/\#Identity-constraint\_Definition\_details}}.
 
-Maximum weigthed IS is a well researched topic with a lot of known direct or approximation algorithms, see e.g. \cite{JM1986425} or \cite{Fomin:2009:MCA:1552285.1552286}.\\
+Fajt in \cite{fajt} summarizes several algorithms to help find XML keys in existing data, namely \textit{Gordian}, \textit{XML Primary Keys}, \textit{SPIDER} and \textit{DBA Companion}. Except for \textit{XML Primary Keys}, they all are originally purposed to find keys in relational databases. We will describe them shortly.
+
+\subsubsection{\textit{Gordian}}
+
+This algorithm from \cite{fajt-41} extracts composite primary keys (PKs) from relational databases.
+
+\begin{quote}
+The idea behind is an observation that a projection of entities corresponds to a key if each counted aggregation for a projection is equal to 1. Thus, this method searches for all possible projections of a dataset while computing aggregations on the projected part of the set of entities.
+\end{quote}
+
+This is achieved by constructing a prefix tree from the tuples in the original relation, which is then pruned and traversed depth-first to find non-key attributes from which the primary keys are inferred. This algorithm still has to be adapted to search for PKs in XML data.
+
+\subsubsection{\textit{XML Primary Keys}}
+
+This is an algorithm from \cite{fajt-39} capable of finding simple keys and foreign keys directly in XML data. This is achieved by building a prefix tree containing all the XML nodes and then evaluating every path in it as a candidate key using metrics called \textit{support} and \textit{confidence}. To find more complex keys, the algorithm iteratively constructs candidate keys from simpler ones and evaluates them.\\
+
+The following two algorithms deal with \textit{inclusion dependencies} (INDs), described for example in \cite{fajt-12}.
+
+\subsubsection{\textit{SPIDER}}
+
+The core of this algorithm from \cite{fajt-51, fajt-53} is the following.
+
+\begin{quote}
+The process consists of two steps - sets of values are sorted during the first one and then all the candidates are analyzed in parallel. The core of the method is utilizing the data structure called min-heap which synchronizes the processing of all values of all attributes.
+\end{quote}
+
+It is possible to use a number of heuristic pruning strategies to keep the min-heap in a reasonable size. This algorithm performs very well for PKs in relational databases, however, it still has to be adapted for XML keys.
+
+\subsubsection{\textit{DBA Companion}}
+
+Like \textit{SPIDER}, this method from \cite{fajt-53} is able to find all the INDs in the database in just one pass. However, it uses a different data structure (basically a binary relation between the attributes and their corresponding values) and considers data types. Composite INDs are found using the simple ones and pruning the search space. According to the authors of \textit{SPIDER}, \textit{DBA Companion} is far inferior in performance. This algorithm has yet to be adapted to search for XML keys, too.
+
+\subsubsection{Fajt's Approach - \textit{KeyMiner}}
+
+Fajt introduces a new algorithm based on \textit{Gordian} and \textit{SPIDER} to look for primary and foreign keys in XML data. First, relations have to be extracted from the original XML document. Then all the primary keys are found using a modified \textit{Gordian} algorithm which can find absolute as well as relative PKs. Finally, \textit{SPIDER} is used to compute the foreign keys from the PKs found in the previous step.
+
+\subsection{Relation to \texttt{ID} Attributes}
+
+XML keys found this or any other way can under some circumstances (when they are simple enough) be translated to an equivalent \texttt{ID} attribute definition. The process is described in \cite[Ch.\ 9, s.\ 3]{vlist2002xml}. This opens a new line of possible research: finding XML keys using an algorithm modified to look only for \textit{useful} keys and then converting them to \texttt{ID} attributes.\\ 
+
+However, in our work we find \texttt{ID} attributes directly. And even though we can always convert them to XML keys by the process mentioned above, we are unable to find more complex keys this way.\\
+
+\section{Maximum Weighted IS}
+
+Maximum weigthed IS is a well researched topic with a lot of known direct or approximation algorithms, see e.g. \cite{JM1986425} or \cite{Fomin:2009:MCA:1552285.1552286}. According to for example \cite{Paschos:1997:SAO:254180.254190}, the best known approximation algorithm for weighted IS to-date achieves an approximation ratio of $3(\Delta + 2)$, where $\Delta$ is the maximum degree of a vertex in the IS graph. This article lists several algorithms similar to those we introduce in the following chapters.\\

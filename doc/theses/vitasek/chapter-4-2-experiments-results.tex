@@ -1020,4 +1020,6 @@ The first fact is that if we have the time available, it is best to just let the
 
 Secondly, if we do not have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Strategy 1. In all our realistic data sets the optimum was found almost instantly, and the most complex and bigges artificial data sets took only around 1/4 of the time to finish, compared to \heu{Glpk}.\\
 
-Furthermore, it is always good to ignore the simple text data nodes, as it will improve the total run time.
+Furthermore, it is always good to ignore the simple text data nodes, as it will improve the total run time.\\
+
+Now compare this to the performance of the original algorithm from \cite{fidax} that we have implemented as \heu{FIDAX}. We cannot use it to find the optimum, even if we do have enough time: it is hungry, deterministic and always gives us only one solution. And even if time is constrained, we have shown in Section \ref{section-experiments-random-fuzzy-fidax} that even trivial algorithms such as \heu{Random} or \heu{Fuzzy} very often outperform \heu{FIDAX}. And \heu{Glpk} constrained to 1 second run time outperforms \heu{FIDAX} on every data set.\\

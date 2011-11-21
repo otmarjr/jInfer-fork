@@ -2,14 +2,14 @@
 
 A straightforward extension granting the ability to handle more than one input XML file has already been suggested in \cite{fidax}. However, it was not implemented in this work either, so it remains an obvious first choice of future work.\\
 
-It is possible (and easy) to add more construction and improvement heuristics, as well as more metaheuristics using the existing IHs. A~starting point is in Section \ref{section-appendix-iss-howto}.\\
+It is possible (and easy) to add more construction and improvement heuristics, as well as more metaheuristics using the existing IHs. A~starting point is~in~Section \ref{section-appendix-iss-howto}.\\
 
 As it was mentioned in Section \ref{section-mip-ihs}, the combination of \heu{Crossover}, \heu{Mu\-ta\-tion} and \heu{RemoveWorst} can be seen as a sort of genetic programming. However some modifications would still be necessary to make it a real instance of genetic algorithm metaheuristic.
 
 Likewise it is possible to create an Ant Colony Optimization metaheuristic solving the same problem. It would be interesting to see all these metaheuristics compared to each other in a set of comprehensive experiments.\\
 
-The approach used in this work was strictly single-threaded, however there are in principle no limitations to extending this to a parallel, multi-threaded environment. For example, creating a pool of initial solutions in \heu{Glpk} construction heuristic can be improved by running several instances of GLPK solver in parallel - as GLPK on its own uses only a single thread.\\
+The approach used in this work was strictly single-threaded, however there are in principle no limitations to extending this to a parallel, multi-threaded environment. For example, creating a pool of initial solutions in \heu{Glpk} construction heuristic can be improved by running several instances of GLPK solver in~parallel - as GLPK on its own uses only a single thread.\\
 
-From the point of view of a user - researcher, the current implementation of the experimental framework leaves a lot to be desired. As jInfer already contains support for interchangeable and configurable modules, it is possible to create GUI for experiment and experimental set configuration on the fly.\\
+From the point of view of a user - researcher, the current implementation of~the experimental framework leaves a lot to be desired. As jInfer already contains support for interchangeable and configurable modules, it is possible to~create GUI for experiment and experimental set configuration on the fly.\\
 
 jInfer as well as the \jmodule{IDSetSearch} module are open source projects, meaning that anyone wishing to build upon this work can do so easily.

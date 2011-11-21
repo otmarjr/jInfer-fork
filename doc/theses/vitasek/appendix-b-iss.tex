@@ -19,7 +19,7 @@ Most important packages in \jmodule{IDSetSearch} are the following.
 
 \texttt{Experiment} is a class representing a single experiment with specified input data (encapsulated in \texttt{Test\-Data} interface), settings (encapsulated in \texttt{Ex\-pe\-ri\-ment\-Pa\-ra\-me\-ters}) and a metaheuristic as defined in Section \ref{section-mip-heuristics}. Its method \texttt{run()} will launch the metaheuristic, first executing the construction heuristic and then running the specified improvement heuristics in a loop until termination criteria defined in an implementation of \texttt{Ter\-mi\-na\-tion\-Cri\-ter\-ion} are met. The quality of a single ID set is measured by an instance of \texttt{Quality\-Measurement}. After the experiment finishes, it invokes the \texttt{notify\-Finished()} method.
 
-However, experiments are almost never run alone. For the purpose of running a whole experimental set there is the \texttt{Experiment\-Set} interface and its abstract implementation \texttt{Abstract\-Experiment\-Set}. Its descendants need only to provide a list of \texttt{Experiment\-Parameter}s and looping as well as data collection will be handled for them.
+However, experiments are almost never run alone. For the purpose of running a whole experimental set there is the \texttt{Experiment\-Set} interface and its abstract implementation \texttt{Abstract\-Experiment\-Set}. Its descendants need only to~provide a list of \texttt{Experiment\-Parameter}s and looping as well as data collection will be handled for them.
 
 \section{How to Create a New Heuristic}
 \label{section-appendix-iss-howto}
@@ -30,6 +30,6 @@ In this method use the provided \texttt{Experiment} instance (and \texttt{List<I
 
 \section{How to Create a New Experimental Set}
 
-Subclass the \texttt{Abstract\-Experiment\-Set} class, override \texttt{get\-Name()} to provide the name of this set and finally override \texttt{get\-Experiments()} to return the list of \texttt{Experiment\-Parameters} that will constitute this sit.
+Subclass the \texttt{Abstract\-Experiment\-Set} class, override \texttt{get\-Name()} to provide the name of this set and finally override \texttt{get\-Experiments()} to return the list of~\texttt{Ex\-per\-i\-ment\-Parameters} that will constitute this sit.
 
-It is possible to override any of the following methods: \texttt{notify\-Start()}, \texttt{notify\-Finished()} and \texttt{notify\-Finished\-All()}. They will be invoked before running the first experiment, after each experiment run and after all experiments finished, respectively. Note that \texttt{notify\-Finished()} already can output some information regarding the currently finished experiment to a file, but it can be safely overriden without a need to call \texttt{super.\.notify\-Finished()}.
+It is possible to override any of the following methods: \texttt{notify\-Start()}, \texttt{notify\-Finished()} and \texttt{notify\-Finished\-All()}. They will be invoked before running the first experiment, after each experiment run and after all experiments finished, respectively. Note that \texttt{notify\-Finished()} already can output some information regarding the currently finished experiment to a file, but it~can be safely overriden without a need to call \texttt{super.\.notify\-Finished()}.

@@ -93,7 +93,7 @@ Element,Attribute
 \end{scriptsize}
 \end{multicols}
 
-The first section deals with system information. Please note that some of these characteristics cannot be easily obtained programmatically and are thus stored in the source code as constants.\\
+The first section deals with system information. Note that some of~these char\-ac\-ter\-is\-tics cannot be easily obtained programmatically and are thus stored in the source code as constants.\\
 To obtain GLPK information, the program parses the first line of standard output produced by running \code{glpsol -v}. It tries to guess whether it's the Cygwin version by looking at the path to the binary.
 
 The second section states the input file along with its size and graph representation (Section \ref{section-experiments-data}). Alpha and beta parameters for this instance belong here too.
@@ -142,7 +142,7 @@ Algorithm: Mutation, ratio = 0.1, limit = 1 s
 After the last improvement phase, the reason why the metaheuristic terminated is stated. Possible causes are exceeding the maximum time available, maximum iterations or reaching the known optimum for this file and alpha / beta settings.
 \\
 
-To be able to reconstruct the progress of the metaheuristic, the next section contains CSV \nomenclature{CSV}{Comma Separated Values} formatted data for each iteration. Each row contains the time in milliseconds, quality of the incumbent solution and the number of its AMs.
+To be able to reconstruct the progress of the metaheuristic, the next section contains CSV \nomenclature{CSV}{Comma Separated Values} formatted data for each iteration. Each row contains the time in~milliseconds, quality of the incumbent solution and the number of its AMs.
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -154,7 +154,7 @@ Time,Quality,AMs
 \end{verbatim}
 \end{footnotesize}
 
-And finally, it is important to know what is the ID/IDREF set recommended by this experiment run. Thus the log is concluded by a CSV formatted list of element - attribute name pairs to be included in the ID and IDREF set, respectively.
+And finally, it is important to know what is the ID/IDREF set recommended by this experiment run. Thus the log is concluded by a CSV formatted list of~element - attribute name pairs to be included in the ID and IDREF set, respectively.
 
 \begin{footnotesize}
 \begin{verbatim}

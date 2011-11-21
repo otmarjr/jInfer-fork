@@ -63,7 +63,7 @@ The experimental set will contain $50 * (11 + 11) = 1100$ configurations: 50 ite
 
 The results are captured in Table \ref{table-experiments-grammar-model-timing}. We are presenting the average grammar extraction (GE) times and their standard deviation, the same for model creation (MC) and total (sum of these two, Tot) times. For many data sets the average time is less than 10 ms: this is not enough to be precise and we do not calculate the standard deviation in these cases.
 
-We can see from the results that for most data sets their model can easily be created under around one second, only in case of the biggest set \dataset{XMA-p} (13 MB) this takes some 17 seconds. We can conclude that grammar and model creation times are not a bottleneck for now. Heuristics run times will be order of magnitude higher.
+We can see from the results that for most data sets their model can easily be created under around one second, only in case of the biggest set \dataset{XMA-p} (13 MB) this takes approximately 17 seconds. We can conclude that grammar and~model creation times are not a bottleneck for now. Heuristics run times will be~order of magnitude higher.
 
 \subsubsection{GLPK Interface Timing}
 
@@ -107,7 +107,7 @@ A related problem is how long it takes to create an input for GLPK and then pars
 
 The results are captured in Table \ref{table-experiments-glpk-timing}. For each data set there are the times of (GLPK) input creation (IC) - average and standard deviation, then the same for output parsing (OP) and total (Tot).
 
-Interestingly enough, in most cases the times to create an input for GLPK and then to parse its output are very similar. Also, for sized test data sets it is interesting to note that even though the $|V|$ and $|E|$ numbers are increasing, the times remain almost the same. This is probably due to the fact that IC and OP times include the I/O when writing to a file for GLPK or reading the file it produced, and these times are probably the most relevant.
+Interestingly enough, in most cases the times to create an input for GLPK and then to parse its output are very similar. Also, for sized test data sets it~is~interesting to note that even though the $|V|$ and $|E|$ numbers are increasing, the~times remain almost the same. This is probably due to the fact that IC and OP times include the I/O when writing to a file for GLPK or reading the~file it~produced, and these times are probably the most relevant.
 
 \subsection{GLPK: Native vs. Cygwin}
 \label{section-glpk-comparison}
@@ -117,9 +117,9 @@ Interestingly enough, in most cases the times to create an input for GLPK and th
 
 In this experiment we will try to remove one of the variables out of the equation: that is the effect of different versions of GLPK on the overall results. The rationale is this: on Windows systems, the two most accessible ways to install GLPK are via a binary distribution or via Cygwin as one of its packages.
 
-If we find out which of these Cygwin version is better, we will be using it exclusively knowing this should not affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be and interesting finding, too.
+If we find out which of these Cygwin version is better, we will be using it~exclusively knowing this should not affect any other aspect of our experiments. We might also find that there is no relevant difference, which would be and interesting finding, too.
 
-Apart from comparing different versions, we shall see how the pure GLPK approach behaves. The first part of this experiment will be limiting the run time, thus making it an instance of \heu{Truncated branch \& bound}. In this case we will see the dependency between the run time and the quality achieved in it. In the second part we will let GLPK run until the optimum is found. We shall see the dependency between input size and run time needed to achieve the optimum.
+Apart from comparing different versions, we shall see how the pure GLPK approach behaves. The first part of this experiment will be limiting the run time, thus making it an instance of \heu{Truncated branch \& bound}. In this case we will see the dependency between the run time and the quality achieved in~it. In the second part we will let GLPK run until the optimum is found. We shall see the dependency between input size and run time needed to achieve the optimum.
 
 \begin{center}
 \bigskip
@@ -163,7 +163,7 @@ Our experimental set will contain 500 experimental configurations for each of th
 
 The results of this test are captured in Figure \ref{image-experiment-time-vs-quality}. They should be interpreted as follows: for each time limit from 1 to 46 seconds there are two boxplots next to each other, the left, dashed one is the native GLPK, the right, solid one is the Cygwin GLPK. This is reflected in the tics on the X (time) axis, meaning that the axis cannot be interpreted in the usual way.
 
-We can see from the graph that even though for smaller times (1 and 6 seconds, respectively) the Cygwin GLPK is reaching better qualities with smaller variance, starting from 11 seconds the native GLPK is at least as good or better for every following time. The results are inconclusive though, it is necessary to wait for confirmation from the second part of this experiment.
+We can see from the graph that even though for smaller times (1 and 6 seconds, respectively) the Cygwin GLPK is reaching better qualities with smaller variance, starting from 11 seconds the native GLPK is at least as good or better for every following time. The results are inconclusive though, it is necessary to~wait for confirmation from the second part of this experiment.
 
 \begin{center}
 \bigskip
@@ -181,7 +181,7 @@ We can see from the graph that even though for smaller times (1 and 6 seconds, r
 \bigskip
 \end{center}
 
-The other way to compare the performance of these two GLPK versions is to see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 550 configurations for each version. Every configuration will let \heu{Glpk} CH run for unlimited time, until it finds the optimum. This will be repeated in 50 iterations for each of the 11 files from the sized test data set (see Algorithm \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.\\
+The other way to compare the performance of these two GLPK versions is~to~see how long it takes them to find the optimum for a set of data of increasing size. This experimental set will contain 550 configurations for each version. Every configuration will let \heu{Glpk} CH run for unlimited time, until it~finds the optimum. This will be repeated in 50 iterations for each of the 11 files from the sized test data set (see Algorithm \ref{listing-experiment-glpk-native-vs-cygwin-2}). There will again be no IH, the only data we will collect are the times of the CH run in each case.\\
 
 \begin{algorithm}
 \caption{GLPK: Native vs. Cygwin Set Generation 2}
@@ -205,7 +205,7 @@ The other way to compare the performance of these two GLPK versions is to see ho
     \includegraphics[width=\textwidth]{images/experiments/time-till-optimum}
 \end{figure}
 
-The results are captured in Figure \ref{image-experiment-time-until-optimum}; please take a note that the Y axis is in log scale. As with the previous case, the X axis cannot be interpreted in the usual way. For each data set there are two boxplots next to each other: the left one is the native GLPK, the right one is the Cygwin GLPK.
+The results are captured in Figure \ref{image-experiment-time-until-optimum}; please take a note that the Y axis is~in~log scale. As with the previous case, the X axis cannot be interpreted in~the usual way. For each data set there are two boxplots next to each other: the left one is the native GLPK, the right one is the Cygwin GLPK.
 
 From these results it becomes clear that the native GLPK has in general shorter running times for each and every input data set than its Cygwin counterpart. This becomes less extreme with the increasing input size, which leads us to suspicion that the core parts of computation in both cases are equally powerful. Regardless of that, we shall be using the \textbf{native} GLPK for the following experiments.
 
@@ -226,7 +226,7 @@ These experiments proved that for bigger data sets the times to reach the optimu
 
 %         NB class RandomVsFuzzyVsFidaxStart
 
-Our investigation into various CHs will start by comparing \heu{FIDAX} from the original article \cite{fidax} to 2 of our trivial randomized hungry heuristics, \heu{Random} and \heu{Fuzzy}.
+Our investigation into various CHs will start by comparing \heu{FIDAX} from the original article \cite{fidax} to 2 of our trivial randomized greedy heuristics, \heu{Random} and \heu{Fuzzy}.
 
 \begin{center}
 \bigskip
@@ -362,7 +362,7 @@ Table \ref{table-experiments-fidax-and-hungry-idsets} lists the \texttt{ID} attr
 
 %         NB class BestStandaloneCH
 
-We shall now try to find the best standalone CH, that is the CH that finds on average the best solutions when run without any IHs. We need to set a time limit for \heu{Glpk} to make it an instance of \heu{Truncated Branch \& Bound}, and we shall use 1 second. This is the smallest time limit possible for GLPK and it is still a reasonably short time, fair to other CHs.
+We shall now try to find the best standalone CH, that is the CH that finds on~average the best solutions when run without any IHs. We need to set a time limit for \heu{Glpk} to make it an instance of \heu{Truncated Branch \& Bound}, and we shall use 1 second. This is the smallest time limit possible for GLPK and it~is~still a~reasonably short time, fair to other CHs.
 
 \begin{center}
 \bigskip
@@ -380,7 +380,7 @@ We shall now try to find the best standalone CH, that is the CH that finds on av
 \bigskip
 \end{center}
 
-We will use all the official data sets, set the pool size to 10 where applicable, $\alpha$ and $\beta$ to 1. This experiment will consist of 50 iterations * 11 data sets * 6 CHs = 3300 experimental configurations. See the Algorithm \ref{listing-experiment-best-standalone-ch} for details. This time we are not interested in run times, only in qualities which we shall gather in format for GnuPlot.\\
+We will use all the official data sets, set the pool size to 10 where applicable, $\alpha$ and $\beta$ to 1. This experiment will consist of 50 iterations * 11 data sets * 6 CHs = 3300 experimental configurations. See the Algorithm \ref{listing-experiment-best-standalone-ch} for details. This time we are not interested in run times, only in qualities which we shall gather in~format for GnuPlot.\\
 
 \begin{algorithm}
 \caption{Best Standalone CH Set Generation}
@@ -425,14 +425,14 @@ We can see that \heu{Glpk} wins (or is among the best) in every single case. We 
 
 The next logical step is to try to add one IH after the best CH we have found, \heu{Glpk}. We will investigate all IHs except for \heu{RandomRemove} and \heu{RemoveWorst}, which cannot help us at this time.
 
-We should note that the combination \textit{best CH - best IH} found this way does not necessarily need to be the best one overall, because we find it using a hungry approach.
+We should note that the combination \textit{best CH - best IH} found this way does not necessarily need to be the best one overall, because we find it using a greedy approach.
 
 \begin{center}
 \bigskip
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Input data        & \dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \\
+  Input data        & \dataset{80-320}, \dataset{90-405}, \dataset{100-500}, \\
                     & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000} \\
   Iterations        & 50 \\
   Pool size         & 10 \\
@@ -452,7 +452,7 @@ This experimental set will contain 6 data sets * 50 iterations * 4 IHs = 1200 ex
 \begin{algorithmic}
 \ENSURE experimental set $ES$
 \STATE $ES \gets \emptyset$
-\FOR{$file \in \{\dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
+\FOR{$file \in \{\dataset{80-320}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
 	\FOR{$i = 1 \to 50$}
     	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Crossover}(fraction = 0.1, limit = 1)\}$
     	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Hungry}\}$
@@ -503,14 +503,14 @@ The results are listed in Table \ref{table-experiments-best-ih-for-glpk}. We sha
 
 %         NB class CHForMutation
 
-As we mentioned before, we chose the combination \heu{Glpk} and \heu{Mutation} in a hungry manner. We will now try to take a step back and attempt to replace \heu{Glpk} with \heu{Random}, hoping to get similar qualities in much shorter time (a reminder: \heu{Glpk} always takes 1 second).
+As mentioned before, we chose the combination \heu{Glpk} and \heu{Mutation} in~a~greedy manner. We will now try to take a step back and attempt to replace \heu{Glpk} with \heu{Random}, hoping to get similar qualities in much shorter time (a reminder: \heu{Glpk} always takes 1 second).
 
 \begin{center}
 \bigskip
 \begin{tabular}{| l | l |}
   \hline
   \hline
-  Input data        & \dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \\
+  Input data        & \dataset{80-320}, \dataset{90-405}, \dataset{100-500}, \\
                     & \dataset{100-100}, \dataset{100-200}, \dataset{100-1000} \\
   Iterations        & 50 \\
   Pool size         & 10 \\
@@ -530,7 +530,7 @@ Setup used will be almost identical to that from the previous experiment. Experi
 \begin{algorithmic}
 \ENSURE experimental set $ES$
 \STATE $ES \gets \emptyset$
-\FOR{$file \in \{\dataset{80-30}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
+\FOR{$file \in \{\dataset{80-320}, \dataset{90-405}, \dataset{100-500}, \dataset{100-100}, \dataset{100-200}, \dataset{100-1000}\}$}
 	\FOR{$i = 1 \to 50$}
     	\STATE $ES \gets ES \cup \{file, CH = \heu{Random}, IH = \heu{Mutation}(fraction = 0.1, limit = 1)\}$
     	\STATE $ES \gets ES \cup \{file, CH = \heu{Glpk}(limit = 1), IH = \heu{Mutation}(fraction = 0.1, limit = 1)\}$
@@ -540,7 +540,7 @@ Setup used will be almost identical to that from the previous experiment. Experi
 \end{algorithmic}
 \end{algorithm}
 
-Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, for each data set there are two boxplots representing \heu{Random} (left one) and \heu{Glpk} (right one). The combination \heu{Glpk} + \heu{Mutation} always finds the optimum for the simpler data sets, thus the collapsed boxplots. Moreover, it achieves higher quality in each data set. On the other hand, combination \heu{Random} + \heu{Mutation} has much shorter running times and in the biggest (and hardest) data set \dataset{100-1000} has almost comparable results. This makes it a reasonable choice for big inputs where short time is more important than optimal quality.
+Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, for each data set there are two boxplots representing \heu{Random} (left one) and \heu{Glpk} (right one). The combination \heu{Glpk} + \heu{Mutation} always finds the optimum for the simpler data sets, thus the collapsed boxplots. Moreover, it achieves higher quality in each data set. On~the other hand, combination \heu{Random} + \heu{Mutation} has much shorter running times and in the biggest (and hardest) data set \dataset{100-1000} has almost comparable results. This makes it a reasonable choice for big inputs where short time is more important than optimal quality.
 
 \begin{figure}
   \caption{CH for \heu{Mutation}}
@@ -551,7 +551,7 @@ Results are summarized in Figure \ref{image-experiment-ch-for-mutation}. Again, 
 
 \subsection{\texorpdfstring{Various $\alpha$, $\beta$}{Various alpha, beta}}
 
-After finding the best combination of a CH and IH we turn our attention to parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function (Section \ref{section-definitions-weight}). A short reminder: the weight is defined as follows. 
+After finding the best combination of a CH and IH we turn our attention to~parameters. The first ones are the $\alpha$ and $\beta$ from the definition of our weight function (Section \ref{section-definitions-weight}). A short reminder: the weight is defined as follows. 
 \[weight(m) = \alpha . \phi(m) + \beta . \chi(m)\]
 Where $\phi(m)$ is support the attribute mapping $m$ and $\chi(m)$ is its coverage.
 
@@ -575,7 +575,7 @@ We do not expect any changes in performance of heuristics and we will limit the 
 \bigskip
 \end{center}
 
-This experimental set will contain 5 different $\alpha$ settings * 5 $\beta$ settings * 8 data sets = 200 experimental configurations. We are not using the artificial data sets, because due to the way they are generated (attribute values are random numbers), they cannot possibly create different optimal ID sets. The pseudocode capturing this is provided in Algorithm \ref{listing-experiment-various-betas}. We will use \heu{Glpk} constrained to 1 second (thus making it an instance of \heu{Truncated Branch \& Bound}) and no IHs. Pool size as well as iteration count will be 1. We are noting the actual ID set found by the run of the heuristic.\\
+This experimental set will contain 5 different $\alpha$ settings * 5 $\beta$ settings * 8 data sets = 200 experimental configurations. We are not using the artificial data sets, because due to the way they are generated (attribute values are random numbers), they cannot possibly create different optimal ID sets. The pseudocode capturing this is provided in Algorithm \ref{listing-experiment-various-betas}. We will use \heu{Glpk} constrained to~1~second (thus making it an instance of \heu{Truncated Branch \& Bound}) and no IHs. Pool size as well as iteration count will be 1. We are noting the actual ID set found by the run of the heuristic.\\
 
 \begin{algorithm}
 \caption{Various Values of $\alpha$ and $\beta$ Set Generation}
@@ -598,7 +598,7 @@ The following data sets have the same optimal ID sets regardless of the setting 
 
 \subsubsection{Results for \dataset{OVA1}}
 
-The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1} are listed in Table \ref{table-experiments-various-betas-ova1} (note that the actual names had to be anonymized for reasons discussed in Section \ref{section-realistic-data}). The differing attribute mapping is marked.
+The 2 different ID sets found for various $\alpha$ and $\beta$ in \dataset{OVA1} are listed in Table \ref{table-experiments-various-betas-ova1} (note that the actual names had to be anonymized for reasons discussed in~Section \ref{section-realistic-data}). The differing attribute mapping is marked.
 
 \begin{table}
   \caption{Different ID Sets Found for \dataset{OVA1}}
@@ -667,13 +667,13 @@ Table \ref{table-experiments-various-betas-ova1-effect} summarizes the dependenc
   \end{tabular}
 \end{table}
 
-Interestingly enough, there is no clear separation between the two ID sets depending on the $\alpha-ratio$ to be found. The existence of the two sets might be due to the fact that \heu{Glpk} randomizes the order in which AMs are presented to the external GLPK solver. However, this question is beyond the scope of this work, and shall be left for future work.
+Interestingly enough, there is no clear separation between the two ID sets depending on the $\alpha-ratio$ to be found. The existence of the two sets might be~due to the fact that \heu{Glpk} randomizes the order in which AMs are presented to the external GLPK solver. However, this question is beyond the scope of this work, and shall be left for future work.
 
 \subsection{Ignoring Text Data}
 
 %         NB class IgnoreTextData
 
-When considering data sets such as \dataset{XMA-p}, we notice that they contain a lot of simple text nodes that do not contribute to our search, but possibly slow it down. Precisely for this reason the \jmodule{BasicIGG} module in jInfer contains an option to turn off processing of such nodes. (It also allows to ignore the content of attributes, but this would be devastating to our cause.) Ignoring the content of text nodes means internally that these are created, but their actual string content is skipped and not saved in the memory structures. This means that the whole data model occupies less space on the heap, which can possibly lead to better performance.
+When considering data sets such as \dataset{XMA-p}, we notice that they contain a lot of simple text nodes that do not contribute to our search, but possibly slow it~down. Precisely for this reason the \jmodule{BasicIGG} module in jInfer contains an~option to turn off processing of such nodes. (It also allows to ignore the content of~attributes, but this would be devastating to our cause.) Ignoring the content of~text nodes means internally that these are created, but their actual string content is skipped and not saved in the memory structures. This means that the whole data model occupies less space on the heap, which can possibly lead to~better performance.
 
 We shall now investigate this matter by taking the biggest data set \dataset{XMA-p} containing a lot of text data.
 
@@ -727,9 +727,9 @@ Interestingly, the grammar extraction times tend to be shorter in the case when 
 
 %         NB class ChainedIHsX
 
-In this section we will describe the most interesting experimental area, that is chaining more than one improvement heuristics and running them in a loop. Unfortunately, the sheer number of possible combinations in which IHs can be ordered (as well as the number of ways to set their parameters) prohibits us from investigating this in depth.
+In this section we will describe the most interesting experimental area, that is~chaining more than one improvement heuristics and running them in a loop. Unfortunately, the sheer number of possible combinations in which IHs can be ordered (as well as the number of ways to set their parameters) prohibits us from investigating this in depth.
 
-We shall then employ a higher-level heuristic: we will choose 3 strategies (lists of IHs, or metaheuristics), assess their performance to find the best one and then tune its parameters. This approach is by no means exhaustive, it is just a probe in the problem space.
+We shall then employ a higher-level heuristic: we will choose 3 strategies (lists of IHs, or metaheuristics), assess their performance to find the best one and then tune its parameters. This approach is by no means exhaustive, it~is~just a probe in the problem space.
 
 The 3 strategies we assess will be constructed from the following instances of improvement heuristics:
 
@@ -766,7 +766,7 @@ The strategies themselves shall be the following:
 \bigskip
 \end{center}
 
-The experimental set will consist of 3 strategies * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Algorithm \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the fractions are set to $0.1$ for the time being. The termination criterion is set to limit the total runtime to 10 seconds and (potentialy) infinite iterations.
+The experimental set will consist of 3 strategies * 11 data sets * 20 iterations = 660 experimental configurations. Their construction is formalized in the Algorithm \ref{listing-experiment-chaining-ihs}. The construction heuristic will be \heu{Random} with pool size 10. All the fractions are set to $0.1$ for the time being. The termination criterion is set to~limit the total runtime to 10 seconds and (potentialy) infinite iterations.
 
 Log traces like the one in Appendix \ref{appendix-trace} will be gathered - also, after each iteration, the time taken so far and the quality of incumbent solution is noted.\\
 
@@ -810,7 +810,7 @@ Resulting traces for each data set can be summarized in graphs like the one for 
     \includegraphics[width=\textwidth]{images/experiments/chained-ihs-s1}
 \end{figure}
 
-X and Y axes represent the time and quality, as usual. Each line represents one run of the strategy (metaheuristic) in the following way: the N\textsuperscript{th} break in the line (i.e. the N\textsuperscript{th} data point) is the partial result after the N\textsuperscript{th} step of the strategy. Its X position denotes the absolute time in which this step finished, and its Y position represents the incumbent solution quality after this step. Every time a line ``disappears'' before reaching 10 seconds it means that this metaheuristic run found the optimum before the 10 second mark. There is an obvious repetitive regularity in the shape of each line, which corresponds to the fact that there is a finite number of IHs in this strategy (5 of them in Strategy 1) which repeat over time. The obvious similarity between different lines corresponds to the fact that each run is from the same strategy, and over time, they do the same steps.
+X and Y axes represent the time and quality, as usual. Each line represents one run of the strategy (metaheuristic) in the following way: the N\textsuperscript{th} break in~the line (i.e. the N\textsuperscript{th} data point) is the partial result after the N\textsuperscript{th} step of the strategy. Its X position denotes the absolute time in which this step finished, and its Y position represents the incumbent solution quality after this step. Every time a line ``disappears'' before reaching 10 seconds it means that this metaheuristic run found the optimum before the 10 second mark. There is an obvious repetitive regularity in the shape of each line, which corresponds to the fact that there is a finite number of IHs in this strategy (5 of them in Strategy 1) which repeat over time. The obvious similarity between different lines corresponds to the fact that each run is from the same strategy, and over time, they do the same steps.
 
 We can see effects of different IHs from this graph:
 \begin{itemize}
@@ -883,7 +883,7 @@ The parameters we can tune in this strategy are the fractions in \heu{RandomRemo
 \bigskip
 \end{center}
 
-This experimental set will consist of 45 fraction combinations * 11 data sets * 25 iterations = 12375 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Strategy 1, with their fractions set to one of the 45 combinations produced in the following way.
+This experimental set will consist of 45 fraction combinations * 11 data sets * 25 iterations = 12375 experimental configurations. CH will be \heu{Random} with pool size of 10. IHs will be the ones from Strategy 1, with their fractions set to~one of the 45 combinations produced in the following way.
 \begin{itemize}
 	\item \heu{RandomRemove} fraction will be from $\{0, 0.05, 0.1, 0.2, 0.5\}$
 	\item \heu{Mutatio} fraction will be from $\{0.05, 0.1, 0.2\}$
@@ -918,7 +918,7 @@ The total limit will remain at 10 seconds. The process of creating the configura
 \end{algorithmic}
 \end{algorithm}
 
-After averaging the data, we get a large result table; an excerpt of it is in Table \ref{table-experiments-chained-ihs-tweaking-s1}. Only the results for the biggest data sets and a few combinations of RR, MUT and CX fractions are presented.
+After averaging the data, we get a large result table; an excerpt of~it~is~in~Table~\ref{table-experiments-chained-ihs-tweaking-s1}. Only the results for the biggest data sets and a few combinations of~RR, MUT and CX fractions are presented.
 
 In the left part of the table are the fraction values. In the right part are the averaged running times (AT), success ratios (ratio of runs that found the optimum, SR) and average qualities (AQ) for each data set. The highest success ratios and qualities are highlited.\\
 
@@ -955,11 +955,11 @@ In the left part of the table are the fraction values. In the right part are the
     \end{tabular}
 \end{table}
 
-It is now necessary to pick one fraction combination as the best one, and it is $(RR = 0.5, MUT = 0.2, CX = 0.1)$. Using this combination for all the data sets from \dataset{10-20} up to \dataset{80-320} the optimum was always found and for \dataset{90-405} and \dataset{100-500} the success ratios were the highest.
+It is now necessary to pick one fraction combination as the best one, and it~is~$(RR = 0.5, MUT = 0.2, CX = 0.1)$. Using this combination for all the data sets from \dataset{10-20} up to \dataset{80-320} the optimum was always found and for \dataset{90-405} and \dataset{100-500} the success ratios were the highest.
 
-Now to interpret the fractions in the best combination. \heu{RandomRemove} fraction of 0.5 means that a randomly chosen half of all AMs from every ID set in the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} fraction of 0.2 means around 1/5\textsuperscript{th} of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} fraction of 0.1 means that around 10\% of ID sets in the pool (randomly chosen) will be scanned for common AMs.
+Now to interpret the fractions in the best combination. \heu{RandomRemove} fraction of 0.5 means that a randomly chosen half of all AMs from every ID set in~the pool will be discarded. This amounts to a very strong diversification tendency and keeps the strategy from stalling in local optima. \heu{Mutation} fraction of 0.2 means around 1/5\textsuperscript{th} of AMs in the incumbent solution will be fixed for the next GLPK optimization. \heu{Crossover} fraction of 0.1 means that around 10\% of ID sets in the pool (randomly chosen) will be scanned for common AMs.
 
-\heu{RandomRemove} and \heu{Mutation} fractions in the best combination are at the upper bound of the range we chose for them. As a future work option it is possible to start moving these fractions even more in their preferred way.
+\heu{RandomRemove} and \heu{Mutation} fractions in the best combination are at the upper bound of the range we chose for them. As a future work option it~is~possible to start moving these fractions even more in their preferred way.
 
 \subsubsection{Final Comparison}
 
@@ -1020,6 +1020,6 @@ The first fact is that if we have the time available, it is best to just let the
 
 Secondly, if we do not have enough time, or have to work in a dynamic environment, we should employ a metaheuristic with a series of improvement heuristics, more specifically Strategy 1. In all our realistic data sets the optimum was found almost instantly, and the most complex and bigges artificial data sets took only around 1/4 of the time to finish, compared to \heu{Glpk}.\\
 
-Furthermore, it is always good to ignore the simple text data nodes, as it will improve the total run time.\\
+Furthermore, it is always good to ignore the simple text data nodes, as~it~will improve the total run time.\\
 
-Now compare this to the performance of the original algorithm from \cite{fidax} that we have implemented as \heu{FIDAX}. We cannot use it to find the optimum, even if we do have enough time: it is hungry, deterministic and always gives us only one solution. And even if time is constrained, we have shown in Section \ref{section-experiments-random-fuzzy-fidax} that even trivial algorithms such as \heu{Random} or \heu{Fuzzy} very often outperform \heu{FIDAX}. And \heu{Glpk} constrained to 1 second run time outperforms \heu{FIDAX} on every data set.\\
+Now compare this to the performance of the original algorithm from \cite{fidax} that we have implemented as \heu{FIDAX}. We cannot use it to find the optimum, even if we do have enough time: it is greedy, deterministic and always gives us only one solution. And even if time is constrained, we have shown in Section \ref{section-experiments-random-fuzzy-fidax} that even trivial algorithms such as \heu{Random} or \heu{Fuzzy} very often outperform \heu{FIDAX}. And \heu{Glpk} constrained to 1 second run time outperforms \heu{FIDAX} on every data set.\\

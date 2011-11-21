@@ -1,8 +1,8 @@
 \chapter{MIP Approach}
 \label{chapter-mip}
 
-In this chapter we introduce a new approach to finding maximum ID sets. First, we transform the problem formulation to maximum weighted IS problem formulation. Then we transform this into a MIP formulation, and demonstrate how this can be solved using a solver such as GLPK \cite{glpk}. \nomenclature{GLPK}{GNU Linear Programming Kit}
-We will continue by applying heuristical approaches to improve the performance of the process.
+In this chapter we introduce a new approach to finding maximum ID sets. First, we transform the problem formulation to maximum weighted IS problem formulation. Then we transform this into an MIP formulation, and demonstrate how this can be solved using a solver such as GLPK \cite{glpk}. \nomenclature{GLPK}{GNU Linear Programming Kit}
+We will continue by~applying heuristic approaches to improve the performance of the process.
 
 \section{ID Set to IS Formulation}
 
@@ -25,9 +25,9 @@ GLPK is a multi-platform, multi-purpose solver well suited for this task. It use
 
 \paragraph{\textit{Branch \& Bound}} This is an optimization method where the search space is systematically divided into smaller sub-spaces. This is the \textit{branching} component, and a so-called \textit{search tree} is built this way. Then, the sub-problems are recursively solved and whole branches of the search tree are discarded when it becomes obvious that the solution does not lie there. This is the \textit{bounding} component. See \cite{land60a} for detailed description.\\
 
-An advantage of using \textit{Branch \& Bound} is that while traversing the search tree it finds intermittent, sub-optimal solutions. It is thus possible to limit the total search time and instead of the optimum take the best solution found so far.\\
+An advantage of using \textit{Branch \& Bound} is~that while traversing the search tree it finds intermittent, sub-optimal solutions. It is thus possible to limit the~total search time and instead of the optimum take the best solution found so far.\\
 
-We will now demonstrate the full process of finding the optimal ID set of an example XML file using GLPK.
+We will now demonstrate the full process of~finding the optimal ID set of~an~example XML file using GLPK.
 
 \subsection*{Example}
 
@@ -51,16 +51,16 @@ Recall that attribute mappings in this example are $C = \{M_{y}^{a}, M_{y}^{b}, 
 (v_{y-a},v_{z-a}). \\
 \end{eqnarray*}
 
-The first three edges are due to the type collision ($y$), the last one is due to $\iota(M_{y}^{a}) \cap \iota(M_{z}^{a}) = \{1\}$. The graph $G$ constructed in this way is in Figure \ref{image-mip-is-graph}.
+The first three edges are due to the type collision ($y$), the last one is due to~$\iota(M_{y}^{a}) \cap \iota(M_{z}^{a}) = \{1\}$. The graph $G$ constructed in this way is shown in~Figure~\ref{image-mip-is-graph}.
 
 \begin{figure}
-  \caption{IS Representation Graph}
-  \label{image-mip-is-graph}
   \centering
 	\includegraphics[width=.25\textwidth]{images/is-representation}
+  \caption{IS Representation Graph}
+  \label{image-mip-is-graph}
 \end{figure}
 
-The next step is the MIP formulation. We do not need to translate from the IS formulation, as the translation from ID set formulation is straightforward, too. For each AM $m$ there will be one binary variable $x_{name(m)}$. Objective function coefficients in vector $\mathbf{c}$ will be weights of respective mappings. For each pair of AMs $m_1, m_2$ that cannot share the same ID set there shall be a row in matrix $A$ representing the inequality $x_{name(m_1)} + x_{name(m_2)} \leqslant 1$. $\mathbf{b}$ will be a vector of ones with corresponding length.
+The next step is the MIP formulation. We do not need to translate from the IS formulation, as the translation from ID set formulation is straightforward, too. For each AM $m$ there will be one binary variable $x_{name(m)}$. Objective function coefficients in vector $\mathbf{c}$ will be weights of respective mappings. For each pair of~AMs $m_1, m_2$ that cannot share the same ID set there shall be a row in matrix $A$ representing the inequality $x_{name(m_1)} + x_{name(m_2)} \leqslant 1$. $\mathbf{b}$ will be a vector of~ones of corresponding length.
 
 \[
 \mathbf{x} =
@@ -168,14 +168,14 @@ The definition of \textit{heuristic} or \textit{heuristic algorithm} varies from
 \end{define}
 
 \begin{define}[Heuristic Algorithm]
-	A \textit{heuristic algorithm} is one that, in a reasonably short time, generates a good, maybe even optimal solution to an optimization problem. However, it won’t provide any formal guarantee about its quality.
+	A \textit{heuristic algorithm} is one that, in a reasonably short time, generates a good, maybe even optimal solution to an optimization problem. However, it will not provide any formal guarantee about its quality.
 \end{define} 
 
 This definion of heuristic algorithm coming from \cite{heu-lecture} is rather vague, however, it will be sufficient for us.
 
 An example of a heuristic is the commonly used approach of \textit{trial and error}: after a failed attempt, change some parameter and try again. We will see many more heuristics later in this chapter.
 
-While a heuristic algorithm can be seen as a tool designed to solve one specific problem, the notion of a \textit{metaheuristic} reminds of a recipy to solve a whole family of problems. We shall be using the metaheuristic presented in Figure \ref{image-metaheuristic} to find optimal ID sets in this work. But before we start describing its structure and components, we need to introduce some more notions.
+While a heuristic algorithm can be seen as a tool designed to solve one specific problem, the notion of a \textit{metaheuristic} reminds of a recipe to solve a whole family of problems. We shall be using the metaheuristic presented in Figure \ref{image-metaheuristic} to find optimal ID sets in this work. But before we start describing its structure and components, we need to introduce some more notions.
 
 \begin{figure}
   \caption{Metaheuristic schema}
@@ -189,10 +189,10 @@ While a heuristic algorithm can be seen as a tool designed to solve one specific
 \end{define}
 
 \begin{define}[Solution Neighborhood]
-	Neighborhood of a solution $\mathbf{x}$ in the solution space are all the other solutions close to $\mathbf{x}$ according to some metric.
+	Neighborhood of a solution $\mathbf{x}$ in~the~solution space are all the other solutions close to~$\mathbf{x}$ according to~some metric.
 \end{define}
 
-The precise definition of the neighborhood is always adjusted according to specific needs. However, the neighborhood should be defined so that is \textit{continuous} (with respect to quality) to be useful. The exact reasons for this requirement are sketched in Section \ref{section-mip-ihs}.
+The precise definition of the neighborhood is always adjusted according to~specific needs. However, the neighborhood should be defined so that is \textit{continuous} (with respect to quality) to be useful. The exact reasons for this requirement are sketched in Section \ref{section-mip-ihs}.
 
 \begin{define}[Solution Pool, Incumbent Solution]
 	\textit{Solution pool} (sometimes called pool of feasible solutions or feasible pool) is a set of solutions of different qualities that were found in one of the stages of the metaheuristic. The solution(s) with the highest quality is (are) called the \textit{incumbent} solution(s).
@@ -202,7 +202,7 @@ A quick reminder of what we are trying to solve using our metaheuristic: given a
 
 First we take the list of candidate AMs and ask a \textit{construction heuristic} (see Section \ref{section-mip-chs}) to provide us with a pool of solutions. Then, in a loop, we use this pool as input for \textit{improvement heuristics} (see Section \ref{section-mip-ihs}) and in turns ask them to improve it. All the time we check whether \textit{termination criteria} are met, and if so, we terminate the metaheuristic. The incumbent solution from the last pool is then declared the Output ID set.\\
 
-The notion of metaheuristic covers a wide range of topics in the field of heuristics, such as Tabu Search (see \cite{Glover:1997:TS:549765}), Ant Colony Optimization (see \cite{dorigo2004ant}) or Genetic Algorithms (see e.g. \cite{goldberg1989genetic}), to name a few.\\
+The notion of metaheuristic covers a wide range of topics in the field of~heuristics, such as Tabu Search (see \cite{Glover:1997:TS:549765}), Ant Colony Optimization (see \cite{dorigo2004ant}) or Genetic Algorithms (see e.g. \cite{goldberg1989genetic}), to name a few.\\
 
 We will now introduce the heurisitics we have implemented to use in our metaheuristic for finding optimal ID sets.
 
@@ -210,7 +210,7 @@ We will now introduce the heurisitics we have implemented to use in our metaheur
 \label{section-mip-chs}
 \nomenclature{CH}{Construction Heuristic}
 
-When we start to solve a problem using a metaheuristic approach, at first we have no solutions at all. The purpose of a construction heuristic (CH) is then to provide us with at least some solution. This may or may not be already the optimum, in the latter case it will be improved on later using improvement heuristics (IH). Some IHs can profit from a pool of several sub-optimal solutions, and some CHs can produce this pool from them.
+When we start to solve a problem using a metaheuristic approach, at first we have no solutions at all. The purpose of a construction heuristic (CH) is then to provide us with at least some solution. This may or may not be already the~optimum, in the latter case it will be improved on later using improvement heuristics (IH). Some IHs can profit from a pool of several sub-optimal solutions, and some CHs can produce this pool from them.
 
 \subsubsection{\heu{FIDAX}}
 \label{section-mip-fidax}
@@ -248,7 +248,7 @@ The pseudocode of this CH (taken from the original article with trivial modifica
 \subsubsection{\heu{Random}}
 \label{heu-ch-random}
 
-One of the most natural heuristics when dealing with the ID set problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is obviously a hungry heuristic.
+One of the most natural heuristics when dealing with the ID set problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is obviously a greedy heuristic.
 
 The advantages of this trivial heuristic are simplicity, speed and ease with which it can create a pool of variable solutions, almost for free. As we will see later in the experiments (Section \ref{section-experiments-random-fuzzy-fidax}), it performs surprisingly well.
 
@@ -280,7 +280,7 @@ See the Listing \ref{listing-ch-random} for its pseudocode.
 
 \heu{Fuzzy} is an improvement over the \heu{Random} CH: the next AM to be added is selected based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in Section \ref{section-definitions-weight}. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
 
-This is again a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
+This is again a greedy heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
 
 \begin{algorithm}
 \caption{\heu{Fuzzy} CH}
@@ -317,7 +317,7 @@ This is again a hungry heuristic, the Listing \ref{listing-ch-fuzzy} contains it
 
 \subsubsection{\heu{Incremental}}
 
-This trivial heuristics sorts all candidate AMs by their decreasing weights (see Section \ref{section-definitions-weight}) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a hungry heuristic.
+This trivial heuristic sorts all candidate AMs by their decreasing weights (see Section \ref{section-definitions-weight}) and then tries to iteratively add them to solution, if possible. This way it can create only one solution, and again, this is a greedy heuristic.
 
 See Listing \ref{listing-ch-incremental} for its pseudocode.
 
@@ -340,7 +340,7 @@ See Listing \ref{listing-ch-incremental} for its pseudocode.
 
 \subsubsection{\heu{Removal}}
 
-This is basically a reversal of the idea from the \heu{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, sort them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a hungry heuristic returning only one solution.
+This is basically a reversal of the idea from the \heu{Incremental} heuristic - start with a solution containing all the candidate AMs. This probably does not satisfy the ID set condition. Therefore, sort them by increasing size and start removing them from the solution, until it satisfies the ID set condition. Again, this is a greedy heuristic returning only one solution.
 
 See Listing \ref{listing-ch-removal} for its pseudocode.
 
@@ -365,28 +365,28 @@ See Listing \ref{listing-ch-removal} for its pseudocode.
 
 This construction heuristic will be called \heu{Glpk} from now on. It is basically a~time-constrained run of GLPK. Recall that GLPK uses a the \textit{Branch \& Bound} algorithm that produces feasible solutions even before the optimum is found. Limiting the run time gives us the best solution found so far, which means this is a construction heuristic.
 
-To be able to create a pool of solutions, the GLPK input in MathProg langauge is always randomly shuffled by changing the order in which variables and constraints appear. This is causes the solver to explore the search tree in various orders, producing different solution in each of the time-constrained runs.
+To be able to create a pool of solutions, the GLPK input in MathProg langauge is always randomly shuffled by changing the order in which variables and constraints appear. This is causes the solver to explore the search tree in~various orders, producing different solution in each of the time-constrained runs.
 
 \subsection{Improvement Heuristics}
 \label{section-mip-ihs}
 
 \nomenclature{IH}{Improvement Heuristic}
 
-Improvement heuristics in general start with a solution pool, attempt to improve one or more solutions in it and then return this improved pool in the end. We will need two notions to describe their behavior.
+Improvement heuristics in general start with a solution pool, attempt to improve one or more solutions in it and then return this improved pool in~the~end. We will need two notions to describe their behavior.
 
 \paragraph{Intensification}
 
-is the attempt to move the solution towards the nearby local optimum in the solution space.
+is the attempt to move the solution towards the nearby local optimum in~the~solution space.
 
 \paragraph{Diversification}
 
-is the attempt to move the solution away (escape) from from the local optimum, to be able to explore more of the solution space when the metaheuristic starts stagnating.\\
+is the attempt to move the solution away (escape) from the~local optimum, to be able to explore more of the solution space when the metaheuristic starts stagnating.\\
 
-A metaheuristic needs to combine intensification and diversification tendencies to explore the solution space and at the same time arrive at a local optimum. Recall the requirement for the solution space to be continuous in terms of quality: this guarantees that as we approach a solution $\mathbf{x}$, the quality of solutions we encounter approaches the quality of $\mathbf{x}$.
+A metaheuristic needs to combine intensification and diversification tendencies to explore the solution space and at the same time arrive at a local optimum. Recall the requirement for the solution space to be continuous in~terms of quality: this guarantees that as we approach a solution $\mathbf{x}$, the quality of solutions we encounter approaches the quality of $\mathbf{x}$.
 
 \subsubsection{\heu{Identity}}
 
-This ultimately trivial improvement heuristics does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its Listing \ref{listing-ih-identity}.
+This ultimately trivial improvement heuristic does nothing. It simply returns the feasible pool unchanged. For the sake of completeness, see its Listing \ref{listing-ih-identity}.
 
 \begin{algorithm}
 \caption{\heu{Identity} IH}
@@ -400,7 +400,7 @@ This ultimately trivial improvement heuristics does nothing. It simply returns t
 
 \subsubsection{\heu{Remove Worst}}
 
-This trivial IH tries to improve the solution pool by removing the worst solution (i.e. the one with the lowest quality). This is interesting in cooperation with other improvement heuristics that increase the solution pool size, to keep it from growing by pruning inferior solutions.
+This trivial IH tries to improve the solution pool by removing the worst solution (i.e. the one with the lowest quality). This is interesting in cooperation with other improvement heuristics that increase the solution pool size, to keep it~from growing by pruning inferior solutions.
 
 See Listing \ref{listing-ih-removeworst} for details.
 
@@ -419,9 +419,9 @@ See Listing \ref{listing-ih-removeworst} for details.
 
 This is again a rather trivial diversification improvement heuristic. By removing a random subset of specified size from each solution in the pool, it provides the variability needed to escape from local optima in the solution space.
 
-The number of AMs to remove from each solution is specified as fraction from $(0, 1)$ of the solution size (number of AMs in solution). For example, \heu{Random Remove} with $fraction = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to rounding).
+The number of AMs to remove from each solution is specified as fraction from $(0, 1)$ of the solution size (number of AMs in solution). For example, \heu{Random Remove} with $fraction = 0.1$ would remove 1 random AM from a solution containing 10 AMs and 2 from a solution containing 17 AMs (due to~rounding).
 
-This heuristic returns a pool of solutions of the same size as it got on its input.
+This heuristic returns a pool of solutions of the same size as it got on input.
 
 See Listing \ref{listing-ih-randomremove} for pseudocode.
 
@@ -471,7 +471,7 @@ The following three IHs: \heu{Mutation}, \heu{Crossover} and \heu{Local Branchin
 
 \subsubsection{\heu{Mutation}}
 
-\heu{Mutation} is based on the following idea. We assume that an incumbent solution may already contain some AMs belonging to the optimal solution. We will take a random guess and fix some of these AMs, i.e. we add new constraints to the MIP formulation fixing values of the respective variables to 1.
+\heu{Mutation} is based on the following idea. We assume that an incumbent solution may already contain some AMs belonging to the optimal solution. We will take a random guess and fix some of these AMs, i.e. we add new constraints to~the~MIP formulation fixing values of the respective variables to 1.
 
 This new formulation contains less free variables and should be easier to solve, probably even to optimum. We run GLPK again using this constrained formulation, enforcing again a time limit. Solution found this way is a feasible solution of the original problem, however the optimum is not necessarily the same as in unconstrained formulation. It is an intensification approach: we limit the search to the neighborhood of an already found solution.\\
 
@@ -504,11 +504,11 @@ Listing \ref{listing-ih-mutation} captures the process of randomly selecting a s
 
 \subsubsection{\heu{Crossover}}
 
-This improvement heuristic expands on the idea of \heu{Mutation}. But, instead of randomly selecting AMs in the incumbent solution, it looks for commonalities among the solutions in the pool. This is based on the hope that if more solutions agree on the same AMs, those are probably included in the optimal solution too.
+This improvement heuristic expands on the idea of \heu{Mutation}. But, instead of~randomly selecting AMs in the incumbent solution, it looks for commonalities among the solutions in the pool. This is based on the hope that if more solutions agree on the same AMs, those are probably included in the optimal solution too.
 
-\heu{Crossover} takes a parameter - fraction of solutions in the pool among which to look for commonalities. AMs found in every one of them are fixed in the modified MIP formulation the same way as in \heu{Mutation}. This again amounts to an intensification tendency.
+\heu{Crossover} takes a parameter - fraction of solutions in the pool among which to look for commonalities. AMs found in every one of them are fixed in the~modified MIP formulation the same way as in \heu{Mutation}. This again amounts to~an~intensification tendency.
 
-Listing \ref{listing-ih-crossover} captures the process. \heu{Crossover} requires at least one solution in the pool, but to work properly, more are needed. Solutions are picked at random from the pool, common AMs found and fixed. GLPK is run again (with a time constraint) and the improved solution is added to the result pool.
+Listing \ref{listing-ih-crossover} captures the process. \heu{Crossover} requires at least one solution in~the pool, but to work properly, more are needed. Solutions are picked at~random from the pool, common AMs found and fixed. GLPK is run again (with a~time constraint) and the improved solution is~added to~the~result pool.
 
 \begin{algorithm}
 \caption{\heu{Crossover} IH}
@@ -536,7 +536,7 @@ The incumbent solution is represented by a vector $\mathbf{x}_{INCUMBENT}$ of on
 
 Where $INCUMBENT$ is the set of names of AMs in the incumbent solution, $REMAINING$ is the set of all AMs not included in the incumbent solution and $K$ is the maximum edit distance allowed. $K$ is determined as a fraction of the count of all AMs, provided as parameter $k$.
 
-See Listing \ref{listing-ih-localbranching} for pseudocode. The heuristic requires a pool containing at least one solution, solves the modified MIP formulation using GLPK limited to some time again and adds the improved solution to the result pool.\\
+See Listing \ref{listing-ih-localbranching} for pseudocode. The heuristic requires a pool containing at~least one solution, solves the modified MIP formulation using GLPK limited to~some time again and adds the improved solution to the result pool.\\
 
 \begin{algorithm}
 \caption{\heu{Local Branching} IH}
@@ -567,7 +567,7 @@ Second, find the image of the ID set as the union of images of all the AMs in th
 
 \[\iota(ID) = \bigcup_{m \in ID} \iota(m)\]
 
-Now the IDREF set contains all the AMs whose images are a subset of the ID set image.
+Now the IDREF set contains all the AMs whose images are a subset of the~ID set image.
 
 \[\iota(c) \subset \iota(ID) \Rightarrow c \in IDREF\]
 

@@ -54,10 +54,10 @@ Recall that attribute mappings in this example are $C = \{M_{y}^{a}, M_{y}^{b}, 
 The first three edges are due to the type collision ($y$), the last one is due to~$\iota(M_{y}^{a}) \cap \iota(M_{z}^{a}) = \{1\}$. The graph $G$ constructed in this way is shown in~Figure~\ref{image-mip-is-graph}.
 
 \begin{figure}
-  \centering
-	\includegraphics[width=.25\textwidth]{images/is-representation}
   \caption{IS Representation Graph}
   \label{image-mip-is-graph}
+  \centering
+	 \includegraphics[width=.25\textwidth]{images/is-representation}
 \end{figure}
 
 The next step is the MIP formulation. We do not need to translate from the IS formulation, as the translation from ID set formulation is straightforward, too. For each AM $m$ there will be one binary variable $x_{name(m)}$. Objective function coefficients in vector $\mathbf{c}$ will be weights of respective mappings. For each pair of~AMs $m_1, m_2$ that cannot share the same ID set there shall be a row in matrix $A$ representing the inequality $x_{name(m_1)} + x_{name(m_2)} \leqslant 1$. $\mathbf{b}$ will be a vector of~ones of corresponding length.
@@ -198,7 +198,7 @@ The precise definition of the neighborhood is always adjusted according to~speci
 	\textit{Solution pool} (sometimes called pool of feasible solutions or feasible pool) is a set of solutions of different qualities that were found in one of the stages of the metaheuristic. The solution(s) with the highest quality is (are) called the \textit{incumbent} solution(s).
 \end{define}
 
-A quick reminder of what we are trying to solve using our metaheuristic: given a list of AMs with weights, find a non-conflicting subset maximizing the sum of weights in the subset. We will now describe its structure, please refer again to Figure \ref{image-metaheuristic}.
+A quick reminder of what we are trying to solve using our metaheuristic: given a list of AMs with weights, find a non-conflicting subset maximizing the sum of weights in the subset. This sum will henceforth be considered the quality of the solution (subset). We will now describe its structure, please refer again to Figure \ref{image-metaheuristic}.
 
 First we take the list of candidate AMs and ask a \textit{construction heuristic} (see Section \ref{section-mip-chs}) to provide us with a pool of solutions. Then, in a loop, we use this pool as input for \textit{improvement heuristics} (see Section \ref{section-mip-ihs}) and in turns ask them to improve it. All the time we check whether \textit{termination criteria} are met, and if so, we terminate the metaheuristic. The incumbent solution from the last pool is then declared the Output ID set.\\
 

@@ -1,7 +1,7 @@
 set style data boxplot
 
 set xlabel 'Data set'
-set ylabel 'Time'
+set ylabel 'Time [ms]'
 
 set yrange [ 1 : 10000 ]
 set xrange [ 0 : 34 ]

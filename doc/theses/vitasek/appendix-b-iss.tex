@@ -30,6 +30,6 @@ In this method use the provided \texttt{Experiment} instance (and \texttt{List<I
 
 \section{How to Create a New Experimental Set}
 
-Subclass the \texttt{Abstract\-Experiment\-Set} class, override \texttt{get\-Name()} to provide the name of this set and finally override \texttt{get\-Experiments()} to return the list of~\texttt{Ex\-per\-i\-ment\-Parameters} that will constitute this sit.
+Subclass the \texttt{Abstract\-Experiment\-Set} class, override \texttt{get\-Name()} to provide the name of this set and finally override \texttt{get\-Experiments()} to return the list of~\texttt{Ex\-per\-i\-ment\-Parameters} that will constitute this set.
 
 It is possible to override any of the following methods: \texttt{notify\-Start()}, \texttt{notify\-Finished()} and \texttt{notify\-Finished\-All()}. They will be invoked before running the first experiment, after each experiment run and after all experiments finished, respectively. Note that \texttt{notify\-Finished()} already can output some information regarding the currently finished experiment to a file, but it~can be safely overriden without a need to call \texttt{super.\.notify\-Finished()}.

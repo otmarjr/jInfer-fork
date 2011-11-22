@@ -23,18 +23,18 @@ To conduct out experiments, we are using XML documents of three categories:
 \end{itemize}
 
 In case of realistic data we want to see the performance in cases taken from the real world. The problem with realistic data is that sometimes, interesting values (that might or might not contain IDs) are stored as simple text nodes instead of attributes. We will try to convert some of these values to attributes (e.g. using a smart XSL transformation), let our heuristics find the ID sets, and then translate them back to XML keys (see Section \ref{section-realistic-converted} for details).
-And finally, we create completely artificial data to create inputs that will put our heuristics in stress. This is because the realistic data often prove to be too simple to solve - the list of candidate AMs is usually too short to be hard to be solved to optimality.
+And finally, we create completely artificial data to create inputs that will put our heuristics in~stress. This is because the realistic data often prove to be too simple to solve - the list of candidate AMs is usually too short to be hard to be solved to optimality.
 
 \begin{define}[Data set]
 	\label{define-data-set}
-	One or more XML files sharing the same schema (even if only an implicit schema) shall be referred to as a \textit{data set}. In the scope of this work this will always mean a \textit{single} XML file. However, this definition of a data \textit{set} covers also the extension to more XML files as described in \cite{fidax}.
+	One or more XML files sharing the same schema (even if only an implicit schema) shall be referred to as a \textit{data set}. In the scope of this work this will always mean a \textit{single} XML file. However, this definition of~a~data \textit{set} covers also the extension to more XML files as described in \cite{fidax}.
 \end{define}
 
 To understand our test data sets we discuss their origin and \textit{graph representation}. As mentioned earlier in Chapter \ref{chapter-mip}, the problem of finding the optimal ID set is in fact the problem of finding the maximum weighted independent set in a graph. Therefore it is interesting to actually see the graphs of these data sets and understand some related metrics.
 
-The former will be achieved with the help of the GraphViz tool (\cite{graphviz}), where we will draw the graphs so that all the vertices represent the \textit{candidate AMs}, and the edges represent pairs of AMs that have nonempty intersection of their images (and thus cannot be in the same ID set together). Thus solving the maximal weighted IS on these graphs will be equivalent to solving our problem of optimal ID set.
+The former will be achieved with the help of the GraphViz tool (\cite{graphviz}), where we will draw the graphs so that all the vertices represent the \textit{candidate AMs}, and the edges represent pairs of AMs that have nonempty intersection of~their images (and thus cannot be in the same ID set together). Thus solving the maximal weighted IS on these graphs will be equivalent to solving our problem of optimal ID set.
 
-The latter will come in form of tables containing information regarding the data sets, such their size, known optimum for $\alpha = \beta = 1$ (found by running the \heu{Glpk} heuristic without a time limit) and the numbers of vertices and edges in aforementioned graphs.
+The latter will come in form of tables containing information regarding the data sets, such their size, known optimum for $\alpha = \beta = 1$ (found by running the \heu{Glpk} heuristic without a time limit) and the numbers of vertices and edges in~aforementioned graphs.
 
 \subsection{Realistic Data}
 \label{section-realistic-data}
@@ -226,7 +226,7 @@ While studying the tables it becomes obvious that the actual numbers $|V|$ and $
 
 To interpret Tables \ref{table-experiments-data-artificial} and \ref{table-experiments-data-artificial-size}: we get 3 sets of different sizes and densities in the first one. The $|V|$ and $|E|$ numbers are orders of magnitude higher than in any realistic (or converted) data set we are using.
 
-In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\%$, and we can see that this was indeed achieved. There is an interesting observation to~be~made here: the optimum is steadily decreasing with the increasing overall graph size. This intuitively suggests that the maximum quality theoretically achievable is related to the $\frac{|E|}{|V|}$ density, not to the one we fixed. Exploration of this phenomenon is beyond the scope of this thesis.\\
+In the second table we aimed for the $\frac{|E|}{E_{max}}$ density of $0.1 = 10\%$, and we can see that this was indeed achieved. There is an interesting observation to~be~made here: the optimum is steadily decreasing with the increasing overall graph size. This intuitively suggests that the maximum quality theoretically achievable is~related to the $\frac{|E|}{|V|}$ density, not to the one we fixed. Exploration of this phenomenon is beyond the scope of this thesis.\\
 
 Note that all the data sets we used in experiments can be found on the DVD enclosed with this work.
 
@@ -255,7 +255,7 @@ And finally, one or more experiment configurations, regardless whether their par
 
 This section will briefly describe the process by which an input data set is processed to obtain the AM model as described in Section \ref{section-definitions-ams}.\\
 
-An input data set is a single XML file on the filesystem; however, there is a straightforward extension to multiple files conforming to the same schema. The first step in this process is to use jInfer's module \jmodule{BasicIGG} module (see \cite{basiciggdoc} for details) to obtain a list of rules - an \textit{initial grammar} (IG). \nomenclature{IG}{Initial Grammar}
+An input data set is a single XML file on the filesystem; however, there is~a~straightforward extension to multiple files conforming to the same schema. The first step in this process is to use jInfer's module \jmodule{BasicIGG} module (see \cite{basiciggdoc} for details) to obtain a list of rules - an \textit{initial grammar} (IG). \nomenclature{IG}{Initial Grammar}
 Please see \cite{archdoc} for detailed specification of IG format.\\
 
 The second step is to convert the grammar into the AM model. This is done by a linear scan and retrieving a so-called \textit{flat} representation. This consists of~a~list of~tuples in the following format.

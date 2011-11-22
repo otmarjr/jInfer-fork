@@ -21,9 +21,9 @@ It is obvious that the objective function and all the constraints consitute a~MI
 
 By chaining these two translations we can create a MIP formulation for a given set of AMs from a document. Solving this MIP instance will give us the optimal ID set for this document.
 
-GLPK is a multi-platform, multi-purpose solver well suited for this task. It uses the Simplex method to solve LP problems and \textit{Branch \& Bound} for MIP. 
+GLPK is a multi-platform, multi-purpose solver well suited for this task. It~uses the Simplex method to solve LP problems and \textit{Branch \& Bound} for MIP. 
 
-\paragraph{\textit{Branch \& Bound}} This is an optimization method where the search space is systematically divided into smaller sub-spaces. This is the \textit{branching} component, and a so-called \textit{search tree} is built this way. Then, the sub-problems are recursively solved and whole branches of the search tree are discarded when it becomes obvious that the solution does not lie there. This is the \textit{bounding} component. See \cite{land60a} for detailed description.\\
+\paragraph{\textit{Branch \& Bound}} This is an optimization method where the search space is~systematically divided into smaller sub-spaces. This is the \textit{branching} component, and a so-called \textit{search tree} is built this way. Then, the sub-problems are recursively solved and whole branches of the search tree are discarded when it becomes obvious that the solution does not lie there. This is the \textit{bounding} component. See \cite{land60a} for detailed description.\\
 
 An advantage of using \textit{Branch \& Bound} is~that while traversing the search tree it finds intermittent, sub-optimal solutions. It is thus possible to limit the~total search time and instead of the optimum take the best solution found so far.\\
 
@@ -185,7 +185,7 @@ While a heuristic algorithm can be seen as a tool designed to solve one specific
 \end{figure}
 
 \begin{define}[Solution Space, Solution Quality]
-	Solution space in general is the set of all permissible solutions (not violating any constraints). In the specific case of a MIP formulation it is the set of all $\mathbf{x}$ subject to $A\mathbf{x} \leqslant \mathbf{b}$. Every solution in the solution space has its \textit{quality}, in case of MIP for solution $\mathbf{x}$ it is the value of the objective function in $\mathbf{x}$.
+	Solution space in general is~the~set of all permissible solutions (not violating any constraints). In the specific case of a MIP formulation it is the set of all $\mathbf{x}$ subject to $A\mathbf{x} \leqslant \mathbf{b}$. Every solution in the solution space has its \textit{quality}, in case of MIP for solution $\mathbf{x}$ it~is~the value of the objective function in $\mathbf{x}$.
 \end{define}
 
 \begin{define}[Solution Neighborhood]
@@ -217,7 +217,7 @@ When we start to solve a problem using a metaheuristic approach, at first we hav
 
 The first construction heuristic is the algorithm described in \cite{fidax} (we shall call it \heu{FIDAX} from now on). It can trivially be used to give us one feasible solution - it is, after all, a deterministic heuristic algorithm.
 
-The algorithm works in two steps. First, all candidate AMs are grouped according to their types, and for each type the AM with the highest weight is selected. Second, all these AMs (now called $C'$) are traversed in order of their decreasing size. For each AM $m$, a set $S$ of all conflicting AMs from $C'$ is found and weights of both $m$ and $S$ are calculated. Then the weights are compared and either $m$ or $S$ is removed from $C'$.
+The algorithm works in two steps. First, all candidate AMs are grouped according to their types, and for each type the AM with the highest weight is~selected. Second, all these AMs (now called $C'$) are traversed in order of their decreasing size. For each AM $m$, a set $S$ of all conflicting AMs from $C'$ is found and weights of both $m$ and $S$ are calculated. Then the weights are compared and either $m$ or $S$ is removed from $C'$.
 
 The pseudocode of this CH (taken from the original article with trivial modifications without changing the logic) is in Listing \ref{listing-ch-fidax}.
 
@@ -248,7 +248,7 @@ The pseudocode of this CH (taken from the original article with trivial modifica
 \subsubsection{\heu{Random}}
 \label{heu-ch-random}
 
-One of the most natural heuristics when dealing with the ID set problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is obviously a greedy heuristic.
+One of the most natural heuristics when dealing with the ID set problem can be described as follows: select from candidate AMs at random, if possible (addition would not violate the ID set condition) add them to the solution. This is~obviously a greedy heuristic.
 
 The advantages of this trivial heuristic are simplicity, speed and ease with which it can create a pool of variable solutions, almost for free. As we will see later in the experiments (Section \ref{section-experiments-random-fuzzy-fidax}), it performs surprisingly well.
 
@@ -278,7 +278,7 @@ See the Listing \ref{listing-ch-random} for its pseudocode.
 \subsubsection{\heu{Fuzzy}}
 \label{heu-ch-fuzzy}
 
-\heu{Fuzzy} is an improvement over the \heu{Random} CH: the next AM to be added is selected based on \textit{weighted} instead of uniform random. The weight used here is the usual weight of an AM as defined in Section \ref{section-definitions-weight}. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
+\heu{Fuzzy} is an improvement over the \heu{Random} CH: the next AM to be added is~selected based on \textit{weighted} instead of uniform random. The weight used here is~the usual weight of an AM as defined in Section \ref{section-definitions-weight}. Because of the randomness involved in the choice, we can again easily create a pool of solutions this way.
 
 This is again a greedy heuristic, the Listing \ref{listing-ch-fuzzy} contains its pseudocode.
 

@@ -32,7 +32,7 @@ Fajt in \cite{fajt} summarizes several algorithms to help find XML keys in exist
 This algorithm from \cite{fajt-41} extracts composite primary keys (PKs) from relational databases.
 
 \begin{quote}
-The idea behind is an observation that a projection of entities corresponds to a key if each counted aggregation for a projection is equal to 1. Thus, this method searches for all possible projections of a dataset while computing aggregations on the projected part of the set of entities.
+The idea behind is~an~observation that a~projection of~entities corresponds to~a~key if~each counted aggregation for a~projection is~equal to 1. Thus, this method searches for all possible projections of a~data\-set while computing aggregations on~the projected part of~the set of~entities.
 \end{quote}
 
 This is achieved by constructing a prefix tree from the tuples in the original relation, which is then pruned and traversed depth-first to find non-key attributes from which the primary keys are inferred. This algorithm still has to~be~adapted to~search for PKs in XML data.
@@ -69,4 +69,4 @@ However, in our work we find \texttt{ID} attributes directly. And even though we
 
 \section{Maximum Weighted IS}
 
-Maximum weigthed IS is a well researched topic with a lot of known direct or approximation algorithms, see e.g. \cite{JM1986425} or \cite{Fomin:2009:MCA:1552285.1552286}. According to for example \cite{Paschos:1997:SAO:254180.254190}, the best known approximation algorithm for weighted IS to-date achieves an approximation ratio of $3(\Delta + 2)$, where $\Delta$ is the maximum degree of a vertex in the IS graph. This article lists several algorithms similar to those we introduce in the following chapters.\\
+Maximum weigthed IS is a well researched topic with a lot of~known direct or~approximation algorithms, see e.g. \cite{JM1986425} or \cite{Fomin:2009:MCA:1552285.1552286}. According to \cite{Paschos:1997:SAO:254180.254190}, the best known approximation algorithm for weighted IS to-date achieves an~approximation ratio of $3(\Delta + 2)$, where $\Delta$ is the maximum degree of a vertex in~the IS graph. This article lists several algorithms similar to those we introduce in~the following chapters.\\

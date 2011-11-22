@@ -3,7 +3,7 @@
 
 \section{XML Tree}
 
-We shall use the representation introduced in \cite{fidax}, where an XML file is represented by a labeled tree consisting of nodes for elements, attributes and simple text data. Parent nodes are connected to child nodes with edges. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the cited article does.
+We shall use the representation introduced in \cite{fidax}, where an XML file is~represented by a labeled tree consisting of nodes for elements, attributes and simple text data. Parent nodes are connected to child nodes with edges. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the cited article does.
 
 Without loss of generality we ignore the actual ordering of nodes in the tree.
 
@@ -78,7 +78,7 @@ We will use a different definition (without introducing keys from \cite{keX}) th
 
 Thus the relation $M_{x}^{y}$ contains edges in the XML tree connecting element nodes labeled $x$ and attribute nodes labeled $y$.
 
-We can use projection to retrieve all the unique \textit{ids} of either elements or attributes from the relation, with notation $\pi_E(M_{x}^{y})$ and $\pi_A(M_{x}^{y})$.
+We can use projection to retrieve all the unique \textit{ids} of either elements or~attributes from the relation, with notation $\pi_E(M_{x}^{y})$ and $\pi_A(M_{x}^{y})$.
 
 \begin{define}[Type of the attribute mapping]
 	Attribute mapping $M_{x}^{y}$ is of the \textit{type} $\tau(M_{x}^{y}) = x$.
@@ -139,7 +139,7 @@ A set of candidate attribute mappings $I = \{m_1, \ldots m_n\}$ is an \textit{ID
 That is, an ID set has images without repeating values and all the types are unique (an element cannot have more than one \texttt{ID} attribute).
 
 \paragraph{Example}
-Returning to our example, the following are all the possible ID sets: $\{ M_{y}^{a} \}, \{ M_{y}^{b} \}, \{ M_{y}^{b}, M_{z}^{a} \}, \{ M_{y}^{c} \}, \{ M_{y}^{c}, M_{z}^{a} \}$. Note that once we select an AM of type $y$ we can never add any other with the same type. Note also that $\{ M_{y}^{c}, M_{z}^{a} \}$ is not an ID set, because $\iota(M_{y}^{c}) \cap \iota(M_{z}^{a}) \neq \emptyset$.
+Returning to our example, the following are all the possible ID sets: $\{ M_{y}^{a} \}, \{ M_{y}^{b} \}, \{ M_{y}^{b}, M_{z}^{a} \}, \{ M_{y}^{c} \}, \{ M_{y}^{c}, M_{z}^{a} \}$. Note that once we select an AM of~type $y$ we can never add any other with the same type. Note also that $\{ M_{y}^{c}, M_{z}^{a} \}$ is~not an ID set, because $\iota(M_{y}^{c}) \cap \iota(M_{z}^{a}) \neq \emptyset$.
 
 \subsection*{\texttt{IDREF} and \texttt{IDREFS} Condition}
 
@@ -155,7 +155,7 @@ This definition of weight for AMs or AM sets comes from \cite{fidax} again. Let 
 \subsection{Support}
 
 \begin{define}[Support]
-\textit{Support} of an attribute mapping $m$ is defined as follows:
+\textit{Support} of an attribute mapping $m$ is defined as~follows:
 \[\phi(m) = \frac{|m|}{\sum_{p \in M}|p|}.\]
 \end{define}
 
@@ -169,7 +169,7 @@ Support of $M_{y}^{a}$ in our example is $2 / (2+1+1+1) = 0.4$. Support of~every
 \subsection{Coverage}
 
 \begin{define}[Coverage]
-\textit{Coverage} of an attribute mapping $m$ is defined as follows:
+\textit{Coverage} of an attribute mapping $m$ is defined as~follows:
 \[\chi(m) = \left( \sum_{p \in M, p \neq m} |\iota(m) \cap \iota(p)| \right) / \sum_{p \in M} |\iota(p)|.\]
 \end{define}
 
@@ -205,7 +205,7 @@ Given an undirected graph $G = (V, E)$, a set of vertices $I \subseteq V$ is an 
 \end{define}
 
 \begin{define}[Maximum weighted independent set]
-Given an undirected graph $G = (V, E)$ and a weight function $w: V \rightarrow \mathbb{R}$, an independent set $I_{max}$ is the \textit{maximum weighted independent set}, iff the following is satisfied:
+Given an undirected graph $G = (V, E)$ and a weight function $w: V \rightarrow \mathbb{R}$, an~independent set $I_{max}$ is~the \textit{maximum weighted independent set}, iff the following is satisfied:
 \[\forall I' \subseteq V, I' \text{is an independent set}: \sum_{v \in I'} w(v) \leqslant \sum_{v \in I_{max}} w(v).\]
 \end{define}
 
@@ -248,7 +248,7 @@ b_m \\
 
 where a minimization version is possible, too.
 
-Where $\mathbf{x}$ is the vector of variables (to be found by the optimization), $\mathbf{b}$ is the vector and $A$ its accompanying matrix of constraints and $\mathbf{c}$ is the vector of coefficients for the objective function. $\mathbf{x}$ and $\mathbf{c}$ have length $n$, $\mathbf{b}$ has length $m$ and $A$ has dimensions $m \times n$. Furthermore, \[\max_{x} f(x)\] means maximize the value of $f(x)$ by changing the value of $x$.\\
+Where $\mathbf{x}$ is~the vector of variables (to be found by the optimization), $\mathbf{b}$ is~the vector and $A$ its accompanying matrix of constraints and $\mathbf{c}$ is the vector of coefficients for the objective function. $\mathbf{x}$ and $\mathbf{c}$ have length $n$, $\mathbf{b}$ has length $m$ and $A$ has dimensions $m \times n$. Furthermore, \[\max_{x} f(x)\] means maximize the value of $f(x)$ by changing the value of $x$.\\
 
 Another way to write this formulation is this:
 

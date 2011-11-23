@@ -3,13 +3,13 @@
 
 \section{XML Tree}
 
-We shall use the representation introduced in \cite{fidax}, where an XML file is~represented by a labeled tree consisting of nodes for elements, attributes and simple text data. Parent nodes are connected to child nodes with edges. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the cited article does.
+We shall use the representation introduced in \cite{fidax}, where an XML file is~represented by a labeled tree consisting of nodes for elements, attributes and simple text data. Parent nodes are connected to child nodes with edges. This tree shall be called an \textit{XML tree}. For a given node $v$ of an XML tree we define $label(v)$ (name of the node in the document, only for elements and attributes), $id(v)$ (unique identifier across the document) and $value(v)$ (text content, only for attributes and simple text data) in the same way as the cited article does.
 
 Without loss of generality we ignore the actual ordering of nodes in the tree.
 
 \paragraph{Example}
 
-This example introduces an XML file fragment that will be used for demonstration throughout this work. An XML tree representing it is in Figure \ref{image-definitions-example-xml-tree}(a), where each node is annotated with a triplet $label(v) : id(v) : value(v)$.
+This example introduces an XML file fragment that will be used for demonstration throughout the work. An XML tree representing it is in Figure \ref{image-definitions-example-xml-tree}(a), where each node is annotated with a triplet $label(v) : id(v) : value(v)$.
 
 \begin{verbatim}
 <x>
@@ -24,7 +24,7 @@ This example introduces an XML file fragment that will be used for demonstration
   \caption{Example XML Tree}
   \label{image-definitions-example-xml-tree} 
   \centering
-    \subfigure[XML tree]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree}}
+    \subfigure[XML Tree]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree}}
     \subfigure[Attribute Mappings]{\includegraphics[width=.45\textwidth]{images/definitions/xml-tree-ams}}
 \end{figure}
 
@@ -54,7 +54,7 @@ An element type \textsc{must not} have more than one \texttt{ID} attribute speci
 
 \textbf{Validity constraint: \texttt{ID} Attribute Default}
 
-An \texttt{ID} attribute \textsc{must} have a declared default of \texttt{\#IMPLIED}\footnote{\texttt{\#IMPLIED} means that the attribute has a specified default value.} or \texttt{\#REQUIRED}\footnote{\texttt{\#REQUIRED} means that the attribute cannot be empty.}.
+An \texttt{ID} attribute \textsc{must} have a declared default of \texttt{\#IMPLIED}\footnote{\texttt{\#IMPLIED} means that the attribute has a specified default value.} or \texttt{\#RE\-QUIRED}\footnote{\texttt{\#REQUIRED} means that the attribute cannot be empty.}.
 
 \textbf{Validity constraint: \texttt{IDREF}}
 
@@ -133,7 +133,7 @@ Now we can proceed to define an ID set.
 
 \begin{define}[ID set]
 A set of candidate attribute mappings $I = \{m_1, \ldots m_n\}$ is an \textit{ID set} iff
-\[\bigcap_{m_i \in I} \tau(m_i) = \emptyset \wedge \bigcap_{m_i \in I} \iota(m_i) = \emptyset.\]
+\[\bigcap_{m_i \in I} \tau(m_i) = \emptyset\:\text{and} \bigcap_{m_i \in I} \iota(m_i) = \emptyset.\]
 \end{define}
 
 That is, an ID set has images without repeating values and all the types are unique (an element cannot have more than one \texttt{ID} attribute).
@@ -150,7 +150,7 @@ Furthermore, if $m$ contains multivalued attributes, it is to be marked \texttt{
 \section{Attribute Mapping Weight}
 \label{section-definitions-weight}
 
-This definition of weight for AMs or AM sets comes from \cite{fidax} again. Let $M = \{m_1, \dots m_i\}$ be the set of all non-empty AMs in the document.
+This definition of weight for AMs or AM sets comes from \cite{fidax} again. We need the notions of \textit{support} and \textit{coverage} to define it. Let $M = \{m_1, \dots m_i\}$ be the set of all non-empty AMs in the document.
 
 \subsection{Support}
 
@@ -178,7 +178,7 @@ The coverage of an attribute mapping measures how much of the image of that mapp
 \end{quote}
 
 \paragraph{Example}
-Coverage of $M_{y}^{a}$ in our example is $(0+0+1) / (2+1+1+1) = 0.2$. Coverage of $M_{z}^{a}$ is $0.2$ as well, all the other mappings have coverage $0$.
+Coverage of $M_{y}^{a}$ in our example is $(0+0+1) / (2+1+1+1) = 0.2$. Coverage of $M_{z}^{a}$ is $0.2$ as well; all the other mappings have coverage $0$.
 \\
 
 \textit{Weight} of an attribute mapping is then defined as a linear combination of its support and coverage.
@@ -190,7 +190,7 @@ For a set of AMs (which may or may not be an ID set) $S = \{m_1, \ldots m_i\}$ w
 \[weight(S) = \sum_{m \in S} weight(m).\]
 \end{define}
 
-Note that this definition of weight is quite arbitrary and all the algorithms mentioned later could easily work with AM weight defined in any other way, even for example defined interactively by the user.
+Note that this definition of weight is quite arbitrary and all the algorithms mentioned later could easily work with AM weight defined in any other way, even, for example, defined interactively by the user.
 
 \section{Independent Set}
 \label{section-definitions-is}

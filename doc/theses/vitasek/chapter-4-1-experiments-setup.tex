@@ -42,7 +42,7 @@ The latter will come in form of tables containing information regarding the data
 From three different sources we collected 6 different data sets, called \dataset{OVA1} - \dataset{OVA3}, \dataset{XMA-c}, \dataset{XMA-p} and \dataset{XMD}. Their summary is in Table \ref{table-experiments-data-realistic}, their graph representations can be seen in Figure \ref{image-experiments-data-realistic}.
 
 \begin{table}
-  \caption{List of realistic test data files}
+  \caption{List of Realistic Test Data Sets}
   \bigskip
   \label{table-experiments-data-realistic}
   \centering
@@ -59,7 +59,7 @@ From three different sources we collected 6 different data sets, called \dataset
 \end{table}
 
 \begin{figure}
-  \caption{Realistic data}
+  \caption{Realistic Data}
   \label{image-experiments-data-realistic}
   \centering
     \subfigure[\dataset{OVA1}]{\includegraphics[width=0.45\textwidth]{images/experiments/data/realistic/OVA1}}
@@ -86,7 +86,7 @@ To address the conversion: in case of \dataset{MSH} we found 2 elements with val
 This approach is useful, because as mentioned in Chapter \ref{chapter-research}, \texttt{ID} attributes are a special case of XML keys. We can use this approach to find XML keys: convert some ``suspicious'' data into attributes, find the optimal ID set and then create XML key based on this ID set.
 
 \begin{table}
-  \caption{List of realistic test data files with converted attributes}
+  \caption{List of Realistic Test Data Sets With Converted Attributes}
   \bigskip
   \label{table-experiments-data-converted}
   \centering
@@ -99,7 +99,7 @@ This approach is useful, because as mentioned in Chapter \ref{chapter-research},
 \end{table}
 
 \begin{figure}
-  \caption{Realistic data with converted attributes}
+  \caption{Realistic Data With Converted Attributes}
   \label{image-experiments-data-converted}
   \centering
     \subfigure[\dataset{MSH}]{\includegraphics[width=0.08\textwidth]{images/experiments/data/converted/MSH}}
@@ -181,7 +181,7 @@ A summary is provided in Table \ref{table-experiments-data-artificial} and Table
 While studying the tables it becomes obvious that the actual numbers $|V|$ and $|E|$ do not match to the $v$ and $e$ in the names of the sets. This is because of~the~way the random generation algorithm works: it might pick the same edge twice, which will automatically render it unsuitable for the ID set. Because of~the~so-called Birthday paradox (see e.g. \cite{birthday}), this will happen more with higher $e$.
 
 \begin{table}
-  \caption{List of artificial test data files}
+  \caption{List of Artificial Test Data Sets}
   \bigskip
   \label{table-experiments-data-artificial}
   \centering
@@ -195,7 +195,7 @@ While studying the tables it becomes obvious that the actual numbers $|V|$ and $
 \end{table}
 
 \begin{table}
-  \caption{List of ``sized'' artificial test data files}
+  \caption{List of ``Sized'' Artificial Test Data Sets}
   \bigskip
   \label{table-experiments-data-artificial-size}
   \centering
@@ -217,7 +217,7 @@ While studying the tables it becomes obvious that the actual numbers $|V|$ and $
 \end{table}
 
 \begin{figure}
-  \caption{Artificial data}
+  \caption{Artificial Data}
   \label{image-experiments-data-artificial}
   \centering
     \subfigure[\dataset{48-80}]{\includegraphics[width=\textwidth]{images/experiments/data/artificial/size/40-80}}

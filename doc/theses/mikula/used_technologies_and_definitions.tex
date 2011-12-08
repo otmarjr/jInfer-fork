@@ -2,17 +2,17 @@
 
 \todo[inline]{Zvyraznovanie pojmov}
 
-\section{XML schema}
+\section{XML Schema}
 An XML schema refers to a description of an XML document in terms of its structure and various constraints. Commonly, the XML schema describes element and attribute names, their parent-child relations, their order and a type of their content. Other constraints often expressed in the XML schema are restrictions on numbers of occurrences of elements, specification of (non-)obligatory attributes, uniqueness and specification of keys.
 
 Various languages have been proposed to express XML schemata. The most known are Document Type Definition (DTD) \todo{link} and XML Schema Definition (XML Schema, XSD) \todo{link} which are briefly described in the following sections. Another examples of the XML schema languages are RELAX NG \todo{link} and  Schematron \todo{link}.
 
-A validity of an XML document againt its XML schema expresses wheather the document is well-formed \todo{link} and at the same time wheather it conforms to the XML schema.
+A validity of an XML document againt its XML schema expresses wheather the document is well-formed \todo{link}, and at the same time, wheather it conforms to the XML schema.
 
 \subsection{DTD}
 Document Type Definition (DTD) expresses a structure of XML documents by declarations of elements. An element has its name, content and optional list of attributes.
 
-The content of an element can be denoted by \emph{EMPTY} for an empty element, \emph{ANY} for any content, \emph{(\#PCDATA)} allowing only textual content (without any other subelements), or specified using regular expressions. Names of subelement are combined using the well-known operators (\emph{|}, \emph{+}, \emph{*}, \emph{?} and \emph{,}(comma)). To express the mixed content \emph{\#PCDATA} can be used in an alternation list with the subelement names and this alternation has to be enclosed in \emph{*} operator.
+The content of an element can be denoted by \emph{EMPTY} for an empty element, \emph{ANY} for any content, \emph{(\#PCDATA)} allowing only textual content (without any other subelements), or specified using regular expressions. Names of subelements are combined using operators (\emph{|}, \emph{+}, \emph{*}, \emph{?} and \emph{,}(comma)). To express the mixed content \emph{\#PCDATA} can be used in an alternation list with the subelement names and this alternation has to be enclosed in \emph{*} operator.
 
 \todo[inline]{dopisat, priklady}
 

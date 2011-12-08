@@ -1,15 +1,15 @@
 \chapter{Analysis of Recent Approaches} \label{chapter_analysis_of_recent_approaches}
-Existing approaches of XML schema inference can be classified by several criteria. A basic division is by the language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
+Existing approaches to XML schema inference can be classified using several criteria. A basic classification is based on the language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
 
-According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods (\cite{Chidlovskii:2002:SEX:544220.544288, Garofalakis:2000:XSE:342009.335409, Moh:2000:RSW:336597.336638, Wong03onstructural, Vosta:2008:EAC:1802514.1802522}) are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. Two of these approaches are described in Section \ref{section_xtract} and Section \ref{section_even_an_ant_can_create_an_xsd}.
+According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods \cite{Chidlovskii:2002:SEX:544220.544288, Garofalakis:2000:XSE:342009.335409, Moh:2000:RSW:336597.336638, Wong03onstructural, Vosta:2008:EAC:1802514.1802522} are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. Two of these approaches are described in Section \ref{section_xtract} and Section \ref{section_even_an_ant_can_create_an_xsd}. \todo{chce to větu proč zrovna dva}
 
-On the contrary, the grammar-inferring methods (\cite{Ahonen1996GeneratingGrammars, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475, Fernau:2001:LXG:645744.667236}) are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
+On the contrary, the grammar-inferring methods \cite{Ahonen1996GeneratingGrammars, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475, Fernau:2001:LXG:645744.667236} are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
 
-Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize other or additional sources may be developed. An approach utilizing XML data along with an obsolete XML schema is described in \cite{Mlynkova:2009:IXS:1862681.1862693}. However, the most significant approaches in terms of this work are those, utilizing operations over XML data. According to our best knowledge at the time of writing, there is just one approach of this category, described in \cite{Necasky:2009:DXK:1529282.1529414}. It utilizes a set of XQuery queries to discover keys and foreign keys.
+Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize other or additional sources may be developed. An approach utilizing XML data along with an obsolete XML schema is described in \cite{Mlynkova:2009:IXS:1862681.1862693}. However, the most significant approaches in terms of this work are those utilizing operations over XML data. According to our best knowledge at the time of writing, there is just one approach of this category, described in \cite{Necasky:2009:DXK:1529282.1529414}. It utilizes a set of XQuery queries to discover keys and foreign keys.
 
 \section{Common Caracteristics}
-The process of inference commonly used by a significant number of approaches is summarized in \cite{Mlynkova:2008:AAX:1494650.1495496} as the following one: For each occurrence of element $e$ from the input XML documents and its subelements $e_1, e_2, ..., e_k$ a production $e \rightarrow e_1 e_2 ... e_k$ is constructed. The productions form so-called \emph{initial grammar} (IG). For each element type the productions are then merged, simplified and generalized using various methods and criteria. A common approach is so-called \emph{merging state algorithm}, where a \emph{prefix tree automaton} (PTA) is built from the productions of the same element type and the automaton is generalized via merging of its states. Finally, the generalized automaton/grammar is expressed in syntax of the respective XML schema language.
-\todo[inline]{Tento odstavec je doslovne prebraty z uvedeneho clanku. Mozem to takto pouzit?}
+The process of XML schema inference commonly used by a significant number of approaches is summarized in \cite{Mlynkova:2008:AAX:1494650.1495496} as the following one: For each occurrence of element $e$ from the input XML documents and its subelements $e_1, e_2, ..., e_k$ a production $e \rightarrow e_1 e_2 ... e_k$ is constructed. The productions form so-called \emph{initial grammar} (IG). For each element type the productions are then merged, simplified and generalized using various methods and criteria. A common approach is so-called \emph{merging state algorithm}, where a \emph{prefix tree automaton} (PTA) is built from the productions of the same element type and the automaton is generalized via merging of its states. Finally, the generalized automaton/grammar is expressed in syntax of the respective XML schema language.
+\todo[inline]{Q: Tento odstavec je doslovne prebraty z uvedeneho clanku. Mozem to takto pouzit? A: ano, jen by pak neměla být výrazně jiná úroveň angličtiny}
 
 \section{XTRACT} \label{section_xtract}
 The XTRACT \cite{Garofalakis:2000:XSE:342009.335409} system is an example of a \emph{heuristic} \emph{merging state algorithm} creating the result in DTD. Its process of inference consists of three steps:
@@ -20,53 +20,49 @@ The XTRACT \cite{Garofalakis:2000:XSE:342009.335409} system is an example of a \
 \end{enumerate}
 
 \subsection{Generalization}
-Purpose of generalization is to create a set of DTD candidates - schemata that cover fractions of the input XML data. In the last step, this set will be used to compose a (sub)optimal result with respect to a trade-off between its preciseness and conciseness. Therefore, it is desirable to create DTD canditates with various degree of these two characteristics.
+The purpose of generalization is to create a set of DTD candidates - schemata that cover fractions of the input XML data. In the last step, this set will be used to compose a (sub)optimal result with respect to a trade-off between its preciseness and conciseness. Therefore, it is desirable to create DTD canditates with various degrees of these two characteristics.
 
 Generalization is based on replacing fragmets (sequences of subelements of a given element) from the input XML data by regular expressions, thus, using metacharacters like (*, +, ?). To provide a wide set of DTD canditates, each sequence is processed several times using various values of input parameters. Due to the very large number of possible DTD canditates, the authors employ certain real-life motivated heuristics.
 
 For instance, paper \cite{Garofalakis:2000:XSE:342009.335409} introduces the following example: Sequences \texttt{abab} and \texttt{bbbe} are generalized to \texttt{(ab)*}, \texttt{(a|b)*}, \texttt{b*e}.
-\todo[inline]{Mozem takto pouzivat prevzate priklady?}
 
 \subsection{Factoring}
-Factoring is a process of creating a new DTD canditate from two or more DTD canditates, decresing their summed size without modifications in their semantics. An aim of this step is to decrease an MDL cost of DTD candidates calculated in the MDL step and thus refine the process of construction of the resulting DTD.
+Factoring is a process of creating a new DTD canditate from two or more DTD canditates, decresing their summed size without modifications in their semantics. The aim of this step is to decrease the MDL cost of DTD candidates calculated in the MDL step and thus refine the process of construction of the resulting DTD.
 
 An example introduced it paper \cite{Garofalakis:2000:XSE:342009.335409}: DTD candidates \texttt{ac}, \texttt{ad}, \texttt{bc} and \texttt{bd} are factored into \texttt{(a|b)(c|d)}.
 
-Alike the generalization step, also in this step the set of possible factored DTD is huge and the authors propose certain heuristics to make the factorization effective.
+Alike the generalization step, also in this step the set of possible factored DTDs is huge and the authors propose certain heuristics to make the factorization effective.
 
 \subsection{Minimum Description Length (MDL) Principle}
 This is an important step trying to create the resulting DTD with the best trade-off between its preciseness and conciseness.  
 
 Paper \cite{Mlynkova:2008:AAX:1494650.1495496} summarizes this step as follows: It expresses the quality of a DTD candidate using two aspects – conciseness and preciseness. Conciseness of a DTD is expressed using the number of bits required to describe the DTD (the smaller, the better). Preciseness of a DTD is expressed using the number of bits required for description of the input data using the DTD. In other words, the more accurately the structure is described, the fewer bits are required. Since the two conditions are contradictory, their balancing brings reasonable and realistic results.
 
-\todo[inline]{Detailnejsie? Priklad?}
-
 \section{Even an Ant Can Create an XSD} \label{section_even_an_ant_can_create_an_xsd}
 This work, described in \cite{Vosta:2008:EAC:1802514.1802522}, combines several previously proposed approaches including the XTRACT system discussed in the previous section. Its improvements of the process of XML schema inference include:
 
 \begin{itemize}
-\item Distinguishing elements with the same name but different semantics.
+\item Distinguishing elements with the same name but different context.
 \item Improvements of algorithms adopted from the previous works.
 \item Incorporating inference of an unordered sequence.
-\item Creating a result in XML Schema language.
+\item Creating a result in the XML Schema language.
 \end{itemize}
 
 \subsection{Clustering of Elements}
-This phase clusters elements on a basis of their context and structure. It is done by creating tree structures for each input XML documents where vertices represent elements and attributes and an edge between two vertices expresses their parent-child relation. These trees and their subtrees are then compared using an imposed tree similarity measure to find elements with the same semantics.
+This phase clusters elements on the basis of their context and structure. It is done by creating tree structures for each input XML document where vertices represent elements and attributes and an edge between two vertices expresses their parent-child relationship. These trees and their subtrees are then compared using an imposed tree similarity measure to find elements with the same semantics.
 
 \subsection{Schema Generalization}
-For each cluster, a trivial schema is created, which is then generalized to achieve a reasonable result. In a search for the optimal schema, \emph{Ant Colony Optimization (ACO)} heuristic is incorporated. The idea behind the ACO heuristic is that a set of artifical ants is searching a space of possible solutions, each ant given a subspace of the space to find a local suboptimum. An ant 
-is performing steps (schema modifications), dying after a predefined number of steps and providing an information - positive feedback - on quality of a solution found. The search is performed in a defined count of interations (or it stops if a good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
+For each cluster, a trivial schema is created, which is then generalized to achieve a reasonable result. In a search for the optimal schema, \emph{Ant Colony Optimization (ACO)} heuristic is incorporated. The idea behind the ACO heuristic is that a set of artifical ants is searching a space of possible solutions, each ant given a subspace of the space to find a local suboptimum. An ant is performing steps (schema modifications), dying after a predefined number of steps and providing an information - positive feedback - on the quality of a solution found. The search is performed in a defined number of interations (or it stops if a good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
 
 One of the improvements of this heuristic is an inclusion of a negative feedback after each step of an ant, visible only in a current iteration. Due to this improvement, a larger subspace of solutions is searched.
 
 Another improvement lies in a way how an ant decides for a particular step to perform. To achieve better results, the authors propose a combination of several verified approaches. A set of all possible steps is created using \emph{k,h-context} \cite{Ahonen1996GeneratingGrammars} and \emph{s,k-string} \cite{Raman97thesk-strings, Wong03onstructural} methods. The optimal step is then selected employing the MDL principle \cite{Grünwald05atutorial, Garofalakis:2000:XSE:342009.335409}.
 
 \subsection{Result in XSD}
-Unlike the majority of recent approaches, this methods creates its result in XML Schema language (XSD). Comparing to DTD, XSD is a newer language and it provides greater expression possibilities. Authors of this method focused on inferring elements with the same name but different context and the unordered sequences which can be in XSD expressed by \texttt{xs:all} construct. Elements with the same name but different context cannot be expressed in DTD and, however, the unordered sequence can be also expressed in DTD as alternations of ordered sequences, such expression in not practical nor well human-readable.
+Unlike the majority of recent approaches, this methods creates its result in XML Schema. Contrary to DTD, XSD is a newer language and it provides greater expressive possibilities. The authors of this method focused on inferring elements with the same name but different context and the unordered sequences which can be in XSD expressed by \texttt{xs:all} construct. Elements with the same name but different context cannot be expressed in DTD and, although, the unordered sequence can be also expressed in DTD as alternations of ordered sequences, such expression in not practical nor well human-readable.
 
 \section{On Inference of XML Schema with the Knowledge of an Obsolete One}
-An aim of approach described in \cite{Mlynkova:2009:IXS:1862681.1862693} is to exploit an obsolete XML schema as an additional input information to infer a new schema more efficiently. A XML schema can become obsolete due to changes in a set of XML documents, without capturing these changes in the schema. Thus, the schema becames outdated and according to the paper, this case is quite common.
+The aim of approach described in \cite{Mlynkova:2009:IXS:1862681.1862693} is to exploit an obsolete XML schema as an additional input information to infer a new schema more efficiently. A XML schema can become obsolete due to changes in a set of XML documents, without capturing these changes in the schema. Thus, the schema becomes outdated and according to the paper, this case is quite common.
 
 On input, the method is given:
 \begin{itemize}
@@ -74,32 +70,32 @@ On input, the method is given:
 \item A set of XML documents. Not all have to be valid against the original schema.
 \end{itemize}
 
-And the algorithm consists of two independent steps:
+The algorithm consists of two independent steps:
 
 \begin{enumerate}
 \item Correction of the input schema.
 \item Specialization of the input schema.
 \end{enumerate}
 
-In the fist step the input schema is corrected to conform to the whole set of input XML documents. This is done by creating a PTA \todo{ref na def} for each production extracted from the input schema and merging it with a respective production from the initial grammar \todo{ref na def}, involving ACO and MDL heuristics.
+In the fist step the input schema is corrected to conform to the whole set of input XML documents. This is done by creating a PTA for each production extracted from the input schema and merging it with a respective production from the initial grammar, involving ACO and MDL heuristics.
 
-In the second step, assuming a correct schema it is wanted to specialize the regular expressions involved in the schema with regard to the XML documents, resulting in more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
+\todo{Tato věta hodně divná.} In the second step, assuming a correct schema it is wanted to specialize the regular expressions involved in the schema with regard to the XML documents, resulting in more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
-This method is described in paper \cite{Necasky:2009:DXK:1529282.1529414}. It tries to improve automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} and \textbf{unique} constructs.
+The method described in paper \cite{Necasky:2009:DXK:1529282.1529414} improves automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} and \textbf{unique} constructs.
 
 \subsection{Assumptions and Observations}
 To discover keys and foreign keys, the method utilizes element/element joins. Assume a query $Q$ that joins a sequence of elements $S_1$ targeted by a path $P_1$ with a sequence of elements $S_2$ targeted by a path $P_2$ on a condition $L_1 = L_2$. For instance, see Listing \ref{listing_for_join_pattern} and Listing \ref{listing_let_join_pattern}.
 
-The method is based on assumption that each join is done via key/foreign key pair. It means it is supposed that $L_1$ is a key of the elements $S_1$ and $L_2$ is it's respective foreign key or vice versa.
+The method is based on assumption that each join is done via key/foreign key pair. It means it is supposed that $L_1$ is a key of the elements $S_1$ and $L_2$ is its respective foreign key or vice versa.
 
-The author describe two possible cases:
+The authors describe two possible cases:
 
 \begin{enumerate}
 \renewcommand{\theenumi}{(O\arabic{enumi})}
 \renewcommand{\labelenumi}{\theenumi}
-\item $L_1$ is a key of the elements $S_1$, $L_2$ is a respective foreign key and it itself is not a key of the elements $S_2$.
-\item $L_2$ is a key of the elements $S_2$, $L_1$ is a respective foreign key and it cannot be decided whether $L_1$ is a key of the elements $S_1$ or not.
+\item $L_1$ is a key of the elements in $S_1$, $L_2$ is a respective foreign key and it itself is not a key of the elements in $S_2$.
+\item $L_2$ is a key of the elements in $S_2$, $L_1$ is a respective foreign key and it cannot be decided whether $L_1$ is a key of the elements in $S_1$ or not.
 \end{enumerate}
 
 \subsection{Join Patterns and Key Inference}
@@ -123,18 +119,18 @@ For a certain join, the decision for one of the cases (O1) and (O2) is made by t
 
 Each occurrence of a join pattern is classified by application of the following rules it this specific order. The first satisfied ruled is applied. The occurrence is also assigned with a weight determining how sure the method is about the inferred statement.
 
-The pattern occurrence is considered of case (O1) if it is the for join pattern (weight: 1), if aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a return path (weight: 1) or if aggregation function \texttt{count} is applied on a return path (weight: 0.75). \todo {definovat return path?}
+The pattern occurrence is considered of case (O1) if it is the for join pattern (weight: 1), if aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a return path (weight: 1) or if aggregation function \texttt{count} is applied on a return path (weight: 0.75). \todo {Q: definovat return path? A: no, možná spíš jednu větu co to zhruba je}
 
 Otherwise, the pattern occurrence is considered of case (O2) and the assigned weight depends on the number of target return paths. If the number is greater than one, the weight is one (weight: 1), else (the number equals zero or one) the weight is one half (weight: 0.5).
 
 \subsection{Summarization of the Results}
 
-The assumption the method is based on may not be fulfilled for every join in a supplied set of queries. A key $K$ may be inferred from some query and processing of another query may result to denial of $K$ as a key. \todo[inline]{priklad?}
+The assumption the method is based on may not be fulfilled for every join in a supplied set of queries. A key $K$ may be inferred from some query and processing of another query may result to denial of $K$ as a key.
 
 Therefore, the authors introduce a scoring function to summarize the positive and the negative statements about keys using the assigned weights. The value of the score expresses the probalitity that a respective key statement is satisfied. Finally, the scores of the inferred keys are normalized to be comparable with each other.
 
 \subsection{Conclusion}
-The output of the method is a list of scored keys and for each key a list foreign keys referencing the key. Since the method deals only with the inference of keys, it is not an overall method of the XML schema inference. It is meant to be used in a collaboration with other schema-inferring methods to refine their results.
+The output of the method is a list of scored keys and for each key a list foreign keys referencing the key. Since the method deals only with the inference of keys, it is not an overall method of the XML schema inference. It is meant to be used in collaboration with other schema-inferring methods to refine their results.
 
 Since the method is based on intuition of how XQuery constructs are commonly applied in practice, it can be imprecise in certain cases.
 
@@ -160,15 +156,15 @@ Since the method is based on intuition of how XQuery constructs are commonly app
   \end{tabular}
   \todo[inline]{doplnit}
   \begin{tablenotes}
-	\item [1] Result of this method is a list of discovered keys and foreign keys.
+	\item [1] The result of this method is a list of discovered keys and foreign keys.
   \end{tablenotes}
   \caption{Summary of Recent Approaches}
   \label{table_summary_of_recent_approaches}
   \end{threeparttable}
 \end{table}
 
-As shown in Table \ref{table_summary_of_recent_approaches}, most of the recent approaches of XML schema inference are base on utilization of XML documents. These incorporates various verified methods and the newer approaches often improve the older ones and/or combine them together to achieve better results.
+As shown in Table \ref{table_summary_of_recent_approaches}, most of the recent approaches of XML schema inference are based on utilization of XML documents. These incorporate various verified methods and the newer approaches often improve the older ones and/or combine them together to achieve better results.
 
-Lately, several approaches that utilize other input sources have been proposed. Paper \cite{Mlynkova:2009:IXS:1862681.1862693} introduces a method that utilizes an XML schema besides XML documents. The method described in \cite{Necasky:2009:DXK:1529282.1529414} utilizes XQuery queries, however, the result of this method is a list of discovered keys and foreign keys, not an XML schema. Also, to our best knowledge, implementation that combines this method with another approach to get the XML schema has not been proposed yet. \todo{Toto je pravda, naozaj ta implementacia neexistuje?}
+Lately, several approaches that utilize other input sources have been proposed. Paper \cite{Mlynkova:2009:IXS:1862681.1862693} introduces a method that utilizes an XML schema besides XML documents. The method described in \cite{Necasky:2009:DXK:1529282.1529414} utilizes XQuery queries, however, the result of this method is a list of discovered keys and foreign keys, not an XML schema. Also, to our best knowledge, implementation that combines this method with another approach to get the XML schema has not been proposed yet.
 
 There are plenty of additional sources that can be exploited in the process of inference such as other XML schema languages, queries, XSLT scripts, negative examples (XML documents that should not conform to the resulting schema). In this work we focus on utilizing XQuery queries.

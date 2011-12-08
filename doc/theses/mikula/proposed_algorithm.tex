@@ -205,10 +205,12 @@ We can also determine expression types in functions. To do this for a certain fu
 \section{Step 3: Inference of Built-in Types}
 In this step, the algorithm goes through the syntax tree and tries to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
-How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain some $pathType$ subexpression $E$ (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is the expression has to be either a function call or an arithmetic operation \todo{Nejake ine ako napr type constructor, cast as? Princip je stale rovnaky}.
+How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of $pathType$ type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is the expression has to be either a function call or an arithmetic operation \todo{Nejake ine ako napr type constructor, cast as? Princip je stale rovnaky}.
 
-\todo[inline]{Zlucovanie odvodenych tvrdeni}
-\todo[inline]{Co ked mame path expression s predikatmi?}
+The output of this step is a set of couples ($pathType$, XML Schema built-in type).
+
+\todo[inline]{Zlucovanie odvodenych tvrdeni.}
+\todo[inline]{Path expressions s predikatmi.}
 
 \subsection{Function Calls}
 This case is quite simple. The algorithm encounters a function call and one of the arguments is a known set of elements of attributes (subexpression $E$ representing $S$). To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.

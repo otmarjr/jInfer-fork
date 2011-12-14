@@ -97,6 +97,12 @@
 \addcontentsline{toc}{chapter}{#1}
 }
 
+
+% Theorem environment
+\newenvironment{definition}[1][Definition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+
 \begin{document}
 
 % Trochu volnějąí nastavení dělení slov, neľ je default.

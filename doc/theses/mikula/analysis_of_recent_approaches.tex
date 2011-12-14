@@ -1,7 +1,7 @@
 \chapter{Analysis of Recent Approaches} \label{chapter_analysis_of_recent_approaches}
 Existing approaches to XML schema inference can be classified using several criteria. A basic classification is based on the language the resulting schema is written in. Commonly used languages are DTD and XML Schema.
 
-According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods \cite{Chidlovskii:2002:SEX:544220.544288, Garofalakis:2000:XSE:342009.335409, Moh:2000:RSW:336597.336638, Wong03onstructural, Vosta:2008:EAC:1802514.1802522} are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. Two of these approaches are described in Section \ref{section_xtract} and Section \ref{section_even_an_ant_can_create_an_xsd}. \todo{chce to větu proč zrovna dva}
+According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods \cite{Chidlovskii:2002:SEX:544220.544288, Garofalakis:2000:XSE:342009.335409, Moh:2000:RSW:336597.336638, Wong03onstructural, Vosta:2008:EAC:1802514.1802522} are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. Two of these approaches are described in Section \ref{section_xtract} and Section \ref{section_even_an_ant_can_create_an_xsd}. The former one incorporates so-called MDL principle to create the (sub)optimal result. The latter one combines several verified methods together to improve the quality of the result.
 
 On the contrary, the grammar-inferring methods \cite{Ahonen1996GeneratingGrammars, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475, Fernau:2001:LXG:645744.667236} are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
 
@@ -79,7 +79,7 @@ The algorithm consists of two independent steps:
 
 In the fist step the input schema is corrected to conform to the whole set of input XML documents. This is done by creating a PTA for each production extracted from the input schema and merging it with a respective production from the initial grammar, involving ACO and MDL heuristics.
 
-\todo{Tato věta hodně divná.} In the second step, assuming a correct schema it is wanted to specialize the regular expressions involved in the schema with regard to the XML documents, resulting in more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
+In the second step, regular expressions from the corrected schema are specialized with regard to the XML documents, resulting in a more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
 
 \section{Discovering XML Keys and Foreign Keys in Queries}
 The method described in paper \cite{Necasky:2009:DXK:1529282.1529414} improves automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} and \textbf{unique} constructs.
@@ -119,7 +119,7 @@ For a certain join, the decision for one of the cases (O1) and (O2) is made by t
 
 Each occurrence of a join pattern is classified by application of the following rules it this specific order. The first satisfied ruled is applied. The occurrence is also assigned with a weight determining how sure the method is about the inferred statement.
 
-The pattern occurrence is considered of case (O1) if it is the for join pattern (weight: 1), if aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a return path (weight: 1) or if aggregation function \texttt{count} is applied on a return path (weight: 0.75). \todo {Q: definovat return path? A: no, možná spíš jednu větu co to zhruba je}
+The pattern occurrence is considered of case (O1) if it is the for join pattern (weight: 1), if aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a target return path (weight: 1) or if aggregation function \texttt{count} is applied on a target return path (weight: 0.75), where target return paths are paths in $C_R$ starting with $\$e_2$.
 
 Otherwise, the pattern occurrence is considered of case (O2) and the assigned weight depends on the number of target return paths. If the number is greater than one, the weight is one (weight: 1), else (the number equals zero or one) the weight is one half (weight: 0.5).
 

@@ -3,7 +3,7 @@ The Extensible Markup Language (XML) \cite{Bray:08:EML} has become a popular sta
 
 With XML used to represent data themselves, it is often needed or convenient to somehow specify a structure of the represented data, their format, internal relations or restrictions, etc. In order to this need, several so-called XML schema languages (XML schemata) have been created. The most used of them are Document Type Definition (DTD) \cite{Bray:08:EML} and XML Schema (or XSD as XML Schema Definition) \cite{Walmsley:04:XSP, Thompson:04:XSP, Malhotra:04:XSP} proposed by the World Wide Web Consorcium (W3C).
 
-Despite an conveyed encouragement to use an XML schema along with an XML data representation, in practise it is done sparsely. Commonly, XML documents are not assigned with their respective XML schema at all or the schema is outdated due to modifications done to a structure of data without updating the schema. \todo{ref na clanok s tvrdenim}
+Despite an conveyed encouragement to use an XML schema along with an XML data representation, in practise it is done sparsely. Commonly, XML documents are not assigned with their respective XML schema at all or the schema is outdated due to modifications done to a structure of data without updating the schema \cite{Mlynkova:2008:AAX:1494650.1495496}.
 
 Recently in reaction to this situation, a significant number of approaches dealing with an automatic construction of an XML schema has been proposed. An aim is to exploit a provided set of XML documents and infer an XML schema, so that the XML documents are valid against it. In addition, the inferred schema should be reasonable in views of human-readability, preciseness and conciseness. Most of published approaches to XML schema inference are of this type - the input is a set of XML documents. They are based on various ideas and can be classified by several aspects as discussed in Chapter \ref{chapter_analysis_of_recent_approaches}.
 
@@ -12,7 +12,7 @@ Besides the mentioned type, some approaches that utilize other or additional sou
 Recently, the main effort has been focused on a research of the approaches that utilize XML documents, and thus, there are only few approaches of the latter type (as also discussed in Chapter \ref{chapter_analysis_of_recent_approaches}), leaving a wide space for a possible future research and improvements.
 
 \section{Aim of this Work}
-Our aim is to perform a research on the problem of inference of an XML schema for the given set of XML data in a situation when we are provided also with a set of related operations (XML queries, XSLT scripts \todo{ref} etc.).
+Our aim is to perform a research on the problem of inference of an XML schema for the given set of XML data in a situation when we are provided also with a set of related operations (XML queries, XSLT scripts \cite{Clark:99:XTV} etc.).
 
 Firstly, we indend to analyze existing inference solutions in general and to discuss their advantages and disadvantages. Then, we try to identificate and discuss information that can be extracted from a given set of XML operations and how they can be exploited to achieve more precise and realistic XML schema.
 

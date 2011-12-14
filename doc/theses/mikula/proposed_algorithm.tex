@@ -11,8 +11,24 @@ The syntactic analysis needs to be slightly modified to suit our case. It writes
 
 \todo[inline]{Toto vše je OK, ale asi budeme potřebovat vědět, co nám z té analýzy leze za informace se kterými dál pracujeme. Čili vstupy našeho algoritmu je potřeba popsat přesně, ideálně formálně, tj. je to asi nějaký strom T= (V, E), kde V je... atd. Jeslti už je to pak implementováno jako objekty v paměti nebo XML data je celkem jedno a bude popsáno v kapitola Implementation.}
 
+\subsection{Definition of the Syntax Tree}
+\begin{definition}
+Syntax tree of a XQuery query $Q$ is a tuple $T = (V, E, o)$ where $V$ is a set of nodes representing XQuery language constructs (TODO\todo{kompletny zoznam}), $E$ is a set of edges - couples $(a,b):a,b \in V$ and $o:V \rightarrow \mathbb{N}$ is an ordering function and $T$ satisfies the following conditions:
+\begin{itemize}
+\item $(V,E)$ is a tree.
+\item The root node is $ModuleNode$ representing the entire query Q.
+\item $(a,b)$ is an element of $E$ if and only if $b$ is a direct component of construct $a$ in $Q$.
+\item For every node $a \in V$ the ordering function $o$ is defined as follows \\* $o(a) = \left\{
+	\begin{array}{ll}
+		1  & \mbox{if }a\mbox{ is the root node} \\
+		seq(a) & \mbox{else}
+	\end{array}
+\right.$ \\* where $seq(a)$ is a sequential number of appearence of construct $a$ in $Q$.
+\end{itemize}
+\end{definition}
+
 \subsection{Description of the Syntax Tree}
-Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are $FLWOR$, $if-than-else$ and function call. Leaf nodes represent elements of XQuery language that cannot be further devided. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
+Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are $FLWOR$, $if-than-else$ and function call. Leaf nodes represent elements of XQuery language that cannot be further divided. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
 
 \todo[inline]{\^ Toto bude potřeba popsat přesně, ne jen příkladem. Klidně převezměnte z diplomky JS.}
 

@@ -27,6 +27,120 @@ Syntax tree of a XQuery query $Q$ is a tuple $T = (V, E, o)$ where $V$ is a set 
 \end{itemize}
 \end{definition}
 
+\subsection{Syntax Tree Nodes}
+\todo[inline]{Dat do appendixu?}
+Nodes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a simple node can be of several types. Nodes with emphasised names express a common type of a group of nodes, their descendants, and these type nodes cannot be directly used in the syntax tree. The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
+
+For example, an instance of the syntax tree cannot directly contain nodes $Node$ and $ExprNode$, but it can contain instances of nodes $AttributeNode$ and $LiteralNode$. Regarding the types, an instance of $LiteralNode$ node is of three types: $LiteralNode$, $ExprNode$ and $Node$. It carries information on a type of the literal and its value, for example $xs:integer$ of value $5$. 
+
+\begin{description}
+\item \textbf{Node}
+\begin{description}
+\item AttributeNode
+\item AttrListNode
+\item AxisNode
+\item CaseClauseNode
+\item CaseClausesNode
+\item CDataSectionNode
+\item ContentNode
+\item DefaultCaseNode
+\item EntityRefNode
+\item \textbf{ExprHolderNode}
+  \begin{description}
+  \item BindingSequenceNode
+  \item DefaultValueNode
+  \item ElseExpressionNode
+  \item OperandExpressionNode
+  \item ReturnClauseNode
+  \item TestExpressionNode
+  \item ThenExpressionNode
+  \item WhereClauseNode
+  \end{description}
+\item \textbf{ExprNode}
+  \begin{description}
+  \item CommaOperatorNode
+  \item ConstructorNode
+  \item ContextItemExprNode
+  \item EmptySequenceNode
+  \item ExtensionExprNode
+  \item FLWORExprNode
+  \item FunctionCallNode
+  \item IfExprNode
+  \item LiteralNode
+  \item OperatorNode
+  \item OrderedExprNode
+  \item PathExprNode
+  \item QuantifiedExprNode
+  \item TypeswitchExprNode
+  \item UnorderedExprNode
+  \item ValidateExprNode
+  \item VarRefNode
+  \end{description}
+\item FunctionBodyNode
+\item CharRefNode
+\item InClausesNode
+\item \textbf{ItemTypeNode}
+  \begin{description}
+  \item AnyItemNode
+  \item AtomicTypeNode
+  \item KindTestNode
+  \item NameTestNode
+  \end{description}
+\item LocationHintNode
+\item LocationHintsNode
+\item \textbf{ModuleChildNode}
+  \begin{description}
+  \item ModuleDeclNode
+  \item PrologNode
+  \item QueryBodyNode
+  \end{description}
+\item ModuleNode
+\item NameNode
+\item OrderByClauseNode
+\item OrderSpecNode
+\item ParamListNode
+\item ParamNode
+\item PITargetNode
+\item PragmaListNode
+\item PragmaNode
+\item PredicateListNode
+\item \textbf{PrologChildNode}
+  \begin{description}
+  \item BaseURIDeclNode
+  \item BoundarySpaceDeclNode
+  \item ConstructionDeclNode
+  \item CopyNamespacesDeclNode
+  \item DefaultCollationDeclNode
+  \item DefaultNamespaceDeclNode
+  \item EmptyOrderDeclNode
+  \item FunctionDeclNode
+  \item \textbf{ImportNode}
+    \begin{description}
+    \item ModuleImportNode
+    \item SchemaImportNode
+    \end{description}
+  \item NamespaceDeclNode
+  \item OptionDeclNode
+  \item OrderingModeDeclNode
+  \item VarDeclNode
+  \end{description}
+\item \textbf{StepExprNode}
+  \begin{description}
+  \item SelfOrDescendantStepNode
+  \end{description}
+\item StringNode
+\item TupleStreamNode
+\item TypeNode
+\item \textbf{VariableBindingNode}
+  \begin{description}
+  \item ForClauseNode
+  \item InClauseNode
+  \item LetClauseNode
+  \end{description}
+\item VarValueNode
+\end{description}
+\end{description}
+
 \subsection{Description of the Syntax Tree}
 Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are $FLWOR$, $if-than-else$ and function call. Leaf nodes represent elements of XQuery language that cannot be further divided. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
 

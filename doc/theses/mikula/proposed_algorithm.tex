@@ -31,6 +31,8 @@ Syntax tree of a XQuery query $Q$ is a tuple $T = (V, E, o)$ where $V$ is a set 
 \todo[inline]{Dat do appendixu?}
 Nodes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a simple node can be of several types. Nodes with emphasised names express a common type of a group of nodes, their descendants, and these type nodes cannot be directly used in the syntax tree. The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
 
+\todo[inline]{V ExprNode si pamatame aj typ vyrazu}
+
 For example, an instance of the syntax tree cannot directly contain nodes $Node$ and $ExprNode$, but it can contain instances of nodes $AttributeNode$ and $LiteralNode$. Regarding the types, an instance of $LiteralNode$ node is of three types: $LiteralNode$, $ExprNode$ and $Node$. It carries information on a type of the literal and its value, for example $xs:integer$ of value $5$. 
 
 \begin{description}
@@ -141,6 +143,10 @@ For example, an instance of the syntax tree cannot directly contain nodes $Node$
 \end{description}
 \end{description}
 
+Some pseudo code algorithms in the following sections need to determine the type of a node instance. For this purpose, we define function $isA(nodeInstance, nodeType)$. The first argument is an instance of any node and the second is a node type itself. The function returns boolean value $true$ if the instance is of the specified node type, according to the described principle. Otherwise, it returns $false$.
+
+For instance, assuming variable $literal$ is an instance of node $LiteralNode$, calls $isA(literal, LiteralNode)$, $isA(literal, ExprNode)$ return $true$, while call $isA(literal, ContentNode)$ returns $false$.
+
 \subsection{Description of the Syntax Tree}
 Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are $FLWOR$, $if-than-else$ and function call. Leaf nodes represent elements of XQuery language that cannot be further divided. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
 
@@ -232,13 +238,14 @@ A similar approach as in the case of functions can be applied to determine types
 \ENSURE The expression type.
 
 \STATE $type = null$
-\IF{$exprNode$ represents a literal value}
-     \STATE $type =$ particular literal value type, exactly-once cardinality
-\ELSIF{$exprNode$ represents a call of function $f$}
-     \STATE $type = getFunctionReturnType(f)$
-\ELSIF{$exprNode$ represents variable reference $var$}
-     \STATE $type = getVariableType(contextVarTypes, var)$
-\ELSIF{$exprNode$ represents path expression $path$}
+\IF{$isA(exprNode, LiteralNode)$}
+     \STATE $type =$ ((LiteralNode)exprNode).type, exactly-once cardinality
+\ELSIF{$isA(exprNode, FunctionCallNode)$}
+     \STATE $type = getFunctionReturnType(((FunctionCallNode)exprNode).functionName)$
+\ELSIF{$isA(exprNode, VarRefNode)$}
+     \STATE $type = getVariableType(contextVarTypes, ((VarRefNode)exprNode).variableName)$
+\ELSIF{$isA(exprNode, PathExprNode)$}
+     \STATE $path = ((PathExprNode)exprNode).path$
      \IF{$path$ selects an element set}
          \STATE $type =$ element type, zero-or-more cardianlity, $path$ included
      \ELSIF{$path$ selects an attribute set}
@@ -246,26 +253,51 @@ A similar approach as in the case of functions can be applied to determine types
      \ELSE
          \STATE $type = null$
      \ENDIF
-\ELSIF{$exprNode$ represents operator $op$}
-     \IF{$op$ is a comparison operator}
-         \STATE $type = xs:boolean$
-     \ELSIF{$op$ is an additive operator $AND$ one of the operands is of a numeric type}
-         \IF{both operands are of numeric types}
-             \STATE $type =$ the numberic type which is more or equally general than the other
-         \ELSE
-             \STATE $type =$ type of the numeric operand
-         \ENDIF
-     \ENDIF
-\ELSIF{$exprNode$ represents $FLWOR$ construct $flwor$}
-     \STATE  $type =$ type of an expression in the return clause of $flwor$
+\ELSIF{$isA(exprNode, OperatorNode)$}
+     \STATE $type = determineOperatorType(exprNode, contextVarTypes)$
+\ELSIF{$isA(exprNode, FLWORExprNode)$}
+     \STATE $returnClauseNode = ((FLWORExprNode)exprNode).returnClauseNode$
+     \STATE $type = returnClauseNode.type$
 \ENDIF
 
 \RETURN $type$
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{algoritmus 6.2, riadok 2, slovo "represents" - Tady by neškodilo definovat nějakou funkci a její možné návratové hodnoty a toto používat.}
-\todo[inline]{algoritmus 6.2, riadok 19 - Totéž, neškodila by nějaká funkce, tj. trochu formálnější zápis. Jednak se pravděpodobně bude hodit dál a druhak to zpřehlední popis.}
+\todo[inline]{Napisat, ze determineOperatorType() tiez nie je kompletna}
+\todo[inline]{definovat isOperatorClassAddition()}
+\todo[inline]{definovat isNumericType()}
+\todo[inline]{definovat isOperatorClassComparison()}
+
+\begin{algorithm}
+\caption{Function determineOperatorType}
+\label{ALG_func_determineOperatorType}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $operatorNode$: An operator expression node in the syntax tree. \\
+    $contextVarTypes$: Types of local variables valid in the current subtree.
+}
+\ENSURE The operator expression type.
+
+\STATE $type = null$
+\STATE $operator = operatorNode.operator$
+\IF{$isOperatorClassComparison(operator)$}
+    \STATE $type = xs:boolean$
+\ELSIF{$isOperatorClassAddition(operator) AND$ one of the operands is of a numeric type}
+    \STATE $leftOperand = ((OperatorNode)exprNode).leftOperand$
+    \STATE $rightOperand = ((OperatorNode).exprNode).rightOperand$
+    \IF{$isNumericType(leftOperand.type) AND isNumericType(rightOperand.type)$}
+        \STATE $type = selectMoreGeneralType(leftOperand.type, rightOperand.type)$
+    \ELSIF{$isNumericType(leftOperand.type)$}
+        \STATE $type = leftOperand.type$
+    \ELSIF{$isNumericType(rightOperand.type)$}
+        \STATE $type = rightOperand.type$
+    \ENDIF
+\ENDIF
+
+\RETURN $type$
+\end{algorithmic}
+\end{algorithm}
 
 The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression, its type can be either determined directly or it depends on its subexpressions. \todo{link na mozne triedy vyrazov.}
 

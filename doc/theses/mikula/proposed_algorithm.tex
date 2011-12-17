@@ -29,53 +29,55 @@ Syntax tree of a XQuery query $Q$ is a tuple $T = (V, E, o)$ where $V$ is a set 
 
 \subsection{Syntax Tree Nodes}
 \todo[inline]{Dat do appendixu?}
-Nodes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a simple node can be of several types. Nodes with emphasised names express a common type of a group of nodes, their descendants, and these type nodes cannot be directly used in the syntax tree. The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
+Nodes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a simple node can be of several types. Nodes with emphasised names express a common type of a group of nodes - their descendants, and these type nodes cannot be directly used in the syntax tree. The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
 
-\todo[inline]{V ExprNode si pamatame aj typ vyrazu}
+\todo[inline]{V ExprNode s ExprHolderNode si pamatame aj typ vyrazu}
 
-For example, an instance of the syntax tree cannot directly contain nodes $Node$ and $ExprNode$, but it can contain instances of nodes $AttributeNode$ and $LiteralNode$. Regarding the types, an instance of $LiteralNode$ node is of three types: $LiteralNode$, $ExprNode$ and $Node$. It carries information on a type of the literal and its value, for example $xs:integer$ of value $5$. 
+For example, an instance of the syntax tree cannot directly contain nodes $Node$ and $ExprNode$, but it can contain instances of nodes $AttributeNode$ and $LiteralNode$. Regarding the types, an instance of $LiteralNode$ node is of three types: $LiteralNode$, $ExprNode$ and $Node$. It carries information on a type of the literal and its value, for example $xs:integer$ of value $5$.
+
+Nodes can be classified into three groups: inner nodes, leaf nodes and nodes that can be both inner and leaf. Inner nodes (marked $I$) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such node is $FLWORExprNode$ which is composed of nodes $TupleStreamNode$, $WhereClauseNode$, $OrderByClauseNode$ and $ReturnClauseNode$. Leaf nodes (marked $L$) represent elements of XQuery language that cannot be further divided. For example, $LiteralNode$. Node $FunctionCallNode$ is an example of the third group (marked $IL$). Function call of a function without arguments is represented by a leaf while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
 
 \begin{description}
 \item \textbf{Node}
 \begin{description}
-\item AttributeNode
+\item AttributeNode (I)
 \item AttrListNode
-\item AxisNode
-\item CaseClauseNode
-\item CaseClausesNode
+\item AxisNode (I)
+\item CaseClauseNode (I)
+\item CaseClausesNode (I)
 \item CDataSectionNode
 \item ContentNode
-\item DefaultCaseNode
+\item DefaultCaseNode (I)
 \item EntityRefNode
 \item \textbf{ExprHolderNode}
   \begin{description}
-  \item BindingSequenceNode
-  \item DefaultValueNode
-  \item ElseExpressionNode
-  \item OperandExpressionNode
-  \item ReturnClauseNode
-  \item TestExpressionNode
-  \item ThenExpressionNode
-  \item WhereClauseNode
+  \item BindingSequenceNode (I)
+  \item DefaultValueNode (I)
+  \item ElseExpressionNode (I)
+  \item OperandExpressionNode (I)
+  \item ReturnClauseNode (I)
+  \item TestExpressionNode (I)
+  \item ThenExpressionNode (I)
+  \item WhereClauseNode (I)
   \end{description}
 \item \textbf{ExprNode}
   \begin{description}
-  \item CommaOperatorNode
-  \item ConstructorNode
+  \item CommaOperatorNode (I)
+  \item ConstructorNode (I)
   \item ContextItemExprNode
   \item EmptySequenceNode
-  \item ExtensionExprNode
-  \item FLWORExprNode
+  \item ExtensionExprNode (I)
+  \item FLWORExprNode (I)
   \item FunctionCallNode
-  \item IfExprNode
+  \item IfExprNode (I)
   \item LiteralNode
-  \item OperatorNode
-  \item OrderedExprNode
-  \item PathExprNode
-  \item QuantifiedExprNode
-  \item TypeswitchExprNode
-  \item UnorderedExprNode
-  \item ValidateExprNode
+  \item OperatorNode (I)
+  \item OrderedExprNode (I)
+  \item PathExprNode (I)
+  \item QuantifiedExprNode (I)
+  \item TypeswitchExprNode (I)
+  \item UnorderedExprNode (I)
+  \item ValidateExprNode (I)
   \item VarRefNode
   \end{description}
 \item FunctionBodyNode
@@ -126,7 +128,7 @@ For example, an instance of the syntax tree cannot directly contain nodes $Node$
   \item OrderingModeDeclNode
   \item VarDeclNode
   \end{description}
-\item \textbf{StepExprNode}
+\item StepExprNode
   \begin{description}
   \item SelfOrDescendantStepNode
   \end{description}
@@ -148,7 +150,15 @@ Some pseudo code algorithms in the following sections need to determine the type
 For instance, assuming variable $literal$ is an instance of node $LiteralNode$, calls $isA(literal, LiteralNode)$, $isA(literal, ExprNode)$ return $true$, while call $isA(literal, ContentNode)$ returns $false$.
 
 \subsection{Description of the Syntax Tree}
-Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. Inner nodes stand for XQuery constructs that are composed of other constructs and can be further divided. Examples of such constructs are $FLWOR$, $if-than-else$ and function call. Leaf nodes represent elements of XQuery language that cannot be further divided. Typical representants are literal constants. \todo{zistit, ci konstanty nahodou nie su jedine}
+Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. 
+
+Inner nodes are: $AttributeNode$, $AxisNode$, $CaseClauseNode$, $CaseClausesNode$, $DefaultCaseNode$, $BindingSequenceNode$, $DefaultValueNode$, $ElseExpressionNode$, $OperandExpressionNode$, $ReturnClauseNode$, $TestExpressionNode$, $ThenExpressionNode$, $WhereClauseNode$, $CommaOperatorNode$, $ConstructorNode$, $ExtensionExprNode$, $FLWORExprNode$, $IfExprNode$, $OperatorNode$, $OrderedExprNode$, $PathExprNode$, $QuantifiedExprNode$, $TypeswitchExprNode$, $UnorderedExprNode$, $ValidateExprNode$, $InClausesNode$, $QueryBodyNode$, $ModuleNode$, $OrderByClauseNode$, $OrderSpecNode$, $ParamListNode$, $ParamNode$, $PragmaListNode$, $PredicateListNode$, $FunctionDeclNode$, $ModuleImportNode$, $SchemaImportNode$, $VarDeclNode$, $StepExprNode$, $TupleStreamNode$, $ForClauseNode$, $InClauseNode$, $LetClauseNode$.
+
+Nodes that can be both inner and leaf are: $AttrListNode$, $ContentNode$, $FunctionCallNode$, $FunctionBodyNode$, $KindTestNode$, $LocationHintsNode$, $NameNode$, $PrologNode$, $PITargetNode$, $VarValueNode$.
+
+Leaf nodes are: $CDataSectionNode$, $EntityRefNode$, $ContextItemExprNode$, $EmptySequenceNode$, $VarRefNode$, $PragmaNode$, $BaseURIDeclNode$, $BoundarySpaceDeclNode$, $ConstructionDeclNode$, $CopyNamespacesDeclNode$, $DefaultCollationDeclNode$, $DefaultNamespaceDeclNode$, $EmptyOrderDeclNode$, $LocationHintNode$, $NamespaceDeclNode$, $OptionDeclNode$, $OrderingModeDeclNode$, $SelfOrDescendantStepNode$, $StringNode$, $TypeNode$.
+
+\todo{zistit, ci konstanty nahodou nie su jedine. NIE: CDataSectionNode, ContentNode(ale nemusi byt list), EntityRefNode, ContextItemExprNode, EmptySequenceNode, FunctionCallNode(bez parametrov), VarRefNode, FunctionBodyNode(prazdna funkcia), CharRefNode, AnyItemNode, AtomicTypeNode, KindTestNode(nemusi), NameTestNode, LocationHintNode, ModuleDeclNode, PrologNode, NameNode(nemusi), PITargetNode(nemusi), PragmaNode, BaseURIDeclNode, BoundarySpaceDeclNode, ConstructionDeclNode, CopyNamespacesDeclNode, DefaultCollationDeclNode, DefaultNamespaceDeclNode, EmptyOrderDeclNode, NamespaceDeclNode, OptionDeclNode, OrderingModeDeclNode, SelfOrDescendantStepNode, StringNode, TypeNode, VarValueNode}
 
 \todo[inline]{\^ Toto bude potřeba popsat přesně, ne jen příkladem. Klidně převezměnte z diplomky JS.}
 

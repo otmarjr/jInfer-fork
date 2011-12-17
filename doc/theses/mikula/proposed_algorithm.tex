@@ -27,28 +27,77 @@ Syntax tree of a XQuery query $Q$ is a tuple $T = (V, E, o)$ where $V$ is a set 
 \end{itemize}
 \end{definition}
 
-\subsection{Syntax Tree Nodes}
-\todo[inline]{Dat do appendixu?}
-Nodes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a simple node can be of several types. Nodes with emphasised names express a common type of a group of nodes - their descendants, and these type nodes cannot be directly used in the syntax tree. The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
+\subsection{Syntax Tree Node Types}
+\todo[inline]{Dat figures do appendixu?}
+The node types (or classes) of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a node can be of several types. This hierarchy is shown in figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}. Nodes with emphasised names express a common type of a group of nodes - their descendants, and these type nodes cannot be directly used in the syntax tree (abstract classes). The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
 
 \todo[inline]{V ExprNode s ExprHolderNode si pamatame aj typ vyrazu}
 
-For example, an instance of the syntax tree cannot directly contain nodes $Node$ and $ExprNode$, but it can contain instances of nodes $AttributeNode$ and $LiteralNode$. Regarding the types, an instance of $LiteralNode$ node is of three types: $LiteralNode$, $ExprNode$ and $Node$. It carries information on a type of the literal and its value, for example $xs:integer$ of value $5$.
+For example, an instance of the syntax tree cannot directly contain instances of nodes $Node$ and $ExprNode$, but it can contain instances of nodes $AttributeNode$ and $LiteralNode$. Regarding the types, an instance of $LiteralNode$ node is of three types: $LiteralNode$, $ExprNode$ and $Node$. It carries information on a type of the literal and its value, for example $xs:integer$ of value $5$.
+
+\todo[inline]{Asi bude potrebne nakreslit pre kazdy node, co presne obsahuje. Alebo staci pre tie, ktore budeme my pouzivat?}
 
 Nodes can be classified into three groups: inner nodes, leaf nodes and nodes that can be both inner and leaf. Inner nodes (marked $I$) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such node is $FLWORExprNode$ which is composed of nodes $TupleStreamNode$, $WhereClauseNode$, $OrderByClauseNode$ and $ReturnClauseNode$. Leaf nodes (marked $L$) represent elements of XQuery language that cannot be further divided. For example, $LiteralNode$. Node $FunctionCallNode$ is an example of the third group (marked $IL$). Function call of a function without arguments is represented by a leaf while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
 
+\begin{figure}
+\caption{Syntax tree node types part 1.}
+\label{FIG_syntax_tree_node_types_part_1}
 \begin{description}
 \item \textbf{Node}
 \begin{description}
 \item AttributeNode (I)
-\item AttrListNode
+\item AttrListNode (IL)
 \item AxisNode (I)
 \item CaseClauseNode (I)
 \item CaseClausesNode (I)
-\item CDataSectionNode
-\item ContentNode
+\item CDataSectionNode (L)
+\item ContentNode (IL)
 \item DefaultCaseNode (I)
-\item EntityRefNode
+\item EntityRefNode (L)
+\item \textbf{ExprHolderNode}
+\item \textbf{ExprNode}
+\item FunctionBodyNode (IL)
+\item CharRefNode (L)
+\item InClausesNode (I)
+\item \textbf{ItemTypeNode}
+\item LocationHintNode (L)
+\end{description}
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 2.}
+\label{FIG_syntax_tree_node_types_part_2}
+\begin{description}
+\item \textbf{Node}
+\begin{description}
+\item LocationHintsNode (IL)
+\item \textbf{ModuleChildNode}
+\item ModuleNode (I)
+\item NameNode (IL)
+\item OrderByClauseNode (I)
+\item OrderSpecNode (I)
+\item ParamListNode (I)
+\item ParamNode (I)
+\item PITargetNode (IL)
+\item PragmaListNode (I)
+\item PragmaNode (L)
+\item PredicateListNode (I)
+\item \textbf{PrologChildNode}
+\item StepExprNode (I)
+\item StringNode (L)
+\item TupleStreamNode (I)
+\item TypeNode (L)
+\item \textbf{VariableBindingNode}
+\item VarValueNode (IL)
+\end{description}
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 3.}
+\label{FIG_syntax_tree_node_types_part_3}
+\begin{description}
 \item \textbf{ExprHolderNode}
   \begin{description}
   \item BindingSequenceNode (I)
@@ -60,17 +109,24 @@ Nodes can be classified into three groups: inner nodes, leaf nodes and nodes tha
   \item ThenExpressionNode (I)
   \item WhereClauseNode (I)
   \end{description}
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 4.}
+\label{FIG_syntax_tree_node_types_part_4}
+\begin{description}
 \item \textbf{ExprNode}
   \begin{description}
   \item CommaOperatorNode (I)
   \item ConstructorNode (I)
-  \item ContextItemExprNode
-  \item EmptySequenceNode
+  \item ContextItemExprNode (L)
+  \item EmptySequenceNode (L)
   \item ExtensionExprNode (I)
   \item FLWORExprNode (I)
-  \item FunctionCallNode
+  \item FunctionCallNode (IL)
   \item IfExprNode (I)
-  \item LiteralNode
+  \item LiteralNode (L)
   \item OperatorNode (I)
   \item OrderedExprNode (I)
   \item PathExprNode (I)
@@ -78,95 +134,95 @@ Nodes can be classified into three groups: inner nodes, leaf nodes and nodes tha
   \item TypeswitchExprNode (I)
   \item UnorderedExprNode (I)
   \item ValidateExprNode (I)
-  \item VarRefNode
+  \item VarRefNode (L)
   \end{description}
-\item FunctionBodyNode
-\item CharRefNode
-\item InClausesNode
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 5.}
+\label{FIG_syntax_tree_node_types_part_5}
+\begin{description}
 \item \textbf{ItemTypeNode}
   \begin{description}
-  \item AnyItemNode
-  \item AtomicTypeNode
-  \item KindTestNode
-  \item NameTestNode
+  \item AnyItemNode (L)
+  \item AtomicTypeNode (L)
+  \item KindTestNode (IL)
+  \item NameTestNode (L)
   \end{description}
-\item LocationHintNode
-\item LocationHintsNode
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 6.}
+\label{FIG_syntax_tree_node_types_part_6}
+\begin{description}
 \item \textbf{ModuleChildNode}
   \begin{description}
-  \item ModuleDeclNode
-  \item PrologNode
-  \item QueryBodyNode
+  \item ModuleDeclNode (L)
+  \item PrologNode (IL)
+  \item QueryBodyNode (I)
   \end{description}
-\item ModuleNode
-\item NameNode
-\item OrderByClauseNode
-\item OrderSpecNode
-\item ParamListNode
-\item ParamNode
-\item PITargetNode
-\item PragmaListNode
-\item PragmaNode
-\item PredicateListNode
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 7.}
+\label{FIG_syntax_tree_node_types_part_7}
+\begin{description}
 \item \textbf{PrologChildNode}
   \begin{description}
-  \item BaseURIDeclNode
-  \item BoundarySpaceDeclNode
-  \item ConstructionDeclNode
-  \item CopyNamespacesDeclNode
-  \item DefaultCollationDeclNode
-  \item DefaultNamespaceDeclNode
-  \item EmptyOrderDeclNode
-  \item FunctionDeclNode
+  \item BaseURIDeclNode (L)
+  \item BoundarySpaceDeclNode (L)
+  \item ConstructionDeclNode (L)
+  \item CopyNamespacesDeclNode (L)
+  \item DefaultCollationDeclNode (L)
+  \item DefaultNamespaceDeclNode (L)
+  \item EmptyOrderDeclNode (L)
+  \item FunctionDeclNode (I)
   \item \textbf{ImportNode}
     \begin{description}
-    \item ModuleImportNode
-    \item SchemaImportNode
+    \item ModuleImportNode (I)
+    \item SchemaImportNode (I)
     \end{description}
-  \item NamespaceDeclNode
-  \item OptionDeclNode
-  \item OrderingModeDeclNode
-  \item VarDeclNode
+  \item NamespaceDeclNode (L)
+  \item OptionDeclNode (L)
+  \item OrderingModeDeclNode (L)
+  \item VarDeclNode (I)
   \end{description}
-\item StepExprNode
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 8.}
+\label{FIG_syntax_tree_node_types_part_8}
+\begin{description}
+\item StepExprNode (I)
   \begin{description}
-  \item SelfOrDescendantStepNode
+  \item SelfOrDescendantStepNode (L)
   \end{description}
-\item StringNode
-\item TupleStreamNode
-\item TypeNode
+\end{description}
+\end{figure}
+
+\begin{figure}
+\caption{Syntax tree node types part 9.}
+\label{FIG_syntax_tree_node_types_part_9}
+\begin{description}
 \item \textbf{VariableBindingNode}
   \begin{description}
-  \item ForClauseNode
-  \item InClauseNode
-  \item LetClauseNode
+  \item ForClauseNode (I)
+  \item InClauseNode (I)
+  \item LetClauseNode (I)
   \end{description}
-\item VarValueNode
 \end{description}
-\end{description}
+\end{figure}
 
 Some pseudo code algorithms in the following sections need to determine the type of a node instance. For this purpose, we define function $isA(nodeInstance, nodeType)$. The first argument is an instance of any node and the second is a node type itself. The function returns boolean value $true$ if the instance is of the specified node type, according to the described principle. Otherwise, it returns $false$.
 
 For instance, assuming variable $literal$ is an instance of node $LiteralNode$, calls $isA(literal, LiteralNode)$, $isA(literal, ExprNode)$ return $true$, while call $isA(literal, ContentNode)$ returns $false$.
 
 \subsection{Description of the Syntax Tree}
-Since we modified only the implementation of the output form, the design of the syntax tree remains consequent to the entire design of the analyses. Each node represents a logical component of a query. 
-
-Inner nodes are: $AttributeNode$, $AxisNode$, $CaseClauseNode$, $CaseClausesNode$, $DefaultCaseNode$, $BindingSequenceNode$, $DefaultValueNode$, $ElseExpressionNode$, $OperandExpressionNode$, $ReturnClauseNode$, $TestExpressionNode$, $ThenExpressionNode$, $WhereClauseNode$, $CommaOperatorNode$, $ConstructorNode$, $ExtensionExprNode$, $FLWORExprNode$, $IfExprNode$, $OperatorNode$, $OrderedExprNode$, $PathExprNode$, $QuantifiedExprNode$, $TypeswitchExprNode$, $UnorderedExprNode$, $ValidateExprNode$, $InClausesNode$, $QueryBodyNode$, $ModuleNode$, $OrderByClauseNode$, $OrderSpecNode$, $ParamListNode$, $ParamNode$, $PragmaListNode$, $PredicateListNode$, $FunctionDeclNode$, $ModuleImportNode$, $SchemaImportNode$, $VarDeclNode$, $StepExprNode$, $TupleStreamNode$, $ForClauseNode$, $InClauseNode$, $LetClauseNode$.
-
-Nodes that can be both inner and leaf are: $AttrListNode$, $ContentNode$, $FunctionCallNode$, $FunctionBodyNode$, $KindTestNode$, $LocationHintsNode$, $NameNode$, $PrologNode$, $PITargetNode$, $VarValueNode$.
-
-Leaf nodes are: $CDataSectionNode$, $EntityRefNode$, $ContextItemExprNode$, $EmptySequenceNode$, $VarRefNode$, $PragmaNode$, $BaseURIDeclNode$, $BoundarySpaceDeclNode$, $ConstructionDeclNode$, $CopyNamespacesDeclNode$, $DefaultCollationDeclNode$, $DefaultNamespaceDeclNode$, $EmptyOrderDeclNode$, $LocationHintNode$, $NamespaceDeclNode$, $OptionDeclNode$, $OrderingModeDeclNode$, $SelfOrDescendantStepNode$, $StringNode$, $TypeNode$.
-
-\todo{zistit, ci konstanty nahodou nie su jedine. NIE: CDataSectionNode, ContentNode(ale nemusi byt list), EntityRefNode, ContextItemExprNode, EmptySequenceNode, FunctionCallNode(bez parametrov), VarRefNode, FunctionBodyNode(prazdna funkcia), CharRefNode, AnyItemNode, AtomicTypeNode, KindTestNode(nemusi), NameTestNode, LocationHintNode, ModuleDeclNode, PrologNode, NameNode(nemusi), PITargetNode(nemusi), PragmaNode, BaseURIDeclNode, BoundarySpaceDeclNode, ConstructionDeclNode, CopyNamespacesDeclNode, DefaultCollationDeclNode, DefaultNamespaceDeclNode, EmptyOrderDeclNode, NamespaceDeclNode, OptionDeclNode, OrderingModeDeclNode, SelfOrDescendantStepNode, StringNode, TypeNode, VarValueNode}
-
-\todo[inline]{\^ Toto bude potřeba popsat přesně, ne jen příkladem. Klidně převezměnte z diplomky JS.}
-
-In detail, the syntax tree is a n-ary tree representing syntactic structure of a given query. Every node represents a certain XQuery construct and that is a type of the node. Some types can be divided into more specific subtypes. This is shown \todo{obrazok typov uzlov}.
-
-\todo[inline]{\^ Toto je skoro stejný odstavec ne?}
-
-An important characteric of the syntax tree is related to a definition of local variables and their scope. The representation of a definition of a local variable is $VariableBinding$ node. Nodes of this type contain only two subnodes; a type of the variable and a binding expression. The node and its subtree representing the type do not contain any expressions. The binding expression node is an expression node but the represented expression cannot use the variable which is just being bound. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ node. Assuming \todo{Toto je velmi high-level popis na to, jak málo o syntaktickém stromě a dalších položkách víme.} the post-order numbering of the nodes, the new variable may be valid in some nodes with a higher post-order sequence number. Which \todo{Toto není anglický slovosled.} nodes that are, it depends on the type of the ancestor node(s).
+An important characteric of the syntax tree is related to a definition of local variables and their scope. The representation of a definition of a local variable is $VariableBinding$ node. Nodes of this type contain only two subnodes; a type of the variable and a binding expression. The node and its subtree representing the type do not contain any expressions. The binding expression node is an expression node but the represented expression cannot use the variable which is just being bound. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ node. Assuming \todo{Toto je velmi high-level popis na to, jak málo o syntaktickém stromě a dalších položkách víme.} the post-order numbering of the nodes, the new variable may be valid in some nodes with a higher post-order sequence number. It depends on the type of the ancestor node(s) which nodes that are.
 
 For example, $FLWORExpr$ node contains four subnodes; $TupleStream$, $WhereClause$, $OrderByClause$ and $ReturnClause$. $TupleStream$ node contains a list of $VariableBinding$ node which define variables valid in all other three subnodes of the $FLWORExpr$ node.
 

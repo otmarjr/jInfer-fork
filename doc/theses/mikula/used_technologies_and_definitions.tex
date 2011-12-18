@@ -9,20 +9,259 @@ Various languages have been proposed to express XML schemata. The most known are
 
 A validity of an XML document againt its XML schema expresses wheather the document is well-formed \cite{Bray:08:EML}, and at the same time, wheather it conforms to the XML schema.
 
+\subsection{An XML Sample}
+To demonstrate the described technologies, we introduce a part of a simple XML document \ref{FIG_a_simple_xml_sample}. It represents books in a bookstore. Each book has a mandatory id, a title, a list of authors and an optional ISBN.
+
+\begin{figure}
+\caption{A simple XML sample.}
+\label{FIG_a_simple_xml_sample}
+\begin{verbatim}
+<bookstore>
+  <book id="b1">
+    <title>Compilers: Principles, Techniques, and Tools (2nd Edition)</title>
+    <authors>
+      <author>Alfred V. Aho</author>
+      <author>Monica S. Lam</author>
+      <author>Ravi Sethi</author>
+      <author>Jeffrey D. Ullman</author>
+    </authors>
+  </book>
+  <book id="b2">
+    <title>XQuery</title>
+    <authors>
+      <author>Priscilla Walmsley</author>
+    </authors>
+    <isbn>0596006349</isbn>
+  </book>
+</bookstore>
+\end{verbatim}
+\end{figure}
+
 \subsection{DTD}
-Document Type Definition (DTD) expresses a structure of XML documents by declarations of elements. An element has its name, content and optional list of attributes.
+Document Type Definition (DTD) expresses a structure of XML documents by declarations of elements. An element has its name and content is declared using syntax \texttt{<!ELEMENT $name$ $content$>}.
 
-The content of an element can be denoted by \emph{EMPTY} for an empty element, \emph{ANY} for any content, \emph{(\#PCDATA)} allowing only textual content (without any other subelements), or specified using regular expressions. Names of subelements are combined using operators (\emph{|}, \emph{+}, \emph{*}, \emph{?} and \emph{,}(comma)). To express the mixed content \emph{\#PCDATA} can be used in an alternation list with the subelement names and this alternation has to be enclosed in \emph{*} operator.
+The content of an element can be denoted by \texttt{EMPTY} for an empty element, \texttt{ANY} for any content, \texttt{(\#PCDATA)} allowing only textual content (without any other subelements), or specified using regular expressions. Names of subelements are combined using operators (\texttt{|}, \texttt{+}, \texttt{*}, \texttt{?} and \texttt{,}(comma)). To express the mixed content \texttt{\#PCDATA} can be used in an alternation list with the subelement names and this alternation has to be enclosed in \texttt{*} operator.
 
-\todo[inline]{dopisat, priklady}
+Attributes of an element are specified in an attribute list \texttt{<!ATTLIST $element\_name$ $attribute\_name$ $type$ $default\_value$>}. Each attribute has its name, its type and its default value or definition of obligation of occurrence. The type can be an enumeration of values \texttt{($value_1$ | $value_2$ | $\dots$ | $value_n$)} or one of the following values.
+
+\begin{itemize}
+\item \texttt{CDATA} Character data - any string.
+\item \texttt{ID} An unique identifier.
+\item \texttt{IDREF} An ID reference - a value of the ID.
+\item \texttt{IDREFS} A space-separated list of ID references. 
+\item \texttt{NMTOKEN}	A valid XML name.
+\item \texttt{NMTOKENS} A space-separated list of valid XML names.
+\item \texttt{ENTITY} An entity.
+\item \texttt{ENTITIES} A space-separated list of entities.
+\item \texttt{NOTATION} A name of a notation.
+\end{itemize}
+
+The dafault value is either a literal value or one of the following specifiers.
+
+\begin{itemize}
+\item \texttt{\#REQUIRED} The attribute is mandatory.
+\item \texttt{\#IMPLIED} The attribute is optional.
+\item \texttt{\#FIXED $value$} The attribute value is constant $value$.
+\end{itemize}
+
+The DTD also provides other constructs such as declaration of entities and notations not mentioned in this work.
+
+An example of DTD describing the book element from the XML sample \ref{FIG_a_simple_xml_sample} follows.
+
+\begin{verbatim}
+<!ELEMENT book (title, authors, isbn?)>
+<!ATTRLIST book id ID #REQUIRED>
+
+<!ELEMENT title #PCDATA>
+
+<!ELEMENT authors (author+)>
+
+<!ELEMENT author #PCDATA>
+
+<!ELEMENT isbn #PCDATA>
+\end{verbatim}
+
+\todo[inline]{overit, zvalidovat}
 
 \subsection{XSD}
-\todo[inline]{TODO}
+Since the XSD language, containing many constructs and features, is quite comprehensive, we will describe just its basic principles. An important fact is that each XSD instance is a valid XML document. Its root element is always \texttt{<schema>} and the the XSD instance may (and it often does) begins with the following two lines.
+
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+\end{verbatim}
+
+Definition of an element in the XSD is
+\begin{alltt}
+<xs:element name="\(name\)" type="\(type\)"/>
+\end{alltt}
+where $type$ is either one of the built-in types \todo{ref?} or a user-defined type. Definition of an attribute is similar.
+\begin{alltt}
+<xs:attribute name="\(name\)" type="\(type\)"/>
+\end{alltt}
+Attributes are optional by default. If an attribute is mandatory, it is expressed by adding \texttt{use} attribute to its definition.
+\begin{alltt}
+<xs:attribute name="\(name\)" type="\(type\)" use="required"/>
+\end{alltt}
+
+The user-defined type in the XSD language is either a simple type, if it does not contain other elements and attributes, or a complex type otherwise. Attributes are only allowed to be of the simple types. Definition of the a simple type is
+\begin{alltt}
+<xs:simpleType name="\(name\)">
+   \(type details\)
+</xs:simpleType>
+\end{alltt}
+The user-defined simple types often serve to restrict the built-in types in various ways such as limiting lengths of strings, allowing only certain values and thus creating an enumeration type, and other.
+
+A complex type is defined in the same way.
+\begin{alltt}
+<xs:complexType name="\(name\)">
+  \(type details\)
+</xs:complexType>
+\end{alltt}
+The complex types can contain many constructs. Subelements are declared using \texttt{<xs:sequence>}, \texttt{<xs:choice>} and \texttt{<xs:all>} schema elements. If the order of the subelements is significant, we use \texttt{<xs:sequence>}, where the subelements in an XML must occur in the same order as they are defined in the sequence. If the order is not significant, we use \texttt{<xs:all>}, where the subelements must only occur but their order is not relevant. Construct \texttt{<xs:choice>} is equivalent to the alternation of several elements in the DTD.
+
+Moreover, these three construct can be nested and combined, assuming the combination is not ambiguous.
+
+Many schema elements (including \texttt{<xs:element>}, \texttt{<xs:sequence>}, \texttt{<xs:choice>}, \texttt{<xs:all>}) can be assigned with an occurrence interval. The occurrence interval is expressed using \texttt{minOccurs} and \texttt{maxOccurs} attributes. For instance, if an element is optional, it definition can be
+\begin{alltt}
+<xs:element name="\(name\)" type="\(type\)" minOccurs="0" maxOccurs="1"/>
+\end{alltt}
+
+An element can has a mixed content (can contain text and other elements at the same time). Such element has to be of a complex type and definition of the type has to contain attribute \texttt{mixed} with value \texttt{true}. The following example demonstrates the mixed content along with the definition of the element type inside \texttt{<xs:element>} schema element.
+\begin{alltt}
+<xs:element name="\(name\)">
+  <xs:complexType mixed="true">
+    \(complex type details\)
+  </xs:complexType>
+</xs:element>
+\end{alltt}
+
+The XSD language consists of many more constructs we do not mention such as substitution groups, type extensions, integrity constranints and other.
+
+The book element from the sample XML \ref{FIG_a_simple_xml_sample} can be described using the XSD as follows.
+\begin{alltt}
+<xs:element name="book">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="title" type="xs:string"/>
+      <xs:element name="authors>
+        <xs:complexType>
+          <xs:element name="author" type="xs:string" maxOccurs="unbound"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="isbn" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+  </xs:complexContent>
+</xs:element>
+\end{alltt}
+
+\todo[inline]{overit, zvalidovat}
 
 \section{XPath}
-\todo[inline]{TODO}
+XML Path Language (XPath, version 1.0) \cite{xpath} is a language to select fractions of XML documents using so-called path expressions. XPath considers an XML document as a tree of nodes. It recognizes seven types of nodes: document node, element node, attribute node, text node, namespace node, processing instruction node, and comment node. The root of the tree is the document node representing the entire XML document.
+
+\subsection{Path Expressions}
+A path expression is composed of individual path steps separated by \texttt{/} and can be absolute or relative. The absolute path begins with \texttt{/} representing the document node. The relative path needs a non-empty starting node-set to be evaluated. A path step is \\ \texttt{$axis$::$node\_test$[$predicate_1$]$\dots$[$predicate_n$]} \\
+where $axis$ and all predicates are optional.
+
+\subsection{Axes}
+An axis specifies a node-set relative to the current node. The default axis is \texttt{child} selecting all children nodes of the current node. Another important axes are \texttt{attribute}, selecting attributes of the current node, and \texttt{descendant-or-self} selecting the current node and all its descendants in the tree. The remaining axes are: \texttt{ancestor}, \texttt{ancestor-or-self}, \texttt{descendant}, \texttt{following}, \texttt{following-sibling}, \texttt{namespace}, \texttt{parent}, \texttt{preceding}, \texttt{preceding-sibling}, and \texttt{self}.
+
+\subsection{Node Tests}
+A node test identifies node(s) within all nodes selected by an axis. It can be a node type and/or node name. Examples of the node tests follow.
+\begin{itemize}
+\item \texttt{node()} All nodes selected by an axis.
+\item \texttt{text()} Text nodes.
+\item \texttt{*} All nodes assigned with their name (element and attributes).
+\end{itemize}
+
+\subsection{Abbrevations}
+Abbrevations for several most widely used construct are defined.
+\begin{itemize}
+\item \texttt{$P$/@$identifier$} stands for \texttt{$P$/atribute::$identifier$}
+\item \texttt{$P$/../$identifier$} stands for \texttt{$P$/parent::*/$identifier$}
+\item \texttt{$P$//$identifier$} stands for \texttt{$P$/descendant-or-self::node()/$identifier$} 
+\end{itemize}
+
+\subsection{Predicates}
+Predicates places additional conditions upon nodes that passed the node test. They can be either relative XPath paths or comparison expressions. The path predicates evaluate to true if they select a not empty set of nodes. Operators in the comparison expressions are \texttt{=}, \texttt{!=}, \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{\&eq;}, \texttt{\&ne;}, \texttt{\&lt;}, \texttt{\&gt;}, \texttt{\&le;}, and \texttt{\&ge;}. Operands are any XPath expressions (paths, literal values, etc).
+
+\subsection{Built-in Functions}
+XPath also provides a set of built-in functions. Few examples are \texttt{count($path$)}, returning a number of nodes selected by $path$, \texttt{position()}, returning the position of the current node in the current node-set, and \texttt{sum($path$)}, returning the sum of all nodes selected by $path$.
+
+\subsection{Usage Examples}
+Finally, we introduce several examples of XPath expressions, with their description, using the sample XML \ref{FIG_a_simple_xml_sample}.
+
+Path that selects \texttt{author} elements of the book with id $b1$:
+\begin{alltt}
+/bookstore/book[@id = "b1"]/authors/author
+\end{alltt}
+
+Expression returning a number of all books:
+\begin{alltt}
+count(//book)
+\end{alltt}
+
+Path selecting the ISBN element of the book titles $XQuery$:
+\begin{alltt}
+/bookstore/book[title = "XQuery"]/isbn
+\end{alltt}
+
+Path returning the titles of the books written by more than one author:
+\begin{alltt}
+/bookstore/book[count(authors/author) > 1]/title/text()
+\end{alltt}
+
+\todo[inline]{overit, otestovat}
 
 \section{XQuery}
-\todo[inline]{TODO}
+\todo[inline]{Tuto sekciu som vypracovaval primarne podla vasich slidov na prednasku Technologie XML. Mam to niekde uviest?}
+
+An XML Query Language (XQuery, version 1.0) \todo{ref} is a language designed to query XML data. It is based on XPath 2.0. XPath 2.0 is an extension of XPath 1.0 (but not entirely compatible), adding ordered sequences, their iterations, set operations, conditional expressions, quantified expressions, and XML Schema types.
+
+\subsection{Sequences}
+A sequence is an ordered set of items. The result of each XPath 2.0 (and also XQuery 1.0) path is a sequence. An item is either an atomic value or a node. An atomic value is a value of a XML Schema simple type. A node is an instance of one of the node types.
+
+Each node has its identity, data type (simple or complex, according to the XML Schema types), typed value (can be retrieved by function \texttt{fn:data()}, and string value (retrieved by function \texttt{fn:string()}.
+
+\subsection{FLWOR Expressions}
+A basic construct of the XQuery language is $FLWOR$. It is an abbrevation of its five clauses: for, let, where, order by, return. For clause is \\
+\texttt{for $var$ in $expr$} \\
+Expression $expr$ is evaluated and its result is a sequence. Items of the sequence are iteratively assigned to $var$ variable, which is valid also in the following clauses.
+
+Let clause is \\
+\texttt{let $var$ := $expr$} \\
+which evaluates $expr$ expression and its result is assigned to $var$ variable.
+
+Where clause is \\
+\texttt{where $expr$} \\
+Expression $expr$ can (and usually should) contain the variables from the for clause(s) and the remaining clauses are executed for only those tuples of values of the for variables, that the $expr$ evaluates to true.
+
+Order by clause is \\
+\texttt{order by $expr$)} \\
+and it orders the tuples of values that passed the where clause by the specified criterion.
+
+Return clause is \\
+\texttt{return $expr$} \\
+The result of the whole $FLWOR$ expression is $expr$. It can (and usually is) be constructed using the tuples of the for variable values and the let variables.
+
+\subsection{Conditional Expressions}
+
+\subsection{Quantified Expressions}
+
+\subsection{Built-in Functions}
+
+\subsection{User-defined Functions}
+
+\subsection{Value Comparison Expressions}
+
+\subsection{General Comparison Expressions}
+
+\subsection{Node Comparison Expressions}
+
+\subsection{Usage Examples}
+
+\todo[inline]{TODO XQuery Core?}
 
 \todo[inline]{možná ňejaký automat apod. Prostě co budete dále v textu potřebovat. Skratky: XSD, XSLT, ...}

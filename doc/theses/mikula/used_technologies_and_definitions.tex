@@ -220,6 +220,8 @@ Path returning the titles of the books written by more than one author:
 
 An XML Query Language (XQuery, version 1.0) \todo{ref} is a language designed to query XML data. It is based on XPath 2.0. XPath 2.0 is an extension of XPath 1.0 (but not entirely compatible), adding ordered sequences, their iterations, set operations, conditional expressions, quantified expressions, and XML Schema types.
 
+In the remainder of this section, basic features of the XQuery languages are briefly described. Many query samples can be found in  chapter \ref{CHAPTER_analysis_of_xquery}.
+
 \subsection{Sequences}
 A sequence is an ordered set of items. The result of each XPath 2.0 (and also XQuery 1.0) path is a sequence. An item is either an atomic value or a node. An atomic value is a value of a XML Schema simple type. A node is an instance of one of the node types.
 
@@ -247,21 +249,54 @@ Return clause is \\
 The result of the whole $FLWOR$ expression is $expr$. It can (and usually is) be constructed using the tuples of the for variable values and the let variables.
 
 \subsection{Conditional Expressions}
+XQuery provides common \texttt{if-than-else} conditional expressions with common syntax.
+\begin{alltt}
+if (\(condition\))
+than \(expr1\)
+else \(expr2\)
+\end{alltt}
+If $condition$ expression evaluates to true, $expr1$ is evaluated, else $expr2$ is evaluated. The else branch is optional.
 
 \subsection{Quantified Expressions}
+XQuery provides two types of quantified expressions, \texttt{every} and \texttt{some}. Their syntax follows.
+\begin{alltt}
+every \(var\) in \(expr1\)
+satisfies \(expr2\)
+\end{alltt}
+\begin{alltt}
+some \(var\) in \(expr1\)
+satisfies \(expr2\)
+\end{alltt}
 
-\subsection{Built-in Functions}
+Firstly, $expr1$ is evaluated, and then the result of the quantified expression is true if $expr2$ is true for every (some) item, represented by $var$, of the result of $expr1$ (which is a sequence). 
 
-\subsection{User-defined Functions}
+\subsection{Functions}
+XQuery provides a wide set of built-in functions. \todo{ref?}
 
-\subsection{Value Comparison Expressions}
+And also new functions can defined using the following syntax.
+\begin{alltt}
+define function \(name\)(\(parameters\)) as \(type\)
+\{
+  \(expr\)
+\}
+\end{alltt}
+where $name$ is the function's name, $parameters$ is a list of parameters (with or without specification of their types), and $type$ is a type of a return value, which is the result of $expr$.
 
-\subsection{General Comparison Expressions}
+\subsection{Comparison Expressions}
+Comparison expressions are of three types: $value$ comparison expressions, $general$ comparison expressions, and $node$ comparison expressions. A very brief insight follows. More details can be found in REF\todo{ref, moze to takto ostat?}.
 
-\subsection{Node Comparison Expressions}
+The $value$ comparison expressions use operators \texttt{lt}, \texttt{gt}, \texttt{le}, \texttt{ge}, \texttt{eq}, and \texttt{ne} and they compare operands that are or can be converted to atomic values.
 
-\subsection{Usage Examples}
+The $general$ comparison expressions use operators \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, and \texttt{!=} and they can also compare sequences.
+
+And the $node$ comparison expressions use operators \texttt{is}, \texttt{<<}, and \texttt{>>} and they compare nodes, their identities and order.
 
 \todo[inline]{TODO XQuery Core?}
+
+\section{Other Technologies}
+
+\begin{description}
+\item[XSLT] e\textbf{X}tensible \textbf{S}tylesheet \textbf{L}anguage \textbf{T}ransformations \cite{Clark:99:XTV} is a language to transform input XML document(s) into other (not necessarily XML) document(s).
+\end{description}
 
 \todo[inline]{možná ňejaký automat apod. Prostě co budete dále v textu potřebovat. Skratky: XSD, XSLT, ...}

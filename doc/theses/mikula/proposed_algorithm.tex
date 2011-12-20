@@ -13,18 +13,14 @@ The syntactic analysis needs to be slightly modified to suit our case. It writes
 
 \subsection{Definition of the Syntax Tree}
 \begin{definition}
-Syntax tree of a XQuery query $Q$ is a tuple $T = (V, E, o)$ where $V$ is a set of nodes representing XQuery language constructs (TODO\todo{kompletny zoznam}), $E$ is a set of edges - couples $(a,b):a,b \in V$ and $o:V \rightarrow \mathbb{N}$ is an ordering function and $T$ satisfies the following conditions:
-\begin{itemize}
-\item $(V,E)$ is a tree.
-\item The root node is $ModuleNode$ representing the entire query Q.
-\item $(a,b)$ is an element of $E$ if and only if $b$ is a direct component of construct $a$ in $Q$.
-\item For every node $a \in V$ the ordering function $o$ is defined as follows \\* $o(a) = \left\{
-	\begin{array}{ll}
-		1  & \mbox{if }a\mbox{ is the root node} \\
-		seq(a) & \mbox{else}
-	\end{array}
-\right.$ \\* where $seq(a)$ is a sequential number of appearence of construct $a$ in $Q$.
-\end{itemize}
+Syntax tree of XQuery query $Q$ is tuple $T = (V, E, \mathcal{F})$ where $V$ is a set of nodes REF\todo{ref} representing the XQuery syntax constructs, $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ in query $Q$, and $\mathcal{F}$ is a set of functions specifying additional properties of the nodes.
+
+Since two different literal values in $Q$ are represented by the same item from $LiteralNode \in V$, it is needed to distinguish them using $\mathcal{F}$. Each literal value has a type and value. Therefore $\mathcal{F}$ contains functions $type_{LiteralNode}: V_{LiteralNode} \rightarrow Types_{literal}$ and $value_{LiteralNode}: V_{LiteralNode} \rightarrow Values_{literal}$, where $V_{LiteralNode}$ is set $\{v | v \in V, v = LiteralNode\}$, $Types_{literal}$ is set of all types of literal values $\{DECIMAL, INTEGER, DOUBLE, STRING\}$, and $Values_{literal}$ is a set of all literal values (all valid XQuery decimal numbers, integers, double numbers and strings).
+
+\todo[inline]{Podobne funkcie pre dalsie clenske premenne dalsich tried}
+Set $\mathcal{F}$ also contains functions that return children of particular nodes. For $FLWORExprNode$ it is function $whereClauseNode_{FLWORNodeExpr} : V_{FLWORNodeExpr} \rightarrow V$ where $V_{FLWORNodeExpr}$ is set $\{v | v \in V, v = FLWORNodeExpr\}$. For every $v \in V_{FLWORNodeExpr}: whereClauseNode_{FLWORNodeExpr}(v) = w$ so that $(v, w) \in E$ and $w = WhereClauseNode$.
+
+For $ParamListNode$, which can has multiple $ParamNode$ children, set $\mathcal{F}$ contains $paramOrder_{ParamListNode} : V_{ParamListNode} \rightarrow \mathcal{PO}$ where $V_{ParamListNode}$ is set $\{v | v \in V, v = ParamListNode\}$ and $\mathcal{PO}$ is set of functions $\{paramOrder_v : E_v \rightarrow \mathbb{N} | v \in V_{ParamListNode}, E_v = \{(v,w) | (v,w) \in E, w = ParamNode\}\}$. For every $v \in V_{ParamListNode}: paramOrder_{ParamListNode}(v) = paramOrder_v$ and for every $e = (v, w) \in E_v: paramOrder_v(e)$ is a sequential number of $w$ in children of $v$ in query $Q$. 
 \end{definition}
 
 \subsection{Syntax Tree Node Types}

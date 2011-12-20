@@ -30,8 +30,6 @@ The query consists of a function declaration and an arithmetic comparison. The c
 
 While simplier approaches of the query processing such as the pattern finding limit possibilities of the query utilization, a more complex processing of queries provides a better starting point for consecutive analyses and also for further refinements and additions. Therefore, we decided to incorporate query processing using the lexical and syntax analyses.
 
-\todo[inline]{Tak náročnost implementace rozhodně není kritérium. Ta se udělá jednou. Navíc ve vědě (tj. i DP) nemá opodstatnění. Pro DP navíc platí, že nemusíte implementovat vše, co navrhnete. Implementace je pomocná věc, která slouží k tomu, abychom experimentálně ukázali vlastnosti a chování navrženého algoritmu.}
-
 \section{Inference of XML Structure}
 The question of inference of XML structure from queries is partially discussed in the previous chapter. We are able to infer XML structure from queries without their evaluation, but in a limited way. This inference is based on an analysis of path expressions. Its limitation involves the following issues. When we infer some subelements of a certain element we often cannot be sure about their number of occurrences. Also, we cannot be sure if every occurrence of the certain element contains these subelements and we even do not know if at least one occurrence of the element contains them. Thus, the inferred statement is more likely an indication than a fact about the structure.
 

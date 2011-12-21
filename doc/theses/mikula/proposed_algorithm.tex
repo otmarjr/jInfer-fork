@@ -5,27 +5,44 @@
 \todo[inline]{Predpoklad korektnosti dotazov}
 
 \section{Step 1: Construction of a Syntax Tree}
-The first step of the algorithm involves lexical and syntactic analyses known from compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
+The first step of the algorithm involves lexical and syntax analyses known from the construction of compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
 
 The syntactic analysis needs to be slightly modified to suit our case. It writes its result into a file in an XML representation. Instead, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though this requirement concerns modifications of implementation, the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
 \todo[inline]{Toto vše je OK, ale asi budeme potřebovat vědět, co nám z té analýzy leze za informace se kterými dál pracujeme. Čili vstupy našeho algoritmu je potřeba popsat přesně, ideálně formálně, tj. je to asi nějaký strom T= (V, E), kde V je... atd. Jeslti už je to pak implementováno jako objekty v paměti nebo XML data je celkem jedno a bude popsáno v kapitola Implementation.}
 
 \subsection{Definition of the Syntax Tree}
-\begin{definition}
-Syntax tree of XQuery query $Q$ is tuple $T = (V, E, \mathcal{F})$ where $V$ is a set of nodes REF\todo{ref} representing the XQuery syntax constructs, $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ in query $Q$, and $\mathcal{F}$ is a set of functions specifying additional properties of the nodes.
+Firstly, we formally define the syntax tree.
 
-Since two different literal values in $Q$ are represented by the same item from $LiteralNode \in V$, it is needed to distinguish them using $\mathcal{F}$. Each literal value has a type and value. Therefore $\mathcal{F}$ contains functions $type_{LiteralNode}: V_{LiteralNode} \rightarrow Types_{literal}$ and $value_{LiteralNode}: V_{LiteralNode} \rightarrow Values_{literal}$, where $V_{LiteralNode}$ is set $\{v | v \in V, v = LiteralNode\}$, $Types_{literal}$ is set of all types of literal values $\{DECIMAL, INTEGER, DOUBLE, STRING\}$, and $Values_{literal}$ is a set of all literal values (all valid XQuery decimal numbers, integers, double numbers and strings).
+\begin{define}[Syntax tree]
+Syntax tree of XQuery query $Q$ is tuple $T = (V, E, c, \mathcal{P}, \mathcal{O})$ where $V \subset \mathbb{N}$ is a set of nodes, each node representing a particular XQuery construct in query $Q$, $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ in query $Q$, $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9} (those with non-bolded names), $\mathcal{P}$ is a set of functions specifying additional properties of the nodes, and $\mathcal{O}$ is a set of functions specifying an order of children of particular nodes.
+\end{define}
 
-\todo[inline]{Podobne funkcie pre dalsie clenske premenne dalsich tried}
-Set $\mathcal{F}$ also contains functions that return children of particular nodes. For $FLWORExprNode$ it is function $whereClauseNode_{FLWORNodeExpr} : V_{FLWORNodeExpr} \rightarrow V$ where $V_{FLWORNodeExpr}$ is set $\{v | v \in V, v = FLWORNodeExpr\}$. For every $v \in V_{FLWORNodeExpr}: whereClauseNode_{FLWORNodeExpr}(v) = w$ so that $(v, w) \in E$ and $w = WhereClauseNode$.
+Regarding the additional properties, two constructs in $Q$ represented by two nodes of the same class from $C$ may differ in certain ways, and therefore, it is needed to distinguish them. For instance, two different literal values in $Q$ are represented by nodes $l_1, l_2 \in V$ and $c(l_1) = c(l_2) = LiteralNode$ but each has a different value and type. Therefore $\mathcal{P}$ contains functions \\
+$type_{LiteralNode}: V_{LiteralNode} \rightarrow Types_{literal}$ \\
+$value_{LiteralNode}: V_{LiteralNode} \rightarrow Values_{literal}$ \\
+where $V_{LiteralNode}$ is set $\{v | v \in V, c(v) = LiteralNode\}$, $Types_{literal}$ is set of all types of literal values $\{DECIMAL, INTEGER, DOUBLE, STRING\}$, and $Values_{literal}$ is a set of all literal values (all valid XQuery decimal numbers, integers, double numbers and strings).
 
-For $ParamListNode$, which can has multiple $ParamNode$ children, set $\mathcal{F}$ contains $paramOrder_{ParamListNode} : V_{ParamListNode} \rightarrow \mathcal{PO}$ where $V_{ParamListNode}$ is set $\{v | v \in V, v = ParamListNode\}$ and $\mathcal{PO}$ is set of functions $\{paramOrder_v : E_v \rightarrow \mathbb{N} | v \in V_{ParamListNode}, E_v = \{(v,w) | (v,w) \in E, w = ParamNode\}\}$. For every $v \in V_{ParamListNode}: paramOrder_{ParamListNode}(v) = paramOrder_v$ and for every $e = (v, w) \in E_v: paramOrder_v(e)$ is a sequential number of $w$ in children of $v$ in query $Q$. 
-\end{definition}
+Set $\mathcal{P}$ contains other similar functions but due to their large count, we do not define them formally.
+\todo[inline]{Moze takto ostat, alebo definovat aspon tie co pouzivame? Alebo ich aspon vypisat?}
 
-\subsection{Syntax Tree Node Types}
+Set $\mathcal{P}$ also contains functions that return children of particular nodes. For instance, in every syntax tree, for every $v \in V, c(v) = FLWORExprNode$ it exists $w = \in V, c(w) = WhereClauseNode$ so that $(v,w) \in E$. In other words, every $FLWORExprNode$ node has a $WhereClauseNode$ node amongst its children. Set $\mathcal{P}$ contains function \\
+$whereClauseNode_{FLWORExprNode} : V_{FLWORExprNode} \rightarrow V$ \\ 
+where $V_{FLWORExprNode}$ is set $\{v | v \in V, c(v) = FLWORExprNode\}$. For every $v \in V_{FLWORExprNode}: whereClauseNode_{FLWORExprNode}(v) = w$ so that $(v, w) \in E$ and $c(w) = WhereClauseNode$. Function $whereClauseNode_{FLWORExprNode}$ is a convenient function to specify a $WhereClauseNode$ child of a given $FLWORExprNode$ node.
+
+Set $\mathcal{O}$ contains functions specifying an order of children of a some nodes. Those nodes are nodes with all children of the same class from $C$. For instance, $ParamListNode$ can has multiple $ParamNode$ children. Set $\mathcal{O}$ contains function \\
+$paramOrder_{ParamListNode} : V_{ParamListNode} \rightarrow \mathcal{O}_P$ \\
+where $V_{ParamListNode}$ is set $\{v | v \in V, c(v) = ParamListNode\}$ and $\mathcal{O}_P$ is set of functions $\{paramOrder_v : E_v \rightarrow \mathbb{N} | v \in V_{ParamListNode}, E_v = \{(v,w) | (v,w) \in E, c(w) = ParamNode\}\}$. For every $v \in V_{ParamListNode}: paramOrder_{ParamListNode}(v) = paramOrder_v$ and for every $e = (v, w) \in E_v: paramOrder_v(e)$ is a sequential number of $w$ amongst children of $v$ in query $Q$. In other words, it represents the order of the children as the respective constructs appear in the query.
+
+\subsection{Syntactic Abbrevations}
+Since we need to use the syntax tree in pseudo-algorithms, we define several abbrevations to make its usage more simplier.
+
+Assuming, $v \in V$
+$v.X$ is abbrevation for $X(v)$
+
+\subsection{Closer Look at the Nodes of the Syntax Tree}
 \todo[inline]{Dat figures do appendixu?}
-The node types (or classes) of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a node can be of several types. This hierarchy is shown in figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}. Nodes with emphasised names express a common type of a group of nodes - their descendants, and these type nodes cannot be directly used in the syntax tree (abstract classes). The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
+The node types (or classes) of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a node can be of several types. This hierarchy is shown in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}. Nodes with emphasised names express a common type of a group of nodes - their descendants, and these type nodes cannot be directly used in the syntax tree (abstract classes). The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
 
 \todo[inline]{V ExprNode s ExprHolderNode si pamatame aj typ vyrazu}
 

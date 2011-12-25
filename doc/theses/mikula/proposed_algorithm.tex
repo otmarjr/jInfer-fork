@@ -9,13 +9,12 @@ The first step of the algorithm involves lexical and syntax analyses known from 
 
 The syntactic analysis needs to be slightly modified to suit our case. It writes its result into a file in an XML representation. Instead, we need to keep the result in memory and pass it to consecutive steps of our algorithm. Though this requirement concerns modifications of implementation, the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
-\todo[inline]{Toto vše je OK, ale asi budeme potřebovat vědět, co nám z té analýzy leze za informace se kterými dál pracujeme. Čili vstupy našeho algoritmu je potřeba popsat přesně, ideálně formálně, tj. je to asi nějaký strom T= (V, E), kde V je... atd. Jeslti už je to pak implementováno jako objekty v paměti nebo XML data je celkem jedno a bude popsáno v kapitola Implementation.}
-
 \subsection{Definition of the Syntax Tree}
 Firstly, we formally define the syntax tree.
 
 \begin{define}[Syntax tree]
-Syntax tree of XQuery query $Q$ is tuple $T = (V, E, c, \mathcal{P}, \mathcal{O})$ where $V \subset \mathbb{N}$ is a set of nodes, each node representing a particular XQuery construct in query $Q$, $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ in query $Q$, $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9} (those with non-bolded names), $\mathcal{P}$ is a set of functions specifying additional properties of the nodes, and $\mathcal{O}$ is a set of functions specifying an order of children of particular nodes.
+\label{DEF_syntax_tree}
+Syntax tree of XQuery query $Q$ is tuple $T = (V, E, c, \mathcal{P}, o)$ where $V \subset \mathbb{N}$ is a set of nodes, each node representing a particular XQuery construct in query $Q$, $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ ($b$ is a child of $a$) in query $Q$, $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}, $\mathcal{P}$ is a set of functions specifying additional properties of the nodes and distinguishing the nodes of the same classes, and $o : V \rightarrow \mathcal{O}$ is a function specifying an order of children of the nodes where $\mathcal{O} = \{o_v : E_v \rightarrow \mathbb{N} | v \in V, E_v = \{(v, w) | w \in V, (v,w) \in E\}\}$ is set of functions specifying the children order for each node. For every $v \in V, o(v) = o_v$ so that $o_v(v,w)$ is a sequential number of a construct represented by $w$ amongst constructs represented by children of $v$ in query $Q$. 
 \end{define}
 
 Regarding the additional properties, two constructs in $Q$ represented by two nodes of the same class from $C$ may differ in certain ways, and therefore, it is needed to distinguish them. For instance, two different literal values in $Q$ are represented by nodes $l_1, l_2 \in V$ and $c(l_1) = c(l_2) = LiteralNode$ but each has a different value and type. Therefore $\mathcal{P}$ contains functions \\
@@ -26,31 +25,28 @@ where $V_{LiteralNode}$ is set $\{v | v \in V, c(v) = LiteralNode\}$, $Types_{li
 Set $\mathcal{P}$ contains other similar functions but due to their large count, we do not define them formally.
 \todo[inline]{Moze takto ostat, alebo definovat aspon tie co pouzivame? Alebo ich aspon vypisat?}
 
-Set $\mathcal{P}$ also contains functions that return children of particular nodes. For instance, in every syntax tree, for every $v \in V, c(v) = FLWORExprNode$ it exists $w = \in V, c(w) = WhereClauseNode$ so that $(v,w) \in E$. In other words, every $FLWORExprNode$ node has a $WhereClauseNode$ node amongst its children. Set $\mathcal{P}$ contains function \\
-$whereClauseNode_{FLWORExprNode} : V_{FLWORExprNode} \rightarrow V$ \\ 
-where $V_{FLWORExprNode}$ is set $\{v | v \in V, c(v) = FLWORExprNode\}$. For every $v \in V_{FLWORExprNode}: whereClauseNode_{FLWORExprNode}(v) = w$ so that $(v, w) \in E$ and $c(w) = WhereClauseNode$. Function $whereClauseNode_{FLWORExprNode}$ is a convenient function to specify a $WhereClauseNode$ child of a given $FLWORExprNode$ node.
+\subsection{Syntactic Abbreviations}
+Since we need to use the syntax tree in pseudo-algorithms, we define the following abbreviations to make its usage more simple.
 
-Set $\mathcal{O}$ contains functions specifying an order of children of a some nodes. Those nodes are nodes with all children of the same class from $C$. For instance, $ParamListNode$ can has multiple $ParamNode$ children. Set $\mathcal{O}$ contains function \\
-$paramOrder_{ParamListNode} : V_{ParamListNode} \rightarrow \mathcal{O}_P$ \\
-where $V_{ParamListNode}$ is set $\{v | v \in V, c(v) = ParamListNode\}$ and $\mathcal{O}_P$ is set of functions $\{paramOrder_v : E_v \rightarrow \mathbb{N} | v \in V_{ParamListNode}, E_v = \{(v,w) | (v,w) \in E, c(w) = ParamNode\}\}$. For every $v \in V_{ParamListNode}: paramOrder_{ParamListNode}(v) = paramOrder_v$ and for every $e = (v, w) \in E_v: paramOrder_v(e)$ is a sequential number of $w$ amongst children of $v$ in query $Q$. In other words, it represents the order of the children as the respective constructs appear in the query.
+For every $v \in V$, abbreviation
+\begin{itemize}
+\item $v.p$ stands for $p_{c(v)}(v)$ if $p_{c(v)} \in \mathcal{P}$.
+\item $v.getChildren()$ stands for $\{w | w \in V, (v,w) \in E\}$ which is a set of all children of $v$.
+\item $v.getChild(i)$, $i \in \mathbb{N} \cup \{0\}$, stands for $w \in V$ so that $o(v)(v,w) = i + 1$.
+\item $v.getChild(class), class \in C$, stands for $w \in V$ so that $(v,w) \in E$ and $c(w) = class$, if $\Bigl | \{u | u \in V, (v,u) \in E, c(u) = class\}\Bigr | = 1$.
+\end{itemize}
 
-\subsection{Syntactic Abbrevations}
-Since we need to use the syntax tree in pseudo-algorithms, we define several abbrevations to make its usage more simplier.
-
-Assuming, $v \in V$
-$v.X$ is abbrevation for $X(v)$
+\todo[inline]{Je nutne presnejsie popisat kedy a preco tieto skratky maju zmysel? V pseudo-kodoch budu samozrejme pouzivane len v pripadoch, ked su dobre definovane a maju zmysel.}
 
 \subsection{Closer Look at the Nodes of the Syntax Tree}
 \todo[inline]{Dat figures do appendixu?}
-The node types (or classes) of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where a node can be of several types. This hierarchy is shown in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}. Nodes with emphasised names express a common type of a group of nodes - their descendants, and these type nodes cannot be directly used in the syntax tree (abstract classes). The remaining nodes represent particular constructs of the XQuery language and their instances can be used as nodes of the syntax tree. Each of the instances additionaly contains details about the particular form of the respective XQuery construct used in the query.
+The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}. The classes with emphasised names represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
 
-\todo[inline]{V ExprNode s ExprHolderNode si pamatame aj typ vyrazu}
-
-For example, an instance of the syntax tree cannot directly contain instances of nodes $Node$ and $ExprNode$, but it can contain instances of nodes $AttributeNode$ and $LiteralNode$. Regarding the types, an instance of $LiteralNode$ node is of three types: $LiteralNode$, $ExprNode$ and $Node$. It carries information on a type of the literal and its value, for example $xs:integer$ of value $5$.
+For example, an instance of the syntax tree cannot directly contain nodes of $Node$ and $ExprNode$ classes (for every $v \in V, c(v) \neq Node, c(v) \neq ExprNode$), but it can contain nodes of $AttributeNode$ and $LiteralNode$ classes. Regarding the multiplicity of types, a node of $LiteralNode$ class is also considered to be of two indirect types: $ExprNode$ and $Node$.
 
 \todo[inline]{Asi bude potrebne nakreslit pre kazdy node, co presne obsahuje. Alebo staci pre tie, ktore budeme my pouzivat?}
 
-Nodes can be classified into three groups: inner nodes, leaf nodes and nodes that can be both inner and leaf. Inner nodes (marked $I$) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such node is $FLWORExprNode$ which is composed of nodes $TupleStreamNode$, $WhereClauseNode$, $OrderByClauseNode$ and $ReturnClauseNode$. Leaf nodes (marked $L$) represent elements of XQuery language that cannot be further divided. For example, $LiteralNode$. Node $FunctionCallNode$ is an example of the third group (marked $IL$). Function call of a function without arguments is represented by a leaf while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
+The node classes can be classified into three groups: inner node classes, leaf node classes and node classes that can be both inner and leaf. Inner node classes (marked $I$) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such class is $FLWORExprNode$ which is composed of $TupleStreamNode$, $WhereClauseNode$, $OrderByClauseNode$ and $ReturnClauseNode$ classes. Leaf node classes (marked $L$) represent elements of XQuery language that cannot be further divided. For example, $LiteralNode$. Node $FunctionCallNode$ is an example of the third group (marked $IL$). Function call of a function without arguments is represented by a leaf node while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
 
 \begin{figure}
 \caption{Syntax tree node types part 1.}
@@ -230,14 +226,16 @@ Nodes can be classified into three groups: inner nodes, leaf nodes and nodes tha
 \end{description}
 \end{figure}
 
-Some pseudo code algorithms in the following sections need to determine the type of a node instance. For this purpose, we define function $isA(nodeInstance, nodeType)$. The first argument is an instance of any node and the second is a node type itself. The function returns boolean value $true$ if the instance is of the specified node type, according to the described principle. Otherwise, it returns $false$.
+Some pseudo code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, for every $v \in V$ and every $class \in C$, we define function $is(v, class)$. It returns boolean value $true$ if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns $false$.
 
-For instance, assuming variable $literal$ is an instance of node $LiteralNode$, calls $isA(literal, LiteralNode)$, $isA(literal, ExprNode)$ return $true$, while call $isA(literal, ContentNode)$ returns $false$.
+For instance, assuming $v \in V, c(v) = LiteralNode$, calls $is(v, LiteralNode)$, $is(v, ExprNode)$ return $true$, while call $is(v, ContentNode)$ returns $false$.
 
-\subsection{Description of the Syntax Tree}
-An important characteric of the syntax tree is related to a definition of local variables and their scope. The representation of a definition of a local variable is $VariableBinding$ node. Nodes of this type contain only two subnodes; a type of the variable and a binding expression. The node and its subtree representing the type do not contain any expressions. The binding expression node is an expression node but the represented expression cannot use the variable which is just being bound. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ node. Assuming \todo{Toto je velmi high-level popis na to, jak málo o syntaktickém stromě a dalších položkách víme.} the post-order numbering of the nodes, the new variable may be valid in some nodes with a higher post-order sequence number. It depends on the type of the ancestor node(s) which nodes that are.
+\subsection{Characteristics of the Syntax Tree}
+An important characteristic of the syntax tree is related to a definition of local variables and their scope in the XQuery language. The representation of a definition of a local variable in the syntax tree is a node of $VariableBinding$ class. Nodes of that class contain have only two children; a node representing the type of the variable and a node representing the binding expression (expression defining the value of the variable, and thus, it cannot use the variable). Hence, the entire subtree doesn't contain any expressions that use the variable. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ class node. It depends on the type of XQuery construct that the variable binding is a (indirect) component of.
 
-For example, $FLWORExpr$ node contains four subnodes; $TupleStream$, $WhereClause$, $OrderByClause$ and $ReturnClause$. $TupleStream$ node contains a list of $VariableBinding$ node which define variables valid in all other three subnodes of the $FLWORExpr$ node.
+For example, a node of $FLWORExpr$ class contains four subnodes of $TupleStream$, $WhereClause$, $OrderByClause$ and $ReturnClause$ classes. The $TupleStream$ class node contains a list of node of $variableBinding$ class which define variables valid in all other three subnodes of the FLWOR node.
+
+\todo[inline]{Nejak sa z tohoto vytratilo to, preco to je pre nas dolezita charakteristika}
 
 \todo[inline]{priklad stromu}
 
@@ -282,7 +280,7 @@ Instead, the syntax tree can be searched just once, before the analysis of expre
 
 A simple algorithm is presented in Algorithm \ref{ALG_determination_of_function_return_types} \todo{Q: uvadzat aj taketo jednoduche funkcie? A: Obecně by mělo být popsáno vše. Ale pokud se nějaká jednoduchá věc např. opakuje, tak stačí napsat, že je algoritmus podobný jako v předchozím případě nebo tak něco.}. It uses \texttt{getFunctionDeclarationNodes()} function, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
 
-For simplicity, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is somewhat more difficult to implement \todo{Q: je to ok? A: No spíš napište něco jako without loss of generality.}. Return types of built-in functions are fixed and, thus, there is no need to analyze them.
+Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyse them.
 
 \begin{algorithm}
 \caption{Determination of Function Return Types}
@@ -299,7 +297,7 @@ For simplicity, we will focus on locally defined functions. We will not determin
 \end{algorithmic}
 \end{algorithm}
 
-For the rest of the thesis, we assume function \todo{Většinou se na začátek sekce s algoritmem dává seznam používaných  funkcí a jejich význam.} \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
+For the rest of the thesis, we assume function \todo{Většinou se na začátek sekce s algoritmem dává seznam používaných funkcí a jejich význam.} \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
 Later phases of the algorithm may need to process the function declarations. Therefore, we also store references to the entire function declaration nodes.
 

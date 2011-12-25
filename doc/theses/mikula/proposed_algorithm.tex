@@ -278,7 +278,34 @@ Determination of return types of functions is needed because function calls can 
 
 Instead, the syntax tree can be searched just once, before the analysis of expressions, and return types of all functions found are stored.
 
-A simple algorithm is presented in Algorithm \ref{ALG_determination_of_function_return_types} \todo{Q: uvadzat aj taketo jednoduche funkcie? A: Obecně by mělo být popsáno vše. Ale pokud se nějaká jednoduchá věc např. opakuje, tak stačí napsat, že je algoritmus podobný jako v předchozím případě nebo tak něco.}. It uses \texttt{getFunctionDeclarationNodes()} function, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
+\begin{algorithm}
+\caption{Retrieval of Function Declaration Nodes $getFunctionDeclarationNodes(syntaxTree)$}
+\label{ALG_retrieval_of_function_declaration_nodes}
+\begin{algorithmic}[1]
+\REQUIRE $syntaxTree$: A reference to the root node of a syntax tree.
+\ENSURE A list of syntax tree nodes representing function declarations.
+
+\STATE $prologNode = null$
+\FORALL{$moduleChildNode \in syntaxTree.getChildren()$}
+    \IF{$is(moduleChildNode, PrologNode)$}
+        \STATE $prologNode = moduleChildNode$
+    \ENDIF
+\ENDFOR
+
+\STATE $functionDeclarationNodes =$ an empty list
+\IF{$prologNode \neq null$}
+    \FORALL{$prologChildNode \in prologNode.getChildren()$}
+        \IF{$is(prologChildNode, FunctionDeclNode)$}
+            \STATE add $prologChildNode$ to $functionDeclarationNodes$
+        \ENDIF
+    \ENDFOR
+\ENDIF
+
+\RETURN $functionDeclarationNodes$
+\end{algorithmic}
+\end{algorithm}
+
+A simple algorithm is presented in Algorithm \ref{ALG_determination_of_function_return_types} \todo{Q: uvadzat aj taketo jednoduche funkcie? A: Obecně by mělo být popsáno vše. Ale pokud se nějaká jednoduchá věc např. opakuje, tak stačí napsat, že je algoritmus podobný jako v předchozím případě nebo tak něco.}. It uses \texttt{getFunctionDeclarationNodes()} function, defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
 
 Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyse them.
 
@@ -286,20 +313,27 @@ Without loss of generality, we will focus on locally defined functions. We will 
 \caption{Determination of Function Return Types}
 \label{ALG_determination_of_function_return_types}
 \begin{algorithmic}[1]
-\ENSURE An associative array of function names with their types.
+\REQUIRE{\ \\
+    $getFunctionDeclarationNodes()$: Function defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}. \\
+    $syntaxTree$: A reference to the root node of a syntax tree.
+}
+\ENSURE An associative array of function names with their types and references to the their declaration nodes.
 
-\STATE $functionTypes$ = empty associative array
-\FORALL{$functionDeclarationNode \in getFunctionDeclarationNodes()$}
-    \STATE $functionName = functionDeclarationNode.getFunctionName()$
-    \STATE $functionTypes[functionName] = functionDeclarationNode.getReturnType()$
+\STATE $functionArray$ = an empty associative array
+\FORALL{$functionDeclarationNode \in getFunctionDeclarationNodes(syntaxTree)$}
+    \STATE $functionName = functionDeclarationNode.funcName$
+    \STATE $typeNode = functionDeclarationNode.getChild(TypeNode)$
+    \STATE $functionArray[functionName] = (PROCESS\_TYPE(typeNode), functionDeclarationNode)$
 \ENDFOR
-\RETURN $functionTypes$
+\RETURN $functionArray$
 \end{algorithmic}
 \end{algorithm}
 
-For the rest of the thesis, we assume function \todo{Většinou se na začátek sekce s algoritmem dává seznam používaných funkcí a jejich význam.} \texttt{getFunctionReturnType()} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
+\todo[inline]{Definovat a premenovat PROCESS\_TYPE() v Determination of Function Return Types. V skratke robi to, ze instanciu TypeNode prevediu na nasu reprezentaciu typu.}
 
-Later phases of the algorithm may need to process the function declarations. Therefore, we also store references to the entire function declaration nodes.
+For the rest of the thesis, we assume function \todo{Většinou se na začátek sekce s algoritmem dává seznam používaných funkcí a jejich význam.} $getFunctionReturnType()$ which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
+
+Later phases of the algorithm may need to process the function declarations. Therefore, we also store references to the entire function declaration nodes, accessible using function $getFunctionDeclNode()$.
 
 \subsection{Determination of Global Variable Types}
 A similar approach as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not, it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason as in case of external functions.
@@ -315,25 +349,25 @@ A similar approach as in the case of functions can be applied to determine types
 \ENSURE The expression type.
 
 \STATE $type = null$
-\IF{$isA(exprNode, LiteralNode)$}
-     \STATE $type =$ ((LiteralNode)exprNode).type, exactly-once cardinality
-\ELSIF{$isA(exprNode, FunctionCallNode)$}
-     \STATE $type = getFunctionReturnType(((FunctionCallNode)exprNode).functionName)$
-\ELSIF{$isA(exprNode, VarRefNode)$}
-     \STATE $type = getVariableType(contextVarTypes, ((VarRefNode)exprNode).variableName)$
-\ELSIF{$isA(exprNode, PathExprNode)$}
-     \STATE $path = ((PathExprNode)exprNode).path$
+\IF{$is(exprNode, LiteralNode)$}
+     \STATE $type = exprNode.type$, exactly-once cardinality
+\ELSIF{$is(exprNode, FunctionCallNode)$}
+     \STATE $type = getFunctionReturnType(exprNode.functionName)$
+\ELSIF{$is(exprNode, VarRefNode)$}
+     \STATE $type = getVariableType(contextVarTypes, exprNode.variableName)$
+\ELSIF{$is(exprNode, PathExprNode)$}
+     \STATE $path = exprNode.path$
      \IF{$path$ selects an element set}
-         \STATE $type =$ element type, zero-or-more cardianlity, $path$ included
+         \STATE $type =$ element type, zero-or-more cardinality, $path$ included
      \ELSIF{$path$ selects an attribute set}
-         \STATE $type =$ attribute type, zero-or-more cardianlity, $path$ included
+         \STATE $type =$ attribute type, zero-or-more cardinality, $path$ included
      \ELSE
          \STATE $type = null$
      \ENDIF
-\ELSIF{$isA(exprNode, OperatorNode)$}
+\ELSIF{$is(exprNode, OperatorNode)$}
      \STATE $type = determineOperatorType(exprNode, contextVarTypes)$
-\ELSIF{$isA(exprNode, FLWORExprNode)$}
-     \STATE $returnClauseNode = ((FLWORExprNode)exprNode).returnClauseNode$
+\ELSIF{$is(exprNode, FLWORExprNode)$}
+     \STATE $returnClauseNode = exprNode.returnClauseNode$
      \STATE $type = returnClauseNode.type$
 \ENDIF
 

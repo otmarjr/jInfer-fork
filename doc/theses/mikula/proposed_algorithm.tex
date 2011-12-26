@@ -226,7 +226,7 @@ The node classes can be classified into three groups: inner node classes, leaf n
 \end{description}
 \end{figure}
 
-Some pseudo code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, for every $v \in V$ and every $class \in C$, we define function $is(v, class)$. It returns boolean value $true$ if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns $false$.
+Some pseudo code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, we define the following function. For every $v \in V$ and every $class \in C$, function $is(v, class)$ returns boolean value $true$ if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns $false$.
 
 For instance, assuming $v \in V, c(v) = LiteralNode$, calls $is(v, LiteralNode)$, $is(v, ExprNode)$ return $true$, while call $is(v, ContentNode)$ returns $false$.
 
@@ -248,13 +248,9 @@ We want to capture the following types.
 
 \begin{itemize}
 \item XML Schema built-in atomic types \todo{link do appendixu}.
-\item Type $xs:untyped$. \todo{to je co?}
-\item Type representing any item. \todo{je potrebne?}
-\item Type representing an element, attribute, item, node, text node, comment, processing instruction, document node.
-\item Type representing a set of elements or attributes selected by a certain path expression. The path expression is included in this type. Let this type be identified as $pathType$.
+\item Types $ElementType$, $AttributeType$, $NodeType$, $TextNodeType$, $CommentType$, $ProcessingInstructionType$, $DocumentType$ representing an element, attribute, node, text node, comment, processing instruction, document node.
+\item Type representing a node selected by a certain path expression. The path expression is included in this type. Let this type be identified as $PathType$.
 \end{itemize}
-
-\todo[inline]{Q: Akeho typu je napr path expression /root/(elementA * 2)? A: Datový typ je daný operátorem. Hodnota elementu se přetypuje.}
 
 To capture sequences, we assign each type with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Every type can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
 
@@ -265,6 +261,8 @@ To capture sequences, we assign each type with its cardinality as proposed in \t
 \item A sequence containing zero or more items (modifier $*$).
 \item A sequence containing one or more items (modifier $+$).
 \end{itemize}
+
+$PathType$ has always cardinality of zero-or-more, because the result of a path expression is a general sequence and since we do not evaluate the queries we cannot determine its actual cardinality.
 
 If we cannot determine the type of an expression, we express that using $null$. An example of such case is path expression $/rootElement/(elementA * 2)$. \todo{Nejak dopisat}
 
@@ -305,16 +303,17 @@ Instead, the syntax tree can be searched just once, before the analysis of expre
 \end{algorithmic}
 \end{algorithm}
 
-A simple algorithm is presented in Algorithm \ref{ALG_determination_of_function_return_types} \todo{Q: uvadzat aj taketo jednoduche funkcie? A: Obecně by mělo být popsáno vše. Ale pokud se nějaká jednoduchá věc např. opakuje, tak stačí napsat, že je algoritmus podobný jako v předchozím případě nebo tak něco.}. It uses \texttt{getFunctionDeclarationNodes()} function, defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
+A simple algorithm is presented in Algorithm \ref{ALG_processing_of_functions} \todo{Q: uvadzat aj taketo jednoduche funkcie? A: Obecně by mělo být popsáno vše. Ale pokud se nějaká jednoduchá věc např. opakuje, tak stačí napsat, že je algoritmus podobný jako v předchozím případě nebo tak něco.}. It uses \texttt{getFunctionDeclarationNodes()} function, defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
 
 Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyse them.
 
 \begin{algorithm}
-\caption{Determination of Function Return Types}
-\label{ALG_determination_of_function_return_types}
+\caption{Processing of Functions}
+\label{ALG_processing_of_functions}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
     $getFunctionDeclarationNodes()$: Function defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}. \\
+    $getTypeTN()$: Function defined in Algorithm \ref{ALG_extraction_of_a_type_from_typenode}. \\
     $syntaxTree$: A reference to the root node of a syntax tree.
 }
 \ENSURE An associative array of function names with their types and references to the their declaration nodes.
@@ -323,26 +322,52 @@ Without loss of generality, we will focus on locally defined functions. We will 
 \FORALL{$functionDeclarationNode \in getFunctionDeclarationNodes(syntaxTree)$}
     \STATE $functionName = functionDeclarationNode.funcName$
     \STATE $typeNode = functionDeclarationNode.getChild(TypeNode)$
-    \STATE $functionArray[functionName] = (PROCESS\_TYPE(typeNode), functionDeclarationNode)$
+    \STATE $functionArray[functionName] = (getTypeTN(typeNode), functionDeclarationNode)$
 \ENDFOR
 \RETURN $functionArray$
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Definovat a premenovat PROCESS\_TYPE() v Determination of Function Return Types. V skratke robi to, ze instanciu TypeNode prevediu na nasu reprezentaciu typu.}
+\begin{algorithm}
+\caption{Extraction of a Type from TypeNode getTypeTN()}
+\label{ALG_extraction_of_a_type_from_typenode}
+\begin{algorithmic}[1]
+\REQUIRE $typeNode$: Syntax tree node of TypeNode class.
+\ENSURE Type extracted from $typeNode$.
 
-For the rest of the thesis, we assume function \todo{Většinou se na začátek sekce s algoritmem dává seznam používaných funkcí a jejich význam.} $getFunctionReturnType()$ which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
+\STATE $type = null$
+\STATE $cardinality = typeNode.cardinality$
+\STATE $itemTypeNode = typeNode.getChild(ItemTypeNode)$
+\IF{$is(itemTypeNode, AtomicTypeNode)$}
+    \STATE $type = itemTypeNode.typeName$
+\ELSIF{$is(itemTypeNode, KindTestNode)$}
+    \STATE $type = itemTypeNode.nodeKind$
+\ENDIF
 
-Later phases of the algorithm may need to process the function declarations. Therefore, we also store references to the entire function declaration nodes, accessible using function $getFunctionDeclNode()$.
+\RETURN $type$, $cardinality$
+\end{algorithmic}
+\end{algorithm}
+
+\todo[inline]{ALG Extraction of a Type from TypeNode nie uplne sedi s definiciou typov. DP JS ma nieco navyse.}
+
+For the rest of the thesis, we assume function $getFunctionReturnType()$ which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
+
+Later phases of the algorithm may need to process the declarations of certain functions. Therefore, we also store references to the entire function declaration nodes, accessible using function $getFunctionDeclNode()$.
 
 \subsection{Determination of Global Variable Types}
 A similar approach as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not, it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason as in case of external functions.
 
+\todo[inline]{ALG \ref{ALG_func_determineExpressionType}: Vymysliet a dopisat ako ziskavat typ z PathExprNode. Bude potrebne vyskusat implementaciu, ako sa chova.}
+
 \begin{algorithm}
-\caption{Function determineExpressionType}
+\caption{Function determineExpressionType()}
 \label{ALG_func_determineExpressionType}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
+    $getFunctionReturnType()$: Function returning a type of a function. \\
+    $getVariableType()$: Function returning a type of a variable. \\
+    $determineOperatorType()$: Function defined in \ref{ALG_func_determineOperatorType}. \\
+    $getType()$: Function returning a type of already processed expression. \\
     $exprNode$: An expression node in the syntax tree. \\
     $contextVarTypes$: Types of local variables valid in the current subtree.
 }
@@ -350,41 +375,38 @@ A similar approach as in the case of functions can be applied to determine types
 
 \STATE $type = null$
 \IF{$is(exprNode, LiteralNode)$}
-     \STATE $type = exprNode.type$, exactly-once cardinality
+     \STATE $type =$ XSD atomic type $exprNode.type$, exactly-once cardinality
 \ELSIF{$is(exprNode, FunctionCallNode)$}
-     \STATE $type = getFunctionReturnType(exprNode.functionName)$
+     \STATE $type = getFunctionReturnType(exprNode.fncName)$
 \ELSIF{$is(exprNode, VarRefNode)$}
-     \STATE $type = getVariableType(contextVarTypes, exprNode.variableName)$
+     \STATE $type = getVariableType(contextVarTypes, exprNode.varName)$
 \ELSIF{$is(exprNode, PathExprNode)$}
-     \STATE $path = exprNode.path$
-     \IF{$path$ selects an element set}
-         \STATE $type =$ element type, zero-or-more cardinality, $path$ included
-     \ELSIF{$path$ selects an attribute set}
-         \STATE $type =$ attribute type, zero-or-more cardinality, $path$ included
-     \ELSE
-         \STATE $type = null$
+     \IF{$exprNode$ selects an element set}
+         \STATE $type = ElementType$, zero-or-more cardinality, $exprNode$ included
+     \ELSIF{$exprNode$ selects an attribute set}
+         \STATE $type = AttributeType$, zero-or-more cardinality, $exprNode$ included
      \ENDIF
 \ELSIF{$is(exprNode, OperatorNode)$}
      \STATE $type = determineOperatorType(exprNode, contextVarTypes)$
 \ELSIF{$is(exprNode, FLWORExprNode)$}
-     \STATE $returnClauseNode = exprNode.returnClauseNode$
-     \STATE $type = returnClauseNode.type$
+     \STATE $returnClauseNode = exprNode.getChild(ReturnClauseNode)$
+     \STATE $type = getType(returnClauseNode)$
 \ENDIF
 
 \RETURN $type$
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Napisat, ze determineOperatorType() tiez nie je kompletna}
-\todo[inline]{definovat isOperatorClassAddition()}
-\todo[inline]{definovat isNumericType()}
-\todo[inline]{definovat isOperatorClassComparison()}
-
 \begin{algorithm}
-\caption{Function determineOperatorType}
+\caption{Function determineOperatorType()}
 \label{ALG_func_determineOperatorType}
 \begin{algorithmic}[1]
-\REQUIRE{\ \\
+\REQUIRE{\ \\ 
+    $getType()$: Function returning a type of already processed expression. \\
+    $isOperatorClassComparison()$: Function defined in \ref{ALG_func_isOperatorClassComparison}. \\
+    $isOperatorClassAddition()$: Function defined in \ref{ALG_func_isOperatorClassAddition}. \\
+    $isNumericType()$: Function defined in \ref{ALG_func_isNumericType}. \\
+    $selectMoreGenericNumericType()$: Function defined in \ref{ALG_func_selectMoreGeneralNumericType}. \\
     $operatorNode$: An operator expression node in the syntax tree. \\
     $contextVarTypes$: Types of local variables valid in the current subtree.
 }
@@ -393,16 +415,16 @@ A similar approach as in the case of functions can be applied to determine types
 \STATE $type = null$
 \STATE $operator = operatorNode.operator$
 \IF{$isOperatorClassComparison(operator)$}
-    \STATE $type = xs:boolean$
-\ELSIF{$isOperatorClassAddition(operator) AND$ one of the operands is of a numeric type}
-    \STATE $leftOperand = ((OperatorNode)exprNode).leftOperand$
-    \STATE $rightOperand = ((OperatorNode).exprNode).rightOperand$
-    \IF{$isNumericType(leftOperand.type) AND isNumericType(rightOperand.type)$}
-        \STATE $type = selectMoreGeneralType(leftOperand.type, rightOperand.type)$
-    \ELSIF{$isNumericType(leftOperand.type)$}
-        \STATE $type = leftOperand.type$
-    \ELSIF{$isNumericType(rightOperand.type)$}
-        \STATE $type = rightOperand.type$
+    \STATE $type = xs:boolean$, exactly-one cardinality
+\ELSIF{$isOperatorClassAddition(operator)$}
+    \STATE $leftOperandType = getType(exprNode.leftSide)$
+    \STATE $rightOperandType = getType(exprNode.rightSide)$
+    \IF{$isNumericType(leftOperandType)) AND isNumericType(rightOperandType)$}
+        \STATE $type = selectMoreGeneralNumericType(leftOperandType, rightOperandType)$
+    \ELSIF{$isNumericType(leftOperandType)$}
+        \STATE $type = leftOperandType$
+    \ELSIF{$isNumericType(rightOperandType)$}
+        \STATE $type = rightOperandType$
     \ENDIF
 \ENDIF
 
@@ -410,13 +432,71 @@ A similar approach as in the case of functions can be applied to determine types
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression, its type can be either determined directly or it depends on its subexpressions. \todo{link na mozne triedy vyrazov.}
+\begin{algorithm}
+\caption{Function isOperatorClassComparison()}
+\label{ALG_func_isOperatorClassComparison}
+\begin{algorithmic}[1]
+\REQUIRE $operator$: Representation of a XQuery operator.
+\ENSURE $true$ if $operator$ is a comparison operator, $false$ otherwise.
+
+\IF{$operator$ equals one of $GEN\_EQUALS$, $GEN\_GREATER\_THAN$, $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_LESS\_THAN$, $GEN\_LESS_THAN\_EQUALS$, $GEN\_NOT\_EQUALS$, $VAL\_EQUALS$, $VAL\_GREATER\_THAN$, $VAL\_GREATER\_THAN\_EQUALS$, $VAL\_LESS\_THAN$, $VAL\_LESS\_THAN\_EQUALS$, $VAL\_NOT\_EQUALS$}
+    \RETURN $true$
+\ELSE
+    \RETURN $false$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function isOperatorClassAddition()}
+\label{ALG_func_isOperatorClassAddition}
+\begin{algorithmic}[1]
+\REQUIRE $operator$: Representation of a XQuery operator.
+\ENSURE $true$ if $operator$ is an addition operator, $false$ otherwise.
+
+\IF{$operator$ equals one of $PLUS$, $MINUS$}
+    \RETURN $true$
+\ELSE
+    \RETURN $false$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function isNumericType()}
+\label{ALG_func_isNumericType}
+\begin{algorithmic}[1]
+\REQUIRE $type$: Representation of a type.
+\ENSURE $true$ if $type$ represents one of the XSD atomic built-in numeric types, $false$ otherwise.
+
+\IF{$type$ represents one of $float$, $double$, $decimal$, $integer$, $long$, $int$, $short$, $byte$, $nonPositiveInteger$, $negativeInteger$, $nonNegativeInteger$, $positiveInteger$, $unsignedLong$, $unsignedInt$, $unsignedShort$, $unsignedByte$}
+    \RETURN $true$
+\ELSE
+    \RETURN $false$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function selectMoreGeneralNumericType()}
+\label{ALG_func_selectMoreGeneralNumericType}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $numericType1$: Numeric type one.
+    $numericType2$: Numeric type two.
+}
+\ENSURE Returns the more generic numeric type of the two specified.
+\STATE TODO
+\end{algorithmic}
+\end{algorithm}
+
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_4}), its type can be either determined directly or it depends on its subexpressions. A part of the function's semantic is separated in \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
 
 Function $determineExpressionType()$ is called within function $analysisOfExpressionTypes$ presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
-The order of the recursion is post-order. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the post-order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
+The order of the recursion is to firstly process children of a node and then the node itself. The order of children processing is specified by function $o$ from the definition of the syntax tree \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
 
-The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the post-order \todo{overit}. Therefore, the left-most subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the post-order numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where its meaning is that every node even ''knows'' if its particular subnode may define new variables. An example is a $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into ist first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlaping. It is important to note that we assume the variable context is not passed by refence but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
+The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where its meaning is that every node even ''knows'' if its particular subnode may define new variables. An example is a $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
 \begin{algorithm}
 \caption{Function analysisOfExpressionTypes}

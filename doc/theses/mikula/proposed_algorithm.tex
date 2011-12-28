@@ -406,7 +406,7 @@ A similar approach as in the case of functions can be applied to determine types
     $isOperatorClassComparison()$: Function defined in \ref{ALG_func_isOperatorClassComparison}. \\
     $isOperatorClassAddition()$: Function defined in \ref{ALG_func_isOperatorClassAddition}. \\
     $isNumericType()$: Function defined in \ref{ALG_func_isNumericType}. \\
-    $selectMoreGenericNumericType()$: Function defined in \ref{ALG_func_selectMoreGeneralNumericType}. \\
+    $selectMoreGenericNumericType()$: Function that select a more generic numeric XSD type from two given types according to the type promotions rules (TODO-REF). \\
     $operatorNode$: An operator expression node in the syntax tree. \\
     $contextVarTypes$: Types of local variables valid in the current subtree.
 }
@@ -477,53 +477,57 @@ A similar approach as in the case of functions can be applied to determine types
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
-\caption{Function selectMoreGeneralNumericType()}
-\label{ALG_func_selectMoreGeneralNumericType}
-\begin{algorithmic}[1]
-\REQUIRE{\ \\
-    $numericType1$: Numeric type one.
-    $numericType2$: Numeric type two.
-}
-\ENSURE Returns the more generic numeric type of the two specified.
-\STATE TODO
-\end{algorithmic}
-\end{algorithm}
-
 The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_4}), its type can be either determined directly or it depends on its subexpressions. A part of the function's semantic is separated in \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
 
 Function $determineExpressionType()$ is called within function $analysisOfExpressionTypes$ presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
 The order of the recursion is to firstly process children of a node and then the node itself. The order of children processing is specified by function $o$ from the definition of the syntax tree \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
 
-The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition at line 10. This condition is double-checked at line 3 where its meaning is that every node even ''knows'' if its particular subnode may define new variables. An example is a $FLWOR$ construct. The processing of $FLWOR$ knows that the first part (the first subnode) of this node may bind new variables using $for$ and $let$ constructs. After the subnode is processed, the processing of the $FLWOR$ node looks if any new variables were bound and if so the context of local variables is extended. This is done at line 4. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
+The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
 \begin{algorithm}
 \caption{Function analysisOfExpressionTypes}
 \label{ALG_func_analysisOfExpressionTypes}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-    $startingNode$: A node determinig a subtree to perform the analysis on \\
+    $memorizeType()$: Function memorizing a determined type of a specified node. \\
+    $set()$: Function memorizing a specified property of a specified node. \\
+    $add()$: Function adding a value to a list of specified properties of a specified node. \\
+    $get()$: Function returning a specified property (or list) set by functions $set()$ and $add()$. \\
+    $mergeContextVarTypes()$: Function defined in Algorithm \ref{ALG_function_mergeContextVarTypes}. \\
+    $startingNode$: A node determining a subtree to perform the analysis on. \\
     $contextVarTypes$: Types of local variables valid in the current subtree.
 }
 
-\FORALL{$subnode \in$ all subnodes of $startingNode$}
+\FORALL{$i \in \{1, \dots, |startingNode.getChildren()|\}$ ordered from the lowest to the highest}
+    \STATE $subnode = startingNode.getChild(i)$
     \STATE $analysisOfExpressionTypes(subnode, contextVarTypes)$ \COMMENT{recursion}
-    \IF{$subnode$ defines new variables valid for following subnodes}
-        \STATE $contextVarTypes = mergeContextVarTypes(contextVarTypes, subnode.variableTypes)$
-    \ENDIF
+    \STATE $newVars = get(subnode, newVars)$    
+    \STATE $contextVarTypes = mergeContextVarTypes(contextVarTypes, newVars)$
 \ENDFOR
-\IF{$startingNode$ is expression node}
-    \STATE $startingNode.type = determineExpressionType(startingNode)$
+\IF{$is(startingNode, ExprNode)$}
+    \STATE $memorizeType(startingNode, determineExpressionType(startingNode))$
 \ENDIF
-\IF{$startingNode$ defines new variables valid in following nodes}
-    \STATE determine types of the variables
-    \STATE memorize their types in $startingNode.variableTypes$
+\IF{$is(startingNode, VariableBindingNode)$}
+    \STATE $type = null$
+    \STATE $typeNode = startingNode.getChild(TypeNode)$
+    \IF{$typeNode \neq null$}
+        \STATE $type = getTypeTN(typeNode)$
+    \ELSE
+        \STATE $type = determineExpressionType(startingNode.getChild(BindingSequenceNode).getChild(ExprNode), contextVarTypes)$
+    \ENDIF
+    \STATE $set(startingNode, newVars, (startingNode.varName, type))$
+\ELSIF{$is(startingNode, TupleStreamNode)$}
+    \FORALL{$varBindingNode \in startingNode.getChildren()$}
+        \STATE $add(startingNode, newVars, get(varBindingNode, newVars))$
+    \ENDFOR
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Algoritmus analysisOfEXpressionTypes, line 10 - Tady tyhle věty jsou v pseudoalgoritmech divné. Měy by se vyskytovat minimálně. JInak je to pak v podstatě jen odřádkovaná věta, ne formální popis algoritmu bez technických detailů.}
+\todo[inline]{Popisat dvojicu funkcii memorizeType() a getType(). Taktiez trojicu set(), get(), add().}
+
+\todo[inline]{Overit si, ci ALG \ref{ALG_func_analysisOfExpressionTypes} pokryva vsetky pripady, co sa tyka definovania novych premennych a ich propagacie vyssim uzlom.}
 
 \todo[inline]{Pozor na to přetékání textu - na spoustě míst.}
 
@@ -532,8 +536,9 @@ The handling of new variable definitions relies on the fact that the definitions
 \label{ALG_function_mergeContextVarTypes}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
+    $keys()$: Function retrieving index values of an indexed structure. \\
     $contextVarTypes$: Types of local variables valid in current context. \\    
-    $extendingVarTypes$: Variable types of the same structure as the first argument and extending it.
+    $extendingVarTypes$: New variables in the same structure as the first argument.
 }
 \ENSURE The context variable types extended with the variable types from the second argument.
 
@@ -551,6 +556,7 @@ Function $analysisOfExpressionTypes$ called upon a binding expression of a globa
 \label{ALG_function_get_variable_type}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
+    $getGlobalVariableType()$: Function returning a determined type of a specified global variable. \\
     $contextVarTypes$: Types of local variables valid in current context. \\
     $var$: A variable to determine the type of.
 }
@@ -574,7 +580,7 @@ We can also determine expression types in functions. To do this for a certain fu
 \section{Step 3: Inference of Built-in Types}
 In this step, the algorithm goes through the syntax tree to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
-How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of $pathType$ type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation \todo{Q: Nejake ine ako napr type constructor, cast as? Princip je stale rovnaky. A: ak to jen popište. To je naprosto OK.}.
+How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of $PathType$ type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation \todo{Q: Nejake ine ako napr type constructor, cast as? Princip je stale rovnaky. A: ak to jen popište. To je naprosto OK.}.
 
 The output of this step is a set of couples ($pathType$, XML Schema built-in type).
 
@@ -587,8 +593,8 @@ This case is quite straightforward. The algorithm encounters a function call and
 If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. Otherwise, no statement is inferred.
 
 \subsection{Arithmetic Operations}
-If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression is $Operator$ and the class of the operator is one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ \todo{Niekam napisat mozne triedy operatora}), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
+If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression node is $Operator$ and it represents one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ \todo{Niekam napisat mozne triedy operatora}), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
 
-If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression is $Operator$ and the class of the operator is one of $GEN\_LESS\_THAN$, $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$, $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$, $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
+If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression node is $Operator$ and it represents one of $GEN\_LESS\_THAN$, $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$, $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$, $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
 
 \todo[inline]{Pěkné, neškodilo by proložit příklady, tj. dotaz, strom, co z něho odvodíme.}

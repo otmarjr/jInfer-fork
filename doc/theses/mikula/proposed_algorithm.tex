@@ -598,6 +598,32 @@ If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expressi
 
 If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression node is $Operator$ and it represents one of $GEN\_LESS\_THAN$, $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$, $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$, $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
 
-\todo[inline]{Pěkné, neškodilo by proložit příklady, tj. dotaz, strom, co z něho odvodíme.}
+\todo[inline]{Pěkné, neškodilo by proložit příklady, tj. dotaz, strom, co z něho odvodíme. -- To urobim pocas implementacie pre nejaky vzorovy dotaz.}
 
 \section{Step 4: Key Discovery}
+In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in section \ref{Keys}, and extending it. Firstly, the syntax tree is searched for certain forms of FLWOR expressions to infer the keys from. Then, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
+
+\subsection{Join Patterns}
+The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_join_pattern_3}, \ref{listing_join_pattern_4} and \ref{listing_join_pattern_5}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child and descendant axes.
+
+\begin{lstlisting}[mathescape, float, caption=Join pattern 3, frame=single, label=listing_join_pattern_3]
+for $\$e_1$ in $P_1$
+for $\$e_2$ in
+    $P_2[L_2 = \$e_1/L_1]$
+return $C_R$
+\end{lstlisting}
+
+\begin{lstlisting}[mathescape, float, caption=Join pattern 4, frame=single, label=listing_join_pattern_4]
+for $\$e_1$ in $P_1$
+let $\$e_2$ :=
+    $P_2[L_2 = \$e_1/L_1]$
+return $C_R$
+\end{lstlisting}
+
+\begin{lstlisting}[mathescape, float, caption=Join pattern 5, frame=single, label=listing_join_pattern_5]
+for $\$e_1$ in $P_1$
+for $\$e_2$ in $P_2$
+where $\$e_2/L_2 = \$e_1/L_1$
+return $C_R$
+\end{lstlisting}
+

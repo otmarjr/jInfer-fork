@@ -81,7 +81,7 @@ In the fist step the input schema is corrected to conform to the whole set of in
 
 In the second step, regular expressions from the corrected schema are specialized with regard to the XML documents, resulting in a more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
 
-\section{Discovering XML Keys and Foreign Keys in Queries}
+\section{Discovering XML Keys and Foreign Keys in Queries}\label{Keys}
 The method described in paper \cite{Necasky:2009:DXK:1529282.1529414} improves automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} and \textbf{unique} constructs.
 
 \subsection{Assumptions and Observations}

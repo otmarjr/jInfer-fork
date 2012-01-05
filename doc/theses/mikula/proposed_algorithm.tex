@@ -604,26 +604,73 @@ If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expr
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in section \ref{Keys}, and extending it. Firstly, the syntax tree is searched for certain forms of FLWOR expressions to infer the keys from. Then, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
 
 \subsection{Join Patterns}
-The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_join_pattern_3}, \ref{listing_join_pattern_4} and \ref{listing_join_pattern_5}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child and descendant axes.
 
-\begin{lstlisting}[mathescape, float, caption=Join pattern 3, frame=single, label=listing_join_pattern_3]
+\begin{lstlisting}[mathescape, float, caption=Other form of the for join pattern., frame=single, label=listing_other_for_join_pattern]
 for $\$e_1$ in $P_1$
 for $\$e_2$ in
     $P_2[L_2 = \$e_1/L_1]$
 return $C_R$
 \end{lstlisting}
 
-\begin{lstlisting}[mathescape, float, caption=Join pattern 4, frame=single, label=listing_join_pattern_4]
+\begin{lstlisting}[mathescape, float, caption=Other form of the let join pattern., frame=single, label=listing_other_let_join_pattern]
 for $\$e_1$ in $P_1$
 let $\$e_2$ :=
     $P_2[L_2 = \$e_1/L_1]$
 return $C_R$
 \end{lstlisting}
 
-\begin{lstlisting}[mathescape, float, caption=Join pattern 5, frame=single, label=listing_join_pattern_5]
+\begin{lstlisting}[mathescape, float, caption=Join pattern 3., frame=single, label=listing_join_pattern_3]
 for $\$e_1$ in $P_1$
 for $\$e_2$ in $P_2$
 where $\$e_2/L_2 = \$e_1/L_1$
 return $C_R$
 \end{lstlisting}
 
+The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_other_for_join_pattern}, \ref{listing_other_let_join_pattern} and \ref{listing_join_pattern_3}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child and descendant axes. Actually, the join patterns from \ref{listing_other_for_join_pattern} and \ref{listing_other_let_join_pattern} are covered by the for and let join pattern in the original approach, but we introduce them explicitly because their structure in the syntax tree is different.
+
+Since, in this step, we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of $PathType$ without predicates, using only child and descendant axes.
+
+As described in the original method and summarized in section \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns and rules to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
+
+\begin{algorithm}
+\caption{Processing of FLWOR expressions}
+\label{ALG_processing_of_flwor_expressions}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $flworNode$: A node representing a FLWOR expression. \\
+    $forVars$: An array of couples of for variables and their for clause nodes.\\
+}
+
+\ENSURE Updated variable $forVars$.
+
+\STATE $bindingNodes = bindingNode \in flworNode.getChild(TupleStreamNode).getChildren()$
+\FORALL{$bindingNode \in bindingNodes$}
+    \STATE $bindingExpr = bindingNode.getChild(BindingSequenceNode).getChild(ExprNode)$
+    \IF{$getType(BindingExpr) == PathType$ using only child and descendant axes, ending with exactly one predicate $P$}
+      \FORALL{$(var, node) \in forVars$}
+            \IF{$P$ is of form $bindingNode.varName/L_1 = var/L_2$}
+                \IF{$is(bindingExpr, ForClauseNode)$}
+                    \STATE memorize $(node, bindingExpr)$ as an occurrence of the for join pattern
+                \ELSIF{$is(bindingExpr, LetClauseNode)$}
+                    \STATE memorize $(node, bindingExpr)$ as an occurrence of the for let pattern                
+                \ENDIF
+            \ENDIF
+        \ENDFOR
+    \ELSIF{$getType(BindingExpr) == PathType$ without predicates using only child and descendant axes}
+        \IF{$is(bindingNode, ForClauseNode$}
+            \STATE add $(bindingNode.varName, bindingNode)$ to forVars
+        \ENDIF
+    \ENDIF
+\ENDFOR
+
+\RETURN $forVars$
+\end{algorithmic}
+\end{algorithm}
+
+\todo[inline]{Processing function pre join pattern 3.}
+
+To find the occurrences of the join patterns, the algorithm recursively, in pre-order, searches the syntax tree and every node representing a FLWOR expression is processed. The FLWOR processing is shown in Algorithm \ref{ALG_processing_of_flwor_expressions}. Its input is an array of couples containing names of variables which has been bound in for clauses in FLWOR expressions represented by ancestor nodes, and references to those respective for clause nodes. The processing iterates trough subnodes of a current node and the iteration consists of two logical parts.
+
+In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. Otherwise, if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the currect FLWOR node or in its descendant FLWOR nodes, later in the recursion.
+
+\subsection{Analysis of the Join Pattern Occurrences}

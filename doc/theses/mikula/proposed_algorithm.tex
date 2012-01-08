@@ -630,7 +630,7 @@ The two join patterns from the original approach are shown in Listings \ref{list
 
 Since, in this step, we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of $PathType$ without predicates, using only child and descendant axes.
 
-As described in the original method and summarized in section \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns and rules to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
+As described in the original method and summarized in section \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns, and rules to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
 
 \begin{algorithm}
 \caption{Processing of FLWOR expressions}
@@ -638,23 +638,28 @@ As described in the original method and summarized in section \ref{Keys} we reco
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
     $flworNode$: A node representing a FLWOR expression. \\
-    $forVars$: An array of couples of for variables and their for clause nodes.\\
+    $forVars$: An array of couples of for variables and their for clause nodes.
 }
 
 \ENSURE Updated variable $forVars$.
 
 \STATE $bindingNodes = bindingNode \in flworNode.getChild(TupleStreamNode).getChildren()$
+
+\STATE $whereClause = flworNode.getChild(WhereClauseNode)$
+\STATE $checkJoinPattern3 = false$
+\STATE $whereExpr = null$
+\IF{$whereClause != null$}
+    \STATE $whereExpr = whereClause.getChild(ExprNode)$
+    \IF{$is(whereExpr, OperatorNode)$ AND $whereExpr.operator == GEN\_EQUALS$}
+        \STATE $checkJoinPattern3 = true$
+    \ENDIF
+\ENDIF
+
 \FORALL{$bindingNode \in bindingNodes$}
     \STATE $bindingExpr = bindingNode.getChild(BindingSequenceNode).getChild(ExprNode)$
     \IF{$getType(BindingExpr) == PathType$ using only child and descendant axes, ending with exactly one predicate $P$}
-      \FORALL{$(var, node) \in forVars$}
-            \IF{$P$ is of form $bindingNode.varName/L_1 = var/L_2$}
-                \IF{$is(bindingExpr, ForClauseNode)$}
-                    \STATE memorize $(node, bindingExpr)$ as an occurrence of the for join pattern
-                \ELSIF{$is(bindingExpr, LetClauseNode)$}
-                    \STATE memorize $(node, bindingExpr)$ as an occurrence of the for let pattern                
-                \ENDIF
-            \ENDIF
+        \FORALL{$(var, node) \in forVars$}
+            \STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var, forVars)$
         \ENDFOR
     \ELSIF{$getType(BindingExpr) == PathType$ without predicates using only child and descendant axes}
         \IF{$is(bindingNode, ForClauseNode$}
@@ -667,10 +672,100 @@ As described in the original method and summarized in section \ref{Keys} we reco
 \end{algorithmic}
 \end{algorithm}
 
+\begin{algorithm}
+\caption{Function determinateJoinPatterns}
+\label{ALG_func_determinateJoinPatterns}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+    $curBindingNode$: A variable binding node in the current FLWOR node. \\
+    $P$: A predicate from the binding expression. \\
+    $forBindingNode$: A for binding node from an ancestor FLWOR node. \\
+    $forVar$: A variable from the ancestor for binding node. \\
+    $forVars$: An array of couples of for variables and their for clause nodes.
+}
+
+\ENSURE Updated variable $forVars$.
+
+\IF{$P$ is of form $curBindingNode.varName/L_1 = var/L_2$}
+    \IF{$is(curBindingNode, ForClauseNode)$}
+        \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the for join pattern
+        \STATE remove $(forVar, forBindingNode)$ from $forVars$
+    \ELSIF{$is(curBindingNode, LetClauseNode)$}
+        \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the for let pattern                
+        \STATE remove $(forVar, forBindingNode)$ from $forVars$
+    \ENDIF
+\ELSIF{$checkJoinPattern3$ AND $is(curBindingNode, ForClauseNode)$}
+    \IF{$whereExpr$ is of form $bindingNode.varName/L_1 = var/L_2$}
+        \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the join pattern 3
+        \STATE remove $(forVar, forBindingNode)$ from $forVars$
+    \ENDIF
+\ENDIF
+
+
+\RETURN $forVars$
+\end{algorithmic}
+\end{algorithm}
+
 \todo[inline]{Processing function pre join pattern 3.}
 
-To find the occurrences of the join patterns, the algorithm recursively, in pre-order, searches the syntax tree and every node representing a FLWOR expression is processed. The FLWOR processing is shown in Algorithm \ref{ALG_processing_of_flwor_expressions}. Its input is an array of couples containing names of variables which has been bound in for clauses in FLWOR expressions represented by ancestor nodes, and references to those respective for clause nodes. The processing iterates trough subnodes of a current node and the iteration consists of two logical parts.
+To find the occurrences of the join patterns, the algorithm recursively, in pre-order, searches the syntax tree and every node representing a FLWOR expression is processed. The FLWOR processing is shown in Algorithm \ref{ALG_processing_of_flwor_expressions}. Its input is an array of couples containing names of variables which has been bound in for clauses in FLWOR expressions represented by ancestor nodes, and references to those respective for clause nodes. The processing iterates through subnodes of a current node and the iteration consists of two logical parts.
 
-In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. Otherwise, if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the currect FLWOR node or in its descendant FLWOR nodes, later in the recursion.
+In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. The responsible code is partially moved to function $determineJoinPatterns()$ in Algorithm \ref{ALG_func_determinateJoinPatterns}. If the subnode does not form an occurrence, and if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the currect FLWOR node or in its descendant FLWOR nodes, later in the recursion.
 
 \subsection{Analysis of the Join Pattern Occurrences}
+For each found join pattern occurrence, the algorithm displayed in Algorithm \ref{ALG_classification_of_join_pattern_occurrences} decides whether it is (O1) or (O2) case, using the rules from the original method and the rule for the join pattern 3 considering it of case (O1) and assigning it with weight of 0.5.
+
+\begin{algorithm}
+\caption{Classification of join pattern occurrences}
+\label{ALG_classification_of_join_pattern_occurrences}
+\begin{algorithmic}[1]
+\REQUIRE $\mathcal{O}$: A set of all found join pattern occurrences.
+
+\ENSURE $\mathcal{O'}$: A set of the classified join pattern occurrences from $\mathcal{O}$ assigned with their respective weights.
+
+\FORALL{$jpOccurrence \in \mathcal{O}$}
+    \IF{$jpOccurrence$ is the for join pattern}
+        \STATE mark $jpOccurrence$ as case (O1), weight 1
+    \ELSIF{$jpOccurrence$ is the join pattern 3}
+        \STATE mark $jpOccurrence$ as case (O1), weight 0.5
+    \ELSE
+        \STATE TODO (R2,R3,R4,R5)
+    \ENDIF
+    \STATE update $jpOccurrence$ in $\mathcal{O}$
+\ENDFOR
+
+\RETURN $\mathcal{O}$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Rejection of Uniqueness}
+While the previous steps of the key discovery produce positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. An aim of this step is to eliminate or decrease the number of falsely inferred keys.
+\todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
+When the algorithm discovers that a certain element is probably not unique, it assign the element with a negative weight that will decrease the sum of its weights in the summarizing step.
+
+The first group of XQuery constructs utilized by this step is a group of $distinct-values()$ function and aggregation functions $min()$, $max()$, TODO \todo{Doplnit} as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they can not be keys.
+
+Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates. Predicates in a path restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates. \todo[inline]{Toto asi nebude uplne pravda pre nejake exoticke predikaty. Overit pri implementacii.}
+
+\begin{algorithm}
+\caption{Rejection of uniqueness - aggregation functions}
+\label{ALG_rejection_of_uniqueness_aggregation_functions}
+\begin{algorithmic}[1]
+\REQUIRE $node$: A node of the syntax tree.
+
+\IF{$is(node, FunctionCallNode)$}
+    \IF{$node.fncName$ is one of $distinct-values$, $min$, $max$, TODO}
+        \STATE $argument = node.getChild(0)$
+        \IF{$getType(argument) == PathType$ using only child and descendant axes}
+            \STATE memorize $argument$ as the negative key statement, weight 1
+        \ENDIF
+    \ENDIF
+\ENDIF
+
+\FORALL{$subnode \in node.getChildren()$}
+    \STATE call this function recursively with $subnode$
+\ENDFOR
+
+\end{algorithmic}
+\end{algorithm}
+
